@@ -7,12 +7,13 @@ import { type UNSAFE_RouteModules as RouteModules } from '@remix-run/react';
  */
 export function getLocale(url: string) {
   const pathname = new URL(url).pathname;
+  const locale = pathname.split('/')?.[1];
 
-  if (pathname.startsWith('/en')) {
+  if (locale === 'en') {
     return 'en';
   }
 
-  if (pathname.startsWith('/fr')) {
+  if (locale === 'fr') {
     return 'fr';
   }
 
@@ -28,8 +29,8 @@ export function getLocale(url: string) {
 export function getNamespaces(routeModules: RouteModules) {
   const namespaces = new Set(
     Object.values(routeModules)
-      .filter((route) => (route.handle as { i18nNamespaces: string; })?.i18nNamespaces !== undefined)
-      .flatMap((route) => (route.handle as { i18nNamespaces: string; }).i18nNamespaces)
+      .filter((route) => (route.handle as { i18nNamespaces: string })?.i18nNamespaces !== undefined)
+      .flatMap((route) => (route.handle as { i18nNamespaces: string }).i18nNamespaces),
   );
 
   return [...namespaces];
