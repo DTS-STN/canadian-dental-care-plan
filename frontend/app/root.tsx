@@ -1,12 +1,12 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
+import { cssBundleHref } from '@remix-run/css-bundle';
 import { json, type LinksFunction, type LoaderFunctionArgs } from '@remix-run/node';
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
 
-import { getLocale } from "./utils/locale-utils";
+import stylesheet from '~/tailwind.css';
 
-export const links: LinksFunction = () => [
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-];
+import { getLocale } from './utils/locale-utils';
+
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: stylesheet }, ...(cssBundleHref ? [{ rel: 'stylesheet', href: cssBundleHref }] : [])];
 
 export const loader = ({ request }: LoaderFunctionArgs) => {
   return json({ locale: getLocale(request.url) });
