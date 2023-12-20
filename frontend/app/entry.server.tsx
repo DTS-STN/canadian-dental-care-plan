@@ -4,6 +4,7 @@
  * For more information, see https://remix.run/file-conventions/entry.server
  */
 
+import { resolve } from 'node:path';
 import { PassThrough } from "node:stream";
 
 import type { AppLoadContext, EntryContext } from "@remix-run/node";
@@ -11,6 +12,12 @@ import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
+
+import { createInstance } from 'i18next';
+import I18NexFsBackend from 'i18next-fs-backend';
+import { initReactI18next } from 'react-i18next';
+
+import { getLocale, getNamespaces } from '~/utils/locale-utils';
 
 const ABORT_DELAY = 5_000;
 
@@ -39,12 +46,25 @@ export default function handleRequest(
       );
 }
 
-function handleBotRequest(
+async function handleBotRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext
 ) {
+  await createInstance()
+    .use(initReactI18next)
+    .use(I18NexFsBackend)
+    .init({
+      backend: { loadPath: resolve('./public/locales/{{lng}}/{{ns}}.json') },
+      debug: process.env.NODE_ENV === 'development',
+      fallbackLng: 'en',
+      interpolation: { escapeValue: false },
+      lng: getLocale(request.url),
+      ns: getNamespaces(remixContext.routeModules),
+      supportedLngs: ['en', 'fr'],
+    });
+
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
@@ -89,12 +109,25 @@ function handleBotRequest(
   });
 }
 
-function handleBrowserRequest(
+async function handleBrowserRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext
 ) {
+  await createInstance()
+    .use(initReactI18next)
+    .use(I18NexFsBackend)
+    .init({
+      backend: { loadPath: resolve('./public/locales/{{lng}}/{{ns}}.json') },
+      debug: process.env.NODE_ENV === 'development',
+      fallbackLng: 'en',
+      interpolation: { escapeValue: false },
+      lng: getLocale(request.url),
+      ns: getNamespaces(remixContext.routeModules),
+      supportedLngs: ['en', 'fr'],
+    });
+
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(

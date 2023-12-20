@@ -1,21 +1,22 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction } from "@remix-run/node";
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "@remix-run/react";
+import { json, type LinksFunction, type LoaderFunctionArgs } from '@remix-run/node';
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
+
+import { getLocale } from "./utils/locale-utils";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
+export const loader = ({ request }: LoaderFunctionArgs) => {
+  return json({ locale: getLocale(request.url) });
+};
+
 export default function App() {
+  const { locale } = useLoaderData<typeof loader>();
+
   return (
-    <html lang="en">
+    <html lang={locale ?? 'en'}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
