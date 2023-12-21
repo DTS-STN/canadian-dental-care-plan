@@ -13,7 +13,7 @@ export const links: LinksFunction = () => [
 ];
 
 export const loader = ({ request }: LoaderFunctionArgs) => {
-  return json({ locale: getLocale(request.url) });
+  return json({ locale: getLocale(request) });
 };
 
 export default function App() {

@@ -5,7 +5,8 @@ import { type UNSAFE_RouteModules as RouteModules } from '@remix-run/react';
  *
  * @param {string} url - The URL to retrieve the locale from.
  */
-export function getLocale(url: string) {
+export function getLocale(request: Request) {
+  const url = request.url;
   const pathname = new URL(url).pathname;
   const locale = pathname.split('/')?.[1];
 

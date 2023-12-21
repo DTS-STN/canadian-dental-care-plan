@@ -10,7 +10,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const locale = getLocale(request.url);
+  const locale = getLocale(request);
   const { pathname } = new URL(request.url);
 
   if (pathname !== '/' && locale === undefined) {

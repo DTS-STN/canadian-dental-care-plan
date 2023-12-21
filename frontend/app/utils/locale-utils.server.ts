@@ -18,9 +18,9 @@ export async function getFixedT<N extends Namespace>(request: Request, namespace
     .init({
       backend: { loadPath: resolve('./public/locales/{{lng}}/{{ns}}.json') },
       debug: process.env.NODE_ENV === 'development',
-      fallbackLng: getLocale(request.url),
+      fallbackLng: getLocale(request),
       interpolation: { escapeValue: false },
-      lng: getLocale(request.url),
+      lng: getLocale(request),
       ns: namespaces,
     });
 

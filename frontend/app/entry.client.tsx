@@ -31,15 +31,17 @@ function hydrate() {
 }
 
 if (!i18n.isInitialized) {
+  const request = new Request(window.location.href);
+
   i18n
     .use(initReactI18next)
     .use(I18nextBrowserLanguageDetector)
     .use(I18NextHttpBackend)
     .init({
       detection: { order: ['path'] },
-      fallbackLng: getLocale(window.location.href),
+      fallbackLng: getLocale(request),
       interpolation: { escapeValue: false },
-      lng: getLocale(window.location.href),
+      lng: getLocale(request),
       ns: getNamespaces(window.__remixRouteModules),
     })
     .then(() => {

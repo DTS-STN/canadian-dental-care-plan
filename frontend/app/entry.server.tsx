@@ -46,9 +46,9 @@ export default async function handleRequest(request: Request, responseStatusCode
     .use(I18NexFsBackend)
     .init({
       backend: { loadPath: resolve('./public/locales/{{lng}}/{{ns}}.json') },
-      fallbackLng: getLocale(request.url),
+      fallbackLng: getLocale(request),
       interpolation: { escapeValue: false },
-      lng: getLocale(request.url),
+      lng: getLocale(request),
       ns: getNamespaces(remixContext.routeModules),
     });
     
