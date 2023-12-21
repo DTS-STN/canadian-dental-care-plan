@@ -17,7 +17,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     throw new Response('Not found', { status: 404, statusText: 'Not found' });
   }
 
-  const t = await getFixedT(request, 'common');
+  const t = await getFixedT(request, handle.i18nNamespaces);
   return json({ pageTitle: t('index.page-title') });
 };
 
@@ -26,7 +26,7 @@ export const handle = {
 };
 
 export default function Index() {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation(handle.i18nNamespaces);
 
   return (
     <>

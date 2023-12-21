@@ -15,7 +15,7 @@ import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import I18NextHttpBackend from 'i18next-http-backend';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 
-import { getNamespaces } from '~/utils/locale-utils';
+import { getLocale, getNamespaces } from '~/utils/locale-utils';
 
 function hydrate() {
   startTransition(() => {
@@ -32,16 +32,15 @@ function hydrate() {
 
 if (!i18n.isInitialized) {
   i18n
+    .use(initReactI18next)
     .use(I18nextBrowserLanguageDetector)
     .use(I18NextHttpBackend)
-    .use(initReactI18next)
     .init({
-      debug: process.env.NODE_ENV === 'development',
       detection: { order: ['path'] },
-      fallbackLng: 'en',
+      fallbackLng: getLocale(window.location.href),
       interpolation: { escapeValue: false },
+      lng: getLocale(window.location.href),
       ns: getNamespaces(window.__remixRouteModules),
-      supportedLngs: ['en', 'fr'],
     })
     .then(() => {
       if (typeof requestIdleCallback === 'function') {

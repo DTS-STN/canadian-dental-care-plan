@@ -45,15 +45,11 @@ export default async function handleRequest(request: Request, responseStatusCode
     .use(initReactI18next)
     .use(I18NexFsBackend)
     .init({
-      backend: {
-        loadPath: resolve('./public/locales/{{lng}}/{{ns}}.json')
-      },
-      debug: process.env.NODE_ENV === 'development',
-      fallbackLng: 'en',
+      backend: { loadPath: resolve('./public/locales/{{lng}}/{{ns}}.json') },
+      fallbackLng: getLocale(request.url),
       interpolation: { escapeValue: false },
       lng: getLocale(request.url),
       ns: getNamespaces(remixContext.routeModules),
-      supportedLngs: ['en', 'fr'],
     });
     
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
