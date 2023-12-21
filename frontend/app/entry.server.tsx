@@ -3,19 +3,17 @@
  * You are free to delete this file if you'd like to, but if you ever want it revealed again, you can run `npx remix reveal` ✨
  * For more information, see https://remix.run/file-conventions/entry.server
  */
-
-import * as crypto from 'node:crypto';
-import { resolve } from 'node:path';
-import { PassThrough } from 'node:stream';
-
 import type { EntryContext } from '@remix-run/node';
 import { createReadableStreamFromReadable } from '@remix-run/node';
 import { RemixServer } from '@remix-run/react';
-import isbot from 'isbot';
-import { renderToPipeableStream } from 'react-dom/server';
 
 import { createInstance } from 'i18next';
 import I18NexFsBackend from 'i18next-fs-backend';
+import isbot from 'isbot';
+import * as crypto from 'node:crypto';
+import { resolve } from 'node:path';
+import { PassThrough } from 'node:stream';
+import { renderToPipeableStream } from 'react-dom/server';
 import { initReactI18next } from 'react-i18next';
 
 import { NonceContext } from '~/components/nonce-context';
@@ -31,13 +29,7 @@ const ABORT_DELAY = 5_000;
 function generateContentSecurityPolicy(nonce: string) {
   const isDevelopment = process.env.NODE_ENV === 'development';
 
-  return [
-    `base-uri 'none'`,
-    `default-src 'none'`,
-    `connect-src 'self'` + (isDevelopment && ' ws://localhost:3001'),
-    `script-src 'strict-dynamic' 'nonce-${nonce}'`,
-    `style-src 'self'`,
-  ].join('; ');
+  return [`base-uri 'none'`, `default-src 'none'`, `connect-src 'self'` + (isDevelopment && ' ws://localhost:3001'), `script-src 'strict-dynamic' 'nonce-${nonce}'`, `style-src 'self'`].join('; ');
 }
 
 export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, remixContext: EntryContext) {
@@ -51,13 +43,13 @@ export default async function handleRequest(request: Request, responseStatusCode
       lng: getLocale(request.url),
       ns: getNamespaces(remixContext.routeModules),
     });
-    
+
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
   const nonce = crypto.randomBytes(32).toString('hex');
 
   // @see: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
   responseHeaders.set('Content-Security-Policy', generateContentSecurityPolicy(nonce));
-  responseHeaders.set('Content-Type', 'text/html; charset=UTF-8');  
+  responseHeaders.set('Content-Type', 'text/html; charset=UTF-8');
   responseHeaders.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   responseHeaders.set('X-Content-Type-Options', 'nosniff');
   responseHeaders.set('X-Frame-Options', 'deny');
@@ -89,7 +81,7 @@ export default async function handleRequest(request: Request, responseStatusCode
             console.error(error);
           }
         },
-      }
+      },
     );
 
     setTimeout(abort, ABORT_DELAY);

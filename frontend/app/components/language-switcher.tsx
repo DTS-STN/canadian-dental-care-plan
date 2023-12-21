@@ -1,4 +1,5 @@
-import { Link, useLocation, type LinkProps } from '@remix-run/react';
+import { Link, type LinkProps, useLocation } from '@remix-run/react';
+
 import { useTranslation } from 'react-i18next';
 
 /**

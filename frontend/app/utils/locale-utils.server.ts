@@ -1,4 +1,4 @@
-import { createInstance, type Namespace } from 'i18next';
+import { type Namespace, createInstance } from 'i18next';
 import I18NexFsBackend from 'i18next-fs-backend';
 import { resolve } from 'node:path';
 
@@ -13,16 +13,14 @@ import { getLocale } from '~/utils/locale-utils';
 export async function getFixedT<N extends Namespace>(request: Request, namespaces: N) {
   const i18n = createInstance();
 
-  await i18n
-    .use(I18NexFsBackend)
-    .init({
-      backend: { loadPath: resolve('./public/locales/{{lng}}/{{ns}}.json') },
-      debug: process.env.NODE_ENV === 'development',
-      fallbackLng: getLocale(request.url),
-      interpolation: { escapeValue: false },
-      lng: getLocale(request.url),
-      ns: namespaces,
-    });
+  await i18n.use(I18NexFsBackend).init({
+    backend: { loadPath: resolve('./public/locales/{{lng}}/{{ns}}.json') },
+    debug: process.env.NODE_ENV === 'development',
+    fallbackLng: getLocale(request.url),
+    interpolation: { escapeValue: false },
+    lng: getLocale(request.url),
+    ns: namespaces,
+  });
 
   return i18n.getFixedT(null, null);
 }

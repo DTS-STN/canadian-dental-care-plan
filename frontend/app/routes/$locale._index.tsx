@@ -1,4 +1,5 @@
-import { json, type LoaderFunctionArgs, type MetaFunction } from '@remix-run/node';
+import { type LoaderFunctionArgs, type MetaFunction, json } from '@remix-run/node';
+
 import { useTranslation } from 'react-i18next';
 
 import { LanguageSwitcher } from '~/components/language-switcher';
