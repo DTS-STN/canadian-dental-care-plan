@@ -6,6 +6,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev --manual",
+    "format": "prettier --write .",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc"
@@ -20,6 +21,7 @@
     "i18next-fs-backend": "^2.3.1",
     "i18next-http-backend": "^2.4.2",
     "isbot": "^3.7.1",
+    "prettier-plugin-tailwindcss": "^0.5.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^13.5.0"
@@ -54,6 +56,9 @@
     "semi": true,
     "tabWidth": 2,
     "singleQuote": true,
-    "printWidth": 256
+    "printWidth": 256,
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ]
   }
 }
