@@ -1,4 +1,5 @@
 import { Link, type LinkProps } from '@remix-run/react';
+
 import { useTranslation } from 'react-i18next';
 
 /**

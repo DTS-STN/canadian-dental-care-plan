@@ -29,6 +29,7 @@
   "devDependencies": {
     "@remix-run/dev": "^2.4.0",
     "@remix-run/eslint-config": "^2.4.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
@@ -57,7 +58,17 @@
     "tabWidth": 2,
     "singleQuote": true,
     "printWidth": 256,
+    "importOrder": [
+      "^react$",
+      "^@testing-library/(.*)$",
+      "^@remix(.*)$",
+      "<THIRD_PARTY_MODULES>",
+      "^[(.|~)/]"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true,
     "plugins": [
+      "@trivago/prettier-plugin-sort-imports",
       "prettier-plugin-tailwindcss"
     ]
   }
