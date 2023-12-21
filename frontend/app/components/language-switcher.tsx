@@ -1,4 +1,5 @@
 import { Link, useLocation, type LinkProps } from '@remix-run/react';
+import { type ReactEventHandler } from 'react';
 import { useTranslation } from 'react-i18next';
 
 /**
@@ -12,12 +13,16 @@ export type LanguageSwitcherProps = Omit<LinkProps, 'to'>;
 export function LanguageSwitcher({ ...props }: LanguageSwitcherProps) {
   const { pathname } = useLocation();
   const { i18n, t } = useTranslation('common');
-
+  
   const altLang = i18n.language === 'fr' ? 'en' : 'fr';
-  const linkPath = pathname.replace(i18n.language, altLang);
+  const altLangUrl = `${pathname}?lang=${altLang}`;
+
+  const changeLanguage: ReactEventHandler = () => {
+    i18n.changeLanguage(altLang);
+  };
 
   return (
-    <Link {...props} to={linkPath} onClick={() => i18n.changeLanguage(altLang)}>
+    <Link {...props} to={altLangUrl} onClick={changeLanguage}>
       {t('alt-lang')}
     </Link>
   );

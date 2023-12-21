@@ -1,25 +1,5 @@
+import { createCookie } from '@remix-run/node';
 import { type UNSAFE_RouteModules as RouteModules } from '@remix-run/react';
-
-/**
- * Retrieves the locale from the provided URL if it starts with '/en' or '/fr'.
- *
- * @param {string} url - The URL to retrieve the locale from.
- */
-export function getLocale(request: Request) {
-  const url = request.url;
-  const pathname = new URL(url).pathname;
-  const locale = pathname.split('/')?.[1];
-
-  if (locale === 'en') {
-    return 'en';
-  }
-
-  if (locale === 'fr') {
-    return 'fr';
-  }
-
-  return undefined;
-}
 
 /**
  * Returns all namespaces required by the given routes by examining the route's i18nNamespaces handle property.
