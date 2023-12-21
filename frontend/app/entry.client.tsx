@@ -15,9 +15,21 @@ import I18NextHttpBackend from 'i18next-http-backend';
 import { hydrateRoot } from 'react-dom/client';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 
-import { getLocale, getNamespaces } from '~/utils/locale-utils';
+import { getNamespaces } from '~/utils/locale-utils';
 
-function hydrate() {
+async function hydrate() {
+  await i18n
+    .use(initReactI18next)
+    .use(I18nextBrowserLanguageDetector)
+    .use(I18NextHttpBackend)
+    .init({
+      detection: { order: ['htmlTag'] },
+      fallbackLng: false,
+      interpolation: { escapeValue: false },
+      ns: getNamespaces(window.__remixRouteModules),
+      react: { useSuspense: false },
+    });
+
   startTransition(() => {
     hydrateRoot(
       document,
@@ -30,25 +42,10 @@ function hydrate() {
   });
 }
 
-if (!i18n.isInitialized) {
-  i18n
-    .use(initReactI18next)
-    .use(I18nextBrowserLanguageDetector)
-    .use(I18NextHttpBackend)
-    .init({
-      detection: { order: ['path'] },
-      fallbackLng: getLocale(window.location.href),
-      interpolation: { escapeValue: false },
-      lng: getLocale(window.location.href),
-      ns: getNamespaces(window.__remixRouteModules),
-    })
-    .then(() => {
-      if (typeof requestIdleCallback === 'function') {
-        requestIdleCallback(hydrate);
-      } else {
-        // Safari doesn't support requestIdleCallback
-        // https://caniuse.com/requestidlecallback
-        setTimeout(hydrate, 1);
-      }
-    });
+if (typeof requestIdleCallback === 'function') {
+  requestIdleCallback(hydrate);
+} else {
+  // Safari doesn't support requestIdleCallback
+  // https://caniuse.com/requestidlecallback
+  setTimeout(hydrate, 1);
 }

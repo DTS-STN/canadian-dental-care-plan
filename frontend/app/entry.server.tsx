@@ -14,10 +14,11 @@ import * as crypto from 'node:crypto';
 import { resolve } from 'node:path';
 import { PassThrough } from 'node:stream';
 import { renderToPipeableStream } from 'react-dom/server';
-import { initReactI18next } from 'react-i18next';
+import { I18nextProvider, initReactI18next } from 'react-i18next';
 
 import { NonceContext } from '~/components/nonce-context';
-import { getLocale, getNamespaces } from '~/utils/locale-utils';
+import { getNamespaces } from '~/utils/locale-utils';
+import { createLangCookie, getLocale } from '~/utils/locale-utils.server';
 
 const ABORT_DELAY = 5_000;
 
@@ -29,28 +30,39 @@ const ABORT_DELAY = 5_000;
 function generateContentSecurityPolicy(nonce: string) {
   const isDevelopment = process.env.NODE_ENV === 'development';
 
-  return [`base-uri 'none'`, `default-src 'none'`, `connect-src 'self'` + (isDevelopment && ' ws://localhost:3001'), `script-src 'strict-dynamic' 'nonce-${nonce}'`, `style-src 'self'`].join('; ');
+  return [
+    // prettier-ignore
+    `base-uri 'none'`,
+    `default-src 'none'`,
+    `connect-src 'self'` + (isDevelopment && ' ws://localhost:3001'),
+    `script-src 'strict-dynamic' 'nonce-${nonce}'`,
+    `style-src 'self'`,
+  ].join('; ');
 }
 
 export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, remixContext: EntryContext) {
-  await createInstance()
+  const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
+  const i18n = createInstance();
+  const langCookie = createLangCookie();
+  const locale = (await getLocale(request)) ?? 'en';
+  const nonce = crypto.randomBytes(32).toString('hex');
+
+  await i18n
     .use(initReactI18next)
     .use(I18NexFsBackend)
     .init({
       backend: { loadPath: resolve('./public/locales/{{lng}}/{{ns}}.json') },
-      fallbackLng: getLocale(request.url),
+      fallbackLng: false,
       interpolation: { escapeValue: false },
-      lng: getLocale(request.url),
+      lng: locale,
       ns: getNamespaces(remixContext.routeModules),
     });
-
-  const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
-  const nonce = crypto.randomBytes(32).toString('hex');
 
   // @see: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
   responseHeaders.set('Content-Security-Policy', generateContentSecurityPolicy(nonce));
   responseHeaders.set('Content-Type', 'text/html; charset=UTF-8');
   responseHeaders.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  responseHeaders.set('Set-Cookie', await langCookie.serialize(locale));
   responseHeaders.set('X-Content-Type-Options', 'nosniff');
   responseHeaders.set('X-Frame-Options', 'deny');
 
@@ -58,9 +70,11 @@ export default async function handleRequest(request: Request, responseStatusCode
     let shellRendered = false;
 
     const { pipe, abort } = renderToPipeableStream(
-      <NonceContext.Provider value={{ nonce }}>
-        <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />
-      </NonceContext.Provider>,
+      <I18nextProvider i18n={i18n}>
+        <NonceContext.Provider value={{ nonce }}>
+          <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />
+        </NonceContext.Provider>
+      </I18nextProvider>,
       {
         [handlerFnName]() {
           shellRendered = true;
