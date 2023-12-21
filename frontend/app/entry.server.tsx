@@ -17,10 +17,11 @@ import { renderToPipeableStream } from 'react-dom/server';
 import { createInstance, type i18n } from 'i18next';
 import I18NexFsBackend from 'i18next-fs-backend';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
+import { serialize } from 'cookie';
 
 import { NonceContext } from '~/components/nonce-context';
 import { getNamespaces } from '~/utils/locale-utils';
-import { createLangCookie, getLocale } from '~/utils/locale-utils.server';
+import { getLocale, langCookieName, langCookieSerializeOptions } from '~/utils/locale-utils.server';
 
 const ABORT_DELAY = 5_000;
 
@@ -32,20 +33,13 @@ const ABORT_DELAY = 5_000;
 function generateContentSecurityPolicy(nonce: string) {
   const isDevelopment = process.env.NODE_ENV === 'development';
 
-  return [
-    `base-uri 'none'`,
-    `default-src 'none'`,
-    `connect-src 'self'` + (isDevelopment && ' ws://localhost:3001'),
-    `script-src 'strict-dynamic' 'nonce-${nonce}'`,
-    `style-src 'self'`,
-  ].join('; ');
+  return [`base-uri 'none'`, `default-src 'none'`, `connect-src 'self'` + (isDevelopment && ' ws://localhost:3001'), `script-src 'strict-dynamic' 'nonce-${nonce}'`, `style-src 'self'`].join('; ');
 }
 
 export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, remixContext: EntryContext) {
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
   const i18n = createInstance() as i18n; // 🤷 ... typescript (FIXME)
-  const langCookie = createLangCookie();
-  const locale = await getLocale(request) ?? 'en';
+  const locale = (await getLocale(request)) ?? 'en';
   const nonce = crypto.randomBytes(32).toString('hex');
 
   await i18n
@@ -58,12 +52,12 @@ export default async function handleRequest(request: Request, responseStatusCode
       lng: locale,
       ns: getNamespaces(remixContext.routeModules),
     });
-    
+
   // @see: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
   responseHeaders.set('Content-Security-Policy', generateContentSecurityPolicy(nonce));
-  responseHeaders.set('Content-Type', 'text/html; charset=UTF-8');  
+  responseHeaders.set('Content-Type', 'text/html; charset=UTF-8');
   responseHeaders.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  responseHeaders.set('Set-Cookie', await langCookie.serialize(locale));
+  responseHeaders.set('Set-Cookie', serialize(langCookieName, locale, langCookieSerializeOptions));
   responseHeaders.set('X-Content-Type-Options', 'nosniff');
   responseHeaders.set('X-Frame-Options', 'deny');
 
@@ -96,7 +90,7 @@ export default async function handleRequest(request: Request, responseStatusCode
             console.error(error);
           }
         },
-      }
+      },
     );
 
     setTimeout(abort, ABORT_DELAY);

@@ -1,5 +1,5 @@
-import { Link, useLocation, type LinkProps } from '@remix-run/react';
-import { type ReactEventHandler } from 'react';
+import { type LinkProps, useFetcher } from '@remix-run/react';
+import { MouseEventHandler } from 'react';
 import { useTranslation } from 'react-i18next';
 
 /**
@@ -10,20 +10,20 @@ export type LanguageSwitcherProps = Omit<LinkProps, 'to'>;
 /**
  * A component that renders a link to switch between languages.
  */
-export function LanguageSwitcher({ ...props }: LanguageSwitcherProps) {
-  const { pathname } = useLocation();
+export function LanguageSwitcher() {
   const { i18n, t } = useTranslation('common');
-  
-  const altLang = i18n.language === 'fr' ? 'en' : 'fr';
-  const altLangUrl = `${pathname}?lang=${altLang}`;
+  const fetcher = useFetcher();
 
-  const changeLanguage: ReactEventHandler = () => {
+  const altLang = i18n.language === 'fr' ? 'en' : 'fr';
+
+  const changeLanguage: MouseEventHandler<HTMLButtonElement> = (event) => {
+    fetcher.submit(event.currentTarget.form, { method: 'POST' });
     i18n.changeLanguage(altLang);
   };
 
   return (
-    <Link {...props} to={altLangUrl} onClick={changeLanguage}>
-      {t('alt-lang')}
-    </Link>
+    <fetcher.Form method="post" action="/api/switch-lang">
+      <button onClick={changeLanguage}>{t('alt-lang')}</button>
+    </fetcher.Form>
   );
 }
