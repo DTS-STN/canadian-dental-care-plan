@@ -9,7 +9,8 @@
     "format": "prettier --write .",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/index.js",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@remix-run/css-bundle": "^2.4.0",
@@ -27,9 +28,11 @@
     "react-i18next": "^13.5.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.40.1",
     "@remix-run/dev": "^2.4.0",
     "@remix-run/eslint-config": "^2.4.0",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/node": "^20.10.5",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
