@@ -1,0 +1,100 @@
+#
+# The following labels should be set at build time.
+#
+#     - BUILD_DATE
+#     - BUILD_ID
+#     - BUILD_REVISION
+#     - BUILD_VERSION
+#
+# example commands:
+#
+# 	$ docker build . --tag canadian-dental-care-plan \
+# 	      --build-arg BUILD_DATE="$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+# 	      --build-arg BUILD_ID="0000" \
+# 	      --build-arg BUILD_REVISION="$(git rev-parse --short=8 HEAD)" \
+# 	      --build-arg BUILD_VERSION="$(date -u +%Y%m%d)-0000-$(git rev-parse --short=8 HEAD)"
+# 	$ docker inspect canadian-dental-care-plan
+# 	$ docker run --init --rm --publish 3000:3000 canadian-dental-care-plan
+
+
+# base node image
+FROM docker.io/node:20.10.0-bookworm-slim AS base
+
+ARG BUILD_DATE="1970-01-01T00:00:00.000Z"
+ARG BUILD_ID="0000"
+ARG BUILD_REVISION="00000000"
+ARG BUILD_VERSION="19700101-0000-00000000"
+
+ENV BUILD_DATE=${BUILD_DATE}
+ENV BUILD_ID=${BUILD_ID}
+ENV BUILD_REVISION=${BUILD_REVISION}
+ENV BUILD_VERSION=${BUILD_VERSION}
+
+ENV NODE_ENV production
+
+
+
+# Intermediate image containing all dependencies
+FROM base as deps
+
+WORKDIR /home/node
+COPY --chown=node:node package.json package-lock.json ./
+
+USER node
+RUN npm clean-install --include dev
+
+
+
+# Intermediate image containing production-only dependencies
+FROM base as prod-deps
+
+WORKDIR /home/node
+COPY --from=deps --chown=node:node /home/node/node_modules/ ./node_modules/
+COPY --chown=node:node package.json package-lock.json ./
+
+USER node
+RUN npm prune --omit dev
+
+
+
+# Intermediate image containing application build files
+FROM base as build
+
+WORKDIR /home/node
+COPY --from=deps --chown=node:node /home/node/node_modules/ ./node_modules/
+COPY --chown=node:node ./ ./
+
+USER node
+RUN npm run build
+
+
+
+# Final image containing slimmed-down production build
+FROM base
+
+ARG IMAGE_AUTHORS="Digital Technology Solutions"
+ARG IMAGE_DESCRIPTION="Canadian Dental Care Plan -- Frontend Application"
+ARG IMAGE_TITLE="Canadian Dental Care Plan"
+ARG IMAGE_URL="https://github.com/DTS-STN/canadian-dental-care-plan/"
+ARG IMAGE_VENDOR="Employment and Social Development Canada"
+
+# see: https://github.com/opencontainers/image-spec/blob/main/annotations.md
+LABEL org.opencontainers.image.created=${BUILD_DATE}
+LABEL org.opencontainers.image.revision=${BUILD_REVISION}
+LABEL org.opencontainers.image.version=${BUILD_VERSION}
+
+LABEL org.opencontainers.image.authors=${IMAGE_AUTHORS}
+LABEL org.opencontainers.image.description=${IMAGE_DESCRIPTION}
+LABEL org.opencontainers.image.title=${IMAGE_TITLE}
+LABEL org.opencontainers.image.url=${IMAGE_URL}
+LABEL org.opencontainers.image.vendor=${IMAGE_VENDOR}
+
+WORKDIR /home/node
+COPY --from=prod-deps --chown=node:node /home/node/node_modules/ ./node_modules/
+COPY --from=build --chown=node:node /home/node/build/ ./build/
+COPY --from=build --chown=node:node /home/node/public/ ./public/
+COPY --from=build --chown=node:node /home/node/package.json /home/node/package-lock.json ./
+
+USER node
+ENV PORT=3000
+CMD npm run start
