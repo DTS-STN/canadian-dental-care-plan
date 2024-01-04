@@ -1,7 +1,7 @@
-import { Cookie } from '@remix-run/node';
+import { type Cookie } from '@remix-run/node';
 
 import { parse, serialize } from 'cookie';
-import { createInstance, InitOptions, type Namespace } from 'i18next';
+import { type InitOptions, type Namespace, createInstance } from 'i18next';
 import I18NexFsBackend from 'i18next-fs-backend';
 import { resolve } from 'node:path';
 
