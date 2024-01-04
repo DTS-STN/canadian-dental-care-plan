@@ -16,7 +16,7 @@ import { PassThrough } from 'node:stream';
 import { renderToPipeableStream } from 'react-dom/server';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 
-import { NonceContext } from '~/components/nonce-context';
+import { NonceProvider } from '~/components/nonce-context';
 import { getNamespaces } from '~/utils/locale-utils';
 import { createLangCookie, getLocale } from '~/utils/locale-utils.server';
 
@@ -71,9 +71,9 @@ export default async function handleRequest(request: Request, responseStatusCode
 
     const { pipe, abort } = renderToPipeableStream(
       <I18nextProvider i18n={i18n}>
-        <NonceContext.Provider value={{ nonce }}>
+        <NonceProvider nonce={nonce}>
           <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />
-        </NonceContext.Provider>
+        </NonceProvider>
       </I18nextProvider>,
       {
         [handlerFnName]() {
