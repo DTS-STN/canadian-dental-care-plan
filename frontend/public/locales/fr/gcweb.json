@@ -1,0 +1,20 @@
+{
+  "gcweb": {
+    "nav.skip-to-content": "Passer au contenu principal",
+    "nav.skip-to-about": "Passer à « À propos de ce site »",
+    "header.application-title": "Régime canadien de soins dentaires",
+    "header.language-selection": "Sélection de la langue",
+    "header.govt-of-canada": "Gouvernement du Canada",
+    "footer.about-site": "À propos de ce site",
+    "footer.gc-corporate": "Organisation du gouvernement du Canada",
+    "footer.terms-conditions.text": "Avis",
+    "footer.terms-conditions.href": "https://www.canada.ca/fr/transparence/avis.html",
+    "footer.privacy.text": "Confidentialité",
+    "footer.privacy.href": "https://www.canada.ca/fr/transparence/confidentialite.html",
+    "footer.gc-symbol": "Symbole du gouvernement du Canada",
+    "language-switcher.alt-lang": "English",
+    "language-switcher.alt-lang-abbr": "EN",
+    "page-details.page-details": "Détails de la page",
+    "page-details.date-modfied": "Date de modification\u00a0:"
+  }
+}

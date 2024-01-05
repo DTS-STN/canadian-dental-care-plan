@@ -3,7 +3,6 @@ import { Link } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import { LanguageSwitcher } from '~/components/language-switcher';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -31,11 +30,10 @@ export default function Index() {
 
   return (
     <>
-      <h1 className="mb-5 text-3xl font-bold underline">{t('index.page-title')}</h1>
+      <h1 id="wb-cont" property="name">
+        {t('index.page-title')}
+      </h1>
       <ul>
-        <li>
-          <LanguageSwitcher />
-        </li>
         <li>
           <Link to="/about">About</Link>
         </li>

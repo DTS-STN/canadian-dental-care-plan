@@ -1,0 +1,20 @@
+{
+  "gcweb": {
+    "nav.skip-to-content": "Skip to main content",
+    "nav.skip-to-about": "Skip to About this site",
+    "header.application-title": "Canadian Dental Care Plan",
+    "header.language-selection": "Language selection",
+    "header.govt-of-canada": "Government of Canada",
+    "footer.about-site": "About this site",
+    "footer.gc-corporate": "Government of Canada Corporate",
+    "footer.terms-conditions.text": "Terms and conditions",
+    "footer.terms-conditions.href": "https://www.canada.ca/en/transparency/terms.html",
+    "footer.privacy.text": "Privacy",
+    "footer.privacy.href": "https://www.canada.ca/en/transparency/privacy.html",
+    "footer.gc-symbol": "Symbol of the Government of Canada",
+    "language-switcher.alt-lang": "Français",
+    "language-switcher.alt-lang-abbr": "FR",
+    "page-details.page-details": "Page details",
+    "page-details.date-modfied": "Date modified:"
+  }
+}
