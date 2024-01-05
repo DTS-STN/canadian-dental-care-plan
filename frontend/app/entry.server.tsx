@@ -1,8 +1,3 @@
-/**
- * By default, Remix will handle generating the HTTP Response for you.
- * You are free to delete this file if you'd like to, but if you ever want it revealed again, you can run `npx remix reveal` ✨
- * For more information, see https://remix.run/file-conventions/entry.server
- */
 import type { EntryContext } from '@remix-run/node';
 import { createReadableStreamFromReadable } from '@remix-run/node';
 import { RemixServer } from '@remix-run/react';
@@ -10,7 +5,7 @@ import { RemixServer } from '@remix-run/react';
 import { createInstance } from 'i18next';
 import I18NexFsBackend from 'i18next-fs-backend';
 import isbot from 'isbot';
-import * as crypto from 'node:crypto';
+import crypto from 'node:crypto';
 import { resolve } from 'node:path';
 import { PassThrough } from 'node:stream';
 import { renderToPipeableStream } from 'react-dom/server';
@@ -34,7 +29,7 @@ function generateContentSecurityPolicy(nonce: string) {
     // prettier-ignore
     `base-uri 'none'`,
     `default-src 'none'`,
-    `connect-src 'self'` + (isDevelopment && ' ws://localhost:3001'),
+    `connect-src 'self'` + (isDevelopment ? ' ws://localhost:3001' : ''),
     `script-src 'strict-dynamic' 'nonce-${nonce}'`,
     `style-src 'self'`,
   ].join('; ');

@@ -39,6 +39,12 @@ export default function Index() {
         <li>
           <Link to="/about">About</Link>
         </li>
+        <li>
+          <Link to="/not-found">404 not found page</Link>
+        </li>
+        <li>
+          <Link to="/error">500 internal server error page</Link>
+        </li>
       </ul>
     </>
   );
