@@ -1,6 +1,6 @@
 {
-  "alt-lang": "Français",
-  "index.page-title": "Canadian Dental Care Plan",
+  "index.page-title": "Home",
+  "about.page-title": "About us",
   "errors": {
     "not-found": {
       "page-title": "Not found",

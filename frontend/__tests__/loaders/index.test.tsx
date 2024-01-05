@@ -1,4 +1,4 @@
-import { loader } from '~/routes/_index';
+import { loader } from '~/routes/_gcweb-application+/_index';
 
 describe('Loader for _index in english', () => {
   test('gets page title', async () => {

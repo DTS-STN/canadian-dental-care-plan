@@ -30,6 +30,8 @@ function generateContentSecurityPolicy(nonce: string) {
     `base-uri 'none'`,
     `default-src 'none'`,
     `connect-src 'self'` + (isDevelopment ? ' ws://localhost:3001' : ''),
+    `font-src 'self' fonts.gstatic.com`,
+    `img-src 'self'`,
     `script-src 'strict-dynamic' 'nonce-${nonce}'`,
     `style-src 'self'`,
   ].join('; ');
