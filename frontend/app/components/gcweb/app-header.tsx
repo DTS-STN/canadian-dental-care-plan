@@ -2,7 +2,7 @@ import { Link } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import { LanguageSwitcher } from '../language-switcher';
+import { LanguageSwitcher } from '~/components/gcweb/language-switcher';
 
 export default function AppHeader() {
   const { i18n, t } = useTranslation(['gcweb']);
