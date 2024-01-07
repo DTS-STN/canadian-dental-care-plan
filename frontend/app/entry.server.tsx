@@ -4,7 +4,7 @@ import { RemixServer } from '@remix-run/react';
 
 import { createInstance } from 'i18next';
 import I18NexFsBackend from 'i18next-fs-backend';
-import isbot from 'isbot';
+import { isbot } from 'isbot';
 import crypto from 'node:crypto';
 import { resolve } from 'node:path';
 import { PassThrough } from 'node:stream';
