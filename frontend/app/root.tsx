@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 
-import { LinksFunction } from '@remix-run/node';
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
@@ -8,7 +7,14 @@ import { useTranslation } from 'react-i18next';
 import { NonceContext } from './components/nonce-context';
 import stylesheet from '~/tailwind.css';
 
-export const links: LinksFunction = () => [{ rel: 'stylesheet', href: stylesheet }];
+export const handle = {
+  gcweb: {
+    dateModified: '2000-01-01',
+    version: '0.0.0',
+  },
+};
+
+export const links = () => [{ rel: 'stylesheet', href: stylesheet }];
 
 export default function App() {
   const { nonce } = useContext(NonceContext);

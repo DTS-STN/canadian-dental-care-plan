@@ -5,8 +5,11 @@ import { useTranslation } from 'react-i18next';
 
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  return [{ title: data?.pageTitle }];
+export const handle = {
+  gcweb: {
+    pageId: 'CDCP-0001',
+  },
+  i18nNamespaces: ['common'],
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -21,8 +24,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json({ pageTitle: t('index.page-title') });
 };
 
-export const handle = {
-  i18nNamespaces: ['common'],
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [{ title: data?.pageTitle }];
 };
 
 export default function Index() {

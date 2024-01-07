@@ -1,3 +1,9 @@
+export const handle = {
+  gcweb: {
+    pageId: 'CDCP-0003',
+  },
+};
+
 /**
  * Error route used to test error handling.
  * TODO :: GjB :: eventually remove
