@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
-import { type LoaderFunctionArgs } from '@remix-run/node';
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, json } from '@remix-run/react';
+import { type LoaderFunctionArgs, json } from '@remix-run/node';
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 

@@ -1,5 +1,5 @@
-import { type LoaderFunctionArgs } from '@remix-run/node';
-import { Link, type MetaFunction, json } from '@remix-run/react';
+import { type LoaderFunctionArgs, type MetaFunction, json } from '@remix-run/node';
+import { Link } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
