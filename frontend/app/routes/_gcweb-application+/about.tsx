@@ -1,15 +1,24 @@
-import { type LoaderFunctionArgs, json } from '@remix-run/node';
+import { type LoaderFunctionArgs, type MetaFunction, json } from '@remix-run/node';
 
 import { useTranslation } from 'react-i18next';
+
+import { getFixedT } from '~/utils/locale-utils.server';
 
 export const handle = {
   i18nNamespaces: ['common'],
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const t = await getFixedT(request, handle.i18nNamespaces);
+
   return json({
     pageId: 'CDCP-0002',
+    pageTitle: t('about.page-title'),
   });
+};
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [{ title: data?.pageTitle }];
 };
 
 export default function About() {

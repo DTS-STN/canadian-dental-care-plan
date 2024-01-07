@@ -41,7 +41,7 @@ export async function getFixedT<N extends Namespace>(request: Request, namespace
 
   await i18n.use(I18NexFsBackend).init({
     backend: { loadPath: resolve('./public/locales/{{lng}}/{{ns}}.json') },
-    fallbackLng: await getLocale(request),
+    fallbackLng: false,
     interpolation: { escapeValue: false },
     lng: await getLocale(request),
     ns: namespaces,
