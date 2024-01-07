@@ -8,7 +8,7 @@ import { NonceContext } from '~/components/nonce-context';
 
 export default function NotFound() {
   const { nonce } = useContext(NonceContext);
-  const { i18n, t } = useTranslation(['common']);
+  const { i18n, t } = useTranslation();
 
   // (content will be added by <Trans>)
   // eslint-disable-next-line jsx-a11y/anchor-has-content

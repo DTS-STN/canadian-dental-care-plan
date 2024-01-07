@@ -15,6 +15,16 @@
     "language-switcher.alt-lang": "English",
     "language-switcher.alt-lang-abbr": "EN",
     "page-details.page-details": "Détails de la page",
-    "page-details.date-modfied": "Date de modification\u00a0:"
+    "page-details.date-modfied": "Date de modification\u00a0:",
+    "not-found.page-title": "Page introuvable",
+    "not-found.page-header": "Nous ne pouvons trouver cette page Web (Erreur 404)",
+    "not-found.page-message": "Nous sommes désolés que vous ayez abouti ici. Il arrive parfois qu'une page ait été déplacée ou supprimée. Heureusement, nous pouvons vous aider à trouver ce que vous cherchez.",
+    "not-found.page-link": "Retournez à la <home>page d'accueil</home>",
+    "server-error.page-title": "Erreur interne du serveur",
+    "server-error.page-header": "Nous éprouvons des difficultés avec cette page",
+    "server-error.page-subheader": "(Erreur 500)",
+    "server-error.page-message": "Nous espérons résoudre le problème sous peu. Il ne s'agit pas d'un problème avec votre ordinateur ou Internet, mais plutôt avec le serveur de notre site Web. Que faire?",
+    "server-error.option-01": "Actualisez la page ou réessayez plus tard",
+    "server-error.option-02": "Retournez à la <home>page d'accueil</home>"
   }
 }

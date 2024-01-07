@@ -15,6 +15,16 @@
     "language-switcher.alt-lang": "Français",
     "language-switcher.alt-lang-abbr": "FR",
     "page-details.page-details": "Page details",
-    "page-details.date-modfied": "Date modified:"
+    "page-details.date-modfied": "Date modified:",
+    "not-found.page-title": "Not found",
+    "not-found.page-header": "We couldn't find that Web page (Error 404)",
+    "not-found.page-message": "We're sorry you ended up here. Sometimes a page gets moved or deleted, but hopefully we can help you find what you're looking for.",
+    "not-found.page-link": "Return to the <home>home page</home>",
+    "server-error.page-title": "Internal server error",
+    "server-error.page-header": "We're having a problem with that page",
+    "server-error.page-subheader": "(Error 500)",
+    "server-error.page-message": "We expect the problem to be fixed shortly. It's not your computer or Internet connection but a problem with our website's server. What next?",
+    "server-error.option-01": "Try refreshing the page or try again later",
+    "server-error.option-02": "Return to the <home>home page</home>"
   }
 }

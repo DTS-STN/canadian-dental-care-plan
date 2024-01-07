@@ -1,20 +1,4 @@
 {
   "index.page-title": "Home",
-  "about.page-title": "About us",
-  "errors": {
-    "not-found": {
-      "page-title": "Not found",
-      "page-header": "We couldn't find that Web page (Error 404)",
-      "page-message": "We're sorry you ended up here. Sometimes a page gets moved or deleted, but hopefully we can help you find what you're looking for.",
-      "page-link": "Return to the <home>home page</home>"
-    },
-    "server-error": {
-      "page-title": "Internal server error",
-      "page-header": "We're having a problem with that page",
-      "page-subheader": "Error 500",
-      "page-message": "We expect the problem to be fixed shortly. It's not your computer or Internet connection but a problem with our website's server. What next?",
-      "option-01": "Try refreshing the page or try again later",
-      "option-02": "Return to the <home>home page</home>"
-    }
-  }
+  "about.page-title": "About us"
 }
