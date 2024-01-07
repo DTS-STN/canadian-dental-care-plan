@@ -17,7 +17,7 @@ export function LanguageSwitcher({ ...props }: LanguageSwitcherProps) {
   const to = `${pathname}?lang=${i18n.language === 'fr' ? 'en' : 'fr'}`;
 
   return (
-    <Link {...props} to={to} reloadDocument>
+    <Link {...props} to={to} data-testid="language-switcher" reloadDocument>
       <span className="hidden-xs">{t('gcweb.language-switcher.alt-lang')}</span>
       <abbr title="Français" className="visible-xs h3 mrgn-tp-sm mrgn-bttm-0 text-uppercase">
         {t('gcweb.language-switcher.alt-lang-abbr')}
