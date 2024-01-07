@@ -1,20 +1,26 @@
 import { useContext } from 'react';
 
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
+import { type LoaderFunctionArgs } from '@remix-run/node';
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, json } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import { NonceContext } from './components/nonce-context';
+import { NonceContext } from '~/components/nonce-context';
 import stylesheet from '~/tailwind.css';
-
-export const handle = {
-  gcweb: {
-    dateModified: '2000-01-01',
-    version: '0.0.0',
-  },
-};
+import { readBuildInfo } from '~/utils/build-info';
 
 export const links = () => [{ rel: 'stylesheet', href: stylesheet }];
+
+export const loader = ({ request }: LoaderFunctionArgs) => {
+  const buildInfo = readBuildInfo('build-info.json') ?? {
+    buildDate: '2000-01-01T00:00:00Z',
+    buildId: '0000',
+    buildRevision: '00000000',
+    buildVersion: '0.0.0+00000000-0000',
+  };
+
+  return json({ buildInfo });
+};
 
 export default function App() {
   const { nonce } = useContext(NonceContext);

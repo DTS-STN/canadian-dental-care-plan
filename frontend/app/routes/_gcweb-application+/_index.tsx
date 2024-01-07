@@ -1,14 +1,11 @@
-import { type LoaderFunctionArgs, type MetaFunction, json } from '@remix-run/node';
-import { Link } from '@remix-run/react';
+import { type LoaderFunctionArgs } from '@remix-run/node';
+import { Link, type MetaFunction, json } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 
 export const handle = {
-  gcweb: {
-    pageId: 'CDCP-0001',
-  },
   i18nNamespaces: ['common'],
 };
 
@@ -21,7 +18,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  return json({ pageTitle: t('index.page-title') });
+  return json({
+    pageId: 'CDCP-0001',
+    pageTitle: t('index.page-title'),
+  });
 };
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {

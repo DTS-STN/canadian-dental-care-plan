@@ -1,7 +1,10 @@
-export const handle = {
-  gcweb: {
+import { type LoaderFunctionArgs } from '@remix-run/node';
+import { json } from '@remix-run/react';
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  return json({
     pageId: 'CDCP-0003',
-  },
+  });
 };
 
 /**

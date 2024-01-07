@@ -1,10 +1,16 @@
+import { type LoaderFunctionArgs } from '@remix-run/node';
+import { json } from '@remix-run/react';
+
 import { useTranslation } from 'react-i18next';
 
 export const handle = {
-  gcweb: {
-    pageId: 'CDCP-0002',
-  },
   i18nNamespaces: ['common'],
+};
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  return json({
+    pageId: 'CDCP-0002',
+  });
 };
 
 export default function About() {

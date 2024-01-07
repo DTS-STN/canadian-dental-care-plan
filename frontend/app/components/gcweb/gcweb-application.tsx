@@ -3,6 +3,7 @@ import { Link, useMatches } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 
 import { LanguageSwitcher } from './language-switcher';
+import { useBuildInfo } from '~/utils/build-info';
 
 export type GCWebApplicationProps = {
   children: React.ReactElement;
@@ -106,12 +107,14 @@ function ApplicationFooter() {
 }
 
 function PageDetails() {
-  type PageDetailsAttrs = { gcweb?: { dateModified?: string; pageId?: string; version?: string } };
-  const pageDetailsAttrs = useMatches().map((match) => match.handle as PageDetailsAttrs);
+  const buildInfo = useBuildInfo();
 
-  const dateModified = pageDetailsAttrs.map((attr) => attr.gcweb?.dateModified).reduce((last, curr) => curr ?? last, undefined);
-  const pageId = pageDetailsAttrs.map((attr) => attr.gcweb?.pageId).reduce((last, curr) => curr ?? last, undefined);
-  const version = pageDetailsAttrs.map((attr) => attr.gcweb?.version).reduce((last, curr) => curr ?? last, undefined);
+  type PageDetailsAttrs = { pageId?: string };
+  const pageDetailsAttrs = useMatches().map((match) => match.data as PageDetailsAttrs);
+
+  const dateModified = buildInfo?.buildDate;
+  const pageId = pageDetailsAttrs.map((attr) => attr?.pageId).reduce((last, curr) => curr ?? last);
+  const version = buildInfo?.buildVersion;
 
   const { t } = useTranslation(['gcweb']);
 
@@ -133,7 +136,7 @@ function PageDetails() {
               <>
                 <dt className="float-left clear-left pr-[1ch]">{t('gcweb.page-details.date-modfied')}</dt>
                 <dd className="float-left clear-right mb-0">
-                  <time property="dateModified">{dateModified}</time>
+                  <time property="dateModified">{dateModified.slice(0, 10)}</time>
                 </dd>
               </>
             )}
