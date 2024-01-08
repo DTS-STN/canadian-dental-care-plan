@@ -1,7 +1,7 @@
 import { createCookie } from '@remix-run/node';
 
 import { parse, serialize } from 'cookie';
-import { type InitOptions, type Namespace, createInstance } from 'i18next';
+import { type Namespace, createInstance } from 'i18next';
 import I18NexFsBackend from 'i18next-fs-backend';
 import { resolve } from 'node:path';
 import { initReactI18next } from 'react-i18next';
@@ -38,9 +38,10 @@ export function createLangCookie() {
  * Returns a t function that defaults to the language resolved through the request.
  * @see https://www.i18next.com/overview/api#getfixedt
  */
-export async function getFixedT<N extends Namespace>(request: Request, namespaces: N, options?: Omit<InitOptions, 'react'>) {
-  const i18n = await initI18n(await getLocale(request), namespaces);
-  return i18n.getFixedT(null, null);
+export async function getFixedT(request: Request, namespaces: Namespace) {
+  const locale = await getLocale(request);
+  const i18n = await initI18n(locale, namespaces);
+  return i18n.getFixedT(locale ?? null, namespaces);
 }
 
 /**
