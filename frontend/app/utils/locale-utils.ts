@@ -7,27 +7,18 @@ import { type RouteHandle } from '~/types';
 
 /**
  * Returns all namespaces required by the given routes by examining the route's i18nNamespaces handle property.
- *
- * @param {RouteModules} routeModules - Object containing route modules
  * @see https://remix.run/docs/en/main/route/handle
  */
-export function getNamespaces(routeModules: Record<string, { handle?: unknown }>) {
-  const namespaces = new Set(
-    Object.values(routeModules)
-      .map((route) => route.handle)
-      .filter((handle): handle is RouteHandle => handle !== undefined)
-      .map((handle) => handle.i18nNamespaces)
-      .filter((i18nNamespaces): i18nNamespaces is Namespace => i18nNamespaces !== undefined)
-      .flatMap((i18nNamespaces) => i18nNamespaces),
-  );
-
-  return [...namespaces];
+export function getNamespaces(routes: Array<{ handle?: unknown }>) {
+  const routeHandles = routes.map((route) => route.handle).filter((handle): handle is RouteHandle => handle !== undefined);
+  const i18nNamespaces = routeHandles.map((handle) => handle.i18nNamespaces).filter((i18nNamespaces): i18nNamespaces is Namespace => i18nNamespaces !== undefined);
+  return [...new Set(i18nNamespaces.flatMap((i18nNamespace) => i18nNamespace))];
 }
 
 /**
  * Initializes the client instance of i18next.
  */
-export async function initI18n(namespaces: string[]) {
+export async function initI18n(namespaces: Array<string>) {
   const i18n = createInstance();
 
   await i18n

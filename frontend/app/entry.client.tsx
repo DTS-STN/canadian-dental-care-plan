@@ -13,7 +13,8 @@ import { I18nextProvider } from 'react-i18next';
 import { getNamespaces, initI18n } from '~/utils/locale-utils';
 
 async function hydrate() {
-  const i18n = await initI18n(getNamespaces(window.__remixRouteModules));
+  const routes = Object.values(window.__remixRouteModules);
+  const i18n = await initI18n(getNamespaces(routes));
 
   startTransition(() => {
     hydrateRoot(
