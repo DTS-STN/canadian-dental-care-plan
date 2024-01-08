@@ -48,7 +48,7 @@ export async function getFixedT<N extends Namespace>(request: Request, namespace
  */
 export async function getLocale(request: Request) {
   const searchParams = new URL(request.url).searchParams;
-  const searchParamsLang = searchParams.get(getEnv('LANG_PARAM') ?? 'lang');
+  const searchParamsLang = searchParams.get(getEnv('LANG_QUERY_PARAM') ?? 'lang');
 
   if (searchParamsLang === 'en') {
     log.debug('Locale [en] detected in URL search params');
