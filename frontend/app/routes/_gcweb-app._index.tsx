@@ -8,6 +8,7 @@ import { getFixedT } from '~/utils/locale-utils.server';
 
 export const handle = {
   i18nNamespaces: ['common'],
+  i18nPageTitleKey: 'index.page-title',
 } satisfies RouteHandle;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

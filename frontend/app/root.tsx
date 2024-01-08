@@ -1,10 +1,11 @@
 import { useContext } from 'react';
 
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useMatches } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
+import { getNamespaces } from './utils/locale-utils';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import stylesheet from '~/tailwind.css';
@@ -42,6 +43,7 @@ export default function () {
         <Links />
       </head>
       <body vocab="http://schema.org/" typeof="WebPage">
+        <PageTitle />
         <Outlet />
         <ClientEnv env={env} nonce={nonce} />
         <ScrollRestoration nonce={nonce} />
@@ -49,5 +51,22 @@ export default function () {
         <LiveReload nonce={nonce} />
       </body>
     </html>
+  );
+}
+
+function PageTitle() {
+  const matches = useMatches();
+  const namespaces = getNamespaces(matches);
+
+  const { t } = useTranslation(namespaces);
+
+  const handles = matches.map((matches) => matches.handle).filter((handle): handle is { i18nPageTitleKey: string } => handle !== undefined);
+  const i18nPageTitleKey = handles.map((handle) => handle.i18nPageTitleKey).reduce((last, curr) => curr ?? last);
+  console.debug({ namespaces, i18nPageTitleKey });
+
+  return (
+    <>
+      <big>Page title is: ${t(i18nPageTitleKey)}</big>
+    </>
   );
 }
