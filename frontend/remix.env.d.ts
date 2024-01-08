@@ -1,9 +1,14 @@
 /// <reference types="@remix-run/dev" />
 /// <reference types="@remix-run/node" />
-
 // i18next - import all namespaces (for the default language, only)
 import type common from '../public/locales/en/common.json';
 import type gcweb from '../public/locales/en/gcweb.json';
+
+declare global {
+  interface Window {
+    env: Record<string, unknown>;
+  }
+}
 
 /**
  * @see https://www.i18next.com/overview/typescript
