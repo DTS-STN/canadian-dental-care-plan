@@ -13,6 +13,5 @@ export function useClientEnv(key: string) {
     return getEnv(key);
   }
 
-  const windowWithEnv = window as unknown as { env: Record<string, string> };
-  return windowWithEnv.env[key];
+  return window.env[key];
 }
