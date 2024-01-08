@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { NonceContext } from '~/components/nonce-context';
 import stylesheet from '~/tailwind.css';
-import { readBuildInfo } from '~/utils/build-info';
+import { readBuildInfo } from '~/utils/build-info.server';
 
 export const links = () => [{ rel: 'stylesheet', href: stylesheet }];
 
@@ -22,7 +22,7 @@ export const loader = ({ request }: LoaderFunctionArgs) => {
   return json({ buildInfo });
 };
 
-export default function App() {
+export default function () {
   const { nonce } = useContext(NonceContext);
   const { i18n } = useTranslation();
 

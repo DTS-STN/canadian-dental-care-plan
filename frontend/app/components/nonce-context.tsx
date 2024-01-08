@@ -3,17 +3,22 @@ import { type ReactNode, createContext } from 'react';
 /**
  * Context for the NonceContext.
  */
-export type NonceContextType = { nonce?: string };
+export type NonceContextProps = {
+  nonce?: string;
+};
 
 /**
  * A react context that provides nonce values to child components.
  */
-export const NonceContext = createContext<NonceContextType>({});
+export const NonceContext = createContext<NonceContextProps>({});
 
 /**
  * Prop types for NonceProvider.
  */
-export type NonceProviderProps = { nonce?: string; children?: ReactNode };
+export type NonceProviderProps = {
+  children?: ReactNode;
+  nonce?: string;
+};
 
 /**
  * The NonceContext provider.

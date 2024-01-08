@@ -3,21 +3,15 @@ import { Link } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import { getFixedT, getLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 
 export const handle = {
   i18nNamespaces: ['common'],
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const locale = getLocale(request);
-  const { pathname } = new URL(request.url);
-
-  if (pathname !== '/' && locale === undefined) {
-    throw new Response('Not found', { status: 404, statusText: 'Not found' });
-  }
-
   const t = await getFixedT(request, handle.i18nNamespaces);
+
   return json({
     pageId: 'CDCP-0001',
     pageTitle: t('index.page-title'),
@@ -28,7 +22,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: data?.pageTitle }];
 };
 
-export default function Index() {
+export default function () {
   const { t } = useTranslation(handle.i18nNamespaces);
 
   return (

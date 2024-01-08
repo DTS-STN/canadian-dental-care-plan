@@ -47,6 +47,7 @@ export async function getFixedT<N extends Namespace>(request: Request, namespace
     ns: namespaces,
   });
 
+  // see https://www.i18next.com/overview/api#getfixedt
   return i18n.getFixedT(null, null);
 }
 
