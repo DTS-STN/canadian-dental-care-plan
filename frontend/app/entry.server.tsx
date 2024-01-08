@@ -17,9 +17,8 @@ const abortDelay = 5_000;
 const log = getLogger('entry.server');
 
 export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, remixContext: EntryContext) {
-  log.debug(`Handling request ${request.method} ${request.url}`);
-
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
+  log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
 
   const locale = (await getLocale(request)) ?? 'en';
   const langCookie = await createLangCookie().serialize(locale);
