@@ -1,9 +1,9 @@
-import { type UNSAFE_RouteModules as RouteModules } from '@remix-run/react';
-
-import { createInstance } from 'i18next';
+import { type Namespace, createInstance } from 'i18next';
 import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import I18NextHttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
+
+import { type RouteHandle } from '~/types';
 
 /**
  * Returns all namespaces required by the given routes by examining the route's i18nNamespaces handle property.
@@ -11,11 +11,14 @@ import { initReactI18next } from 'react-i18next';
  * @param {RouteModules} routeModules - Object containing route modules
  * @see https://remix.run/docs/en/main/route/handle
  */
-export function getNamespaces(routeModules: RouteModules) {
+export function getNamespaces(routeModules: Record<string, { handle?: unknown }>) {
   const namespaces = new Set(
     Object.values(routeModules)
-      .filter((route) => (route.handle as { i18nNamespaces: string })?.i18nNamespaces !== undefined)
-      .flatMap((route) => (route.handle as { i18nNamespaces: string }).i18nNamespaces),
+      .map((route) => route.handle)
+      .filter((handle): handle is RouteHandle => handle !== undefined)
+      .map((handle) => handle.i18nNamespaces)
+      .filter((i18nNamespaces): i18nNamespaces is Namespace => i18nNamespaces !== undefined)
+      .flatMap((i18nNamespaces) => i18nNamespaces),
   );
 
   return [...namespaces];
