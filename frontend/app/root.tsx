@@ -1,13 +1,15 @@
 import { useContext } from 'react';
 
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
+import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import stylesheet from '~/tailwind.css';
 import { readBuildInfo } from '~/utils/build-info.server';
+import { getEnv } from '~/utils/environment.server';
 
 export const links = () => [{ rel: 'stylesheet', href: stylesheet }];
 
@@ -19,11 +21,16 @@ export const loader = ({ request }: LoaderFunctionArgs) => {
     buildVersion: '0.0.0+00000000-0000',
   };
 
-  return json({ buildInfo });
+  const env = {
+    LANG_QUERY_PARAM: getEnv('LANG_QUERY_PARAM') ?? 'lang',
+  };
+
+  return json({ buildInfo, env });
 };
 
 export default function () {
   const { nonce } = useContext(NonceContext);
+  const { env } = useLoaderData<typeof loader>();
   const { i18n } = useTranslation();
 
   return (
@@ -36,6 +43,7 @@ export default function () {
       </head>
       <body vocab="http://schema.org/" typeof="WebPage">
         <Outlet />
+        <ClientEnv env={env} nonce={nonce} />
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
         <LiveReload nonce={nonce} />
