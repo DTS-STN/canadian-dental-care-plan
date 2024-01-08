@@ -1,34 +1,48 @@
 {
   "gcweb": {
-    "nav.skip-to-content": "Passer au contenu principal",
-    "nav.skip-to-about": "Passer à « À propos de ce site »",
-    "header.application-title": "Régime canadien de soins dentaires",
-    "header.language-selection": "Sélection de la langue",
-    "header.govt-of-canada.text": "Gouvernement du Canada",
-    "header.govt-of-canada.href": "https://www.canada.ca/fr.html",
-    "footer.about-site": "À propos de ce site",
-    "footer.gc-corporate": "Organisation du gouvernement du Canada",
-    "footer.terms-conditions.text": "Avis",
-    "footer.terms-conditions.href": "https://www.canada.ca/fr/transparence/avis.html",
-    "footer.privacy.text": "Confidentialité",
-    "footer.privacy.href": "https://www.canada.ca/fr/transparence/confidentialite.html",
-    "footer.gc-symbol": "Symbole du gouvernement du Canada",
-    "language-switcher.alt-lang": "English",
-    "language-switcher.alt-lang-abbr": "EN",
-    "page-details.page-details": "Détails de la page",
-    "page-details.date-modfied": "Date de modification\u00a0:",
-    "page-details.screen-id": "Identificateur d'écran\u00a0:",
-    "page-details.version": "Version\u00a0:",
-    "not-found.page-title": "Page introuvable",
-    "not-found.page-header": "Nous ne pouvons trouver cette page",
-    "not-found.page-subheader": "(Erreur 404)",
-    "not-found.page-message": "Nous sommes désolés que vous ayez abouti ici. Il arrive parfois qu'une page ait été déplacée ou supprimée. Heureusement, nous pouvons vous aider à trouver ce que vous cherchez.",
-    "not-found.page-link": "Retournez à la <home>page d'accueil</home>",
-    "server-error.page-title": "Erreur interne du serveur",
-    "server-error.page-header": "Nous éprouvons des difficultés avec cette page",
-    "server-error.page-subheader": "(Erreur 500)",
-    "server-error.page-message": "Nous espérons résoudre le problème sous peu. Il ne s'agit pas d'un problème avec votre ordinateur ou Internet, mais plutôt avec le serveur de notre site Web. Que faire?",
-    "server-error.option-01": "Actualisez la page ou réessayez plus tard",
-    "server-error.option-02": "Retournez à la <home>page d'accueil</home>"
+    "nav": {
+      "skip-to-content": "Passer au contenu principal",
+      "skip-to-about": "Passer à « À propos de ce site »"
+    },
+    "header": {
+      "application-title": "Régime canadien de soins dentaires",
+      "language-selection": "Sélection de la langue",
+      "govt-of-canada.text": "Gouvernement du Canada",
+      "govt-of-canada.href": "https://www.canada.ca/fr.html"
+    },
+    "footer": {
+      "about-site": "À propos de ce site",
+      "gc-corporate": "Organisation du gouvernement du Canada",
+      "terms-conditions.text": "Avis",
+      "terms-conditions.href": "https://www.canada.ca/fr/transparence/avis.html",
+      "privacy.text": "Confidentialité",
+      "privacy.href": "https://www.canada.ca/fr/transparence/confidentialite.html",
+      "gc-symbol": "Symbole du gouvernement du Canada"
+    },
+    "language-switcher": {
+      "alt-lang": "English",
+      "alt-lang-abbr": "EN"
+    },
+    "page-details": {
+      "page-details": "Détails de la page",
+      "date-modfied": "Date de modification\u00a0:",
+      "screen-id": "Identificateur d'écran\u00a0:",
+      "version": "Version\u00a0:"
+    },
+    "not-found": {
+      "page-title": "Page introuvable",
+      "page-header": "Nous ne pouvons trouver cette page",
+      "page-subheader": "(Erreur 404)",
+      "page-message": "Nous sommes désolés que vous ayez abouti ici. Il arrive parfois qu'une page ait été déplacée ou supprimée. Heureusement, nous pouvons vous aider à trouver ce que vous cherchez.",
+      "page-link": "Retournez à la <home>page d'accueil</home>"
+    },
+    "server-error": {
+      "page-title": "Erreur interne du serveur",
+      "page-header": "Nous éprouvons des difficultés avec cette page",
+      "page-subheader": "(Erreur 500)",
+      "page-message": "Nous espérons résoudre le problème sous peu. Il ne s'agit pas d'un problème avec votre ordinateur ou Internet, mais plutôt avec le serveur de notre site Web. Que faire?",
+      "option-01": "Actualisez la page ou réessayez plus tard",
+      "option-02": "Retournez à la <home>page d'accueil</home>"
+    }
   }
 }
