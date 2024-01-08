@@ -1,4 +1,4 @@
-import { type Cookie, createCookie } from '@remix-run/node';
+import { createCookie } from '@remix-run/node';
 
 import { parse, serialize } from 'cookie';
 import { type InitOptions, type Namespace, createInstance } from 'i18next';
