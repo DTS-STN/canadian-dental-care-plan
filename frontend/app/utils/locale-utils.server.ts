@@ -1,33 +1,32 @@
-import { type Cookie } from '@remix-run/node';
+import { type Cookie, createCookie } from '@remix-run/node';
 
 import { parse, serialize } from 'cookie';
 import { type InitOptions, type Namespace, createInstance } from 'i18next';
 import I18NexFsBackend from 'i18next-fs-backend';
 import { resolve } from 'node:path';
+import { initReactI18next } from 'react-i18next';
+
+import { getEnv } from '~/utils/environment.server';
 
 /**
  * Creates a cookie object for the language.
  */
-export function createLangCookie(): Cookie {
-  const cookieName = '_gc_lang'; // TODO :: GjB :: make configurable
+export function createLangCookie() {
+  const cookieName = getEnv('LANG_COOKIE_NAME') ?? '_gc_lang';
 
   const cookieOptions = {
-    domain: undefined, // TODO :: GjB :: make configurable
-    httpOnly: false, // TODO :: GjB :: make configurable
-    path: '/', // TODO :: GjB :: make configurable
-    secure: false, // TODO :: GjB :: make configurable
+    domain: getEnv('LANG_COOKIE_DOMAIN'),
+    httpOnly: getEnv('LANG_COOKIE_HTTP_ONLY') === 'true',
+    path: getEnv('LANG_COOKIE_PATH') ?? '/',
+    secure: getEnv('LANG_COOKIE_SECURE') === 'true',
   };
 
-  return {
-    name: cookieName,
-    isSigned: false,
-    parse: async function (cookieHeader, parseOptions) {
-      return cookieHeader && parse(cookieHeader, { ...cookieOptions, ...parseOptions })[cookieName];
-    },
-    serialize: async function (value, serializeOptions) {
-      return serialize(cookieName, value, { ...cookieOptions, ...serializeOptions });
-    },
-  };
+  // Remix will JSON.stringify() cookies by default; to prevent this, we supply custom parse() and serialize() functions
+  const cookie = createCookie(cookieName, cookieOptions);
+  cookie.parse = async (cookieHeader, parseOptions) => cookieHeader && parse(cookieHeader, { ...cookieOptions, ...parseOptions })[cookieName];
+  cookie.serialize = async (value, serializeOptions) => serialize(cookieName, value, { ...cookieOptions, ...serializeOptions });
+
+  return cookie;
 }
 
 /**
@@ -58,7 +57,7 @@ export async function getFixedT<N extends Namespace>(request: Request, namespace
  */
 export async function getLocale(request: Request) {
   const searchParams = new URL(request.url).searchParams;
-  const searchParamsLang = searchParams.get('lang'); // TODO :: GjB :: make configurable
+  const searchParamsLang = searchParams.get(getEnv('LANG_PARAM') ?? 'lang');
 
   if (searchParamsLang === 'en') {
     return 'en';
@@ -88,4 +87,24 @@ export async function getLocale(request: Request) {
   //
 
   return undefined;
+}
+
+/**
+ * Initializes the server instance of i18next.
+ */
+export async function initI18n(locale: string, namespaces: string[]) {
+  const i18n = createInstance();
+
+  await i18n
+    .use(initReactI18next)
+    .use(I18NexFsBackend)
+    .init({
+      backend: { loadPath: resolve('./public/locales/{{lng}}/{{ns}}.json') },
+      fallbackLng: false,
+      interpolation: { escapeValue: false },
+      lng: locale,
+      ns: namespaces,
+    });
+
+  return i18n;
 }

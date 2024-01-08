@@ -1,5 +1,3 @@
-/* eslint-disable import/no-named-as-default-member */
-
 /**
  * By default, Remix will handle hydrating your app on the client for you.
  * You are free to delete this file if you'd like to, but if you ever want it revealed again, you can run `npx remix reveal` ✨
@@ -9,26 +7,13 @@ import { StrictMode, startTransition } from 'react';
 
 import { RemixBrowser } from '@remix-run/react';
 
-import i18n from 'i18next';
-import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
-import I18NextHttpBackend from 'i18next-http-backend';
 import { hydrateRoot } from 'react-dom/client';
-import { I18nextProvider, initReactI18next } from 'react-i18next';
+import { I18nextProvider } from 'react-i18next';
 
-import { getNamespaces } from '~/utils/locale-utils';
+import { getNamespaces, initI18n } from '~/utils/locale-utils';
 
 async function hydrate() {
-  await i18n
-    .use(initReactI18next)
-    .use(I18nextBrowserLanguageDetector)
-    .use(I18NextHttpBackend)
-    .init({
-      detection: { order: ['htmlTag'] },
-      fallbackLng: false,
-      interpolation: { escapeValue: false },
-      ns: getNamespaces(window.__remixRouteModules),
-      react: { useSuspense: false },
-    });
+  const i18n = await initI18n(getNamespaces(window.__remixRouteModules));
 
   startTransition(() => {
     hydrateRoot(
