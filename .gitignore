@@ -72,3 +72,9 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,osx,windows
+
+#
+# Custom entries below...
+#
+
+**/tmp/
