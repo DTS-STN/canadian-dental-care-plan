@@ -6,7 +6,7 @@ import I18NexFsBackend from 'i18next-fs-backend';
 import { resolve } from 'node:path';
 import { initReactI18next } from 'react-i18next';
 
-import { getEnv } from '~/utils/environment.server';
+import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('locale-utils.server');
@@ -15,13 +15,15 @@ const log = getLogger('locale-utils.server');
  * Creates a cookie object for the language.
  */
 export function createLangCookie() {
-  const cookieName = getEnv('LANG_COOKIE_NAME') ?? '_gc_lang';
+  const env = getEnv();
+
+  const cookieName = env.LANG_COOKIE_NAME;
 
   const cookieOptions = {
-    domain: getEnv('LANG_COOKIE_DOMAIN'),
-    httpOnly: getEnv('LANG_COOKIE_HTTP_ONLY') !== 'false',
-    path: getEnv('LANG_COOKIE_PATH') ?? '/',
-    secure: getEnv('LANG_COOKIE_SECURE') !== 'false',
+    domain: env.LANG_COOKIE_DOMAIN,
+    httpOnly: env.LANG_COOKIE_HTTP_ONLY,
+    path: env.LANG_COOKIE_PATH,
+    secure: env.LANG_COOKIE_SECURE,
   };
 
   const cookie = createCookie(cookieName, cookieOptions);
@@ -48,8 +50,10 @@ export async function getFixedT(request: Request, namespaces: Namespace) {
  * Retrieves the locale using a deterministic lookup algorithm (URL → cookies → 🤷).
  */
 export async function getLocale(request: Request) {
+  const env = getEnv();
+
   const searchParams = new URL(request.url).searchParams;
-  const searchParamsLang = searchParams.get(getEnv('LANG_QUERY_PARAM') ?? 'lang');
+  const searchParamsLang = searchParams.get(env.LANG_QUERY_PARAM);
 
   if (searchParamsLang === 'en') {
     log.debug('Locale [en] detected in URL search params');

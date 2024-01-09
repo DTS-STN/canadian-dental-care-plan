@@ -9,23 +9,24 @@ import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import stylesheet from '~/tailwind.css';
 import { readBuildInfo } from '~/utils/build-info.server';
-import { getEnv } from '~/utils/environment.server';
+import { getClientEnv } from '~/utils/env.server';
 
 export const links = () => [{ rel: 'stylesheet', href: stylesheet }];
 
 export const loader = ({ request }: LoaderFunctionArgs) => {
-  const buildInfo = readBuildInfo('build-info.json') ?? {
-    buildDate: '2000-01-01T00:00:00Z',
-    buildId: '0000',
-    buildRevision: '00000000',
-    buildVersion: '0.0.0+00000000-0000',
-  };
+  const { LANG_QUERY_PARAM } = getClientEnv();
 
-  const env = {
-    LANG_QUERY_PARAM: getEnv('LANG_QUERY_PARAM') ?? 'lang',
-  };
-
-  return json({ buildInfo, env });
+  return json({
+    buildInfo: readBuildInfo('build-info.json') ?? {
+      buildDate: '2000-01-01T00:00:00Z',
+      buildId: '0000',
+      buildRevision: '00000000',
+      buildVersion: '0.0.0+00000000-0000',
+    },
+    env: {
+      LANG_QUERY_PARAM,
+    },
+  });
 };
 
 export default function () {
