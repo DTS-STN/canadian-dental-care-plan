@@ -1,5 +1,5 @@
-import { getLogger } from './logging.server';
-import { getEnv } from '~/utils/environment.server';
+import { getEnv } from '~/utils/env.server';
+import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('csp.server');
 
@@ -8,7 +8,8 @@ const log = getLogger('csp.server');
  * @see https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html
  */
 export function generateContentSecurityPolicy(nonce: string) {
-  const isDevelopment = getEnv('NODE_ENV') === 'development';
+  const { NODE_ENV } = getEnv();
+  const isDevelopment = NODE_ENV === 'development';
 
   const contentSecurityPolicy = [
     // prettier-ignore

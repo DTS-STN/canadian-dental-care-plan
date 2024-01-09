@@ -1,10 +1,12 @@
 import { type Logger, createLogger, format, transports } from 'winston';
 
-import { getEnv } from './environment.server';
+import { getEnv } from './env.server';
 
-export const getLogger = (category: string): Logger =>
-  createLogger({
-    level: getEnv('LOG_LEVEL') ?? 'info',
+export const getLogger = (category: string): Logger => {
+  const { LOG_LEVEL } = getEnv();
+
+  return createLogger({
+    level: LOG_LEVEL,
     format: format.combine(
       format.align(),
       format.timestamp(),
@@ -12,3 +14,4 @@ export const getLogger = (category: string): Logger =>
     ),
     transports: [new transports.Console()],
   });
+};

@@ -1,17 +1,19 @@
 import { type ScriptProps } from '@remix-run/react/dist/components';
 
-import { getEnv } from '~/utils/environment.server';
+import { type ClientEnv, getClientEnv } from '~/utils/env.server';
 
-export type ClientEnvProps = ScriptProps & { env: unknown };
+export type ClientEnvProps = ScriptProps & { env: ClientEnv };
 
 export function ClientEnv({ env, ...props }: ClientEnvProps) {
   return <script {...props} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: `window.env = ${JSON.stringify(env)}` }} />;
 }
 
-export function useClientEnv(key: string) {
-  if (typeof window === 'undefined') {
-    return getEnv(key);
+export function useClientEnv() {
+  const isServer = typeof document === 'undefined';
+
+  if (isServer) {
+    return getClientEnv();
   }
 
-  return window.env[key];
+  return window.env;
 }
