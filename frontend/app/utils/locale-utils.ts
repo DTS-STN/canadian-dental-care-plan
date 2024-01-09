@@ -6,6 +6,21 @@ import { initReactI18next } from 'react-i18next';
 import { type RouteHandle } from '~/types';
 
 /**
+ * Returns the alternate language for the given input language.
+ * (ie: 'en' → 'fr'; 'fr' → 'en')
+ */
+export function getAltLanguage(language: string) {
+  switch (language) {
+    case 'en':
+      return 'fr';
+    case 'fr':
+      return 'en';
+    default:
+      throw new Error(`Unexpected language: ${language}`);
+  }
+}
+
+/**
  * Returns all namespaces required by the given routes by examining the route's i18nNamespaces handle property.
  * @see https://remix.run/docs/en/main/route/handle
  */
