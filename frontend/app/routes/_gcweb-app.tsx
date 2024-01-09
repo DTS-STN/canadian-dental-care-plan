@@ -1,11 +1,11 @@
 import { type ReactNode } from 'react';
 
 import { type LinksFunction } from '@remix-run/node';
-import { Link, type LinkProps, Outlet, isRouteErrorResponse, useLocation, useMatches, useRouteError } from '@remix-run/react';
+import { Link, Outlet, isRouteErrorResponse, useMatches, useRouteError } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 
-import { useClientEnv } from '~/components/client-env';
+import { LanguageSwitcher } from '~/components/language-switcher';
 import { type RouteHandle } from '~/types';
 import { useBuildInfo } from '~/utils/build-info';
 
@@ -80,7 +80,12 @@ function PageHeader() {
               <h2 className="wb-inv">{t('gcweb.header.language-selection')}</h2>
               <ul className="list-inline mrgn-bttm-0">
                 <li>
-                  <LanguageSwitcher />
+                  <LanguageSwitcher>
+                    <span className="hidden-xs">{t('gcweb.language-switcher.alt-lang')}</span>
+                    <abbr title="Français" className="visible-xs h3 mrgn-tp-sm mrgn-bttm-0 text-uppercase">
+                      {t('gcweb.language-switcher.alt-lang-abbr')}
+                    </abbr>
+                  </LanguageSwitcher>
                 </li>
               </ul>
             </section>
@@ -180,23 +185,6 @@ function PageFooter() {
         </div>
       </div>
     </footer>
-  );
-}
-
-function LanguageSwitcher({ ...props }: Omit<LinkProps, 'to' | 'reloadDocument'>) {
-  const langQueryParam = useClientEnv('LANG_QUERY_PARAM') ?? 'lang';
-  const { pathname } = useLocation();
-  const { i18n, t } = useTranslation(['gcweb']);
-
-  const to = `${pathname}?${langQueryParam}=${i18n.language === 'fr' ? 'en' : 'fr'}`;
-
-  return (
-    <Link {...props} to={to} data-testid="language-switcher" reloadDocument>
-      <span className="hidden-xs">{t('gcweb.language-switcher.alt-lang')}</span>
-      <abbr title="Français" className="visible-xs h3 mrgn-tp-sm mrgn-bttm-0 text-uppercase">
-        {t('gcweb.language-switcher.alt-lang-abbr')}
-      </abbr>
-    </Link>
   );
 }
 
