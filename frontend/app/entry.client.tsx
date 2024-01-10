@@ -12,19 +12,29 @@ import { I18nextProvider } from 'react-i18next';
 
 import { getNamespaces, initI18n } from '~/utils/locale-utils';
 
+async function prepareApp() {
+  if (process.env.NODE_ENV === 'development') {
+    const { worker } = await import('./mocks/browser');
+    return worker.start();
+  }
+  return Promise.resolve();
+}
+
 async function hydrate() {
   const routes = Object.values(window.__remixRouteModules);
   const i18n = await initI18n(getNamespaces(routes));
 
-  startTransition(() => {
-    hydrateRoot(
-      document,
-      <StrictMode>
-        <I18nextProvider i18n={i18n}>
-          <RemixBrowser />
-        </I18nextProvider>
-      </StrictMode>,
-    );
+  prepareApp().then(() => {
+    startTransition(() => {
+      hydrateRoot(
+        document,
+        <StrictMode>
+          <I18nextProvider i18n={i18n}>
+            <RemixBrowser />
+          </I18nextProvider>
+        </StrictMode>,
+      );
+    });
   });
 }
 

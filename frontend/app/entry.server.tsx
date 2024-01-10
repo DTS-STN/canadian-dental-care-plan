@@ -7,11 +7,16 @@ import { PassThrough } from 'node:stream';
 import { renderToPipeableStream } from 'react-dom/server';
 import { I18nextProvider } from 'react-i18next';
 
+import { server } from './mocks/node';
 import { NonceProvider, generateNonce } from '~/components/nonce-context';
 import { generateContentSecurityPolicy } from '~/utils/csp.server';
 import { getNamespaces } from '~/utils/locale-utils';
 import { createLangCookie, getLocale, initI18n } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+
+if (process.env.NODE_ENV === 'development') {
+  server.listen();
+}
 
 const abortDelay = 5_000;
 const log = getLogger('entry.server');
