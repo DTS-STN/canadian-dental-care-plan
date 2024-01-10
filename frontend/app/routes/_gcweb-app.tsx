@@ -6,8 +6,9 @@ import { Link, Outlet, isRouteErrorResponse, useMatches, useRouteError } from '@
 import { Trans, useTranslation } from 'react-i18next';
 
 import { LanguageSwitcher } from '~/components/language-switcher';
-import { type RouteHandle } from '~/types';
+import { type RouteHandle, type RouteHandleBreadcrumb } from '~/types';
 import { useBuildInfo } from '~/utils/build-info';
+import { getNamespaces } from '~/utils/locale-utils';
 
 export const handle: RouteHandle = { i18nNamespaces: ['gcweb'] };
 
@@ -191,10 +192,13 @@ function PageFooter() {
 
 function Breadcrumbs() {
   const matches = useMatches();
-  const match = matches.filter((match) => (match.handle as RouteHandle)?.breadcrumbs);
-  const breadcrumbs = match.flatMap((match) => (match.handle as RouteHandle).breadcrumbs);
+  const { t } = useTranslation(getNamespaces(matches));
 
-  const { t } = useTranslation(['gcweb']);
+  const breadcrumbs = matches
+    .map((match) => match.handle)
+    .filter((handle): handle is RouteHandle => handle !== undefined)
+    .flatMap((handle) => handle.breadcrumbs)
+    .filter((breadcrumb): breadcrumb is RouteHandleBreadcrumb => breadcrumb !== undefined);
 
   if (breadcrumbs.length === 0) {
     return <></>;
@@ -211,7 +215,7 @@ function Breadcrumbs() {
                 <span property="name">{t(breadcrumb.i18nKey)}</span>
               </Link>
             ) : (
-              <span property="name">{t(breadcrumb?.i18nKey)}</span>
+              <span property="name">{t(breadcrumb.i18nKey)}</span>
             );
 
             return (
