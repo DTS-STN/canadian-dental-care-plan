@@ -40,7 +40,7 @@ export function createLangCookie() {
  * Returns a t function that defaults to the language resolved through the request.
  * @see https://www.i18next.com/overview/api#getfixedt
  */
-export async function getFixedT(request: Request, namespaces: Namespace) {
+export async function getFixedT<N extends Namespace>(request: Request, namespaces: N) {
   const locale = await getLocale(request);
   const i18n = await initI18n(locale, namespaces);
   return i18n.getFixedT(locale ?? null, namespaces);
