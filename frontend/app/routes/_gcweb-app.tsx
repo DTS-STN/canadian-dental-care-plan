@@ -107,6 +107,7 @@ function PageHeader() {
           </h2>
         </div>
       </section>
+      <Breadcrumbs />
     </>
   );
 }
@@ -185,6 +186,44 @@ function PageFooter() {
         </div>
       </div>
     </footer>
+  );
+}
+
+function Breadcrumbs() {
+  const matches = useMatches();
+  const match = matches.filter((match) => (match.handle as RouteHandle)?.breadcrumbs);
+  const breadcrumbs = match.flatMap((match) => (match.handle as RouteHandle).breadcrumbs);
+
+  const { t } = useTranslation(['gcweb']);
+
+  if (breadcrumbs.length === 0) {
+    return <></>;
+  }
+
+  return (
+    <nav id="wb-bc" property="breadcrumb">
+      <h2>{t('gcweb.breadcrumbs.you-are-here')}</h2>
+      <div className="container">
+        <ol className="breadcrumb" typeof="BreadcrumbList">
+          {breadcrumbs.map((breadcrumb, index) => {
+            const breadcrumbItem = breadcrumb?.to ? (
+              <Link to={breadcrumb.to} property="item" typeof="WebPage">
+                <span property="name">{t(breadcrumb.i18nKey)}</span>
+              </Link>
+            ) : (
+              <span property="name">{t(breadcrumb?.i18nKey)}</span>
+            );
+
+            return (
+              <li key={index} property="itemListElement" typeof="ListItem">
+                {breadcrumbItem}
+                <meta property="position" content={index + 1 + ''} />
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </nav>
   );
 }
 
