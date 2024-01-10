@@ -23,6 +23,11 @@
       "alt-lang": "English",
       "alt-lang-abbr": "EN"
     },
+    "breadcrumbs": {
+      "you-are-here": "Vous êtes ici\u00a0:",
+      "index": "Accueil",
+      "about": "Qui sommes-nous?"
+    },
     "page-details": {
       "page-details": "Détails de la page",
       "date-modfied": "Date de modification\u00a0:",

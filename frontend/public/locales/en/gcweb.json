@@ -23,6 +23,11 @@
       "alt-lang": "Français",
       "alt-lang-abbr": "FR"
     },
+    "breadcrumbs": {
+      "you-are-here": "You are here:",
+      "index": "Home",
+      "about": "About us"
+    },
     "page-details": {
       "page-details": "Page details",
       "date-modfied": "Date modified:",
