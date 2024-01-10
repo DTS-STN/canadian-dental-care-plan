@@ -14,13 +14,9 @@ export const handle = {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const response = await fetch('https://api.example.com/user');
-  const user = await response.json();
-
   return json({
     pageId: 'CDCP-0001',
     pageTitle: t('index.page-title'),
-    user,
   });
 };
 
@@ -30,14 +26,12 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export default function () {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { user } = useLoaderData<typeof loader>();
 
   return (
     <>
       <h1 id="wb-cont" property="name">
         {t('index.page-title')}
       </h1>
-      <p id="greeting">Hello, {user.firstName}</p>
       <ul>
         <li>
           <Link to="/about">About</Link>
