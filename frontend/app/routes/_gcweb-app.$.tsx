@@ -4,22 +4,15 @@ import { Link } from '@remix-run/react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { type RouteHandle } from '~/types';
-import { getFixedT } from '~/utils/locale-utils.server';
 
 export const handle = {
   i18nNamespaces: ['gcweb'],
+  pageId: 'CDCP-0404',
+  pageTitleKey: 'gcweb:not-found.page-title',
 } satisfies RouteHandle;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const t = await getFixedT(request, handle.i18nNamespaces);
-
-  return json(
-    {
-      pageId: 'CDCP-0404',
-      pageTitle: t('gcweb:not-found.page-title'),
-    },
-    { status: 404 },
-  );
+  return json({}, { status: 404 });
 };
 
 export default function () {

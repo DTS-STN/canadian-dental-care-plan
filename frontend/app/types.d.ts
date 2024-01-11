@@ -1,4 +1,4 @@
-import { type Namespace, type ParseKeys } from 'i18next';
+import { type Namespace as I18nNamespace, type ParseKeys } from 'i18next';
 
 import type common from '../public/locales/en/common.json';
 import type gcweb from '../public/locales/en/gcweb.json';
@@ -70,17 +70,20 @@ type ToTupleArray<Union, Result extends unknown[]> = RemoveLast<Union> extends n
  */
 type ToTuple<Union> = ToTupleArray<Union, []>;
 
+type I18nResourceKey = ParseKeys<ToTuple<keyof I18nResources>>;
+
 export type I18nResources = {
   common: typeof common;
   gcweb: typeof gcweb;
 };
 
 export type RouteHandleBreadcrumb = {
-  i18nKey: ParseKeys<ToTuple<keyof I18nResources>>;
+  i18nKey: I18nResourceKey;
   to?: string;
 };
 
 export interface RouteHandle extends Record<string, unknown> {
-  i18nNamespaces?: Namespace;
   breadcrumbs?: Array<RouteHandleBreadcrumb>;
+  i18nNamespaces?: I18nNamespace;
+  pageTitleKey?: I18nResourceKey;
 }
