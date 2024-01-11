@@ -7,8 +7,8 @@ import { type RouteHandle } from '~/types';
 import { getFixedT } from '~/utils/locale-utils.server';
 
 export const handle = {
-  i18nNamespaces: ['common'],
-  breadcrumbs: [{ i18nKey: 'gcweb.breadcrumbs.index' }],
+  i18nNamespaces: ['gcweb', 'common'],
+  breadcrumbs: [{ i18nKey: 'gcweb:breadcrumbs.index' }],
 } satisfies RouteHandle;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -16,7 +16,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   return json({
     pageId: 'CDCP-0001',
-    pageTitle: t('index.page-title'),
+    pageTitle: t('common:index.page-title'),
   });
 };
 
@@ -25,12 +25,12 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export default function () {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation();
 
   return (
     <>
       <h1 id="wb-cont" property="name">
-        {t('index.page-title')}
+        {t('common:index.page-title')}
       </h1>
       <ul>
         <li>
