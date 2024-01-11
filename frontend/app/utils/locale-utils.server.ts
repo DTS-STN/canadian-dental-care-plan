@@ -89,12 +89,14 @@ export async function getLocale(request: Request) {
  * @see https://www.i18next.com/overview/api#createinstance
  */
 export async function initI18n<N extends Namespace>(locale: string | undefined, namespaces: N) {
+  const { I18NEXT_DEBUG } = getEnv();
   const i18n = createInstance();
 
   await i18n
     .use(initReactI18next)
     .use(I18NexFsBackend)
     .init({
+      debug: I18NEXT_DEBUG,
       backend: {
         loadPath: resolve('./public/locales/{{lng}}/{{ns}}.json'),
       },

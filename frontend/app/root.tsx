@@ -9,13 +9,11 @@ import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import stylesheet from '~/tailwind.css';
 import { readBuildInfo } from '~/utils/build-info.server';
-import { getClientEnv } from '~/utils/env.server';
+import { getPublicEnv } from '~/utils/env.server';
 
 export const links = () => [{ rel: 'stylesheet', href: stylesheet }];
 
 export const loader = ({ request }: LoaderFunctionArgs) => {
-  const { LANG_QUERY_PARAM } = getClientEnv();
-
   return json({
     buildInfo: readBuildInfo('build-info.json') ?? {
       buildDate: '2000-01-01T00:00:00Z',
@@ -23,9 +21,7 @@ export const loader = ({ request }: LoaderFunctionArgs) => {
       buildRevision: '00000000',
       buildVersion: '0.0.0+00000000-0000',
     },
-    env: {
-      LANG_QUERY_PARAM,
-    },
+    env: getPublicEnv(),
   });
 };
 

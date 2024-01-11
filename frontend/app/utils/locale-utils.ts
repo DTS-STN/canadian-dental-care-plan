@@ -4,6 +4,7 @@ import I18NextHttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
 import { type RouteHandle } from '~/types';
+import { getClientEnv } from '~/utils/env';
 
 /**
  * Returns the alternate language for the given input language.
@@ -34,6 +35,7 @@ export function getNamespaces(routes: Array<{ handle?: unknown }>) {
  * Initializes the client instance of i18next.
  */
 export async function initI18n(namespaces: Array<string>) {
+  const { I18NEXT_DEBUG } = getClientEnv();
   const i18n = createInstance();
 
   await i18n
@@ -41,11 +43,18 @@ export async function initI18n(namespaces: Array<string>) {
     .use(I18nextBrowserLanguageDetector)
     .use(I18NextHttpBackend)
     .init({
-      detection: { order: ['htmlTag'] },
+      debug: I18NEXT_DEBUG,
+      detection: {
+        order: ['htmlTag'],
+      },
       fallbackLng: false,
-      interpolation: { escapeValue: false },
+      interpolation: {
+        escapeValue: false,
+      },
       ns: namespaces,
-      react: { useSuspense: false },
+      react: {
+        useSuspense: false,
+      },
     });
 
   return i18n;

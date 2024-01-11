@@ -2,7 +2,7 @@ import { Link, type LinkProps, useSearchParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import { useClientEnv } from '~/components/client-env';
+import { getClientEnv } from '~/utils/env';
 import { getAltLanguage } from '~/utils/locale-utils';
 
 export type LanguageSwitcherProps = Omit<LinkProps, 'to' | 'reloadDocument'>;
@@ -15,7 +15,7 @@ export function LanguageSwitcher({ children, ...props }: LanguageSwitcherProps) 
   const { i18n } = useTranslation(['gcweb']);
   const [currentSearchParams] = useSearchParams();
 
-  const { LANG_QUERY_PARAM: langParam } = useClientEnv();
+  const { LANG_QUERY_PARAM: langParam } = getClientEnv();
   const langValue = getAltLanguage(i18n.language);
 
   const searchParams = new URLSearchParams(currentSearchParams);
