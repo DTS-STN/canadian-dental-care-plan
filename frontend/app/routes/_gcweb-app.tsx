@@ -8,9 +8,10 @@ import { Trans, useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { type RouteHandle, type RouteHandleBreadcrumb } from '~/types';
 import { useBuildInfo } from '~/utils/build-info';
-import { getNamespaces } from '~/utils/locale-utils';
 
-export const handle: RouteHandle = { i18nNamespaces: ['gcweb'] };
+export const handle: RouteHandle = {
+  i18nNamespaces: ['gcweb'],
+};
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: '/theme/gcweb/css/theme.min.css' }];
 
@@ -56,7 +57,7 @@ function ApplicationLayout({ children }: { children?: ReactNode }) {
 }
 
 function PageHeader() {
-  const { i18n, t } = useTranslation(['gcweb']);
+  const { i18n, t } = useTranslation();
 
   return (
     <>
@@ -64,12 +65,12 @@ function PageHeader() {
         <ul id="wb-tphp">
           <li className="wb-slc">
             <a className="wb-sl" href="#wb-cont">
-              {t('gcweb.nav.skip-to-content')}
+              {t('gcweb:nav.skip-to-content')}
             </a>
           </li>
           <li className="wb-slc visible-sm visible-md visible-lg">
             <a className="wb-sl" href="#wb-info">
-              {t('gcweb.nav.skip-to-about')}
+              {t('gcweb:nav.skip-to-about')}
             </a>
           </li>
         </ul>
@@ -78,23 +79,23 @@ function PageHeader() {
         <div id="wb-bnr" className="container">
           <div className="row">
             <section id="wb-lng" className="col-xs-3 col-sm-12 pull-right text-right">
-              <h2 className="wb-inv">{t('gcweb.header.language-selection')}</h2>
+              <h2 className="wb-inv">{t('gcweb:header.language-selection')}</h2>
               <ul className="list-inline mrgn-bttm-0">
                 <li>
                   <LanguageSwitcher>
-                    <span className="hidden-xs">{t('gcweb.language-switcher.alt-lang')}</span>
+                    <span className="hidden-xs">{t('gcweb:language-switcher.alt-lang')}</span>
                     <abbr title="Français" className="visible-xs h3 mrgn-tp-sm mrgn-bttm-0 text-uppercase">
-                      {t('gcweb.language-switcher.alt-lang-abbr')}
+                      {t('gcweb:language-switcher.alt-lang-abbr')}
                     </abbr>
                   </LanguageSwitcher>
                 </li>
               </ul>
             </section>
             <div className="brand col-xs-9 col-sm-5 col-md-4" property="publisher" typeof="GovernmentOrganization">
-              <Link to={t('gcweb.header.govt-of-canada.href')} property="url">
-                <img src={`/theme/gcweb/assets/sig-blk-${i18n.language}.svg`} alt={t('gcweb.header.govt-of-canada.text')} property="logo" />
+              <Link to={t('gcweb:header.govt-of-canada.href')} property="url">
+                <img src={`/theme/gcweb/assets/sig-blk-${i18n.language}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" />
               </Link>
-              <meta property="name" content={t('gcweb.header.govt-of-canada.text')} />
+              <meta property="name" content={t('gcweb:header.govt-of-canada.text')} />
               <meta property="areaServed" typeof="Country" content="Canada" />
               <link property="logo" href="/theme/gcweb/assets/wmms-blk.svg" />
             </div>
@@ -104,7 +105,7 @@ function PageHeader() {
       <section className="application-bar">
         <div className="container">
           <h2>
-            <Link to="/">{t('gcweb.header.application-title')}</Link>
+            <Link to="/">{t('gcweb:header.application-title')}</Link>
           </h2>
         </div>
       </section>
@@ -123,17 +124,17 @@ function PageDetails() {
   const pageId = pageDetailsAttrs.map((attr) => attr?.pageId).reduce((last, curr) => curr ?? last);
   const version = buildInfo?.buildVersion;
 
-  const { t } = useTranslation(['gcweb']);
+  const { t } = useTranslation();
 
   return (
     <section className="pagedetails">
-      <h2 className="wb-inv">{t('gcweb.page-details.page-details')}</h2>
+      <h2 className="wb-inv">{t('gcweb:page-details.page-details')}</h2>
       <div className="row">
         <div className="col-xs-12">
           <dl id="wb-dtmd">
             {!!pageId && (
               <>
-                <dt className="float-left clear-left pr-[1ch]">{t('gcweb.page-details.screen-id')}</dt>
+                <dt className="float-left clear-left pr-[1ch]">{t('gcweb:page-details.screen-id')}</dt>
                 <dd className="float-left clear-right mb-0">
                   <span property="identifier">{pageId}</span>
                 </dd>
@@ -141,7 +142,7 @@ function PageDetails() {
             )}
             {!!dateModified && (
               <>
-                <dt className="float-left clear-left pr-[1ch]">{t('gcweb.page-details.date-modfied')}</dt>
+                <dt className="float-left clear-left pr-[1ch]">{t('gcweb:page-details.date-modfied')}</dt>
                 <dd className="float-left clear-right mb-0">
                   <time property="dateModified">{dateModified.slice(0, 10)}</time>
                 </dd>
@@ -149,7 +150,7 @@ function PageDetails() {
             )}
             {!!version && (
               <>
-                <dt className="float-left clear-left pr-[1ch]">{t('gcweb.page-details.version')}</dt>
+                <dt className="float-left clear-left pr-[1ch]">{t('gcweb:page-details.version')}</dt>
                 <dd className="float-left clear-right mb-0">
                   <span property="version">{version}</span>
                 </dd>
@@ -163,26 +164,26 @@ function PageDetails() {
 }
 
 function PageFooter() {
-  const { t } = useTranslation(['gcweb']);
+  const { t } = useTranslation();
 
   return (
     <footer id="wb-info">
-      <h2 className="wb-inv">{t('gcweb.footer.about-site')}</h2>
+      <h2 className="wb-inv">{t('gcweb:footer.about-site')}</h2>
       <div className="gc-sub-footer">
         <div className="d-flex align-items-center container">
           <nav>
-            <h3 className="wb-inv">{t('gcweb.footer.gc-corporate')}</h3>
+            <h3 className="wb-inv">{t('gcweb:footer.gc-corporate')}</h3>
             <ul>
               <li>
-                <Link to={t('gcweb.footer.terms-conditions.href')}>{t('gcweb.footer.terms-conditions.text')}</Link>
+                <Link to={t('gcweb:footer.terms-conditions.href')}>{t('gcweb:footer.terms-conditions.text')}</Link>
               </li>
               <li>
-                <Link to={t('gcweb.footer.privacy.href')}>{t('gcweb.footer.privacy.text')}</Link>
+                <Link to={t('gcweb:footer.privacy.href')}>{t('gcweb:footer.privacy.text')}</Link>
               </li>
             </ul>
           </nav>
           <div className="wtrmrk align-self-end">
-            <img src="/theme/gcweb/assets/wmms-blk.svg" alt={t('gcweb.footer.gc-symbol')} />
+            <img src="/theme/gcweb/assets/wmms-blk.svg" alt={t('gcweb:footer.gc-symbol')} />
           </div>
         </div>
       </div>
@@ -192,7 +193,7 @@ function PageFooter() {
 
 function Breadcrumbs() {
   const matches = useMatches();
-  const { t } = useTranslation(getNamespaces(matches));
+  const { t } = useTranslation();
 
   const breadcrumbs = matches
     .map((match) => match.handle)
@@ -206,7 +207,7 @@ function Breadcrumbs() {
 
   return (
     <nav id="wb-bc" property="breadcrumb">
-      <h2>{t('gcweb.breadcrumbs.you-are-here')}</h2>
+      <h2>{t('gcweb:breadcrumbs.you-are-here')}</h2>
       <div className="container">
         <ol className="breadcrumb" typeof="BreadcrumbList">
           {breadcrumbs.map((breadcrumb, index) => {
@@ -232,7 +233,7 @@ function Breadcrumbs() {
 }
 
 function ServerError({ error }: { error: unknown }) {
-  const { t } = useTranslation(['gcweb']);
+  const { t } = useTranslation();
 
   // (content will be added by <Trans>)
   // eslint-disable-next-line jsx-a11y/anchor-has-content
@@ -242,13 +243,13 @@ function ServerError({ error }: { error: unknown }) {
     <ApplicationLayout>
       <h1>
         <span className="glyphicon glyphicon-warning-sign mrgn-rght-md"></span>
-        <span>{t('gcweb.server-error.page-header')}</span> <small className="help-inline">{t('gcweb.server-error.page-subheader')}</small>
+        <span>{t('gcweb:server-error.page-header')}</span> <small className="help-inline">{t('gcweb:server-error.page-subheader')}</small>
       </h1>
-      <p>{t('gcweb.server-error.page-message')}</p>
+      <p>{t('gcweb:server-error.page-message')}</p>
       <ul className="list-disc ps-16">
-        <li>{t('gcweb.server-error.option-01')}</li>
+        <li>{t('gcweb:server-error.option-01')}</li>
         <li>
-          <Trans ns={['gcweb']} i18nKey="gcweb.server-error.option-02" components={{ home }} />
+          <Trans i18nKey="gcweb:server-error.option-02" components={{ home }} />
         </li>
       </ul>
     </ApplicationLayout>

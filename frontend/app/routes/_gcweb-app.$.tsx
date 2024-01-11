@@ -16,14 +16,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json(
     {
       pageId: 'CDCP-0404',
-      pageTitle: t('gcweb.not-found.page-title'),
+      pageTitle: t('gcweb:not-found.page-title'),
     },
     { status: 404 },
   );
 };
 
 export default function () {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation();
 
   // (content will be added by <Trans>)
   // eslint-disable-next-line jsx-a11y/anchor-has-content
@@ -32,12 +32,12 @@ export default function () {
   return (
     <>
       <h1>
-        <span>{t('gcweb.not-found.page-header')}</span> <small className="help-inline">{t('gcweb.not-found.page-subheader')}</small>
+        <span>{t('gcweb:not-found.page-header')}</span> <small className="help-inline">{t('gcweb:not-found.page-subheader')}</small>
       </h1>
-      <p>{t('gcweb.not-found.page-message')}</p>
+      <p>{t('gcweb:not-found.page-message')}</p>
       <ul>
         <li>
-          <Trans ns={['gcweb']} i18nKey="gcweb.not-found.page-link" components={{ home }} />
+          <Trans i18nKey="gcweb:not-found.page-link" components={{ home }} />
         </li>
       </ul>
     </>

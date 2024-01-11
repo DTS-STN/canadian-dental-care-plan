@@ -6,8 +6,8 @@ import { type RouteHandle } from '~/types';
 import { getFixedT } from '~/utils/locale-utils.server';
 
 export const handle = {
-  i18nNamespaces: ['common'],
-  breadcrumbs: [{ i18nKey: 'gcweb.breadcrumbs.index', to: '/' }, { i18nKey: 'gcweb.breadcrumbs.about' }],
+  i18nNamespaces: ['gcweb', 'common'],
+  breadcrumbs: [{ i18nKey: 'gcweb:breadcrumbs.index', to: '/' }, { i18nKey: 'gcweb:breadcrumbs.about' }],
 } satisfies RouteHandle;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -15,7 +15,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   return json({
     pageId: 'CDCP-0002',
-    pageTitle: t('about.page-title'),
+    pageTitle: t('common:about.page-title'),
   });
 };
 
@@ -29,7 +29,7 @@ export default function () {
   return (
     <>
       <h1 id="wb-cont" property="name">
-        {t('about.page-title')}
+        {t('common:about.page-title')}
       </h1>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu tempor est. Maecenas vitae urna quis mauris tristique dapibus et nec diam. Morbi vulputate sollicitudin justo ut tempor. Aliquam aliquam condimentum dolor ut tincidunt. Duis at

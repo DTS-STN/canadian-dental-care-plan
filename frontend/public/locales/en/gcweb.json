@@ -1,53 +1,51 @@
 {
-  "gcweb": {
-    "nav": {
-      "skip-to-content": "Skip to main content",
-      "skip-to-about": "Skip to About this site"
-    },
-    "header": {
-      "application-title": "Canadian Dental Care Plan",
-      "language-selection": "Language selection",
-      "govt-of-canada.text": "Government of Canada",
-      "govt-of-canada.href": "https://www.canada.ca/en.html"
-    },
-    "footer": {
-      "about-site": "About this site",
-      "gc-corporate": "Government of Canada Corporate",
-      "terms-conditions.text": "Terms and conditions",
-      "terms-conditions.href": "https://www.canada.ca/en/transparency/terms.html",
-      "privacy.text": "Privacy",
-      "privacy.href": "https://www.canada.ca/en/transparency/privacy.html",
-      "gc-symbol": "Symbol of the Government of Canada"
-    },
-    "language-switcher": {
-      "alt-lang": "Français",
-      "alt-lang-abbr": "FR"
-    },
-    "breadcrumbs": {
-      "you-are-here": "You are here:",
-      "index": "Home",
-      "about": "About us"
-    },
-    "page-details": {
-      "page-details": "Page details",
-      "date-modfied": "Date modified:",
-      "screen-id": "Screen identifier:",
-      "version": "Version:"
-    },
-    "not-found": {
-      "page-title": "Not found",
-      "page-header": "We couldn't find that web page",
-      "page-subheader": "(Error 404)",
-      "page-message": "We're sorry you ended up here. Sometimes a page gets moved or deleted, but hopefully we can help you find what you're looking for.",
-      "page-link": "Return to the <home>home page</home>"
-    },
-    "server-error": {
-      "page-title": "Internal server error",
-      "page-header": "We're having a problem with that page",
-      "page-subheader": "(Error 500)",
-      "page-message": "We expect the problem to be fixed shortly. It's not your computer or Internet connection but a problem with our website's server. What next?",
-      "option-01": "Try refreshing the page or try again later",
-      "option-02": "Return to the <home>home page</home>"
-    }
+  "nav": {
+    "skip-to-content": "Skip to main content",
+    "skip-to-about": "Skip to About this site"
+  },
+  "header": {
+    "application-title": "Canadian Dental Care Plan",
+    "language-selection": "Language selection",
+    "govt-of-canada.text": "Government of Canada",
+    "govt-of-canada.href": "https://www.canada.ca/en.html"
+  },
+  "footer": {
+    "about-site": "About this site",
+    "gc-corporate": "Government of Canada Corporate",
+    "terms-conditions.text": "Terms and conditions",
+    "terms-conditions.href": "https://www.canada.ca/en/transparency/terms.html",
+    "privacy.text": "Privacy",
+    "privacy.href": "https://www.canada.ca/en/transparency/privacy.html",
+    "gc-symbol": "Symbol of the Government of Canada"
+  },
+  "language-switcher": {
+    "alt-lang": "Français",
+    "alt-lang-abbr": "FR"
+  },
+  "breadcrumbs": {
+    "you-are-here": "You are here:",
+    "index": "Home",
+    "about": "About us"
+  },
+  "page-details": {
+    "page-details": "Page details",
+    "date-modfied": "Date modified:",
+    "screen-id": "Screen identifier:",
+    "version": "Version:"
+  },
+  "not-found": {
+    "page-title": "Not found",
+    "page-header": "We couldn't find that web page",
+    "page-subheader": "(Error 404)",
+    "page-message": "We're sorry you ended up here. Sometimes a page gets moved or deleted, but hopefully we can help you find what you're looking for.",
+    "page-link": "Return to the <home>home page</home>"
+  },
+  "server-error": {
+    "page-title": "Internal server error",
+    "page-header": "We're having a problem with that page",
+    "page-subheader": "(Error 500)",
+    "page-message": "We expect the problem to be fixed shortly. It's not your computer or Internet connection but a problem with our website's server. What next?",
+    "option-01": "Try refreshing the page or try again later",
+    "option-02": "Return to the <home>home page</home>"
   }
 }
