@@ -13,7 +13,7 @@ export default defineConfig({
     // https://github.com/capricorn86/happy-dom/issues/585
     environment: 'jsdom',
     setupFiles: ['./__tests__/setup-test-env.ts'],
-    include: ['./**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    include: ['./**/*.{test,test-d,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     exclude: ['**/node_modules/**', '**/build/**', '**/e2e/**'],
   },
 });

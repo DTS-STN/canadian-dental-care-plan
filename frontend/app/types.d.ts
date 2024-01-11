@@ -5,15 +5,18 @@ import type gcweb from '../public/locales/en/gcweb.json';
 import { type PublicEnv } from '~/utils/env.server';
 
 declare global {
+  /**
+   * Add the public environment variables to the global window type.
+   */
   interface Window {
     env: PublicEnv;
   }
 }
 
-/**
- * @see https://www.i18next.com/overview/typescript
- */
 declare module 'i18next' {
+  /**
+   * @see https://www.i18next.com/overview/typescript
+   */
   interface CustomTypeOptions {
     resources: I18nResources;
   }
@@ -70,20 +73,34 @@ type ToTupleArray<Union, Result extends unknown[]> = RemoveLast<Union> extends n
  */
 type ToTuple<Union> = ToTupleArray<Union, []>;
 
-type I18nResourceKey = ParseKeys<ToTuple<keyof I18nResources>>;
+/**
+ * A utility type that extracts i18n resource keys from i18next custom
+ * resources.
+ */
+export type I18nResourceKey<T> = ParseKeys<ToTuple<keyof T>>;
 
+/**
+ * A type representing all of the i18n namespaces and content in the
+ * application.
+ */
 export type I18nResources = {
   common: typeof common;
   gcweb: typeof gcweb;
 };
 
+/**
+ * A type representing breadcrumb data that is added to a route handle.
+ */
 export type RouteHandleBreadcrumb = {
-  i18nKey: I18nResourceKey;
+  i18nKey: I18nResourceKey<I18nResources>;
   to?: string;
 };
 
+/**
+ * A type representing a route handle.
+ */
 export interface RouteHandle extends Record<string, unknown> {
   breadcrumbs?: Array<RouteHandleBreadcrumb>;
   i18nNamespaces?: I18nNamespace;
-  pageTitleKey?: I18nResourceKey;
+  pageTitlei18nKey?: I18nResourceKey<I18nResources>;
 }

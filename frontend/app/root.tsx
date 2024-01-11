@@ -57,14 +57,14 @@ function PageTitle() {
   const matches = useMatches();
   const { t } = useTranslation(getNamespaces(matches));
 
-  const pageTitleKey = useRouteHandles<RouteHandle>()
-    .map((handle) => handle.pageTitleKey)
+  const pageTitlei18nKey = useRouteHandles<RouteHandle>()
+    .map((handle) => handle.pageTitlei18nKey)
     .filter((pageTitleKey) => pageTitleKey !== undefined)
     .reduce((last, curr) => curr ?? last, undefined);
 
-  if (pageTitleKey === undefined) {
+  if (pageTitlei18nKey === undefined) {
     return <></>;
   }
 
-  return <title>{t(pageTitleKey)}</title>;
+  return <title>{t(pageTitlei18nKey)}</title>;
 }
