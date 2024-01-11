@@ -27,7 +27,7 @@ declare module 'i18next' {
 type ToFunc<T> = T extends any ? (t: T) => void : never;
 
 /**
- * A type that a union type to an intersection type.
+ * A type that converts a union type to an intersection type.
  *
  * ex: ToIntersection<{ foo: undefined } | { bar: undefined }> = ({ foo: undefined } & { bar: undefined })
  */
