@@ -25,7 +25,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export default function () {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['common']);
 
   return (
     <>

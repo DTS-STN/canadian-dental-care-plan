@@ -23,7 +23,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function () {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['gcweb']);
 
   // (content will be added by <Trans>)
   // eslint-disable-next-line jsx-a11y/anchor-has-content
@@ -37,7 +37,7 @@ export default function () {
       <p>{t('gcweb:not-found.page-message')}</p>
       <ul>
         <li>
-          <Trans i18nKey="gcweb:not-found.page-link" components={{ home }} />
+          <Trans ns={['gcweb']} i18nKey="gcweb:not-found.page-link" components={{ home }} />
         </li>
       </ul>
     </>
