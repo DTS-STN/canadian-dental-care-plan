@@ -19,14 +19,56 @@ declare module 'i18next' {
   }
 }
 
-// 🤷 see: https://stackoverflow.com/a/71822375
-type UnionToParm<U> = U extends any ? (k: U) => void : never;
-type UnionToSect<U> = UnionToParm<U> extends (k: infer I) => void ? I : never;
-type ExtractParm<F> = F extends { (a: infer A): void } ? A : never;
-type SpliceOne<Union> = Exclude<Union, ExtractOne<Union>>;
-type ExtractOne<Union> = ExtractParm<UnionToSect<UnionToParm<Union>>>;
-type ToTupleRec<Union, Rslt extends any[]> = SpliceOne<Union> extends never ? [ExtractOne<Union>, ...Rslt] : ToTupleRec<SpliceOne<Union>, [ExtractOne<Union>, ...Rslt]>;
-type ToTuple<Union> = ToTupleRec<Union, []>;
+/**
+ * A type that converts a type T to a function type that takes T as a parameter.
+ *
+ * ex: ToFunc<{ foo: undefined } | { bar: undefined }> = ((t: { foo: undefined }) => void) | ((t: { bar: undefined }) => void)
+ */
+type ToFunc<T> = T extends any ? (t: T) => void : never;
+
+/**
+ * A type that a union type to an intersection type.
+ *
+ * ex: ToIntersection<{ foo: undefined } | { bar: undefined }> = ({ foo: undefined } & { bar: undefined })
+ */
+type ToIntersection<Union> = ToFunc<Union> extends (t: infer Type) => unknown ? Type : never;
+
+/**
+ * A type that extracts the first function parameter type from a function.
+ *
+ * ex: ExtractFuncParm<(a: string, b: number) => void> = string
+ */
+type ExtractFuncParm<Func> = Func extends { (t: infer Type, ...rest): unknown } ? Type : never;
+
+/**
+ * A type that extracts the last type from a union type.
+ *
+ * ex: ExtractLast<{ a: string } | { b: number }> = { b: number }
+ */
+type ExtractLast<Union> = ExtractFuncParm<ToIntersection<ToFunc<Union>>>;
+
+/**
+ * A type that removes the last type from a union type.
+ *
+ * ex: RemoveLast<{ a: string } | { b: number } | { c: boolean }> = { a: string } | { b: number }
+ */
+type RemoveLast<Union> = Exclude<Union, ExtractLast<Union>>;
+
+/**
+ * A recursive utility type that converts a union type to a tuple type. It works
+ * by removing the last element of the union and appending it to the result
+ * array, until the union is empty.
+ *
+ * ex: ToTupleArray<{ a: string } | { b: number } | { c: boolean }, []> = [{ a: string }, { b: number }, { c: boolean }]
+ */
+type ToTupleArray<Union, Result extends unknown[]> = RemoveLast<Union> extends never ? [ExtractLast<Union>, ...Result] : ToTupleArray<RemoveLast<Union>, [ExtractLast<Union>, ...Result]>;
+
+/**
+ * A seed type that calls ToTupleArray with an empty array.
+ *
+ * ex: ToTuple<string | number | boolean> = [string, number, false, true]
+ */
+type ToTuple<Union> = ToTupleArray<Union, []>;
 
 export type I18nResources = {
   common: typeof common;
