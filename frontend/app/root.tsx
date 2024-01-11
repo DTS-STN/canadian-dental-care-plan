@@ -1,10 +1,13 @@
 import { useContext } from 'react';
 
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useMatches } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
+import { type RouteHandle } from './types';
+import { getNamespaces } from './utils/locale-utils';
+import { useRouteHandles } from './utils/route-utils';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import stylesheet from '~/tailwind.css';
@@ -35,6 +38,7 @@ export default function () {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <PageTitle />
         <Meta />
         <Links />
       </head>
@@ -47,4 +51,20 @@ export default function () {
       </body>
     </html>
   );
+}
+
+function PageTitle() {
+  const matches = useMatches();
+  const { t } = useTranslation(getNamespaces(matches));
+
+  const pageTitleKey = useRouteHandles<RouteHandle>()
+    .map((handle) => handle.pageTitleKey)
+    .filter((pageTitleKey) => pageTitleKey !== undefined)
+    .reduce((last, curr) => curr ?? last, undefined);
+
+  if (pageTitleKey === undefined) {
+    return <></>;
+  }
+
+  return <title>{t(pageTitleKey)}</title>;
 }

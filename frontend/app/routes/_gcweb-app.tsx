@@ -11,9 +11,9 @@ import { useBuildInfo } from '~/utils/build-info';
 import { getNamespaces } from '~/utils/locale-utils';
 import { useRouteHandles } from '~/utils/route-utils';
 
-export const handle: RouteHandle = {
+export const handle = {
   i18nNamespaces: ['gcweb'],
-};
+} satisfies RouteHandle;
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: '/theme/gcweb/css/theme.min.css' }];
 
