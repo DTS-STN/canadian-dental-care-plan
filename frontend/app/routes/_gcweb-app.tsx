@@ -9,6 +9,7 @@ import { LanguageSwitcher } from '~/components/language-switcher';
 import { type RouteHandle, type RouteHandleBreadcrumb } from '~/types';
 import { useBuildInfo } from '~/utils/build-info';
 import { getNamespaces } from '~/utils/locale-utils';
+import { useRouteHandles } from '~/utils/route-utils';
 
 export const handle: RouteHandle = {
   i18nNamespaces: ['gcweb'],
@@ -117,9 +118,7 @@ function PageHeader() {
 
 function PageDetails() {
   const buildInfo = useBuildInfo();
-
-  type PageDetailsAttrs = { pageId?: string };
-  const pageDetailsAttrs = useMatches().map((match) => match.data as PageDetailsAttrs);
+  const pageDetailsAttrs = useRouteHandles<{ pageId?: string }>();
 
   const dateModified = buildInfo?.buildDate;
   const pageId = pageDetailsAttrs.map((attr) => attr?.pageId).reduce((last, curr) => curr ?? last);
@@ -196,9 +195,7 @@ function Breadcrumbs() {
   const matches = useMatches();
   const { t } = useTranslation(getNamespaces(matches));
 
-  const breadcrumbs = matches
-    .map((match) => match.handle)
-    .filter((handle): handle is RouteHandle => handle !== undefined)
+  const breadcrumbs = useRouteHandles<RouteHandle>()
     .flatMap((handle) => handle.breadcrumbs)
     .filter((breadcrumb): breadcrumb is RouteHandleBreadcrumb => breadcrumb !== undefined);
 
