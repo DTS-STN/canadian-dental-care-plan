@@ -1,4 +1,15 @@
 {
-  "index.page-title": "Home",
-  "about.page-title": "About us"
+  "index": {
+    "page-title": "Home",
+    "breadcrumbs": {
+      "home": "Home"
+    }
+  },
+  "about": {
+    "page-title": "About us",
+    "breadcrumbs": {
+      "home": "Home",
+      "about": "About us"
+    }
+  }
 }
