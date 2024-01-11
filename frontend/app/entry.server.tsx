@@ -15,7 +15,14 @@ import { createLangCookie, getLocale, initI18n } from '~/utils/locale-utils.serv
 import { getLogger } from '~/utils/logging.server';
 
 if (process.env.NODE_ENV === 'development') {
-  server.listen();
+  server.listen({
+    onUnhandledRequest(request, print) {
+      if (request.url.includes('/ping')) {
+        return;
+      }
+      print.warning();
+    },
+  });
 }
 
 const abortDelay = 5_000;
