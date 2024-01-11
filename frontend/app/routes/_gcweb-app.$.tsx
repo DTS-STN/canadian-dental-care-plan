@@ -8,7 +8,7 @@ import { type RouteHandle } from '~/types';
 export const handle = {
   i18nNamespaces: ['gcweb'],
   pageId: 'CDCP-0404',
-  pageTitleKey: 'gcweb:not-found.page-title',
+  pageTitlei18nKey: 'gcweb:not-found.page-title',
 } satisfies RouteHandle;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

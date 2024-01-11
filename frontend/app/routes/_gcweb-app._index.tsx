@@ -8,7 +8,7 @@ export const handle = {
   breadcrumbs: [{ i18nKey: 'common:index.breadcrumbs.home' }],
   i18nNamespaces: ['common'],
   pageId: 'CDCP-0001',
-  pageTitleKey: 'common:index.page-title',
+  pageTitlei18nKey: 'common:index.page-title',
 } satisfies RouteHandle;
 
 export default function () {
