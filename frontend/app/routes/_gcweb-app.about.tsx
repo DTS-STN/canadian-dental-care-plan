@@ -24,7 +24,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export default function () {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(['common']);
 
   return (
     <>

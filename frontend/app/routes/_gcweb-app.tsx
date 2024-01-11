@@ -8,6 +8,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { type RouteHandle, type RouteHandleBreadcrumb } from '~/types';
 import { useBuildInfo } from '~/utils/build-info';
+import { getNamespaces } from '~/utils/locale-utils';
 
 export const handle: RouteHandle = {
   i18nNamespaces: ['gcweb'],
@@ -124,7 +125,7 @@ function PageDetails() {
   const pageId = pageDetailsAttrs.map((attr) => attr?.pageId).reduce((last, curr) => curr ?? last);
   const version = buildInfo?.buildVersion;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(['gcweb']);
 
   return (
     <section className="pagedetails">
@@ -164,7 +165,7 @@ function PageDetails() {
 }
 
 function PageFooter() {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['gcweb']);
 
   return (
     <footer id="wb-info">
@@ -193,7 +194,7 @@ function PageFooter() {
 
 function Breadcrumbs() {
   const matches = useMatches();
-  const { t } = useTranslation();
+  const { t } = useTranslation(getNamespaces(matches));
 
   const breadcrumbs = matches
     .map((match) => match.handle)
@@ -233,7 +234,7 @@ function Breadcrumbs() {
 }
 
 function ServerError({ error }: { error: unknown }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['gcweb']);
 
   // (content will be added by <Trans>)
   // eslint-disable-next-line jsx-a11y/anchor-has-content
