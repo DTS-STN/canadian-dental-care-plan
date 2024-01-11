@@ -2,7 +2,7 @@ import { type Namespace, type ParseKeys } from 'i18next';
 
 import type common from '../public/locales/en/common.json';
 import type gcweb from '../public/locales/en/gcweb.json';
-import { type ClientEnv } from '~/utils/env.server';
+import { type PublicEnv } from '~/utils/env.server';
 
 export type I18nResources = {
   common: typeof common;
@@ -16,7 +16,7 @@ export type RouteHandleBreadcrumb = {
 
 declare global {
   interface Window {
-    env: ClientEnv;
+    env: PublicEnv;
   }
 }
 
