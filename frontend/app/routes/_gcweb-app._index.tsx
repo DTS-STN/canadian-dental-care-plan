@@ -7,8 +7,8 @@ import { type RouteHandle } from '~/types';
 import { getFixedT } from '~/utils/locale-utils.server';
 
 export const handle = {
-  i18nNamespaces: ['gcweb', 'common'],
-  breadcrumbs: [{ i18nKey: 'gcweb:breadcrumbs.index' }],
+  i18nNamespaces: ['common'],
+  breadcrumbs: [{ i18nKey: 'common:index.breadcrumbs.home' }],
 } satisfies RouteHandle;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

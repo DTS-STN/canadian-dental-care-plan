@@ -1,4 +1,15 @@
 {
-  "index.page-title": "Accueil",
-  "about.page-title": "Qui sommes-nous?"
+  "index": {
+    "page-title": "Accueil",
+    "breadcrumbs": {
+      "home": "Accueil"
+    }
+  },
+  "about": {
+    "page-title": "Qui sommes-nous?",
+    "breadcrumbs": {
+      "home": "Accueil",
+      "about": "Qui sommes-nous?"
+    }
+  }
 }
