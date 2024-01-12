@@ -1,14 +1,14 @@
 import { type ReactNode } from 'react';
 
 import { type LinksFunction } from '@remix-run/node';
-import { Link, Outlet, isRouteErrorResponse, useMatches, useRouteError } from '@remix-run/react';
+import { Link, Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { type RouteHandle } from '~/types';
 import { useBuildInfo } from '~/utils/build-info';
-import { useBreadcrumb } from '~/utils/route-utils';
+import { useBreadcrumb, usePageIdentifier } from '~/utils/route-utils';
 
 export const handle = {
   i18nNamespaces: ['gcweb'],
@@ -120,11 +120,7 @@ function PageDetails() {
   const dateModified = buildInfo?.buildDate;
   const version = buildInfo?.buildVersion;
 
-  const pageId = useMatches()
-    .map((route) => route.handle)
-    .filter((handle): handle is RouteHandle => !!handle)
-    .map((routeHandle) => routeHandle.pageId)
-    .reduce((last, curr) => curr ?? last);
+  const pageIdentifier = usePageIdentifier();
 
   const { t } = useTranslation(['gcweb']);
 
@@ -134,11 +130,11 @@ function PageDetails() {
       <div className="row">
         <div className="col-xs-12">
           <dl id="wb-dtmd">
-            {!!pageId && (
+            {!!pageIdentifier && (
               <>
                 <dt className="float-left clear-left pr-[1ch]">{t('gcweb:page-details.screen-id')}</dt>
                 <dd className="float-left clear-right mb-0">
-                  <span property="identifier">{pageId}</span>
+                  <span property="identifier">{pageIdentifier}</span>
                 </dd>
               </>
             )}

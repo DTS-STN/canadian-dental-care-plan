@@ -30,3 +30,14 @@ export function useBreadcrumb() {
     .map((result) => (result.success ? result.data.breadcrumb : undefined))
     .reduce((last, curr) => curr ?? last, undefined);
 }
+
+const pageIdentifierDataSchema = z.object({ pageIdentifier: z.string() });
+
+export type PageIdentifierDataSchema = z.infer<typeof pageIdentifierDataSchema>;
+
+export function usePageIdentifier() {
+  return useMatches()
+    .map(({ data }) => pageIdentifierDataSchema.safeParse(data))
+    .map((result) => (result.success ? result.data.pageIdentifier : undefined))
+    .reduce((last, curr) => curr ?? last, undefined);
+}

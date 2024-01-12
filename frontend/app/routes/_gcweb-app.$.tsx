@@ -5,17 +5,17 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { type RouteHandle } from '~/types';
 import { getFixedT } from '~/utils/locale-utils.server';
-import { type PageTitleDataSchema } from '~/utils/route-utils';
+import { type PageIdentifierDataSchema, type PageTitleDataSchema } from '~/utils/route-utils';
 
 export const handle = {
   i18nNamespaces: ['gcweb'],
-  pageId: 'CDCP-0404',
 } satisfies RouteHandle;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const t = await getFixedT(request, ['gcweb']);
 
-  const data: PageTitleDataSchema = {
+  const data: PageTitleDataSchema & PageIdentifierDataSchema = {
+    pageIdentifier: 'CDCP-0404',
     pageTitle: t('gcweb:not-found.page-title'),
   };
 
