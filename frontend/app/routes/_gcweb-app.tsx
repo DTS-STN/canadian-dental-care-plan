@@ -170,11 +170,11 @@ function PageFooter() {
 
   return (
     <footer id="wb-info">
-      <h2 id='footer-heading' className="wb-inv">{t('gcweb:footer.about-site')}</h2>
+      <h2 className="wb-inv">{t('gcweb:footer.about-site')}</h2>
       <div className="gc-sub-footer">
         <div className="d-flex align-items-center container">
-          <nav aria-labelledby='footer-heading'>
-            <h3 className="wb-inv">{t('gcweb:footer.gc-corporate')}</h3>
+          <nav aria-labelledby='gc-corporate'>
+            <h3 id="gc-corporate" className="wb-inv">{t('gcweb:footer.gc-corporate')}</h3>
             <ul>
               <li>
                 <Link to={t('gcweb:footer.terms-conditions.href')}>{t('gcweb:footer.terms-conditions.text')}</Link>
