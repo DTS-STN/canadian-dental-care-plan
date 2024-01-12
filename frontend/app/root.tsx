@@ -58,7 +58,7 @@ function PageTitle() {
     .filter((handle): handle is RouteHandle => handle !== undefined)
     .filter((handle) => handle.pageTitlei18nKey !== undefined)
     .map((handle) => handle.pageTitlei18nKey)
-    .reduce((last, curr) => curr ?? last);
+    .pop();
 
   const { t } = useTranslation(getNamespaces(useMatches()));
 

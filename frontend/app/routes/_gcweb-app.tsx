@@ -124,7 +124,7 @@ function PageDetails() {
     .map((route) => route.handle)
     .filter((handle): handle is RouteHandle => !!handle)
     .map((routeHandle) => routeHandle.pageId)
-    .reduce((last, curr) => curr ?? last);
+    .pop();
 
   const { t } = useTranslation(['gcweb']);
 

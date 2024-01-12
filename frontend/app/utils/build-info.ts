@@ -21,5 +21,5 @@ export function useBuildInfo() {
     .map((route) => route.data)
     .filter((data): data is RouteData => !!data)
     .map((routeData) => routeData.buildInfo)
-    .reduce((last, curr) => curr ?? last);
+    .pop();
 }
