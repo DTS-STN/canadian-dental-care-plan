@@ -25,9 +25,9 @@ export function getAltLanguage(language: string) {
  * Returns all namespaces required by the given routes by examining the route's i18nNamespaces handle property.
  * @see https://remix.run/docs/en/main/route/handle
  */
-export function getNamespaces(routes: Array<{ handle?: unknown }>) {
+export function getNamespaces(routes: Array<{ handle?: unknown } | undefined>) {
   const namespaces = routes
-    .map((route) => route.handle)
+    .map((route) => route?.handle)
     .filter((handle): handle is RouteHandle => !!handle)
     .map((routeHandle) => routeHandle.i18nNamespaces)
     .filter((i18nNamespaces): i18nNamespaces is Namespace => !!i18nNamespaces)
