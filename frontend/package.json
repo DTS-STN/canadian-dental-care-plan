@@ -17,6 +17,7 @@
     "test:unit": "vitest"
   },
   "dependencies": {
+    "@axe-core/playwright": "^4.8.2",
     "@remix-run/css-bundle": "^2.5.0",
     "@remix-run/node": "^2.5.0",
     "@remix-run/react": "^2.5.0",
