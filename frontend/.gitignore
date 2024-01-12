@@ -174,3 +174,4 @@ node_modules
 # Custom entries below...
 playwright-report/
 test-results/
+server.js
