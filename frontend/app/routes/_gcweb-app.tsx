@@ -6,9 +6,9 @@ import { Link, Outlet, isRouteErrorResponse, useMatches, useRouteError } from '@
 import { Trans, useTranslation } from 'react-i18next';
 
 import { LanguageSwitcher } from '~/components/language-switcher';
-import { type RouteHandle, type RouteHandleBreadcrumb } from '~/types';
+import { type RouteHandle } from '~/types';
 import { useBuildInfo } from '~/utils/build-info';
-import { getNamespaces } from '~/utils/locale-utils';
+import { useBreadcrumb } from '~/utils/route-utils';
 
 export const handle = {
   i18nNamespaces: ['gcweb'],
@@ -173,8 +173,10 @@ function PageFooter() {
       <h2 className="wb-inv">{t('gcweb:footer.about-site')}</h2>
       <div className="gc-sub-footer">
         <div className="d-flex align-items-center container">
-          <nav aria-labelledby='gc-corporate'>
-            <h3 id="gc-corporate" className="wb-inv">{t('gcweb:footer.gc-corporate')}</h3>
+          <nav aria-labelledby="gc-corporate">
+            <h3 id="gc-corporate" className="wb-inv">
+              {t('gcweb:footer.gc-corporate')}
+            </h3>
             <ul>
               <li>
                 <Link to={t('gcweb:footer.terms-conditions.href')}>{t('gcweb:footer.terms-conditions.text')}</Link>
@@ -194,15 +196,10 @@ function PageFooter() {
 }
 
 function Breadcrumbs() {
-  const { t } = useTranslation(getNamespaces(useMatches()));
+  const { t } = useTranslation(['gcweb']);
+  const breadcrumb = useBreadcrumb();
 
-  const breadcrumbs = useMatches()
-    .map((route) => route.handle)
-    .filter((handle): handle is RouteHandle => !!handle)
-    .flatMap((routeHandle) => routeHandle.breadcrumbs)
-    .filter((breadcrumbs): breadcrumbs is RouteHandleBreadcrumb => !!breadcrumbs);
-
-  if (breadcrumbs.length === 0) {
+  if (breadcrumb === undefined || breadcrumb.length === 0) {
     return <></>;
   }
 
@@ -211,13 +208,13 @@ function Breadcrumbs() {
       <h2 id="breadcrumbs">{t('gcweb:breadcrumbs.you-are-here')}</h2>
       <div className="container">
         <ol className="breadcrumb" typeof="BreadcrumbList">
-          {breadcrumbs.map((breadcrumb, index) => {
-            const breadcrumbItem = breadcrumb?.to ? (
-              <Link to={breadcrumb.to} property="item" typeof="WebPage">
-                <span property="name">{t(breadcrumb.i18nKey)}</span>
+          {breadcrumb.map(({ label, to }, index) => {
+            const breadcrumbItem = to ? (
+              <Link to={to} property="item" typeof="WebPage">
+                <span property="name">{label}</span>
               </Link>
             ) : (
-              <span property="name">{t(breadcrumb.i18nKey)}</span>
+              <span property="name">{label}</span>
             );
 
             return (
