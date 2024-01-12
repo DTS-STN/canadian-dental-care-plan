@@ -4,26 +4,19 @@ import { Link } from '@remix-run/react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { type RouteHandle } from '~/types';
-import { getFixedT } from '~/utils/locale-utils.server';
 
 export const handle = {
   i18nNamespaces: ['gcweb'],
+  pageId: 'CDCP-0404',
+  pageTitlei18nKey: 'gcweb:not-found.page-title',
 } satisfies RouteHandle;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const t = await getFixedT(request, handle.i18nNamespaces);
-
-  return json(
-    {
-      pageId: 'CDCP-0404',
-      pageTitle: t('gcweb:not-found.page-title'),
-    },
-    { status: 404 },
-  );
+  return json({}, { status: 404 });
 };
 
 export default function () {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['gcweb']);
 
   // (content will be added by <Trans>)
   // eslint-disable-next-line jsx-a11y/anchor-has-content
@@ -37,7 +30,7 @@ export default function () {
       <p>{t('gcweb:not-found.page-message')}</p>
       <ul>
         <li>
-          <Trans i18nKey="gcweb:not-found.page-link" components={{ home }} />
+          <Trans ns={['gcweb']} i18nKey="gcweb:not-found.page-link" components={{ home }} />
         </li>
       </ul>
     </>

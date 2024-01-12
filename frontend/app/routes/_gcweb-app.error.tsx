@@ -1,9 +1,15 @@
-import { type LoaderFunctionArgs, json } from '@remix-run/node';
+import { type LoaderFunctionArgs } from '@remix-run/node';
+
+import { type RouteHandle } from '~/types';
+
+export const handle = {
+  i18nNamespaces: ['gcweb'],
+  pageId: 'CDCP-0003',
+  pageTitlei18nKey: 'gcweb:server-error.page-title',
+} satisfies RouteHandle;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  return json({
-    pageId: 'CDCP-0003',
-  });
+  throw new Error('Keyboard not responding. Press any key to continue.');
 };
 
 /**
@@ -11,5 +17,5 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
  * TODO :: GjB :: eventually remove
  */
 export default function () {
-  throw new Error('Keyboard not responding. Press any key to continue.');
+  return <></>;
 }
