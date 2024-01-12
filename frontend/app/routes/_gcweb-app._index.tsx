@@ -1,15 +1,21 @@
+import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
 import { type RouteHandle } from '~/types';
+import { getFixedT } from '~/utils/locale-utils.server';
 
 export const handle = {
   breadcrumbs: [{ i18nKey: 'common:index.breadcrumbs.home' }],
   i18nNamespaces: ['common'],
   pageId: 'CDCP-0001',
-  pageTitlei18nKey: 'common:index.page-title',
 } satisfies RouteHandle;
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const t = await getFixedT(request, ['common']);
+  return json({ pageTitle: t('common:index.page-title') });
+}
 
 export default function () {
   const { t } = useTranslation(['common']);
