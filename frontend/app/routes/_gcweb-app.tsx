@@ -102,14 +102,14 @@ function PageHeader() {
             </div>
           </div>
         </div>
+        <section className="application-bar">
+          <div className="container">
+            <h2>
+              <Link to="/">{t('gcweb:header.application-title')}</Link>
+            </h2>
+          </div>
+        </section>
       </header>
-      <section className="application-bar">
-        <div className="container">
-          <h2>
-            <Link to="/">{t('gcweb:header.application-title')}</Link>
-          </h2>
-        </div>
-      </section>
       <Breadcrumbs />
     </>
   );
@@ -170,10 +170,10 @@ function PageFooter() {
 
   return (
     <footer id="wb-info">
-      <h2 className="wb-inv">{t('gcweb:footer.about-site')}</h2>
+      <h2 id='footer-heading' className="wb-inv">{t('gcweb:footer.about-site')}</h2>
       <div className="gc-sub-footer">
         <div className="d-flex align-items-center container">
-          <nav>
+          <nav aria-labelledby='footer-heading'>
             <h3 className="wb-inv">{t('gcweb:footer.gc-corporate')}</h3>
             <ul>
               <li>
@@ -207,7 +207,7 @@ function Breadcrumbs() {
   }
 
   return (
-    <nav id="wb-bc" property="breadcrumb">
+    <nav id="wb-bc" property="breadcrumb" aria-label="breadcrumbs">
       <h2>{t('gcweb:breadcrumbs.you-are-here')}</h2>
       <div className="container">
         <ol className="breadcrumb" typeof="BreadcrumbList">
