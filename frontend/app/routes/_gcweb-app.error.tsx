@@ -4,7 +4,6 @@ import { type RouteHandle } from '~/types';
 
 export const handle = {
   i18nNamespaces: ['gcweb'],
-  pageId: 'CDCP-0003',
 } satisfies RouteHandle;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

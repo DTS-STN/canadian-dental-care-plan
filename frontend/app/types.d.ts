@@ -101,5 +101,4 @@ export type RouteData = {
  */
 export type RouteHandle = {
   i18nNamespaces?: I18nNamespace;
-  pageId?: string;
 };
