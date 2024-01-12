@@ -98,6 +98,7 @@ COPY --from=build --chown=node:node /home/node/build/ ./build/
 COPY --from=build --chown=node:node /home/node/public/ ./public/
 COPY --from=build --chown=node:node /home/node/package.json /home/node/package-lock.json ./
 COPY --from=build --chown=node:node /home/node/build-info.json ./
+COPY --from=build --chown=node:node /home/node/server.js ./
 
 USER node
 ENV PORT=3000

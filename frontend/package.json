@@ -8,7 +8,7 @@
     "build:remix": "remix build",
     "build:server": "esbuild --platform=node --format=esm ./server.ts --outdir=./",
     "dev": "remix dev -c \"npm run dev:server\" --manual",
-    "start": "cross-env NODE_ENV=production node  server.js",
+    "start": "cross-env NODE_ENV=production node ./server.js",
     "dev:server": "tsx watch --clear-screen=false --ignore 'app/**' --ignore 'build/**' --ignore 'node_modules/**' --inspect ./server.ts",
     "format": "prettier --write .",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
