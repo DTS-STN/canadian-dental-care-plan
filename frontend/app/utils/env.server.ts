@@ -7,7 +7,6 @@ const toBoolean = (val: string) => val === 'true';
  */
 const serverEnv = z.object({
   NODE_ENV: z.enum(['production', 'development', 'test']),
-  LOG_LEVEL: z.enum(['error', 'warn', 'info', 'http', 'verbose', 'debug', 'silly']).default('info'),
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
   LANG_COOKIE_NAME: z.string().default('_gc_lang'),
   LANG_COOKIE_DOMAIN: z.string().optional(),
