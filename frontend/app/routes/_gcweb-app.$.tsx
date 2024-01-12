@@ -5,6 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { type RouteHandle } from '~/types';
 import { getFixedT } from '~/utils/locale-utils.server';
+import { type PageTitleDataSchema } from '~/utils/route-utils';
 
 export const handle = {
   i18nNamespaces: ['gcweb'],
@@ -13,7 +14,12 @@ export const handle = {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const t = await getFixedT(request, ['gcweb']);
-  return json({ pageTitle: t('gcweb:not-found.page-title') }, { status: 404 });
+
+  const data: PageTitleDataSchema = {
+    pageTitle: t('gcweb:not-found.page-title'),
+  };
+
+  return json(data, { status: 404 });
 };
 
 export default function () {

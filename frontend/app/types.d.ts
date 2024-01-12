@@ -90,14 +90,6 @@ export type I18nResources = {
 };
 
 /**
- * A type representing breadcrumb data that is added to a route handle.
- */
-export type RouteHandleBreadcrumb = {
-  i18nKey: I18nResourceKey<I18nResources>;
-  to?: string;
-};
-
-/**
  * A type representing a route's loader data.
  */
 export type RouteData = {
@@ -108,8 +100,6 @@ export type RouteData = {
  * A type representing a route's handle.
  */
 export type RouteHandle = {
-  breadcrumbs?: Array<RouteHandleBreadcrumb>;
   i18nNamespaces?: I18nNamespace;
   pageId?: string;
-  pageTitlei18nKey?: I18nResourceKey<I18nResources>;
 };
