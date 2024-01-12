@@ -1,107 +1,143 @@
 import { type RequestHandler, createRequestHandler } from '@remix-run/express';
-import { broadcastDevReady, installGlobals } from '@remix-run/node';
+import { type ServerBuild, broadcastDevReady, installGlobals } from '@remix-run/node';
 
+import chokidar from 'chokidar';
 import compression from 'compression';
 import express from 'express';
+import getPort from 'get-port';
 import morgan from 'morgan';
-import * as fs from 'node:fs';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import url from 'node:url';
 import sourceMapSupport from 'source-map-support';
 
-// patch in Remix runtime globals
-installGlobals();
-sourceMapSupport.install();
-
-/**
- * @typedef {import('@remix-run/node').ServerBuild} ServerBuild
- */
 const BUILD_PATH = './build/index.js';
-const WATCH_PATH = './build/version.txt';
+const VERSION_PATH = './build/version.txt';
+const require = { cache: {} as Record<string, unknown> };
 
-/**
- * Initial build
- * @type {ServerBuild}
- */
-let build = await import(BUILD_PATH);
+//
+// Remix native server code below...
+// copied from: https://github.com/remix-run/remix/blob/remix@2.5.0/packages/remix-serve/cli.ts
+//
 
-// Make chokidar a dev dependency so it doesn't get bundled in production.
-const chokidar = process.env.NODE_ENV === 'development' ? await import('chokidar') : null;
+process.env.NODE_ENV = process.env.NODE_ENV ?? 'production';
 
-const app = express();
-
-app.use(compression());
-
-// http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
-app.disable('x-powered-by');
-
-// Remix fingerprints its assets so we can cache forever.
-app.use('/build', express.static('public/build', { immutable: true, maxAge: '1y' }));
-
-// Everything else (like favicon.ico) is cached for an hour. You may want to be
-// more aggressive with this caching.
-app.use(express.static('public', { maxAge: '1h' }));
-
-app.use(morgan('tiny'));
-
-// Check if the server is running in development mode and use the devBuild to reflect realtime changes in the codebase.
-app.all(
-  '*',
-  process.env.NODE_ENV === 'development'
-    ? createDevRequestHandler()
-    : createRequestHandler({
-        build,
-        mode: process.env.NODE_ENV,
-      }),
-);
-
-const port = process.env.PORT || 3000;
-
-app.listen(port, async () => {
-  console.log(`Express server listening on port ${port}`);
-
-  // send "ready" message to dev server
-  if (process.env.NODE_ENV === 'development') {
-    await broadcastDevReady(build);
-  }
+sourceMapSupport.install({
+  retrieveSourceMap: function (source) {
+    let match = source.startsWith('file://');
+    if (match) {
+      let filePath = url.fileURLToPath(source);
+      let sourceMapPath = `${filePath}.map`;
+      if (fs.existsSync(sourceMapPath)) {
+        return {
+          url: source,
+          map: fs.readFileSync(sourceMapPath, 'utf8'),
+        };
+      }
+    }
+    return null;
+  },
 });
+installGlobals();
 
-// Create a request handler that watches for changes to the server build during development.
-function createDevRequestHandler(): RequestHandler {
-  async function handleServerUpdate() {
-    // 1. re-import the server build
-    build = await reimportServer();
+run();
 
-    // Add debugger to assist in v2 dev debugging
-    if (build?.assets === undefined) {
-      console.log(build.assets);
-      debugger;
-    }
-
-    // 2. tell dev server that this app server is now up-to-date and ready
-    await broadcastDevReady(build);
-  }
-
-  chokidar?.watch(WATCH_PATH, { ignoreInitial: true }).on('add', handleServerUpdate).on('change', handleServerUpdate);
-
-  // wrap request handler to make sure its recreated with the latest build for every request
-  return async (req, res, next) => {
-    try {
-      return createRequestHandler({
-        build,
-        mode: 'development',
-      })(req, res, next);
-    } catch (error) {
-      next(error);
-    }
-  };
+function parseNumber(raw?: string) {
+  if (raw === undefined) return undefined;
+  let maybe = Number(raw);
+  if (Number.isNaN(maybe)) return undefined;
+  return maybe;
 }
 
-// ESM import cache busting
-/**
- * @type {() => Promise<ServerBuild>}
- */
-async function reimportServer() {
-  const stat = fs.statSync(BUILD_PATH);
+async function run() {
+  let port = parseNumber(process.env.PORT) ?? (await getPort({ port: 3000 }));
 
-  // use a timestamp query parameter to bust the import cache
-  return import(BUILD_PATH + '?t=' + stat.mtimeMs);
+  let buildPath = path.resolve(BUILD_PATH);
+  let versionPath = path.resolve(VERSION_PATH);
+
+  async function reimportServer() {
+    Object.keys(require.cache).forEach((key) => {
+      if (key.startsWith(buildPath)) {
+        delete require.cache[key];
+      }
+    });
+
+    let stat = fs.statSync(buildPath);
+
+    // use a timestamp query parameter to bust the import cache
+    return import(url.pathToFileURL(buildPath).href + '?t=' + stat.mtimeMs);
+  }
+
+  function createDevRequestHandler(initialBuild: ServerBuild): RequestHandler {
+    let build = initialBuild;
+    async function handleServerUpdate() {
+      // 1. re-import the server build
+      build = await reimportServer();
+      // 2. tell Remix that this app server is now up-to-date and ready
+      broadcastDevReady(build);
+    }
+
+    chokidar.watch(versionPath, { ignoreInitial: true }).on('add', handleServerUpdate).on('change', handleServerUpdate);
+
+    // wrap request handler to make sure its recreated with the latest build for every request
+    return async (req, res, next) => {
+      try {
+        return createRequestHandler({
+          build,
+          mode: 'development',
+        })(req, res, next);
+      } catch (error) {
+        next(error);
+      }
+    };
+  }
+
+  let build: ServerBuild = await reimportServer();
+
+  let onListen = () => {
+    let address =
+      process.env.HOST ||
+      Object.values(os.networkInterfaces())
+        .flat()
+        .find((ip) => String(ip?.family).includes('4') && !ip?.internal)?.address;
+
+    if (!address) {
+      console.log(`[remix-serve] http://localhost:${port}`);
+    } else {
+      console.log(`[remix-serve] http://localhost:${port} (http://${address}:${port})`);
+    }
+    if (process.env.NODE_ENV === 'development') {
+      void broadcastDevReady(build);
+    }
+  };
+
+  let app = express();
+  app.disable('x-powered-by');
+  app.use(compression());
+  app.use(
+    build.publicPath,
+    express.static(build.assetsBuildDirectory, {
+      immutable: true,
+      maxAge: '1y',
+    }),
+  );
+  app.use(express.static('public', { maxAge: '1h' }));
+  app.use(morgan('tiny'));
+
+  app.all(
+    '*',
+    process.env.NODE_ENV === 'development'
+      ? createDevRequestHandler(build)
+      : createRequestHandler({
+          build,
+          mode: process.env.NODE_ENV,
+        }),
+  );
+
+  let server = process.env.HOST ? app.listen(port, process.env.HOST, onListen) : app.listen(port, onListen);
+
+  ['SIGTERM', 'SIGINT'].forEach((signal) => {
+    process.once(signal, () => server?.close(console.error));
+  });
 }
