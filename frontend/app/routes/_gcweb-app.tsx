@@ -207,8 +207,8 @@ function Breadcrumbs() {
   }
 
   return (
-    <nav id="wb-bc" property="breadcrumb" aria-label="breadcrumbs">
-      <h2>{t('gcweb:breadcrumbs.you-are-here')}</h2>
+    <nav id="wb-bc" property="breadcrumb" aria-labelledby="breadcrumbs">
+      <h2 id="breadcrumbs">{t('gcweb:breadcrumbs.you-are-here')}</h2>
       <div className="container">
         <ol className="breadcrumb" typeof="BreadcrumbList">
           {breadcrumbs.map((breadcrumb, index) => {
