@@ -58,7 +58,7 @@ function ApplicationLayout({ children }: { children?: ReactNode }) {
 }
 
 function PageHeader() {
-  const { i18n, t } = useTranslation();
+  const { i18n, t } = useTranslation(['gcweb']);
 
   return (
     <>

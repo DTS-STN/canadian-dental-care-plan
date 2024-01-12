@@ -1,17 +1,16 @@
 import { useContext } from 'react';
 
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useMatches } from '@remix-run/react';
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import { type RouteHandle } from './types';
-import { getNamespaces } from './utils/locale-utils';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import stylesheet from '~/tailwind.css';
 import { readBuildInfo } from '~/utils/build-info.server';
 import { getPublicEnv } from '~/utils/env.server';
+import { usePageTitle } from '~/utils/route-utils';
 
 export const links = () => [{ rel: 'stylesheet', href: stylesheet }];
 
@@ -30,6 +29,7 @@ export const loader = ({ request }: LoaderFunctionArgs) => {
 export default function () {
   const { nonce } = useContext(NonceContext);
   const { env } = useLoaderData<typeof loader>();
+  const pageTitle = usePageTitle();
   const { i18n } = useTranslation();
 
   return (
@@ -37,7 +37,7 @@ export default function () {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <PageTitle />
+        <title>{pageTitle}</title>
         <Meta />
         <Links />
       </head>
@@ -50,21 +50,4 @@ export default function () {
       </body>
     </html>
   );
-}
-
-function PageTitle() {
-  const pageTitlei18nKey = useMatches()
-    .map((route) => route.handle)
-    .filter((handle): handle is RouteHandle => handle !== undefined)
-    .filter((handle) => handle.pageTitlei18nKey !== undefined)
-    .map((handle) => handle.pageTitlei18nKey)
-    .reduce((last, curr) => curr ?? last);
-
-  const { t } = useTranslation(getNamespaces(useMatches()));
-
-  if (pageTitlei18nKey === undefined) {
-    return <></>;
-  }
-
-  return <title>{t(pageTitlei18nKey)}</title>;
 }
