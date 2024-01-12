@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 
 import { type RouteHandle } from './types';
 import { getNamespaces } from './utils/locale-utils';
-import { useRouteHandles } from './utils/route-utils';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import stylesheet from '~/tailwind.css';
@@ -54,13 +53,14 @@ export default function () {
 }
 
 function PageTitle() {
-  const matches = useMatches();
-  const { t } = useTranslation(getNamespaces(matches));
-
-  const pageTitlei18nKey = useRouteHandles<RouteHandle>()
+  const pageTitlei18nKey = useMatches()
+    .map((route) => route.handle)
+    .filter((handle): handle is RouteHandle => handle !== undefined)
+    .filter((handle) => handle.pageTitlei18nKey !== undefined)
     .map((handle) => handle.pageTitlei18nKey)
-    .filter((pageTitleKey) => pageTitleKey !== undefined)
-    .reduce((last, curr) => curr ?? last, undefined);
+    .reduce((last, curr) => curr ?? last);
+
+  const { t } = useTranslation(getNamespaces(useMatches()));
 
   if (pageTitlei18nKey === undefined) {
     return <></>;
