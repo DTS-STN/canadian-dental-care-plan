@@ -2,6 +2,7 @@ import { type Namespace as I18nNamespace, type ParseKeys } from 'i18next';
 
 import type common from '../public/locales/en/common.json';
 import type gcweb from '../public/locales/en/gcweb.json';
+import { type BuildInfo } from '~/utils/build-info.server';
 import { type PublicEnv } from '~/utils/env.server';
 
 declare global {
@@ -97,10 +98,18 @@ export type RouteHandleBreadcrumb = {
 };
 
 /**
- * A type representing a route handle.
+ * A type representing a route's loader data.
  */
-export interface RouteHandle extends Record<string, unknown> {
-  breadcrumbs?: Array<RouteHandleBreadcrumb>;
-  i18nNamespaces?: I18nNamespace;
-  pageTitlei18nKey?: I18nResourceKey<I18nResources>;
-}
+export type RouteData = Partial<{
+  buildInfo: BuildInfo;
+}>;
+
+/**
+ * A type representing a route's handle.
+ */
+export type RouteHandle = Partial<{
+  breadcrumbs: Array<RouteHandleBreadcrumb>;
+  i18nNamespaces: I18nNamespace;
+  pageId: string;
+  pageTitlei18nKey: I18nResourceKey<I18nResources>;
+}>;

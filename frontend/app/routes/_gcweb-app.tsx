@@ -9,7 +9,6 @@ import { LanguageSwitcher } from '~/components/language-switcher';
 import { type RouteHandle, type RouteHandleBreadcrumb } from '~/types';
 import { useBuildInfo } from '~/utils/build-info';
 import { getNamespaces } from '~/utils/locale-utils';
-import { useRouteHandles } from '~/utils/route-utils';
 
 export const handle = {
   i18nNamespaces: ['gcweb'],
@@ -118,11 +117,14 @@ function PageHeader() {
 
 function PageDetails() {
   const buildInfo = useBuildInfo();
-  const pageDetailsAttrs = useRouteHandles<{ pageId?: string }>();
-
   const dateModified = buildInfo?.buildDate;
-  const pageId = pageDetailsAttrs.map((attr) => attr?.pageId).reduce((last, curr) => curr ?? last);
   const version = buildInfo?.buildVersion;
+
+  const pageId = useMatches()
+    .map((route) => route.handle)
+    .filter((handle): handle is RouteHandle => !!handle)
+    .map((routeHandle) => routeHandle.pageId)
+    .reduce((last, curr) => curr ?? last);
 
   const { t } = useTranslation(['gcweb']);
 
@@ -192,12 +194,13 @@ function PageFooter() {
 }
 
 function Breadcrumbs() {
-  const matches = useMatches();
-  const { t } = useTranslation(getNamespaces(matches));
+  const { t } = useTranslation(getNamespaces(useMatches()));
 
-  const breadcrumbs = useRouteHandles<RouteHandle>()
-    .flatMap((handle) => handle.breadcrumbs)
-    .filter((breadcrumb): breadcrumb is RouteHandleBreadcrumb => breadcrumb !== undefined);
+  const breadcrumbs = useMatches()
+    .map((route) => route.handle)
+    .filter((handle): handle is RouteHandle => !!handle)
+    .flatMap((routeHandle) => routeHandle.breadcrumbs)
+    .filter((breadcrumbs): breadcrumbs is RouteHandleBreadcrumb => !!breadcrumbs);
 
   if (breadcrumbs.length === 0) {
     return <></>;

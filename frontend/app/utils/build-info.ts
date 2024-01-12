@@ -1,4 +1,6 @@
-import { useRouteData } from '~/utils/route-utils';
+import { useMatches } from '@remix-run/react';
+
+import { type RouteData } from '~/types';
 
 export type BuildInfo = {
   buildDate?: string;
@@ -15,7 +17,9 @@ export type BuildInfo = {
  * emit a BuildInfo object, otherwise this function will return undefined.
  */
 export function useBuildInfo() {
-  return useRouteData<{ buildInfo?: BuildInfo }>()
-    .map((data) => data?.buildInfo)
+  return useMatches()
+    .map((route) => route.data)
+    .filter((data): data is RouteData => !!data)
+    .map((routeData) => routeData.buildInfo)
     .reduce((last, curr) => curr ?? last);
 }

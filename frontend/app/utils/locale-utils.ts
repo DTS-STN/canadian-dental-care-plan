@@ -26,9 +26,14 @@ export function getAltLanguage(language: string) {
  * @see https://remix.run/docs/en/main/route/handle
  */
 export function getNamespaces(routes: Array<{ handle?: unknown }>) {
-  const routeHandles = routes.map((route) => route.handle).filter((handle): handle is RouteHandle => handle !== undefined);
-  const i18nNamespaces = routeHandles.map((handle) => handle.i18nNamespaces).filter((i18nNamespaces): i18nNamespaces is Namespace => i18nNamespaces !== undefined);
-  return [...new Set(i18nNamespaces.flatMap((i18nNamespace) => i18nNamespace))];
+  const namespaces = routes
+    .map((route) => route.handle)
+    .filter((handle): handle is RouteHandle => !!handle)
+    .map((routeHandle) => routeHandle.i18nNamespaces)
+    .filter((i18nNamespaces): i18nNamespaces is Namespace => !!i18nNamespaces)
+    .flatMap((namespace) => namespace);
+
+  return [...new Set(namespaces)];
 }
 
 /**
