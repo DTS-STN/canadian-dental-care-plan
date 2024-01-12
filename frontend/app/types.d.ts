@@ -100,16 +100,16 @@ export type RouteHandleBreadcrumb = {
 /**
  * A type representing a route's loader data.
  */
-export type RouteData = Partial<{
-  buildInfo: BuildInfo;
-}>;
+export type RouteData = {
+  buildInfo?: BuildInfo;
+};
 
 /**
  * A type representing a route's handle.
  */
-export type RouteHandle = Partial<{
-  breadcrumbs: Array<RouteHandleBreadcrumb>;
-  i18nNamespaces: I18nNamespace;
-  pageId: string;
-  pageTitlei18nKey: I18nResourceKey<I18nResources>;
-}>;
+export type RouteHandle = {
+  breadcrumbs?: Array<RouteHandleBreadcrumb>;
+  i18nNamespaces?: I18nNamespace;
+  pageId?: string;
+  pageTitlei18nKey?: I18nResourceKey<I18nResources>;
+};
