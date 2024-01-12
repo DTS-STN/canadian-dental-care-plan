@@ -33,7 +33,7 @@ export default async function handleRequest(request: Request, responseStatusCode
   log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
 
   const routes = Object.values(remixContext.routeModules);
-  const locale = (await getLocale(request)) ?? 'en';
+  const locale = await getLocale(request);
   const langCookie = await createLangCookie().serialize(locale);
   const i18n = await initI18n(locale, getNamespaces(routes));
 

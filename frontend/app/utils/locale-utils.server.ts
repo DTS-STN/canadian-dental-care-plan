@@ -80,8 +80,8 @@ export async function getLocale(request: Request) {
     return 'fr';
   }
 
-  log.debug('Epic fail: no locale detected in URL search params or cookies; returning undefined');
-  return undefined;
+  log.debug('Epic fail: no locale detected in URL search params or cookies; returning default [en]');
+  return 'en';
 }
 
 /**
