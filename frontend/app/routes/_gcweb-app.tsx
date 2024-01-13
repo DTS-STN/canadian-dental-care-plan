@@ -8,7 +8,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { type RouteHandle } from '~/types';
 import { useBuildInfo } from '~/utils/build-info';
-import { useBreadcrumb, usePageIdentifier } from '~/utils/route-utils';
+import { useBreadcrumbs, usePageIdentifier } from '~/utils/route-utils';
 
 export const handle = {
   i18nNamespaces: ['gcweb'],
@@ -193,9 +193,9 @@ function PageFooter() {
 
 function Breadcrumbs() {
   const { t } = useTranslation(['gcweb']);
-  const breadcrumb = useBreadcrumb();
+  const breadcrumbs = useBreadcrumbs();
 
-  if (breadcrumb === undefined || breadcrumb.length === 0) {
+  if (breadcrumbs === undefined || breadcrumbs.length === 0) {
     return <></>;
   }
 
@@ -204,22 +204,18 @@ function Breadcrumbs() {
       <h2 id="breadcrumbs">{t('gcweb:breadcrumbs.you-are-here')}</h2>
       <div className="container">
         <ol className="breadcrumb" typeof="BreadcrumbList">
-          {breadcrumb.map(({ label, to }, index) => {
-            const breadcrumbItem = to ? (
-              <Link to={to} property="item" typeof="WebPage">
+          {breadcrumbs.map(({ label, to }, index) => (
+            <li key={index} property="itemListElement" typeof="ListItem">
+              {to ? (
+                <Link to={to} property="item" typeof="WebPage">
+                  <span property="name">{label}</span>
+                </Link>
+              ) : (
                 <span property="name">{label}</span>
-              </Link>
-            ) : (
-              <span property="name">{label}</span>
-            );
-
-            return (
-              <li key={index} property="itemListElement" typeof="ListItem">
-                {breadcrumbItem}
-                <meta property="position" content={index + 1 + ''} />
-              </li>
-            );
-          })}
+              )}
+              <meta property="position" content={`${index + 1}`} />
+            </li>
+          ))}
         </ol>
       </div>
     </nav>

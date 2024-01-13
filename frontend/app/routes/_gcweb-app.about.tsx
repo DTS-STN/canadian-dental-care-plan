@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { type RouteHandle } from '~/types';
 import { getFixedT } from '~/utils/locale-utils.server';
-import { type BreadcrumbDataSchema, type PageIdentifierDataSchema, type PageTitleDataSchema } from '~/utils/route-utils';
+import { type BreadcrumbsDataSchema, type PageIdentifierDataSchema, type PageTitleDataSchema } from '~/utils/route-utils';
 
 export const handle = {
   i18nNamespaces: ['common'],
@@ -13,8 +13,8 @@ export const handle = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const t = await getFixedT(request, ['common']);
 
-  const data: PageTitleDataSchema & BreadcrumbDataSchema & PageIdentifierDataSchema = {
-    breadcrumb: [{ label: t('common:about.breadcrumbs.home'), to: '/' }, { label: t('common:about.breadcrumbs.about') }],
+  const data: PageTitleDataSchema & BreadcrumbsDataSchema & PageIdentifierDataSchema = {
+    breadcrumbs: [{ label: t('common:about.breadcrumbs.home'), to: '/' }, { label: t('common:about.breadcrumbs.about') }],
     pageIdentifier: 'CDCP-0002',
     pageTitle: t('common:about.page-title'),
   };

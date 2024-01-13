@@ -13,8 +13,8 @@ export function usePageTitle() {
     .reduce((last, curr) => curr ?? last, undefined);
 }
 
-const breadcrumbDataSchema = z.object({
-  breadcrumb: z.array(
+const breadcrumbsDataSchema = z.object({
+  breadcrumbs: z.array(
     z.object({
       label: z.string(),
       to: z.string().optional(),
@@ -22,12 +22,12 @@ const breadcrumbDataSchema = z.object({
   ),
 });
 
-export type BreadcrumbDataSchema = z.infer<typeof breadcrumbDataSchema>;
+export type BreadcrumbsDataSchema = z.infer<typeof breadcrumbsDataSchema>;
 
-export function useBreadcrumb() {
+export function useBreadcrumbs() {
   return useMatches()
-    .map(({ data }) => breadcrumbDataSchema.safeParse(data))
-    .map((result) => (result.success ? result.data.breadcrumb : undefined))
+    .map(({ data }) => breadcrumbsDataSchema.safeParse(data))
+    .map((result) => (result.success ? result.data.breadcrumbs : undefined))
     .reduce((last, curr) => curr ?? last, undefined);
 }
 
