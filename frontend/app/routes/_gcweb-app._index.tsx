@@ -11,7 +11,7 @@ const i18nNamespaces: Namespace = ['common'];
 export async function loader({ request }: LoaderFunctionArgs) {
   const t = await getFixedT(request, i18nNamespaces);
 
-  return json({
+  return json<LoaderFunctionData>({
     breadcrumbs: [{ label: t('common:index.breadcrumbs.home') }],
     i18nNamespaces,
     pageIdentifier: 'CDCP-0001',

@@ -14,7 +14,7 @@ const i18nNamespaces: Namespace = ['gcweb'];
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: '/theme/gcweb/css/theme.min.css' }];
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return json({ i18nNamespaces });
+  return json<LoaderFunctionData>({ i18nNamespaces });
 }
 
 export function ErrorBoundary() {

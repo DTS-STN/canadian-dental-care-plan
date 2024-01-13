@@ -11,7 +11,7 @@ const i18nNamespaces: Namespace = ['gcweb'];
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const t = await getFixedT(request, i18nNamespaces);
 
-  return json(
+  return json<LoaderFunctionData>(
     {
       i18nNamespaces,
       pageIdentifier: 'CDCP-0404',

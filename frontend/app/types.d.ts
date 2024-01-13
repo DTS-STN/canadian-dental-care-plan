@@ -1,27 +1,9 @@
-import { type Namespace as I18nNamespace, type ParseKeys } from 'i18next';
+import { type ParseKeys } from 'i18next';
 
 import type common from '../public/locales/en/common.json';
 import type gcweb from '../public/locales/en/gcweb.json';
-import { type BuildInfo } from '~/utils/build-info.server';
+import { type Breadcrumbs, type BuildInfo, type I18nNamespaces, type PageIdentifier, type PageTitle } from './utils/route-utils';
 import { type PublicEnv } from '~/utils/env.server';
-
-declare global {
-  /**
-   * Add the public environment variables to the global window type.
-   */
-  interface Window {
-    env: PublicEnv;
-  }
-}
-
-declare module 'i18next' {
-  /**
-   * @see https://www.i18next.com/overview/typescript
-   */
-  interface CustomTypeOptions {
-    resources: I18nResources;
-  }
-}
 
 /**
  * A type that converts a type T to a function type that takes T as a parameter.
@@ -78,27 +60,33 @@ type ToTuple<Union> = ToTupleArray<Union, []>;
  * A utility type that extracts i18n resource keys from i18next custom
  * resources.
  */
-export type I18nResourceKey<T> = ParseKeys<ToTuple<keyof T>>;
+type I18nResourceKey<T> = ParseKeys<ToTuple<keyof T>>;
 
 /**
- * A type representing all of the i18n namespaces and content in the
- * application.
+ * Application-scoped global types.
  */
-export type I18nResources = {
-  common: typeof common;
-  gcweb: typeof gcweb;
-};
+declare global {
+  /**
+   * Add the public environment variables to the global window type.
+   */
+  interface Window {
+    env: PublicEnv;
+  }
 
-/**
- * A type representing a route's loader data.
- */
-export type RouteData = {
-  buildInfo?: BuildInfo;
-};
+  /**
+   * Common data returned from a loader function.
+   */
+  type LoaderFunctionData = Partial<Breadcrumbs & BuildInfo & I18nNamespaces & PageIdentifier & PageTitle>;
+}
 
-/**
- * A type representing a route's handle.
- */
-export type RouteHandle = {
-  i18nNamespaces?: I18nNamespace;
-};
+declare module 'i18next' {
+  /**
+   * @see https://www.i18next.com/overview/typescript
+   */
+  interface CustomTypeOptions {
+    resources: {
+      common: typeof common;
+      gcweb: typeof gcweb;
+    };
+  }
+}

@@ -1,5 +1,6 @@
 import { useMatches } from '@remix-run/react';
 
+import { type Namespace } from 'i18next';
 import { z } from 'zod';
 
 /**
@@ -25,6 +26,10 @@ const buildInfo = z.object({
   }),
 });
 
+const i18nNamespaces = z.object({
+  i18nNamespaces: z.custom<Namespace>(),
+});
+
 const pageIdentifier = z.object({
   pageIdentifier: z.string(),
 });
@@ -36,6 +41,8 @@ const pageTitle = z.object({
 export type Breadcrumbs = z.infer<typeof breadcrumbs>;
 
 export type BuildInfo = z.infer<typeof buildInfo>;
+
+export type I18nNamespaces = z.infer<typeof i18nNamespaces>;
 
 export type PageIdentifier = z.infer<typeof pageIdentifier>;
 
@@ -53,6 +60,13 @@ export function useBuildInfo() {
     .map(({ data }) => buildInfo.safeParse(data))
     .map((result) => (result.success ? result.data.buildInfo : undefined))
     .reduce(toLastDefinedValue);
+}
+
+export function useI18nNamespaces() {
+  return useMatches()
+    .map(({ data }) => i18nNamespaces.safeParse(data))
+    .map((result) => (result.success ? result.data.i18nNamespaces : undefined))
+    .filter((i18nNamespaces) => i18nNamespaces !== undefined);
 }
 
 export function usePageIdentifier() {
