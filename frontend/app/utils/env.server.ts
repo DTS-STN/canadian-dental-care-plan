@@ -14,6 +14,7 @@ const serverEnv = z.object({
   LANG_COOKIE_HTTP_ONLY: z.string().transform(toBoolean).default('true'),
   LANG_COOKIE_SECURE: z.string().transform(toBoolean).default('true'),
   LANG_QUERY_PARAM: z.string().default('lang'),
+  MOCKS_ENABLED: z.string().transform(toBoolean).default('false'),
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;

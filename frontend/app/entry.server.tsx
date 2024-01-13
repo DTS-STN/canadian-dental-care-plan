@@ -18,9 +18,9 @@ import { getLogger } from '~/utils/logging.server';
 const abortDelay = 5_000;
 const log = getLogger('entry.server');
 
-const { NODE_ENV } = getEnv();
+const { NODE_ENV, MOCKS_ENABLED } = getEnv();
 
-if (NODE_ENV === 'development' || NODE_ENV === 'test') {
+if (MOCKS_ENABLED || NODE_ENV === 'development' || NODE_ENV === 'test') {
   server.listen({ onUnhandledRequest: 'bypass' });
   log.info('MSW mock server initialized');
 }
