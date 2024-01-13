@@ -41,3 +41,19 @@ export function usePageIdentifier() {
     .map((result) => (result.success ? result.data.pageIdentifier : undefined))
     .reduce((last, curr) => curr ?? last, undefined);
 }
+
+const buildInfoDataSchema = z.object({
+  buildDate: z.string(),
+  buildId: z.string(),
+  buildRevision: z.string(),
+  buildVersion: z.string(),
+});
+
+export type BuildInfoDataSchema = z.infer<typeof buildInfoDataSchema>;
+
+export function useBuildInfo() {
+  return useMatches()
+    .map(({ data }) => buildInfoDataSchema.safeParse(data))
+    .map((result) => (result.success ? result.data : undefined))
+    .reduce((last, curr) => curr ?? last, undefined);
+}

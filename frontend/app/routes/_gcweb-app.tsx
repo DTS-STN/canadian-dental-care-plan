@@ -7,8 +7,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { type RouteHandle } from '~/types';
-import { useBuildInfo } from '~/utils/build-info';
-import { useBreadcrumbs, usePageIdentifier } from '~/utils/route-utils';
+import { useBreadcrumbs, useBuildInfo, usePageIdentifier } from '~/utils/route-utils';
 
 export const handle = {
   i18nNamespaces: ['gcweb'],
@@ -116,9 +115,10 @@ function PageHeader() {
 }
 
 function PageDetails() {
-  const buildInfo = useBuildInfo();
-  const dateModified = buildInfo?.buildDate;
-  const version = buildInfo?.buildVersion;
+  const buildInfo = useBuildInfo() ?? {
+    buildDate: '2000-01-01T00:00:00Z',
+    buildVersion: '0.0.0+00000000-0000',
+  };
 
   const pageIdentifier = usePageIdentifier();
 
@@ -138,19 +138,19 @@ function PageDetails() {
                 </dd>
               </>
             )}
-            {!!dateModified && (
+            {!!buildInfo?.buildDate && (
               <>
                 <dt className="float-left clear-left pr-[1ch]">{t('gcweb:page-details.date-modfied')}</dt>
                 <dd className="float-left clear-right mb-0">
-                  <time property="dateModified">{dateModified.slice(0, 10)}</time>
+                  <time property="dateModified">{buildInfo?.buildDate.slice(0, 10)}</time>
                 </dd>
               </>
             )}
-            {!!version && (
+            {!!buildInfo?.buildVersion && (
               <>
                 <dt className="float-left clear-left pr-[1ch]">{t('gcweb:page-details.version')}</dt>
                 <dd className="float-left clear-right mb-0">
-                  <span property="version">{version}</span>
+                  <span property="version">{buildInfo?.buildVersion}</span>
                 </dd>
               </>
             )}
