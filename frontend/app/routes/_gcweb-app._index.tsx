@@ -23,7 +23,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // TODO :: GjB :: figure out a cleaner way to type this
   return json<LoaderFunctionData & { user: User }>({
     breadcrumbs: [{ label: t('common:index.breadcrumbs.home') }],
-    i18nNamespaces: i18nNamespaces,
+    i18nNamespaces,
     pageIdentifier: 'CDCP-0001',
     pageTitle: t('common:index.page-title'),
     user: await getUser(),
