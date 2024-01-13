@@ -1,2 +1,3 @@
-public/build/
-public/theme/
+**/public/build/
+**/public/theme/
+**/tmp/
