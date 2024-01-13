@@ -3,15 +3,18 @@ import { type ReactNode } from 'react';
 import { type LinksFunction, type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link, Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
+import { type Namespace } from 'i18next';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { useBreadcrumbs, useBuildInfo, usePageIdentifier } from '~/utils/route-utils';
 
+const i18nNamespaces: Namespace = ['gcweb'];
+
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: '/theme/gcweb/css/theme.min.css' }];
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return json({ i18nNamespaces: ['gcweb'] });
+  return json({ i18nNamespaces });
 }
 
 export function ErrorBoundary() {
@@ -54,7 +57,7 @@ function ApplicationLayout({ children }: { children?: ReactNode }) {
 }
 
 function PageHeader() {
-  const { i18n, t } = useTranslation(['gcweb']);
+  const { i18n, t } = useTranslation(i18nNamespaces);
 
   return (
     <>
@@ -119,7 +122,7 @@ function PageDetails() {
 
   const pageIdentifier = usePageIdentifier();
 
-  const { t } = useTranslation(['gcweb']);
+  const { t } = useTranslation(i18nNamespaces);
 
   return (
     <section className="pagedetails">
@@ -159,7 +162,7 @@ function PageDetails() {
 }
 
 function PageFooter() {
-  const { t } = useTranslation(['gcweb']);
+  const { t } = useTranslation(i18nNamespaces);
 
   return (
     <footer id="wb-info">
@@ -189,7 +192,7 @@ function PageFooter() {
 }
 
 function Breadcrumbs() {
-  const { t } = useTranslation(['gcweb']);
+  const { t } = useTranslation(i18nNamespaces);
   const breadcrumbs = useBreadcrumbs();
 
   if (breadcrumbs === undefined || breadcrumbs.length === 0) {
@@ -220,7 +223,7 @@ function Breadcrumbs() {
 }
 
 function ServerError({ error }: { error: unknown }) {
-  const { t } = useTranslation(['gcweb']);
+  const { t } = useTranslation(i18nNamespaces);
 
   // (content will be added by <Trans>)
   // eslint-disable-next-line jsx-a11y/anchor-has-content

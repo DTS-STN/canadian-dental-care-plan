@@ -1,23 +1,26 @@
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link } from '@remix-run/react';
 
+import { type Namespace } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
 import { getFixedT } from '~/utils/locale-utils.server';
 
+const i18nNamespaces: Namespace = ['common'];
+
 export async function loader({ request }: LoaderFunctionArgs) {
-  const t = await getFixedT(request, ['common']);
+  const t = await getFixedT(request, i18nNamespaces);
 
   return json({
     breadcrumbs: [{ label: t('common:index.breadcrumbs.home') }],
-    i18nNamespaces: ['common'],
+    i18nNamespaces,
     pageIdentifier: 'CDCP-0001',
     pageTitle: t('common:index.page-title'),
   });
 }
 
 export default function () {
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(i18nNamespaces);
 
   return (
     <>

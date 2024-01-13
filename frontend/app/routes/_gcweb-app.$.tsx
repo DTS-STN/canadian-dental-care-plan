@@ -1,16 +1,19 @@
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link } from '@remix-run/react';
 
+import { type Namespace } from 'i18next';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { getFixedT } from '~/utils/locale-utils.server';
 
+const i18nNamespaces: Namespace = ['gcweb'];
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const t = await getFixedT(request, ['gcweb']);
+  const t = await getFixedT(request, i18nNamespaces);
 
   return json(
     {
-      i18nNamespaces: ['gcweb'],
+      i18nNamespaces,
       pageIdentifier: 'CDCP-0404',
       pageTitle: t('gcweb:not-found.page-title'),
     },
@@ -19,7 +22,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function () {
-  const { t } = useTranslation(['gcweb']);
+  const { t } = useTranslation(i18nNamespaces);
 
   // (content will be added by <Trans>)
   // eslint-disable-next-line jsx-a11y/anchor-has-content
@@ -33,7 +36,7 @@ export default function () {
       <p>{t('gcweb:not-found.page-message')}</p>
       <ul>
         <li>
-          <Trans ns={['gcweb']} i18nKey="gcweb:not-found.page-link" components={{ home }} />
+          <Trans i18nKey="gcweb:not-found.page-link" components={{ home }} />
         </li>
       </ul>
     </>
