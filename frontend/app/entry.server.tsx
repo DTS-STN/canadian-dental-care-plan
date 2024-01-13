@@ -18,11 +18,15 @@ import { getLogger } from '~/utils/logging.server';
 const abortDelay = 5_000;
 const log = getLogger('entry.server');
 
-const { NODE_ENV, MOCKS_ENABLED } = getEnv();
+const { NODE_ENV, JAVASCRIPT_ENABLED, MOCKS_ENABLED } = getEnv();
+
+if (!JAVASCRIPT_ENABLED) {
+  log.warn('‼️ Client-side javascript has been disabled');
+}
 
 if (MOCKS_ENABLED || NODE_ENV === 'development' || NODE_ENV === 'test') {
   server.listen({ onUnhandledRequest: 'bypass' });
-  log.info('MSW mock server initialized');
+  log.warn('‼️ Mock Service Worker has been enabled');
 }
 
 export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, remixContext: EntryContext) {

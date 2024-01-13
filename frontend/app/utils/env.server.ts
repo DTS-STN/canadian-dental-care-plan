@@ -14,6 +14,7 @@ const serverEnv = z.object({
   LANG_COOKIE_HTTP_ONLY: z.string().transform(toBoolean).default('true'),
   LANG_COOKIE_SECURE: z.string().transform(toBoolean).default('true'),
   LANG_QUERY_PARAM: z.string().default('lang'),
+  JAVASCRIPT_ENABLED: z.string().transform(toBoolean).default('true'),
   MOCKS_ENABLED: z.string().transform(toBoolean).default('false'),
 });
 
@@ -26,6 +27,7 @@ export type ServerEnv = z.infer<typeof serverEnv>;
 const publicEnv = serverEnv.pick({
   I18NEXT_DEBUG: true,
   LANG_QUERY_PARAM: true,
+  JAVASCRIPT_ENABLED: true,
 });
 
 export type PublicEnv = z.infer<typeof publicEnv>;
