@@ -3,7 +3,6 @@ import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import I18NextHttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
-import { type RouteHandle } from '~/types';
 import { getClientEnv } from '~/utils/env';
 
 /**
@@ -25,13 +24,15 @@ export function getAltLanguage(language: string) {
  * Returns all namespaces required by the given routes by examining the route's i18nNamespaces handle property.
  * @see https://remix.run/docs/en/main/route/handle
  */
-export function getNamespaces(routes: Array<{ handle?: unknown } | undefined>) {
-  const namespaces = routes
-    .map((route) => route?.handle)
-    .filter((handle): handle is RouteHandle => !!handle)
-    .map((routeHandle) => routeHandle.i18nNamespaces)
+export function getNamespaces(routes?: { [routeId: string]: { i18nNamespaces?: Namespace } }) {
+  if (routes === undefined) {
+    return [];
+  }
+
+  const namespaces = Object.values(routes)
+    .map((route) => route?.i18nNamespaces)
     .filter((i18nNamespaces): i18nNamespaces is Namespace => !!i18nNamespaces)
-    .flatMap((namespace) => namespace);
+    .flatMap((i18nNamespaces) => i18nNamespaces);
 
   return [...new Set(namespaces)];
 }

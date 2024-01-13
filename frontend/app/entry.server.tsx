@@ -32,10 +32,10 @@ export default async function handleRequest(request: Request, responseStatusCode
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
   log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
 
-  const routes = Object.values(remixContext.routeModules);
+  const loaderData = remixContext.staticHandlerContext.loaderData;
   const locale = await getLocale(request);
   const langCookie = await createLangCookie().serialize(locale);
-  const i18n = await initI18n(locale, getNamespaces(routes));
+  const i18n = await initI18n(locale, getNamespaces(loaderData));
 
   const nonce = generateNonce(32);
   const contentSecurityPolicy = generateContentSecurityPolicy(nonce);

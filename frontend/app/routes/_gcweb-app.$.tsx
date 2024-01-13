@@ -3,18 +3,14 @@ import { Link } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 
-import { type RouteHandle } from '~/types';
 import { getFixedT } from '~/utils/locale-utils.server';
-
-export const handle = {
-  i18nNamespaces: ['gcweb'],
-} satisfies RouteHandle;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const t = await getFixedT(request, ['gcweb']);
 
   return json(
     {
+      i18nNamespaces: ['gcweb'],
       pageIdentifier: 'CDCP-0404',
       pageTitle: t('gcweb:not-found.page-title'),
     },

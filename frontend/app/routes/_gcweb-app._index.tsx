@@ -3,18 +3,14 @@ import { Link } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import { type RouteHandle } from '~/types';
 import { getFixedT } from '~/utils/locale-utils.server';
-
-export const handle = {
-  i18nNamespaces: ['common'],
-} satisfies RouteHandle;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const t = await getFixedT(request, ['common']);
 
   return json({
     breadcrumbs: [{ label: t('common:index.breadcrumbs.home') }],
+    i18nNamespaces: ['common'],
     pageIdentifier: 'CDCP-0001',
     pageTitle: t('common:index.page-title'),
   });

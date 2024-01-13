@@ -1,11 +1,5 @@
 import { type LoaderFunctionArgs } from '@remix-run/node';
 
-import { type RouteHandle } from '~/types';
-
-export const handle = {
-  i18nNamespaces: ['gcweb'],
-} satisfies RouteHandle;
-
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   throw new Error('Keyboard not responding. Press any key to continue.');
 };
