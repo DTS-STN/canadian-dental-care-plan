@@ -4,9 +4,9 @@ import { type Namespace } from 'i18next';
 import { z } from 'zod';
 
 /**
- * Reducer function that returns the last non-undefined value.
+ * A reducer function that coalesces two values, returning the non-null (or non-undefined) value.
  */
-const toLastDefinedValue = <T>(previousValue: T | undefined, currentValue: T | undefined) => currentValue ?? previousValue;
+export const coalesce = <T>(previousValue?: T, currentValue?: T) => currentValue ?? previousValue;
 
 const breadcrumbs = z.object({
   breadcrumbs: z.array(
@@ -52,20 +52,20 @@ export function useBreadcrumbs() {
   return useMatches()
     .map(({ data }) => breadcrumbs.safeParse(data))
     .map((result) => (result.success ? result.data.breadcrumbs : undefined))
-    .reduce(toLastDefinedValue);
+    .reduce(coalesce);
 }
 
 export function useBuildInfo() {
   return useMatches()
     .map(({ data }) => buildInfo.safeParse(data))
     .map((result) => (result.success ? result.data.buildInfo : undefined))
-    .reduce(toLastDefinedValue);
+    .reduce(coalesce);
 }
 
 export function useI18nNamespaces() {
   return useMatches()
     .map(({ data }) => i18nNamespaces.safeParse(data))
-    .map((result) => (result.success ? result.data.i18nNamespaces : undefined))
+    .flatMap((result) => (result.success ? result.data.i18nNamespaces : undefined))
     .filter((i18nNamespaces) => i18nNamespaces !== undefined);
 }
 
@@ -73,12 +73,12 @@ export function usePageIdentifier() {
   return useMatches()
     .map(({ data }) => pageIdentifier.safeParse(data))
     .map((result) => (result.success ? result.data.pageIdentifier : undefined))
-    .reduce(toLastDefinedValue);
+    .reduce(coalesce);
 }
 
 export function usePageTitle() {
   return useMatches()
     .map(({ data }) => pageTitle.safeParse(data))
     .map((result) => (result.success ? result.data.pageTitle : undefined))
-    .reduce(toLastDefinedValue);
+    .reduce(coalesce);
 }
