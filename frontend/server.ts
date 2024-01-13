@@ -11,12 +11,25 @@ import os from 'node:os';
 import path from 'node:path';
 import url from 'node:url';
 import sourceMapSupport from 'source-map-support';
+import { createLogger, format, transports } from 'winston';
 
-import { getLogger } from '~/utils/logging.server';
+// TODO :: GjB :: figure out how to import the logger from ./app/utils/
+function formatCategory(category: string, size: number) {
+  const str = category.padStart(size);
+  return str.length <= size ? str : `...${str.slice(-size + 3)}`;
+}
+
+// TODO :: GjB :: figure out how to import the logger from ./app/utils/
+const logger = createLogger({
+  format: format.combine(
+    format.timestamp(),
+    format.printf((info) => `${info.timestamp} ${info.level.toUpperCase().padStart(7)} --- [${formatCategory('server', 25)}]: ${info.message}`),
+  ),
+  transports: [new transports.Console()],
+});
 
 const BUILD_PATH = './build/index.js';
 const VERSION_PATH = './build/version.txt';
-const logger = getLogger('server');
 const require = { cache: {} as Record<string, unknown> };
 
 //
