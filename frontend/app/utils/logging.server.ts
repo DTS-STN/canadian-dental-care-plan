@@ -10,13 +10,17 @@ const logLevel = z
   .default('info')
   .parse(process.env.LOG_LEVEL);
 
+function formatCategory(category: string, size: number) {
+  const str = category.padStart(size);
+  return str.length <= size ? str : `...${str.slice(-size + 3)}`;
+}
+
 export const getLogger = (category: string): Logger => {
   return createLogger({
     level: logLevel,
     format: format.combine(
-      format.align(),
       format.timestamp(),
-      format.printf((info) => `${info.timestamp}  ${info.level.toUpperCase()} --- [${category}]: ${info.message}`),
+      format.printf((info) => `${info.timestamp} ${info.level.toUpperCase().padStart(7)} --- [${formatCategory(category, 25)}]: ${info.message}`),
     ),
     transports: [new transports.Console()],
   });

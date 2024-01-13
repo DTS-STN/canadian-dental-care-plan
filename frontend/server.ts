@@ -12,8 +12,11 @@ import path from 'node:path';
 import url from 'node:url';
 import sourceMapSupport from 'source-map-support';
 
+import { getLogger } from '~/utils/logging.server';
+
 const BUILD_PATH = './build/index.js';
 const VERSION_PATH = './build/version.txt';
+const logger = getLogger('server');
 const require = { cache: {} as Record<string, unknown> };
 
 //
@@ -122,8 +125,9 @@ async function run() {
       maxAge: '1y',
     }),
   );
+
   app.use(express.static('public', { maxAge: '1h' }));
-  app.use(morgan('tiny'));
+  app.use(morgan('tiny', { stream: { write: (str) => logger.info(str) } }));
 
   app.all(
     '*',
