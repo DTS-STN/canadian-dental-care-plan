@@ -2,18 +2,12 @@ import { useMatches } from '@remix-run/react';
 
 import { z } from 'zod';
 
-const pageTitleDataSchema = z.object({ pageTitle: z.string() });
+/**
+ * Reducer function that returns the last non-undefined value.
+ */
+const toLastDefinedValue = <T>(previousValue: T | undefined, currentValue: T | undefined) => currentValue ?? previousValue;
 
-export type PageTitleDataSchema = z.infer<typeof pageTitleDataSchema>;
-
-export function usePageTitle() {
-  return useMatches()
-    .map(({ data }) => pageTitleDataSchema.safeParse(data))
-    .map((result) => (result.success ? result.data.pageTitle : undefined))
-    .reduce((last, curr) => curr ?? last, undefined);
-}
-
-const breadcrumbsDataSchema = z.object({
+const breadcrumbs = z.object({
   breadcrumbs: z.array(
     z.object({
       label: z.string(),
@@ -22,38 +16,53 @@ const breadcrumbsDataSchema = z.object({
   ),
 });
 
-export type BreadcrumbsDataSchema = z.infer<typeof breadcrumbsDataSchema>;
-
-export function useBreadcrumbs() {
-  return useMatches()
-    .map(({ data }) => breadcrumbsDataSchema.safeParse(data))
-    .map((result) => (result.success ? result.data.breadcrumbs : undefined))
-    .reduce((last, curr) => curr ?? last, undefined);
-}
-
-const pageIdentifierDataSchema = z.object({ pageIdentifier: z.string() });
-
-export type PageIdentifierDataSchema = z.infer<typeof pageIdentifierDataSchema>;
-
-export function usePageIdentifier() {
-  return useMatches()
-    .map(({ data }) => pageIdentifierDataSchema.safeParse(data))
-    .map((result) => (result.success ? result.data.pageIdentifier : undefined))
-    .reduce((last, curr) => curr ?? last, undefined);
-}
-
-const buildInfoDataSchema = z.object({
+const buildInfo = z.object({
   buildDate: z.string(),
   buildId: z.string(),
   buildRevision: z.string(),
   buildVersion: z.string(),
 });
 
-export type BuildInfoDataSchema = z.infer<typeof buildInfoDataSchema>;
+const pageIdentifier = z.object({
+  pageIdentifier: z.string(),
+});
+
+const pageTitle = z.object({
+  pageTitle: z.string(),
+});
+
+export type Breadcrumbs = z.infer<typeof breadcrumbs>;
+
+export type BuildInfo = z.infer<typeof buildInfo>;
+
+export type PageIdentifier = z.infer<typeof pageIdentifier>;
+
+export type PageTitle = z.infer<typeof pageTitle>;
+
+export function useBreadcrumbs() {
+  return useMatches()
+    .map(({ data }) => breadcrumbs.safeParse(data))
+    .map((result) => (result.success ? result.data.breadcrumbs : undefined))
+    .reduce(toLastDefinedValue);
+}
 
 export function useBuildInfo() {
   return useMatches()
-    .map(({ data }) => buildInfoDataSchema.safeParse(data))
+    .map(({ data }) => buildInfo.safeParse(data))
     .map((result) => (result.success ? result.data : undefined))
-    .reduce((last, curr) => curr ?? last, undefined);
+    .reduce(toLastDefinedValue);
+}
+
+export function usePageIdentifier() {
+  return useMatches()
+    .map(({ data }) => pageIdentifier.safeParse(data))
+    .map((result) => (result.success ? result.data.pageIdentifier : undefined))
+    .reduce(toLastDefinedValue);
+}
+
+export function usePageTitle() {
+  return useMatches()
+    .map(({ data }) => pageTitle.safeParse(data))
+    .map((result) => (result.success ? result.data.pageTitle : undefined))
+    .reduce(toLastDefinedValue);
 }

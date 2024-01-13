@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 
 import { getLogger } from '~/utils/logging.server';
-import { type BuildInfoDataSchema } from '~/utils/route-utils';
+import { type BuildInfo } from '~/utils/route-utils';
 
 const logger = getLogger('build-info.server');
 
@@ -17,7 +17,7 @@ export function readBuildInfo(filename: string) {
     return undefined;
   }
 
-  const buildInfo = JSON.parse(readFileSync(filename, 'utf8')) as BuildInfoDataSchema;
+  const buildInfo = JSON.parse(readFileSync(filename, 'utf8')) as BuildInfo;
   logger.debug(`Application build info: [${JSON.stringify(buildInfo)}]`);
 
   return buildInfo;

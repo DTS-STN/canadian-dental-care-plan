@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 
 import { type RouteHandle } from '~/types';
 import { getFixedT } from '~/utils/locale-utils.server';
-import { type BreadcrumbsDataSchema, type PageIdentifierDataSchema, type PageTitleDataSchema } from '~/utils/route-utils';
 
 export const handle = {
   i18nNamespaces: ['common'],
@@ -14,13 +13,11 @@ export const handle = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const t = await getFixedT(request, ['common']);
 
-  const data: PageTitleDataSchema & BreadcrumbsDataSchema & PageIdentifierDataSchema = {
+  return json({
     breadcrumbs: [{ label: t('common:index.breadcrumbs.home') }],
     pageIdentifier: 'CDCP-0001',
     pageTitle: t('common:index.page-title'),
-  };
-
-  return json(data);
+  });
 }
 
 export default function () {
