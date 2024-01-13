@@ -10,23 +10,20 @@ import { I18nextProvider } from 'react-i18next';
 import { server } from './mocks/node';
 import { NonceProvider, generateNonce } from '~/components/nonce-context';
 import { generateContentSecurityPolicy } from '~/utils/csp.server';
+import { getEnv } from '~/utils/env.server';
 import { getNamespaces } from '~/utils/locale-utils';
 import { createLangCookie, getLocale, initI18n } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
-if (process.env.NODE_ENV === 'development') {
-  server.listen({
-    onUnhandledRequest(request, print) {
-      if (request.url.includes('/ping')) {
-        return;
-      }
-      print.warning();
-    },
-  });
-}
-
 const abortDelay = 5_000;
 const log = getLogger('entry.server');
+
+const { NODE_ENV } = getEnv();
+
+if (NODE_ENV === 'development' || NODE_ENV === 'test') {
+  server.listen({ onUnhandledRequest: 'bypass' });
+  log.info('MSW mock server initialized');
+}
 
 export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, remixContext: EntryContext) {
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
