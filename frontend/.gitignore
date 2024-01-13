@@ -170,8 +170,11 @@ node_modules
 
 # End of https://www.toptal.com/developers/gitignore/api/dotenv,node,remix,visualstudiocode
 
-
+#
 # Custom entries below...
+#
 playwright-report/
 test-results/
+
+build-info.json
 server.js
