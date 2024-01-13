@@ -17,10 +17,12 @@ const breadcrumbs = z.object({
 });
 
 const buildInfo = z.object({
-  buildDate: z.string(),
-  buildId: z.string(),
-  buildRevision: z.string(),
-  buildVersion: z.string(),
+  buildInfo: z.object({
+    buildDate: z.string(),
+    buildId: z.string(),
+    buildRevision: z.string(),
+    buildVersion: z.string(),
+  }),
 });
 
 const pageIdentifier = z.object({
@@ -49,7 +51,7 @@ export function useBreadcrumbs() {
 export function useBuildInfo() {
   return useMatches()
     .map(({ data }) => buildInfo.safeParse(data))
-    .map((result) => (result.success ? result.data : undefined))
+    .map((result) => (result.success ? result.data.buildInfo : undefined))
     .reduce(toLastDefinedValue);
 }
 
