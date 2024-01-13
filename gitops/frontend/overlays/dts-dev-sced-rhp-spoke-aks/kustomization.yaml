@@ -19,3 +19,4 @@ configMapGenerator:
   - name: canada-dental-care-plan-frontend
     literals:
       - LOG_LEVEL=debug
+      - MOCKS_ENABLED=true
