@@ -149,7 +149,7 @@ describe('useI18nNamespaces()', () => {
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(useI18nNamespaces())}</div>,
-            loader: () => ({ i18nNamespaces: ['ns2', 'ns3'] }),
+            loader: () => ({ i18nNamespaces: ['ns1', 'ns2', 'ns3'] }),
             path: '/',
           },
         ],

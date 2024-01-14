@@ -63,10 +63,12 @@ export function useBuildInfo() {
 }
 
 export function useI18nNamespaces() {
-  return useMatches()
+  const namespaces = useMatches()
     .map(({ data }) => i18nNamespaces.safeParse(data))
     .flatMap((result) => (result.success ? result.data.i18nNamespaces : undefined))
     .filter((i18nNamespaces) => i18nNamespaces !== undefined);
+
+  return [...new Set(namespaces)];
 }
 
 export function usePageIdentifier() {
