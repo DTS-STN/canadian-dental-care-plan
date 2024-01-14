@@ -19,27 +19,11 @@ const log = getLogger('server');
 //
 // Remix native server code below...
 // copied from: https://github.com/remix-run/remix/blob/remix@2.5.0/packages/remix-serve/cli.ts
-// with only slight modifications to logging (console → logger)
+// with only slight modifications to logging (console → logger) and SIGTERM/SIGINT handlers
 //
 
 process.env.NODE_ENV = process.env.NODE_ENV ?? 'production';
 
-sourceMapSupport.install({
-  retrieveSourceMap: function (source) {
-    let match = source.startsWith('file://');
-    if (match) {
-      let filePath = url.fileURLToPath(source);
-      let sourceMapPath = `${filePath}.map`;
-      if (fs.existsSync(sourceMapPath)) {
-        return {
-          url: source,
-          map: fs.readFileSync(sourceMapPath, 'utf8'),
-        };
-      }
-    }
-    return null;
-  },
-});
 sourceMapSupport.install({
   retrieveSourceMap: function (source) {
     let match = source.startsWith('file://');
@@ -161,7 +145,9 @@ async function run() {
 
   let server = process.env.HOST ? app.listen(port, process.env.HOST, onListen) : app.listen(port, onListen);
 
-  ['SIGTERM', 'SIGINT'].forEach((signal) => {
-    process.once(signal, () => server?.close(console.error));
-  });
+  if (process.env.NODE_ENV === 'production') {
+    ['SIGTERM', 'SIGINT'].forEach((signal) => {
+      process.once(signal, () => server?.close(console.error));
+    });
+  }
 }
