@@ -11,34 +11,35 @@ import os from 'node:os';
 import path from 'node:path';
 import url from 'node:url';
 import sourceMapSupport from 'source-map-support';
-import { createLogger, format, transports } from 'winston';
 
-// TODO :: GjB :: figure out how to import the logger from ./app/utils/
-function formatCategory(category: string, size: number) {
-  const str = category.padStart(size);
-  return str.length <= size ? str : `...${str.slice(-size + 3)}`;
-}
+import { getLogger } from '~/utils/logging.server';
 
-// TODO :: GjB :: figure out how to import the logger from ./app/utils/
-const logger = createLogger({
-  format: format.combine(
-    format.timestamp(),
-    format.printf((info) => `${info.timestamp} ${info.level.toUpperCase().padStart(7)} --- [${formatCategory('server', 25)}]: ${info.message}`),
-  ),
-  transports: [new transports.Console()],
-});
-
-const BUILD_PATH = './build/index.js';
-const VERSION_PATH = './build/version.txt';
-const require = { cache: {} as Record<string, unknown> };
+const log = getLogger('server');
 
 //
 // Remix native server code below...
 // copied from: https://github.com/remix-run/remix/blob/remix@2.5.0/packages/remix-serve/cli.ts
+// with only slight modifications to logging (console → logger)
 //
 
 process.env.NODE_ENV = process.env.NODE_ENV ?? 'production';
 
+sourceMapSupport.install({
+  retrieveSourceMap: function (source) {
+    let match = source.startsWith('file://');
+    if (match) {
+      let filePath = url.fileURLToPath(source);
+      let sourceMapPath = `${filePath}.map`;
+      if (fs.existsSync(sourceMapPath)) {
+        return {
+          url: source,
+          map: fs.readFileSync(sourceMapPath, 'utf8'),
+        };
+      }
+    }
+    return null;
+  },
+});
 sourceMapSupport.install({
   retrieveSourceMap: function (source) {
     let match = source.startsWith('file://');
@@ -69,8 +70,15 @@ function parseNumber(raw?: string) {
 async function run() {
   let port = parseNumber(process.env.PORT) ?? (await getPort({ port: 3000 }));
 
-  let buildPath = path.resolve(BUILD_PATH);
-  let versionPath = path.resolve(VERSION_PATH);
+  let buildPathArg = process.argv[2];
+
+  if (!buildPathArg) {
+    console.error(`Usage: remix-serve <server-build-path> - e.g. remix-serve build/index.js`);
+    process.exit(1);
+  }
+
+  let buildPath = path.resolve(buildPathArg);
+  let versionPath = path.resolve(buildPath, '..', 'version.txt');
 
   async function reimportServer() {
     Object.keys(require.cache).forEach((key) => {
@@ -119,9 +127,9 @@ async function run() {
         .find((ip) => String(ip?.family).includes('4') && !ip?.internal)?.address;
 
     if (!address) {
-      console.log(`[remix-serve] http://localhost:${port}`);
+      log.info(`[remix-serve] http://localhost:${port}`);
     } else {
-      console.log(`[remix-serve] http://localhost:${port} (http://${address}:${port})`);
+      log.info(`[remix-serve] http://localhost:${port} (http://${address}:${port})`);
     }
     if (process.env.NODE_ENV === 'development') {
       void broadcastDevReady(build);
@@ -138,9 +146,8 @@ async function run() {
       maxAge: '1y',
     }),
   );
-
   app.use(express.static('public', { maxAge: '1h' }));
-  app.use(morgan('tiny', { stream: { write: (str) => logger.info(str) } }));
+  app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'tiny', { stream: { write: (str) => log.info(str) } }));
 
   app.all(
     '*',
