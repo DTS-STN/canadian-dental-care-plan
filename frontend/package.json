@@ -4,15 +4,14 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "run-p build:*",
-    "build:remix": "remix build",
-    "build:server": "esbuild --platform=node --format=esm ./server.ts --outdir=./",
-    "dev": "remix dev -c \"npm run dev:server\" --manual",
-    "start": "cross-env NODE_ENV=production node ./server.js",
-    "dev:server": "tsx watch --clear-screen=false --ignore 'app/**' --ignore 'build/**' --ignore 'node_modules/**' --inspect ./server.ts",
-    "format": "prettier --write .",
-    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
+    "build": "remix build",
+    "dev": "remix dev --manual --command 'tsx watch --clear-screen=false --ignore './app/**' --ignore './build/**' --ignore './node_modules/**' --inspect ./server.ts'",
+    "start": "tsx ./server.ts",
+    "format": "prettier --write ./",
+    "lint": "eslint --ignore-path ./.gitignore --cache --cache-location ./.cache/eslint ./",
     "typecheck": "tsc",
+    "check:all": "npm run-script lint && npm run-script typecheck",
+    "test:all": "npm run-script test:unit run && npm run-script test:e2e",
     "test:e2e": "playwright test",
     "test:unit": "vitest"
   },
@@ -36,6 +35,7 @@
     "react-dom": "^18.2.0",
     "react-i18next": "^14.0.0",
     "source-map-support": "^0.5.21",
+    "tsx": "^4.7.0",
     "winston": "^3.11.0",
     "zod": "^3.22.4"
   },
@@ -66,7 +66,6 @@
     "prettier": "^3.2.1",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.4.1",
-    "tsx": "^4.7.0",
     "typescript": "^5.3.3",
     "vite": "^5.0.11",
     "vite-tsconfig-paths": "^4.2.3",
@@ -109,8 +108,5 @@
       "@trivago/prettier-plugin-sort-imports",
       "prettier-plugin-tailwindcss"
     ]
-  },
-  "msw": {
-    "workerDirectory": "public"
   }
 }

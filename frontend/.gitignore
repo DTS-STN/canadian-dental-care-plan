@@ -173,8 +173,8 @@ node_modules
 #
 # Custom entries below...
 #
+
 playwright-report/
 test-results/
 
 build-info.json
-server.js
