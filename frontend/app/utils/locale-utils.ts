@@ -1,4 +1,4 @@
-import { type Namespace, createInstance } from 'i18next';
+import { type FlatNamespace, type Namespace, createInstance } from 'i18next';
 import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import I18NextHttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
@@ -64,4 +64,24 @@ export async function initI18n(namespaces: Array<string>) {
     });
 
   return i18n;
+}
+
+/**
+ * Returns a tuple representing a typed list of namespaces.
+ *
+ * @template T - The primary namespace to include in the tuple.
+ * @template T2 - Additional namespaces to include in the tuple. Should only contain distinct values.
+ * @param ns - The primary namespace of type T.
+ * @param rest - Additional namespaces of type T2 (should be distinct).
+ * @returns A tuple containing the primary namespace and additional namespaces.
+ *
+ * @note Ensure that the values in the `rest` parameter are distinct to avoid duplicates in the resulting tuple.
+ *
+ * @example
+ * // Usage example:
+ * const result = getTypedI18nNs("common", "gcweb", "other");
+ * // result is of type: readonly ["common", "gcweb", "other"]
+ */
+export function getTypedI18nNamespaces<const T extends Readonly<FlatNamespace>, const T2 extends ReadonlyArray<Exclude<FlatNamespace, T>>>(ns: T, ...rest: T2) {
+  return [ns, ...rest] as const;
 }

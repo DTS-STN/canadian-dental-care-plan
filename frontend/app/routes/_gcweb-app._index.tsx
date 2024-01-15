@@ -1,13 +1,13 @@
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 
-import { type Namespace } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 
-const i18nNamespaces: Namespace = ['common'];
+const i18nNamespaces = getTypedI18nNamespaces('common', 'gcweb');
 
 const userSchema = z.object({ firstName: z.string(), lastName: z.string() });
 type User = z.infer<typeof userSchema>;
@@ -21,18 +21,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const t = await getFixedT(request, i18nNamespaces);
 
   // TODO :: GjB :: figure out a cleaner way to type this
-  return json<LoaderFunctionData & { user: User }>({
+  return json({
     breadcrumbs: [{ label: t('common:index.breadcrumbs.home') }],
     i18nNamespaces,
     pageIdentifier: 'CDCP-0001',
     pageTitle: t('common:index.page-title'),
     user: await getUser(),
-  });
+  } as const satisfies LoaderFunctionData & { user: User });
 }
 
 export default function Index() {
-  const { t } = useTranslation(i18nNamespaces);
   const { user } = useLoaderData<typeof loader>();
+  const { t } = useTranslation(i18nNamespaces);
 
   return (
     <>

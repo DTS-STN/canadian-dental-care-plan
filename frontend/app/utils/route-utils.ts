@@ -1,6 +1,6 @@
 import { useMatches } from '@remix-run/react';
 
-import { type Namespace } from 'i18next';
+import { type FlatNamespace } from 'i18next';
 import { z } from 'zod';
 
 /**
@@ -27,7 +27,7 @@ const buildInfo = z.object({
 });
 
 const i18nNamespaces = z.object({
-  i18nNamespaces: z.custom<Namespace>(),
+  i18nNamespaces: z.array(z.custom<FlatNamespace>()).readonly(),
 });
 
 const pageIdentifier = z.object({

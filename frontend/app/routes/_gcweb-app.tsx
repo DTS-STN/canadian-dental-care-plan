@@ -3,18 +3,18 @@ import { type ReactNode } from 'react';
 import { type LinksFunction, type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link, Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
-import { type Namespace } from 'i18next';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { LanguageSwitcher } from '~/components/language-switcher';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useBreadcrumbs, useBuildInfo, usePageIdentifier } from '~/utils/route-utils';
 
-const i18nNamespaces: Namespace = ['gcweb'];
+const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: '/theme/gcweb/css/theme.min.css' }];
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return json<LoaderFunctionData>({ i18nNamespaces });
+  return json({ i18nNamespaces } as const satisfies LoaderFunctionData);
 }
 
 export function ErrorBoundary() {
