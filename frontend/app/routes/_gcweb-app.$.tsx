@@ -21,7 +21,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   );
 };
 
-export default function () {
+export default function NotFound() {
   const { t } = useTranslation(i18nNamespaces);
 
   // (content will be added by <Trans>)

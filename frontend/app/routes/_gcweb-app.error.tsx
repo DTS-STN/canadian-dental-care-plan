@@ -8,6 +8,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
  * Error route used to test error handling.
  * TODO :: GjB :: eventually remove
  */
-export default function () {
+export default function Err() {
   return <></>;
 }

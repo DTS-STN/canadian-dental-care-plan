@@ -30,7 +30,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   });
 }
 
-export default function () {
+export default function Index() {
   const { t } = useTranslation(i18nNamespaces);
   const { user } = useLoaderData<typeof loader>();
 

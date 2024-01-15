@@ -18,7 +18,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   });
 }
 
-export default function () {
+export default function About() {
   const { t } = useTranslation(i18nNamespaces);
 
   return (

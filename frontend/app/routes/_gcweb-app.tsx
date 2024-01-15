@@ -31,7 +31,7 @@ export function ErrorBoundary() {
   return <ServerError error={error} />;
 }
 
-export default function () {
+export default function GCWebApp() {
   return (
     <ApplicationLayout>
       <Outlet />
