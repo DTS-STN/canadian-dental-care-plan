@@ -36,7 +36,7 @@ export default function NotFound() {
       <p>{t('gcweb:not-found.page-message')}</p>
       <ul>
         <li>
-          <Trans i18nKey="gcweb:not-found.page-link" components={{ home }} />
+          <Trans ns={i18nNamespaces} i18nKey="gcweb:not-found.page-link" components={{ home }} />
         </li>
       </ul>
     </>
