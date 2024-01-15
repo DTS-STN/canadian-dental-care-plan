@@ -239,7 +239,7 @@ function ServerError({ error }: { error: unknown }) {
       <ul className="list-disc ps-16">
         <li>{t('gcweb:server-error.option-01')}</li>
         <li>
-          <Trans i18nKey="gcweb:server-error.option-02" components={{ home }} />
+          <Trans ns={i18nNamespaces} i18nKey="gcweb:server-error.option-02" components={{ home }} />
         </li>
       </ul>
     </ApplicationLayout>
