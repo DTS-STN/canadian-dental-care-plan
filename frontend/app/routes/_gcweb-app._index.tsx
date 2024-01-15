@@ -13,7 +13,7 @@ const userSchema = z.object({ firstName: z.string(), lastName: z.string() });
 type User = z.infer<typeof userSchema>;
 
 async function getUser() {
-  const response = await fetch('https://api.example.com/user/00000000-0000-0000-0000-00000000000');
+  const response = await fetch('https://api.example.com/users/00000000-0000-0000-0000-00000000000');
   return userSchema.parse(await response.json()) as User;
 }
 
