@@ -7,7 +7,7 @@
     "build:client": "remix build",
     "build:server": "esbuild --bundle --outdir=build --platform=node ./server.ts",
     "dev": "run-p dev:client dev:server",
-    "dev:client": "remix dev --manual --command 'node --watch-path ./build/server.js --watch ./build/server.js ./build/index.js'",
+    "dev:client": "remix dev --manual --command \"node --watch-path ./build/server.js --watch ./build/server.js ./build/index.js\"",
     "dev:server": "cross-env NODE_ENV=development npm run-script build:server -- --watch",
     "start": "cross-env NODE_ENV=production node ./build/server.js ./build/index.js",
     "format": "prettier --write ./",
