@@ -1,22 +1,22 @@
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link } from '@remix-run/react';
 
-import { type Namespace } from 'i18next';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 
-const i18nNamespaces: Namespace = ['gcweb'];
+const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const t = await getFixedT(request, i18nNamespaces);
 
-  return json<LoaderFunctionData>(
+  return json(
     {
       i18nNamespaces,
       pageIdentifier: 'CDCP-0404',
       pageTitle: t('gcweb:not-found.page-title'),
-    },
+    } as const satisfies LoaderFunctionData,
     { status: 404 },
   );
 };
