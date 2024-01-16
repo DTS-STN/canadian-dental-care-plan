@@ -1,19 +1,15 @@
-import { type LoaderFunctionArgs, json } from '@remix-run/node';
-
 import { useTranslation } from 'react-i18next';
 
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('common');
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  return json({
-    breadcrumbs: [{ labelI18nKey: 'common:about.breadcrumbs.home', to: '/' }, { labelI18nKey: 'common:about.breadcrumbs.about' }],
-    i18nNamespaces,
-    pageIdentifier: 'CDCP-0002',
-    pageTitleI18nKey: 'common:about.page-title',
-  } as const satisfies LoaderFunctionData);
-}
+export const handle = {
+  breadcrumbs: [{ labelI18nKey: 'common:about.breadcrumbs.home', to: '/' }, { labelI18nKey: 'common:about.breadcrumbs.about' }],
+  i18nNamespaces,
+  pageIdentifier: 'CDCP-0002',
+  pageTitleI18nKey: 'common:about.page-title',
+} as const satisfies RouteHandleData;
 
 export default function About() {
   const { t } = useTranslation(i18nNamespaces);

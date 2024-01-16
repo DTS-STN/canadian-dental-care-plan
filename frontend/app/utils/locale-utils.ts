@@ -1,10 +1,11 @@
-import { type FlatNamespace, type Namespace, createInstance } from 'i18next';
+import { type FlatNamespace, createInstance } from 'i18next';
 import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import I18NextHttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
 import { type SwitchLanguageData } from '~/routes/api.switch-language';
 import { getClientEnv } from '~/utils/env';
+import { i18nNamespacesSchema } from '~/utils/route-utils';
 
 /**
  * Returns the alternate language for the given input language.
@@ -25,15 +26,15 @@ export function getAltLanguage(language: string) {
  * Returns all namespaces required by the given routes by examining the route's i18nNamespaces handle property.
  * @see https://remix.run/docs/en/main/route/handle
  */
-export function getNamespaces(routes?: { [routeId: string]: { i18nNamespaces?: Namespace } }) {
+export function getNamespaces(routes?: ({ handle?: unknown } | undefined)[]) {
   if (routes === undefined) {
     return [];
   }
 
-  const namespaces = Object.values(routes)
-    .map((route) => route?.i18nNamespaces)
-    .filter((i18nNamespaces): i18nNamespaces is Namespace => !!i18nNamespaces)
-    .flatMap((i18nNamespaces) => i18nNamespaces);
+  const namespaces = routes
+    .map((route) => i18nNamespacesSchema.safeParse(route?.handle))
+    .flatMap((result) => (result.success ? result.data.i18nNamespaces : undefined))
+    .filter((i18nNamespaces): i18nNamespaces is FlatNamespace => i18nNamespaces !== undefined);
 
   return [...new Set(namespaces)];
 }
@@ -52,6 +53,7 @@ export async function initI18n(namespaces: Array<string>) {
     .init({
       appendNamespaceToMissingKey: true,
       debug: I18NEXT_DEBUG,
+      defaultNS: false,
       detection: {
         order: ['htmlTag'],
       },

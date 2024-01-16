@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 
-import { type LinksFunction, type LoaderFunctionArgs, json } from '@remix-run/node';
+import { type LinksFunction } from '@remix-run/node';
 import { Link, Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
@@ -11,11 +11,9 @@ import { useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier } fr
 
 const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
-export const links: LinksFunction = () => [{ rel: 'stylesheet', href: '/theme/gcweb/css/theme.min.css' }];
+export const handle = { i18nNamespaces } as const satisfies RouteHandleData;
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  return json({ i18nNamespaces } as const satisfies LoaderFunctionData);
-}
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: '/theme/gcweb/css/theme.min.css' }];
 
 export function ErrorBoundary() {
   const error = useRouteError();

@@ -98,6 +98,7 @@ export async function initI18n<N extends Namespace>(locale: string | undefined, 
     .init({
       appendNamespaceToMissingKey: true,
       debug: I18NEXT_DEBUG,
+      defaultNS: false,
       backend: {
         loadPath: resolve('./public/locales/{{lng}}/{{ns}}.json'),
       },

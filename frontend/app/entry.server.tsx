@@ -7,8 +7,8 @@ import { PassThrough } from 'node:stream';
 import { renderToPipeableStream } from 'react-dom/server';
 import { I18nextProvider } from 'react-i18next';
 
-import { server } from './mocks/node';
 import { NonceProvider, generateNonce } from '~/components/nonce-context';
+import { server } from '~/mocks/node';
 import { generateContentSecurityPolicy } from '~/utils/csp.server';
 import { getEnv } from '~/utils/env.server';
 import { getNamespaces } from '~/utils/locale-utils';
@@ -33,10 +33,10 @@ export default async function handleRequest(request: Request, responseStatusCode
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
   log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
 
-  const loaderData = remixContext.staticHandlerContext.loaderData;
+  const routes = Object.values(remixContext.routeModules);
   const locale = await getLocale(request);
   const langCookie = await createLangCookie().serialize(locale);
-  const i18n = await initI18n(locale, getNamespaces(loaderData));
+  const i18n = await initI18n(locale, getNamespaces(routes));
 
   const nonce = generateNonce(32);
   const contentSecurityPolicy = generateContentSecurityPolicy(nonce);
