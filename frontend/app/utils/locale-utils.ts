@@ -3,6 +3,7 @@ import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import I18NextHttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
+import { type SwitchLanguageData } from '~/routes/api.switch-language';
 import { getClientEnv } from '~/utils/env';
 
 /**
@@ -84,4 +85,26 @@ export async function initI18n(namespaces: Array<string>) {
  */
 export function getTypedI18nNamespaces<const T extends Readonly<FlatNamespace>, const T2 extends ReadonlyArray<Exclude<FlatNamespace, T>>>(ns: T, ...rest: T2) {
   return [ns, ...rest] as const;
+}
+
+/**
+ * Asynchronously switches the language using a language cookie.
+ *
+ * @template T - The type of language to switch to, which should be a subtype of `SwitchLanguageData['language']`.
+ * @param {T} language - The language to switch to.
+ * @returns {Promise<number>} A promise that resolves to the HTTP status code of the switch operation.
+ *
+ * @example
+ * const statusCode = await switchLanguageCookie('en');
+ * console.log(statusCode); // Output: 204
+ *
+ * @param {SwitchLanguageData['language']} language - The language to switch to.
+ */
+export async function switchLanguageCookie<T extends SwitchLanguageData['language']>(language: T) {
+  const response = await fetch('/api/switch-language', {
+    body: JSON.stringify({ language }),
+    headers: { 'Content-Type': 'application/json' },
+    method: 'PUT',
+  });
+  return response.status;
 }
