@@ -50,6 +50,7 @@ export async function initI18n(namespaces: Array<string>) {
     .use(I18nextBrowserLanguageDetector)
     .use(I18NextHttpBackend)
     .init({
+      appendNamespaceToMissingKey: true,
       debug: I18NEXT_DEBUG,
       detection: {
         order: ['htmlTag'],

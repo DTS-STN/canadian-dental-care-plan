@@ -96,6 +96,7 @@ export async function initI18n<N extends Namespace>(locale: string | undefined, 
     .use(initReactI18next)
     .use(I18NexFsBackend)
     .init({
+      appendNamespaceToMissingKey: true,
       debug: I18NEXT_DEBUG,
       backend: {
         loadPath: resolve('./public/locales/{{lng}}/{{ns}}.json'),
