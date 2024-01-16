@@ -7,7 +7,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { useBreadcrumbs, useBuildInfo, usePageIdentifier } from '~/utils/route-utils';
+import { useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier } from '~/utils/route-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
@@ -193,6 +193,7 @@ function PageFooter() {
 
 function Breadcrumbs() {
   const { t } = useTranslation(i18nNamespaces);
+  const { t: breadcrumbsTranslation } = useTranslation(useI18nNamespaces());
   const breadcrumbs = useBreadcrumbs();
 
   if (breadcrumbs === undefined || breadcrumbs.length === 0) {
@@ -204,18 +205,21 @@ function Breadcrumbs() {
       <h2 id="breadcrumbs">{t('gcweb:breadcrumbs.you-are-here')}</h2>
       <div className="container">
         <ol className="breadcrumb" typeof="BreadcrumbList">
-          {breadcrumbs.map(({ label, to }, index) => (
-            <li key={index} property="itemListElement" typeof="ListItem">
-              {to ? (
-                <Link to={to} property="item" typeof="WebPage">
+          {breadcrumbs.map(({ labelI18nKey, to }, index) => {
+            const label = breadcrumbsTranslation(labelI18nKey);
+            return (
+              <li key={index} property="itemListElement" typeof="ListItem">
+                {to ? (
+                  <Link to={to} property="item" typeof="WebPage">
+                    <span property="name">{label}</span>
+                  </Link>
+                ) : (
                   <span property="name">{label}</span>
-                </Link>
-              ) : (
-                <span property="name">{label}</span>
-              )}
-              <meta property="position" content={`${index + 1}`} />
-            </li>
-          ))}
+                )}
+                <meta property="position" content={`${index + 1}`} />
+              </li>
+            );
+          })}
         </ol>
       </div>
     </nav>

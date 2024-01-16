@@ -1,6 +1,6 @@
 import { type MouseEvent } from 'react';
 
-import { Link, type LinkProps, useRevalidator, useSearchParams } from '@remix-run/react';
+import { Link, type LinkProps, useSearchParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -16,7 +16,6 @@ export type LanguageSwitcherProps = Omit<LinkProps, 'to' | 'reloadDocument' | 'o
 export function LanguageSwitcher({ children, ...props }: LanguageSwitcherProps) {
   const { i18n } = useTranslation();
   const [currentSearchParams] = useSearchParams();
-  const revalidator = useRevalidator();
 
   const { LANG_QUERY_PARAM: langParam } = getClientEnv();
   const langValue = getAltLanguage(i18n.language);
@@ -41,9 +40,6 @@ export function LanguageSwitcher({ children, ...props }: LanguageSwitcherProps) 
     const status = await switchLanguageCookie(langValue);
 
     if (status >= 200 && status < 300) {
-      // Revalidate the data on the page.
-      revalidator.revalidate();
-
       // Changes the language client-side.
       i18n.changeLanguage(langValue);
     }

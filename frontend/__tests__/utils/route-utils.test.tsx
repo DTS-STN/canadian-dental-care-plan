@@ -3,7 +3,8 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { Outlet } from '@remix-run/react';
 import { createRemixStub } from '@remix-run/testing';
 
-import { coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitle } from '~/utils/route-utils';
+import type { Breadcrumbs, BuildInfo, I18nNamespaces, PageIdentifier, PageTitleI18nKey } from '~/utils/route-utils';
+import { coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey } from '~/utils/route-utils';
 
 describe('coalesce<T> reducer', () => {
   test('expect undefined from two undefined values', () => {
@@ -47,11 +48,11 @@ describe('useBreadcrumbs()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        loader: () => ({ breadcrumbs: [{ label: 'Home' }] }),
+        loader: () => ({ breadcrumbs: [{ labelI18nKey: 'common:index.breadcrumbs.home' }] }) satisfies Breadcrumbs,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(useBreadcrumbs())}</div>,
-            loader: () => ({ breadcrumbs: [{ label: 'Home', to: '/' }, { label: 'About' }] }),
+            loader: () => ({ breadcrumbs: [{ labelI18nKey: 'common:about.breadcrumbs.home', to: '/' }, { labelI18nKey: 'common:about.breadcrumbs.about' }] }) satisfies Breadcrumbs,
             path: '/',
           },
         ],
@@ -61,7 +62,7 @@ describe('useBreadcrumbs()', () => {
     render(<RemixStub />);
 
     const element = await waitFor(() => screen.findByTestId('data'));
-    expect(element.textContent).toEqual('[{"label":"Home","to":"/"},{"label":"About"}]');
+    expect(element.textContent).toEqual('[{"labelI18nKey":"common:about.breadcrumbs.home","to":"/"},{"labelI18nKey":"common:about.breadcrumbs.about"}]');
   });
 });
 
@@ -89,25 +90,27 @@ describe('useBuildInfo()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        loader: () => ({
-          buildInfo: {
-            buildDate: '0000-00-00T00:00:00Z',
-            buildId: '0000',
-            buildRevision: '00000000',
-            buildVersion: '0.0.0+00000000-0000',
-          },
-        }),
+        loader: () =>
+          ({
+            buildInfo: {
+              buildDate: '0000-00-00T00:00:00Z',
+              buildId: '0000',
+              buildRevision: '00000000',
+              buildVersion: '0.0.0+00000000-0000',
+            },
+          }) satisfies BuildInfo,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(useBuildInfo())}</div>,
-            loader: () => ({
-              buildInfo: {
-                buildDate: '2000-01-01T00:00:00Z',
-                buildId: '6969',
-                buildRevision: '69696969',
-                buildVersion: '0.0.0+69696969-6969',
-              },
-            }),
+            loader: () =>
+              ({
+                buildInfo: {
+                  buildDate: '2000-01-01T00:00:00Z',
+                  buildId: '6969',
+                  buildRevision: '69696969',
+                  buildVersion: '0.0.0+69696969-6969',
+                },
+              }) satisfies BuildInfo,
             path: '/',
           },
         ],
@@ -145,11 +148,11 @@ describe('useI18nNamespaces()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        loader: () => ({ i18nNamespaces: 'ns1' }),
+        loader: () => ({ i18nNamespaces: ['common'] }) satisfies I18nNamespaces,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(useI18nNamespaces())}</div>,
-            loader: () => ({ i18nNamespaces: ['ns1', 'ns2', 'ns3'] }),
+            loader: () => ({ i18nNamespaces: ['gcweb'] }) satisfies I18nNamespaces,
             path: '/',
           },
         ],
@@ -159,7 +162,7 @@ describe('useI18nNamespaces()', () => {
     render(<RemixStub />);
 
     const element = await waitFor(() => screen.findByTestId('data'));
-    expect(element.textContent).toEqual('["ns1","ns2","ns3"]');
+    expect(element.textContent).toEqual('["common","gcweb"]');
   });
 });
 
@@ -187,11 +190,11 @@ describe('usePageIdentifier()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        loader: () => ({ pageIdentifier: 'CDCP-0000' }),
+        loader: () => ({ pageIdentifier: 'CDCP-0000' }) satisfies PageIdentifier,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(usePageIdentifier())}</div>,
-            loader: () => ({ pageIdentifier: 'CDCP-0001' }),
+            loader: () => ({ pageIdentifier: 'CDCP-0001' }) satisfies PageIdentifier,
             path: '/',
           },
         ],
@@ -212,7 +215,7 @@ describe('usePageTitle()', () => {
         Component: () => <Outlet />,
         children: [
           {
-            Component: () => <div data-testid="data">{JSON.stringify(usePageTitle())}</div>,
+            Component: () => <div data-testid="data">{JSON.stringify(usePageTitleI18nKey())}</div>,
             path: '/',
           },
         ],
@@ -229,11 +232,11 @@ describe('usePageTitle()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        loader: () => ({ pageTitle: 'Layout w/ outlet' }),
+        loader: () => ({ pageTitleI18nKey: 'common:index.page-title' }) satisfies PageTitleI18nKey,
         children: [
           {
-            Component: () => <div data-testid="data">{JSON.stringify(usePageTitle())}</div>,
-            loader: () => ({ pageTitle: 'Page w/ title' }),
+            Component: () => <div data-testid="data">{JSON.stringify(usePageTitleI18nKey())}</div>,
+            loader: () => ({ pageTitleI18nKey: 'common:about.page-title' }) satisfies PageTitleI18nKey,
             path: '/',
           },
         ],
@@ -243,6 +246,6 @@ describe('usePageTitle()', () => {
     render(<RemixStub />);
 
     const element = await waitFor(() => screen.findByTestId('data'));
-    expect(element.textContent).toEqual('"Page w/ title"');
+    expect(element.textContent).toEqual('"common:about.page-title"');
   });
 });

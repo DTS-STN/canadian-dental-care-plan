@@ -2,8 +2,8 @@ import { type ParseKeys } from 'i18next';
 
 import type common from '../public/locales/en/common.json';
 import type gcweb from '../public/locales/en/gcweb.json';
-import { type Breadcrumbs, type BuildInfo, type I18nNamespaces, type PageIdentifier, type PageTitle } from './utils/route-utils';
 import { type PublicEnv } from '~/utils/env.server';
+import { type Breadcrumbs, type BuildInfo, type I18nNamespaces, type PageIdentifier, type PageTitleI18nKey } from '~/utils/route-utils';
 
 /**
  * A type that converts a type T to a function type that takes T as a parameter.
@@ -76,7 +76,7 @@ declare global {
   /**
    * Common data returned from a loader function.
    */
-  type LoaderFunctionData = Partial<Breadcrumbs & BuildInfo & I18nNamespaces & PageIdentifier & PageTitle>;
+  type LoaderFunctionData = Partial<Breadcrumbs & BuildInfo & I18nNamespaces & PageIdentifier & PageTitleI18nKey>;
 }
 
 declare module 'i18next' {
