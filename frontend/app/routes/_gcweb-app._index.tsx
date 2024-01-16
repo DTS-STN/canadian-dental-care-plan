@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
 
 const i18nNamespaces = getTypedI18nNamespaces('common', 'gcweb');
 
@@ -18,14 +17,12 @@ async function getUser() {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const t = await getFixedT(request, i18nNamespaces);
-
   // TODO :: GjB :: figure out a cleaner way to type this
   return json({
-    breadcrumbs: [{ label: t('common:index.breadcrumbs.home') }],
+    breadcrumbs: [{ labelI18nKey: 'common:index.breadcrumbs.home' }],
     i18nNamespaces,
     pageIdentifier: 'CDCP-0001',
-    pageTitle: t('common:index.page-title'),
+    pageTitleI18nKey: 'common:index.page-title',
     user: await getUser(),
   } as const satisfies LoaderFunctionData & { user: User });
 }

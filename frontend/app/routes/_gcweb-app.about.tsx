@@ -3,18 +3,15 @@ import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { useTranslation } from 'react-i18next';
 
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
 
 const i18nNamespaces = getTypedI18nNamespaces('common');
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const t = await getFixedT(request, i18nNamespaces);
-
   return json({
-    breadcrumbs: [{ label: t('common:about.breadcrumbs.home'), to: '/' }, { label: t('common:about.breadcrumbs.about') }],
+    breadcrumbs: [{ labelI18nKey: 'common:about.breadcrumbs.home', to: '/' }, { labelI18nKey: 'common:about.breadcrumbs.about' }],
     i18nNamespaces,
     pageIdentifier: 'CDCP-0002',
-    pageTitle: t('common:about.page-title'),
+    pageTitleI18nKey: 'common:about.page-title',
   } as const satisfies LoaderFunctionData);
 }
 

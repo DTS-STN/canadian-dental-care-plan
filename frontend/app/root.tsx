@@ -10,7 +10,7 @@ import { NonceContext } from '~/components/nonce-context';
 import stylesheet from '~/tailwind.css';
 import { readBuildInfo } from '~/utils/build-info.server';
 import { getEnv, getPublicEnv } from '~/utils/env.server';
-import { usePageTitle } from '~/utils/route-utils';
+import { useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
 
 export const links = () => [{ rel: 'stylesheet', href: stylesheet }];
 
@@ -34,15 +34,15 @@ export const loader = ({ request }: LoaderFunctionArgs) => {
 export default function () {
   const { nonce } = useContext(NonceContext);
   const { env, javascriptEnabled } = useLoaderData<typeof loader>();
-  const pageTitle = usePageTitle();
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation(useI18nNamespaces());
+  const pageTitleI18nKey = usePageTitleI18nKey();
 
   return (
     <html lang={i18n.language}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>{pageTitle}</title>
+        <title>{pageTitleI18nKey && t(pageTitleI18nKey)}</title>
         <Meta />
         <Links />
       </head>
