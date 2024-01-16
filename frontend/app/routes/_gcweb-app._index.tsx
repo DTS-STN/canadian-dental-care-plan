@@ -41,6 +41,9 @@ export default function Index() {
       </p>
       <ul>
         <li>
+          <Link to="/update-info">Update personal info</Link>
+        </li>
+        <li>
           <Link to="/about">About</Link>
         </li>
         <li>
