@@ -59,7 +59,7 @@ export function useBreadcrumbs() {
 
 export function useBuildInfo() {
   return useMatches()
-    .map(({ handle }) => buildInfoSchema.safeParse(handle))
+    .map(({ data }) => buildInfoSchema.safeParse(data))
     .map((result) => (result.success ? result.data.buildInfo : undefined))
     .reduce(coalesce);
 }

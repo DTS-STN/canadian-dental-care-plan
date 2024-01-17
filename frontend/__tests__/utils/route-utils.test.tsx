@@ -1,9 +1,9 @@
 import { render, screen, waitFor } from '@testing-library/react';
 
-import { Outlet } from '@remix-run/react';
+import { Outlet, json } from '@remix-run/react';
 import { createRemixStub } from '@remix-run/testing';
 
-import type { Breadcrumbs, BuildInfo, I18nNamespaces, PageIdentifier, PageTitleI18nKey } from '~/utils/route-utils';
+import type { Breadcrumbs, I18nNamespaces, PageIdentifier, PageTitleI18nKey } from '~/utils/route-utils';
 import { coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey } from '~/utils/route-utils';
 
 describe('coalesce<T> reducer', () => {
@@ -90,25 +90,29 @@ describe('useBuildInfo()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        handle: {
-          buildInfo: {
-            buildDate: '0000-00-00T00:00:00Z',
-            buildId: '0000',
-            buildRevision: '00000000',
-            buildVersion: '0.0.0+00000000-0000',
-          },
-        } satisfies BuildInfo,
+        loader: () => {
+          return json({
+            buildInfo: {
+              buildDate: '0000-00-00T00:00:00Z',
+              buildId: '0000',
+              buildRevision: '00000000',
+              buildVersion: '0.0.0+00000000-0000',
+            },
+          });
+        },
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(useBuildInfo())}</div>,
-            handle: {
-              buildInfo: {
-                buildDate: '2000-01-01T00:00:00Z',
-                buildId: '6969',
-                buildRevision: '69696969',
-                buildVersion: '0.0.0+69696969-6969',
-              },
-            } satisfies BuildInfo,
+            loader: () => {
+              return json({
+                buildInfo: {
+                  buildDate: '2000-01-01T00:00:00Z',
+                  buildId: '6969',
+                  buildRevision: '69696969',
+                  buildVersion: '0.0.0+69696969-6969',
+                },
+              });
+            },
             path: '/',
           },
         ],
