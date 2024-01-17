@@ -2,19 +2,11 @@ import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
 
+import { getUserId, getUserInfo } from '~/services/user-info-service';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('common', 'gcweb');
-
-const userSchema = z.object({ firstName: z.string(), lastName: z.string() });
-type User = z.infer<typeof userSchema>;
-
-async function getUser() {
-  const response = await fetch('https://api.example.com/users/00000000-0000-0000-0000-00000000000');
-  return userSchema.parse(await response.json()) as User;
-}
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'common:index.breadcrumbs.home' }],
@@ -25,7 +17,7 @@ export const handle = {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   return json({
-    user: await getUser(),
+    user: await getUserInfo(await getUserId()),
   });
 }
 
