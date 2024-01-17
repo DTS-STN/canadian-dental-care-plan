@@ -3,15 +3,22 @@ import { Form, useActionData, useLoaderData } from '@remix-run/react';
 
 import { z } from 'zod';
 
-import { getUserId, getUserInfo, updateUserInfo } from '~/services/user-info-service';
+import { userService } from '~/services/user-service';
+import { getEnv } from '~/utils/env.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const env = getEnv();
+  const { getUserId, getUserInfo } = userService({ env });
+  const userId = await getUserId();
   return json({
-    userInfo: await getUserInfo(await getUserId()),
+    userInfo: await getUserInfo(userId),
   });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const env = getEnv();
+  const { getUserId, updateUserInfo } = userService({ env });
+
   const isPhoneNumber = (val: string) => val.match(/\([0-9]{3}\) [0-9]{3}-[0-9]{4}/);
 
   const formDataSchema = z.object({
@@ -29,7 +36,8 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const userInfo = parsedDataResult.data;
-  await updateUserInfo(await getUserId(), userInfo);
+  const userId = await getUserId();
+  await updateUserInfo(userId, userInfo);
 
   return redirect('/update-info-success');
 }
