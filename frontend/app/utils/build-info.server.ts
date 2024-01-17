@@ -1,9 +1,15 @@
 import { existsSync, readFileSync } from 'node:fs';
 
 import { getLogger } from '~/utils/logging.server';
-import { type BuildInfo } from '~/utils/route-utils';
 
 const logger = getLogger('build-info.server');
+
+export type BuildInfo = {
+  buildDate: string;
+  buildId: string;
+  buildRevision: string;
+  buildVersion: string;
+};
 
 /**
  * The readBuildInfo function takes a filename as an argument and returns a BuildInfo object. The BuildInfo object
