@@ -16,15 +16,17 @@ async function getUser() {
   return userSchema.parse(await response.json()) as User;
 }
 
+export const handle = {
+  breadcrumbs: [{ labelI18nKey: 'common:index.breadcrumbs.home' }],
+  i18nNamespaces,
+  pageIdentifier: 'CDCP-0001',
+  pageTitleI18nKey: 'common:index.page-title',
+} as const satisfies RouteHandleData;
+
 export async function loader({ request }: LoaderFunctionArgs) {
-  // TODO :: GjB :: figure out a cleaner way to type this
   return json({
-    breadcrumbs: [{ labelI18nKey: 'common:index.breadcrumbs.home' }],
-    i18nNamespaces,
-    pageIdentifier: 'CDCP-0001',
-    pageTitleI18nKey: 'common:index.page-title',
     user: await getUser(),
-  } as const satisfies LoaderFunctionData & { user: User });
+  });
 }
 
 export default function Index() {

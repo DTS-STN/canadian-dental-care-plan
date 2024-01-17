@@ -14,7 +14,7 @@ import { useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
 
 export const links = () => [{ rel: 'stylesheet', href: stylesheet }];
 
-export const loader = ({ request }: LoaderFunctionArgs) => {
+export async function loader({ request }: LoaderFunctionArgs) {
   const buildInfo = readBuildInfo('build-info.json');
   const privateEnv = getEnv();
   const publicEnv = getPublicEnv();
@@ -29,7 +29,7 @@ export const loader = ({ request }: LoaderFunctionArgs) => {
     env: publicEnv,
     javascriptEnabled: privateEnv.JAVASCRIPT_ENABLED,
   });
-};
+}
 
 export default function () {
   const { nonce } = useContext(NonceContext);

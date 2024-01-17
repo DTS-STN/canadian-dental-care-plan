@@ -10,7 +10,7 @@ type ParsedKeysByNamespaces<TOpt extends TOptions = {}> = ParseKeysByNamespaces<
  */
 export const coalesce = <T>(previousValue?: T, currentValue?: T) => currentValue ?? previousValue;
 
-const breadcrumbs = z.object({
+const breadcrumbsSchema = z.object({
   breadcrumbs: z.array(
     z.object({
       labelI18nKey: z.custom<ParsedKeysByNamespaces>(),
@@ -19,7 +19,7 @@ const breadcrumbs = z.object({
   ),
 });
 
-const buildInfo = z.object({
+const buildInfoSchema = z.object({
   buildInfo: z.object({
     buildDate: z.string(),
     buildId: z.string(),
@@ -28,61 +28,60 @@ const buildInfo = z.object({
   }),
 });
 
-const i18nNamespaces = z.object({
+export const i18nNamespacesSchema = z.object({
   i18nNamespaces: z.array(z.custom<FlatNamespace>()).readonly(),
 });
 
-const pageIdentifier = z.object({
+const pageIdentifierSchema = z.object({
   pageIdentifier: z.string(),
 });
 
-const pageTitleI18nKey = z.object({
+const pageTitleI18nKeySchema = z.object({
   pageTitleI18nKey: z.custom<ParsedKeysByNamespaces>(),
 });
 
-export type Breadcrumbs = z.infer<typeof breadcrumbs>;
+export type Breadcrumbs = z.infer<typeof breadcrumbsSchema>;
 
-export type BuildInfo = z.infer<typeof buildInfo>;
+export type BuildInfo = z.infer<typeof buildInfoSchema>;
 
-export type I18nNamespaces = z.infer<typeof i18nNamespaces>;
+export type I18nNamespaces = z.infer<typeof i18nNamespacesSchema>;
 
-export type PageIdentifier = z.infer<typeof pageIdentifier>;
+export type PageIdentifier = z.infer<typeof pageIdentifierSchema>;
 
-export type PageTitleI18nKey = z.infer<typeof pageTitleI18nKey>;
+export type PageTitleI18nKey = z.infer<typeof pageTitleI18nKeySchema>;
 
 export function useBreadcrumbs() {
   return useMatches()
-    .map(({ data }) => breadcrumbs.safeParse(data))
+    .map(({ handle }) => breadcrumbsSchema.safeParse(handle))
     .map((result) => (result.success ? result.data.breadcrumbs : undefined))
     .reduce(coalesce);
 }
 
 export function useBuildInfo() {
   return useMatches()
-    .map(({ data }) => buildInfo.safeParse(data))
+    .map(({ handle }) => buildInfoSchema.safeParse(handle))
     .map((result) => (result.success ? result.data.buildInfo : undefined))
     .reduce(coalesce);
 }
 
 export function useI18nNamespaces() {
   const namespaces = useMatches()
-    .map(({ data }) => i18nNamespaces.safeParse(data))
+    .map(({ handle }) => i18nNamespacesSchema.safeParse(handle))
     .flatMap((result) => (result.success ? result.data.i18nNamespaces : undefined))
     .filter((i18nNamespaces): i18nNamespaces is FlatNamespace => i18nNamespaces !== undefined);
-
   return [...new Set(namespaces)];
 }
 
 export function usePageIdentifier() {
   return useMatches()
-    .map(({ data }) => pageIdentifier.safeParse(data))
+    .map(({ handle }) => pageIdentifierSchema.safeParse(handle))
     .map((result) => (result.success ? result.data.pageIdentifier : undefined))
     .reduce(coalesce);
 }
 
 export function usePageTitleI18nKey() {
   return useMatches()
-    .map(({ data }) => pageTitleI18nKey.safeParse(data))
+    .map(({ handle }) => pageTitleI18nKeySchema.safeParse(handle))
     .map((result) => (result.success ? result.data.pageTitleI18nKey : undefined))
     .reduce(coalesce);
 }

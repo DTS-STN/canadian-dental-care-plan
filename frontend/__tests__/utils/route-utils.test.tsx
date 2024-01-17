@@ -48,11 +48,11 @@ describe('useBreadcrumbs()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        loader: () => ({ breadcrumbs: [{ labelI18nKey: 'common:index.breadcrumbs.home' }] }) satisfies Breadcrumbs,
+        handle: { breadcrumbs: [{ labelI18nKey: 'common:index.breadcrumbs.home' }] } satisfies Breadcrumbs,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(useBreadcrumbs())}</div>,
-            loader: () => ({ breadcrumbs: [{ labelI18nKey: 'common:about.breadcrumbs.home', to: '/' }, { labelI18nKey: 'common:about.breadcrumbs.about' }] }) satisfies Breadcrumbs,
+            handle: { breadcrumbs: [{ labelI18nKey: 'common:about.breadcrumbs.home', to: '/' }, { labelI18nKey: 'common:about.breadcrumbs.about' }] } satisfies Breadcrumbs,
             path: '/',
           },
         ],
@@ -90,27 +90,25 @@ describe('useBuildInfo()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        loader: () =>
-          ({
-            buildInfo: {
-              buildDate: '0000-00-00T00:00:00Z',
-              buildId: '0000',
-              buildRevision: '00000000',
-              buildVersion: '0.0.0+00000000-0000',
-            },
-          }) satisfies BuildInfo,
+        handle: {
+          buildInfo: {
+            buildDate: '0000-00-00T00:00:00Z',
+            buildId: '0000',
+            buildRevision: '00000000',
+            buildVersion: '0.0.0+00000000-0000',
+          },
+        } satisfies BuildInfo,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(useBuildInfo())}</div>,
-            loader: () =>
-              ({
-                buildInfo: {
-                  buildDate: '2000-01-01T00:00:00Z',
-                  buildId: '6969',
-                  buildRevision: '69696969',
-                  buildVersion: '0.0.0+69696969-6969',
-                },
-              }) satisfies BuildInfo,
+            handle: {
+              buildInfo: {
+                buildDate: '2000-01-01T00:00:00Z',
+                buildId: '6969',
+                buildRevision: '69696969',
+                buildVersion: '0.0.0+69696969-6969',
+              },
+            } satisfies BuildInfo,
             path: '/',
           },
         ],
@@ -148,11 +146,11 @@ describe('useI18nNamespaces()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        loader: () => ({ i18nNamespaces: ['common'] }) satisfies I18nNamespaces,
+        handle: { i18nNamespaces: ['common'] } satisfies I18nNamespaces,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(useI18nNamespaces())}</div>,
-            loader: () => ({ i18nNamespaces: ['gcweb'] }) satisfies I18nNamespaces,
+            handle: { i18nNamespaces: ['gcweb'] } satisfies I18nNamespaces,
             path: '/',
           },
         ],
@@ -190,11 +188,11 @@ describe('usePageIdentifier()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        loader: () => ({ pageIdentifier: 'CDCP-0000' }) satisfies PageIdentifier,
+        handle: { pageIdentifier: 'CDCP-0000' } satisfies PageIdentifier,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(usePageIdentifier())}</div>,
-            loader: () => ({ pageIdentifier: 'CDCP-0001' }) satisfies PageIdentifier,
+            handle: { pageIdentifier: 'CDCP-0001' } satisfies PageIdentifier,
             path: '/',
           },
         ],
@@ -232,11 +230,11 @@ describe('usePageTitle()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        loader: () => ({ pageTitleI18nKey: 'common:index.page-title' }) satisfies PageTitleI18nKey,
+        handle: { pageTitleI18nKey: 'common:index.page-title' } satisfies PageTitleI18nKey,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(usePageTitleI18nKey())}</div>,
-            loader: () => ({ pageTitleI18nKey: 'common:about.page-title' }) satisfies PageTitleI18nKey,
+            handle: { pageTitleI18nKey: 'common:about.page-title' } satisfies PageTitleI18nKey,
             path: '/',
           },
         ],

@@ -7,16 +7,15 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  return json(
-    {
-      i18nNamespaces,
-      pageIdentifier: 'CDCP-0404',
-      pageTitleI18nKey: 'gcweb:not-found.page-title',
-    } as const satisfies LoaderFunctionData,
-    { status: 404 },
-  );
-};
+export const handle = {
+  i18nNamespaces,
+  pageIdentifier: 'CDCP-0404',
+  pageTitleI18nKey: 'gcweb:not-found.page-title',
+} as const satisfies RouteHandleData;
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  return json(null, { status: 404 });
+}
 
 export default function NotFound() {
   const { t } = useTranslation(i18nNamespaces);

@@ -74,9 +74,9 @@ declare global {
   }
 
   /**
-   * Common data returned from a loader function.
+   * Common data returned from a route's handle object.
    */
-  type LoaderFunctionData = Partial<Breadcrumbs & BuildInfo & I18nNamespaces & PageIdentifier & PageTitleI18nKey>;
+  type RouteHandleData = Partial<Breadcrumbs & BuildInfo & I18nNamespaces & PageIdentifier & PageTitleI18nKey>;
 }
 
 declare module 'i18next' {
@@ -84,6 +84,7 @@ declare module 'i18next' {
    * @see https://www.i18next.com/overview/typescript
    */
   interface CustomTypeOptions {
+    defaultNS: false;
     resources: {
       common: typeof common;
       gcweb: typeof gcweb;
