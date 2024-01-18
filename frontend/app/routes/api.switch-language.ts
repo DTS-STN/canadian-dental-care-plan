@@ -14,7 +14,7 @@ const switchLanguageDataSchema = z.object({
 export type SwitchLanguageData = z.infer<typeof switchLanguageDataSchema>;
 
 /**
- * A loader function that always throws a 404 Not Found response.
+ * A loader function that always throws a 405 Method Not Allowed response.
  */
 export async function loader() {
   logger.warn(`Method Not Allowed: The requested method (GET) is not allowed for this resource. Allowed methods: PUT.`);
