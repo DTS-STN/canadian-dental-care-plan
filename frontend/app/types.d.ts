@@ -76,7 +76,12 @@ declare global {
   /**
    * Common data returned from a route's handle object.
    */
-  type RouteHandleData = Partial<Breadcrumbs & I18nNamespaces & PageIdentifier & PageTitleI18nKey>;
+  interface RouteHandleData extends Record<string, unknown | undefined> {
+    breadcrumbs?: Breadcrumbs;
+    i18nNamespaces?: I18nNamespaces;
+    pageIdentifier?: PageIdentifier;
+    pageTitleI18nKey?: PageTitleI18nKey;
+  }
 }
 
 declare module 'i18next' {

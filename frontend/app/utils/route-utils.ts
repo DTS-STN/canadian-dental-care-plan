@@ -10,35 +10,31 @@ type ParsedKeysByNamespaces<TOpt extends TOptions = {}> = ParseKeysByNamespaces<
  */
 export const coalesce = <T>(previousValue?: T, currentValue?: T) => currentValue ?? previousValue;
 
-const breadcrumbsSchema = z.object({
-  breadcrumbs: z.array(
-    z.object({
-      labelI18nKey: z.custom<ParsedKeysByNamespaces>(),
-      to: z.string().optional(),
-    }),
-  ),
-});
+const breadcrumbsSchema = z
+  .array(
+    z
+      .object({
+        labelI18nKey: z.custom<ParsedKeysByNamespaces>(),
+        to: z.string().optional(),
+      })
+      .readonly(),
+  )
+  .readonly();
 
-const buildInfoSchema = z.object({
-  buildInfo: z.object({
+const buildInfoSchema = z
+  .object({
     buildDate: z.string(),
     buildId: z.string(),
     buildRevision: z.string(),
     buildVersion: z.string(),
-  }),
-});
+  })
+  .readonly();
 
-export const i18nNamespacesSchema = z.object({
-  i18nNamespaces: z.array(z.custom<FlatNamespace>()).readonly(),
-});
+export const i18nNamespacesSchema = z.array(z.custom<FlatNamespace>()).readonly();
 
-const pageIdentifierSchema = z.object({
-  pageIdentifier: z.string(),
-});
+const pageIdentifierSchema = z.string().readonly();
 
-const pageTitleI18nKeySchema = z.object({
-  pageTitleI18nKey: z.custom<ParsedKeysByNamespaces>(),
-});
+const pageTitleI18nKeySchema = z.custom<ParsedKeysByNamespaces>().readonly();
 
 export type Breadcrumbs = z.infer<typeof breadcrumbsSchema>;
 
@@ -52,36 +48,41 @@ export type PageTitleI18nKey = z.infer<typeof pageTitleI18nKeySchema>;
 
 export function useBreadcrumbs() {
   return useMatches()
-    .map(({ handle }) => breadcrumbsSchema.safeParse(handle))
-    .map((result) => (result.success ? result.data.breadcrumbs : undefined))
+    .map((route) => route?.handle as RouteHandleData | undefined)
+    .map((handle) => breadcrumbsSchema.safeParse(handle?.breadcrumbs))
+    .map((result) => (result.success ? result.data : undefined))
     .reduce(coalesce);
 }
 
 export function useBuildInfo() {
   return useMatches()
-    .map(({ data }) => buildInfoSchema.safeParse(data))
-    .map((result) => (result.success ? result.data.buildInfo : undefined))
+    .map(({ data }) => data as { buildInfo?: BuildInfo } | undefined)
+    .map((data) => buildInfoSchema.safeParse(data?.buildInfo))
+    .map((result) => (result.success ? result.data : undefined))
     .reduce(coalesce);
 }
 
 export function useI18nNamespaces() {
   const namespaces = useMatches()
-    .map(({ handle }) => i18nNamespacesSchema.safeParse(handle))
-    .flatMap((result) => (result.success ? result.data.i18nNamespaces : undefined))
+    .map(({ handle }) => handle as RouteHandleData | undefined)
+    .map((handle) => i18nNamespacesSchema.safeParse(handle?.i18nNamespaces))
+    .flatMap((result) => (result.success ? result.data : undefined))
     .filter((i18nNamespaces): i18nNamespaces is FlatNamespace => i18nNamespaces !== undefined);
   return [...new Set(namespaces)];
 }
 
 export function usePageIdentifier() {
   return useMatches()
-    .map(({ handle }) => pageIdentifierSchema.safeParse(handle))
-    .map((result) => (result.success ? result.data.pageIdentifier : undefined))
+    .map(({ handle }) => handle as RouteHandleData | undefined)
+    .map((handle) => pageIdentifierSchema.safeParse(handle?.pageIdentifier))
+    .map((result) => (result.success ? result.data : undefined))
     .reduce(coalesce);
 }
 
 export function usePageTitleI18nKey() {
   return useMatches()
-    .map(({ handle }) => pageTitleI18nKeySchema.safeParse(handle))
-    .map((result) => (result.success ? result.data.pageTitleI18nKey : undefined))
+    .map(({ handle }) => handle as RouteHandleData | undefined)
+    .map((handle) => pageTitleI18nKeySchema.safeParse(handle?.pageTitleI18nKey))
+    .map((result) => (result.success ? result.data : undefined))
     .reduce(coalesce);
 }
