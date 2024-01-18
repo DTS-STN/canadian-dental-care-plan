@@ -45,9 +45,10 @@ export default async function handleRequest(request: Request, responseStatusCode
   responseHeaders.set('Content-Security-Policy', contentSecurityPolicy);
   responseHeaders.set('Content-Type', 'text/html; charset=UTF-8');
   responseHeaders.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  responseHeaders.set('Set-Cookie', langCookie);
   responseHeaders.set('X-Content-Type-Options', 'nosniff');
   responseHeaders.set('X-Frame-Options', 'deny');
+  // .append() because there can be more than one cookie in a response
+  responseHeaders.append('Set-Cookie', langCookie);
 
   return new Promise((resolve, reject) => {
     let shellRendered = false;
