@@ -8,6 +8,7 @@ const toBoolean = (val: string) => val === 'true';
 const serverEnv = z.object({
   NODE_ENV: z.enum(['production', 'development', 'test']),
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
+  INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
   LANG_COOKIE_NAME: z.string().default('_gc_lang'),
   LANG_COOKIE_DOMAIN: z.string().optional(),
   LANG_COOKIE_PATH: z.string().default('/'),
