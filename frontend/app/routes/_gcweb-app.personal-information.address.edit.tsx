@@ -16,7 +16,7 @@ export default function ChangeAddress() {
 
         <div className="form-group">
           <label htmlFor="mailingAddress" className="required">
-            Mailing address<strong className="text-danger">(required)</strong>
+            Mailing address <strong className="text-danger">(required)</strong>
           </label>
           <input id="mailingAddress" name="mailingAddress" className="form-control" />
         </div>
