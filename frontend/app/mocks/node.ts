@@ -7,7 +7,10 @@ const handlers = [
     return HttpResponse.json({
       firstName: 'John',
       lastName: 'Maverick',
-      phoneNumber: '(555) 555-5555'
+      phoneNumber: '(555) 555-5555',
+      homeAddress: '123 Home Street',
+      mailingAddress: '123 Mailing Street',
+      preferredLanguage: 'fr'
     })
   }),
 
