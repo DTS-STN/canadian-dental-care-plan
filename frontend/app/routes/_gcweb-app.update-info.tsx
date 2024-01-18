@@ -3,7 +3,7 @@ import { Form, useActionData, useLoaderData } from '@remix-run/react';
 
 import { z } from 'zod';
 
-import { userService } from '~/services/user-service';
+import { userService } from '~/services/user-service.server';
 import { getEnv } from '~/utils/env.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
