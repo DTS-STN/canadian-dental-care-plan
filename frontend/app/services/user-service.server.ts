@@ -14,7 +14,7 @@ export interface UserServiceDependencies {
   };
 }
 
-export function userService({ env }: UserServiceDependencies) {
+export function getUserService({ env }: UserServiceDependencies) {
   const { INTEROP_API_BASE_URI } = env;
 
   async function getUserId() {
