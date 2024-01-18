@@ -32,8 +32,9 @@ export function getNamespaces(routes?: ({ handle?: unknown } | undefined)[]) {
   }
 
   const namespaces = routes
-    .map((route) => i18nNamespacesSchema.safeParse(route?.handle))
-    .flatMap((result) => (result.success ? result.data.i18nNamespaces : undefined))
+    .map((route) => route?.handle as RouteHandleData | undefined)
+    .map((handle) => i18nNamespacesSchema.safeParse(handle?.i18nNamespaces))
+    .flatMap((result) => (result.success ? result.data : undefined))
     .filter((i18nNamespaces): i18nNamespaces is FlatNamespace => i18nNamespaces !== undefined);
 
   return [...new Set(namespaces)];

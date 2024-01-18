@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { Outlet, json } from '@remix-run/react';
 import { createRemixStub } from '@remix-run/testing';
 
-import type { Breadcrumbs, I18nNamespaces, PageIdentifier, PageTitleI18nKey } from '~/utils/route-utils';
+import type { BuildInfo } from '~/utils/route-utils';
 import { coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey } from '~/utils/route-utils';
 
 describe('coalesce<T> reducer', () => {
@@ -48,11 +48,11 @@ describe('useBreadcrumbs()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        handle: { breadcrumbs: [{ labelI18nKey: 'common:index.breadcrumbs.home' }] } satisfies Breadcrumbs,
+        handle: { breadcrumbs: [{ labelI18nKey: 'common:index.breadcrumbs.home' }] } satisfies RouteHandleData,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(useBreadcrumbs())}</div>,
-            handle: { breadcrumbs: [{ labelI18nKey: 'common:about.breadcrumbs.home', to: '/' }, { labelI18nKey: 'common:about.breadcrumbs.about' }] } satisfies Breadcrumbs,
+            handle: { breadcrumbs: [{ labelI18nKey: 'common:about.breadcrumbs.home', to: '/' }, { labelI18nKey: 'common:about.breadcrumbs.about' }] } satisfies RouteHandleData,
             path: '/',
           },
         ],
@@ -87,11 +87,15 @@ describe('useBuildInfo()', () => {
   });
 
   it('expect correctly coalesced build info from useBuildInfo() if the loaders provide data', async () => {
+    interface DataBuildInfo {
+      buildInfo: BuildInfo;
+    }
+
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
         loader: () => {
-          return json({
+          return json<DataBuildInfo>({
             buildInfo: {
               buildDate: '0000-00-00T00:00:00Z',
               buildId: '0000',
@@ -104,7 +108,7 @@ describe('useBuildInfo()', () => {
           {
             Component: () => <div data-testid="data">{JSON.stringify(useBuildInfo())}</div>,
             loader: () => {
-              return json({
+              return json<DataBuildInfo>({
                 buildInfo: {
                   buildDate: '2000-01-01T00:00:00Z',
                   buildId: '6969',
@@ -150,11 +154,11 @@ describe('useI18nNamespaces()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        handle: { i18nNamespaces: ['common'] } satisfies I18nNamespaces,
+        handle: { i18nNamespaces: ['common'] } satisfies RouteHandleData,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(useI18nNamespaces())}</div>,
-            handle: { i18nNamespaces: ['gcweb'] } satisfies I18nNamespaces,
+            handle: { i18nNamespaces: ['gcweb'] } satisfies RouteHandleData,
             path: '/',
           },
         ],
@@ -192,11 +196,11 @@ describe('usePageIdentifier()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        handle: { pageIdentifier: 'CDCP-0000' } satisfies PageIdentifier,
+        handle: { pageIdentifier: 'CDCP-0000' } satisfies RouteHandleData,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(usePageIdentifier())}</div>,
-            handle: { pageIdentifier: 'CDCP-0001' } satisfies PageIdentifier,
+            handle: { pageIdentifier: 'CDCP-0001' } satisfies RouteHandleData,
             path: '/',
           },
         ],
@@ -234,11 +238,11 @@ describe('usePageTitle()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        handle: { pageTitleI18nKey: 'common:index.page-title' } satisfies PageTitleI18nKey,
+        handle: { pageTitleI18nKey: 'common:index.page-title' } satisfies RouteHandleData,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(usePageTitleI18nKey())}</div>,
-            handle: { pageTitleI18nKey: 'common:about.page-title' } satisfies PageTitleI18nKey,
+            handle: { pageTitleI18nKey: 'common:about.page-title' } satisfies RouteHandleData,
             path: '/',
           },
         ],
