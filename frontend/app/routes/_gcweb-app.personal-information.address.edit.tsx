@@ -9,14 +9,14 @@ export default function ChangeAddress() {
       <Form method="post">
         <div className="form-group">
           <label htmlFor="homeAddress" className="required">
-            Home address <strong className="text-danger mrgn-lft-sm">(required)</strong>
+            Home address <strong className="text-danger">(required)</strong>
           </label>
           <input id="homeAddress" name="homeAddress" className="form-control" />
         </div>
 
         <div className="form-group">
           <label htmlFor="mailingAddress" className="required">
-            Mailing address<strong className="text-danger mrgn-lft-sm">(required)</strong>
+            Mailing address<strong className="text-danger">(required)</strong>
           </label>
           <input id="mailingAddress" name="mailingAddress" className="form-control" />
         </div>
