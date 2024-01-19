@@ -1,5 +1,5 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
-import { useActionData, useLoaderData, useNavigate } from '@remix-run/react';
+import { Link, useActionData, useLoaderData } from '@remix-run/react';
 
 import { z } from 'zod';
 import { PhoneNumber } from '~/components/phone-number';
@@ -54,8 +54,6 @@ export default function UpdateInfo() {
 
   const fieldErrors = actionData?.errors;
 
-  const navigate = useNavigate();
-
   return (
     <>
       <h1 id="wb-cont" property="name">
@@ -66,7 +64,7 @@ export default function UpdateInfo() {
           <PhoneNumber phoneNumber={actionData?.formData.phoneNumber ?? loaderData.userInfo.phoneNumber} fieldErrors={fieldErrors?.phoneNumber?._errors}/>
         </div>
         <div className="form-group">
-          <button className="btn btn-primary btn-lg" onClick={() => navigate("/update-phone-number")}>Edit</button>
+          <Link id="editPhoneButton" to="/update-phone-number" className="btn btn-default btn-lg">Edit</Link>
         </div>
     </>
   );
