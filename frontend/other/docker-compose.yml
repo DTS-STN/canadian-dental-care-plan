@@ -1,0 +1,10 @@
+version: '3'
+services:
+  # Start a password-protected Redis instance on the default port.
+  # @see https://redis.io/docs/management/security/#authentication
+  redis:
+    image: docker.io/redis:7.2
+    command: >
+      --requirepass password
+    ports:
+      - 6379:6379
