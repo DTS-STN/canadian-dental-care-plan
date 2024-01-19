@@ -64,7 +64,7 @@ export default function UpdateInfo() {
           <PhoneNumber phoneNumber={actionData?.formData.phoneNumber ?? loaderData.userInfo.phoneNumber} fieldErrors={fieldErrors?.phoneNumber?._errors}/>
         </div>
         <div className="form-group">
-          <Link id="editPhoneButton" to="/update-phone-number" className="btn btn-default btn-lg">Edit</Link>
+          <Link id="editPhoneButton" to="/update-phone-number" className="btn btn-primary btn-lg">Edit</Link>
         </div>
     </>
   );
