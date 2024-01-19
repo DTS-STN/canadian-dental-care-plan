@@ -12,17 +12,11 @@ import path from 'node:path';
 import url from 'node:url';
 import sourceMapSupport from 'source-map-support';
 
+import { getSessionService } from '~/services/session-service.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('express.server');
-
-//
-// Remix native server code below...
-// copied from: https://github.com/remix-run/remix/blob/remix@2.5.0/packages/remix-serve/cli.ts
-// with only slight modifications to logging (console → logger) and SIGTERM/SIGINT handlers (and formatting)
-//
-
 process.env.NODE_ENV = process.env.NODE_ENV ?? 'production';
+const log = getLogger('express.server');
 
 installSourceMapSupport();
 installGlobals();
@@ -56,28 +50,25 @@ function parseNumber(raw?: string) {
 
 async function run() {
   const port = parseNumber(process.env.PORT) ?? (await getPort({ port: 3000 }));
-
   const buildPathArg = process.argv[2];
 
   if (!buildPathArg) {
-    console.error(`Usage: remix-serve <server-build-path> - e.g. remix-serve build/index.js`);
+    log.error('Usage: express.server.js <application-build-path> -- e.g. ./build/express.server.js ./build/index.js');
     process.exit(1);
   }
 
   const buildPath = path.resolve(buildPathArg);
   const versionPath = path.resolve(buildPath, '..', 'version.txt');
 
-  async function reimportServer() {
+  function reimportServer() {
     Object.keys(require.cache).forEach((key) => {
       if (key.startsWith(buildPath)) {
         delete require.cache[key];
       }
     });
 
-    const stat = fs.statSync(buildPath);
-
     // use a timestamp query parameter to bust the import cache
-    return import(url.pathToFileURL(buildPath).href + '?t=' + stat.mtimeMs);
+    return import(url.pathToFileURL(buildPath).href + '?t=' + fs.statSync(buildPath).mtimeMs);
   }
 
   function createDevRequestHandler(initialBuild: ServerBuild): RequestHandler {
@@ -108,6 +99,16 @@ async function run() {
     };
   }
 
+  function sessionUpdate(): RequestHandler {
+    return async (req, res, next) => {
+      log.debug('Touching session to extend its lifetime');
+      const sessionStorage = await getSessionService().createSessionStorage();
+      const session = await sessionStorage.getSession(req.headers.cookie ?? '');
+      res.appendHeader('Set-Cookie', await sessionStorage.commitSession(session));
+      next();
+    };
+  }
+
   const build: ServerBuild = await reimportServer();
 
   const app = express();
@@ -116,6 +117,7 @@ async function run() {
   app.use(express.static('public', { maxAge: '1h' }));
   app.use(build.publicPath, express.static(build.assetsBuildDirectory, { immutable: true, maxAge: '1y' }));
   app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'tiny', { stream: { write: (str) => log.info(str) } }));
+  app.use(sessionUpdate());
   app.all('*', process.env.NODE_ENV === 'development' ? createDevRequestHandler(build) : createRequestHandler({ build, mode: process.env.NODE_ENV }));
 
   const onListen = () => {
@@ -126,9 +128,9 @@ async function run() {
         .find((ip) => String(ip?.family).includes('4') && !ip?.internal)?.address;
 
     if (!address) {
-      log.info(`[remix-serve] http://localhost:${port}`);
+      log.info(`Server listening at http://localhost:${port}/`);
     } else {
-      log.info(`[remix-serve] http://localhost:${port} (http://${address}:${port})`);
+      log.info(`Server listening at http://localhost:${port}/ (http://${address}:${port}/)`);
     }
 
     if (process.env.NODE_ENV === 'development') {
@@ -139,6 +141,6 @@ async function run() {
   const server = process.env.HOST ? app.listen(port, process.env.HOST, onListen) : app.listen(port, onListen);
 
   if (process.env.NODE_ENV === 'production') {
-    ['SIGTERM', 'SIGINT'].forEach((signal) => process.once(signal, () => server?.close(console.error)));
+    ['SIGTERM', 'SIGINT'].forEach((signal) => process.once(signal, () => server?.close(log.error)));
   }
 }

@@ -1,9 +1,18 @@
+import jsonpatch from 'fast-json-patch';
 import { z } from 'zod';
 
+import { getLogger } from '~/utils/logging.server';
+
+const logger = getLogger('user-service.server');
+
 export const userInfoSchema = z.object({
+  id: z.string().uuid().optional(),
   firstName: z.string().optional(),
   lastName: z.string().optional(),
   phoneNumber: z.string().optional(),
+  homeAddress: z.string().optional(),
+  mailingAddress: z.string().optional(),
+  preferredLanguage: z.string().optional(),
 });
 
 export type UserInfo = z.infer<typeof userInfoSchema>;
@@ -22,20 +31,47 @@ export function getUserService({ env }: UserServiceDependencies) {
   }
 
   async function getUserInfo(userId: string) {
-    const response = await fetch(`${INTEROP_API_BASE_URI}/users/${userId}`);
-    return userInfoSchema.parse(await response.json());
+    const url = `${INTEROP_API_BASE_URI}/users/${userId}`;
+    const response = await fetch(url);
+
+    if (response.ok) return userInfoSchema.parse(await response.json());
+    if (response.status === 404) return null;
+
+    logger.error('%j', {
+      message: 'Failed to fetch data',
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+
+    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
   async function updateUserInfo(userId: string, userInfo: UserInfo) {
-    const patches = Object.entries(userInfo)
-      .filter(([key, value]) => value !== null && value !== undefined)
-      .map(([key, value]) => ({ op: 'replace', path: `/${key}`, value: value }));
+    const curentUserInfo = await getUserInfo(userId);
 
-    if (patches.length > 0) {
-      await fetch(`${INTEROP_API_BASE_URI}/users/${userId}`, {
-        method: 'PATCH',
-        body: JSON.stringify(patches),
+    if (!curentUserInfo) return;
+
+    const patch = jsonpatch.compare(curentUserInfo, { ...curentUserInfo, ...userInfo });
+    if (patch.length === 0) return;
+
+    const url = `${INTEROP_API_BASE_URI}/users/${userId}`;
+    const response = await fetch(url, {
+      method: 'PATCH',
+      body: JSON.stringify(patch),
+    });
+
+    if (!response.ok) {
+      logger.error('%j', {
+        message: 'Failed to fetch data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
       });
+
+      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
   }
 
