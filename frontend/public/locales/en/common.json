@@ -11,5 +11,12 @@
       "home": "Home",
       "about": "About us"
     }
+  },
+  "personal-information": {
+    "page-title": "Personal information",
+    "breadcrumbs": {
+      "home": "Home",
+      "personal-information": "Personal information"
+    }
   }
 }

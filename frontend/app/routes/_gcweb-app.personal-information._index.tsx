@@ -3,6 +3,16 @@ import { useLoaderData } from '@remix-run/react';
 
 import { getUserService } from '~/services/user-service.server';
 import { getEnv } from '~/utils/env.server';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+
+const i18nNamespaces = getTypedI18nNamespaces('common');
+
+export const handle = {
+  breadcrumbs: [{ labelI18nKey: 'common:personal-information.breadcrumbs.home', to: '/' }, { labelI18nKey: 'common:personal-information.page-title' }],
+  i18nNamespaces,
+  pageIdentifier: 'CDCP-0003',
+  pageTitleI18nKey: 'common:personal-information.page-title',
+} as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const env = getEnv();
