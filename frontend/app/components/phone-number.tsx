@@ -12,7 +12,7 @@ export function PhoneNumber({ editMode, fieldErrors, phoneNumber, previousPhoneN
         <label htmlFor="previousPhoneNumber">
           <span className="field-name">Previous phone number</span>
         </label>
-        <input id="previousPhoneNumber" name="previousPhoneNumber" className="form-control" maxLength={32} defaultValue={previousPhoneNumber} data-testid="previousPhoneNumber" disabled={true}/>
+        <input id="previousPhoneNumber" name="previousPhoneNumber" className="form-control mrgn-bttm-sm" maxLength={32} defaultValue={previousPhoneNumber} data-testid="previousPhoneNumber" disabled={true}/>
       </>}
       <label htmlFor="phoneNumber" className={editMode ? "required" : "none"}>
           <span className="field-name">{previousPhoneNumber !== undefined ? "New phone number" : "Phone number"}</span>

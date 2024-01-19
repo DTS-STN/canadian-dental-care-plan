@@ -28,7 +28,7 @@ export default function UpdatePhoneNumberSuccess() {
           <PhoneNumber phoneNumber={loaderData.userInfo?.phoneNumber}/>
         </div>
         <div className="form-group">
-          <Link id="successPhoneButton" to="/update-info" className="btn btn-default btn-lg">Return to personal info</Link>
+          <Link id="successPhoneButton" to="/update-info" className="btn btn-primary btn-lg">Return to personal info</Link>
         </div>
       </>
     );
