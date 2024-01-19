@@ -11,5 +11,12 @@
       "home": "Accueil",
       "about": "Qui sommes-nous?"
     }
+  },
+  "personal-information": {
+    "page-title": "(FR) Personal information",
+    "breadcrumbs": {
+      "home": "Accueil",
+      "personal-information": "(FR) Personal information"
+    }
   }
 }
