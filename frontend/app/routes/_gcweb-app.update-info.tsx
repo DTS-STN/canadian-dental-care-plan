@@ -9,17 +9,22 @@ import { getEnv } from '~/utils/env.server';
 export async function loader({ request }: LoaderFunctionArgs) {
   const env = getEnv();
   const { getUserId, getUserInfo } = getUserService({ env });
+
   const userId = await getUserId();
-  return json({
-    userInfo: await getUserInfo(userId),
-  });
+  const userInfo = await getUserInfo(userId);
+
+  if (!userInfo) {
+    throw new Response(null, { status: 404, statusText: 'User Info Not Found' });
+  }
+
+  return json({ userInfo });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
   const env = getEnv();
   const userService = getUserService({ env });
 
-  const isPhoneNumber = (val: string) => val.match(/\([0-9]{3}\) [0-9]{3}-[0-9]{4}/);
+  const isPhoneNumber = (val: string) => /\(\d{3}\) \d{3}-\d{4}/.exec(val);
 
   const formDataSchema = z.object({
     phoneNumber: z.string().refine(isPhoneNumber, { message: 'Invalid phone number' }),

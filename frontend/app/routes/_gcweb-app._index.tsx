@@ -19,14 +19,19 @@ export const handle = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const env = getEnv();
   const userService = getUserService({ env });
+
   const userId = await userService.getUserId();
-  return json({
-    user: await userService.getUserInfo(userId),
-  });
+  const userInfo = await userService.getUserInfo(userId);
+
+  if (!userInfo) {
+    throw new Response(null, { status: 404, statusText: 'User Info Not Found' });
+  }
+
+  return json({ userInfo });
 }
 
 export default function Index() {
-  const { user } = useLoaderData<typeof loader>();
+  const { userInfo } = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
 
   return (
@@ -35,7 +40,7 @@ export default function Index() {
         {t('common:index.page-title')}
       </h1>
       <p>
-        Welcome {user.firstName} {user.lastName}
+        Welcome {userInfo.firstName} {userInfo.lastName}
       </p>
       <ul>
         <li>

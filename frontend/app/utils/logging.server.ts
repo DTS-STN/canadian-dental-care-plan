@@ -20,6 +20,7 @@ export const getLogger = (category: string): Logger => {
     level: logLevel,
     format: format.combine(
       format.timestamp(),
+      format.splat(),
       format.printf((info) => `${info.timestamp} ${info.level.toUpperCase().padStart(7)} --- [${formatCategory(category, 25)}]: ${info.message}`),
     ),
     transports: [new transports.Console()],
