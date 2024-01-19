@@ -1,6 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: canada-dental-care-plan
+nameSuffix: -dev
 
 labels:
   - pairs:
@@ -8,6 +9,7 @@ labels:
       app.kubernetes.io/part-of: canada-dental-care-plan
       app.kubernetes.io/managed-by: teamcity
       app.kubernetes.io/cluster: dts-dev-sced-rhp-spoke-aks
+      app.kubernetes.io/environment: dev
       app.kubernetes.io/tier: nonprod
 
 resources:
@@ -16,7 +18,7 @@ resources:
   - ./services.yaml
 
 configMapGenerator:
-  - name: canada-dental-care-plan-frontend
+  - name: frontend
     literals:
       - LOG_LEVEL=debug
       - MOCKS_ENABLED=true

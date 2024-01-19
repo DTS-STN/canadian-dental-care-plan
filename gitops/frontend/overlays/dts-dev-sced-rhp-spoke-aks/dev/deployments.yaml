@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: canada-dental-care-plan-frontend
+  name: frontend
   labels:
-    app.kubernetes.io/name: canada-dental-care-plan-frontend
+    app.kubernetes.io/name: frontend
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: canada-dental-care-plan-frontend
+      app.kubernetes.io/name: frontend
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: canada-dental-care-plan-frontend
+        app.kubernetes.io/name: frontend
     spec:
       containers:
         - name: canada-dental-care-plan-frontend
           image: dtsrhpdevscedacr.azurecr.io/canada-dental-care-plan/canada-dental-care-plan-frontend
           envFrom:
             - configMapRef:
-                name: canada-dental-care-plan-frontend
+                name: frontend
           ports:
             - name: http
               containerPort: 3000

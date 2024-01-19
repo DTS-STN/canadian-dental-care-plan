@@ -1,9 +1,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: canada-dental-care-plan-frontend
+  name: frontend
   labels:
-    app.kubernetes.io/name: canada-dental-care-plan-frontend
+    app.kubernetes.io/name: frontend
 spec:
   ingressClassName: nginx
   rules:
@@ -14,7 +14,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: canada-dental-care-plan-frontend
+                name: frontend
                 port:
                   name: http
     - host: cdcp-dev.dev-dp-internal.dts-stn.com
@@ -24,6 +24,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: canada-dental-care-plan-frontend
+                name: frontend
                 port:
                   name: http
