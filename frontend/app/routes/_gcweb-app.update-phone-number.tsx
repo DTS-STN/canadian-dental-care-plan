@@ -62,8 +62,8 @@ export default function UpdateInfo() {
           <PhoneNumber editMode phoneNumber={actionData?.formData.phoneNumber ?? loaderData.userInfo?.phoneNumber} fieldErrors={fieldErrors?.phoneNumber?._errors}/>
         </div>
         <div className="form-group">
-          <button className="btn btn-primary btn-lg" style={{ marginRight: "10px" }}>Save</button>
-          <Link id="cancelButton" to="/update-info">Cancel</Link> 
+          <button className="btn btn-primary btn-lg mrgn-rght-sm">Save</button>
+          <Link id="cancelButton" to="/update-info" className="btn btn-default btn-lg">Cancel</Link> 
         </div>
       </Form>
     </>

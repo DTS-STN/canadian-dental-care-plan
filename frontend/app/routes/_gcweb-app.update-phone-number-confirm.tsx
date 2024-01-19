@@ -41,8 +41,8 @@ export default function UpdatePhoneNumberConfirm() {
             <PhoneNumber phoneNumber={loaderData.newPhoneNumber ?? ''} previousPhoneNumber={loaderData.userInfo?.phoneNumber}/>
           </div>
           <div className="form-group">
-            <button className="btn btn-primary btn-lg" style={{ marginRight: "10px" }}>Confirm</button>
-            <Link id="cancelButton" to="/update-info">Cancel</Link>
+            <button className="btn btn-primary btn-lg mrgn-rght-sm">Confirm</button>
+            <Link id="cancelButton" to="/update-info" className="btn btn-default btn-lg">Cancel</Link>
           </div>
         </Form>
       </>

@@ -54,7 +54,7 @@ export default function UpdateInfo() {
 
   const fieldErrors = actionData?.errors;
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <>
