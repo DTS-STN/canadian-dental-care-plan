@@ -3,7 +3,7 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 import { type LoaderFunctionArgs, type ActionFunctionArgs, json, redirect } from '@remix-run/node';
 
 import { getUserService } from '~/services/user-service.server';
-import { commitSession, getSession } from '~/sessions';
+import { getSessionService } from '~/services/session-service.server';
 import { getEnv } from '~/utils/env.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -18,12 +18,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   const formData = Object.fromEntries(await request.formData());
 
-  const session = await getSession(
-    request.headers.get("Cookie")
-  );
+  const { getSession, commitSession } = await getSessionService().createSessionStorage();
+  const session = await getSession(request.headers.get('Cookie'));
 
   session.set('newAddress', {homeAddress: formData.homeAddress.toString(), mailingAddress: formData.mailingAddress.toString()});
-
+  console.log(formData);
 
   return redirect('/personal-information/address/confirm', { headers: {
     "Set-Cookie": await commitSession(session),
