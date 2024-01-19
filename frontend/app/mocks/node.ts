@@ -64,6 +64,14 @@ const handlers = [
     db.user.update({ where: { id: { equals: userEntity.id } }, data: patchResult.newDocument });
     return HttpResponse.text(null, { status: 204 });
   }),
+   /**
+   * Handler for GET requests to retrieve preferred languages
+   */
+   http.get('https://api.example.com/lookups/preferred-languages', async ({ }) => {
+    return HttpResponse.json({
+      
+    });
+  }),
 ];
 
 export const server = setupServer(...handlers);

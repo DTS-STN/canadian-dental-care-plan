@@ -18,6 +18,11 @@ const db = factory({
     mailingAddress: () => faker.helpers.fake(fullAddressFormat),
     preferredLanguage: () => faker.helpers.arrayElement(['en', 'fr']),
   },
+  preferredLanguage: {
+    id: faker.helpers.arrayElement(['en', 'fr']),
+    nameEn: faker.helpers.arrayElement(['English', 'French']),
+    nameFr: faker.helpers.arrayElement(['Anglais', 'Français']),
+  }
 });
 
 // seed users
@@ -26,6 +31,18 @@ db.user.create({
   firstName: 'John',
   lastName: 'Maverick',
   preferredLanguage: 'fr',
+});
+
+db.preferredLanguage.create({
+  id: "en",
+  nameEn: "English",
+  nameFr: "Anglais"
+});
+
+db.preferredLanguage.create({
+  id: "fr",
+  nameEn: "French",
+  nameFr: "Français"
 });
 
 export { db };
