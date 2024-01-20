@@ -45,5 +45,8 @@
     "page-message": "We expect the problem to be fixed shortly. It's not your computer or Internet connection but a problem with our website's server. What next?",
     "option-01": "Try refreshing the page or try again later",
     "option-02": "Return to the <home>home page</home>"
+  },
+  "input-label": {
+    "required": "Required field"
   }
 }
