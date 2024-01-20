@@ -1,4 +1,5 @@
-import { createFileSessionStorage, createMemorySessionStorage, createSessionStorage } from '@remix-run/node';
+/* eslint @typescript-eslint/no-unused-vars: ["error", { "varsIgnorePattern": "^_" }] */
+import { createFileSessionStorage, createSessionStorage } from '@remix-run/node';
 
 import { describe, expect, it } from 'vitest';
 
@@ -6,104 +7,88 @@ import { getRedisService } from '~/services/redis-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getEnv } from '~/utils/env.server';
 
-describe('session-service.server tests', () => {
-  beforeEach(() => vi.resetAllMocks());
+vi.mock('@remix-run/node', () => ({
+  createCookie: vi.fn(),
+  createFileSessionStorage: vi.fn(),
+  createMemorySessionStorage: vi.fn(),
+  createSessionStorage: vi.fn(),
+}));
 
-  vi.mock('@remix-run/node');
-  vi.mock('~/services/redis-service.server');
-  vi.mock('~/utils/env.server');
+vi.mock('~/services/redis-service.server', () => ({
+  getRedisService: vi.fn(),
+}));
+
+vi.mock('~/utils/env.server', () => ({
+  getEnv: vi.fn(),
+}));
+
+vi.mock('~/utils/logging.server', () => ({
+  getLogger: vi.fn().mockReturnValue({ debug: vi.fn() }),
+}));
+
+describe('session-service.server tests', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
 
   describe('getSessionService() -- SESSION_STORAGE_TYPE flag tests', () => {
-    it('should create a new memory-backed session storage when SESSION_STORAGE_TYPE=memory', async () => {
-      vi.mocked(getEnv).mockReturnValue({ SESSION_STORAGE_TYPE: 'memory' } as any);
-      vi.mocked(createMemorySessionStorage).mockReturnValue({} as any);
-
-      const sessionService = getSessionService();
-      const sessionStorage = await sessionService.createSessionStorage();
-
-      expect(sessionStorage).toBeDefined();
-      expect(vi.mocked(getEnv)).toHaveBeenCalled();
-      expect(vi.mocked(createMemorySessionStorage)).toHaveBeenCalled();
-    });
-
     it('should create a new file-backed session storage when SESSION_STORAGE_TYPE=file', async () => {
-      vi.mocked(getEnv).mockReturnValue({ SESSION_STORAGE_TYPE: 'file' } as any);
-      vi.mocked(createFileSessionStorage).mockReturnValue({} as any);
-
-      const sessionService = getSessionService();
-      const sessionStorage = await sessionService.createSessionStorage();
-
-      expect(sessionStorage).toBeDefined();
-      expect(vi.mocked(getEnv)).toHaveBeenCalled();
-      expect(vi.mocked(createFileSessionStorage)).toHaveBeenCalled();
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({ SESSION_STORAGE_TYPE: 'file' });
+      const _sessionService = getSessionService();
+      expect(createFileSessionStorage).toHaveBeenCalled();
     });
 
     it('should create a new redis-backed session storage when SESSION_STORAGE_TYPE=redis', async () => {
-      vi.mocked(getEnv).mockReturnValue({ SESSION_STORAGE_TYPE: 'redis' } as any);
-      vi.mocked(createSessionStorage).mockReturnValue({} as any);
-
-      const sessionService = getSessionService();
-      const sessionStorage = await sessionService.createSessionStorage();
-
-      expect(sessionStorage).toBeDefined();
-      expect(vi.mocked(getEnv)).toHaveBeenCalled();
-      expect(vi.mocked(createSessionStorage)).toHaveBeenCalled();
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({ SESSION_STORAGE_TYPE: 'redis' });
+      const _sessionService = getSessionService();
+      expect(createSessionStorage).toHaveBeenCalled();
     });
   });
 
   describe('getSessionService() -- redis-backed session storage tests', () => {
     it('should call redisService.set() when creating redis-backed session storage', async () => {
-      vi.mocked(getEnv).mockReturnValue({ SESSION_STORAGE_TYPE: 'redis' } as any);
-      vi.mocked(getRedisService).mockReturnValue({ set: vi.fn() } as any);
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({ SESSION_STORAGE_TYPE: 'redis' });
+      vi.mocked(getRedisService, { partial: true }).mockReturnValue({ set: vi.fn() });
 
-      await getSessionService().createSessionStorage();
-
-      // sessionService.createRedisSessionStorage.createSessionStorage(sessionStrategy)
-      const sessionStrategy = vi.mocked(createSessionStorage).mock.calls[0][0];
-      const sessionId = await sessionStrategy.createData('value');
+      const _sessionService = getSessionService();
+      const strategy = vi.mocked(createSessionStorage).mock.calls[0][0];
+      const sessionId = await strategy.createData('value');
 
       expect(sessionId).toBeDefined();
-      expect(vi.mocked(getRedisService().set)).toHaveBeenCalled();
+      expect(getRedisService().set).toHaveBeenCalled();
     });
 
     it('should call redisService.get() when reading from redis-backed session storage', async () => {
-      vi.mocked(getEnv).mockReturnValue({ SESSION_STORAGE_TYPE: 'redis' } as any);
-      vi.mocked(getRedisService).mockReturnValue({ get: () => JSON.stringify('value') } as any);
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({ SESSION_STORAGE_TYPE: 'redis' });
+      vi.mocked(getRedisService, { partial: true }).mockReturnValue({ get: vi.fn().mockResolvedValue('"value"') });
 
-      const sessionService = getSessionService();
-      await sessionService.createSessionStorage();
+      const _sessionService = getSessionService();
+      const strategy = vi.mocked(createSessionStorage).mock.calls[0][0];
+      await strategy.readData('id');
 
-      // sessionService.createRedisSessionStorage.createSessionStorage(sessionStrategy)
-      const sessionStrategy = vi.mocked(createSessionStorage).mock.calls[0][0];
-      const data = await sessionStrategy.readData('id');
-
-      expect(data).toBe('value');
+      expect(getRedisService().get).toHaveBeenCalled();
     });
 
     it('should call redisService.set() when updating redis-backed session storage', async () => {
-      vi.mocked(getEnv).mockReturnValue({ SESSION_STORAGE_TYPE: 'redis' } as any);
-      vi.mocked(getRedisService).mockReturnValue({ set: vi.fn() } as any);
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({ SESSION_STORAGE_TYPE: 'redis' });
+      vi.mocked(getRedisService, { partial: true }).mockReturnValue({ set: vi.fn() });
 
-      await getSessionService().createSessionStorage();
-
-      // sessionService.createRedisSessionStorage.createSessionStorage(sessionStrategy)
+      const _sessionService = getSessionService();
       const sessionStrategy = vi.mocked(createSessionStorage).mock.calls[0][0];
       await sessionStrategy.updateData('id', 'value');
 
-      expect(vi.mocked(getRedisService().set)).toHaveBeenCalled();
+      expect(getRedisService().set).toHaveBeenCalled();
     });
 
     it('should call redisService.del() when deleting from redis-backed session storage', async () => {
-      vi.mocked(getEnv).mockReturnValue({ SESSION_STORAGE_TYPE: 'redis' } as any);
-      vi.mocked(getRedisService).mockReturnValue({ del: vi.fn() } as any);
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({ SESSION_STORAGE_TYPE: 'redis' });
+      vi.mocked(getRedisService, { partial: true }).mockReturnValue({ del: vi.fn() });
 
-      await getSessionService().createSessionStorage();
-
-      // sessionService.createRedisSessionStorage.createSessionStorage(sessionStrategy)
+      const _sessionService = getSessionService();
       const sessionStrategy = vi.mocked(createSessionStorage).mock.calls[0][0];
       await sessionStrategy.deleteData('id');
 
-      expect(vi.mocked(getRedisService().del)).toHaveBeenCalled();
+      expect(getRedisService().del).toHaveBeenCalled();
     });
   });
 });

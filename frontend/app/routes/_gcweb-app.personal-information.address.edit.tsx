@@ -37,7 +37,7 @@ export async function action({ request }: ActionFunctionArgs) {
     });
   }
 
-  const { getSession, commitSession } = await getSessionService().createSessionStorage();
+  const { commitSession, getSession } = await getSessionService();
   const session = await getSession(request.headers.get('Cookie'));
   session.set('newAddress', parsedDataResult.data);
 

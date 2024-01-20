@@ -9,11 +9,10 @@ import { getUserService } from '~/services/user-service.server';
 import { getEnv } from '~/utils/env.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const env = getEnv();
-  const { getUserId, getUserInfo } = getUserService({ env });
-  const userId = await getUserId();
+  const { getUserId, getUserInfo } = getUserService({ env: getEnv() });
+
   return json({
-    userInfo: await getUserInfo(userId),
+    userInfo: await getUserInfo(await getUserId()),
   });
 }
 
@@ -34,9 +33,8 @@ export async function action({ request }: ActionFunctionArgs) {
     });
   }
 
-  const { getSession, commitSession } = await getSessionService().createSessionStorage();
+  const { getSession, commitSession } = getSessionService();
   const session = await getSession(request.headers.get('Cookie'));
-
   session.set('newPhoneNumber', parsedDataResult.data.phoneNumber);
 
   return redirect('/update-phone-number-confirm', {

@@ -6,13 +6,11 @@ import { getUserService } from '~/services/user-service.server';
 import { getEnv } from '~/utils/env.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const { getSession } = await getSessionService().createSessionStorage();
-  const env = getEnv();
-  const { getUserId, getUserInfo } = getUserService({ env });
-  const userId = await getUserId();
-  const session = await getSession(request.headers.get('Cookie'));
+  const session = await getSessionService().getSession(request.headers.get('Cookie'));
+  const { getUserId, getUserInfo } = getUserService({ env: getEnv() });
+
   return json({
-    userInfo: await getUserInfo(userId),
+    userInfo: await getUserInfo(await getUserId()),
     newAddress: await session.get('newAddress'),
   });
 }

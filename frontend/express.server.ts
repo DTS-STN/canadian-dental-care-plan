@@ -12,7 +12,6 @@ import path from 'node:path';
 import url from 'node:url';
 import sourceMapSupport from 'source-map-support';
 
-import { getSessionService } from '~/services/session-service.server';
 import { getLogger } from '~/utils/logging.server';
 
 process.env.NODE_ENV = process.env.NODE_ENV ?? 'production';
@@ -99,16 +98,6 @@ async function run() {
     };
   }
 
-  function sessionUpdate(): RequestHandler {
-    return async (req, res, next) => {
-      log.debug('Touching session to extend its lifetime');
-      const sessionStorage = await getSessionService().createSessionStorage();
-      const session = await sessionStorage.getSession(req.headers.cookie ?? '');
-      res.appendHeader('Set-Cookie', await sessionStorage.commitSession(session));
-      next();
-    };
-  }
-
   const build: ServerBuild = await reimportServer();
 
   const app = express();
@@ -117,7 +106,6 @@ async function run() {
   app.use(express.static('public', { maxAge: '1h' }));
   app.use(build.publicPath, express.static(build.assetsBuildDirectory, { immutable: true, maxAge: '1y' }));
   app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'tiny', { stream: { write: (str) => log.info(str) } }));
-  app.use(sessionUpdate());
   app.all('*', process.env.NODE_ENV === 'development' ? createDevRequestHandler(build) : createRequestHandler({ build, mode: process.env.NODE_ENV }));
 
   const onListen = () => {
