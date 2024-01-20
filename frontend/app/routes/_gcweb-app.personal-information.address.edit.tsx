@@ -15,7 +15,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userInfo = await userService.getUserInfo(userId);
 
   if (!userInfo) {
-    throw new Response(null, { status: 404, statusText: 'User Info Not Found' });
+    throw new Response(null, { status: 404 });
   }
 
   return json({ userInfo });

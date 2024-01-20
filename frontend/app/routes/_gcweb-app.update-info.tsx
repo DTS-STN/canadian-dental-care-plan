@@ -2,8 +2,8 @@ import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from
 import { Link, useActionData, useLoaderData } from '@remix-run/react';
 
 import { z } from 'zod';
-import { PhoneNumber } from '~/components/phone-number';
 
+import { PhoneNumber } from '~/components/phone-number';
 import { getUserService } from '~/services/user-service.server';
 import { getEnv } from '~/utils/env.server';
 
@@ -15,7 +15,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userInfo = await getUserInfo(userId);
 
   if (!userInfo) {
-    throw new Response(null, { status: 404, statusText: 'User Info Not Found' });
+    throw new Response(null, { status: 404 });
   }
 
   return json({ userInfo });
@@ -60,12 +60,14 @@ export default function UpdateInfo() {
         Update personal info
       </h1>
       <p>Please update your info below.</p>
-        <div className="form-group">
-          <PhoneNumber phoneNumber={actionData?.formData.phoneNumber ?? loaderData.userInfo.phoneNumber} fieldErrors={fieldErrors?.phoneNumber?._errors}/>
-        </div>
-        <div className="form-group">
-          <Link id="editPhoneButton" to="/update-phone-number" className="btn btn-primary btn-lg">Edit</Link>
-        </div>
+      <div className="form-group">
+        <PhoneNumber phoneNumber={actionData?.formData.phoneNumber ?? loaderData.userInfo.phoneNumber} fieldErrors={fieldErrors?.phoneNumber?._errors} />
+      </div>
+      <div className="form-group">
+        <Link id="editPhoneButton" to="/update-phone-number" className="btn btn-primary btn-lg">
+          Edit
+        </Link>
+      </div>
     </>
   );
 }
