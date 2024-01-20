@@ -5,6 +5,7 @@ import { Link, Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/re
 
 import { Trans, useTranslation } from 'react-i18next';
 
+import cdcpStylesheet from '~/cdcp.css';
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier } from '~/utils/route-utils';
@@ -13,7 +14,10 @@ const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
 export const handle = { i18nNamespaces } as const satisfies RouteHandleData;
 
-export const links: LinksFunction = () => [{ rel: 'stylesheet', href: '/theme/gcweb/css/theme.min.css' }];
+export const links: LinksFunction = () => [
+  { rel: 'stylesheet', href: '/theme/gcweb/css/theme.min.css' },
+  { rel: 'stylesheet', href: cdcpStylesheet },
+];
 
 export function ErrorBoundary() {
   const error = useRouteError();
