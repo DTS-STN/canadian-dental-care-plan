@@ -45,5 +45,8 @@
     "page-message": "Nous espérons résoudre le problème sous peu. Il ne s'agit pas d'un problème avec votre ordinateur ou Internet, mais plutôt avec le serveur de notre site Web. Que faire?",
     "option-01": "Actualisez la page ou réessayez plus tard",
     "option-02": "Retournez à la <home>page d'accueil</home>"
+  },
+  "input-label": {
+    "required": "Champ requis"
   }
 }
