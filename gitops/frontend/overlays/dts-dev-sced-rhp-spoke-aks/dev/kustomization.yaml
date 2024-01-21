@@ -22,3 +22,4 @@ configMapGenerator:
     literals:
       - LOG_LEVEL=debug
       - MOCKS_ENABLED=true
+      - SESSION_FILE_DIR=sessions
