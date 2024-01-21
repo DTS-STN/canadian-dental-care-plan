@@ -5,15 +5,13 @@ import { z } from 'zod';
 
 import { PhoneNumber } from '~/components/phone-number';
 import { getSessionService } from '~/services/session-service.server';
-import { getUserService } from '~/services/user-service.server';
-import { getEnv } from '~/utils/env.server';
+import { userService } from '~/services/user-service.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const { getUserId, getUserInfo } = getUserService({ env: getEnv() });
+  const userId = await userService.getUserId();
+  const userInfo = await userService.getUserInfo(userId);
 
-  return json({
-    userInfo: await getUserInfo(await getUserId()),
-  });
+  return json({ userInfo });
 }
 
 export async function action({ request }: ActionFunctionArgs) {

@@ -4,15 +4,11 @@ import { Link, useActionData, useLoaderData } from '@remix-run/react';
 import { z } from 'zod';
 
 import { PhoneNumber } from '~/components/phone-number';
-import { getUserService } from '~/services/user-service.server';
-import { getEnv } from '~/utils/env.server';
+import { userService } from '~/services/user-service.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const env = getEnv();
-  const { getUserId, getUserInfo } = getUserService({ env });
-
-  const userId = await getUserId();
-  const userInfo = await getUserInfo(userId);
+  const userId = await userService.getUserId();
+  const userInfo = await userService.getUserInfo(userId);
 
   if (!userInfo) {
     throw new Response(null, { status: 404 });
@@ -22,9 +18,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const env = getEnv();
-  const userService = getUserService({ env });
-
   const isPhoneNumber = (val: string) => /\(\d{3}\) \d{3}-\d{4}/.exec(val);
 
   const formDataSchema = z.object({

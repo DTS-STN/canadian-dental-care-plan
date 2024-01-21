@@ -4,17 +4,14 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 
 import { PhoneNumber } from '~/components/phone-number';
 import { getSessionService } from '~/services/session-service.server';
-import { getUserService } from '~/services/user-service.server';
-import { getEnv } from '~/utils/env.server';
+import { userService } from '~/services/user-service.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const userId = await userService.getUserId();
+  const userInfo = await userService.getUserInfo(userId);
   const session = await getSessionService().getSession(request.headers.get('Cookie'));
-  const { getUserId, getUserInfo } = getUserService({ env: getEnv() });
 
-  return json({
-    userInfo: await getUserInfo(await getUserId()),
-    newPhoneNumber: await session.get('newPhoneNumber'),
-  });
+  return json({ userInfo, newPhoneNumber: await session.get('newPhoneNumber') });
 }
 
 export async function action({ request }: ActionFunctionArgs) {

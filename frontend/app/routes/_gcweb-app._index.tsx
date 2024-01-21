@@ -3,8 +3,7 @@ import { Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import { getUserService } from '~/services/user-service.server';
-import { getEnv } from '~/utils/env.server';
+import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('common', 'gcweb');
@@ -17,9 +16,6 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const env = getEnv();
-  const userService = getUserService({ env });
-
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
 
