@@ -25,7 +25,7 @@ import { type Cookie, createCookie, createFileSessionStorage, createSessionStora
 
 import { randomUUID } from 'node:crypto';
 
-import { getRedisService } from '~/services/redis-service.server';
+import { redisService } from '~/services/redis-service.server';
 import { type ServerEnv, getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
@@ -57,7 +57,6 @@ export function getSessionService() {
 
 function createRedisSessionStorage(env: ServerEnv, sessionCookie: Cookie) {
   const sessionId = randomUUID();
-  const redisService = getRedisService();
   const setCommandOptions = { EX: env.SESSION_EXPIRES_SECONDS };
 
   return createSessionStorage({
