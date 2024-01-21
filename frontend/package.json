@@ -16,7 +16,8 @@
     "typecheck": "tsc",
     "test:all": "npm run-script test:unit run && npm run-script test:e2e",
     "test:e2e": "playwright test",
-    "test:unit": "vitest"
+    "test:unit": "vitest",
+    "test:unit:ui": "vitest --ui"
   },
   "dependencies": {
     "@axe-core/playwright": "^4.8.3",
@@ -51,6 +52,7 @@
     "@remix-run/dev": "^2.5.1",
     "@remix-run/eslint-config": "^2.5.1",
     "@remix-run/testing": "^2.5.1",
+    "@testing-library/jest-dom": "^6.2.0",
     "@testing-library/react": "^14.1.2",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/compression": "^1.7.5",
@@ -63,6 +65,7 @@
     "@types/react-dom": "^18.2.18",
     "@types/source-map-support": "^0.5.10",
     "@vitejs/plugin-react": "^4.2.1",
+    "@vitest/ui": "^1.2.1",
     "chokidar": "^3.5.3",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",

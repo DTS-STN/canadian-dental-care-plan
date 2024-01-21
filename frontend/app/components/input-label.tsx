@@ -16,9 +16,13 @@ export const InputLabel = (props: InputLabelProps) => {
   return (
     <label className={clsx(required && 'required', className)} data-testid="input-label" {...restLabelProps}>
       <span className="field-name">{children}</span>
-      {required && <strong className="required">&#32;({t('input-label.required')})</strong>}
+      {required && (
+        <strong className="required" data-testid="input-label-required">
+          &#32;({t('input-label.required')})
+        </strong>
+      )}
       {errorMessage && (
-        <span className="label label-danger wb-server-error" data-testid="input-error-message">
+        <span className="label label-danger wb-server-error" data-testid="input-label-error-message">
           {errorMessage}
         </span>
       )}
