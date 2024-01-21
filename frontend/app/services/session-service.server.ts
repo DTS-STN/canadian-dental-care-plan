@@ -21,17 +21,17 @@
  *
  * @see https://remix.run/docs/en/main/utils/sessions
  */
-import { type Cookie, createCookie, createFileSessionStorage, createSessionStorage } from '@remix-run/node';
+import { createCookie, createFileSessionStorage, createSessionStorage } from '@remix-run/node';
 
 import { randomUUID } from 'node:crypto';
 
 import { redisService } from '~/services/redis-service.server';
-import { type ServerEnv, getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('session-service.server');
+function createSessionService() {
+  const log = getLogger('session-service.server');
 
-export function getSessionService() {
   const env = getEnv();
 
   const sessionCookie = createCookie(env.SESSION_COOKIE_NAME, {
@@ -45,38 +45,42 @@ export function getSessionService() {
 
   switch (env.SESSION_STORAGE_TYPE) {
     case 'file':
-      // note: file-backed sessions are not cleaned up; so use only during development!
-      return { ...createFileSessionStorage({ cookie: sessionCookie, dir: env.SESSION_FILE_DIR }) };
+      log.warn('Using file-backed sessions. This is not recommended for production.');
+      return createFileSessionStorage({ cookie: sessionCookie, dir: env.SESSION_FILE_DIR });
     case 'redis':
-      return { ...createRedisSessionStorage(env, sessionCookie) };
+      log.info('Using Redis-backed sessions.');
+      return createRedisSessionStorage();
     default:
-      // this should never happen..
+      // this should never happen (because: typescript)
       throw new Error(`Unknown session storage type: ${env.SESSION_STORAGE_TYPE}`);
+  }
+
+  function createRedisSessionStorage() {
+    const sessionId = randomUUID();
+    const setCommandOptions = { EX: env.SESSION_EXPIRES_SECONDS };
+
+    return createSessionStorage({
+      cookie: sessionCookie,
+      createData: async (data) => {
+        log.debug(`Creating new session storage slot with id=[${sessionId}]`);
+        await redisService.set(sessionId, JSON.stringify(data), setCommandOptions);
+        return sessionId;
+      },
+      readData: async (id) => {
+        log.debug(`Reading session data for session id=[${id}]`);
+        return JSON.parse(await redisService.get(id));
+      },
+      updateData: async (id, data) => {
+        log.debug(`Updating session data for session id=[${id}]`);
+        await redisService.set(id, JSON.stringify(data), setCommandOptions);
+      },
+      deleteData: async (id) => {
+        log.debug(`Deleting all session data for session id=[${id}]`);
+        await redisService.del(id);
+      },
+    });
   }
 }
 
-function createRedisSessionStorage(env: ServerEnv, sessionCookie: Cookie) {
-  const sessionId = randomUUID();
-  const setCommandOptions = { EX: env.SESSION_EXPIRES_SECONDS };
-
-  return createSessionStorage({
-    cookie: sessionCookie,
-    createData: async (data) => {
-      log.debug(`Creating new session storage slot with id=[${sessionId}]`);
-      await redisService.set(sessionId, JSON.stringify(data), setCommandOptions);
-      return sessionId;
-    },
-    readData: async (id) => {
-      log.debug(`Reading session data for session id=[${id}]`);
-      return JSON.parse(await redisService.get(id));
-    },
-    updateData: async (id, data) => {
-      log.debug(`Updating session data for session id=[${id}]`);
-      await redisService.set(id, JSON.stringify(data), setCommandOptions);
-    },
-    deleteData: async (id) => {
-      log.debug(`Deleting all session data for session id=[${id}]`);
-      await redisService.del(id);
-    },
-  });
-}
+// singleton instance of session service
+export const sessionService = createSessionService();
