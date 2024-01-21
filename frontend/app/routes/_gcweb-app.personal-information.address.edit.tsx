@@ -4,7 +4,7 @@ import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
 import { z } from 'zod';
 
 import { InputField } from '~/components/input-field';
-import { getSessionService } from '~/services/session-service.server';
+import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -34,13 +34,12 @@ export async function action({ request }: ActionFunctionArgs) {
     });
   }
 
-  const { commitSession, getSession } = await getSessionService();
-  const session = await getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request.headers.get('Cookie'));
   session.set('newAddress', parsedDataResult.data);
 
   return redirect('/personal-information/address/confirm', {
     headers: {
-      'Set-Cookie': await commitSession(session),
+      'Set-Cookie': await sessionService.commitSession(session),
     },
   });
 }

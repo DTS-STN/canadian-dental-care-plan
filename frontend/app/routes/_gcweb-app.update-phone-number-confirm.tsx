@@ -3,13 +3,13 @@ import { json, redirect } from '@remix-run/node';
 import { Form, Link, useLoaderData } from '@remix-run/react';
 
 import { PhoneNumber } from '~/components/phone-number';
-import { getSessionService } from '~/services/session-service.server';
+import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
-  const session = await getSessionService().getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request.headers.get('Cookie'));
 
   return json({ userInfo, newPhoneNumber: await session.get('newPhoneNumber') });
 }
