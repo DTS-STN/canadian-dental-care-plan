@@ -1,11 +1,10 @@
 import jsonpatch from 'fast-json-patch';
 import { z } from 'zod';
 
+import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
-const logger = getLogger('user-service.server');
-
-export const userInfoSchema = z.object({
+const userInfoSchema = z.object({
   id: z.string().uuid().optional(),
   firstName: z.string().optional(),
   lastName: z.string().optional(),
@@ -17,14 +16,9 @@ export const userInfoSchema = z.object({
 
 export type UserInfo = z.infer<typeof userInfoSchema>;
 
-export interface UserServiceDependencies {
-  readonly env: {
-    readonly INTEROP_API_BASE_URI: string;
-  };
-}
-
-export function getUserService({ env }: UserServiceDependencies) {
-  const { INTEROP_API_BASE_URI } = env;
+function createUserService() {
+  const logger = getLogger('user-service.server');
+  const { INTEROP_API_BASE_URI } = getEnv();
 
   async function getUserId() {
     return '00000000-0000-0000-0000-000000000000';
@@ -75,9 +69,7 @@ export function getUserService({ env }: UserServiceDependencies) {
     }
   }
 
-  return {
-    getUserId,
-    getUserInfo,
-    updateUserInfo,
-  };
+  return { getUserId, getUserInfo, updateUserInfo };
 }
+
+export const userService = createUserService();

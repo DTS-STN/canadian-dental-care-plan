@@ -3,16 +3,13 @@ import { json } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 
 import { PhoneNumber } from '~/components/phone-number';
-import { getUserService } from '~/services/user-service.server';
-import { getEnv } from '~/utils/env.server';
+import { userService } from '~/services/user-service.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const env = getEnv();
-  const { getUserId, getUserInfo } = getUserService({ env });
-  const userId = await getUserId();
-  return json({
-    userInfo: await getUserInfo(userId),
-  });
+  const userId = await userService.getUserId();
+  const userInfo = await userService.getUserInfo(userId);
+
+  return json({ userInfo });
 }
 
 export default function UpdatePhoneNumberSuccess() {
