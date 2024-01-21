@@ -21,28 +21,21 @@ import { type SetOptions, createClient } from 'redis';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('redis-service.server');
-
-/**
- * Singleton redis client instance; lazy initialized as needed.
- */
-let redisClient: ReturnType<typeof createClient> | undefined = undefined;
-
-export function getRedisService() {
+function createRedisService() {
+  const log = getLogger('redis-service.server');
   const { REDIS_URL, REDIS_USERNAME, REDIS_PASSWORD } = getEnv();
 
-  function createRedisClient(url: string, username?: string, password?: string) {
-    log.info(`Creating new Redis client; url=[${url}]`);
-    return createClient({ url, username, password })
-      .on('connect', () => log.info(`Redis client initiating connection to [${url}]`))
-      .on('ready', () => log.info('Redis client is ready to use'))
-      .on('reconnecting', () => log.info(`Redis client is reconnecting to [${url}]`))
-      .on('error', (error: Error) => log.error(`Redis client error connecting to [${url}]: ${error.message}`))
-      .connect();
-  }
+  // singleton redis client instance; lazy initialized as needed
+  let redisClient: ReturnType<typeof createClient> | undefined = undefined;
 
   async function getRedisClient() {
-    return (redisClient ??= await createRedisClient(REDIS_URL, REDIS_USERNAME, REDIS_PASSWORD));
+    log.info(`Creating new Redis client; url=[${REDIS_URL}]`);
+    return (redisClient ??= await createClient({ url: REDIS_URL, username: REDIS_USERNAME, password: REDIS_PASSWORD })
+      .on('connect', () => log.info(`Redis client initiating connection to [${REDIS_URL}]`))
+      .on('ready', () => log.info('Redis client is ready to use'))
+      .on('reconnecting', () => log.info(`Redis client is reconnecting to [${REDIS_URL}]`))
+      .on('error', (error: Error) => log.error(`Redis client error connecting to [${REDIS_URL}]: ${error.message}`))
+      .connect());
   }
 
   return {
@@ -70,3 +63,5 @@ export function getRedisService() {
     },
   };
 }
+
+export const redisService = createRedisService();
