@@ -14,7 +14,7 @@ export type LanguageSwitcherProps = Omit<LinkProps, 'to' | 'reloadDocument' | 'o
  * (ie: 'en' → 'fr'; 'fr' → 'en')
  */
 export function LanguageSwitcher({ children, ...props }: LanguageSwitcherProps) {
-  const { i18n } = useTranslation();
+  const { i18n } = useTranslation(['gcweb']);
   const [currentSearchParams] = useSearchParams();
 
   const { LANG_QUERY_PARAM: langParam } = getClientEnv();
