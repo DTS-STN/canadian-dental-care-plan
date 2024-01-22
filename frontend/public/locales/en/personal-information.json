@@ -22,8 +22,8 @@
     },
     "on-file": "We have the following preferred language for you on file.",
     "id": "ID",
-    "nameEn": "Name in English",
-    "nameFr": "Name in French",
+    "nameEn": "English",
+    "nameFr": "French",
     "language": "Language"
   },
   "edit": {
