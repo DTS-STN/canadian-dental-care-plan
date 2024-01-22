@@ -28,18 +28,18 @@ export const InputField = (props: InputFieldProps) => {
   }
 
   return (
-    <div id={inputWrapperId} className="form-group" data-testid="input-field">
-      <InputLabel id={inputLabelId} htmlFor={id} required={required} errorMessage={errorMessage}>
+    <div id={inputWrapperId} data-testid={inputWrapperId} className="form-group">
+      <InputLabel id={inputLabelId} data-testid={inputLabelId} htmlFor={id} required={required} errorMessage={errorMessage}>
         {label}
       </InputLabel>
       {helpMessage && (
-        <div className="mb-1.5 max-w-prose text-base text-gray-600" id={inputHelpMessageId}>
+        <div className="mb-1.5 max-w-prose text-base text-gray-600" id={inputHelpMessageId} data-testid={inputHelpMessageId}>
           {helpMessage}
         </div>
       )}
-      <input aria-describedby={getAriaDescribedby()} aria-invalid={!!errorMessage} aria-labelledby={inputLabelId} aria-required={required} className={clsx('form-control', className)} id={id} {...restInputProps} />
+      <input aria-describedby={getAriaDescribedby()} aria-invalid={!!errorMessage} aria-labelledby={inputLabelId} aria-required={required} className={clsx('form-control', className)} id={id} data-testid={id} {...restInputProps} />
       {helpMessageSecondary && (
-        <div className="mt-1.5 max-w-prose text-base text-gray-600" id={inputHelpMessageSecondaryId}>
+        <div className="mt-1.5 max-w-prose text-base text-gray-600" id={inputHelpMessageSecondaryId} data-testid={inputHelpMessageId}>
           {helpMessageSecondary}
         </div>
       )}
