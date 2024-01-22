@@ -1,5 +1,19 @@
+#
+# A Docker Compose file runs two services: CDCP and Redis.
+#
 version: '3'
 services:
+  # Start the CDCP application on port 3000.
+  cdcp:
+    image: canadian-dental-care-plan
+    ports:
+      - 3000:3000
+    environment:
+      - LOG_LEVEL=debug
+      - MOCKS_ENABLED=true
+      - SESSION_STORAGE_TYPE=redis
+      - REDIS_URL=redis://redis
+      - REDIS_PASSWORD=password
   # Start a password-protected Redis instance on the default port.
   # @see https://redis.io/docs/management/security/#authentication
   redis:
