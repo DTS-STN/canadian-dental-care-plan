@@ -1,0 +1,15 @@
+{
+  "index": {
+    "on-file": "We have the following information for you on file.",
+    "first-name": "First name",
+    "last-name": "Last name",
+    "phone-number": "Phone number",
+    "home-address": "Home address",
+    "mailing-address":"Mailing address",
+    "preferred-language": "Preferred language"
+  },
+  "preferred-language": {
+    "on-file": "We have the following preferred language for you on file.",
+    "language": "Language"
+  }
+}

@@ -18,5 +18,13 @@
       "home": "Accueil",
       "personal-information": "(FR) Personal information"
     }
+  },
+  "preferred-language": {
+    "page-title": "(FR) Preferred language",
+    "breadcrumbs": {
+      "home": "Accueil",
+      "personal-information":"(FR) Personal information",
+      "preferred-language": "(FR) Preferred language"
+    }
   }
 }

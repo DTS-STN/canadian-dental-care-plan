@@ -18,5 +18,13 @@
       "home": "Home",
       "personal-information": "Personal information"
     }
+  },
+  "preferred-language": {
+    "page-title": "Preferred language",
+    "breadcrumbs": {
+      "home": "Home",
+      "personal-information":"Personal information",
+      "preferred-language": "Preferred language"
+    }
   }
 }

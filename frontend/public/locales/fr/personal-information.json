@@ -1,0 +1,15 @@
+{
+  "index": {
+    "on-file": "(FR) We have the following information for you on file.",
+    "first-name": "(FR) First name",
+    "last-name": "(FR) Last name",
+    "phone-number": "(FR) Phone number",
+    "home-address": "(FR) Home address",
+    "mailing-address":"(FR) Mailing address",
+    "preferred-language": "(FR) Preferred language"
+  },
+  "preferred-language": {
+    "on-file": "(FR) We have the following preferred language for you on file.",
+    "language": "(FR) Language"
+  }
+}
