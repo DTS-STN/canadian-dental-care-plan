@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs, json } from '@remix-run/node';
+import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, Link, useLoaderData } from '@remix-run/react';
 
 import { sessionService } from '~/services/session-service.server';
@@ -10,6 +10,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const session = await sessionService.getSession(request.headers.get('Cookie'));
 
   return json({ userInfo, newAddress: await session.get('newAddress') });
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const userId = await userService.getUserId();
+  const session = await sessionService.getSession(request.headers.get('Cookie'));
+
+  await userService.updateUserInfo(userId, session.get('newAddress'));
+
+  return redirect('/personal-information/address/success');
 }
 
 export default function ConfirmAddress() {
