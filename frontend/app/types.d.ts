@@ -3,6 +3,8 @@ import { type ParseKeys } from 'i18next';
 import type common from '../public/locales/en/common.json';
 import type gcweb from '../public/locales/en/gcweb.json';
 import type personalInformation from '../public/locales/en/personal-information.json';
+import type updatePhoneNumber from '../public/locales/en/update-phone-number.json';
+import type updateInfo from '../public/locales/en/update-info.json';
 import { type PublicEnv } from '~/utils/env.server';
 import { type Breadcrumbs, type I18nNamespaces, type PageIdentifier, type PageTitleI18nKey } from '~/utils/route-utils';
 
@@ -95,6 +97,8 @@ declare module 'i18next' {
       common: typeof common;
       gcweb: typeof gcweb;
       'personal-information': typeof personalInformation;
+      'update-phone-number': typeof updatePhoneNumber;
+      'update-info': typeof updateInfo;
     };
   }
 }

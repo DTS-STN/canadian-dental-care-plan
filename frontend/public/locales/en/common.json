@@ -3,7 +3,8 @@
     "page-title": "Home",
     "breadcrumbs": {
       "home": "Home"
-    }
+    },
+    "welcome": "Welcome"
   },
   "about": {
     "page-title": "About us",
@@ -14,6 +15,7 @@
   },
   "personal-information": {
     "page-title": "Personal information",
+    "update": "Update personal information",
     "breadcrumbs": {
       "home": "Home",
       "personal-information": "Personal information"

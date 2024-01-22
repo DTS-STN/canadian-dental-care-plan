@@ -4,6 +4,10 @@ import { Link, useLoaderData } from '@remix-run/react';
 
 import { PhoneNumber } from '~/components/phone-number';
 import { userService } from '~/services/user-service.server';
+import { useTranslation } from 'react-i18next';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+
+const i18nNamespaces = getTypedI18nNamespaces('update-phone-number');
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
@@ -14,19 +18,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function UpdatePhoneNumberSuccess() {
   const loaderData = useLoaderData<typeof loader>();
+  const { t } = useTranslation(i18nNamespaces)
 
   return (
     <>
       <h1 id="wb-cont" property="name">
-        Phone number saved sucecssfully
+      {t('update-phone-number:success.title')}
       </h1>
-      <p>Phone number has been successfully updated</p>
+      <p>{t('update-phone-number:success.success-message')}</p>
       <div className="form-group">
         <PhoneNumber phoneNumber={loaderData.userInfo?.phoneNumber} />
       </div>
       <div className="form-group">
         <Link id="successPhoneButton" to="/update-info" className="btn btn-primary btn-lg">
-          Return to personal info
+        {t('update-phone-number:success.return')}
         </Link>
       </div>
     </>

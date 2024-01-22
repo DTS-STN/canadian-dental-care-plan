@@ -3,7 +3,8 @@
     "page-title": "Accueil",
     "breadcrumbs": {
       "home": "Accueil"
-    }
+    },
+    "welcome": "Bienvenue"
   },
   "about": {
     "page-title": "Qui sommes-nous?",
@@ -14,6 +15,7 @@
   },
   "personal-information": {
     "page-title": "(FR) Personal information",
+    "update": "(FR) Update personal information",
     "breadcrumbs": {
       "home": "Accueil",
       "personal-information": "(FR) Personal information"

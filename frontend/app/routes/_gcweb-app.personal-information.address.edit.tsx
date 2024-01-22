@@ -6,6 +6,10 @@ import { z } from 'zod';
 import { InputField } from '~/components/input-field';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
+import { useTranslation } from 'react-i18next';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+
+const i18nNamespaces = getTypedI18nNamespaces('gcweb', 'personal-information');
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
@@ -47,7 +51,7 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function ChangeAddress() {
   const actionData = useActionData<typeof action>();
   const { userInfo } = useLoaderData<typeof loader>();
-
+  const { t } = useTranslation(i18nNamespaces);
   const defaultValues = {
     homeAddress: actionData?.formData.homeAddress ?? userInfo.homeAddress ?? '',
     mailingAddress: actionData?.formData.mailingAddress ?? userInfo.mailingAddress ?? '',
@@ -61,21 +65,21 @@ export default function ChangeAddress() {
   return (
     <>
       <h1 id="wb-cont" property="name">
-        Change address
+        {t('personal-information:edit.change-address')}
       </h1>
       <Form method="post">
-        <InputField id="home-address" label="Home address" name="homeAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.homeAddress} errorMessage={errorMessages.homeAddress} />
-        <InputField id="mailing-address" label="Mailing address" name="mailingAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.mailingAddress} errorMessage={errorMessages.mailingAddress} />
+        <InputField id="home-address" label={`${t('personal-information:index.home-address')}`} name="homeAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.homeAddress} errorMessage={errorMessages.homeAddress} />
+        <InputField id="mailing-address" label={`${t('personal-information:index.mailing-address')}`} name="mailingAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.mailingAddress} errorMessage={errorMessages.mailingAddress} />
         <div className="form-group">
           <ul className="list-inline lst-spcd">
             <li>
               <button id="change-button" className="btn btn-primary btn-lg">
-                Change
+              {t('gcweb:input-label.button.change')}
               </button>
             </li>
             <li>
               <Link id="cancel-button" to="/personal-information" className="btn btn-default btn-lg">
-                Cancel
+              {t('gcweb:input-label.button.cancel')}
               </Link>
             </li>
           </ul>

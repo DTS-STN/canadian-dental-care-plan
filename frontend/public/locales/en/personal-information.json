@@ -11,5 +11,14 @@
   "preferred-language": {
     "on-file": "We have the following preferred language for you on file.",
     "language": "Language"
-  }
+  },
+  "edit": {
+    "change-address": "Change address"
+  },
+  "confirm": {
+    "changed-address": "Change of Home Address",
+    "changed-mailing": "Change of Mailing Address",
+    "from": "From:",
+    "to": "To:"
+  }  
 }

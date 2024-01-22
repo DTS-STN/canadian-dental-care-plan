@@ -36,23 +36,23 @@ export default function Index() {
         {t('common:index.page-title')}
       </h1>
       <p>
-        Welcome {userInfo.firstName} {userInfo.lastName}
+      {t('common:index.welcome')} {userInfo.firstName} {userInfo.lastName}
       </p>
       <ul>
         <li>
-          <Link to="/personal-information">Personal information</Link>
+          <Link to="/personal-information">{t('common:personal-information.page-title')}</Link>
         </li>
         <li>
-          <Link to="/update-info">Update personal info</Link>
+          <Link to="/update-info">{t('common:personal-information.update')}</Link>
         </li>
         <li>
-          <Link to="/about">About</Link>
+          <Link to="/about">{t('common:about.page-title')}</Link>
         </li>
         <li>
-          <Link to="/not-found">404 not found page</Link>
+          <Link to="/not-found">{t('gcweb:not-found.page-title')}</Link>
         </li>
         <li>
-          <Link to="/error">500 internal server error page</Link>
+          <Link to="/error">{t('gcweb:server-error.page-title')}</Link>
         </li>
       </ul>
     </>

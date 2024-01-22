@@ -5,6 +5,10 @@ import { z } from 'zod';
 
 import { PhoneNumber } from '~/components/phone-number';
 import { userService } from '~/services/user-service.server';
+import { useTranslation } from 'react-i18next';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+
+const i18nNamespaces = getTypedI18nNamespaces('update-info', 'gcweb');
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
@@ -44,21 +48,21 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function UpdateInfo() {
   const actionData = useActionData<typeof action>();
   const loaderData = useLoaderData<typeof loader>();
-
+  const { t } = useTranslation(i18nNamespaces);
   const fieldErrors = actionData?.errors;
 
   return (
     <>
       <h1 id="wb-cont" property="name">
-        Update personal info
+      {t('update-info:update.title')}
       </h1>
-      <p>Please update your info below.</p>
+      <p>{t('update-info:update.update-message')}</p>
       <div className="form-group">
         <PhoneNumber phoneNumber={actionData?.formData.phoneNumber ?? loaderData.userInfo.phoneNumber} fieldErrors={fieldErrors?.phoneNumber?._errors} />
       </div>
       <div className="form-group">
         <Link id="editPhoneButton" to="/update-phone-number" className="btn btn-primary btn-lg">
-          Edit
+        {t('gcweb:input-label.button.edit')}
         </Link>
       </div>
     </>

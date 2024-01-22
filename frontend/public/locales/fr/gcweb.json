@@ -47,6 +47,14 @@
     "option-02": "Retournez à la <home>page d'accueil</home>"
   },
   "input-label": {
-    "required": "requis"
+    "error": "Erreur",
+    "required": "requis",
+    "button": {
+      "submit": "Soumettre",
+      "cancel": "Annuler",
+      "change": "Changer",
+      "confirm": "Confirmer",
+      "edit": "Modifier"
+    }
   }
 }

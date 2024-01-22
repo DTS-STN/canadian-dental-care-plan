@@ -5,6 +5,10 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 import { PhoneNumber } from '~/components/phone-number';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
+import { useTranslation } from 'react-i18next';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+
+const i18nNamespaces = getTypedI18nNamespaces('update-phone-number', 'gcweb');
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
@@ -22,21 +26,21 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function UpdatePhoneNumberConfirm() {
   const loaderData = useLoaderData<typeof loader>();
-
+  const { t } = useTranslation(i18nNamespaces);
   return (
     <>
       <h1 id="wb-cont" property="name">
-        Confirm phone number
+      {t('update-phone-number:confirm.title')}
       </h1>
-      <p>Please confirm the phone number change below.</p>
+      <p>{t('update-phone-number:confirm.confirm-message')}</p>
       <Form method="post">
         <div className="form-group">
           <PhoneNumber phoneNumber={loaderData.newPhoneNumber ?? ''} previousPhoneNumber={loaderData.userInfo?.phoneNumber} />
         </div>
         <div className="form-group">
-          <button className="btn btn-primary btn-lg mrgn-rght-sm">Confirm</button>
+          <button className="btn btn-primary btn-lg mrgn-rght-sm">{t('gcweb:input-label.button.confirm')}</button>
           <Link id="cancelButton" to="/update-info" className="btn btn-default btn-lg">
-            Cancel
+          {t('gcweb:input-label.button.cancel')}
           </Link>
         </div>
       </Form>

@@ -3,6 +3,10 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
+import { useTranslation } from 'react-i18next';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+
+const i18nNamespaces = getTypedI18nNamespaces('common', 'gcweb', 'personal-information');
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
@@ -14,20 +18,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function ConfirmAddress() {
   const loaderData = useLoaderData<typeof loader>();
-
+  const { t } = useTranslation(i18nNamespaces);
   return (
     <>
       <h1 id="wb-cont" property="name">
-        Change address
+      {t('personal-information:edit.change-address')}
       </h1>
-      <h2 className="h3">Confirm</h2>
+      <h2 className="h3">{t('gcweb:input-label.button.confirm')}</h2>
       <Form method="post">
-        <h3>Change of Home Address</h3>
+        <h3>{t('personal-information:confirm.changed-address')}</h3>
         <div className="row mrgn-tp-sm">
           <div className="col-sm-6">
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h4 className="panel-title">From:</h4>
+                <h4 className="panel-title">{t('personal-information:confirm.from')}</h4>
               </header>
               <div className="panel-body">
                 <p>{loaderData.userInfo?.homeAddress}</p>
@@ -38,7 +42,7 @@ export default function ConfirmAddress() {
           <div className="col-sm-6">
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h4 className="panel-title">To:</h4>
+                <h4 className="panel-title">{t('personal-information:confirm.to')}</h4>
               </header>
               <div className="panel-body">
                 <p>{loaderData.newAddress?.homeAddress}</p>
@@ -47,12 +51,12 @@ export default function ConfirmAddress() {
           </div>
         </div>
 
-        <h3>Change of Mailing Address</h3>
+        <h3>{t('personal-information:confirm.changed-mailing')}</h3>
         <div className="row mrgn-tp-sm">
           <div className="col-sm-6">
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h4 className="panel-title">From:</h4>
+                <h4 className="panel-title">{t('personal-information:confirm.from')}</h4>
               </header>
               <div className="panel-body">
                 <p>{loaderData.userInfo?.mailingAddress}</p>
@@ -63,7 +67,7 @@ export default function ConfirmAddress() {
           <div className="col-sm-6">
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h4 className="panel-title">To:</h4>
+                <h4 className="panel-title">{t('personal-information:confirm.to')}</h4>
               </header>
               <div className="panel-body">
                 <p>{loaderData.newAddress?.mailingAddress}</p>
@@ -76,12 +80,12 @@ export default function ConfirmAddress() {
           <ul className="list-inline lst-spcd">
             <li>
               <button id="confirm-button" className="btn btn-primary btn-lg">
-                Confirm
+              {t('gcweb:input-label.button.confirm')}
               </button>
             </li>
             <li>
               <Link id="cancel-button" to="/personal-information/address/edit" className="btn btn-default btn-lg">
-                Cancel
+              {t('gcweb:input-label.button.cancel')}
               </Link>
             </li>
           </ul>

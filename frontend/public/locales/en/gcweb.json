@@ -47,6 +47,14 @@
     "option-02": "Return to the <home>home page</home>"
   },
   "input-label": {
-    "required": "required"
+    "error": "Error",
+    "required": "required",
+    "button": {
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "change": "Change",
+      "confirm": "Confirm",
+      "edit": "Edit"
+    }
   }
 }

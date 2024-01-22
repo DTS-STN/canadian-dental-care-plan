@@ -1,0 +1,10 @@
+{
+  "success": {
+    "title": "Success",
+    "success-message":"You have successfully updated your info."
+  },
+  "update": {
+    "title": "Update personal information",
+    "update-message":"Please update your info below."
+  }
+}

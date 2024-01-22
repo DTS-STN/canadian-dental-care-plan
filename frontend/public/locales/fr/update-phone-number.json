@@ -1,0 +1,18 @@
+{
+  "page-title": "(FR) Update phone number",
+  "update-message":"(FR) Please update your phone number below.",
+  "component": {
+    "previous":"(FR) Previous phone number",
+    "newPhone":"(FR) New phone number",
+    "phone":"(FR) Phone number"
+  },
+    "confirm": {
+      "title":"(FR) Confirm phone number",
+      "confirm-message": "(FR) Please confirm the phone number change below."
+    },
+    "success": {
+      "title": "(FR) Phone number saved successfully",
+      "success-message": "(FR) Phone number has been successfully updated.",
+      "return": "(FR) Return to personal information"
+    }
+}
