@@ -22,4 +22,7 @@
     "editor.formatOnSave": true,
     "editor.tabSize": 2
   },
+  "tailwindCSS.experimental.classRegex": [
+    ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ]
 }
