@@ -20,14 +20,14 @@ export default function ConfirmAddress() {
       <h1 id="wb-cont" property="name">
         Change address
       </h1>
-      <p className="h3">Confirm</p>
+      <h2 className="h3">Confirm</h2>
       <Form method="post">
-        <strong>Change of Home Address</strong>
+        <h3>Change of Home Address</h3>
         <div className="row mrgn-tp-sm">
           <div className="col-sm-6">
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h3 className="panel-title">From:</h3>
+                <h4 className="panel-title">From:</h4>
               </header>
               <div className="panel-body">
                 <p>{loaderData.userInfo?.homeAddress}</p>
@@ -38,7 +38,7 @@ export default function ConfirmAddress() {
           <div className="col-sm-6">
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h3 className="panel-title">To:</h3>
+                <h4 className="panel-title">To:</h4>
               </header>
               <div className="panel-body">
                 <p>{loaderData.newAddress?.homeAddress}</p>
@@ -47,12 +47,12 @@ export default function ConfirmAddress() {
           </div>
         </div>
 
-        <strong>Change of Mailing Address</strong>
+        <h3>Change of Mailing Address</h3>
         <div className="row mrgn-tp-sm">
           <div className="col-sm-6">
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h3 className="panel-title">From:</h3>
+                <h4 className="panel-title">From:</h4>
               </header>
               <div className="panel-body">
                 <p>{loaderData.userInfo?.mailingAddress}</p>
@@ -63,7 +63,7 @@ export default function ConfirmAddress() {
           <div className="col-sm-6">
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h3 className="panel-title">To:</h3>
+                <h4 className="panel-title">To:</h4>
               </header>
               <div className="panel-body">
                 <p>{loaderData.newAddress?.mailingAddress}</p>
