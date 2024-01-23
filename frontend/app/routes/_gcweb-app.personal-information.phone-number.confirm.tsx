@@ -4,7 +4,6 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import { PhoneNumber } from '~/components/phone-number';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -22,10 +21,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   //TODO: API call to POST phone number
 
-  return redirect('/update-phone-number-success');
+  return redirect('/personal-information/phone-number/success');
 }
 
-export default function UpdatePhoneNumberConfirm() {
+export default function PhoneNumberConfirm() {
   const loaderData = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
   return (
@@ -36,7 +35,12 @@ export default function UpdatePhoneNumberConfirm() {
       <p>{t('update-phone-number:confirm.confirm-message')}</p>
       <Form method="post">
         <div className="form-group">
-          <PhoneNumber phoneNumber={loaderData.newPhoneNumber ?? ''} previousPhoneNumber={loaderData.userInfo?.phoneNumber} />
+          <dl>
+            <dt>{t('update-phone-number:component.previous')}</dt>
+            <dd>{loaderData.userInfo?.phoneNumber}</dd>
+            <dt>{t('update-phone-number:component.phone')}</dt>
+            <dd>{loaderData.newPhoneNumber ?? ''}</dd>
+          </dl>
         </div>
         <div className="form-group">
           <button className="btn btn-primary btn-lg mrgn-rght-sm">{t('update-phone-number:confirm.button.confirm')}</button>

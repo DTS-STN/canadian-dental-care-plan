@@ -1,16 +1,15 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
-import { isValidPhoneNumber } from 'libphonenumber-js';
 
+import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import { PhoneNumber } from '~/components/phone-number';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('update-phone-number');
+const i18nNamespaces = getTypedI18nNamespaces('update-phone-number', 'gcweb');
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
@@ -20,7 +19,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-
   const formDataSchema = z.object({
     phoneNumber: z.string().refine((val) => isValidPhoneNumber(val, 'CA'), { message: 'Invalid phone number' }),
   });
@@ -35,17 +33,17 @@ export async function action({ request }: ActionFunctionArgs) {
     });
   }
 
-  const session = await sessionService.getSession(request.headers.get('Cookie'));  
-  session.set('newPhoneNumber', parsedDataResult.data.phoneNumber)
+  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  session.set('newPhoneNumber', parsedDataResult.data.phoneNumber);
 
-  return redirect('/update-phone-number-confirm', {
+  return redirect('/personal-information/phone-number/confirm', {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),
     },
   });
 }
 
-export default function UpdateInfo() {
+export default function PhoneNumberEdit() {
   const actionData = useActionData<typeof action>();
   const loaderData = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
@@ -59,7 +57,20 @@ export default function UpdateInfo() {
       <p>{t('update-phone-number:update-message')}</p>
       <Form method="post">
         <div className="form-group">
-          <PhoneNumber editMode phoneNumber={actionData?.formData.phoneNumber ?? loaderData.userInfo?.phoneNumber} fieldErrors={fieldErrors?.phoneNumber?._errors} />
+          <label htmlFor="phoneNumber" className={'required'}>
+            <span className="field-name">{t('update-phone-number:component.phone')}</span>
+            <strong className="required mrgn-lft-sm">({t('gcweb:input-label.required')})</strong>
+            {fieldErrors?.phoneNumber?._errors &&
+              fieldErrors?.phoneNumber?._errors.map((error, idx) => (
+                <span key={idx} className="label label-danger wb-server-error">
+                  <strong>
+                    <span className="prefix">{t('update-phone-number:component.error')}</span>
+                    <span className="mrgn-lft-sm">{error}</span>
+                  </strong>
+                </span>
+              ))}
+          </label>
+          <input id="phoneNumber" name="phoneNumber" className="form-control" maxLength={32} defaultValue={actionData?.formData.phoneNumber ?? loaderData.userInfo?.phoneNumber} data-testid="phoneNumber" />
         </div>
         <div className="form-group">
           <button className="btn btn-primary btn-lg mrgn-rght-sm">{t('update-phone-number:button.save')}</button>

@@ -6,6 +6,7 @@
   "update": {
     "title": "(FR) Update personal information",
     "update-message": "(FR) Please update your info below.",
+    "phone-number": "(FR) Phone number",
     "button": {
       "edit": "Modifier"
     }
