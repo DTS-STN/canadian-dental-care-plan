@@ -1,0 +1,23 @@
+{
+  "page-title": "Home",
+  "welcome": "Welcome {{firstName}} {{lastName}}",
+  "breadcrumbs": {
+    "home": "Home"
+  },
+  "personal-info": "Personal information",
+  "personal-info-desc": "In this section, you can see your personal information.",
+  "update-info": "Update personal information",
+  "update-info-desc": "In this section, you can your personal information.",
+  "upload": "Upload document for CDCP",
+  "upload-desc": "In this section, you can your upload documents.",
+  "view-letters": "View my letters",
+  "view-letters-desc": "In this section, you can see any letters that were sent for you.",
+  "view-cdcp": "View my CDCP messages",
+  "view-cdcp-desc": "In this section, you can see any messages that were sent to you.",
+  "subscribe": "Subscribe to CDCP email alerts",
+  "subscribe-desc": "In this section, you can subscribe to the email alerts for CDCO, Any time you have a new message, you will be alerted.",
+  "legacy-links": "Legacy Links",
+  "about": "About us",
+  "not-found": "(404) Not Found",
+  "server-error": "(500) Server Error"
+}

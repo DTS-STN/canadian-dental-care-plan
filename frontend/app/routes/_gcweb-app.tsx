@@ -86,7 +86,7 @@ function PageHeader() {
                 <li>
                   <LanguageSwitcher>
                     <span className="hidden-xs">{t('gcweb:language-switcher.alt-lang')}</span>
-                    <abbr title="Français" className="visible-xs h3 mrgn-tp-sm mrgn-bttm-0 text-uppercase">
+                    <abbr title={t('gcweb:language-switcher.alt-lang')} className="visible-xs h3 mrgn-tp-sm mrgn-bttm-0 text-uppercase">
                       {t('gcweb:language-switcher.alt-lang-abbr')}
                     </abbr>
                   </LanguageSwitcher>

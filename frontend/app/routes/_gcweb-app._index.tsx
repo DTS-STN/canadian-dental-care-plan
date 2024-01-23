@@ -3,18 +3,17 @@ import { Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
+import { LandingPageLink } from '~/components/landing-page-link';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
-import { LandingPageLink } from '~/components/landing-page-link';
-
-const i18nNamespaces = getTypedI18nNamespaces('common', 'gcweb');
+const i18nNamespaces = getTypedI18nNamespaces('index');
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'common:index.breadcrumbs.home' }],
+  breadcrumbs: [{ labelI18nKey: 'index:breadcrumbs.home' }],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0001',
-  pageTitleI18nKey: 'common:index.page-title',
+  pageTitleI18nKey: 'index:page-title',
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -31,48 +30,42 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Index() {
   const { userInfo } = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
-
   return (
     <>
       <h1 id="wb-cont" property="name">
-        {t('common:index.page-title')}
+        {t('index:page-title')}
       </h1>
-      <p>
-        Welcome {userInfo.firstName} {userInfo.lastName}
-      </p>
+      <p>{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.firstName })}</p>
       <div className="grid gap-4 md:grid-cols-2">
-        <LandingPageLink title="Update Your Information" description="In this section, you can your personal information." to="/update-info">
-          Update your information
+        <LandingPageLink title={t('index:update-info')} description={t('index:update-info-desc')} to="/update-info">
+          {t('index:update-info')}
         </LandingPageLink>
-        <LandingPageLink title="Upload Document" description="In this section, you can your upload documents." to="/upload-document">
-          Upload document for CDCP
+        <LandingPageLink title={t('index:upload')} description={t('index:upload-desc')} to="/upload-document">
+          {t('index:upload')}
         </LandingPageLink>
-        <LandingPageLink title="Personal Information" description="In this section, you can see your personal information." to="/personal-information">
-          Personal information
+        <LandingPageLink title={t('index:personal-info')} description={t('index:personal-info-desc')} to="/personal-information">
+          {t('index:personal-info')}
         </LandingPageLink>
-        <LandingPageLink title="View my Letters" description="In this section, you can see any letters that were sent for you." to="/view-letters">
-          View My Letters
+        <LandingPageLink title={t('index:view-letters')} description={t('index:view-letters-desc')} to="/view-letters">
+          {t('index:view-letters')}
         </LandingPageLink>
-        <LandingPageLink title="View my messages" description="In this section, you can see any messages that were sent to you." to="/messages">
-          View My CDCP Messages
+        <LandingPageLink title={t('index:view-cdcp')} description={t('index:view-cdcp-desc')} to="/messages">
+          {t('index:view-cdcp')}
         </LandingPageLink>
-        <LandingPageLink title="CDCP alerts" description="In this section, you can subscribe to the email alerts for CDCO, Any time you have a new message, you will be alerted." to="/alert-me">
-          Subscribe to CDCP email alerts
+        <LandingPageLink title={t('index:subscribe')} description={t('index:subscribe-desc')} to="/alert-me">
+          {t('index:subscribe')}
         </LandingPageLink>
       </div>
-      <h2>LEGACY LINKS</h2>
+      <h2>{t('index:legacy-links')}</h2>
       <ul className="list-unstyled">
         <li>
-          <Link to="/personal-information">Personal information</Link>
+          <Link to="/about">{t('index:about')}</Link>
         </li>
         <li>
-          <Link to="/about">About</Link>
+          <Link to="/not-found">{t('index:not-found')}</Link>
         </li>
         <li>
-          <Link to="/not-found">404 not found page</Link>
-        </li>
-        <li>
-          <Link to="/error">500 internal server error page</Link>
+          <Link to="/error">{t('index:server-error')}</Link>
         </li>
       </ul>
     </>

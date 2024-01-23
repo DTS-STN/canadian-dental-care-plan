@@ -2,13 +2,13 @@ import { useTranslation } from 'react-i18next';
 
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('common');
+const i18nNamespaces = getTypedI18nNamespaces('about');
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'common:about.breadcrumbs.home', to: '/' }, { labelI18nKey: 'common:about.breadcrumbs.about' }],
+  breadcrumbs: [{ labelI18nKey: 'about:breadcrumbs.home', to: '/' }, { labelI18nKey: 'about:breadcrumbs.about' }],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0002',
-  pageTitleI18nKey: 'common:about.page-title',
+  pageTitleI18nKey: 'about:page-title',
 } as const satisfies RouteHandleData;
 
 export default function About() {
@@ -17,7 +17,7 @@ export default function About() {
   return (
     <>
       <h1 id="wb-cont" property="name">
-        {t('common:about.page-title')}
+        {t('about:page-title')}
       </h1>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu tempor est. Maecenas vitae urna quis mauris tristique dapibus et nec diam. Morbi vulputate sollicitudin justo ut tempor. Aliquam aliquam condimentum dolor ut tincidunt. Duis at

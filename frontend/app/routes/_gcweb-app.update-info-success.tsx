@@ -1,10 +1,16 @@
+import { useTranslation } from 'react-i18next';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+
+const i18nNamespaces = getTypedI18nNamespaces('update-info');
+
 export default function UpdateInfoSuccess() {
+  const { t } = useTranslation(i18nNamespaces);
   return (
     <>
       <h1 id="wb-cont" property="name">
-        Success
+      {t('update-info:success.title')}
       </h1>
-      <p>You have successfully updated your info.</p>
+      <p>{t('update-info:success.success-message')}</p>
     </>
   );
 }

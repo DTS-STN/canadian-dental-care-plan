@@ -1,11 +1,15 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
-import { isValidPhoneNumber } from 'libphonenumber-js';
 
+import { isValidPhoneNumber } from 'libphonenumber-js';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+
+const i18nNamespaces = getTypedI18nNamespaces('update-phone-number', 'gcweb');
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
@@ -15,7 +19,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-
   const formDataSchema = z.object({
     phoneNumber: z.string().refine((val) => isValidPhoneNumber(val, 'CA'), { message: 'Invalid phone number' }),
   });
@@ -30,8 +33,8 @@ export async function action({ request }: ActionFunctionArgs) {
     });
   }
 
-  const session = await sessionService.getSession(request.headers.get('Cookie'));  
-  session.set('newPhoneNumber', parsedDataResult.data.phoneNumber)
+  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  session.set('newPhoneNumber', parsedDataResult.data.phoneNumber);
 
   return redirect('/personal-information/phone-number/confirm', {
     headers: {
@@ -43,24 +46,25 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function PhoneNumberEdit() {
   const actionData = useActionData<typeof action>();
   const loaderData = useLoaderData<typeof loader>();
+  const { t } = useTranslation(i18nNamespaces);
   const fieldErrors = actionData?.errors;
 
   return (
     <>
       <h1 id="wb-cont" property="name">
-        Update phone number
+        {t('update-phone-number:page-title')}
       </h1>
-      <p>Please update your phone number below.</p>
+      <p>{t('update-phone-number:update-message')}</p>
       <Form method="post">
         <div className="form-group">
           <label htmlFor="phoneNumber" className={'required'}>
-            <span className="field-name">Phone number</span>
-            <strong className="required mrgn-lft-sm">(required)</strong>
+            <span className="field-name">{t('update-phone-number:component.phone')}</span>
+            <strong className="required mrgn-lft-sm">({t('gcweb:input-label.required')})</strong>
             {fieldErrors?.phoneNumber?._errors &&
               fieldErrors?.phoneNumber?._errors.map((error, idx) => (
                 <span key={idx} className="label label-danger wb-server-error">
                   <strong>
-                    <span className="prefix">Error:</span>
+                    <span className="prefix">{t('update-phone-number:component.error')}</span>
                     <span className="mrgn-lft-sm">{error}</span>
                   </strong>
                 </span>
@@ -69,9 +73,9 @@ export default function PhoneNumberEdit() {
           <input id="phoneNumber" name="phoneNumber" className="form-control" maxLength={32} defaultValue={actionData?.formData.phoneNumber ?? loaderData.userInfo?.phoneNumber} data-testid="phoneNumber" />
         </div>
         <div className="form-group">
-          <button className="btn btn-primary btn-lg mrgn-rght-sm">Save</button>
-          <Link id="cancelButton" to="/personal-information" className="btn btn-default btn-lg">
-            Cancel
+          <button className="btn btn-primary btn-lg mrgn-rght-sm">{t('update-phone-number:button.save')}</button>
+          <Link id="cancelButton" to="/update-info" className="btn btn-default btn-lg">
+            {t('update-phone-number:button.cancel')}
           </Link>
         </div>
       </Form>
