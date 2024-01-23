@@ -1,8 +1,20 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, Link, useLoaderData } from '@remix-run/react';
 
+import { useTranslation } from 'react-i18next';
+
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+
+const i18nNamespaces = getTypedI18nNamespaces('common', 'personal-information');
+
+export const handle = {
+  breadcrumbs: [{ labelI18nKey: 'common:personal-information.breadcrumbs.home', to: '/' }, { labelI18nKey: 'common:personal-information.page-title', to: '/personal-information' }, { labelI18nKey: 'common:address-change-confirm.page-title' }],
+  i18nNamespaces,
+  pageIdentifier: 'CDCP-0008',
+  pageTitleI18nKey: 'common:address-change-confirm.page-title',
+};
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
@@ -23,13 +35,13 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function ConfirmAddress() {
   const loaderData = useLoaderData<typeof loader>();
+  const { t } = useTranslation(i18nNamespaces);
 
   return (
     <>
       <h1 id="wb-cont" property="name">
-        Change address
+        {t('common:address-change-confirm.page-title')}
       </h1>
-      <h2 className="h3">Confirm</h2>
       <Form method="post">
         <h3>Change of Home Address</h3>
         <div className="row mrgn-tp-sm">

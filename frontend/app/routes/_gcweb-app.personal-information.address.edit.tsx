@@ -1,11 +1,22 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
 
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { InputField } from '~/components/input-field';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+
+const i18nNamespaces = getTypedI18nNamespaces('common', 'personal-information');
+
+export const handle = {
+  breadcrumbs: [{ labelI18nKey: 'common:personal-information.breadcrumbs.home', to: '/' }, { labelI18nKey: 'common:personal-information.page-title', to: '/personal-information' }, { labelI18nKey: 'common:address-change.page-title' }],
+  i18nNamespaces,
+  pageIdentifier: 'CDCP-0007',
+  pageTitleI18nKey: 'common:address-change.page-title',
+} as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
@@ -47,6 +58,7 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function ChangeAddress() {
   const actionData = useActionData<typeof action>();
   const { userInfo } = useLoaderData<typeof loader>();
+  const { t } = useTranslation(i18nNamespaces);
 
   const defaultValues = {
     homeAddress: actionData?.formData.homeAddress ?? userInfo.homeAddress ?? '',
@@ -61,7 +73,7 @@ export default function ChangeAddress() {
   return (
     <>
       <h1 id="wb-cont" property="name">
-        Change address
+        {t('common:address-change.page-title')}
       </h1>
       <Form method="post">
         <InputField id="home-address" label="Home address" name="homeAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.homeAddress} errorMessage={errorMessages.homeAddress} />
