@@ -30,7 +30,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Index() {
   const { userInfo } = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
-
   return (
     <>
       <h1 id="wb-cont" property="name">
