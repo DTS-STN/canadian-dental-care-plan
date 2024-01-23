@@ -23,12 +23,9 @@ spec:
           args:
             - /etc/redis/redis.conf
             - --requirepass $(REDIS_PASSWORD)
-          env:
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: redis-password
-                  key: redis-password.conf
+          envFrom:
+            - secretRef:
+                name: redis
           ports:
             - name: redis
               containerPort: 6379
@@ -40,7 +37,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: redis.conf
+            name: redis
   volumeClaimTemplates:
     - metadata:
         name: data

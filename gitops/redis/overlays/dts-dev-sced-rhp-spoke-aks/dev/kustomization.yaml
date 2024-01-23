@@ -17,11 +17,13 @@ resources:
   - ./stateful-sets.yaml
 
 configMapGenerator:
-  - name: redis.conf
+  - name: redis
     files:
       - ./redis.conf
 
 secretGenerator:
-  - name: redis-password
-    files:
-      - ./redis-password.conf
+  - name: redis
+    envs:
+      - ./redis-secrets.conf
+    options:
+      disableNameSuffixHash: true
