@@ -3,6 +3,7 @@ import { Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
+import { LandingPageLink } from '~/components/landing-page-link';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -36,13 +37,28 @@ export default function Index() {
         {t('index:page-title')}
       </h1>
       <p>{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.firstName })}</p>
-      <ul>
-        <li>
-          <Link to="/personal-information">{t('index:personal-info')}</Link>
-        </li>
-        <li>
-          <Link to="/update-info">{t('index:update-info')}</Link>
-        </li>
+      <div className="grid gap-4 md:grid-cols-2">
+        <LandingPageLink title={t('index:update-info')} description={t('index:update-info-desc')} to="/update-info">
+          {t('index:update-info')}
+        </LandingPageLink>
+        <LandingPageLink title={t('index:upload')} description={t('index:upload-desc')} to="/upload-document">
+          {t('index:upload')}
+        </LandingPageLink>
+        <LandingPageLink title={t('index:personal-info')} description={t('index:personal-info-desc')} to="/personal-information">
+          {t('index:personal-info')}
+        </LandingPageLink>
+        <LandingPageLink title={t('index:view-letters')} description={t('index:view-letters-desc')} to="/view-letters">
+          {t('index:view-letters')}
+        </LandingPageLink>
+        <LandingPageLink title={t('index:view-CDCP')} description={t('index:view-CDCP-desc')} to="/messages">
+          {t('index:view-CDCP')}
+        </LandingPageLink>
+        <LandingPageLink title={t('index:subscribe')} description={t('index:subscribe-desc')} to="/alert-me">
+          {t('index:subscribe')}
+        </LandingPageLink>
+      </div>
+      <h2>{t('index:legacy-links')}</h2>
+      <ul className="list-unstyled">
         <li>
           <Link to="/about">{t('index:about')}</Link>
         </li>

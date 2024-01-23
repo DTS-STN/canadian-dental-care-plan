@@ -5,7 +5,18 @@
     "home": "(FR) Home"
   },
   "personal-info": "(FR) Personal information",
+  "personal-info-desc": "(FR) In this section, you can see your personal information.",
   "update-info": "(FR) Update personal information",
+  "update-info-desc": "(FR) In this section, you can your personal information.",
+  "upload": "(FR) Upload document for CDCP",
+  "upload-desc": "(FR) In this section, you can your upload documents.",
+  "view-letters": "(FR) View my letters",
+  "view-letters-desc": "(FR) In this section, you can see any letters that were sent for you.",
+  "view-CDCP": "(FR) View my CDCP messages",
+  "view-CDCP-desc": "(FR) In this section, you can see any messages that were sent to you.",
+  "subscribe": "(FR) Subscribe to CDCP email alerts",
+  "subscribe-desc": "(FR) In this section, you can subscribe to the email alerts for CDCO, Any time you have a new message, you will be alerted.",
+  "legacy-links": "(FR) Legacy Links",
   "about": "(FR) About us",
   "not-found": "(FR) (404) Not Found",
   "server-error": "(FR) (500) Server Error"

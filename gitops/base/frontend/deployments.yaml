@@ -15,10 +15,8 @@ spec:
     spec:
       containers:
         - name: canada-dental-care-plan-frontend
-          image: dtsrhpdevscedacr.azurecr.io/canada-dental-care-plan/canada-dental-care-plan-frontend
-          envFrom:
-            - configMapRef:
-                name: frontend
+          # Note: image tag should be pinned to a specific version in overlays
+          image: dtsrhpdevscedacr.azurecr.io/canada-dental-care-plan/canada-dental-care-plan-frontend:latest
           ports:
             - name: http
               containerPort: 3000
@@ -29,3 +27,5 @@ spec:
             limits:
               cpu: 500m
               memory: 1024Mi
+          securityContext:
+            allowPrivilegeEscalation: false

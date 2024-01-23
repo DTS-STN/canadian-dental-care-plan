@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: frontend
+  template:
+    spec:
+      containers:
+        - name: canada-dental-care-plan-frontend
+          envFrom:
+            - configMapRef:
+                name: frontend
+            - secretRef:
+                name: redis
