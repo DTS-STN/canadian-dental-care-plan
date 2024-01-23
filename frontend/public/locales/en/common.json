@@ -26,5 +26,29 @@
       "personal-information":"Personal information",
       "preferred-language": "Preferred language"
     }
-  }
+  },
+  "address-change": {
+    "page-title": "Change address",
+    "breadcrumbs": {
+      "home": "Home",
+      "personal-information":"Personal information",
+      "address-change": "Change address"
+    }
+  },
+  "address-change-confirm": {
+    "page-title": "Confirm",
+    "breadcrumbs": {
+      "home": "Home",
+      "personal-information":"Personal information",
+      "address-change-confirm": "Confirm"
+    }
+  },
+  "address-change-success": {
+    "page-title": "Success",
+    "breadcrumbs": {
+      "home": "Home",
+      "personal-information":"Personal information",
+      "address-change-success": "Success"
+    }
+  }    
 }
