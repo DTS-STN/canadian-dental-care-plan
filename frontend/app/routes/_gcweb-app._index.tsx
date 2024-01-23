@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
+import { LandingPageLink } from '~/components/landing-page-link';
+
 const i18nNamespaces = getTypedI18nNamespaces('common', 'gcweb');
 
 export const handle = {
@@ -38,12 +40,30 @@ export default function Index() {
       <p>
         Welcome {userInfo.firstName} {userInfo.lastName}
       </p>
-      <ul>
+      <div className="grid gap-4 md:grid-cols-2">
+        <LandingPageLink title="Update Your Information" description="In this section, you can your personal information." to="/update-info">
+          Update your information
+        </LandingPageLink>
+        <LandingPageLink title="Upload Document" description="In this section, you can your upload documents." to="/Upload-Document">
+          Upload document for CDCP
+        </LandingPageLink>
+        <LandingPageLink title="Personal Information" description="In this section, you can see your personal information." to="/Personal-Information">
+          Personal information
+        </LandingPageLink>
+        <LandingPageLink title="View my Letters" description="In this section, you can see any letters that were sent for you." to="/View-Letters">
+          View My Letters
+        </LandingPageLink>
+        <LandingPageLink title="View my messages" description="In this section, you can see any messages that were sent to you." to="/Messages">
+          View My CDCP Messages
+        </LandingPageLink>
+        <LandingPageLink title="CDCP alerts" description="In this section, you can subscribe to the email alerts for CDCO, Any time you have a new message, you will be alerted." to="/Alert-me">
+          Subscribe to CDCP email alerts
+        </LandingPageLink>
+      </div>
+      <h2>LEGACY LINKS</h2>
+      <ul className="list-unstyled">
         <li>
           <Link to="/personal-information">Personal information</Link>
-        </li>
-        <li>
-          <Link to="/update-info">Update personal info</Link>
         </li>
         <li>
           <Link to="/about">About</Link>
