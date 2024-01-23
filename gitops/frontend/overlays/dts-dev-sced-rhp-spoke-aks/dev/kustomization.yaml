@@ -22,4 +22,5 @@ configMapGenerator:
     literals:
       - LOG_LEVEL=debug
       - MOCKS_ENABLED=true
-      - SESSION_FILE_DIR=sessions
+      - REDIS_URL=redis://redis-dev
+      - SESSION_STORAGE_TYPE=redis
