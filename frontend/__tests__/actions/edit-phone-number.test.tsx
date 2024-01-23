@@ -10,7 +10,7 @@ describe('Edit Phone Number Action', () => {
     vi.resetModules();
   });
 
-  it('Should redirect without validation erros', async () => {
+  it('Should redirect without validation errors', async () => {
     const formData = new FormData();
     formData.append('phoneNumber', '819 426-5555');
     let request = new Request('http://localhost:3000/personal-information/phone-number/edit', {
