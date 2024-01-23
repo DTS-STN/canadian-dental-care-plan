@@ -10,6 +10,9 @@
   },
   "preferred-language": {
     "on-file": "(FR) We have the following preferred language for you on file.",
-    "language": "(FR) Language"
+    "language": "(FR) Language",
+    "id": "(FR) id", 
+    "nameEn": "(FR) English Name", 
+    "nameFr": "(FR) French Name" 
   }
 }

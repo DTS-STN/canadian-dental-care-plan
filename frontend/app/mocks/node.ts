@@ -27,6 +27,27 @@ function getUserEntity(id: string | readonly string[]) {
 }
 
 /**
+ * Retrieves a preferred language entity based on the provided user ID.
+ *
+ * @param id - The preferred language ID to look up in the database.
+ * @returns The preferred language entity if found, otherwise throws a 404 error.
+ */
+function getPreferredLanguageEntity(id: string | readonly string[]) {
+  const parsedPreferredLanguageId = z.string().safeParse(id);
+  const parsedPreferredLanguage = !parsedPreferredLanguageId.success
+    ? undefined
+    : db.preferredLanguage.findFirst({
+        where: { id: { equals: parsedPreferredLanguageId.data } },
+      });
+
+  if (!parsedPreferredLanguage) {
+    throw new HttpResponse('No Preferred Language found', { status: 404, headers: { 'Content-Type': 'text/plain' } });
+  }
+
+  return parsedPreferredLanguage;
+}
+
+/**
  * Converts a user entity to a patch document with specific fields.
  *
  * @param userEntity - The user entity to convert.
@@ -63,6 +84,26 @@ const handlers = [
     const patchResult = jsonpatch.applyPatch(document, patch, true);
     db.user.update({ where: { id: { equals: userEntity.id } }, data: patchResult.newDocument });
     return HttpResponse.text(null, { status: 204 });
+  }),
+
+   /**
+   * Handler for GET request to retrieve all preferred languages
+   */
+   http.get('https://api.example.com/lookups/preferred-languages', () => {
+    const preferredLanguageList = db.preferredLanguage.getAll();
+    return HttpResponse.json(preferredLanguageList);
+  }),
+
+  /**
+   * Handler for GET requests to retrieve preferred languages by id
+   */
+  http.get('https://api.example.com/lookups/preferred-languages/:id', ({ params }) => {
+    const preferredLanguageEntity = getPreferredLanguageEntity(params.id);
+    return HttpResponse.json({
+      id: preferredLanguageEntity.id,
+      nameEn: preferredLanguageEntity.nameEn,
+      nameFr: preferredLanguageEntity.nameFr,
+    });
   }),
 ];
 
