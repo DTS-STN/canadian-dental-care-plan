@@ -2,7 +2,6 @@ import type { LoaderFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 
-import { PhoneNumber } from '~/components/phone-number';
 import { userService } from '~/services/user-service.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -12,7 +11,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ userInfo });
 }
 
-export default function UpdatePhoneNumberSuccess() {
+export default function PhoneNumberSuccess() {
   const loaderData = useLoaderData<typeof loader>();
 
   return (
@@ -21,11 +20,14 @@ export default function UpdatePhoneNumberSuccess() {
         Phone number saved sucecssfully
       </h1>
       <p>Phone number has been successfully updated</p>
-      <div className="form-group">
-        <PhoneNumber phoneNumber={loaderData.userInfo?.phoneNumber} />
+      <div>
+        <dl>
+          <dt>Phone number</dt>
+          <dd>{loaderData.userInfo?.phoneNumber}</dd>
+        </dl>
       </div>
-      <div className="form-group">
-        <Link id="successPhoneButton" to="/update-info" className="btn btn-primary btn-lg">
+      <div>
+        <Link id="successPhoneButton" to="/personal-information" className="btn btn-primary btn-lg">
           Return to personal info
         </Link>
       </div>

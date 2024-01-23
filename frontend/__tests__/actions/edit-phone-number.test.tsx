@@ -1,26 +1,19 @@
 import { redirect } from '@remix-run/node';
 
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import { action } from '~/routes/_gcweb-app.update-info';
+import { action } from '~/routes/_gcweb-app.personal-information.phone-number.edit';
 
-vi.mock('~/services/user-service.server.ts', () => ({
-  userService: {
-    getUserId: vi.fn(),
-    updateUserInfo: vi.fn(),
-  },
-}));
-
-describe('Update Information Action', () => {
+describe('Edit Phone Number Action', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.resetModules();
   });
 
-  it('Should redirect if no validation errors', async () => {
+  it('Should redirect without validation errors', async () => {
     const formData = new FormData();
-    formData.append('phoneNumber', '(123) 456-7890');
-    let request = new Request('http://localhost:3000/update-info', {
+    formData.append('phoneNumber', '819 426-5555');
+    let request = new Request('http://localhost:3000/personal-information/phone-number/edit', {
       method: 'POST',
       body: formData,
     });
@@ -28,13 +21,13 @@ describe('Update Information Action', () => {
     const response = await action({ request, context: {}, params: {} });
 
     expect(response.status).toBe(302);
-    expect(response).toEqual(redirect('/update-info-success'));
+    expect(response.url).toEqual(redirect('/personal-information/phone-number/confirm').url);
   });
 
   it('Should return validation errors', async () => {
     const formData = new FormData();
-    formData.append('phoneNumber', 'not a phone number');
-    let request = new Request('http://localhost:3000/update-info', {
+    formData.append('phoneNumber', '819 426-55');
+    let request = new Request('http://localhost:3000/personal-information/phone-number/edit', {
       method: 'POST',
       body: formData,
     });

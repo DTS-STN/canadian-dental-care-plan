@@ -4,7 +4,6 @@ import { isValidPhoneNumber } from 'libphonenumber-js';
 
 import { z } from 'zod';
 
-import { PhoneNumber } from '~/components/phone-number';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 
@@ -34,14 +33,14 @@ export async function action({ request }: ActionFunctionArgs) {
   const session = await sessionService.getSession(request.headers.get('Cookie'));  
   session.set('newPhoneNumber', parsedDataResult.data.phoneNumber)
 
-  return redirect('/update-phone-number-confirm', {
+  return redirect('/personal-information/phone-number/confirm', {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),
     },
   });
 }
 
-export default function UpdateInfo() {
+export default function PhoneNumberEdit() {
   const actionData = useActionData<typeof action>();
   const loaderData = useLoaderData<typeof loader>();
   const fieldErrors = actionData?.errors;
@@ -54,11 +53,24 @@ export default function UpdateInfo() {
       <p>Please update your phone number below.</p>
       <Form method="post">
         <div className="form-group">
-          <PhoneNumber editMode phoneNumber={actionData?.formData.phoneNumber ?? loaderData.userInfo?.phoneNumber} fieldErrors={fieldErrors?.phoneNumber?._errors} />
+          <label htmlFor="phoneNumber" className={'required'}>
+            <span className="field-name">Phone number</span>
+            <strong className="required mrgn-lft-sm">(required)</strong>
+            {fieldErrors?.phoneNumber?._errors &&
+              fieldErrors?.phoneNumber?._errors.map((error, idx) => (
+                <span key={idx} className="label label-danger wb-server-error">
+                  <strong>
+                    <span className="prefix">Error:</span>
+                    <span className="mrgn-lft-sm">{error}</span>
+                  </strong>
+                </span>
+              ))}
+          </label>
+          <input id="phoneNumber" name="phoneNumber" className="form-control" maxLength={32} defaultValue={actionData?.formData.phoneNumber ?? loaderData.userInfo?.phoneNumber} data-testid="phoneNumber" />
         </div>
         <div className="form-group">
           <button className="btn btn-primary btn-lg mrgn-rght-sm">Save</button>
-          <Link id="cancelButton" to="/update-info" className="btn btn-default btn-lg">
+          <Link id="cancelButton" to="/personal-information" className="btn btn-default btn-lg">
             Cancel
           </Link>
         </div>
