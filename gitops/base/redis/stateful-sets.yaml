@@ -17,7 +17,9 @@ spec:
     spec:
       containers:
         - name: redis
-          image: docker.io/redis:7.2
+          # Note: image tag should be pinned to a specific version in overlays
+          #       ex: 7.2 in nonprod; 7.2.3 in prod
+          image: docker.io/redis:7
           args: [/etc/redis/redis.conf, --requirepass $(REDIS_PASSWORD)]
           envFrom:
             - secretRef:
@@ -45,7 +47,8 @@ spec:
             allowPrivilegeEscalation: false
           volumeMounts:
             - name: config
-              mountPath: /etc/redis/
+              mountPath: /etc/redis/redis.conf
+              subPath: config.conf
             - name: data
               mountPath: /data
       volumes:

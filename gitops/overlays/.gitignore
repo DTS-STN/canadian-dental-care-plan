@@ -1,0 +1,5 @@
+# ignore secrets (ie: frontend-secrets.conf, redis-secrets.conf)
+**/*secrets.conf
+
+# allow secrets examples (ie: frontend-secrets.conf.example, redis-secrets.conf.example)
+!**/*secrets.conf.example
