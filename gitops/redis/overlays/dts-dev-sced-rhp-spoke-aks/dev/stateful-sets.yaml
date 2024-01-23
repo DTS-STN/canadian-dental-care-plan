@@ -18,17 +18,21 @@ spec:
       containers:
         - name: redis
           image: docker.io/redis:7.2
-          command:
-            - redis-server
-          args:
-            - /etc/redis/redis.conf
-            - --requirepass $(REDIS_PASSWORD)
+          args: [/etc/redis/redis.conf, --requirepass $(REDIS_PASSWORD)]
           envFrom:
             - secretRef:
                 name: redis
           ports:
             - name: redis
               containerPort: 6379
+          livenessProbe:
+            exec:
+              command: [sh, -c, redis-cli --pass $(REDIS_PASSWORD) ping]
+            initialDelaySeconds: 10
+          readinessProbe:
+            exec:
+              command: [sh, -c, redis-cli --pass $(REDIS_PASSWORD) ping]
+            initialDelaySeconds: 10
           resources:
             requests:
               cpu: 250m
@@ -36,11 +40,14 @@ spec:
             limits:
               cpu: 500m
               memory: 512Mi
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
           volumeMounts:
-            - name: data
-              mountPath: /data
             - name: config
               mountPath: /etc/redis/
+            - name: data
+              mountPath: /data
       volumes:
         - name: config
           configMap:
