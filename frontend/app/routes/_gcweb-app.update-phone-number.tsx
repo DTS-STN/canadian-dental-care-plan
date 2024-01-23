@@ -1,5 +1,6 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -19,10 +20,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const isPhoneNumber = (val: string) => val.match(/\([0-9]{3}\) [0-9]{3}-[0-9]{4}/);
 
   const formDataSchema = z.object({
-    phoneNumber: z.string().refine(isPhoneNumber, { message: 'Invalid phone number' }),
+    phoneNumber: z.string().refine((val) => isValidPhoneNumber(val, 'CA'), { message: 'Invalid phone number' }),
   });
 
   const formData = Object.fromEntries(await request.formData());
@@ -35,8 +35,8 @@ export async function action({ request }: ActionFunctionArgs) {
     });
   }
 
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
-  session.set('newPhoneNumber', parsedDataResult.data.phoneNumber);
+  const session = await sessionService.getSession(request.headers.get('Cookie'));  
+  session.set('newPhoneNumber', parsedDataResult.data.phoneNumber)
 
   return redirect('/update-phone-number-confirm', {
     headers: {

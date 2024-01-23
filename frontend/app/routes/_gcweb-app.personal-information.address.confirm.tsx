@@ -9,6 +9,17 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
+export const handle = {
+  breadcrumbs: [
+    { labelI18nKey: 'personal-information:confirm.breadcrumbs.home', to: '/' },
+    { labelI18nKey: 'personal-information:confirm.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:confirm.breadcrumbs.address-change-confirm' },
+  ],
+  i18nNamespaces,
+  pageIdentifier: 'CDCP-0008',
+  pageTitleI18nKey: 'personal-information:confirm.page-title',
+};
+
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
@@ -34,7 +45,6 @@ export default function ConfirmAddress() {
       <h1 id="wb-cont" property="name">
         {t('personal-information:confirm.change-address')}
       </h1>
-      <h2 className="h3">{t('personal-information:confirm.button.confirm')}</h2>
       <Form method="post">
         <h3>{t('personal-information:confirm.changed-address')}</h3>
         <div className="row mrgn-tp-sm">

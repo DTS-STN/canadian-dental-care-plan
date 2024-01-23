@@ -21,10 +21,18 @@
       "preferred-language": "(FR) Preferred language"
     },
     "on-file": "(FR) We have the following preferred language for you on file.",
+    "id": "(FR) id",
+    "nameEn": "(FR) English Name",
+    "nameFr": "(FR) French Name",
     "language": "(FR) Language"
   },
   "edit": {
     "page-title": "Changer d'adresse",
+    "breadcrumbs": {
+      "home": "(FR) Home",
+      "personal-information": "(FR) Personal information",
+      "address-change": "(FR) Change address"
+    },
     "home-address": "(FR) Home address",
     "mailing-address": "(FR) Mailing address",
     "button": {
@@ -33,6 +41,12 @@
     }
   },
   "confirm": {
+    "page-title": "(FR) Confirm",
+    "breadcrumbs": {
+      "home": "(FR) Home",
+      "personal-information": "(FR) Personal information",
+      "address-change-confirm": "(FR) Confirm"
+    },
     "changed-address": "(FR) Change of Home Address",
     "changed-mailing": "(FR) Change of Mailing Address",
     "from": "(FR) From:",
@@ -44,7 +58,12 @@
     }
   },
   "success": {
-    "page-title": "(FR) Address saved successfully",
+    "page-title": "(FR) Success",
+    "breadcrumbs": {
+      "home": "(FR) Home",
+      "personal-information": "(FR) Personal information",
+      "address-change-success": "(FR) Success"
+    },
     "success-message": "(FR) Address has been successfully updated",
     "home-address": "(FR) Home address",
     "mailing-address": "(FR) Mailing address",

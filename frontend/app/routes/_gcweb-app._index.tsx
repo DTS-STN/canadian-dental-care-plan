@@ -49,8 +49,8 @@ export default function Index() {
         <LandingPageLink title={t('index:view-letters')} description={t('index:view-letters-desc')} to="/view-letters">
           {t('index:view-letters')}
         </LandingPageLink>
-        <LandingPageLink title={t('index:view-CDCP')} description={t('index:view-CDCP-desc')} to="/messages">
-          {t('index:view-CDCP')}
+        <LandingPageLink title={t('index:view-cdcp')} description={t('index:view-cdcp-desc')} to="/messages">
+          {t('index:view-cdcp')}
         </LandingPageLink>
         <LandingPageLink title={t('index:subscribe')} description={t('index:subscribe-desc')} to="/alert-me">
           {t('index:subscribe')}

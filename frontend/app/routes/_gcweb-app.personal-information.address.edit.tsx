@@ -11,6 +11,17 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
+export const handle = {
+  breadcrumbs: [
+    { labelI18nKey: 'personal-information:edit.breadcrumbs.home', to: '/' },
+    { labelI18nKey: 'personal-information:edit.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:edit.breadcrumbs.address-change' },
+  ],
+  i18nNamespaces,
+  pageIdentifier: 'CDCP-0007',
+  pageTitleI18nKey: 'personal-information:edit.page-title',
+} as const satisfies RouteHandleData;
+
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
@@ -52,6 +63,7 @@ export default function ChangeAddress() {
   const actionData = useActionData<typeof action>();
   const { userInfo } = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
+
   const defaultValues = {
     homeAddress: actionData?.formData.homeAddress ?? userInfo.homeAddress ?? '',
     mailingAddress: actionData?.formData.mailingAddress ?? userInfo.mailingAddress ?? '',

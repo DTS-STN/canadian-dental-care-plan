@@ -18,6 +18,24 @@ const db = factory({
     mailingAddress: () => faker.helpers.fake(fullAddressFormat),
     preferredLanguage: () => faker.helpers.arrayElement(['en', 'fr']),
   },
+  preferredLanguage: {
+    id: primaryKey(String),
+    nameEn: String,
+    nameFr: String,
+  }
+});
+
+// seed avaliable languages (before user)
+db.preferredLanguage.create({
+  id: "en",
+  nameEn: "English",
+  nameFr: "Anglais"
+});
+
+db.preferredLanguage.create({
+  id: "fr",
+  nameEn: "French",
+  nameFr: "Français"
 });
 
 // seed users
