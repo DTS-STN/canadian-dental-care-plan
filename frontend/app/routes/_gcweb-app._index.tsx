@@ -8,7 +8,7 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 import { LandingPageLink } from '~/components/landing-page-link';
 
-const i18nNamespaces = getTypedI18nNamespaces('common', 'gcweb');
+const i18nNamespaces = getTypedI18nNamespaces('common', 'gcweb', 'landingpage');
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'common:index.breadcrumbs.home' }],
@@ -41,23 +41,23 @@ export default function Index() {
         Welcome {userInfo.firstName} {userInfo.lastName}
       </p>
       <div className="grid gap-4 md:grid-cols-2">
-        <LandingPageLink title="Update Your Information" description="In this section, you can your personal information." to="/update-info">
-          Update your information
+      <LandingPageLink title={t('landingpage:view-application.card-title')} description={t('landingpage:view-application.description')} to="/view-application">
+          {t('landingpage:view-application.link-title')}
         </LandingPageLink>
-        <LandingPageLink title="Upload Document" description="In this section, you can your upload documents." to="/upload-document">
-          Upload document for CDCP
+        <LandingPageLink title={t('landingpage:upload-document.card-title')} description={t('landingpage:upload-document.description')} to="/upload-document">
+          {t('landingpage:upload-document.link-title')}
         </LandingPageLink>
-        <LandingPageLink title="Personal Information" description="In this section, you can see your personal information." to="/personal-information">
-          Personal information
+        <LandingPageLink title={t('landingpage:personal-information.card-title')} description={t('landingpage:personal-information.description')} to="/personal-information">
+          {t('landingpage:personal-information.link-title')}
         </LandingPageLink>
-        <LandingPageLink title="View my Letters" description="In this section, you can see any letters that were sent for you." to="/view-letters">
-          View My Letters
+        <LandingPageLink title={t('landingpage:view-my-letters.card-title')} description={t('landingpage:view-my-letters.description')} to="/view-letters">
+          {t('landingpage:view-my-letters.link-title')}
         </LandingPageLink>
-        <LandingPageLink title="View my messages" description="In this section, you can see any messages that were sent to you." to="/messages">
-          View My CDCP Messages
+        <LandingPageLink title={t('landingpage:view-my-messages.card-title')} description={t('landingpage:view-my-messages.description')} to="/messages">
+          {t('landingpage:view-my-messages.link-title')}
         </LandingPageLink>
-        <LandingPageLink title="CDCP alerts" description="In this section, you can subscribe to the email alerts for CDCO, Any time you have a new message, you will be alerted." to="/alert-me">
-          Subscribe to CDCP email alerts
+        <LandingPageLink title={t('landingpage:cdcp-alerts.card-title')} description={t('landingpage:cdcp-alerts.description')} to="/alert-me">
+          {t('landingpage:cdcp-alerts.link-title')}
         </LandingPageLink>
       </div>
       <h2>LEGACY LINKS</h2>

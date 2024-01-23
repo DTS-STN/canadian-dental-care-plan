@@ -1,0 +1,32 @@
+{
+    "view-application": {
+        "card-title": "Voir mon application",
+        "description": "Dans cette section, vous pouvez consulter le statut de votre application au régime canadien de soins dentaires ",
+        "link-title":"Voir mon application"
+    },
+    "upload-document": {
+        "card-title": "Televerser un document",
+        "description": "Dans cette section, vous pouvez téléverser des documents pour votre application au régime canadien de soins dentaires.",
+        "link-title":"Televerser un document"
+    },
+    "personal-information": {
+        "card-title": "Vos informations personnel",
+        "description": "Dans cette section, vous pouvez consulter vos informations personelles.",
+        "link-title":"Mes informations"
+    },
+    "view-my-letters": {
+        "card-title": "Voir mes lettres",
+        "description": "Dans cette section, vous pouvez consulter les lettres que vous avez recues en lien avec le régime canadien de soins dentaires.",
+        "link-title":"Voir mes lettres"
+    },
+    "view-my-messages": {
+        "card-title": "Voir mes messages",
+        "description": "Dans cette section, vous pouvez consulter les messages que vous avez recues en lien avec le régime canadien de soins dentaires.",
+        "link-title":"Voir mes messages"
+    },
+    "cdcp-alerts": {
+        "card-title": "Alertes CDCP",
+        "description": "Dans cette section, vous pouvez vous abonner aux alertes email pour le régime canadien de soins dentaires. Chaque fois que vous aurez un nouveau message, vous serez alerté.",
+        "link-title":"M'inscrire aux alertes CDCP."
+    }
+}

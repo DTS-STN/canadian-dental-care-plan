@@ -1,0 +1,32 @@
+{
+    "view-application": {
+        "card-title": "View your applications",
+        "description": "In this section, you can see the status fof your application",
+        "link-title":"View my application"
+    },
+    "upload-document": {
+        "card-title": "Upload Document",
+        "description": "In this section, you can your upload documents.",
+        "link-title":"Upload document for CDCP"
+    },
+    "personal-information": {
+        "card-title": "Personal Information",
+        "description": "In this section, you can see your personal information.",
+        "link-title":"Personal information"
+    },
+    "view-my-letters": {
+        "card-title": "View my Letters",
+        "description": "In this section, you can see any letters that were sent for you.",
+        "link-title":"View My Letters"
+    },
+    "view-my-messages": {
+        "card-title": "View my messages",
+        "description": "In this section, you can see any messages that were sent to you.",
+        "link-title":"View My CDCP Messages"
+    },
+    "cdcp-alerts": {
+        "card-title": "CDCP alerts",
+        "description": "In this section, you can subscribe to the email alerts for CDCO, Any time you have a new message, you will be alerted.",
+        "link-title":"Subscribe to CDCP email alerts"
+    }
+}
