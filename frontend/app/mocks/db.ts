@@ -19,20 +19,13 @@ const db = factory({
     preferredLanguage: () => faker.helpers.arrayElement(['en', 'fr']),
   },
   preferredLanguage: {
-    id: faker.helpers.arrayElement(['en', 'fr']),
-    nameEn: faker.helpers.arrayElement(['English', 'French']),
-    nameFr: faker.helpers.arrayElement(['Anglais', 'Français']),
+    id: primaryKey(String),
+    nameEn: String,
+    nameFr: String,
   }
 });
 
-// seed users
-db.user.create({
-  id: '00000000-0000-0000-0000-000000000000',
-  firstName: 'John',
-  lastName: 'Maverick',
-  preferredLanguage: 'fr',
-});
-
+// seed avaliable languages (before user)
 db.preferredLanguage.create({
   id: "en",
   nameEn: "English",
@@ -43,6 +36,14 @@ db.preferredLanguage.create({
   id: "fr",
   nameEn: "French",
   nameFr: "Français"
+});
+
+// seed users
+db.user.create({
+  id: '00000000-0000-0000-0000-000000000000',
+  firstName: 'John',
+  lastName: 'Maverick',
+  preferredLanguage: 'fr',
 });
 
 export { db };
