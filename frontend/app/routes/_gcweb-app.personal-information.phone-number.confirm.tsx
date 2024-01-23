@@ -2,7 +2,6 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { Form, Link, useLoaderData } from '@remix-run/react';
 
-import { PhoneNumber } from '~/components/phone-number';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 
@@ -17,10 +16,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   //TODO: API call to POST phone number
 
-  return redirect('/update-phone-number-success');
+  return redirect('/personal-information/phone-number/success');
 }
 
-export default function UpdatePhoneNumberConfirm() {
+export default function PhoneNumberConfirm() {
   const loaderData = useLoaderData<typeof loader>();
 
   return (
@@ -31,11 +30,16 @@ export default function UpdatePhoneNumberConfirm() {
       <p>Please confirm the phone number change below.</p>
       <Form method="post">
         <div className="form-group">
-          <PhoneNumber phoneNumber={loaderData.newPhoneNumber ?? ''} previousPhoneNumber={loaderData.userInfo?.phoneNumber} />
+          <dl>
+            <dt>Previous phone number</dt>
+            <dd>{loaderData.userInfo?.phoneNumber}</dd>
+            <dt>New phone number</dt>
+            <dd>{loaderData.newPhoneNumber ?? ''}</dd>
+          </dl>
         </div>
         <div className="form-group">
           <button className="btn btn-primary btn-lg mrgn-rght-sm">Confirm</button>
-          <Link id="cancelButton" to="/update-info" className="btn btn-default btn-lg">
+          <Link id="cancelButton" to="/personal-information" className="btn btn-default btn-lg">
             Cancel
           </Link>
         </div>
