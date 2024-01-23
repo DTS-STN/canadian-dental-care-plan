@@ -11,6 +11,10 @@ const serverEnv = z.object({
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
   INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
 
+  // auth settings
+  AUTH_JWT_PRIVATE_KEY: z.string().min(1).optional(),
+  AUTH_JWT_PUBLIC_KEY: z.string().min(1).optional(),
+
   // language cookie settings
   LANG_COOKIE_NAME: z.string().default('_gc_lang'),
   LANG_COOKIE_DOMAIN: z.string().optional(),
