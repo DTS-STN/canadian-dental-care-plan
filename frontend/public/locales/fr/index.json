@@ -1,0 +1,12 @@
+{
+  "page-title": "(FR) Home",
+  "welcome": "Bienvenue {{firstName}} {{lastName}}",
+  "breadcrumbs": {
+    "home": "(FR) Home"
+  },
+  "personal-info": "(FR) Personal information",
+  "update-info": "(FR) Update personal information",
+  "about": "(FR) About us",
+  "not-found": "(FR) (404) Not Found",
+  "server-error": "(FR) (500) Server Error"
+}

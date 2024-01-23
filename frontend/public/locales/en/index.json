@@ -1,0 +1,12 @@
+{
+  "page-title": "Home",
+  "welcome": "Welcome {{firstName}} {{lastName}}",
+  "breadcrumbs": {
+    "home": "Home"
+  },
+  "personal-info": "Personal information",
+  "update-info": "Update personal information",
+  "about": "About us",
+  "not-found": "(404) Not Found",
+  "server-error": "(500) Server Error"
+}

@@ -6,13 +6,17 @@ import { useTranslation } from 'react-i18next';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('common', 'personal-information');
+const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'common:personal-information.breadcrumbs.home', to: '/' }, { labelI18nKey: 'common:personal-information.page-title', to: '/personal-information' }, { labelI18nKey: 'common:preferred-language.page-title' }],
+  breadcrumbs: [
+    { labelI18nKey: 'personal-information:preferred-language.breadcrumbs.home', to: '/' },
+    { labelI18nKey: 'personal-information:preferred-language.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:preferred-language.breadcrumbs.preferred-language' },
+  ],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0004',
-  pageTitleI18nKey: 'common:preferred-language.page-title',
+  pageTitleI18nKey: 'personal-information:preferred-language.page-title',
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -32,7 +36,7 @@ export default function PersonalInformationIndex() {
   return (
     <>
       <h1 id="wb-cont" property="name">
-        {t('common:preferred-language.page-title')}
+        {t('personal-information:preferred-language.page-title')}
       </h1>
       <p>{t('personal-information:preferred-language.on-file')}</p>
       <dl>

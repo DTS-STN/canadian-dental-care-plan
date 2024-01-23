@@ -48,11 +48,11 @@ describe('useBreadcrumbs()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        handle: { breadcrumbs: [{ labelI18nKey: 'common:index.breadcrumbs.home' }] } satisfies RouteHandleData,
+        handle: { breadcrumbs: [{ labelI18nKey: 'index:breadcrumbs.home' }] } satisfies RouteHandleData,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(useBreadcrumbs())}</div>,
-            handle: { breadcrumbs: [{ labelI18nKey: 'common:about.breadcrumbs.home', to: '/' }, { labelI18nKey: 'common:about.breadcrumbs.about' }] } satisfies RouteHandleData,
+            handle: { breadcrumbs: [{ labelI18nKey: 'about:breadcrumbs.home', to: '/' }, { labelI18nKey: 'about:breadcrumbs.about' }] } satisfies RouteHandleData,
             path: '/',
           },
         ],
@@ -62,7 +62,7 @@ describe('useBreadcrumbs()', () => {
     render(<RemixStub />);
 
     const element = await waitFor(() => screen.findByTestId('data'));
-    expect(element.textContent).toEqual('[{"labelI18nKey":"common:about.breadcrumbs.home","to":"/"},{"labelI18nKey":"common:about.breadcrumbs.about"}]');
+    expect(element.textContent).toEqual('[{"labelI18nKey":"about:breadcrumbs.home","to":"/"},{"labelI18nKey":"about:breadcrumbs.about"}]');
   });
 });
 
@@ -154,7 +154,7 @@ describe('useI18nNamespaces()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        handle: { i18nNamespaces: ['common'] } satisfies RouteHandleData,
+        handle: { i18nNamespaces: ['index'] } satisfies RouteHandleData,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(useI18nNamespaces())}</div>,
@@ -168,7 +168,7 @@ describe('useI18nNamespaces()', () => {
     render(<RemixStub />);
 
     const element = await waitFor(() => screen.findByTestId('data'));
-    expect(element.textContent).toEqual('["common","gcweb"]');
+    expect(element.textContent).toEqual('["index","gcweb"]');
   });
 });
 
@@ -238,11 +238,11 @@ describe('usePageTitle()', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        handle: { pageTitleI18nKey: 'common:index.page-title' } satisfies RouteHandleData,
+        handle: { pageTitleI18nKey: 'index:page-title' } satisfies RouteHandleData,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(usePageTitleI18nKey())}</div>,
-            handle: { pageTitleI18nKey: 'common:about.page-title' } satisfies RouteHandleData,
+            handle: { pageTitleI18nKey: 'about:page-title' } satisfies RouteHandleData,
             path: '/',
           },
         ],
@@ -252,6 +252,6 @@ describe('usePageTitle()', () => {
     render(<RemixStub />);
 
     const element = await waitFor(() => screen.findByTestId('data'));
-    expect(element.textContent).toEqual('"common:about.page-title"');
+    expect(element.textContent).toEqual('"about:page-title"');
   });
 });

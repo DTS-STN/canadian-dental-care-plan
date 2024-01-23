@@ -1,18 +1,27 @@
 {
   "page-title": "(FR) Update phone number",
-  "update-message":"(FR) Please update your phone number below.",
-  "component": {
-    "previous":"(FR) Previous phone number",
-    "newPhone":"(FR) New phone number",
-    "phone":"(FR) Phone number"
+  "update-message": "(FR) Please update your phone number below.",
+  "button": {
+    "save": "Sauvegarder",
+    "cancel": "Canceler"
   },
-    "confirm": {
-      "title":"(FR) Confirm phone number",
-      "confirm-message": "(FR) Please confirm the phone number change below."
-    },
-    "success": {
-      "title": "(FR) Phone number saved successfully",
-      "success-message": "(FR) Phone number has been successfully updated.",
-      "return": "(FR) Return to personal information"
+  "component": {
+    "previous": "(FR) Previous phone number",
+    "newPhone": "(FR) New phone number",
+    "phone": "(FR) Phone number",
+    "error": "Erreur"
+  },
+  "confirm": {
+    "title": "(FR) Confirm phone number",
+    "confirm-message": "(FR) Please confirm the phone number change below.",
+    "button": {
+      "confirm": "Confirmer",
+      "cancel": "Annuler"
     }
+  },
+  "success": {
+    "title": "(FR) Phone number saved successfully",
+    "success-message": "(FR) Phone number has been successfully updated.",
+    "return": "(FR) Return to personal information"
+  }
 }

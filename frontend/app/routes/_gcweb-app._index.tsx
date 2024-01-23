@@ -6,13 +6,13 @@ import { useTranslation } from 'react-i18next';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('common', 'gcweb');
+const i18nNamespaces = getTypedI18nNamespaces('index');
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'common:index.breadcrumbs.home' }],
+  breadcrumbs: [{ labelI18nKey: 'index:breadcrumbs.home' }],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0001',
-  pageTitleI18nKey: 'common:index.page-title',
+  pageTitleI18nKey: 'index:page-title',
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -33,26 +33,24 @@ export default function Index() {
   return (
     <>
       <h1 id="wb-cont" property="name">
-        {t('common:index.page-title')}
+        {t('index:page-title')}
       </h1>
-      <p>
-      {t('common:index.welcome')} {userInfo.firstName} {userInfo.lastName}
-      </p>
+      <p>{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.firstName })}</p>
       <ul>
         <li>
-          <Link to="/personal-information">{t('common:personal-information.page-title')}</Link>
+          <Link to="/personal-information">{t('index:personal-info')}</Link>
         </li>
         <li>
-          <Link to="/update-info">{t('common:personal-information.update')}</Link>
+          <Link to="/update-info">{t('index:update-info')}</Link>
         </li>
         <li>
-          <Link to="/about">{t('common:about.page-title')}</Link>
+          <Link to="/about">{t('index:about')}</Link>
         </li>
         <li>
-          <Link to="/not-found">{t('gcweb:not-found.page-title')}</Link>
+          <Link to="/not-found">{t('index:not-found')}</Link>
         </li>
         <li>
-          <Link to="/error">{t('gcweb:server-error.page-title')}</Link>
+          <Link to="/error">{t('index:server-error')}</Link>
         </li>
       </ul>
     </>

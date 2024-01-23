@@ -1,10 +1,13 @@
 {
   "success": {
     "title": "(FR) Success",
-    "success-message":"(FR) You have successfully updated your info."
+    "success-message": "(FR) You have successfully updated your info."
   },
   "update": {
     "title": "(FR) Update personal information",
-    "update-message":"(FR) Please update your info below."
+    "update-message": "(FR) Please update your info below.",
+    "button": {
+      "edit": "Modifier"
+    }
   }
 }

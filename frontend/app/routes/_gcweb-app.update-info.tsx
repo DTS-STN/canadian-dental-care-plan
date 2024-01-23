@@ -1,14 +1,14 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Link, useActionData, useLoaderData } from '@remix-run/react';
 
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { PhoneNumber } from '~/components/phone-number';
 import { userService } from '~/services/user-service.server';
-import { useTranslation } from 'react-i18next';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('update-info', 'gcweb');
+const i18nNamespaces = getTypedI18nNamespaces('update-info');
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
@@ -54,7 +54,7 @@ export default function UpdateInfo() {
   return (
     <>
       <h1 id="wb-cont" property="name">
-      {t('update-info:update.title')}
+        {t('update-info:update.title')}
       </h1>
       <p>{t('update-info:update.update-message')}</p>
       <div className="form-group">
@@ -62,7 +62,7 @@ export default function UpdateInfo() {
       </div>
       <div className="form-group">
         <Link id="editPhoneButton" to="/update-phone-number" className="btn btn-primary btn-lg">
-        {t('gcweb:input-label.button.edit')}
+          {t('update-info:update.button.edit')}
         </Link>
       </div>
     </>

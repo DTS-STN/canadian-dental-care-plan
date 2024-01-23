@@ -1,15 +1,15 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
 
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { InputField } from '~/components/input-field';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
-import { useTranslation } from 'react-i18next';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('gcweb', 'personal-information');
+const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
@@ -65,21 +65,21 @@ export default function ChangeAddress() {
   return (
     <>
       <h1 id="wb-cont" property="name">
-        {t('personal-information:edit.change-address')}
+        {t('personal-information:edit.page-title')}
       </h1>
       <Form method="post">
-        <InputField id="home-address" label={`${t('personal-information:index.home-address')}`} name="homeAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.homeAddress} errorMessage={errorMessages.homeAddress} />
-        <InputField id="mailing-address" label={`${t('personal-information:index.mailing-address')}`} name="mailingAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.mailingAddress} errorMessage={errorMessages.mailingAddress} />
+        <InputField id="home-address" label={t('personal-information:edit.home-address')} name="homeAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.homeAddress} errorMessage={errorMessages.homeAddress} />
+        <InputField id="mailing-address" label={t('personal-information:edit.mailing-address')} name="mailingAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.mailingAddress} errorMessage={errorMessages.mailingAddress} />
         <div className="form-group">
           <ul className="list-inline lst-spcd">
             <li>
               <button id="change-button" className="btn btn-primary btn-lg">
-              {t('gcweb:input-label.button.change')}
+                {t('personal-information:edit.button.change')}
               </button>
             </li>
             <li>
               <Link id="cancel-button" to="/personal-information" className="btn btn-default btn-lg">
-              {t('gcweb:input-label.button.cancel')}
+                {t('personal-information:edit.button.cancel')}
               </Link>
             </li>
           </ul>
