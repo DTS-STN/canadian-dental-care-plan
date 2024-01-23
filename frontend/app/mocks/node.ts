@@ -86,10 +86,10 @@ const handlers = [
     return HttpResponse.text(null, { status: 204 });
   }),
 
-   /**
+  /**
    * Handler for GET request to retrieve all preferred languages
    */
-   http.get('https://api.example.com/lookups/preferred-languages', () => {
+  http.get('https://api.example.com/lookups/preferred-languages', () => {
     const preferredLanguageList = db.preferredLanguage.getAll();
     return HttpResponse.json(preferredLanguageList);
   }),

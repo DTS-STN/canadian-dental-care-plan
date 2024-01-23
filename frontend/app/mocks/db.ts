@@ -22,20 +22,20 @@ const db = factory({
     id: primaryKey(String),
     nameEn: String,
     nameFr: String,
-  }
+  },
 });
 
 // seed avaliable languages (before user)
 db.preferredLanguage.create({
-  id: "en",
-  nameEn: "English",
-  nameFr: "Anglais"
+  id: 'en',
+  nameEn: 'English',
+  nameFr: 'Anglais',
 });
 
 db.preferredLanguage.create({
-  id: "fr",
-  nameEn: "French",
-  nameFr: "Français"
+  id: 'fr',
+  nameEn: 'French',
+  nameFr: 'Français',
 });
 
 // seed users

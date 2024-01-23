@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { getLogger } from '~/utils/logging.server';
 import { getEnv } from '~/utils/env.server';
+import { getLogger } from '~/utils/logging.server';
 
 const preferredLanguageSchema = z.object({
   id: z.string().optional(),
@@ -12,14 +12,13 @@ const preferredLanguageSchema = z.object({
 export type PreferredLanguageInfo = z.infer<typeof preferredLanguageSchema>;
 
 function createLookupService() {
-
   const logger = getLogger('lookup-service.server');
   const { INTEROP_API_BASE_URI } = getEnv();
 
   async function getAllPreferredLanguages() {
     const url = `${INTEROP_API_BASE_URI}/lookups/preferred-languages/`;
     const response = await fetch(url);
-    
+
     const preferredLanguageSchemaList = z.array(preferredLanguageSchema);
     if (response.ok) return preferredLanguageSchemaList.parse(await response.json());
     if (response.status === 404) return null;
@@ -55,7 +54,7 @@ function createLookupService() {
 
   return {
     getAllPreferredLanguages,
-    getPreferredLanguage
+    getPreferredLanguage,
   };
 }
 
