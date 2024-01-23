@@ -19,5 +19,5 @@ This project has been tested with the following toolchain:
 1. Run the following command to apply the kustomize manifests to the target environment:
 
     ``` shell
-    kubectl --kubeconfig {path-to-kubeconfig} apply --kustomize {application}/overlays/{target-cluster}
+    kubectl --kubeconfig {path-to-kubeconfig} apply --kustomize ./overlays/{target-environment}
     ```
