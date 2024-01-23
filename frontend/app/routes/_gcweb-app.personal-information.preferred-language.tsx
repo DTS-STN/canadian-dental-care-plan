@@ -3,8 +3,8 @@ import { useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import { userService } from '~/services/user-service.server';
 import { lookupService } from '~/services/lookup-service.server';
+import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
@@ -27,7 +27,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     throw new Response(null, { status: 404 });
   }
 
-  const preferredLanguage = (userInfo?.preferredLanguage)? await lookupService.getPreferredLanguage(userInfo.preferredLanguage) : undefined;
+  const preferredLanguage = userInfo?.preferredLanguage ? await lookupService.getPreferredLanguage(userInfo.preferredLanguage) : undefined;
   if (preferredLanguage === null) {
     throw new Response(null, { status: 404 });
   }
@@ -36,7 +36,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function PersonalInformationIndex() {
   const { user, preferredLanguageDetails } = useLoaderData<typeof loader>();
-  
+
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
