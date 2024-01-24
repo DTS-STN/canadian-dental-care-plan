@@ -13,6 +13,27 @@
     "mailing-address": "Mailing address",
     "preferred-language": "Preferred language"
   },
+  "address": {
+    "page-title": "Address",
+    "breadcrumbs": {
+      "home": "Home",
+      "personal-information": "Personal information",
+      "address": "Address"
+    },
+    "home-address": "Home address",
+    "mailing-address": "Mailing address",
+    "change": "Change"
+  },
+  "phone-number":{
+    "page-title": "Phone number",
+    "breadcrumbs": {
+      "home": "Home",
+      "personal-information": "Personal information",
+      "phone-number": "Phone number"
+    },
+    "phone-number": "Phone number",
+    "change": "Change"
+  },
   "preferred-language": {
     "page-title": "Preferred language",
     "breadcrumbs": {

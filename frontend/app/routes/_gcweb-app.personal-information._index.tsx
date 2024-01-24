@@ -19,6 +19,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
 
+  if (!userInfo) {
+    throw new Response(null, { status: 404 });
+  }
+
   return json({ user: userInfo });
 }
 
@@ -33,19 +37,25 @@ export default function PersonalInformationIndex() {
       <p>{t('personal-information:index.on-file')}</p>
       <dl>
         <dt>{t('personal-information:index.first-name')}</dt>
-        <dd>{user?.firstName}</dd>
+        <dd>{user.firstName}</dd>
         <dt>{t('personal-information:index.last-name')}</dt>
-        <dd>{user?.lastName}</dd>
-        <dt>{t('personal-information:index.phone-number')}</dt>
-        <dd>{user?.phoneNumber}</dd>
-        <dt>{t('personal-information:index.home-address')}</dt>
-        <dd>{user?.homeAddress}</dd>
-        <dt>{t('personal-information:index.mailing-address')}</dt>
-        <dd>{user?.mailingAddress}</dd>
+        <dd>{user.lastName}</dd>
+        <dt>
+          <Link to="/personal-information/phone-number">{t('personal-information:index.phone-number')}</Link>
+        </dt>
+        <dd>{user.phoneNumber}</dd>
+        <dt>
+          <Link to="/personal-information/address">{t('personal-information:index.home-address')}</Link>
+        </dt>
+        <dd>{user.homeAddress}</dd>
+        <dt>
+          <Link to="/personal-information/address">{t('personal-information:index.mailing-address')}</Link>
+        </dt>
+        <dd>{user.mailingAddress}</dd>
         <dt>
           <Link to="/personal-information/preferred-language">{t('personal-information:index.preferred-language')}</Link>
         </dt>
-        <dd>{user?.preferredLanguage}</dd>
+        <dd>{user.preferredLanguage}</dd>
       </dl>
     </>
   );
