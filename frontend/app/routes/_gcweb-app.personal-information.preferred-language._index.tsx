@@ -11,13 +11,13 @@ const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
   breadcrumbs: [
-    { labelI18nKey: 'personal-information:preferred-language.breadcrumbs.home', to: '/' },
-    { labelI18nKey: 'personal-information:preferred-language.breadcrumbs.personal-information', to: '/personal-information' },
-    { labelI18nKey: 'personal-information:preferred-language.breadcrumbs.preferred-language' },
+    { labelI18nKey: 'personal-information:preferred-language.index.breadcrumbs.home', to: '/' },
+    { labelI18nKey: 'personal-information:preferred-language.index.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:preferred-language.index.breadcrumbs.preferred-language' },
   ],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0004',
-  pageTitleI18nKey: 'personal-information:preferred-language.page-title',
+  pageTitleI18nKey: 'personal-information:preferred-language.index.page-title',
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -40,17 +40,17 @@ export default function PreferredLanguage() {
   return (
     <>
       <h1 id="wb-cont" property="name">
-        {t('personal-information:preferred-language.page-title')}
+        {t('personal-information:preferred-language.index.page-title')}
       </h1>
-      <p>{t('personal-information:preferred-language.on-file')}</p>
+      <p>{t('personal-information:preferred-language.index.on-file')}</p>
       <dl>
-        <dt>{t('personal-information:preferred-language.language')}</dt>
+        <dt>{t('personal-information:preferred-language.index.language')}</dt>
         <dd>{user?.preferredLanguage}</dd>
-        <dt>{t('personal-information:preferred-language.id')}</dt>
+        <dt>{t('personal-information:preferred-language.index.id')}</dt>
         <dd>{preferredLanguageDetails?.id}</dd>
-        <dt>{t('personal-information:preferred-language.nameEn')}</dt>
+        <dt>{t('personal-information:preferred-language.index.nameEn')}</dt>
         <dd>{preferredLanguageDetails?.nameEn}</dd>
-        <dt>{t('personal-information:preferred-language.nameFr')}</dt>
+        <dt>{t('personal-information:preferred-language.index.nameFr')}</dt>
         <dd>{preferredLanguageDetails?.nameFr}</dd>
       </dl>
     </>

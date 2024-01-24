@@ -11,9 +11,9 @@ const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
   breadcrumbs: [
-    { labelI18nKey: 'personal-information:success.breadcrumbs.home', to: '/' },
-    { labelI18nKey: 'personal-information:success.breadcrumbs.personal-information', to: '/personal-information' },
-    { labelI18nKey: 'personal-information:success.breadcrumbs.address-change-success' },
+    { labelI18nKey: 'personal-information:address.success.breadcrumbs.home', to: '/' },
+    { labelI18nKey: 'personal-information:address.success.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:address.success.breadcrumbs.address-change-success' },
   ],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0009',
@@ -33,15 +33,15 @@ export default function UpdateAddressSuccess() {
   return (
     <>
       <h1 id="wb-cont" property="name">
-        {t('personal-information:success.page-title')}
+        {t('personal-information:address.success.page-title')}
       </h1>
-      <p>{t('personal-information:success.success-message')}</p>
+      <p>{t('personal-information:address.success.success-message')}</p>
 
       <div className="row mrgn-tp-sm">
         <div className="col-sm-6">
           <section className="panel panel-info">
             <header className="panel-heading">
-              <h3 className="panel-title">{t('personal-information:success.home-address')}</h3>
+              <h3 className="panel-title">{t('personal-information:address.success.home-address')}</h3>
             </header>
             <div className="panel-body">
               <p>{loaderData.userInfo?.homeAddress}</p>
@@ -54,7 +54,7 @@ export default function UpdateAddressSuccess() {
         <div className="col-sm-6">
           <section className="panel panel-info">
             <header className="panel-heading">
-              <h3 className="panel-title">{t('personal-information:success.mailing-address')}</h3>
+              <h3 className="panel-title">{t('personal-information:address.success.mailing-address')}</h3>
             </header>
             <div className="panel-body">
               <p>{loaderData.userInfo?.mailingAddress}</p>
@@ -65,7 +65,7 @@ export default function UpdateAddressSuccess() {
 
       <div className="form-group">
         <Link id="successPhoneButton" to="/personal-information" className="btn btn-primary btn-lg">
-          {t('personal-information:success.button.return')}
+          {t('personal-information:address.success.button.return')}
         </Link>
       </div>
     </>

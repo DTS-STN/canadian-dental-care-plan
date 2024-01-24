@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('update-phone-number');
+const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
   i18nNamespaces,
@@ -27,18 +27,18 @@ export default function PhoneNumberSuccess() {
   return (
     <>
       <h1 id="wb-cont" property="name">
-        {t('update-phone-number:success.title')}
+        {t('personal-information:phone-number.success.page-title')}
       </h1>
-      <p>{t('update-phone-number:success.success-message')}</p>
+      <p>{t('personal-information:phone-number.success.success-message')}</p>
       <div>
         <dl>
-          <dt>{t('update-phone-number:component.phone')}</dt>
+          <dt>{t('personal-information:phone-number.edit.component.phone')}</dt>
           <dd>{loaderData.userInfo?.phoneNumber}</dd>
         </dl>
       </div>
       <div>
         <Link id="successPhoneButton" to="/personal-information" className="btn btn-primary btn-lg">
-          {t('update-phone-number:success.return')}
+          {t('personal-information:phone-number.success.return')}
         </Link>
       </div>
     </>

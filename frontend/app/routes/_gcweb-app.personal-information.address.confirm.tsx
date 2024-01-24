@@ -11,9 +11,9 @@ const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
   breadcrumbs: [
-    { labelI18nKey: 'personal-information:confirm.breadcrumbs.home', to: '/' },
-    { labelI18nKey: 'personal-information:confirm.breadcrumbs.personal-information', to: '/personal-information' },
-    { labelI18nKey: 'personal-information:confirm.breadcrumbs.address-change-confirm' },
+    { labelI18nKey: 'personal-information:address.confirm.breadcrumbs.home', to: '/' },
+    { labelI18nKey: 'personal-information:address.confirm.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:address.confirm.breadcrumbs.address-change-confirm' },
   ],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0008',
@@ -43,15 +43,15 @@ export default function ConfirmAddress() {
   return (
     <>
       <h1 id="wb-cont" property="name">
-        {t('personal-information:confirm.change-address')}
+        {t('personal-information:address.confirm.change-address')}
       </h1>
       <Form method="post">
-        <h3>{t('personal-information:confirm.changed-address')}</h3>
+        <h3>{t('personal-information:address.confirm.changed-address')}</h3>
         <div className="row mrgn-tp-sm">
           <div className="col-sm-6">
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h4 className="panel-title">{t('personal-information:confirm.from')}</h4>
+                <h4 className="panel-title">{t('personal-information:address.confirm.from')}</h4>
               </header>
               <div className="panel-body">
                 <p>{loaderData.userInfo?.homeAddress}</p>
@@ -62,7 +62,7 @@ export default function ConfirmAddress() {
           <div className="col-sm-6">
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h4 className="panel-title">{t('personal-information:confirm.to')}</h4>
+                <h4 className="panel-title">{t('personal-information:address.confirm.to')}</h4>
               </header>
               <div className="panel-body">
                 <p>{loaderData.newAddress?.homeAddress}</p>
@@ -71,12 +71,12 @@ export default function ConfirmAddress() {
           </div>
         </div>
 
-        <h3>{t('personal-information:confirm.changed-mailing')}</h3>
+        <h3>{t('personal-information:address.confirm.changed-mailing')}</h3>
         <div className="row mrgn-tp-sm">
           <div className="col-sm-6">
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h4 className="panel-title">{t('personal-information:confirm.from')}</h4>
+                <h4 className="panel-title">{t('personal-information:address.confirm.from')}</h4>
               </header>
               <div className="panel-body">
                 <p>{loaderData.userInfo?.mailingAddress}</p>
@@ -87,7 +87,7 @@ export default function ConfirmAddress() {
           <div className="col-sm-6">
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h4 className="panel-title">{t('personal-information:confirm.to')}</h4>
+                <h4 className="panel-title">{t('personal-information:address.confirm.to')}</h4>
               </header>
               <div className="panel-body">
                 <p>{loaderData.newAddress?.mailingAddress}</p>
@@ -100,12 +100,12 @@ export default function ConfirmAddress() {
           <ul className="list-inline lst-spcd">
             <li>
               <button id="confirm-button" className="btn btn-primary btn-lg">
-                {t('personal-information:confirm.button.confirm')}
+                {t('personal-information:address.confirm.button.confirm')}
               </button>
             </li>
             <li>
               <Link id="cancel-button" to="/personal-information/address/edit" className="btn btn-default btn-lg">
-                {t('personal-information:confirm.button.cancel')}
+                {t('personal-information:address.confirm.button.cancel')}
               </Link>
             </li>
           </ul>

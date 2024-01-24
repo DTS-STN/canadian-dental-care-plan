@@ -14,82 +14,130 @@
     "preferred-language": "Preferred language"
   },
   "address": {
-    "page-title": "Address",
-    "breadcrumbs": {
-      "home": "Home",
-      "personal-information": "Personal information",
-      "address": "Address"
+    "index": {
+      "page-title": "Address",
+      "breadcrumbs": {
+        "home": "Home",
+        "personal-information": "Personal information",
+        "address": "Address"
+      },
+      "home-address": "Home address",
+      "mailing-address": "Mailing address",
+      "change": "Change"
     },
-    "home-address": "Home address",
-    "mailing-address": "Mailing address",
-    "change": "Change"
+    "edit": {
+      "page-title": "Change address",
+      "breadcrumbs": {
+        "home": "Home",
+        "personal-information": "Personal information",
+        "address-change": "Change address"
+      },
+      "home-address": "Home address",
+      "mailing-address": "Mailing address",
+      "button": {
+        "change": "Change",
+        "cancel": "Cancel"
+      }
+    },
+    "confirm": {
+      "page-title": "Confirm",
+      "breadcrumbs": {
+        "home": "Home",
+        "personal-information": "Personal information",
+        "address-change-confirm": "Confirm"
+      },
+      "changed-address": "Change of Home Address",
+      "changed-mailing": "Change of Mailing Address",
+      "from": "From:",
+      "to": "To:",
+      "change-address": "Change address",
+      "button": {
+        "confirm": "Confirm",
+        "cancel": "Cancel"
+      }
+    },
+    "success": {
+      "page-title": "Success",
+      "breadcrumbs": {
+        "home": "Home",
+        "personal-information": "Personal information",
+        "address-change-success": "Success"
+      },
+      "success-message": "Address has been successfully updated",
+      "home-address": "Home address",
+      "mailing-address": "Mailing address",
+      "button": {
+        "return": "Return to personal information"
+      }
+    }
   },
-  "phone-number":{
-    "page-title": "Phone number",
-    "breadcrumbs": {
-      "home": "Home",
-      "personal-information": "Personal information",
-      "phone-number": "Phone number"
+  "phone-number": {
+    "index": {
+      "page-title": "Phone number",
+      "breadcrumbs": {
+        "home": "Home",
+        "personal-information": "Personal information",
+        "phone-number": "Phone number"
+      },
+      "phone-number": "Phone number",
+      "change": "Change"
     },
-    "phone-number": "Phone number",
-    "change": "Change"
+    "edit": {
+      "page-title": "Update phone number",
+      "update-message": "Please update your phone number below.",
+      "button": {
+        "save": "Save",
+        "cancel": "Cancel"
+      },
+      "component": {
+        "previous": "Previous phone number",
+        "newPhone": "New phone number",
+        "phone": "Phone number",
+        "error": "Error"
+      }
+    },
+    "confirm": {
+      "page-title": "Confirm phone number",
+      "confirm-message": "Please confirm the phone number change below.",
+      "button": {
+        "confirm": "Confirmer",
+        "cancel": "Cancel"
+      }
+    },
+    "success": {
+      "page-title": "Phone number saved successfully",
+      "success-message": "Phone number has been successfully updated.",
+      "return": "Return to personal information"
+    }
   },
   "preferred-language": {
-    "page-title": "Preferred language",
-    "breadcrumbs": {
-      "home": "Home",
-      "personal-information": "Personal information",
-      "preferred-language": "Preferred language"
+    "index": {
+      "page-title": "Preferred language",
+      "breadcrumbs": {
+        "home": "Home",
+        "personal-information": "Personal information",
+        "preferred-language": "Preferred language"
+      },
+      "on-file": "We have the following preferred language for you on file.",
+      "id": "ID",
+      "nameEn": "English",
+      "nameFr": "French",
+      "language": "Language"
     },
-    "on-file": "We have the following preferred language for you on file.",
-    "id": "ID",
-    "nameEn": "English",
-    "nameFr": "French",
-    "language": "Language"
-  },
-  "edit": {
-    "page-title": "Change address",
-    "breadcrumbs": {
-      "home": "Home",
-      "personal-information": "Personal information",
-      "address-change": "Change address"
-    },
-    "home-address": "Home address",
-    "mailing-address": "Mailing address",
-    "button": {
+    "edit": {
+      "page-title": "Preferred language edit",
+      "breadcrumbs": {
+        "home": "Home",
+        "personal-information": "Personal information",
+        "preferred-language": "Preferred language",
+        "edit": "Edit"
+      },
+      "id": "ID",
+      "nameEn": "English",
+      "nameFr": "French",
+      "language": "Language",
       "change": "Change",
       "cancel": "Cancel"
-    }
-  },
-  "confirm": {
-    "page-title": "Confirm",
-    "breadcrumbs": {
-      "home": "Home",
-      "personal-information": "Personal information",
-      "address-change-confirm": "Confirm"
-    },
-    "changed-address": "Change of Home Address",
-    "changed-mailing": "Change of Mailing Address",
-    "from": "From:",
-    "to": "To:",
-    "change-address": "Change address",
-    "button": {
-      "confirm": "Confirm",
-      "cancel": "Cancel"
-    }
-  },
-  "success": {
-    "page-title": "Success",
-    "breadcrumbs": {
-      "home": "Home",
-      "personal-information": "Personal information",
-      "address-change-success": "Success"
-    },
-    "success-message": "Address has been successfully updated",
-    "home-address": "Home address",
-    "mailing-address": "Mailing address",
-    "button": {
-      "return": "Return to personal information"
     }
   }
 }

@@ -13,13 +13,13 @@ const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
   breadcrumbs: [
-    { labelI18nKey: 'personal-information:edit.breadcrumbs.home', to: '/' },
-    { labelI18nKey: 'personal-information:edit.breadcrumbs.personal-information', to: '/personal-information' },
-    { labelI18nKey: 'personal-information:edit.breadcrumbs.address-change' },
+    { labelI18nKey: 'personal-information:address.edit.breadcrumbs.home', to: '/' },
+    { labelI18nKey: 'personal-information:address.edit.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:address.edit.breadcrumbs.address-change' },
   ],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0007',
-  pageTitleI18nKey: 'personal-information:edit.page-title',
+  pageTitleI18nKey: 'personal-information:address.edit.page-title',
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -77,21 +77,21 @@ export default function ChangeAddress() {
   return (
     <>
       <h1 id="wb-cont" property="name">
-        {t('personal-information:edit.page-title')}
+        {t('personal-information:address.edit.page-title')}
       </h1>
       <Form method="post">
-        <InputField id="home-address" label={t('personal-information:edit.home-address')} name="homeAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.homeAddress} errorMessage={errorMessages.homeAddress} />
-        <InputField id="mailing-address" label={t('personal-information:edit.mailing-address')} name="mailingAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.mailingAddress} errorMessage={errorMessages.mailingAddress} />
+        <InputField id="home-address" label={t('personal-information:address.edit.home-address')} name="homeAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.homeAddress} errorMessage={errorMessages.homeAddress} />
+        <InputField id="mailing-address" label={t('personal-information:address.edit.mailing-address')} name="mailingAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.mailingAddress} errorMessage={errorMessages.mailingAddress} />
         <div className="form-group">
           <ul className="list-inline lst-spcd">
             <li>
               <button id="change-button" className="btn btn-primary btn-lg">
-                {t('personal-information:edit.button.change')}
+                {t('personal-information:address.edit.button.change')}
               </button>
             </li>
             <li>
               <Link id="cancel-button" to="/personal-information" className="btn btn-default btn-lg">
-                {t('personal-information:edit.button.cancel')}
+                {t('personal-information:address.edit.button.cancel')}
               </Link>
             </li>
           </ul>

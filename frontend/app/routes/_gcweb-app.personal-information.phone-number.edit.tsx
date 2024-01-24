@@ -10,8 +10,7 @@ import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('update-phone-number');
-
+const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 export const handle = {
   i18nNamespaces,
 } as const satisfies RouteHandleData;
@@ -69,15 +68,15 @@ export default function PhoneNumberEdit() {
   return (
     <>
       <h1 id="wb-cont" property="name">
-        {t('update-phone-number:page-title')}
+        {t('personal-information:phone-number.edit.page-title')}
       </h1>
-      <p>{t('update-phone-number:update-message')}</p>
+      <p>{t('personal-information:phone-number.edit.update-message')}</p>
       <Form method="post">
-        <InputField id="phone-number" name="phoneNumber" type="tel" label={t('update-phone-number:component.phone')} defaultValue={defaultValues.phoneNumber} errorMessage={errorMessages.phoneNumber} />
+        <InputField id="phone-number" name="phoneNumber" type="tel" label={t('personal-information:phone-number.edit.component.phone')} defaultValue={defaultValues.phoneNumber} errorMessage={errorMessages.phoneNumber} />
         <div className="form-group">
-          <button className="btn btn-primary btn-lg mrgn-rght-sm">{t('update-phone-number:button.save')}</button>
-          <Link id="cancelButton" to="/personal-information" className="btn btn-default btn-lg">
-            {t('update-phone-number:button.cancel')}
+          <button className="btn btn-primary btn-lg mrgn-rght-sm">{t('personal-information:phone-number.edit.button.save')}</button>
+          <Link id="cancelButton" to="/update-info" className="btn btn-default btn-lg">
+            {t('personal-information:phone-number.edit.button.cancel')}
           </Link>
         </div>
       </Form>

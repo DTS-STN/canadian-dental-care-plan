@@ -12,14 +12,14 @@ const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
   breadcrumbs: [
-    { labelI18nKey: 'personal-information:preferred-language.breadcrumbs.home', to: '/' },
-    { labelI18nKey: 'personal-information:preferred-language.breadcrumbs.personal-information', to: '/personal-information' },
-    { labelI18nKey: 'personal-information:preferred-language.page-title', to: '/personal-information/preferred-language' },
-    { labelI18nKey: 'personal-information:preferred-language.page-title' },
+    { labelI18nKey: 'personal-information:preferred-language.edit.breadcrumbs.home', to: '/' },
+    { labelI18nKey: 'personal-information:preferred-language.edit.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:preferred-language.edit.page-title', to: '/personal-information/preferred-language' },
+    { labelI18nKey: 'personal-information:preferred-language.edit.page-title' },
   ],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0005',
-  pageTitleI18nKey: 'personal-information:preferred-language.page-title',
+  pageTitleI18nKey: 'personal-information:preferred-language.edit.page-title',
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -62,19 +62,19 @@ export default function PreferredLanguageEdit() {
   return (
     <>
       <h1 id="wb-cont" property="name">
-        Preferred Language
+        {t('personal-information:preferred-language.edit.page-title')}
       </h1>
       <Form method="post">
         <fieldset className="gc-chckbxrdio">
-          <legend>{t('personal-information:preferred-language.page-title')}</legend>
+          <legend>{t('personal-information:preferred-language.edit.page-title')}</legend>
           <ul className="list-unstyled lst-spcd-2">
             <li className="radio">
               <input type="radio" name="preferredLanguage" id="preferred-language-option-en" value="en" defaultChecked={userInfo.preferredLanguage === 'en'} />
-              <label htmlFor="preferred-language-option-en">{t('personal-information:preferred-language.nameEn')}</label>
+              <label htmlFor="preferred-language-option-en">{t('personal-information:preferred-language.edit.nameEn')}</label>
             </li>
             <li className="radio">
               <input type="radio" name="preferredLanguage" id="preferred-language-option-fr" value="fr" defaultChecked={userInfo.preferredLanguage === 'fr'} />
-              <label htmlFor="preferred-language-option-fr">{t('personal-information:preferred-language.nameFr')}</label>
+              <label htmlFor="preferred-language-option-fr">{t('personal-information:preferred-language.edit.nameFr')}</label>
             </li>
           </ul>
         </fieldset>
@@ -82,12 +82,12 @@ export default function PreferredLanguageEdit() {
           <ul className="list-inline lst-spcd">
             <li>
               <button id="change-button" className="btn btn-primary btn-lg">
-                {t('personal-information:edit.button.change')}
+                {t('personal-information:preferred-language.edit.change')}
               </button>
             </li>
             <li>
               <Link id="cancel-button" to="/personal-information" className="btn btn-default btn-lg">
-                {t('personal-information:edit.button.cancel')}
+                {t('personal-information:preferred-language.edit.cancel')}
               </Link>
             </li>
           </ul>

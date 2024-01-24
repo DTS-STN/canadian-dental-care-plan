@@ -1,6 +1,5 @@
 import { type ParseKeys } from 'i18next';
 
-import type about from '../public/locales/en/about.json';
 import type gcweb from '../public/locales/en/gcweb.json';
 import type index from '../public/locales/en/index.json';
 import type personalInformation from '../public/locales/en/personal-information.json';
@@ -98,7 +97,6 @@ declare module 'i18next' {
       'personal-information': typeof personalInformation;
       'update-phone-number': typeof updatePhoneNumber;
       index: typeof index;
-      about: typeof about;
     };
   }
 }
