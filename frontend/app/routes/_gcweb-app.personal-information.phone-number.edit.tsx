@@ -5,15 +5,24 @@ import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { InputField } from '~/components/input-field';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('update-phone-number', 'gcweb');
+const i18nNamespaces = getTypedI18nNamespaces('update-phone-number');
+
+export const handle = {
+  i18nNamespaces,
+} as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
+
+  if (!userInfo) {
+    throw new Response(null, { status: 404 });
+  }
 
   return json({ userInfo });
 }
@@ -44,10 +53,18 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function PhoneNumberEdit() {
+  const { userInfo } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
-  const loaderData = useLoaderData<typeof loader>();
+
   const { t } = useTranslation(i18nNamespaces);
-  const fieldErrors = actionData?.errors;
+
+  const defaultValues = {
+    phoneNumber: actionData?.formData.phoneNumber ?? userInfo.phoneNumber ?? '',
+  };
+
+  const errorMessages = {
+    phoneNumber: actionData?.errors.phoneNumber?._errors[0],
+  };
 
   return (
     <>
@@ -56,22 +73,7 @@ export default function PhoneNumberEdit() {
       </h1>
       <p>{t('update-phone-number:update-message')}</p>
       <Form method="post">
-        <div className="form-group">
-          <label htmlFor="phoneNumber" className={'required'}>
-            <span className="field-name">{t('update-phone-number:component.phone')}</span>
-            <strong className="required mrgn-lft-sm">({t('gcweb:input-label.required')})</strong>
-            {fieldErrors?.phoneNumber?._errors &&
-              fieldErrors?.phoneNumber?._errors.map((error, idx) => (
-                <span key={idx} className="label label-danger wb-server-error">
-                  <strong>
-                    <span className="prefix">{t('update-phone-number:component.error')}</span>
-                    <span className="mrgn-lft-sm">{error}</span>
-                  </strong>
-                </span>
-              ))}
-          </label>
-          <input id="phoneNumber" name="phoneNumber" className="form-control" maxLength={32} defaultValue={actionData?.formData.phoneNumber ?? loaderData.userInfo?.phoneNumber} data-testid="phoneNumber" />
-        </div>
+        <InputField id="phone-number" name="phoneNumber" type="tel" label={t('update-phone-number:component.phone')} defaultValue={defaultValues.phoneNumber} errorMessage={errorMessages.phoneNumber} />
         <div className="form-group">
           <button className="btn btn-primary btn-lg mrgn-rght-sm">{t('update-phone-number:button.save')}</button>
           <Link id="cancelButton" to="/personal-information" className="btn btn-default btn-lg">
