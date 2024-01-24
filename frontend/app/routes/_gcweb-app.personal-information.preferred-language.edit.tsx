@@ -70,11 +70,11 @@ export default function PreferredLanguageEdit() {
           <ul className="list-unstyled lst-spcd-2">
             <li className="radio">
               <input type="radio" name="preferredLanguage" id="preferred-language-option-en" value="en" defaultChecked={userInfo.preferredLanguage === 'en'} />
-              <label htmlFor="en">{t('personal-information:preferred-language.nameEn')}</label>
+              <label htmlFor="preferred-language-option-en">{t('personal-information:preferred-language.nameEn')}</label>
             </li>
             <li className="radio">
               <input type="radio" name="preferredLanguage" id="preferred-language-option-fr" value="fr" defaultChecked={userInfo.preferredLanguage === 'fr'} />
-              <label htmlFor="fr">{t('personal-information:preferred-language.nameFr')}</label>
+              <label htmlFor="preferred-language-option-fr">{t('personal-information:preferred-language.nameFr')}</label>
             </li>
           </ul>
         </fieldset>
