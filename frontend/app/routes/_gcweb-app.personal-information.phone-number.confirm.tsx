@@ -18,7 +18,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
   const session = await sessionService.getSession(request.headers.get('Cookie'));
-  if(!session.has('newPhoneNumber')) return redirect('/');
+  if(!session.has('newPhoneNumber')) return redirect('/');  //Redirect if newPhoneNumber is not set in session
 
   return json({ userInfo, newPhoneNumber: await session.get('newPhoneNumber') });
 }
@@ -27,11 +27,12 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const userId = await userService.getUserId();
   if(!userId) return redirect('/');
-
   const userInfo = await userService.getUserInfo(userId);
   if(!userInfo) return redirect('/');
 
   const session = await sessionService.getSession(request.headers.get('Cookie'));
+  if(!session.has('newPhoneNumber')) return redirect('/');  //Redirect if session expires
+
   userInfo.phoneNumber = session.get('newPhoneNumber');
   await userService.updateUserInfo(userId, userInfo);
   session.unset('newPhoneNumber');
