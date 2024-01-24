@@ -1,6 +1,20 @@
-import { randomUUID } from 'node:crypto';
+import { createPrivateKey, createPublicKey, randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
+/**
+ * returns false if and only if the passed-in function throws
+ */
+function tryOrElseFalse(fn: () => unknown) {
+  // prettier-ignore
+  try { fn(); return true; }
+  catch { return false; }
+}
+
+// refiners
+const isValidPublicKey = (val: string) => tryOrElseFalse(() => createPublicKey(`-----BEGIN PUBLIC KEY-----\n${val}\n-----END PUBLIC KEY-----`));
+const isValidPrivateKey = (val: string) => tryOrElseFalse(() => createPrivateKey(`-----BEGIN RSA PRIVATE KEY-----\n${val}\n-----END RSA PRIVATE KEY-----`));
+
+// transformers
 const toBoolean = (val: string) => val === 'true';
 
 /**
@@ -11,9 +25,9 @@ const serverEnv = z.object({
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
   INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
 
-  // auth settings
-  AUTH_JWT_PRIVATE_KEY: z.string().min(1).optional(),
-  AUTH_JWT_PUBLIC_KEY: z.string().min(1).optional(),
+  // auth settings (TODO :: GjB :: public and private keys might be required in the future)
+  AUTH_JWT_PRIVATE_KEY: z.string().refine(isValidPrivateKey).optional(),
+  AUTH_JWT_PUBLIC_KEY: z.string().refine(isValidPublicKey).optional(),
 
   // language cookie settings
   LANG_COOKIE_NAME: z.string().default('_gc_lang'),
