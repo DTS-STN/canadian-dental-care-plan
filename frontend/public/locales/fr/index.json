@@ -14,6 +14,8 @@
   "view-letters-desc": "(FR) In this section, you can see any letters that were sent for you.",
   "view-cdcp": "(FR) View my CDCP messages",
   "view-cdcp-desc": "(FR) In this section, you can see any messages that were sent to you.",
+  "view-my-application":"(FR)View my application(s)",
+  "view-my-application-desc":"(FR)In this section, you can see the status of current or past applications for the Canadian Dental Care Program",
   "subscribe": "(FR) Subscribe to CDCP email alerts",
   "subscribe-desc": "(FR) In this section, you can subscribe to the email alerts for CDCO, Any time you have a new message, you will be alerted.",
   "legacy-links": "(FR) Legacy Links",
