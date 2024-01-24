@@ -59,9 +59,6 @@ export default function Index() {
       <h2>{t('index:legacy-links')}</h2>
       <ul className="list-unstyled">
         <li>
-          <Link to="/about">{t('index:about')}</Link>
-        </li>
-        <li>
           <Link to="/not-found">{t('index:not-found')}</Link>
         </li>
         <li>

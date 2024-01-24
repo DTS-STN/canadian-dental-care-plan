@@ -2,7 +2,7 @@
   "index": {
     "page-title": "(FR) Personal information",
     "breadcrumbs": {
-      "home": "Accueil",
+      "home": "(FR) Home",
       "personal-information": "(FR) Personal information"
     },
     "on-file": "(FR) We have the following information for you on file.",
@@ -14,82 +14,130 @@
     "preferred-language": "(FR) Preferred language"
   },
   "address": {
-    "page-title": "(FR) Address",
-    "breadcrumbs": {
-      "home": "(FR) Home",
-      "personal-information": "(FR) Personal information",
-      "address": "(FR) Address"
+    "index": {
+      "page-title": "(FR) Address",
+      "breadcrumbs": {
+        "home": "(FR) Home",
+        "personal-information": "(FR) Personal information",
+        "address": "(FR) Address"
+      },
+      "home-address": "(FR) Home address",
+      "mailing-address": "(FR) Mailing address",
+      "change": "(FR) Change"
     },
-    "home-address": "(FR) Home address",
-    "mailing-address": "(FR) Mailing address",
-    "change": "(FR) Change"
+    "edit": {
+      "page-title": "(FR) Change address",
+      "breadcrumbs": {
+        "home": "(FR) Home",
+        "personal-information": "(FR) Personal information",
+        "address-change": "(FR) Change address"
+      },
+      "home-address": "(FR) Home address",
+      "mailing-address": "(FR) Mailing address",
+      "button": {
+        "change": "(FR) Change",
+        "cancel": "(FR) Cancel"
+      }
+    },
+    "confirm": {
+      "page-title": "(FR) Confirm",
+      "breadcrumbs": {
+        "home": "(FR) Home",
+        "personal-information": "(FR) Personal information",
+        "address-change-confirm": "(FR) Confirm"
+      },
+      "changed-address": "(FR) Change of Home Address",
+      "changed-mailing": "(FR) Change of Mailing Address",
+      "from": "(FR) From:",
+      "to": "(FR) To:",
+      "change-address": "(FR) Change address",
+      "button": {
+        "confirm": "(FR) Confirm",
+        "cancel": "(FR) Cancel"
+      }
+    },
+    "success": {
+      "page-title": "(FR) Success",
+      "breadcrumbs": {
+        "home": "(FR) Home",
+        "personal-information": "(FR) Personal information",
+        "address-change-success": "(FR) Success"
+      },
+      "success-message": "(FR) Address has been successfully updated",
+      "home-address": "(FR) Home address",
+      "mailing-address": "(FR) Mailing address",
+      "button": {
+        "return": "(FR) Return to personal information"
+      }
+    }
   },
-  "phone-number":{
-    "page-title": "(FR) Phone number",
-    "breadcrumbs": {
-      "home": "(FR) Home",
-      "personal-information": "(FR) Personal information",
-      "phone-number": "(FR) Phone number"
+  "phone-number": {
+    "index": {
+      "page-title": "(FR) Phone number",
+      "breadcrumbs": {
+        "home": "(FR) Home",
+        "personal-information": "(FR) Personal information",
+        "phone-number": "(FR) Phone number"
+      },
+      "phone-number": "(FR) Phone number",
+      "change": "(FR) Change"
     },
-    "phone-number": "(FR) Phone number",
-    "change": "(FR) Change"
+    "edit": {
+      "page-title": "(FR) Update phone number",
+      "update-message": "(FR) Please update your phone number below.",
+      "button": {
+        "save": "(FR) Save",
+        "cancel": "(FR) Cancel"
+      },
+      "component": {
+        "previous": "(FR) Previous phone number",
+        "newPhone": "(FR) New phone number",
+        "phone": "(FR) Phone number",
+        "error": "(FR) Error"
+      }
+    },
+    "confirm": {
+      "page-title": "(FR) Confirm phone number",
+      "confirm-message": "(FR) Please confirm the phone number change below.",
+      "button": {
+        "confirm": "(FR) Confirmer",
+        "cancel": "(FR) Cancel"
+      }
+    },
+    "success": {
+      "page-title": "(FR) Phone number saved successfully",
+      "success-message": "(FR) Phone number has been successfully updated.",
+      "return": "(FR) Return to personal information"
+    }
   },
   "preferred-language": {
-    "page-title": "(FR) Preferred language",
-    "breadcrumbs": {
-      "home": "(FR) Home",
-      "personal-information": "(FR) Personal information",
-      "preferred-language": "(FR) Preferred language"
+    "index": {
+      "page-title": "(FR) Preferred language",
+      "breadcrumbs": {
+        "home": "(FR) Home",
+        "personal-information": "(FR) Personal information",
+        "preferred-language": "(FR) Preferred language"
+      },
+      "on-file": "(FR) We have the following preferred language for you on file.",
+      "id": "(FR) ID",
+      "nameEn": "(FR) English",
+      "nameFr": "(FR) French",
+      "language": "(FR) Language"
     },
-    "on-file": "(FR) We have the following preferred language for you on file.",
-    "id": "(FR) id",
-    "nameEn": "(FR) English",
-    "nameFr": "(FR) French",
-    "language": "(FR) Language"
-  },
-  "edit": {
-    "page-title": "Changer d'adresse",
-    "breadcrumbs": {
-      "home": "(FR) Home",
-      "personal-information": "(FR) Personal information",
-      "address-change": "(FR) Change address"
-    },
-    "home-address": "(FR) Home address",
-    "mailing-address": "(FR) Mailing address",
-    "button": {
-      "change": "Changer",
-      "cancel": "Annuler"
-    }
-  },
-  "confirm": {
-    "page-title": "(FR) Confirm",
-    "breadcrumbs": {
-      "home": "(FR) Home",
-      "personal-information": "(FR) Personal information",
-      "address-change-confirm": "(FR) Confirm"
-    },
-    "changed-address": "(FR) Change of Home Address",
-    "changed-mailing": "(FR) Change of Mailing Address",
-    "from": "(FR) From:",
-    "to": "(FR) To:",
-    "change-address": "Changer d'adresse",
-    "button": {
-      "confirm": "Confirmer",
-      "cancel": "Annuler"
-    }
-  },
-  "success": {
-    "page-title": "(FR) Success",
-    "breadcrumbs": {
-      "home": "(FR) Home",
-      "personal-information": "(FR) Personal information",
-      "address-change-success": "(FR) Success"
-    },
-    "success-message": "(FR) Address has been successfully updated",
-    "home-address": "(FR) Home address",
-    "mailing-address": "(FR) Mailing address",
-    "button": {
-      "return": "(FR) Return to personal information"
+    "edit": {
+      "page-title": "(FR) Preferred language edit",
+      "breadcrumbs": {
+        "home": "(FR) Home",
+        "personal-information": "(FR) Personal information",
+        "preferred-language": "(FR) Preferred language",
+        "edit": "(FR) Edit"
+      },
+      "id": "(FR) ID",
+      "nameEn": "(FR) English",
+      "nameFr": "(FR) French",
+      "language": "(FR) Language",
+      "change": "(FR) Change",
+      "cancel": "(FR) Cancel"
     }
   }
 }

@@ -10,13 +10,13 @@ const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
   breadcrumbs: [
-    { labelI18nKey: 'personal-information:phone-number.breadcrumbs.home', to: '/' },
-    { labelI18nKey: 'personal-information:phone-number.breadcrumbs.personal-information', to: '/personal-information' },
-    { labelI18nKey: 'personal-information:phone-number.breadcrumbs.phone-number' },
+    { labelI18nKey: 'personal-information:phone-number.index.breadcrumbs.home', to: '/' },
+    { labelI18nKey: 'personal-information:phone-number.index.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:phone-number.index.breadcrumbs.phone-number' },
   ],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0007',
-  pageTitleI18nKey: 'personal-information:phone-number.page-title',
+  pageTitleI18nKey: 'personal-information:phone-number.index.page-title',
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -37,15 +37,15 @@ export default function PhoneNumberIndex() {
   return (
     <>
       <h1 id="wb-cont" property="name">
-        {t('personal-information:phone-number.page-title')}
+        {t('personal-information:phone-number.index.page-title')}
       </h1>
 
       <dl>
-        <dt>{t('personal-information:phone-number.phone-number')}</dt>
+        <dt>{t('personal-information:phone-number.index.phone-number')}</dt>
         <dd>{userInfo.phoneNumber}</dd>
       </dl>
       <Link to="/personal-information/phone-number/edit" className="btn btn-primary">
-        {t('personal-information:phone-number.change')}
+        {t('personal-information:phone-number.index.change')}
       </Link>
     </>
   );
