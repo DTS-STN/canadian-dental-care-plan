@@ -1,3 +1,5 @@
+import { forwardRef } from 'react';
+
 import clsx from 'clsx';
 
 import { InputLabel } from '~/components/input-label';
@@ -12,7 +14,7 @@ export interface InputFieldProps extends Omit<React.ComponentProps<'input'>, 'ar
   type?: 'email' | 'number' | 'password' | 'search' | 'tel' | 'text' | 'url';
 }
 
-export const InputField = (props: InputFieldProps) => {
+const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) => {
   const { errorMessage, className, helpMessage, helpMessageSecondary, id, label, required, ...restInputProps } = props;
 
   const inputHelpMessageId = `input-${id}-help`;
@@ -39,6 +41,7 @@ export const InputField = (props: InputFieldProps) => {
         </div>
       )}
       <input
+        ref={ref}
         aria-describedby={getAriaDescribedby()}
         aria-errormessage={errorMessage ? inputLabelErrorId : undefined}
         aria-invalid={!!errorMessage}
@@ -57,4 +60,8 @@ export const InputField = (props: InputFieldProps) => {
       )}
     </div>
   );
-};
+});
+
+InputField.displayName = 'InputField';
+
+export { InputField };
