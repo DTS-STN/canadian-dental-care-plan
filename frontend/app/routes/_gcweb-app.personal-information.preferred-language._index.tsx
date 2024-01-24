@@ -1,5 +1,5 @@
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -53,6 +53,9 @@ export default function PreferredLanguage() {
         <dt>{t('personal-information:preferred-language.index.nameFr')}</dt>
         <dd>{preferredLanguageDetails?.nameFr}</dd>
       </dl>
+      <Link to="/personal-information/preferred-language/edit" className="btn btn-primary">
+        {t('personal-information:preferred-language.index.change')}
+      </Link>
     </>
   );
 }
