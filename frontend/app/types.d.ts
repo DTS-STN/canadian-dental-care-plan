@@ -4,7 +4,6 @@ import type about from '../public/locales/en/about.json';
 import type gcweb from '../public/locales/en/gcweb.json';
 import type index from '../public/locales/en/index.json';
 import type personalInformation from '../public/locales/en/personal-information.json';
-import type updateInfo from '../public/locales/en/update-info.json';
 import type updatePhoneNumber from '../public/locales/en/update-phone-number.json';
 import { type PublicEnv } from '~/utils/env.server';
 import { type Breadcrumbs, type I18nNamespaces, type PageIdentifier, type PageTitleI18nKey } from '~/utils/route-utils';
@@ -98,7 +97,6 @@ declare module 'i18next' {
       gcweb: typeof gcweb;
       'personal-information': typeof personalInformation;
       'update-phone-number': typeof updatePhoneNumber;
-      'update-info': typeof updateInfo;
       index: typeof index;
       about: typeof about;
     };

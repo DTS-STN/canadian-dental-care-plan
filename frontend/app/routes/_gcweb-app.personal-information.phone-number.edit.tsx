@@ -74,7 +74,7 @@ export default function PhoneNumberEdit() {
         </div>
         <div className="form-group">
           <button className="btn btn-primary btn-lg mrgn-rght-sm">{t('update-phone-number:button.save')}</button>
-          <Link id="cancelButton" to="/update-info" className="btn btn-default btn-lg">
+          <Link id="cancelButton" to="/personal-information" className="btn btn-default btn-lg">
             {t('update-phone-number:button.cancel')}
           </Link>
         </div>

@@ -44,7 +44,7 @@ export default function PhoneNumberConfirm() {
         </div>
         <div className="form-group">
           <button className="btn btn-primary btn-lg mrgn-rght-sm">{t('update-phone-number:confirm.button.confirm')}</button>
-          <Link id="cancelButton" to="/update-info" className="btn btn-default btn-lg">
+          <Link id="cancelButton" to="/personal-information" className="btn btn-default btn-lg">
             {t('update-phone-number:confirm.button.cancel')}
           </Link>
         </div>
