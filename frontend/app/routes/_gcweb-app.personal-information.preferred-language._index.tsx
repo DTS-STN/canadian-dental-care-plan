@@ -34,9 +34,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ user: userInfo, preferredLanguageDetails: preferredLanguage });
 }
 
-export default function PersonalInformationIndex() {
+export default function PreferredLanguage() {
   const { user, preferredLanguageDetails } = useLoaderData<typeof loader>();
-
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
