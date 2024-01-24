@@ -10,6 +10,10 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('update-phone-number');
 
+export const handle = {
+  i18nNamespaces,
+} as const satisfies RouteHandleData;
+
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
