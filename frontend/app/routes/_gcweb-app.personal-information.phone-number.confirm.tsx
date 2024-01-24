@@ -18,14 +18,30 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
   const session = await sessionService.getSession(request.headers.get('Cookie'));
+  if (!session.has('newPhoneNumber')) return redirect('/');
 
   return json({ userInfo, newPhoneNumber: await session.get('newPhoneNumber') });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  //TODO: API call to POST phone number
 
-  return redirect('/personal-information/phone-number/success');
+  const userId = await userService.getUserId();
+  if (!userId) return redirect('/');
+  const userInfo = await userService.getUserInfo(userId);
+  if (!userInfo) return redirect('/');
+
+  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  if (!session.has('newPhoneNumber')) return redirect('/');
+
+  userInfo.phoneNumber = session.get('newPhoneNumber');
+  await userService.updateUserInfo(userId, userInfo);
+  session.unset('newPhoneNumber');
+
+  return redirect('/personal-information/phone-number/success', {
+    headers: {
+      'Set-Cookie': await sessionService.commitSession(session),
+    },
+  });
 }
 
 export default function PhoneNumberConfirm() {
