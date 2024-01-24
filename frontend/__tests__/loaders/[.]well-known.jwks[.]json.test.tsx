@@ -47,11 +47,12 @@ describe('/.well-known/jwks.json', () => {
     expect(data).toEqual({
       keys: [
         {
-          use: 'sig',
+          alg: 'RS256',
+          e: 'AQAB',
           kid: '15aa2634535ac6bc6664e2ef5839df2e',
           kty: 'RSA',
           n: '0H5_WxqSoFDn0C8Ll02eYOjtmtoQBBb092efY_qOT61Df8RbELMe7bf_IbhHMpnCDznquXO4kloqyBMiyrR51xmHaxk5kJk25j-JyDp3iOyyWJLPyrMEhHFsYU3FfJwS_wGfSVX_tO7QMlet2OekHXL2mjNc4N4jsDz_fBWTyJXbHHdRxiQvqCJ2GRWE3DVX93KcqIdvBFsFr3wKLjLpqlv9r91YAieazGD0ns5vsK3GrhCh6okNHUSiB4Jn5QMvusQU0c5cHcaJXyC-6eTzKw3Ns7IfQyQyW1VPxzxi8ln0viMDRii_0t3wovO1INTi6u8IiY6d0xXa5SWiJYaERQ',
-          e: 'AQAB',
+          use: 'sig',
         },
       ],
     });

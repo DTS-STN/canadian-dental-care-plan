@@ -20,6 +20,7 @@ export function loader({ request }: LoaderFunctionArgs) {
       keys: [
         {
           use: 'sig',
+          alg: 'RS256',
           kid: createHash('md5').update(AUTH_JWT_PUBLIC_KEY).digest('hex'),
           ...createPublicKey(`-----BEGIN PUBLIC KEY-----\n${AUTH_JWT_PUBLIC_KEY}\n-----END PUBLIC KEY-----`).export({ format: 'jwk' }),
         },
