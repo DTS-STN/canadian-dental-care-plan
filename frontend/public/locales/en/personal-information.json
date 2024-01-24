@@ -122,7 +122,8 @@
       "id": "ID",
       "nameEn": "English",
       "nameFr": "French",
-      "language": "Language"
+      "language": "Language",
+      "change": "Change"
     },
     "edit": {
       "page-title": "Preferred language edit",
