@@ -8,8 +8,7 @@
   "component": {
     "previous": "Previous phone number",
     "newPhone": "New phone number",
-    "phone": "Phone number",
-    "error": "Error"
+    "phone": "Phone number"
   },
   "confirm": {
     "title": "Confirm phone number",

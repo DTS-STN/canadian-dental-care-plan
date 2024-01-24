@@ -3,13 +3,12 @@
   "update-message": "(FR) Please update your phone number below.",
   "button": {
     "save": "Sauvegarder",
-    "cancel": "Canceler"
+    "cancel": "Annuler"
   },
   "component": {
     "previous": "(FR) Previous phone number",
     "newPhone": "(FR) New phone number",
-    "phone": "(FR) Phone number",
-    "error": "Erreur"
+    "phone": "(FR) Phone number"
   },
   "confirm": {
     "title": "(FR) Confirm phone number",
