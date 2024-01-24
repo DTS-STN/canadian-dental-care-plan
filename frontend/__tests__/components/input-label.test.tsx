@@ -19,7 +19,11 @@ describe('InputLabel', () => {
   });
 
   it('should render', () => {
-    render(<InputLabel id="id">input label</InputLabel>);
+    render(
+      <InputLabel id="id" errorId="error-id">
+        input label
+      </InputLabel>,
+    );
 
     const actualLabel = screen.getByTestId('input-label-id');
     expect(actualLabel).toBeInTheDocument();
@@ -31,7 +35,7 @@ describe('InputLabel', () => {
 
   it('should render with required text', () => {
     render(
-      <InputLabel id="id" required>
+      <InputLabel id="id" errorId="error-id" required>
         input label
       </InputLabel>,
     );
@@ -47,7 +51,7 @@ describe('InputLabel', () => {
 
   it('should render with error message', () => {
     render(
-      <InputLabel id="id" errorMessage="error message">
+      <InputLabel id="id" errorId="error-id" errorMessage="error message">
         input label
       </InputLabel>,
     );

@@ -28,14 +28,18 @@ function createRedisService() {
   // singleton redis client instance; lazy initialized as needed
   let redisClient: ReturnType<typeof createClient> | undefined = undefined;
 
-  async function getRedisClient() {
+  async function createRedisClient() {
     log.info(`Creating new Redis client; url=[${REDIS_URL}]`);
-    return (redisClient ??= await createClient({ url: REDIS_URL, username: REDIS_USERNAME, password: REDIS_PASSWORD })
+    return createClient({ url: REDIS_URL, username: REDIS_USERNAME, password: REDIS_PASSWORD })
       .on('connect', () => log.info(`Redis client initiating connection to [${REDIS_URL}]`))
       .on('ready', () => log.info('Redis client is ready to use'))
       .on('reconnecting', () => log.info(`Redis client is reconnecting to [${REDIS_URL}]`))
       .on('error', (error: Error) => log.error(`Redis client error connecting to [${REDIS_URL}]: ${error.message}`))
-      .connect());
+      .connect();
+  }
+
+  async function getRedisClient() {
+    return (redisClient ??= await createRedisClient());
   }
 
   return {
