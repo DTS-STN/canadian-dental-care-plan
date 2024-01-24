@@ -13,6 +13,27 @@
     "mailing-address": "(FR) Mailing address",
     "preferred-language": "(FR) Preferred language"
   },
+  "address": {
+    "page-title": "(FR) Address",
+    "breadcrumbs": {
+      "home": "(FR) Home",
+      "personal-information": "(FR) Personal information",
+      "address": "(FR) Address"
+    },
+    "home-address": "(FR) Home address",
+    "mailing-address": "(FR) Mailing address",
+    "change": "(FR) Change"
+  },
+  "phone-number":{
+    "page-title": "(FR) Phone number",
+    "breadcrumbs": {
+      "home": "(FR) Home",
+      "personal-information": "(FR) Personal information",
+      "phone-number": "(FR) Phone number"
+    },
+    "phone-number": "(FR) Phone number",
+    "change": "(FR) Change"
+  },
   "preferred-language": {
     "page-title": "(FR) Preferred language",
     "breadcrumbs": {
