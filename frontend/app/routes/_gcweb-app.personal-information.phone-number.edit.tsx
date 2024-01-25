@@ -13,6 +13,7 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 export const handle = {
   i18nNamespaces,
+  pageTitleI18nKey: 'personal-information:phone-number.edit.page-title',
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {

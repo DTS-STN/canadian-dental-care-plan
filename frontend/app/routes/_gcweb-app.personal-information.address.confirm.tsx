@@ -17,7 +17,7 @@ export const handle = {
   ],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0008',
-  pageTitleI18nKey: 'personal-information:confirm.page-title',
+  pageTitleI18nKey: 'personal-information:address.confirm.page-title',
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -46,12 +46,12 @@ export default function ConfirmAddress() {
         {t('personal-information:address.confirm.change-address')}
       </h1>
       <Form method="post">
-        <h3>{t('personal-information:address.confirm.changed-address')}</h3>
+        <h2>{t('personal-information:address.confirm.changed-address')}</h2>
         <div className="row mrgn-tp-sm">
           <div className="col-sm-6">
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h4 className="panel-title">{t('personal-information:address.confirm.from')}</h4>
+                <h3 className="panel-title">{t('personal-information:address.confirm.from')}</h3>
               </header>
               <div className="panel-body">
                 <p>{loaderData.userInfo?.homeAddress}</p>
@@ -62,7 +62,7 @@ export default function ConfirmAddress() {
           <div className="col-sm-6">
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h4 className="panel-title">{t('personal-information:address.confirm.to')}</h4>
+                <h3 className="panel-title">{t('personal-information:address.confirm.to')}</h3>
               </header>
               <div className="panel-body">
                 <p>{loaderData.newAddress?.homeAddress}</p>
@@ -71,12 +71,12 @@ export default function ConfirmAddress() {
           </div>
         </div>
 
-        <h3>{t('personal-information:address.confirm.changed-mailing')}</h3>
+        <h2>{t('personal-information:address.confirm.changed-mailing')}</h2>
         <div className="row mrgn-tp-sm">
           <div className="col-sm-6">
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h4 className="panel-title">{t('personal-information:address.confirm.from')}</h4>
+                <h3 className="panel-title">{t('personal-information:address.confirm.from')}</h3>
               </header>
               <div className="panel-body">
                 <p>{loaderData.userInfo?.mailingAddress}</p>
