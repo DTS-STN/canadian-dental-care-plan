@@ -30,31 +30,33 @@ vi.mock('~/services/session-service.server.ts', () => ({
   },
 }));
 
-describe('Action for /personal-information/phone-number/confirm', () => {
+describe('_gcweb-app.personal-information.phone-number.confirm', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.resetModules();
   });
 
-  it('Should redirect to the success page when newPhoneNumber is present', async () => {
-    let request = new Request('http://localhost:3000/personal-information/phone-number/confirm', {
-      method: 'POST',
+  describe('action()', () => {
+    it('Should redirect to the success page when newPhoneNumber is present', async () => {
+      let request = new Request('http://localhost:3000/personal-information/phone-number/confirm', {
+        method: 'POST',
+      });
+
+      const response = await action({ request, context: {}, params: {} });
+
+      expect(response.status).toBe(302);
+      expect(response).toEqual(redirect('/personal-information/phone-number/success', { headers: { 'Set-Cookie': 'undefined' } }));
     });
 
-    const response = await action({ request, context: {}, params: {} });
+    it('Should redirect to homepage page when newPhoneNumber is missing', async () => {
+      let request = new Request('http://localhost:3000/personal-information/phone-number/confirm', {
+        method: 'POST',
+      });
 
-    expect(response.status).toBe(302);
-    expect(response).toEqual(redirect('/personal-information/phone-number/success', { headers: { 'Set-Cookie': 'undefined' } }));
-  });
+      const response = await action({ request, context: {}, params: {} });
 
-  it('Should redirect to homepage page when newPhoneNumber is missing', async () => {
-    let request = new Request('http://localhost:3000/personal-information/phone-number/confirm', {
-      method: 'POST',
+      expect(response.status).toBe(302);
+      expect(response).toEqual(redirect('/'));
     });
-
-    const response = await action({ request, context: {}, params: {} });
-
-    expect(response.status).toBe(302);
-    expect(response).toEqual(redirect('/'));
   });
 });
