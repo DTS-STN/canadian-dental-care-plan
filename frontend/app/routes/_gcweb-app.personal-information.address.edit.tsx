@@ -19,7 +19,7 @@ export const handle = {
     { labelI18nKey: 'personal-information:address.edit.breadcrumbs.address-change' },
   ],
   i18nNamespaces,
-  pageIdentifier: 'CDCP-0007',
+  pageIdentifier: 'CDCP-0004',
   pageTitleI18nKey: 'personal-information:address.edit.page-title',
 } as const satisfies RouteHandleData;
 

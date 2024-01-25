@@ -16,7 +16,7 @@ export const handle = {
     { labelI18nKey: 'personal-information:address.success.breadcrumbs.address-change-success' },
   ],
   i18nNamespaces,
-  pageIdentifier: 'CDCP-0009',
+  pageIdentifier: 'CDCP-0006',
   pageTitleI18nKey: 'personal-information:address.success.page-title',
 };
 export async function loader({ request }: LoaderFunctionArgs) {

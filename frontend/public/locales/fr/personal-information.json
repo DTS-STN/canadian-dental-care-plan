@@ -84,6 +84,11 @@
     },
     "edit": {
       "page-title": "(FR) Update phone number",
+      "breadcrumbs": {
+        "home": "(FR) Home",
+        "personal-information": "(FR) Personal information",
+        "change-phone-number": "(FR) Change phone number"
+      },
       "update-message": "(FR) Please update your phone number below.",
       "button": {
         "save": "(FR) Save",
@@ -98,6 +103,11 @@
     },
     "confirm": {
       "page-title": "(FR) Confirm phone number",
+      "breadcrumbs": {
+        "home": "(FR) Home",
+        "personal-information": "(FR) Personal information",
+        "confirm-phone-number": "(FR) Confirm phone number"
+      },
       "confirm-message": "(FR) Please confirm the phone number change below.",
       "button": {
         "confirm": "(FR) Confirmer",
@@ -105,7 +115,12 @@
       }
     },
     "success": {
-      "page-title": "(FR) Phone number saved successfully",
+      "page-title": "(FR) Phone number saved successfully",      
+      "breadcrumbs": {
+        "home": "(FR) Home",
+        "personal-information": "(FR) Personal information",
+        "success-phone-number": "(FR) Success phone number"
+      },
       "success-message": "(FR) Phone number has been successfully updated.",
       "return": "(FR) Return to personal information"
     }

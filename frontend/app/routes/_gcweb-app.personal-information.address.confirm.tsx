@@ -16,7 +16,7 @@ export const handle = {
     { labelI18nKey: 'personal-information:address.confirm.breadcrumbs.address-change-confirm' },
   ],
   i18nNamespaces,
-  pageIdentifier: 'CDCP-0008',
+  pageIdentifier: 'CDCP-0005',
   pageTitleI18nKey: 'personal-information:address.confirm.page-title',
 };
 
