@@ -16,10 +16,6 @@
   "view-my-application-desc": "(FR)In this section, you can see the status of current or past applications for the Canadian Dental Care Program",
   "subscribe": "(FR) Subscribe to CDCP email alerts",
   "subscribe-desc": "(FR) In this section, you can subscribe to the email alerts for CDCO, Any time you have a new message, you will be alerted.",
-  "legacy-links": "(FR) Legacy Links",
-  "about": "(FR) About us",
-  "not-found": "(FR) (404) Not Found",
-  "server-error": "(FR) (500) Server Error",
   "label-in-progress": {
     "sr-only": "(FR)State:",
     "text": "(FR)In progress"

@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
 
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -71,15 +71,6 @@ export default function Index() {
           {t('index:subscribe')}
         </LandingPageLink>
       </div>
-      <h2>{t('index:legacy-links')}</h2>
-      <ul className="list-unstyled">
-        <li>
-          <Link to="/not-found">{t('index:not-found')}</Link>
-        </li>
-        <li>
-          <Link to="/error">{t('index:server-error')}</Link>
-        </li>
-      </ul>
     </>
   );
 }
