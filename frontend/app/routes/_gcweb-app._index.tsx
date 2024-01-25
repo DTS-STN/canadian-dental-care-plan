@@ -1,3 +1,5 @@
+import { type ReactNode } from 'react';
+
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 
@@ -30,6 +32,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Index() {
   const { userInfo } = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
+
+  function TitleWithInProgressLabel({ children }: { children: ReactNode }) {
+    return (
+      <>
+        {children}
+        <span className="label label-warning label-sm mrgn-lft-sm">
+          <span className="wb-inv">{t('index:label-in-progress.sr-only')}</span>
+          {t('index:label-in-progress.text')}
+        </span>
+      </>
+    );
+  }
+
   return (
     <>
       <h1 id="wb-cont" property="name">
@@ -37,22 +52,22 @@ export default function Index() {
       </h1>
       <p>{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.firstName })}</p>
       <div className="grid gap-4 md:grid-cols-2">
-        <LandingPageLink title={t('index:view-my-application')} description={t('index:view-my-application-desc')} to="/view-application">
+        <LandingPageLink title={<TitleWithInProgressLabel>{t('index:view-my-application')}</TitleWithInProgressLabel>} description={t('index:view-my-application-desc')} to="/view-application">
           {t('index:view-my-application')}
         </LandingPageLink>
-        <LandingPageLink title={t('index:upload')} description={t('index:upload-desc')} to="/upload-document">
+        <LandingPageLink title={<TitleWithInProgressLabel>{t('index:upload')}</TitleWithInProgressLabel>} description={t('index:upload-desc')} to="/upload-document">
           {t('index:upload')}
         </LandingPageLink>
         <LandingPageLink title={t('index:personal-info')} description={t('index:personal-info-desc')} to="/personal-information">
           {t('index:personal-info')}
         </LandingPageLink>
-        <LandingPageLink title={t('index:view-letters')} description={t('index:view-letters-desc')} to="/view-letters">
+        <LandingPageLink title={<TitleWithInProgressLabel>{t('index:view-letters')}</TitleWithInProgressLabel>} description={t('index:view-letters-desc')} to="/view-letters">
           {t('index:view-letters')}
         </LandingPageLink>
-        <LandingPageLink title={t('index:view-cdcp')} description={t('index:view-cdcp-desc')} to="/messages">
+        <LandingPageLink title={<TitleWithInProgressLabel>{t('index:view-cdcp')}</TitleWithInProgressLabel>} description={t('index:view-cdcp-desc')} to="/messages">
           {t('index:view-cdcp')}
         </LandingPageLink>
-        <LandingPageLink title={t('index:subscribe')} description={t('index:subscribe-desc')} to="/alert-me">
+        <LandingPageLink title={<TitleWithInProgressLabel>{t('index:subscribe')}</TitleWithInProgressLabel>} description={t('index:subscribe-desc')} to="/alert-me">
           {t('index:subscribe')}
         </LandingPageLink>
       </div>

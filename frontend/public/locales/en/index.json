@@ -19,5 +19,9 @@
   "legacy-links": "Legacy Links",
   "about": "About us",
   "not-found": "(404) Not Found",
-  "server-error": "(500) Server Error"
+  "server-error": "(500) Server Error",
+  "label-in-progress": {
+    "sr-only": "State:",
+    "text": "In progress"
+  }
 }
