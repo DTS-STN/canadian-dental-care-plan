@@ -7,11 +7,7 @@ html {
 	color: #ffffff;
 	display: inline-block;
 	margin: 0px;
-	padding: 5px 40px 5px 15px;
+	padding: 5px 40px 10px 15px;
 	font-size: 1.3em;
 	min-width: 300px;
-}
-
-.label-warning{
-  border-color:#ffffff
 }
