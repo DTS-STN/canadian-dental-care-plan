@@ -45,11 +45,11 @@ export default function PersonalInformationIndex() {
         </dt>
         <dd>{user.phoneNumber}</dd>
         <dt>
-          <Link to="/personal-information/address">{t('personal-information:index.home-address')}</Link>
+          <Link to="/personal-information/address/edit">{t('personal-information:index.home-address')}</Link>
         </dt>
         <dd>{user.homeAddress}</dd>
         <dt>
-          <Link to="/personal-information/address">{t('personal-information:index.mailing-address')}</Link>
+          <Link to="/personal-information/address/edit">{t('personal-information:index.mailing-address')}</Link>
         </dt>
         <dd>{user.mailingAddress}</dd>
         <dt>

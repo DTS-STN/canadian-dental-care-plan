@@ -34,7 +34,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   await userService.updateUserInfo(userId, session.get('newAddress'));
 
-  return redirect('/personal-information/address/success');
+  return redirect('/personal-information');
 }
 
 export default function ConfirmAddress() {

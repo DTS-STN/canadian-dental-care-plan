@@ -14,17 +14,6 @@
     "preferred-language": "Preferred language"
   },
   "address": {
-    "index": {
-      "page-title": "Address",
-      "breadcrumbs": {
-        "home": "Home",
-        "personal-information": "Personal information",
-        "address": "Address"
-      },
-      "home-address": "Home address",
-      "mailing-address": "Mailing address",
-      "change": "Change"
-    },
     "edit": {
       "page-title": "Change address",
       "breadcrumbs": {
@@ -54,20 +43,6 @@
       "button": {
         "confirm": "Confirm",
         "cancel": "Cancel"
-      }
-    },
-    "success": {
-      "page-title": "Success",
-      "breadcrumbs": {
-        "home": "Home",
-        "personal-information": "Personal information",
-        "address-change-success": "Success"
-      },
-      "success-message": "Address has been successfully updated",
-      "home-address": "Home address",
-      "mailing-address": "Mailing address",
-      "button": {
-        "return": "Return to personal information"
       }
     }
   },
