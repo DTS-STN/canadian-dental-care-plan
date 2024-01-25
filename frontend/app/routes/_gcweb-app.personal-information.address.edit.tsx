@@ -53,6 +53,22 @@ export async function action({ request }: ActionFunctionArgs) {
     });
   }
 
+  /* const isHomeAddressValid = await addressValidationService.isValidAddress(parsedDataResult.data.homeAddress);
+  const isMailingAddressValid = await addressValidationService.isValidAddress(parsedDataResult.data.mailingAddress);
+  const addressSchema = z.object({
+    homeAddress: z.string().refine(() => isHomeAddressValid, { message: 'Invalid home address' }),
+    mailingAddress: z.string().refine(() => isMailingAddressValid, { message: 'Invalid mailing address' }),
+  });
+
+  const parsedAddressResult = addressSchema.safeParse(formData);
+
+  if (!parsedAddressResult.success) {
+    return json({
+      errors: parsedAddressResult.error.format(),
+      formData: formData as Partial<z.infer<typeof formDataSchema>>,
+    });
+  } */
+
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   session.set('newAddress', parsedDataResult.data);
 
