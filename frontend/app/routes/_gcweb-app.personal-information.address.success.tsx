@@ -17,7 +17,7 @@ export const handle = {
   ],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0009',
-  pageTitleI18nKey: 'personal-information:success.page-title',
+  pageTitleI18nKey: 'personal-information:address.success.page-title',
 };
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();

@@ -12,6 +12,7 @@ const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
   i18nNamespaces,
+  pageTitleI18nKey: 'personal-information:phone-number.confirm.page-title',
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -24,7 +25,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-
   const userId = await userService.getUserId();
   if (!userId) return redirect('/');
   const userInfo = await userService.getUserInfo(userId);

@@ -11,6 +11,7 @@ const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
   i18nNamespaces,
+  pageTitleI18nKey: 'personal-information:phone-number.success.page-title',
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
