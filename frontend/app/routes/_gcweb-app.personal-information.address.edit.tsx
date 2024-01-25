@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { InputField } from '~/components/input-field';
+import { addressValidationService } from '~/services/address-validation-service.server';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -34,13 +35,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const isHomeAddressValid = (val: string) => addressValidationService.isValidAddress(val);
+  const isMailingAddressValid = (val: string) => addressValidationService.isValidAddress(val);
+
   const formDataSchema = z.object({
-    homeAddress: z.string().min(1),
-    mailingAddress: z.string().min(1),
+    homeAddress: z.string().min(1).refine(isHomeAddressValid, { message: 'Invalid home address' }),
+    mailingAddress: z.string().min(1).refine(isMailingAddressValid, { message: 'Invalid mailing address' }),
   });
 
   const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = formDataSchema.safeParse(formData);
+  const parsedDataResult = await formDataSchema.safeParseAsync(formData);
 
   if (!parsedDataResult.success) {
     return json({
