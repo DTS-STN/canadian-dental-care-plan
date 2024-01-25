@@ -14,9 +14,9 @@ describe('crypto-utils.server', () => {
     const cryptoKey = await publicKeyPemToCryptoKey(publicKeyPem);
 
     expect(cryptoKey).toBeDefined();
-    expect(cryptoKey.algorithm.name).toBe('RSA-PSS');
+    expect(cryptoKey.algorithm.name).toBe('RSA-OAEP');
     expect(cryptoKey.extractable).toBe(true);
-    expect(cryptoKey.usages).toEqual(['verify']);
+    expect(cryptoKey.usages).toEqual(['encrypt', 'wrapKey']);
   });
 
   it('should convert a private key from PEM format to a CryptoKey', async () => {
@@ -40,8 +40,8 @@ describe('crypto-utils.server', () => {
     const cryptoKey = await privateKeyPemToCryptoKey(privateKeyPem);
 
     expect(cryptoKey).toBeDefined();
-    expect(cryptoKey.algorithm.name).toBe('RSA-PSS');
+    expect(cryptoKey.algorithm.name).toBe('RSA-OAEP');
     expect(cryptoKey.extractable).toBe(true);
-    expect(cryptoKey.usages).toEqual(['sign']);
+    expect(cryptoKey.usages).toEqual(['decrypt', 'unwrapKey']);
   });
 });

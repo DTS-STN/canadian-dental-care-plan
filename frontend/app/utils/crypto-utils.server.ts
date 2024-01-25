@@ -9,8 +9,8 @@ import { subtle } from 'node:crypto';
  */
 export function privateKeyPemToCryptoKey(pem: string) {
   const keyData = Buffer.from(atob(pem), 'latin1');
-  const algorithm = { name: 'RSA-PSS', hash: 'SHA-256' };
-  return subtle.importKey('pkcs8', keyData, algorithm, true, ['sign']);
+  const algorithm = { name: 'RSA-OAEP', hash: 'SHA-256' };
+  return subtle.importKey('pkcs8', keyData, algorithm, true, ['decrypt', 'unwrapKey']);
 }
 
 /**
@@ -19,6 +19,6 @@ export function privateKeyPemToCryptoKey(pem: string) {
  */
 export function publicKeyPemToCryptoKey(pem: string) {
   const keyData = Buffer.from(atob(pem), 'latin1');
-  const algorithm = { name: 'RSA-PSS', hash: 'SHA-256' };
-  return subtle.importKey('spki', keyData, algorithm, true, ['verify']);
+  const algorithm = { name: 'RSA-OAEP', hash: 'SHA-256' };
+  return subtle.importKey('spki', keyData, algorithm, true, ['encrypt', 'wrapKey']);
 }
