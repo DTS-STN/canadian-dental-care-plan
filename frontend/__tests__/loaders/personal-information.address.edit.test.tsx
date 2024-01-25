@@ -9,6 +9,11 @@ vi.mock('~/services/user-service.server.ts', () => ({
 }));
 
 describe('/personal-information/address/edit', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.resetModules();
+  });
+
   it('should return userInfo object if userInfo is found', async () => {
     vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', firstName: 'John', lastName: 'Maverick' });
 
