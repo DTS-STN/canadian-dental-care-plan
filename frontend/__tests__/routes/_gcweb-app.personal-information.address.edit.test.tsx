@@ -8,7 +8,7 @@ vi.mock('~/services/user-service.server.ts', () => ({
   },
 }));
 
-describe('/personal-information/address/edit', () => {
+describe('Loader for /personal-information/address/edit', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.resetModules();

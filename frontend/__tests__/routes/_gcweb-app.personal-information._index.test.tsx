@@ -16,7 +16,7 @@ vi.mock('~/services/user-service.server.ts', () => ({
   },
 }));
 
-describe('Loader for _gcweb-app.personal-information._index', () => {
+describe('Loader for /personal-information', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.resetModules();

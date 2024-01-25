@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import { action } from '~/routes/_gcweb-app.personal-information.phone-number.edit';
 
-describe('Edit Phone Number Action', () => {
+describe('Action for /personal-information/phone-number/edit', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.resetModules();

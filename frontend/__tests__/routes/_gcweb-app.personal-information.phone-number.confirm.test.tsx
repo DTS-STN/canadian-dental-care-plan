@@ -30,8 +30,7 @@ vi.mock('~/services/session-service.server.ts', () => ({
   },
 }));
 
-
-describe('Confirm Phone Number Action', () => {
+describe('Action for /personal-information/phone-number/confirm', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.resetModules();
@@ -45,7 +44,7 @@ describe('Confirm Phone Number Action', () => {
     const response = await action({ request, context: {}, params: {} });
 
     expect(response.status).toBe(302);
-    expect(response).toEqual(redirect('/personal-information/phone-number/success', { headers: { 'Set-Cookie': 'undefined' }}));
+    expect(response).toEqual(redirect('/personal-information/phone-number/success', { headers: { 'Set-Cookie': 'undefined' } }));
   });
 
   it('Should redirect to homepage page when newPhoneNumber is missing', async () => {
