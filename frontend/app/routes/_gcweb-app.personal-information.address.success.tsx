@@ -41,7 +41,7 @@ export default function UpdateAddressSuccess() {
         <div className="col-sm-6">
           <section className="panel panel-info">
             <header className="panel-heading">
-              <h3 className="panel-title">{t('personal-information:address.success.home-address')}</h3>
+              <h2 className="panel-title">{t('personal-information:address.success.home-address')}</h2>
             </header>
             <div className="panel-body">
               <p>{loaderData.userInfo?.homeAddress}</p>
@@ -54,7 +54,7 @@ export default function UpdateAddressSuccess() {
         <div className="col-sm-6">
           <section className="panel panel-info">
             <header className="panel-heading">
-              <h3 className="panel-title">{t('personal-information:address.success.mailing-address')}</h3>
+              <h2 className="panel-title">{t('personal-information:address.success.mailing-address')}</h2>
             </header>
             <div className="panel-body">
               <p>{loaderData.userInfo?.mailingAddress}</p>
