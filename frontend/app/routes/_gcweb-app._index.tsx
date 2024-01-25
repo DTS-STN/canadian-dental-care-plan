@@ -50,7 +50,7 @@ export default function Index() {
       <h1 id="wb-cont" property="name">
         {t('index:page-title')}
       </h1>
-      <p>{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.firstName })}</p>
+      <p>{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.lastName })}</p>
       <div className="grid gap-4 md:grid-cols-2">
         <LandingPageLink title={<TitleWithInProgressLabel>{t('index:view-my-application')}</TitleWithInProgressLabel>} description={t('index:view-my-application-desc')} to="/view-application">
           {t('index:view-my-application')}
