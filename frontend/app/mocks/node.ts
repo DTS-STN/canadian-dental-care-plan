@@ -105,6 +105,15 @@ const handlers = [
       nameFr: preferredLanguageEntity.nameFr,
     });
   }),
+
+  /**
+   * Handler for GET requests to validate address
+   */
+  http.get('https://api.example.com/address/correct/:address', ({ params }) => {
+    return HttpResponse.json({
+      isCorrect: true,
+    });
+  }),
 ];
 
 export const server = setupServer(...handlers);
