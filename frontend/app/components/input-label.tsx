@@ -1,33 +1,26 @@
-import React, { type ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
-export interface InputLabelProps extends Omit<React.ComponentProps<'label'>, ''> {
+export interface InputLabelProps extends ComponentProps<'label'> {
   children: ReactNode;
-  errorId: string;
-  errorMessage?: string;
   id: string;
   required?: boolean;
 }
 
-export const InputLabel = (props: InputLabelProps) => {
+export function InputLabel(props: InputLabelProps) {
   const { t } = useTranslation('gcweb');
-  const { children, className, errorId, errorMessage, id, required, ...restLabelProps } = props;
+  const { children, className, required, ...restProps } = props;
 
   return (
-    <label className={clsx(required && 'required', className)} id={id} data-testid={`input-label-${id}`} {...restLabelProps}>
+    <label className={clsx(required && 'required', className)} data-testid="input-label" {...restProps}>
       <span className="field-name">{children}</span>
       {required && (
-        <strong className="required mrgn-lft-sm" data-testid={`input-label-required-${id}`}>
+        <strong className="required mrgn-lft-sm" data-testid="input-label-required">
           ({t('input-label.required')})
         </strong>
       )}
-      {errorMessage && (
-        <span id={errorId} className="label label-danger wb-server-error" data-testid={`input-label-error-message-${id}`}>
-          {errorMessage}
-        </span>
-      )}
     </label>
   );
-};
+}

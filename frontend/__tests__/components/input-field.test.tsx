@@ -17,56 +17,65 @@ describe('InputLabel', () => {
   });
 
   it('should render', async () => {
-    render(<InputField id="id" name="test" label="label" defaultValue="default value" />);
+    render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" />);
 
-    const actual = screen.getByTestId('data-test-id');
+    const actual: HTMLInputElement = screen.getByTestId('input-field');
 
     expect(actual).toBeInTheDocument();
+    expect(actual).toHaveAccessibleName('label test');
+    expect(actual).toHaveAttribute('id', 'test-id');
+    expect(actual).toHaveValue('default value');
     expect(actual).not.toBeRequired();
-    expect(actual).toHaveAccessibleName('label');
     expect(actual).not.toHaveAccessibleDescription();
   });
 
   it('should render with help message', async () => {
-    render(<InputField id="id" name="test" label="label" defaultValue="default value" helpMessage="help message" />);
+    render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" helpMessage="help message" />);
 
-    const actual = screen.getByTestId('data-test-id');
+    const actual = screen.getByTestId('input-field');
 
     expect(actual).toBeInTheDocument();
-    expect(actual).not.toBeRequired();
-    expect(actual).toHaveAccessibleName('label');
     expect(actual).toHaveAccessibleDescription('help message');
+    expect(actual).toHaveAccessibleName('label test');
+    expect(actual).toHaveAttribute('id', 'test-id');
+    expect(actual).toHaveValue('default value');
+    expect(actual).not.toBeRequired();
   });
 
   it('should render with help message secondary', async () => {
-    render(<InputField id="id" name="test" label="label" defaultValue="default value" helpMessageSecondary="help message secondary" />);
+    render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" helpMessageSecondary="help message secondary" />);
 
-    const actual = screen.getByTestId('data-test-id');
+    const actual = screen.getByTestId('input-field');
 
     expect(actual).toBeInTheDocument();
-    expect(actual).not.toBeRequired();
-    expect(actual).toHaveAccessibleName('label');
     expect(actual).toHaveAccessibleDescription('help message secondary');
+    expect(actual).toHaveAccessibleName('label test');
+    expect(actual).toHaveAttribute('id', 'test-id');
+    expect(actual).toHaveValue('default value');
+    expect(actual).not.toBeRequired();
   });
 
   it('should render with required', async () => {
-    render(<InputField id="id" name="test" label="label" defaultValue="default value" required />);
+    render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" required />);
 
-    const actual = screen.getByTestId('data-test-id');
+    const actual = screen.getByTestId('input-field');
 
     expect(actual).toBeInTheDocument();
-    expect(actual).toHaveAccessibleName('label (input-label.required)');
+    expect(actual).toHaveAccessibleName('label test (input-label.required)');
+    expect(actual).toHaveAttribute('id', 'test-id');
+    expect(actual).toHaveValue('default value');
     expect(actual).toBeRequired();
+    expect(actual).not.toHaveAccessibleDescription();
   });
 
   it('should render with error message', async () => {
-    render(<InputField id="id" name="test" label="label" defaultValue="default value" errorMessage="error message" />);
+    render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" errorMessage="error message" />);
 
-    const actual = screen.getByTestId('data-test-id');
+    const actual = screen.getByTestId('input-field');
 
     expect(actual).toBeInTheDocument();
-    expect(actual).toHaveAccessibleName('label error message');
+    expect(actual).toHaveAccessibleName('label test');
     expect(actual).toBeInvalid();
-    expect(actual).toHaveAccessibleErrorMessage();
+    expect(actual).toHaveAccessibleErrorMessage('error message');
   });
 });
