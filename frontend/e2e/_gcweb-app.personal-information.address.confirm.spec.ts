@@ -1,15 +1,15 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-test.describe('preferred language page', async () => {
-  test('should navigate to page and render', async ({ page }) => {
-    await page.goto('/personal-information/preferred-language');
-    const locator = page.locator('h1');
-    await expect(locator).toHaveText(/preferred language/i);
+test.describe('homepage', () => {
+  test('should navigate to index', async ({ page }) => {
+    await page.goto('/personal-information/address/confirm');
+
+    await expect(page.locator('h1')).toHaveText(/change address/i);
   });
 
   test('should not have any automatically detectable accessibility issues', async ({ page }) => {
-    await page.goto('/personal-information/preferred-language');
+    await page.goto('/personal-information/address/confirm');
 
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 
