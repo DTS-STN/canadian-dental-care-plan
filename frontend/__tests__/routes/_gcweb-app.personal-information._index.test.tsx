@@ -16,50 +16,52 @@ vi.mock('~/services/user-service.server.ts', () => ({
   },
 }));
 
-describe('Loader for /personal-information', () => {
+describe('_gcweb-app.personal-information._index', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.resetModules();
   });
 
-  it('Loader should return a Response object', async () => {
-    const response = await loader({
-      request: new Request('http://localhost:3000/personal-information'),
-      context: {},
-      params: {},
+  describe('loader()', () => {
+    it('should return a Response object', async () => {
+      const response = await loader({
+        request: new Request('http://localhost:3000/personal-information'),
+        context: {},
+        params: {},
+      });
+
+      expect(response).toBeInstanceOf(Response);
     });
 
-    expect(response).toBeInstanceOf(Response);
-  });
+    it('should return reponse status of 200', async () => {
+      const response = await loader({
+        request: new Request('http://localhost:3000/personal-information'),
+        context: {},
+        params: {},
+      });
 
-  it('Loader response status should be 200', async () => {
-    const response = await loader({
-      request: new Request('http://localhost:3000/personal-information'),
-      context: {},
-      params: {},
+      expect(response.status).toBe(200);
     });
 
-    expect(response.status).toBe(200);
-  });
+    it('should return correct mocked data', async () => {
+      const response = await loader({
+        request: new Request('http://localhost:3000/personal-information'),
+        context: {},
+        params: {},
+      });
 
-  it('Loader should return correct mocked data', async () => {
-    const response = await loader({
-      request: new Request('http://localhost:3000/personal-information'),
-      context: {},
-      params: {},
-    });
+      const data = await response.json();
 
-    const data = await response.json();
-
-    expect(data).toEqual({
-      user: {
-        firstName: 'John',
-        homeAddress: '123 Home Street',
-        lastName: 'Maverick',
-        mailingAddress: '123 Mailing Street',
-        phoneNumber: '(555) 555-5555',
-        preferredLanguage: 'fr',
-      },
+      expect(data).toEqual({
+        user: {
+          firstName: 'John',
+          homeAddress: '123 Home Street',
+          lastName: 'Maverick',
+          mailingAddress: '123 Mailing Street',
+          phoneNumber: '(555) 555-5555',
+          preferredLanguage: 'fr',
+        },
+      });
     });
   });
 });

@@ -8,39 +8,41 @@ vi.mock('~/services/user-service.server.ts', () => ({
   },
 }));
 
-describe('Loader for /personal-information/address/edit', () => {
+describe('_gcweb-app.personal-information.address.edit', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.resetModules();
   });
 
-  it('should return userInfo object if userInfo is found', async () => {
-    vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', firstName: 'John', lastName: 'Maverick' });
+  describe('loader()', () => {
+    it('should return userInfo object if userInfo is found', async () => {
+      vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', firstName: 'John', lastName: 'Maverick' });
 
-    const response = await loader({
-      request: new Request('http://localhost:3000/personal-information/address/edit'),
-      context: {},
-      params: {},
-    });
-
-    const data = await response.json();
-
-    expect(data).toEqual({
-      userInfo: { id: 'some-id', firstName: 'John', lastName: 'Maverick' },
-    });
-  });
-
-  it('should throw 404 response if userInfo is not found', async () => {
-    vi.mocked(userService.getUserInfo).mockResolvedValue(null);
-
-    try {
-      await loader({
+      const response = await loader({
         request: new Request('http://localhost:3000/personal-information/address/edit'),
         context: {},
         params: {},
       });
-    } catch (error) {
-      expect((error as Response).status).toEqual(404);
-    }
+
+      const data = await response.json();
+
+      expect(data).toEqual({
+        userInfo: { id: 'some-id', firstName: 'John', lastName: 'Maverick' },
+      });
+    });
+
+    it('should throw 404 response if userInfo is not found', async () => {
+      vi.mocked(userService.getUserInfo).mockResolvedValue(null);
+
+      try {
+        await loader({
+          request: new Request('http://localhost:3000/personal-information/address/edit'),
+          context: {},
+          params: {},
+        });
+      } catch (error) {
+        expect((error as Response).status).toEqual(404);
+      }
+    });
   });
 });
