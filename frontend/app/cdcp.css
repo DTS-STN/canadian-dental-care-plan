@@ -11,3 +11,7 @@ html {
 	font-size: 1.3em;
 	min-width: 300px;
 }
+
+.label-warning{
+  border-color:#ffffff
+}
