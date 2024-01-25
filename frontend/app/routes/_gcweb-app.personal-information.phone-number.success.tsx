@@ -10,7 +10,13 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
+  breadcrumbs: [
+    { labelI18nKey: 'personal-information:phone-number.success.breadcrumbs.home', to: '/' },
+    { labelI18nKey: 'personal-information:phone-number.success.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:phone-number.success.breadcrumbs.success-phone-number' },
+  ],
   i18nNamespaces,
+  pageIdentifier: 'CDCP-0010',
   pageTitleI18nKey: 'personal-information:phone-number.success.page-title',
 } as const satisfies RouteHandleData;
 

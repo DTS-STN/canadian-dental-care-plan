@@ -84,6 +84,11 @@
     },
     "edit": {
       "page-title": "Update phone number",
+      "breadcrumbs": {
+        "home": "Home",
+        "personal-information": "Personal information",
+        "change-phone-number": "Change phone number"
+      },
       "update-message": "Please update your phone number below.",
       "button": {
         "save": "Save",
@@ -98,6 +103,11 @@
     },
     "confirm": {
       "page-title": "Confirm phone number",
+      "breadcrumbs": {
+        "home": "Home",
+        "personal-information": "Personal information",
+        "confirm-phone-number": "Confirm phone number"
+      },
       "confirm-message": "Please confirm the phone number change below.",
       "button": {
         "confirm": "Confirmer",
@@ -106,6 +116,11 @@
     },
     "success": {
       "page-title": "Phone number saved successfully",
+      "breadcrumbs": {
+        "home": "Home",
+        "personal-information": "Personal information",
+        "success-phone-number": "Success phone number"
+      },
       "success-message": "Phone number has been successfully updated.",
       "return": "Return to personal information"
     }

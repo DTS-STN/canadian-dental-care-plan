@@ -16,7 +16,7 @@ export const handle = {
     { labelI18nKey: 'personal-information:preferred-language.index.breadcrumbs.preferred-language' },
   ],
   i18nNamespaces,
-  pageIdentifier: 'CDCP-0004',
+  pageIdentifier: 'CDCP-0011',
   pageTitleI18nKey: 'personal-information:preferred-language.index.page-title',
 } as const satisfies RouteHandleData;
 

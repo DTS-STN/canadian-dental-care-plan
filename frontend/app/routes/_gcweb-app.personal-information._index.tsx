@@ -11,7 +11,7 @@ const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'personal-information:index.breadcrumbs.home', to: '/' }, { labelI18nKey: 'personal-information:index.page-title' }],
   i18nNamespaces,
-  pageIdentifier: 'CDCP-0003',
+  pageIdentifier: 'CDCP-0002',
   pageTitleI18nKey: 'personal-information:index.page-title',
 } as const satisfies RouteHandleData;
 

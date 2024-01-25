@@ -15,7 +15,7 @@ export const handle = {
     { labelI18nKey: 'personal-information:address.index.breadcrumbs.address' },
   ],
   i18nNamespaces,
-  pageIdentifier: 'CDCP-0007',
+  pageIdentifier: 'CDCP-0003',
   pageTitleI18nKey: 'personal-information:address.index.page-title',
 } as const satisfies RouteHandleData;
 
