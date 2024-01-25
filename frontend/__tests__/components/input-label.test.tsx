@@ -19,50 +19,29 @@ describe('InputLabel', () => {
   });
 
   it('should render', () => {
-    render(
-      <InputLabel id="id" errorId="error-id">
-        input label
-      </InputLabel>,
-    );
+    render(<InputLabel id="id">input test</InputLabel>);
 
-    const actualLabel = screen.getByTestId('input-label-id');
+    const actualLabel = screen.getByTestId('input-label');
     expect(actualLabel).toBeInTheDocument();
-    expect(actualLabel.id).toBe('id');
-
-    expect(() => getByTestId(actualLabel, 'input-label-required-id')).toThrow();
-    expect(() => getByTestId(actualLabel, 'input-label-error-message-id')).toThrow();
-  });
-
-  it('should render with required text', () => {
-    render(
-      <InputLabel id="id" errorId="error-id" required>
-        input label
-      </InputLabel>,
-    );
-
-    const actualLabel = screen.getByTestId('input-label-id');
-    expect(actualLabel).toBeInTheDocument();
-
-    const actualRequired = getByTestId(actualLabel, 'input-label-required-id');
-    expect(actualRequired.textContent).toBe('(input-label.required)');
-
-    expect(() => getByTestId(actualLabel, 'input-label-error-message-id')).toThrow();
-  });
-
-  it('should render with error message', () => {
-    render(
-      <InputLabel id="id" errorId="error-id" errorMessage="error message">
-        input label
-      </InputLabel>,
-    );
-
-    const actualLabel = screen.getByTestId('input-label-id');
-    expect(actualLabel).toBeInTheDocument();
-
-    const actualErrorMessage = getByTestId(actualLabel, 'input-label-error-message-id');
-    expect(actualErrorMessage).toBeInTheDocument();
-    expect(actualErrorMessage.textContent).toBe('error message');
+    expect(actualLabel).toHaveAttribute('id', 'id');
+    expect(actualLabel).toHaveTextContent('input test');
 
     expect(() => getByTestId(actualLabel, 'input-label-required')).toThrow();
+  });
+
+  it('should render with required', () => {
+    render(
+      <InputLabel id="id" required>
+        input test
+      </InputLabel>,
+    );
+
+    const actualLabel = screen.getByTestId('input-label');
+    expect(actualLabel).toBeInTheDocument();
+    expect(actualLabel).toHaveAttribute('id', 'id');
+    expect(actualLabel).toHaveTextContent('input test');
+
+    const actualRequired = getByTestId(actualLabel, 'input-label-required');
+    expect(actualRequired).toHaveTextContent('(input-label.required)');
   });
 });

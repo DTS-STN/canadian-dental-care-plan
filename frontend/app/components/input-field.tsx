@@ -2,6 +2,7 @@ import { forwardRef } from 'react';
 
 import clsx from 'clsx';
 
+import { InputError } from './input-error';
 import { InputLabel } from '~/components/input-label';
 
 export interface InputFieldProps extends Omit<React.ComponentProps<'input'>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children'> {
@@ -17,9 +18,9 @@ export interface InputFieldProps extends Omit<React.ComponentProps<'input'>, 'ar
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) => {
   const { errorMessage, className, helpMessage, helpMessageSecondary, id, label, required, ...restInputProps } = props;
 
+  const inputErrorId = `input-${id}-error`;
   const inputHelpMessageId = `input-${id}-help`;
   const inputHelpMessageSecondaryId = `input-${id}-help-secondary`;
-  const inputLabelErrorId = `input-${id}-error`;
   const inputLabelId = `input-${id}-label`;
   const inputWrapperId = `input-${id}`;
 
@@ -32,31 +33,36 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) =>
 
   return (
     <div id={inputWrapperId} data-testid={inputWrapperId} className="form-group">
-      <InputLabel id={inputLabelId} errorId={inputLabelErrorId} data-testid={inputLabelId} htmlFor={id} required={required} errorMessage={errorMessage}>
+      <InputLabel id={inputLabelId} htmlFor={id} required={required}>
         {label}
       </InputLabel>
+      {errorMessage && (
+        <InputError id={inputErrorId} className="mb-1.5">
+          {errorMessage}
+        </InputError>
+      )}
       {helpMessage && (
-        <div className="mb-1.5 max-w-prose text-base text-gray-600" id={inputHelpMessageId} data-testid={inputHelpMessageId}>
+        <span className="mb-1.5 block max-w-prose text-base text-gray-600" id={inputHelpMessageId} data-testid="input-field-help">
           {helpMessage}
-        </div>
+        </span>
       )}
       <input
         ref={ref}
         aria-describedby={getAriaDescribedby()}
-        aria-errormessage={errorMessage ? inputLabelErrorId : undefined}
+        aria-errormessage={errorMessage ? inputErrorId : undefined}
         aria-invalid={!!errorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
         className={clsx('form-control', className)}
-        data-testid={`data-test-${id}`}
+        data-testid="input-field"
         id={id}
         required={required}
         {...restInputProps}
       />
       {helpMessageSecondary && (
-        <div className="mt-1.5 max-w-prose text-base text-gray-600" id={inputHelpMessageSecondaryId} data-testid={inputHelpMessageSecondaryId}>
+        <span className="mt-1.5 block max-w-prose text-base text-gray-600" id={inputHelpMessageSecondaryId} data-testid="input-field-help-secondary">
           {helpMessageSecondary}
-        </div>
+        </span>
       )}
     </div>
   );
