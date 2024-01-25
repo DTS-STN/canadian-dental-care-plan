@@ -19,5 +19,9 @@
   "legacy-links": "(FR) Legacy Links",
   "about": "(FR) About us",
   "not-found": "(FR) (404) Not Found",
-  "server-error": "(FR) (500) Server Error"
+  "server-error": "(FR) (500) Server Error",
+  "label-in-progress": {
+    "sr-only": "(FR)State:",
+    "text": "(FR)In progress"
+  }
 }
