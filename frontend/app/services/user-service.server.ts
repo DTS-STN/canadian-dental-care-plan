@@ -4,6 +4,9 @@ import { z } from 'zod';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
+const VALUES = ['fr', 'en'] as const;
+const LanguageEnum = z.enum(VALUES);
+
 const userInfoSchema = z.object({
   id: z.string().uuid().optional(),
   firstName: z.string().optional(),
@@ -11,7 +14,7 @@ const userInfoSchema = z.object({
   phoneNumber: z.string().optional(),
   homeAddress: z.string().optional(),
   mailingAddress: z.string().optional(),
-  preferredLanguage: z.string().optional(),
+  preferredLanguage: LanguageEnum.optional(),
 });
 
 export type UserInfo = z.infer<typeof userInfoSchema>;
