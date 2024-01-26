@@ -99,7 +99,7 @@
       "change": "Change"
     },
     "edit": {
-      "page-title": "Preferred language edit",
+      "page-title": "Change preferred language",
       "breadcrumbs": {
         "home": "Home",
         "personal-information": "Personal information",
@@ -112,6 +112,21 @@
       "language": "Language",
       "change": "Change",
       "cancel": "Cancel"
+    },
+    "confirm": {
+      "page-title": "Confirm preferred language",
+      "breadcrumbs": {
+        "home": "Home",
+        "personal-information": "Personal information",
+        "preferred-language": "Preferred language",
+        "preferred-language-edit": "Change preferred language",
+        "preferred-language-confirm": "Confirm preferred language"
+      },
+      "confirm-message": "Please confirm the change below.",
+      "button": {
+        "confirm": "Confirm",
+        "cancel": "Cancel"
+      }
     }
   }
 }

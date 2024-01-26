@@ -3,7 +3,6 @@ import { Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import { lookupService } from '~/services/lookup-service.server';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -26,16 +25,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (userInfo === null) {
     throw new Response(null, { status: 404 });
   }
-
-  const preferredLanguage = userInfo?.preferredLanguage ? await lookupService.getPreferredLanguage(userInfo.preferredLanguage) : undefined;
-  if (preferredLanguage === null) {
-    throw new Response(null, { status: 404 });
-  }
-  return json({ user: userInfo, preferredLanguageDetails: preferredLanguage });
+  return json({ user: userInfo });
 }
 
 export default function PreferredLanguage() {
-  const { user, preferredLanguageDetails } = useLoaderData<typeof loader>();
+  const { user } = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
@@ -45,13 +39,7 @@ export default function PreferredLanguage() {
       <p>{t('personal-information:preferred-language.index.on-file')}</p>
       <dl>
         <dt>{t('personal-information:preferred-language.index.language')}</dt>
-        <dd>{user?.preferredLanguage}</dd>
-        <dt>{t('personal-information:preferred-language.index.id')}</dt>
-        <dd>{preferredLanguageDetails?.id}</dd>
-        <dt>{t('personal-information:preferred-language.index.nameEn')}</dt>
-        <dd>{preferredLanguageDetails?.nameEn}</dd>
-        <dt>{t('personal-information:preferred-language.index.nameFr')}</dt>
-        <dd>{preferredLanguageDetails?.nameFr}</dd>
+        <dd>{user?.preferredLanguage === 'en' ? t('personal-information:preferred-language.index.nameEn') : t('personal-information:preferred-language.index.nameFr')}</dd>
       </dl>
       <Link to="/personal-information/preferred-language/edit" className="btn btn-primary">
         {t('personal-information:preferred-language.index.change')}
