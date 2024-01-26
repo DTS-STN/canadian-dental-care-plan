@@ -50,16 +50,6 @@
     }
   },
   "phone-number": {
-    "index": {
-      "page-title": "Phone number",
-      "breadcrumbs": {
-        "home": "Home",
-        "personal-information": "Personal information",
-        "phone-number": "Phone number"
-      },
-      "phone-number": "Phone number",
-      "change": "Change"
-    },
     "edit": {
       "page-title": "Update phone number",
       "breadcrumbs": {
@@ -91,16 +81,6 @@
         "confirm": "Confirmer",
         "cancel": "Cancel"
       }
-    },
-    "success": {
-      "page-title": "Phone number saved successfully",
-      "breadcrumbs": {
-        "home": "Home",
-        "personal-information": "Personal information",
-        "success-phone-number": "Success phone number"
-      },
-      "success-message": "Phone number has been successfully updated.",
-      "return": "Return to personal information"
     }
   },
   "preferred-language": {
