@@ -4,9 +4,11 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { lookupService } from '~/services/lookup-service.server';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { PREFFERRED_LANGUAGES } from '~/utils/constants';
+import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
@@ -28,12 +30,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
     throw new Response(null, { status: 404 });
   }
 
-  return json({ userInfo });
+  const preferredLanguageList = userInfo?.preferredLanguage ? await lookupService.getAllPreferredLanguages() : undefined;
+  return json({ userInfo, preferredLanguageList });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
   const formDataSchema = z.object({
-    preferredLanguage: z.enum(['en', 'fr']),
+    preferredLanguage: z.enum(PREFFERRED_LANGUAGES),
   });
   const formData = Object.fromEntries(await request.formData());
   const parsedDataResult = formDataSchema.safeParse(formData);
@@ -47,6 +50,8 @@ export async function action({ request }: ActionFunctionArgs) {
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   session.set('preferredLanguage', parsedDataResult.data.preferredLanguage);
 
+  const userId = await userService.getUserId();
+  await userService.updateUserInfo(userId, parsedDataResult.data);
   return redirect('/personal-information/preferred-language/confirm', {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),
@@ -55,8 +60,8 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function PreferredLanguageEdit() {
-  const { userInfo } = useLoaderData<typeof loader>();
-  const { t } = useTranslation(i18nNamespaces);
+  const { userInfo, preferredLanguageList } = useLoaderData<typeof loader>();
+  const { i18n, t } = useTranslation(i18nNamespaces);
 
   return (
     <>
@@ -67,14 +72,15 @@ export default function PreferredLanguageEdit() {
         <fieldset className="gc-chckbxrdio">
           <legend>{t('personal-information:preferred-language.edit.page-title')}</legend>
           <ul className="list-unstyled lst-spcd-2">
-            <li className="radio">
-              <input type="radio" name="preferredLanguage" id="preferred-language-option-en" value="en" defaultChecked={userInfo.preferredLanguage === 'en'} />
-              <label htmlFor="preferred-language-option-en">{t('personal-information:preferred-language.edit.nameEn')}</label>
-            </li>
-            <li className="radio">
-              <input type="radio" name="preferredLanguage" id="preferred-language-option-fr" value="fr" defaultChecked={userInfo.preferredLanguage === 'fr'} />
-              <label htmlFor="preferred-language-option-fr">{t('personal-information:preferred-language.edit.nameFr')}</label>
-            </li>
+            {preferredLanguageList?.map((language) => {
+              const radioId = `preferred-language-option-${language.id}`;
+              return (
+                <li key={radioId} className="radio">
+                  <input type="radio" name="preferredLanguage" id={radioId} value={language.id} defaultChecked={userInfo.preferredLanguage === language.id} />
+                  <label htmlFor={radioId}> {getNameByLanguage(i18n.language, language)} </label>
+                </li>
+              );
+            })}
           </ul>
         </fieldset>
         <div className="form-group">
