@@ -7,12 +7,12 @@ import express from 'express';
 import getPort from 'get-port';
 import morgan from 'morgan';
 import fs from 'node:fs';
+import { type IncomingMessage, type ServerResponse } from 'node:http';
 import os from 'node:os';
 import path from 'node:path';
 import url from 'node:url';
 import sourceMapSupport from 'source-map-support';
-
-import { getLogger } from '~/utils/logging.server';
+import { createLogger, format, transports } from 'winston';
 
 process.env.NODE_ENV = process.env.NODE_ENV ?? 'production';
 const log = getLogger('express.server');
@@ -20,6 +20,27 @@ const log = getLogger('express.server');
 installSourceMapSupport();
 installGlobals();
 run();
+
+/**
+ * Function copied from ./app/utils/logging.server.ts to work around typescript
+ * path alias issues with ESM and ESBuild. 🤷
+ */
+function getLogger(category: string) {
+  function formatCategory(category: string, size: number) {
+    const str = category.padStart(size);
+    return str.length <= size ? str : `...${str.slice(-size + 3)}`;
+  }
+
+  return createLogger({
+    level: process.env['LOG_LEVEL'] ?? 'info',
+    format: format.combine(
+      format.timestamp(),
+      format.splat(),
+      format.printf((info) => `${info.timestamp} ${info.level.toUpperCase().padStart(7)} --- [${formatCategory(category, 25)}]: ${info.message}`),
+    ),
+    transports: [new transports.Console()],
+  });
+}
 
 function installSourceMapSupport() {
   sourceMapSupport.install({
@@ -60,12 +81,7 @@ async function run() {
   const versionPath = path.resolve(buildPath, '..', 'version.txt');
 
   function reimportServer() {
-    Object.keys(require.cache).forEach((key) => {
-      if (key.startsWith(buildPath)) {
-        delete require.cache[key];
-      }
-    });
-
+    // TODO :: GjB :: do we need to bust the ESM import cache here?
     // use a timestamp query parameter to bust the import cache
     return import(url.pathToFileURL(buildPath).href + '?t=' + fs.statSync(buildPath).mtimeMs);
   }
@@ -98,6 +114,12 @@ async function run() {
     };
   }
 
+  const loggingOptions: morgan.Options<IncomingMessage, ServerResponse> = {
+    stream: {
+      write: (str: string) => log.info(str.trim()),
+    },
+  };
+
   const build: ServerBuild = await reimportServer();
 
   const app = express();
@@ -105,7 +127,7 @@ async function run() {
   app.use(compression());
   app.use(express.static('public', { maxAge: '1h' }));
   app.use(build.publicPath, express.static(build.assetsBuildDirectory, { immutable: true, maxAge: '1y' }));
-  app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'tiny', { stream: { write: (str) => log.info(str) } }));
+  app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'tiny', loggingOptions));
   app.all('*', process.env.NODE_ENV === 'development' ? createDevRequestHandler(build) : createRequestHandler({ build, mode: process.env.NODE_ENV }));
 
   const onListen = () => {

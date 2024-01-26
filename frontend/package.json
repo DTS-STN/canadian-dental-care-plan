@@ -2,10 +2,11 @@
   "name": "canadian-dental-care-plan",
   "private": true,
   "sideEffects": false,
+  "type": "module",
   "scripts": {
     "build": "run-p build:client build:server",
     "build:client": "remix build",
-    "build:server": "esbuild --bundle --outdir=build --platform=node ./express.server.ts",
+    "build:server": "esbuild --format=esm --platform=node --outdir=build ./express.server.ts",
     "dev": "run-p dev:client dev:server",
     "dev:client": "remix dev --manual --command \"node --watch-path ./build/express.server.js --watch ./build/express.server.js ./build/index.js\"",
     "dev:server": "cross-env NODE_ENV=development npm run-script build:server -- --watch",
