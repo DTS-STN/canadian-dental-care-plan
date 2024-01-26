@@ -14,7 +14,6 @@ export const handle = {
   breadcrumbs: [
     { labelI18nKey: 'personal-information:preferred-language.confirm.breadcrumbs.home', to: '/' },
     { labelI18nKey: 'personal-information:preferred-language.confirm.breadcrumbs.personal-information', to: '/personal-information' },
-    { labelI18nKey: 'personal-information:preferred-language.confirm.breadcrumbs.preferred-language', to: '/personal-information/preferred-language' },
     { labelI18nKey: 'personal-information:preferred-language.confirm.breadcrumbs.preferred-language-edit', to: '/personal-information/preferred-language/edit' },
     { labelI18nKey: 'personal-information:preferred-language.confirm.breadcrumbs.preferred-language-confirm' },
   ],
