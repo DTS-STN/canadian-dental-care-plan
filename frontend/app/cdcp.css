@@ -1,3 +1,13 @@
 html {
   font-size: 16px;
 }
+
+.header-bg h2 {
+	background: linear-gradient(297.5deg, transparent, transparent 25px, white 26px, white 31px, #26374a 32px, #26374a);
+	color: #ffffff;
+	display: inline-block;
+	margin: 0px;
+	padding: 5px 40px 10px 15px;
+	font-size: 1.3em;
+	min-width: 300px;
+}
