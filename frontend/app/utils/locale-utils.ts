@@ -22,6 +22,10 @@ export function getAltLanguage(language: string) {
   }
 }
 
+export function getNameByLanguage(language: string, { nameEn, nameFr }: { nameEn?: string; nameFr?: string }) {
+  return language == 'en' ? nameEn : nameFr;
+}
+
 /**
  * Returns all namespaces required by the given routes by examining the route's i18nNamespaces handle property.
  * @see https://remix.run/docs/en/main/route/handle

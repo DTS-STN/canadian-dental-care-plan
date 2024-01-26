@@ -39,7 +39,6 @@ function createLookupService() {
     const response = await fetch(url);
 
     if (response.ok) return preferredLanguageSchema.parse(await response.json());
-    if (response.status === 404) return null;
 
     logger.error('%j', {
       message: 'Failed to fetch data',
