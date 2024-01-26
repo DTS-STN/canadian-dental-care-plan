@@ -43,6 +43,7 @@
     "libphonenumber-js": "^1.10.54",
     "morgan": "^1.10.0",
     "msw": "^2.1.5",
+    "oauth4webapi": "^2.8.1",
     "patch-package": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
