@@ -5,7 +5,7 @@ test.describe('preferred language edit page', async () => {
   test('should navigate to page and render', async ({ page }) => {
     await page.goto('/personal-information/preferred-language/edit');
 
-    await expect(page.locator('h1')).toHaveText(/preferred language edit/i);
+    await expect(page.locator('h1')).toHaveText(/Change preferred language/i);
   });
 
   test('should not have any automatically detectable accessibility issues', async ({ page }) => {

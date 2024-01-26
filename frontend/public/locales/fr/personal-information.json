@@ -81,6 +81,16 @@
         "confirm": "(FR) Confirmer",
         "cancel": "(FR) Cancel"
       }
+    },
+    "success": {
+      "page-title": "(FR) Phone number saved successfully",
+      "breadcrumbs": {
+        "home": "(FR) Home",
+        "personal-information": "(FR) Personal information",
+        "success-phone-number": "(FR) Success phone number"
+      },
+      "success-message": "(FR) Phone number has been successfully updated.",
+      "return": "(FR) Return to personal information"
     }
   },
   "preferred-language": {
@@ -99,7 +109,7 @@
       "change": "(FR) Change"
     },
     "edit": {
-      "page-title": "(FR) Preferred language edit",
+      "page-title": "(FR) Change preferred language",
       "breadcrumbs": {
         "home": "(FR) Home",
         "personal-information": "(FR) Personal information",
@@ -112,6 +122,21 @@
       "language": "(FR) Language",
       "change": "(FR) Change",
       "cancel": "(FR) Cancel"
+    },
+    "confirm": {
+      "page-title": "(FR) Confirm preferred language",
+      "breadcrumbs": {
+        "home": "(FR) Home",
+        "personal-information": "(FR) Personal information",
+        "preferred-language": "(FR) Preferred language",
+        "preferred-language-edit": "(FR) Change preferred language",
+        "preferred-language-confirm": "(FR) Confirm"
+      },
+      "confirm-message": "(FR) Please confirm the phone number change below.",
+      "button": {
+        "confirm": "(FR) Confirmer",
+        "cancel": "(FR) Cancel"
+      }
     }
   }
 }

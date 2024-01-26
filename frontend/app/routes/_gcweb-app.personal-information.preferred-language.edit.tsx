@@ -14,7 +14,6 @@ export const handle = {
   breadcrumbs: [
     { labelI18nKey: 'personal-information:preferred-language.edit.breadcrumbs.home', to: '/' },
     { labelI18nKey: 'personal-information:preferred-language.edit.breadcrumbs.personal-information', to: '/personal-information' },
-    { labelI18nKey: 'personal-information:preferred-language.edit.page-title', to: '/personal-information/preferred-language' },
     { labelI18nKey: 'personal-information:preferred-language.edit.page-title' },
   ],
   i18nNamespaces,
@@ -48,7 +47,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   session.set('preferredLanguage', parsedDataResult.data.preferredLanguage);
 
-  return redirect('/personal-information/preferred-language', {
+  return redirect('/personal-information/preferred-language/confirm', {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),
     },
