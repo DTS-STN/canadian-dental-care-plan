@@ -32,12 +32,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const userId = await userService.getUserId();
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  try {
+    const userId = await userService.getUserId();
+    const session = await sessionService.getSession(request.headers.get('Cookie'));
 
-  await userService.updateUserInfo(userId, session.get('preferredLanguage'));
+    const preferredLanguage = await session.get('preferredLanguage');
+    await userService.updateUserInfo(userId, { preferredLanguage });
 
-  return redirect('/personal-information');
+    return redirect('/personal-information');
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export default function PreferredLanguageConfirm() {
