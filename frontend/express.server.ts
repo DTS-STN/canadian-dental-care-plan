@@ -7,8 +7,6 @@ import express from 'express';
 import getPort from 'get-port';
 import morgan from 'morgan';
 import fs from 'node:fs';
-import { type IncomingMessage, type ServerResponse } from 'node:http';
-import os from 'node:os';
 import path from 'node:path';
 import url from 'node:url';
 import sourceMapSupport from 'source-map-support';
@@ -19,7 +17,7 @@ const log = getLogger('express.server');
 
 installSourceMapSupport();
 installGlobals();
-run();
+runServer();
 
 /**
  * Function copied from ./app/utils/logging.server.ts to work around typescript
@@ -61,14 +59,10 @@ function installSourceMapSupport() {
   });
 }
 
-function parseNumber(raw?: string) {
-  if (raw === undefined) return undefined;
-  let maybe = Number(raw);
-  if (Number.isNaN(maybe)) return undefined;
-  return maybe;
-}
-
-async function run() {
+/**
+ * Configure and start the express server, listening on localhost.
+ */
+async function runServer() {
   const port = parseNumber(process.env.PORT) ?? (await getPort({ port: 3000 }));
   const buildPathArg = process.argv[2];
 
@@ -78,79 +72,70 @@ async function run() {
   }
 
   const buildPath = path.resolve(buildPathArg);
-  const versionPath = path.resolve(buildPath, '..', 'version.txt');
-
-  function reimportServer() {
-    // TODO :: GjB :: do we need to bust the ESM import cache here?
-    // use a timestamp query parameter to bust the import cache
-    return import(url.pathToFileURL(buildPath).href + '?t=' + fs.statSync(buildPath).mtimeMs);
-  }
-
-  function createDevRequestHandler(initialBuild: ServerBuild): RequestHandler {
-    let build = initialBuild;
-
-    async function handleServerUpdate() {
-      // 1. re-import the server build
-      build = await reimportServer();
-
-      // 2. tell Remix that this app server is now up-to-date and ready
-      broadcastDevReady(build);
-    }
-
-    // prettier-ignore
-    chokidar.watch(versionPath, { ignoreInitial: true })
-      .on('add', handleServerUpdate)
-      .on('change', handleServerUpdate);
-
-    // wrap request handler to make sure its recreated
-    // with the latest build for every request
-    return async (req, res, next) => {
-      try {
-        const requestHandler = createRequestHandler({ build, mode: 'development' });
-        return requestHandler(req, res, next);
-      } catch (error) {
-        next(error);
-      }
-    };
-  }
-
-  const loggingOptions: morgan.Options<IncomingMessage, ServerResponse> = {
+  const versionPath = path.resolve(buildPathArg, '..', 'version.txt');
+  const build = await reimportServer(buildPath);
+  const loggingOptions = {
     stream: {
       write: (str: string) => log.info(str.trim()),
     },
   };
 
-  const build: ServerBuild = await reimportServer();
-
   const app = express();
   app.disable('x-powered-by');
   app.use(compression());
   app.use(express.static('public', { maxAge: '1h' }));
+  // since remix fingerprints assets served from build/ we can use aggressive caching
   app.use(build.publicPath, express.static(build.assetsBuildDirectory, { immutable: true, maxAge: '1y' }));
   app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'tiny', loggingOptions));
-  app.all('*', process.env.NODE_ENV === 'development' ? createDevRequestHandler(build) : createRequestHandler({ build, mode: process.env.NODE_ENV }));
+  app.all('*', process.env.NODE_ENV === 'development' ? createDevRequestHandler(build, buildPath, versionPath) : createRequestHandler({ build, mode: process.env.NODE_ENV }));
 
-  const onListen = () => {
-    const address =
-      process.env.HOST ||
-      Object.values(os.networkInterfaces())
-        .flat()
-        .find((ip) => String(ip?.family).includes('4') && !ip?.internal)?.address;
-
-    if (!address) {
-      log.info(`Server listening at http://localhost:${port}/`);
-    } else {
-      log.info(`Server listening at http://localhost:${port}/ (http://${address}:${port}/)`);
-    }
-
+  const server = app.listen(port, () => {
+    log.info(`Server listening at http://localhost:${port}/`);
     if (process.env.NODE_ENV === 'development') {
       void broadcastDevReady(build);
     }
-  };
-
-  const server = process.env.HOST ? app.listen(port, process.env.HOST, onListen) : app.listen(port, onListen);
+  });
 
   if (process.env.NODE_ENV === 'production') {
     ['SIGTERM', 'SIGINT'].forEach((signal) => process.once(signal, () => server?.close(log.error)));
   }
+}
+
+function createDevRequestHandler(initialBuild: ServerBuild, buildPath: string, versionPath: string) {
+  let build = initialBuild;
+
+  const handleServerUpdate = async () => {
+    build = await reimportServer(buildPath);
+    broadcastDevReady(build);
+  };
+
+  // prettier-ignore
+  chokidar.watch(versionPath, { ignoreInitial: true })
+    .on('add', handleServerUpdate)
+    .on('change', handleServerUpdate);
+
+  // wrap request handler to make sure its recreated
+  // with the latest build for every request
+  const requestHandler: RequestHandler = async (req, res, next) => {
+    try {
+      return createRequestHandler({ build, mode: 'development' })(req, res, next);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  return requestHandler;
+}
+
+function parseNumber(raw?: string) {
+  if (raw === undefined) return undefined;
+  let maybe = Number(raw);
+  if (Number.isNaN(maybe)) return undefined;
+  return maybe;
+}
+
+function reimportServer(buildPath: string) {
+  // TODO :: GjB :: do we need to bust the ESM import cache here?
+  // use a timestamp query parameter to bust the import cache
+  return import(url.pathToFileURL(buildPath).href + '?t=' + fs.statSync(buildPath).mtimeMs);
 }
