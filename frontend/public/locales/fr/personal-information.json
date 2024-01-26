@@ -50,16 +50,6 @@
     }
   },
   "phone-number": {
-    "index": {
-      "page-title": "(FR) Phone number",
-      "breadcrumbs": {
-        "home": "(FR) Home",
-        "personal-information": "(FR) Personal information",
-        "phone-number": "(FR) Phone number"
-      },
-      "phone-number": "(FR) Phone number",
-      "change": "(FR) Change"
-    },
     "edit": {
       "page-title": "(FR) Update phone number",
       "breadcrumbs": {
@@ -91,16 +81,6 @@
         "confirm": "(FR) Confirmer",
         "cancel": "(FR) Cancel"
       }
-    },
-    "success": {
-      "page-title": "(FR) Phone number saved successfully",      
-      "breadcrumbs": {
-        "home": "(FR) Home",
-        "personal-information": "(FR) Personal information",
-        "success-phone-number": "(FR) Success phone number"
-      },
-      "success-message": "(FR) Phone number has been successfully updated.",
-      "return": "(FR) Return to personal information"
     }
   },
   "preferred-language": {

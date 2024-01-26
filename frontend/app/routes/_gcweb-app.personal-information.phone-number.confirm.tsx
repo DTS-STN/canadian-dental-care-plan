@@ -43,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
   await userService.updateUserInfo(userId, userInfo);
   session.unset('newPhoneNumber');
 
-  return redirect('/personal-information/phone-number/success', {
+  return redirect('/personal-information', {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),
     },

@@ -37,7 +37,7 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
   });
 
   describe('action()', () => {
-    it('Should redirect to the success page when newPhoneNumber is present', async () => {
+    it('Should redirect to the personal information on success', async () => {
       let request = new Request('http://localhost:3000/personal-information/phone-number/confirm', {
         method: 'POST',
       });
@@ -45,7 +45,7 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
       const response = await action({ request, context: {}, params: {} });
 
       expect(response.status).toBe(302);
-      expect(response).toEqual(redirect('/personal-information/phone-number/success', { headers: { 'Set-Cookie': 'undefined' } }));
+      expect(response).toEqual(redirect('/personal-information', { headers: { 'Set-Cookie': 'undefined' } }));
     });
 
     it('Should redirect to homepage page when newPhoneNumber is missing', async () => {
