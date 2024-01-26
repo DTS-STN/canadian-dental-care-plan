@@ -4,6 +4,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
+    "postinstall": "patch-package --patch-dir other/patches",
     "build": "run-p build:client build:server",
     "build:client": "remix build",
     "build:server": "esbuild --format=esm --platform=node --outdir=build ./express.server.ts",
@@ -42,11 +43,14 @@
     "libphonenumber-js": "^1.10.54",
     "morgan": "^1.10.0",
     "msw": "^2.1.5",
+    "oauth4webapi": "^2.8.1",
+    "patch-package": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^14.0.1",
     "redis": "^4.6.12",
     "source-map-support": "^0.5.21",
+    "undici": "^6.5.0",
     "winston": "^3.11.0",
     "zod": "^3.22.4"
   },
