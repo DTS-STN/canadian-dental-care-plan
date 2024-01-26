@@ -52,14 +52,14 @@ export default function Index() {
       </h1>
       <p>{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.lastName })}</p>
       <div className="grid gap-4 md:grid-cols-2">
+        <LandingPageLink title={t('index:personal-info')} description={t('index:personal-info-desc')} to="/personal-information">
+          {t('index:personal-info')}
+        </LandingPageLink>
         <LandingPageLink title={<TitleWithInProgressLabel>{t('index:view-my-application')}</TitleWithInProgressLabel>} description={t('index:view-my-application-desc')} to="/view-application">
           {t('index:view-my-application')}
         </LandingPageLink>
         <LandingPageLink title={<TitleWithInProgressLabel>{t('index:upload')}</TitleWithInProgressLabel>} description={t('index:upload-desc')} to="/upload-document">
           {t('index:upload')}
-        </LandingPageLink>
-        <LandingPageLink title={t('index:personal-info')} description={t('index:personal-info-desc')} to="/personal-information">
-          {t('index:personal-info')}
         </LandingPageLink>
         <LandingPageLink title={<TitleWithInProgressLabel>{t('index:view-letters')}</TitleWithInProgressLabel>} description={t('index:view-letters-desc')} to="/view-letters">
           {t('index:view-letters')}
