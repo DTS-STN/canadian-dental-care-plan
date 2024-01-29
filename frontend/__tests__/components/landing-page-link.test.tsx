@@ -15,8 +15,8 @@ describe('LandingPageLink', () => {
       {
         path: '/',
         Component: () => (
-          <LandingPageLink title="title" description="description" to="/">
-            anchor text
+          <LandingPageLink title="title" to="/">
+            description
           </LandingPageLink>
         ),
       },
@@ -28,7 +28,7 @@ describe('LandingPageLink', () => {
     const description = container.querySelector('p');
 
     expect(anchor).toHaveAttribute('href', '/');
-    expect(anchor?.textContent).toBe('anchor text');
+    expect(anchor?.textContent).toBe('titledescription');
     expect(title?.textContent).toBe('title');
     expect(description?.textContent).toBe('description');
   });
@@ -38,8 +38,8 @@ describe('LandingPageLink', () => {
       {
         path: '/',
         Component: () => (
-          <LandingPageLink title="title" description="description" to="/">
-            hello
+          <LandingPageLink title="title" to="/">
+            description
           </LandingPageLink>
         ),
       },
