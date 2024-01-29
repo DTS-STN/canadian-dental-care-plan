@@ -1,6 +1,8 @@
 /**
  * Utility functions to help with RAOIDC requests.
  */
+import { randomBytes } from 'node:crypto';
+
 import { getLogger } from './logging.server';
 
 const log = getLogger('raoidc-utils.server');
@@ -101,6 +103,52 @@ export async function fetchServerMetadata(authServerUrl: string, fetchFn?: Fetch
   log.silly('Server JWKS response: [%j]', jwkSet);
 
   return { jwkSet, serverMetadata };
+}
+
+/**
+ * Generate an OIDC authorization request that is used to start the OIDC login process.
+ *
+ * @see https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.1
+ */
+export function generateAuthorizationRequest(authorizationUri: string, clientId: string, codeChallenge: string, redirectUri: string, scope: string) {
+  const codeChallengeMethod = 'S256';
+  const nonce = generateRandomNonce();
+  const responseType = 'code';
+  const state = generateRandomState();
+
+  const authorizationRequest = new URL(authorizationUri);
+  authorizationRequest.searchParams.set('client_id', clientId);
+  authorizationRequest.searchParams.set('code_challenge', codeChallenge);
+  authorizationRequest.searchParams.set('code_challenge_method', codeChallengeMethod);
+  authorizationRequest.searchParams.set('nonce', nonce);
+  authorizationRequest.searchParams.set('redirect_uri', redirectUri);
+  authorizationRequest.searchParams.set('response_type', responseType);
+  authorizationRequest.searchParams.set('scope', scope);
+  authorizationRequest.searchParams.set('state', state);
+
+  log.debug('Generated authorization request: [%s]', authorizationRequest);
+  return authorizationRequest;
+}
+
+/**
+ * Generate a random nonce string.
+ */
+export function generateRandomNonce(len = 16) {
+  return generateRandomString(len);
+}
+
+/**
+ * Generate a random state state.
+ */
+export function generateRandomState(len = 32) {
+  return generateRandomString(len);
+}
+
+/**
+ * Generate a random string, duh.
+ */
+export function generateRandomString(len: number) {
+  return randomBytes(len).toString('hex');
 }
 
 /**
