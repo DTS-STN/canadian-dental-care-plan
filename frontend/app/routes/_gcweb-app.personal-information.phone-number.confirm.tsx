@@ -68,8 +68,8 @@ export default function PhoneNumberConfirm() {
             <dd>{loaderData.newPhoneNumber ?? ''}</dd>
           </dl>
         </div>
-        <div className="form-group">
-          <button className="btn btn-primary btn-lg mrgn-rght-sm">{t('personal-information:phone-number.confirm.button.confirm')}</button>
+        <div className="flex flex-wrap gap-3">
+          <button className="btn btn-primary btn-lg">{t('personal-information:phone-number.confirm.button.confirm')}</button>
           <Link id="cancelButton" to="/personal-information" className="btn btn-default btn-lg">
             {t('personal-information:phone-number.confirm.button.cancel')}
           </Link>

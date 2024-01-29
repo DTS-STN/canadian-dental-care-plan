@@ -71,7 +71,7 @@ export default function PersonalInformationIndex() {
             </header>
             <div className="panel-body">{user?.homeAddress}</div>
             <footer className="panel-footer">
-              <Link id="change-home-address-button" className="btn btn-primary" to="/personal-information/address/edit">
+              <Link id="change-home-address-button" className="btn btn-primary btn-lg" to="/personal-information/address/edit">
                 {t('personal-information:index.change')}
               </Link>
             </footer>
@@ -87,7 +87,7 @@ export default function PersonalInformationIndex() {
             </header>
             <div className="panel-body">{user?.mailingAddress}</div>
             <footer className="panel-footer">
-              <Link id="change-mailing-address-button" className="btn btn-primary" to="/personal-information/address/edit">
+              <Link id="change-mailing-address-button" className="btn btn-primary btn-lg" to="/personal-information/address/edit">
                 {t('personal-information:index.change')}
               </Link>
             </footer>
@@ -105,7 +105,7 @@ export default function PersonalInformationIndex() {
             </header>
             <div className="panel-body">{languageName}</div>
             <footer className="panel-footer">
-              <Link id="change-preferred-language-button" className="btn btn-primary" to="/personal-information/preferred-language/edit">
+              <Link id="change-preferred-language-button" className="btn btn-primary btn-lg" to="/personal-information/preferred-language/edit">
                 {t('personal-information:index.change')}
               </Link>
             </footer>
@@ -123,7 +123,7 @@ export default function PersonalInformationIndex() {
             </header>
             <div className="panel-body">{user?.phoneNumber}</div>
             <footer className="panel-footer">
-              <Link id="change-phone-number-button" className="btn btn-primary" to="/personal-information/phone-number/edit">
+              <Link id="change-phone-number-button" className="btn btn-primary btn-lg" to="/personal-information/phone-number/edit">
                 {t('personal-information:index.change')}
               </Link>
             </footer>

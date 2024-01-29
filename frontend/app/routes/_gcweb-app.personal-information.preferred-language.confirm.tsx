@@ -60,8 +60,8 @@ export default function PreferredLanguageConfirm() {
             <dd>{loaderData.preferredLanguage === 'en' ? t('personal-information:preferred-language.index.nameEn') : t('personal-information:preferred-language.index.nameFr')}</dd>
           </dl>
         </div>
-        <div className="form-group">
-          <button className="btn btn-primary btn-lg mrgn-rght-sm">{t('personal-information:preferred-language.confirm.button.confirm')}</button>
+        <div className="flex flex-wrap gap-3">
+          <button className="btn btn-primary btn-lg">{t('personal-information:preferred-language.confirm.button.confirm')}</button>
           <Link id="cancelButton" to="/personal-information/preferred-language/edit" className="btn btn-default btn-lg">
             {t('personal-information:preferred-language.confirm.button.cancel')}
           </Link>

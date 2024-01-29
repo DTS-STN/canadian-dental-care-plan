@@ -85,19 +85,13 @@ export default function ChangeAddress() {
       <Form method="post">
         <InputField id="home-address" label={t('personal-information:address.edit.home-address')} name="homeAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.homeAddress} errorMessage={errorMessages.homeAddress} />
         <InputField id="mailing-address" label={t('personal-information:address.edit.mailing-address')} name="mailingAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.mailingAddress} errorMessage={errorMessages.mailingAddress} />
-        <div className="form-group">
-          <ul className="list-inline lst-spcd">
-            <li>
-              <button id="change-button" className="btn btn-primary btn-lg">
-                {t('personal-information:address.edit.button.change')}
-              </button>
-            </li>
-            <li>
-              <Link id="cancel-button" to="/personal-information" className="btn btn-default btn-lg">
-                {t('personal-information:address.edit.button.cancel')}
-              </Link>
-            </li>
-          </ul>
+        <div className="flex flex-wrap gap-3">
+          <button id="change-button" className="btn btn-primary btn-lg">
+            {t('personal-information:address.edit.button.change')}
+          </button>
+          <Link id="cancel-button" to="/personal-information" className="btn btn-default btn-lg">
+            {t('personal-information:address.edit.button.cancel')}
+          </Link>
         </div>
       </Form>
     </>
