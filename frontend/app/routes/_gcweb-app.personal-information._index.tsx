@@ -50,7 +50,7 @@ export default function PersonalInformationIndex() {
         <PersonalInformationSection
           footer={
             <Link id="change-home-address-button" className="btn btn-primary btn-lg" to="/personal-information/address/edit">
-              {t('personal-information:index.change')}
+              {t('personal-information:index.change-home-address')}
             </Link>
           }
           title={t('personal-information:index.home-address')}
@@ -61,7 +61,7 @@ export default function PersonalInformationIndex() {
         <PersonalInformationSection
           footer={
             <Link id="change-mailing-address-button" className="btn btn-primary btn-lg" to="/personal-information/address/edit">
-              {t('personal-information:index.change')}
+              {t('personal-information:index.change-mailing-address')}
             </Link>
           }
           title={t('personal-information:index.mailing-address')}
@@ -72,7 +72,7 @@ export default function PersonalInformationIndex() {
         <PersonalInformationSection
           footer={
             <Link id="change-preferred-language-button" className="btn btn-primary btn-lg" to="/personal-information/preferred-language/edit">
-              {t('personal-information:index.change')}
+              {t('personal-information:index.change-preferred-language')}
             </Link>
           }
           title={t('personal-information:index.preferred-language')}
@@ -83,7 +83,7 @@ export default function PersonalInformationIndex() {
         <PersonalInformationSection
           footer={
             <Link id="change-phone-number-button" className="btn btn-primary btn-lg" to="/personal-information/phone-number/edit">
-              {t('personal-information:index.change')}
+              {t('personal-information:index.change-phone-number')}
             </Link>
           }
           title={t('personal-information:index.phone-number')}
