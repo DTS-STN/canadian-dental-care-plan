@@ -2,13 +2,7 @@ import { loader } from '~/routes/_gcweb-app.personal-information.preferred-langu
 import { lookupService } from '~/services/lookup-service.server';
 import { userService } from '~/services/user-service.server';
 
-vi.mock('~/services/user-service.server.ts', () => ({
-  userService: {
-    getUserId: vi.fn().mockReturnValue('some-id'),
-    getUserInfo: vi.fn(),
-  },
-}));
-vi.mock('~/services/lookup-service.server.ts', () => ({
+vi.mock('~/services/lookup-service.server', () => ({
   lookupService: {
     getAllPreferredLanguages: vi.fn().mockReturnValue([
       {
@@ -27,6 +21,17 @@ vi.mock('~/services/lookup-service.server.ts', () => ({
       nameEn: 'French',
       nameFr: 'Français',
     }),
+  },
+}));
+
+vi.mock('~/services/session-service.server', () => ({
+  /* intentionally left blank */
+}));
+
+vi.mock('~/services/user-service.server', () => ({
+  userService: {
+    getUserId: vi.fn().mockReturnValue('some-id'),
+    getUserInfo: vi.fn(),
   },
 }));
 
