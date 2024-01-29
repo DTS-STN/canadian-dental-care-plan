@@ -4,6 +4,15 @@ import { describe, expect, it } from 'vitest';
 
 import { action } from '~/routes/_gcweb-app.personal-information.phone-number.edit';
 
+vi.mock('~/services/session-service.server', () => ({
+  sessionService: {
+    commitSession: vi.fn(),
+    getSession: vi.fn().mockReturnValue({
+      set: vi.fn(),
+    }),
+  },
+}));
+
 describe('_gcweb-app.personal-information.phone-number.edit', () => {
   afterEach(() => {
     vi.clearAllMocks();
