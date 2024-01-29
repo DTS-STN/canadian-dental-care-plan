@@ -31,17 +31,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  try {
-    const userId = await userService.getUserId();
-    const session = await sessionService.getSession(request.headers.get('Cookie'));
+  const userId = await userService.getUserId();
+  const session = await sessionService.getSession(request.headers.get('Cookie'));
 
-    const preferredLanguage = await session.get('preferredLanguage');
-    await userService.updateUserInfo(userId, { preferredLanguage });
+  const preferredLanguage = await session.get('preferredLanguage');
+  await userService.updateUserInfo(userId, { preferredLanguage });
 
-    return redirect('/personal-information');
-  } catch (error) {
-    console.error(error);
-  }
+  return redirect('/personal-information');
 }
 
 export default function PreferredLanguageConfirm() {
@@ -54,14 +50,12 @@ export default function PreferredLanguageConfirm() {
       </h1>
       <p>{t('personal-information:preferred-language.confirm.confirm-message')}</p>
       <Form method="post">
+        <dl>
+          <dt>{t('personal-information:preferred-language.edit.language')}</dt>
+          <dd>{loaderData.preferredLanguage === 'en' ? t('personal-information:preferred-language.edit.nameEn') : t('personal-information:preferred-language.edit.nameFr')}</dd>
+        </dl>
         <div className="form-group">
-          <dl>
-            <dt>{t('personal-information:preferred-language.index.language')}</dt>
-            <dd>{loaderData.preferredLanguage === 'en' ? t('personal-information:preferred-language.index.nameEn') : t('personal-information:preferred-language.index.nameFr')}</dd>
-          </dl>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <button className="btn btn-primary btn-lg">{t('personal-information:preferred-language.confirm.button.confirm')}</button>
+          <button className="btn btn-primary btn-lg mrgn-rght-sm">{t('personal-information:preferred-language.confirm.button.confirm')}</button>
           <Link id="cancelButton" to="/personal-information/preferred-language/edit" className="btn btn-default btn-lg">
             {t('personal-information:preferred-language.confirm.button.cancel')}
           </Link>
