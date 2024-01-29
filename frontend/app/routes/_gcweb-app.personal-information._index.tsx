@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 
+import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 import { userService } from '~/services/user-service.server';
@@ -107,7 +108,7 @@ function PersonalInformationSection({ children, footer, title, icon }: PersonalI
     <section className="panel panel-info !m-0 flex flex-col">
       <header className="panel-heading">
         <h2 className="h3 panel-title">
-          <span className={`glyphicon ${icon} pull-right`} aria-hidden="true"></span>
+          {icon && <span className={clsx('glyphicon', icon, 'pull-right')} aria-hidden="true"></span>}
           {title}
         </h2>
       </header>
