@@ -6,6 +6,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   test: {
+    pool: 'forks',
     testTimeout: 50000,
     globals: true,
     // happy-dom doesn't support button submit or FormData
