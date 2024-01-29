@@ -23,12 +23,13 @@ import { getLogger } from '~/utils/logging.server';
 
 function createRedisService() {
   const log = getLogger('redis-service.server');
-  const { REDIS_URL, REDIS_USERNAME, REDIS_PASSWORD } = getEnv();
 
   // singleton redis client instance; lazy initialized as needed
   let redisClient: ReturnType<typeof createClient> | undefined = undefined;
 
   async function createRedisClient() {
+    const { REDIS_URL, REDIS_USERNAME, REDIS_PASSWORD } = getEnv();
+
     log.info(`Creating new Redis client; url=[${REDIS_URL}]`);
     return createClient({ url: REDIS_URL, username: REDIS_USERNAME, password: REDIS_PASSWORD })
       .on('connect', () => log.info(`Redis client initiating connection to [${REDIS_URL}]`))
