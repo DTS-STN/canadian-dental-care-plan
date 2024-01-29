@@ -87,6 +87,7 @@ async function runServer() {
   // since remix fingerprints assets served from build/ we can use aggressive caching
   app.use(build.publicPath, express.static(build.assetsBuildDirectory, { immutable: true, maxAge: '1y' }));
   app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'tiny', loggingOptions));
+  app.set('trust proxy', true); // enable X-Forwarded-* header support to build OAuth callback URLs
   app.all('*', process.env.NODE_ENV === 'development' ? createDevRequestHandler(build, buildPath, versionPath) : createRequestHandler({ build, mode: process.env.NODE_ENV }));
 
   const server = app.listen(port, () => {
