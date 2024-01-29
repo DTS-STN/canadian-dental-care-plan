@@ -1,5 +1,7 @@
-import { createPrivateKey, createPublicKey, randomUUID } from 'node:crypto';
+import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
+
+import { privateKeyPemToCryptoKey, publicKeyPemToCryptoKey } from './crypto-utils.server';
 
 /**
  * returns false if and only if the passed-in function throws
@@ -11,8 +13,8 @@ function tryOrElseFalse(fn: () => unknown) {
 }
 
 // refiners
-const isValidPublicKey = (val: string) => tryOrElseFalse(() => createPublicKey(`-----BEGIN PUBLIC KEY-----\n${val}\n-----END PUBLIC KEY-----`));
-const isValidPrivateKey = (val: string) => tryOrElseFalse(() => createPrivateKey(`-----BEGIN RSA PRIVATE KEY-----\n${val}\n-----END RSA PRIVATE KEY-----`));
+const isValidPublicKey = (val: string) => tryOrElseFalse(() => publicKeyPemToCryptoKey(val));
+const isValidPrivateKey = (val: string) => tryOrElseFalse(() => privateKeyPemToCryptoKey(val));
 
 // transformers
 const toBoolean = (val: string) => val === 'true';
