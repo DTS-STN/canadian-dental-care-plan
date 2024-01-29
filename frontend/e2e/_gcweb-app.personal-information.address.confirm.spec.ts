@@ -1,8 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-test.describe('homepage', () => {
-  test('should navigate to index', async ({ page }) => {
+test.describe('address change confirmation page', () => {
+  test('should navigate to address change confirmation page', async ({ page }) => {
     await page.goto('/personal-information/address/confirm');
 
     await expect(page.locator('h1')).toHaveText(/change address/i);
