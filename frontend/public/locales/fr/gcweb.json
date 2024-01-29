@@ -48,5 +48,8 @@
   },
   "input-label": {
     "required": "requis"
+  },
+  "input-legend": {
+    "required": "requis"
   }
 }
