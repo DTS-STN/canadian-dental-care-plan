@@ -14,7 +14,10 @@
     "preferred-language": "(FR) Preferred language",
     "french-language-name": "Français",
     "english-language-name": "(FR) English",
-    "change": "(FR) Change"
+    "change-home-address": "(FR) Change home address",
+    "change-mailing-address": "(FR) Change mailing address",
+    "change-phone-number": "(FR) Change phone number",
+    "change-preferred-language": "(FR) Change preferred language"
   },
   "address": {
     "edit": {
