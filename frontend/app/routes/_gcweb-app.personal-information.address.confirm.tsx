@@ -96,19 +96,13 @@ export default function ConfirmAddress() {
           </div>
         </div>
 
-        <div className="form-group">
-          <ul className="list-inline lst-spcd">
-            <li>
-              <button id="confirm-button" className="btn btn-primary btn-lg">
-                {t('personal-information:address.confirm.button.confirm')}
-              </button>
-            </li>
-            <li>
-              <Link id="cancel-button" to="/personal-information/address/edit" className="btn btn-default btn-lg">
-                {t('personal-information:address.confirm.button.cancel')}
-              </Link>
-            </li>
-          </ul>
+        <div className="flex flex-wrap gap-3">
+          <button id="confirm-button" className="btn btn-primary btn-lg">
+            {t('personal-information:address.confirm.button.confirm')}
+          </button>
+          <Link id="cancel-button" to="/personal-information/address/edit" className="btn btn-default btn-lg">
+            {t('personal-information:address.confirm.button.cancel')}
+          </Link>
         </div>
       </Form>
     </>

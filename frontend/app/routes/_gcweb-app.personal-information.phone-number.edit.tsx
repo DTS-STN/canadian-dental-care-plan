@@ -80,8 +80,8 @@ export default function PhoneNumberEdit() {
       <p>{t('personal-information:phone-number.edit.update-message')}</p>
       <Form method="post">
         <InputField id="phone-number" name="phoneNumber" type="tel" label={t('personal-information:phone-number.edit.component.phone')} required defaultValue={defaultValues.phoneNumber} errorMessage={errorMessages.phoneNumber} />
-        <div className="form-group">
-          <button className="btn btn-primary btn-lg mrgn-rght-sm">{t('personal-information:phone-number.edit.button.save')}</button>
+        <div className="flex flex-wrap gap-3">
+          <button className="btn btn-primary btn-lg">{t('personal-information:phone-number.edit.button.save')}</button>
           <Link id="cancelButton" to="/personal-information" className="btn btn-default btn-lg">
             {t('personal-information:phone-number.edit.button.cancel')}
           </Link>

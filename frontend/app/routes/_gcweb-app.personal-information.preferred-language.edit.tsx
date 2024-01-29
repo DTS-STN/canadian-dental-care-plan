@@ -81,19 +81,13 @@ export default function PreferredLanguageEdit() {
             })}
           </ul>
         </fieldset>
-        <div className="form-group">
-          <ul className="list-inline lst-spcd">
-            <li>
-              <button id="change-button" className="btn btn-primary btn-lg">
-                {t('personal-information:preferred-language.edit.change')}
-              </button>
-            </li>
-            <li>
-              <Link id="cancel-button" to="/personal-information" className="btn btn-default btn-lg">
-                {t('personal-information:preferred-language.edit.cancel')}
-              </Link>
-            </li>
-          </ul>
+        <div className="flex flex-wrap gap-3">
+          <button id="change-button" className="btn btn-primary btn-lg">
+            {t('personal-information:preferred-language.edit.change')}
+          </button>
+          <Link id="cancel-button" to="/personal-information" className="btn btn-default btn-lg">
+            {t('personal-information:preferred-language.edit.cancel')}
+          </Link>
         </div>
       </Form>
     </>
