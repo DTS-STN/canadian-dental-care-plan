@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 
@@ -30,106 +32,78 @@ export default function PersonalInformationIndex() {
   const { user } = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
   const languageName = user?.preferredLanguage === 'fr' ? t('personal-information:index.french-language-name') : t('personal-information:index.english-language-name');
+
   return (
     <>
       <h1 id="wb-cont" property="name">
         {t('personal-information:index.page-title')}
       </h1>
       <p>{t('personal-information:index.on-file')}</p>
-      <div className="row">
-        <div className="col-sm-6">
-          <section className="panel panel-info">
-            <header className="panel-heading">
-              <h2 className="h3 panel-title">
-                <span className="glyphicon glyphicon-envelope pull-right" aria-hidden="true"></span>
-                {t('personal-information:index.first-name')}
-              </h2>
-            </header>
-            <div className="panel-body">{user?.firstName}</div>
-          </section>
-        </div>
-        <div className="col-sm-6">
-          <section className="panel panel-info">
-            <header className="panel-heading">
-              <h2 className="h3 panel-title">
-                <span className="glyphicon glyphicon-envelope pull-right" aria-hidden="true"></span>
-                {t('personal-information:index.last-name')}
-              </h2>
-            </header>
-            <div className="panel-body">{user?.lastName}</div>
-          </section>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-sm-6">
-          <section className="panel panel-info">
-            <header className="panel-heading">
-              <h2 className="h3 panel-title">
-                <span className="glyphicon glyphicon-envelope pull-right" aria-hidden="true"></span>
-                {t('personal-information:index.home-address')}
-              </h2>
-            </header>
-            <div className="panel-body">{user?.homeAddress}</div>
-            <footer className="panel-footer">
-              <Link id="change-home-address-button" className="btn btn-primary btn-lg" to="/personal-information/address/edit">
-                {t('personal-information:index.change')}
-              </Link>
-            </footer>
-          </section>
-        </div>
-        <div className="col-sm-6">
-          <section className="panel panel-info">
-            <header className="panel-heading">
-              <h2 className="h3 panel-title">
-                <span className="glyphicon glyphicon-envelope pull-right" aria-hidden="true"></span>
-                {t('personal-information:index.mailing-address')}
-              </h2>
-            </header>
-            <div className="panel-body">{user?.mailingAddress}</div>
-            <footer className="panel-footer">
-              <Link id="change-mailing-address-button" className="btn btn-primary btn-lg" to="/personal-information/address/edit">
-                {t('personal-information:index.change')}
-              </Link>
-            </footer>
-          </section>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-sm-6">
-          <section className="panel panel-info">
-            <header className="panel-heading">
-              <h2 className="h3 panel-title">
-                <span className="glyphicon glyphicon-envelope pull-right" aria-hidden="true"></span>
-                {t('personal-information:index.preferred-language')}
-              </h2>
-            </header>
-            <div className="panel-body">{languageName}</div>
-            <footer className="panel-footer">
-              <Link id="change-preferred-language-button" className="btn btn-primary btn-lg" to="/personal-information/preferred-language/edit">
-                {t('personal-information:index.change')}
-              </Link>
-            </footer>
-          </section>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-sm-6">
-          <section className="panel panel-info">
-            <header className="panel-heading">
-              <h2 className="h3 panel-title">
-                <span className="glyphicon glyphicon-envelope pull-right" aria-hidden="true"></span>
-                {t('personal-information:index.phone-number')}
-              </h2>
-            </header>
-            <div className="panel-body">{user?.phoneNumber}</div>
-            <footer className="panel-footer">
-              <Link id="change-phone-number-button" className="btn btn-primary btn-lg" to="/personal-information/phone-number/edit">
-                {t('personal-information:index.change')}
-              </Link>
-            </footer>
-          </section>
-        </div>
+      <div className="grid gap-6 md:grid-cols-2">
+        <PersonalInformationSection title={t('personal-information:index.first-name')}>{user?.firstName}</PersonalInformationSection>
+        <PersonalInformationSection title={t('personal-information:index.last-name')}>{user?.lastName}</PersonalInformationSection>
+        <PersonalInformationSection
+          footer={
+            <Link id="change-home-address-button" className="btn btn-primary btn-lg" to="/personal-information/address/edit">
+              {t('personal-information:index.change')}
+            </Link>
+          }
+          title={t('personal-information:index.home-address')}
+        >
+          {user?.homeAddress}
+        </PersonalInformationSection>
+        <PersonalInformationSection
+          footer={
+            <Link id="change-mailing-address-button" className="btn btn-primary btn-lg" to="/personal-information/address/edit">
+              {t('personal-information:index.change')}
+            </Link>
+          }
+          title={t('personal-information:index.mailing-address')}
+        >
+          {user?.mailingAddress}
+        </PersonalInformationSection>
+        <PersonalInformationSection
+          footer={
+            <Link id="change-preferred-language-button" className="btn btn-primary btn-lg" to="/personal-information/preferred-language/edit">
+              {t('personal-information:index.change')}
+            </Link>
+          }
+          title={t('personal-information:index.preferred-language')}
+        >
+          {languageName}
+        </PersonalInformationSection>
+        <PersonalInformationSection
+          footer={
+            <Link id="change-phone-number-button" className="btn btn-primary btn-lg" to="/personal-information/phone-number/edit">
+              {t('personal-information:index.change')}
+            </Link>
+          }
+          title={t('personal-information:index.phone-number')}
+        >
+          {user?.phoneNumber}
+        </PersonalInformationSection>
       </div>
     </>
+  );
+}
+
+interface PersonalInformationSectionProps {
+  children: ReactNode;
+  footer?: ReactNode;
+  title: ReactNode;
+}
+
+function PersonalInformationSection({ children, footer, title }: PersonalInformationSectionProps) {
+  return (
+    <section className="panel panel-info !m-0 flex flex-col">
+      <header className="panel-heading">
+        <h2 className="h3 panel-title">
+          <span className="glyphicon glyphicon-envelope pull-right" aria-hidden="true"></span>
+          {title}
+        </h2>
+      </header>
+      <div className="panel-body">{children}</div>
+      {footer && <footer className="panel-footer mt-auto">{footer}</footer>}
+    </section>
   );
 }
