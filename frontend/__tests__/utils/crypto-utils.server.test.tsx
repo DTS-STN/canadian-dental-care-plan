@@ -40,8 +40,8 @@ describe('crypto-utils.server', () => {
     const cryptoKey = await privateKeyPemToCryptoKey(privateKeyPem);
 
     expect(cryptoKey).toBeDefined();
-    expect(cryptoKey.algorithm.name).toBe('RSA-OAEP');
+    expect(cryptoKey.algorithm.name).toBe('RSA-PSS');
     expect(cryptoKey.extractable).toBe(true);
-    expect(cryptoKey.usages).toEqual(['decrypt', 'unwrapKey']);
+    expect(cryptoKey.usages).toEqual(['sign']);
   });
 });
