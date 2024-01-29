@@ -3,6 +3,7 @@ import { forwardRef } from 'react';
 import clsx from 'clsx';
 
 import { InputError } from './input-error';
+import { InputHelp } from './input-help';
 import { InputLabel } from '~/components/input-label';
 
 export interface InputFieldProps extends Omit<React.ComponentProps<'input'>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children'> {
@@ -42,9 +43,9 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) =>
         </InputError>
       )}
       {helpMessage && (
-        <span className="mb-1.5 block max-w-prose text-base text-gray-600" id={inputHelpMessageId} data-testid="input-field-help">
+        <InputHelp id={inputHelpMessageId} className="mb-1.5" data-testid="input-field-help">
           {helpMessage}
-        </span>
+        </InputHelp>
       )}
       <input
         ref={ref}
@@ -60,9 +61,9 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) =>
         {...restInputProps}
       />
       {helpMessageSecondary && (
-        <span className="mt-1.5 block max-w-prose text-base text-gray-600" id={inputHelpMessageSecondaryId} data-testid="input-field-help-secondary">
+        <InputHelp id={inputHelpMessageSecondaryId} className="mt-1.5" data-testid="input-field-help-secondary">
           {helpMessageSecondary}
-        </span>
+        </InputHelp>
       )}
     </div>
   );
