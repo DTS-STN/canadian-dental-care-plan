@@ -15,13 +15,16 @@ function createLookupService() {
   const logger = getLogger('lookup-service.server');
   const { INTEROP_API_BASE_URI } = getEnv();
 
+  /**
+   *
+   * @returns all the avaliable preferred languages
+   */
   async function getAllPreferredLanguages() {
     const url = `${INTEROP_API_BASE_URI}/lookups/preferred-languages/`;
     const response = await fetch(url);
 
     const preferredLanguageSchemaList = z.array(preferredLanguageSchema);
     if (response.ok) return preferredLanguageSchemaList.parse(await response.json());
-    if (response.status === 404) return null;
 
     logger.error('%j', {
       message: 'Failed to fetch data',
@@ -34,6 +37,11 @@ function createLookupService() {
     throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
+  /**
+   *
+   * @param preferredLanguageId
+   * @returns returns the preferred language based off  @param preferredLanguageId
+   */
   async function getPreferredLanguage(preferredLanguageId: string) {
     const url = `${INTEROP_API_BASE_URI}/lookups/preferred-languages/${preferredLanguageId}`;
     const response = await fetch(url);
