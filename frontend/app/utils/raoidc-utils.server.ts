@@ -1,11 +1,49 @@
 /**
  * Utility functions to help with RAOIDC requests.
  */
-import { randomBytes } from 'node:crypto';
+import { SignJWT, compactDecrypt, importJWK, jwtVerify } from 'jose';
+import { randomBytes, subtle } from 'node:crypto';
 
 import { getLogger } from './logging.server';
 
 const log = getLogger('raoidc-utils.server');
+
+/**
+ * Authorization token set.
+ * Returned from an the auth server's auth endpoint or token endpoint.
+ */
+export interface AuthTokenSet extends Record<string, unknown> {
+  access_token: string;
+  id_token: string;
+  //
+  // optional
+  //
+  expires_at?: number;
+  expires_in?: number;
+  refresh_token?: string;
+  scope?: string;
+  session_state?: string;
+  token_type?: string;
+}
+
+/**
+ * An OIDC client.
+ */
+export interface ClientMetadata {
+  /**
+   * The OIDC client ID.
+   */
+  clientId: string;
+  /**
+   * The private RSA signing key of the client.
+   * Used for client assertion signing during token exchange.
+   */
+  privateKey: CryptoKey;
+  /**
+   * A unique identifier identifying the private RSA signing key of the client.
+   */
+  privateKeyId: string;
+}
 
 /**
  * An OIDC authentication server.
@@ -131,6 +169,94 @@ export function generateAuthorizationRequest(authorizationUri: string, clientId:
 }
 
 /**
+ * Exchange an OIDC authorization code for an access token and id token.
+ *
+ * @see https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.3
+ */
+export async function fetchAccessToken(serverMetadata: ServerMetadata, serverJwks: JWKSet, authCode: string, client: ClientMetadata, codeVerifier: string, redirectUri: string, fetchFn?: FetchFunction) {
+  log.debug('Exchanging authorization code for access/id tokens');
+
+  const clientAssertion = await createClientAssertion(serverMetadata.issuer, client);
+  const clientAssertionType = 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer';
+  const grantType = 'authorization_code';
+
+  const fetchOptions = {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      client_id: client.clientId,
+      client_assertion_type: clientAssertionType,
+      client_assertion: clientAssertion,
+      code: authCode,
+      code_verifier: codeVerifier,
+      grant_type: grantType,
+      redirect_uri: redirectUri,
+    }).toString(),
+  };
+
+  // prettier-ignore
+  const response = fetchFn
+    ? await fetchFn(serverMetadata.token_endpoint, fetchOptions)
+    : await fetch(serverMetadata.token_endpoint, fetchOptions);
+
+  if (response.status !== 200) {
+    throw new Error('Error fetching server metadata: non-200 status');
+  }
+
+  const authTokenSet = (await response.json()) as AuthTokenSet;
+  authTokenSet.id_token = await decryptJwe(authTokenSet.id_token, client.privateKey);
+  await validateAuthorizationToken(serverMetadata, serverJwks, authTokenSet);
+
+  return authTokenSet;
+}
+
+/**
+ * Creates an OIDC client assertion.
+ *
+ * @see https://datatracker.ietf.org/doc/html/rfc7521
+ */
+async function createClientAssertion(issuer: string, client: ClientMetadata) {
+  log.debug(`Creating client [%s] assertion for issuer [%s]`, client.clientId, issuer);
+
+  const now = Math.floor(Date.now() / 1000); // current time, rounded down to the nearest second
+  const expiry = now + 60; // valid for 1 minute
+  const jwtId = generateRandomString(32); // mitigate replay attacks
+
+  const header = {
+    alg: 'PS256',
+    kid: client.privateKeyId,
+  };
+
+  const payload = {
+    aud: issuer,
+    exp: expiry,
+    iat: now,
+    iss: client.clientId,
+    jti: jwtId,
+    nbf: now,
+    sub: client.clientId,
+  };
+
+  // prettier-ignore
+  return await new SignJWT(payload)
+    .setProtectedHeader(header)
+    .sign(client.privateKey);
+}
+
+/**
+ * Decrypt a JWE token using the provided private key.
+ */
+async function decryptJwe(jwe: string, privateKey: CryptoKey) {
+  const jwk = await subtle.exportKey('jwk', privateKey);
+  const key = await importJWK({ ...jwk }, 'RSA-OAEP');
+  const decryptResult = await compactDecrypt(jwe, key, { keyManagementAlgorithms: ['RSA-OAEP-256'] });
+  return decryptResult.plaintext.toString();
+}
+
+/**
  * Generate a random nonce string.
  */
 export function generateRandomNonce(len = 16) {
@@ -149,6 +275,34 @@ export function generateRandomState(len = 32) {
  */
 export function generateRandomString(len: number) {
   return randomBytes(len).toString('hex');
+}
+
+export async function validateAuthorizationToken(serverMetadata: ServerMetadata, serverJwks: JWKSet, authToken: AuthTokenSet) {
+  if (!authToken.access_token) {
+    throw new Error('Authorization token is missing access_token claim');
+  }
+
+  if (!authToken.id_token) {
+    throw new Error('Authorization token is missing id_token claim');
+  }
+
+  // validation is performed via a boolean reducer; if any key matches the access token's signature, we reduce to true
+  const idTokenValid = await serverJwks.keys.reduce(async (previousValue, currentValue) => {
+    try {
+      const key = await importJWK({ ...currentValue }, 'RSA-OAEP');
+      const verificationOpts = { issuer: serverMetadata.issuer };
+      await jwtVerify(authToken.id_token, key, verificationOpts);
+      return true; // verification succeeded (no throw 🥳)
+    } catch {
+      return (await previousValue) || false;
+    }
+  }, Promise.resolve(false));
+
+  if (!idTokenValid) {
+    throw new Error('ID token validation failed: signature matched no known JWK');
+  }
+
+  log.debug('Authorization token successfully validated');
 }
 
 /**
