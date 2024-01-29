@@ -27,9 +27,9 @@ const serverEnv = z.object({
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
   INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
 
-  // auth settings (TODO :: GjB :: public and private keys might be required in the future)
-  AUTH_JWT_PRIVATE_KEY: z.string().refine(isValidPrivateKey).optional(),
-  AUTH_JWT_PUBLIC_KEY: z.string().refine(isValidPublicKey).optional(),
+  // auth/oidc settings
+  AUTH_JWT_PRIVATE_KEY: z.string().refine(isValidPrivateKey),
+  AUTH_JWT_PUBLIC_KEY: z.string().refine(isValidPublicKey),
 
   // language cookie settings
   LANG_COOKIE_NAME: z.string().default('_gc_lang'),
