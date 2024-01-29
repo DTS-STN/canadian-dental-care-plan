@@ -94,20 +94,6 @@
     }
   },
   "preferred-language": {
-    "index": {
-      "page-title": "(FR) Preferred language",
-      "breadcrumbs": {
-        "home": "(FR) Home",
-        "personal-information": "(FR) Personal information",
-        "preferred-language": "(FR) Preferred language"
-      },
-      "on-file": "(FR) We have the following preferred language for you on file.",
-      "id": "(FR) ID",
-      "nameEn": "(FR) English",
-      "nameFr": "(FR) French",
-      "language": "(FR) Language",
-      "change": "(FR) Change"
-    },
     "edit": {
       "page-title": "(FR) Change preferred language",
       "breadcrumbs": {
