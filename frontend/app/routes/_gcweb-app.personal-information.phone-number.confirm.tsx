@@ -69,7 +69,9 @@ export default function PhoneNumberConfirm() {
           </dl>
         </div>
         <div className="form-group">
-          <button className="btn btn-primary btn-lg mrgn-rght-sm">{t('personal-information:phone-number.confirm.button.confirm')}</button>
+          <button type="submit" className="btn btn-primary btn-lg mrgn-rght-sm">
+            {t('personal-information:phone-number.confirm.button.confirm')}
+          </button>
           <Link id="cancelButton" to="/update-info" className="btn btn-default btn-lg">
             {t('personal-information:phone-number.confirm.button.cancel')}
           </Link>

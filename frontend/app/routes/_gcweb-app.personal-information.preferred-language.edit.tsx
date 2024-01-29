@@ -80,7 +80,7 @@ export default function PreferredLanguageEdit() {
         <div className="form-group">
           <ul className="list-inline lst-spcd">
             <li>
-              <button id="change-button" className="btn btn-primary btn-lg">
+              <button type="submit" id="change-button" className="btn btn-primary btn-lg">
                 {t('personal-information:preferred-language.edit.change')}
               </button>
             </li>

@@ -61,7 +61,9 @@ export default function PreferredLanguageConfirm() {
           </dl>
         </div>
         <div className="form-group">
-          <button className="btn btn-primary btn-lg mrgn-rght-sm">{t('personal-information:preferred-language.confirm.button.confirm')}</button>
+          <button type="submit" className="btn btn-primary btn-lg mrgn-rght-sm">
+            {t('personal-information:preferred-language.confirm.button.confirm')}
+          </button>
           <Link id="cancelButton" to="/personal-information/preferred-language/edit" className="btn btn-default btn-lg">
             {t('personal-information:preferred-language.confirm.button.cancel')}
           </Link>

@@ -99,7 +99,7 @@ export default function ConfirmAddress() {
         <div className="form-group">
           <ul className="list-inline lst-spcd">
             <li>
-              <button id="confirm-button" className="btn btn-primary btn-lg">
+              <button id="confirm-button" type='submit' className="btn btn-primary btn-lg">
                 {t('personal-information:address.confirm.button.confirm')}
               </button>
             </li>

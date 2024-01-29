@@ -89,7 +89,7 @@ export default function ChangeAddress() {
         <div className="form-group">
           <ul className="list-inline lst-spcd">
             <li>
-              <button id="change-button" className="btn btn-primary btn-lg">
+              <button id="change-button" type="submit" className="btn btn-primary btn-lg">
                 {t('personal-information:address.edit.button.change')}
               </button>
             </li>
