@@ -1,7 +1,7 @@
 /**
  * Utility functions to help with RAOIDC requests.
  */
-import { SignJWT, compactDecrypt, importJWK, jwtVerify } from 'jose';
+import { SignJWT, compactDecrypt, decodeJwt, importJWK, jwtVerify } from 'jose';
 import { randomBytes, subtle } from 'node:crypto';
 
 import { getLogger } from './logging.server';
@@ -211,6 +211,37 @@ export async function fetchAccessToken(serverMetadata: ServerMetadata, serverJwk
   await validateAuthorizationToken(serverMetadata, serverJwks, authTokenSet);
 
   return authTokenSet;
+}
+
+/**
+ * Fetch the current user's info from the auth server's userinfo endpoint.
+ */
+export async function fetchUserInfo(userInfoUri: string, accessToken: string, client: ClientMetadata, fetchFn?: FetchFunction) {
+  log.debug('Fetching user info');
+
+  const fetchOptions = {
+    headers: {
+      Accept: 'application/json, applicatin/jwt',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  // prettier-ignore
+  const response = fetchFn
+    ? await fetchFn(userInfoUri, fetchOptions)
+    : await fetch(userInfoUri, fetchOptions);
+
+  if (response.status !== 200) {
+    throw new Error('Error fetching user info: non-200 status');
+  }
+
+  const userInfo = (await response.json()) as { userinfo_token: string };
+
+  if (!userInfo.userinfo_token) {
+    throw new Error('No userinfo token found in token set');
+  }
+
+  return decodeJwt(await decryptJwe(userInfo.userinfo_token, client.privateKey));
 }
 
 /**
