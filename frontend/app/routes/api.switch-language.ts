@@ -2,14 +2,13 @@ import { type ActionFunctionArgs, json } from '@remix-run/node';
 
 import { z } from 'zod';
 
-import { PREFFERRED_LANGUAGES } from '~/utils/constants';
 import { createLangCookie } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const logger = getLogger('routes/api.switch-language');
 
 const switchLanguageDataSchema = z.object({
-  language: z.enum(PREFFERRED_LANGUAGES),
+  language: z.enum(['en', 'fr']),
 });
 
 export type SwitchLanguageData = z.infer<typeof switchLanguageDataSchema>;

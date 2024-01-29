@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { lookupService } from '~/services/lookup-service.server';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
-import { PREFFERRED_LANGUAGES } from '~/utils/constants';
+import { PREFERRED_LANGUAGES } from '~/utils/constants';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
@@ -36,7 +36,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function action({ request }: ActionFunctionArgs) {
   const formDataSchema = z.object({
-    preferredLanguage: z.enum(PREFFERRED_LANGUAGES),
+    preferredLanguage: z.enum(PREFERRED_LANGUAGES),
   });
   const formData = Object.fromEntries(await request.formData());
   const parsedDataResult = formDataSchema.safeParse(formData);
@@ -50,8 +50,6 @@ export async function action({ request }: ActionFunctionArgs) {
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   session.set('preferredLanguage', parsedDataResult.data.preferredLanguage);
 
-  const userId = await userService.getUserId();
-  await userService.updateUserInfo(userId, parsedDataResult.data);
   return redirect('/personal-information/preferred-language/confirm', {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),
@@ -77,7 +75,7 @@ export default function PreferredLanguageEdit() {
               return (
                 <li key={radioId} className="radio">
                   <input type="radio" name="preferredLanguage" id={radioId} value={language.id} defaultChecked={userInfo.preferredLanguage === language.id} />
-                  <label htmlFor={radioId}> {getNameByLanguage(i18n.language, language)} </label>
+                  <label htmlFor={radioId}>{getNameByLanguage(i18n.language, language)}</label>
                 </li>
               );
             })}
