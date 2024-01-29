@@ -13,6 +13,10 @@ vi.mock('~/services/session-service.server', () => ({
   },
 }));
 
+vi.mock('~/services/user-service.server', () => ({
+  /* intentionally left blank */
+}));
+
 describe('_gcweb-app.personal-information.phone-number.edit', () => {
   afterEach(() => {
     vi.clearAllMocks();
