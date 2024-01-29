@@ -51,7 +51,11 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
           nameEn: 'English',
           nameFr: 'Anglais',
         },
-        { id: 'fr', nameEn: 'French', nameFr: 'Français' },
+        {
+          id: 'fr',
+          nameEn: 'French',
+          nameFr: 'Français',
+        },
       ]);
 
       const response = await loader({
@@ -64,7 +68,7 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
 
       expect(data).toEqual({
         userInfo: { id: 'some-id', preferredLanguage: 'fr' },
-        preferredLanguageList: [
+        preferredLanguages: [
           { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
           { id: 'fr', nameEn: 'French', nameFr: 'Français' },
         ],

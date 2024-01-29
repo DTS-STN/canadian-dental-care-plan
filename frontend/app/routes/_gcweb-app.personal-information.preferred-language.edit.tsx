@@ -4,6 +4,7 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { InputRadios } from '~/components/input-radios';
 import { lookupService } from '~/services/lookup-service.server';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
@@ -26,12 +27,13 @@ export const handle = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
+
   if (!userInfo) {
     throw new Response(null, { status: 404 });
   }
 
-  const preferredLanguageList = userInfo?.preferredLanguage ? await lookupService.getAllPreferredLanguages() : undefined;
-  return json({ userInfo, preferredLanguageList });
+  const preferredLanguages = await lookupService.getAllPreferredLanguages();
+  return json({ userInfo, preferredLanguages });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -58,7 +60,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function PreferredLanguageEdit() {
-  const { userInfo, preferredLanguageList } = useLoaderData<typeof loader>();
+  const { userInfo, preferredLanguages } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
 
   return (
@@ -67,20 +69,19 @@ export default function PreferredLanguageEdit() {
         {t('personal-information:preferred-language.edit.page-title')}
       </h1>
       <Form method="post">
-        <fieldset className="gc-chckbxrdio">
-          <legend>{t('personal-information:preferred-language.edit.page-title')}</legend>
-          <ul className="list-unstyled lst-spcd-2">
-            {preferredLanguageList?.map((language) => {
-              const radioId = `preferred-language-option-${language.id}`;
-              return (
-                <li key={radioId} className="radio">
-                  <input type="radio" name="preferredLanguage" id={radioId} value={language.id} defaultChecked={userInfo.preferredLanguage === language.id} />
-                  <label htmlFor={radioId}>{getNameByLanguage(i18n.language, language)}</label>
-                </li>
-              );
-            })}
-          </ul>
-        </fieldset>
+        {preferredLanguages.length > 0 && (
+          <InputRadios
+            id="preferred-language"
+            name="preferredLanguage"
+            legend={t('personal-information:preferred-language.edit.page-title')}
+            options={preferredLanguages.map((language) => ({
+              defaultChecked: userInfo.preferredLanguage === language.id,
+              children: getNameByLanguage(i18n.language, language),
+              value: language.id,
+            }))}
+            required
+          />
+        )}
         <div className="flex flex-wrap gap-3">
           <button id="change-button" className="btn btn-primary btn-lg">
             {t('personal-information:preferred-language.edit.change')}
