@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
 const addressValidationSchema = z.object({
@@ -8,9 +9,10 @@ const addressValidationSchema = z.object({
 
 function createAddressValidationService() {
   const logger = getLogger('address-validation-service.server');
+  const { INTEROP_API_BASE_URI } = getEnv();
 
   async function isValidAddress(addressString: string) {
-    const url = `https://api.example.com/address/correct/${addressString}`;
+    const url = `${INTEROP_API_BASE_URI}/address/correct/${addressString}`;
     const response = await fetch(url);
 
     if (response.ok) {

@@ -35,12 +35,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const isHomeAddressValid = (val: string) => addressValidationService.isValidAddress(val);
-  const isMailingAddressValid = (val: string) => addressValidationService.isValidAddress(val);
+  const isValidAddress = (val: string) => val && addressValidationService.isValidAddress(val);
 
   const formDataSchema = z.object({
-    homeAddress: z.string().min(1).refine(isHomeAddressValid, { message: 'Invalid home address' }),
-    mailingAddress: z.string().min(1).refine(isMailingAddressValid, { message: 'Invalid mailing address' }),
+    homeAddress: z.string().min(1, { message: 'Enter a home address' }).refine(isValidAddress, { message: 'Invalid home address' }),
+    mailingAddress: z.string().min(1, { message: 'Enter a mailing address' }).refine(isValidAddress, { message: 'Invalid mailing address' }),
   });
 
   const formData = Object.fromEntries(await request.formData());
