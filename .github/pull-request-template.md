@@ -1,0 +1,24 @@
+## Pull Request
+
+### Description
+<!-- Provide a brief description of the changes in this PR. -->
+
+### Related Azure Boards Work Items
+<!-- Mention any Azure Boards work items that are related to this pull request. Reference them using the work item ID. For example: "AB#123". -->
+
+### Screenshots (if applicable)
+<!-- Include screenshots or GIFs if the changes are visual. -->
+
+### Checklist
+<!-- Go through each item and check it with an "x" inside the square brackets. -->
+- [ ] I have tested the changes locally.
+- [ ] My code follows the project's coding style.
+- [ ] I have updated the documentation if necessary.
+- [ ] I have added tests that prove my fix is effective or that my feature works.
+- [ ] All new and existing tests passed.
+
+### Test Instructions
+<!-- Provide step-by-step instructions on how to test the changes made in this PR. Include any specific setup or prerequisites needed for testing. -->
+
+### Additional Notes
+<!-- Include any additional information or context about the PR that might be helpful for reviewers. -->
