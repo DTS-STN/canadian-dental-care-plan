@@ -31,6 +31,12 @@
       "button": {
         "change": "Change",
         "cancel": "Cancel"
+      },
+      "error-message": {
+        "empty-home-address": "Enter a home address",
+        "empty-mailing-address": "Enter a mailing address",
+        "invalid-home-address": "Invalid home address",
+        "invalid-mailing-address": "Invalid mailing address"
       }
     },
     "confirm": {
