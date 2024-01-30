@@ -148,11 +148,10 @@ export async function fetchServerMetadata(authServerUrl: string, fetchFn?: Fetch
  *
  * @see https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.1
  */
-export function generateAuthorizationRequest(authorizationUri: string, clientId: string, codeChallenge: string, redirectUri: string, scope: string) {
+export function generateAuthorizationRequest(authorizationUri: string, clientId: string, codeChallenge: string, redirectUri: string, scope: string, state: string) {
   const codeChallengeMethod = 'S256';
   const nonce = generateRandomNonce();
   const responseType = 'code';
-  const state = generateRandomState();
 
   const authorizationRequest = new URL(authorizationUri);
   authorizationRequest.searchParams.set('client_id', clientId);
