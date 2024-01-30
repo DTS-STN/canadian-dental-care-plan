@@ -57,6 +57,7 @@ const serverEnv = z.object({
   REDIS_PASSWORD: z.string().trim().min(1).optional(),
 
   // feature flags (ie: THING_ENABLED=true/false)
+  AUTH_ENABLED: z.string().transform(toBoolean).default('false'),
   JAVASCRIPT_ENABLED: z.string().transform(toBoolean).default('true'),
   MOCKS_ENABLED: z.string().transform(toBoolean).default('false'),
 });
