@@ -47,7 +47,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (!parsedDataResult.success) {
     return json({
-      errors: parsedDataResult.error.format(),
+      errors: parsedDataResult.error.flatten(),
       formData: formData as Partial<z.infer<typeof formDataSchema>>,
     });
   }
@@ -73,9 +73,28 @@ export default function ChangeAddress() {
   };
 
   const errorMessages = {
-    homeAddress: actionData?.errors.homeAddress?._errors[0],
-    mailingAddress: actionData?.errors.mailingAddress?._errors[0],
+    homeAddress: actionData?.errors.fieldErrors.homeAddress?.[0],
+    mailingAddress: actionData?.errors.fieldErrors.mailingAddress?.[0],
   };
+
+  /**
+   * Gets an error message based on the provided internationalization (i18n) key.
+   *
+   * @param errorI18nKey - The i18n key for the error message.
+   * @returns The corresponding error message, or undefined if no key is provided.
+   */
+  function getErrorMessage(errorI18nKey?: string): string | undefined {
+    console.log('hi');
+    console.log(errorI18nKey);
+
+    if (!errorI18nKey) return undefined;
+
+    /**
+     * The 'as any' is employed to circumvent typechecking, as the type of
+     * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
+     */
+    return t(`personal-information:address.edit.error-message.${errorI18nKey}` as any);
+  }
 
   return (
     <>
@@ -90,7 +109,7 @@ export default function ChangeAddress() {
           className="!w-full lg:!w-1/2"
           required
           defaultValue={defaultValues.homeAddress}
-          errorMessage={errorMessages && errorMessages.homeAddress && t(`personal-information:address.edit.error-message.${errorMessages.homeAddress}` as any)}
+          errorMessage={getErrorMessage(errorMessages.homeAddress)}
         />
         <InputField
           id="mailing-address"
@@ -99,7 +118,7 @@ export default function ChangeAddress() {
           className="!w-full lg:!w-1/2"
           required
           defaultValue={defaultValues.mailingAddress}
-          errorMessage={errorMessages && errorMessages.mailingAddress && t(`personal-information:address.edit.error-message.${errorMessages.mailingAddress}` as any)}
+          errorMessage={getErrorMessage(errorMessages.mailingAddress)}
         />
         <div className="flex flex-wrap gap-3">
           <button id="change-button" className="btn btn-primary btn-lg">

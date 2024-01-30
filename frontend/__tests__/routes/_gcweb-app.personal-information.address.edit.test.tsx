@@ -93,8 +93,8 @@ describe('_gcweb-app.personal-information.address.edit', () => {
       });
 
       const errors = (await response.json()).errors;
-      expect(errors.homeAddress?._errors[0]).toBeTruthy();
-      expect(errors.mailingAddress?._errors[0]).toBeTruthy();
+      expect(errors.fieldErrors.homeAddress?.[0]).toBeTruthy();
+      expect(errors.fieldErrors.mailingAddress?.[0]).toBeTruthy();
     });
   });
 });
