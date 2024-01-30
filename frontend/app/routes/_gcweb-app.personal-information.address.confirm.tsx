@@ -24,8 +24,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
   const session = await sessionService.getSession(request.headers.get('Cookie'));
-
-  return json({ userInfo, newAddress: await session.get('newAddress') });
+  const newAddress = await session.get('newAddress');
+  return json({ userInfo, newAddress });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -38,7 +38,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function ConfirmAddress() {
-  const loaderData = useLoaderData<typeof loader>();
+  const { userInfo, newAddress } = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
@@ -47,53 +47,43 @@ export default function ConfirmAddress() {
       </h1>
       <Form method="post">
         <h2>{t('personal-information:address.confirm.changed-address')}</h2>
-        <div className="row mrgn-tp-sm">
-          <div className="col-sm-6">
-            <section className="panel panel-info">
-              <header className="panel-heading">
-                <h3 className="panel-title">{t('personal-information:address.confirm.from')}</h3>
-              </header>
-              <div className="panel-body">
-                <p>{loaderData.userInfo?.homeAddress}</p>
-              </div>
-            </section>
-          </div>
-
-          <div className="col-sm-6">
-            <section className="panel panel-info">
-              <header className="panel-heading">
-                <h3 className="panel-title">{t('personal-information:address.confirm.to')}</h3>
-              </header>
-              <div className="panel-body">
-                <p>{loaderData.newAddress?.homeAddress}</p>
-              </div>
-            </section>
-          </div>
+        <div className="grid gap-6 md:grid-cols-2">
+          <section className="panel panel-info">
+            <header className="panel-heading">
+              <h3 className="panel-title">{t('personal-information:address.confirm.from')}</h3>
+            </header>
+            <div className="panel-body">
+              <p className="m-0 whitespace-pre-line">{userInfo?.homeAddress}</p>
+            </div>
+          </section>
+          <section className="panel panel-info">
+            <header className="panel-heading">
+              <h3 className="panel-title">{t('personal-information:address.confirm.to')}</h3>
+            </header>
+            <div className="panel-body">
+              <p className="m-0 whitespace-pre-line">{newAddress?.homeAddress}</p>
+            </div>
+          </section>
         </div>
 
         <h2>{t('personal-information:address.confirm.changed-mailing')}</h2>
-        <div className="row mrgn-tp-sm">
-          <div className="col-sm-6">
-            <section className="panel panel-info">
-              <header className="panel-heading">
-                <h3 className="panel-title">{t('personal-information:address.confirm.from')}</h3>
-              </header>
-              <div className="panel-body">
-                <p>{loaderData.userInfo?.mailingAddress}</p>
-              </div>
-            </section>
-          </div>
-
-          <div className="col-sm-6">
-            <section className="panel panel-info">
-              <header className="panel-heading">
-                <h4 className="panel-title">{t('personal-information:address.confirm.to')}</h4>
-              </header>
-              <div className="panel-body">
-                <p>{loaderData.newAddress?.mailingAddress}</p>
-              </div>
-            </section>
-          </div>
+        <div className="grid gap-6 md:grid-cols-2">
+          <section className="panel panel-info">
+            <header className="panel-heading">
+              <h3 className="panel-title">{t('personal-information:address.confirm.from')}</h3>
+            </header>
+            <div className="panel-body">
+              <p className="m-0 whitespace-pre-line">{userInfo?.mailingAddress}</p>
+            </div>
+          </section>
+          <section className="panel panel-info">
+            <header className="panel-heading">
+              <h4 className="panel-title">{t('personal-information:address.confirm.to')}</h4>
+            </header>
+            <div className="panel-body">
+              <p className="m-0 whitespace-pre-line">{newAddress?.mailingAddress}</p>
+            </div>
+          </section>
         </div>
 
         <div className="flex flex-wrap gap-3">

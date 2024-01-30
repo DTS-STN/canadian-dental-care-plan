@@ -66,9 +66,9 @@ export default function PersonalInformationIndex() {
         >
           <dl>
             <dt>{t('personal-information:index.home-address')}</dt>
-            <dd>{user.homeAddress}</dd>
+            <dd className="whitespace-pre-line">{user.homeAddress}</dd>
             <dt>{t('personal-information:index.mailing-address')}</dt>
-            <dd>{user.mailingAddress}</dd>
+            <dd className="whitespace-pre-line">{user.mailingAddress}</dd>
           </dl>
         </PersonalInformationSection>
         <PersonalInformationSection
