@@ -84,9 +84,6 @@ export default function ChangeAddress() {
    * @returns The corresponding error message, or undefined if no key is provided.
    */
   function getErrorMessage(errorI18nKey?: string): string | undefined {
-    console.log('hi');
-    console.log(errorI18nKey);
-
     if (!errorI18nKey) return undefined;
 
     /**
