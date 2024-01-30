@@ -38,8 +38,8 @@ export async function action({ request }: ActionFunctionArgs) {
   const isValidAddress = (val: string) => val && addressValidationService.isValidAddress(val);
 
   const formDataSchema = z.object({
-    homeAddress: z.string().min(1, { message: 'Enter a home address' }).refine(isValidAddress, { message: 'Invalid home address' }),
-    mailingAddress: z.string().min(1, { message: 'Enter a mailing address' }).refine(isValidAddress, { message: 'Invalid mailing address' }),
+    homeAddress: z.string().min(1, { message: 'empty-home-address' }).refine(isValidAddress, { message: 'invalid-home-address' }),
+    mailingAddress: z.string().min(1, { message: 'empty-mailing-address' }).refine(isValidAddress, { message: 'invalid-mailing-address' }),
   });
 
   const formData = Object.fromEntries(await request.formData());
@@ -83,8 +83,24 @@ export default function ChangeAddress() {
         {t('personal-information:address.edit.page-title')}
       </h1>
       <Form method="post">
-        <InputField id="home-address" label={t('personal-information:address.edit.home-address')} name="homeAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.homeAddress} errorMessage={errorMessages.homeAddress} />
-        <InputField id="mailing-address" label={t('personal-information:address.edit.mailing-address')} name="mailingAddress" className="!w-full lg:!w-1/2" required defaultValue={defaultValues.mailingAddress} errorMessage={errorMessages.mailingAddress} />
+        <InputField
+          id="home-address"
+          label={t('personal-information:address.edit.home-address')}
+          name="homeAddress"
+          className="!w-full lg:!w-1/2"
+          required
+          defaultValue={defaultValues.homeAddress}
+          errorMessage={errorMessages && errorMessages.homeAddress && t(`personal-information:address.edit.error-message.${errorMessages.homeAddress}` as any)}
+        />
+        <InputField
+          id="mailing-address"
+          label={t('personal-information:address.edit.mailing-address')}
+          name="mailingAddress"
+          className="!w-full lg:!w-1/2"
+          required
+          defaultValue={defaultValues.mailingAddress}
+          errorMessage={errorMessages && errorMessages.mailingAddress && t(`personal-information:address.edit.error-message.${errorMessages.mailingAddress}` as any)}
+        />
         <div className="flex flex-wrap gap-3">
           <button id="change-button" className="btn btn-primary btn-lg">
             {t('personal-information:address.edit.button.change')}
