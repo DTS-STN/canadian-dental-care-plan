@@ -2,7 +2,7 @@
  * Utility functions to help with RAOIDC requests.
  */
 import { SignJWT, compactDecrypt, decodeJwt, importJWK, jwtVerify } from 'jose';
-import { randomBytes, subtle } from 'node:crypto';
+import { createHash, randomBytes, subtle } from 'node:crypto';
 
 import { getLogger } from './logging.server';
 
@@ -285,6 +285,26 @@ async function decryptJwe(jwe: string, privateKey: CryptoKey) {
   const key = await importJWK({ ...jwk }, 'RSA-OAEP');
   const decryptResult = await compactDecrypt(jwe, key, { keyManagementAlgorithms: ['RSA-OAEP-256'] });
   return decryptResult.plaintext.toString();
+}
+
+/**
+ * Generate an OIDC code challenge from the verifier string.
+ *
+ * @see https://www.iana.org/assignments/oauth-parameters/oauth-parameters.xhtml#pkce-code-challenge-method
+ */
+export function generateCodeChallenge() {
+  const codeVerifier = generateRandomCodeVerifier();
+  const codeChallenge = createHash('sha256').update(codeVerifier).digest('base64url');
+  return { codeChallenge, codeVerifier };
+}
+
+/**
+ * Generate a random OIDC code verifier.
+ *
+ * @see https://www.iana.org/assignments/oauth-parameters/oauth-parameters.xhtml#parameters
+ */
+export function generateRandomCodeVerifier(len = 64) {
+  return generateRandomString(len);
 }
 
 /**
