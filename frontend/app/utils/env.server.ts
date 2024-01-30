@@ -28,8 +28,10 @@ const serverEnv = z.object({
   INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
 
   // auth/oidc settings
-  AUTH_JWT_PRIVATE_KEY: z.string().refine(isValidPrivateKey),
-  AUTH_JWT_PUBLIC_KEY: z.string().refine(isValidPublicKey),
+  AUTH_JWT_PRIVATE_KEY: z.string().trim().refine(isValidPrivateKey),
+  AUTH_JWT_PUBLIC_KEY: z.string().trim().refine(isValidPublicKey),
+  AUTH_RAOIDC_BASE_URL: z.string().trim().min(1),
+  AUTH_RAOIDC_CLIENT_ID: z.string().trim().min(1),
 
   // language cookie settings
   LANG_COOKIE_NAME: z.string().default('_gc_lang'),

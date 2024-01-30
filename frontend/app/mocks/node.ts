@@ -4,6 +4,7 @@ import { setupServer } from 'msw/node';
 import { z } from 'zod';
 
 import { db } from '~/mocks/db';
+import { raoidc } from '~/mocks/raoidc/raoidc.server';
 
 /**
  * Retrieves a user entity based on the provided user ID.
@@ -58,6 +59,8 @@ function toUserPatchDocument({ homeAddress, mailingAddress, phoneNumber, preferr
 }
 
 const handlers = [
+  ...raoidc, // TODO :: GjB :: eventually enable/disable RAOIDC mocks w/ a feature flag
+
   /**
    * Handler for GET requests to retrieve user details.
    */
