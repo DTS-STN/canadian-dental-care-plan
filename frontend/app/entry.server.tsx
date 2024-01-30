@@ -30,6 +30,7 @@ if (MOCKS_ENABLED || NODE_ENV === 'development' || NODE_ENV === 'test') {
 }
 
 export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, remixContext: EntryContext) {
+  console.log('!!!!!!!!!!!!!!!!!!!');
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
   log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
 
@@ -49,6 +50,7 @@ export default async function handleRequest(request: Request, responseStatusCode
   responseHeaders.set('X-Frame-Options', 'deny');
   // .append() because there can be more than one cookie in a response
   responseHeaders.append('Set-Cookie', langCookie);
+  responseHeaders.append('X-Greg-Rocks', 'true');
 
   return new Promise((resolve, reject) => {
     let shellRendered = false;
