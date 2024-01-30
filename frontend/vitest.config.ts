@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
@@ -14,7 +14,10 @@ export default defineConfig({
     // https://github.com/capricorn86/happy-dom/issues/585
     environment: 'jsdom',
     setupFiles: ['./__tests__/setup-test-env.ts'],
-    include: ['./**/*.{test,test-d,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    exclude: ['**/node_modules/**', '**/build/**', '**/e2e/**'],
+    include: [...configDefaults.include, '**/*.test-d.ts(x)'],
+    exclude: [...configDefaults.exclude, '**/build/**', '**/e2e/**'],
+    coverage: {
+      exclude: [...(configDefaults.coverage.exclude ?? []), '**/build/**', '**/e2e/**'],
+    },
   },
 });
