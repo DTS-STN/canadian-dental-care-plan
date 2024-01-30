@@ -120,6 +120,6 @@ export async function switchLanguageCookie<T extends SwitchLanguageData['languag
  * @param { english translation, french translation}
  * @returns either the english translation or the french translation.
  */
-export function getNameByLanguage(language: string, { nameEn, nameFr }: { nameEn?: string; nameFr?: string }) {
-  return language == 'fr' ? nameFr : nameEn;
+export function getNameByLanguage(language: string, obj: { nameEn?: string; nameFr?: string }) {
+  return language == 'fr' ? obj.nameFr : obj.nameEn;
 }

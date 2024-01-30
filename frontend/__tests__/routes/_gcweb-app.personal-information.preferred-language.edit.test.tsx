@@ -44,7 +44,7 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
   describe('loader()', () => {
     it('should return userInfo object if userInfo is found', async () => {
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', preferredLanguage: 'fr' });
-      vi.mocked(lookupService.getPreferredLanguage).mockResolvedValue({ id: 'fr', nameEn: 'French', nameFr: 'fr' });
+      vi.mocked(lookupService.getPreferredLanguage).mockResolvedValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' });
       vi.mocked(lookupService.getAllPreferredLanguages).mockResolvedValue([
         {
           id: 'en',
