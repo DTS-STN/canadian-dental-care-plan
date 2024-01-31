@@ -67,7 +67,7 @@
       },
       "update-message": "Please update your phone number below.",
       "button": {
-        "save": "Save",
+        "save": "Change",
         "cancel": "Cancel"
       },
       "component": {
@@ -86,7 +86,7 @@
       },
       "confirm-message": "Please confirm the phone number change below.",
       "button": {
-        "confirm": "Confirmer",
+        "confirm": "Confirm",
         "cancel": "Cancel"
       }
     }

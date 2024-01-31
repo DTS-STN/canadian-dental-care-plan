@@ -70,7 +70,7 @@ export default function PhoneNumberConfirm() {
         </div>
         <div className="flex flex-wrap gap-3">
           <button className="btn btn-primary btn-lg">{t('personal-information:phone-number.confirm.button.confirm')}</button>
-          <Link id="cancelButton" to="/personal-information" className="btn btn-default btn-lg">
+          <Link id="cancelButton" to="/personal-information/phone-number/edit" className="btn btn-default btn-lg">
             {t('personal-information:phone-number.confirm.button.cancel')}
           </Link>
         </div>
