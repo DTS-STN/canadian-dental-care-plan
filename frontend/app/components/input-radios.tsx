@@ -44,7 +44,7 @@ const InputRadios = ({ errorMessage, helpMessage, helpMessageSecondary, id, lege
           const inputRadioId = `${id}-option-${index}`;
           return (
             <li key={inputRadioId} className="radio">
-              <InputRadio aria-describedby={getAriaDescribedby()} aria-errormessage={errorMessage ? inputErrorId : undefined} aria-invalid={!!errorMessage} aria-required={required} id={inputRadioId} name={name} required={required} {...option} />
+              <InputRadio aria-describedby={getAriaDescribedby()} aria-errormessage={errorMessage && inputErrorId} aria-invalid={!!errorMessage} aria-required={required} id={inputRadioId} name={name} required={required} {...option} />
             </li>
           );
         })}

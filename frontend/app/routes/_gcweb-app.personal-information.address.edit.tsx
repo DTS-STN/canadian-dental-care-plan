@@ -1,9 +1,12 @@
+import { useEffect } from 'react';
+
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputTextarea } from '~/components/input-textarea';
 import { addressValidationService } from '~/services/address-validation-service.server';
 import { sessionService } from '~/services/session-service.server';
@@ -70,19 +73,15 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 }
 
-export default function ChangeAddress() {
+export default function PersonalInformationAddressEdit() {
   const actionData = useActionData<typeof action>();
   const { userInfo } = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
+  const errorSummaryId = 'error-summary';
 
   const defaultValues = {
     homeAddress: actionData?.formData.homeAddress ?? userInfo.homeAddress ?? '',
     mailingAddress: actionData?.formData.mailingAddress ?? userInfo.mailingAddress ?? '',
-  };
-
-  const errorMessages = {
-    homeAddress: actionData?.errors.fieldErrors.homeAddress?.[0],
-    mailingAddress: actionData?.errors.fieldErrors.mailingAddress?.[0],
   };
 
   /**
@@ -101,30 +100,28 @@ export default function ChangeAddress() {
     return t(`personal-information:address.edit.error-message.${errorI18nKey}` as any);
   }
 
+  const errorMessages = {
+    homeAddress: getErrorMessage(actionData?.errors.fieldErrors.homeAddress?.[0]),
+    mailingAddress: getErrorMessage(actionData?.errors.fieldErrors.mailingAddress?.[0]),
+  };
+
+  const errorSummaryItems = createErrorSummaryItems(errorMessages);
+
+  useEffect(() => {
+    if (actionData?.formData && hasErrors(actionData.formData)) {
+      scrollAndFocusToErrorSummary(errorSummaryId);
+    }
+  }, [actionData]);
+
   return (
     <>
       <h1 id="wb-cont" property="name">
         {t('personal-information:address.edit.page-title')}
       </h1>
-      <Form method="post">
-        <InputTextarea
-          id="home-address"
-          label={t('personal-information:address.edit.home-address')}
-          name="homeAddress"
-          className="!w-full lg:!w-1/2"
-          required
-          defaultValue={defaultValues.homeAddress}
-          errorMessage={getErrorMessage(errorMessages.homeAddress)}
-        />
-        <InputTextarea
-          id="mailing-address"
-          label={t('personal-information:address.edit.mailing-address')}
-          name="mailingAddress"
-          className="!w-full lg:!w-1/2"
-          required
-          defaultValue={defaultValues.mailingAddress}
-          errorMessage={getErrorMessage(errorMessages.mailingAddress)}
-        />
+      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+      <Form className="max-w-prose" method="post">
+        <InputTextarea className="!w-full" defaultValue={defaultValues.homeAddress} errorMessage={errorMessages.homeAddress} id="homeAddress" label={t('personal-information:address.edit.home-address')} name="homeAddress" required />
+        <InputTextarea className="!w-full" defaultValue={defaultValues.mailingAddress} errorMessage={errorMessages.mailingAddress} id="mailingAddress" label={t('personal-information:address.edit.mailing-address')} name="mailingAddress" required />
         <div className="flex flex-wrap gap-3">
           <button id="change-button" className="btn btn-primary btn-lg">
             {t('personal-information:address.edit.button.change')}

@@ -1,9 +1,13 @@
+import { useEffect } from 'react';
+
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
 
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+
+import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
@@ -34,9 +38,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function action({ request }: ActionFunctionArgs) {
   const formDataSchema = z.object({
-    phoneNumber: z.string()
+    phoneNumber: z
+      .string()
       .min(1, { message: 'empty-phone-number' })
-      .refine((val) => isValidPhoneNumber(val, 'CA'), { message: "invalid-phone-format" }),
+      .refine((val) => isValidPhoneNumber(val, 'CA'), { message: 'invalid-phone-format' }),
   });
 
   const formData = Object.fromEntries(await request.formData());
@@ -62,15 +67,12 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function PhoneNumberEdit() {
   const { userInfo } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
+  const errorSummaryId = 'error-summary';
 
   const { t } = useTranslation(i18nNamespaces);
 
   const defaultValues = {
     phoneNumber: actionData?.formData.phoneNumber ?? userInfo.phoneNumber ?? '',
-  };
-
-  const errorMessages = {
-    phoneNumber: actionData?.errors.phoneNumber?._errors[0],
   };
 
   /**
@@ -89,6 +91,17 @@ export default function PhoneNumberEdit() {
     return t(`personal-information:phone-number.edit.error-message.${errorI18nKey}` as any);
   }
 
+  const errorMessages = {
+    phoneNumber: getErrorMessage(actionData?.errors.phoneNumber?._errors[0]),
+  };
+
+  const errorSummaryItems = createErrorSummaryItems(errorMessages);
+
+  useEffect(() => {
+    if (actionData?.formData && hasErrors(actionData.formData)) {
+      scrollAndFocusToErrorSummary(errorSummaryId);
+    }
+  }, [actionData]);
 
   return (
     <>
@@ -96,9 +109,9 @@ export default function PhoneNumberEdit() {
         {t('personal-information:phone-number.edit.page-title')}
       </h1>
       <p>{t('personal-information:phone-number.edit.update-message')}</p>
+      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post">
-        <InputField id="phone-number" name="phoneNumber" type="tel" label={t('personal-information:phone-number.edit.component.phone')}
-          required defaultValue={defaultValues.phoneNumber} errorMessage={getErrorMessage(errorMessages.phoneNumber)} />
+        <InputField id="phoneNumber" name="phoneNumber" type="tel" label={t('personal-information:phone-number.edit.component.phone')} required defaultValue={defaultValues.phoneNumber} errorMessage={errorMessages.phoneNumber} />
         <div className="flex flex-wrap gap-3">
           <button className="btn btn-primary btn-lg">{t('personal-information:phone-number.edit.button.save')}</button>
           <Link id="cancelButton" to="/personal-information" className="btn btn-default btn-lg">
