@@ -6,8 +6,9 @@ import { Link, useLoaderData } from '@remix-run/react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
+import { lookupService } from '~/services/lookup-service.server';
 import { userService } from '~/services/user-service.server';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
@@ -25,14 +26,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (!userInfo) {
     throw new Response(null, { status: 404 });
   }
+  const preferredLanguage = userInfo.preferredLanguage ? await lookupService.getPreferredLanguage(userInfo?.preferredLanguage) : undefined;
 
-  return json({ user: userInfo });
+  return json({ user: userInfo, preferredLanguage });
 }
 
 export default function PersonalInformationIndex() {
-  const { user } = useLoaderData<typeof loader>();
-  const { t } = useTranslation(i18nNamespaces);
-  const languageName = user?.preferredLanguage === 'fr' ? t('personal-information:index.french-language-name') : t('personal-information:index.english-language-name');
+  const { user, preferredLanguage } = useLoaderData<typeof loader>();
+  const { i18n, t } = useTranslation(i18nNamespaces);
 
   return (
     <>
@@ -53,7 +54,7 @@ export default function PersonalInformationIndex() {
           title={t('personal-information:index.preferred-language')}
           icon="glyphicon-globe"
         >
-          {languageName}
+          {preferredLanguage ? getNameByLanguage(i18n.language, preferredLanguage) : 'No preferred language set'}
         </PersonalInformationSection>
         <PersonalInformationSection
           footer={

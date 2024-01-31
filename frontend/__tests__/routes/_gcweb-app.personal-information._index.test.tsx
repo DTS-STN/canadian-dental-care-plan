@@ -15,6 +15,27 @@ vi.mock('~/services/user-service.server.ts', () => ({
     }),
   },
 }));
+vi.mock('~/services/lookup-service.server.ts', () => ({
+  lookupService: {
+    getAllPreferredLanguages: vi.fn().mockReturnValue([
+      {
+        id: 'en',
+        nameEn: 'English',
+        nameFr: 'Anglais',
+      },
+      {
+        id: 'fr',
+        nameEn: 'French',
+        nameFr: 'Français',
+      },
+    ]),
+    getPreferredLanguage: vi.fn().mockReturnValue({
+      id: 'fr',
+      nameEn: 'French',
+      nameFr: 'Français',
+    }),
+  },
+}));
 
 describe('_gcweb-app.personal-information._index', () => {
   afterEach(() => {
@@ -61,6 +82,7 @@ describe('_gcweb-app.personal-information._index', () => {
           phoneNumber: '(555) 555-5555',
           preferredLanguage: 'fr',
         },
+        preferredLanguage: { id: 'fr', nameEn: 'French', nameFr: 'Français' },
       });
     });
   });

@@ -4,9 +4,10 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
+import { lookupService } from '~/services/lookup-service.server';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
@@ -27,7 +28,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userInfo = await userService.getUserInfo(userId);
   const session = await sessionService.getSession(request.headers.get('Cookie'));
 
-  return json({ userInfo, preferredLanguage: await session.get('preferredLanguage') });
+  const sessionPreferredLanguage = await session.get('preferredLanguage');
+  const preferredLanguage = await lookupService.getPreferredLanguage(sessionPreferredLanguage);
+  return json({ userInfo, preferredLanguage });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -41,8 +44,9 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function PreferredLanguageConfirm() {
-  const loaderData = useLoaderData<typeof loader>();
-  const { t } = useTranslation(i18nNamespaces);
+  const { preferredLanguage } = useLoaderData<typeof loader>();
+  const { i18n, t } = useTranslation(i18nNamespaces);
+
   return (
     <>
       <h1 id="wb-cont" property="name">
@@ -52,7 +56,7 @@ export default function PreferredLanguageConfirm() {
       <Form method="post">
         <dl>
           <dt>{t('personal-information:preferred-language.edit.language')}</dt>
-          <dd>{loaderData.preferredLanguage === 'en' ? t('personal-information:preferred-language.edit.nameEn') : t('personal-information:preferred-language.edit.nameFr')}</dd>
+          <dd> {preferredLanguage ? getNameByLanguage(i18n.language, preferredLanguage) : preferredLanguage}</dd>
         </dl>
         <div className="flex flex-wrap gap-3">
           <button className="btn btn-primary btn-lg">{t('personal-information:preferred-language.confirm.button.confirm')}</button>
