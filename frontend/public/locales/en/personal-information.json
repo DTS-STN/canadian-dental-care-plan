@@ -12,8 +12,6 @@
     "home-address": "Home address",
     "mailing-address": "Mailing address",
     "preferred-language": "Preferred language",
-    "french-language-name": "French",
-    "english-language-name": "English",
     "change-addresses": "Change addresses",
     "change-phone-number": "Change phone number",
     "change-preferred-language": "Change preferred language"
@@ -101,8 +99,6 @@
         "edit": "Edit"
       },
       "id": "ID",
-      "nameEn": "English",
-      "nameFr": "French",
       "language": "Language",
       "change": "Change",
       "cancel": "Cancel"
