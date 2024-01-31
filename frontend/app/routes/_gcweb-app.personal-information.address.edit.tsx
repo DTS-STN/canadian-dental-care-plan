@@ -4,7 +4,7 @@ import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import { InputField } from '~/components/input-field';
+import { InputTextarea } from '~/components/input-textarea';
 import { addressValidationService } from '~/services/address-validation-service.server';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
@@ -38,8 +38,16 @@ export async function action({ request }: ActionFunctionArgs) {
   const isValidAddress = (val: string) => val && addressValidationService.isValidAddress(val);
 
   const formDataSchema = z.object({
-    homeAddress: z.string().min(1, { message: 'empty-home-address' }).refine(isValidAddress, { message: 'invalid-home-address' }),
-    mailingAddress: z.string().min(1, { message: 'empty-mailing-address' }).refine(isValidAddress, { message: 'invalid-mailing-address' }),
+    homeAddress: z
+      .string()
+      .min(1, { message: 'empty-home-address' })
+      .refine(isValidAddress, { message: 'invalid-home-address' })
+      .transform((val) => val.trim()),
+    mailingAddress: z
+      .string()
+      .min(1, { message: 'empty-mailing-address' })
+      .refine(isValidAddress, { message: 'invalid-mailing-address' })
+      .transform((val) => val.trim()),
   });
 
   const formData = Object.fromEntries(await request.formData());
@@ -99,7 +107,7 @@ export default function ChangeAddress() {
         {t('personal-information:address.edit.page-title')}
       </h1>
       <Form method="post">
-        <InputField
+        <InputTextarea
           id="home-address"
           label={t('personal-information:address.edit.home-address')}
           name="homeAddress"
@@ -108,7 +116,7 @@ export default function ChangeAddress() {
           defaultValue={defaultValues.homeAddress}
           errorMessage={getErrorMessage(errorMessages.homeAddress)}
         />
-        <InputField
+        <InputTextarea
           id="mailing-address"
           label={t('personal-information:address.edit.mailing-address')}
           name="mailingAddress"
