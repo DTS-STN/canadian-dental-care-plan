@@ -2,7 +2,8 @@ import { redirect } from '@remix-run/node';
 
 import { describe, expect, it } from 'vitest';
 
-import { action } from '~/routes/_gcweb-app.personal-information.phone-number.edit';
+import { action, loader } from '~/routes/_gcweb-app.personal-information.phone-number.edit';
+import { userService } from '~/services/user-service.server';
 
 vi.mock('~/services/session-service.server', () => ({
   sessionService: {
@@ -14,7 +15,10 @@ vi.mock('~/services/session-service.server', () => ({
 }));
 
 vi.mock('~/services/user-service.server', () => ({
-  /* intentionally left blank */
+  userService: {
+    getUserId: vi.fn().mockReturnValue('some-id'),
+    getUserInfo: vi.fn(),
+  },
 }));
 
 describe('_gcweb-app.personal-information.phone-number.edit', () => {
@@ -23,8 +27,26 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
     vi.resetModules();
   });
 
+  describe('loader()', () => {
+    it('should return userInfo object if userInfo is found', async () => {
+      vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', phoneNumber: '(111) 222-3333' });
+
+      const response = await loader({
+        request: new Request('http://localhost:3000/personal-information/phone-number/edit'),
+        context: {},
+        params: {},
+      });
+
+      const data = await response.json();
+
+      expect(data).toEqual({
+        userInfo: { id: 'some-id', phoneNumber: '(111) 222-3333' },
+      });
+    });
+  });
+
   describe('action()', () => {
-    it('Should redirect without validation errors', async () => {
+    it('should redirect without validation errors', async () => {
       const formData = new FormData();
       formData.append('phoneNumber', '819 426-5555');
       let request = new Request('http://localhost:3000/personal-information/phone-number/edit', {
@@ -38,7 +60,7 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
       expect(response.url).toEqual(redirect('/personal-information/phone-number/confirm').url);
     });
 
-    it('Should return validation errors', async () => {
+    it('should return validation errors', async () => {
       const formData = new FormData();
       formData.append('phoneNumber', '819 426-55');
       let request = new Request('http://localhost:3000/personal-information/phone-number/edit', {
