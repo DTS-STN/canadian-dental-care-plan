@@ -287,6 +287,15 @@ async function decryptJwe(jwe: string, privateKey: CryptoKey) {
 }
 
 /**
+ * Creates the OIDC callback URL.
+ *
+ * @see https://datatracker.ietf.org/doc/html/rfc6749#section-3.1.2
+ */
+export function generateCallbackUri(baseUri: string, providerId?: string) {
+  return new URL(`/auth/callback/${providerId}`, baseUri).href;
+}
+
+/**
  * Generate an OIDC code challenge from the verifier string.
  *
  * @see https://www.iana.org/assignments/oauth-parameters/oauth-parameters.xhtml#pkce-code-challenge-method

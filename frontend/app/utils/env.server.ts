@@ -30,6 +30,9 @@ const serverEnv = z.object({
   // auth/oidc settings
   AUTH_JWT_PRIVATE_KEY: z.string().refine(isValidPrivateKey),
   AUTH_JWT_PUBLIC_KEY: z.string().refine(isValidPublicKey),
+  AUTH_RAOIDC_BASE_URL: z.string().trim().min(1),
+  AUTH_RAOIDC_CLIENT_ID: z.string().trim().min(1),
+  AUTH_RAOIDC_PROXY_URL: z.string().trim().optional(),
 
   // language cookie settings
   LANG_COOKIE_NAME: z.string().default('_gc_lang'),
