@@ -1,8 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-test.describe('homepage', () => {
-  test('should navigate to index', async ({ page }) => {
+test.describe('phone number editing page', () => {
+  test('should navigate to phone number editing page', async ({ page }) => {
     await page.goto('/personal-information/phone-number/edit');
 
     await expect(page.locator('h1')).toHaveText(/update phone number/i);
