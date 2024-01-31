@@ -50,6 +50,8 @@
     "react-i18next": "^14.0.1",
     "redis": "^4.6.12",
     "source-map-support": "^0.5.21",
+    "undici": "^6.5.0",
+    "web-streams-node": "^0.4.0",
     "winston": "^3.11.0",
     "zod": "^3.22.4"
   },
