@@ -6,7 +6,6 @@ import { factory, primaryKey } from '@mswjs/data';
 faker.seed(123);
 
 const phoneFormat = '([0-9]{3}) [0-9]{3}-[0-9]{4}';
-const fullAddressFormat = '{{location.street}} {{location.buildingNumber}} {{location.secondaryAddress}}\n{{location.city}} {{location.state}} {{location.zipCode}}';
 
 const db = factory({
   user: {
@@ -14,9 +13,19 @@ const db = factory({
     firstName: faker.person.firstName,
     lastName: faker.person.lastName,
     phoneNumber: () => faker.helpers.fromRegExp(phoneFormat),
-    homeAddress: () => faker.helpers.fake(fullAddressFormat),
-    mailingAddress: () => faker.helpers.fake(fullAddressFormat),
+    homeAddress: () => 'home-address-id',
+    mailingAddress: () => 'mailing-address-id',
     preferredLanguage: () => faker.helpers.arrayElement(['en', 'fr']),
+  },
+  // address field names are based off of Power Platform API elements
+  address: {
+    id: primaryKey(String),
+    addressApartmentUnitNumber: faker.location.buildingNumber,
+    addressStreet: faker.location.street,
+    addressCity: faker.location.city,
+    addressProvince: faker.location.state,
+    addressPostalZipCode: faker.location.zipCode,
+    addressCountry: () => 'Canada',
   },
   preferredLanguage: {
     id: primaryKey(String),
@@ -36,6 +45,15 @@ db.preferredLanguage.create({
   id: 'fr',
   nameEn: 'French',
   nameFr: 'Français',
+});
+
+// seed avaliable addresses (before user)
+db.address.create({
+  id: 'home-address-id',
+});
+
+db.address.create({
+  id: 'mailing-address-id',
 });
 
 // seed users
