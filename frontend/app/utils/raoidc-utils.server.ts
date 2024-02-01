@@ -1,7 +1,7 @@
 /**
  * Utility functions to help with RAOIDC requests.
  */
-import { SignJWT, compactDecrypt, decodeJwt, importJWK, jwtVerify } from 'jose';
+import { SignJWT, compactDecrypt, decodeJwt, importJWK } from 'jose';
 import { createHash, randomBytes, subtle } from 'node:crypto';
 
 import { getLogger } from './logging.server';
@@ -206,8 +206,8 @@ export async function fetchAccessToken(serverMetadata: ServerMetadata, serverJwk
   }
 
   const authTokenSet = (await response.json()) as AuthTokenSet;
-  authTokenSet.id_token = await decryptJwe(authTokenSet.id_token, client.privateKey);
-  await validateAuthorizationToken(serverMetadata, serverJwks, authTokenSet);
+  await validateAuthorizationToken(authTokenSet);
+  authTokenSet.id_token = decodeJwt(await decryptJwe(authTokenSet.id_token, client.privateKey));
 
   return authTokenSet;
 }
@@ -336,29 +336,13 @@ export function generateRandomString(len: number) {
   return randomBytes(len).toString('hex');
 }
 
-export async function validateAuthorizationToken(serverMetadata: ServerMetadata, serverJwks: JWKSet, authToken: AuthTokenSet) {
+export async function validateAuthorizationToken(authToken: AuthTokenSet) {
   if (!authToken.access_token) {
     throw new Error('Authorization token is missing access_token claim');
   }
 
   if (!authToken.id_token) {
     throw new Error('Authorization token is missing id_token claim');
-  }
-
-  // validation is performed via a boolean reducer; if any key matches the access token's signature, we reduce to true
-  const idTokenValid = await serverJwks.keys.reduce(async (previousValue, currentValue) => {
-    try {
-      const key = await importJWK({ ...currentValue }, 'RSA-OAEP');
-      const verificationOpts = { issuer: serverMetadata.issuer };
-      await jwtVerify(authToken.id_token, key, verificationOpts);
-      return true; // verification succeeded (no throw 🥳)
-    } catch {
-      return (await previousValue) || false;
-    }
-  }, Promise.resolve(false));
-
-  if (!idTokenValid) {
-    throw new Error('ID token validation failed: signature matched no known JWK');
   }
 
   log.debug('Authorization token successfully validated');
