@@ -1,7 +1,16 @@
 /**
  * Useful utility functions for crypto stuff.
  */
-import { subtle } from 'node:crypto';
+import { createHash, subtle, type webcrypto } from 'node:crypto';
+
+/**
+ * Generate a JWK ID from the modulus of the JWK.
+ */
+export function generateJwkId(jwk: webcrypto.JsonWebKey) {
+  return createHash('md5')
+    .update(jwk.n ?? '')
+    .digest('hex');
+}
 
 /**
  * Takes a PEM-encoded private key as input and returns a CryptoKey object
