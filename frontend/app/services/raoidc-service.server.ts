@@ -5,37 +5,18 @@ import { createHash, subtle } from 'node:crypto';
 import { ProxyAgent, fetch as undiciFetch } from 'undici';
 import { toNodeReadable } from 'web-streams-node';
 
-import { privateKeyPemToCryptoKey, publicKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
+import { privateKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
 import { getEnv } from '~/utils/env.server';
-import { getLogger } from '~/utils/logging.server';
 import { type ClientMetadata, type FetchFunctionInit, fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState } from '~/utils/raoidc-utils.server';
 
 const { AUTH_ENABLED } = getEnv();
 
 async function createRaoidcService() {
-  const log = getLogger('raoidc-service.server');
-
-  const { AUTH_JWT_PUBLIC_KEY, AUTH_JWT_PRIVATE_KEY } = getEnv();
+  const { AUTH_JWT_PRIVATE_KEY } = getEnv();
   const { AUTH_RAOIDC_BASE_URL, AUTH_RAOIDC_CLIENT_ID, AUTH_RAOIDC_PROXY_URL } = getEnv();
 
   const fetchFn = getFetchFn(AUTH_RAOIDC_PROXY_URL);
   const { jwkSet: serverJwkSet, serverMetadata } = await fetchServerMetadata(AUTH_RAOIDC_BASE_URL, fetchFn);
-
-  /**
-   * Return a promise that resolves to an array of public JWKs. If no public
-   * keys have been configured, this function returns an empty array.
-   *
-   * TODO :: GjB :: move this to a different file since it isn't specific to RAOIDC.
-   */
-  async function getPublicJwks() {
-    if (!AUTH_JWT_PUBLIC_KEY) {
-      log.warn('AUTH_JWT_PUBLIC_KEY is not set, returning empty JWKS');
-      return [];
-    }
-
-    const jwk = await subtle.exportKey('jwk', await publicKeyPemToCryptoKey(AUTH_JWT_PUBLIC_KEY));
-    return [{ ...jwk, kid: generateJwkId(jwk) } as JsonWebKey & { kid: string }];
-  }
 
   /**
    * Generates an OAuth authentication request. Used to kickstart the OAuth login process.
@@ -107,7 +88,7 @@ async function createRaoidcService() {
     return async (input: string | URL, init?: FetchFunctionInit) => fetch(input, init);
   }
 
-  return { getPublicJwks, generateAuthRequest, handleCallback };
+  return { generateAuthRequest, handleCallback };
 }
 
 // TODO :: GjB :: this seems wrong; is there a better way to avoid creating the service if AUTH_ENABLED is false?
