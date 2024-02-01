@@ -26,7 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (!userInfo) {
     throw new Response(null, { status: 404 });
   }
-  const preferredLanguage = userInfo.preferredLanguage ? await lookupService.getPreferredLanguage(userInfo?.preferredLanguage) : undefined;
+  const preferredLanguage = userInfo.preferredLanguage && (await lookupService.getPreferredLanguage(userInfo?.preferredLanguage));
 
   return json({ user: userInfo, preferredLanguage });
 }

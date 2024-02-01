@@ -49,7 +49,7 @@ const InputTextarea = forwardRef<HTMLTextAreaElement, InputTextareaProps>((props
       <textarea
         ref={ref}
         aria-describedby={getAriaDescribedby()}
-        aria-errormessage={errorMessage ? inputErrorId : undefined}
+        aria-errormessage={errorMessage && inputErrorId}
         aria-invalid={!!errorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}

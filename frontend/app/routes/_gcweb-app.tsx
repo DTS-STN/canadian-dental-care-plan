@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 
 import { type LinksFunction } from '@remix-run/node';
 import { Link, Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
@@ -7,6 +7,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import cdcpStylesheet from '~/cdcp.css';
 import { LanguageSwitcher } from '~/components/language-switcher';
+import { scrollAndFocusFromAnchorLink } from '~/utils/link-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier } from '~/utils/route-utils';
 
@@ -61,17 +62,22 @@ function ApplicationLayout({ children }: { children?: ReactNode }) {
 function PageHeader() {
   const { i18n, t } = useTranslation(i18nNamespaces);
 
+  function handleOnSkipLinkClick(e: MouseEvent<HTMLAnchorElement>) {
+    e.preventDefault();
+    scrollAndFocusFromAnchorLink(e.currentTarget.href);
+  }
+
   return (
     <>
       <nav>
         <ul id="wb-tphp">
           <li className="wb-slc">
-            <a className="wb-sl" href="#wb-cont">
+            <a className="wb-sl" href="#wb-cont" onClick={handleOnSkipLinkClick}>
               {t('gcweb:nav.skip-to-content')}
             </a>
           </li>
           <li className="wb-slc visible-sm visible-md visible-lg">
-            <a className="wb-sl" href="#wb-info">
+            <a className="wb-sl" href="#wb-info" onClick={handleOnSkipLinkClick}>
               {t('gcweb:nav.skip-to-about')}
             </a>
           </li>
