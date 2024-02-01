@@ -4,7 +4,6 @@ import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
-
 import { InputField } from '~/components/input-field';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
@@ -35,7 +34,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function action({ request }: ActionFunctionArgs) {
   const formDataSchema = z.object({
-    phoneNumber: z.string().refine((val) => isValidPhoneNumber(val, 'CA'), { message: 'Invalid phone number' }),
+    phoneNumber: z.string()
+      .min(1, { message: 'empty-phone-number' })
+      .refine((val) => isValidPhoneNumber(val, 'CA'), { message: "invalid-phone-format" }),
   });
 
   const formData = Object.fromEntries(await request.formData());
@@ -72,6 +73,23 @@ export default function PhoneNumberEdit() {
     phoneNumber: actionData?.errors.phoneNumber?._errors[0],
   };
 
+  /**
+   * Gets an error message based on the provided internationalization (i18n) key.
+   *
+   * @param errorI18nKey - The i18n key for the error message.
+   * @returns The corresponding error message, or undefined if no key is provided.
+   */
+  function getErrorMessage(errorI18nKey?: string): string | undefined {
+    if (!errorI18nKey) return undefined;
+
+    /**
+     * The 'as any' is employed to circumvent typechecking, as the type of
+     * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
+     */
+    return t(`personal-information:phone-number.edit.error-message.${errorI18nKey}` as any);
+  }
+
+
   return (
     <>
       <h1 id="wb-cont" property="name">
@@ -79,7 +97,8 @@ export default function PhoneNumberEdit() {
       </h1>
       <p>{t('personal-information:phone-number.edit.update-message')}</p>
       <Form method="post">
-        <InputField id="phone-number" name="phoneNumber" type="tel" label={t('personal-information:phone-number.edit.component.phone')} required defaultValue={defaultValues.phoneNumber} errorMessage={errorMessages.phoneNumber} />
+        <InputField id="phone-number" name="phoneNumber" type="tel" label={t('personal-information:phone-number.edit.component.phone')}
+          required defaultValue={defaultValues.phoneNumber} errorMessage={getErrorMessage(errorMessages.phoneNumber)} />
         <div className="flex flex-wrap gap-3">
           <button className="btn btn-primary btn-lg">{t('personal-information:phone-number.edit.button.save')}</button>
           <Link id="cancelButton" to="/personal-information" className="btn btn-default btn-lg">

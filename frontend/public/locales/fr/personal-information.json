@@ -73,6 +73,10 @@
         "newPhone": "(FR) New phone number",
         "phone": "(FR) Phone number",
         "error": "(FR) Error"
+      },
+      "error-message": {
+        "empty-phone-number": "(FR) Enter a phone number",        
+        "invalid-phone-format":"(FR) Invalid phone number"
       }
     },
     "confirm": {
