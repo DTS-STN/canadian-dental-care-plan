@@ -1,7 +1,6 @@
-import { type MouseEvent } from 'react';
-
 import { useTranslation } from 'react-i18next';
 
+import { AnchorLink } from '~/components/anchor-link';
 import { scrollAndFocusFromAnchorLink } from '~/utils/link-utils';
 
 /**
@@ -92,15 +91,6 @@ export interface ErrorSummaryProps {
 export function ErrorSummary({ errors, id }: ErrorSummaryProps) {
   const { t } = useTranslation(['gcweb']);
 
-  /**
-   * Handles click events on anchor links, preventing the default behavior and
-   * scrolling and focusing on the associated error message.
-   */
-  function handleOnAnchorLinkClick(e: MouseEvent<HTMLAnchorElement>) {
-    e.preventDefault();
-    scrollAndFocusFromAnchorLink(e.currentTarget.href);
-  }
-
   return (
     <section id={id} className="my-5 space-y-3 border-l-[6px] border-[#d3080c] p-5" tabIndex={-1}>
       <h2 className="m-0 text-2xl font-bold">{t('gcweb:error-summary.header', { count: errors.length })}</h2>
@@ -108,9 +98,7 @@ export function ErrorSummary({ errors, id }: ErrorSummaryProps) {
         <ul className="m-0 list-disc space-y-2 pl-10 ">
           {errors.map(({ feildId, errorMessage }) => (
             <li key={feildId}>
-              <a href={`#${feildId}`} onClick={handleOnAnchorLinkClick}>
-                {errorMessage}
-              </a>
+              <AnchorLink anchorElementId={feildId}>{errorMessage}</AnchorLink>
             </li>
           ))}
         </ul>

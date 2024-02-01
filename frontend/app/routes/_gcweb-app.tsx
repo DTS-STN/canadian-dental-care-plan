@@ -1,4 +1,4 @@
-import type { MouseEvent, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { type LinksFunction } from '@remix-run/node';
 import { Link, Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
@@ -6,8 +6,8 @@ import { Link, Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/re
 import { Trans, useTranslation } from 'react-i18next';
 
 import cdcpStylesheet from '~/cdcp.css';
+import { AnchorLink } from '~/components/anchor-link';
 import { LanguageSwitcher } from '~/components/language-switcher';
-import { scrollAndFocusFromAnchorLink } from '~/utils/link-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier } from '~/utils/route-utils';
 
@@ -62,24 +62,19 @@ function ApplicationLayout({ children }: { children?: ReactNode }) {
 function PageHeader() {
   const { i18n, t } = useTranslation(i18nNamespaces);
 
-  function handleOnSkipLinkClick(e: MouseEvent<HTMLAnchorElement>) {
-    e.preventDefault();
-    scrollAndFocusFromAnchorLink(e.currentTarget.href);
-  }
-
   return (
     <>
       <nav>
         <ul id="wb-tphp">
           <li className="wb-slc">
-            <a className="wb-sl" href="#wb-cont" onClick={handleOnSkipLinkClick}>
+            <AnchorLink anchorElementId="wb-cont" className="wb-sl">
               {t('gcweb:nav.skip-to-content')}
-            </a>
+            </AnchorLink>
           </li>
           <li className="wb-slc visible-sm visible-md visible-lg">
-            <a className="wb-sl" href="#wb-info" onClick={handleOnSkipLinkClick}>
+            <AnchorLink anchorElementId="wb-info" className="wb-sl">
               {t('gcweb:nav.skip-to-about')}
-            </a>
+            </AnchorLink>
           </li>
         </ul>
       </nav>
