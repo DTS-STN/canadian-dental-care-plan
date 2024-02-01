@@ -55,6 +55,27 @@
       }
     }
   },
+  "home-address": {
+    "edit": {
+      "page-title": "(FR) Change home address",
+      "breadcrumbs": {
+        "home": "(FR) Home",
+        "personal-information": "(FR) Personal information",
+        "home-address-change": "(FR) Change home address"
+      },
+      "field": {
+        "address": "(FR) Adddress",
+        "city": "(FR) City",
+        "province": "(FR) Province",
+        "postal-code": "(FR) Postal code",
+        "country": "(FR) Country"               
+      },
+      "button": {
+        "change": "(FR) Change",
+        "cancel": "(FR) Cancel"
+      }
+    }
+  },   
   "phone-number": {
     "edit": {
       "page-title": "(FR) Update phone number",
