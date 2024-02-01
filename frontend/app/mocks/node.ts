@@ -27,7 +27,32 @@ function getUserEntity(id: string | readonly string[]) {
 }
 
 /**
- * Retrieves a preferred language entity based on the provided user ID.
+ * Retrieves an address entity based on the provided user ID and address ID.
+ *
+ * @param userId - The user ID to look up in the database.
+ * @param addressId - The address ID to look up in the database.
+ * @returns The address entity if found, otherwise throws a 404 error.
+ */
+function getAddressEntity(userId: string | readonly string[], addressId: string | readonly string[]) {
+  const userEntity = getUserEntity(userId);
+  const parsedAddressId = z.string().safeParse(addressId);
+
+  if (!parsedAddressId.success || ![userEntity.homeAddress, userEntity.mailingAddress].includes(parsedAddressId.data)) {
+    throw new HttpResponse('No address found', { status: 404, headers: { 'Content-Type': 'text/plain' } });
+  }
+  const parsedAddress = db.address.findFirst({
+    where: { id: { equals: parsedAddressId.data } },
+  });
+
+  if (!parsedAddress) {
+    throw new HttpResponse('No address found', { status: 404, headers: { 'Content-Type': 'text/plain' } });
+  }
+
+  return parsedAddress;
+}
+
+/**
+ * Retrieves a preferred language entity based on the provided preferred language ID.
  *
  * @param id - The preferred language ID to look up in the database.
  * @returns The preferred language entity if found, otherwise throws a 404 error.
@@ -84,6 +109,22 @@ const handlers = [
     const patchResult = jsonpatch.applyPatch(document, patch, true);
     db.user.update({ where: { id: { equals: userEntity.id } }, data: patchResult.newDocument });
     return HttpResponse.text(null, { status: 204 });
+  }),
+
+  /**
+   * Handler for GET request to retrieve address by id
+   */
+  http.get('https://api.example.com/users/:userId/addresses/:addressId', ({ params }) => {
+    const addressEntity = getAddressEntity(params.userId, params.addressId);
+    return HttpResponse.json({
+      id: addressEntity.id,
+      addressApartmentUnitNumber: addressEntity.addressApartmentUnitNumber,
+      addressStreet: addressEntity.addressStreet,
+      addressCity: addressEntity.addressCity,
+      addressProvince: addressEntity.addressProvince,
+      addressPostalZipCode: addressEntity.addressPostalZipCode,
+      addressCountry: addressEntity.addressCountry,
+    });
   }),
 
   /**
