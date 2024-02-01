@@ -55,6 +55,27 @@
       }
     }
   },
+  "home-address": {
+    "edit": {
+      "page-title": "Change home address",
+      "breadcrumbs": {
+        "home": "Home",
+        "personal-information": "Personal information",
+        "home-address-change": "Change home address"
+      },
+      "field": {
+        "address": "Adddress",
+        "city": "City",
+        "province": "Province",
+        "postal-code": "Postal code",
+        "country": "Country"              
+      },
+      "button": {
+        "change": "Change",
+        "cancel": "Cancel"
+      }
+    }
+  },    
   "phone-number": {
     "edit": {
       "page-title": "Update phone number",
