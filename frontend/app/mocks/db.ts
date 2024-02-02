@@ -23,7 +23,7 @@ const db = factory({
     addressApartmentUnitNumber: faker.location.buildingNumber,
     addressStreet: faker.location.street,
     addressCity: faker.location.city,
-    addressProvince: faker.location.state,
+    addressProvince: () => faker.location.state({ abbreviated: true }),
     addressPostalZipCode: faker.location.zipCode,
     addressCountry: () => 'Canada',
   },
