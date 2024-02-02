@@ -1,0 +1,12 @@
+{
+  "index": {
+    "page-title": "(FR) View my letters",
+    "breadcrumbs": {
+      "home": "(FR) Home",
+      "view-letter": "(FR) View letters"
+    },
+    "subject": "(FR) Subject",
+    "date-sent": "(FR) Date sent",
+    "reference-id": "(FR) Reference ID"
+  }
+}
