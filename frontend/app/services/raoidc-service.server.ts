@@ -6,7 +6,7 @@
  * The service exports three functions for making calls to the downstream RAOIDC
  * service:
  *
- *   - generateSigninRequest() -- generates a standard OIDC signing request
+ *   - generateSigninRequest() -- generates a standard OIDC signing> request
  *   - handleCallback() -- handles the OIDC callback request
  *   - handleLogout() -- handles an RAOIDC logout
  *
@@ -28,7 +28,7 @@ import { toNodeReadable } from 'web-streams-node';
 import { generateJwkId, privateKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
-import { type ClientMetadata, type FetchFunctionInit, fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState } from '~/utils/raoidc-utils.server';
+import { type ClientMetadata, type FetchFunctionInit, fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState, validateSession } from '~/utils/raoidc-utils.server';
 
 const log = getLogger('raoidc-service.server');
 
@@ -99,6 +99,10 @@ async function createRaoidcService() {
     throw new Error('Not yet implemented');
   }
 
+  function handleSessionValidation(sessionId: string) {
+    return validateSession(AUTH_RAOIDC_BASE_URL, AUTH_RAOIDC_CLIENT_ID, sessionId, fetchFn);
+  }
+
   /**
    * Return a custom fetch() function if a proxy URL has been provided.
    * If no proxy has been provided, simply return global.fetch().
@@ -117,5 +121,5 @@ async function createRaoidcService() {
     return global.fetch;
   }
 
-  return { generateSigninRequest, handleCallback, handleLogout };
+  return { generateSigninRequest, handleCallback, handleLogout, handleSessionValidation };
 }

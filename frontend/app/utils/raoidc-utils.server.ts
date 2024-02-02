@@ -244,6 +244,35 @@ export async function fetchUserInfo(userInfoUri: string, accessToken: string, cl
 }
 
 /**
+ * Validate (and extend) an RAOIDC session.
+ *
+ * This function is used to detect whether or not a user has logged out via
+ * another ECAS-protected application. A side-effect of this validation call is
+ * that the user's session is extended for another TTL (typically 20 minutes).
+ */
+export async function validateSession(authUrl: string, clientId: string, sessionId: string, fetchFn?: FetchFunction) {
+  const validateUrl = new URL('validatesession', authUrl + '/');
+  log.debug('Validating/extending session [%s] via [%s]', sessionId, validateUrl);
+
+  validateUrl.searchParams.set('client_id', clientId);
+  validateUrl.searchParams.set('shared_session_id', sessionId);
+
+  // prettier-ignore
+  const response = fetchFn
+    ? await fetchFn(validateUrl)
+    : await fetch(validateUrl);
+
+  if (response.status !== 200) {
+    throw new Error('Error validating session: non-200 status');
+  }
+
+  const result = (await response.text()) === 'true';
+
+  log.debug('Session [%s] is valid: [%s]', sessionId, result);
+  return result;
+}
+
+/**
  * Creates an OIDC client assertion.
  *
  * @see https://datatracker.ietf.org/doc/html/rfc7521
