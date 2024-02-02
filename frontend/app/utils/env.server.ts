@@ -17,7 +17,8 @@ const isValidPublicKey = (val: string) => tryOrElseFalse(() => publicKeyPemToCry
 const isValidPrivateKey = (val: string) => tryOrElseFalse(() => privateKeyPemToCryptoKey(val));
 
 // transformers
-const toBoolean = (val: string) => val === 'true';
+const toBoolean = (val?: string) => val === 'true';
+const toUndefined = (val?: string) => (val === '' ? undefined : val);
 
 /**
  * Environment variables that will be available to server only.
@@ -32,7 +33,7 @@ const serverEnv = z.object({
   AUTH_JWT_PUBLIC_KEY: z.string().refine(isValidPublicKey),
   AUTH_RAOIDC_BASE_URL: z.string().trim().min(1),
   AUTH_RAOIDC_CLIENT_ID: z.string().trim().min(1),
-  AUTH_RAOIDC_PROXY_URL: z.string().trim().optional(),
+  AUTH_RAOIDC_PROXY_URL: z.string().trim().transform(toUndefined).optional(),
 
   // language cookie settings
   LANG_COOKIE_NAME: z.string().default('_gc_lang'),
