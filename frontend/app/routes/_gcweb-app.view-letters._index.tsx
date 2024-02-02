@@ -1,7 +1,10 @@
 // import { type LoaderFunctionArgs, json } from '@remix-run/node';
+import { useEffect, useState } from 'react';
+
+import { Link } from '@remix-run/react';
+
 import { useTranslation } from 'react-i18next';
 
-import { LetterList } from '~/components/letter-list';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('view-letters');
@@ -13,23 +16,12 @@ export const handle = {
   pageTitleI18nKey: 'view-letters:index.page-title',
 } as const satisfies RouteHandleData;
 
-// Use the loader function to retrieve data from mock service
+// TODO Create loader function to fetch data from mock using service
 
-// export async function loader({ request }: LoaderFunctionArgs) {
-//   const userId = await userService.getUserId();
-
-//   if (!userId) {
-//     throw new Response(null, { status: 404 });
-//   }
-
-//   const letters = await letterService.getLettersForUser(userId);
-//   return json({ letters });
-// }
-
-export default function PersonalInformationIndex() {
+export default function ViewLetters() {
   const { t } = useTranslation(i18nNamespaces);
 
-  // dummy data for testing, should use retrieved data from mock when it's ready
+  // TODO Dummy data should be removed when loader is implemented
   const letters = [
     { id: '112029', subject: 'Letter subject text 1', dateSent: '2022-07-20', referenceId: '898815' },
     { id: '014095', subject: 'Letter subject text 2', dateSent: '2023-04-22', referenceId: '443526' },
@@ -48,8 +40,59 @@ export default function PersonalInformationIndex() {
         {t('view-letters:index.page-title')}
       </h1>
       <div>
-        <LetterList letters={letters} i18n={{ subject: t('view-letters:index.subject'), dateSent: t('view-letters:index.date-sent'), referenceId: t('view-letters:index.reference-id') }} />
+        <LetterList letters={letters} />
       </div>
     </>
+  );
+}
+
+interface Letter {
+  id: string;
+  subject: string;
+  dateSent: string;
+  referenceId: string;
+}
+
+interface LetterListProps {
+  letters: Letter[];
+}
+
+function LetterList({ letters }: LetterListProps) {
+  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC');
+  const [sorted, setSorted] = useState<Letter[]>(letters);
+  const { t } = useTranslation(i18nNamespaces);
+
+  useEffect(() => {
+    setSorted(sortLetters(letters, sortOrder));
+  }, [letters, sortOrder]);
+
+  const sortLetters = (letters: Letter[], order: 'ASC' | 'DESC') => {
+    return [...letters].sort((a, b) => {
+      return order === 'ASC' ? new Date(a.dateSent).getTime() - new Date(b.dateSent).getTime() : new Date(b.dateSent).getTime() - new Date(a.dateSent).getTime();
+    });
+  };
+
+  return (
+    <div>
+      <button onClick={() => setSortOrder(sortOrder === 'ASC' ? 'DESC' : 'ASC')}>Sort by date</button>
+      <div className="border-l border-r border-t">
+        <div className="grid grid-cols-3 divide-x divide-gray-300 bg-gray-100 md:grid-cols-[3fr_1fr_1fr]">
+          <strong className="border-b border-gray-300 px-4">{t('view-letters:index.subject')}</strong>
+          <strong className="border-b border-gray-300 px-4">{t('view-letters:index.date-sent')}</strong>
+          <strong className="border-b border-gray-300 px-4">{t('view-letters:index.reference-id')}</strong>
+        </div>
+        <ul>
+          {sorted.map((letter) => (
+            <li key={letter.id} className="grid grid-cols-3 divide-x divide-gray-300 md:grid-cols-[3fr_1fr_1fr]">
+              <span className="border-b border-gray-300 px-4">
+                <Link to={`/letters/${letter.referenceId}`}>{letter.subject}</Link>
+              </span>
+              <span className="border-b border-gray-300 px-4">{new Date(letter.dateSent).toLocaleDateString()}</span>
+              <span className="border-b border-gray-300 px-4">{letter.referenceId}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }
