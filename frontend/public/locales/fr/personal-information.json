@@ -74,6 +74,21 @@
         "change": "(FR) Change",
         "cancel": "(FR) Cancel"
       }
+    },
+    "confirm": {
+      "page-title": "(FR) Confirm",
+      "breadcrumbs": {
+        "home": "(FR) Home",
+        "personal-information": "(FR) Personal information",
+        "address-change-confirm": "(FR) Confirm"
+      },
+      "change-of-address": "(FR) Change of home address",
+      "from": "(FR) From:",
+      "to": "(FR) To:",
+      "button": {
+        "confirm": "(FR) Confirm",
+        "cancel": "(FR) Cancel"
+      }
     }
   },   
   "phone-number": {
