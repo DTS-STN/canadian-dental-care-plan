@@ -8,5 +8,8 @@
     "subject": "(FR) Subject",
     "date-sent": "(FR) Date sent",
     "reference-id": "(FR) Reference ID"
+  },
+  "view": {
+    "download": "(FR) Download PDF"
   }
 }
