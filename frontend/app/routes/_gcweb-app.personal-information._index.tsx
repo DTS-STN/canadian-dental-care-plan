@@ -37,9 +37,6 @@ export default function PersonalInformationIndex() {
 
   return (
     <>
-      <h1 id="wb-cont" property="name">
-        {t('personal-information:index.page-title')}
-      </h1>
       <p>{t('personal-information:index.on-file')}</p>
       <div className="grid gap-6 md:grid-cols-2">
         <PersonalInformationSection title={t('personal-information:index.full-name')} icon="glyphicon-user">

@@ -55,9 +55,6 @@ export default function PhoneNumberConfirm() {
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <h1 id="wb-cont" property="name">
-        {t('personal-information:phone-number.confirm.page-title')}
-      </h1>
       <p>{t('personal-information:phone-number.confirm.confirm-message')}</p>
       <Form method="post">
         <div className="form-group">

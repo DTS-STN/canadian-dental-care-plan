@@ -81,6 +81,7 @@ declare global {
    */
   interface RouteHandleData extends Record<string, unknown | undefined> {
     breadcrumbs?: Breadcrumbs;
+    documentTitleI18nKey?: PageTitleI18nKey;
     i18nNamespaces?: I18nNamespaces;
     pageIdentifier?: PageIdentifier;
     pageTitleI18nKey?: PageTitleI18nKey;

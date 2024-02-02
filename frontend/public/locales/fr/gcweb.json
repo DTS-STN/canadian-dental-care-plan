@@ -32,16 +32,16 @@
     "version": "Version\u00a0:"
   },
   "not-found": {
-    "page-title": "Page introuvable",
-    "page-header": "Nous ne pouvons trouver cette page",
-    "page-subheader": "(Erreur 404)",
+    "document-title": "Page introuvable",
+    "page-title": "Nous ne pouvons trouver cette page",
+    "page-subtitle": "(Erreur 404)",
     "page-message": "Nous sommes désolés que vous ayez abouti ici. Il arrive parfois qu'une page ait été déplacée ou supprimée. Heureusement, nous pouvons vous aider à trouver ce que vous cherchez.",
     "page-link": "Retournez à la <home>page d'accueil</home>"
   },
   "server-error": {
-    "page-title": "Erreur interne du serveur",
-    "page-header": "Nous éprouvons des difficultés avec cette page",
-    "page-subheader": "(Erreur 500)",
+    "document-title": "Erreur interne du serveur",
+    "page-title": "Nous éprouvons des difficultés avec cette page",
+    "page-subtitle": "(Erreur 500)",
     "page-message": "Nous espérons résoudre le problème sous peu. Il ne s'agit pas d'un problème avec votre ordinateur ou Internet, mais plutôt avec le serveur de notre site Web. Que faire?",
     "option-01": "Actualisez la page ou réessayez plus tard",
     "option-02": "Retournez à la <home>page d'accueil</home>"

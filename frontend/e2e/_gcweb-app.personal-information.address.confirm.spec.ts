@@ -5,7 +5,7 @@ test.describe('address change confirmation page', () => {
   test('should navigate to address change confirmation page', async ({ page }) => {
     await page.goto('/personal-information/address/confirm');
 
-    await expect(page.locator('h1')).toHaveText(/change address/i);
+    await expect(page.locator('h1')).toHaveText(/confirm/i);
   });
 
   test('should not have any automatically detectable accessibility issues', async ({ page }) => {

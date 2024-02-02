@@ -10,7 +10,7 @@ import { NonceContext } from '~/components/nonce-context';
 import stylesheet from '~/tailwind.css';
 import { readBuildInfo } from '~/utils/build-info.server';
 import { getEnv, getPublicEnv } from '~/utils/env.server';
-import { useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
+import { useDocumentTitleI18nKey, useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
 
 export const links = () => [{ rel: 'stylesheet', href: stylesheet }];
 
@@ -31,18 +31,38 @@ export async function loader({ request }: LoaderFunctionArgs) {
   });
 }
 
+/**
+ * Custom hook to get the translated document title based on internationalization keys.
+ *
+ * @function
+ * @returns {string|undefined} - Translated document title or undefined if no internationalization key is provided.
+ *
+ * @description
+ * This hook initializes the translation function and retrieves internationalization keys for the
+ * document title and page title. It returns the translated document title or undefined if no key is provided.
+ */
+function useDocumentTitle() {
+  const ns = useI18nNamespaces();
+  const { t } = useTranslation(ns);
+  const documentTitleI18nKey = useDocumentTitleI18nKey();
+  const pageTitleI18nKey = usePageTitleI18nKey();
+  const i18nKey = documentTitleI18nKey ?? pageTitleI18nKey;
+  return i18nKey && (t(i18nKey) as string); // as string otherwise it's typeof any
+}
+
 export default function () {
   const { nonce } = useContext(NonceContext);
   const { env, javascriptEnabled } = useLoaderData<typeof loader>();
-  const { i18n, t } = useTranslation(useI18nNamespaces());
-  const pageTitleI18nKey = usePageTitleI18nKey();
+  const ns = useI18nNamespaces();
+  const { i18n } = useTranslation(ns);
+  const documentTitle = useDocumentTitle();
 
   return (
     <html lang={i18n.language}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>{pageTitleI18nKey && t(pageTitleI18nKey)}</title>
+        <title>{documentTitle}</title>
         <Meta />
         <Links />
       </head>

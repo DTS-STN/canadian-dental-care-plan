@@ -115,9 +115,6 @@ export default function PersonalInformationAddressEdit() {
 
   return (
     <>
-      <h1 id="wb-cont" property="name">
-        {t('personal-information:address.edit.page-title')}
-      </h1>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form className="max-w-prose" method="post">
         <InputTextarea className="!w-full" defaultValue={defaultValues.homeAddress} errorMessage={errorMessages.homeAddress} id="homeAddress" label={t('personal-information:address.edit.home-address')} name="homeAddress" required />
