@@ -3,14 +3,15 @@ import { Link } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 
+import { PageTitle } from '~/components/page-title';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
 export const handle = {
+  documentTitleI18nKey: 'gcweb:not-found.document-title',
   i18nNamespaces,
   pageIdentifier: 'CDCP-0404',
-  pageTitleI18nKey: 'gcweb:not-found.page-title',
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -26,9 +27,9 @@ export default function NotFound() {
 
   return (
     <>
-      <h1>
-        <span>{t('gcweb:not-found.page-header')}</span> <small className="help-inline">{t('gcweb:not-found.page-subheader')}</small>
-      </h1>
+      <PageTitle>
+        <span>{t('gcweb:not-found.page-title')}</span> <small className="help-inline">{t('gcweb:not-found.page-subtitle')}</small>
+      </PageTitle>
       <p>{t('gcweb:not-found.page-message')}</p>
       <ul>
         <li>

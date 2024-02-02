@@ -1,6 +1,7 @@
 import { useMatches } from '@remix-run/react';
 
 import { type FlatNamespace, type KeysByTOptions, type Namespace, type ParseKeysByNamespaces, type TOptions } from 'i18next';
+import validator from 'validator';
 import { z } from 'zod';
 
 type ParsedKeysByNamespaces<TOpt extends TOptions = {}> = ParseKeysByNamespaces<Namespace, KeysByTOptions<TOpt>>;
@@ -30,21 +31,29 @@ const buildInfoSchema = z
   })
   .readonly();
 
-export const i18nNamespacesSchema = z.array(z.custom<FlatNamespace>()).readonly();
+const i18nKeySchema = z
+  .custom<ParsedKeysByNamespaces>()
+  .refine((val) => typeof val === 'string' && !validator.isEmpty(val))
+  .readonly();
+
+export const i18nNamespacesSchema = z
+  .array(z.custom<FlatNamespace>())
+  .refine((arr) => Array.isArray(arr) && arr.every((val) => typeof val === 'string' && !validator.isEmpty(val)))
+  .readonly();
 
 const pageIdentifierSchema = z.string().readonly();
-
-const pageTitleI18nKeySchema = z.custom<ParsedKeysByNamespaces>().readonly();
 
 export type Breadcrumbs = z.infer<typeof breadcrumbsSchema>;
 
 export type BuildInfo = z.infer<typeof buildInfoSchema>;
 
+export type DocumentTitleI18nKey = z.infer<typeof i18nKeySchema>;
+
 export type I18nNamespaces = z.infer<typeof i18nNamespacesSchema>;
 
 export type PageIdentifier = z.infer<typeof pageIdentifierSchema>;
 
-export type PageTitleI18nKey = z.infer<typeof pageTitleI18nKeySchema>;
+export type PageTitleI18nKey = z.infer<typeof i18nKeySchema>;
 
 export function useBreadcrumbs() {
   return useMatches()
@@ -58,6 +67,14 @@ export function useBuildInfo() {
   return useMatches()
     .map(({ data }) => data as { buildInfo?: BuildInfo } | undefined)
     .map((data) => buildInfoSchema.safeParse(data?.buildInfo))
+    .map((result) => (result.success ? result.data : undefined))
+    .reduce(coalesce);
+}
+
+export function useDocumentTitleI18nKey() {
+  return useMatches()
+    .map(({ handle }) => handle as RouteHandleData | undefined)
+    .map((handle) => i18nKeySchema.safeParse(handle?.documentTitleI18nKey))
     .map((result) => (result.success ? result.data : undefined))
     .reduce(coalesce);
 }
@@ -82,7 +99,7 @@ export function usePageIdentifier() {
 export function usePageTitleI18nKey() {
   return useMatches()
     .map(({ handle }) => handle as RouteHandleData | undefined)
-    .map((handle) => pageTitleI18nKeySchema.safeParse(handle?.pageTitleI18nKey))
+    .map((handle) => i18nKeySchema.safeParse(handle?.pageTitleI18nKey))
     .map((result) => (result.success ? result.data : undefined))
     .reduce(coalesce);
 }

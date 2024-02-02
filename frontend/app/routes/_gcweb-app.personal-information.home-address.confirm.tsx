@@ -46,9 +46,6 @@ export default function ConfirmAddress() {
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <h1 id="wb-cont" property="name">
-        {t('personal-information:home-address.confirm.page-title')}
-      </h1>
       <Form method="post">
         <h2>{t('personal-information:home-address.confirm.change-of-address')}</h2>
         <div className="grid gap-6 md:grid-cols-2">

@@ -46,9 +46,6 @@ export default function PreferredLanguageConfirm() {
 
   return (
     <>
-      <h1 id="wb-cont" property="name">
-        {t('personal-information:preferred-language.confirm.page-title')}
-      </h1>
       <p>{t('personal-information:preferred-language.confirm.confirm-message')}</p>
       <Form method="post">
         <dl>

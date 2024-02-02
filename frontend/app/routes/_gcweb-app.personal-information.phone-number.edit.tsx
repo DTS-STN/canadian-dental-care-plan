@@ -105,9 +105,6 @@ export default function PhoneNumberEdit() {
 
   return (
     <>
-      <h1 id="wb-cont" property="name">
-        {t('personal-information:phone-number.edit.page-title')}
-      </h1>
       <p>{t('personal-information:phone-number.edit.update-message')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post">

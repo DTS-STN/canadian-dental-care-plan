@@ -104,9 +104,6 @@ export default function ChangeAddress() {
 
   return (
     <>
-      <h1 id="wb-cont" property="name">
-        {t('personal-information:home-address.edit.page-title')}
-      </h1>
       <Form method="post">
         <InputField id="unit" label="Unit" name="addressApartmentUnitNumber" defaultValue={defaultValues.addressApartmentUnitNumber} />
         <InputField id="address" label={t('personal-information:home-address.edit.field.address')} name="addressStreet" required defaultValue={defaultValues.addressStreet} />

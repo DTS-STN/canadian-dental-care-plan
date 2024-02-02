@@ -65,9 +65,6 @@ export default function PreferredLanguageEdit() {
 
   return (
     <>
-      <h1 id="wb-cont" property="name">
-        {t('personal-information:preferred-language.edit.page-title')}
-      </h1>
       <Form method="post">
         {preferredLanguages.length > 0 && (
           <InputRadios

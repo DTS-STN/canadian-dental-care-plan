@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 
 import { type LinksFunction } from '@remix-run/node';
 import { Link, Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
@@ -8,8 +8,9 @@ import { Trans, useTranslation } from 'react-i18next';
 import cdcpStylesheet from '~/cdcp.css';
 import { AnchorLink } from '~/components/anchor-link';
 import { LanguageSwitcher } from '~/components/language-switcher';
+import { PageTitle } from '~/components/page-title';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier } from '~/utils/route-utils';
+import { useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey } from '~/utils/route-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
@@ -51,6 +52,7 @@ function ApplicationLayout({ children }: { children?: ReactNode }) {
     <>
       <PageHeader />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
+        <AppPageTitle />
         {children}
         <PageDetails />
       </main>
@@ -115,6 +117,13 @@ function PageHeader() {
       <Breadcrumbs />
     </>
   );
+}
+
+function AppPageTitle(props: Omit<ComponentProps<typeof PageTitle>, 'children'>) {
+  const { t } = useTranslation(useI18nNamespaces());
+  const pageTitleI18nKey = usePageTitleI18nKey();
+
+  return pageTitleI18nKey && <PageTitle {...props}>{t(pageTitleI18nKey)}</PageTitle>;
 }
 
 function PageDetails() {
@@ -240,7 +249,7 @@ function ServerError({ error }: { error: unknown }) {
     <ApplicationLayout>
       <h1>
         <span className="glyphicon glyphicon-warning-sign mrgn-rght-md"></span>
-        <span>{t('gcweb:server-error.page-header')}</span> <small className="help-inline">{t('gcweb:server-error.page-subheader')}</small>
+        <span>{t('gcweb:server-error.page-title')}</span> <small className="help-inline">{t('gcweb:server-error.page-subtitle')}</small>
       </h1>
       <p>{t('gcweb:server-error.page-message')}</p>
       <ul className="list-disc ps-16">

@@ -34,9 +34,6 @@ export default function Index() {
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <h1 id="wb-cont" property="name">
-        {t('index:page-title')}
-      </h1>
       <p>{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.lastName })}</p>
       <div className="grid gap-4 md:grid-cols-2">
         <LandingPageLink title={t('index:personal-info')} to="/personal-information">
