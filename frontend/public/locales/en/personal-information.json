@@ -74,6 +74,21 @@
         "change": "Change",
         "cancel": "Cancel"
       }
+    },
+    "confirm": {
+      "page-title": "Confirm",
+      "breadcrumbs": {
+        "home": "Home",
+        "personal-information": "Personal information",
+        "address-change-confirm": "Confirm"
+      },
+      "change-of-address": "Change of home address",
+      "from": "From:",
+      "to": "To:",
+      "button": {
+        "confirm": "Confirm",
+        "cancel": "Cancel"
+      }
     }
   },    
   "phone-number": {

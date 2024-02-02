@@ -82,6 +82,16 @@ function toUserPatchDocument({ homeAddress, mailingAddress, phoneNumber, preferr
   return { homeAddress, mailingAddress, phoneNumber, preferredLanguage };
 }
 
+/**
+ * Converts a address entity to a patch document with specific fields.
+ *
+ * @param addressEntity - The address entity to convert.
+ * @returns Patch document containing selected user fields.
+ */
+function toAddressPatchDocument({ addressApartmentUnitNumber, addressStreet, addressCity, addressProvince, addressPostalZipCode, addressCountry }: ReturnType<typeof getAddressEntity>) {
+  return { addressApartmentUnitNumber, addressStreet, addressCity, addressProvince, addressPostalZipCode, addressCountry };
+}
+
 const handlers = [
   /**
    * Handler for GET requests to retrieve user details.
@@ -125,6 +135,18 @@ const handlers = [
       addressPostalZipCode: addressEntity.addressPostalZipCode,
       addressCountry: addressEntity.addressCountry,
     });
+  }),
+
+  /**
+   * Handler for PATCH requests to update address
+   */
+  http.patch('https://api.example.com/users/:userId/addresses/:addressId', async ({ params, request }) => {
+    const addressEntity = getAddressEntity(params.userId, params.addressId);
+    const document = toAddressPatchDocument(addressEntity);
+    const patch = (await request.json()) as Operation[];
+    const patchResult = jsonpatch.applyPatch(document, patch, true);
+    db.address.update({ where: { id: { equals: String(params.addressId) } }, data: patchResult.newDocument });
+    return HttpResponse.text(null, { status: 204 });
   }),
 
   /**
