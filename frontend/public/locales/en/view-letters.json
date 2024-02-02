@@ -8,5 +8,8 @@
     "subject": "Subject",
     "date-sent": "Date sent",
     "reference-id": "Reference ID"
+  },
+  "view": {
+    "download": "Download PDF"
   }
 }

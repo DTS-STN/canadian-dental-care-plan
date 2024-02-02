@@ -85,7 +85,7 @@ function LetterList({ letters }: LetterListProps) {
           {sorted.map((letter) => (
             <li key={letter.id} className="grid grid-cols-3 divide-x divide-gray-300 md:grid-cols-[3fr_1fr_1fr]">
               <span className="border-b border-gray-300 px-4">
-                <Link to={`/letters/${letter.referenceId}`}>{letter.subject}</Link>
+                <Link to={`/view-letters/${letter.referenceId}`}>{letter.subject}</Link>
               </span>
               <span className="border-b border-gray-300 px-4">{new Date(letter.dateSent).toLocaleDateString()}</span>
               <span className="border-b border-gray-300 px-4">{letter.referenceId}</span>
