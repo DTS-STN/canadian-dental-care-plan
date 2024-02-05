@@ -83,11 +83,11 @@ export default function PersonalInformationMailingAddressEdit() {
   const errorSummaryId = 'error-summary';
 
   const defaultValues = {
-    address: actionData?.formData.address ?? addressInfo?.address ?? '',
-    city: actionData?.formData.city ?? addressInfo?.city ?? '',
-    province: actionData?.formData.province ?? addressInfo?.province ?? '',
-    country: actionData?.formData.country ?? addressInfo?.country ?? '',
-    postalCode: actionData?.formData.postalCode ?? addressInfo?.postalCode ?? '',
+    address: actionData?.formData.address ?? addressInfo?.address,
+    city: actionData?.formData.city ?? addressInfo?.city,
+    province: actionData?.formData.province ?? addressInfo?.province,
+    country: actionData?.formData.country ?? addressInfo?.country,
+    postalCode: actionData?.formData.postalCode ?? addressInfo?.postalCode,
   };
   /**
    * Gets an error message based on the provided internationalization (i18n) key.

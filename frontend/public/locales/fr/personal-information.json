@@ -71,8 +71,7 @@
         "country": "(FR) Country"               
       },
       "error-message": {
-        "empty-field": "(FR) Enter a value",
-        "invalid-home-address": "(FR) Invalid home address"
+        "empty-field": "(FR) Enter a value"
       },       
       "button": {
         "change": "(FR) Change",
@@ -104,7 +103,7 @@
         "mailing-address-change": "(FR) Change mailing address"
       },
       "field": {
-        "address": "(FR) Adddress",
+        "address": "(FR) Address",
         "city": "(FR) City",
         "province": "(FR) Province",
         "postal-code": "(FR) Postal code",
@@ -154,7 +153,8 @@
         "error": "(FR) Error"
       },
       "error-message": {
-        "empty-phone-number": "(FR) Enter a phone number"
+        "empty-phone-number": "(FR) Enter a phone number",        
+        "invalid-phone-format":"Invalid phone number"
       }
     },
     "confirm": {

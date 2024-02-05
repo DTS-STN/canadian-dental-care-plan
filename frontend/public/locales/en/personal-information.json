@@ -103,7 +103,7 @@
         "mailing-address-change": "Change mailing address"
       },
       "field": {
-        "address": "Adddress",
+        "address": "Address",
         "city": "City",
         "province": "Province",
         "postal-code": "Postal code",

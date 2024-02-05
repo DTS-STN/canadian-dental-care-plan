@@ -6,11 +6,11 @@ import { getLogger } from '~/utils/logging.server';
 
 const addressDtoSchema = z.object({
   addressApartmentUnitNumber: z.string().optional(),
-  addressStreet: z.string().optional(),
-  addressCity: z.string().optional(),
+  addressStreet: z.string(),
+  addressCity: z.string(),
   addressProvince: z.string().optional(),
   addressPostalZipCode: z.string().optional(),
-  addressCountry: z.string().optional(),
+  addressCountry: z.string(),
 });
 
 type AddressDto = z.infer<typeof addressDtoSchema>;
@@ -27,11 +27,11 @@ export type AddressInfo = z.infer<typeof addressInfoSchema>;
 
 function toAddressInfo(addressDto: AddressDto): AddressInfo {
   return {
-    address: addressDto.addressApartmentUnitNumber ? addressDto.addressApartmentUnitNumber + ' ' + addressDto.addressStreet : addressDto.addressStreet ?? ' ',
-    city: addressDto.addressCity ?? ' ',
+    address: addressDto.addressApartmentUnitNumber ? addressDto.addressApartmentUnitNumber + ' ' + addressDto.addressStreet : addressDto.addressStreet,
+    city: addressDto.addressCity,
     province: addressDto.addressProvince,
     postalCode: addressDto.addressPostalZipCode,
-    country: addressDto.addressCountry ?? ' ',
+    country: addressDto.addressCountry,
   };
 }
 
