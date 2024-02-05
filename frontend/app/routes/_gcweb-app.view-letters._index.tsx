@@ -1,7 +1,7 @@
-// import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { useEffect, useState } from 'react';
 
-import { Link } from '@remix-run/react';
+import { type LoaderFunctionArgs, json } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -17,10 +17,16 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 // TODO Create loader function to fetch data from mock using service
+export async function loader({ request }: LoaderFunctionArgs) {
+  const filePath = '/test.pdf';
+  return json({ filePath });
+}
+
+type LoaderData = {
+  filePath: string;
+};
 
 export default function ViewLetters() {
-  const { t } = useTranslation(i18nNamespaces);
-
   // TODO Dummy data should be removed when loader is implemented
   const letters = [
     { id: '112029', subject: 'Letter subject text 1', dateSent: '2022-07-20', referenceId: '898815' },
@@ -36,12 +42,7 @@ export default function ViewLetters() {
   ];
   return (
     <>
-      <h1 id="wb-cont" property="name">
-        {t('view-letters:index.page-title')}
-      </h1>
-      <div>
-        <LetterList letters={letters} />
-      </div>
+      <LetterList letters={letters} />
     </>
   );
 }
@@ -58,6 +59,7 @@ interface LetterListProps {
 }
 
 function LetterList({ letters }: LetterListProps) {
+  const { filePath } = useLoaderData<LoaderData>();
   const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC');
   const [sorted, setSorted] = useState<Letter[]>(letters);
   const { t } = useTranslation(i18nNamespaces);
@@ -72,10 +74,25 @@ function LetterList({ letters }: LetterListProps) {
     });
   };
 
+  function formatDate(dateStr: string) {
+    const date = new Date(dateStr);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
   return (
     <div>
-      <button onClick={() => setSortOrder(sortOrder === 'ASC' ? 'DESC' : 'ASC')}>Sort by date</button>
-      <div className="border-l border-r border-t">
+      <label htmlFor="sortOrder" className="text-sm">
+        <strong>{t('view-letters:index.filter')}</strong>
+      </label>
+      <select id="sortOrder" value={sortOrder} onChange={(e) => setSortOrder(e.target.value as 'ASC' | 'DESC')} className="text-sm">
+        <option value="DESC">{t('view-letters:index.newest')}</option>
+        <option value="ASC">{t('view-letters:index.oldest')}</option>
+      </select>
+      <div className="mt-2 border-l border-r border-t">
         <div className="grid grid-cols-3 divide-x divide-gray-300 bg-gray-100 md:grid-cols-[3fr_1fr_1fr]">
           <strong className="border-b border-gray-300 px-4">{t('view-letters:index.subject')}</strong>
           <strong className="border-b border-gray-300 px-4">{t('view-letters:index.date-sent')}</strong>
@@ -85,9 +102,12 @@ function LetterList({ letters }: LetterListProps) {
           {sorted.map((letter) => (
             <li key={letter.id} className="grid grid-cols-3 divide-x divide-gray-300 md:grid-cols-[3fr_1fr_1fr]">
               <span className="border-b border-gray-300 px-4">
-                <Link to={`/view-letters/${letter.referenceId}`}>{letter.subject}</Link>
+                {/* TODO Replace with dynamic data when endpoint mock is ready. Consider showing file type and file size in the subject*/}
+                <a href={filePath} download>
+                  {letter.subject} (PDF, fileSize)
+                </a>
               </span>
-              <span className="border-b border-gray-300 px-4">{new Date(letter.dateSent).toLocaleDateString()}</span>
+              <span className="border-b border-gray-300 px-4">{formatDate(letter.dateSent)}</span>
               <span className="border-b border-gray-300 px-4">{letter.referenceId}</span>
             </li>
           ))}
