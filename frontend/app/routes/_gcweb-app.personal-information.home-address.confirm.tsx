@@ -25,7 +25,6 @@ export const handle = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
-  //const homeAddressInfo = await addressService.getAddressInfo(userId, userInfo?.homeAddress ?? '');
   const homeAddressInfo = await addressService.getAddressInfo(userId, userInfo?.homeAddress ?? '');
 
   const session = await sessionService.getSession(request.headers.get('Cookie'));
