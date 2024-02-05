@@ -87,14 +87,53 @@
         "address-change-confirm": "(FR) Confirm"
       },
       "change-of-address": "(FR) Change of home address",
-      "from": "(FR) From:",
-      "to": "(FR) To:",
+      "previous-home-address": "(FR) Previous home address",
+      "new-home-address": "(FR) New home address",
       "button": {
         "confirm": "(FR) Confirm",
         "cancel": "(FR) Cancel"
       }
     }
-  },   
+  },
+  "mailing-address": {
+    "edit": {
+      "page-title": "(FR) Change mailing address",
+      "breadcrumbs": {
+        "home": "(FR) Home",
+        "personal-information": "(FR) Personal information",
+        "mailing-address-change": "(FR) Change mailing address"
+      },
+      "field": {
+        "address": "(FR) Adddress",
+        "city": "(FR) City",
+        "province": "(FR) Province",
+        "postal-code": "(FR) Postal code",
+        "country": "(FR) Country"              
+      },
+      "error-message": {
+        "empty-field": "(FR) Enter a value"
+      },         
+      "button": {
+        "change": "(FR) Change",
+        "cancel": "(FR) Cancel"
+      }
+    },
+    "confirm": {
+      "page-title": "(FR) Confirm",
+      "breadcrumbs": {
+        "home": "(FR) Home",
+        "personal-information": "(FR) Personal information",
+        "address-change-confirm": "(FR) Confirm"
+      },
+      "change-of-address": "(FR) Change of mailing address",
+      "previous-mailing-address": "(FR) Previous mailing address",
+      "new-mailing-address": "(FR) New mailing address",
+      "button": {
+        "confirm": "(FR) Confirm",
+        "cancel": "(FR) Cancel"
+      }
+    }
+  },    
   "phone-number": {
     "edit": {
       "page-title": "(FR) Update phone number",
@@ -115,8 +154,7 @@
         "error": "(FR) Error"
       },
       "error-message": {
-        "empty-phone-number": "(FR) Enter a phone number",        
-        "invalid-phone-format":"(FR) Invalid phone number"
+        "empty-phone-number": "(FR) Enter a phone number"
       }
     },
     "confirm": {
