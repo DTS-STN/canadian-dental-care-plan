@@ -1,9 +1,12 @@
+import { useEffect } from 'react';
+
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
-import { Form, Link, useLoaderData } from '@remix-run/react';
+import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { addressService } from '~/services/address-service.server';
 import { sessionService } from '~/services/session-service.server';
@@ -36,27 +39,22 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const isValidAddress = (val: object) => val && addressService.isValidAddress(val);
-
-  const formDataSchema = z
-    .object({
-      addressApartmentUnitNumber: z.string().transform((val) => val.trim()),
-      addressStreet: z
-        .string()
-        .min(1, { message: 'empty-home-address' })
-        .transform((val) => val.trim()),
-      addressCity: z
-        .string()
-        .min(1, { message: 'empty-home-address' })
-        .transform((val) => val.trim()),
-      addressProvince: z.string().transform((val) => val.trim()),
-      addressPostalZipCode: z.string().transform((val) => val.trim()),
-      addressCountry: z
-        .string()
-        .min(1, { message: 'empty-home-address' })
-        .transform((val) => val.trim()),
-    })
-    .refine(isValidAddress, { message: 'invalid-home-address' });
+  const formDataSchema = z.object({
+    address: z
+      .string()
+      .min(1, { message: 'empty-field' })
+      .transform((val) => val.trim()),
+    city: z
+      .string()
+      .min(1, { message: 'empty-field' })
+      .transform((val) => val.trim()),
+    province: z.string().transform((val) => val.trim()),
+    postalCode: z.string().transform((val) => val.trim()),
+    country: z
+      .string()
+      .min(1, { message: 'empty-field' })
+      .transform((val) => val.trim()),
+  });
 
   const formData = Object.fromEntries(await request.formData());
   const parsedDataResult = await formDataSchema.safeParseAsync(formData);
@@ -78,39 +76,60 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 }
 
-export default function ChangeAddress() {
+export default function PersonalInformationHomeAddressEdit() {
+  const actionData = useActionData<typeof action>();
   const { addressInfo } = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
+  const errorSummaryId = 'error-summary';
 
-  const defaultValues = addressInfo
-    ? {
-        id: addressInfo.id,
-        addressApartmentUnitNumber: addressInfo.addressApartmentUnitNumber,
-        addressStreet: addressInfo.addressStreet,
-        addressCity: addressInfo.addressCity,
-        addressProvince: addressInfo.addressProvince,
-        addressPostalZipCode: addressInfo.addressPostalZipCode,
-        addressCountry: addressInfo.addressCountry,
-      }
-    : {
-        id: '',
-        addressApartmentUnitNumber: '',
-        addressStreet: '',
-        addressCity: '',
-        addressProvince: '',
-        addressPostalZipCode: '',
-        addressCountry: '',
-      };
+  const defaultValues = {
+    address: actionData?.formData.address ?? addressInfo?.address ?? '',
+    city: actionData?.formData.city ?? addressInfo?.city ?? '',
+    province: actionData?.formData.province ?? addressInfo?.province ?? '',
+    country: actionData?.formData.country ?? addressInfo?.country ?? '',
+    postalCode: actionData?.formData.postalCode ?? addressInfo?.postalCode ?? '',
+  };
+  /**
+   * Gets an error message based on the provided internationalization (i18n) key.
+   *
+   * @param errorI18nKey - The i18n key for the error message.
+   * @returns The corresponding error message, or undefined if no key is provided.
+   */
+  function getErrorMessage(errorI18nKey?: string): string | undefined {
+    if (!errorI18nKey) return undefined;
+
+    /**
+     * The 'as any' is employed to circumvent typechecking, as the type of
+     * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
+     */
+    return t(`personal-information:home-address.edit.error-message.${errorI18nKey}` as any);
+  }
+
+  const errorMessages = {
+    address: getErrorMessage(actionData?.errors.fieldErrors.address?.[0]),
+    city: getErrorMessage(actionData?.errors.fieldErrors.city?.[0]),
+    province: getErrorMessage(actionData?.errors.fieldErrors.province?.[0]),
+    postalCode: getErrorMessage(actionData?.errors.fieldErrors.postalCode?.[0]),
+    country: getErrorMessage(actionData?.errors.fieldErrors.country?.[0]),
+  };
+
+  const errorSummaryItems = createErrorSummaryItems(errorMessages);
+
+  useEffect(() => {
+    if (actionData?.formData && hasErrors(actionData.formData)) {
+      scrollAndFocusToErrorSummary(errorSummaryId);
+    }
+  }, [actionData]);
 
   return (
     <>
-      <Form method="post">
-        <InputField id="unit" label="Unit" name="addressApartmentUnitNumber" defaultValue={defaultValues.addressApartmentUnitNumber} />
-        <InputField id="address" label={t('personal-information:home-address.edit.field.address')} name="addressStreet" required defaultValue={defaultValues.addressStreet} />
-        <InputField id="city" label={t('personal-information:home-address.edit.field.city')} name="addressCity" required defaultValue={defaultValues.addressCity} />
-        <InputField id="province" label={t('personal-information:home-address.edit.field.province')} name="addressProvince" defaultValue={defaultValues.addressProvince} />
-        <InputField id="postalCode" label={t('personal-information:home-address.edit.field.postal-code')} name="addressPostalZipCode" defaultValue={defaultValues.addressPostalZipCode} />
-        <InputField id="country" label={t('personal-information:home-address.edit.field.country')} name="addressCountry" required defaultValue={defaultValues.addressCountry} />
+      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+      <Form className="max-w-prose" method="post">
+        <InputField id="address" label={t('personal-information:home-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />
+        <InputField id="city" label={t('personal-information:home-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
+        <InputField id="province" label={t('personal-information:home-address.edit.field.province')} name="province" defaultValue={defaultValues.province} errorMessage={errorMessages.province} />
+        <InputField id="postalCode" label={t('personal-information:home-address.edit.field.postal-code')} name="postalCode" defaultValue={defaultValues.postalCode} errorMessage={errorMessages.postalCode} />
+        <InputField id="country" label={t('personal-information:home-address.edit.field.country')} name="country" required defaultValue={defaultValues.country} errorMessage={errorMessages.country} />
 
         <div className="flex flex-wrap gap-3">
           <button id="change-button" className="btn btn-primary btn-lg">

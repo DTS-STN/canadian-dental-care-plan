@@ -3,6 +3,7 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
+import { Address } from '~/components/address';
 import { addressService } from '~/services/address-service.server';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
@@ -41,7 +42,7 @@ export async function action({ request }: ActionFunctionArgs) {
   return redirect('/personal-information');
 }
 
-export default function ConfirmAddress() {
+export default function PersonalInformationHomeAddressConfirm() {
   const { homeAddressInfo, newHomeAddress } = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
   return (
@@ -54,14 +55,7 @@ export default function ConfirmAddress() {
               <h3 className="panel-title">{t('personal-information:home-address.confirm.from')}</h3>
             </header>
             <div className="panel-body">
-              <p className="m-0">
-                {homeAddressInfo?.addressApartmentUnitNumber} {homeAddressInfo?.addressStreet}
-              </p>
-              <p className="m-0">
-                {homeAddressInfo?.addressCity}, {homeAddressInfo?.addressProvince ? homeAddressInfo?.addressProvince + ', ' : ''}
-                {homeAddressInfo?.addressCountry}
-              </p>
-              <p className="m-0">{homeAddressInfo?.addressPostalZipCode}</p>
+              <Address address={homeAddressInfo?.address ?? ''} city={homeAddressInfo?.city ?? ''} provinceState={homeAddressInfo?.province ?? ''} postalZipCode={homeAddressInfo?.postalCode ?? ''} country={homeAddressInfo?.country ?? ''} />
             </div>
           </section>
           <section className="panel panel-info">
@@ -69,14 +63,7 @@ export default function ConfirmAddress() {
               <h3 className="panel-title">{t('personal-information:home-address.confirm.to')}</h3>
             </header>
             <div className="panel-body">
-              <p className="m-0">
-                {newHomeAddress.addressApartmentUnitNumber} {newHomeAddress.addressStreet}
-              </p>
-              <p className="m-0">
-                {newHomeAddress.addressCity}, {newHomeAddress.addressProvince ? newHomeAddress.addressProvince + ', ' : ''}
-                {newHomeAddress.addressCountry}
-              </p>
-              <p className="m-0">{newHomeAddress.addressPostalZipCode}</p>
+              <Address address={newHomeAddress.address} city={newHomeAddress.city} provinceState={newHomeAddress.province} postalZipCode={newHomeAddress.postalCode} country={newHomeAddress.country} />
             </div>
           </section>
         </div>
