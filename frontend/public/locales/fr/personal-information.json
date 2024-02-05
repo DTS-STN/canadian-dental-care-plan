@@ -70,6 +70,10 @@
         "postal-code": "(FR) Postal code",
         "country": "(FR) Country"               
       },
+      "error-message": {
+        "empty-field": "(FR) Enter a value",
+        "invalid-home-address": "(FR) Invalid home address"
+      },       
       "button": {
         "change": "(FR) Change",
         "cancel": "(FR) Cancel"
