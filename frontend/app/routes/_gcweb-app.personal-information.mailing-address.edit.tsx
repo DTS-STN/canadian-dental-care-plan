@@ -17,19 +17,19 @@ const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
   breadcrumbs: [
-    { labelI18nKey: 'personal-information:home-address.edit.breadcrumbs.home', to: '/' },
-    { labelI18nKey: 'personal-information:home-address.edit.breadcrumbs.personal-information', to: '/personal-information' },
-    { labelI18nKey: 'personal-information:home-address.edit.breadcrumbs.home-address-change' },
+    { labelI18nKey: 'personal-information:mailing-address.edit.breadcrumbs.home', to: '/' },
+    { labelI18nKey: 'personal-information:mailing-address.edit.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:mailing-address.edit.breadcrumbs.mailing-address-change' },
   ],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0004',
-  pageTitleI18nKey: 'personal-information:home-address.edit.page-title',
+  pageTitleI18nKey: 'personal-information:mailing-address.edit.page-title',
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
-  const addressInfo = await addressService.getAddressInfo(userId, userInfo?.homeAddress ?? '');
+  const addressInfo = await addressService.getAddressInfo(userId, userInfo?.mailingAddress ?? '');
 
   if (!userInfo) {
     throw new Response(null, { status: 404 });
@@ -67,16 +67,16 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const session = await sessionService.getSession(request.headers.get('Cookie'));
-  session.set('newHomeAddress', parsedDataResult.data);
+  session.set('newMailingAddress', parsedDataResult.data);
 
-  return redirect('/personal-information/home-address/confirm', {
+  return redirect('/personal-information/mailing-address/confirm', {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),
     },
   });
 }
 
-export default function PersonalInformationHomeAddressEdit() {
+export default function PersonalInformationMailingAddressEdit() {
   const actionData = useActionData<typeof action>();
   const { addressInfo } = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
@@ -102,7 +102,7 @@ export default function PersonalInformationHomeAddressEdit() {
      * The 'as any' is employed to circumvent typechecking, as the type of
      * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
      */
-    return t(`personal-information:home-address.edit.error-message.${errorI18nKey}` as any);
+    return t(`personal-information:mailing-address.edit.error-message.${errorI18nKey}` as any);
   }
 
   const errorMessages = {
@@ -125,18 +125,18 @@ export default function PersonalInformationHomeAddressEdit() {
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form className="max-w-prose" method="post">
-        <InputField id="address" label={t('personal-information:home-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />
-        <InputField id="city" label={t('personal-information:home-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
-        <InputField id="province" label={t('personal-information:home-address.edit.field.province')} name="province" defaultValue={defaultValues.province} errorMessage={errorMessages.province} />
-        <InputField id="postalCode" label={t('personal-information:home-address.edit.field.postal-code')} name="postalCode" defaultValue={defaultValues.postalCode} errorMessage={errorMessages.postalCode} />
-        <InputField id="country" label={t('personal-information:home-address.edit.field.country')} name="country" required defaultValue={defaultValues.country} errorMessage={errorMessages.country} />
+        <InputField id="address" label={t('personal-information:mailing-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />
+        <InputField id="city" label={t('personal-information:mailing-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
+        <InputField id="province" label={t('personal-information:mailing-address.edit.field.province')} name="province" defaultValue={defaultValues.province} errorMessage={errorMessages.province} />
+        <InputField id="postalCode" label={t('personal-information:mailing-address.edit.field.postal-code')} name="postalCode" defaultValue={defaultValues.postalCode} errorMessage={errorMessages.postalCode} />
+        <InputField id="country" label={t('personal-information:mailing-address.edit.field.country')} name="country" required defaultValue={defaultValues.country} errorMessage={errorMessages.country} />
 
         <div className="flex flex-wrap gap-3">
           <button id="change-button" className="btn btn-primary btn-lg">
-            {t('personal-information:home-address.edit.button.change')}
+            {t('personal-information:mailing-address.edit.button.change')}
           </button>
           <Link id="cancel-button" to="/personal-information" className="btn btn-default btn-lg">
-            {t('personal-information:home-address.edit.button.cancel')}
+            {t('personal-information:mailing-address.edit.button.cancel')}
           </Link>
         </div>
       </Form>

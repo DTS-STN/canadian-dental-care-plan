@@ -71,8 +71,7 @@
         "country": "Country"              
       },
       "error-message": {
-        "empty-field": "Enter a value",
-        "invalid-home-address": "Invalid home address"
+        "empty-field": "Enter a value"
       },         
       "button": {
         "change": "Change",
@@ -87,14 +86,53 @@
         "address-change-confirm": "Confirm"
       },
       "change-of-address": "Change of home address",
-      "from": "From:",
-      "to": "To:",
+      "previous-home-address": "Previous home address",
+      "new-home-address": "New home address",
       "button": {
         "confirm": "Confirm",
         "cancel": "Cancel"
       }
     }
-  },    
+  },
+  "mailing-address": {
+    "edit": {
+      "page-title": "Change mailing address",
+      "breadcrumbs": {
+        "home": "Home",
+        "personal-information": "Personal information",
+        "mailing-address-change": "Change mailing address"
+      },
+      "field": {
+        "address": "Address",
+        "city": "City",
+        "province": "Province",
+        "postal-code": "Postal code",
+        "country": "Country"              
+      },
+      "error-message": {
+        "empty-field": "Enter a value"
+      },         
+      "button": {
+        "change": "Change",
+        "cancel": "Cancel"
+      }
+    },
+    "confirm": {
+      "page-title": "Confirm",
+      "breadcrumbs": {
+        "home": "Home",
+        "personal-information": "Personal information",
+        "address-change-confirm": "Confirm"
+      },
+      "change-of-address": "Change of mailing address",
+      "previous-mailing-address": "Previous mailing address",
+      "new-mailing-address": "New mailing address",
+      "button": {
+        "confirm": "Confirm",
+        "cancel": "Cancel"
+      }
+    }
+  },   
   "phone-number": {
     "edit": {
       "page-title": "Update phone number",
