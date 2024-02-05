@@ -200,12 +200,10 @@ const handlers = [
       serviceType: "Unknown",
       serviceNumber: "000",
       country: "CAN",
-      warnings: null,
+      warnings: '',
       functionalMessages: [
-        {action: 'OriginalInput',
-        message: '111 WELLINGTON ST   OTTAWA   ON   K1A0A4   CAN'},
-        {action: 'Information',
-        message: 'Dept = SENAT   Branch = SENAT   Lang = F'}
+        {action: 'action',
+        message: 'message'},
       ],
     });
   }),
@@ -224,7 +222,7 @@ const handlers = [
         message: 'Dept = SENAT   Branch = SENAT   Lang = F'}
       ],
       message: '',
-      warnings: null,
+      warnings: '',
     });
   }),
 ];

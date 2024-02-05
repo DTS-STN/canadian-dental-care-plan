@@ -27,7 +27,7 @@ const ParseWSAddressResponseSchema = z.object({
   deliveryInformation: z.string().optional(),
   extraInformation: z.string().optional(),
   statusCode: z.string().optional(),
-  canadaPostInformation: z.string().optional(),
+  canadaPostInformation: z.array(z.string()).optional(),
   message: z.string().optional(),
   addressType: z.string().optional(),
   streetNumber: z.string().optional(),

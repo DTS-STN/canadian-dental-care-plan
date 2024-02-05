@@ -16,7 +16,7 @@ export interface ParseWSAddressResponseDTOProps {
   deliveryInformation?: string;
   extraInformation?: string;
   statusCode?: string;
-  canadaPostInformation?: string;
+  canadaPostInformation?: string[];
   message?: string;
   addressType?: string;
   streetNumber?: string;
@@ -47,7 +47,7 @@ export class ParseWSAddressResponseDTO implements ParseWSAddressResponseDTOProps
   deliveryInformation?: string;
   extraInformation?: string;
   statusCode?: string;
-  canadaPostInformation?: string;
+  canadaPostInformation?: string[];
   message?: string;
   addressType?: string;
   streetNumber?: string;
@@ -76,7 +76,7 @@ export class ParseWSAddressResponseDTO implements ParseWSAddressResponseDTOProps
     deliveryInformation?: string,
     extraInformation?: string,
     statusCode?: string,
-    canadaPostInformation?: string,
+    canadaPostInformation?: string[],
     message?: string,
     addressType?: string,
     streetNumber?: string,
