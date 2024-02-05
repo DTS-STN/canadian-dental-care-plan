@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import moize from 'moize';
 import type { ParseWSAddressRequestDTOProps } from '~/dtos/parse-address-request-dto.server';
 import { ParseWSAddressRequestDTO } from '~/dtos/parse-address-request-dto.server';
 import { ParseWSAddressResponseDTO } from '~/dtos/parse-address-response-dto.server';
@@ -8,6 +9,8 @@ import { ValidateWSAddressResponseDTO } from '~/dtos/validate-address-response-d
 
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
+
+const log = getLogger('wsaddress-service.server');
 
 const ParseWSAddressResponseSchema = z.object({
   responseType: z.string().optional(),
@@ -56,8 +59,10 @@ const ValidateWSAddressResponseSchema = z.object({
   warnings: z.string().optional(),
 });
 
-function createWSAddressService() {
-  const log = getLogger('wsaddress-service.server');
+
+export const getWSAddressService = moize.promise(createWSAddressService, { onCacheAdd: () => log.info('Creating new WSAddress service') });
+
+async function createWSAddressService() {
   const { INTEROP_API_BASE_URI } = getEnv();
 
   async function parseWSAddress({addressLine, city, province, postalCode, country, language}: ParseWSAddressRequestDTOProps) {
@@ -144,5 +149,3 @@ function createWSAddressService() {
 
   return { parseWSAddress, validateWSAddress };
 }
-
-export const WSAddressService = createWSAddressService();
