@@ -73,6 +73,30 @@ function getPreferredLanguageEntity(id: string | readonly string[]) {
 }
 
 /**
+ * Retrieves letter entities based on the provided user ID.
+ *
+ * @param userId - The user ID to look up in the database.
+ * @returns The letter entity if found, otherwise throws a 404 error.
+ */
+function getLetterEntities(userId: string | readonly string[]) {
+  const parsedUserId = z.string().uuid().safeParse(userId);
+  const letterEntity = !parsedUserId.success
+    ? undefined
+    : db.letter.findMany({
+        where: {
+          userId: {
+            equals: parsedUserId.data,
+          },
+        },
+      });
+  if (!letterEntity) {
+    throw new HttpResponse('Letter Not found', { status: 404, headers: { 'Content-Type': 'text/plain' } });
+  }
+
+  return letterEntity;
+}
+
+/**
  * Converts a user entity to a patch document with specific fields.
  *
  * @param userEntity - The user entity to convert.
@@ -173,38 +197,35 @@ const handlers = [
    * Handler for POST requests to WSAddress parse service
    */
   http.post('https://api.example.com/address/parse', ({ params }) => {
-    return HttpResponse.json({  
-      responseType: "CA",
-      addressLine: "23 CORONATION ST",
-      city: "ST JOHNS",
-      province: "NL",
-      postalCode: "A1C5B9",
-      streetNumberSuffix: "streetNumberSuffix",
-      streetDirection: "streetDirection",
-      unitType: "unitType",
-      unitNumber: "000",
-      serviceAreaName: "serviceAreaName",
-      serviceAreaType: "serviceAreaType",
-      serviceAreaQualifier: "",
-      cityLong: "cityLong",
-      cityShort: "cityShort",
-      deliveryInformation: "deliveryInformation",
-      extraInformation: "extraInformation",
-      statusCode: "Valid",
+    return HttpResponse.json({
+      responseType: 'CA',
+      addressLine: '23 CORONATION ST',
+      city: 'ST JOHNS',
+      province: 'NL',
+      postalCode: 'A1C5B9',
+      streetNumberSuffix: 'streetNumberSuffix',
+      streetDirection: 'streetDirection',
+      unitType: 'unitType',
+      unitNumber: '000',
+      serviceAreaName: 'serviceAreaName',
+      serviceAreaType: 'serviceAreaType',
+      serviceAreaQualifier: '',
+      cityLong: 'cityLong',
+      cityShort: 'cityShort',
+      deliveryInformation: 'deliveryInformation',
+      extraInformation: 'extraInformation',
+      statusCode: 'Valid',
       canadaPostInformation: [],
-      message: "message",
-      addressType: "Urban",
-      streetNumber: "23",
-      streetName: "CORONATION",
-      streetType: "ST",
-      serviceType: "Unknown",
-      serviceNumber: "000",
-      country: "CAN",
+      message: 'message',
+      addressType: 'Urban',
+      streetNumber: '23',
+      streetName: 'CORONATION',
+      streetType: 'ST',
+      serviceType: 'Unknown',
+      serviceNumber: '000',
+      country: 'CAN',
       warnings: '',
-      functionalMessages: [
-        {action: 'action',
-        message: 'message'},
-      ],
+      functionalMessages: [{ action: 'action', message: 'message' }],
     });
   }),
 
@@ -216,14 +237,29 @@ const handlers = [
       responseType: 'CA',
       statusCode: 'Valid',
       functionalMessages: [
-        {action: 'OriginalInput',
-        message: '111 WELLINGTON ST   OTTAWA   ON   K1A0A4   CAN'},
-        {action: 'Information',
-        message: 'Dept = SENAT   Branch = SENAT   Lang = F'}
+        { action: 'OriginalInput', message: '111 WELLINGTON ST   OTTAWA   ON   K1A0A4   CAN' },
+        { action: 'Information', message: 'Dept = SENAT   Branch = SENAT   Lang = F' },
       ],
       message: '',
       warnings: '',
     });
+  }),
+
+  /**
+   * Handler for GET requests to retrieve letters details.
+   */
+  http.get('https://api.example.com/letters/:userId', ({ params }) => {
+    const letterEntities = getLetterEntities(params.userId);
+
+    return HttpResponse.json(
+      letterEntities.map((letter) => {
+        return {
+          dateSent: letter.dateSent,
+          subject: letter.letterTypeCd,
+          referenceId: letter.referenceId,
+        };
+      }),
+    );
   }),
 ];
 

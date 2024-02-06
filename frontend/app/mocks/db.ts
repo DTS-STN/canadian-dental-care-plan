@@ -32,6 +32,13 @@ const db = factory({
     nameEn: String,
     nameFr: String,
   },
+  letter: {
+    referenceId: primaryKey(faker.string.uuid),
+    dateSent: Date,
+    letterTypeCd: String,
+    userId: String,
+    subject: String,
+  },
 });
 
 // seed avaliable languages (before user)
@@ -57,11 +64,19 @@ db.address.create({
 });
 
 // seed users
-db.user.create({
+const defaultUser = db.user.create({
   id: '00000000-0000-0000-0000-000000000000',
   firstName: 'John',
   lastName: 'Maverick',
   preferredLanguage: 'fr',
+});
+
+// seed avaliable letters (after user)
+db.letter.create({
+  referenceId: '00000000-0000-0000-0000-000000000011',
+  dateSent: '2024-01-02',
+  letterTypeCd: 'Letter Type',
+  userId: defaultUser.id,
 });
 
 export { db };
