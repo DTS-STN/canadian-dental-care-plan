@@ -80,7 +80,10 @@ function getPreferredLanguageEntity(id: string | readonly string[]) {
  */
 function getLetterEntities(userId: string | readonly string[]) {
   const parsedUserId = z.string().uuid().safeParse(userId);
-  const letterEntity = !parsedUserId.success
+  if (!parsedUserId) {
+    throw new HttpResponse('Invalid userId: ' + parsedUserId, { status: 404, headers: { 'Content-Type': 'text/plain' } });
+  }
+  const letterEntities = !parsedUserId.success
     ? undefined
     : db.letter.findMany({
         where: {
@@ -89,11 +92,8 @@ function getLetterEntities(userId: string | readonly string[]) {
           },
         },
       });
-  if (!letterEntity) {
-    throw new HttpResponse('Letter Not found', { status: 404, headers: { 'Content-Type': 'text/plain' } });
-  }
 
-  return letterEntity;
+  return letterEntities;
 }
 
 /**
@@ -104,6 +104,9 @@ function getLetterEntities(userId: string | readonly string[]) {
  */
 function getPdfEntity(referenceId: string | readonly string[]) {
   const parsedReferenceId = z.string().safeParse(referenceId);
+  if (!parsedReferenceId) {
+    throw new HttpResponse('Invalid referenceId: ' + referenceId, { status: 400, headers: { 'Content-Type': 'text/plain' } });
+  }
   const parsedPdfEntity = !parsedReferenceId.success
     ? undefined
     : db.pdf.findFirst({
@@ -111,7 +114,7 @@ function getPdfEntity(referenceId: string | readonly string[]) {
       });
 
   if (!parsedPdfEntity) {
-    throw new HttpResponse('No PDF found', { status: 404, headers: { 'Content-Type': 'text/plain' } });
+    throw new HttpResponse('No PDF found with the provided referenceId: ' + referenceId, { status: 404, headers: { 'Content-Type': 'text/plain' } });
   }
 
   return parsedPdfEntity;
@@ -177,6 +180,7 @@ const handlers = [
       addressStreet: addressEntity.addressStreet,
       addressCity: addressEntity.addressCity,
       addressProvince: addressEntity.addressProvince,
+
       addressPostalZipCode: addressEntity.addressPostalZipCode,
       addressCountry: addressEntity.addressCountry,
     });
@@ -273,7 +277,7 @@ const handlers = [
     const letterEntities = getLetterEntities(params.userId);
 
     return HttpResponse.json(
-      letterEntities.map((letter) => {
+      letterEntities?.map((letter) => {
         return {
           dateSent: letter.dateSent,
           subject: letter.letterTypeCd,
@@ -285,6 +289,10 @@ const handlers = [
 
   /**
    * Handler for GET requests to retrieve pdf
+   */
+
+  /**
+   *
    */
   http.get('https://api.example.com/cct/letters/:referenceId', async ({ params }) => {
     const encoder = new TextEncoder();

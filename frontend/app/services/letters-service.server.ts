@@ -21,11 +21,11 @@ function createLettersService() {
    * @returns returns the letters based off  @param userId
    */
   async function getLetters(requestBody: { userId: string }) {
-    const url = `${INTEROP_API_BASE_URI}/letters?userId=${requestBody.userId}`;
+    const url = new URL(`${INTEROP_API_BASE_URI}/letters`);
+    url.searchParams.set('userId', requestBody.userId);
     const response = await fetch(url);
 
     if (response.ok) return letterSchema.parse(await response.json());
-    if (response.status === 404) return null;
 
     logger.error('%j', {
       message: 'Failed to fetch data',
