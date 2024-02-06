@@ -22,10 +22,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ filePath });
 }
 
-type LoaderData = {
-  filePath: string;
-};
-
 export default function ViewLetters() {
   // TODO Dummy data should be removed when loader is implemented
   const letters = [
@@ -59,7 +55,7 @@ interface LetterListProps {
 }
 
 function LetterList({ letters }: LetterListProps) {
-  const { filePath } = useLoaderData<LoaderData>();
+  const { filePath } = useLoaderData<typeof loader>();
   const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC');
   const [sorted, setSorted] = useState<Letter[]>(letters);
   const { t } = useTranslation(i18nNamespaces);
