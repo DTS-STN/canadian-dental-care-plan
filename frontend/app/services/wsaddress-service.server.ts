@@ -1,17 +1,71 @@
-import { z } from 'zod';
 import moize from 'moize';
-import type { ParseWSAddressRequestDTOProps } from '~/dtos/parse-address-request-dto.server';
-import { ParseWSAddressRequestDTO } from '~/dtos/parse-address-request-dto.server';
-import { ParseWSAddressResponseDTO } from '~/dtos/parse-address-response-dto.server';
-import type { ValidateWSAddressRequestDTOProps } from '~/dtos/validate-address-request-dto.server';
-import { ValidateWSAddressRequestDTO } from '~/dtos/validate-address-request-dto.server';
-import { ValidateWSAddressResponseDTO } from '~/dtos/validate-address-response-dto.server';
+import { z } from 'zod';
 
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('wsaddress-service.server');
 
+export interface ParseWSAddressRequestDTO {
+  addressLine: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  country: string;
+  language: string;
+}
+
+export interface ParseWSAddressResponseDTO {
+  responseType?: string;
+  addressLine?: string;
+  city?: string;
+  province?: string;
+  postalCode?: string;
+  streetNumberSuffix?: string;
+  streetDirection?: string;
+  unitType?: string;
+  unitNumber?: string;
+  serviceAreaName?: string;
+  serviceAreaType?: string;
+  serviceAreaQualifier?: string;
+  cityLong?: string;
+  cityShort?: string;
+  deliveryInformation?: string;
+  extraInformation?: string;
+  statusCode?: string;
+  canadaPostInformation?: string[];
+  message?: string;
+  addressType?: string;
+  streetNumber?: string;
+  streetName?: string;
+  streetType?: string;
+  serviceType?: string;
+  serviceNumber?: string;
+  country?: string;
+  warnings?: string;
+  functionalMessages?: { action: string; message: string }[];
+}
+
+export interface ValidateWSAddressRequestDTO {
+  addressLine: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  country: string;
+  geographicScope: string;
+  parseType: string;
+  language: string;
+}
+
+export interface ValidateWSAddressResponseDTO {
+  responseType?: string;
+  statusCode?: string;
+  functionalMessages?: { action: string; message: string }[];
+  message?: string;
+  warnings?: string;
+}
+
+//TODO: Update validation schema when changing to use Interop's WSAddress endpoint instead of MSW
 const ParseWSAddressResponseSchema = z.object({
   responseType: z.string().optional(),
   addressLine: z.string().optional(),
@@ -40,70 +94,49 @@ const ParseWSAddressResponseSchema = z.object({
   serviceNumber: z.string().optional(),
   country: z.string().optional(),
   warnings: z.string().optional(),
-  functionalMessages: z.array(z.object({
-    action: z.string(),
-    message: z.string()
-    })
-  ).optional(),
+  functionalMessages: z
+    .array(
+      z.object({
+        action: z.string(),
+        message: z.string(),
+      }),
+    )
+    .optional(),
 });
 
+//TODO: Update validation schema when changing to use Interop's WSAddress endpoint instead of MSW
 const ValidateWSAddressResponseSchema = z.object({
   responseType: z.string().optional(),
   statusCode: z.string().optional(),
-  functionalMessages: z.array(z.object({
-      action: z.string(),
-      message: z.string()
-    })
-  ).optional(),
+  functionalMessages: z
+    .array(
+      z.object({
+        action: z.string(),
+        message: z.string(),
+      }),
+    )
+    .optional(),
   message: z.string().optional(),
   warnings: z.string().optional(),
 });
-
 
 export const getWSAddressService = moize.promise(createWSAddressService, { onCacheAdd: () => log.info('Creating new WSAddress service') });
 
 async function createWSAddressService() {
   const { INTEROP_API_BASE_URI } = getEnv();
 
-  async function parseWSAddress({addressLine, city, province, postalCode, country, language}: ParseWSAddressRequestDTOProps) {
+  async function parseWSAddress(parseRequest: ParseWSAddressRequestDTO) {
+    const address: ParseWSAddressRequestDTO = { addressLine: parseRequest.addressLine, city: parseRequest.city, province: parseRequest.province, postalCode: parseRequest.postalCode, country: parseRequest.country, language: parseRequest.language };
     const url = `${INTEROP_API_BASE_URI}/address/parse`;
     const response = await fetch(url, {
       method: 'POST',
-      body: JSON.stringify(new ParseWSAddressRequestDTO(addressLine, city, province, postalCode, country, language)),
+      body: JSON.stringify(address),
     });
 
     if (response.ok) {
       const parseData = ParseWSAddressResponseSchema.parse(await response.json());
-      if(parseData.statusCode === 'Valid') return new ParseWSAddressResponseDTO(
-        parseData.responseType,
-        parseData.addressLine,
-        parseData.city,
-        parseData.province,
-        parseData.postalCode,
-        parseData.streetNumberSuffix,
-        parseData.streetDirection,
-        parseData.unitType,
-        parseData.unitNumber,
-        parseData.serviceAreaName,
-        parseData.serviceAreaType,
-        parseData.serviceAreaQualifier,
-        parseData.cityLong,
-        parseData.cityShort,
-        parseData.deliveryInformation,
-        parseData.extraInformation,
-        parseData.statusCode,
-        parseData.canadaPostInformation,
-        parseData.message,
-        parseData.addressType,
-        parseData.streetNumber,
-        parseData.streetName,
-        parseData.streetType,
-        parseData.serviceType,
-        parseData.serviceNumber,
-        parseData.country,
-        parseData.warnings,
-        parseData.functionalMessages,
-      );
+      const parsedAddress: ParseWSAddressResponseDTO = { ...parseData };
+      if (parseData.statusCode === 'Valid') return parsedAddress;
     }
 
     log.error('%j', {
@@ -117,23 +150,27 @@ async function createWSAddressService() {
     throw new Error(`Failed to parse the address. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
-  async function validateWSAddress({addressLine, city, province, postalCode, country, geographicScope, parseType, language}: ValidateWSAddressRequestDTOProps) {
+  async function validateWSAddress(validateRequest: ValidateWSAddressRequestDTO) {
+    const address: ValidateWSAddressRequestDTO = {
+      addressLine: validateRequest.addressLine,
+      city: validateRequest.city,
+      province: validateRequest.province,
+      postalCode: validateRequest.postalCode,
+      country: validateRequest.country,
+      geographicScope: validateRequest.geographicScope,
+      parseType: validateRequest.parseType,
+      language: validateRequest.language,
+    };
     const url = `${INTEROP_API_BASE_URI}/address/validate`;
     const response = await fetch(url, {
       method: 'POST',
-      body: JSON.stringify(new ValidateWSAddressRequestDTO(addressLine, city, province, postalCode, country, geographicScope, parseType, language)),
+      body: JSON.stringify(address),
     });
 
     if (response.ok) {
       const validationData = ValidateWSAddressResponseSchema.parse(await response.json());
-
-      if (validationData.statusCode === 'Valid') return new ValidateWSAddressResponseDTO(
-        validationData.responseType,
-        validationData.statusCode,
-        validationData.functionalMessages,
-        validationData.message,
-        validationData.warnings
-      );
+      const validatedAddress: ValidateWSAddressResponseDTO = { ...validationData };
+      if (validationData.statusCode === 'Valid') return validatedAddress;
     }
 
     log.error('%j', {
