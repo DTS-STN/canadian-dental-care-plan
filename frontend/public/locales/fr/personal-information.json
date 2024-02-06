@@ -12,9 +12,11 @@
     "home-address": "(FR) Home address",
     "mailing-address": "(FR) Mailing address",
     "preferred-language": "(FR) Preferred language",
-    "change-addresses": "(FR) Change addresses",
+    "change-home-address": "(FR) Change your home address",
+    "change-mailing-address": "(FR) Change your mailing address",
     "change-phone-number": "(FR) Change phone number",
-    "change-preferred-language": "(FR) Change preferred language"
+    "change-preferred-language": "(FR) Change preferred language",
+    "no-address-on-file": "(FR) No address on file"
   },
   "address": {
     "edit": {
@@ -32,7 +34,7 @@
       },
       "error-message": {
         "empty-home-address": "(FR) Enter a home address",
-        "empty-mailing-address": "(FR) Enter a mailing address",        
+        "empty-mailing-address": "(FR) Enter a mailing address",
         "invalid-home-address": "(FR) Invalid home address",
         "invalid-mailing-address": "(FR) Invalid mailing address"
       }
@@ -68,11 +70,11 @@
         "city": "(FR) City",
         "province": "(FR) Province",
         "postal-code": "(FR) Postal code",
-        "country": "(FR) Country"               
+        "country": "(FR) Country"
       },
       "error-message": {
         "empty-field": "(FR) Enter a value"
-      },       
+      },
       "button": {
         "change": "(FR) Change",
         "cancel": "(FR) Cancel"
@@ -107,11 +109,11 @@
         "city": "(FR) City",
         "province": "(FR) Province",
         "postal-code": "(FR) Postal code",
-        "country": "(FR) Country"              
+        "country": "(FR) Country"
       },
       "error-message": {
         "empty-field": "(FR) Enter a value"
-      },         
+      },
       "button": {
         "change": "(FR) Change",
         "cancel": "(FR) Cancel"
@@ -132,7 +134,7 @@
         "cancel": "(FR) Cancel"
       }
     }
-  },    
+  },
   "phone-number": {
     "edit": {
       "page-title": "(FR) Update phone number",
@@ -153,8 +155,8 @@
         "error": "(FR) Error"
       },
       "error-message": {
-        "empty-phone-number": "(FR) Enter a phone number",        
-        "invalid-phone-format":"Invalid phone number"
+        "empty-phone-number": "(FR) Enter a phone number",
+        "invalid-phone-format": "Invalid phone number"
       }
     },
     "confirm": {

@@ -3,9 +3,11 @@
 
 ### Related Azure Boards Work Items
 <!--
-  Mention any Azure Boards work items that are related to this pull request. Reference them using the work item ID. For example: "AB#123".
-
+  Mention any Azure Boards work items that are related to this pull request.
   https://dev.azure.com/dts-stn/canada%20dental%20care%20plan/_backlogs/
+
+  Use AB# to link from GitHub to Azure Boards work items. For example: "AB#{id}".
+  https://learn.microsoft.com/en-ca/azure/devops/boards/github/link-to-from-github?view=azure-devops#use-ab-to-link-from-github-to-azure-boards-work-items
 -->
 
 ### Screenshots (if applicable)
@@ -20,7 +22,7 @@
 - [ ] I have checked that my code contains no linting errors by running `npm run lint`
 - [ ] I have checked that my code contains no type errors by running `npm run typecheck`
 - [ ] I have checked that all unit tests pass by running `npm run test:unit -- run`
-- [ ] I have checked that all e2e tests pass by running `npm run test:e2e -- run`
+- [ ] I have checked that all e2e tests pass by running `npm run test:e2e`
 
 ### Test Instructions
 <!-- Provide step-by-step instructions on how to test the changes made in this PR. Include any specific setup or prerequisites needed for testing. -->

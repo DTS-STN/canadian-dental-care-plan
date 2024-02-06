@@ -12,9 +12,11 @@
     "home-address": "Home address",
     "mailing-address": "Mailing address",
     "preferred-language": "Preferred language",
-    "change-addresses": "Change addresses",
+    "change-home-address": "Change your home address",
+    "change-mailing-address": "Change your mailing address",
     "change-phone-number": "Change phone number",
-    "change-preferred-language": "Change preferred language"
+    "change-preferred-language": "Change preferred language",
+    "no-address-on-file": "No address on file"
   },
   "address": {
     "edit": {
@@ -68,11 +70,11 @@
         "city": "City",
         "province": "Province",
         "postal-code": "Postal code",
-        "country": "Country"              
+        "country": "Country"
       },
       "error-message": {
         "empty-field": "Enter a value"
-      },         
+      },
       "button": {
         "change": "Change",
         "cancel": "Cancel"
@@ -107,11 +109,11 @@
         "city": "City",
         "province": "Province",
         "postal-code": "Postal code",
-        "country": "Country"              
+        "country": "Country"
       },
       "error-message": {
         "empty-field": "Enter a value"
-      },         
+      },
       "button": {
         "change": "Change",
         "cancel": "Cancel"
@@ -132,7 +134,7 @@
         "cancel": "Cancel"
       }
     }
-  },   
+  },
   "phone-number": {
     "edit": {
       "page-title": "Update phone number",
@@ -153,8 +155,8 @@
         "error": "Error"
       },
       "error-message": {
-        "empty-phone-number": "Enter a phone number",        
-        "invalid-phone-format":"Invalid phone number"
+        "empty-phone-number": "Enter a phone number",
+        "invalid-phone-format": "Invalid phone number"
       }
     },
     "confirm": {

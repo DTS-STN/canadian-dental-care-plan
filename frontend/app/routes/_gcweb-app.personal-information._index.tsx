@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next';
 import { lookupService } from '~/services/lookup-service.server';
 import { userService } from '~/services/user-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { Address } from '~/components/address';
+import { addressService } from '~/services/address-service.server';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
@@ -28,13 +30,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
   const preferredLanguage = userInfo.preferredLanguage && (await lookupService.getPreferredLanguage(userInfo?.preferredLanguage));
 
-  return json({ user: userInfo, preferredLanguage });
+  const homeAddressInfo = userInfo.homeAddress && (await addressService.getAddressInfo(userId, userInfo?.homeAddress));
+  const mailingAddressInfo = userInfo.mailingAddress && (await addressService.getAddressInfo(userId, userInfo?.mailingAddress));
+
+  return json({ user: userInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo });
 }
 
 export default function PersonalInformationIndex() {
-  const { user, preferredLanguage } = useLoaderData<typeof loader>();
+  const { user, preferredLanguage, homeAddressInfo, mailingAddressInfo } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
-
   return (
     <>
       <p>{t('personal-information:index.on-file')}</p>
@@ -55,19 +59,44 @@ export default function PersonalInformationIndex() {
         </PersonalInformationSection>
         <PersonalInformationSection
           footer={
-            <Link id="change-home-address-button" className="btn btn-primary btn-lg" to="/personal-information/address/edit">
-              {t('personal-information:index.change-addresses')}
+            <Link id="change-home-address-button" className="btn btn-primary btn-lg" to="/personal-information/home-address/edit">
+              {t('personal-information:index.change-home-address')}
             </Link>
           }
-          title={t('personal-information:index.addresses')}
+          title={t('personal-information:index.home-address')}
           icon="glyphicon-map-marker"
         >
-          <dl>
-            <dt>{t('personal-information:index.home-address')}</dt>
-            <dd className="whitespace-pre-line">{user.homeAddress}</dd>
-            <dt>{t('personal-information:index.mailing-address')}</dt>
-            <dd className="whitespace-pre-line">{user.mailingAddress}</dd>
-          </dl>
+
+          {homeAddressInfo && <Address address={homeAddressInfo?.address}
+            city={homeAddressInfo?.city}
+            provinceState={homeAddressInfo?.province}
+            postalZipCode={homeAddressInfo?.postalCode}
+            country={homeAddressInfo?.country} />}
+          {
+            !homeAddressInfo && <p>{t('personal-information:index.no-address-on-file')}</p>
+          }
+
+
+        </PersonalInformationSection>
+        <PersonalInformationSection
+          footer={
+            <Link id="change-home-address-button" className="btn btn-primary btn-lg" to="/personal-information/mailing-address/edit">
+              {t('personal-information:index.change-mailing-address')}
+            </Link>
+          }
+          title={t('personal-information:index.mailing-address')}
+          icon="glyphicon-map-marker"
+        >
+
+          {mailingAddressInfo && <Address address={mailingAddressInfo?.address}
+            city={mailingAddressInfo?.city}
+            provinceState={mailingAddressInfo?.province}
+            postalZipCode={mailingAddressInfo?.postalCode}
+            country={mailingAddressInfo?.country} />}
+          {
+            !mailingAddressInfo && <p>{t('personal-information:index.no-address-on-file')}</p>
+          }
+
         </PersonalInformationSection>
         <PersonalInformationSection
           footer={

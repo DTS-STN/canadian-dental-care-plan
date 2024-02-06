@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
@@ -30,12 +30,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
   const addressInfo = await addressService.getAddressInfo(userId, userInfo?.mailingAddress ?? '');
+  const homeAddressInfo = await addressService.getAddressInfo(userId, userInfo?.homeAddress ?? '');
 
   if (!userInfo) {
     throw new Response(null, { status: 404 });
   }
 
-  return json({ addressInfo });
+  return json({ addressInfo, homeAddressInfo });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -78,17 +79,23 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function PersonalInformationMailingAddressEdit() {
   const actionData = useActionData<typeof action>();
-  const { addressInfo } = useLoaderData<typeof loader>();
+  const { addressInfo, homeAddressInfo } = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
   const errorSummaryId = 'error-summary';
+  const [isCopyAddressChecked, setCopyAddressChecked] = useState(false);
+
+  const checkHandler = () => {
+    setCopyAddressChecked((curState) => !curState);
+  };
 
   const defaultValues = {
-    address: actionData?.formData.address ?? addressInfo?.address,
-    city: actionData?.formData.city ?? addressInfo?.city,
-    province: actionData?.formData.province ?? addressInfo?.province,
-    country: actionData?.formData.country ?? addressInfo?.country,
-    postalCode: actionData?.formData.postalCode ?? addressInfo?.postalCode,
+    address: actionData?.formData.address ?? (isCopyAddressChecked ? homeAddressInfo?.address : addressInfo?.address),
+    city: actionData?.formData.city ?? (isCopyAddressChecked ? homeAddressInfo?.city : addressInfo?.city),
+    province: actionData?.formData.province ?? (isCopyAddressChecked ? homeAddressInfo?.province : addressInfo?.province),
+    country: actionData?.formData.country ?? (isCopyAddressChecked ? homeAddressInfo?.country : addressInfo?.country),
+    postalCode: actionData?.formData.postalCode ?? (isCopyAddressChecked ? homeAddressInfo?.postalCode : addressInfo?.postalCode),
   };
+
   /**
    * Gets an error message based on the provided internationalization (i18n) key.
    *
@@ -125,11 +132,56 @@ export default function PersonalInformationMailingAddressEdit() {
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form className="max-w-prose" method="post">
-        <InputField id="address" label={t('personal-information:mailing-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />
-        <InputField id="city" label={t('personal-information:mailing-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
-        <InputField id="province" label={t('personal-information:mailing-address.edit.field.province')} name="province" defaultValue={defaultValues.province} errorMessage={errorMessages.province} />
-        <InputField id="postalCode" label={t('personal-information:mailing-address.edit.field.postal-code')} name="postalCode" defaultValue={defaultValues.postalCode} errorMessage={errorMessages.postalCode} />
-        <InputField id="country" label={t('personal-information:mailing-address.edit.field.country')} name="country" required defaultValue={defaultValues.country} errorMessage={errorMessages.country} />
+        <div className="checkbox gc-chckbxrdio">
+          <input id="copy-home-address" type="checkbox" name="ifCopyHomeAddress" checked={isCopyAddressChecked} onChange={checkHandler} />
+          <label id="copy-home-address" htmlFor="copy-home-address">
+            Copy home address
+          </label>
+        </div>
+
+        <InputField
+          id="address"
+          label={t('personal-information:mailing-address.edit.field.address')}
+          name="address"
+          required
+          key={isCopyAddressChecked ? homeAddressInfo?.address : addressInfo?.address}
+          defaultValue={defaultValues.address}
+          errorMessage={errorMessages.address}
+        />
+        <InputField
+          id="city"
+          label={t('personal-information:mailing-address.edit.field.city')}
+          name="city"
+          required
+          key={isCopyAddressChecked ? homeAddressInfo?.city : addressInfo?.city}
+          defaultValue={defaultValues.city}
+          errorMessage={errorMessages.city}
+        />
+        <InputField
+          id="province"
+          label={t('personal-information:mailing-address.edit.field.province')}
+          name="province"
+          key={isCopyAddressChecked ? homeAddressInfo?.province : addressInfo?.province}
+          defaultValue={defaultValues.province}
+          errorMessage={errorMessages.province}
+        />
+        <InputField
+          id="postalCode"
+          label={t('personal-information:mailing-address.edit.field.postal-code')}
+          name="postalCode"
+          key={isCopyAddressChecked ? homeAddressInfo?.postalCode : addressInfo?.postalCode}
+          defaultValue={defaultValues.postalCode}
+          errorMessage={errorMessages.postalCode}
+        />
+        <InputField
+          id="country"
+          label={t('personal-information:mailing-address.edit.field.country')}
+          name="country"
+          required
+          key={isCopyAddressChecked ? homeAddressInfo?.country : addressInfo?.country}
+          defaultValue={defaultValues.country}
+          errorMessage={errorMessages.country}
+        />
 
         <div className="flex flex-wrap gap-3">
           <button id="change-button" className="btn btn-primary btn-lg">
