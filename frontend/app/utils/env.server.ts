@@ -64,6 +64,12 @@ const serverEnv = z.object({
   AUTH_ENABLED: z.string().transform(toBoolean).default('false'),
   JAVASCRIPT_ENABLED: z.string().transform(toBoolean).default('true'),
   MOCKS_ENABLED: z.string().transform(toBoolean).default('false'),
+
+  // mocks settings
+  MOCK_AUTH_ALLOWED_REDIRECTS: z
+    .string()
+    .transform((val) => val.split(',').map((val) => val.trim()))
+    .default('http://localhost:3000/auth/callback/raoidc'),
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;
