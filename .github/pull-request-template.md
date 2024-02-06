@@ -20,7 +20,7 @@
 - [ ] I have checked that my code contains no linting errors by running `npm run lint`
 - [ ] I have checked that my code contains no type errors by running `npm run typecheck`
 - [ ] I have checked that all unit tests pass by running `npm run test:unit -- run`
-- [ ] I have checked that all e2e tests pass by running `npm run test:e2e -- run`
+- [ ] I have checked that all e2e tests pass by running `npm run test:e2e`
 
 ### Test Instructions
 <!-- Provide step-by-step instructions on how to test the changes made in this PR. Include any specific setup or prerequisites needed for testing. -->
