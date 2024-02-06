@@ -36,6 +36,20 @@ vi.mock('~/services/lookup-service.server.ts', () => ({
     }),
   },
 }));
+vi.mock('~/services/address-service.server.ts', () => ({
+  addressService: {
+    getAddressInfo: vi.fn().mockReturnValue(
+      {
+        address: "address",
+        city: "mega-city",
+        province: "mega province",
+        postalCode: "postal code",
+        country: "super country",
+      }
+    )
+
+  }
+}));
 describe('_gcweb-app.personal-information._index', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -82,6 +96,20 @@ describe('_gcweb-app.personal-information._index', () => {
           preferredLanguage: 'fr',
         },
         preferredLanguage: { id: 'fr', nameEn: 'French', nameFr: 'Français' },
+        homeAddressInfo: {
+          address: "address",
+          city: "mega-city",
+          province: "mega province",
+          postalCode: "postal code",
+          country: "super country",
+        },
+        mailingAddressInfo: {
+          address: "address",
+          city: "mega-city",
+          province: "mega province",
+          postalCode: "postal code",
+          country: "super country",
+        }
       });
     });
   });
