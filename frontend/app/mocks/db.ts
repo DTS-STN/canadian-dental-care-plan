@@ -1,5 +1,5 @@
 import { fakerEN_CA as faker } from '@faker-js/faker';
-import { factory, primaryKey } from '@mswjs/data';
+import { factory, oneOf, primaryKey } from '@mswjs/data';
 
 // (Optional) Seed `faker` to ensure reproducible
 // random values of model properties.
@@ -39,6 +39,11 @@ const db = factory({
     userId: String,
     subject: String,
   },
+  pdf: {
+    fileStream: String,
+    referenceId: oneOf('letter'),
+    id: primaryKey(faker.string.uuid),
+  },
 });
 
 // seed avaliable languages (before user)
@@ -72,11 +77,18 @@ const defaultUser = db.user.create({
 });
 
 // seed avaliable letters (after user)
-db.letter.create({
+const sampleLetter = db.letter.create({
   referenceId: '00000000-0000-0000-0000-000000000011',
   dateSent: '2024-01-02',
   letterTypeCd: 'Letter Type',
   userId: defaultUser.id,
+});
+
+// seed avaliable pdf (after letter)
+db.pdf.create({
+  referenceId: sampleLetter,
+  fileStream: '',
+  id: '00000000-0000-0000-0000-000000000011',
 });
 
 export { db };

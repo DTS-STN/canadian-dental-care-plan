@@ -73,7 +73,7 @@ function getPreferredLanguageEntity(id: string | readonly string[]) {
 }
 
 /**
- * Retrieves letter entities based on the provided user ID.
+ * Retrieves list of letter entities based on the provided user ID.
  *
  * @param userId - The user ID to look up in the database.
  * @returns The letter entity if found, otherwise throws a 404 error.
@@ -94,6 +94,27 @@ function getLetterEntities(userId: string | readonly string[]) {
   }
 
   return letterEntity;
+}
+
+/**
+ * Retrieves a PDF entity based on the provided referenceId ID.
+ *
+ * @param id - The reference Id to look up in the database.
+ * @returns The PDF entity if found, otherwise throws a 404 error.
+ */
+function getPdfEntity(referenceId: string | readonly string[]) {
+  const parsedReferenceId = z.string().safeParse(referenceId);
+  const parsedPdfEntity = !parsedReferenceId.success
+    ? undefined
+    : db.pdf.findFirst({
+        where: { id: { equals: parsedReferenceId.data } },
+      });
+
+  if (!parsedPdfEntity) {
+    throw new HttpResponse('No PDF found', { status: 404, headers: { 'Content-Type': 'text/plain' } });
+  }
+
+  return parsedPdfEntity;
 }
 
 /**
@@ -248,7 +269,7 @@ const handlers = [
   /**
    * Handler for GET requests to retrieve letters details.
    */
-  http.get('https://api.example.com/letters/:userId', ({ params }) => {
+  http.get('https://api.example.com/letters?userId=', ({ params }) => {
     const letterEntities = getLetterEntities(params.userId);
 
     return HttpResponse.json(
@@ -260,6 +281,31 @@ const handlers = [
         };
       }),
     );
+  }),
+
+  /**
+   * Handler for GET requests to retrieve pdf
+   */
+  http.get('https://api.example.com/cct/letters/:referenceId', async ({ params }) => {
+    const encoder = new TextEncoder();
+    const pdfEntity = getPdfEntity(params.referenceId);
+    const stream = new ReadableStream({
+      start(controller) {
+        // Encode the string chunks using "TextEncoder".
+        controller.enqueue(encoder.encode('Gums'));
+        controller.enqueue(encoder.encode('n'));
+        controller.enqueue(encoder.encode('proses'));
+        controller.enqueue(encoder.encode(pdfEntity?.id));
+        controller.close();
+      },
+    });
+
+    // Send the mocked response immediately.
+    return new HttpResponse(stream, {
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+    });
   }),
 ];
 

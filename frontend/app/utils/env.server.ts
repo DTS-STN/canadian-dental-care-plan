@@ -27,6 +27,7 @@ const serverEnv = z.object({
   NODE_ENV: z.enum(['production', 'development', 'test']),
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
   INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
+  CCT_API_BASE_URI: z.string().url().default('https://api.example.com'),
 
   // auth/oidc settings
   AUTH_JWT_PRIVATE_KEY: z.string().refine(isValidPrivateKey),

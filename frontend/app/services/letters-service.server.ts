@@ -6,8 +6,7 @@ import { getLogger } from '~/utils/logging.server';
 const letterSchema = z.object({
   dateSent: z.date().optional(),
   letterTypeCode: z.string().optional(),
-  referenceId: z.string().optional(),
-  subject: z.string().optional(),
+  referenceId: z.string().uuid().optional(),
 });
 
 export type LettersInfo = z.infer<typeof letterSchema>;
@@ -19,7 +18,7 @@ function createLettersService() {
   /**
    *
    * @param { userId }
-   * @returns returns the preferred language based off  @param lettersId
+   * @returns returns the letters based off  @param userId
    */
   async function getLetters(requestBody: { userId: string }) {
     const url = `${INTEROP_API_BASE_URI}/letters?userId=${requestBody.userId}`;
