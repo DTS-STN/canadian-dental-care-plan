@@ -25,17 +25,19 @@ function createLettersService() {
     url.searchParams.set('userId', requestBody.userId);
     const response = await fetch(url);
 
-    if (response.ok) return letterSchema.parse(await response.json());
+    if (!response.ok) {
+      logger.error('%j', {
+        message: 'Failed to fetch data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
 
-    logger.error('%j', {
-      message: 'Failed to fetch data',
-      status: response.status,
-      statusText: response.statusText,
-      url: url,
-      responseBody: await response.text(),
-    });
+      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
 
-    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    return letterSchema.parse(await response.json());
   }
 
   return {

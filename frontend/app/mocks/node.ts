@@ -81,7 +81,7 @@ function getPreferredLanguageEntity(id: string | readonly string[]) {
 function getLetterEntities(userId: string | readonly string[]) {
   const parsedUserId = z.string().uuid().safeParse(userId);
   if (!parsedUserId) {
-    throw new HttpResponse('Invalid userId: ' + parsedUserId, { status: 404, headers: { 'Content-Type': 'text/plain' } });
+    throw new HttpResponse('Invalid userId: ' + parsedUserId, { status: 400, headers: { 'Content-Type': 'text/plain' } });
   }
   const letterEntities = !parsedUserId.success
     ? undefined
@@ -290,10 +290,6 @@ const handlers = [
   /**
    * Handler for GET requests to retrieve pdf
    */
-
-  /**
-   *
-   */
   http.get('https://api.example.com/cct/letters/:referenceId', async ({ params }) => {
     const encoder = new TextEncoder();
     const pdfEntity = getPdfEntity(params.referenceId);
@@ -311,7 +307,8 @@ const handlers = [
     // Send the mocked response immediately.
     return new HttpResponse(stream, {
       headers: {
-        'Content-Type': 'text/plain',
+        'Content-Type': 'application/octet-stream',
+        'Content-Disposition': `attachment, filename=${pdfEntity.referenceId}.pdf`,
       },
     });
   }),
