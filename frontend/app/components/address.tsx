@@ -10,7 +10,7 @@ export interface AddressProps extends ComponentProps<'address'> {
   country: string;
 }
 
-function formatAddress({ address, city, provinceState, postalZipCode, country }: AddressProps): string {
+function formatAddress(address: string, city: string, country: string, provinceState?: string, postalZipCode?: string) {
   // TODO 'canada' shouldn't be hardcoded as we may deal with different values of the country field such as abbreviations
   const isNotCanadianAddress = 'canada' !== country.toLowerCase();
 
@@ -26,8 +26,8 @@ function formatAddress({ address, city, provinceState, postalZipCode, country }:
 }
 
 export function Address(props: AddressProps) {
-  const { className, ...restProps } = props;
-  const formattedAddress = formatAddress(props);
+  const { address, city, provinceState, postalZipCode, country, className, ...restProps } = props;
+  const formattedAddress = formatAddress(address, city, country, provinceState, postalZipCode);
 
   return (
     <address className={clsx('mb-0 whitespace-pre-wrap', className)} data-testid="address-id" {...restProps}>
