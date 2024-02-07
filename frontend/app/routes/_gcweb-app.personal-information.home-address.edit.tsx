@@ -8,6 +8,8 @@ import { z } from 'zod';
 
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
+import { type InputOptionProps } from '~/components/input-option';
+import { InputSelect } from '~/components/input-select';
 import { addressService } from '~/services/address-service.server';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
@@ -89,6 +91,14 @@ export default function PersonalInformationHomeAddressEdit() {
     country: actionData?.formData.country ?? addressInfo?.country,
     postalCode: actionData?.formData.postalCode ?? addressInfo?.postalCode,
   };
+
+  // TODO remove this and get countries from lookup service
+  const countries: InputOptionProps[] = [
+    { label: 'Canada', value: 'Canada', id: 'ca' },
+    { label: 'Mexico', value: 'Mexico', id: 'mx' },
+    { label: 'United States', value: 'United States', id: 'us' },
+  ];
+
   /**
    * Gets an error message based on the provided internationalization (i18n) key.
    *
@@ -129,7 +139,7 @@ export default function PersonalInformationHomeAddressEdit() {
         <InputField id="city" label={t('personal-information:home-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
         <InputField id="province" label={t('personal-information:home-address.edit.field.province')} name="province" defaultValue={defaultValues.province} errorMessage={errorMessages.province} />
         <InputField id="postalCode" label={t('personal-information:home-address.edit.field.postal-code')} name="postalCode" defaultValue={defaultValues.postalCode} errorMessage={errorMessages.postalCode} />
-        <InputField id="country" label={t('personal-information:home-address.edit.field.country')} name="country" required defaultValue={defaultValues.country} errorMessage={errorMessages.country} />
+        <InputSelect id="country" label={t('personal-information:home-address.edit.field.country')} name="country" defaultValue={defaultValues.country} required options={countries} errorMessage={errorMessages.country} />
 
         <div className="flex flex-wrap gap-3">
           <button id="change-button" className="btn btn-primary btn-lg">
