@@ -219,6 +219,22 @@ const handlers = [
   }),
 
   /**
+   * Handler for GET request to retrieve all countries
+   */
+  http.get('https://api.example.com/lookups/countries', () => {
+    const countryList = db.country.getAll();
+    return HttpResponse.json(countryList.sort((a, b) => (a.code < b.code ? -1 : 1)));
+  }),
+
+  /**
+   * Handler for GET request to retrieve all countries
+   */
+  http.get('https://api.example.com/lookups/regions', () => {
+    const provinceList = db.region.getAll();
+    return HttpResponse.json(provinceList);
+  }),
+
+  /**
    * Handler for POST requests to WSAddress parse service
    */
   http.post('https://api.example.com/address/parse', ({ params }) => {

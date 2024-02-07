@@ -9,6 +9,23 @@ const preferredLanguageSchema = z.object({
   nameFr: z.string().optional(),
 });
 
+const countrySchema = z.object({
+  code: z.string(),
+  nameEn: z.string(),
+  nameFr: z.string(),
+});
+
+const regionSchema = z.object({
+  code: z.string(),
+  country: z.object({
+    code: z.string(),
+    nameEn: z.string(),
+    nameFr: z.string(),
+  }),
+  nameEn: z.string(),
+  nameFr: z.string(),
+});
+
 export type PreferredLanguageInfo = z.infer<typeof preferredLanguageSchema>;
 
 function createLookupService() {
@@ -60,9 +77,55 @@ function createLookupService() {
     throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
+  /**
+   *
+   * @returns all countries
+   */
+  async function getAllCountries() {
+    const url = `${INTEROP_API_BASE_URI}/lookups/countries/`;
+    const response = await fetch(url);
+
+    const countryListSchema = z.array(countrySchema);
+    if (response.ok) return countryListSchema.parse(await response.json());
+
+    logger.error('%j', {
+      message: 'Failed to fetch data',
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+
+    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+  }
+
+  /**
+   *
+   * @returns returns province list
+   */
+  async function getAllRegions() {
+    const url = `${INTEROP_API_BASE_URI}/lookups/regions`;
+    const response = await fetch(url);
+
+    const regionListSchema = z.array(regionSchema);
+    if (response.ok) return regionListSchema.parse(await response.json());
+
+    logger.error('%j', {
+      message: 'Failed to fetch data',
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+
+    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+  }
+
   return {
     getAllPreferredLanguages,
     getPreferredLanguage,
+    getAllCountries,
+    getAllRegions,
   };
 }
 
