@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { db } from '~/mocks/db';
 import { getLookupApiMockHandlers } from '~/mocks/lookup-api.server';
 import { getPowerPlatformApiMockHandlers } from '~/mocks/power-platform-api.server';
+import { getWSAddressApiMockHandlers } from '~/mocks/wsaddress-api.server';
 
 /**
  * Retrieves a PDF entity based on the provided referenceId ID.
@@ -32,58 +33,6 @@ function getPdfEntity(referenceId: string | readonly string[]) {
 
 const handlers = [
   /**
-   * Handler for POST requests to WSAddress parse service
-   */
-  http.post('https://api.example.com/address/parse', ({ params }) => {
-    return HttpResponse.json({
-      responseType: 'CA',
-      addressLine: '23 CORONATION ST',
-      city: 'ST JOHNS',
-      province: 'NL',
-      postalCode: 'A1C5B9',
-      streetNumberSuffix: 'streetNumberSuffix',
-      streetDirection: 'streetDirection',
-      unitType: 'unitType',
-      unitNumber: '000',
-      serviceAreaName: 'serviceAreaName',
-      serviceAreaType: 'serviceAreaType',
-      serviceAreaQualifier: '',
-      cityLong: 'cityLong',
-      cityShort: 'cityShort',
-      deliveryInformation: 'deliveryInformation',
-      extraInformation: 'extraInformation',
-      statusCode: 'Valid',
-      canadaPostInformation: [],
-      message: 'message',
-      addressType: 'Urban',
-      streetNumber: '23',
-      streetName: 'CORONATION',
-      streetType: 'ST',
-      serviceType: 'Unknown',
-      serviceNumber: '000',
-      country: 'CAN',
-      warnings: '',
-      functionalMessages: [{ action: 'action', message: 'message' }],
-    });
-  }),
-
-  /**
-   * Handler for POST requests to WSAddress validate service
-   */
-  http.post('https://api.example.com/address/validate', ({ params }) => {
-    return HttpResponse.json({
-      responseType: 'CA',
-      statusCode: 'Valid',
-      functionalMessages: [
-        { action: 'OriginalInput', message: '111 WELLINGTON ST   OTTAWA   ON   K1A0A4   CAN' },
-        { action: 'Information', message: 'Dept = SENAT   Branch = SENAT   Lang = F' },
-      ],
-      message: '',
-      warnings: '',
-    });
-  }),
-
-  /**
    * Handler for GET requests to retrieve pdf
    */
   http.get('https://api.example.com/cct/letters/:referenceId', async ({ params }) => {
@@ -110,4 +59,4 @@ const handlers = [
   }),
 ];
 
-export const server = setupServer(...handlers, ...getLookupApiMockHandlers(), ...getPowerPlatformApiMockHandlers());
+export const server = setupServer(...handlers, ...getLookupApiMockHandlers(), ...getPowerPlatformApiMockHandlers(), ...getWSAddressApiMockHandlers());
