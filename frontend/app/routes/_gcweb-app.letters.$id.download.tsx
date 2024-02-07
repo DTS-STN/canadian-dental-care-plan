@@ -1,5 +1,4 @@
 import { type LoaderFunctionArgs } from '@remix-run/node';
-import { useLoaderData, useParams } from '@remix-run/react';
 
 // TODO Refactor the loader to fetch pdf using service
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -18,18 +17,4 @@ export async function loader({ params }: LoaderFunctionArgs) {
   return new Response(response.body, {
     headers: headers,
   });
-}
-
-export default function ViewLetter() {
-  const { id } = useParams();
-  const { filePath } = useLoaderData<typeof loader>();
-
-  return (
-    <>
-      <p>
-        ID: {id}
-        Path: {filePath}
-      </p>
-    </>
-  );
 }
