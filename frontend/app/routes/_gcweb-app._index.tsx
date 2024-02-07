@@ -45,7 +45,7 @@ export default function Index() {
         <LandingPageLink title={<TitleWithInProgressLabel>{t('index:upload')}</TitleWithInProgressLabel>} to="/upload-document">
           {t('index:upload-desc')}
         </LandingPageLink>
-        <LandingPageLink title={<TitleWithInProgressLabel>{t('index:view-letters')}</TitleWithInProgressLabel>} to="/view-letters">
+        <LandingPageLink title={<TitleWithInProgressLabel>{t('index:view-letters')}</TitleWithInProgressLabel>} to="/letters">
           {t('index:view-letters-desc')}
         </LandingPageLink>
         <LandingPageLink title={<TitleWithInProgressLabel>{t('index:view-cdcp')}</TitleWithInProgressLabel>} to="/messages">

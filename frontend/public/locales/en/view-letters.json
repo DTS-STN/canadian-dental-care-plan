@@ -7,9 +7,9 @@
     },
     "subject": "Subject",
     "date-sent": "Date sent",
-    "reference-id": "Reference ID"
-  },
-  "view": {
-    "download": "Download PDF"
+    "reference-id": "Reference ID",
+    "filter": "Filter by:",
+    "newest": "Newest first",
+    "oldest": "Oldest first"
   }
 }
