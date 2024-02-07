@@ -1,9 +1,9 @@
 {
   "index": {
-    "page-title": "(FR) View my letters",
+    "page-title": "(FR) Letters",
     "breadcrumbs": {
       "home": "(FR) Home",
-      "view-letter": "(FR) View letters"
+      "letters": "(FR) Letters"
     },
     "subject": "(FR) Subject",
     "date-sent": "(FR) Date sent",

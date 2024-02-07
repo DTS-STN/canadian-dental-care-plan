@@ -7,13 +7,13 @@ import { useTranslation } from 'react-i18next';
 
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('view-letters');
+const i18nNamespaces = getTypedI18nNamespaces('letters');
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'view-letters:index.breadcrumbs.home', to: '/' }, { labelI18nKey: 'view-letters:index.page-title' }],
+  breadcrumbs: [{ labelI18nKey: 'letters:index.breadcrumbs.home', to: '/' }, { labelI18nKey: 'letters:index.page-title' }],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0002',
-  pageTitleI18nKey: 'view-letters:index.page-title',
+  pageTitleI18nKey: 'letters:index.page-title',
 } as const satisfies RouteHandleData;
 
 const sortOptions = {
@@ -66,17 +66,17 @@ export default function LettersIndex() {
   return (
     <div>
       <label htmlFor="sortOrder" className="text-sm">
-        <strong>{t('view-letters:index.filter')}</strong>
+        <strong>{t('letters:index.filter')}</strong>
       </label>
       <select id="sortOrder" value={searchParams.get('sort') ?? defaultSortOption} onChange={handleOnSortOrderChange} className="text-sm">
-        <option value={sortOptions.DESCENDING}>{t('view-letters:index.newest')}</option>
-        <option value={sortOptions.ASCENDING}>{t('view-letters:index.oldest')}</option>
+        <option value={sortOptions.DESCENDING}>{t('letters:index.newest')}</option>
+        <option value={sortOptions.ASCENDING}>{t('letters:index.oldest')}</option>
       </select>
       <div className="mt-2 border-l border-r border-t">
         <div className="grid grid-cols-3 divide-x divide-gray-300 bg-gray-100 md:grid-cols-[3fr_1fr_1fr]">
-          <strong className="border-b border-gray-300 px-4">{t('view-letters:index.subject')}</strong>
-          <strong className="border-b border-gray-300 px-4">{t('view-letters:index.date-sent')}</strong>
-          <strong className="border-b border-gray-300 px-4">{t('view-letters:index.reference-id')}</strong>
+          <strong className="border-b border-gray-300 px-4">{t('letters:index.subject')}</strong>
+          <strong className="border-b border-gray-300 px-4">{t('letters:index.date-sent')}</strong>
+          <strong className="border-b border-gray-300 px-4">{t('letters:index.reference-id')}</strong>
         </div>
         <ul>
           {letters.map((letter) => (
