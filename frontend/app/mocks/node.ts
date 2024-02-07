@@ -3,28 +3,8 @@ import { setupServer } from 'msw/node';
 import { z } from 'zod';
 
 import { db } from '~/mocks/db';
+import { getLookupApiMockHandlers } from '~/mocks/lookup-api.server';
 import { getPowerPlatformApiMockHandlers } from '~/mocks/power-platform-api.server';
-
-/**
- * Retrieves a preferred language entity based on the provided preferred language ID.
- *
- * @param id - The preferred language ID to look up in the database.
- * @returns The preferred language entity if found, otherwise throws a 404 error.
- */
-function getPreferredLanguageEntity(id: string | readonly string[]) {
-  const parsedPreferredLanguageId = z.string().safeParse(id);
-  const parsedPreferredLanguage = !parsedPreferredLanguageId.success
-    ? undefined
-    : db.preferredLanguage.findFirst({
-        where: { id: { equals: parsedPreferredLanguageId.data } },
-      });
-
-  if (!parsedPreferredLanguage) {
-    throw new HttpResponse('No Preferred Language found', { status: 404, headers: { 'Content-Type': 'text/plain' } });
-  }
-
-  return parsedPreferredLanguage;
-}
 
 /**
  * Retrieves a PDF entity based on the provided referenceId ID.
@@ -51,42 +31,6 @@ function getPdfEntity(referenceId: string | readonly string[]) {
 }
 
 const handlers = [
-  /**
-   * Handler for GET request to retrieve all preferred languages
-   */
-  http.get('https://api.example.com/lookups/preferred-languages', () => {
-    const preferredLanguageList = db.preferredLanguage.getAll();
-    return HttpResponse.json(preferredLanguageList);
-  }),
-
-  /**
-   * Handler for GET requests to retrieve preferred languages by id
-   */
-  http.get('https://api.example.com/lookups/preferred-languages/:id', ({ params }) => {
-    const preferredLanguageEntity = getPreferredLanguageEntity(params.id);
-    return HttpResponse.json({
-      id: preferredLanguageEntity.id,
-      nameEn: preferredLanguageEntity.nameEn,
-      nameFr: preferredLanguageEntity.nameFr,
-    });
-  }),
-
-  /**
-   * Handler for GET request to retrieve all countries
-   */
-  http.get('https://api.example.com/lookups/countries', () => {
-    const countryList = db.country.getAll();
-    return HttpResponse.json(countryList.sort((a, b) => (a.code < b.code ? -1 : 1)));
-  }),
-
-  /**
-   * Handler for GET request to retrieve all countries
-   */
-  http.get('https://api.example.com/lookups/regions', () => {
-    const provinceList = db.region.getAll();
-    return HttpResponse.json(provinceList);
-  }),
-
   /**
    * Handler for POST requests to WSAddress parse service
    */
@@ -166,4 +110,4 @@ const handlers = [
   }),
 ];
 
-export const server = setupServer(...handlers, ...getPowerPlatformApiMockHandlers());
+export const server = setupServer(...handlers, ...getLookupApiMockHandlers(), ...getPowerPlatformApiMockHandlers());
