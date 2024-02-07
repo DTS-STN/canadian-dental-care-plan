@@ -4,31 +4,44 @@ import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
+import reactToastifyStyleSheet from 'react-toastify/dist/ReactToastify.css';
+import { getToast } from 'remix-toast';
 
+import { Toaster } from './components/toaster';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
-import stylesheet from '~/tailwind.css';
+import tailwindStyleSheet from '~/tailwind.css';
 import { readBuildInfo } from '~/utils/build-info.server';
 import { getEnv, getPublicEnv } from '~/utils/env.server';
 import { useDocumentTitleI18nKey, useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
 
-export const links = () => [{ rel: 'stylesheet', href: stylesheet }];
+export const links = () => [
+  { rel: 'stylesheet', href: tailwindStyleSheet },
+  { rel: 'stylesheet', href: reactToastifyStyleSheet },
+];
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const buildInfo = readBuildInfo('build-info.json');
   const privateEnv = getEnv();
   const publicEnv = getPublicEnv();
+  const { toast, headers } = await getToast(request);
 
-  return json({
-    buildInfo: buildInfo ?? {
-      buildDate: '2000-01-01T00:00:00Z',
-      buildId: '0000',
-      buildRevision: '00000000',
-      buildVersion: '0.0.0+00000000-0000',
+  return json(
+    {
+      buildInfo: buildInfo ?? {
+        buildDate: '2000-01-01T00:00:00Z',
+        buildId: '0000',
+        buildRevision: '00000000',
+        buildVersion: '0.0.0+00000000-0000',
+      },
+      env: publicEnv,
+      javascriptEnabled: privateEnv.JAVASCRIPT_ENABLED,
+      toast,
     },
-    env: publicEnv,
-    javascriptEnabled: privateEnv.JAVASCRIPT_ENABLED,
-  });
+    {
+      headers,
+    },
+  );
 }
 
 /**
@@ -50,9 +63,9 @@ function useDocumentTitle() {
   return i18nKey && (t(i18nKey) as string); // as string otherwise it's typeof any
 }
 
-export default function () {
+export default function App() {
   const { nonce } = useContext(NonceContext);
-  const { env, javascriptEnabled } = useLoaderData<typeof loader>();
+  const { env, javascriptEnabled, toast } = useLoaderData<typeof loader>();
   const ns = useI18nNamespaces();
   const { i18n } = useTranslation(ns);
   const documentTitle = useDocumentTitle();
@@ -76,6 +89,7 @@ export default function () {
           </>
         )}
         <LiveReload nonce={nonce} />
+        <Toaster toast={toast} />
       </body>
     </html>
   );
