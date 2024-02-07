@@ -18,45 +18,6 @@
     "change-preferred-language": "(FR) Change preferred language",
     "no-address-on-file": "(FR) No address on file"
   },
-  "address": {
-    "edit": {
-      "page-title": "(FR) Change address",
-      "breadcrumbs": {
-        "home": "(FR) Home",
-        "personal-information": "(FR) Personal information",
-        "address-change": "(FR) Change address"
-      },
-      "home-address": "(FR) Home address",
-      "mailing-address": "(FR) Mailing address",
-      "button": {
-        "change": "(FR) Change",
-        "cancel": "(FR) Cancel"
-      },
-      "error-message": {
-        "empty-home-address": "(FR) Enter a home address",
-        "empty-mailing-address": "(FR) Enter a mailing address",
-        "invalid-home-address": "(FR) Invalid home address",
-        "invalid-mailing-address": "(FR) Invalid mailing address"
-      }
-    },
-    "confirm": {
-      "page-title": "(FR) Confirm",
-      "breadcrumbs": {
-        "home": "(FR) Home",
-        "personal-information": "(FR) Personal information",
-        "address-change-confirm": "(FR) Confirm"
-      },
-      "changed-address": "(FR) Change of Home Address",
-      "changed-mailing": "(FR) Change of Mailing Address",
-      "from": "(FR) From:",
-      "to": "(FR) To:",
-      "change-address": "(FR) Change address",
-      "button": {
-        "confirm": "(FR) Confirm",
-        "cancel": "(FR) Cancel"
-      }
-    }
-  },
   "home-address": {
     "edit": {
       "page-title": "(FR) Change home address",
