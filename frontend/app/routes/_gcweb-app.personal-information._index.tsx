@@ -6,11 +6,11 @@ import { Link, useLoaderData } from '@remix-run/react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
+import { Address } from '~/components/address';
+import { addressService } from '~/services/address-service.server';
 import { lookupService } from '~/services/lookup-service.server';
 import { userService } from '~/services/user-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { Address } from '~/components/address';
-import { addressService } from '~/services/address-service.server';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
@@ -66,17 +66,8 @@ export default function PersonalInformationIndex() {
           title={t('personal-information:index.home-address')}
           icon="glyphicon-map-marker"
         >
-
-          {homeAddressInfo && <Address address={homeAddressInfo?.address}
-            city={homeAddressInfo?.city}
-            provinceState={homeAddressInfo?.province}
-            postalZipCode={homeAddressInfo?.postalCode}
-            country={homeAddressInfo?.country} />}
-          {
-            !homeAddressInfo && <p>{t('personal-information:index.no-address-on-file')}</p>
-          }
-
-
+          {homeAddressInfo && <Address address={homeAddressInfo?.address} city={homeAddressInfo?.city} provinceState={homeAddressInfo?.province} postalZipCode={homeAddressInfo?.postalCode} country={homeAddressInfo?.country} />}
+          {!homeAddressInfo && <p>{t('personal-information:index.no-address-on-file')}</p>}
         </PersonalInformationSection>
         <PersonalInformationSection
           footer={
@@ -87,16 +78,8 @@ export default function PersonalInformationIndex() {
           title={t('personal-information:index.mailing-address')}
           icon="glyphicon-map-marker"
         >
-
-          {mailingAddressInfo && <Address address={mailingAddressInfo?.address}
-            city={mailingAddressInfo?.city}
-            provinceState={mailingAddressInfo?.province}
-            postalZipCode={mailingAddressInfo?.postalCode}
-            country={mailingAddressInfo?.country} />}
-          {
-            !mailingAddressInfo && <p>{t('personal-information:index.no-address-on-file')}</p>
-          }
-
+          {mailingAddressInfo && <Address address={mailingAddressInfo?.address} city={mailingAddressInfo?.city} provinceState={mailingAddressInfo?.province} postalZipCode={mailingAddressInfo?.postalCode} country={mailingAddressInfo?.country} />}
+          {!mailingAddressInfo && <p>{t('personal-information:index.no-address-on-file')}</p>}
         </PersonalInformationSection>
         <PersonalInformationSection
           footer={

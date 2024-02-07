@@ -12,7 +12,7 @@ interoperability.
 The RAOIDC service is owned by the Government of Canada's Enterprise Cyber
 Authentication System (ECAS) team.
 
-CDCP uses the *authorization code flow with proof key for code exchange (PKCE)*
+CDCP uses the _authorization code flow with proof key for code exchange (PKCE)_
 OAuth flow to authenticate users.
 
 ## Authentication routes
@@ -32,33 +32,33 @@ The login process consists of three main steps:
    `/auth/login/{provider-id}`, which redirects the user to the authorization
    endpoint RAOIDC. The authorization request includes the following parameters:
 
-     - `response_type=code`: indicates that CDCP expects an *authorization code* as the response
-     - `client_id`: the unique identifier of CDCP registered with RAOIDC
-     - `redirect_uri`: the CDCP URL where the user will be redirected after authorization
-     - `scope`: the requested permissions, such as `openid`, `profile`, or `email`
-     - `state`: a random string used to prevent CSRF attacks
-     - `code_challenge`: a hashed and base64url-encoded version of a randomly generated string,
-       called the `code_verifier`, which will be used later to verify the authorization code
-     - `code_challenge_method`: the method used to generate the code challenge, such as `S256` for SHA-256
+   - `response_type=code`: indicates that CDCP expects an _authorization code_ as the response
+   - `client_id`: the unique identifier of CDCP registered with RAOIDC
+   - `redirect_uri`: the CDCP URL where the user will be redirected after authorization
+   - `scope`: the requested permissions, such as `openid`, `profile`, or `email`
+   - `state`: a random string used to prevent CSRF attacks
+   - `code_challenge`: a hashed and base64url-encoded version of a randomly generated string,
+     called the `code_verifier`, which will be used later to verify the authorization code
+   - `code_challenge_method`: the method used to generate the code challenge, such as `S256` for SHA-256
 
 1. RAOIDC authenticates the user and (optionally) obtains their consent for the
    requested scope. If successful, RAOIDC redirects the user back to the
    `redirect_uri` with the following parameters:
 
-     - `code`: the authorization code that can be exchanged for an access token and an ID token
-     - `state`: the same value that was sent in the previous request, this is used to ensure
-       that the response being handled is for the same authentication request
+   - `code`: the authorization code that can be exchanged for an access token and an ID token
+   - `state`: the same value that was sent in the previous request, this is used to ensure
+     that the response being handled is for the same authentication request
 
 1. In `/auth/callback/{provider-id}`, CDCP verifies that the `state` parameter
    matches the one stored in the session, and sends a POST request to RAOIDC's
    token endpoint to exchange the authorization code for a token response. The
    token exchange request includes the following parameters:
 
-    - `grant_type=authorization_code`: indicates that CDCP is using the authorization code grant type
-    - `client_id`: the same value that was sent in the first request
-    - `code`: the authorization code received in the previous step
-    - `redirect_uri`: the same value that was sent in the first request
-    - `code_verifier`: the original random string that was used to generate the code challenge in the first request
+   - `grant_type=authorization_code`: indicates that CDCP is using the authorization code grant type
+   - `client_id`: the same value that was sent in the first request
+   - `code`: the authorization code received in the previous step
+   - `redirect_uri`: the same value that was sent in the first request
+   - `code_verifier`: the original random string that was used to generate the code challenge in the first request
 
    During the token exchange, RAOIDC verifies that the `code_verifier` matches
    the `code_challenge` that was sent in the first request, and returns a token
