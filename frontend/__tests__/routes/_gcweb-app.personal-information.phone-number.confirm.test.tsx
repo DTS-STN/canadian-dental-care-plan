@@ -1,6 +1,6 @@
 import { redirect } from '@remix-run/node';
 
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/_gcweb-app.personal-information.phone-number.confirm';
 import { sessionService } from '~/services/session-service.server';
@@ -67,7 +67,6 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
     });
 
     it('should redirect to homepage page when newPhoneNumber is missing', async () => {
-
       let request = new Request('http://localhost:3000/personal-information/phone-number/confirm', {
         method: 'POST',
       });

@@ -3,23 +3,25 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { Outlet, json } from '@remix-run/react';
 import { createRemixStub } from '@remix-run/testing';
 
+import { describe, expect, it } from 'vitest';
+
 import type { BuildInfo } from '~/utils/route-utils';
 import { coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey } from '~/utils/route-utils';
 
 describe('coalesce<T> reducer', () => {
-  test('expect undefined from two undefined values', () => {
+  it('expect undefined from two undefined values', () => {
     expect(coalesce(undefined, undefined)).toBeUndefined();
   });
 
-  test('expect previous from previous and undefined', () => {
+  it('expect previous from previous and undefined', () => {
     expect(coalesce('previous', undefined)).toBe('previous');
   });
 
-  test('expect current from undefined and current', () => {
+  it('expect current from undefined and current', () => {
     expect(coalesce(undefined, 'current')).toBe('current');
   });
 
-  test('expect current from previous and current', () => {
+  it('expect current from previous and current', () => {
     expect(coalesce('previous', 'current')).toBe('current');
   });
 });

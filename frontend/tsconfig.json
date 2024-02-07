@@ -11,13 +11,12 @@
     "moduleResolution": "Bundler",
     "noEmit": true,
     "paths": {
-      "~/*": ["./app/*"],
+      "~/*": ["./app/*"]
     },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
-    "target": "ES2022",
-    "types": ["vitest/globals"],
-  },
+    "target": "ES2022"
+  }
 }
