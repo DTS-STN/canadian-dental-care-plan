@@ -289,7 +289,7 @@ const handlers = [
   /**
    * Handler for GET requests to retrieve letters details.
    */
-  http.get('https://api.example.com/letters?userId=', ({ params }) => {
+  http.get('https://api.example.com/letters', ({ params }) => {
     const letterEntities = getLetterEntities(params.userId);
 
     return HttpResponse.json(

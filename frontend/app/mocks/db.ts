@@ -37,7 +37,6 @@ const db = factory({
     dateSent: Date,
     letterTypeCd: String,
     userId: String,
-    subject: String,
   },
   pdf: {
     fileStream: String,
@@ -64,7 +63,7 @@ db.preferredLanguage.create({
   nameFr: 'Anglais',
 });
 
-db.preferredLanguage.create({
+const frenchLanguage = db.preferredLanguage.create({
   id: 'fr',
   nameEn: 'French',
   nameFr: 'Français',
@@ -84,7 +83,7 @@ const defaultUser = db.user.create({
   id: '00000000-0000-0000-0000-000000000000',
   firstName: 'John',
   lastName: 'Maverick',
-  preferredLanguage: 'fr',
+  preferredLanguage: frenchLanguage.id,
 });
 
 // seed avaliable letters (after user)
