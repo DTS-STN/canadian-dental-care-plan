@@ -3,7 +3,9 @@ import type { ChangeEvent } from 'react';
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link, useLoaderData, useSearchParams } from '@remix-run/react';
 
+import { sort } from 'moderndash';
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -16,12 +18,7 @@ export const handle = {
   pageTitleI18nKey: 'letters:index.page-title',
 } as const satisfies RouteHandleData;
 
-const sortOptions = {
-  ASCENDING: 'ASC',
-  DESCENDING: 'DESC',
-} as const;
-
-const defaultSortOption = sortOptions.DESCENDING;
+const orderEnumSchema = z.enum(['asc', 'desc']);
 
 export async function loader({ request }: LoaderFunctionArgs) {
   /**
@@ -29,7 +26,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
    * @sort This accesses the URL's search parameter and retrieves the value associated with the 'sort' parameter, allows the client to specify how the data should be sorted via the URL
    */
   const url = new URL(request.url);
-  const sort = url.searchParams.get('sort') ?? defaultSortOption;
+  const parsedOrder = orderEnumSchema.safeParse(url.searchParams.get('sort'));
+  const sortOrder = parsedOrder.success ? parsedOrder.data : orderEnumSchema.enum.desc;
 
   // TODO replace with actual data
   const letters = [
@@ -45,16 +43,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
     { id: '538967', subject: 'Letter subject text 10', dateSent: '2023-03-11T03:04:05.000Z', referenceId: '624957' },
   ];
 
-  letters.sort((a, b) => {
-    return sort === sortOptions.ASCENDING ? new Date(a.dateSent).getTime() - new Date(b.dateSent).getTime() : new Date(b.dateSent).getTime() - new Date(a.dateSent).getTime();
-  });
-  return json({ letters });
+  const sortedLetters = sort(letters, { order: sortOrder, by: (item) => item.dateSent });
+
+  return json({ letters: sortedLetters, sortOrder });
 }
 
 export default function LettersIndex() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
   const { t } = useTranslation(i18nNamespaces);
-  const { letters } = useLoaderData<typeof loader>();
+  const { letters, sortOrder } = useLoaderData<typeof loader>();
 
   function handleOnSortOrderChange(e: ChangeEvent<HTMLSelectElement>) {
     setSearchParams((prev) => {
@@ -65,12 +62,12 @@ export default function LettersIndex() {
 
   return (
     <div>
-      <label htmlFor="sortOrder" className="text-sm">
+      <label htmlFor="sort-order" className="text-sm">
         <strong>{t('letters:index.filter')}</strong>
       </label>
-      <select id="sortOrder" value={searchParams.get('sort') ?? defaultSortOption} onChange={handleOnSortOrderChange} className="text-sm">
-        <option value={sortOptions.DESCENDING}>{t('letters:index.newest')}</option>
-        <option value={sortOptions.ASCENDING}>{t('letters:index.oldest')}</option>
+      <select id="sort-order" value={sortOrder} onChange={handleOnSortOrderChange} className="text-sm">
+        <option value={orderEnumSchema.enum.desc}>{t('letters:index.newest')}</option>
+        <option value={orderEnumSchema.enum.asc}>{t('letters:index.oldest')}</option>
       </select>
       <div className="mt-2 border-l border-r border-t">
         <div className="grid grid-cols-3 divide-x divide-gray-300 bg-gray-100 md:grid-cols-[3fr_1fr_1fr]">
