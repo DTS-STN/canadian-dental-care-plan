@@ -27,6 +27,14 @@ export interface AuthTokenSet extends Record<string, unknown> {
 }
 
 /**
+ * Userinfo token set.
+ * Returned from the auth server's userinfo endpoint.
+ */
+export interface UserinfoTokenSet extends Record<string, unknown> {
+  userinfo_token: string;
+}
+
+/**
  * An OIDC client.
  */
 export interface ClientMetadata {
@@ -234,7 +242,7 @@ export async function fetchUserInfo(userInfoUri: string, accessToken: string, cl
     throw new Error('Error fetching user info: non-200 status');
   }
 
-  const userInfo = (await response.json()) as { userinfo_token: string };
+  const userInfo = (await response.json()) as UserinfoTokenSet;
 
   if (!userInfo.userinfo_token) {
     throw new Error('No userinfo token found in token set');
