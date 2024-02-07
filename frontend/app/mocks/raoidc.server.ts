@@ -1,5 +1,7 @@
+import { subtle } from 'crypto';
 import { HttpResponse, http } from 'msw';
 
+import { publicKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
@@ -20,7 +22,36 @@ export function getRaoidcMockHandlers() {
       log.debug('Handling request for [%s]', request.url);
       return HttpResponse.json(getOpenidConfiguration(AUTH_RAOIDC_BASE_URL));
     }),
+
+    //
+    // OIDC `/jwks` endpoint mock
+    //
+    http.get(`${AUTH_RAOIDC_BASE_URL}/jwks`, async ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      return HttpResponse.json(await getJwks());
+    }),
   ];
+}
+
+/**
+ * Since the application requires a public/private keypair for
+ * client assertions, we can reuse these keys to encrypt the
+ * JWTs when mocking to make managing encryption a little easier 🎉
+ */
+async function getJwks() {
+  const { AUTH_JWT_PUBLIC_KEY } = getEnv();
+
+  const publicCryptoKey = await publicKeyPemToCryptoKey(AUTH_JWT_PUBLIC_KEY);
+  const publicJwk = await subtle.exportKey('jwk', publicCryptoKey);
+
+  return {
+    keys: [
+      {
+        kid: 'RAOIDC_Client_Dev', // matches RAOIDC's nonprod key id
+        ...publicJwk,
+      },
+    ],
+  };
 }
 
 function getOpenidConfiguration(authBaseUrl: string) {
