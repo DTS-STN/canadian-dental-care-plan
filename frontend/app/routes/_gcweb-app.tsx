@@ -101,20 +101,14 @@ function PageHeader() {
   }, [showDropdown]);
   return (
     <>
-      <nav>
-        <ul id="wb-tphp">
-          <li className="wb-slc">
-            <AnchorLink anchorElementId="wb-cont" className="wb-sl">
-              {t('gcweb:nav.skip-to-content')}
-            </AnchorLink>
-          </li>
-          <li className="wb-slc visible-sm visible-md visible-lg">
-            <AnchorLink anchorElementId="wb-info" className="wb-sl">
-              {t('gcweb:nav.skip-to-about')}
-            </AnchorLink>
-          </li>
-        </ul>
-      </nav>
+      <div id="skip-to-content" className="wb-slc">
+        <AnchorLink anchorElementId="wb-cont" className="wb-sl">
+          {t('gcweb:nav.skip-to-content')}
+        </AnchorLink>
+        <AnchorLink anchorElementId="wb-info" className="wb-sl">
+          {t('gcweb:nav.skip-to-about')}
+        </AnchorLink>
+      </div>
       <header>
         <div id="wb-bnr" className="container">
           <div className="row">
