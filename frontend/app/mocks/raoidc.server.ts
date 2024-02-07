@@ -1,9 +1,11 @@
 import { subtle } from 'crypto';
+import { CompactEncrypt, SignJWT } from 'jose';
 import { HttpResponse, http } from 'msw';
 
-import { publicKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
+import { privateKeyPemToCryptoKey, publicKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
+import { type AuthTokenSet } from '~/utils/raoidc-utils.server';
 
 const log = getLogger('raoidc.server');
 
@@ -30,7 +32,84 @@ export function getRaoidcMockHandlers() {
       log.debug('Handling request for [%s]', request.url);
       return HttpResponse.json(await getJwks());
     }),
+
+    //
+    // OIDC `/token` endpoint mock
+    //
+    http.post(`${AUTH_RAOIDC_BASE_URL}/token`, async ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      return HttpResponse.json(await getAuthTokenSet());
+    }),
   ];
+}
+
+/**
+ * Performs a mock token exchange.
+ *
+ * Note that since this is just a mock, the OIDC authorization code that is sent
+ * from the client is ignored. There's no actual exchange happening.
+ */
+async function getAuthTokenSet() {
+  const { AUTH_JWT_PRIVATE_KEY, AUTH_JWT_PUBLIC_KEY } = getEnv();
+
+  // RAOIDC returns an access token that is encrypted using its private key
+  const encryptedAccessToken = await generateAccessToken(AUTH_JWT_PRIVATE_KEY);
+
+  // RAOIDC returns an id token that is encrypted using the CDCP's public key
+  const encryptedIdToken = await generateIdToken(AUTH_JWT_PUBLIC_KEY, AUTH_JWT_PRIVATE_KEY);
+
+  return {
+    access_token: encryptedAccessToken,
+    id_token: encryptedIdToken,
+    token_type: 'Bearer',
+    expires_in: 300,
+  } as AuthTokenSet;
+}
+
+/**
+ * Creates an encrypted access token in JWE format.
+ */
+async function generateAccessToken(serverPrivateKeyPem: string) {
+  const accessTokenPayload = {
+    /* intentionally left blank */
+  };
+
+  const serverPrivateCryptoKey = await privateKeyPemToCryptoKey(serverPrivateKeyPem);
+
+  // prettier-ignore
+  const accessToken = await new SignJWT(accessTokenPayload)
+    .setProtectedHeader({ alg: 'PS256' })
+    .sign(serverPrivateCryptoKey);
+
+  // prettier-ignore
+  return await new CompactEncrypt(new TextEncoder().encode(accessToken))
+    .setProtectedHeader({ alg: 'RSA-OAEP-256', enc: 'A256GCM' })
+    .encrypt(serverPrivateCryptoKey);
+}
+
+/**
+ * Creates an encrypted ID token in JWE format.
+ */
+async function generateIdToken(clientPublicKeyPem: string, serverPrivateKeyPem: string) {
+  const idTokenPayload = {
+    aud: 'CDCP',
+    iss: 'GC-ECAS-MOCK',
+    sid: '00000000-0000-0000-0000-000000000000',
+    sub: '00000000-0000-0000-0000-000000000000',
+  };
+
+  const clientPublicCryptoKey = await publicKeyPemToCryptoKey(clientPublicKeyPem);
+  const serverPrivateCryptoKey = await privateKeyPemToCryptoKey(serverPrivateKeyPem);
+
+  // prettier-ignore
+  const idToken = await new SignJWT(idTokenPayload)
+    .setProtectedHeader({ alg: 'PS256' })
+    .sign(serverPrivateCryptoKey);
+
+  // prettier-ignore
+  return await new CompactEncrypt(new TextEncoder().encode(idToken))
+    .setProtectedHeader({ alg: 'RSA-OAEP-256', enc: 'A256GCM' })
+    .encrypt(clientPublicCryptoKey);
 }
 
 /**
