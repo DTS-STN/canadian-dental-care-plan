@@ -42,30 +42,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ letters });
 }
 
-export default function ViewLetters() {
-  const { letters } = useLoaderData<typeof loader>();
-  return (
-    <>
-      <LetterList letters={letters} />
-    </>
-  );
-}
-
-interface Letter {
-  id: string;
-  subject: string;
-  dateSent: string;
-  referenceId: string;
-}
-
-interface LetterListProps {
-  letters: Letter[];
-}
-
-function LetterList({ letters }: LetterListProps) {
+export default function LettersIndex() {
   const navigate = useNavigate();
   const { t } = useTranslation(i18nNamespaces);
-
+  const { letters } = useLoaderData<typeof loader>();
   return (
     <div>
       <label htmlFor="sortOrder" className="text-sm">
