@@ -73,6 +73,54 @@ function getPreferredLanguageEntity(id: string | readonly string[]) {
 }
 
 /**
+ * Retrieves list of letter entities based on the provided user ID.
+ *
+ * @param userId - The user ID to look up in the database.
+ * @returns The letter entity if found, otherwise throws a 404 error.
+ */
+function getLetterEntities(userId: string | readonly string[]) {
+  const parsedUserId = z.string().uuid().safeParse(userId);
+  if (!parsedUserId) {
+    throw new HttpResponse('Invalid userId: ' + parsedUserId, { status: 400, headers: { 'Content-Type': 'text/plain' } });
+  }
+  const letterEntities = !parsedUserId.success
+    ? undefined
+    : db.letter.findMany({
+        where: {
+          userId: {
+            equals: parsedUserId.data,
+          },
+        },
+      });
+
+  return letterEntities;
+}
+
+/**
+ * Retrieves a PDF entity based on the provided referenceId ID.
+ *
+ * @param id - The reference Id to look up in the database.
+ * @returns The PDF entity if found, otherwise throws a 404 error.
+ */
+function getPdfEntity(referenceId: string | readonly string[]) {
+  const parsedReferenceId = z.string().safeParse(referenceId);
+  if (!parsedReferenceId) {
+    throw new HttpResponse('Invalid referenceId: ' + referenceId, { status: 400, headers: { 'Content-Type': 'text/plain' } });
+  }
+  const parsedPdfEntity = !parsedReferenceId.success
+    ? undefined
+    : db.pdf.findFirst({
+        where: { id: { equals: parsedReferenceId.data } },
+      });
+
+  if (!parsedPdfEntity) {
+    throw new HttpResponse('No PDF found with the provided referenceId: ' + referenceId, { status: 404, headers: { 'Content-Type': 'text/plain' } });
+  }
+
+  return parsedPdfEntity;
+}
+
+/**
  * Converts a user entity to a patch document with specific fields.
  *
  * @param userEntity - The user entity to convert.
@@ -132,6 +180,7 @@ const handlers = [
       addressStreet: addressEntity.addressStreet,
       addressCity: addressEntity.addressCity,
       addressProvince: addressEntity.addressProvince,
+
       addressPostalZipCode: addressEntity.addressPostalZipCode,
       addressCountry: addressEntity.addressCountry,
     });
@@ -173,38 +222,35 @@ const handlers = [
    * Handler for POST requests to WSAddress parse service
    */
   http.post('https://api.example.com/address/parse', ({ params }) => {
-    return HttpResponse.json({  
-      responseType: "CA",
-      addressLine: "23 CORONATION ST",
-      city: "ST JOHNS",
-      province: "NL",
-      postalCode: "A1C5B9",
-      streetNumberSuffix: "streetNumberSuffix",
-      streetDirection: "streetDirection",
-      unitType: "unitType",
-      unitNumber: "000",
-      serviceAreaName: "serviceAreaName",
-      serviceAreaType: "serviceAreaType",
-      serviceAreaQualifier: "",
-      cityLong: "cityLong",
-      cityShort: "cityShort",
-      deliveryInformation: "deliveryInformation",
-      extraInformation: "extraInformation",
-      statusCode: "Valid",
+    return HttpResponse.json({
+      responseType: 'CA',
+      addressLine: '23 CORONATION ST',
+      city: 'ST JOHNS',
+      province: 'NL',
+      postalCode: 'A1C5B9',
+      streetNumberSuffix: 'streetNumberSuffix',
+      streetDirection: 'streetDirection',
+      unitType: 'unitType',
+      unitNumber: '000',
+      serviceAreaName: 'serviceAreaName',
+      serviceAreaType: 'serviceAreaType',
+      serviceAreaQualifier: '',
+      cityLong: 'cityLong',
+      cityShort: 'cityShort',
+      deliveryInformation: 'deliveryInformation',
+      extraInformation: 'extraInformation',
+      statusCode: 'Valid',
       canadaPostInformation: [],
-      message: "message",
-      addressType: "Urban",
-      streetNumber: "23",
-      streetName: "CORONATION",
-      streetType: "ST",
-      serviceType: "Unknown",
-      serviceNumber: "000",
-      country: "CAN",
+      message: 'message',
+      addressType: 'Urban',
+      streetNumber: '23',
+      streetName: 'CORONATION',
+      streetType: 'ST',
+      serviceType: 'Unknown',
+      serviceNumber: '000',
+      country: 'CAN',
       warnings: '',
-      functionalMessages: [
-        {action: 'action',
-        message: 'message'},
-      ],
+      functionalMessages: [{ action: 'action', message: 'message' }],
     });
   }),
 
@@ -216,13 +262,54 @@ const handlers = [
       responseType: 'CA',
       statusCode: 'Valid',
       functionalMessages: [
-        {action: 'OriginalInput',
-        message: '111 WELLINGTON ST   OTTAWA   ON   K1A0A4   CAN'},
-        {action: 'Information',
-        message: 'Dept = SENAT   Branch = SENAT   Lang = F'}
+        { action: 'OriginalInput', message: '111 WELLINGTON ST   OTTAWA   ON   K1A0A4   CAN' },
+        { action: 'Information', message: 'Dept = SENAT   Branch = SENAT   Lang = F' },
       ],
       message: '',
       warnings: '',
+    });
+  }),
+
+  /**
+   * Handler for GET requests to retrieve letters details.
+   */
+  http.get('https://api.example.com/letters?userId=', ({ params }) => {
+    const letterEntities = getLetterEntities(params.userId);
+
+    return HttpResponse.json(
+      letterEntities?.map((letter) => {
+        return {
+          dateSent: letter.dateSent,
+          subject: letter.letterTypeCd,
+          referenceId: letter.referenceId,
+        };
+      }),
+    );
+  }),
+
+  /**
+   * Handler for GET requests to retrieve pdf
+   */
+  http.get('https://api.example.com/cct/letters/:referenceId', async ({ params }) => {
+    const encoder = new TextEncoder();
+    const pdfEntity = getPdfEntity(params.referenceId);
+    const stream = new ReadableStream({
+      start(controller) {
+        // Encode the string chunks using "TextEncoder".
+        controller.enqueue(encoder.encode('Gums'));
+        controller.enqueue(encoder.encode('n'));
+        controller.enqueue(encoder.encode('proses'));
+        controller.enqueue(encoder.encode(pdfEntity?.id));
+        controller.close();
+      },
+    });
+
+    // Send the mocked response immediately.
+    return new HttpResponse(stream, {
+      headers: {
+        'Content-Type': 'application/octet-stream',
+        'Content-Disposition': `attachment, filename=${pdfEntity.referenceId}.pdf`,
+      },
     });
   }),
 ];

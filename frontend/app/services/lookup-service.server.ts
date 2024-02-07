@@ -4,7 +4,7 @@ import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
 const preferredLanguageSchema = z.object({
-  id: z.string().optional(),
+  id: z.string(),
   nameEn: z.string().optional(),
   nameFr: z.string().optional(),
 });
