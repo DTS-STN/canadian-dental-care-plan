@@ -18,45 +18,6 @@
     "change-preferred-language": "Change preferred language",
     "no-address-on-file": "No address on file"
   },
-  "address": {
-    "edit": {
-      "page-title": "Change address",
-      "breadcrumbs": {
-        "home": "Home",
-        "personal-information": "Personal information",
-        "address-change": "Change address"
-      },
-      "home-address": "Home address",
-      "mailing-address": "Mailing address",
-      "button": {
-        "change": "Change",
-        "cancel": "Cancel"
-      },
-      "error-message": {
-        "empty-home-address": "Enter a home address",
-        "empty-mailing-address": "Enter a mailing address",
-        "invalid-home-address": "Invalid home address",
-        "invalid-mailing-address": "Invalid mailing address"
-      }
-    },
-    "confirm": {
-      "page-title": "Confirm",
-      "breadcrumbs": {
-        "home": "Home",
-        "personal-information": "Personal information",
-        "address-change-confirm": "Confirm"
-      },
-      "changed-address": "Change of Home Address",
-      "changed-mailing": "Change of Mailing Address",
-      "from": "From:",
-      "to": "To:",
-      "change-address": "Change address",
-      "button": {
-        "confirm": "Confirm",
-        "cancel": "Cancel"
-      }
-    }
-  },
   "home-address": {
     "edit": {
       "page-title": "Change home address",
