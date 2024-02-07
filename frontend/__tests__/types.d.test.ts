@@ -1,3 +1,5 @@
+import { describe, expectTypeOf, it } from 'vitest';
+
 import { type ExtractFuncParm, type ExtractLast, type RemoveLast, type ToFunc, type ToIntersection, type ToTuple, type ToTupleArray } from '~/types';
 
 describe('ToFunc<T> utility type', () => {

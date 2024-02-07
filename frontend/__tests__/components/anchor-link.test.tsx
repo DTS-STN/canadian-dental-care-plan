@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/react';
 
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { AnchorLink, type AnchorLinkProps } from '~/components/anchor-link';
 import { scrollAndFocusFromAnchorLink } from '~/utils/link-utils';

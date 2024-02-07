@@ -5,7 +5,7 @@ import { createRemixStub } from '@remix-run/testing';
 
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { useTranslation } from 'react-i18next';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { getClientEnv } from '~/utils/env';
