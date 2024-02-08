@@ -35,6 +35,25 @@ vi.mock('~/services/lookup-service.server', () => ({
       nameEn: 'French',
       nameFr: 'Français',
     }),
+    getAllCountries: vi.fn().mockReturnValue([
+      {
+        code: 'SUP',
+        nameEn: 'super country',
+        nameFr: '(FR) super country',
+      },
+    ]),
+    getAllRegions: vi.fn().mockReturnValue([
+      {
+        code: 'SP',
+        country: {
+          code: 'SUP',
+          nameEn: 'super country',
+          nameFr: '(FR) super country',
+        },
+        nameEn: 'sample',
+        nameFr: '(FR) sample',
+      },
+    ]),
   }),
 }));
 
@@ -109,6 +128,25 @@ describe('_gcweb-app.personal-information._index', () => {
           postalCode: 'postal code',
           country: 'super country',
         },
+        countryList: [
+          {
+            code: 'SUP',
+            nameEn: 'super country',
+            nameFr: '(FR) super country',
+          },
+        ],
+        regionList: [
+          {
+            code: 'SP',
+            country: {
+              code: 'SUP',
+              nameEn: 'super country',
+              nameFr: '(FR) super country',
+            },
+            nameEn: 'sample',
+            nameFr: '(FR) sample',
+          },
+        ],
       });
     });
   });

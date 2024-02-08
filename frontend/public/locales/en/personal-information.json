@@ -41,7 +41,7 @@
         "cancel": "Cancel"
       }
     },
-    "address-accuracy": {
+"address-accuracy": {
       "page-title": "Home Address Accuracy",
       "breadcrumbs": {
         "home": "Home",
@@ -55,7 +55,7 @@
       "requested-change": "Requested change:",
       "re-enter-address": "Re-enter your address"
     },
-    "suggested": {
+"suggested": {
       "page-title:": "Suggested address",
       "breadcrumbs": {
         "home": "Home",
@@ -97,6 +97,8 @@
         "personal-information": "Personal information",
         "mailing-address-change": "Change mailing address"
       },
+      "copy-home-address": "Copy home address",
+      "copy-home-address-note": "We have the following home address on file, which will be used as your mailing address:",   
       "field": {
         "address": "Address",
         "city": "City",
@@ -112,7 +114,7 @@
         "cancel": "Cancel"
       }
     },
-    "address-accuracy": {
+"address-accuracy": {
       "page-title": "Mailing Address Accuracy",
       "breadcrumbs": {
         "home": "Home",

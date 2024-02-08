@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
@@ -11,6 +11,8 @@ import { InputField } from '~/components/input-field';
 import { type InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { getAddressService } from '~/services/address-service.server';
+import { type RegionInfo } from '~/services/lookup-service.server';
+import { getLookupService } from '~/services/lookup-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -33,12 +35,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
   const addressInfo = await getAddressService().getAddressInfo(userId, userInfo?.homeAddress ?? '');
+  const countryList = await getLookupService().getAllCountries();
+  const regionList = await getLookupService().getAllRegions();
 
   if (!userInfo) {
     throw new Response(null, { status: 404 });
   }
 
-  return json({ addressInfo });
+  return json({ addressInfo, countryList, regionList });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -51,8 +55,8 @@ export async function action({ request }: ActionFunctionArgs) {
       .string()
       .min(1, { message: 'empty-field' })
       .transform((val) => val.trim()),
-    province: z.string().transform((val) => val.trim()),
-    postalCode: z.string().transform((val) => val.trim()),
+    province: z.string().trim().optional(),
+    postalCode: z.string().trim().optional(),
     country: z
       .string()
       .min(1, { message: 'empty-field' })
@@ -82,24 +86,57 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function PersonalInformationHomeAddressEdit() {
   const actionData = useActionData<typeof action>();
-  const { addressInfo } = useLoaderData<typeof loader>();
-  const { t } = useTranslation(i18nNamespaces);
+  const { addressInfo, countryList, regionList } = useLoaderData<typeof loader>();
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [countryRegions, setCountryRegions] = useState<RegionInfo[]>([]);
+  const { i18n, t } = useTranslation(i18nNamespaces);
   const errorSummaryId = 'error-summary';
+
+  useEffect(() => {
+    const filteredRegions = regionList.filter((region) => region.country.code === selectedCountry);
+    setCountryRegions(filteredRegions);
+  }, [selectedCountry, regionList]);
+
+  const countryChangeHandler = (event: React.SyntheticEvent<HTMLSelectElement>) => {
+    setSelectedCountry(event.currentTarget.value);
+  };
 
   const defaultValues = {
     address: actionData?.formData.address ?? addressInfo?.address,
     city: actionData?.formData.city ?? addressInfo?.city,
-    province: actionData?.formData.province ?? addressInfo?.province,
-    country: actionData?.formData.country ?? addressInfo?.country,
-    postalCode: actionData?.formData.postalCode ?? addressInfo?.postalCode,
+    province: actionData?.formData.province ?? addressInfo?.province ?? '',
+    country: actionData?.formData.country ?? addressInfo?.country ?? '',
+    postalCode: actionData?.formData.postalCode ?? addressInfo?.postalCode ?? '',
   };
 
-  // TODO remove this and get countries from lookup service
-  const countries: InputOptionProps[] = [
-    { label: 'Canada', value: 'Canada', id: 'ca' },
-    { label: 'Mexico', value: 'Mexico', id: 'mx' },
-    { label: 'United States', value: 'United States', id: 'us' },
-  ];
+  const countries: InputOptionProps[] = countryList.map((country) => {
+    return {
+      label: i18n.language === 'fr' ? country.nameFr : country.nameEn,
+      value: country.code,
+      id: country.code,
+    };
+  }) as InputOptionProps[];
+
+  const regions: InputOptionProps[] = selectedCountry
+    ? (countryRegions
+        .map((region) => {
+          return {
+            label: i18n.language === 'fr' ? region.nameFr : region.nameEn,
+            value: region.code,
+            id: region.code,
+          };
+        })
+        .sort((r1, r2) => (r1.id < r2.id ? -1 : 1)) as InputOptionProps[])
+    : (regionList
+        .filter((region) => region.country.code === defaultValues.country)
+        .map((region) => {
+          return {
+            label: i18n.language === 'fr' ? region.nameFr : region.nameEn,
+            value: region.code,
+            id: region.code,
+          };
+        })
+        .sort((r1, r2) => (r1.id < r2.id ? -1 : 1)) as InputOptionProps[]);
 
   /**
    * Gets an error message based on the provided internationalization (i18n) key.
@@ -139,9 +176,9 @@ export default function PersonalInformationHomeAddressEdit() {
       <Form className="max-w-prose" method="post">
         <InputField id="address" label={t('personal-information:home-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />
         <InputField id="city" label={t('personal-information:home-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
-        <InputField id="province" label={t('personal-information:home-address.edit.field.province')} name="province" defaultValue={defaultValues.province} errorMessage={errorMessages.province} />
+        <InputSelect id="province" label={t('personal-information:home-address.edit.field.province')} name="province" defaultValue={defaultValues.province} options={regions} errorMessage={errorMessages.province} />
         <InputField id="postalCode" label={t('personal-information:home-address.edit.field.postal-code')} name="postalCode" defaultValue={defaultValues.postalCode} errorMessage={errorMessages.postalCode} />
-        <InputSelect id="country" label={t('personal-information:home-address.edit.field.country')} name="country" defaultValue={defaultValues.country} required options={countries} errorMessage={errorMessages.country} />
+        <InputSelect id="country" label={t('personal-information:home-address.edit.field.country')} name="country" defaultValue={defaultValues.country} required options={countries} onChange={countryChangeHandler} errorMessage={errorMessages.country} />
 
         <div className="flex flex-wrap gap-3">
           <button id="change-button" className="btn btn-primary btn-lg">

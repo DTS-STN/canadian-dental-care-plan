@@ -25,7 +25,7 @@ const db = factory({
     addressCity: faker.location.city,
     addressProvince: () => faker.location.state({ abbreviated: true }),
     addressPostalZipCode: faker.location.zipCode,
-    addressCountry: () => 'Canada',
+    addressCountry: () => 'CAN',
   },
   preferredLanguage: {
     id: primaryKey(String),
@@ -103,7 +103,7 @@ db.pdf.create({
 
 // seed country list
 const countryCanada = db.country.create({
-  code: 'CDN',
+  code: 'CAN',
   nameEn: 'Canada',
   nameFr: '(FR) Canada',
 });
@@ -125,7 +125,7 @@ db.region.create({
   code: 'ON',
   country: countryCanada,
   nameEn: 'Ontario',
-  nameFr: '(FR) COntario',
+  nameFr: '(FR) Ontario',
 });
 
 db.region.create({
@@ -140,6 +140,20 @@ db.region.create({
   country: countryCanada,
   nameEn: 'Quebec',
   nameFr: '(FR) Quebec',
+});
+
+db.region.create({
+  code: 'NS',
+  country: countryCanada,
+  nameEn: 'Nova Scotia',
+  nameFr: '(FR) Nova Scotia',
+});
+
+db.region.create({
+  code: 'PE',
+  country: countryCanada,
+  nameEn: 'Prince Edward Island',
+  nameFr: '(FR) Prince Edward Island',
 });
 
 db.region.create({

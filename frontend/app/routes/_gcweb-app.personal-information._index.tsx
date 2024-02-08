@@ -25,6 +25,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
+  const countryList = await getLookupService().getAllCountries();
+  const regionList = await getLookupService().getAllRegions();
 
   if (!userInfo) {
     throw new Response(null, { status: 404 });
@@ -34,11 +36,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const homeAddressInfo = userInfo.homeAddress && (await getAddressService().getAddressInfo(userId, userInfo?.homeAddress));
   const mailingAddressInfo = userInfo.mailingAddress && (await getAddressService().getAddressInfo(userId, userInfo?.mailingAddress));
 
-  return json({ user: userInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo });
+  return json({ user: userInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, countryList, regionList });
 }
 
 export default function PersonalInformationIndex() {
-  const { user, preferredLanguage, homeAddressInfo, mailingAddressInfo } = useLoaderData<typeof loader>();
+  const { user, preferredLanguage, homeAddressInfo, mailingAddressInfo, countryList, regionList } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
   return (
     <>
@@ -67,11 +69,16 @@ export default function PersonalInformationIndex() {
           title={t('personal-information:index.home-address')}
           icon="glyphicon-map-marker"
         >
-          {homeAddressInfo ? (
-            <Address address={homeAddressInfo.address} city={homeAddressInfo.city} provinceState={homeAddressInfo.province} postalZipCode={homeAddressInfo.postalCode} country={homeAddressInfo.country} />
-          ) : (
-            <p>{t('personal-information:index.no-address-on-file')}</p>
+          {homeAddressInfo && (
+            <Address
+              address={homeAddressInfo?.address}
+              city={homeAddressInfo?.city}
+              provinceState={regionList.find((region) => region.code === homeAddressInfo.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
+              postalZipCode={homeAddressInfo?.postalCode}
+              country={countryList.find((country) => country.code === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
+            />
           )}
+          {!homeAddressInfo && <p>{t('personal-information:index.no-address-on-file')}</p>}
         </PersonalInformationSection>
         <PersonalInformationSection
           footer={
@@ -82,11 +89,16 @@ export default function PersonalInformationIndex() {
           title={t('personal-information:index.mailing-address')}
           icon="glyphicon-map-marker"
         >
-          {mailingAddressInfo ? (
-            <Address address={mailingAddressInfo.address} city={mailingAddressInfo.city} provinceState={mailingAddressInfo.province} postalZipCode={mailingAddressInfo.postalCode} country={mailingAddressInfo.country} />
-          ) : (
-            <p>{t('personal-information:index.no-address-on-file')}</p>
+          {mailingAddressInfo && (
+            <Address
+              address={mailingAddressInfo?.address}
+              city={mailingAddressInfo?.city}
+              provinceState={regionList.find((region) => region.code === mailingAddressInfo.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
+              postalZipCode={mailingAddressInfo?.postalCode}
+              country={countryList.find((country) => country.code === mailingAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ''}
+            />
           )}
+          {!mailingAddressInfo && <p>{t('personal-information:index.no-address-on-file')}</p>}
         </PersonalInformationSection>
         <PersonalInformationSection
           footer={

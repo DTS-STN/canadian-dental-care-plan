@@ -7,6 +7,30 @@ import { getAddressService } from '~/services/address-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 
+vi.mock('~/services/lookup-service.server', () => ({
+  getLookupService: vi.fn().mockReturnValue({
+    getAllCountries: vi.fn().mockReturnValue([
+      {
+        code: 'SUP',
+        nameEn: 'super country',
+        nameFr: '(FR) super country',
+      },
+    ]),
+    getAllRegions: vi.fn().mockReturnValue([
+      {
+        code: 'SP',
+        country: {
+          code: 'SUP',
+          nameEn: 'super country',
+          nameFr: '(FR) super country',
+        },
+        nameEn: 'sample',
+        nameFr: '(FR) sample',
+      },
+    ]),
+  }),
+}));
+
 vi.mock('~/services/address-service.server', () => ({
   getAddressService: vi.fn().mockReturnValue({
     getAddressInfo: vi.fn(),
@@ -38,12 +62,13 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
   describe('loader()', () => {
     it('should return addressInfo', async () => {
       const userService = getUserService();
+      const addressService = getAddressService();
 
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', firstName: 'John', lastName: 'Maverick' });
-      vi.mocked(getAddressService().getAddressInfo).mockResolvedValue({ address: '111 Fake Home St', city: 'city', country: 'country' });
+      vi.mocked(addressService.getAddressInfo).mockResolvedValue({ address: '111 Fake Home St', city: 'city', country: 'country' });
 
       const response = await loader({
-        request: new Request('http://localhost:3000/personal-information/address/edit'),
+        request: new Request('http://localhost:3000/personal-information/home-address/edit'),
         context: {},
         params: {},
       });
@@ -52,6 +77,25 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
 
       expect(data).toEqual({
         addressInfo: { address: '111 Fake Home St', city: 'city', country: 'country' },
+        countryList: [
+          {
+            code: 'SUP',
+            nameEn: 'super country',
+            nameFr: '(FR) super country',
+          },
+        ],
+        regionList: [
+          {
+            code: 'SP',
+            country: {
+              code: 'SUP',
+              nameEn: 'super country',
+              nameFr: '(FR) super country',
+            },
+            nameEn: 'sample',
+            nameFr: '(FR) sample',
+          },
+        ],
       });
     });
 
@@ -73,6 +117,7 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
   describe('action()', () => {
     it('should redirect to confirm page', async () => {
       const sessionService = await getSessionService();
+
       vi.mocked(sessionService.commitSession).mockResolvedValue('some-set-cookie-header');
 
       const formData = new FormData();
