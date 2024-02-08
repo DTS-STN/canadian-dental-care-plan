@@ -1,5 +1,6 @@
 {
   "include": ["./remix.env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["./tmp/**"],
   "compilerOptions": {
     "allowJs": true,
     "esModuleInterop": true,
