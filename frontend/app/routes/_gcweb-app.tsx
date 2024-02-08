@@ -106,30 +106,24 @@ function PageHeader() {
         ))}
       </div>
       <header>
-        <div id="wb-bnr" className="container">
-          <div className="row">
-            <section id="wb-lng" className="col-xs-3 col-sm-12 pull-right text-right">
-              <h2 className="sr-only">{t('gcweb:header.language-selection')}</h2>
-              <ul className="list-inline mrgn-bttm-0">
-                <li>
-                  <LanguageSwitcher>
-                    <span className="hidden md:inline-block">{t('gcweb:language-switcher.alt-lang')}</span>
-                    <abbr title={t('gcweb:language-switcher.alt-lang')} className="text-lg uppercase md:hidden">
-                      {t('gcweb:language-switcher.alt-lang-abbr')}
-                    </abbr>
-                  </LanguageSwitcher>
-                </li>
-              </ul>
-            </section>
-            <div className="brand col-xs-9 col-sm-5 col-md-4" property="publisher" typeof="GovernmentOrganization">
-              <Link to={t('gcweb:header.govt-of-canada.href')} property="url">
-                <img src={`/theme/gcweb/assets/sig-blk-${i18n.language}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" />
-              </Link>
-              <meta property="name" content={t('gcweb:header.govt-of-canada.text')} />
-              <meta property="areaServed" typeof="Country" content="Canada" />
-              <link property="logo" href="/theme/gcweb/assets/wmms-blk.svg" />
-            </div>
+        <div id="wb-bnr" className="container flex justify-between gap-6 py-2.5">
+          <div className="md:mt-7" property="publisher" typeof="GovernmentOrganization">
+            <Link to={t('gcweb:header.govt-of-canada.href')} property="url">
+              <img className="h-7 w-auto md:h-8" src={`/theme/gcweb/assets/sig-blk-${i18n.language}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
+            </Link>
+            <meta property="name" content={t('gcweb:header.govt-of-canada.text')} />
+            <meta property="areaServed" typeof="Country" content="Canada" />
+            <link property="logo" href="/theme/gcweb/assets/wmms-blk.svg" />
           </div>
+          <section id="wb-lng">
+            <h2 className="sr-only">{t('gcweb:header.language-selection')}</h2>
+            <LanguageSwitcher className="underline">
+              <span className="hidden md:block">{t('gcweb:language-switcher.alt-lang')}</span>
+              <abbr title={t('gcweb:language-switcher.alt-lang')} className="cursor-help font-bold uppercase md:hidden">
+                {t('gcweb:language-switcher.alt-lang-abbr')}
+              </abbr>
+            </LanguageSwitcher>
+          </section>
         </div>
         <section className="application-bar">
           <div className="container">

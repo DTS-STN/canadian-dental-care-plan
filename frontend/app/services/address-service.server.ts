@@ -1,5 +1,4 @@
 import jsonpatch from 'fast-json-patch';
-import moize from 'moize';
 import { z } from 'zod';
 
 import { getEnv } from '~/utils/env.server';
@@ -28,10 +27,19 @@ const addressInfoSchema = z.object({
 
 export type AddressInfo = z.infer<typeof addressInfoSchema>;
 
+let addressServiceSingleton: ReturnType<typeof createAddressService> | undefined = undefined;
+
 /**
  * Return a singleton instance (by means of memomization) of the address service.
  */
-export const getAddressService = moize(createAddressService, { onCacheAdd: () => log.info('Creating new address service') });
+export function getAddressService() {
+  if (!addressServiceSingleton) {
+    log.info('Creating new address service');
+    addressServiceSingleton = createAddressService();
+    log.info('New address service created');
+  }
+  return addressServiceSingleton;
+}
 
 function createAddressService() {
   const { INTEROP_API_BASE_URI } = getEnv();
