@@ -1,12 +1,13 @@
 import { type ChangeEvent, useEffect, useState } from 'react';
 
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
-import { Link, useLoaderData, useSearchParams } from '@remix-run/react';
+import { useLoaderData, useSearchParams } from '@remix-run/react';
 
 import { sort } from 'moderndash';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { InlineLink } from '~/components/inline-link';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('letters');
@@ -83,9 +84,9 @@ export default function LettersIndex() {
       <ul className="mt-2 divide-y rounded-md border">
         {letters.map((letter) => (
           <li key={letter.id} className="space-y-1 px-4 py-2 hover:bg-gray-100">
-            <Link reloadDocument to={`/letters/${letter.id}/download`} className="text-base font-bold no-underline">
+            <InlineLink reloadDocument to={`/letters/${letter.id}/download`} className="font-bold">
               {letter.subject}
-            </Link>
+            </InlineLink>
             <div className="text-sm">{t('letters:index.date', { date: getFormattedDate(letter.dateSent) })}</div>
           </li>
         ))}
