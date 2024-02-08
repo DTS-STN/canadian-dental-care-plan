@@ -3,10 +3,10 @@ import { redirect } from '@remix-run/node';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/_gcweb-app.personal-information.phone-number.confirm';
-import { sessionService } from '~/services/session-service.server';
+import { getSessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 
-vi.mock('~/services/user-service.server.ts', () => ({
+vi.mock('~/services/user-service.server', () => ({
   userService: {
     getUserId: vi.fn().mockReturnValue('some-id'),
     getUserInfo: vi.fn(),
@@ -14,15 +14,15 @@ vi.mock('~/services/user-service.server.ts', () => ({
   },
 }));
 
-vi.mock('~/services/session-service.server.ts', () => ({
-  sessionService: {
+vi.mock('~/services/session-service.server', () => ({
+  getSessionService: vi.fn().mockResolvedValue({
+    commitSession: vi.fn(),
     getSession: vi.fn().mockReturnValue({
       has: vi.fn(),
       get: vi.fn(),
       unset: vi.fn(),
     }),
-    commitSession: vi.fn(),
-  },
+  }),
 }));
 
 describe('_gcweb-app.personal-information.phone-number.confirm', () => {
@@ -33,9 +33,12 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
 
   describe('loader()', () => {
     it('should return userInfo and newPhoneNumber', async () => {
+      const sessionService = await getSessionService();
+      const session = await sessionService.getSession();
+
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', phoneNumber: '(111) 222-3333' });
-      vi.mocked((await sessionService.getSession()).get).mockResolvedValue('(444) 555-6666');
-      vi.mocked((await sessionService.getSession()).has).mockResolvedValueOnce(true);
+      vi.mocked(session.get).mockResolvedValue('(444) 555-6666');
+      vi.mocked(session.has).mockResolvedValueOnce(true);
 
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information/phone-number/confirm'),
@@ -54,7 +57,10 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
 
   describe('action()', () => {
     it('should redirect to the personal information on success', async () => {
-      vi.mocked((await sessionService.getSession()).has).mockResolvedValueOnce(true);
+      const sessionService = await getSessionService();
+      const session = await sessionService.getSession();
+
+      vi.mocked(session.has).mockResolvedValueOnce(true);
 
       let request = new Request('http://localhost:3000/personal-information/phone-number/confirm', {
         method: 'POST',

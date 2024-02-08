@@ -6,12 +6,12 @@ import { action, loader } from '~/routes/_gcweb-app.personal-information.phone-n
 import { userService } from '~/services/user-service.server';
 
 vi.mock('~/services/session-service.server', () => ({
-  sessionService: {
+  getSessionService: vi.fn().mockResolvedValue({
     commitSession: vi.fn(),
     getSession: vi.fn().mockReturnValue({
       set: vi.fn(),
     }),
-  },
+  }),
 }));
 
 vi.mock('~/services/user-service.server', () => ({

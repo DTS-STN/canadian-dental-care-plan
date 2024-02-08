@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
 import { getAddressService } from '~/services/address-service.server';
-import { sessionService } from '~/services/session-service.server';
+import { getSessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -27,6 +27,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userInfo = await userService.getUserInfo(userId);
   const homeAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.homeAddress ?? '');
 
+  const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   const newHomeAddress = await session.get('newHomeAddress');
   return json({ homeAddressInfo, newHomeAddress });
@@ -35,6 +36,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
+  const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));
 
   await getAddressService().updateAddressInfo(userId, userInfo?.homeAddress ?? '', session.get('newHomeAddress'));

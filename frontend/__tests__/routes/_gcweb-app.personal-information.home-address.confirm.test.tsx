@@ -4,15 +4,15 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/_gcweb-app.personal-information.home-address.confirm';
 import { getAddressService } from '~/services/address-service.server';
-import { sessionService } from '~/services/session-service.server';
+import { getSessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 
 vi.mock('~/services/session-service.server', () => ({
-  sessionService: {
+  getSessionService: vi.fn().mockResolvedValue({
     getSession: vi.fn().mockReturnValue({
       get: vi.fn(),
     }),
-  },
+  }),
 }));
 
 vi.mock('~/services/user-service.server', () => ({
@@ -37,6 +37,7 @@ describe('_gcweb-app.personal-information.home-address.confirm', () => {
 
   describe('loader()', () => {
     it('should return homeAddressInfo and newHomeAddress objects', async () => {
+      const sessionService = await getSessionService();
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', firstName: 'John', lastName: 'Maverick' });
       vi.mocked(getAddressService().getAddressInfo).mockResolvedValue({ address: '111 Fake Home St', city: 'city', country: 'country' });
       vi.mocked((await sessionService.getSession()).get).mockResolvedValue({ address: '123 Fake Home St.', city: 'city', country: 'country' });

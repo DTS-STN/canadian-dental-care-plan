@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { InputRadios } from '~/components/input-radios';
 import { getLookupService } from '~/services/lookup-service.server';
-import { sessionService } from '~/services/session-service.server';
+import { getSessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 import { PREFERRED_LANGUAGES } from '~/utils/constants';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -49,6 +49,7 @@ export async function action({ request }: ActionFunctionArgs) {
     });
   }
 
+  const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   session.set('preferredLanguage', parsedDataResult.data.preferredLanguage);
 

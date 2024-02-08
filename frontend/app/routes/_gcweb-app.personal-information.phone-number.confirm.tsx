@@ -4,7 +4,7 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import { sessionService } from '~/services/session-service.server';
+import { getSessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -24,6 +24,7 @@ export const handle = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
+  const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   if (!session.has('newPhoneNumber')) return redirect('/');
 
@@ -36,6 +37,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const userInfo = await userService.getUserInfo(userId);
   if (!userInfo) return redirect('/');
 
+  const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   if (!session.has('newPhoneNumber')) return redirect('/');
 
