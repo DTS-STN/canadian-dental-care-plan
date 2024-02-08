@@ -68,9 +68,9 @@ export default function LettersIndex() {
         <option value={orderEnumSchema.enum.desc}>{t('letters:index.newest')}</option>
         <option value={orderEnumSchema.enum.asc}>{t('letters:index.oldest')}</option>
       </select>
-      <ul className="mt-2 divide-y rounded-md border border-gray-300">
+      <ul className="mt-2 divide-y rounded-md border">
         {letters.map((letter) => (
-          <li key={letter.id} className="flex flex-col space-y-1 border-gray-300 px-4 py-2 hover:bg-gray-100">
+          <li key={letter.id} className="flex flex-col space-y-1 px-4 py-2 hover:bg-gray-100">
             <Link to={`/letters/${letter.id}/download`} className="text-base font-bold no-underline">
               {letter.subject}
             </Link>
