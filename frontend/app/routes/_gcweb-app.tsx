@@ -125,10 +125,10 @@ function PageHeader() {
             </LanguageSwitcher>
           </section>
         </div>
-        <section className="application-bar">
+        <section className="mt-4 bg-gray-700">
           <div className="container">
             <div className="justify-between sm:flex">
-              <h2>
+              <h2 className="my-2.5 text-2xl font-bold text-white hover:underline">
                 <Link to="/">{t('gcweb:header.application-title')}</Link>
               </h2>
               <nav ref={dropdown}>
@@ -138,7 +138,7 @@ function PageHeader() {
                   aria-haspopup="true"
                   data-testid="menuButton"
                   aria-expanded={showDropdown}
-                  className="font-body text-blue-primary ring-blue-hover flex h-full w-full items-center justify-between rounded-sm py-0.5 font-bold ring-offset-2 focus:mb-1 focus:outline-none focus:ring-2 sm:pl-4"
+                  className="text-blue-primary ring-blue-hover flex h-full w-full items-center justify-between rounded-sm py-0.5 font-bold text-white ring-offset-2 focus:mb-1 focus:outline-none focus:ring-2 sm:pl-4"
                 >
                   <span className="flex items-center">
                     <svg className="mr-4" width="35" height="35" viewBox="0 0 35 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -293,7 +293,7 @@ function Breadcrumbs() {
 
 function MenuOption({ onClick, icon, href, text }: { onClick: MouseEventHandler<HTMLAnchorElement>; icon?: ReactElement; href: string; text: string }) {
   return (
-    <Link className="font-body hover:text-blue-hover ring-blue-hover flex h-[55px] items-center rounded-sm px-4 ring-offset-2 focus:border-none focus:outline-none focus:ring-2" onClick={onClick} to={href} aria-label={text}>
+    <Link className="hover:text-blue-hover ring-blue-hover flex h-[55px] items-center rounded-sm px-4 ring-offset-2 focus:border-none focus:outline-none focus:ring-2" onClick={onClick} to={href} aria-label={text}>
       {icon}
       {text}
     </Link>
