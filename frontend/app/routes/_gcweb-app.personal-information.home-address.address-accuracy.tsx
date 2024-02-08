@@ -24,6 +24,7 @@ export const handle = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));
+  if (!session.has('newHomeAddress')) return redirect('/');
   const newHomeAddress = await session.get('newHomeAddress');
   return json({ newHomeAddress });
 }
@@ -39,7 +40,7 @@ export default function PersonalInformationHomeAddressAccuracy() {
     <>
       <Form method="post">
         <section className="alert alert-warning mt-4">
-          <h3>{t('personal-information:home-address.address-accuracy.invalid-address')}</h3>
+          <h2>{t('personal-information:home-address.address-accuracy.invalid-address')}</h2>
           <p>{t('personal-information:home-address.address-accuracy.invalid-address-info')}</p>
         </section>
         <p>{t('personal-information:home-address.address-accuracy.note')}</p>
@@ -52,8 +53,7 @@ export default function PersonalInformationHomeAddressAccuracy() {
               </h2>
             </header>
             <div className="panel-body">
-              {newHomeAddress && <Address address={newHomeAddress?.address} city={newHomeAddress?.city} provinceState={newHomeAddress?.province} postalZipCode={newHomeAddress?.postalCode} country={newHomeAddress?.country} />}
-              {!newHomeAddress && <p>{t('personal-information:index.no-address-on-file')}</p>}
+              <Address address={newHomeAddress?.address} city={newHomeAddress?.city} provinceState={newHomeAddress?.province} postalZipCode={newHomeAddress?.postalCode} country={newHomeAddress?.country} />
             </div>
           </section>
         </div>
