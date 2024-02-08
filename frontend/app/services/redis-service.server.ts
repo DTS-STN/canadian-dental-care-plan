@@ -16,39 +16,34 @@
  *
  * @see https://redis.io/docs/connect/clients/nodejs/
  */
+import moize from 'moize';
 import { type SetOptions, createClient } from 'redis';
 
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
-function createRedisService() {
-  const log = getLogger('redis-service.server');
+const log = getLogger('redis-service.server');
 
-  // singleton redis client instance; lazy initialized as needed
-  let redisClient: ReturnType<typeof createClient> | undefined = undefined;
+/**
+ * Return a singleton instance (by means of memomization) of the redis service.
+ */
+export const getRedisService = moize.promise(createRedisService, { onCacheAdd: () => log.info('Creating new redis service') });
 
-  async function createRedisClient() {
-    const { REDIS_URL, REDIS_USERNAME, REDIS_PASSWORD } = getEnv();
+async function createRedisService() {
+  const { REDIS_URL, REDIS_USERNAME, REDIS_PASSWORD } = getEnv();
 
-    log.info(`Creating new Redis client; url=[${REDIS_URL}]`);
-    return createClient({ url: REDIS_URL, username: REDIS_USERNAME, password: REDIS_PASSWORD })
-      .on('connect', () => log.info(`Redis client initiating connection to [${REDIS_URL}]`))
-      .on('ready', () => log.info('Redis client is ready to use'))
-      .on('reconnecting', () => log.info(`Redis client is reconnecting to [${REDIS_URL}]`))
-      .on('error', (error: Error) => log.error(`Redis client error connecting to [${REDIS_URL}]: ${error.message}`))
-      .connect();
-  }
-
-  async function getRedisClient() {
-    return (redisClient ??= await createRedisClient());
-  }
+  const redisClient = await createClient({ url: REDIS_URL, username: REDIS_USERNAME, password: REDIS_PASSWORD })
+    .on('connect', () => log.info(`Redis client initiating connection to [${REDIS_URL}]`))
+    .on('ready', () => log.info('Redis client is ready to use'))
+    .on('reconnecting', () => log.info(`Redis client is reconnecting to [${REDIS_URL}]`))
+    .on('error', (error: Error) => log.error(`Redis client error connecting to [${REDIS_URL}]: ${error.message}`))
+    .connect();
 
   return {
     /**
      * @see https://redis.io/commands/get/
      */
     get: async (key: string) => {
-      const redisClient = await getRedisClient();
       const value = await redisClient.get(key);
       return value ? JSON.parse(value) : null;
     },
@@ -56,17 +51,13 @@ function createRedisService() {
      * @see https://redis.io/commands/set/
      */
     set: async (key: string, value: unknown, options?: SetOptions) => {
-      const redisClient = await getRedisClient();
       return redisClient.set(key, JSON.stringify(value), options);
     },
     /**
      * @see https://redis.io/commands/del/
      */
     del: async (key: string) => {
-      const redisClient = await getRedisClient();
       return redisClient.del(key);
     },
   };
 }
-
-export const redisService = createRedisService();
