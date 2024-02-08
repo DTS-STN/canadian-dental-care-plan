@@ -321,11 +321,11 @@ function ServerError({ error }: { error: unknown }) {
 
   return (
     <ApplicationLayout>
-      <h1>
+      <PageTitle>
         <span className="glyphicon glyphicon-warning-sign mrgn-rght-md"></span>
         <span>{t('gcweb:server-error.page-title')}</span> <small className="help-inline">{t('gcweb:server-error.page-subtitle')}</small>
-      </h1>
-      <p>{t('gcweb:server-error.page-message')}</p>
+      </PageTitle>
+      <p className="pragraph-gutter">{t('gcweb:server-error.page-message')}</p>
       <ul className="list-disc ps-16">
         <li>{t('gcweb:server-error.option-01')}</li>
         <li>

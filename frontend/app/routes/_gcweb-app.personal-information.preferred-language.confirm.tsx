@@ -50,7 +50,7 @@ export default function PreferredLanguageConfirm() {
 
   return (
     <>
-      <p>{t('personal-information:preferred-language.confirm.confirm-message')}</p>
+      <p className="pragraph-gutter">{t('personal-information:preferred-language.confirm.confirm-message')}</p>
       <Form method="post">
         <dl>
           <dt>{t('personal-information:preferred-language.edit.language')}</dt>

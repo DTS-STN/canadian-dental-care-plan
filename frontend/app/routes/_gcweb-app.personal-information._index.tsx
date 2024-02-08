@@ -44,7 +44,7 @@ export default function PersonalInformationIndex() {
   const { i18n, t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <p>{t('personal-information:index.on-file')}</p>
+      <p className="pragraph-gutter">{t('personal-information:index.on-file')}</p>
       <div className="grid gap-6 md:grid-cols-2">
         <PersonalInformationSection title={t('personal-information:index.full-name')} icon="glyphicon-user">
           {`${user.firstName} ${user.lastName}`}

@@ -75,48 +75,44 @@ export default function HomeAddressSuggested() {
   const { t } = useTranslation(i18nNamespaces);
 
   return (
-    <>
-      <Form method="post">
-        <p>{t('personal-information:home-address.suggested.note')}</p>
-        <div className="grid gap-6 md:grid-cols-2">
-          <PersonalInformationSection title={t('personal-information:home-address.suggested.address-entered')} icon="glyphicon-map-marker">
-            {homeAddressInfo && <Address address={homeAddressInfo?.address} city={homeAddressInfo?.city} provinceState={homeAddressInfo?.province} postalZipCode={homeAddressInfo?.postalCode} country={homeAddressInfo?.country} />}
-            {!homeAddressInfo && <p>{t('personal-information:index.no-address-on-file')}</p>}
-          </PersonalInformationSection>
-          <PersonalInformationSection title={t('personal-information:home-address.suggested.address-suggested')} icon="glyphicon-map-marker">
-            {suggestedAddressInfo ? (
-              <Address address={suggestedAddressInfo?.address} city={suggestedAddressInfo?.city} provinceState={suggestedAddressInfo?.province} postalZipCode={suggestedAddressInfo?.postalCode} country={suggestedAddressInfo?.country} />
-            ) : (
-              <p>{t('personal-information:index.no-address-on-file')}</p>
-            )}
-          </PersonalInformationSection>
-        </div>
-        <div>
-          <InputRadios
-            id="selected-address"
-            name="selectedAddress"
-            legend={t('personal-information:home-address.suggested.choose-address')}
-            options={[
-              { value: 'home', children: t('personal-information:home-address.suggested.use-entered') },
-              { value: 'suggested', children: t('personal-information:home-address.suggested.use-suggested') },
-            ]}
-            required
-          />
-        </div>
-        <p>{t('personal-information:home-address.suggested.re-enter-address')}</p>
-        <div className="flex flex-wrap gap-3">
-          <button id="confirm-button" className="btn btn-primary btn-lg">
-            {t('personal-information:home-address.suggested.continue')}
-          </button>
-          <Link id="cancel-button" to="/personal-information/" className="btn btn-default btn-lg">
-            {t('personal-information:home-address.suggested.cancel')}
-          </Link>
-          <Link id="edit-button" to="/personal-information/home-address/edit" className="btn btn-default btn-lg">
-            {t('personal-information:home-address.suggested.edit')}
-          </Link>
-        </div>
-      </Form>
-    </>
+    <Form method="post">
+      <p className="pragraph-gutter">{t('personal-information:home-address.suggested.note')}</p>
+      <div className="grid gap-6 md:grid-cols-2">
+        <PersonalInformationSection title={t('personal-information:home-address.suggested.address-entered')} icon="glyphicon-map-marker">
+          {homeAddressInfo && <Address address={homeAddressInfo?.address} city={homeAddressInfo?.city} provinceState={homeAddressInfo?.province} postalZipCode={homeAddressInfo?.postalCode} country={homeAddressInfo?.country} />}
+          {!homeAddressInfo && <p>{t('personal-information:index.no-address-on-file')}</p>}
+        </PersonalInformationSection>
+        <PersonalInformationSection title={t('personal-information:home-address.suggested.address-suggested')} icon="glyphicon-map-marker">
+          {suggestedAddressInfo ? (
+            <Address address={suggestedAddressInfo?.address} city={suggestedAddressInfo?.city} provinceState={suggestedAddressInfo?.province} postalZipCode={suggestedAddressInfo?.postalCode} country={suggestedAddressInfo?.country} />
+          ) : (
+            <p>{t('personal-information:index.no-address-on-file')}</p>
+          )}
+        </PersonalInformationSection>
+      </div>
+      <InputRadios
+        id="selected-address"
+        name="selectedAddress"
+        legend={t('personal-information:home-address.suggested.choose-address')}
+        options={[
+          { value: 'home', children: t('personal-information:home-address.suggested.use-entered') },
+          { value: 'suggested', children: t('personal-information:home-address.suggested.use-suggested') },
+        ]}
+        required
+      />
+      <p className="pragraph-gutter">{t('personal-information:home-address.suggested.re-enter-address')}</p>
+      <div className="flex flex-wrap gap-3">
+        <button id="confirm-button" className="btn btn-primary btn-lg">
+          {t('personal-information:home-address.suggested.continue')}
+        </button>
+        <Link id="cancel-button" to="/personal-information/" className="btn btn-default btn-lg">
+          {t('personal-information:home-address.suggested.cancel')}
+        </Link>
+        <Link id="edit-button" to="/personal-information/home-address/edit" className="btn btn-default btn-lg">
+          {t('personal-information:home-address.suggested.edit')}
+        </Link>
+      </div>
+    </Form>
   );
 }
 

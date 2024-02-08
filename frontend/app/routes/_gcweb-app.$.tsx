@@ -30,7 +30,7 @@ export default function NotFound() {
       <PageTitle>
         <span>{t('gcweb:not-found.page-title')}</span> <small className="help-inline">{t('gcweb:not-found.page-subtitle')}</small>
       </PageTitle>
-      <p>{t('gcweb:not-found.page-message')}</p>
+      <p className="pragraph-gutter">{t('gcweb:not-found.page-message')}</p>
       <ul>
         <li>
           <Trans ns={i18nNamespaces} i18nKey="gcweb:not-found.page-link" components={{ home }} />

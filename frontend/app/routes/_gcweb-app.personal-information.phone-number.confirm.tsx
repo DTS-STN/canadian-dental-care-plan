@@ -60,7 +60,7 @@ export default function PhoneNumberConfirm() {
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <p>{t('personal-information:phone-number.confirm.confirm-message')}</p>
+      <p className="pragraph-gutter">{t('personal-information:phone-number.confirm.confirm-message')}</p>
       <Form method="post">
         <div className="form-group">
           <dl>

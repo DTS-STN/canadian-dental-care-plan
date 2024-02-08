@@ -35,7 +35,7 @@ export default function Index() {
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <p>{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.lastName })}</p>
+      <p className="pragraph-gutter">{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.lastName })}</p>
       <div className="grid gap-4 md:grid-cols-2">
         <CardLink title={t('index:personal-info')} to="/personal-information">
           {t('index:personal-info-desc')}
