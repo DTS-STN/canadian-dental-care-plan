@@ -25,7 +25,7 @@ import { createCookie, createFileSessionStorage, createSessionStorage } from '@r
 
 import { randomUUID } from 'node:crypto';
 
-import { redisService } from '~/services/redis-service.server';
+import { getRedisService } from '~/services/redis-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
@@ -63,20 +63,24 @@ function createSessionService() {
       cookie: sessionCookie,
       createData: async (data) => {
         log.debug(`Creating new session storage slot with id=[${sessionId}]`);
-        await redisService.set(sessionId, JSON.stringify(data), setCommandOptions);
+        const redisService = await getRedisService();
+        redisService.set(sessionId, JSON.stringify(data), setCommandOptions);
         return sessionId;
       },
       readData: async (id) => {
         log.debug(`Reading session data for session id=[${id}]`);
+        const redisService = await getRedisService();
         return JSON.parse(await redisService.get(id));
       },
       updateData: async (id, data) => {
         log.debug(`Updating session data for session id=[${id}]`);
-        await redisService.set(id, JSON.stringify(data), setCommandOptions);
+        const redisService = await getRedisService();
+        redisService.set(id, JSON.stringify(data), setCommandOptions);
       },
       deleteData: async (id) => {
         log.debug(`Deleting all session data for session id=[${id}]`);
-        await redisService.del(id);
+        const redisService = await getRedisService();
+        redisService.del(id);
       },
     });
   }
