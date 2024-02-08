@@ -3,7 +3,6 @@ import type { ComponentProps, ReactNode } from 'react';
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 
-import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 import { getUserService } from '~/services/user-service.server';
@@ -36,7 +35,7 @@ export default function Index() {
   return (
     <>
       <p className="pragraph-gutter">{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.lastName })}</p>
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2 md:gap-6">
         <CardLink title={t('index:personal-info')} to="/personal-information">
           {t('index:personal-info-desc')}
         </CardLink>
@@ -61,12 +60,10 @@ export default function Index() {
 }
 
 function CardLink({ children, inProgress, title, to }: { children: ReactNode; inProgress?: boolean; title: ReactNode; to: ComponentProps<typeof Link>['to'] }) {
-  const linkResetClassName = '!text-inherit !no-underline !decoration-inherit';
-  const linkClassName = clsx(linkResetClassName, 'block rounded-lg border border-gray-200 p-6 shadow hover:bg-gray-100');
   return (
-    <Link className={linkClassName} to={to}>
-      <h2 className="h3 !mt-0">{inProgress ? <ProgressLabel>{title}</ProgressLabel> : title}</h2>
-      <p className="m-0">{children}</p>
+    <Link className="block space-y-4 rounded-lg border border-gray-200 p-4 shadow hover:bg-gray-100" to={to}>
+      <h2 className="text-xl font-bold">{inProgress ? <ProgressLabel>{title}</ProgressLabel> : title}</h2>
+      <p>{children}</p>
     </Link>
   );
 }
