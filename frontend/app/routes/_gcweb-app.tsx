@@ -10,6 +10,7 @@ import cdcpStylesheet from '~/cdcp.css';
 import { AnchorLink } from '~/components/anchor-link';
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { PageTitle } from '~/components/page-title';
+import { getClientEnv } from '~/utils/env';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey } from '~/utils/route-utils';
 
@@ -66,13 +67,37 @@ function PageHeader() {
   const { i18n, t } = useTranslation(i18nNamespaces);
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const dropdown = useRef<HTMLDivElement>(null);
+  const { SCCH_BASE_URI } = getClientEnv();
   const menuOptions = [
     {
-      id: 'signOut',
-      key: 'signOutKey',
+      id: 'dashboard-id',
+      path: t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }),
+      showIcon: false,
+      value: t('gcweb:header.menu-dashboard.text'),
+    },
+    {
+      id: 'profile-id',
+      path: t('gcweb:header.menu-profile.href', { baseUri: SCCH_BASE_URI }),
+      showIcon: false,
+      value: t('gcweb:header.menu-profile.text'),
+    },
+    {
+      id: 'securitySettings-id',
+      path: t('gcweb:header.menu-security-settings.href', { baseUri: SCCH_BASE_URI }),
+      showIcon: false,
+      value: t('gcweb:header.menu-security-settings.text'),
+    },
+    {
+      id: 'contactUs-id',
+      path: t('gcweb:header.menu-contact-us.href', { baseUri: SCCH_BASE_URI }),
+      showIcon: false,
+      value: t('gcweb:header.menu-contact-us.text'),
+    },
+    {
+      id: 'signOut-id',
       path: '/auth/logout',
       showIcon: true,
-      value: t('gcweb:header.menu-sign-out'),
+      value: t('gcweb:header.menu-sign-out.text'),
     },
   ];
   useEffect(() => {
@@ -167,7 +192,7 @@ function PageHeader() {
                   <div id="dropdownNavbar" className="text-deep-blue-dark z-10 rounded-b-[5px] bg-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] sm:absolute sm:w-[260px]" aria-labelledby="dropdownLargeButton">
                     {menuOptions.map((element, index) => {
                       return (
-                        <div key={element.key}>
+                        <div key={element.id}>
                           <Link
                             className={`${index === 0 ? 'border-none' : 'border-t-2'} font-body hover:text-blue-hover ring-blue-hover flex h-[55px] items-center rounded-sm px-4 ring-offset-2 focus:border-none focus:outline-none focus:ring-2`}
                             onClick={() => setShowDropdown((currentState) => !currentState)}

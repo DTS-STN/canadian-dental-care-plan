@@ -9,7 +9,15 @@
     "govt-of-canada.text": "Gouvernement du Canada",
     "govt-of-canada.href": "https://www.canada.ca/fr.html",
     "menu-title": "Compte",
-    "menu-sign-out": "Se déconnecter"
+    "menu-dashboard.text": "Mon tableau de bord",
+    "menu-dashboard.href": "{{baseUri}}/fr/mon-tableau-de-bord",
+    "menu-profile.text": "Profil",
+    "menu-profile.href": "{{baseUri}}/fr/profil",
+    "menu-security-settings.text": "Paramètres de sécurité",
+    "menu-security-settings.href": "{{baseUri}}/fr/parametres-securite",
+    "menu-contact-us.text": "Contactez-nous",
+    "menu-contact-us.href": "{{baseUri}}/fr/contactez-nous",
+    "menu-sign-out.text": "Se déconnecter"
   },
   "footer": {
     "about-site": "À propos de ce site",
