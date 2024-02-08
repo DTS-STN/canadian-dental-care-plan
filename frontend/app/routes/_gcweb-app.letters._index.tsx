@@ -61,27 +61,23 @@ export default function LettersIndex() {
 
   return (
     <div>
-      <label htmlFor="sort-order" className="text-sm">
+      <label htmlFor="sort-order" className="block text-sm font-medium text-gray-900">
         <strong>{t('letters:index.filter')}</strong>
       </label>
-      <select id="sort-order" value={sortOrder} onChange={handleOnSortOrderChange} className="text-sm">
+      <select id="sort-order" value={sortOrder} onChange={handleOnSortOrderChange} className="block rounded-md border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-blue-500">
         <option value={orderEnumSchema.enum.desc}>{t('letters:index.newest')}</option>
         <option value={orderEnumSchema.enum.asc}>{t('letters:index.oldest')}</option>
       </select>
       <div className="mt-2 border-l border-r border-t">
-        <div className="grid grid-cols-3 divide-x divide-gray-300 bg-gray-100 md:grid-cols-[3fr_1fr_1fr]">
-          <strong className="border-b border-gray-300 px-4">{t('letters:index.subject')}</strong>
-          <strong className="border-b border-gray-300 px-4">{t('letters:index.date-sent')}</strong>
-          <strong className="border-b border-gray-300 px-4">{t('letters:index.reference-id')}</strong>
-        </div>
         <ul>
           {letters.map((letter) => (
-            <li key={letter.id} className="grid grid-cols-3 divide-x divide-gray-300 md:grid-cols-[3fr_1fr_1fr]">
-              <span className="border-b border-gray-300 px-4">
-                <Link to={`/letters/${letter.id}/download`}>{letter.subject}</Link>
+            <li key={letter.id} className="flex flex-col border-b border-gray-300 px-4 py-2 hover:bg-gray-100">
+              <Link to={`/letters/${letter.id}/download`} className="text-base font-bold no-underline">
+                {letter.subject}
+              </Link>
+              <span className="text-sm">
+                {t('letters:index.date')}&nbsp;{letter.dateSent}
               </span>
-              <span className="border-b border-gray-300 px-4">{letter.dateSent}</span>
-              <span className="border-b border-gray-300 px-4">{letter.referenceId}</span>
             </li>
           ))}
         </ul>
