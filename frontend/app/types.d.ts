@@ -2,9 +2,9 @@ import { type ParseKeys } from 'i18next';
 
 import type gcweb from '../public/locales/en/gcweb.json';
 import type index from '../public/locales/en/index.json';
+import type letters from '../public/locales/en/letters.json';
 import type personalInformation from '../public/locales/en/personal-information.json';
 import type updatePhoneNumber from '../public/locales/en/update-phone-number.json';
-import type letters from '../public/locales/en/letters.json';
 import { type PublicEnv } from '~/utils/env.server';
 import { type Breadcrumbs, type I18nNamespaces, type PageIdentifier, type PageTitleI18nKey } from '~/utils/route-utils';
 
@@ -98,7 +98,7 @@ declare module 'i18next' {
       gcweb: typeof gcweb;
       'personal-information': typeof personalInformation;
       'update-phone-number': typeof updatePhoneNumber;
-      'letters': typeof letters;
+      letters: typeof letters;
       index: typeof index;
     };
   }
