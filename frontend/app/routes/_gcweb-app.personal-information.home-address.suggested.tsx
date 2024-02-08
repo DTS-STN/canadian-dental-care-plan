@@ -65,7 +65,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
   return redirect('/personal-information/home-address/confirm', {
     headers: {
-      'Set-Cookie': await getSessionService.commitSession(session),
+      'Set-Cookie': await sessionService.commitSession(session),
     },
   });
 }
