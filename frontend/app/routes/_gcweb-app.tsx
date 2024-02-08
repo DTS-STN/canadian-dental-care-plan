@@ -1,4 +1,4 @@
-import type { ComponentProps, ReactNode } from 'react';
+import type { ComponentProps, MouseEventHandler, ReactElement, ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
 import { type LinksFunction } from '@remix-run/node';
@@ -10,6 +10,7 @@ import cdcpStylesheet from '~/cdcp.css';
 import { AnchorLink } from '~/components/anchor-link';
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { PageTitle } from '~/components/page-title';
+import { SignOutIcon } from '~/components/sign-out-icon';
 import { getClientEnv } from '~/utils/env';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey } from '~/utils/route-utils';
@@ -68,38 +69,9 @@ function PageHeader() {
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const dropdown = useRef<HTMLDivElement>(null);
   const { SCCH_BASE_URI } = getClientEnv();
-  const menuOptions = [
-    {
-      id: 'dashboard-id',
-      path: t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI }),
-      showIcon: false,
-      value: t('gcweb:header.menu-dashboard.text'),
-    },
-    {
-      id: 'profile-id',
-      path: t('gcweb:header.menu-profile.href', { baseUri: SCCH_BASE_URI }),
-      showIcon: false,
-      value: t('gcweb:header.menu-profile.text'),
-    },
-    {
-      id: 'securitySettings-id',
-      path: t('gcweb:header.menu-security-settings.href', { baseUri: SCCH_BASE_URI }),
-      showIcon: false,
-      value: t('gcweb:header.menu-security-settings.text'),
-    },
-    {
-      id: 'contactUs-id',
-      path: t('gcweb:header.menu-contact-us.href', { baseUri: SCCH_BASE_URI }),
-      showIcon: false,
-      value: t('gcweb:header.menu-contact-us.text'),
-    },
-    {
-      id: 'signOut-id',
-      path: '/auth/logout',
-      showIcon: true,
-      value: t('gcweb:header.menu-sign-out.text'),
-    },
-  ];
+
+  const onClickMenuHandler = () => setShowDropdown((currentState) => !currentState);
+
   useEffect(() => {
     if (!showDropdown) return;
 
@@ -190,28 +162,11 @@ function PageHeader() {
                 </button>
                 {showDropdown && (
                   <div id="dropdownNavbar" className="text-deep-blue-dark z-10 rounded-b-[5px] bg-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] sm:absolute sm:w-[260px]" aria-labelledby="dropdownLargeButton">
-                    {menuOptions.map((element, index) => {
-                      return (
-                        <div key={element.id}>
-                          <Link
-                            className={`${index === 0 ? 'border-none' : 'border-t-2'} font-body hover:text-blue-hover ring-blue-hover flex h-[55px] items-center rounded-sm px-4 ring-offset-2 focus:border-none focus:outline-none focus:ring-2`}
-                            onClick={() => setShowDropdown((currentState) => !currentState)}
-                            to={element.path}
-                            aria-label={element.value}
-                          >
-                            {element.showIcon && (
-                              <svg width="18" height="15" viewBox="0 0 18 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-3">
-                                <path
-                                  d="M13.1665 3.33333L11.9915 4.50833L14.1415 6.66667H5.6665V8.33333H14.1415L11.9915 10.4833L13.1665 11.6667L17.3332 7.5L13.1665 3.33333ZM2.33317 1.66667H8.99984V0H2.33317C1.4165 0 0.666504 0.75 0.666504 1.66667V13.3333C0.666504 14.25 1.4165 15 2.33317 15H8.99984V13.3333H2.33317V1.66667Z"
-                                  fill="#284162"
-                                />
-                              </svg>
-                            )}
-                            {element.value}
-                          </Link>
-                        </div>
-                      );
-                    })}
+                    <MenuOption onClick={onClickMenuHandler} href={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} text={t('gcweb:header.menu-dashboard.text')} />
+                    <MenuOption onClick={onClickMenuHandler} href={t('gcweb:header.menu-profile.href', { baseUri: SCCH_BASE_URI })} text={t('gcweb:header.menu-profile.text')} />
+                    <MenuOption onClick={onClickMenuHandler} href={t('gcweb:header.menu-security-settings.href', { baseUri: SCCH_BASE_URI })} text={t('gcweb:header.menu-security-settings.text')} />
+                    <MenuOption onClick={onClickMenuHandler} href={t('gcweb:header.menu-contact-us.href', { baseUri: SCCH_BASE_URI })} text={t('gcweb:header.menu-contact-us.text')} />
+                    <MenuOption onClick={onClickMenuHandler} icon={<SignOutIcon />} href={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} text={t('gcweb:header.menu-sign-out.text')} />
                   </div>
                 )}
               </nav>
@@ -340,6 +295,15 @@ function Breadcrumbs() {
         </ol>
       </div>
     </nav>
+  );
+}
+
+function MenuOption({ onClick, icon, href, text }: { onClick: MouseEventHandler<HTMLAnchorElement>; icon?: ReactElement; href: string; text: string }) {
+  return (
+    <Link className="font-body hover:text-blue-hover ring-blue-hover flex h-[55px] items-center rounded-sm px-4 ring-offset-2 focus:border-none focus:outline-none focus:ring-2" onClick={onClick} to={href} aria-label={text}>
+      {icon}
+      {text}
+    </Link>
   );
 }
 
