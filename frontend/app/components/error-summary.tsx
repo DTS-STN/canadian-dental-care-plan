@@ -92,7 +92,7 @@ export function ErrorSummary({ errors, id }: ErrorSummaryProps) {
   const { t } = useTranslation(['gcweb']);
 
   return (
-    <section id={id} className="my-5 space-y-3 border-l-[6px] border-[#d3080c] p-5" tabIndex={-1}>
+    <section id={id} className="my-5 space-y-3 border-l-[6px] border-red-700 p-5" tabIndex={-1}>
       <h2 className="m-0 text-2xl font-bold">{t('gcweb:error-summary.header', { count: errors.length })}</h2>
       {errors.length > 0 && (
         <ul className="m-0 list-disc space-y-2 pl-10 ">
