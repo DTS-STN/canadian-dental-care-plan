@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { loader } from '~/routes/_gcweb-app.personal-information._index';
 
-vi.mock('~/services/user-service.server.ts', () => ({
+vi.mock('~/services/user-service.server', () => ({
   userService: {
     getUserId: vi.fn().mockReturnValue('00000000-0000-0000-0000-000000000000'),
     getUserInfo: vi.fn().mockReturnValue({
@@ -15,7 +15,8 @@ vi.mock('~/services/user-service.server.ts', () => ({
     }),
   },
 }));
-vi.mock('~/services/lookup-service.server.ts', () => ({
+
+vi.mock('~/services/lookup-service.server', () => ({
   lookupService: {
     getAllPreferredLanguages: vi.fn().mockReturnValue([
       {
@@ -36,8 +37,9 @@ vi.mock('~/services/lookup-service.server.ts', () => ({
     }),
   },
 }));
-vi.mock('~/services/address-service.server.ts', () => ({
-  addressService: {
+
+vi.mock('~/services/address-service.server', () => ({
+  getAddressService: vi.fn().mockReturnValue({
     getAddressInfo: vi.fn().mockReturnValue({
       address: 'address',
       city: 'mega-city',
@@ -45,12 +47,12 @@ vi.mock('~/services/address-service.server.ts', () => ({
       postalCode: 'postal code',
       country: 'super country',
     }),
-  },
+  }),
 }));
+
 describe('_gcweb-app.personal-information._index', () => {
   afterEach(() => {
     vi.clearAllMocks();
-    vi.resetModules();
   });
 
   describe('loader()', () => {

@@ -4,7 +4,7 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
-import { addressService } from '~/services/address-service.server';
+import { getAddressService } from '~/services/address-service.server';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -25,7 +25,7 @@ export const handle = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
-  const homeAddressInfo = await addressService.getAddressInfo(userId, userInfo?.homeAddress ?? '');
+  const homeAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.homeAddress ?? '');
 
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   const newHomeAddress = await session.get('newHomeAddress');
@@ -37,7 +37,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const userInfo = await userService.getUserInfo(userId);
   const session = await sessionService.getSession(request.headers.get('Cookie'));
 
-  await addressService.updateAddressInfo(userId, userInfo?.homeAddress ?? '', session.get('newHomeAddress'));
+  await getAddressService().updateAddressInfo(userId, userInfo?.homeAddress ?? '', session.get('newHomeAddress'));
 
   return redirect('/personal-information');
 }

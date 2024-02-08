@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
-import { addressService } from '~/services/address-service.server';
+import { getAddressService } from '~/services/address-service.server';
 import { lookupService } from '~/services/lookup-service.server';
 import { userService } from '~/services/user-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -30,8 +30,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
   const preferredLanguage = userInfo.preferredLanguage && (await lookupService.getPreferredLanguage(userInfo?.preferredLanguage));
 
-  const homeAddressInfo = userInfo.homeAddress && (await addressService.getAddressInfo(userId, userInfo?.homeAddress));
-  const mailingAddressInfo = userInfo.mailingAddress && (await addressService.getAddressInfo(userId, userInfo?.mailingAddress));
+  const homeAddressInfo = userInfo.homeAddress && (await getAddressService().getAddressInfo(userId, userInfo?.homeAddress));
+  const mailingAddressInfo = userInfo.mailingAddress && (await getAddressService().getAddressInfo(userId, userInfo?.mailingAddress));
 
   return json({ user: userInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo });
 }

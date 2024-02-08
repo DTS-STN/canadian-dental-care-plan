@@ -3,15 +3,15 @@ import { redirect } from '@remix-run/node';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/_gcweb-app.personal-information.home-address.edit';
-import { addressService } from '~/services/address-service.server';
+import { getAddressService } from '~/services/address-service.server';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 
 vi.mock('~/services/address-service.server', () => ({
-  addressService: {
+  getAddressService: vi.fn().mockReturnValue({
     getAddressInfo: vi.fn(),
     updateAddressInfo: vi.fn(),
-  },
+  }),
 }));
 
 vi.mock('~/services/session-service.server', () => ({
@@ -33,13 +33,12 @@ vi.mock('~/services/user-service.server', () => ({
 describe('_gcweb-app.personal-information.home-address.edit', () => {
   afterEach(() => {
     vi.clearAllMocks();
-    vi.resetModules();
   });
 
   describe('loader()', () => {
     it('should return addressInfo', async () => {
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', firstName: 'John', lastName: 'Maverick' });
-      vi.mocked(addressService.getAddressInfo).mockResolvedValue({ address: '111 Fake Home St', city: 'city', country: 'country' });
+      vi.mocked(getAddressService().getAddressInfo).mockResolvedValue({ address: '111 Fake Home St', city: 'city', country: 'country' });
 
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information/address/edit'),
@@ -55,7 +54,7 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
     });
 
     it('should throw 404 response if addressInfo is not found', async () => {
-      vi.mocked(addressService.getAddressInfo).mockResolvedValue(null);
+      vi.mocked(getAddressService().getAddressInfo).mockResolvedValue(null);
 
       try {
         await loader({
