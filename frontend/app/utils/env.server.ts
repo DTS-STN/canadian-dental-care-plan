@@ -12,13 +12,18 @@ function tryOrElseFalse(fn: () => unknown) {
   catch { return false; }
 }
 
+// @see app/mocks/node.ts
+const validMockNames = ['cct', 'lookup', 'power-platform', 'raoidc', 'wsaddress'];
+
 // refiners
+const areValidMockNames = (arr: Array<string>) => arr.every((str) => validMockNames.includes(str));
 const isValidPublicKey = (val: string) => tryOrElseFalse(() => publicKeyPemToCryptoKey(val));
 const isValidPrivateKey = (val: string) => tryOrElseFalse(() => privateKeyPemToCryptoKey(val));
 
 // transformers
+const csvToArray = (csv?: string) => csv?.split(',').map((str) => str.trim()) ?? [];
+const emptyToUndefined = (val?: string) => (val === '' ? undefined : val);
 const toBoolean = (val?: string) => val === 'true';
-const toUndefined = (val?: string) => (val === '' ? undefined : val);
 
 /**
  * Environment variables that will be available to server only.
@@ -34,7 +39,7 @@ const serverEnv = z.object({
   AUTH_JWT_PUBLIC_KEY: z.string().refine(isValidPublicKey),
   AUTH_RAOIDC_BASE_URL: z.string().trim().min(1),
   AUTH_RAOIDC_CLIENT_ID: z.string().trim().min(1),
-  AUTH_RAOIDC_PROXY_URL: z.string().trim().transform(toUndefined).optional(),
+  AUTH_RAOIDC_PROXY_URL: z.string().trim().transform(emptyToUndefined).optional(),
 
   // language cookie settings
   LANG_COOKIE_NAME: z.string().default('_gc_lang'),
@@ -65,14 +70,8 @@ const serverEnv = z.object({
   JAVASCRIPT_ENABLED: z.string().transform(toBoolean).default('true'),
 
   // mocks settings
-  ENABLED_MOCKS: z
-    .string() // TODO :: GjB :: can this instead be a z.enum()
-    .transform((val) => val.split(',').map((val) => val.trim()))
-    .default(''),
-  MOCK_AUTH_ALLOWED_REDIRECTS: z
-    .string()
-    .transform((val) => val.split(',').map((val) => val.trim()))
-    .default('http://localhost:3000/auth/callback/raoidc'),
+  ENABLED_MOCKS: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidMockNames).default(''),
+  MOCK_AUTH_ALLOWED_REDIRECTS: z.string().transform(emptyToUndefined).transform(csvToArray).default('http://localhost:3000/auth/callback/raoidc'),
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;
