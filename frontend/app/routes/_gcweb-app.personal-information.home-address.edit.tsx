@@ -10,7 +10,7 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputField } from '~/components/input-field';
 import { type InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
-import { addressService } from '~/services/address-service.server';
+import { getAddressService } from '~/services/address-service.server';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -31,7 +31,7 @@ export const handle = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
-  const addressInfo = await addressService.getAddressInfo(userId, userInfo?.homeAddress ?? '');
+  const addressInfo = await getAddressService().getAddressInfo(userId, userInfo?.homeAddress ?? '');
 
   if (!userInfo) {
     throw new Response(null, { status: 404 });

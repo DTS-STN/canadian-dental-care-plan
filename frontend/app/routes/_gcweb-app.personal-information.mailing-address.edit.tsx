@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
-import { addressService } from '~/services/address-service.server';
+import { getAddressService } from '~/services/address-service.server';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -29,8 +29,8 @@ export const handle = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
-  const addressInfo = await addressService.getAddressInfo(userId, userInfo?.mailingAddress ?? '');
-  const homeAddressInfo = await addressService.getAddressInfo(userId, userInfo?.homeAddress ?? '');
+  const addressInfo = await getAddressService().getAddressInfo(userId, userInfo?.mailingAddress ?? '');
+  const homeAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.homeAddress ?? '');
 
   if (!userInfo) {
     throw new Response(null, { status: 404 });

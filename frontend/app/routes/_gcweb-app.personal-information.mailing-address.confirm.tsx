@@ -4,7 +4,7 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
-import { addressService } from '~/services/address-service.server';
+import { getAddressService } from '~/services/address-service.server';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -25,7 +25,7 @@ export const handle = {
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
-  const mailingAddressInfo = await addressService.getAddressInfo(userId, userInfo?.mailingAddress ?? '');
+  const mailingAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.mailingAddress ?? '');
 
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   const newMailingAddress = await session.get('newMailingAddress');
@@ -37,7 +37,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const userInfo = await userService.getUserInfo(userId);
   const session = await sessionService.getSession(request.headers.get('Cookie'));
 
-  await addressService.updateAddressInfo(userId, userInfo?.mailingAddress ?? '', session.get('newMailingAddress'));
+  await getAddressService().updateAddressInfo(userId, userInfo?.mailingAddress ?? '', session.get('newMailingAddress'));
 
   return redirect('/personal-information');
 }
