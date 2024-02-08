@@ -70,7 +70,7 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
       const response = await action({ request, context: {}, params: {} });
 
       expect(response.status).toBe(302);
-      expect(response).toEqual(redirect('/personal-information', { headers: { 'Set-Cookie': 'undefined' } }));
+      expect(response.headers.get('location')).toBe('/personal-information');
     });
 
     it('should redirect to homepage page when newPhoneNumber is missing', async () => {

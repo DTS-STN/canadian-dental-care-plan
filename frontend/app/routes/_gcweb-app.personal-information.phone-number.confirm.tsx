@@ -3,6 +3,7 @@ import { json, redirect } from '@remix-run/node';
 import { Form, Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
+import { redirectWithSuccess } from 'remix-toast';
 
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
@@ -47,7 +48,7 @@ export async function action({ request }: ActionFunctionArgs) {
   await userService.updateUserInfo(userId, userInfo);
   session.unset('newPhoneNumber');
 
-  return redirect('/personal-information', {
+  return redirectWithSuccess('/personal-information', 'Phone number has been updated.', {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),
     },
