@@ -317,16 +317,15 @@ function ServerError({ error }: { error: unknown }) {
 
   // (content will be added by <Trans>)
   // eslint-disable-next-line jsx-a11y/anchor-has-content
-  const home = <Link to="/" />;
+  const home = <InlineLink to="/" />;
 
   return (
     <ApplicationLayout>
       <PageTitle>
-        <span className="glyphicon glyphicon-warning-sign mrgn-rght-md"></span>
-        <span>{t('gcweb:server-error.page-title')}</span> <small className="help-inline">{t('gcweb:server-error.page-subtitle')}</small>
+        {t('gcweb:server-error.page-title')} <small className="text-2xl font-normal text-neutral-500">{t('gcweb:server-error.page-subtitle')}</small>
       </PageTitle>
       <p className="pragraph-gutter">{t('gcweb:server-error.page-message')}</p>
-      <ul className="list-disc ps-16">
+      <ul className="list-disc space-y-2 pl-10">
         <li>{t('gcweb:server-error.option-01')}</li>
         <li>
           <Trans ns={i18nNamespaces} i18nKey="gcweb:server-error.option-02" components={{ home }} />
