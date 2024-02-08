@@ -8,6 +8,7 @@ import reactToastifyStyleSheet from 'react-toastify/dist/ReactToastify.css';
 import { getToast } from 'remix-toast';
 
 import { Toaster } from './components/toaster';
+import cdcpStyleSheet from '~/cdcp.css';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import tailwindStyleSheet from '~/tailwind.css';
@@ -18,6 +19,7 @@ import { useDocumentTitleI18nKey, useI18nNamespaces, usePageTitleI18nKey } from 
 export const links = () => [
   { rel: 'stylesheet', href: tailwindStyleSheet },
   { rel: 'stylesheet', href: reactToastifyStyleSheet },
+  { rel: 'stylesheet', href: cdcpStyleSheet },
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {

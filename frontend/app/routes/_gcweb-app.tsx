@@ -1,12 +1,10 @@
 import type { ComponentProps, MouseEventHandler, ReactElement, ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
-import { type LinksFunction } from '@remix-run/node';
 import { Link, Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 
-import cdcpStylesheet from '~/cdcp.css';
 import { AnchorLink } from '~/components/anchor-link';
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { PageTitle } from '~/components/page-title';
@@ -18,11 +16,6 @@ import { useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, use
 const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
 export const handle = { i18nNamespaces } as const satisfies RouteHandleData;
-
-export const links: LinksFunction = () => [
-  { rel: 'stylesheet', href: '/theme/gcweb/css/theme.min.css' },
-  { rel: 'stylesheet', href: cdcpStylesheet },
-];
 
 export function ErrorBoundary() {
   const error = useRouteError();
