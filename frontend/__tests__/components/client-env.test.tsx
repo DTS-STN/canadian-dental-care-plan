@@ -12,6 +12,7 @@ describe('<ClientEnv>', () => {
       I18NEXT_DEBUG: true,
       LANG_QUERY_PARAM: 'locale',
       JAVASCRIPT_ENABLED: false,
+      SCCH_BASE_URI: 'http://www.example.com',
     };
 
     const { container } = render(<ClientEnv env={env} nonce={nonce} />);

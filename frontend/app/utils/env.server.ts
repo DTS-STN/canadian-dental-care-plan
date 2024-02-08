@@ -72,6 +72,8 @@ const serverEnv = z.object({
   // mocks settings
   ENABLED_MOCKS: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidMockNames).default(''),
   MOCK_AUTH_ALLOWED_REDIRECTS: z.string().transform(emptyToUndefined).transform(csvToArray).default('http://localhost:3000/auth/callback/raoidc'),
+
+  SCCH_BASE_URI: z.string().url().default('https://www.example.com'),
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;
@@ -84,6 +86,7 @@ const publicEnv = serverEnv.pick({
   I18NEXT_DEBUG: true,
   LANG_QUERY_PARAM: true,
   JAVASCRIPT_ENABLED: true,
+  SCCH_BASE_URI: true,
 });
 
 export type PublicEnv = z.infer<typeof publicEnv>;
