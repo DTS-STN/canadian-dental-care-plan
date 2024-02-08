@@ -1,13 +1,14 @@
 import { type MouseEvent } from 'react';
 
-import { Link, type LinkProps, useSearchParams } from '@remix-run/react';
+import { useSearchParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
+import { InlineLink, type InlineLinkProps } from './inline-link';
 import { getClientEnv } from '~/utils/env';
 import { getAltLanguage, switchLanguageCookie } from '~/utils/locale-utils';
 
-export type LanguageSwitcherProps = Omit<LinkProps, 'to' | 'reloadDocument' | 'onClick'>;
+export type LanguageSwitcherProps = Omit<InlineLinkProps, 'to' | 'reloadDocument' | 'onClick'>;
 
 /**
  * Component that can be used to switch from one language to another.
@@ -46,8 +47,8 @@ export function LanguageSwitcher({ children, ...props }: LanguageSwitcherProps) 
   }
 
   return (
-    <Link data-testid="language-switcher" onClick={changeLanguage} reloadDocument to={{ search }} {...props}>
+    <InlineLink data-testid="language-switcher" onClick={changeLanguage} reloadDocument to={{ search }} {...props}>
       {children}
-    </Link>
+    </InlineLink>
   );
 }

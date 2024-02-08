@@ -113,8 +113,8 @@ function PageHeader() {
               <ul className="list-inline mrgn-bttm-0">
                 <li>
                   <LanguageSwitcher>
-                    <span className="hidden-xs">{t('gcweb:language-switcher.alt-lang')}</span>
-                    <abbr title={t('gcweb:language-switcher.alt-lang')} className="visible-xs h3 mrgn-tp-sm mrgn-bttm-0 text-uppercase">
+                    <span className="hidden md:inline-block">{t('gcweb:language-switcher.alt-lang')}</span>
+                    <abbr title={t('gcweb:language-switcher.alt-lang')} className="text-lg uppercase md:hidden">
                       {t('gcweb:language-switcher.alt-lang-abbr')}
                     </abbr>
                   </LanguageSwitcher>
