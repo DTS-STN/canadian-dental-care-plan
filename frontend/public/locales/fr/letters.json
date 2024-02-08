@@ -6,7 +6,7 @@
       "letters": "(FR) Letters"
     },
     "subject": "(FR) Subject",
-    "date": "(FR) Date:",
+    "date": "(FR) Date: {{date}}",
     "reference-id": "(FR) Reference ID",
     "filter": "(FR) Filter by:",
     "newest": "(FR) Newest first",

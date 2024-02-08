@@ -61,27 +61,23 @@ export default function LettersIndex() {
 
   return (
     <div>
-      <label htmlFor="sort-order" className="block text-sm font-medium text-gray-900">
+      <label htmlFor="sort-order" className="block w-fit text-base font-medium">
         <strong>{t('letters:index.filter')}</strong>
       </label>
-      <select id="sort-order" value={sortOrder} onChange={handleOnSortOrderChange} className="block rounded-md border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-blue-500">
+      <select id="sort-order" value={sortOrder} onChange={handleOnSortOrderChange} className="block rounded border p-2.5 text-sm outline-none focus:border-blue-500 focus:ring-blue-500">
         <option value={orderEnumSchema.enum.desc}>{t('letters:index.newest')}</option>
         <option value={orderEnumSchema.enum.asc}>{t('letters:index.oldest')}</option>
       </select>
-      <div className="mt-2 border-l border-r border-t">
-        <ul>
-          {letters.map((letter) => (
-            <li key={letter.id} className="flex flex-col border-b border-gray-300 px-4 py-2 hover:bg-gray-100">
-              <Link to={`/letters/${letter.id}/download`} className="text-base font-bold no-underline">
-                {letter.subject}
-              </Link>
-              <span className="text-sm">
-                {t('letters:index.date')}&nbsp;{letter.dateSent}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ul className="mt-2 divide-y rounded-md border border-gray-300">
+        {letters.map((letter) => (
+          <li key={letter.id} className="flex flex-col space-y-1 border-gray-300 px-4 py-2 hover:bg-gray-100">
+            <Link to={`/letters/${letter.id}/download`} className="text-base font-bold no-underline">
+              {letter.subject}
+            </Link>
+            <div className="text-sm">{t('letters:index.date', { date: letter.dateSent })}</div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
