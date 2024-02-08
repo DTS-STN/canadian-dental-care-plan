@@ -229,23 +229,23 @@ function PageFooter() {
   return (
     <footer id="wb-info">
       <h2 className="sr-only">{t('gcweb:footer.about-site')}</h2>
-      <div className="gc-sub-footer">
-        <div className="d-flex align-items-center container">
+      <div className="bg-stone-50 py-6">
+        <div className="container flex items-center justify-between gap-4">
           <nav aria-labelledby="gc-corporate">
             <h3 id="gc-corporate" className="sr-only">
               {t('gcweb:footer.gc-corporate')}
             </h3>
-            <ul>
-              <li>
+            <ul className="flex flex-wrap items-center sm:justify-center">
+              <li className="me-4 hover:underline md:me-6">
                 <Link to={t('gcweb:footer.terms-conditions.href')}>{t('gcweb:footer.terms-conditions.text')}</Link>
               </li>
-              <li>
+              <li className="me-4 hover:underline md:me-6">
                 <Link to={t('gcweb:footer.privacy.href')}>{t('gcweb:footer.privacy.text')}</Link>
               </li>
             </ul>
           </nav>
-          <div className="wtrmrk align-self-end">
-            <img src="/theme/gcweb/assets/wmms-blk.svg" alt={t('gcweb:footer.gc-symbol')} />
+          <div>
+            <img src="/theme/gcweb/assets/wmms-blk.svg" alt={t('gcweb:footer.gc-symbol')} width={300} height={71} className="h-10 w-auto" />
           </div>
         </div>
       </div>
