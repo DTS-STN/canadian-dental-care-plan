@@ -65,10 +65,7 @@ export default function LettersIndex() {
   }
 
   function getFormattedDate(date: string | undefined) {
-    if (!date) {
-      return date;
-    }
-    if (!dateTimeFormat) {
+    if (!date || !dateTimeFormat) {
       return date;
     }
     return dateTimeFormat.format(new Date(date));
