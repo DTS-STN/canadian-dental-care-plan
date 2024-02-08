@@ -27,15 +27,17 @@ export const handle = {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const userId = await getUserService.getUserId();
-  const userInfo = await getUserService.getUserInfo(userId);
+  const userService = getUserService();
+  const sessionService = await getSessionService();
+  const userId = await userService.getUserId();
+  const userInfo = await userService.getUserInfo(userId);
   const homeAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.homeAddress ?? '');
   //
   // TODO
   // CHANGE THE SOURCE OF THE SUGGESTED ADDRESS TO WHAT WS ADDRESS SERVICE IS RETURNING INSTEAD OF MAILING ADDRESS
   //
   const suggestedAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.mailingAddress ?? '');
-  const session = await getSessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request.headers.get('Cookie'));
   session.set('homeAddress', homeAddressInfo);
   session.set('suggestedAddress', suggestedAddressInfo);
 
@@ -43,8 +45,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const userId = await getUserService.getUserId();
-  const userInfo = await getUserService.getUserInfo(userId);
+  const userService = getUserService();
+  const sessionService = await getSessionService();
+  const userId = await userService.getUserId();
+  const userInfo = await userService.getUserInfo(userId);
   const homeAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.homeAddress ?? '');
   //
   // TODO
@@ -53,7 +57,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const suggestedAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.mailingAddress ?? '');
   const formDataRadio = Object.fromEntries(await request.formData());
   //retrieve selected address, store it in the session and then redirect to the confirm page...
-  const session = await getSessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request.headers.get('Cookie'));
   if (formDataRadio.selectedAddress === 'home') {
     session.set('newHomeAddress', homeAddressInfo);
   } else {
