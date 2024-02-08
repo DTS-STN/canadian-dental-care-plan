@@ -29,12 +29,11 @@ vi.mock('~/utils/env.server', () => ({
 }));
 
 vi.mock('~/services/session-service.server', () => ({
-  createSessionService: vi.fn(),
-  sessionService: {
+  getSessionService: vi.fn().mockResolvedValue({
     getSession: vi.fn().mockReturnValue({
       get: vi.fn(),
     }),
-  },
+  }),
 }));
 
 describe('_gcweb-app.personal-information.preferred-language.confirm', () => {

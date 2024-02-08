@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/_gcweb-app.personal-information.home-address.edit';
 import { getAddressService } from '~/services/address-service.server';
-import { sessionService } from '~/services/session-service.server';
+import { getSessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 
 vi.mock('~/services/address-service.server', () => ({
@@ -15,12 +15,12 @@ vi.mock('~/services/address-service.server', () => ({
 }));
 
 vi.mock('~/services/session-service.server', () => ({
-  sessionService: {
+  getSessionService: vi.fn().mockResolvedValue({
+    commitSession: vi.fn(),
     getSession: vi.fn().mockReturnValue({
       set: vi.fn(),
     }),
-    commitSession: vi.fn(),
-  },
+  }),
 }));
 
 vi.mock('~/services/user-service.server', () => ({
@@ -70,6 +70,7 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
 
   describe('action()', () => {
     it('should redirect to confirm page', async () => {
+      const sessionService = await getSessionService();
       vi.mocked(sessionService.commitSession).mockResolvedValue('some-set-cookie-header');
 
       const formData = new FormData();

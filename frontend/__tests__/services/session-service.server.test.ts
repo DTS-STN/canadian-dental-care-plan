@@ -41,23 +41,32 @@ describe('session-service.server tests', () => {
 
   describe('getSessionService() -- SESSION_STORAGE_TYPE flag tests', () => {
     it('should create a new file-backed session storage when SESSION_STORAGE_TYPE=file', async () => {
+      const { getSessionService } = await import('~/services/session-service.server');
+
       vi.mocked(getEnv, { partial: true }).mockReturnValue({ SESSION_STORAGE_TYPE: 'file' });
-      const { sessionService: _sessionService } = await import('~/services/session-service.server');
+      const _sessionService = await getSessionService();
+
       expect(createFileSessionStorage).toHaveBeenCalled();
     });
 
     it('should create a new redis-backed session storage when SESSION_STORAGE_TYPE=redis', async () => {
+      const { getSessionService } = await import('~/services/session-service.server');
+
       vi.mocked(getEnv, { partial: true }).mockReturnValue({ SESSION_STORAGE_TYPE: 'redis' });
-      const { sessionService: _sessionService } = await import('~/services/session-service.server');
+      const _sessionService = await getSessionService();
+
       expect(createSessionStorage).toHaveBeenCalled();
     });
   });
 
   describe('getSessionService() -- redis-backed session storage tests', () => {
     it('should call redisService.set() when creating redis-backed session storage', async () => {
+      const { getSessionService } = await import('~/services/session-service.server');
       const redisService = await getRedisService();
+
       vi.mocked(getEnv, { partial: true }).mockReturnValue({ SESSION_STORAGE_TYPE: 'redis' });
-      const { sessionService: _sessionService } = await import('~/services/session-service.server');
+      const _sessionService = await getSessionService();
+
       const strategy = vi.mocked(createSessionStorage).mock.calls[0][0];
       const sessionId = await strategy.createData('value');
       expect(sessionId).toBeDefined();
@@ -65,10 +74,13 @@ describe('session-service.server tests', () => {
     });
 
     it('should call redisService().get() when reading from redis-backed session storage', async () => {
+      const { getSessionService } = await import('~/services/session-service.server');
       const redisService = await getRedisService();
+
       vi.mocked(getEnv, { partial: true }).mockReturnValue({ SESSION_STORAGE_TYPE: 'redis' });
       vi.mocked(redisService.get).mockResolvedValue('"value"');
-      const { sessionService: _sessionService } = await import('~/services/session-service.server');
+      const _sessionService = await getSessionService();
+
       const strategy = vi.mocked(createSessionStorage).mock.calls[0][0];
       await strategy.readData('id');
       expect(redisService.get).toHaveBeenCalled();
@@ -76,17 +88,23 @@ describe('session-service.server tests', () => {
 
     it('should call redisService().set() when updating redis-backed session storage', async () => {
       vi.mocked(getEnv, { partial: true }).mockReturnValue({ SESSION_STORAGE_TYPE: 'redis' });
+      const { getSessionService } = await import('~/services/session-service.server');
       const redisService = await getRedisService();
-      const { sessionService: _sessionService } = await import('~/services/session-service.server');
+
+      const _sessionService = await getSessionService();
+
       const sessionStrategy = vi.mocked(createSessionStorage).mock.calls[0][0];
       await sessionStrategy.updateData('id', 'value');
       expect(redisService.set).toHaveBeenCalled();
     });
 
     it('should call redisService().del() when deleting from redis-backed session storage', async () => {
+      const { getSessionService } = await import('~/services/session-service.server');
       const redisService = await getRedisService();
+
       vi.mocked(getEnv, { partial: true }).mockReturnValue({ SESSION_STORAGE_TYPE: 'redis' });
-      const { sessionService: _sessionService } = await import('~/services/session-service.server');
+      const _sessionService = await getSessionService();
+
       const sessionStrategy = vi.mocked(createSessionStorage).mock.calls[0][0];
       await sessionStrategy.deleteData('id');
       expect(redisService.del).toHaveBeenCalled();

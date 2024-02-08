@@ -11,7 +11,7 @@ import { InputField } from '~/components/input-field';
 import { type InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { getAddressService } from '~/services/address-service.server';
-import { sessionService } from '~/services/session-service.server';
+import { getSessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -68,6 +68,7 @@ export async function action({ request }: ActionFunctionArgs) {
     });
   }
 
+  const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   session.set('newHomeAddress', parsedDataResult.data);
 

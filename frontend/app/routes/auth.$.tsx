@@ -3,7 +3,7 @@ import { type LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { z } from 'zod';
 
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { sessionService } from '~/services/session-service.server';
+import { getSessionService } from '~/services/session-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 import { generateCallbackUri, generateRandomString } from '~/utils/raoidc-utils.server';
@@ -54,6 +54,7 @@ async function handleRaoidcLoginRequest({ params, request }: LoaderFunctionArgs)
   const { authUrl, codeVerifier, state } = raoidcService.generateSigninRequest(redirectUri);
 
   // codeVerifier and state will have to be validated in the callback handler
+  const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   session.set('codeVerifier', codeVerifier);
   session.set('state', state);
@@ -71,6 +72,7 @@ async function handleRaoidcLoginRequest({ params, request }: LoaderFunctionArgs)
 async function handleRaoidcCallbackRequest({ params, request }: LoaderFunctionArgs) {
   log.debug('Handling RAOIDC callback request');
   const raoidcService = await getRaoidcService();
+  const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   const codeVerifier = session.get('codeVerifier');
   const state = session.get('state');

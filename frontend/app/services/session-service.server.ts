@@ -23,15 +23,21 @@
  */
 import { createCookie, createFileSessionStorage, createSessionStorage } from '@remix-run/node';
 
+import moize from 'moize';
 import { randomUUID } from 'node:crypto';
 
 import { getRedisService } from '~/services/redis-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
-function createSessionService() {
-  const log = getLogger('session-service.server');
+const log = getLogger('session-service.server');
 
+/**
+ * Return a singleton instance (by means of memomization) of the session service.
+ */
+export const getSessionService = moize.promise(createSessionService, { onCacheAdd: () => log.info('Creating new session service') });
+
+async function createSessionService() {
   const env = getEnv();
 
   const sessionCookie = createCookie(env.SESSION_COOKIE_NAME, {
@@ -55,7 +61,8 @@ function createSessionService() {
       throw new Error(`Unknown session storage type: ${env.SESSION_STORAGE_TYPE}`);
   }
 
-  function createRedisSessionStorage() {
+  async function createRedisSessionStorage() {
+    const redisService = await getRedisService();
     const sessionId = randomUUID();
     const setCommandOptions = { EX: env.SESSION_EXPIRES_SECONDS };
 
@@ -63,28 +70,21 @@ function createSessionService() {
       cookie: sessionCookie,
       createData: async (data) => {
         log.debug(`Creating new session storage slot with id=[${sessionId}]`);
-        const redisService = await getRedisService();
-        redisService.set(sessionId, JSON.stringify(data), setCommandOptions);
+        await redisService.set(sessionId, JSON.stringify(data), setCommandOptions);
         return sessionId;
       },
       readData: async (id) => {
         log.debug(`Reading session data for session id=[${id}]`);
-        const redisService = await getRedisService();
         return JSON.parse(await redisService.get(id));
       },
       updateData: async (id, data) => {
         log.debug(`Updating session data for session id=[${id}]`);
-        const redisService = await getRedisService();
-        redisService.set(id, JSON.stringify(data), setCommandOptions);
+        await redisService.set(id, JSON.stringify(data), setCommandOptions);
       },
       deleteData: async (id) => {
         log.debug(`Deleting all session data for session id=[${id}]`);
-        const redisService = await getRedisService();
-        redisService.del(id);
+        await redisService.del(id);
       },
     });
   }
 }
-
-// singleton instance of session service
-export const sessionService = createSessionService();
