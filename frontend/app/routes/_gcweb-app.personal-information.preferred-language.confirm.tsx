@@ -4,7 +4,7 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import { lookupService } from '~/services/lookup-service.server';
+import { getLookupService } from '~/services/lookup-service.server';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -28,7 +28,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userInfo = await userService.getUserInfo(userId);
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   const preferredLanguageSession = await session.get('preferredLanguage');
-  const preferredLanguage = await lookupService.getPreferredLanguage(preferredLanguageSession);
+  const preferredLanguage = await getLookupService().getPreferredLanguage(preferredLanguageSession);
   return json({ userInfo, preferredLanguage });
 }
 

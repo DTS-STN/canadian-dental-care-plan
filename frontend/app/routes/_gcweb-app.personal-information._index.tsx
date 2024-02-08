@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
 import { getAddressService } from '~/services/address-service.server';
-import { lookupService } from '~/services/lookup-service.server';
+import { getLookupService } from '~/services/lookup-service.server';
 import { userService } from '~/services/user-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -28,7 +28,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (!userInfo) {
     throw new Response(null, { status: 404 });
   }
-  const preferredLanguage = userInfo.preferredLanguage && (await lookupService.getPreferredLanguage(userInfo?.preferredLanguage));
+  const preferredLanguage = userInfo.preferredLanguage && (await getLookupService().getPreferredLanguage(userInfo?.preferredLanguage));
 
   const homeAddressInfo = userInfo.homeAddress && (await getAddressService().getAddressInfo(userId, userInfo?.homeAddress));
   const mailingAddressInfo = userInfo.mailingAddress && (await getAddressService().getAddressInfo(userId, userInfo?.mailingAddress));

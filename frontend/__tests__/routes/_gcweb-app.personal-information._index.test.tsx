@@ -17,7 +17,7 @@ vi.mock('~/services/user-service.server', () => ({
 }));
 
 vi.mock('~/services/lookup-service.server', () => ({
-  lookupService: {
+  getLookupService: vi.fn().mockReturnValue({
     getAllPreferredLanguages: vi.fn().mockReturnValue([
       {
         id: 'en',
@@ -35,7 +35,7 @@ vi.mock('~/services/lookup-service.server', () => ({
       nameEn: 'French',
       nameFr: 'Français',
     }),
-  },
+  }),
 }));
 
 vi.mock('~/services/address-service.server', () => ({

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { InputRadios } from '~/components/input-radios';
-import { lookupService } from '~/services/lookup-service.server';
+import { getLookupService } from '~/services/lookup-service.server';
 import { sessionService } from '~/services/session-service.server';
 import { userService } from '~/services/user-service.server';
 import { PREFERRED_LANGUAGES } from '~/utils/constants';
@@ -32,7 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     throw new Response(null, { status: 404 });
   }
 
-  const preferredLanguages = await lookupService.getAllPreferredLanguages();
+  const preferredLanguages = await getLookupService().getAllPreferredLanguages();
   return json({ userInfo, preferredLanguages });
 }
 
