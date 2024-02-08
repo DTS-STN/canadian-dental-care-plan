@@ -109,7 +109,7 @@ function PageHeader() {
         <div id="wb-bnr" className="container">
           <div className="row">
             <section id="wb-lng" className="col-xs-3 col-sm-12 pull-right text-right">
-              <h2 className="wb-inv">{t('gcweb:header.language-selection')}</h2>
+              <h2 className="sr-only">{t('gcweb:header.language-selection')}</h2>
               <ul className="list-inline mrgn-bttm-0">
                 <li>
                   <LanguageSwitcher>
@@ -197,7 +197,7 @@ function PageDetails() {
 
   return (
     <section className="pagedetails">
-      <h2 className="wb-inv">{t('gcweb:page-details.page-details')}</h2>
+      <h2 className="sr-only">{t('gcweb:page-details.page-details')}</h2>
       <div className="row">
         <div className="col-xs-12">
           <dl id="wb-dtmd">
@@ -237,11 +237,11 @@ function PageFooter() {
 
   return (
     <footer id="wb-info">
-      <h2 className="wb-inv">{t('gcweb:footer.about-site')}</h2>
+      <h2 className="sr-only">{t('gcweb:footer.about-site')}</h2>
       <div className="gc-sub-footer">
         <div className="d-flex align-items-center container">
           <nav aria-labelledby="gc-corporate">
-            <h3 id="gc-corporate" className="wb-inv">
+            <h3 id="gc-corporate" className="sr-only">
               {t('gcweb:footer.gc-corporate')}
             </h3>
             <ul>

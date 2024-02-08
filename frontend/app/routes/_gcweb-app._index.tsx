@@ -77,7 +77,7 @@ function ProgressLabel({ children }: { children: ReactNode }) {
     <span className="flex flex-wrap items-center gap-4">
       <span>{children}</span>
       <span className="me-2 rounded border border-yellow-300 bg-yellow-100 px-2.5 py-0.5 text-sm font-medium text-yellow-800">
-        <span className="wb-inv">{t('index:label-in-progress.sr-only')}</span>
+        <span className="sr-only">{t('index:label-in-progress.sr-only')}</span>
         {t('index:label-in-progress.text')}
       </span>
     </span>
