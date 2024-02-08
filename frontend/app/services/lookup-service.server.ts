@@ -20,16 +20,13 @@ const countrySchema = z.object({
 
 const regionSchema = z.object({
   code: z.string(),
-  country: z.object({
-    code: z.string(),
-    nameEn: z.string(),
-    nameFr: z.string(),
-  }),
+  country: countrySchema,
   nameEn: z.string(),
   nameFr: z.string(),
 });
 
 export type PreferredLanguageInfo = z.infer<typeof preferredLanguageSchema>;
+export type RegionInfo = z.infer<typeof regionSchema>;
 
 /**
  * Return a singleton instance (by means of memomization) of the lookup service.

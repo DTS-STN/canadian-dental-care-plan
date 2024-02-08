@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
 import { getAddressService } from '~/services/address-service.server';
+import { getLookupService } from '~/services/lookup-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -27,11 +28,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
   const mailingAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.mailingAddress ?? '');
+  const countryList = await getLookupService().getAllCountries();
+  const regionList = await getLookupService().getAllRegions();
 
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   const newMailingAddress = await session.get('newMailingAddress');
-  return json({ mailingAddressInfo, newMailingAddress });
+  return json({ mailingAddressInfo, newMailingAddress, countryList, regionList });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -48,8 +51,8 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function PersonalInformationMailingAddressConfirm() {
-  const { mailingAddressInfo, newMailingAddress } = useLoaderData<typeof loader>();
-  const { t } = useTranslation(i18nNamespaces);
+  const { mailingAddressInfo, newMailingAddress, countryList, regionList } = useLoaderData<typeof loader>();
+  const { i18n, t } = useTranslation(i18nNamespaces);
   return (
     <>
       <Form method="post">
@@ -61,7 +64,13 @@ export default function PersonalInformationMailingAddressConfirm() {
                 <h3 className="panel-title">{t('personal-information:mailing-address.confirm.previous-mailing-address')}</h3>
               </header>
               <div className="panel-body">
-                <Address address={mailingAddressInfo.address} city={mailingAddressInfo.city} provinceState={mailingAddressInfo.province} postalZipCode={mailingAddressInfo.postalCode} country={mailingAddressInfo.country} />
+                <Address
+                  address={mailingAddressInfo.address}
+                  city={mailingAddressInfo.city}
+                  provinceState={regionList.find((region) => region.code === mailingAddressInfo.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
+                  postalZipCode={mailingAddressInfo.postalCode}
+                  country={countryList.find((country) => country.code === mailingAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
+                />
               </div>
             </section>
           )}
@@ -70,7 +79,13 @@ export default function PersonalInformationMailingAddressConfirm() {
               <h3 className="panel-title">{t('personal-information:mailing-address.confirm.new-mailing-address')}</h3>
             </header>
             <div className="panel-body">
-              <Address address={newMailingAddress.address} city={newMailingAddress.city} provinceState={newMailingAddress.province} postalZipCode={newMailingAddress.postalCode} country={newMailingAddress.country} />
+              <Address
+                address={newMailingAddress.address}
+                city={newMailingAddress.city}
+                provinceState={regionList.find((region) => region.code === newMailingAddress.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
+                postalZipCode={newMailingAddress.postalCode}
+                country={countryList.find((country) => country.code === newMailingAddress.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
+              />
             </div>
           </section>
         </div>

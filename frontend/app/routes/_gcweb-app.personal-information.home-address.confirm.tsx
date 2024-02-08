@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
 import { getAddressService } from '~/services/address-service.server';
+import { getLookupService } from '~/services/lookup-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -27,11 +28,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
   const homeAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.homeAddress ?? '');
+  const countryList = await getLookupService().getAllCountries();
+  const regionList = await getLookupService().getAllRegions();
 
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   const newHomeAddress = await session.get('newHomeAddress');
-  return json({ homeAddressInfo, newHomeAddress });
+  return json({ homeAddressInfo, newHomeAddress, countryList, regionList });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -47,8 +50,8 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function PersonalInformationHomeAddressConfirm() {
-  const { homeAddressInfo, newHomeAddress } = useLoaderData<typeof loader>();
-  const { t } = useTranslation(i18nNamespaces);
+  const { homeAddressInfo, newHomeAddress, countryList, regionList } = useLoaderData<typeof loader>();
+  const { i18n, t } = useTranslation(i18nNamespaces);
   return (
     <>
       <Form method="post">
@@ -60,7 +63,13 @@ export default function PersonalInformationHomeAddressConfirm() {
                 <h3 className="panel-title">{t('personal-information:home-address.confirm.previous-home-address')}</h3>
               </header>
               <div className="panel-body">
-                <Address address={homeAddressInfo.address} city={homeAddressInfo.city} provinceState={homeAddressInfo.province} postalZipCode={homeAddressInfo.postalCode} country={homeAddressInfo.country} />
+                <Address
+                  address={homeAddressInfo.address}
+                  city={homeAddressInfo.city}
+                  provinceState={regionList.find((region) => region.code === homeAddressInfo.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
+                  postalZipCode={homeAddressInfo.postalCode}
+                  country={countryList.find((country) => country.code === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
+                />
               </div>
             </section>
           )}
@@ -69,7 +78,13 @@ export default function PersonalInformationHomeAddressConfirm() {
               <h3 className="panel-title">{t('personal-information:home-address.confirm.new-home-address')}</h3>
             </header>
             <div className="panel-body">
-              <Address address={newHomeAddress.address} city={newHomeAddress.city} provinceState={newHomeAddress.province} postalZipCode={newHomeAddress.postalCode} country={newHomeAddress.country} />
+              <Address
+                address={newHomeAddress.address}
+                city={newHomeAddress.city}
+                provinceState={regionList.find((region) => region.code === newHomeAddress.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
+                postalZipCode={newHomeAddress.postalCode}
+                country={countryList.find((country) => country.code === newHomeAddress.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
+              />
             </div>
           </section>
         </div>

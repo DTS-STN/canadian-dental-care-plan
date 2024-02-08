@@ -25,7 +25,7 @@
         "home": "(FR) Home",
         "personal-information": "(FR) Personal information",
         "home-address-change": "(FR) Change home address"
-      },
+      },   
       "field": {
         "address": "(FR) Adddress",
         "city": "(FR) City",
@@ -41,7 +41,7 @@
         "cancel": "(FR) Cancel"
       }
     },
-    "address-accuracy": {
+"address-accuracy": {
       "page-title": "(FR) Home Address Accuracy",
       "breadcrumbs": {
         "home": "(FR) Home",
@@ -55,7 +55,7 @@
       "requested-change": "(FR) Requested change:",
       "re-enter-address": "(FR) Re-enter your address"
     },
-    "suggested": {
+"suggested": {
       "page-title:": "(FR) Suggested address",
       "breadcrumbs": {
         "home": "(FR) Home",
@@ -97,6 +97,8 @@
         "personal-information": "(FR) Personal information",
         "mailing-address-change": "(FR) Change mailing address"
       },
+      "copy-home-address": "(FR) Copy home address",      
+      "copy-home-address-note": "(FR) We have the following home address on file, which will be used as your mailing address:",   
       "field": {
         "address": "(FR) Address",
         "city": "(FR) City",
@@ -112,7 +114,7 @@
         "cancel": "(FR) Cancel"
       }
     },
-    "address-accuracy": {
+"address-accuracy": {
       "page-title": "(FR) Mailing Address Accuracy",
       "breadcrumbs": {
         "home": "(FR) Home",

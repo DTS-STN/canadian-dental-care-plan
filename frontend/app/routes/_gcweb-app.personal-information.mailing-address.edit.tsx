@@ -6,9 +6,14 @@ import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { Address } from '~/components/address';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
+import { type InputOptionProps } from '~/components/input-option';
+import { InputSelect } from '~/components/input-select';
 import { getAddressService } from '~/services/address-service.server';
+import { type RegionInfo } from '~/services/lookup-service.server';
+import { getLookupService } from '~/services/lookup-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -32,12 +37,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userInfo = await userService.getUserInfo(userId);
   const addressInfo = await getAddressService().getAddressInfo(userId, userInfo?.mailingAddress ?? '');
   const homeAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.homeAddress ?? '');
+  const countryList = await getLookupService().getAllCountries();
+  const regionList = await getLookupService().getAllRegions();
 
   if (!userInfo) {
     throw new Response(null, { status: 404 });
   }
 
-  return json({ addressInfo, homeAddressInfo });
+  return json({ addressInfo, homeAddressInfo, countryList, regionList });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -50,8 +57,8 @@ export async function action({ request }: ActionFunctionArgs) {
       .string()
       .min(1, { message: 'empty-field' })
       .transform((val) => val.trim()),
-    province: z.string().transform((val) => val.trim()),
-    postalCode: z.string().transform((val) => val.trim()),
+    province: z.string().trim().optional(),
+    postalCode: z.string().trim().optional(),
     country: z
       .string()
       .min(1, { message: 'empty-field' })
@@ -81,10 +88,21 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function PersonalInformationMailingAddressEdit() {
   const actionData = useActionData<typeof action>();
-  const { addressInfo, homeAddressInfo } = useLoaderData<typeof loader>();
-  const { t } = useTranslation(i18nNamespaces);
+  const { addressInfo, homeAddressInfo, countryList, regionList } = useLoaderData<typeof loader>();
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [countryRegions, setCountryRegions] = useState<RegionInfo[]>([]);
+  const { i18n, t } = useTranslation(i18nNamespaces);
   const errorSummaryId = 'error-summary';
   const [isCopyAddressChecked, setCopyAddressChecked] = useState(false);
+
+  useEffect(() => {
+    const filteredRegions = regionList.filter((region) => region.country.code === selectedCountry);
+    setCountryRegions(filteredRegions);
+  }, [selectedCountry, regionList]);
+
+  const countryChangeHandler = (event: React.SyntheticEvent<HTMLSelectElement>) => {
+    setSelectedCountry(event.currentTarget.value);
+  };
 
   const checkHandler = () => {
     setCopyAddressChecked((curState) => !curState);
@@ -97,6 +115,35 @@ export default function PersonalInformationMailingAddressEdit() {
     country: actionData?.formData.country ?? (isCopyAddressChecked ? homeAddressInfo?.country : addressInfo?.country),
     postalCode: actionData?.formData.postalCode ?? (isCopyAddressChecked ? homeAddressInfo?.postalCode : addressInfo?.postalCode),
   };
+
+  const countries: InputOptionProps[] = countryList.map((country) => {
+    return {
+      label: i18n.language === 'fr' ? country.nameFr : country.nameEn,
+      value: country.code,
+      id: country.code,
+    };
+  }) as InputOptionProps[];
+
+  const regions: InputOptionProps[] = selectedCountry
+    ? (countryRegions
+        .map((region) => {
+          return {
+            label: i18n.language === 'fr' ? region.nameFr : region.nameEn,
+            value: region.code,
+            id: region.code,
+          };
+        })
+        .sort((r1, r2) => (r1.id < r2.id ? -1 : 1)) as InputOptionProps[])
+    : (regionList
+        .filter((region) => region.country.code === defaultValues.country)
+        .map((region) => {
+          return {
+            label: i18n.language === 'fr' ? region.nameFr : region.nameEn,
+            value: region.code,
+            id: region.code,
+          };
+        })
+        .sort((r1, r2) => (r1.id < r2.id ? -1 : 1)) as InputOptionProps[]);
 
   /**
    * Gets an error message based on the provided internationalization (i18n) key.
@@ -134,56 +181,89 @@ export default function PersonalInformationMailingAddressEdit() {
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form className="max-w-prose" method="post">
-        <div className="checkbox gc-chckbxrdio">
-          <input id="copy-home-address" type="checkbox" name="ifCopyHomeAddress" checked={isCopyAddressChecked} onChange={checkHandler} />
-          <label id="copy-home-address" htmlFor="copy-home-address">
-            Copy home address
-          </label>
-        </div>
+        {homeAddressInfo && (
+          <div className="checkbox gc-chckbxrdio">
+            <input id="copy-home-address" type="checkbox" name="ifCopyHomeAddress" checked={isCopyAddressChecked} onChange={checkHandler} />
+            <label id="copy-home-address" htmlFor="copy-home-address">
+              {t('personal-information:mailing-address.edit.copy-home-address')}
+            </label>
+          </div>
+        )}
 
-        <InputField
-          id="address"
-          label={t('personal-information:mailing-address.edit.field.address')}
-          name="address"
-          required
-          key={isCopyAddressChecked ? homeAddressInfo?.address : addressInfo?.address}
-          defaultValue={defaultValues.address}
-          errorMessage={errorMessages.address}
-        />
-        <InputField
-          id="city"
-          label={t('personal-information:mailing-address.edit.field.city')}
-          name="city"
-          required
-          key={isCopyAddressChecked ? homeAddressInfo?.city : addressInfo?.city}
-          defaultValue={defaultValues.city}
-          errorMessage={errorMessages.city}
-        />
-        <InputField
-          id="province"
-          label={t('personal-information:mailing-address.edit.field.province')}
-          name="province"
-          key={isCopyAddressChecked ? homeAddressInfo?.province : addressInfo?.province}
-          defaultValue={defaultValues.province}
-          errorMessage={errorMessages.province}
-        />
-        <InputField
-          id="postalCode"
-          label={t('personal-information:mailing-address.edit.field.postal-code')}
-          name="postalCode"
-          key={isCopyAddressChecked ? homeAddressInfo?.postalCode : addressInfo?.postalCode}
-          defaultValue={defaultValues.postalCode}
-          errorMessage={errorMessages.postalCode}
-        />
-        <InputField
-          id="country"
-          label={t('personal-information:mailing-address.edit.field.country')}
-          name="country"
-          required
-          key={isCopyAddressChecked ? homeAddressInfo?.country : addressInfo?.country}
-          defaultValue={defaultValues.country}
-          errorMessage={errorMessages.country}
-        />
+        {isCopyAddressChecked && homeAddressInfo && (
+          <div>
+            <p>
+              <strong>{t('personal-information:mailing-address.edit.copy-home-address-note')}</strong>
+            </p>
+            <Address
+              address={homeAddressInfo.address}
+              city={homeAddressInfo.city}
+              provinceState={regionList.find((region) => region.code === homeAddressInfo?.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
+              postalZipCode={homeAddressInfo.postalCode}
+              country={countryList.find((country) => country.code === homeAddressInfo?.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
+            />
+            <input type="text" id="address" name="address" value={defaultValues.address} readOnly hidden />
+            <input type="text" id="city" name="city" value={defaultValues.city} readOnly hidden />
+            <input type="text" id="province" name="province" value={defaultValues.province} readOnly hidden />
+            <input type="text" id="postalCode" name="postalCode" value={defaultValues.postalCode} readOnly hidden />
+            <input type="text" id="country" name="country" value={defaultValues.country} readOnly hidden />
+          </div>
+        )}
+
+        {!isCopyAddressChecked && (
+          <>
+            <InputField
+              id="address"
+              label={t('personal-information:mailing-address.edit.field.address')}
+              name="address"
+              required
+              key={isCopyAddressChecked ? homeAddressInfo?.address : addressInfo?.address}
+              defaultValue={defaultValues.address}
+              errorMessage={errorMessages.address}
+            />
+
+            <InputField
+              id="city"
+              label={t('personal-information:mailing-address.edit.field.city')}
+              name="city"
+              required
+              key={isCopyAddressChecked ? homeAddressInfo?.city : addressInfo?.city}
+              defaultValue={defaultValues.city}
+              errorMessage={errorMessages.city}
+            />
+
+            <InputSelect
+              id="province"
+              label={t('personal-information:mailing-address.edit.field.province')}
+              name="province"
+              key={isCopyAddressChecked ? homeAddressInfo?.province : addressInfo?.province}
+              options={regions}
+              defaultValue={defaultValues?.province ?? ''}
+              errorMessage={errorMessages.province}
+            />
+
+            <InputField
+              id="postalCode"
+              label={t('personal-information:mailing-address.edit.field.postal-code')}
+              name="postalCode"
+              key={isCopyAddressChecked ? homeAddressInfo?.postalCode : addressInfo?.postalCode}
+              defaultValue={defaultValues.postalCode}
+              errorMessage={errorMessages.postalCode}
+            />
+
+            <InputSelect
+              id="country"
+              label={t('personal-information:mailing-address.edit.field.country')}
+              name="country"
+              required
+              key={isCopyAddressChecked ? homeAddressInfo?.country : addressInfo?.country}
+              options={countries}
+              onChange={countryChangeHandler}
+              defaultValue={defaultValues?.country ?? ''}
+              errorMessage={errorMessages.country}
+            />
+          </>
+        )}
 
         <div className="flex flex-wrap gap-3">
           <button id="change-button" className="btn btn-primary btn-lg">

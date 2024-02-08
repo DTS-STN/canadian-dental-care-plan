@@ -60,14 +60,15 @@ function createAddressService() {
   }
 
   async function updateAddressInfo(userId: string, addressId: string, addressInfo: AddressInfo) {
-    const curentAddressDto = await getAddressInfo(userId, addressId);
-    const addressDto = toAddressDto(addressInfo);
+    const currentAddressInfo = await getAddressInfo(userId, addressId);
 
-    if (!curentAddressDto) {
+    if (!currentAddressInfo) {
       return;
     }
+    const currentAddressDto = toAddressDto(currentAddressInfo);
+    const addressDto = toAddressDto(addressInfo);
 
-    const patch = jsonpatch.compare(curentAddressDto, { ...curentAddressDto, ...addressDto });
+    const patch = jsonpatch.compare(currentAddressDto, { ...currentAddressDto, ...addressDto });
 
     if (patch.length === 0) {
       return;
@@ -100,8 +101,8 @@ function toAddressDto(addressForm: AddressInfo): AddressDto {
     addressApartmentUnitNumber: String(addressForm.address?.match(/[\d|-]+/)),
     addressStreet: addressForm.address?.substring(addressForm.address?.indexOf(' ') + 1),
     addressCity: addressForm.city,
-    addressProvince: addressForm.province,
-    addressPostalZipCode: addressForm.postalCode,
+    addressProvince: addressForm.province ?? '',
+    addressPostalZipCode: addressForm.postalCode ?? '',
     addressCountry: addressForm.country,
   };
 }
