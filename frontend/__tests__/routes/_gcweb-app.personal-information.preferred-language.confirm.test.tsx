@@ -2,14 +2,14 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { loader } from '~/routes/_gcweb-app.personal-information.preferred-language.confirm';
 import { getLookupService } from '~/services/lookup-service.server';
-import { userService } from '~/services/user-service.server';
+import { getUserService } from '~/services/user-service.server';
 import { getEnv } from '~/utils/env.server';
 
 vi.mock('~/services/user-service.server', () => ({
-  userService: {
+  getUserService: vi.fn().mockReturnValue({
     getUserId: vi.fn().mockReturnValue('some-id'),
     getUserInfo: vi.fn(),
-  },
+  }),
 }));
 
 vi.mock('~/services/lookup-service.server', () => ({
@@ -43,6 +43,8 @@ describe('_gcweb-app.personal-information.preferred-language.confirm', () => {
 
   describe('loader()', () => {
     it('should return userInfo object if userInfo is found', async () => {
+      const userService = getUserService();
+
       vi.mocked(getEnv, { partial: true }).mockReturnValue({
         SESSION_STORAGE_TYPE: 'file',
         AUTH_JWT_PUBLIC_KEY: 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDT04V6j20+5DQPA7rZCBfabQeyhfNLrKuKSs1yZF/7+y+47Pw80eOmqhgsLQXK9avPMZSvjd++viZ/++jIdej5+J6ifH5KpuVskfgAMY9kPsRLFkJAK8Orph2gibQT/PdfKweSokRmErJxdTWJOqKYTOw607QPh91ubdlgx+VcVwIDAQAB',
@@ -67,6 +69,8 @@ describe('_gcweb-app.personal-information.preferred-language.confirm', () => {
     });
 
     it('should throw 404 response if userInfo is not found', async () => {
+      const userService = getUserService();
+
       vi.mocked(getEnv, { partial: true }).mockReturnValue({
         SESSION_STORAGE_TYPE: 'file',
         AUTH_JWT_PUBLIC_KEY: 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDT04V6j20+5DQPA7rZCBfabQeyhfNLrKuKSs1yZF/7+y+47Pw80eOmqhgsLQXK9avPMZSvjd++viZ/++jIdej5+J6ifH5KpuVskfgAMY9kPsRLFkJAK8Orph2gibQT/PdfKweSokRmErJxdTWJOqKYTOw607QPh91ubdlgx+VcVwIDAQAB',

@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { loader } from '~/routes/_gcweb-app.personal-information._index';
 
 vi.mock('~/services/user-service.server', () => ({
-  userService: {
+  getUserService: vi.fn().mockReturnValue({
     getUserId: vi.fn().mockReturnValue('00000000-0000-0000-0000-000000000000'),
     getUserInfo: vi.fn().mockReturnValue({
       firstName: 'John',
@@ -13,7 +13,7 @@ vi.mock('~/services/user-service.server', () => ({
       phoneNumber: '(555) 555-5555',
       preferredLanguage: 'fr',
     }),
-  },
+  }),
 }));
 
 vi.mock('~/services/lookup-service.server', () => ({

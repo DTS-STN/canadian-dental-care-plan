@@ -5,7 +5,7 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 
 import { getSessionService } from '~/services/session-service.server';
-import { userService } from '~/services/user-service.server';
+import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
@@ -22,6 +22,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
   const sessionService = await getSessionService();
@@ -32,6 +33,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const userService = getUserService();
   const userId = await userService.getUserId();
   if (!userId) return redirect('/');
   const userInfo = await userService.getUserInfo(userId);

@@ -6,7 +6,7 @@ import { Link, useLoaderData } from '@remix-run/react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
-import { userService } from '~/services/user-service.server';
+import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('index');
@@ -19,6 +19,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
 

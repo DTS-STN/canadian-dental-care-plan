@@ -3,7 +3,7 @@ import { redirect } from '@remix-run/node';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/_gcweb-app.personal-information.phone-number.edit';
-import { userService } from '~/services/user-service.server';
+import { getUserService } from '~/services/user-service.server';
 
 vi.mock('~/services/session-service.server', () => ({
   getSessionService: vi.fn().mockResolvedValue({
@@ -15,10 +15,10 @@ vi.mock('~/services/session-service.server', () => ({
 }));
 
 vi.mock('~/services/user-service.server', () => ({
-  userService: {
+  getUserService: vi.fn().mockReturnValue({
     getUserId: vi.fn().mockReturnValue('some-id'),
     getUserInfo: vi.fn(),
-  },
+  }),
 }));
 
 describe('_gcweb-app.personal-information.phone-number.edit', () => {
@@ -29,6 +29,7 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
 
   describe('loader()', () => {
     it('should return userInfo object if userInfo is found', async () => {
+      const userService = getUserService();
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', phoneNumber: '(111) 222-3333' });
 
       const response = await loader({

@@ -10,7 +10,7 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputField } from '~/components/input-field';
 import { getAddressService } from '~/services/address-service.server';
 import { getSessionService } from '~/services/session-service.server';
-import { userService } from '~/services/user-service.server';
+import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
@@ -27,6 +27,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
   const addressInfo = await getAddressService().getAddressInfo(userId, userInfo?.mailingAddress ?? '');

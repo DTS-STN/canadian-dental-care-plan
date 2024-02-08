@@ -4,14 +4,14 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/_gcweb-app.personal-information.phone-number.confirm';
 import { getSessionService } from '~/services/session-service.server';
-import { userService } from '~/services/user-service.server';
+import { getUserService } from '~/services/user-service.server';
 
 vi.mock('~/services/user-service.server', () => ({
-  userService: {
+  getUserService: vi.fn().mockReturnValue({
     getUserId: vi.fn().mockReturnValue('some-id'),
     getUserInfo: vi.fn(),
     updateUserInfo: vi.fn(),
-  },
+  }),
 }));
 
 vi.mock('~/services/session-service.server', () => ({
@@ -35,6 +35,7 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
     it('should return userInfo and newPhoneNumber', async () => {
       const sessionService = await getSessionService();
       const session = await sessionService.getSession();
+      const userService = getUserService();
 
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', phoneNumber: '(111) 222-3333' });
       vi.mocked(session.get).mockResolvedValue('(444) 555-6666');
