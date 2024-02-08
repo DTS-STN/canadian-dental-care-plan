@@ -1,4 +1,4 @@
-import type { ChangeEvent } from 'react';
+import { type ChangeEvent, useEffect, useState } from 'react';
 
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link, useLoaderData, useSearchParams } from '@remix-run/react';
@@ -49,14 +49,29 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function LettersIndex() {
   const [, setSearchParams] = useSearchParams();
-  const { t } = useTranslation(i18nNamespaces);
+  const { i18n, t } = useTranslation(i18nNamespaces);
   const { letters, sortOrder } = useLoaderData<typeof loader>();
+  const [dateTimeFormat, setDateTimeFormat] = useState<Intl.DateTimeFormat | undefined>();
+
+  useEffect(() => {
+    setDateTimeFormat(new Intl.DateTimeFormat(`${i18n.language}-CA`));
+  }, [i18n.language]);
 
   function handleOnSortOrderChange(e: ChangeEvent<HTMLSelectElement>) {
     setSearchParams((prev) => {
       prev.set('sort', e.target.value);
       return prev;
     });
+  }
+
+  function getFormattedDate(date: string | undefined) {
+    if (!date) {
+      return date;
+    }
+    if (!dateTimeFormat) {
+      return date;
+    }
+    return dateTimeFormat.format(new Date(date));
   }
 
   return (
@@ -74,7 +89,7 @@ export default function LettersIndex() {
             <Link reloadDocument to={`/letters/${letter.id}/download`} className="text-base font-bold no-underline">
               {letter.subject}
             </Link>
-            <div className="text-sm">{t('letters:index.date', { date: letter.dateSent })}</div>
+            <div className="text-sm">{t('letters:index.date', { date: getFormattedDate(letter.dateSent) })}</div>
           </li>
         ))}
       </ul>
