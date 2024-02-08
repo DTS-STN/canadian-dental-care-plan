@@ -71,7 +71,7 @@ export default function LettersIndex() {
       <ul className="mt-2 divide-y rounded-md border">
         {letters.map((letter) => (
           <li key={letter.id} className="flex flex-col space-y-1 px-4 py-2 hover:bg-gray-100">
-            <Link to={`/letters/${letter.id}/download`} className="text-base font-bold no-underline">
+            <Link reloadDocument to={`/letters/${letter.id}/download`} className="text-base font-bold no-underline">
               {letter.subject}
             </Link>
             <div className="text-sm">{t('letters:index.date', { date: letter.dateSent })}</div>
