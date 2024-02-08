@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { loader } from '~/routes/_gcweb-app.personal-information.preferred-language.edit';
-import { lookupService } from '~/services/lookup-service.server';
+import { getLookupService } from '~/services/lookup-service.server';
 import { userService } from '~/services/user-service.server';
 
 vi.mock('~/services/lookup-service.server', () => ({
-  lookupService: {
+  getLookupService: vi.fn().mockReturnValue({
     getAllPreferredLanguages: vi.fn().mockReturnValue([
       {
         id: 'en',
@@ -23,7 +23,7 @@ vi.mock('~/services/lookup-service.server', () => ({
       nameEn: 'French',
       nameFr: 'Français',
     }),
-  },
+  }),
 }));
 
 vi.mock('~/services/session-service.server', () => ({
@@ -40,14 +40,13 @@ vi.mock('~/services/user-service.server', () => ({
 describe('_gcweb-app.personal-information.preferred-language.edit', () => {
   afterEach(() => {
     vi.clearAllMocks();
-    vi.resetModules();
   });
 
   describe('loader()', () => {
     it('should return userInfo object if userInfo is found', async () => {
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', preferredLanguage: 'fr' });
-      vi.mocked(lookupService.getPreferredLanguage).mockResolvedValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' });
-      vi.mocked(lookupService.getAllPreferredLanguages).mockResolvedValue([
+      vi.mocked(getLookupService().getPreferredLanguage).mockResolvedValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' });
+      vi.mocked(getLookupService().getAllPreferredLanguages).mockResolvedValue([
         {
           id: 'en',
           nameEn: 'English',
