@@ -91,13 +91,19 @@ function PageHeader() {
   }, [showDropdown]);
   return (
     <>
-      <div id="skip-to-content" className="wb-slc">
-        <AnchorLink anchorElementId="wb-cont" className="wb-sl">
-          {t('gcweb:nav.skip-to-content')}
-        </AnchorLink>
-        <AnchorLink anchorElementId="wb-info" className="wb-sl">
-          {t('gcweb:nav.skip-to-about')}
-        </AnchorLink>
+      <div id="skip-to-content">
+        {[
+          { anchorElementId: 'wb-cont', children: t('gcweb:nav.skip-to-content') },
+          { anchorElementId: 'wb-info', children: t('gcweb:nav.skip-to-about') },
+        ].map(({ anchorElementId, children }) => (
+          <AnchorLink
+            key={anchorElementId}
+            anchorElementId={anchorElementId}
+            className="absolute z-10 mx-2 -translate-y-full rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-blue-800 focus:mt-2 focus:translate-y-0 focus:outline-none focus:ring-4 focus:ring-blue-300"
+          >
+            {children}
+          </AnchorLink>
+        ))}
       </div>
       <header>
         <div id="wb-bnr" className="container">
