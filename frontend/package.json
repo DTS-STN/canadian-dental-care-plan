@@ -43,6 +43,7 @@
     "isbot": "^4.4.0",
     "jose": "^5.2.1",
     "libphonenumber-js": "^1.10.55",
+    "moderndash": "^3.9.2",
     "moize": "^6.1.6",
     "morgan": "^1.10.0",
     "msw": "^2.1.6",
