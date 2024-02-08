@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { getLookupService } from '~/services/lookup-service.server';
 import { getSessionService } from '~/services/session-service.server';
-import { userService } from '~/services/user-service.server';
+import { getUserService } from '~/services/user-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
@@ -24,6 +24,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
   const sessionService = await getSessionService();
@@ -34,6 +35,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const userService = getUserService();
   const userId = await userService.getUserId();
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));

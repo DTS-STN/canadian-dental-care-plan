@@ -1,11 +1,13 @@
 import jsonpatch from 'fast-json-patch';
+import moize from 'moize';
 import { z } from 'zod';
 
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
-const VALUES = ['fr', 'en'] as const;
-const LanguageEnum = z.enum(VALUES);
+const log = getLogger('user-service.server');
+const LANGUAGES = ['fr', 'en'] as const;
+const LanguageEnum = z.enum(LANGUAGES);
 
 const userInfoSchema = z.object({
   id: z.string().uuid().optional(),
@@ -19,8 +21,12 @@ const userInfoSchema = z.object({
 
 export type UserInfo = z.infer<typeof userInfoSchema>;
 
+/**
+ * Return a singleton instance (by means of memomization) of the user service.
+ */
+export const getUserService = moize(createUserService, { onCacheAdd: () => log.info('Creating new user service') });
+
 function createUserService() {
-  const logger = getLogger('user-service.server');
   const { INTEROP_API_BASE_URI } = getEnv();
 
   async function getUserId() {
@@ -34,7 +40,7 @@ function createUserService() {
     if (response.ok) return userInfoSchema.parse(await response.json());
     if (response.status === 404) return null;
 
-    logger.error('%j', {
+    log.error('%j', {
       message: 'Failed to fetch data',
       status: response.status,
       statusText: response.statusText,
@@ -60,7 +66,7 @@ function createUserService() {
     });
 
     if (!response.ok) {
-      logger.error('%j', {
+      log.error('%j', {
         message: 'Failed to fetch data',
         status: response.status,
         statusText: response.statusText,
@@ -74,5 +80,3 @@ function createUserService() {
 
   return { getUserId, getUserInfo, updateUserInfo };
 }
-
-export const userService = createUserService();

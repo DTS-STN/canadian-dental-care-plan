@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { InputRadios } from '~/components/input-radios';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getSessionService } from '~/services/session-service.server';
-import { userService } from '~/services/user-service.server';
+import { getUserService } from '~/services/user-service.server';
 import { PREFERRED_LANGUAGES } from '~/utils/constants';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -25,6 +25,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
 
