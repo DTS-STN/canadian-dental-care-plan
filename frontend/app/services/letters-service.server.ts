@@ -1,7 +1,10 @@
+import moize from 'moize';
 import { z } from 'zod';
 
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
+
+const log = getLogger('letters-service.server');
 
 const letterSchema = z.object({
   dateSent: z.date().optional(),
@@ -11,22 +14,21 @@ const letterSchema = z.object({
 
 export type LettersInfo = z.infer<typeof letterSchema>;
 
+/**
+ * Return a singleton instance (by means of memomization) of the letter service.
+ */
+export const getLettersService = moize(createLettersService, { onCacheAdd: () => log.info('Creating new letter service') });
+
 function createLettersService() {
-  const logger = getLogger('letters-service.server');
   const { INTEROP_API_BASE_URI } = getEnv();
 
-  /**
-   *
-   * @param { userId }
-   * @returns returns the letters based off  @param userId
-   */
   async function getLetters(requestBody: { userId: string }) {
     const url = new URL(`${INTEROP_API_BASE_URI}/letters`);
     url.searchParams.set('userId', requestBody.userId);
     const response = await fetch(url);
 
     if (!response.ok) {
-      logger.error('%j', {
+      log.error('%j', {
         message: 'Failed to fetch data',
         status: response.status,
         statusText: response.statusText,
@@ -40,9 +42,5 @@ function createLettersService() {
     return letterSchema.parse(await response.json());
   }
 
-  return {
-    getLetters,
-  };
+  return { getLetters };
 }
-
-export const lettersService = createLettersService();
