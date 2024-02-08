@@ -1,11 +1,11 @@
-import { type ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData } from '@remix-run/react';
 
+import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
-import { LandingPageLink } from '~/components/landing-page-link';
 import { userService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -36,30 +36,41 @@ export default function Index() {
     <>
       <p>{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.lastName })}</p>
       <div className="grid gap-4 md:grid-cols-2">
-        <LandingPageLink title={t('index:personal-info')} to="/personal-information">
+        <CardLink title={t('index:personal-info')} to="/personal-information">
           {t('index:personal-info-desc')}
-        </LandingPageLink>
-        <LandingPageLink title={<TitleWithInProgressLabel>{t('index:view-my-application')}</TitleWithInProgressLabel>} to="/view-application">
-          {t('index:view-my-application-desc')}
-        </LandingPageLink>
-        <LandingPageLink title={<TitleWithInProgressLabel>{t('index:upload')}</TitleWithInProgressLabel>} to="/upload-document">
-          {t('index:upload-desc')}
-        </LandingPageLink>
-        <LandingPageLink title={<TitleWithInProgressLabel>{t('index:view-letters')}</TitleWithInProgressLabel>} to="/letters">
+        </CardLink>
+        <CardLink title={t('index:view-letters')} to="/letters">
           {t('index:view-letters-desc')}
-        </LandingPageLink>
-        <LandingPageLink title={<TitleWithInProgressLabel>{t('index:view-cdcp')}</TitleWithInProgressLabel>} to="/messages">
+        </CardLink>
+        <CardLink title={t('index:view-my-application')} to="/view-application" inProgress>
+          {t('index:view-my-application-desc')}
+        </CardLink>
+        <CardLink title={t('index:upload')} to="/upload-document" inProgress>
+          {t('index:upload-desc')}
+        </CardLink>
+        <CardLink title={t('index:view-cdcp')} to="/messages" inProgress>
           {t('index:view-cdcp-desc')}
-        </LandingPageLink>
-        <LandingPageLink title={<TitleWithInProgressLabel>{t('index:subscribe')}</TitleWithInProgressLabel>} to="/alert-me">
+        </CardLink>
+        <CardLink title={t('index:subscribe')} to="/alert-me" inProgress>
           {t('index:subscribe-desc')}
-        </LandingPageLink>
+        </CardLink>
       </div>
     </>
   );
 }
 
-function TitleWithInProgressLabel({ children }: { children: ReactNode }) {
+function CardLink({ children, inProgress, title, to }: { children: ReactNode; inProgress?: boolean; title: ReactNode; to: ComponentProps<typeof Link>['to'] }) {
+  const linkResetClassName = '!text-inherit !no-underline !decoration-inherit';
+  const linkClassName = clsx(linkResetClassName, 'block rounded-lg border border-gray-200 p-6 shadow hover:bg-gray-100');
+  return (
+    <Link className={linkClassName} to={to}>
+      <h2 className="h3 !mt-0">{inProgress ? <ProgressLabel>{title}</ProgressLabel> : title}</h2>
+      <p className="m-0">{children}</p>
+    </Link>
+  );
+}
+
+function ProgressLabel({ children }: { children: ReactNode }) {
   const { t } = useTranslation(i18nNamespaces);
   return (
     <span className="flex flex-wrap items-center gap-4">
