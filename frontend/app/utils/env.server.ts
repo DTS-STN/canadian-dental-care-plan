@@ -62,11 +62,13 @@ const serverEnv = z.object({
   REDIS_PASSWORD: z.string().trim().min(1).optional(),
 
   // feature flags (ie: THING_ENABLED=true/false)
-  AUTH_ENABLED: z.string().transform(toBoolean).default('false'),
   JAVASCRIPT_ENABLED: z.string().transform(toBoolean).default('true'),
-  MOCKS_ENABLED: z.string().transform(toBoolean).default('false'),
 
   // mocks settings
+  ENABLED_MOCKS: z
+    .string() // TODO :: GjB :: can this instead be a z.enum()
+    .transform((val) => val.split(',').map((val) => val.trim()))
+    .default(''),
   MOCK_AUTH_ALLOWED_REDIRECTS: z
     .string()
     .transform((val) => val.split(',').map((val) => val.trim()))
