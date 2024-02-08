@@ -70,7 +70,7 @@ export default function LettersIndex() {
       </select>
       <ul className="mt-2 divide-y rounded-md border">
         {letters.map((letter) => (
-          <li key={letter.id} className="flex flex-col space-y-1 px-4 py-2 hover:bg-gray-100">
+          <li key={letter.id} className="space-y-1 px-4 py-2 hover:bg-gray-100">
             <Link reloadDocument to={`/letters/${letter.id}/download`} className="text-base font-bold no-underline">
               {letter.subject}
             </Link>
