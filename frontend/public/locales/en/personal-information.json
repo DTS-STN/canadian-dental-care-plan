@@ -41,6 +41,24 @@
         "cancel": "Cancel"
       }
     },
+    "suggested": {
+      "page-title:": "Suggested address",
+      "breadcrumbs": {
+        "home": "Home",
+        "personal-information": "Personal information",
+        "suggested-address": "Change home address"
+      },
+      "address-entered": "Address entered",
+      "address-suggested": "Suggested address",
+      "choose-address": "Choose the address you wish to use:",
+      "use-entered": "Use what I entered",
+      "use-suggested": "Use suggested address",
+      "re-enter-address": "If neither of these addresses is correct, you should re-enter your address",
+      "note": "Please note: Your address is compared against Canada Post information for accuracy. However, in some cases, the system may not be able to verify the address’s accuracy. Use this address if you are certain it is correct.",
+      "continue": "Continue",
+      "cancel": "Cancel",
+      "edit": "Return to edit page"
+    },
     "confirm": {
       "page-title": "Confirm",
       "breadcrumbs": {
