@@ -228,7 +228,7 @@ export default function PersonalInformationMailingAddressEdit() {
           <>
             <InputField id="address" label={t('personal-information:mailing-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />
             <InputField id="city" label={t('personal-information:mailing-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
-            <InputSelect id="province" label={t('personal-information:mailing-address.edit.field.province')} name="province" options={regions} defaultValue={defaultValues.province} errorMessage={errorMessages.province} />
+            {regions.length > 0 && <InputSelect id="province" label={t('personal-information:mailing-address.edit.field.province')} name="province" options={regions} defaultValue={defaultValues.province} errorMessage={errorMessages.province} />}
             <InputField id="postalCode" label={t('personal-information:mailing-address.edit.field.postal-code')} name="postalCode" defaultValue={defaultValues.postalCode} errorMessage={errorMessages.postalCode} />
             <InputSelect
               id="country"

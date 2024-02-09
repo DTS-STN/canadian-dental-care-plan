@@ -12,8 +12,8 @@
     "home-address": "(FR) Home address",
     "mailing-address": "(FR) Mailing address",
     "preferred-language": "(FR) Preferred language",
-    "change-home-address": "(FR) Change your home address",
-    "change-mailing-address": "(FR) Change your mailing address",
+    "change-home-address": "(FR) Change home address",
+    "change-mailing-address": "(FR) Change mailing address",
     "change-phone-number": "(FR) Change phone number",
     "change-preferred-language": "(FR) Change preferred language",
     "no-address-on-file": "(FR) No address on file"
@@ -27,9 +27,9 @@
         "home-address-change": "(FR) Change home address"
       },
       "field": {
-        "address": "(FR) Adddress",
+        "address": "(FR) Address",
         "city": "(FR) City",
-        "province": "(FR) Province",
+        "province": "(FR) Province/State",
         "postal-code": "(FR) Postal code",
         "country": "(FR) Country"
       },
@@ -102,7 +102,7 @@
       "field": {
         "address": "(FR) Address",
         "city": "(FR) City",
-        "province": "(FR) Province",
+        "province": "(FR) Province/State",
         "postal-code": "(FR) Postal code",
         "country": "(FR) Country"
       },

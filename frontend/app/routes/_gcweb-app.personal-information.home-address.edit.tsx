@@ -176,7 +176,7 @@ export default function PersonalInformationHomeAddressEdit() {
       <Form className="max-w-prose" method="post">
         <InputField id="address" label={t('personal-information:home-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />
         <InputField id="city" label={t('personal-information:home-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
-        <InputSelect id="province" label={t('personal-information:home-address.edit.field.province')} name="province" defaultValue={defaultValues.province} options={regions} errorMessage={errorMessages.province} />
+        {regions.length > 0 && <InputSelect id="province" label={t('personal-information:home-address.edit.field.province')} name="province" defaultValue={defaultValues.province} options={regions} errorMessage={errorMessages.province} />}
         <InputField id="postalCode" label={t('personal-information:home-address.edit.field.postal-code')} name="postalCode" defaultValue={defaultValues.postalCode} errorMessage={errorMessages.postalCode} />
         <InputSelect id="country" label={t('personal-information:home-address.edit.field.country')} name="country" defaultValue={defaultValues.country} required options={countries} onChange={countryChangeHandler} errorMessage={errorMessages.country} />
 
