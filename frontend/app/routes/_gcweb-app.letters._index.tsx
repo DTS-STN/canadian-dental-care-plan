@@ -7,6 +7,8 @@ import { sort } from 'moderndash';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { getLettersService } from '~/services/letters-service.server';
+import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('letters');
@@ -28,21 +30,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const sortOrder = orderEnumSchema.catch('desc').parse(url.searchParams.get('sort'));
 
-  // TODO replace with actual data
-  const letters = [
-    { id: '112029', subject: 'Letter subject text 1', dateSent: '2022-07-20T03:04:05.000Z', referenceId: '898815' },
-    { id: '014095', subject: 'Letter subject text 2', dateSent: '2023-04-22T03:04:05.000Z', referenceId: '443526' },
-    { id: '428715', subject: 'Letter subject text 3', dateSent: '2022-08-21T03:04:05.000Z', referenceId: '803445' },
-    { id: '780806', subject: 'Letter subject text 4', dateSent: '2022-02-14T03:04:05.000Z', referenceId: '445545' },
-    { id: '762502', subject: 'Letter subject text 5', dateSent: '2023-05-14T03:04:05.000Z', referenceId: '746995' },
-    { id: '295592', subject: 'Letter subject text 6', dateSent: '2022-05-04T03:04:05.000Z', referenceId: '766722' },
-    { id: '284742', subject: 'Letter subject text 7', dateSent: '2022-06-23T03:04:05.000Z', referenceId: '978920' },
-    { id: '157691', subject: 'Letter subject text 8', dateSent: '2022-04-15T03:04:05.000Z', referenceId: '547667' },
-    { id: '816041', subject: 'Letter subject text 9', dateSent: '2023-07-07T03:04:05.000Z', referenceId: '726700' },
-    { id: '538967', subject: 'Letter subject text 10', dateSent: '2023-03-11T03:04:05.000Z', referenceId: '624957' },
-  ];
+  const userService = await getUserService();
+  const letterService = await getLettersService();
+  const userId = await userService.getUserId();
+  const letters = await letterService.getLetters(userId);
 
-  const sortedLetters = sort(letters, { order: sortOrder, by: (item) => item.dateSent });
+  const sortedLetters = sort(letters, { order: sortOrder, by: (item) => item.dateSent ?? new Date(0) });
 
   return json({ letters: sortedLetters, sortOrder });
 }
@@ -83,8 +76,8 @@ export default function LettersIndex() {
       <ul className="mt-2 divide-y rounded-md border">
         {letters.map((letter) => (
           <li key={letter.id} className="space-y-1 px-4 py-2 hover:bg-gray-100">
-            <Link reloadDocument to={`/letters/${letter.id}/download`} className="text-base font-bold no-underline">
-              {letter.subject}
+            <Link reloadDocument to={`/letters/${letter.referenceId}/download`} className="text-base font-bold no-underline">
+              {i18n.language === 'en' ? letter.nameEn : letter.nameFr}
             </Link>
             <div className="text-sm">{t('letters:index.date', { date: getFormattedDate(letter.dateSent) })}</div>
           </li>
