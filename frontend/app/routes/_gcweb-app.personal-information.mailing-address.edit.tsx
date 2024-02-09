@@ -35,20 +35,24 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
-  const addressInfo = await getAddressService().getAddressInfo(userId, userInfo?.mailingAddress ?? '');
-  const homeAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.homeAddress ?? '');
-  const countryList = await getLookupService().getAllCountries();
-  const regionList = await getLookupService().getAllRegions();
-
   if (!userInfo) {
     throw new Response(null, { status: 404 });
   }
+
+  const addressInfo = await getAddressService().getAddressInfo(userId, userInfo.mailingAddress ?? '');
+  const homeAddressInfo = await getAddressService().getAddressInfo(userId, userInfo.homeAddress ?? '');
+
+  const countryList = await getLookupService().getAllCountries();
+  const regionList = await getLookupService().getAllRegions();
 
   return json({ addressInfo, homeAddressInfo, countryList, regionList });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const formDataSchema = z.object({
+  const copyHomeAddressSchema = z.object({
+    copyHomeAddress: z.string().transform((value) => value === 'on'),
+  });
+  const addressFormSchema = z.object({
     address: z
       .string()
       .min(1, { message: 'empty-field' })
@@ -64,6 +68,7 @@ export async function action({ request }: ActionFunctionArgs) {
       .min(1, { message: 'empty-field' })
       .transform((val) => val.trim()),
   });
+  const formDataSchema = z.union([copyHomeAddressSchema, addressFormSchema]);
 
   const formData = Object.fromEntries(await request.formData());
   const parsedDataResult = await formDataSchema.safeParseAsync(formData);
@@ -71,13 +76,27 @@ export async function action({ request }: ActionFunctionArgs) {
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.flatten(),
-      formData: formData as Partial<z.infer<typeof formDataSchema>>,
+      formData: formData as Partial<z.infer<typeof addressFormSchema>>,
     });
   }
 
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));
-  session.set('newMailingAddress', parsedDataResult.data);
+
+  const { copyHomeAddress } = formData as Partial<z.infer<typeof copyHomeAddressSchema>>;
+  if (copyHomeAddress) {
+    const userService = getUserService();
+    const userId = await userService.getUserId();
+    const userInfo = await userService.getUserInfo(userId);
+    if (!userInfo) {
+      throw new Response(null, { status: 404 });
+    }
+
+    const homeAddress = await getAddressService().getAddressInfo(userId, userInfo?.homeAddress ?? '');
+    session.set('newMailingAddress', homeAddress);
+  } else {
+    session.set('newMailingAddress', parsedDataResult.data);
+  }
 
   return redirect('/personal-information/mailing-address/confirm', {
     headers: {
@@ -109,11 +128,11 @@ export default function PersonalInformationMailingAddressEdit() {
   };
 
   const defaultValues = {
-    address: actionData?.formData.address ?? (isCopyAddressChecked ? homeAddressInfo?.address : addressInfo?.address),
-    city: actionData?.formData.city ?? (isCopyAddressChecked ? homeAddressInfo?.city : addressInfo?.city),
-    province: actionData?.formData.province ?? (isCopyAddressChecked ? homeAddressInfo?.province : addressInfo?.province),
-    country: actionData?.formData.country ?? (isCopyAddressChecked ? homeAddressInfo?.country : addressInfo?.country),
-    postalCode: actionData?.formData.postalCode ?? (isCopyAddressChecked ? homeAddressInfo?.postalCode : addressInfo?.postalCode),
+    address: actionData?.formData.address ?? addressInfo?.address,
+    city: actionData?.formData.city ?? addressInfo?.city,
+    province: actionData?.formData.province ?? addressInfo?.province,
+    country: actionData?.formData.country ?? addressInfo?.country,
+    postalCode: actionData?.formData.postalCode ?? addressInfo?.postalCode,
   };
 
   const countries: InputOptionProps[] = countryList.map((country) => {
@@ -183,7 +202,7 @@ export default function PersonalInformationMailingAddressEdit() {
       <Form className="max-w-prose" method="post">
         {homeAddressInfo && (
           <div className="checkbox gc-chckbxrdio">
-            <input id="copy-home-address" type="checkbox" name="ifCopyHomeAddress" checked={isCopyAddressChecked} onChange={checkHandler} />
+            <input id="copy-home-address" type="checkbox" name="copyHomeAddress" checked={isCopyAddressChecked} onChange={checkHandler} />
             <label id="copy-home-address" htmlFor="copy-home-address">
               {t('personal-information:mailing-address.edit.copy-home-address')}
             </label>
@@ -198,68 +217,27 @@ export default function PersonalInformationMailingAddressEdit() {
             <Address
               address={homeAddressInfo.address}
               city={homeAddressInfo.city}
-              provinceState={regionList.find((region) => region.code === homeAddressInfo?.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
+              provinceState={regionList.find((region) => region.code === homeAddressInfo.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
               postalZipCode={homeAddressInfo.postalCode}
-              country={countryList.find((country) => country.code === homeAddressInfo?.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
+              country={countryList.find((country) => country.code === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
             />
-            <input type="text" id="address" name="address" value={defaultValues.address} readOnly hidden />
-            <input type="text" id="city" name="city" value={defaultValues.city} readOnly hidden />
-            <input type="text" id="province" name="province" value={defaultValues.province} readOnly hidden />
-            <input type="text" id="postalCode" name="postalCode" value={defaultValues.postalCode} readOnly hidden />
-            <input type="text" id="country" name="country" value={defaultValues.country} readOnly hidden />
           </div>
         )}
 
         {!isCopyAddressChecked && (
           <>
-            <InputField
-              id="address"
-              label={t('personal-information:mailing-address.edit.field.address')}
-              name="address"
-              required
-              key={isCopyAddressChecked ? homeAddressInfo?.address : addressInfo?.address}
-              defaultValue={defaultValues.address}
-              errorMessage={errorMessages.address}
-            />
-
-            <InputField
-              id="city"
-              label={t('personal-information:mailing-address.edit.field.city')}
-              name="city"
-              required
-              key={isCopyAddressChecked ? homeAddressInfo?.city : addressInfo?.city}
-              defaultValue={defaultValues.city}
-              errorMessage={errorMessages.city}
-            />
-
-            <InputSelect
-              id="province"
-              label={t('personal-information:mailing-address.edit.field.province')}
-              name="province"
-              key={isCopyAddressChecked ? homeAddressInfo?.province : addressInfo?.province}
-              options={regions}
-              defaultValue={defaultValues?.province ?? ''}
-              errorMessage={errorMessages.province}
-            />
-
-            <InputField
-              id="postalCode"
-              label={t('personal-information:mailing-address.edit.field.postal-code')}
-              name="postalCode"
-              key={isCopyAddressChecked ? homeAddressInfo?.postalCode : addressInfo?.postalCode}
-              defaultValue={defaultValues.postalCode}
-              errorMessage={errorMessages.postalCode}
-            />
-
+            <InputField id="address" label={t('personal-information:mailing-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />
+            <InputField id="city" label={t('personal-information:mailing-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
+            <InputSelect id="province" label={t('personal-information:mailing-address.edit.field.province')} name="province" options={regions} defaultValue={defaultValues.province} errorMessage={errorMessages.province} />
+            <InputField id="postalCode" label={t('personal-information:mailing-address.edit.field.postal-code')} name="postalCode" defaultValue={defaultValues.postalCode} errorMessage={errorMessages.postalCode} />
             <InputSelect
               id="country"
               label={t('personal-information:mailing-address.edit.field.country')}
               name="country"
               required
-              key={isCopyAddressChecked ? homeAddressInfo?.country : addressInfo?.country}
               options={countries}
               onChange={countryChangeHandler}
-              defaultValue={defaultValues?.country ?? ''}
+              defaultValue={defaultValues.country}
               errorMessage={errorMessages.country}
             />
           </>
