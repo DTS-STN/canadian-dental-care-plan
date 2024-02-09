@@ -28,6 +28,13 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     // A mock authorize route for testing purposes
     //
     case 'authorize':
+      const { ENABLED_MOCKS } = getEnv();
+
+      if (!ENABLED_MOCKS.includes('raoidc')) {
+        log.warn('Call to mock authorize endpoint when mocks are not enabled');
+        return new Response(null, { status: 404 });
+      }
+
       return handleMockAuthorizeRequest({ context, params, request });
   }
 
@@ -39,7 +46,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
  * Handler for /auth/login requests
  */
 async function handleLoginRequest({ params, request }: LoaderFunctionArgs) {
-  log.debug('Redirecting to default provider [%s]', defaultProviderId);
+  log.debug('Redirecting to default provider handler: [%s]', `/auth/login/${defaultProviderId}`);
   return redirect(`/auth/login/${defaultProviderId}`);
 }
 
@@ -53,16 +60,15 @@ async function handleRaoidcLoginRequest({ params, request }: LoaderFunctionArgs)
   const redirectUri = generateCallbackUri(new URL(request.url).origin, 'raoidc');
   const { authUrl, codeVerifier, state } = raoidcService.generateSigninRequest(redirectUri);
 
-  // codeVerifier and state will have to be validated in the callback handler
+  log.debug('Storing [codeVerifier] and [state] in session for future validation');
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   session.set('codeVerifier', codeVerifier);
   session.set('state', state);
 
+  log.debug('Redirecting to RAOIDC signin URL [%s]', authUrl.href);
   return redirect(authUrl.href, {
-    headers: {
-      'Set-Cookie': await sessionService.commitSession(session),
-    },
+    headers: { 'Set-Cookie': await sessionService.commitSession(session) },
   });
 }
 
@@ -71,13 +77,16 @@ async function handleRaoidcLoginRequest({ params, request }: LoaderFunctionArgs)
  */
 async function handleRaoidcCallbackRequest({ params, request }: LoaderFunctionArgs) {
   log.debug('Handling RAOIDC callback request');
+
   const raoidcService = await getRaoidcService();
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));
+
   const codeVerifier = session.get('codeVerifier');
   const state = session.get('state');
   const redirectUri = generateCallbackUri(new URL(request.url).origin, 'raoidc');
 
+  log.debug('Storing auth tokens and userinfo in session');
   const { auth, user_info: userInfo } = await raoidcService.handleCallback(request, codeVerifier, state, redirectUri);
   session.set('auth', auth);
   session.set('userInfo', userInfo);
@@ -86,10 +95,9 @@ async function handleRaoidcCallbackRequest({ params, request }: LoaderFunctionAr
   // TODO :: GjB :: provide the ability to redirect to a specific route after login
   //
 
+  log.debug('RAOIDC login successful; redirecting to [%s]', '/');
   return redirect('/', {
-    headers: {
-      'Set-Cookie': await sessionService.commitSession(session),
-    },
+    headers: { 'Set-Cookie': await sessionService.commitSession(session) },
   });
 }
 
@@ -97,19 +105,17 @@ async function handleRaoidcCallbackRequest({ params, request }: LoaderFunctionAr
  * @see https://openid.net/specs/openid-connect-core-1_0.html#AuthorizationEndpoint
  */
 function handleMockAuthorizeRequest({ params, request }: LoaderFunctionArgs) {
-  const { ENABLED_MOCKS, MOCK_AUTH_ALLOWED_REDIRECTS } = getEnv();
+  log.debug('Handling (mock) RAOIDC authorize request');
 
-  if (!ENABLED_MOCKS.includes('raoidc')) {
-    log.warn('Call to mock authorize endpoint when mocks are not enabled');
-    return new Response(null, { status: 404 });
-  }
+  const { MOCK_AUTH_ALLOWED_REDIRECTS } = getEnv();
+  const isValidRedirectUri = (val: string): boolean => MOCK_AUTH_ALLOWED_REDIRECTS.includes(val);
 
   const searchParamsSchema = z.object({
     clientId: z.string().min(1).max(64),
     codeChallenge: z.string().min(43).max(128),
     codeChallengeMethod: z.enum(['S256']),
     nonce: z.string().min(8).max(64),
-    redirectUri: z.string().refine((val) => MOCK_AUTH_ALLOWED_REDIRECTS.includes(val)),
+    redirectUri: z.string().refine(isValidRedirectUri),
     responseType: z.enum(['code']),
     scope: z.enum(['openid profile']),
     state: z.string().min(8).max(256),
@@ -129,6 +135,7 @@ function handleMockAuthorizeRequest({ params, request }: LoaderFunctionArgs) {
   });
 
   if (!result.success) {
+    log.warn('Invalid authorize request [%j]', result.error.flatten().fieldErrors);
     return new Response(JSON.stringify(result.error.flatten().fieldErrors), { status: 400 });
   }
 
@@ -136,5 +143,6 @@ function handleMockAuthorizeRequest({ params, request }: LoaderFunctionArgs) {
   redirectUri.searchParams.set('code', generateRandomString(16));
   redirectUri.searchParams.set('state', result.data.state);
 
+  log.debug('Mock login successful; redirecting to [%s]', redirectUri.toString());
   return redirect(redirectUri.toString());
 }
