@@ -28,7 +28,7 @@ import { toNodeReadable } from 'web-streams-node';
 import { generateJwkId, privateKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
-import { type ClientMetadata, type FetchFunctionInit, fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState } from '~/utils/raoidc-utils.server';
+import { type ClientMetadata, type FetchFunctionInit, fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState, validateSession } from '~/utils/raoidc-utils.server';
 
 const log = getLogger('raoidc-service.server');
 
@@ -50,6 +50,8 @@ async function createRaoidcService() {
    * Used to kickstart the OIDC login process.
    */
   function generateSigninRequest(redirectUri: string) {
+    log.debug('Generating OIDC signin request');
+
     const { codeChallenge, codeVerifier } = generateCodeChallenge();
     const clientId = AUTH_RAOIDC_CLIENT_ID;
     const scope = 'openid profile';
@@ -63,6 +65,8 @@ async function createRaoidcService() {
    * Handle an OIDC login callback.
    */
   async function handleCallback(request: Request, codeVerifier: string, expectedState: string, redirectUri: string) {
+    log.debug('Handling OIDC callback');
+
     const authCode = new URL(request.url).searchParams.get('code');
     const error = new URL(request.url).searchParams.get('error');
     const state = new URL(request.url).searchParams.get('state');
@@ -94,9 +98,22 @@ async function createRaoidcService() {
     return { auth: authTokenSet, user_info: userInfo };
   }
 
+  /**
+   * Handle an OIDC logout call.
+   */
   async function handleLogout() {
+    log.debug('Handling OIDC logout');
+
     /* TODO :: GjB :: implement logout */
     throw new Error('Not yet implemented');
+  }
+
+  /**
+   * Handle a RAOIDC session validation call.
+   */
+  function handleSessionValidation(sessionId: string) {
+    log.debug('Performing RAOIDC session validation check');
+    return validateSession(AUTH_RAOIDC_BASE_URL, AUTH_RAOIDC_CLIENT_ID, sessionId, fetchFn);
   }
 
   /**
@@ -117,5 +134,5 @@ async function createRaoidcService() {
     return global.fetch;
   }
 
-  return { generateSigninRequest, handleCallback, handleLogout };
+  return { generateSigninRequest, handleCallback, handleLogout, handleSessionValidation };
 }
