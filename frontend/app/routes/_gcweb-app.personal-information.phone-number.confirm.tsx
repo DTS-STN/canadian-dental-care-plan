@@ -48,7 +48,7 @@ export async function action({ request }: ActionFunctionArgs) {
   await userService.updateUserInfo(userId, userInfo);
   session.unset('newPhoneNumber');
 
-  return redirectWithSuccess('/personal-information', 'Phone number has been updated.', {
+  return redirectWithSuccess('/personal-information', 'gcweb:toast.phone-number-updated', {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),
     },

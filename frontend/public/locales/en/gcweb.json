@@ -65,5 +65,9 @@
   "error-summary": {
     "header_one": "The following error was found in the form:",
     "header_other": "The following {{count}} errors were found in the form:"
+  },
+  "toast": {
+    "phone-number-updated": "Phone number updated",
+    "preferred-language-updated": "Preferred language updated"
   }
 }

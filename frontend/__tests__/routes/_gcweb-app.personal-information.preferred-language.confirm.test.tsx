@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { loader } from '~/routes/_gcweb-app.personal-information.preferred-language.confirm';
+import { action, loader } from '~/routes/_gcweb-app.personal-information.preferred-language.confirm';
 import { getLookupService } from '~/services/lookup-service.server';
+import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getEnv } from '~/utils/env.server';
 
@@ -9,6 +10,7 @@ vi.mock('~/services/user-service.server', () => ({
   getUserService: vi.fn().mockReturnValue({
     getUserId: vi.fn().mockReturnValue('some-id'),
     getUserInfo: vi.fn(),
+    updateUserInfo: vi.fn(),
   }),
 }));
 
@@ -30,8 +32,11 @@ vi.mock('~/utils/env.server', () => ({
 
 vi.mock('~/services/session-service.server', () => ({
   getSessionService: vi.fn().mockResolvedValue({
+    commitSession: vi.fn(),
     getSession: vi.fn().mockReturnValue({
+      has: vi.fn(),
       get: vi.fn(),
+      unset: vi.fn(),
     }),
   }),
 }));
@@ -89,6 +94,24 @@ describe('_gcweb-app.personal-information.preferred-language.confirm', () => {
       } catch (error) {
         expect((error as Response).status).toEqual(404);
       }
+    });
+  });
+
+  describe('action()', () => {
+    it('should redirect to the personal information on success', async () => {
+      const sessionService = await getSessionService();
+      const session = await sessionService.getSession();
+
+      vi.mocked(session.has).mockResolvedValueOnce(true);
+
+      let request = new Request('http://localhost:3000/personal-information/phone-number/confirm', {
+        method: 'POST',
+      });
+
+      const response = await action({ request, context: {}, params: {} });
+
+      expect(response.status).toBe(302);
+      expect(response.headers.get('location')).toBe('/personal-information');
     });
   });
 });

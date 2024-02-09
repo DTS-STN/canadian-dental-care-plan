@@ -1,8 +1,9 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { Form, Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
+import { redirectWithSuccess } from 'remix-toast';
 
 import { getLookupService } from '~/services/lookup-service.server';
 import { getSessionService } from '~/services/session-service.server';
@@ -41,7 +42,11 @@ export async function action({ request }: ActionFunctionArgs) {
   const session = await sessionService.getSession(request.headers.get('Cookie'));
   const preferredLanguageSession = await session.get('preferredLanguage');
   await userService.updateUserInfo(userId, { preferredLanguage: preferredLanguageSession });
-  return redirect('/personal-information');
+  return redirectWithSuccess('/personal-information', 'gcweb:toast.preferred-language-updated', {
+    headers: {
+      'Set-Cookie': await sessionService.commitSession(session),
+    },
+  });
 }
 
 export default function PreferredLanguageConfirm() {
