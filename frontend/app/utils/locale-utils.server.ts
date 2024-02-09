@@ -43,7 +43,7 @@ export function createLangCookie() {
 export async function getFixedT<N extends Namespace>(request: Request, namespaces: N) {
   const locale = await getLocale(request);
   const i18n = await initI18n(locale, namespaces);
-  return i18n.getFixedT(locale ?? null, namespaces);
+  return i18n.getFixedT(locale, namespaces);
 }
 
 /**
