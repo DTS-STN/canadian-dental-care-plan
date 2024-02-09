@@ -2,9 +2,9 @@
  * Utility functions to help with RAOIDC requests.
  */
 import { SignJWT, compactDecrypt, decodeJwt, importJWK } from 'jose';
-import { createHash, randomBytes, subtle } from 'node:crypto';
+import { createHash, subtle } from 'node:crypto';
 
-import { getLogger } from './logging.server';
+import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('raoidc-utils.server');
 
@@ -331,7 +331,7 @@ async function decryptJwe(jwe: string, privateKey: CryptoKey) {
  *
  * @see https://datatracker.ietf.org/doc/html/rfc6749#section-3.1.2
  */
-export function generateCallbackUri(baseUri: string, providerId?: string) {
+export function generateCallbackUri(baseUri: string, providerId: string) {
   return new URL(`/auth/callback/${providerId}`, baseUri).href;
 }
 
@@ -373,7 +373,9 @@ export function generateRandomState(len = 32) {
  * Generate a random string, duh.
  */
 export function generateRandomString(len: number) {
-  return randomBytes(len).toString('hex');
+  const allowedChars = '0123456789abcdefghijklmnopqrstuvwxyz';
+  const toRandomChar = () => allowedChars[Math.floor(Math.random() * allowedChars.length)];
+  return Array(len).fill(undefined).map(toRandomChar).join('');
 }
 
 export async function validateAuthorizationToken(authToken: AuthTokenSet) {
