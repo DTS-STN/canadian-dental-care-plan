@@ -119,7 +119,7 @@ db.letter.create({
 // seed avaliable pdf (after letter)
 db.pdf.create({
   referenceId: sampleLetter.referenceId.toString(),
-  fileStream: '/test.pdf',
+  fileStream: '',
   id: '00000000-0000-0000-0000-000000000011',
 });
 
