@@ -10,6 +10,13 @@
       "request": "launch",
       "type": "node-terminal",
       "cwd": "${workspaceFolder}/frontend/"
+    },
+    {
+      "name": "Debug CDCP frontend unit tests",
+      "command": "npm run test:unit",
+      "request": "launch",
+      "type": "node-terminal",
+      "cwd": "${workspaceFolder}/frontend/"
     }
   ]
 }
