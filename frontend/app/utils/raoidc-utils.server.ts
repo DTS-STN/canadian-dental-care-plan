@@ -106,8 +106,8 @@ export interface FetchFunctionInit extends RequestInit {
  * JsonWebKey set.
  * Returned from the auth server's JWKS endpoint.
  */
-interface JWKSet {
-  keys: Array<JsonWebKey>;
+export interface JWKSet {
+  keys: Array<JsonWebKey & Record<string, unknown>>;
 }
 
 /**
@@ -249,6 +249,38 @@ export async function fetchUserInfo(userInfoUri: string, accessToken: string, cl
   }
 
   return decodeJwt(await decryptJwe(userInfo.userinfo_token, client.privateKey));
+}
+
+/**
+ * Validate (and extend) an RAOIDC session.
+ *
+ * This function is used to detect whether or not a user has timed out, or
+ * logged out in RAOIDC/ECAS protected space. A noteworthy side-effect of this
+ * validation call is that the user's RAOIDC/ECAS session is extended for
+ * another TTL (typically 20 minutes).
+ */
+export async function validateSession(authUrl: string, clientId: string, sessionId: string, fetchFn?: FetchFunction) {
+  const validateUrl = new URL('validatesession', authUrl + '/');
+  log.debug('Validating/extending session [%s] via [%s]', sessionId, validateUrl);
+
+  validateUrl.searchParams.set('client_id', clientId);
+  validateUrl.searchParams.set('shared_session_id', sessionId);
+
+  // prettier-ignore
+  const response = fetchFn
+    ? await fetchFn(validateUrl)
+    : await fetch(validateUrl);
+
+  if (response.status !== 200) {
+    throw new Error('Error validating session: non-200 status');
+  }
+
+  // RAOIDC will return simply 'true' or 'false'
+  // to indicate if the session is valid
+  const result = (await response.text()) === 'true';
+
+  log.debug('Session [%s] is valid: [%s]', sessionId, result);
+  return result;
 }
 
 /**

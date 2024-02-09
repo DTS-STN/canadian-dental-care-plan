@@ -5,7 +5,7 @@ import { HttpResponse, http } from 'msw';
 import { privateKeyPemToCryptoKey, publicKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
-import { type AuthTokenSet, type UserinfoTokenSet } from '~/utils/raoidc-utils.server';
+import { type AuthTokenSet, type JWKSet, type ServerMetadata, type UserinfoTokenSet } from '~/utils/raoidc-utils.server';
 
 const log = getLogger('raoidc.server');
 
@@ -47,6 +47,15 @@ export function getRaoidcMockHandlers() {
     http.get(`${AUTH_RAOIDC_BASE_URL}/userinfo`, async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       return HttpResponse.json(await getUserInfo());
+    }),
+
+    //
+    // RAOIDC `/validatesession` endpoint mock
+    // (note: this is not a standard OIDC endpoint)
+    //
+    http.get(`${AUTH_RAOIDC_BASE_URL}/validatesession`, async ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      return HttpResponse.json(getSessionStatus());
     }),
   ];
 }
@@ -177,9 +186,12 @@ async function getJwks() {
         ...publicJwk,
       },
     ],
-  };
+  } as JWKSet;
 }
 
+/**
+ * Returns mock OIDC server metadata.
+ */
 function getOpenidConfiguration(authBaseUrl: string) {
   return {
     issuer: 'GC-ECAS-MOCK',
@@ -199,5 +211,13 @@ function getOpenidConfiguration(authBaseUrl: string) {
     userinfo_signing_alg_values_supported: ['RS256', 'RS512'],
     userinfo_encryption_alg_values_supported: ['RSA-OAEP-256'],
     userinfo_encryption_enc_values_supported: ['A256GCM'],
-  };
+  } as ServerMetadata;
+}
+
+/**
+ * Performs a mock session validation.
+ * 'true' means the session is valid
+ */
+function getSessionStatus() {
+  return true;
 }
