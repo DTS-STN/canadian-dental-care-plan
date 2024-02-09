@@ -74,17 +74,19 @@ export function getPowerPlatformApiMockHandlers() {
       return HttpResponse.text(null, { status: 204 });
     }),
 
-    //
-    // Handler for GET requests to retrieve letters details.
-    //
-    http.get('https://api.example.com/letters', ({ params }) => {
+    /**
+     * Handler for GET requests to retrieve letters details.
+     */
+    http.get('https://api.example.com/users/:userId/letters', ({ params }) => {
       const letterEntities = getLetterEntities(params.userId);
 
       return HttpResponse.json(
         letterEntities?.map((letter) => {
           return {
-            dateSent: letter.dateSent,
-            subject: letter.letterTypeCd,
+            id: letter.id,
+            dateSent: new Date(letter.issuedOn),
+            nameEn: letter.nameEn,
+            nameFr: letter.nameFr,
             referenceId: letter.referenceId,
           };
         }),
@@ -129,6 +131,7 @@ function getLetterEntities(userId: string | readonly string[]) {
   if (!parsedUserId) {
     throw new HttpResponse('Invalid userId: ' + parsedUserId, { status: 400, headers: { 'Content-Type': 'text/plain' } });
   }
+
   const letterEntities = !parsedUserId.success
     ? undefined
     : db.letter.findMany({

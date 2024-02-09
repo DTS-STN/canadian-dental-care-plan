@@ -33,15 +33,17 @@ const db = factory({
     nameFr: String,
   },
   letter: {
-    referenceId: primaryKey(faker.string.uuid),
-    dateSent: Date,
-    letterTypeCd: String,
+    referenceId: String,
+    issuedOn: Date,
     userId: String,
+    nameEn: String,
+    nameFr: String,
+    id: primaryKey(String),
   },
   pdf: {
     fileStream: String,
-    referenceId: oneOf('letter'),
-    id: primaryKey(faker.string.uuid),
+    referenceId: String,
+    id: primaryKey(String),
   },
   country: {
     code: primaryKey(String),
@@ -83,20 +85,40 @@ const defaultUser = db.user.create({
   id: '00000000-0000-0000-0000-000000000000',
   firstName: 'John',
   lastName: 'Maverick',
-  preferredLanguage: frenchLanguage.id,
+  preferredLanguage: frenchLanguage.id.toString(),
 });
 
 // seed avaliable letters (after user)
 const sampleLetter = db.letter.create({
-  referenceId: '00000000-0000-0000-0000-000000000011',
-  dateSent: '2024-01-02',
-  letterTypeCd: 'Letter Type',
-  userId: defaultUser.id,
+  referenceId: '1',
+  issuedOn: '2024-03-03T03:04:05.000Z',
+  userId: defaultUser.id.toString(),
+  nameEn: 'Letters Type 1',
+  nameFr: 'Letters Type 1',
+  id: '00000000-0000-0000-0000-000000000011',
+});
+
+db.letter.create({
+  referenceId: '2',
+  issuedOn: '2024-12-25T03:01:01.000Z',
+  userId: defaultUser.id.toString(),
+  nameEn: 'Letters Type 2',
+  nameFr: 'Letters Type 2',
+  id: '00000000-0000-0000-0000-000000000012',
+});
+
+db.letter.create({
+  referenceId: '3',
+  issuedOn: '2004-02-29T03:11:21.000Z',
+  userId: defaultUser.id.toString(),
+  nameEn: 'Letters Type 3',
+  nameFr: 'Letters Type 3',
+  id: '00000000-0000-0000-0000-00000000013',
 });
 
 // seed avaliable pdf (after letter)
 db.pdf.create({
-  referenceId: sampleLetter,
+  referenceId: sampleLetter.referenceId.toString(),
   fileStream: '',
   id: '00000000-0000-0000-0000-000000000011',
 });

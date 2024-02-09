@@ -4,13 +4,17 @@ import { z } from 'zod';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('letters-service.server');
+const log = getLogger('lookup-service.server');
 
-const letterSchema = z.object({
-  dateSent: z.date().optional(),
-  letterTypeCode: z.string().optional(),
-  referenceId: z.string().uuid().optional(),
-});
+const letterSchema = z.array(
+  z.object({
+    dateSent: z.coerce.date().optional(),
+    referenceId: z.string().optional(),
+    nameEn: z.string().optional(),
+    nameFr: z.string().optional(),
+    id: z.string().optional(),
+  }),
+);
 
 export type LettersInfo = z.infer<typeof letterSchema>;
 
@@ -22,9 +26,13 @@ export const getLettersService = moize(createLettersService, { onCacheAdd: () =>
 function createLettersService() {
   const { INTEROP_API_BASE_URI } = getEnv();
 
-  async function getLetters(requestBody: { userId: string }) {
-    const url = new URL(`${INTEROP_API_BASE_URI}/letters`);
-    url.searchParams.set('userId', requestBody.userId);
+  /**
+   *
+   * @param { userId }
+   * @returns returns the letters based off  @param userId
+   */
+  async function getLetters(userId: string) {
+    const url = `${INTEROP_API_BASE_URI}/users/${userId}/letters`;
     const response = await fetch(url);
 
     if (!response.ok) {
