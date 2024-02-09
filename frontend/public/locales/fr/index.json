@@ -5,7 +5,7 @@
     "home": "(FR) Home"
   },
   "personal-info": "(FR) Personal information",
-  "personal-info-desc": "(FR) In this section, you can see your personal information.",
+  "personal-info-desc": "(FR) In this section, you can see and update your personal information.",
   "upload": "(FR) Upload document for CDCP",
   "upload-desc": "(FR) In this section, you can your upload documents.",
   "view-letters": "(FR) View my letters",
@@ -15,7 +15,7 @@
   "view-my-application": "(FR)View my application(s)",
   "view-my-application-desc": "(FR)In this section, you can see the status of current or past applications for the Canadian Dental Care Program",
   "subscribe": "(FR) Subscribe to CDCP email alerts",
-  "subscribe-desc": "(FR) In this section, you can subscribe to the email alerts for CDCO, Any time you have a new message, you will be alerted.",
+  "subscribe-desc": "(FR) In this section, you can subscribe to the email alerts for CDCP, Any time you have a new message, you will be alerted.",
   "label-in-progress": {
     "sr-only": "(FR)State:",
     "text": "(FR)In progress"

@@ -12,8 +12,8 @@
     "home-address": "Home address",
     "mailing-address": "Mailing address",
     "preferred-language": "Preferred language",
-    "change-home-address": "Change your home address",
-    "change-mailing-address": "Change your mailing address",
+    "change-home-address": "Change home address",
+    "change-mailing-address": "Change mailing address",
     "change-phone-number": "Change phone number",
     "change-preferred-language": "Change preferred language",
     "no-address-on-file": "No address on file"
@@ -27,9 +27,9 @@
         "home-address-change": "Change home address"
       },
       "field": {
-        "address": "Adddress",
+        "address": "Address",
         "city": "City",
-        "province": "Province",
+        "province": "Province/State",
         "postal-code": "Postal code",
         "country": "Country"
       },
@@ -102,7 +102,7 @@
       "field": {
         "address": "Address",
         "city": "City",
-        "province": "Province",
+        "province": "Province/State",
         "postal-code": "Postal code",
         "country": "Country"
       },
