@@ -1,8 +1,18 @@
 import { describe, expect, it } from 'vitest';
 
-import { privateKeyPemToCryptoKey, publicKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
+import { generateJwkId, privateKeyPemToCryptoKey, publicKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
 
 describe('crypto-utils.server', () => {
+  it('should return a JWK ID for an empty JWK', () => {
+    expect(generateJwkId({})).toEqual('d41d8cd98f00b204e9800998ecf8427e');
+  });
+
+  it('should return different JWK IDs for different JWKs', () => {
+    const jwkId1 = generateJwkId({ n: 'foo' });
+    const jwkId2 = generateJwkId({ n: 'bar' });
+    expect(jwkId1).not.toEqual(jwkId2);
+  });
+
   it('should convert a public key from PEM format to a CryptoKey', async () => {
     // prettier-ignore
     const publicKeyPem =
