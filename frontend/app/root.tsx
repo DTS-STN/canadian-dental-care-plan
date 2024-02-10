@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { Suspense, useContext } from 'react';
 
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
@@ -71,26 +71,28 @@ export default function App() {
   const documentTitle = useDocumentTitle();
 
   return (
-    <html lang={i18n.language}>
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>{documentTitle}</title>
-        <Meta />
-        <Links />
-      </head>
-      <body vocab="http://schema.org/" typeof="WebPage">
-        <Outlet />
-        {javascriptEnabled && (
-          <>
-            <ClientEnv env={env} nonce={nonce} />
-            <ScrollRestoration nonce={nonce} />
-            <Scripts nonce={nonce} />
-          </>
-        )}
-        <LiveReload nonce={nonce} />
-        <Toaster toast={toast} />
-      </body>
-    </html>
+    <Suspense>
+      <html lang={i18n.language}>
+        <head>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <title>{documentTitle}</title>
+          <Meta />
+          <Links />
+        </head>
+        <body vocab="http://schema.org/" typeof="WebPage">
+          <Outlet />
+          {javascriptEnabled && (
+            <>
+              <ClientEnv env={env} nonce={nonce} />
+              <ScrollRestoration nonce={nonce} />
+              <Scripts nonce={nonce} />
+            </>
+          )}
+          <LiveReload nonce={nonce} />
+          <Toaster toast={toast} />
+        </body>
+      </html>
+    </Suspense>
   );
 }
