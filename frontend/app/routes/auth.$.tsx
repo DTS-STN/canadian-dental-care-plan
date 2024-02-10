@@ -46,8 +46,11 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
  * Handler for /auth/login requests
  */
 async function handleLoginRequest({ params, request }: LoaderFunctionArgs) {
-  log.debug('Redirecting to default provider handler: [%s]', `/auth/login/${defaultProviderId}`);
-  return redirect(`/auth/login/${defaultProviderId}`);
+  const url = new URL(`/auth/login/${defaultProviderId}`, request.url);
+  url.search = new URL(request.url).search;
+
+  log.debug('Redirecting to default provider handler: [%s]', url);
+  return redirect(url.toString());
 }
 
 /**
@@ -57,14 +60,19 @@ async function handleRaoidcLoginRequest({ params, request }: LoaderFunctionArgs)
   log.debug('Handling RAOIDC login request');
   const raoidcService = await getRaoidcService();
 
-  const redirectUri = generateCallbackUri(new URL(request.url).origin, 'raoidc');
+  const { origin, searchParams } = new URL(request.url);
+  const returnUrl = searchParams.get('returnto');
+
+  const redirectUri = generateCallbackUri(origin, 'raoidc');
   const { authUrl, codeVerifier, state } = raoidcService.generateSigninRequest(redirectUri);
 
   log.debug('Storing [codeVerifier] and [state] in session for future validation');
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));
-  session.set('codeVerifier', codeVerifier);
-  session.set('state', state);
+  // set as flash values so they're removed after the first get()
+  session.flash('codeVerifier', codeVerifier);
+  session.flash('returnUrl', returnUrl ?? '/');
+  session.flash('state', state);
 
   log.debug('Redirecting to RAOIDC signin URL [%s]', authUrl.href);
   return redirect(authUrl.href, {
@@ -81,9 +89,10 @@ async function handleRaoidcCallbackRequest({ params, request }: LoaderFunctionAr
   const raoidcService = await getRaoidcService();
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request.headers.get('Cookie'));
-
   const codeVerifier = session.get('codeVerifier');
+  const returnUrl = session.get('returnUrl') ?? '/';
   const state = session.get('state');
+
   const redirectUri = generateCallbackUri(new URL(request.url).origin, 'raoidc');
 
   log.debug('Storing auth tokens and userinfo in session');
@@ -91,12 +100,8 @@ async function handleRaoidcCallbackRequest({ params, request }: LoaderFunctionAr
   session.set('auth', auth);
   session.set('userInfo', userInfo);
 
-  //
-  // TODO :: GjB :: provide the ability to redirect to a specific route after login
-  //
-
-  log.debug('RAOIDC login successful; redirecting to [%s]', '/');
-  return redirect('/', {
+  log.debug('RAOIDC login successful; redirecting to [%s]', returnUrl);
+  return redirect(returnUrl, {
     headers: { 'Set-Cookie': await sessionService.commitSession(session) },
   });
 }
