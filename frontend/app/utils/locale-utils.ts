@@ -63,9 +63,6 @@ export async function initI18n(namespaces: Array<string>) {
         escapeValue: false,
       },
       ns: namespaces,
-      react: {
-        useSuspense: false,
-      },
     });
 
   return i18n;
