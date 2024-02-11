@@ -179,7 +179,8 @@
       "button": {
         "confirm": "Confirm",
         "cancel": "Cancel"
-      }
+      },
+      "updated-notification": "Phone number updated"
     }
   },
   "preferred-language": {
@@ -209,7 +210,8 @@
       "button": {
         "confirm": "Confirm",
         "cancel": "Cancel"
-      }
+      },
+      "updated-notification": "Preferred language updated"
     }
   }
 }

@@ -4,7 +4,6 @@ import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
-import reactToastifyStyleSheet from 'react-toastify/dist/ReactToastify.css';
 import { getToast } from 'remix-toast';
 
 import { Toaster } from './components/toaster';
@@ -15,10 +14,7 @@ import { readBuildInfo } from '~/utils/build-info.server';
 import { getEnv, getPublicEnv } from '~/utils/env.server';
 import { useDocumentTitleI18nKey, useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
 
-export const links = () => [
-  { rel: 'stylesheet', href: tailwindStyleSheet },
-  { rel: 'stylesheet', href: reactToastifyStyleSheet },
-];
+export const links = () => [{ rel: 'stylesheet', href: tailwindStyleSheet }];
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const buildInfo = readBuildInfo('build-info.json');

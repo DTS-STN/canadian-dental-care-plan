@@ -52,7 +52,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
-  session.set('preferredLanguage', parsedDataResult.data.preferredLanguage);
+  session.set('newPreferredLanguage', parsedDataResult.data.preferredLanguage);
 
   return redirect('/personal-information/preferred-language/confirm', {
     headers: {

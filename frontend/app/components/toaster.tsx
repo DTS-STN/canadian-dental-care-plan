@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 
-import { ToastContainer, toast as notify } from 'react-toastify';
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import type { ToastMessage } from 'remix-toast';
+
+import { SnackbarMessage } from '~/components/snackbar-message';
 
 export interface ToasterProps {
   toast?: ToastMessage;
@@ -9,10 +11,10 @@ export interface ToasterProps {
 
 export function Toaster({ toast }: ToasterProps) {
   useEffect(() => {
-    if (toast) {
-      notify(toast.message, { type: toast.type });
+    if (toast?.message) {
+      enqueueSnackbar(<SnackbarMessage message={toast.message} />, { variant: toast.type });
     }
   }, [toast]);
 
-  return <ToastContainer newestOnTop position="bottom-right" />;
+  return <SnackbarProvider anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }} />;
 }
