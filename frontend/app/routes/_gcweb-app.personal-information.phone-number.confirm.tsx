@@ -24,31 +24,36 @@ export const handle = {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userService = getUserService();
-  const userId = await userService.getUserId();
-  const userInfo = await userService.getUserInfo(userId);
   const sessionService = await getSessionService();
+
+  const userId = await userService.getUserId();
+  if (!userId) return redirect('/');
+
+  const userInfo = await userService.getUserInfo(userId);
+  if (!userInfo) return redirect('/');
+
   const session = await sessionService.getSession(request);
   if (!session.has('newPhoneNumber')) return redirect('/');
 
-  return json({ userInfo, newPhoneNumber: await session.get('newPhoneNumber') });
+  return json({ userInfo, newPhoneNumber: session.get('newPhoneNumber') });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
   const userService = getUserService();
+  const sessionService = await getSessionService();
+
   const userId = await userService.getUserId();
   if (!userId) return redirect('/');
+
   const userInfo = await userService.getUserInfo(userId);
   if (!userInfo) return redirect('/');
 
-  const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
   if (!session.has('newPhoneNumber')) return redirect('/');
 
-  userInfo.phoneNumber = session.get('newPhoneNumber');
-  await userService.updateUserInfo(userId, userInfo);
+  await userService.updateUserInfo(userId, { phoneNumber: session.get('newPhoneNumber') });
   session.unset('newPhoneNumber');
-
-  return redirectWithSuccess('/personal-information', 'Phone number has been updated.', {
+  return redirectWithSuccess('/personal-information', 'personal-information:phone-number.confirm.updated-notification', {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),
     },

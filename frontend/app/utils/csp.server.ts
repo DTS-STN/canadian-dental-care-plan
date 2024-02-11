@@ -20,7 +20,7 @@ export function generateContentSecurityPolicy(nonce: string) {
     `frame-src 'self'`,
     `img-src 'self'`,
     `script-src 'strict-dynamic' 'nonce-${nonce}'`,
-    `style-src 'self'`,
+    `style-src 'self' 'unsafe-inline'`,
   ].join('; ');
 
   log.debug(`Generated content security policy: [${contentSecurityPolicy}]`);

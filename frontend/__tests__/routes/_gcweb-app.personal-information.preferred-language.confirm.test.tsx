@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { loader } from '~/routes/_gcweb-app.personal-information.preferred-language.confirm';
 import { getLookupService } from '~/services/lookup-service.server';
+import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getEnv } from '~/utils/env.server';
 
@@ -31,7 +32,9 @@ vi.mock('~/utils/env.server', () => ({
 vi.mock('~/services/session-service.server', () => ({
   getSessionService: vi.fn().mockResolvedValue({
     getSession: vi.fn().mockReturnValue({
+      has: vi.fn(),
       get: vi.fn(),
+      unset: vi.fn(),
     }),
   }),
 }));
@@ -43,6 +46,8 @@ describe('_gcweb-app.personal-information.preferred-language.confirm', () => {
 
   describe('loader()', () => {
     it('should return userInfo object if userInfo is found', async () => {
+      const sessionService = await getSessionService();
+      const session = await sessionService.getSession(new Request('https://example.com/'));
       const userService = getUserService();
 
       vi.mocked(getEnv, { partial: true }).mockReturnValue({
@@ -53,6 +58,8 @@ describe('_gcweb-app.personal-information.preferred-language.confirm', () => {
       });
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', preferredLanguage: 'fr' });
       vi.mocked(getLookupService().getPreferredLanguage).mockResolvedValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' });
+      vi.mocked(session.get).mockReturnValueOnce('fr');
+      vi.mocked(session.has).mockReturnValueOnce(true);
 
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information/preferred/confirm'),

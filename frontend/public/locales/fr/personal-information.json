@@ -179,17 +179,8 @@
       "button": {
         "confirm": "(FR) Confirm",
         "cancel": "(FR) Cancel"
-      }
-    },
-    "success": {
-      "page-title": "(FR) Phone number saved successfully",
-      "breadcrumbs": {
-        "home": "(FR) Home",
-        "personal-information": "(FR) Personal information",
-        "success-phone-number": "(FR) Success phone number"
       },
-      "success-message": "(FR) Phone number has been successfully updated.",
-      "return": "(FR) Return to personal information"
+      "updated-notification": "(FR) Phone number updated"
     }
   },
   "preferred-language": {
@@ -219,7 +210,8 @@
       "button": {
         "confirm": "(FR) Confirm",
         "cancel": "(FR) Cancel"
-      }
+      },
+      "updated-notification": "(FR) Preferred language updated"
     }
   }
 }

@@ -17,7 +17,7 @@ vi.mock('~/services/user-service.server', () => ({
 vi.mock('~/services/session-service.server', () => ({
   getSessionService: vi.fn().mockResolvedValue({
     commitSession: vi.fn(),
-    getSession: vi.fn().mockReturnValue({
+    getSession: vi.fn().mockResolvedValue({
       has: vi.fn(),
       get: vi.fn(),
       unset: vi.fn(),
@@ -33,13 +33,13 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
 
   describe('loader()', () => {
     it('should return userInfo and newPhoneNumber', async () => {
+      const userService = getUserService();
       const sessionService = await getSessionService();
       const session = await sessionService.getSession(new Request('https://example.com/'));
-      const userService = getUserService();
 
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', phoneNumber: '(111) 222-3333' });
-      vi.mocked(session.get).mockResolvedValue('(444) 555-6666');
-      vi.mocked(session.has).mockResolvedValueOnce(true);
+      vi.mocked(session.get).mockReturnValueOnce('(444) 555-6666');
+      vi.mocked(session.has).mockReturnValueOnce(true);
 
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information/phone-number/confirm'),
@@ -61,7 +61,7 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
       const sessionService = await getSessionService();
       const session = await sessionService.getSession(new Request('https://example.com/'));
 
-      vi.mocked(session.has).mockResolvedValueOnce(true);
+      vi.mocked(session.has).mockReturnValueOnce(true);
 
       let request = new Request('http://localhost:3000/personal-information/phone-number/confirm', {
         method: 'POST',

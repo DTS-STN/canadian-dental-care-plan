@@ -3,6 +3,7 @@ import { json, redirect } from '@remix-run/node';
 import { Form, Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
+import { redirectWithSuccess } from 'remix-toast';
 
 import { getLookupService } from '~/services/lookup-service.server';
 import { getSessionService } from '~/services/session-service.server';
@@ -25,29 +26,46 @@ export const handle = {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userService = getUserService();
-  const userId = await userService.getUserId();
-  const userInfo = await userService.getUserInfo(userId);
   const sessionService = await getSessionService();
+
+  const userId = await userService.getUserId();
+  if (!userId) return redirect('/');
+
+  const userInfo = await userService.getUserInfo(userId);
+  if (!userInfo) return redirect('/');
+
   const session = await sessionService.getSession(request);
-  const preferredLanguageSession = await session.get('preferredLanguage');
-  const preferredLanguage = await getLookupService().getPreferredLanguage(preferredLanguageSession);
+  if (!session.has('newPreferredLanguage')) return redirect('/');
+
+  const preferredLanguage = await getLookupService().getPreferredLanguage(session.get('newPreferredLanguage'));
   return json({ userInfo, preferredLanguage });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
   const userService = getUserService();
-  const userId = await userService.getUserId();
   const sessionService = await getSessionService();
+
+  const userId = await userService.getUserId();
+  if (!userId) return redirect('/');
+
+  const userInfo = await userService.getUserInfo(userId);
+  if (!userInfo) return redirect('/');
+
   const session = await sessionService.getSession(request);
-  const preferredLanguageSession = await session.get('preferredLanguage');
-  await userService.updateUserInfo(userId, { preferredLanguage: preferredLanguageSession });
-  return redirect('/personal-information');
+  if (!session.has('newPreferredLanguage')) return redirect('/');
+
+  await userService.updateUserInfo(userId, { preferredLanguage: session.get('newPreferredLanguage') });
+  session.unset('newPreferredLanguage');
+  return redirectWithSuccess('/personal-information', 'personal-information:preferred-language.confirm.updated-notification', {
+    headers: {
+      'Set-Cookie': await sessionService.commitSession(session),
+    },
+  });
 }
 
 export default function PreferredLanguageConfirm() {
   const { preferredLanguage } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
-
   return (
     <>
       <p>{t('personal-information:preferred-language.confirm.confirm-message')}</p>
