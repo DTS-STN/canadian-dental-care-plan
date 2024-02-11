@@ -32,7 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const regionList = await getLookupService().getAllRegions();
 
   const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request);
   const newHomeAddress = await session.get('newHomeAddress');
   return json({ homeAddressInfo, newHomeAddress, countryList, regionList });
 }
@@ -42,7 +42,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
   const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request);
 
   await getAddressService().updateAddressInfo(userId, userInfo?.homeAddress ?? '', session.get('newHomeAddress'));
 

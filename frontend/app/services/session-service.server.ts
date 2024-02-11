@@ -12,7 +12,7 @@
  * Example usage:
  *
  *    const sessionStorage = await getSessionService().createSessionStorage();
- *    const session = await sessionStorage.getSession(request.headers.get('Cookie'));
+ *    const session = await sessionStorage.getSession(request);
  *    return json({}, {
  *      headers: {
  *        'Set-Cookie': await sessionStorage.commitSession(session)
@@ -50,12 +50,16 @@ async function createSessionService() {
   });
 
   switch (env.SESSION_STORAGE_TYPE) {
-    case 'file':
+    case 'file': {
       log.warn('Using file-backed sessions. This is not recommended for production.');
-      return createFileSessionStorage({ cookie: sessionCookie, dir: env.SESSION_FILE_DIR });
-    case 'redis':
+      const sessionStorage = createFileSessionStorage({ cookie: sessionCookie, dir: env.SESSION_FILE_DIR });
+      return { ...sessionStorage, getSession: (request: Request) => sessionStorage.getSession(request.headers.get('Cookie')) };
+    }
+    case 'redis': {
       log.info('Using Redis-backed sessions.');
-      return createRedisSessionStorage();
+      const sessionStorage = await createRedisSessionStorage();
+      return { ...sessionStorage, getSession: (request: Request) => sessionStorage.getSession(request.headers.get('Cookie')) };
+    }
     default:
       // this should never happen (because: typescript)
       throw new Error(`Unknown session storage type: ${env.SESSION_STORAGE_TYPE}`);

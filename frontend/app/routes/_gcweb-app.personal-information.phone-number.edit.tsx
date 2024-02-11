@@ -56,7 +56,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request);
   session.set('newPhoneNumber', parsedDataResult.data.phoneNumber);
 
   return redirect('/personal-information/phone-number/confirm', {

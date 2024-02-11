@@ -32,7 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const regionList = await getLookupService().getAllRegions();
 
   const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request);
   const newMailingAddress = await session.get('newMailingAddress');
   return json({ mailingAddressInfo, newMailingAddress, countryList, regionList });
 }
@@ -43,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const userInfo = await userService.getUserInfo(userId);
 
   const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request);
 
   await getAddressService().updateAddressInfo(userId, userInfo?.mailingAddress ?? '', session.get('newMailingAddress'));
 

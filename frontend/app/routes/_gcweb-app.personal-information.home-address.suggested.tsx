@@ -37,7 +37,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // CHANGE THE SOURCE OF THE SUGGESTED ADDRESS TO WHAT WS ADDRESS SERVICE IS RETURNING INSTEAD OF MAILING ADDRESS
   //
   const suggestedAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.mailingAddress ?? '');
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request);
   session.set('homeAddress', homeAddressInfo);
   session.set('suggestedAddress', suggestedAddressInfo);
 
@@ -57,7 +57,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const suggestedAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.mailingAddress ?? '');
   const formDataRadio = Object.fromEntries(await request.formData());
   //retrieve selected address, store it in the session and then redirect to the confirm page...
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request);
   if (formDataRadio.selectedAddress === 'home') {
     session.set('newHomeAddress', homeAddressInfo);
   } else {

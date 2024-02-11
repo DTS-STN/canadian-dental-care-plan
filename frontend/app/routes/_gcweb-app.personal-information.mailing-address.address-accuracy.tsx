@@ -23,7 +23,7 @@ export const handle = {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request);
   if (!session.has('newMailingAddress')) return redirect('/');
   const newMailingAddress = await session.get('newMailingAddress');
   return json({ newMailingAddress });
