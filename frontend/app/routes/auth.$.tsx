@@ -68,7 +68,7 @@ async function handleRaoidcLoginRequest({ params, request }: LoaderFunctionArgs)
 
   log.debug('Storing [codeVerifier] and [state] in session for future validation');
   const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request);
   // set as flash values so they're removed after the first get()
   session.flash('codeVerifier', codeVerifier);
   session.flash('returnUrl', returnUrl ?? '/');
@@ -88,7 +88,7 @@ async function handleRaoidcCallbackRequest({ params, request }: LoaderFunctionAr
 
   const raoidcService = await getRaoidcService();
   const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request);
   const codeVerifier = session.get('codeVerifier');
   const returnUrl = session.get('returnUrl') ?? '/';
   const state = session.get('state');

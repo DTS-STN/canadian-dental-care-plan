@@ -81,7 +81,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request);
 
   const { copyHomeAddress } = formData as Partial<z.infer<typeof copyHomeAddressSchema>>;
   if (copyHomeAddress) {

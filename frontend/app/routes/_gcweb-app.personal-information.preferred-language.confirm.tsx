@@ -28,7 +28,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
   const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request);
   const preferredLanguageSession = await session.get('preferredLanguage');
   const preferredLanguage = await getLookupService().getPreferredLanguage(preferredLanguageSession);
   return json({ userInfo, preferredLanguage });
@@ -38,7 +38,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const userService = getUserService();
   const userId = await userService.getUserId();
   const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request);
   const preferredLanguageSession = await session.get('preferredLanguage');
   await userService.updateUserInfo(userId, { preferredLanguage: preferredLanguageSession });
   return redirect('/personal-information');

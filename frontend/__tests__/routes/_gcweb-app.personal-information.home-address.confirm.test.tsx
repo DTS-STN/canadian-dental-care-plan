@@ -65,7 +65,7 @@ describe('_gcweb-app.personal-information.home-address.confirm', () => {
     it('should return homeAddressInfo and newHomeAddress objects', async () => {
       const userService = getUserService();
       const sessionService = await getSessionService();
-      const session = await sessionService.getSession();
+      const session = await sessionService.getSession(new Request('https://example.com/'));
 
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', firstName: 'John', lastName: 'Maverick' });
       vi.mocked(getAddressService().getAddressInfo).mockResolvedValue({ address: '111 Fake Home St', city: 'city', country: 'country' });

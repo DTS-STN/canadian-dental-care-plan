@@ -27,7 +27,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
   const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request);
   if (!session.has('newPhoneNumber')) return redirect('/');
 
   return json({ userInfo, newPhoneNumber: await session.get('newPhoneNumber') });
@@ -41,7 +41,7 @@ export async function action({ request }: ActionFunctionArgs) {
   if (!userInfo) return redirect('/');
 
   const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request.headers.get('Cookie'));
+  const session = await sessionService.getSession(request);
   if (!session.has('newPhoneNumber')) return redirect('/');
 
   userInfo.phoneNumber = session.get('newPhoneNumber');
