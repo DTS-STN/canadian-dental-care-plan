@@ -2,6 +2,7 @@ import type { ComponentProps, ReactNode } from 'react';
 
 import { Link, Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
+import { ChevronDown as ChevronDownIcon, ChevronRight as ChevronRightIcon, CircleUserRound as CircleUserRoundIcon, Home as HomeIcon, LogOut as LogOutIcon } from 'lucide-react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { AnchorLink } from '~/components/anchor-link';
@@ -64,17 +65,10 @@ function NavigationMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="xs" id="dropdownNavbarLink" pill className="gap-2" aria-haspopup="true" data-testid="menuButton">
-          <svg className="h-4 w-4" viewBox="0 0 35 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M17.5 0.499756C7.84 0.499756 0 8.33976 0 17.9998C0 27.6598 7.84 35.4998 17.5 35.4998C27.16 35.4998 35 27.6598 35 17.9998C35 8.33976 27.16 0.499756 17.5 0.499756ZM17.5 7.49976C20.8775 7.49976 23.625 10.2473 23.625 13.6248C23.625 17.0023 20.8775 19.7498 17.5 19.7498C14.1225 19.7498 11.375 17.0023 11.375 13.6248C11.375 10.2473 14.1225 7.49976 17.5 7.49976ZM17.5 31.9998C13.9475 31.9998 9.7475 30.5648 6.755 26.9598C9.7125 24.6498 13.44 23.2498 17.5 23.2498C21.56 23.2498 25.2875 24.6498 28.245 26.9598C25.2525 30.5648 21.0525 31.9998 17.5 31.9998Z"
-              fill="currentColor"
-            />
-          </svg>
+        <Button size="sm" className="gap-2" id="dropdownNavbarLink" pill aria-haspopup="true" data-testid="menuButton">
+          <CircleUserRoundIcon className="h-4 w-4 flex-shrink-0" />
           <span>{t('header.menu-title')}</span>
-          <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path>
-          </svg>
+          <ChevronDownIcon className="h-4 w-4 flex-shrink-0" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-60" align="end">
@@ -92,7 +86,9 @@ function NavigationMenu() {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild className="cursor-pointer">
-          <Link to="/">{t('gcweb:header.menu-sign-out.text')}</Link>
+          <Link to="/" className="flex items-center justify-between gap-2">
+            {t('gcweb:header.menu-sign-out.text')} <LogOutIcon className="h-4 w-4 flex-shrink-0" />
+          </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -249,23 +245,17 @@ function Breadcrumbs() {
         {t('gcweb:breadcrumbs.you-are-here')}
       </h2>
       <div className="container mt-4">
-        <ol className="flex flex-wrap items-center gap-1 md:gap-2" typeof="BreadcrumbList">
-          <li property="itemListElement" typeof="ListItem" className="flex items-center">
-            <svg className="me-2.5 h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-              <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"></path>
-            </svg>
+        <ol className="flex flex-wrap items-center gap-x-3 gap-y-1" typeof="BreadcrumbList">
+          <li property="itemListElement" typeof="ListItem" className="flex items-center gap-2">
+            <HomeIcon className="h-4 w-4 flex-shrink-0" />
             <Breadcrumb to={breadcrumbs.length !== 0 ? '/' : undefined}>{t('gcweb:breadcrumbs.home')}</Breadcrumb>
           </li>
           {breadcrumbs.map(({ labelI18nKey, to }, index) => {
             return (
-              <>
-                <svg className="mx-1 h-3 w-3 text-gray-400 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m1 9 4-4-4-4"></path>
-                </svg>
-                <li key={labelI18nKey} property="itemListElement" typeof="ListItem" className="flex items-center">
-                  <Breadcrumb to={to}>{t(labelI18nKey)}</Breadcrumb>
-                </li>
-              </>
+              <li key={labelI18nKey} property="itemListElement" typeof="ListItem" className="flex items-center">
+                <ChevronRightIcon className="mr-2 mt-0.5 h-4 w-4 text-gray-400" />
+                <Breadcrumb to={to}>{t(labelI18nKey)}</Breadcrumb>
+              </li>
             );
           })}
         </ol>

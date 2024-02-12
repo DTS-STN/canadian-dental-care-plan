@@ -1,3 +1,4 @@
+import { AlertCircle as AlertCircleIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { AnchorLink } from '~/components/anchor-link';
@@ -92,10 +93,8 @@ export function ErrorSummary({ errors, id }: ErrorSummaryProps) {
   const { t } = useTranslation(['gcweb']);
 
   return (
-    <section id={id} className="my-5 flex rounded-lg border border-red-300 bg-red-50 p-4 text-red-800 " tabIndex={-1} role="alert">
-      <svg className="me-3 mt-1 inline h-4 w-4 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-      </svg>
+    <section id={id} className="my-5 flex gap-3 rounded-lg border border-red-300 bg-red-50 p-4 text-red-800" tabIndex={-1} role="alert">
+      <AlertCircleIcon className="mt-1.5 inline h-4 w-4 flex-shrink-0" />
       <div>
         <h2 className="text-lg font-semibold">{t('gcweb:error-summary.header', { count: errors.length })}</h2>
         {errors.length > 0 && (
