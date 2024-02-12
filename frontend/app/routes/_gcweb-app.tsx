@@ -1,5 +1,4 @@
-import type { ComponentProps, MouseEventHandler, ReactElement, ReactNode } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 
 import { Link, Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
@@ -7,10 +6,10 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { AnchorLink } from '~/components/anchor-link';
 import { Button } from '~/components/buttons';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '~/components/dropdown-menu';
 import { InlineLink } from '~/components/inline-link';
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { PageTitle } from '~/components/page-title';
-import { SignOutIcon } from '~/components/sign-out-icon';
 import { getClientEnv } from '~/utils/env';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey } from '~/utils/route-utils';
@@ -59,38 +58,51 @@ function ApplicationLayout({ children }: { children?: ReactNode }) {
   );
 }
 
+function NavigationMenu() {
+  const { t } = useTranslation(i18nNamespaces);
+  const { SCCH_BASE_URI } = getClientEnv();
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button size="xs" id="dropdownNavbarLink" pill className="gap-2" aria-haspopup="true" data-testid="menuButton">
+          <svg className="h-4 w-4" viewBox="0 0 35 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M17.5 0.499756C7.84 0.499756 0 8.33976 0 17.9998C0 27.6598 7.84 35.4998 17.5 35.4998C27.16 35.4998 35 27.6598 35 17.9998C35 8.33976 27.16 0.499756 17.5 0.499756ZM17.5 7.49976C20.8775 7.49976 23.625 10.2473 23.625 13.6248C23.625 17.0023 20.8775 19.7498 17.5 19.7498C14.1225 19.7498 11.375 17.0023 11.375 13.6248C11.375 10.2473 14.1225 7.49976 17.5 7.49976ZM17.5 31.9998C13.9475 31.9998 9.7475 30.5648 6.755 26.9598C9.7125 24.6498 13.44 23.2498 17.5 23.2498C21.56 23.2498 25.2875 24.6498 28.245 26.9598C25.2525 30.5648 21.0525 31.9998 17.5 31.9998Z"
+              fill="currentColor"
+            />
+          </svg>
+          <span>{t('header.menu-title')}</span>
+          <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path>
+          </svg>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-60" align="end">
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-dashboard.text')}</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link to={t('gcweb:header.menu-profile.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-profile.text')}</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link to={t('gcweb:header.menu-security-settings.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-security-settings.text')}</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link to={t('gcweb:header.menu-contact-us.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-contact-us.text')}</Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link to="/">{t('gcweb:header.menu-sign-out.text')}</Link>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 function PageHeader() {
   const { i18n, t } = useTranslation(i18nNamespaces);
-  const [showDropdown, setShowDropdown] = useState<boolean>(false);
-  const dropdown = useRef<HTMLDivElement>(null);
-  const { SCCH_BASE_URI } = getClientEnv();
+  // const { SCCH_BASE_URI } = getClientEnv();
 
-  const onClickMenuHandler = () => setShowDropdown((currentState) => !currentState);
-
-  useEffect(() => {
-    if (!showDropdown) return;
-
-    function handleEsc(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        setShowDropdown(false);
-      }
-    }
-
-    function handleClick(event: MouseEvent) {
-      if (dropdown.current) {
-        const targetInsideDropdown = dropdown.current?.contains(event.target as Node) ?? false;
-        setShowDropdown(targetInsideDropdown);
-      }
-    }
-
-    window.addEventListener('click', handleClick);
-    window.addEventListener('keydown', handleEsc);
-
-    return () => {
-      window.removeEventListener('click', handleClick);
-      window.removeEventListener('keydown', handleEsc);
-    };
-  }, [showDropdown]);
   return (
     <>
       <div id="skip-to-content">
@@ -135,29 +147,7 @@ function PageHeader() {
               <Link to="/" className="text-2xl font-semibold hover:underline">
                 <h2>{t('gcweb:header.application-title')}</h2>
               </Link>
-              <nav ref={dropdown}>
-                <Button size="xs" id="dropdownNavbarLink" pill className="gap-2" onClick={() => setShowDropdown((currentState) => !currentState)} aria-haspopup="true" data-testid="menuButton" aria-expanded={showDropdown}>
-                  <svg className="h-4 w-4" viewBox="0 0 35 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M17.5 0.499756C7.84 0.499756 0 8.33976 0 17.9998C0 27.6598 7.84 35.4998 17.5 35.4998C27.16 35.4998 35 27.6598 35 17.9998C35 8.33976 27.16 0.499756 17.5 0.499756ZM17.5 7.49976C20.8775 7.49976 23.625 10.2473 23.625 13.6248C23.625 17.0023 20.8775 19.7498 17.5 19.7498C14.1225 19.7498 11.375 17.0023 11.375 13.6248C11.375 10.2473 14.1225 7.49976 17.5 7.49976ZM17.5 31.9998C13.9475 31.9998 9.7475 30.5648 6.755 26.9598C9.7125 24.6498 13.44 23.2498 17.5 23.2498C21.56 23.2498 25.2875 24.6498 28.245 26.9598C25.2525 30.5648 21.0525 31.9998 17.5 31.9998Z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                  <span>{t('header.menu-title')}</span>
-                  <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path>
-                  </svg>
-                </Button>
-                {showDropdown && (
-                  <div id="dropdownNavbar" className="text-deep-blue-dark z-10 rounded-b-[5px] bg-white pt-1 drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] sm:absolute sm:w-[260px]" aria-labelledby="dropdownLargeButton">
-                    <MenuOption onClick={onClickMenuHandler} href={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} text={t('gcweb:header.menu-dashboard.text')} />
-                    <MenuOption onClick={onClickMenuHandler} href={t('gcweb:header.menu-profile.href', { baseUri: SCCH_BASE_URI })} text={t('gcweb:header.menu-profile.text')} />
-                    <MenuOption onClick={onClickMenuHandler} href={t('gcweb:header.menu-security-settings.href', { baseUri: SCCH_BASE_URI })} text={t('gcweb:header.menu-security-settings.text')} />
-                    <MenuOption onClick={onClickMenuHandler} href={t('gcweb:header.menu-contact-us.href', { baseUri: SCCH_BASE_URI })} text={t('gcweb:header.menu-contact-us.text')} />
-                    <MenuOption onClick={onClickMenuHandler} icon={<SignOutIcon />} href={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} text={t('gcweb:header.menu-sign-out.text')} />
-                  </div>
-                )}
-              </nav>
+              <NavigationMenu />
             </div>
           </div>
         </section>
@@ -281,15 +271,6 @@ function Breadcrumbs() {
         </ol>
       </div>
     </nav>
-  );
-}
-
-function MenuOption({ onClick, icon, href, text }: { onClick: MouseEventHandler<HTMLAnchorElement>; icon?: ReactElement; href: string; text: string }) {
-  return (
-    <Link className="hover:text-blue-hover ring-blue-hover flex h-[55px] items-center rounded-sm px-4 ring-offset-2 focus:border-none focus:outline-none focus:ring-2" onClick={onClick} to={href} aria-label={text}>
-      {icon}
-      {text}
-    </Link>
   );
 }
 

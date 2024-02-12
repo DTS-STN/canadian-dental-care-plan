@@ -1,4 +1,4 @@
-import type { ComponentProps } from 'react';
+import { type ComponentProps, forwardRef } from 'react';
 
 import { Link } from '@remix-run/react';
 
@@ -34,9 +34,11 @@ export interface ButtonProps extends ComponentProps<'button'> {
  * Tailwind CSS Buttons from Flowbite
  * @see https://flowbite.com/docs/components/buttons/
  */
-export function Button({ className, pill, size, variant, ...props }: ButtonProps) {
-  return <button className={cn(baseClassName, sizes[size ?? 'base'], variants[variant ?? 'default'], props.disabled && disableClassName, pill ? 'rounded-full' : 'rounded-lg', className)} {...props} />;
-}
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, pill, size, variant, ...props }, ref) => {
+  return <button className={cn(baseClassName, sizes[size ?? 'base'], variants[variant ?? 'default'], props.disabled && disableClassName, pill ? 'rounded-full' : 'rounded-lg', className)} {...props} ref={ref} />;
+});
+
+Button.displayName = 'Button';
 
 export interface ButtonLinkProps extends ComponentProps<typeof Link> {
   size?: keyof typeof sizes;
@@ -48,10 +50,14 @@ export interface ButtonLinkProps extends ComponentProps<typeof Link> {
  * Tailwind CSS Buttons from Flowbite
  * @see https://flowbite.com/docs/components/buttons/
  */
-export function ButtonLink({ children, className, pill, size, variant, ...props }: ButtonLinkProps) {
+const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(({ children, className, pill, size, variant, ...props }, ref) => {
   return (
-    <Link className={cn(baseClassName, sizes[size ?? 'base'], variants[variant ?? 'default'], pill ? 'rounded-full' : 'rounded-lg', className)} {...props}>
+    <Link className={cn(baseClassName, sizes[size ?? 'base'], variants[variant ?? 'default'], pill ? 'rounded-full' : 'rounded-lg', className)} {...props} ref={ref}>
       {children}
     </Link>
   );
-}
+});
+
+ButtonLink.displayName = 'ButtonLink';
+
+export { Button, ButtonLink };
