@@ -17,30 +17,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 
   if (pdfResponse.ok) {
-    const readableStream = new ReadableStream({
-      async start(controller) {
-        const reader = pdfResponse.body?.getReader();
-        async function readChunk() {
-          if (!reader) controller.close();
-          else {
-            try {
-              const { done, value } = await reader.read();
-              if (done) {
-                controller.close();
-                return;
-              }
-              controller.enqueue(value);
-            } catch (error) {
-              console.error('Error reading file:', error);
-              controller.error(error);
-            }
-          }
-        }
-        await readChunk();
-      },
-    });
-
-    return new Response(readableStream, {
+    return new Response(pdfResponse.body, {
       headers: {
         'Content-Type': 'application/octet-stream',
         'Content-Length': pdfResponse.headers.get('Content-Length') ?? '',
