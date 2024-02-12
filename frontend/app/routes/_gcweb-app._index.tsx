@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { cn } from '~/utils/tw-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('index');
 
@@ -38,7 +37,7 @@ export default function Index() {
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <p>{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.lastName })}</p>
+      <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.lastName })}</p>
       <div className="grid gap-4 md:grid-cols-2">
         <CardLink title={t('index:personal-info')} to="/personal-information">
           {t('index:personal-info-desc')}
@@ -64,25 +63,25 @@ export default function Index() {
 }
 
 function CardLink({ children, inProgress, title, to }: { children: ReactNode; inProgress?: boolean; title: ReactNode; to: ComponentProps<typeof Link>['to'] }) {
-  const linkResetClassName = '!text-inherit !no-underline !decoration-inherit';
-  const linkClassName = cn(linkResetClassName, 'block rounded-lg border border-gray-200 p-6 shadow hover:bg-gray-100');
   return (
-    <Link className={linkClassName} to={to}>
-      <h2 className="h3 !mt-0">{inProgress ? <ProgressLabel>{title}</ProgressLabel> : title}</h2>
-      <p className="m-0">{children}</p>
+    <Link className="flex flex-col gap-4 rounded-xl border border-slate-300 bg-slate-50 p-6 hover:shadow-md " to={to}>
+      <h2 className="text-2xl font-semibold leading-8">{title}</h2>
+      <p>{children}</p>
+      {inProgress && (
+        <div className="mt-auto">
+          <ProgressLabel />
+        </div>
+      )}
     </Link>
   );
 }
 
-function ProgressLabel({ children }: { children: ReactNode }) {
+function ProgressLabel() {
   const { t } = useTranslation(i18nNamespaces);
   return (
-    <span className="flex flex-wrap items-center gap-4">
-      <span>{children}</span>
-      <span className="me-2 rounded border border-yellow-300 bg-yellow-100 px-2.5 py-0.5 text-sm font-medium text-yellow-800">
-        <span className="wb-inv">{t('index:label-in-progress.sr-only')}</span>
-        {t('index:label-in-progress.text')}
-      </span>
-    </span>
+    <div className="inline-block rounded-full border border-yellow-300 bg-yellow-50 px-1.5 py-0.5 text-xs font-normal text-yellow-800">
+      <span className="sr-only">{t('index:label-in-progress.sr-only')}</span>
+      {t('index:label-in-progress.text')}
+    </div>
   );
 }
