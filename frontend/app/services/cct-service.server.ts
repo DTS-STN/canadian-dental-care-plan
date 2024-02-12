@@ -17,7 +17,7 @@ export const getCCTService = moize(createCCTService, { onCacheAdd: () => log.inf
 function createCCTService() {
   const { CCT_API_BASE_URI } = getEnv();
 
-  async function getPdf(referenceId: string | readonly string[]) {
+  async function getPdf(referenceId: string) {
     const url = `${CCT_API_BASE_URI}/cct/letters/${referenceId}`;
     const response = await fetch(url);
 
