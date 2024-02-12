@@ -41,7 +41,6 @@ const db = factory({
     id: primaryKey(String),
   },
   pdf: {
-    fileStream: String,
     referenceId: String,
     id: primaryKey(String),
   },
@@ -89,7 +88,7 @@ const defaultUser = db.user.create({
 });
 
 // seed avaliable letters (after user)
-const sampleLetter = db.letter.create({
+const sampleLetter1 = db.letter.create({
   referenceId: '1',
   dateSent: '2024-03-03T03:04:05.000Z',
   userId: defaultUser.id.toString(),
@@ -98,7 +97,7 @@ const sampleLetter = db.letter.create({
   id: '00000000-0000-0000-0000-000000000011',
 });
 
-db.letter.create({
+const sampleLetter2 = db.letter.create({
   referenceId: '2',
   dateSent: '2024-12-25T03:01:01.000Z',
   userId: defaultUser.id.toString(),
@@ -107,7 +106,7 @@ db.letter.create({
   id: '00000000-0000-0000-0000-000000000012',
 });
 
-db.letter.create({
+const sampleLetter3 = db.letter.create({
   referenceId: '3',
   dateSent: '2004-02-29T03:11:21.000Z',
   userId: defaultUser.id.toString(),
@@ -127,9 +126,18 @@ db.letter.create({
 
 // seed avaliable pdf (after letter)
 db.pdf.create({
-  referenceId: sampleLetter.referenceId.toString(),
-  fileStream: '',
-  id: '00000000-0000-0000-0000-000000000011',
+  referenceId: sampleLetter1.referenceId.toString(),
+  id: '00000000-3000-0000-0000-000000000011',
+});
+
+db.pdf.create({
+  referenceId: sampleLetter2.referenceId.toString(),
+  id: '00000000-3000-0000-0000-000000000021',
+});
+
+db.pdf.create({
+  referenceId: sampleLetter3.referenceId.toString(),
+  id: '00000000-3000-0000-0000-000000000031',
 });
 
 // seed country list

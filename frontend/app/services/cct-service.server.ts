@@ -4,34 +4,25 @@ import { z } from 'zod';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('pdf-service.server');
-
-const pdfSchema = z.object({
-  fileStream: z.string().optional(),
-  referenceId: z.string().optional(),
-  id: z.string().uuid().optional(),
-});
+const log = getLogger('cct-service.server');
+const pdfSchema = z.string().optional();
 
 export type PdfInfo = z.infer<typeof pdfSchema>;
 
 /**
  * Return a singleton instance (by means of memomization) of the PDF service.
  */
-export const getPdf = moize(createPdfService, { onCacheAdd: () => log.info('Creating new PDF service') });
+export const getCCTService = moize(createCCTService, { onCacheAdd: () => log.info('Creating new PDF service') });
 
-function createPdfService() {
+function createCCTService() {
   const { CCT_API_BASE_URI } = getEnv();
 
-  async function getPdf(referenceId: string) {
+  async function getPdf(referenceId: string | readonly string[]) {
     const url = `${CCT_API_BASE_URI}/cct/letters/${referenceId}`;
     const response = await fetch(url);
 
-    if (response.ok) {
-      return pdfSchema.parse(await response.json());
-    }
-
-    if (response.status === 404) {
-      return null;
+    if (response.ok || response.status === 404) {
+      return response;
     }
 
     log.error('%j', {
