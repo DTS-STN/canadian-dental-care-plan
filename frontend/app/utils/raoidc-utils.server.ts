@@ -358,7 +358,7 @@ export function generateRandomCodeVerifier(len = 64) {
 /**
  * Generate a random nonce string.
  */
-export function generateRandomNonce(len = 16) {
+export function generateRandomNonce(len = 32) {
   return generateRandomString(len);
 }
 
