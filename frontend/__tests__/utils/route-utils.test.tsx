@@ -5,8 +5,7 @@ import { createRemixStub } from '@remix-run/testing';
 
 import { describe, expect, it } from 'vitest';
 
-import type { BuildInfo } from '~/utils/route-utils';
-import { coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey } from '~/utils/route-utils';
+import { type Breadcrumbs, type BuildInfo, coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey } from '~/utils/route-utils';
 
 describe('coalesce<T> reducer', () => {
   it('expect undefined from two undefined values', () => {
@@ -43,25 +42,26 @@ describe('useBreadcrumbs()', () => {
     render(<RemixStub />);
 
     const element = await waitFor(() => screen.findByTestId('data'));
-    expect(element.textContent).toEqual('');
+    expect(element.textContent).toEqual('[]');
   });
 
   it('expect correctly coalesced breadcrumbs from useBreadcrumbs() if the loaders provide data', async () => {
+    const breadcrumbs: Breadcrumbs = [
+      { labelI18nKey: 'personal-information:preferred-language.edit.breadcrumbs.personal-information', to: '/personal-information' },
+      { labelI18nKey: 'personal-information:preferred-language.edit.page-title', to: '/personal-information/preferred-language' },
+      { labelI18nKey: 'personal-information:preferred-language.edit.page-title' },
+    ];
+
     const RemixStub = createRemixStub([
       {
         Component: () => <Outlet />,
-        handle: { breadcrumbs: [{ labelI18nKey: 'index:breadcrumbs.home' }] } satisfies RouteHandleData,
+        handle: {
+          breadcrumbs: [{ labelI18nKey: 'gcweb:breadcrumbs.home' }],
+        } satisfies RouteHandleData,
         children: [
           {
             Component: () => <div data-testid="data">{JSON.stringify(useBreadcrumbs())}</div>,
-            handle: {
-              breadcrumbs: [
-                { labelI18nKey: 'personal-information:preferred-language.edit.breadcrumbs.home', to: '/' },
-                { labelI18nKey: 'personal-information:preferred-language.edit.breadcrumbs.personal-information', to: '/personal-information' },
-                { labelI18nKey: 'personal-information:preferred-language.edit.page-title', to: '/personal-information/preferred-language' },
-                { labelI18nKey: 'personal-information:preferred-language.edit.page-title' },
-              ],
-            } satisfies RouteHandleData,
+            handle: { breadcrumbs } satisfies RouteHandleData,
             path: '/',
           },
         ],
@@ -71,9 +71,7 @@ describe('useBreadcrumbs()', () => {
     render(<RemixStub />);
 
     const element = await waitFor(() => screen.findByTestId('data'));
-    expect(element.textContent).toEqual(
-      `[{"labelI18nKey":"personal-information:preferred-language.edit.breadcrumbs.home","to":"/"},{"labelI18nKey":"personal-information:preferred-language.edit.breadcrumbs.personal-information","to":"/personal-information"},{"labelI18nKey":"personal-information:preferred-language.edit.page-title","to":"/personal-information/preferred-language"},{"labelI18nKey":"personal-information:preferred-language.edit.page-title"}]`,
-    );
+    expect(element.textContent).toEqual(JSON.stringify(breadcrumbs));
   });
 });
 

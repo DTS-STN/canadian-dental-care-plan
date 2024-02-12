@@ -1,9 +1,6 @@
 {
   "page-title": "Home",
   "welcome": "Welcome {{firstName}} {{lastName}}",
-  "breadcrumbs": {
-    "home": "Home"
-  },
   "personal-info": "Personal information",
   "personal-info-desc": "In this section, you can see and update your personal information.",
   "upload": "Upload document for CDCP",

@@ -12,7 +12,6 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 const i18nNamespaces = getTypedI18nNamespaces('index');
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'index:breadcrumbs.home' }],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0001',
   pageTitleI18nKey: 'index:page-title',

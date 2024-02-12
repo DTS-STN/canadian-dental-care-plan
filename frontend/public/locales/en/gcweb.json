@@ -33,7 +33,8 @@
     "alt-lang-abbr": "FR"
   },
   "breadcrumbs": {
-    "you-are-here": "You are here:"
+    "you-are-here": "You are here:",
+    "home": "Home"
   },
   "page-details": {
     "page-details": "Page details",

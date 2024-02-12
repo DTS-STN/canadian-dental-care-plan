@@ -1,9 +1,6 @@
 {
   "page-title": "(FR) Home",
   "welcome": "Bienvenue {{firstName}} {{lastName}}",
-  "breadcrumbs": {
-    "home": "(FR) Home"
-  },
   "personal-info": "(FR) Personal information",
   "personal-info-desc": "(FR) In this section, you can see and update your personal information.",
   "upload": "(FR) Upload document for CDCP",

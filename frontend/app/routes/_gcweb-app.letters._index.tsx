@@ -14,7 +14,7 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 const i18nNamespaces = getTypedI18nNamespaces('letters');
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'letters:index.breadcrumbs.home', to: '/' }, { labelI18nKey: 'letters:index.page-title' }],
+  breadcrumbs: [{ labelI18nKey: 'letters:index.page-title' }],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0002',
   pageTitleI18nKey: 'letters:index.page-title',

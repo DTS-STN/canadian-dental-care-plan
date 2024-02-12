@@ -13,7 +13,7 @@ const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
   breadcrumbs: [
-    { labelI18nKey: 'personal-information:phone-number.confirm.breadcrumbs.home', to: '/' },
+    // prettier-ignore
     { labelI18nKey: 'personal-information:phone-number.confirm.breadcrumbs.personal-information', to: '/personal-information' },
     { labelI18nKey: 'personal-information:phone-number.confirm.breadcrumbs.confirm-phone-number' },
   ],

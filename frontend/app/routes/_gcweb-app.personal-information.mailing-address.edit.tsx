@@ -22,7 +22,7 @@ const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
   breadcrumbs: [
-    { labelI18nKey: 'personal-information:mailing-address.edit.breadcrumbs.home', to: '/' },
+    // prettier-ignore
     { labelI18nKey: 'personal-information:mailing-address.edit.breadcrumbs.personal-information', to: '/personal-information' },
     { labelI18nKey: 'personal-information:mailing-address.edit.breadcrumbs.mailing-address-change' },
   ],
