@@ -82,7 +82,7 @@ export default function PersonalInformationIndex() {
         </PersonalInformationSection>
         <PersonalInformationSection
           footer={
-            <Link id="change-home-address-button" className="btn btn-primary btn-lg" to="/personal-information/mailing-address/edit">
+            <Link id="change-mailing-address-button" className="btn btn-primary btn-lg" to="/personal-information/mailing-address/edit">
               {t('personal-information:index.change-mailing-address')}
             </Link>
           }
