@@ -2,7 +2,6 @@
   "index": {
     "page-title": "Personal information",
     "breadcrumbs": {
-      "home": "Home",
       "personal-information": "Personal information"
     },
     "on-file": "We have the following information for you on file.",
@@ -22,7 +21,6 @@
     "edit": {
       "page-title": "Change home address",
       "breadcrumbs": {
-        "home": "Home",
         "personal-information": "Personal information",
         "home-address-change": "Change home address"
       },
@@ -44,7 +42,6 @@
     "address-accuracy": {
       "page-title": "Home Address Accuracy",
       "breadcrumbs": {
-        "home": "Home",
         "personal-information": "Personal information"
       },
       "cancel": "Cancel",
@@ -58,7 +55,6 @@
     "suggested": {
       "page-title:": "Suggested address",
       "breadcrumbs": {
-        "home": "Home",
         "personal-information": "Personal information",
         "suggested-address": "Change home address"
       },
@@ -76,7 +72,6 @@
     "confirm": {
       "page-title": "Confirm",
       "breadcrumbs": {
-        "home": "Home",
         "personal-information": "Personal information",
         "address-change-confirm": "Confirm"
       },
@@ -93,7 +88,6 @@
     "edit": {
       "page-title": "Change mailing address",
       "breadcrumbs": {
-        "home": "Home",
         "personal-information": "Personal information",
         "mailing-address-change": "Change mailing address"
       },
@@ -117,7 +111,6 @@
     "address-accuracy": {
       "page-title": "Mailing Address Accuracy",
       "breadcrumbs": {
-        "home": "Home",
         "personal-information": "Personal information"
       },
       "cancel": "Cancel",
@@ -131,7 +124,6 @@
     "confirm": {
       "page-title": "Confirm",
       "breadcrumbs": {
-        "home": "Home",
         "personal-information": "Personal information",
         "address-change-confirm": "Confirm"
       },
@@ -148,7 +140,6 @@
     "edit": {
       "page-title": "Update phone number",
       "breadcrumbs": {
-        "home": "Home",
         "personal-information": "Personal information",
         "change-phone-number": "Change phone number"
       },
@@ -171,7 +162,6 @@
     "confirm": {
       "page-title": "Confirm phone number",
       "breadcrumbs": {
-        "home": "Home",
         "personal-information": "Personal information",
         "confirm-phone-number": "Confirm phone number"
       },
@@ -187,7 +177,6 @@
     "edit": {
       "page-title": "Change preferred language",
       "breadcrumbs": {
-        "home": "Home",
         "personal-information": "Personal information",
         "preferred-language": "Preferred language",
         "edit": "Edit"
@@ -200,7 +189,6 @@
     "confirm": {
       "page-title": "Confirm preferred language",
       "breadcrumbs": {
-        "home": "Home",
         "personal-information": "Personal information",
         "preferred-language": "Preferred language",
         "preferred-language-edit": "Change preferred language",

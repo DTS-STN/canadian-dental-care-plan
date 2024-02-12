@@ -15,7 +15,7 @@ import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils'
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'personal-information:index.breadcrumbs.home', to: '/' }, { labelI18nKey: 'personal-information:index.page-title' }],
+  breadcrumbs: [{ labelI18nKey: 'personal-information:index.page-title' }],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0002',
   pageTitleI18nKey: 'personal-information:index.page-title',

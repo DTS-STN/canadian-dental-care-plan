@@ -2,7 +2,6 @@
   "index": {
     "page-title": "(FR) Personal information",
     "breadcrumbs": {
-      "home": "(FR) Home",
       "personal-information": "(FR) Personal information"
     },
     "on-file": "(FR) We have the following information for you on file.",
@@ -22,7 +21,6 @@
     "edit": {
       "page-title": "(FR) Change home address",
       "breadcrumbs": {
-        "home": "(FR) Home",
         "personal-information": "(FR) Personal information",
         "home-address-change": "(FR) Change home address"
       },
@@ -44,7 +42,6 @@
     "address-accuracy": {
       "page-title": "(FR) Home Address Accuracy",
       "breadcrumbs": {
-        "home": "(FR) Home",
         "personal-information": "(FR) Personal information"
       },
       "cancel": "(FR) Cancel",
@@ -58,7 +55,6 @@
     "suggested": {
       "page-title:": "(FR) Suggested address",
       "breadcrumbs": {
-        "home": "(FR) Home",
         "personal-information": "(FR) Personal information",
         "suggested-address": "(FR) Suggested address"
       },
@@ -76,7 +72,6 @@
     "confirm": {
       "page-title": "(FR) Confirm",
       "breadcrumbs": {
-        "home": "(FR) Home",
         "personal-information": "(FR) Personal information",
         "address-change-confirm": "(FR) Confirm"
       },
@@ -93,7 +88,6 @@
     "edit": {
       "page-title": "(FR) Change mailing address",
       "breadcrumbs": {
-        "home": "(FR) Home",
         "personal-information": "(FR) Personal information",
         "mailing-address-change": "(FR) Change mailing address"
       },
@@ -117,7 +111,6 @@
     "address-accuracy": {
       "page-title": "(FR) Mailing Address Accuracy",
       "breadcrumbs": {
-        "home": "(FR) Home",
         "personal-information": "(FR) Personal information"
       },
       "cancel": "(FR) Cancel",
@@ -131,7 +124,6 @@
     "confirm": {
       "page-title": "(FR) Confirm",
       "breadcrumbs": {
-        "home": "(FR) Home",
         "personal-information": "(FR) Personal information",
         "address-change-confirm": "(FR) Confirm"
       },
@@ -148,7 +140,6 @@
     "edit": {
       "page-title": "(FR) Update phone number",
       "breadcrumbs": {
-        "home": "(FR) Home",
         "personal-information": "(FR) Personal information",
         "change-phone-number": "(FR) Change phone number"
       },
@@ -171,7 +162,6 @@
     "confirm": {
       "page-title": "(FR) Confirm phone number",
       "breadcrumbs": {
-        "home": "(FR) Home",
         "personal-information": "(FR) Personal information",
         "confirm-phone-number": "(FR) Confirm phone number"
       },
@@ -187,7 +177,6 @@
     "edit": {
       "page-title": "(FR) Change preferred language",
       "breadcrumbs": {
-        "home": "(FR) Home",
         "personal-information": "(FR) Personal information",
         "preferred-language": "(FR) Preferred language",
         "edit": "(FR) Edit"
@@ -200,7 +189,6 @@
     "confirm": {
       "page-title": "(FR) Confirm preferred language",
       "breadcrumbs": {
-        "home": "(FR) Home",
         "personal-information": "(FR) Personal information",
         "preferred-language": "(FR) Preferred language",
         "preferred-language-edit": "(FR) Change preferred language",

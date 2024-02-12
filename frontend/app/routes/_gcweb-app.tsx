@@ -263,32 +263,29 @@ function PageFooter() {
   );
 }
 
-function Breadcrumbs() {
-  const { t } = useTranslation(i18nNamespaces);
-  const { t: breadcrumbsTranslation } = useTranslation(useI18nNamespaces());
-  const breadcrumbs = useBreadcrumbs();
+function Breadcrumb({ children, to }: { children: ReactNode; to?: string }) {
+  // prettier-ignore
+  return to === undefined
+    ? <span property="name">{children}</span>
+    : <Link to={to} property="item" typeof="WebPage"><span property="name">{children}</span></Link>;
+}
 
-  if (breadcrumbs === undefined || breadcrumbs.length === 0) {
-    return <></>;
-  }
+function Breadcrumbs() {
+  const { t } = useTranslation([...i18nNamespaces, ...useI18nNamespaces()]);
+  const breadcrumbs = useBreadcrumbs();
 
   return (
     <nav id="wb-bc" property="breadcrumb" aria-labelledby="breadcrumbs">
       <h2 id="breadcrumbs">{t('gcweb:breadcrumbs.you-are-here')}</h2>
       <div className="container">
         <ol className="breadcrumb" typeof="BreadcrumbList">
+          <li property="itemListElement" typeof="ListItem">
+            <Breadcrumb to={breadcrumbs.length !== 0 ? '/' : undefined}>{t('gcweb:breadcrumbs.home')}</Breadcrumb>
+          </li>
           {breadcrumbs.map(({ labelI18nKey, to }, index) => {
-            const label = breadcrumbsTranslation(labelI18nKey);
             return (
               <li key={index} property="itemListElement" typeof="ListItem">
-                {to ? (
-                  <Link to={to} property="item" typeof="WebPage">
-                    <span property="name">{label}</span>
-                  </Link>
-                ) : (
-                  <span property="name">{label}</span>
-                )}
-                <meta property="position" content={`${index + 1}`} />
+                <Breadcrumb to={to}>{t(labelI18nKey)}</Breadcrumb>
               </li>
             );
           })}

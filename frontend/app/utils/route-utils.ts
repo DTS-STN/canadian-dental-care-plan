@@ -56,11 +56,13 @@ export type PageIdentifier = z.infer<typeof pageIdentifierSchema>;
 export type PageTitleI18nKey = z.infer<typeof i18nKeySchema>;
 
 export function useBreadcrumbs() {
-  return useMatches()
-    .map((route) => route?.handle as RouteHandleData | undefined)
-    .map((handle) => breadcrumbsSchema.safeParse(handle?.breadcrumbs))
-    .map((result) => (result.success ? result.data : undefined))
-    .reduce(coalesce);
+  return (
+    useMatches()
+      .map((route) => route?.handle as RouteHandleData | undefined)
+      .map((handle) => breadcrumbsSchema.safeParse(handle?.breadcrumbs))
+      .map((result) => (result.success ? result.data : undefined))
+      .reduce(coalesce) ?? []
+  );
 }
 
 export function useBuildInfo() {

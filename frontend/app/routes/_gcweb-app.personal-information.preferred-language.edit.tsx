@@ -15,7 +15,7 @@ const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
   breadcrumbs: [
-    { labelI18nKey: 'personal-information:preferred-language.edit.breadcrumbs.home', to: '/' },
+    // prettier-ignore
     { labelI18nKey: 'personal-information:preferred-language.edit.breadcrumbs.personal-information', to: '/personal-information' },
     { labelI18nKey: 'personal-information:preferred-language.edit.page-title' },
   ],
