@@ -79,8 +79,8 @@ export function getPowerPlatformApiMockHandlers() {
      */
     http.get('https://api.example.com/users/:userId/letters', ({ params, request }) => {
       const url = new URL(request.url)
-      const sortParam = url.searchParams.get('sort') || 'asc'
-      const sort: 'asc' | 'desc' = sortParam === 'desc' ? 'desc' : 'asc';
+      const sortParam = url.searchParams.get('sort') ?? 'asc'
+      const sort = sortParam === 'desc' ? 'desc' : 'asc';
       const letterEntities = getLetterEntities(params.userId, sort);
 
       return HttpResponse.json(
