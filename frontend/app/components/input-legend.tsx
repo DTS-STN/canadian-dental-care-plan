@@ -14,12 +14,18 @@ export function InputLegend(props: InputLegendProps) {
   const { children, className, required, ...restProps } = props;
 
   return (
-    <legend className={cn(required && 'required', className)} data-testid="input-legend" {...restProps}>
-      <span className="field-name">{children}</span>
+    <legend className={cn('block text-sm font-medium', className)} data-testid="input-legend" {...restProps}>
+      <span>{children}</span>
       {required && (
-        <strong className="required mrgn-lft-sm" data-testid="input-legend-required">
-          ({t('input-legend.required')})
-        </strong>
+        <>
+          &nbsp;
+          <i aria-hidden="true" className="font-bold text-red-600">
+            *
+          </i>
+          <strong className="sr-only" data-testid="input-label-required">
+            ({t('input-label.required')})
+          </strong>
+        </>
       )}
     </legend>
   );

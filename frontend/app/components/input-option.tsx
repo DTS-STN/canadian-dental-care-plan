@@ -1,18 +1,15 @@
-import { type ComponentProps } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 
 export interface InputOptionProps extends ComponentProps<'option'> {
-  id: string;
-  label: string;
-  value: string;
+  children: ReactNode;
+  value: string | number;
 }
 
 export function InputOption(props: InputOptionProps) {
-  const { label, value, id, ...restProps } = props;
-  const inputOptionTestId = `input-option-${id}-test`;
-
+  const { children, ...restProps } = props;
   return (
-    <option value={value} id={id} data-testid={inputOptionTestId} {...restProps}>
-      {label}
+    <option data-testid="input-option" {...restProps}>
+      {children}
     </option>
   );
 }

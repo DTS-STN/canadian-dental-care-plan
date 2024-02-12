@@ -30,7 +30,7 @@ export function Address(props: AddressProps) {
   const formattedAddress = formatAddress(address, city, country, provinceState, postalZipCode);
 
   return (
-    <address className={cn('mb-0 whitespace-pre-wrap not-italic', className)} data-testid="address-id" {...restProps}>
+    <address className={cn('whitespace-pre-wrap not-italic', className)} data-testid="address-id" {...restProps}>
       {formattedAddress}
     </address>
   );
