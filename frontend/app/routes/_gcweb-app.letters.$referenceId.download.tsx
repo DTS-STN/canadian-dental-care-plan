@@ -1,40 +1,61 @@
 import { type LoaderFunctionArgs } from '@remix-run/node';
 
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { getCCTService } from '~/services/cct-service.server';
+import { getLogger } from '~/utils/logging.server';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const log = getLogger('_gcweb-app.letters.$referenceId.download');
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const filePath = path.join(__dirname, '..', 'public', 'test.pdf');
-
-  try {
-    const stats = await fs.promises.stat(filePath);
-    const nodeStream = fs.createReadStream(filePath);
-    const stream = new ReadableStream({
-      start(controller) {
-        nodeStream.on('data', (chunk) => {
-          controller.enqueue(chunk);
-        });
-        nodeStream.on('end', () => {
-          controller.close();
-        });
-        nodeStream.on('error', (err) => {
-          controller.error(err);
-        });
-      },
-    });
-
-    return new Response(stream, {
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Length': stats.size.toString(),
-        'Content-Disposition': 'inline; filename="test.pdf"',
-      },
-    });
-  } catch (error) {
-    console.error('Failed to fetch PDF:', error);
-    return new Response('Failed to fetch PDF', { status: 500 });
+  const cctService = getCCTService();
+  if (!params.referenceId) {
+    throw new Response(null, { status: 400 });
   }
+  const pdfResponse = await cctService.getPdf(params.referenceId);
+
+  if (pdfResponse.status === 404) {
+    throw new Response(null, { status: 404 });
+  }
+
+  if (pdfResponse.ok) {
+    const readableStream = new ReadableStream({
+      async start(controller) {
+        const reader = pdfResponse.body?.getReader();
+        async function readChunk() {
+          if (!reader) controller.close();
+          else {
+            try {
+              const { done, value } = await reader.read();
+              if (done) {
+                controller.close();
+                return;
+              }
+              controller.enqueue(value);
+            } catch (error) {
+              console.error('Error reading file:', error);
+              controller.error(error);
+            }
+          }
+        }
+        await readChunk();
+      },
+    });
+
+    return new Response(readableStream, {
+      headers: {
+        'Content-Type': 'application/octet-stream',
+        'Content-Length': pdfResponse.headers.get('Content-Length') ?? '',
+        'Content-Disposition': `attachment; filename="${params.referenceId}.pdf"`,
+      },
+    });
+  }
+
+  log.error('%j', {
+    message: 'Failed to fetch data',
+    status: pdfResponse.status,
+    statusText: pdfResponse.statusText,
+    url: pdfResponse.url,
+    handlersresponseBody: await pdfResponse.text(),
+  });
+
+  throw new Error(`Failed to fetch data. Status: ${pdfResponse.status}, Status Text: ${pdfResponse.statusText}`);
 }

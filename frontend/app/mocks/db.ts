@@ -41,7 +41,6 @@ const db = factory({
     id: primaryKey(String),
   },
   pdf: {
-    fileStream: String,
     referenceId: String,
     id: primaryKey(String),
   },
@@ -87,50 +86,23 @@ const defaultUser = db.user.create({
   lastName: 'Maverick',
   preferredLanguage: frenchLanguage.id.toString(),
 });
-
-// seed avaliable letters (after user)
-const sampleLetter = db.letter.create({
-  referenceId: '1',
-  dateSent: '2024-03-03T03:04:05.000Z',
-  userId: defaultUser.id.toString(),
-  nameEn: 'Letters Type 1',
-  nameFr: 'Letters Type 1',
-  id: '00000000-0000-0000-0000-000000000011',
-});
-
-db.letter.create({
-  referenceId: '2',
-  dateSent: '2024-12-25T03:01:01.000Z',
-  userId: defaultUser.id.toString(),
-  nameEn: 'Letters Type 2',
-  nameFr: 'Letters Type 2',
-  id: '00000000-0000-0000-0000-000000000012',
-});
-
-db.letter.create({
-  referenceId: '3',
-  dateSent: '2004-02-29T03:11:21.000Z',
-  userId: defaultUser.id.toString(),
-  nameEn: 'Letters Type 3',
-  nameFr: 'Letters Type 3',
-  id: '00000000-0000-0000-0000-00000000013',
-});
-
-db.letter.create({
-  referenceId: '4',
-  dateSent: undefined,
-  userId: defaultUser.id.toString(),
-  nameEn: 'Letters Type 4',
-  nameFr: 'Letters Type 4',
-  id: '00000000-0000-0000-0000-00000000014',
-});
-
-// seed avaliable pdf (after letter)
-db.pdf.create({
-  referenceId: sampleLetter.referenceId.toString(),
-  fileStream: '',
-  id: '00000000-0000-0000-0000-000000000011',
-});
+const numberOfLetters = faker.number.int({ min: 10, max: 20 }); // Adjust min and max as needed
+for (let i = 0; i < numberOfLetters; i++) {
+  // seed avaliable letters (after user)
+  const sampleLetter = db.letter.create({
+    referenceId: i.toString(),
+    dateSent: '2024-03-03T03:04:05.000Z',
+    userId: defaultUser.id.toString(),
+    nameEn: 'Letters Type ' + i,
+    nameFr: '(FR) Letters Type ' + i,
+    id: '00000000-0000-0000-0000-' + (10 + i),
+  });
+  // seed avaliable pdf (after letter)
+  db.pdf.create({
+    referenceId: sampleLetter.referenceId.toString(),
+    id: '00000000-3000-0000-0000-' + (0 + i),
+  });
+}
 
 // seed country list
 const countryCanada = db.country.create({
