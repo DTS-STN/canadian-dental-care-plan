@@ -18,7 +18,7 @@ export function generateContentSecurityPolicy(nonce: string) {
     `connect-src 'self'` + (isDevelopment ? ' ws://localhost:3001' : ''),
     `font-src 'self' fonts.gstatic.com`,
     `frame-src 'self'`,
-    `img-src 'self'`,
+    `img-src 'self' data:`,
     `script-src 'strict-dynamic' 'nonce-${nonce}'`,
     `style-src 'self' 'unsafe-inline'`,
   ].join('; ');

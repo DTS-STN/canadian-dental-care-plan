@@ -30,7 +30,7 @@ describe('csp.server', () => {
       expect(csp).toContain(`connect-src 'self';`);
       expect(csp).toContain(`font-src 'self' fonts.gstatic.com;`);
       expect(csp).toContain(`frame-src 'self';`);
-      expect(csp).toContain(`img-src 'self';`);
+      expect(csp).toContain(`img-src 'self' data:;`);
       expect(csp).toContain(`script-src 'strict-dynamic' 'nonce-${nonce}';`);
       expect(csp).toContain(`style-src 'self'`);
     });
