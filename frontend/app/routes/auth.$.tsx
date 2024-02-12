@@ -58,12 +58,18 @@ async function handleLoginRequest({ params, request }: LoaderFunctionArgs) {
  */
 async function handleRaoidcLoginRequest({ params, request }: LoaderFunctionArgs) {
   log.debug('Handling RAOIDC login request');
-  const raoidcService = await getRaoidcService();
 
   const { origin, searchParams } = new URL(request.url);
   const returnUrl = searchParams.get('returnto');
 
+  if (!returnUrl?.startsWith('/')) {
+    log.warn('Invalid return URL [%s]', returnUrl);
+    return new Response(null, { status: 400 });
+  }
+
   const redirectUri = generateCallbackUri(origin, 'raoidc');
+
+  const raoidcService = await getRaoidcService();
   const { authUrl, codeVerifier, state } = raoidcService.generateSigninRequest(redirectUri);
 
   log.debug('Storing [codeVerifier] and [state] in session for future validation');
