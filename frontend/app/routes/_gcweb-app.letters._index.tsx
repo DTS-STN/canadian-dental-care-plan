@@ -27,7 +27,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
    * @sort This accesses the URL's search parameter and retrieves the value associated with the 'sort' parameter, allows the client to specify how the data should be sorted via the URL
    */
   const url = new URL(request.url);
-  const sortOrder = orderEnumSchema.catch('desc').parse(url.searchParams.get('sort') || 'desc');
+  const sortOrder = orderEnumSchema.catch('desc').parse(url.searchParams.get('sort'));
 
   const userService = await getUserService();
   const letterService = await getLettersService();
