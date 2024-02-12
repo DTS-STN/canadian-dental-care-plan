@@ -34,7 +34,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const letterService = await getLettersService();
   const userId = await userService.getUserId();
   const letters = await letterService.getLetters(userId);
-  console.debug(letters);
 
   const sortedLetters = sort(letters, { order: sortOrder, by: (item) => item.dateSent ?? new Date(0) });
 
