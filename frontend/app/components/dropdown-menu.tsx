@@ -1,3 +1,6 @@
+// Dropdown Menu (manual installation)
+// Displays a menu to the user — such as a set of actions or functions — triggered by a button.
+// https://ui.shadcn.com/docs/components/dropdown-menu#installation
 import * as React from 'react';
 
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
