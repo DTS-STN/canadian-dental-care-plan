@@ -115,7 +115,7 @@ const sampleLetter3 = db.letter.create({
   id: '00000000-0000-0000-0000-00000000013',
 });
 
-db.letter.create({
+const sampleLetter4 = db.letter.create({
   referenceId: '4',
   dateSent: undefined,
   userId: defaultUser.id.toString(),
@@ -138,6 +138,10 @@ db.pdf.create({
 db.pdf.create({
   referenceId: sampleLetter3.referenceId.toString(),
   id: '00000000-3000-0000-0000-000000000031',
+});
+db.pdf.create({
+  referenceId: sampleLetter4.referenceId.toString(),
+  id: '00000000-3000-0000-0000-000000000041',
 });
 
 // seed country list

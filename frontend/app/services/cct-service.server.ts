@@ -12,7 +12,7 @@ export type PdfInfo = z.infer<typeof pdfSchema>;
 /**
  * Return a singleton instance (by means of memomization) of the PDF service.
  */
-export const getCCTService = moize(createCCTService, { onCacheAdd: () => log.info('Creating new PDF service') });
+export const getCCTService = moize(createCCTService, { onCacheAdd: () => log.info('Creating new CCT service') });
 
 function createCCTService() {
   const { CCT_API_BASE_URI } = getEnv();
