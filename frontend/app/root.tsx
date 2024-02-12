@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { getToast } from 'remix-toast';
 
 import { Toaster } from './components/toaster';
+// import cdcpStyleSheet from '~/cdcp.css';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import tailwindStyleSheet from '~/tailwind.css';
@@ -14,7 +15,10 @@ import { readBuildInfo } from '~/utils/build-info.server';
 import { getEnv, getPublicEnv } from '~/utils/env.server';
 import { useDocumentTitleI18nKey, useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
 
-export const links = () => [{ rel: 'stylesheet', href: tailwindStyleSheet }];
+export const links = () => [
+  { rel: 'stylesheet', href: tailwindStyleSheet },
+  // { rel: 'stylesheet', href: cdcpStyleSheet },
+];
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const buildInfo = readBuildInfo('build-info.json');
