@@ -3,7 +3,6 @@ import { type ChangeEvent, useEffect, useState } from 'react';
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link, useLoaderData, useSearchParams } from '@remix-run/react';
 
-import { sort } from 'moderndash';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -33,10 +32,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userService = await getUserService();
   const letterService = await getLettersService();
   const userId = await userService.getUserId();
-  const letters = await letterService.getLetters(userId);
+  const letters = await letterService.getLetters(userId, sortOrder);
 
-  const sortedLetters = sort(letters, { order: sortOrder, by: (item) => item.dateSent ?? new Date(0) });
-  return json({ letters: sortedLetters, sortOrder });
+  return json({ letters: letters, sortOrder });
 }
 
 export default function LettersIndex() {
