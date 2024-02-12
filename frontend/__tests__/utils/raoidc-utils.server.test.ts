@@ -30,7 +30,7 @@ describe('raoidc-utils.server', () => {
 
   describe('random string generation utils', () => {
     it('should generate a random nonce', () => {
-      expect(generateRandomNonce().length).toEqual(16);
+      expect(generateRandomNonce().length).toEqual(32);
     });
 
     it('should generate a random code verifier and a code challenge', () => {
