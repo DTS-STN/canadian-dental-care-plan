@@ -34,11 +34,10 @@ describe('Letters Page', () => {
       const data = await response.json();
 
       expect(data.letters).toHaveLength(3);
-      expect(data.letters[2].id).toEqual('2');
-      expect(data.letters[2].nameEn).toEqual('Letter 2');
-      expect(data.letters[0].dateSent).toBeUndefined();
+      expect(data.letters[2].id).toEqual('3');
+      expect(data.letters[2].nameEn).toEqual('Letter 3');
       expect(data.letters[1].dateSent).toBeDefined();
-      expect(data.letters[2].dateSent).toBeDefined();
+      expect(data.letters[2].dateSent).toBeUndefined();
     });
   });
 });

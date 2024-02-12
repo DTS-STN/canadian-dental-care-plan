@@ -31,8 +31,8 @@ function createLettersService() {
    * @param { userId }
    * @returns returns the letters based off  @param userId
    */
-  async function getLetters(userId: string) {
-    const url = `${INTEROP_API_BASE_URI}/users/${userId}/letters`;
+  async function getLetters(userId: string, sortOrder: 'asc' | 'desc' = 'desc') {
+    const url = `${INTEROP_API_BASE_URI}/users/${userId}/letters?sort=${sortOrder}`;
     const response = await fetch(url);
 
     if (!response.ok) {
