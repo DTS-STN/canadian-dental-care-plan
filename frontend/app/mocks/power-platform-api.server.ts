@@ -84,7 +84,7 @@ export function getPowerPlatformApiMockHandlers() {
         letterEntities?.map((letter) => {
           return {
             id: letter.id,
-            dateSent: new Date(letter.issuedOn),
+            dateSent: new Date(letter.dateSent),
             nameEn: letter.nameEn,
             nameFr: letter.nameFr,
             referenceId: letter.referenceId,

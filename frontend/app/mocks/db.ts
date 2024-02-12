@@ -34,7 +34,7 @@ const db = factory({
   },
   letter: {
     referenceId: String,
-    issuedOn: Date,
+    dateSent: Date,
     userId: String,
     nameEn: String,
     nameFr: String,
@@ -91,7 +91,7 @@ const defaultUser = db.user.create({
 // seed avaliable letters (after user)
 const sampleLetter = db.letter.create({
   referenceId: '1',
-  issuedOn: '2024-03-03T03:04:05.000Z',
+  dateSent: '2024-03-03T03:04:05.000Z',
   userId: defaultUser.id.toString(),
   nameEn: 'Letters Type 1',
   nameFr: 'Letters Type 1',
@@ -100,7 +100,7 @@ const sampleLetter = db.letter.create({
 
 db.letter.create({
   referenceId: '2',
-  issuedOn: '2024-12-25T03:01:01.000Z',
+  dateSent: '2024-12-25T03:01:01.000Z',
   userId: defaultUser.id.toString(),
   nameEn: 'Letters Type 2',
   nameFr: 'Letters Type 2',
@@ -109,11 +109,20 @@ db.letter.create({
 
 db.letter.create({
   referenceId: '3',
-  issuedOn: '2004-02-29T03:11:21.000Z',
+  dateSent: '2004-02-29T03:11:21.000Z',
   userId: defaultUser.id.toString(),
   nameEn: 'Letters Type 3',
   nameFr: 'Letters Type 3',
   id: '00000000-0000-0000-0000-00000000013',
+});
+
+db.letter.create({
+  referenceId: '4',
+  dateSent: undefined,
+  userId: defaultUser.id.toString(),
+  nameEn: 'Letters Type 4',
+  nameFr: 'Letters Type 4',
+  id: '00000000-0000-0000-0000-00000000014',
 });
 
 // seed avaliable pdf (after letter)
