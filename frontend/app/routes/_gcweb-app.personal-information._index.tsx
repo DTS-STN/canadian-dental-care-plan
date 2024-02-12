@@ -1,17 +1,17 @@
 import type { ReactNode } from 'react';
 
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
+import { InlineLink } from '~/components/inline-link';
 import { getAddressService } from '~/services/address-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { cn } from '~/utils/tw-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
@@ -35,8 +35,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (!userInfo) {
     throw new Response(null, { status: 404 });
   }
-  const preferredLanguage = userInfo.preferredLanguage && (await getLookupService().getPreferredLanguage(userInfo?.preferredLanguage));
 
+  const preferredLanguage = userInfo.preferredLanguage && (await getLookupService().getPreferredLanguage(userInfo?.preferredLanguage));
   const homeAddressInfo = userInfo.homeAddress && (await getAddressService().getAddressInfo(userId, userInfo?.homeAddress));
   const mailingAddressInfo = userInfo.mailingAddress && (await getAddressService().getAddressInfo(userId, userInfo?.mailingAddress));
 
@@ -48,32 +48,17 @@ export default function PersonalInformationIndex() {
   const { i18n, t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <p>{t('personal-information:index.on-file')}</p>
-      <div className="grid gap-6 md:grid-cols-2">
-        <PersonalInformationSection title={t('personal-information:index.full-name')} icon="glyphicon-user">
-          {`${user.firstName} ${user.lastName}`}
-        </PersonalInformationSection>
-        <PersonalInformationSection
-          footer={
-            <Link id="change-preferred-language-button" className="btn btn-primary btn-lg" to="/personal-information/preferred-language/edit">
-              {t('personal-information:index.change-preferred-language')}
-            </Link>
-          }
-          title={t('personal-information:index.preferred-language')}
-          icon="glyphicon-globe"
-        >
-          {preferredLanguage && getNameByLanguage(i18n.language, preferredLanguage)}
-        </PersonalInformationSection>
-        <PersonalInformationSection
-          footer={
-            <Link id="change-home-address-button" className="btn btn-primary btn-lg" to="/personal-information/home-address/edit">
-              {t('personal-information:index.change-home-address')}
-            </Link>
-          }
-          title={t('personal-information:index.home-address')}
-          icon="glyphicon-home"
-        >
-          {homeAddressInfo && (
+      <p className="mb-8 text-lg text-gray-500">{t('personal-information:index.on-file')}</p>
+      <dl className="mt-6 divide-y border-y">
+        <DescriptionListItem term={t('personal-information:index.full-name')}>{`${user.firstName} ${user.lastName}`}</DescriptionListItem>
+        <DescriptionListItem term={t('personal-information:index.preferred-language')}>
+          <p>{preferredLanguage ? getNameByLanguage(i18n.language, preferredLanguage) : t('personal-information:index.no-preferred-language-on-file')}</p>
+          <InlineLink id="change-preferred-language-button" to="/personal-information/preferred-language/edit" className="mt-3 block">
+            {t('personal-information:index.change-preferred-language')}
+          </InlineLink>
+        </DescriptionListItem>
+        <DescriptionListItem term={t('personal-information:index.home-address')}>
+          {homeAddressInfo ? (
             <Address
               address={homeAddressInfo?.address}
               city={homeAddressInfo?.city}
@@ -81,19 +66,15 @@ export default function PersonalInformationIndex() {
               postalZipCode={homeAddressInfo?.postalCode}
               country={countryList.find((country) => country.code === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
             />
+          ) : (
+            <p>{t('personal-information:index.no-address-on-file')}</p>
           )}
-          {!homeAddressInfo && <p>{t('personal-information:index.no-address-on-file')}</p>}
-        </PersonalInformationSection>
-        <PersonalInformationSection
-          footer={
-            <Link id="change-mailing-address-button" className="btn btn-primary btn-lg" to="/personal-information/mailing-address/edit">
-              {t('personal-information:index.change-mailing-address')}
-            </Link>
-          }
-          title={t('personal-information:index.mailing-address')}
-          icon="glyphicon-envelope"
-        >
-          {mailingAddressInfo && (
+          <InlineLink id="change-home-address-button" to="/personal-information/home-address/edit" className="mt-3 block">
+            {t('personal-information:index.change-home-address')}
+          </InlineLink>
+        </DescriptionListItem>
+        <DescriptionListItem term={t('personal-information:index.mailing-address')}>
+          {mailingAddressInfo ? (
             <Address
               address={mailingAddressInfo?.address}
               city={mailingAddressInfo?.city}
@@ -101,43 +82,29 @@ export default function PersonalInformationIndex() {
               postalZipCode={mailingAddressInfo?.postalCode}
               country={countryList.find((country) => country.code === mailingAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ''}
             />
+          ) : (
+            <p>{t('personal-information:index.no-address-on-file')}</p>
           )}
-          {!mailingAddressInfo && <p>{t('personal-information:index.no-address-on-file')}</p>}
-        </PersonalInformationSection>
-        <PersonalInformationSection
-          footer={
-            <Link id="change-phone-number-button" className="btn btn-primary btn-lg" to="/personal-information/phone-number/edit">
-              {t('personal-information:index.change-phone-number')}
-            </Link>
-          }
-          title={t('personal-information:index.phone-number')}
-          icon="glyphicon-earphone"
-        >
-          {user.phoneNumber}
-        </PersonalInformationSection>
-      </div>
+          <InlineLink id="change-mailing-address-button" to="/personal-information/mailing-address/edit" className="mt-3 block">
+            {t('personal-information:index.change-mailing-address')}
+          </InlineLink>
+        </DescriptionListItem>
+        <DescriptionListItem term={t('personal-information:index.phone-number')}>
+          <p>{user.phoneNumber}</p>
+          <InlineLink id="change-phone-number-button" to="/personal-information/phone-number/edit" className="mt-3 block">
+            {t('personal-information:index.change-phone-number')}
+          </InlineLink>
+        </DescriptionListItem>
+      </dl>
     </>
   );
 }
 
-interface PersonalInformationSectionProps {
-  children: ReactNode;
-  footer?: ReactNode;
-  title: ReactNode;
-  icon?: string;
-}
-
-function PersonalInformationSection({ children, footer, title, icon }: PersonalInformationSectionProps) {
+function DescriptionListItem({ children, term }: { children: ReactNode; term: ReactNode }) {
   return (
-    <section className="panel panel-info !m-0 flex flex-col">
-      <header className="panel-heading">
-        <h2 className="h3 panel-title">
-          {icon && <span className={cn('glyphicon', icon, 'pull-right')} aria-hidden="true"></span>}
-          {title}
-        </h2>
-      </header>
-      <div className="panel-body">{children}</div>
-      {footer && <footer className="panel-footer mt-auto">{footer}</footer>}
-    </section>
+    <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
+      <dt className="font-medium">{term}</dt>
+      <dd className="mt-3 sm:col-span-2 sm:mt-0">{children}</dd>
+    </div>
   );
 }

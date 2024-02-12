@@ -15,7 +15,8 @@
     "change-mailing-address": "Change mailing address",
     "change-phone-number": "Change phone number",
     "change-preferred-language": "Change preferred language",
-    "no-address-on-file": "No address on file"
+    "no-address-on-file": "No address on file",
+    "no-preferred-language-on-file": "No preferred language on file"
   },
   "home-address": {
     "edit": {

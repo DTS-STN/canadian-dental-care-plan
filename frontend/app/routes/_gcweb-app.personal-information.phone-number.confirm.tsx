@@ -1,10 +1,11 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
-import { Form, Link, useLoaderData } from '@remix-run/react';
+import { Form, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
 
+import { Button, ButtonLink } from '~/components/buttons';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
@@ -72,21 +73,23 @@ export default function PhoneNumberConfirm() {
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <p>{t('personal-information:phone-number.confirm.subtitle')}</p>
+      <p className="mb-8 text-lg text-gray-500">{t('personal-information:phone-number.confirm.subtitle')}</p>
       <Form method="post">
-        <div className="form-group">
-          <dl>
-            <dt>{t('personal-information:phone-number.edit.component.previous')}</dt>
-            <dd>{loaderData.userInfo?.phoneNumber}</dd>
-            <dt>{t('personal-information:phone-number.edit.component.phone')}</dt>
-            <dd>{loaderData.newPhoneNumber ?? ''}</dd>
-          </dl>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <button className="btn btn-primary btn-lg">{t('personal-information:phone-number.confirm.button.confirm')}</button>
-          <Link id="cancelButton" to="/personal-information/phone-number/edit" className="btn btn-default btn-lg">
+        <dl className="my-6 divide-y border-y">
+          <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
+            <dt className="font-medium">{t('personal-information:phone-number.edit.component.previous')}</dt>
+            <dd className="mt-3 sm:col-span-2 sm:mt-0">{loaderData.userInfo.phoneNumber}</dd>
+          </div>
+          <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
+            <dt className="font-medium">{t('personal-information:phone-number.edit.component.phone')}</dt>
+            <dd className="mt-3 sm:col-span-2 sm:mt-0">{loaderData.newPhoneNumber}</dd>
+          </div>
+        </dl>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button variant="primary">{t('personal-information:phone-number.confirm.button.confirm')}</Button>
+          <ButtonLink id="cancelButton" to="/personal-information/phone-number/edit">
             {t('personal-information:phone-number.confirm.button.cancel')}
-          </Link>
+          </ButtonLink>
         </div>
       </Form>
     </>

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
-import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, useActionData, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { type InputOptionProps } from '~/components/input-option';
@@ -19,7 +20,7 @@ import { getUserService } from '~/services/user-service.server';
 import { getWSAddressService } from '~/services/wsaddress-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('personal-information');
+const i18nNamespaces = getTypedI18nNamespaces('personal-information', 'gcweb');
 
 export const handle = {
   breadcrumbs: [
@@ -185,19 +186,33 @@ export default function PersonalInformationHomeAddressEdit() {
       <p>{t('personal-information:home-address.edit.subtitle')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form className="max-w-prose" method="post">
-        <InputField id="address" label={t('personal-information:home-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />
-        <InputField id="city" label={t('personal-information:home-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
-        {regions.length > 0 && <InputSelect id="province" label={t('personal-information:home-address.edit.field.province')} name="province" defaultValue={defaultValues.province} options={regions} errorMessage={errorMessages.province} />}
-        <InputField id="postalCode" label={t('personal-information:home-address.edit.field.postal-code')} name="postalCode" defaultValue={defaultValues.postalCode} errorMessage={errorMessages.postalCode} />
-        <InputSelect id="country" label={t('personal-information:home-address.edit.field.country')} name="country" defaultValue={defaultValues.country} required options={countries} onChange={countryChangeHandler} errorMessage={errorMessages.country} />
-
-        <div className="flex flex-wrap gap-3">
-          <button id="change-button" className="btn btn-primary btn-lg">
+        <div className="my-6">
+          <p className="mb-4 text-red-600">{t('gcweb:asterisk-indicates-required-field')}</p>
+          <InputField id="address" className="w-full" label={t('personal-information:home-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />
+          <InputField id="city" className="w-full" label={t('personal-information:home-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
+          {regions.length > 0 && (
+            <InputSelect id="province" className="w-full sm:w-1/2" label={t('personal-information:home-address.edit.field.province')} name="province" defaultValue={defaultValues.province} options={regions} errorMessage={errorMessages.province} />
+          )}
+          <InputField id="postalCode" label={t('personal-information:home-address.edit.field.postal-code')} name="postalCode" defaultValue={defaultValues.postalCode} errorMessage={errorMessages.postalCode} />
+          <InputSelect
+            id="country"
+            className="w-full sm:w-1/2"
+            label={t('personal-information:home-address.edit.field.country')}
+            name="country"
+            defaultValue={defaultValues.country}
+            required
+            options={countries}
+            onChange={countryChangeHandler}
+            errorMessage={errorMessages.country}
+          />
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button id="change-button" variant="primary">
             {t('personal-information:home-address.edit.button.change')}
-          </button>
-          <Link id="cancel-button" to="/personal-information" className="btn btn-default btn-lg">
+          </Button>
+          <ButtonLink id="cancel-button" to="/personal-information">
             {t('personal-information:home-address.edit.button.cancel')}
-          </Link>
+          </ButtonLink>
         </div>
       </Form>
     </>

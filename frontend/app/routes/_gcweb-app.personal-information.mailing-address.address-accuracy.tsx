@@ -4,6 +4,7 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
+import { Button, ButtonLink } from '~/components/buttons';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -64,16 +65,16 @@ export default function PersonalInformationMailingAddressAccuracy() {
             </div>
           </section>
         </div>
-        <Link id="cancel-button" to="/personal-information/mailing-address/edit" className="text-base font-bold">
+        <Link id="cancel-button" to="/personal-information/mailing-address/edit" className="text-base font-semibold">
           {t('personal-information:mailing-address.address-accuracy.re-enter-address')}
         </Link>
-        <div className="flex flex-wrap gap-3">
-          <button id="confirm-button" className="btn btn-primary btn-lg">
+        <div className="flex flex-wrap items-center gap-3">
+          <Button id="confirm-button" variant="primary">
             {t('personal-information:mailing-address.address-accuracy.continue')}
-          </button>
-          <Link id="cancel-button" to="/personal-information/" className="btn btn-default btn-lg">
+          </Button>
+          <ButtonLink id="cancel-button" to="/personal-information/">
             {t('personal-information:mailing-address.address-accuracy.cancel')}
-          </Link>
+          </ButtonLink>
         </div>
       </Form>
     </>

@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
-import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, useActionData, useLoaderData } from '@remix-run/react';
 
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -14,7 +15,7 @@ import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('personal-information');
+const i18nNamespaces = getTypedI18nNamespaces('personal-information', 'gcweb');
 export const handle = {
   breadcrumbs: [
     // prettier-ignore
@@ -114,15 +115,18 @@ export default function PhoneNumberEdit() {
 
   return (
     <>
-      <p>{t('personal-information:phone-number.edit.subtitle')}</p>
+      <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:phone-number.edit.subtitle')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post">
-        <InputField id="phoneNumber" name="phoneNumber" type="tel" label={t('personal-information:phone-number.edit.component.phone')} required defaultValue={defaultValues.phoneNumber} errorMessage={errorMessages.phoneNumber} />
-        <div className="flex flex-wrap gap-3">
-          <button className="btn btn-primary btn-lg">{t('personal-information:phone-number.edit.button.save')}</button>
-          <Link id="cancelButton" to="/personal-information" className="btn btn-default btn-lg">
+        <div className="my-6">
+          <p className="mb-4 text-red-600">{t('gcweb:asterisk-indicates-required-field')}</p>
+          <InputField id="phoneNumber" name="phoneNumber" type="tel" label={t('personal-information:phone-number.edit.component.phone')} required defaultValue={defaultValues.phoneNumber} errorMessage={errorMessages.phoneNumber} />
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button variant="primary">{t('personal-information:phone-number.edit.button.save')}</Button>
+          <ButtonLink id="cancelButton" to="/personal-information">
             {t('personal-information:phone-number.edit.button.cancel')}
-          </Link>
+          </ButtonLink>
         </div>
       </Form>
     </>
