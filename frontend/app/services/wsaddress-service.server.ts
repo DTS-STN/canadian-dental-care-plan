@@ -6,6 +6,31 @@ import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('wsaddress-service.server');
 
+export interface CorrectWSAddressRequestDTO {
+  addressLine: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  country: string;
+  formatResult: boolean;
+  language: string;
+}
+
+export interface CorrectWSAddressResponseDTO {
+  responseType?: string;
+  addressLine?: string;
+  city?: string;
+  province?: string;
+  postalCode?: string;
+  deliveryInformation?: string;
+  extraInformation?: string;
+  statusCode?: string;
+  country?: string;
+  message?: string;
+  warnings?: string;
+  functionalMessages?: { action: string; message: string }[];
+}
+
 export interface ParseWSAddressRequestDTO {
   addressLine: string;
   city: string;
@@ -64,6 +89,29 @@ export interface ValidateWSAddressResponseDTO {
   message?: string;
   warnings?: string;
 }
+
+//TODO: Update validation schema when changing to use Interop's WSAddress endpoint instead of MSW
+const CorrectWSAddressResponseSchema = z.object({
+  responseType: z.string().optional(),
+  addressLine: z.string().optional(),
+  city: z.string().optional(),
+  province: z.string().optional(),
+  postalCode: z.string().optional(),
+  deliveryInformation: z.string().optional(),
+  extraInformation: z.string().optional(),
+  statusCode: z.string().optional(),
+  country: z.string().optional(),
+  message: z.string().optional(),
+  warnings: z.string().optional(),
+  functionalMessages: z
+    .array(
+      z.object({
+        action: z.string(),
+        message: z.string(),
+      }),
+    )
+    .optional(),
+});
 
 //TODO: Update validation schema when changing to use Interop's WSAddress endpoint instead of MSW
 const ParseWSAddressResponseSchema = z.object({
@@ -125,6 +173,39 @@ export const getWSAddressService = moize.promise(createWSAddressService, { onCac
 async function createWSAddressService() {
   const { INTEROP_API_BASE_URI } = getEnv();
 
+  async function correctWSAddress(correctRequest: CorrectWSAddressRequestDTO) {
+    const address: CorrectWSAddressRequestDTO = {
+      addressLine: correctRequest.addressLine,
+      city: correctRequest.city,
+      province: correctRequest.province,
+      postalCode: correctRequest.postalCode,
+      country: correctRequest.country,
+      formatResult: correctRequest.formatResult,
+      language: correctRequest.language,
+    };
+    const url = `${INTEROP_API_BASE_URI}/address/correction`;
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(address),
+    });
+
+    if (response.ok) {
+      const correctData = CorrectWSAddressResponseSchema.parse(await response.json());
+      const correctedAddress: CorrectWSAddressResponseDTO = { ...correctData };
+      if (correctData.statusCode === 'Valid') return correctedAddress;
+    }
+
+    log.error('%j', {
+      message: 'Failed to correct the address',
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+
+    throw new Error(`Failed to correct the address. Status: ${response.status}, Status Text: ${response.statusText}`);
+  }
+
   async function parseWSAddress(parseRequest: ParseWSAddressRequestDTO) {
     const address: ParseWSAddressRequestDTO = { addressLine: parseRequest.addressLine, city: parseRequest.city, province: parseRequest.province, postalCode: parseRequest.postalCode, country: parseRequest.country, language: parseRequest.language };
     const url = `${INTEROP_API_BASE_URI}/address/parse`;
@@ -184,5 +265,5 @@ async function createWSAddressService() {
     throw new Error(`Failed to validate the address. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
-  return { parseWSAddress, validateWSAddress };
+  return { correctWSAddress, parseWSAddress, validateWSAddress };
 }
