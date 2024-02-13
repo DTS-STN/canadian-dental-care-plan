@@ -24,9 +24,7 @@ vi.mock('~/services/lookup-service.server', () => ({
 }));
 
 vi.mock('~/utils/env.server', () => ({
-  getEnv: vi.fn().mockReturnValue({
-    createCookie: vi.fn(),
-  }),
+  getEnv: vi.fn(),
 }));
 
 vi.mock('~/services/session-service.server', () => ({
