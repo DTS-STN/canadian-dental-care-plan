@@ -183,7 +183,7 @@ export default function PersonalInformationHomeAddressEdit() {
 
   return (
     <>
-      <p>{t('personal-information:home-address.edit.subtitle')}</p>
+      <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:home-address.edit.subtitle')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form className="max-w-prose" method="post">
         <div className="my-6">

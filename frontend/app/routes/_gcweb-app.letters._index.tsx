@@ -68,7 +68,7 @@ export default function LettersIndex() {
 
   return (
     <>
-      <p>{t('letters:index.subtitle')}</p>
+      <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('letters:index.subtitle')}</p>
       <div className="my-6">
         <InputSelect
           id="sort-order"

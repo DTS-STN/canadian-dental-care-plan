@@ -45,7 +45,7 @@ export default function PersonalInformationMailingAddressAccuracy() {
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <p>{t('personal-information:mailing-address.address-accuracy.subtitle')}</p>
+      <p className="mb-8 text-lg text-gray-500">{t('personal-information:mailing-address.address-accuracy.subtitle')}</p>
       <Form method="post">
         <section className="alert alert-warning mt-4">
           <h2>{t('personal-information:mailing-address.address-accuracy.invalid-address')}</h2>

@@ -65,7 +65,7 @@ export default function PersonalInformationMailingAddressConfirm() {
   const { i18n, t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <p>{t('personal-information:mailing-address.confirm.subtitle')}</p>
+      <p className="mb-8 text-lg text-gray-500">{t('personal-information:mailing-address.confirm.subtitle')}</p>
       <Form method="post">
         <dl className="my-6 divide-y border-y">
           {mailingAddressInfo && (

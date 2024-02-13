@@ -84,7 +84,7 @@ export default function HomeAddressSuggested() {
 
   return (
     <>
-      <p>{t('personal-information:home-address.suggested.subtitle')}</p>
+      <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:home-address.suggested.subtitle')}</p>
       <Form method="post">
         <p className="mb-4">{t('personal-information:home-address.suggested.note')}</p>
         <div className="grid gap-6 md:grid-cols-2">
