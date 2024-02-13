@@ -59,12 +59,11 @@ export default function PersonalInformationMailingAddressConfirm() {
     <>
       <p>{t('personal-information:mailing-address.confirm.subtitle')}</p>
       <Form method="post">
-        <h2>{t('personal-information:mailing-address.confirm.change-of-address')}</h2>
         <div className="grid gap-6 md:grid-cols-2">
           {mailingAddressInfo && (
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h3 className="panel-title">{t('personal-information:mailing-address.confirm.previous-mailing-address')}</h3>
+                <h2 className="panel-title">{t('personal-information:mailing-address.confirm.previous-mailing-address')}</h2>
               </header>
               <div className="panel-body">
                 <Address
@@ -79,7 +78,7 @@ export default function PersonalInformationMailingAddressConfirm() {
           )}
           <section className="panel panel-info">
             <header className="panel-heading">
-              <h3 className="panel-title">{t('personal-information:mailing-address.confirm.new-mailing-address')}</h3>
+              <h2 className="panel-title">{t('personal-information:mailing-address.confirm.new-mailing-address')}</h2>
             </header>
             <div className="panel-body">
               <Address
