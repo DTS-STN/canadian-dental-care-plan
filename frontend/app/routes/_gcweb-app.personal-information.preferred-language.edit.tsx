@@ -67,6 +67,7 @@ export default function PreferredLanguageEdit() {
 
   return (
     <>
+      <p>{t('personal-information:preferred-language.edit.subtitle')}</p>
       <Form method="post">
         {preferredLanguages.length > 0 && (
           <InputRadios

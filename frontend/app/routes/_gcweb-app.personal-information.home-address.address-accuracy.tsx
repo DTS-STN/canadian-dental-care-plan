@@ -38,6 +38,7 @@ export default function PersonalInformationHomeAddressAccuracy() {
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
+      <p>{t('personal-information:home-address.address-accuracy.subtitle')}</p>
       <Form method="post">
         <section className="alert alert-warning mt-4">
           <h2>{t('personal-information:home-address.address-accuracy.invalid-address')}</h2>

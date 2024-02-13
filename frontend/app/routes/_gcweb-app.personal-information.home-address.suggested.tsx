@@ -76,6 +76,7 @@ export default function HomeAddressSuggested() {
 
   return (
     <>
+      <p>{t('personal-information:home-address.suggested.subtitle')}</p>
       <Form method="post">
         <p>{t('personal-information:home-address.suggested.note')}</p>
         <div className="grid gap-6 md:grid-cols-2">

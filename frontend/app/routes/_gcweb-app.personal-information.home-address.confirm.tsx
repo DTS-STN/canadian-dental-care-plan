@@ -56,6 +56,7 @@ export default function PersonalInformationHomeAddressConfirm() {
   const { i18n, t } = useTranslation(i18nNamespaces);
   return (
     <>
+      <p>{t('personal-information:home-address.confirm.subtitle')}</p>
       <Form method="post">
         <h2>{t('personal-information:home-address.confirm.change-of-address')}</h2>
         <div className="grid gap-6 md:grid-cols-2">

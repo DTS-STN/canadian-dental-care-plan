@@ -29,8 +29,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const sortOrder = orderEnumSchema.catch('desc').parse(url.searchParams.get('sort'));
 
-  const userService = await getUserService();
-  const letterService = await getLettersService();
+  const userService = getUserService();
+  const letterService = getLettersService();
   const userId = await userService.getUserId();
   const letters = await letterService.getLetters(userId, sortOrder);
 
@@ -62,7 +62,8 @@ export default function LettersIndex() {
   }
 
   return (
-    <div>
+    <>
+      <p>{t('letters:index.subtitle')}</p>
       <label htmlFor="sort-order" className="block w-fit text-base font-medium">
         <strong>{t('letters:index.filter')}</strong>
       </label>
@@ -80,6 +81,6 @@ export default function LettersIndex() {
           </li>
         ))}
       </ul>
-    </div>
+    </>
   );
 }
