@@ -129,7 +129,7 @@ function getAddressEntity(userId: string | readonly string[], addressId: string 
  * @param userId - The user ID to look up in the database.
  * @returns The letter entity if found, otherwise throws a 404 error.
  */
-function getLetterEntities(userId: string | readonly string[], sortOrder: 'asc' | 'desc' = 'desc') {
+export function getLetterEntities(userId: string | readonly string[], sortOrder: 'asc' | 'desc' = 'desc') {
   const parsedUserId = z.string().uuid().safeParse(userId);
   if (!parsedUserId) {
     throw new HttpResponse('Invalid userId: ' + parsedUserId, { status: 400, headers: { 'Content-Type': 'text/plain' } });
