@@ -14,7 +14,7 @@ const log = getLogger('raoidc-utils.server');
  */
 export interface AuthTokenSet extends Record<string, unknown> {
   access_token: string;
-  id_token: string;
+  id_token: string | IdToken;
   //
   // optional
   //
@@ -31,7 +31,45 @@ export interface AuthTokenSet extends Record<string, unknown> {
  * Returned from the auth server's userinfo endpoint.
  */
 export interface UserinfoTokenSet extends Record<string, unknown> {
-  userinfo_token: string;
+  userinfo_token: string | UserinfoToken;
+}
+
+/**
+ * An OIDC ID token.
+ */
+export interface IdToken extends Record<string, unknown> {
+  aud: string;
+  exp: number;
+  iat: number;
+  iss: string;
+  jti: string;
+  nbf: number;
+  nonce: string;
+  sid: string;
+  sub: string;
+  //
+  // optional
+  //
+  locale?: string;
+}
+
+/**
+ * An OIDC userinfo token
+ */
+export interface UserinfoToken extends Record<string, unknown> {
+  aud: string;
+  exp: number;
+  iat: number;
+  iss: string;
+  jti: string;
+  nbf: number;
+  sub: string;
+  //
+  // optional
+  //
+  birthdate?: string;
+  locale?: string;
+  sin?: string;
 }
 
 /**
@@ -215,7 +253,7 @@ export async function fetchAccessToken(serverMetadata: ServerMetadata, serverJwk
 
   const authTokenSet = (await response.json()) as AuthTokenSet;
   await validateAuthorizationToken(authTokenSet);
-  authTokenSet.id_token = decodeJwt(await decryptJwe(authTokenSet.id_token, client.privateKey));
+  authTokenSet.id_token = decodeJwt(await decryptJwe(authTokenSet.id_token as string, client.privateKey)) as IdToken;
 
   return authTokenSet;
 }
@@ -248,7 +286,7 @@ export async function fetchUserInfo(userInfoUri: string, accessToken: string, cl
     throw new Error('No userinfo token found in token set');
   }
 
-  return decodeJwt(await decryptJwe(userInfo.userinfo_token, client.privateKey));
+  return decodeJwt(await decryptJwe(userInfo.userinfo_token as string, client.privateKey)) as UserinfoToken;
 }
 
 /**
