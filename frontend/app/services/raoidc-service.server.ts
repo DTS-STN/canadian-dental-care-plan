@@ -92,10 +92,10 @@ async function createRaoidcService() {
       privateKeyId: privateKeyId,
     };
 
-    const authTokenSet = await fetchAccessToken(serverMetadata, jwkSet, authCode, client, codeVerifier, redirectUri, fetchFn);
-    const userInfo = await fetchUserInfo(serverMetadata.userinfo_endpoint, authTokenSet.access_token, client, fetchFn);
+    const { accessToken, idToken } = await fetchAccessToken(serverMetadata, jwkSet, authCode, client, codeVerifier, redirectUri, fetchFn);
+    const userInfoToken = await fetchUserInfo(serverMetadata.userinfo_endpoint, accessToken, client, fetchFn);
 
-    return { auth: authTokenSet, user_info: userInfo };
+    return { accessToken, idToken, userInfoToken };
   }
 
   /**

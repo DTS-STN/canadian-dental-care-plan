@@ -9,6 +9,44 @@ import { getLogger } from '~/utils/logging.server';
 const log = getLogger('raoidc-utils.server');
 
 /**
+ * An OIDC ID token.
+ */
+export interface IdToken extends Record<string, unknown> {
+  aud: string;
+  exp: number;
+  iat: number;
+  iss: string;
+  jti: string;
+  nbf: number;
+  nonce: string;
+  sid: string;
+  sub: string;
+  //
+  // optional
+  //
+  locale?: string;
+}
+
+/**
+ * An OIDC userinfo token.
+ */
+export interface UserinfoToken extends Record<string, unknown> {
+  aud: string;
+  exp: number;
+  iat: number;
+  iss: string;
+  jti: string;
+  nbf: number;
+  sub: string;
+  //
+  // optional
+  //
+  birthdate?: string;
+  locale?: string;
+  sin?: string;
+}
+
+/**
  * The response returned from an the auth server's token endpoint.
  */
 export interface TokenEndpointResponse extends Record<string, unknown> {
@@ -213,9 +251,11 @@ export async function fetchAccessToken(serverMetadata: ServerMetadata, serverJwk
 
   const tokenEndpointResponse: TokenEndpointResponse = await response.json();
   validateAuthorizationToken(tokenEndpointResponse);
-  tokenEndpointResponse.id_token = decodeJwt(await decryptJwe(tokenEndpointResponse.id_token, client.privateKey));
 
-  return tokenEndpointResponse;
+  const accessToken = tokenEndpointResponse.access_token;
+  const idToken: IdToken = decodeJwt(await decryptJwe(tokenEndpointResponse.id_token, client.privateKey));
+
+  return { accessToken, idToken };
 }
 
 /**
@@ -243,7 +283,9 @@ export async function fetchUserInfo(userInfoUri: string, accessToken: string, cl
   const userInfoResponse: UserinfoResponse = await response.json();
   validateUserInfoToken(userInfoResponse);
 
-  return decodeJwt(await decryptJwe(userInfoResponse.userinfo_token, client.privateKey));
+  const userinfoToken: UserinfoToken = decodeJwt(await decryptJwe(userInfoResponse.userinfo_token, client.privateKey));
+
+  return userinfoToken;
 }
 
 /**
