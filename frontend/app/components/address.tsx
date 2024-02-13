@@ -15,8 +15,8 @@ function formatAddress(address: string, city: string, country: string, provinceS
   const isNotCanadianAddress = 'canada' !== country.toLowerCase();
 
   // prettier-ignore
-  const lines = [`${address}`, 
-    `${city}${provinceState ? ` ${provinceState}` : ''}${postalZipCode ? `  ${postalZipCode}` : ''}`, 
+  const lines = [`${address}`,
+    `${city}${provinceState ? ` ${provinceState}` : ''}${postalZipCode ? `  ${postalZipCode}` : ''}`,
     `${isNotCanadianAddress ? country : ''}`];
 
   return lines
@@ -30,7 +30,7 @@ export function Address(props: AddressProps) {
   const formattedAddress = formatAddress(address, city, country, provinceState, postalZipCode);
 
   return (
-    <address className={clsx('mb-0 whitespace-pre-wrap', className)} data-testid="address-id" {...restProps}>
+    <address className={clsx('mb-0 whitespace-pre-wrap not-italic', className)} data-testid="address-id" {...restProps}>
       {formattedAddress}
     </address>
   );
