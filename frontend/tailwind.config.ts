@@ -7,6 +7,9 @@ export default {
       center: true,
       padding: '1rem',
     },
+    fontFamily: {
+      sans: ['Inter', 'sans-serif'],
+    },
     // @see https://wet-boew.github.io/wet-boew-styleguide/design/grids-en.html#responsive
     screens: {
       sm: '768px',
