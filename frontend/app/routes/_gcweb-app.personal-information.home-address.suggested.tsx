@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { Address } from '~/components/address';
 import { InputRadios } from '~/components/input-radios';
 import { getAddressService } from '~/services/address-service.server';
+import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -27,6 +28,9 @@ export const handle = {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const raoidcService = await getRaoidcService();
+  await raoidcService.handleSessionValidation(request);
+
   const userService = getUserService();
   const sessionService = await getSessionService();
   const userId = await userService.getUserId();
@@ -45,6 +49,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const raoidcService = await getRaoidcService();
+  await raoidcService.handleSessionValidation(request);
+
   const userService = getUserService();
   const sessionService = await getSessionService();
   const userId = await userService.getUserId();

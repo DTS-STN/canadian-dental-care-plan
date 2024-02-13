@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
 
 import { getLookupService } from '~/services/lookup-service.server';
+import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -24,6 +25,9 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const raoidcService = await getRaoidcService();
+  await raoidcService.handleSessionValidation(request);
+
   const userService = getUserService();
   const sessionService = await getSessionService();
 
@@ -41,6 +45,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const raoidcService = await getRaoidcService();
+  await raoidcService.handleSessionValidation(request);
+
   const userService = getUserService();
   const sessionService = await getSessionService();
 

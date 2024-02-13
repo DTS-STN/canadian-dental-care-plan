@@ -6,6 +6,13 @@ import { getAddressService } from '~/services/address-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 
+vi.mock('~/services/address-service.server', () => ({
+  getAddressService: vi.fn().mockReturnValue({
+    getAddressInfo: vi.fn(),
+    updateAddressInfo: vi.fn(),
+  }),
+}));
+
 vi.mock('~/services/lookup-service.server', () => ({
   getLookupService: vi.fn().mockReturnValue({
     getAllCountries: vi.fn().mockReturnValue([
@@ -30,6 +37,12 @@ vi.mock('~/services/lookup-service.server', () => ({
   }),
 }));
 
+vi.mock('~/services/raoidc-service.server', () => ({
+  getRaoidcService: vi.fn().mockResolvedValue({
+    handleSessionValidation: vi.fn().mockResolvedValue(true),
+  }),
+}));
+
 vi.mock('~/services/session-service.server', () => ({
   getSessionService: vi.fn().mockResolvedValue({
     commitSession: vi.fn(),
@@ -45,13 +58,6 @@ vi.mock('~/services/user-service.server', () => ({
   getUserService: vi.fn().mockReturnValue({
     getUserId: vi.fn().mockReturnValue('some-id'),
     getUserInfo: vi.fn(),
-  }),
-}));
-
-vi.mock('~/services/address-service.server', () => ({
-  getAddressService: vi.fn().mockReturnValue({
-    getAddressInfo: vi.fn(),
-    updateAddressInfo: vi.fn(),
   }),
 }));
 

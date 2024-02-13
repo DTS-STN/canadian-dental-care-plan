@@ -6,13 +6,6 @@ import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getEnv } from '~/utils/env.server';
 
-vi.mock('~/services/user-service.server', () => ({
-  getUserService: vi.fn().mockReturnValue({
-    getUserId: vi.fn().mockReturnValue('some-id'),
-    getUserInfo: vi.fn(),
-  }),
-}));
-
 vi.mock('~/services/lookup-service.server', () => ({
   getLookupService: vi.fn().mockReturnValue({
     getPreferredLanguage: vi.fn().mockReturnValue({
@@ -23,8 +16,10 @@ vi.mock('~/services/lookup-service.server', () => ({
   }),
 }));
 
-vi.mock('~/utils/env.server', () => ({
-  getEnv: vi.fn(),
+vi.mock('~/services/raoidc-service.server', () => ({
+  getRaoidcService: vi.fn().mockResolvedValue({
+    handleSessionValidation: vi.fn().mockResolvedValue(true),
+  }),
 }));
 
 vi.mock('~/services/session-service.server', () => ({
@@ -35,6 +30,17 @@ vi.mock('~/services/session-service.server', () => ({
       unset: vi.fn(),
     }),
   }),
+}));
+
+vi.mock('~/services/user-service.server', () => ({
+  getUserService: vi.fn().mockReturnValue({
+    getUserId: vi.fn().mockReturnValue('some-id'),
+    getUserInfo: vi.fn(),
+  }),
+}));
+
+vi.mock('~/utils/env.server', () => ({
+  getEnv: vi.fn(),
 }));
 
 describe('_gcweb-app.personal-information.preferred-language.confirm', () => {

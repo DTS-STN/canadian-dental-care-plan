@@ -7,6 +7,7 @@ import { redirectWithSuccess } from 'remix-toast';
 import { Address } from '~/components/address';
 import { getAddressService } from '~/services/address-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
+import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -25,6 +26,9 @@ export const handle = {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const raoidcService = await getRaoidcService();
+  await raoidcService.handleSessionValidation(request);
+
   const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
@@ -39,6 +43,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const raoidcService = await getRaoidcService();
+  await raoidcService.handleSessionValidation(request);
+
   const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);

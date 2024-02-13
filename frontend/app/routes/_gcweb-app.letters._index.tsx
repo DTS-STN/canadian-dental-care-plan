@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { getLettersService } from '~/services/letters-service.server';
+import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -22,6 +23,9 @@ export const handle = {
 const orderEnumSchema = z.enum(['asc', 'desc']);
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const raoidcService = await getRaoidcService();
+  await raoidcService.handleSessionValidation(request);
+
   /**
    * @url Create a new URL object from request URL
    * @sort This accesses the URL's search parameter and retrieves the value associated with the 'sort' parameter, allows the client to specify how the data should be sorted via the URL

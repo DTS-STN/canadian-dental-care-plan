@@ -1,11 +1,15 @@
 import { type LoaderFunctionArgs } from '@remix-run/node';
 
 import { getCCTService } from '~/services/cct-service.server';
+import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('_gcweb-app.letters.$referenceId.download');
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
+  const raoidcService = await getRaoidcService();
+  await raoidcService.handleSessionValidation(request);
+
   const cctService = getCCTService();
   if (!params.referenceId) {
     throw new Response(null, { status: 400 });
