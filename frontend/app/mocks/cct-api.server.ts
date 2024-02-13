@@ -65,7 +65,7 @@ export function getCCTApiMockHandlers() {
  * @param id - The reference Id to look up in the database.
  * @returns The PDF entity if found, otherwise throws a 404 error.
  */
-function getPdfEntity(referenceId: string | readonly string[]) {
+export function getPdfEntity(referenceId: string | readonly string[]) {
   const parsedReferenceId = z.string().safeParse(referenceId);
   if (!parsedReferenceId) {
     throw new HttpResponse('Invalid referenceId: ' + referenceId, { status: 400, headers: { 'Content-Type': 'text/plain' } });
