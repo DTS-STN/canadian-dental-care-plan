@@ -102,9 +102,9 @@ async function handleRaoidcCallbackRequest({ params, request }: LoaderFunctionAr
   const redirectUri = generateCallbackUri(new URL(request.url).origin, 'raoidc');
 
   log.debug('Storing auth tokens and userinfo in session');
-  const { auth, user_info: userInfo } = await raoidcService.handleCallback(request, codeVerifier, state, redirectUri);
-  session.set('auth', auth);
-  session.set('userInfo', userInfo);
+  const { idToken, userInfoToken } = await raoidcService.handleCallback(request, codeVerifier, state, redirectUri);
+  session.set('idToken', idToken);
+  session.set('userInfoToken', userInfoToken);
 
   log.debug('RAOIDC login successful; redirecting to [%s]', returnUrl);
   return redirect(returnUrl, {
