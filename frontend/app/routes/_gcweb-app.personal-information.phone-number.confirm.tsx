@@ -65,7 +65,7 @@ export default function PhoneNumberConfirm() {
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <p>{t('personal-information:phone-number.confirm.confirm-message')}</p>
+      <p>{t('personal-information:phone-number.confirm.subtitle')}</p>
       <Form method="post">
         <div className="form-group">
           <dl>

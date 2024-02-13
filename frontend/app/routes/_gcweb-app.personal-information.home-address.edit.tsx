@@ -172,6 +172,7 @@ export default function PersonalInformationHomeAddressEdit() {
 
   return (
     <>
+      <p>{t('personal-information:home-address.edit.subtitle')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form className="max-w-prose" method="post">
         <InputField id="address" label={t('personal-information:home-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />

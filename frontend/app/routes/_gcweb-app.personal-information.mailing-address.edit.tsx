@@ -198,6 +198,7 @@ export default function PersonalInformationMailingAddressEdit() {
 
   return (
     <>
+      <p>{t('personal-information:mailing-address.edit.subtitle')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form className="max-w-prose" method="post">
         {homeAddressInfo && (

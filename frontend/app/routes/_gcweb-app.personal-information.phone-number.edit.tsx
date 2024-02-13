@@ -107,7 +107,7 @@ export default function PhoneNumberEdit() {
 
   return (
     <>
-      <p>{t('personal-information:phone-number.edit.update-message')}</p>
+      <p>{t('personal-information:phone-number.edit.subtitle')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post">
         <InputField id="phoneNumber" name="phoneNumber" type="tel" label={t('personal-information:phone-number.edit.component.phone')} required defaultValue={defaultValues.phoneNumber} errorMessage={errorMessages.phoneNumber} />
