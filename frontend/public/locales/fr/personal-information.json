@@ -69,7 +69,7 @@
       "re-enter-address": "(FR) If neither of these addresses is correct, you should re-enter your address",
       "note": "(FR) Please note: Your address is compared against Canada Post information for accuracy. However, in some cases, the system may not be able to verify the address’s accuracy. Use this address if you are certain it is correct.",
       "continue": "(FR) Continue",
-      "Cancel": "(FR) Cancel",
+      "cancel": "(FR) Cancel",
       "edit": "(FR) Return to edit page"
     },
     "confirm": {
