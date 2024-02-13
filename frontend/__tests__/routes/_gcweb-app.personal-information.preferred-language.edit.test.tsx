@@ -26,6 +26,12 @@ vi.mock('~/services/lookup-service.server', () => ({
   }),
 }));
 
+vi.mock('~/services/raoidc-service.server', () => ({
+  getRaoidcService: vi.fn().mockResolvedValue({
+    handleSessionValidation: vi.fn().mockResolvedValue(true),
+  }),
+}));
+
 vi.mock('~/services/session-service.server', () => ({
   /* intentionally left blank */
 }));

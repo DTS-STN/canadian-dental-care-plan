@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
+import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -22,6 +23,9 @@ export const handle = {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const raoidcService = await getRaoidcService();
+  await raoidcService.handleSessionValidation(request);
+
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
   if (!session.has('newMailingAddress')) return redirect('/');
@@ -30,6 +34,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const raoidcService = await getRaoidcService();
+  await raoidcService.handleSessionValidation(request);
   return redirect('/personal-information/mailing-address/confirm');
 }
 

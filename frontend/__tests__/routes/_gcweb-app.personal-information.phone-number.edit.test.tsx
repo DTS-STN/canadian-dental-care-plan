@@ -5,6 +5,12 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { action, loader } from '~/routes/_gcweb-app.personal-information.phone-number.edit';
 import { getUserService } from '~/services/user-service.server';
 
+vi.mock('~/services/raoidc-service.server', () => ({
+  getRaoidcService: vi.fn().mockResolvedValue({
+    handleSessionValidation: vi.fn().mockResolvedValue(true),
+  }),
+}));
+
 vi.mock('~/services/session-service.server', () => ({
   getSessionService: vi.fn().mockResolvedValue({
     commitSession: vi.fn(),

@@ -12,6 +12,12 @@ vi.mock('~/services/letters-service.server', () => ({
   }),
 }));
 
+vi.mock('~/services/raoidc-service.server', () => ({
+  getRaoidcService: vi.fn().mockResolvedValue({
+    handleSessionValidation: vi.fn().mockResolvedValue(true),
+  }),
+}));
+
 vi.mock('~/services/user-service.server', () => ({
   getUserService: vi.fn().mockReturnValue({
     getUserId: vi.fn().mockResolvedValue('userId1'),

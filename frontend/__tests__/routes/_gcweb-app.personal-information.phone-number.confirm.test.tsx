@@ -6,11 +6,9 @@ import { action, loader } from '~/routes/_gcweb-app.personal-information.phone-n
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 
-vi.mock('~/services/user-service.server', () => ({
-  getUserService: vi.fn().mockReturnValue({
-    getUserId: vi.fn().mockReturnValue('some-id'),
-    getUserInfo: vi.fn(),
-    updateUserInfo: vi.fn(),
+vi.mock('~/services/raoidc-service.server', () => ({
+  getRaoidcService: vi.fn().mockResolvedValue({
+    handleSessionValidation: vi.fn().mockResolvedValue(true),
   }),
 }));
 
@@ -22,6 +20,14 @@ vi.mock('~/services/session-service.server', () => ({
       get: vi.fn(),
       unset: vi.fn(),
     }),
+  }),
+}));
+
+vi.mock('~/services/user-service.server', () => ({
+  getUserService: vi.fn().mockReturnValue({
+    getUserId: vi.fn().mockReturnValue('some-id'),
+    getUserInfo: vi.fn(),
+    updateUserInfo: vi.fn(),
   }),
 }));
 

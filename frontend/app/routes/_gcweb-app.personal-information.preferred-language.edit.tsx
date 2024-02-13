@@ -6,6 +6,7 @@ import { z } from 'zod';
 
 import { InputRadios } from '~/components/input-radios';
 import { getLookupService } from '~/services/lookup-service.server';
+import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { PREFERRED_LANGUAGES } from '~/utils/constants';
@@ -25,6 +26,9 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const raoidcService = await getRaoidcService();
+  await raoidcService.handleSessionValidation(request);
+
   const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
@@ -38,6 +42,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const raoidcService = await getRaoidcService();
+  await raoidcService.handleSessionValidation(request);
+
   const formDataSchema = z.object({
     preferredLanguage: z.enum(PREFERRED_LANGUAGES),
   });

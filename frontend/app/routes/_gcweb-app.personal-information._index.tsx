@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { Address } from '~/components/address';
 import { getAddressService } from '~/services/address-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
+import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -22,6 +23,9 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const raoidcService = await getRaoidcService();
+  await raoidcService.handleSessionValidation(request);
+
   const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);

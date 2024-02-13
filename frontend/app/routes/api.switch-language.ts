@@ -2,6 +2,7 @@ import { type ActionFunctionArgs, json } from '@remix-run/node';
 
 import { z } from 'zod';
 
+import { getRaoidcService } from '~/services/raoidc-service.server';
 import { createLangCookie } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
@@ -41,6 +42,9 @@ export async function loader() {
  * @param {ActionFunctionArgs} args - The action function arguments.
  */
 export async function action({ request }: ActionFunctionArgs) {
+  const raoidcService = await getRaoidcService();
+  await raoidcService.handleSessionValidation(request);
+
   if (request.method !== 'PUT') {
     logger.warn(`Method Not Allowed: The requested method (${request.method}) is not allowed for this resource. Allowed methods: PUT.`);
     throw json(
