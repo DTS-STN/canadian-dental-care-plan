@@ -33,16 +33,16 @@ const db = factory({
     nameFr: String,
   },
   letter: {
-    referenceId: String,
-    dateSent: Date,
+    referenceId: () => faker.string.alphanumeric(10),
+    dateSent: () => faker.date.past({ years: 1 }),
     userId: String,
     nameEn: String,
     nameFr: String,
-    id: primaryKey(String),
+    id: primaryKey(faker.string.uuid),
   },
   pdf: {
     referenceId: String,
-    id: primaryKey(String),
+    id: primaryKey(faker.string.uuid),
   },
   country: {
     code: primaryKey(String),
@@ -84,23 +84,23 @@ const defaultUser = db.user.create({
   id: '00000000-0000-0000-0000-000000000000',
   firstName: 'John',
   lastName: 'Maverick',
-  preferredLanguage: frenchLanguage.id.toString(),
+  preferredLanguage: frenchLanguage.id,
 });
+
+// seed available letters
 const numberOfLetters = faker.number.int({ min: 10, max: 20 }); // Adjust min and max as needed
 for (let i = 0; i < numberOfLetters; i++) {
-  // seed avaliable letters (after user)
+  const name = faker.lorem.words({ min: 5, max: 7 });
+
   const sampleLetter = db.letter.create({
-    referenceId: i.toString(),
-    dateSent: '2024-03-03T03:04:05.000Z',
-    userId: defaultUser.id.toString(),
-    nameEn: 'Letters Type ' + i,
-    nameFr: '(FR) Letters Type ' + i,
-    id: '00000000-0000-0000-0000-' + (10 + i),
+    userId: defaultUser.id,
+    nameEn: name,
+    nameFr: `(FR) ${name}`,
   });
+
   // seed avaliable pdf (after letter)
   db.pdf.create({
-    referenceId: sampleLetter.referenceId.toString(),
-    id: '00000000-3000-0000-0000-' + (0 + i),
+    referenceId: sampleLetter.referenceId,
   });
 }
 
