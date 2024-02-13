@@ -75,7 +75,7 @@ export default function PersonalInformationHomeAddressConfirm() {
                 <Address
                   address={homeAddressInfo.address}
                   city={homeAddressInfo.city}
-                  provinceState={regionList.find((region) => region.code === homeAddressInfo.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
+                  provinceState={regionList.find((region) => region.code === homeAddressInfo.province)?.code}
                   postalZipCode={homeAddressInfo.postalCode}
                   country={countryList.find((country) => country.code === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
                 />
@@ -90,7 +90,7 @@ export default function PersonalInformationHomeAddressConfirm() {
               <Address
                 address={newHomeAddress.address}
                 city={newHomeAddress.city}
-                provinceState={regionList.find((region) => region.code === newHomeAddress.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
+                provinceState={regionList.find((region) => region.code === newHomeAddress.province)?.code}
                 postalZipCode={newHomeAddress.postalCode}
                 country={countryList.find((country) => country.code === newHomeAddress.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
               />

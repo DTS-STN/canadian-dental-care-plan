@@ -76,7 +76,7 @@ export default function PersonalInformationMailingAddressConfirm() {
                 <Address
                   address={mailingAddressInfo.address}
                   city={mailingAddressInfo.city}
-                  provinceState={regionList.find((region) => region.code === mailingAddressInfo.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
+                  provinceState={regionList.find((region) => region.code === mailingAddressInfo.province)?.code}
                   postalZipCode={mailingAddressInfo.postalCode}
                   country={countryList.find((country) => country.code === mailingAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
                 />
@@ -91,7 +91,7 @@ export default function PersonalInformationMailingAddressConfirm() {
               <Address
                 address={newMailingAddress.address}
                 city={newMailingAddress.city}
-                provinceState={regionList.find((region) => region.code === newMailingAddress.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
+                provinceState={regionList.find((region) => region.code === newMailingAddress.province)?.code}
                 postalZipCode={newMailingAddress.postalCode}
                 country={countryList.find((country) => country.code === newMailingAddress.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
               />
