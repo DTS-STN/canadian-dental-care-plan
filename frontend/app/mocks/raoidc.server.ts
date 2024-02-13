@@ -5,7 +5,7 @@ import { HttpResponse, http } from 'msw';
 import { privateKeyPemToCryptoKey, publicKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
-import { type AuthTokenSet, type JWKSet, type ServerMetadata, type UserinfoTokenSet } from '~/utils/raoidc-utils.server';
+import { type JWKSet, type ServerMetadata, type TokenEndpointResponse, type UserinfoResponse } from '~/utils/raoidc-utils.server';
 
 const log = getLogger('raoidc.server');
 
@@ -80,7 +80,7 @@ async function getAuthTokenSet() {
     id_token: encryptedIdToken,
     token_type: 'Bearer',
     expires_in: 300,
-  } as AuthTokenSet;
+  } as TokenEndpointResponse;
 }
 
 /**
@@ -93,7 +93,7 @@ async function getUserInfo() {
 
   return {
     userinfo_token: encryptedUserinfoToken,
-  } as UserinfoTokenSet;
+  } as UserinfoResponse;
 }
 
 /**
