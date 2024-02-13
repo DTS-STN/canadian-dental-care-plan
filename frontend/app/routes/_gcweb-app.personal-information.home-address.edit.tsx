@@ -128,7 +128,7 @@ export default function PersonalInformationHomeAddressEdit() {
   const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter((region) => region.country.code === defaultValues.country))
     .map((region) => {
       return {
-        label: i18n.language === 'fr' ? region.nameFr : region.nameEn,
+        label: region.code,
         value: region.code,
         id: region.code,
       };
