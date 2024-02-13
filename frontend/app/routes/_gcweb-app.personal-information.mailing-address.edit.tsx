@@ -154,7 +154,7 @@ export default function PersonalInformationMailingAddressEdit() {
   const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter((region) => region.country.code === defaultValues.country))
     .map((region) => {
       return {
-        label: region.code,
+        label: i18n.language === 'fr' ? region.nameFr : region.nameEn,
         value: region.code,
         id: region.code,
       };
