@@ -81,7 +81,8 @@
       "button": {
         "confirm": "Confirm",
         "cancel": "Cancel"
-      }
+      },
+      "updated-notification": "Home address updated"
     }
   },
   "mailing-address": {
@@ -133,7 +134,8 @@
       "button": {
         "confirm": "Confirm",
         "cancel": "Cancel"
-      }
+      },
+      "updated-notification": "Mailing address updated"
     }
   },
   "phone-number": {
