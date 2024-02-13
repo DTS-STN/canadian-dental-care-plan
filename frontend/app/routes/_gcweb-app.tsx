@@ -137,7 +137,7 @@ function PageHeader() {
             </section>
           </div>
         </div>
-        <section className="py-2">
+        <section className="bg-gray-700 py-2 text-white">
           <div className="container">
             <div className="gep-6 flex items-center justify-between ">
               <Link to="/" className="text-2xl font-semibold hover:underline">
@@ -207,21 +207,23 @@ function PageFooter() {
   const { t } = useTranslation(i18nNamespaces);
 
   return (
-    <footer id="wb-info" className="container border-t py-8">
-      <h2 className="sr-only">{t('gcweb:footer.about-site')}</h2>
-      <div className=" flex items-center justify-between gap-4">
-        <nav aria-labelledby="gc-corporate">
-          <h3 id="gc-corporate" className="sr-only">
-            {t('gcweb:footer.gc-corporate')}
-          </h3>
-          <div className="flex flex-col items-start gap-2 text-sm font-semibold leading-6 sm:flex-row sm:items-center sm:gap-4">
-            <Link to={t('gcweb:footer.terms-conditions.href')}>{t('gcweb:footer.terms-conditions.text')}</Link>
-            <div className="hidden h-4 w-px bg-slate-500/20 sm:block"></div>
-            <Link to={t('gcweb:footer.privacy.href')}>{t('gcweb:footer.privacy.text')}</Link>
+    <footer id="wb-info" className="border-t bg-stone-50 py-8">
+      <div className="container">
+        <h2 className="sr-only">{t('gcweb:footer.about-site')}</h2>
+        <div className=" flex items-center justify-between gap-4">
+          <nav aria-labelledby="gc-corporate">
+            <h3 id="gc-corporate" className="sr-only">
+              {t('gcweb:footer.gc-corporate')}
+            </h3>
+            <div className="flex flex-col items-start gap-2 text-sm leading-6 sm:flex-row sm:items-center sm:gap-4">
+              <Link to={t('gcweb:footer.terms-conditions.href')}>{t('gcweb:footer.terms-conditions.text')}</Link>
+              <div className="hidden h-4 w-px bg-slate-500/20 sm:block"></div>
+              <Link to={t('gcweb:footer.privacy.href')}>{t('gcweb:footer.privacy.text')}</Link>
+            </div>
+          </nav>
+          <div>
+            <img src="/theme/gcweb/assets/wmms-blk.svg" alt={t('gcweb:footer.gc-symbol')} width={300} height={71} className="h-8 w-auto" />
           </div>
-        </nav>
-        <div>
-          <img src="/theme/gcweb/assets/wmms-blk.svg" alt={t('gcweb:footer.gc-symbol')} width={300} height={71} className="h-8 w-auto" />
         </div>
       </div>
     </footer>

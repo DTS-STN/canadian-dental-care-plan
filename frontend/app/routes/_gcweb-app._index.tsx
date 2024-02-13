@@ -38,7 +38,7 @@ export default function Index() {
   return (
     <>
       <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.lastName })}</p>
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4">
         <CardLink title={t('index:personal-info')} to="/personal-information">
           {t('index:personal-info-desc')}
         </CardLink>
