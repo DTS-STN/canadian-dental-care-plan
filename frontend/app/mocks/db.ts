@@ -33,17 +33,16 @@ const db = factory({
     nameFr: String,
   },
   letter: {
-    referenceId: String,
-    dateSent: Date,
+    referenceId: () => faker.string.alphanumeric(10),
+    dateSent: () => faker.date.past({ years: 1 }),
     userId: String,
     nameEn: String,
     nameFr: String,
-    id: primaryKey(String),
+    id: primaryKey(faker.string.uuid),
   },
   pdf: {
-    fileStream: String,
     referenceId: String,
-    id: primaryKey(String),
+    id: primaryKey(faker.string.uuid),
   },
   country: {
     code: primaryKey(String),
@@ -85,52 +84,25 @@ const defaultUser = db.user.create({
   id: '00000000-0000-0000-0000-000000000000',
   firstName: 'John',
   lastName: 'Maverick',
-  preferredLanguage: frenchLanguage.id.toString(),
+  preferredLanguage: frenchLanguage.id,
 });
 
-// seed avaliable letters (after user)
-const sampleLetter = db.letter.create({
-  referenceId: '1',
-  dateSent: '2024-03-03T03:04:05.000Z',
-  userId: defaultUser.id.toString(),
-  nameEn: 'Letters Type 1',
-  nameFr: 'Letters Type 1',
-  id: '00000000-0000-0000-0000-000000000011',
-});
+// seed available letters
+const numberOfLetters = faker.number.int({ min: 10, max: 20 }); // Adjust min and max as needed
+for (let i = 0; i < numberOfLetters; i++) {
+  const name = faker.lorem.words({ min: 5, max: 7 });
 
-db.letter.create({
-  referenceId: '2',
-  dateSent: '2024-12-25T03:01:01.000Z',
-  userId: defaultUser.id.toString(),
-  nameEn: 'Letters Type 2',
-  nameFr: 'Letters Type 2',
-  id: '00000000-0000-0000-0000-000000000012',
-});
+  const sampleLetter = db.letter.create({
+    userId: defaultUser.id,
+    nameEn: name,
+    nameFr: `(FR) ${name}`,
+  });
 
-db.letter.create({
-  referenceId: '3',
-  dateSent: '2004-02-29T03:11:21.000Z',
-  userId: defaultUser.id.toString(),
-  nameEn: 'Letters Type 3',
-  nameFr: 'Letters Type 3',
-  id: '00000000-0000-0000-0000-00000000013',
-});
-
-db.letter.create({
-  referenceId: '4',
-  dateSent: undefined,
-  userId: defaultUser.id.toString(),
-  nameEn: 'Letters Type 4',
-  nameFr: 'Letters Type 4',
-  id: '00000000-0000-0000-0000-00000000014',
-});
-
-// seed avaliable pdf (after letter)
-db.pdf.create({
-  referenceId: sampleLetter.referenceId.toString(),
-  fileStream: '',
-  id: '00000000-0000-0000-0000-000000000011',
-});
+  // seed avaliable pdf (after letter)
+  db.pdf.create({
+    referenceId: sampleLetter.referenceId,
+  });
+}
 
 // seed country list
 const countryCanada = db.country.create({

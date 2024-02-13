@@ -1,7 +1,8 @@
-import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
+import { type ActionFunctionArgs, type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Form, Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
+import { redirectWithSuccess } from 'remix-toast';
 
 import { Address } from '~/components/address';
 import { getAddressService } from '~/services/address-service.server';
@@ -47,7 +48,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
   await getAddressService().updateAddressInfo(userId, userInfo?.mailingAddress ?? '', session.get('newMailingAddress'));
 
-  return redirect('/personal-information');
+  // TODO remove new mailing address from session and handle case when it is missing
+  return redirectWithSuccess('/personal-information', 'personal-information:mailing-address.confirm.updated-notification');
 }
 
 export default function PersonalInformationMailingAddressConfirm() {
@@ -55,6 +57,7 @@ export default function PersonalInformationMailingAddressConfirm() {
   const { i18n, t } = useTranslation(i18nNamespaces);
   return (
     <>
+      <p>{t('personal-information:mailing-address.confirm.subtitle')}</p>
       <Form method="post">
         <h2>{t('personal-information:mailing-address.confirm.change-of-address')}</h2>
         <div className="grid gap-6 md:grid-cols-2">

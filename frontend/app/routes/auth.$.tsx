@@ -62,7 +62,7 @@ async function handleRaoidcLoginRequest({ params, request }: LoaderFunctionArgs)
   const { origin, searchParams } = new URL(request.url);
   const returnUrl = searchParams.get('returnto');
 
-  if (!returnUrl?.startsWith('/')) {
+  if (returnUrl && !returnUrl.startsWith('/')) {
     log.warn('Invalid return URL [%s]', returnUrl);
     return new Response(null, { status: 400 });
   }
@@ -102,9 +102,9 @@ async function handleRaoidcCallbackRequest({ params, request }: LoaderFunctionAr
   const redirectUri = generateCallbackUri(new URL(request.url).origin, 'raoidc');
 
   log.debug('Storing auth tokens and userinfo in session');
-  const { auth, user_info: userInfo } = await raoidcService.handleCallback(request, codeVerifier, state, redirectUri);
-  session.set('auth', auth);
-  session.set('userInfo', userInfo);
+  const { idToken, userInfoToken } = await raoidcService.handleCallback(request, codeVerifier, state, redirectUri);
+  session.set('idToken', idToken);
+  session.set('userInfoToken', userInfoToken);
 
   log.debug('RAOIDC login successful; redirecting to [%s]', returnUrl);
   return redirect(returnUrl, {

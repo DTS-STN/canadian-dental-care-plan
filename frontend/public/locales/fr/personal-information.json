@@ -20,6 +20,7 @@
   "home-address": {
     "edit": {
       "page-title": "(FR) Change home address",
+      "subtitle": "(FR) Please update your home address below.",
       "breadcrumbs": {
         "personal-information": "(FR) Personal information",
         "home-address-change": "(FR) Change home address"
@@ -41,6 +42,7 @@
     },
     "address-accuracy": {
       "page-title": "(FR) Home Address Accuracy",
+      "subtitle": "(FR) Please verify the home address accuracy.",
       "breadcrumbs": {
         "personal-information": "(FR) Personal information"
       },
@@ -54,6 +56,7 @@
     },
     "suggested": {
       "page-title:": "(FR) Suggested address",
+      "subtitle": "(FR) Please verify the suggested address.",
       "breadcrumbs": {
         "personal-information": "(FR) Personal information",
         "suggested-address": "(FR) Suggested address"
@@ -71,6 +74,7 @@
     },
     "confirm": {
       "page-title": "(FR) Confirm",
+      "subtitle": "(FR) Please confirm the home address change below.",
       "breadcrumbs": {
         "personal-information": "(FR) Personal information",
         "address-change-confirm": "(FR) Confirm"
@@ -81,12 +85,14 @@
       "button": {
         "confirm": "(FR) Confirm",
         "cancel": "(FR) Cancel"
-      }
+      },
+      "updated-notification": "(FR) Home address updated"
     }
   },
   "mailing-address": {
     "edit": {
       "page-title": "(FR) Change mailing address",
+      "subtitle": "(FR) Please update your mailing address below.",
       "breadcrumbs": {
         "personal-information": "(FR) Personal information",
         "mailing-address-change": "(FR) Change mailing address"
@@ -110,6 +116,7 @@
     },
     "address-accuracy": {
       "page-title": "(FR) Mailing Address Accuracy",
+      "subtitle": "(FR) Please verify the mailing address accuracy.",
       "breadcrumbs": {
         "personal-information": "(FR) Personal information"
       },
@@ -123,6 +130,7 @@
     },
     "confirm": {
       "page-title": "(FR) Confirm",
+      "subtitle": "(FR) Please confirm the mailing address change below.",
       "breadcrumbs": {
         "personal-information": "(FR) Personal information",
         "address-change-confirm": "(FR) Confirm"
@@ -133,12 +141,14 @@
       "button": {
         "confirm": "(FR) Confirm",
         "cancel": "(FR) Cancel"
-      }
+      },
+      "updated-notification": "(FR) Mailing address updated"
     }
   },
   "phone-number": {
     "edit": {
       "page-title": "(FR) Update phone number",
+      "subtitle": "(FR) Please update your phone number below.",
       "breadcrumbs": {
         "personal-information": "(FR) Personal information",
         "change-phone-number": "(FR) Change phone number"
@@ -161,11 +171,11 @@
     },
     "confirm": {
       "page-title": "(FR) Confirm phone number",
+      "subtitle": "(FR) Please confirm the phone number change below.",
       "breadcrumbs": {
         "personal-information": "(FR) Personal information",
         "confirm-phone-number": "(FR) Confirm phone number"
       },
-      "confirm-message": "(FR) Please confirm the phone number change below.",
       "button": {
         "confirm": "(FR) Confirm",
         "cancel": "(FR) Cancel"
@@ -176,6 +186,7 @@
   "preferred-language": {
     "edit": {
       "page-title": "(FR) Change preferred language",
+      "subtitle": "(FR) Please update your preferred language below.",
       "breadcrumbs": {
         "personal-information": "(FR) Personal information",
         "preferred-language": "(FR) Preferred language",
@@ -188,13 +199,13 @@
     },
     "confirm": {
       "page-title": "(FR) Confirm preferred language",
+      "subtitle": "(FR) Please confirm the preferred language change below.",
       "breadcrumbs": {
         "personal-information": "(FR) Personal information",
         "preferred-language": "(FR) Preferred language",
         "preferred-language-edit": "(FR) Change preferred language",
         "preferred-language-confirm": "(FR) Confirm"
       },
-      "confirm-message": "(FR) Please confirm the phone number change below.",
       "button": {
         "confirm": "(FR) Confirm",
         "cancel": "(FR) Cancel"

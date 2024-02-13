@@ -9,10 +9,47 @@ import { getLogger } from '~/utils/logging.server';
 const log = getLogger('raoidc-utils.server');
 
 /**
- * Authorization token set.
- * Returned from an the auth server's auth endpoint or token endpoint.
+ * An OIDC ID token.
  */
-export interface AuthTokenSet extends Record<string, unknown> {
+export interface IdToken extends Record<string, unknown> {
+  aud: string;
+  exp: number;
+  iat: number;
+  iss: string;
+  jti: string;
+  nbf: number;
+  nonce: string;
+  sid: string;
+  sub: string;
+  //
+  // optional
+  //
+  locale?: string;
+}
+
+/**
+ * An OIDC userinfo token.
+ */
+export interface UserinfoToken extends Record<string, unknown> {
+  aud: string;
+  exp: number;
+  iat: number;
+  iss: string;
+  jti: string;
+  nbf: number;
+  sub: string;
+  //
+  // optional
+  //
+  birthdate?: string;
+  locale?: string;
+  sin?: string;
+}
+
+/**
+ * The response returned from an the auth server's token endpoint.
+ */
+export interface TokenEndpointResponse extends Record<string, unknown> {
   access_token: string;
   id_token: string;
   //
@@ -27,10 +64,9 @@ export interface AuthTokenSet extends Record<string, unknown> {
 }
 
 /**
- * Userinfo token set.
- * Returned from the auth server's userinfo endpoint.
+ * The response returned from an the auth server's userinfo endpoint.
  */
-export interface UserinfoTokenSet extends Record<string, unknown> {
+export interface UserinfoResponse extends Record<string, unknown> {
   userinfo_token: string;
 }
 
@@ -213,11 +249,13 @@ export async function fetchAccessToken(serverMetadata: ServerMetadata, serverJwk
     throw new Error('Error fetching server metadata: non-200 status');
   }
 
-  const authTokenSet = (await response.json()) as AuthTokenSet;
-  await validateAuthorizationToken(authTokenSet);
-  authTokenSet.id_token = decodeJwt(await decryptJwe(authTokenSet.id_token, client.privateKey));
+  const tokenEndpointResponse: TokenEndpointResponse = await response.json();
+  validateAuthorizationToken(tokenEndpointResponse);
 
-  return authTokenSet;
+  const accessToken = tokenEndpointResponse.access_token;
+  const idToken: IdToken = decodeJwt(await decryptJwe(tokenEndpointResponse.id_token, client.privateKey));
+
+  return { accessToken, idToken };
 }
 
 /**
@@ -242,13 +280,12 @@ export async function fetchUserInfo(userInfoUri: string, accessToken: string, cl
     throw new Error('Error fetching user info: non-200 status');
   }
 
-  const userInfo = (await response.json()) as UserinfoTokenSet;
+  const userInfoResponse: UserinfoResponse = await response.json();
+  validateUserInfoToken(userInfoResponse);
 
-  if (!userInfo.userinfo_token) {
-    throw new Error('No userinfo token found in token set');
-  }
+  const userinfoToken: UserinfoToken = decodeJwt(await decryptJwe(userInfoResponse.userinfo_token, client.privateKey));
 
-  return decodeJwt(await decryptJwe(userInfo.userinfo_token, client.privateKey));
+  return userinfoToken;
 }
 
 /**
@@ -378,16 +415,24 @@ export function generateRandomString(len: number) {
   return Array(len).fill(undefined).map(toRandomChar).join('');
 }
 
-export async function validateAuthorizationToken(authToken: AuthTokenSet) {
-  if (!authToken.access_token) {
+function validateAuthorizationToken(tokenEndpointResponse: TokenEndpointResponse) {
+  if (!tokenEndpointResponse.access_token) {
     throw new Error('Authorization token is missing access_token claim');
   }
 
-  if (!authToken.id_token) {
+  if (!tokenEndpointResponse.id_token) {
     throw new Error('Authorization token is missing id_token claim');
   }
 
   log.debug('Authorization token successfully validated');
+}
+
+function validateUserInfoToken(userInfoResponse: UserinfoResponse) {
+  if (!userInfoResponse.userinfo_token) {
+    throw new Error('Userinfo token is missing userinfo_token claim');
+  }
+
+  log.debug('Userinfo token successfully validated');
 }
 
 /**

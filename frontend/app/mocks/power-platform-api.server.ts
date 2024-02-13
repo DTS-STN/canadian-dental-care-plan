@@ -78,8 +78,8 @@ export function getPowerPlatformApiMockHandlers() {
      * Handler for GET requests to retrieve letters details.
      */
     http.get('https://api.example.com/users/:userId/letters', ({ params, request }) => {
-      const url = new URL(request.url)
-      const sortParam = url.searchParams.get('sort') ?? 'asc'
+      const url = new URL(request.url);
+      const sortParam = url.searchParams.get('sort') ?? 'asc';
       const sort = sortParam === 'desc' ? 'desc' : 'asc';
       const letterEntities = getLetterEntities(params.userId, sort);
 
@@ -144,8 +144,8 @@ function getLetterEntities(userId: string | readonly string[], sortOrder: 'asc' 
           },
         },
         orderBy: {
-          dateSent: sortOrder
-        }
+          dateSent: sortOrder,
+        },
       });
 
   return letterEntities;

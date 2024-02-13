@@ -20,6 +20,7 @@
   "home-address": {
     "edit": {
       "page-title": "Change home address",
+      "subtitle": "Please update your home address below.",
       "breadcrumbs": {
         "personal-information": "Personal information",
         "home-address-change": "Change home address"
@@ -41,6 +42,7 @@
     },
     "address-accuracy": {
       "page-title": "Home Address Accuracy",
+      "subtitle": "Please verify the home address accuracy.",
       "breadcrumbs": {
         "personal-information": "Personal information"
       },
@@ -54,6 +56,7 @@
     },
     "suggested": {
       "page-title:": "Suggested address",
+      "subtitle": "Please verify the suggested address.",
       "breadcrumbs": {
         "personal-information": "Personal information",
         "suggested-address": "Change home address"
@@ -71,6 +74,7 @@
     },
     "confirm": {
       "page-title": "Confirm",
+      "subtitle": "Please confirm the home address change below.",
       "breadcrumbs": {
         "personal-information": "Personal information",
         "address-change-confirm": "Confirm"
@@ -81,12 +85,14 @@
       "button": {
         "confirm": "Confirm",
         "cancel": "Cancel"
-      }
+      },
+      "updated-notification": "Home address updated"
     }
   },
   "mailing-address": {
     "edit": {
       "page-title": "Change mailing address",
+      "subtitle": "Please update your mailing address below.",
       "breadcrumbs": {
         "personal-information": "Personal information",
         "mailing-address-change": "Change mailing address"
@@ -110,6 +116,7 @@
     },
     "address-accuracy": {
       "page-title": "Mailing Address Accuracy",
+      "subtitle": "Please verify the mailing address accuracy.",
       "breadcrumbs": {
         "personal-information": "Personal information"
       },
@@ -123,6 +130,7 @@
     },
     "confirm": {
       "page-title": "Confirm",
+      "subtitle": "Please confirm the mailing address change below.",
       "breadcrumbs": {
         "personal-information": "Personal information",
         "address-change-confirm": "Confirm"
@@ -133,12 +141,14 @@
       "button": {
         "confirm": "Confirm",
         "cancel": "Cancel"
-      }
+      },
+      "updated-notification": "Mailing address updated"
     }
   },
   "phone-number": {
     "edit": {
       "page-title": "Update phone number",
+      "subtitle": "Please update your phone number below.",
       "breadcrumbs": {
         "personal-information": "Personal information",
         "change-phone-number": "Change phone number"
@@ -161,11 +171,11 @@
     },
     "confirm": {
       "page-title": "Confirm phone number",
+      "subtitle": "Please confirm the phone number change below.",
       "breadcrumbs": {
         "personal-information": "Personal information",
         "confirm-phone-number": "Confirm phone number"
       },
-      "confirm-message": "Please confirm the phone number change below.",
       "button": {
         "confirm": "Confirm",
         "cancel": "Cancel"
@@ -176,6 +186,7 @@
   "preferred-language": {
     "edit": {
       "page-title": "Change preferred language",
+      "subtitle": "Please update your preferred language below.",
       "breadcrumbs": {
         "personal-information": "Personal information",
         "preferred-language": "Preferred language",
@@ -188,13 +199,13 @@
     },
     "confirm": {
       "page-title": "Confirm preferred language",
+      "subtitle": "Please confirm the preferred language change below.",
       "breadcrumbs": {
         "personal-information": "Personal information",
         "preferred-language": "Preferred language",
         "preferred-language-edit": "Change preferred language",
         "preferred-language-confirm": "Confirm"
       },
-      "confirm-message": "Please confirm the change below.",
       "button": {
         "confirm": "Confirm",
         "cancel": "Cancel"

@@ -67,7 +67,7 @@ export default function PreferredLanguageConfirm() {
   const { i18n, t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <p>{t('personal-information:preferred-language.confirm.confirm-message')}</p>
+      <p>{t('personal-information:preferred-language.confirm.subtitle')}</p>
       <Form method="post">
         <dl>
           <dt>{t('personal-information:preferred-language.edit.language')}</dt>
