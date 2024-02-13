@@ -58,12 +58,11 @@ export default function PersonalInformationHomeAddressConfirm() {
     <>
       <p>{t('personal-information:home-address.confirm.subtitle')}</p>
       <Form method="post">
-        <h2>{t('personal-information:home-address.confirm.change-of-address')}</h2>
         <div className="grid gap-6 md:grid-cols-2">
           {homeAddressInfo && (
             <section className="panel panel-info">
               <header className="panel-heading">
-                <h3 className="panel-title">{t('personal-information:home-address.confirm.previous-home-address')}</h3>
+                <h2 className="panel-title">{t('personal-information:home-address.confirm.previous-home-address')}</h2>
               </header>
               <div className="panel-body">
                 <Address
@@ -78,7 +77,7 @@ export default function PersonalInformationHomeAddressConfirm() {
           )}
           <section className="panel panel-info">
             <header className="panel-heading">
-              <h3 className="panel-title">{t('personal-information:home-address.confirm.new-home-address')}</h3>
+              <h2 className="panel-title">{t('personal-information:home-address.confirm.new-home-address')}</h2>
             </header>
             <div className="panel-body">
               <Address
