@@ -1,7 +1,8 @@
-import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
+import { type ActionFunctionArgs, type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Form, Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
+import { redirectWithSuccess } from 'remix-toast';
 
 import { Address } from '~/components/address';
 import { getAddressService } from '~/services/address-service.server';
@@ -46,7 +47,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
   await getAddressService().updateAddressInfo(userId, userInfo?.homeAddress ?? '', session.get('newHomeAddress'));
 
-  return redirect('/personal-information');
+  // TODO remove new home address from session and handle case when it is missing
+  return redirectWithSuccess('/personal-information', 'personal-information:home-address.confirm.updated-notification');
 }
 
 export default function PersonalInformationHomeAddressConfirm() {

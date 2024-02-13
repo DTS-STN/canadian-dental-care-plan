@@ -67,7 +67,7 @@ export default function PersonalInformationIndex() {
             </Link>
           }
           title={t('personal-information:index.home-address')}
-          icon="glyphicon-map-marker"
+          icon="glyphicon-home"
         >
           {homeAddressInfo && (
             <Address
@@ -87,7 +87,7 @@ export default function PersonalInformationIndex() {
             </Link>
           }
           title={t('personal-information:index.mailing-address')}
-          icon="glyphicon-map-marker"
+          icon="glyphicon-envelope"
         >
           {mailingAddressInfo && (
             <Address

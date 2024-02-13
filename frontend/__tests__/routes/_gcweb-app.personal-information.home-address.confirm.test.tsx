@@ -1,5 +1,4 @@
-import { redirect } from '@remix-run/node';
-
+import { redirectWithSuccess } from 'remix-toast';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/_gcweb-app.personal-information.home-address.confirm';
@@ -106,14 +105,14 @@ describe('_gcweb-app.personal-information.home-address.confirm', () => {
   });
 
   describe('action()', () => {
-    it('should redirect to personal information page when updating user info is successful', async () => {
+    it('should redirect with toast message to personal information page when updating user info is successful', async () => {
       const response = await action({
         request: new Request('http://localhost:3000/personal-information/home-address/confirm', { method: 'POST' }),
         context: {},
         params: {},
       });
 
-      expect(response).toEqual(redirect('/personal-information'));
+      expect(response).toEqual(await redirectWithSuccess('/personal-information', 'personal-information:home-address.confirm.updated-notification'));
     });
   });
 });
