@@ -117,26 +117,16 @@ export default function PersonalInformationHomeAddressEdit() {
     };
   }) as InputOptionProps[];
 
-  const regions: InputOptionProps[] = selectedCountry
-    ? (countryRegions
-        .map((region) => {
-          return {
-            label: i18n.language === 'fr' ? region.nameFr : region.nameEn,
-            value: region.code,
-            id: region.code,
-          };
-        })
-        .sort((r1, r2) => (r1.id < r2.id ? -1 : 1)) as InputOptionProps[])
-    : (regionList
-        .filter((region) => region.country.code === defaultValues.country)
-        .map((region) => {
-          return {
-            label: i18n.language === 'fr' ? region.nameFr : region.nameEn,
-            value: region.code,
-            id: region.code,
-          };
-        })
-        .sort((r1, r2) => (r1.id < r2.id ? -1 : 1)) as InputOptionProps[]);
+  //populate region/province/state list with selected country or current address country
+  const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter((region) => region.country.code === defaultValues.country))
+    .map((region) => {
+      return {
+        label: i18n.language === 'fr' ? region.nameFr : region.nameEn,
+        value: region.code,
+        id: region.code,
+      };
+    })
+    .sort((r1, r2) => r1.label.localeCompare(r2.label)) as InputOptionProps[];
 
   /**
    * Gets an error message based on the provided internationalization (i18n) key.
