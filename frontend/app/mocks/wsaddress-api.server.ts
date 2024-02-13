@@ -12,6 +12,30 @@ export function getWSAddressApiMockHandlers() {
 
   return [
     //
+    // Handler for POST requests to WSAddress correction service
+    //
+    http.post('https://api.example.com/address/correction', ({ params, request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      return HttpResponse.json({
+        responseType: 'CA',
+        addressLine: '23 Coronation St',
+        city: "St. John's",
+        province: 'NL',
+        postalCode: 'A1C5B9',
+        deliveryInformation: 'deliveryInformation',
+        extraInformation: 'extraInformation',
+        statusCode: 'Valid',
+        country: 'CAN',
+        message: '',
+        warnings: '',
+        functionalMessages: [
+          { action: 'OriginalInput', message: '111 WELLINGTON ST   OTTAWA   ON   K1A0A4   CAN' },
+          { action: 'Information', message: 'Dept = SENAT   Branch = SENAT   Lang = F' },
+        ],
+      });
+    }),
+
+    //
     // Handler for POST requests to WSAddress parse service
     //
     http.post('https://api.example.com/address/parse', ({ params, request }) => {
