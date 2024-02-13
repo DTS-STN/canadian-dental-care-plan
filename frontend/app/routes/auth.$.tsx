@@ -62,7 +62,7 @@ async function handleRaoidcLoginRequest({ params, request }: LoaderFunctionArgs)
   const { origin, searchParams } = new URL(request.url);
   const returnUrl = searchParams.get('returnto');
 
-  if (!returnUrl?.startsWith('/')) {
+  if (returnUrl && !returnUrl.startsWith('/')) {
     log.warn('Invalid return URL [%s]', returnUrl);
     return new Response(null, { status: 400 });
   }
