@@ -20,6 +20,8 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
   switch (slug) {
     case 'login':
       return handleLoginRequest({ context, params, request });
+    case 'logout':
+      return handleLogoutRequest({ context, params, request });
     case 'login/raoidc':
       return handleRaoidcLoginRequest({ context, params, request });
     case 'callback/raoidc':
@@ -51,6 +53,24 @@ async function handleLoginRequest({ params, request }: LoaderFunctionArgs) {
 
   log.debug('Redirecting to default provider handler: [%s]', url);
   return redirect(url.toString());
+}
+
+/**
+ * Handler for /auth/logout requests
+ */
+async function handleLogoutRequest({ params, request }: LoaderFunctionArgs) {
+  const { AUTH_LOGOUT_REDIRECT_URL } = getEnv();
+
+  log.debug('Destroying CDCP application session session');
+  const sessionService = await getSessionService();
+  const session = await sessionService.getSession(request);
+
+  log.debug('Redirecting to downstream logout handler: [%s]', AUTH_LOGOUT_REDIRECT_URL);
+  return redirect(AUTH_LOGOUT_REDIRECT_URL, {
+    headers: {
+      'Set-Cookie': await sessionService.destroySession(session),
+    },
+  });
 }
 
 /**
