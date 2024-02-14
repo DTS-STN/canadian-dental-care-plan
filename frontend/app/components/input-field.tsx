@@ -1,10 +1,9 @@
 import { forwardRef } from 'react';
 
-import clsx from 'clsx';
-
 import { InputError } from './input-error';
 import { InputHelp } from './input-help';
 import { InputLabel } from '~/components/input-label';
+import { cn } from '~/utils/tw-utils';
 
 export interface InputFieldProps extends Omit<React.ComponentProps<'input'>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children'> {
   errorMessage?: string;
@@ -54,7 +53,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) =>
         aria-invalid={!!errorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        className={clsx('form-control', className)}
+        className={cn('form-control', className)}
         data-testid="input-field"
         id={id}
         required={required}

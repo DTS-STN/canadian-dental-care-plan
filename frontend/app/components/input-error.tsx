@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactNode } from 'react';
 
-import clsx from 'clsx';
+import { cn } from '~/utils/tw-utils';
 
 export interface InputErrorProps extends ComponentProps<'span'> {
   children: ReactNode;
@@ -10,7 +10,7 @@ export interface InputErrorProps extends ComponentProps<'span'> {
 export function InputError(props: InputErrorProps) {
   const { children, className, ...restProps } = props;
   return (
-    <span className={clsx('label label-danger wb-server-error', className)} data-testid="input-error-test-id" {...restProps}>
+    <span className={cn('label label-danger wb-server-error', className)} data-testid="input-error-test-id" {...restProps}>
       {children}
     </span>
   );

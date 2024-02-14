@@ -1,11 +1,10 @@
 import { type ComponentProps, type ReactNode, forwardRef } from 'react';
 
-import clsx from 'clsx';
-
 import { InputError } from './input-error';
 import { InputHelp } from './input-help';
 import { InputLabel } from './input-label';
 import { InputOption } from './input-option';
+import { cn } from '~/utils/tw-utils';
 
 export interface InputSelectProps extends Omit<ComponentProps<'select'>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required'> {
   errorMessage?: string;
@@ -56,7 +55,7 @@ const InputSelect = forwardRef<HTMLSelectElement, InputSelectProps>((props, ref)
         aria-invalid={!!errorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        className={clsx('form-control', className)}
+        className={cn('form-control', className)}
         data-testid={inputTestId}
         id={id}
         required={required}

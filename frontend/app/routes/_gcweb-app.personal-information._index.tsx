@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 
-import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
@@ -12,6 +11,7 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { cn } from '~/utils/tw-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
@@ -132,7 +132,7 @@ function PersonalInformationSection({ children, footer, title, icon }: PersonalI
     <section className="panel panel-info !m-0 flex flex-col">
       <header className="panel-heading">
         <h2 className="h3 panel-title">
-          {icon && <span className={clsx('glyphicon', icon, 'pull-right')} aria-hidden="true"></span>}
+          {icon && <span className={cn('glyphicon', icon, 'pull-right')} aria-hidden="true"></span>}
           {title}
         </h2>
       </header>

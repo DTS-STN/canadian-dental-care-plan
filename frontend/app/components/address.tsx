@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react';
 
-import clsx from 'clsx';
+import { cn } from '~/utils/tw-utils';
 
 export interface AddressProps extends ComponentProps<'address'> {
   address: string;
@@ -30,7 +30,7 @@ export function Address(props: AddressProps) {
   const formattedAddress = formatAddress(address, city, country, provinceState, postalZipCode);
 
   return (
-    <address className={clsx('mb-0 whitespace-pre-wrap not-italic', className)} data-testid="address-id" {...restProps}>
+    <address className={cn('mb-0 whitespace-pre-wrap not-italic', className)} data-testid="address-id" {...restProps}>
       {formattedAddress}
     </address>
   );
