@@ -138,14 +138,14 @@ function PageHeader() {
               <h2>
                 <Link to="/">{t('gcweb:header.application-title')}</Link>
               </h2>
-              <nav ref={dropdown}>
+              <nav ref={dropdown} className="relative">
                 <button
                   id="dropdownNavbarLink"
                   onClick={() => setShowDropdown((currentState) => !currentState)}
                   aria-haspopup="true"
                   data-testid="menuButton"
                   aria-expanded={showDropdown}
-                  className="font-body text-blue-primary ring-blue-hover flex h-full w-full items-center justify-between rounded-sm py-0.5 font-bold ring-offset-2 focus:mb-1 focus:outline-none focus:ring-2 sm:pl-4"
+                  className="font-body text-blue-primary ring-blue-hover relative z-20 flex h-full w-full items-center justify-between rounded-sm py-0.5 font-bold ring-offset-2 focus:outline-none focus:ring-2 sm:pl-4"
                 >
                   <span className="flex items-center">
                     <svg className="mr-4" width="35" height="35" viewBox="0 0 35 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -161,7 +161,7 @@ function PageHeader() {
                   </svg>
                 </button>
                 {showDropdown && (
-                  <div id="dropdownNavbar" className="text-deep-blue-dark z-10 rounded-b-[5px] bg-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] sm:absolute sm:w-[260px]" aria-labelledby="dropdownLargeButton">
+                  <div id="dropdownNavbar" className="text-deep-blue-dark z-10 rounded-b-[5px] bg-white pt-1 drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] sm:absolute sm:w-[260px]" aria-labelledby="dropdownLargeButton">
                     <MenuOption onClick={onClickMenuHandler} href={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} text={t('gcweb:header.menu-dashboard.text')} />
                     <MenuOption onClick={onClickMenuHandler} href={t('gcweb:header.menu-profile.href', { baseUri: SCCH_BASE_URI })} text={t('gcweb:header.menu-profile.text')} />
                     <MenuOption onClick={onClickMenuHandler} href={t('gcweb:header.menu-security-settings.href', { baseUri: SCCH_BASE_URI })} text={t('gcweb:header.menu-security-settings.text')} />
