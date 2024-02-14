@@ -31,12 +31,16 @@ const toBoolean = (val?: string) => val === 'true';
 const serverEnv = z.object({
   NODE_ENV: z.enum(['production', 'development', 'test']),
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
+
+  // TODO :: GjB :: these base URIs should not have defaults
   INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
   CCT_API_BASE_URI: z.string().url().default('https://api.example.com'),
+  SCCH_BASE_URI: z.string().url().default('https://www.example.com'),
 
   // auth/oidc settings
   AUTH_JWT_PRIVATE_KEY: z.string().refine(isValidPrivateKey),
   AUTH_JWT_PUBLIC_KEY: z.string().refine(isValidPublicKey),
+  AUTH_LOGOUT_REDIRECT_URL: z.string().url(),
   AUTH_RAOIDC_BASE_URL: z.string().trim().min(1),
   AUTH_RAOIDC_CLIENT_ID: z.string().trim().min(1),
   AUTH_RAOIDC_PROXY_URL: z.string().trim().transform(emptyToUndefined).optional(),
@@ -72,8 +76,6 @@ const serverEnv = z.object({
   // mocks settings
   ENABLED_MOCKS: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidMockNames).default(''),
   MOCK_AUTH_ALLOWED_REDIRECTS: z.string().transform(emptyToUndefined).transform(csvToArray).default('http://localhost:3000/auth/callback/raoidc'),
-
-  SCCH_BASE_URI: z.string().url().default('https://www.example.com'),
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;
