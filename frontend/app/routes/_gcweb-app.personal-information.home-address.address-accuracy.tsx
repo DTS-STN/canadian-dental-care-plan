@@ -1,13 +1,13 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, Link, useLoaderData } from '@remix-run/react';
 
-import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { cn } from '~/utils/tw-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
@@ -55,7 +55,7 @@ export default function PersonalInformationHomeAddressAccuracy() {
           <section className="panel panel-info flex flex-col">
             <header className="panel-heading">
               <h2 className="h3 panel-title">
-                <span className={clsx('glyphicon', 'glyphicon-map-marker', 'pull-right')} aria-hidden="true"></span>
+                <span className={cn('glyphicon', 'glyphicon-map-marker', 'pull-right')} aria-hidden="true"></span>
                 {t('personal-information:home-address.address-accuracy.requested-change')}
               </h2>
             </header>

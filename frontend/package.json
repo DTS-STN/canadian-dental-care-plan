@@ -55,6 +55,7 @@
     "redis": "^4.6.13",
     "remix-toast": "^1.1.0",
     "source-map-support": "^0.5.21",
+    "tailwind-merge": "^2.2.1",
     "undici": "^6.6.2",
     "validator": "^13.11.0",
     "web-streams-node": "^0.4.0",

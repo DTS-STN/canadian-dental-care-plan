@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactNode } from 'react';
 
-import clsx from 'clsx';
+import { cn } from '~/utils/tw-utils';
 
 export interface InputHelpProps extends ComponentProps<'span'> {
   children: ReactNode;
@@ -10,7 +10,7 @@ export interface InputHelpProps extends ComponentProps<'span'> {
 export function InputHelp(props: InputHelpProps) {
   const { children, className, ...restProps } = props;
   return (
-    <span className={clsx('block max-w-prose text-base text-gray-600', className)} data-testid="input-help" {...restProps}>
+    <span className={cn('block max-w-prose text-base text-gray-600', className)} data-testid="input-help" {...restProps}>
       {children}
     </span>
   );

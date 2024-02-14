@@ -3,12 +3,12 @@ import type { ComponentProps, ReactNode } from 'react';
 import { type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 
-import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { cn } from '~/utils/tw-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('index');
 
@@ -65,7 +65,7 @@ export default function Index() {
 
 function CardLink({ children, inProgress, title, to }: { children: ReactNode; inProgress?: boolean; title: ReactNode; to: ComponentProps<typeof Link>['to'] }) {
   const linkResetClassName = '!text-inherit !no-underline !decoration-inherit';
-  const linkClassName = clsx(linkResetClassName, 'block rounded-lg border border-gray-200 p-6 shadow hover:bg-gray-100');
+  const linkClassName = cn(linkResetClassName, 'block rounded-lg border border-gray-200 p-6 shadow hover:bg-gray-100');
   return (
     <Link className={linkClassName} to={to}>
       <h2 className="h3 !mt-0">{inProgress ? <ProgressLabel>{title}</ProgressLabel> : title}</h2>
