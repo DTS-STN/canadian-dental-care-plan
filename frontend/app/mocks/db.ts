@@ -40,6 +40,12 @@ const db = factory({
     nameFr: String,
     id: primaryKey(faker.string.uuid),
   },
+  letterType: {
+    id: primaryKey(faker.string.uuid),
+    code: String,
+    nameEn: String,
+    nameFr: String,
+  },
   pdf: {
     referenceId: String,
     id: primaryKey(faker.string.uuid),
@@ -103,6 +109,21 @@ for (let i = 0; i < numberOfLetters; i++) {
     referenceId: sampleLetter.referenceId,
   });
 }
+
+// seed letter type list
+db.letterType.create({
+  id: faker.string.alphanumeric(10),
+  code: 'ACC',
+  nameEn: 'Accepted',
+  nameFr: '(FR) Accepted',
+});
+
+db.letterType.create({
+  id: faker.string.alphanumeric(10),
+  code: 'DEN',
+  nameEn: 'DENIED',
+  nameFr: '(FR) DENIED',
+});
 
 // seed country list
 const countryCanada = db.country.create({
