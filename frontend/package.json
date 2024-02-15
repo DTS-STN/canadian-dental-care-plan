@@ -42,7 +42,7 @@
     "i18next-http-backend": "^2.4.3",
     "isbot": "^4.4.0",
     "jose": "^5.2.2",
-    "libphonenumber-js": "^1.10.55",
+    "libphonenumber-js": "^1.10.56",
     "moderndash": "^3.10.0",
     "moize": "^6.1.6",
     "morgan": "^1.10.0",
