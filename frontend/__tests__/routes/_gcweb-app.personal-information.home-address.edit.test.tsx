@@ -60,6 +60,14 @@ vi.mock('~/services/user-service.server', () => ({
   }),
 }));
 
+vi.mock('~/services/wsaddress-service.server', () => ({
+  getWSAddressService: vi.fn().mockReturnValue({
+    validateWSAddress: vi.fn().mockReturnValue({
+      statusCode: 'Valid',
+    }),
+  }),
+}));
+
 describe('_gcweb-app.personal-information.home-address.edit', () => {
   afterEach(() => {
     vi.clearAllMocks();
