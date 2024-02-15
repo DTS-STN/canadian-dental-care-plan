@@ -25,7 +25,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       headers: {
         'Content-Type': 'application/octet-stream',
         'Content-Length': pdfResponse.headers.get('Content-Length') ?? '',
-        'Content-Disposition': `attachment; filename="${params.referenceId}.pdf"`,
+        'Content-Disposition': `inline; filename="${params.referenceId}.pdf"`,
       },
     });
   }
