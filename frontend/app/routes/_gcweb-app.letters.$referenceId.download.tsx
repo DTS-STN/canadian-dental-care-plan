@@ -23,7 +23,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   if (pdfResponse.ok) {
     return new Response(pdfResponse.body, {
       headers: {
-        'Content-Type': 'application/octet-stream',
+        'Content-Type': 'application/pdf',
         'Content-Length': pdfResponse.headers.get('Content-Length') ?? '',
         'Content-Disposition': `inline; filename="${params.referenceId}.pdf"`,
       },
