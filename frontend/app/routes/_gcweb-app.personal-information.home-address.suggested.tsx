@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react';
 
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
-import { Form, Link, useLoaderData } from '@remix-run/react';
+import { Form, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
+import { Button, ButtonLink } from '~/components/buttons';
 import { InputRadios } from '~/components/input-radios';
 import { getAddressService } from '~/services/address-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -83,9 +84,9 @@ export default function HomeAddressSuggested() {
 
   return (
     <>
-      <p>{t('personal-information:home-address.suggested.subtitle')}</p>
+      <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:home-address.suggested.subtitle')}</p>
       <Form method="post">
-        <p>{t('personal-information:home-address.suggested.note')}</p>
+        <p className="mb-4">{t('personal-information:home-address.suggested.note')}</p>
         <div className="grid gap-6 md:grid-cols-2">
           <PersonalInformationSection title={t('personal-information:home-address.suggested.address-entered')} icon="glyphicon-map-marker">
             {homeAddressInfo && <Address address={homeAddressInfo?.address} city={homeAddressInfo?.city} provinceState={homeAddressInfo?.province} postalZipCode={homeAddressInfo?.postalCode} country={homeAddressInfo?.country} />}
@@ -99,29 +100,27 @@ export default function HomeAddressSuggested() {
             )}
           </PersonalInformationSection>
         </div>
-        <div>
-          <InputRadios
-            id="selected-address"
-            name="selectedAddress"
-            legend={t('personal-information:home-address.suggested.choose-address')}
-            options={[
-              { value: 'home', children: t('personal-information:home-address.suggested.use-entered') },
-              { value: 'suggested', children: t('personal-information:home-address.suggested.use-suggested') },
-            ]}
-            required
-          />
-        </div>
-        <p>{t('personal-information:home-address.suggested.re-enter-address')}</p>
-        <div className="flex flex-wrap gap-3">
-          <button id="confirm-button" className="btn btn-primary btn-lg">
+        <InputRadios
+          id="selected-address"
+          name="selectedAddress"
+          legend={t('personal-information:home-address.suggested.choose-address')}
+          options={[
+            { value: 'home', children: t('personal-information:home-address.suggested.use-entered') },
+            { value: 'suggested', children: t('personal-information:home-address.suggested.use-suggested') },
+          ]}
+          required
+        />
+        <p className="mb-4">{t('personal-information:home-address.suggested.re-enter-address')}</p>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button id="confirm-button" variant="primary">
             {t('personal-information:home-address.suggested.continue')}
-          </button>
-          <Link id="cancel-button" to="/personal-information/" className="btn btn-default btn-lg">
+          </Button>
+          <ButtonLink id="cancel-button" to="/personal-information/">
             {t('personal-information:home-address.suggested.cancel')}
-          </Link>
-          <Link id="edit-button" to="/personal-information/home-address/edit" className="btn btn-default btn-lg">
+          </ButtonLink>
+          <ButtonLink id="edit-button" to="/personal-information/home-address/edit">
             {t('personal-information:home-address.suggested.edit')}
-          </Link>
+          </ButtonLink>
         </div>
       </Form>
     </>

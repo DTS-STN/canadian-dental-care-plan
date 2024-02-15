@@ -1,20 +1,26 @@
 import { Suspense, useContext } from 'react';
 
-import { type LoaderFunctionArgs, json } from '@remix-run/node';
+import { type LinksFunction, type LoaderFunctionArgs, json } from '@remix-run/node';
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { getToast } from 'remix-toast';
 
 import { Toaster } from './components/toaster';
+// import cdcpStyleSheet from '~/cdcp.css';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
+import fontInterStyleSheet from '~/fonts/inter.css';
 import tailwindStyleSheet from '~/tailwind.css';
 import { readBuildInfo } from '~/utils/build-info.server';
 import { getEnv, getPublicEnv } from '~/utils/env.server';
 import { useDocumentTitleI18nKey, useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
 
-export const links = () => [{ rel: 'stylesheet', href: tailwindStyleSheet }];
+export const links: LinksFunction = () => [
+  { rel: 'stylesheet', href: fontInterStyleSheet },
+  { rel: 'stylesheet', href: tailwindStyleSheet },
+  // { rel: 'stylesheet', href: cdcpStyleSheet },
+];
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const buildInfo = readBuildInfo('build-info.json');

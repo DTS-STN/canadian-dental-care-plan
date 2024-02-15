@@ -4,6 +4,7 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
+import { Button, ButtonLink } from '~/components/buttons';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -44,7 +45,7 @@ export default function PersonalInformationHomeAddressAccuracy() {
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <p>{t('personal-information:home-address.address-accuracy.subtitle')}</p>
+      <p className="mb-8 text-lg text-gray-500">{t('personal-information:home-address.address-accuracy.subtitle')}</p>
       <Form method="post">
         <section className="alert alert-warning mt-4">
           <h2>{t('personal-information:home-address.address-accuracy.invalid-address')}</h2>
@@ -64,16 +65,16 @@ export default function PersonalInformationHomeAddressAccuracy() {
             </div>
           </section>
         </div>
-        <Link id="cancel-button" to="/personal-information/home-address/edit" className="text-base font-bold">
+        <Link id="cancel-button" to="/personal-information/home-address/edit" className="text-base font-semibold">
           {t('personal-information:home-address.address-accuracy.re-enter-address')}
         </Link>
-        <div className="my-4 flex flex-wrap gap-3">
-          <button id="confirm-button" className="btn btn-primary btn-lg">
+        <div className="my-4 flex flex-wrap items-center gap-3">
+          <Button id="confirm-button" variant="primary">
             {t('personal-information:home-address.address-accuracy.continue')}
-          </button>
-          <Link id="cancel-button" to="/personal-information/" className="btn btn-default btn-lg">
+          </Button>
+          <ButtonLink id="cancel-button" to="/personal-information/">
             {t('personal-information:home-address.address-accuracy.cancel')}
-          </Link>
+          </ButtonLink>
         </div>
       </Form>
     </>

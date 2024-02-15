@@ -15,12 +15,18 @@ export function InputLabel(props: InputLabelProps) {
   const { children, className, required, ...restProps } = props;
 
   return (
-    <label className={cn(required && 'required', className)} data-testid="input-label" {...restProps}>
-      <span className="field-name">{children}</span>
+    <label className={cn('inline-block text-sm font-medium', className)} data-testid="input-label" {...restProps}>
+      <span>{children}</span>
       {required && (
-        <strong className="required mrgn-lft-sm" data-testid="input-label-required">
-          ({t('input-label.required')})
-        </strong>
+        <>
+          &nbsp;
+          <i aria-hidden="true" className="font-bold text-red-600">
+            *
+          </i>
+          <strong className="sr-only" data-testid="input-label-required">
+            ({t('input-label.required')})
+          </strong>
+        </>
       )}
     </label>
   );

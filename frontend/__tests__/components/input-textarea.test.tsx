@@ -42,19 +42,6 @@ describe('InputTextarea', () => {
     expect(actual).not.toBeRequired();
   });
 
-  it('should render with help message secondary', async () => {
-    render(<InputTextarea id="test-id" name="test" label="label test" defaultValue="default value" helpMessageSecondary="help message secondary" />);
-
-    const actual = screen.getByTestId('input-textarea');
-
-    expect(actual).toBeInTheDocument();
-    expect(actual).toHaveAccessibleDescription('help message secondary');
-    expect(actual).toHaveAccessibleName('label test');
-    expect(actual).toHaveAttribute('id', 'test-id');
-    expect(actual).toHaveValue('default value');
-    expect(actual).not.toBeRequired();
-  });
-
   it('should render with required', async () => {
     render(<InputTextarea id="test-id" name="test" label="label test" defaultValue="default value" required />);
 

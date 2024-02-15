@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
-import { Form, Link, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, useActionData, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { Address } from '~/components/address';
+import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import { type InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
@@ -19,7 +21,7 @@ import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('personal-information');
+const i18nNamespaces = getTypedI18nNamespaces('personal-information', 'gcweb');
 
 export const handle = {
   breadcrumbs: [
@@ -195,59 +197,63 @@ export default function PersonalInformationMailingAddressEdit() {
 
   return (
     <>
-      <p>{t('personal-information:mailing-address.edit.subtitle')}</p>
+      <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:mailing-address.edit.subtitle')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form className="max-w-prose" method="post">
+      <Form method="post">
         {homeAddressInfo && (
-          <div className="checkbox gc-chckbxrdio">
-            <input id="copy-home-address" type="checkbox" name="copyHomeAddress" checked={isCopyAddressChecked} onChange={checkHandler} />
-            <label id="copy-home-address" htmlFor="copy-home-address">
+          <div className="my-6">
+            <InputCheckbox id="copy-home-address" name="copyHomeAddress" checked={isCopyAddressChecked} onChange={checkHandler}>
               {t('personal-information:mailing-address.edit.copy-home-address')}
-            </label>
+            </InputCheckbox>
           </div>
         )}
-
-        {isCopyAddressChecked && homeAddressInfo && (
-          <div>
-            <p>
-              <strong>{t('personal-information:mailing-address.edit.copy-home-address-note')}</strong>
-            </p>
-            <Address
-              address={homeAddressInfo.address}
-              city={homeAddressInfo.city}
-              provinceState={regionList.find((region) => region.code === homeAddressInfo.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
-              postalZipCode={homeAddressInfo.postalCode}
-              country={countryList.find((country) => country.code === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
-            />
-          </div>
-        )}
-
-        {!isCopyAddressChecked && (
-          <>
-            <InputField id="address" label={t('personal-information:mailing-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />
-            <InputField id="city" label={t('personal-information:mailing-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
-            {regions.length > 0 && <InputSelect id="province" label={t('personal-information:mailing-address.edit.field.province')} name="province" options={regions} defaultValue={defaultValues.province} errorMessage={errorMessages.province} />}
-            <InputField id="postalCode" label={t('personal-information:mailing-address.edit.field.postal-code')} name="postalCode" defaultValue={defaultValues.postalCode} errorMessage={errorMessages.postalCode} />
-            <InputSelect
-              id="country"
-              label={t('personal-information:mailing-address.edit.field.country')}
-              name="country"
-              required
-              options={countries}
-              onChange={countryChangeHandler}
-              defaultValue={defaultValues.country}
-              errorMessage={errorMessages.country}
-            />
-          </>
-        )}
-
-        <div className="flex flex-wrap gap-3">
-          <button id="change-button" className="btn btn-primary btn-lg">
+        <div className="my-6">
+          {isCopyAddressChecked && homeAddressInfo && (
+            <dl className="border-y py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
+              <dt>
+                <strong className="font-medium">{t('personal-information:mailing-address.edit.copy-home-address-note')}</strong>
+              </dt>
+              <dd className="mt-3 sm:col-span-2 sm:mt-0">
+                <Address
+                  address={homeAddressInfo.address}
+                  city={homeAddressInfo.city}
+                  provinceState={regionList.find((region) => region.code === homeAddressInfo.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
+                  postalZipCode={homeAddressInfo.postalCode}
+                  country={countryList.find((country) => country.code === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
+                />
+              </dd>
+            </dl>
+          )}
+          {!isCopyAddressChecked && (
+            <div className="max-w-prose">
+              <p className="mb-4 text-red-600">{t('gcweb:asterisk-indicates-required-field')}</p>
+              <InputField id="address" className="w-full" label={t('personal-information:mailing-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />
+              <InputField id="city" className="w-full" label={t('personal-information:mailing-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
+              {regions.length > 0 && (
+                <InputSelect id="province" className="w-full sm:w-1/2" label={t('personal-information:mailing-address.edit.field.province')} name="province" options={regions} defaultValue={defaultValues.province} errorMessage={errorMessages.province} />
+              )}
+              <InputField id="postalCode" label={t('personal-information:mailing-address.edit.field.postal-code')} name="postalCode" defaultValue={defaultValues.postalCode} errorMessage={errorMessages.postalCode} />
+              <InputSelect
+                id="country"
+                className="w-full sm:w-1/2"
+                label={t('personal-information:mailing-address.edit.field.country')}
+                name="country"
+                required
+                options={countries}
+                onChange={countryChangeHandler}
+                defaultValue={defaultValues.country}
+                errorMessage={errorMessages.country}
+              />
+            </div>
+          )}
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button id="change-button" variant="primary">
             {t('personal-information:mailing-address.edit.button.change')}
-          </button>
-          <Link id="cancel-button" to="/personal-information" className="btn btn-default btn-lg">
+          </Button>
+          <ButtonLink id="cancel-button" to="/personal-information">
             {t('personal-information:mailing-address.edit.button.cancel')}
-          </Link>
+          </ButtonLink>
         </div>
       </Form>
     </>

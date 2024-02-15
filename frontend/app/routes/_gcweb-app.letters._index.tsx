@@ -6,6 +6,7 @@ import { Link, useLoaderData, useSearchParams } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { InputSelect } from '~/components/input-select';
 import { getLettersService } from '~/services/letters-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
@@ -67,21 +68,27 @@ export default function LettersIndex() {
 
   return (
     <>
-      <p>{t('letters:index.subtitle')}</p>
-      <label htmlFor="sort-order" className="block w-fit text-base font-medium">
-        <strong>{t('letters:index.filter')}</strong>
-      </label>
-      <select id="sort-order" value={sortOrder} onChange={handleOnSortOrderChange} className="block rounded border p-2.5 text-sm outline-none focus:border-blue-500 focus:ring-blue-500">
-        <option value={orderEnumSchema.enum.desc}>{t('letters:index.newest')}</option>
-        <option value={orderEnumSchema.enum.asc}>{t('letters:index.oldest')}</option>
-      </select>
-      <ul className="mt-2 divide-y rounded-md border">
+      <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('letters:index.subtitle')}</p>
+      <div className="my-6">
+        <InputSelect
+          id="sort-order"
+          value={sortOrder}
+          onChange={handleOnSortOrderChange}
+          label={t('letters:index.filter')}
+          name="sortOrder"
+          options={[
+            { value: orderEnumSchema.enum.desc, children: t('letters:index.newest') },
+            { value: orderEnumSchema.enum.asc, children: t('letters:index.oldest') },
+          ]}
+        />
+      </div>
+      <ul className="divide-y border-y">
         {letters.map((letter) => (
-          <li key={letter.id} className="space-y-1 px-4 py-2 hover:bg-gray-100">
-            <Link reloadDocument to={`/letters/${letter.referenceId}/download`} className="text-base font-bold no-underline">
+          <li key={letter.id} className="py-4 sm:py-6">
+            <Link reloadDocument to={`/letters/${letter.referenceId}/download`} className="font-medium hover:underline">
               {i18n.language === 'en' ? letter.nameEn : letter.nameFr}
             </Link>
-            <div className="text-sm">{t('letters:index.date', { date: getFormattedDate(letter.dateSent) })}</div>
+            <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: getFormattedDate(letter.dateSent) })}</p>
           </li>
         ))}
       </ul>

@@ -13,8 +13,8 @@ describe('InputSelect', () => {
         label="label test"
         defaultValue="first"
         options={[
-          { label: 'first option', value: 'first', id: 'first' },
-          { label: 'second option', value: 'second', id: 'second' },
+          { children: 'first option', value: 'first' },
+          { children: 'second option', value: 'second' },
         ]}
       />,
     );
@@ -37,8 +37,8 @@ describe('InputSelect', () => {
         label="label test"
         defaultValue="first"
         options={[
-          { label: 'first option', value: 'first', id: 'first' },
-          { label: 'second option', value: 'second', id: 'second' },
+          { children: 'first option', value: 'first' },
+          { children: 'second option', value: 'second' },
         ]}
         helpMessage="help message"
       />,
@@ -54,31 +54,6 @@ describe('InputSelect', () => {
     expect(actual).not.toBeRequired();
   });
 
-  it('should render with help message secondary', async () => {
-    render(
-      <InputSelect
-        id="some-id"
-        name="test"
-        label="label test"
-        defaultValue="first"
-        options={[
-          { label: 'first option', value: 'first', id: 'first' },
-          { label: 'second option', value: 'second', id: 'second' },
-        ]}
-        helpMessageSecondary="help message secondary"
-      />,
-    );
-
-    const actual = screen.getByTestId('input-some-id-test');
-
-    expect(actual).toBeInTheDocument();
-    expect(actual).toHaveAccessibleDescription('help message secondary');
-    expect(actual).toHaveAccessibleName('label test');
-    expect(actual).toHaveAttribute('id', 'some-id');
-    expect(actual).toHaveValue('first');
-    expect(actual).not.toBeRequired();
-  });
-
   it('should render with required', async () => {
     render(
       <InputSelect
@@ -87,8 +62,8 @@ describe('InputSelect', () => {
         label="label test"
         defaultValue="first"
         options={[
-          { label: 'first option', value: 'first', id: 'first' },
-          { label: 'second option', value: 'second', id: 'second' },
+          { children: 'first option', value: 'first' },
+          { children: 'second option', value: 'second' },
         ]}
         required
       />,
@@ -112,8 +87,8 @@ describe('InputSelect', () => {
         label="label test"
         defaultValue="first"
         options={[
-          { label: 'first option', value: 'first', id: 'first' },
-          { label: 'second option', value: 'second', id: 'second' },
+          { children: 'first option', value: 'first' },
+          { children: 'second option', value: 'second' },
         ]}
         errorMessage="error message"
       />,

@@ -1,10 +1,11 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json } from '@remix-run/node';
-import { Form, Link, useLoaderData } from '@remix-run/react';
+import { Form, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
 
 import { Address } from '~/components/address';
+import { Button, ButtonLink } from '~/components/buttons';
 import { getAddressService } from '~/services/address-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -63,15 +64,13 @@ export default function PersonalInformationHomeAddressConfirm() {
   const { i18n, t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <p>{t('personal-information:home-address.confirm.subtitle')}</p>
+      <p className="mb-8 text-lg text-gray-500">{t('personal-information:home-address.confirm.subtitle')}</p>
       <Form method="post">
-        <div className="grid gap-6 md:grid-cols-2">
+        <dl className="my-6 divide-y border-y">
           {homeAddressInfo && (
-            <section className="panel panel-info">
-              <header className="panel-heading">
-                <h2 className="panel-title">{t('personal-information:home-address.confirm.previous-home-address')}</h2>
-              </header>
-              <div className="panel-body">
+            <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
+              <dt className="font-medium">{t('personal-information:home-address.confirm.previous-home-address')}</dt>
+              <dd className="mt-3 sm:col-span-2 sm:mt-0">
                 <Address
                   address={homeAddressInfo.address}
                   city={homeAddressInfo.city}
@@ -79,14 +78,12 @@ export default function PersonalInformationHomeAddressConfirm() {
                   postalZipCode={homeAddressInfo.postalCode}
                   country={countryList.find((country) => country.code === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
                 />
-              </div>
-            </section>
+              </dd>
+            </div>
           )}
-          <section className="panel panel-info">
-            <header className="panel-heading">
-              <h2 className="panel-title">{t('personal-information:home-address.confirm.new-home-address')}</h2>
-            </header>
-            <div className="panel-body">
+          <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
+            <dt className="font-medium">{t('personal-information:home-address.confirm.new-home-address')}</dt>
+            <dd className="mt-3 sm:col-span-2 sm:mt-0">
               <Address
                 address={newHomeAddress.address}
                 city={newHomeAddress.city}
@@ -94,17 +91,16 @@ export default function PersonalInformationHomeAddressConfirm() {
                 postalZipCode={newHomeAddress.postalCode}
                 country={countryList.find((country) => country.code === newHomeAddress.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
               />
-            </div>
-          </section>
-        </div>
-
-        <div className="flex flex-wrap gap-3">
-          <button id="confirm-button" className="btn btn-primary btn-lg">
+            </dd>
+          </div>
+        </dl>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button id="confirm-button" variant="primary">
             {t('personal-information:home-address.confirm.button.confirm')}
-          </button>
-          <Link id="cancel-button" to="/personal-information/home-address/edit" className="btn btn-default btn-lg">
+          </Button>
+          <ButtonLink id="cancel-button" to="/personal-information/home-address/edit">
             {t('personal-information:home-address.confirm.button.cancel')}
-          </Link>
+          </ButtonLink>
         </div>
       </Form>
     </>

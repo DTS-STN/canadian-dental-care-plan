@@ -1,3 +1,4 @@
+import { AlertCircle as AlertCircleIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { AnchorLink } from '~/components/anchor-link';
@@ -92,17 +93,22 @@ export function ErrorSummary({ errors, id }: ErrorSummaryProps) {
   const { t } = useTranslation(['gcweb']);
 
   return (
-    <section id={id} className="my-5 space-y-3 border-l-[6px] border-[#d3080c] p-5" tabIndex={-1}>
-      <h2 className="m-0 text-2xl font-bold">{t('gcweb:error-summary.header', { count: errors.length })}</h2>
-      {errors.length > 0 && (
-        <ul className="m-0 list-disc space-y-2 pl-10 ">
-          {errors.map(({ feildId, errorMessage }) => (
-            <li key={feildId}>
-              <AnchorLink anchorElementId={feildId}>{errorMessage}</AnchorLink>
-            </li>
-          ))}
-        </ul>
-      )}
+    <section id={id} className="my-5 flex gap-3 rounded-lg border border-red-300 bg-red-50 p-4 text-red-800" tabIndex={-1} role="alert">
+      <AlertCircleIcon className="mt-1.5 inline h-4 w-4 flex-shrink-0" />
+      <div>
+        <h2 className="text-lg font-semibold">{t('gcweb:error-summary.header', { count: errors.length })}</h2>
+        {errors.length > 0 && (
+          <ul className="mt-1.5 list-inside list-disc">
+            {errors.map(({ feildId, errorMessage }) => (
+              <li key={feildId}>
+                <AnchorLink className="hover:underline" anchorElementId={feildId}>
+                  {errorMessage}
+                </AnchorLink>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </section>
   );
 }
