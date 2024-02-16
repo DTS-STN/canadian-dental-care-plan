@@ -17,7 +17,6 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
-import { getWSAddressService } from '~/services/wsaddress-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information', 'gcweb');
@@ -86,9 +85,14 @@ export async function action({ request }: ActionFunctionArgs) {
   const session = await sessionService.getSession(request);
   session.set('newHomeAddress', parsedDataResult.data);
 
-  const wsAddressWebService = await getWSAddressService();
-  const { address, city, country, postalCode, province } = parsedDataResult.data;
-  const validateResultAddress = await wsAddressWebService.validateWSAddress({ address, city, country, postalCode: postalCode ?? '', province: province ?? '' });
+  // TODO the validateWSAddress(..) call below must be corrected to consume the correct response
+  // const wsAddressWebService = await getWSAddressService();
+  // const { address, city, country, postalCode, province } = parsedDataResult.data;
+  // const validateResultAddress = await wsAddressWebService.validateWSAddress({ address, city, country, postalCode: postalCode ?? '', province: province ?? '' });
+
+  // TODO the following line must be removed once the validateWSAddress(..) call above is corrected
+  const validateResultAddress = { statusCode: 'Valid' };
+
   const redirectUrl = validateResultAddress.statusCode === 'Invalid' ? '/personal-information/home-address/address-accuracy' : '/personal-information/home-address/confirm';
 
   return redirect(redirectUrl, {
@@ -136,8 +140,8 @@ export default function PersonalInformationHomeAddressEdit() {
     .map((region) => {
       return {
         label: i18n.language === 'fr' ? region.nameFrench : region.nameEnglish,
-        value: region.countryId,
-        id: region.countryId,
+        value: region.provinceTerritoryStateId,
+        id: region.provinceTerritoryStateId,
       };
     })
     .sort((r1, r2) => r1.label.localeCompare(r2.label)) as InputOptionProps[];
