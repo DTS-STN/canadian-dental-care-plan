@@ -15,7 +15,7 @@ describe('readBuildInfo', () => {
 
   it('should return undefined if the file does not exist', () => {
     vi.mocked(fs.existsSync).mockReturnValue(false);
-    expect(readBuildInfo('build-info.json')).toBeUndefined();
+    expect(readBuildInfo('build-info.json')).toBeNull();
   });
 
   it('should return a BuildInfo object if the file exists', () => {

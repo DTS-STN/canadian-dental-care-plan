@@ -12,4 +12,4 @@ docker build ./ --tag canadian-dental-care-plan                  \
     --build-arg BUILD_DATE="$(date -u +%Y-%m-%dT%H:%M:%SZ)"      \
     --build-arg BUILD_ID="00000"                                 \
     --build-arg BUILD_REVISION="$(git rev-parse --short=8 HEAD)" \
-    --build-arg BUILD_VERSION="0.0.0+$(git rev-parse --short=8 HEAD)-00000"
+    --build-arg BUILD_VERSION="0.0.0-$(git rev-parse --short=8 HEAD)-00000"

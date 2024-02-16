@@ -109,7 +109,7 @@ describe('useBuildInfo()', () => {
               buildDate: '0000-00-00T00:00:00Z',
               buildId: '0000',
               buildRevision: '00000000',
-              buildVersion: '0.0.0+00000000-0000',
+              buildVersion: '0.0.0-00000000-0000',
             },
           });
         },
@@ -122,7 +122,7 @@ describe('useBuildInfo()', () => {
                   buildDate: '2000-01-01T00:00:00Z',
                   buildId: '6969',
                   buildRevision: '69696969',
-                  buildVersion: '0.0.0+69696969-6969',
+                  buildVersion: '0.0.0-69696969-6969',
                 },
               });
             },
@@ -135,7 +135,7 @@ describe('useBuildInfo()', () => {
     render(<RemixStub />);
 
     const element = await waitFor(() => screen.findByTestId('data'));
-    expect(element.textContent).toEqual('{"buildDate":"2000-01-01T00:00:00Z","buildId":"6969","buildRevision":"69696969","buildVersion":"0.0.0+69696969-6969"}');
+    expect(element.textContent).toEqual('{"buildDate":"2000-01-01T00:00:00Z","buildId":"6969","buildRevision":"69696969","buildVersion":"0.0.0-69696969-6969"}');
   });
 });
 

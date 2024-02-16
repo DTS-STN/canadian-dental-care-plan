@@ -163,7 +163,7 @@ function AppPageTitle(props: Omit<ComponentProps<typeof PageTitle>, 'children'>)
 function PageDetails() {
   const buildInfo = useBuildInfo() ?? {
     buildDate: '2000-01-01T00:00:00Z',
-    buildVersion: '0.0.0+00000000-0000',
+    buildVersion: '0.0.0-00000000-0000',
   };
 
   const pageIdentifier = usePageIdentifier();
