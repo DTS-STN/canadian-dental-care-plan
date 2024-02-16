@@ -16,5 +16,5 @@ export function Toaster({ toast }: ToasterProps) {
     }
   }, [toast]);
 
-  return <SnackbarProvider anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }} />;
+  return <SnackbarProvider className="bg-green-700" anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }} />;
 }
