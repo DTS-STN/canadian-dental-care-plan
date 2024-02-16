@@ -10,7 +10,6 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
-import { PREFERRED_LANGUAGES } from '~/utils/constants';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information', 'gcweb');
@@ -47,7 +46,7 @@ export async function action({ request }: ActionFunctionArgs) {
   await raoidcService.handleSessionValidation(request);
 
   const formDataSchema = z.object({
-    preferredLanguage: z.enum(PREFERRED_LANGUAGES),
+    preferredLanguage: z.enum(['en', 'fr']),
   });
   const formData = Object.fromEntries(await request.formData());
   const parsedDataResult = formDataSchema.safeParse(formData);
