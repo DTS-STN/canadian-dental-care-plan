@@ -13,6 +13,7 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
     },
+    project: ['./tsconfig.json'],
   },
   env: {
     browser: true,
@@ -65,6 +66,10 @@ module.exports = {
         },
       },
       extends: ['plugin:@typescript-eslint/recommended', 'plugin:import/recommended', 'plugin:import/typescript', 'prettier'],
+      rules: {
+        '@typescript-eslint/prefer-nullish-coalescing': 'error',
+        '@typescript-eslint/prefer-optional-chain': 'error',
+      },
     },
 
     // Node
