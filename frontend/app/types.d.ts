@@ -13,6 +13,7 @@ import { type Breadcrumbs, type I18nNamespaces, type PageIdentifier, type PageTi
  *
  * ex: ToFunc<{ foo: undefined } | { bar: undefined }> = ((t: { foo: undefined }) => void) | ((t: { bar: undefined }) => void)
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ToFunc<T> = T extends any ? (t: T) => void : never;
 
 /**

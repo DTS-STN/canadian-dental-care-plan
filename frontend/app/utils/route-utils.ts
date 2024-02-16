@@ -4,6 +4,7 @@ import { type FlatNamespace, type KeysByTOptions, type Namespace, type ParseKeys
 import validator from 'validator';
 import { z } from 'zod';
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 type ParsedKeysByNamespaces<TOpt extends TOptions = {}> = ParseKeysByNamespaces<Namespace, KeysByTOptions<TOpt>>;
 
 /**

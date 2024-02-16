@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs, json } from '@remix-run/node';
+import { json } from '@remix-run/node';
 
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -14,7 +14,7 @@ export const handle = {
   pageIdentifier: 'CDCP-0404',
 } as const satisfies RouteHandleData;
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader() {
   return json(null, { status: 404 });
 }
 

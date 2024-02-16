@@ -130,7 +130,7 @@ function createDevRequestHandler(initialBuild: ServerBuild, buildPath: string, v
 
 function parseNumber(raw?: string) {
   if (raw === undefined) return undefined;
-  let maybe = Number(raw);
+  const maybe = Number(raw);
   if (Number.isNaN(maybe)) return undefined;
   return maybe;
 }

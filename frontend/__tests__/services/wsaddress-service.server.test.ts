@@ -2,8 +2,7 @@ import { HttpResponse, http } from 'msw';
 import { setupServer } from 'msw/node';
 import { afterAll, afterEach, beforeAll, describe, expectTypeOf, it, vi } from 'vitest';
 
-import type { CorrectWSAddressResponseDTO, ParseWSAddressResponseDTO, ValidateWSAddressResponseDTO } from '~/services/wsaddress-service.server';
-import { getWSAddressService } from '~/services/wsaddress-service.server';
+import { type CorrectWSAddressResponseDTO, type ParseWSAddressResponseDTO, type ValidateWSAddressResponseDTO, getWSAddressService } from '~/services/wsaddress-service.server';
 
 //TODO: add invalid request tests when changing to use Interop's WSAddress endpoint instead of MSW
 
@@ -11,7 +10,7 @@ const handlers = [
   /**
    * Handler for POST requests to WSAddress correction service
    */
-  http.post('https://api.example.com/address/correction', ({ params, request }) => {
+  http.post('https://api.example.com/address/correction', () => {
     return HttpResponse.json({
       responseType: 'CA',
       addressLine: '23 Coronation St',
@@ -34,7 +33,7 @@ const handlers = [
   /**
    * Handler for POST requests to WSAddress parse service
    */
-  http.post('https://api.example.com/address/parse', ({ params }) => {
+  http.post('https://api.example.com/address/parse', () => {
     return HttpResponse.json({
       responseType: 'CA',
       addressLine: '23 CORONATION ST',
@@ -70,7 +69,7 @@ const handlers = [
   /**
    * Handler for POST requests to WSAddress validate service
    */
-  http.post('https://api.example.com/address/validate', ({ params }) => {
+  http.post('https://api.example.com/address/validate', () => {
     return HttpResponse.json({
       responseType: 'CA',
       statusCode: 'Valid',

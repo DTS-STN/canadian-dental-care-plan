@@ -32,9 +32,14 @@
     "@remix-run/node": "^2.6.0",
     "@remix-run/react": "^2.6.0",
     "@remix-run/serve": "^2.6.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.1",
     "clsx": "^2.1.0",
     "compression": "^1.7.4",
     "cross-env": "^7.0.3",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "express": "^4.18.2",
     "fast-json-patch": "^3.1.1",
     "i18next": "^23.8.2",
@@ -67,7 +72,6 @@
   "devDependencies": {
     "@playwright/test": "^1.41.2",
     "@remix-run/dev": "^2.6.0",
-    "@remix-run/eslint-config": "^2.6.0",
     "@remix-run/testing": "^2.6.0",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
@@ -102,22 +106,6 @@
   },
   "engines": {
     "node": ">=20.0.0"
-  },
-  "eslintConfig": {
-    "ignorePatterns": [
-      "**/.cache/**",
-      "**/build/**",
-      "**/node_modules/**",
-      "**/public/build/**"
-    ],
-    "plugins": [
-      "jsx-a11y"
-    ],
-    "extends": [
-      "@remix-run/eslint-config",
-      "plugin:jsx-a11y/recommended",
-      "prettier"
-    ]
   },
   "prettier": {
     "semi": true,

@@ -176,6 +176,7 @@ export default function PersonalInformationMailingAddressEdit() {
      * The 'as any' is employed to circumvent typechecking, as the type of
      * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return t(`personal-information:mailing-address.edit.error-message.${errorI18nKey}` as any);
   }
 

@@ -69,7 +69,7 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
 
       vi.mocked(session.has).mockReturnValueOnce(true);
 
-      let request = new Request('http://localhost:3000/personal-information/phone-number/confirm', {
+      const request = new Request('http://localhost:3000/personal-information/phone-number/confirm', {
         method: 'POST',
       });
 
@@ -80,7 +80,7 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
     });
 
     it('should redirect to homepage page when newPhoneNumber is missing', async () => {
-      let request = new Request('http://localhost:3000/personal-information/phone-number/confirm', {
+      const request = new Request('http://localhost:3000/personal-information/phone-number/confirm', {
         method: 'POST',
       });
 

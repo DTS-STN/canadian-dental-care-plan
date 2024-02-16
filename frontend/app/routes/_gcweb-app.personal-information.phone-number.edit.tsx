@@ -98,6 +98,7 @@ export default function PhoneNumberEdit() {
      * The 'as any' is employed to circumvent typechecking, as the type of
      * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return t(`personal-information:phone-number.edit.error-message.${errorI18nKey}` as any);
   }
 
