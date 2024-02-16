@@ -102,21 +102,21 @@ describe('wsaddress-service.server tests', () => {
 
   describe('correctWSAddress()', () => {
     it('should correct an address successfully', async () => {
-      const result = await wsAddressService.correctWSAddress({ addressLine: 'addr 123', city: 'ABC', country: 'CAN', language: 'EN', postalCode: 'A1B2C3', province: 'ON', formatResult: true });
+      const result = await wsAddressService.correctWSAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' });
       expectTypeOf(result).toMatchTypeOf<CorrectWSAddressResponseDTO>();
     });
   });
 
   describe('validateWSAddress()', () => {
     it('should validate an address successfully', async () => {
-      const result = await wsAddressService.validateWSAddress({ addressLine: 'addr 123', city: 'ABC', country: 'CAN', language: 'EN', postalCode: 'A1B2C3', province: 'ON', geographicScope: 'GS', parseType: 'PT' });
+      const result = await wsAddressService.validateWSAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' });
       expectTypeOf(result).toMatchTypeOf<ValidateWSAddressResponseDTO>();
     });
   });
 
   describe('parseAddress()', () => {
     it('should parse an address successfully', async () => {
-      const result = await wsAddressService.parseWSAddress({ addressLine: 'addr 123', city: 'ABC', country: 'CAN', language: 'EN', postalCode: 'A1B2C3', province: 'ON' });
+      const result = await wsAddressService.parseWSAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' });
       expectTypeOf(result).toMatchTypeOf<ParseWSAddressResponseDTO>();
     });
   });
