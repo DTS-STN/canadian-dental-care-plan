@@ -5,8 +5,10 @@ import { z } from 'zod';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getEnv } from '~/utils/env.server';
+import { getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { generateCallbackUri, generateRandomString } from '~/utils/raoidc-utils.server';
+import { type IdToken, generateCallbackUri, generateRandomString } from '~/utils/raoidc-utils.server';
+import { expandTemplate } from '~/utils/string-utils';
 
 const log = getLogger('auth.$');
 const defaultProviderId = 'raoidc';
@@ -59,14 +61,23 @@ async function handleLoginRequest({ params, request }: LoaderFunctionArgs) {
  * Handler for /auth/logout requests
  */
 async function handleLogoutRequest({ params, request }: LoaderFunctionArgs) {
-  const { AUTH_LOGOUT_REDIRECT_URL } = getEnv();
+  const { AUTH_LOGOUT_REDIRECT_URL, AUTH_RAOIDC_CLIENT_ID } = getEnv();
 
   log.debug('Destroying CDCP application session session');
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
 
-  log.debug('Redirecting to downstream logout handler: [%s]', AUTH_LOGOUT_REDIRECT_URL);
-  return redirect(AUTH_LOGOUT_REDIRECT_URL, {
+  const idToken: IdToken = session.get('idToken');
+  const locale = await getLocale(request);
+
+  const logoutRedirectUrl = expandTemplate(AUTH_LOGOUT_REDIRECT_URL, {
+    clientId: AUTH_RAOIDC_CLIENT_ID,
+    sharedSessionId: idToken.sid,
+    uiLocales: locale, // TODO :: GjB :: confirm with ECAS what the allowed values are
+  });
+
+  log.debug('Redirecting to downstream logout handler: [%s]', logoutRedirectUrl);
+  return redirect(logoutRedirectUrl, {
     headers: {
       'Set-Cookie': await sessionService.destroySession(session),
     },
