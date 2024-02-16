@@ -87,7 +87,12 @@ function createLookupService() {
     const countryListSchema = z.array(countrySchema);
 
     if (response.ok) {
-      return countryListSchema.parse(await response.json());
+      const parsedCountries = countryListSchema.parse(await response.json());
+      return parsedCountries.map((country) => ({
+        countryId: country.countryId,
+        nameEnglish: country.nameEnglish,
+        nameFrench: country.nameFrench,
+      }));
     }
 
     log.error('%j', {
@@ -108,7 +113,13 @@ function createLookupService() {
     const regionListSchema = z.array(regionSchema);
 
     if (response.ok) {
-      return regionListSchema.parse(await response.json());
+      const parsedRegions = regionListSchema.parse(await response.json());
+      return parsedRegions.map((region) => ({
+        provinceTerritoryStateId: region.provinceTerritoryStateId,
+        countryId: region.countryId,
+        nameEnglish: region.nameEnglish,
+        nameFrench: region.nameFrench,
+      }));
     }
 
     log.error('%j', {
