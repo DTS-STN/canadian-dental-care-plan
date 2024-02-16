@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import * as fs from 'node:fs';
 
 import { getLogger } from '~/utils/logging.server';
 
@@ -16,14 +16,14 @@ export type BuildInfo = {
  * contains information about the build, such as the version number and the build date.
  */
 export function readBuildInfo(filename: string) {
-  const fileExists = existsSync(filename);
+  const fileExists = fs.existsSync(filename);
 
   if (!fileExists) {
     logger.debug(`Application build info file [${filename}] does not exist; returning undefined`);
     return undefined;
   }
 
-  const buildInfo = JSON.parse(readFileSync(filename, 'utf8')) as BuildInfo;
+  const buildInfo = JSON.parse(fs.readFileSync(filename, 'utf8')) as BuildInfo;
   logger.debug(`Application build info: [${JSON.stringify(buildInfo)}]`);
 
   return buildInfo;
