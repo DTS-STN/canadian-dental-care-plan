@@ -12,6 +12,6 @@ export function scrollAndFocusFromAnchorLink(href: string): void {
   const targetElement = document.querySelector<HTMLElement>(hash);
   if (!targetElement) return;
 
-  targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  targetElement.scrollIntoView({ behavior: 'smooth' });
   targetElement.focus();
 }
