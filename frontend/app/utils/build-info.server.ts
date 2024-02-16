@@ -4,12 +4,12 @@ import { getLogger } from '~/utils/logging.server';
 
 const logger = getLogger('build-info.server');
 
-export type BuildInfo = {
+export interface BuildInfo {
   buildDate: string;
   buildId: string;
   buildRevision: string;
   buildVersion: string;
-};
+}
 
 /**
  * The readBuildInfo function takes a filename as an argument and returns a BuildInfo object. The BuildInfo object
@@ -19,8 +19,8 @@ export function readBuildInfo(filename: string) {
   const fileExists = fs.existsSync(filename);
 
   if (!fileExists) {
-    logger.debug(`Application build info file [${filename}] does not exist; returning undefined`);
-    return undefined;
+    logger.debug(`Application build info file [${filename}] does not exist; returning null`);
+    return null;
   }
 
   const buildInfo = JSON.parse(fs.readFileSync(filename, 'utf8')) as BuildInfo;
