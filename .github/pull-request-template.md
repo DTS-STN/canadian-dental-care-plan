@@ -17,7 +17,7 @@
 <!-- Go through each item and check it with an "x" inside the square brackets. -->
 - [ ] I have tested the changes locally
 - [ ] I have updated the documentation if necessary
-- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] I have added/updated tests that prove my fix is effective or that my feature works
 - [ ] I have checked that my code follows the project's coding style by running `npm run format:check`
 - [ ] I have checked that my code contains no linting errors by running `npm run lint`
 - [ ] I have checked that my code contains no type errors by running `npm run typecheck`
