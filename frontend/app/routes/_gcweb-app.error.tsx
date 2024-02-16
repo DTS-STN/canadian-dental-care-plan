@@ -1,6 +1,4 @@
-import { type LoaderFunctionArgs } from '@remix-run/node';
-
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader() {
   throw new Error('Keyboard not responding. Press any key to continue.');
 }
 

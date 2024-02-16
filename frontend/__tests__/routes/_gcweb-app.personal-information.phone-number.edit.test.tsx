@@ -56,7 +56,7 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
     it('should redirect without validation errors', async () => {
       const formData = new FormData();
       formData.append('phoneNumber', '819 426-5555');
-      let request = new Request('http://localhost:3000/personal-information/phone-number/edit', {
+      const request = new Request('http://localhost:3000/personal-information/phone-number/edit', {
         method: 'POST',
         body: formData,
       });
@@ -70,7 +70,7 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
     it('should return validation errors', async () => {
       const formData = new FormData();
       formData.append('phoneNumber', '819 426-55');
-      let request = new Request('http://localhost:3000/personal-information/phone-number/edit', {
+      const request = new Request('http://localhost:3000/personal-information/phone-number/edit', {
         method: 'POST',
         body: formData,
       });

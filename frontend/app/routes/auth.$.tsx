@@ -54,7 +54,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
 /**
  * Handler for /auth/login requests
  */
-async function handleLoginRequest({ params, request }: LoaderFunctionArgs) {
+async function handleLoginRequest({ request }: LoaderFunctionArgs) {
   const url = new URL(`/auth/login/${defaultProviderId}`, request.url);
   url.search = new URL(request.url).search;
 
@@ -65,7 +65,7 @@ async function handleLoginRequest({ params, request }: LoaderFunctionArgs) {
 /**
  * Handler for /auth/logout requests
  */
-async function handleLogoutRequest({ params, request }: LoaderFunctionArgs) {
+async function handleLogoutRequest({ request }: LoaderFunctionArgs) {
   const { AUTH_LOGOUT_REDIRECT_URL, AUTH_RAOIDC_CLIENT_ID } = getEnv();
 
   log.debug('Destroying CDCP application session session');
@@ -92,7 +92,7 @@ async function handleLogoutRequest({ params, request }: LoaderFunctionArgs) {
 /**
  * Handler for /auth/login/raoidc requests
  */
-async function handleRaoidcLoginRequest({ params, request }: LoaderFunctionArgs) {
+async function handleRaoidcLoginRequest({ request }: LoaderFunctionArgs) {
   log.debug('Handling RAOIDC login request');
 
   const { origin, searchParams } = new URL(request.url);
@@ -125,7 +125,7 @@ async function handleRaoidcLoginRequest({ params, request }: LoaderFunctionArgs)
 /**
  * Handler for /auth/callback/raoidc requests
  */
-async function handleRaoidcCallbackRequest({ params, request }: LoaderFunctionArgs) {
+async function handleRaoidcCallbackRequest({ request }: LoaderFunctionArgs) {
   log.debug('Handling RAOIDC callback request');
 
   const raoidcService = await getRaoidcService();
@@ -151,7 +151,7 @@ async function handleRaoidcCallbackRequest({ params, request }: LoaderFunctionAr
 /**
  * @see https://openid.net/specs/openid-connect-core-1_0.html#AuthorizationEndpoint
  */
-function handleMockAuthorizeRequest({ params, request }: LoaderFunctionArgs) {
+function handleMockAuthorizeRequest({ request }: LoaderFunctionArgs) {
   log.debug('Handling (mock) RAOIDC authorize request');
 
   const { MOCK_AUTH_ALLOWED_REDIRECTS } = getEnv();

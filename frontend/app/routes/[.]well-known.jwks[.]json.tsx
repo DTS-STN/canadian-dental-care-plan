@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs, json } from '@remix-run/node';
+import { json } from '@remix-run/node';
 
 import { subtle } from 'node:crypto';
 
@@ -38,7 +38,7 @@ async function getJwks() {
  * A JSON endpoint that contains a list of the application's public keys that
  * can be used by an auth provider to verify private key JWTs.
  */
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader() {
   const keys = await getJwks();
   const headers = { 'Content-Type': 'application/json' };
 

@@ -22,7 +22,13 @@
     "editor.formatOnSave": true,
     "editor.tabSize": 2
   },
+  // Fix: Typescript aliases not working with VSCode Eslint in monorepo
+  // https://stackoverflow.com/a/73025516
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+  // clsx Tailwind Support
+  // https://github.com/lukeed/clsx/tree/master?tab=readme-ov-file#tailwind-support
   "tailwindCSS.experimental.classRegex": [
-    ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+    ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+    ["cn\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ]
 }

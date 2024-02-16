@@ -252,7 +252,7 @@ function Breadcrumbs() {
             <HomeIcon className="h-4 w-4 flex-shrink-0" />
             <Breadcrumb to={breadcrumbs.length !== 0 ? '/' : undefined}>{t('gcweb:breadcrumbs.home')}</Breadcrumb>
           </li>
-          {breadcrumbs.map(({ labelI18nKey, to }, index) => {
+          {breadcrumbs.map(({ labelI18nKey, to }) => {
             return (
               <li key={labelI18nKey} property="itemListElement" typeof="ListItem" className="flex items-center">
                 <ChevronRightIcon className="mr-2 mt-0.5 h-4 w-4 text-gray-400" />
@@ -266,7 +266,12 @@ function Breadcrumbs() {
   );
 }
 
-function ServerError({ error }: { error: unknown }) {
+interface ServerErrorProps {
+  error: unknown;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function ServerError({ error }: ServerErrorProps) {
   const { t } = useTranslation(i18nNamespaces);
 
   // (content will be added by <Trans>)

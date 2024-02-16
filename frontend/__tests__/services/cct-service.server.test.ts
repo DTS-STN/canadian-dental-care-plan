@@ -6,7 +6,7 @@ import { getPdfEntity } from '~/mocks/cct-api.server';
 import { getCCTService } from '~/services/cct-service.server';
 
 const handlers = [
-  http.get('https://api.example.com/cct/letters/:referenceId', async ({ params, request }) => {
+  http.get('https://api.example.com/cct/letters/:referenceId', async ({ params }) => {
     const pdfEntity = getPdfEntity(params.referenceId);
     const content = 'Hello, PDF!';
     const header = '%PDF-1.4\n';

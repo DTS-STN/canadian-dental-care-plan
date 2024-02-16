@@ -14,7 +14,7 @@ export function getWSAddressApiMockHandlers() {
     //
     // Handler for POST requests to WSAddress correction service
     //
-    http.post('https://api.example.com/address/correction', ({ params, request }) => {
+    http.post('https://api.example.com/address/correction', ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       return HttpResponse.json({
         responseType: 'CA',
@@ -38,7 +38,7 @@ export function getWSAddressApiMockHandlers() {
     //
     // Handler for POST requests to WSAddress parse service
     //
-    http.post('https://api.example.com/address/parse', ({ params, request }) => {
+    http.post('https://api.example.com/address/parse', ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       return HttpResponse.json({
         responseType: 'CA',
@@ -75,7 +75,7 @@ export function getWSAddressApiMockHandlers() {
     //
     // Handler for POST requests to WSAddress validate service
     //
-    http.post('https://api.example.com/address/validate', ({ params, request }) => {
+    http.post('https://api.example.com/address/validate', ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       return HttpResponse.json({
         responseType: 'CA',
