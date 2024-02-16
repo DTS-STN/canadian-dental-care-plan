@@ -1,10 +1,10 @@
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('csp.server');
+const log = getLogger('csp-utils.server');
 
 /**
- * Generate a strict CSP.
+ * Generate a strict content security policy.
  * @see https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html
  */
 export function generateContentSecurityPolicy(nonce: string) {

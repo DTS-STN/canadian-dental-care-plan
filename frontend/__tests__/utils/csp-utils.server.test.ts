@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { generateContentSecurityPolicy } from '~/utils/csp.server';
+import { generateContentSecurityPolicy } from '~/utils/csp-utils.server';
 import { getEnv } from '~/utils/env.server';
 
 vi.mock('~/utils/env.server', () => ({
