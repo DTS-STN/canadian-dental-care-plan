@@ -124,7 +124,7 @@ export default function PersonalInformationMailingAddressEdit() {
   const [isCopyAddressChecked, setCopyAddressChecked] = useState(false);
 
   useEffect(() => {
-    const filteredRegions = regionList.filter((region) => region.country.code === selectedCountry);
+    const filteredRegions = regionList.filter((region) => region.countryId === selectedCountry);
     setCountryRegions(filteredRegions);
   }, [selectedCountry, regionList]);
 
@@ -146,19 +146,19 @@ export default function PersonalInformationMailingAddressEdit() {
 
   const countries: InputOptionProps[] = countryList.map((country) => {
     return {
-      label: i18n.language === 'fr' ? country.nameFr : country.nameEn,
-      value: country.code,
-      id: country.code,
+      label: i18n.language === 'fr' ? country.nameFrench : country.nameEnglish,
+      value: country.countryId,
+      id: country.countryId,
     };
   }) as InputOptionProps[];
 
   //populate region/province/state list with selected country or current address country
-  const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter((region) => region.country.code === defaultValues.country))
+  const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter((region) => region.countryId === defaultValues.country))
     .map((region) => {
       return {
-        label: i18n.language === 'fr' ? region.nameFr : region.nameEn,
-        value: region.code,
-        id: region.code,
+        label: i18n.language === 'fr' ? region.nameFrench : region.nameEnglish,
+        value: region.provinceTerritoryStateId,
+        id: region.provinceTerritoryStateId,
       };
     })
     .sort((r1, r2) => r1.label.localeCompare(r2.label)) as InputOptionProps[];
@@ -218,9 +218,9 @@ export default function PersonalInformationMailingAddressEdit() {
                 <Address
                   address={homeAddressInfo.address}
                   city={homeAddressInfo.city}
-                  provinceState={regionList.find((region) => region.code === homeAddressInfo.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
+                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === homeAddressInfo.province)?.[i18n.language === 'fr' ? 'nameFrench' : 'nameEnglish']}
                   postalZipCode={homeAddressInfo.postalCode}
-                  country={countryList.find((country) => country.code === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
+                  country={countryList.find((country) => country.countryId === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFrench' : 'nameEnglish'] ?? ' '}
                 />
               </dd>
             </dl>

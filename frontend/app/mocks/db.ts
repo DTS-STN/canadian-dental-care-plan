@@ -1,5 +1,5 @@
 import { fakerEN_CA as faker } from '@faker-js/faker';
-import { factory, oneOf, primaryKey } from '@mswjs/data';
+import { factory, primaryKey } from '@mswjs/data';
 
 // (Optional) Seed `faker` to ensure reproducible
 // random values of model properties.
@@ -51,15 +51,15 @@ const db = factory({
     id: primaryKey(faker.string.uuid),
   },
   country: {
-    code: primaryKey(String),
-    nameEn: String,
-    nameFr: String,
+    countryId: primaryKey(String),
+    nameEnglish: String,
+    nameFrench: String,
   },
   region: {
-    code: primaryKey(String),
-    country: oneOf('country'),
-    nameEn: String,
-    nameFr: String,
+    provinceTerritoryStateId: primaryKey(String),
+    countryId: String,
+    nameEnglish: String,
+    nameFrench: String,
   },
 });
 
@@ -124,72 +124,72 @@ db.letterType.create({
 });
 
 // seed country list
-const countryCanada = db.country.create({
-  code: 'CAN',
-  nameEn: 'Canada',
-  nameFr: '(FR) Canada',
-});
-
-const countryUsa = db.country.create({
-  code: 'USA',
-  nameEn: 'USA',
-  nameFr: '(FR) USA',
+db.country.create({
+  countryId: 'CAN',
+  nameEnglish: 'Canada',
+  nameFrench: '(FR) Canada',
 });
 
 db.country.create({
-  code: 'MEX',
-  nameEn: 'Mexico',
-  nameFr: '(FR) Mexico',
+  countryId: 'USA',
+  nameEnglish: 'USA',
+  nameFrench: '(FR) USA',
+});
+
+db.country.create({
+  countryId: 'MEX',
+  nameEnglish: 'Mexico',
+  nameFrench: '(FR) Mexico',
 });
 
 // seed province list
 db.region.create({
-  code: 'ON',
-  country: countryCanada,
-  nameEn: 'Ontario',
-  nameFr: '(FR) Ontario',
+  provinceTerritoryStateId: 'ON',
+  countryId: 'CAN',
+  nameEnglish: 'Ontario',
+  nameFrench: '(FR) Ontario',
 });
 
 db.region.create({
-  code: 'MB',
-  country: countryCanada,
-  nameEn: 'Manitoba',
-  nameFr: '(FR) Manitoba',
+  provinceTerritoryStateId: 'MB',
+  countryId: 'CAN',
+  nameEnglish: 'Manitoba',
+  nameFrench: '(FR) Manitoba',
 });
 
 db.region.create({
-  code: 'QC',
-  country: countryCanada,
-  nameEn: 'Quebec',
-  nameFr: '(FR) Quebec',
+  provinceTerritoryStateId: 'QC',
+  countryId: 'CAN',
+  nameEnglish: 'Quebec',
+  nameFrench: '(FR) Quebec',
 });
 
 db.region.create({
-  code: 'NS',
-  country: countryCanada,
-  nameEn: 'Nova Scotia',
-  nameFr: '(FR) Nova Scotia',
+  provinceTerritoryStateId: 'NS',
+  countryId: 'CAN',
+  nameEnglish: 'Nova Scotia',
+  nameFrench: '(FR) Nova Scotia',
 });
 
 db.region.create({
-  code: 'PE',
-  country: countryCanada,
-  nameEn: 'Prince Edward Island',
-  nameFr: '(FR) Prince Edward Island',
+  provinceTerritoryStateId: 'PE',
+  countryId: 'CAN',
+  nameEnglish: 'Prince Edward Island',
+  nameFrench: '(FR) Prince Edward Island',
 });
 
 db.region.create({
-  code: 'UT',
-  country: countryUsa,
-  nameEn: 'Utah',
-  nameFr: '(FR) Utah',
+  provinceTerritoryStateId: 'UT',
+  countryId: 'USA',
+  nameEnglish: 'Utah',
+  nameFrench: '(FR) Utah',
 });
 
 db.region.create({
-  code: 'NY',
-  country: countryUsa,
-  nameEn: 'New York',
-  nameFr: '(FR) New York',
+  provinceTerritoryStateId: 'NY',
+  countryId: 'USA',
+  nameEnglish: 'New York',
+  nameFrench: '(FR) New York',
 });
 
 export { db };

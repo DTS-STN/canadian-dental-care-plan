@@ -41,7 +41,7 @@ export function getLookupApiMockHandlers() {
     http.get('https://api.example.com/lookups/countries', ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       const countryList = db.country.getAll();
-      return HttpResponse.json(countryList.sort((a, b) => (a.code < b.code ? -1 : 1)));
+      return HttpResponse.json(countryList.sort((a, b) => (a.countryId < b.countryId ? -1 : 1)));
     }),
 
     //

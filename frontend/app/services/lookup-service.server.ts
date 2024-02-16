@@ -13,16 +13,16 @@ const preferredLanguageSchema = z.object({
 });
 
 const countrySchema = z.object({
-  code: z.string(),
-  nameEn: z.string(),
-  nameFr: z.string(),
+  countryId: z.string(),
+  nameEnglish: z.string(),
+  nameFrench: z.string(),
 });
 
 const regionSchema = z.object({
-  code: z.string(),
-  country: countrySchema,
-  nameEn: z.string(),
-  nameFr: z.string(),
+  provinceTerritoryStateId: z.string(),
+  countryId: z.string(),
+  nameEnglish: z.string(),
+  nameFrench: z.string(),
 });
 
 export type PreferredLanguageInfo = z.infer<typeof preferredLanguageSchema>;
@@ -87,7 +87,12 @@ function createLookupService() {
     const countryListSchema = z.array(countrySchema);
 
     if (response.ok) {
-      return countryListSchema.parse(await response.json());
+      const parsedCountries = countryListSchema.parse(await response.json());
+      return parsedCountries.map((country) => ({
+        countryId: country.countryId,
+        nameEnglish: country.nameEnglish,
+        nameFrench: country.nameFrench,
+      }));
     }
 
     log.error('%j', {
@@ -108,7 +113,13 @@ function createLookupService() {
     const regionListSchema = z.array(regionSchema);
 
     if (response.ok) {
-      return regionListSchema.parse(await response.json());
+      const parsedRegions = regionListSchema.parse(await response.json());
+      return parsedRegions.map((region) => ({
+        provinceTerritoryStateId: region.provinceTerritoryStateId,
+        countryId: region.countryId,
+        nameEnglish: region.nameEnglish,
+        nameFrench: region.nameFrench,
+      }));
     }
 
     log.error('%j', {
