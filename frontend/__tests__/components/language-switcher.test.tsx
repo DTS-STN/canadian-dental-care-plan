@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { LanguageSwitcher } from '~/components/language-switcher';
-import { getClientEnv } from '~/utils/env';
+import { getClientEnv } from '~/utils/env-utils';
 import { getAltLanguage } from '~/utils/locale-utils';
 
 expect.extend(toHaveNoViolations);
@@ -28,7 +28,7 @@ vi.mock('@remix-run/react', async (actual) => {
   return { Link, useSearchParams: vi.fn() };
 });
 
-vi.mock('~/utils/env', () => ({
+vi.mock('~/utils/env-utils', () => ({
   getClientEnv: vi.fn(),
 }));
 

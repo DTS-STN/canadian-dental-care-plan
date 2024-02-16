@@ -5,7 +5,7 @@ import { useSearchParams } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 
 import { InlineLink, type InlineLinkProps } from './inline-link';
-import { getClientEnv } from '~/utils/env';
+import { getClientEnv } from '~/utils/env-utils';
 import { getAltLanguage, switchLanguageCookie } from '~/utils/locale-utils';
 
 export type LanguageSwitcherProps = Omit<InlineLinkProps, 'to' | 'reloadDocument' | 'onClick'>;
