@@ -1,5 +1,5 @@
 import { fakerEN_CA as faker } from '@faker-js/faker';
-import { factory, oneOf, primaryKey } from '@mswjs/data';
+import { factory, primaryKey } from '@mswjs/data';
 
 // (Optional) Seed `faker` to ensure reproducible
 // random values of model properties.
