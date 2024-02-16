@@ -1,14 +1,14 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
-import { Form, Link, useLoaderData } from '@remix-run/react';
+import { Form, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
+import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { cn } from '~/utils/tw-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
@@ -31,7 +31,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const session = await sessionService.getSession(request);
   if (!session.has('newMailingAddress')) return redirect('/');
   const newMailingAddress = await session.get('newMailingAddress');
-  return json({ newMailingAddress });
+
+  const countryList = await getLookupService().getAllCountries();
+  const regionList = await getLookupService().getAllRegions();
+
+  return json({ newMailingAddress, countryList, regionList });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -41,39 +45,42 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function PersonalInformationMailingAddressAccuracy() {
-  const { newMailingAddress } = useLoaderData<typeof loader>();
-  const { t } = useTranslation(i18nNamespaces);
+  const { newMailingAddress, countryList, regionList } = useLoaderData<typeof loader>();
+  const { i18n, t } = useTranslation(i18nNamespaces);
+
   return (
     <>
-      <p className="mb-8 text-lg text-gray-500">{t('personal-information:mailing-address.address-accuracy.subtitle')}</p>
+      <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:mailing-address.address-accuracy.subtitle')}</p>
       <Form method="post">
-        <section className="alert alert-warning mt-4">
-          <h2>{t('personal-information:mailing-address.address-accuracy.invalid-address')}</h2>
-          <p>{t('personal-information:mailing-address.address-accuracy.invalid-address-info')}</p>
-        </section>
+        <p className="mb-4">{t('personal-information:mailing-address.address-accuracy.invalid-address-info')}</p>
         <p>{t('personal-information:mailing-address.address-accuracy.note')}</p>
-        <div className="grid gap-6 md:grid-cols-2">
-          <section className="panel panel-info !m-0 flex flex-col">
-            <header className="panel-heading">
-              <h2 className="h3 panel-title">
-                <span className={cn('glyphicon', 'glyphicon-map-marker', 'pull-right')} aria-hidden="true"></span>
-                {t('personal-information:mailing-address.address-accuracy.requested-change')}
-              </h2>
-            </header>
-            <div className="panel-body">
-              <Address address={newMailingAddress?.address} city={newMailingAddress?.city} provinceState={newMailingAddress?.province} postalZipCode={newMailingAddress?.postalCode} country={newMailingAddress?.country} />
-            </div>
-          </section>
-        </div>
-        <Link id="cancel-button" to="/personal-information/mailing-address/edit" className="text-base font-semibold">
-          {t('personal-information:mailing-address.address-accuracy.re-enter-address')}
-        </Link>
+        <dl className="my-6 divide-y border-y">
+          <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
+            <dt className="font-medium">{t('personal-information:mailing-address.address-accuracy.requested-change')}</dt>
+            <dd className="mt-3 sm:col-span-2 sm:mt-0">
+              {newMailingAddress ? (
+                <Address
+                  address={newMailingAddress.address}
+                  city={newMailingAddress.city}
+                  provinceState={regionList.find((region) => region.code === newMailingAddress.province)?.code}
+                  postalZipCode={newMailingAddress.postalCode}
+                  country={countryList.find((country) => country.code === newMailingAddress.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
+                />
+              ) : (
+                <p>{t('personal-information:index.no-address-on-file')}</p>
+              )}
+            </dd>
+          </div>
+        </dl>
         <div className="flex flex-wrap items-center gap-3">
           <Button id="confirm-button" variant="primary">
             {t('personal-information:mailing-address.address-accuracy.continue')}
           </Button>
           <ButtonLink id="cancel-button" to="/personal-information/">
             {t('personal-information:mailing-address.address-accuracy.cancel')}
+          </ButtonLink>
+          <ButtonLink id="edit-button" to="/personal-information/mailing-address/edit">
+            {t('personal-information:mailing-address.address-accuracy.re-enter-address')}
           </ButtonLink>
         </div>
       </Form>
