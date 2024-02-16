@@ -86,7 +86,7 @@ function NavigationMenu() {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild className="cursor-pointer">
-          <Link to="/" className="flex items-center justify-between gap-2">
+          <Link to="/auth/logout" className="flex items-center justify-between gap-2">
             {t('gcweb:header.menu-sign-out.text')} <LogOutIcon className="h-4 w-4 flex-shrink-0" />
           </Link>
         </DropdownMenuItem>
