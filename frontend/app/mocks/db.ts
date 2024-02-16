@@ -112,14 +112,12 @@ for (let i = 0; i < numberOfLetters; i++) {
 
 // seed letter type list
 db.letterType.create({
-  id: faker.string.alphanumeric(10),
   code: 'ACC',
   nameEn: 'Accepted',
   nameFr: '(FR) Accepted',
 });
 
 db.letterType.create({
-  id: faker.string.alphanumeric(10),
   code: 'DEN',
   nameEn: 'DENIED',
   nameFr: '(FR) DENIED',
