@@ -20,18 +20,22 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const { '*': slug } = params;
 
   switch (slug) {
-    case 'login':
+    case 'login': {
       return handleLoginRequest({ context, params, request });
-    case 'logout':
+    }
+    case 'logout': {
       return handleLogoutRequest({ context, params, request });
-    case 'login/raoidc':
+    }
+    case 'login/raoidc': {
       return handleRaoidcLoginRequest({ context, params, request });
-    case 'callback/raoidc':
+    }
+    case 'callback/raoidc': {
       return handleRaoidcCallbackRequest({ context, params, request });
+    }
     //
     // A mock authorize route for testing purposes
     //
-    case 'authorize':
+    case 'authorize': {
       const { ENABLED_MOCKS } = getEnv();
 
       if (!ENABLED_MOCKS.includes('raoidc')) {
@@ -40,6 +44,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
       }
 
       return handleMockAuthorizeRequest({ context, params, request });
+    }
   }
 
   log.warn('Invalid authentication route requested: [%s]', slug);
