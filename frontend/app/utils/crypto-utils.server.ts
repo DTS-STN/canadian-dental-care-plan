@@ -16,7 +16,7 @@ export function generateJwkId(jwk: webcrypto.JsonWebKey) {
  * Takes a PEM-encoded private key as input and returns a CryptoKey object
  * that can be used to sign data.
  */
-export function privateKeyPemToCryptoKey(pem: string) {
+export async function privateKeyPemToCryptoKey(pem: string) {
   const keyData = Buffer.from(atob(pem), 'latin1');
   const algorithm = { name: 'RSA-PSS', hash: 'SHA-256' };
   return subtle.importKey('pkcs8', keyData, algorithm, true, ['sign']);
@@ -26,7 +26,7 @@ export function privateKeyPemToCryptoKey(pem: string) {
  * Takes a PEM-encoded public key as input and returns a CryptoKey object
  * that can be used to verify data.
  */
-export function publicKeyPemToCryptoKey(pem: string) {
+export async function publicKeyPemToCryptoKey(pem: string) {
   const keyData = Buffer.from(atob(pem), 'latin1');
   const algorithm = { name: 'RSA-OAEP', hash: 'SHA-256' };
   return subtle.importKey('spki', keyData, algorithm, true, ['encrypt', 'wrapKey']);
