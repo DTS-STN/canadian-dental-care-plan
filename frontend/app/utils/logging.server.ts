@@ -1,4 +1,4 @@
-import winston, { type Logger, createLogger, format, transports } from 'winston';
+import winston, { createLogger, format, transports } from 'winston';
 import { z } from 'zod';
 
 // ['error', 'warn', 'info', 'verbose', 'debug', 'silly']
@@ -10,12 +10,20 @@ const logLevel = z
   .default('info')
   .parse(process.env.LOG_LEVEL);
 
+/**
+ * Formats a log category string to be a fixed length. When the category string
+ * is longer than the specified size, it is truncated and prefixed by a
+ * horizontal ellipsis (…).
+ */
 function formatCategory(category: string, size: number) {
   const str = category.padStart(size);
-  return str.length <= size ? str : `...${str.slice(-size + 3)}`;
+  return str.length <= size ? str : `…${str.slice(-size + 1)}`;
 }
 
-export const getLogger = (category: string): Logger => {
+/**
+ * Returns a logger for the specified logging category.
+ */
+export const getLogger = (category: string) => {
   return createLogger({
     level: logLevel,
     format: format.combine(
