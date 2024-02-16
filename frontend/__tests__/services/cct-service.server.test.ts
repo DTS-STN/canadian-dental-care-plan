@@ -5,6 +5,18 @@ import { afterAll, afterEach, beforeAll, describe, expect, expectTypeOf, it, vi 
 import { getPdfEntity } from '~/mocks/cct-api.server';
 import { getCCTService } from '~/services/cct-service.server';
 
+vi.mock('~/utils/logging.server', () => ({
+  getLogger: vi.fn().mockReturnValue({
+    info: vi.fn(),
+  }),
+}));
+
+vi.mock('~/utils/env.server.ts', () => ({
+  getEnv: vi.fn().mockReturnValue({
+    CCT_API_BASE_URI: 'https://api.example.com',
+  }),
+}));
+
 const handlers = [
   http.get('https://api.example.com/cct/letters/:referenceId', async ({ params }) => {
     const pdfEntity = getPdfEntity(params.referenceId);
@@ -27,12 +39,6 @@ const handlers = [
 const server = setupServer(...handlers);
 
 const cctService = getCCTService();
-
-vi.mock('~/utils/env.server.ts', () => ({
-  getEnv: vi.fn().mockReturnValue({
-    CCT_API_BASE_URI: 'https://api.example.com',
-  }),
-}));
 
 describe('cct-service.server.ts', () => {
   beforeAll(() => server.listen({ onUnhandledRequest: 'bypass' }));

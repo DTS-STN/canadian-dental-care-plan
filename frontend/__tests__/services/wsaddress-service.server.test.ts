@@ -4,6 +4,16 @@ import { afterAll, afterEach, beforeAll, describe, expectTypeOf, it, vi } from '
 
 import { type CorrectWSAddressResponseDTO, type ParseWSAddressResponseDTO, type ValidateWSAddressResponseDTO, getWSAddressService } from '~/services/wsaddress-service.server';
 
+vi.mock('~/utils/logging.server', () => ({
+  getLogger: vi.fn().mockReturnValue({
+    info: vi.fn(),
+  }),
+}));
+
+vi.mock('~/utils/env.server', () => ({
+  getEnv: vi.fn().mockReturnValue({ INTEROP_API_BASE_URI: 'https://api.example.com' }),
+}));
+
 //TODO: add invalid request tests when changing to use Interop's WSAddress endpoint instead of MSW
 
 const handlers = [
@@ -86,10 +96,6 @@ const handlers = [
 const server = setupServer(...handlers);
 
 const wsAddressService = await getWSAddressService();
-
-vi.mock('~/utils/env.server', () => ({
-  getEnv: vi.fn().mockReturnValue({ INTEROP_API_BASE_URI: 'https://api.example.com' }),
-}));
 
 describe('wsaddress-service.server tests', () => {
   beforeAll(() => server.listen({ onUnhandledRequest: 'bypass' }));
