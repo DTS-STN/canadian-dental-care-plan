@@ -9,7 +9,7 @@ import { I18nextProvider } from 'react-i18next';
 
 import { NonceProvider, generateNonce } from '~/components/nonce-context';
 import { server } from '~/mocks/node';
-import { generateContentSecurityPolicy } from '~/utils/csp.server';
+import { generateContentSecurityPolicy } from '~/utils/csp-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getNamespaces } from '~/utils/locale-utils';
 import { createLangCookie, getLocale, initI18n } from '~/utils/locale-utils.server';
