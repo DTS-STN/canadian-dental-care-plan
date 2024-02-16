@@ -5,6 +5,18 @@ import { afterAll, afterEach, beforeAll, describe, expect, expectTypeOf, it, vi 
 import { getLetterEntities } from '~/mocks/power-platform-api.server';
 import { type LettersInfo, getLettersService } from '~/services/letters-service.server';
 
+vi.mock('~/utils/logging.server', () => ({
+  getLogger: vi.fn().mockReturnValue({
+    info: vi.fn(),
+  }),
+}));
+
+vi.mock('~/utils/env.server.ts', () => ({
+  getEnv: vi.fn().mockReturnValue({
+    INTEROP_API_BASE_URI: 'https://api.example.com',
+  }),
+}));
+
 const handlers = [
   http.get('https://api.example.com/users/:userId/letters', ({ params }) => {
     const letterEntities = getLetterEntities(params.userId);
@@ -15,12 +27,6 @@ const handlers = [
 const server = setupServer(...handlers);
 
 const letterService = getLettersService();
-
-vi.mock('~/utils/env.server.ts', () => ({
-  getEnv: vi.fn().mockReturnValue({
-    INTEROP_API_BASE_URI: 'https://api.example.com',
-  }),
-}));
 
 describe('letters-service.server.ts', () => {
   beforeAll(() => server.listen({ onUnhandledRequest: 'bypass' }));

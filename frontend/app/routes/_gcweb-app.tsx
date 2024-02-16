@@ -120,11 +120,11 @@ function PageHeader() {
           <div className="container flex items-center justify-between gap-6 py-2">
             <div property="publisher" typeof="GovernmentOrganization">
               <Link to={t('gcweb:header.govt-of-canada.href')} property="url">
-                <img className="h-6 w-auto" src={`/theme/gcweb/assets/sig-blk-${i18n.language}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
+                <img className="h-6 w-auto" src={`/assets/sig-blk-${i18n.language}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
               </Link>
               <meta property="name" content={t('gcweb:header.govt-of-canada.text')} />
               <meta property="areaServed" typeof="Country" content="Canada" />
-              <link property="logo" href="/theme/gcweb/assets/wmms-blk.svg" />
+              <link property="logo" href="/assets/wmms-blk.svg" />
             </div>
             <section id="wb-lng">
               <h2 className="sr-only">{t('gcweb:header.language-selection')}</h2>
@@ -222,7 +222,7 @@ function PageFooter() {
             </div>
           </nav>
           <div>
-            <img src="/theme/gcweb/assets/wmms-blk.svg" alt={t('gcweb:footer.gc-symbol')} width={300} height={71} className="h-8 w-auto" />
+            <img src="/assets/wmms-blk.svg" alt={t('gcweb:footer.gc-symbol')} width={300} height={71} className="h-8 w-auto" />
           </div>
         </div>
       </div>
