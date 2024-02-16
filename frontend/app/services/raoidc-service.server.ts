@@ -32,6 +32,7 @@ import { generateJwkId, privateKeyPemToCryptoKey } from '~/utils/crypto-utils.se
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 import { type ClientMetadata, type FetchFunctionInit, type IdToken, fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState, validateSession } from '~/utils/raoidc-utils.server';
+import { expandTemplate } from '~/utils/string-utils';
 
 const log = getLogger('raoidc-service.server');
 
@@ -44,7 +45,7 @@ export const getRaoidcService = moize.promise(createRaoidcService, { onCacheAdd:
  * Create and intialize an instance of the RAOID service.
  */
 async function createRaoidcService() {
-  const { AUTH_JWT_PRIVATE_KEY, AUTH_RAOIDC_BASE_URL, AUTH_RAOIDC_CLIENT_ID, AUTH_RAOIDC_PROXY_URL } = getEnv();
+  const { AUTH_LOGOUT_REDIRECT_URL, AUTH_JWT_PRIVATE_KEY, AUTH_RAOIDC_BASE_URL, AUTH_RAOIDC_CLIENT_ID, AUTH_RAOIDC_PROXY_URL } = getEnv();
   const fetchFn = getFetchFn(AUTH_RAOIDC_PROXY_URL);
   const { jwkSet, serverMetadata } = await fetchServerMetadata(AUTH_RAOIDC_BASE_URL, fetchFn);
 
@@ -86,7 +87,7 @@ async function createRaoidcService() {
       throw new Error('CSRF error: state does not match');
     }
 
-    const privateCryptoKey = await privateKeyPemToCryptoKey(AUTH_JWT_PRIVATE_KEY!);
+    const privateCryptoKey = await privateKeyPemToCryptoKey(AUTH_JWT_PRIVATE_KEY);
     const privateKeyId = generateJwkId(await subtle.exportKey('jwk', privateCryptoKey));
 
     const client: ClientMetadata = {
@@ -104,11 +105,8 @@ async function createRaoidcService() {
   /**
    * Handle an OIDC logout call.
    */
-  async function handleLogout() {
-    log.debug('Handling OIDC logout');
-
-    /* TODO :: GjB :: implement logout */
-    throw new Error('Not yet implemented');
+  function generateSignoutRequest(sessionId: string, locale: 'en' | 'fr') {
+    return expandTemplate(AUTH_LOGOUT_REDIRECT_URL, { clientId: AUTH_RAOIDC_CLIENT_ID, sharedSessionId: sessionId, uiLocales: locale });
   }
 
   /**
@@ -158,5 +156,5 @@ async function createRaoidcService() {
     return global.fetch;
   }
 
-  return { generateSigninRequest, handleCallback, handleLogout, handleSessionValidation };
+  return { generateSignoutRequest, generateSigninRequest, handleCallback, handleSessionValidation };
 }
