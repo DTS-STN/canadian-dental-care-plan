@@ -37,6 +37,8 @@ export interface ParseWSAddressRequestDTO {
   province: string;
   postalCode: string;
   country: string;
+  geographicScope: string;
+  parseType: string;
   language: string;
 }
 
@@ -77,8 +79,6 @@ export interface ValidateWSAddressRequestDTO {
   province: string;
   postalCode: string;
   country: string;
-  geographicScope: string;
-  parseType: string;
   language: string;
 }
 
@@ -91,7 +91,7 @@ export interface ValidateWSAddressResponseDTO {
 }
 
 //TODO: Update validation schema when changing to use Interop's WSAddress endpoint instead of MSW
-const CorrectWSAddressResponseSchema = z.object({
+const correctWSAddressResponseSchema = z.object({
   responseType: z.string().optional(),
   addressLine: z.string().optional(),
   city: z.string().optional(),
@@ -114,7 +114,7 @@ const CorrectWSAddressResponseSchema = z.object({
 });
 
 //TODO: Update validation schema when changing to use Interop's WSAddress endpoint instead of MSW
-const ParseWSAddressResponseSchema = z.object({
+const parseWSAddressResponseSchema = z.object({
   responseType: z.string().optional(),
   addressLine: z.string().optional(),
   city: z.string().optional(),
@@ -153,7 +153,7 @@ const ParseWSAddressResponseSchema = z.object({
 });
 
 //TODO: Update validation schema when changing to use Interop's WSAddress endpoint instead of MSW
-const ValidateWSAddressResponseSchema = z.object({
+const validateWSAddressResponseSchema = z.object({
   responseType: z.string().optional(),
   statusCode: z.string().optional(),
   functionalMessages: z
@@ -173,26 +173,24 @@ export const getWSAddressService = moize.promise(createWSAddressService, { onCac
 async function createWSAddressService() {
   const { INTEROP_API_BASE_URI } = getEnv();
 
-  async function correctWSAddress(correctRequest: CorrectWSAddressRequestDTO) {
-    const address: CorrectWSAddressRequestDTO = {
-      addressLine: correctRequest.addressLine,
-      city: correctRequest.city,
-      province: correctRequest.province,
-      postalCode: correctRequest.postalCode,
-      country: correctRequest.country,
-      formatResult: correctRequest.formatResult,
-      language: correctRequest.language,
+  async function correctWSAddress({ address, city, province, postalCode, country }: { address: string; city: string; province: string; postalCode: string; country: string }) {
+    const request: CorrectWSAddressRequestDTO = {
+      addressLine: address,
+      city,
+      province,
+      postalCode,
+      country,
+      formatResult: true,
+      language: 'English', // TODO confirm that we should always have this as "English"
     };
     const url = `${INTEROP_API_BASE_URI}/address/correction`;
     const response = await fetch(url, {
       method: 'POST',
-      body: JSON.stringify(address),
+      body: JSON.stringify(request),
     });
 
     if (response.ok) {
-      const correctData = CorrectWSAddressResponseSchema.parse(await response.json());
-      const correctedAddress: CorrectWSAddressResponseDTO = { ...correctData };
-      if (correctData.statusCode === 'Valid') return correctedAddress;
+      return correctWSAddressResponseSchema.parse(await response.json());
     }
 
     log.error('%j', {
@@ -206,18 +204,25 @@ async function createWSAddressService() {
     throw new Error(`Failed to correct the address. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
-  async function parseWSAddress(parseRequest: ParseWSAddressRequestDTO) {
-    const address: ParseWSAddressRequestDTO = { addressLine: parseRequest.addressLine, city: parseRequest.city, province: parseRequest.province, postalCode: parseRequest.postalCode, country: parseRequest.country, language: parseRequest.language };
+  async function parseWSAddress({ address, city, province, postalCode, country }: { address: string; city: string; province: string; postalCode: string; country: string }) {
+    const request: ParseWSAddressRequestDTO = {
+      addressLine: address,
+      city,
+      province,
+      postalCode,
+      country,
+      geographicScope: 'Canada', // TODO figure out a way to map this - value can also be "Foreign"
+      parseType: 'parseOnly', // only parse the address - do not correct or validate it
+      language: 'English', // TODO confirm that we should always have this as "English"
+    };
     const url = `${INTEROP_API_BASE_URI}/address/parse`;
     const response = await fetch(url, {
       method: 'POST',
-      body: JSON.stringify(address),
+      body: JSON.stringify(request),
     });
 
     if (response.ok) {
-      const parseData = ParseWSAddressResponseSchema.parse(await response.json());
-      const parsedAddress: ParseWSAddressResponseDTO = { ...parseData };
-      if (parseData.statusCode === 'Valid') return parsedAddress;
+      return parseWSAddressResponseSchema.parse(await response.json());
     }
 
     log.error('%j', {
@@ -231,27 +236,23 @@ async function createWSAddressService() {
     throw new Error(`Failed to parse the address. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
-  async function validateWSAddress(validateRequest: ValidateWSAddressRequestDTO) {
-    const address: ValidateWSAddressRequestDTO = {
-      addressLine: validateRequest.addressLine,
-      city: validateRequest.city,
-      province: validateRequest.province,
-      postalCode: validateRequest.postalCode,
-      country: validateRequest.country,
-      geographicScope: validateRequest.geographicScope,
-      parseType: validateRequest.parseType,
-      language: validateRequest.language,
+  async function validateWSAddress({ address, city, province, postalCode, country }: { address: string; city: string; province: string; postalCode: string; country: string }) {
+    const request: ValidateWSAddressRequestDTO = {
+      addressLine: address,
+      city,
+      province,
+      postalCode,
+      country,
+      language: 'English', // TODO confirm that we should always have this as "English"
     };
     const url = `${INTEROP_API_BASE_URI}/address/validate`;
     const response = await fetch(url, {
       method: 'POST',
-      body: JSON.stringify(address),
+      body: JSON.stringify(request),
     });
 
     if (response.ok) {
-      const validationData = ValidateWSAddressResponseSchema.parse(await response.json());
-      const validatedAddress: ValidateWSAddressResponseDTO = { ...validationData };
-      if (validationData.statusCode === 'Valid') return validatedAddress;
+      return validateWSAddressResponseSchema.parse(await response.json());
     }
 
     log.error('%j', {

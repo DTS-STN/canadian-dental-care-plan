@@ -81,21 +81,14 @@ export async function action({ request }: ActionFunctionArgs) {
       formData: formData as Partial<z.infer<typeof formDataSchema>>,
     });
   }
-  const wsAddressWebService = await getWSAddressService();
-  const validateResultAddress = await wsAddressWebService.validateWSAddress({
-    addressLine: parsedDataResult.data.address,
-    city: parsedDataResult.data.city,
-    country: parsedDataResult.data.country,
-    language: 'EN',
-    postalCode: parsedDataResult.data.postalCode ?? '',
-    province: parsedDataResult.data.province ?? '',
-    geographicScope: 'GS',
-    parseType: 'PT',
-  });
 
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
   session.set('newHomeAddress', parsedDataResult.data);
+
+  const wsAddressWebService = await getWSAddressService();
+  const { address, city, country, postalCode, province } = parsedDataResult.data;
+  const validateResultAddress = await wsAddressWebService.validateWSAddress({ address, city, country, postalCode: postalCode ?? '', province: province ?? '' });
   const redirectUrl = validateResultAddress.statusCode === 'Invalid' ? '/personal-information/home-address/address-accuracy' : '/personal-information/home-address/confirm';
 
   return redirect(redirectUrl, {
