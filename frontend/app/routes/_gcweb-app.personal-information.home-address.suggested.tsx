@@ -1,5 +1,3 @@
-import type { ReactNode } from 'react';
-
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, useLoaderData } from '@remix-run/react';
 
@@ -9,11 +7,11 @@ import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InputRadios } from '~/components/input-radios';
 import { getAddressService } from '~/services/address-service.server';
+import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { cn } from '~/utils/tw-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
@@ -37,6 +35,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
   const homeAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.homeAddress ?? '');
+
+  const countryList = await getLookupService().getAllCountries();
+  const regionList = await getLookupService().getAllRegions();
+
   //
   // TODO
   // CHANGE THE SOURCE OF THE SUGGESTED ADDRESS TO WHAT WS ADDRESS SERVICE IS RETURNING INSTEAD OF MAILING ADDRESS
@@ -46,7 +48,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   session.set('homeAddress', homeAddressInfo);
   session.set('suggestedAddress', suggestedAddressInfo);
 
-  return json({ homeAddressInfo, suggestedAddressInfo });
+  return json({ homeAddressInfo, suggestedAddressInfo, countryList, regionList });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -79,27 +81,48 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function HomeAddressSuggested() {
-  const { homeAddressInfo, suggestedAddressInfo } = useLoaderData<typeof loader>();
-  const { t } = useTranslation(i18nNamespaces);
+  const { homeAddressInfo, suggestedAddressInfo, countryList, regionList } = useLoaderData<typeof loader>();
+  const { i18n, t } = useTranslation(i18nNamespaces);
 
   return (
     <>
       <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:home-address.suggested.subtitle')}</p>
       <Form method="post">
         <p className="mb-4">{t('personal-information:home-address.suggested.note')}</p>
-        <div className="grid gap-6 md:grid-cols-2">
-          <PersonalInformationSection title={t('personal-information:home-address.suggested.address-entered')} icon="glyphicon-map-marker">
-            {homeAddressInfo && <Address address={homeAddressInfo?.address} city={homeAddressInfo?.city} provinceState={homeAddressInfo?.province} postalZipCode={homeAddressInfo?.postalCode} country={homeAddressInfo?.country} />}
-            {!homeAddressInfo && <p>{t('personal-information:index.no-address-on-file')}</p>}
-          </PersonalInformationSection>
-          <PersonalInformationSection title={t('personal-information:home-address.suggested.address-suggested')} icon="glyphicon-map-marker">
-            {suggestedAddressInfo ? (
-              <Address address={suggestedAddressInfo?.address} city={suggestedAddressInfo?.city} provinceState={suggestedAddressInfo?.province} postalZipCode={suggestedAddressInfo?.postalCode} country={suggestedAddressInfo?.country} />
-            ) : (
-              <p>{t('personal-information:index.no-address-on-file')}</p>
-            )}
-          </PersonalInformationSection>
-        </div>
+        <dl className="my-6 divide-y border-y">
+          <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
+            <dt className="font-medium">{t('personal-information:home-address.suggested.address-entered')}</dt>
+            <dd className="mt-3 sm:col-span-2 sm:mt-0">
+              {homeAddressInfo ? (
+                <Address
+                  address={homeAddressInfo.address}
+                  city={homeAddressInfo.city}
+                  provinceState={regionList.find((region) => region.code === homeAddressInfo.province)?.code}
+                  postalZipCode={homeAddressInfo.postalCode}
+                  country={countryList.find((country) => country.code === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
+                />
+              ) : (
+                <p>{t('personal-information:index.no-address-on-file')}</p>
+              )}
+            </dd>
+          </div>
+          <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
+            <dt className="font-medium">{t('personal-information:home-address.suggested.address-suggested')}</dt>
+            <dd className="mt-3 sm:col-span-2 sm:mt-0">
+              {suggestedAddressInfo ? (
+                <Address
+                  address={suggestedAddressInfo.address}
+                  city={suggestedAddressInfo.city}
+                  provinceState={regionList.find((region) => region.code === suggestedAddressInfo.province)?.code}
+                  postalZipCode={suggestedAddressInfo.postalCode}
+                  country={countryList.find((country) => country.code === suggestedAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
+                />
+              ) : (
+                <p>{t('personal-information:index.no-address-on-file')}</p>
+              )}
+            </dd>
+          </div>
+        </dl>
         <InputRadios
           id="selected-address"
           name="selectedAddress"
@@ -124,27 +147,5 @@ export default function HomeAddressSuggested() {
         </div>
       </Form>
     </>
-  );
-}
-
-interface PersonalInformationSectionProps {
-  children: ReactNode;
-  footer?: ReactNode;
-  title: ReactNode;
-  icon?: string;
-}
-
-function PersonalInformationSection({ children, footer, title, icon }: PersonalInformationSectionProps) {
-  return (
-    <section className="panel panel-info !m-0 flex flex-col">
-      <header className="panel-heading">
-        <h2 className="h3 panel-title">
-          {icon && <span className={cn('glyphicon', icon, 'pull-right')} aria-hidden="true"></span>}
-          {title}
-        </h2>
-      </header>
-      <div className="panel-body">{children}</div>
-      {footer && <footer className="panel-footer mt-auto">{footer}</footer>}
-    </section>
   );
 }
