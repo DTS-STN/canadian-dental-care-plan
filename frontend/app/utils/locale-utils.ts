@@ -4,7 +4,7 @@ import I18NextHttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
 import { type SwitchLanguageData } from '~/routes/api.switch-language';
-import { getClientEnv } from '~/utils/env';
+import { getClientEnv } from '~/utils/env-utils';
 import { i18nNamespacesSchema } from '~/utils/route-utils';
 
 /**

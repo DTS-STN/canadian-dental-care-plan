@@ -11,7 +11,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { InlineLink } from '~/components/inline-link';
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { PageTitle } from '~/components/page-title';
-import { getClientEnv } from '~/utils/env';
+import { getClientEnv } from '~/utils/env-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey } from '~/utils/route-utils';
 
