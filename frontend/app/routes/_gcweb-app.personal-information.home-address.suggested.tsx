@@ -97,9 +97,9 @@ export default function HomeAddressSuggested() {
                 <Address
                   address={homeAddressInfo.address}
                   city={homeAddressInfo.city}
-                  provinceState={regionList.find((region) => region.code === homeAddressInfo.province)?.code}
+                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === homeAddressInfo.province)?.provinceTerritoryStateId}
                   postalZipCode={homeAddressInfo.postalCode}
-                  country={countryList.find((country) => country.code === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
+                  country={countryList.find((country) => country.countryId === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFrench' : 'nameEnglish'] ?? ' '}
                 />
               ) : (
                 <p>{t('personal-information:index.no-address-on-file')}</p>
@@ -113,9 +113,9 @@ export default function HomeAddressSuggested() {
                 <Address
                   address={suggestedAddressInfo.address}
                   city={suggestedAddressInfo.city}
-                  provinceState={regionList.find((region) => region.code === suggestedAddressInfo.province)?.code}
+                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === suggestedAddressInfo.province)?.provinceTerritoryStateId}
                   postalZipCode={suggestedAddressInfo.postalCode}
-                  country={countryList.find((country) => country.code === suggestedAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
+                  country={countryList.find((country) => country.countryId === suggestedAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFrench' : 'nameEnglish'] ?? ' '}
                 />
               ) : (
                 <p>{t('personal-information:index.no-address-on-file')}</p>
