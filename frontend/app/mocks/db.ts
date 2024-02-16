@@ -1,5 +1,5 @@
 import { fakerEN_CA as faker } from '@faker-js/faker';
-import { factory, primaryKey } from '@mswjs/data';
+import { factory, oneOf, primaryKey } from '@mswjs/data';
 
 // (Optional) Seed `faker` to ensure reproducible
 // random values of model properties.
@@ -32,19 +32,20 @@ const db = factory({
     nameEn: String,
     nameFr: String,
   },
+  letterType: {
+    id: primaryKey(faker.string.uuid),
+    code: String,
+    nameEn: String,
+    nameFr: String,
+  },
   letter: {
     referenceId: () => faker.string.alphanumeric(10),
     dateSent: () => faker.date.past({ years: 1 }),
     userId: String,
     nameEn: String,
     nameFr: String,
+    letterType: oneOf('letterType'),
     id: primaryKey(faker.string.uuid),
-  },
-  letterType: {
-    id: primaryKey(faker.string.uuid),
-    code: String,
-    nameEn: String,
-    nameFr: String,
   },
   pdf: {
     referenceId: String,
@@ -93,6 +94,19 @@ const defaultUser = db.user.create({
   preferredLanguage: frenchLanguage.id,
 });
 
+// seed letter type list
+const letterTypeAccepted = db.letterType.create({
+  code: 'ACC',
+  nameEn: 'Accepted',
+  nameFr: '(FR) Accepted',
+});
+
+const letterTypeDenied = db.letterType.create({
+  code: 'DEN',
+  nameEn: 'DENIED',
+  nameFr: '(FR) DENIED',
+});
+
 // seed available letters
 const numberOfLetters = faker.number.int({ min: 10, max: 20 }); // Adjust min and max as needed
 for (let i = 0; i < numberOfLetters; i++) {
@@ -102,6 +116,7 @@ for (let i = 0; i < numberOfLetters; i++) {
     userId: defaultUser.id,
     nameEn: name,
     nameFr: `(FR) ${name}`,
+    letterType: faker.helpers.arrayElement([letterTypeAccepted, letterTypeDenied]),
   });
 
   // seed avaliable pdf (after letter)
@@ -109,20 +124,6 @@ for (let i = 0; i < numberOfLetters; i++) {
     referenceId: sampleLetter.referenceId,
   });
 }
-
-// seed letter type list
-db.letterType.create({
-  code: 'ACC',
-  nameEn: 'Accepted',
-  nameFr: '(FR) Accepted',
-});
-
-db.letterType.create({
-  code: 'DEN',
-  nameEn: 'DENIED',
-  nameFr: '(FR) DENIED',
-});
-
 // seed country list
 db.country.create({
   countryId: 'CAN',
