@@ -13,16 +13,16 @@ const preferredLanguageSchema = z.object({
 });
 
 const countrySchema = z.object({
-  code: z.string(),
-  nameEn: z.string(),
-  nameFr: z.string(),
+  countryId: z.string(),
+  nameEnglish: z.string(),
+  nameFrench: z.string(),
 });
 
 const regionSchema = z.object({
-  code: z.string(),
-  country: countrySchema,
-  nameEn: z.string(),
-  nameFr: z.string(),
+  provinceTerritoryStateId: z.string(),
+  countryId: z.string(),
+  nameEnglish: z.string(),
+  nameFrench: z.string(),
 });
 
 export type PreferredLanguageInfo = z.infer<typeof preferredLanguageSchema>;
