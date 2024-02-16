@@ -50,17 +50,17 @@ describe('cct-service.server.ts', () => {
   });
 
   it('it should return a 200 response when given a valid referenceID', async () => {
-    const response = await cctService.getPdf('BpEf35ngJg');
+    const response = await cctService.getPdf('liDTgtchkp');
     expect(response.status).toBe(200);
   });
 
   it('it should return "application/pdf" as a the response content-type when given a valid referenceId', async () => {
-    const response = await cctService.getPdf('BpEf35ngJg');
+    const response = await cctService.getPdf('liDTgtchkp');
     expect(response.headers.get('content-type')).toBe('application/pdf');
   });
 
   it('it should return a ReadableStream when given a valid referenceId', async () => {
-    const response = await cctService.getPdf('BpEf35ngJg');
+    const response = await cctService.getPdf('liDTgtchkp');
     expectTypeOf(response.body).toMatchTypeOf<ReadableStream<Uint8Array> | null>();
   });
 
