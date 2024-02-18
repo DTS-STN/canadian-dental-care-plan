@@ -42,13 +42,14 @@ describe('locale-utils.server', () => {
         LANG_COOKIE_DOMAIN: 'example.com',
         LANG_COOKIE_PATH: '/',
         LANG_COOKIE_HTTP_ONLY: true,
+        LANG_COOKIE_SAME_SITE: 'strict',
         LANG_COOKIE_SECURE: true,
       });
 
       const langCookie = createLangCookie();
       const serializedLangCookie = await langCookie.serialize('fr');
 
-      expect(serializedLangCookie).toEqual('lang=fr; Domain=example.com; Path=/; HttpOnly; Secure');
+      expect(serializedLangCookie).toMatch(/lang=fr; Domain=example.com; Path=\/; Expires=(.+); HttpOnly; Secure/);
     });
   });
 
