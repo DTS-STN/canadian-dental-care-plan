@@ -47,6 +47,9 @@ export default function Index() {
         <CardLink title={t('index:view-letters')} to="/letters">
           {t('index:view-letters-desc')}
         </CardLink>
+        <CardLink title={t('index:new-application')} to="/new-application" inProgress>
+          {t('index:new-application-desc')}
+        </CardLink>
         <CardLink title={t('index:view-my-application')} to="/view-application" inProgress>
           {t('index:view-my-application-desc')}
         </CardLink>
