@@ -60,7 +60,7 @@
     "react-dom": "^18.2.0",
     "react-i18next": "^14.0.5",
     "redis": "^4.6.13",
-    "remix-toast": "^1.1.0",
+    "remix-toast": "^1.2.0",
     "source-map-support": "^0.5.21",
     "styled-components": "^6.1.8",
     "tailwind-merge": "^2.2.1",
