@@ -1,5 +1,7 @@
-import { type RequestHandler, createRequestHandler } from '@remix-run/express';
-import { type ServerBuild, broadcastDevReady, installGlobals } from '@remix-run/node';
+import { createRequestHandler } from '@remix-run/express';
+import type { RequestHandler } from '@remix-run/express';
+import { broadcastDevReady, installGlobals } from '@remix-run/node';
+import type { ServerBuild } from '@remix-run/node';
 
 import chokidar from 'chokidar';
 import compression from 'compression';

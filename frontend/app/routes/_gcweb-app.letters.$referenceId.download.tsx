@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs } from '@remix-run/node';
+import type { LoaderFunctionArgs } from '@remix-run/node';
 
 import { getCCTService } from '~/services/cct-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';

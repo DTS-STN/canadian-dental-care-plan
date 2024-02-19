@@ -1,6 +1,6 @@
 import { useMatches } from '@remix-run/react';
 
-import { type FlatNamespace, type KeysByTOptions, type Namespace, type ParseKeysByNamespaces, type TOptions } from 'i18next';
+import type { FlatNamespace, KeysByTOptions, Namespace, ParseKeysByNamespaces, TOptions } from 'i18next';
 import validator from 'validator';
 import { z } from 'zod';
 
@@ -55,6 +55,17 @@ export type I18nNamespaces = z.infer<typeof i18nNamespacesSchema>;
 export type PageIdentifier = z.infer<typeof pageIdentifierSchema>;
 
 export type PageTitleI18nKey = z.infer<typeof i18nKeySchema>;
+
+/**
+ * Common data returned from a route's handle object.
+ */
+export interface RouteHandleData extends Record<string, unknown | undefined> {
+  breadcrumbs?: Breadcrumbs;
+  documentTitleI18nKey?: PageTitleI18nKey;
+  i18nNamespaces?: I18nNamespaces;
+  pageIdentifier?: PageIdentifier;
+  pageTitleI18nKey?: PageTitleI18nKey;
+}
 
 export function useBreadcrumbs() {
   return (

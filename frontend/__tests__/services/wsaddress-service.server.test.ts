@@ -2,7 +2,8 @@ import { HttpResponse, http } from 'msw';
 import { setupServer } from 'msw/node';
 import { afterAll, afterEach, beforeAll, describe, expectTypeOf, it, vi } from 'vitest';
 
-import { type CorrectWSAddressResponseDTO, type ParseWSAddressResponseDTO, type ValidateWSAddressResponseDTO, getWSAddressService } from '~/services/wsaddress-service.server';
+import { getWSAddressService } from '~/services/wsaddress-service.server';
+import type { CorrectWSAddressResponseDTO, ParseWSAddressResponseDTO, ValidateWSAddressResponseDTO } from '~/services/wsaddress-service.server';
 
 vi.mock('~/utils/logging.server', () => ({
   getLogger: vi.fn().mockReturnValue({

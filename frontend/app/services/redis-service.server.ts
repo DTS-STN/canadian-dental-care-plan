@@ -17,7 +17,8 @@
  * @see https://redis.io/docs/connect/clients/nodejs/
  */
 import moize from 'moize';
-import { type SetOptions, createClient } from 'redis';
+import { createClient } from 'redis';
+import type { SetOptions } from 'redis';
 
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';

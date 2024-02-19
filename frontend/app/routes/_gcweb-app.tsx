@@ -14,6 +14,7 @@ import { PageTitle } from '~/components/page-title';
 import { getClientEnv } from '~/utils/env-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey } from '~/utils/route-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 

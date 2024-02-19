@@ -5,6 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { InlineLink } from '~/components/inline-link';
 import { PageTitle } from '~/components/page-title';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 

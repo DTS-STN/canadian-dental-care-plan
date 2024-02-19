@@ -5,7 +5,8 @@ import { createRemixStub } from '@remix-run/testing';
 
 import { describe, expect, it } from 'vitest';
 
-import { type Breadcrumbs, type BuildInfo, coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey } from '~/utils/route-utils';
+import { coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey } from '~/utils/route-utils';
+import type { Breadcrumbs, BuildInfo, RouteHandleData } from '~/utils/route-utils';
 
 describe('coalesce<T> reducer', () => {
   it('expect undefined from two undefined values', () => {

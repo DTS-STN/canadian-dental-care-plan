@@ -1,6 +1,7 @@
 import type { ComponentProps, ReactNode } from 'react';
 
-import { type LoaderFunctionArgs, json } from '@remix-run/node';
+import { json } from '@remix-run/node';
+import type { LoaderFunctionArgs } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
@@ -8,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('index');
 

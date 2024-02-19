@@ -1,10 +1,11 @@
-import { type MouseEvent } from 'react';
+import type { MouseEvent } from 'react';
 
 import { useSearchParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import { InlineLink, type InlineLinkProps } from './inline-link';
+import { InlineLink } from './inline-link';
+import type { InlineLinkProps } from './inline-link';
 import { getClientEnv } from '~/utils/env-utils';
 import { getAltLanguage, switchLanguageCookie } from '~/utils/locale-utils';
 

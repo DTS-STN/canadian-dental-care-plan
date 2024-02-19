@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
-import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { Form, useActionData, useLoaderData } from '@remix-run/react';
 
 import { isValidPhoneNumber } from 'libphonenumber-js';
@@ -14,6 +15,7 @@ import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('personal-information', 'gcweb');
 export const handle = {

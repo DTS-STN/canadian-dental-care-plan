@@ -1,4 +1,5 @@
-import { type ActionFunctionArgs, type LoaderFunctionArgs, json, redirect } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { Form, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
