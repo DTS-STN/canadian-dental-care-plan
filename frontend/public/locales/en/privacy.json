@@ -1,0 +1,13 @@
+{
+  "privacy-statement-title": "Privacy statement",
+  "privacy-statement-content": "Your personal information is collected and managed in accordance with the Department of Health Act, the Dental Care Measures Act, the Privacy Act, the Department of Employment and Social Development Act and other applicable laws. By applying for the Canadian Dental Care Plan, you agree to the collection, use and disclosure of your information to administer and evaluate the Canadian Dental Care Plan.\n\nYour data may be shared with Health Canada and for membership, reporting and planning purposes. Refusing to provide information means that you cannot be considered for the Canadian Dental Care Plan.<br><br>Under the Privacy Act, you have the right to the protection of, access to, and where applicable, the correction of your personal information when you believe there is an error or omission. Your personal information is described in the Personal Information Banks: [LIST PIBS WITH THEIR NUMBERS]. Instructions for obtaining this information are outlined in the government publication titled, Info Source.<br><br>ESDC carries out this application using services from third-party provider Microsoft Corporation, which may be subject to foreign laws. For more information, see:<br><a href='https://www.microsoft.com/en-ca/trust-center/privacy'>Microsoft Data Privacy Policy & Privacy Principles.</a><br><br>If you are not satisfied with our response to your privacy, you have the right to file a complaint with the Privacy Commissioner of Canada regarding Service Canada’s handling of your personal information at:<br>https://www.priv.gc.ca/en/report-a-concern.",
+  "identity-info-title": "Identity Information",
+  "identity-info-content": "You will be deemed to have signed the application by providing and submitting:\n<ol><li>your Social Insurance Number (SIN); and</li>\n<li>your date of birth</li></ol>\nWe will use the information provided to verify the applicant’s identity.\nAny information that does not match the information on your Social Insurance Number may cause a delay in the processing of your application.",
+  "terms-title": "Terms and conditions",
+  "terms-content": "Terms and conditions content",
+  "apply-title": "Apply now",
+  "apply-content": "By starting this application, you consent to the terms of the above privacy notice statement.",
+  "button": {
+    "start-app": "Start application"
+  }
+}
