@@ -14,7 +14,6 @@ import url from 'node:url';
 import sourceMapSupport from 'source-map-support';
 import { createLogger, format, transports } from 'winston';
 
-process.env.NODE_ENV = process.env.NODE_ENV ?? 'production';
 const log = getLogger('express.server');
 
 installSourceMapSupport();
@@ -100,7 +99,7 @@ async function runServer() {
   });
 
   if (process.env.NODE_ENV === 'production') {
-    ['SIGTERM', 'SIGINT'].forEach((signal) => process.once(signal, () => server?.close(log.error)));
+    ['SIGTERM', 'SIGINT'].forEach((signal) => process.once(signal, () => server.close(log.error)));
   }
 }
 

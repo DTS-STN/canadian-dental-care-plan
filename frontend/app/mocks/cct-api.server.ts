@@ -76,15 +76,15 @@ export function getCCTApiMockHandlers() {
  */
 export function getPdfEntity(referenceId: string | readonly string[]) {
   const parsedReferenceId = z.string().safeParse(referenceId);
-  if (!parsedReferenceId) {
+
+  if (!parsedReferenceId.success) {
     throw new HttpResponse('Invalid referenceId: ' + referenceId, { status: 400, headers: { 'Content-Type': 'text/plain' } });
   }
 
-  const parsedPdfEntity = !parsedReferenceId.success
-    ? undefined
-    : db.pdf.findFirst({
-        where: { referenceId: { equals: parsedReferenceId.data } },
-      });
+  const parsedPdfEntity = db.pdf.findFirst({
+    where: { referenceId: { equals: parsedReferenceId.data } },
+  });
+
   if (!parsedPdfEntity) {
     throw new HttpResponse('No PDF found with the provided referenceId: ' + referenceId, { status: 404, headers: { 'Content-Type': 'text/plain' } });
   }

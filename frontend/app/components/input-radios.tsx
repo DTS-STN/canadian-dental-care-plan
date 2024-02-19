@@ -33,7 +33,7 @@ const InputRadios = ({ errorMessage, helpMessage, id, legend, name, options, req
         {legend}
       </InputLegend>
       <ul className="space-y-2">
-        {options?.map((option, index) => {
+        {options.map((option, index) => {
           const inputRadioId = `${id}-option-${index}`;
           return (
             <li key={inputRadioId}>

@@ -38,9 +38,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     throw new Response(null, { status: 404 });
   }
 
-  const preferredLanguage = userInfo.preferredLanguage && (await getLookupService().getPreferredLanguage(userInfo?.preferredLanguage));
-  const homeAddressInfo = userInfo.homeAddress && (await getAddressService().getAddressInfo(userId, userInfo?.homeAddress));
-  const mailingAddressInfo = userInfo.mailingAddress && (await getAddressService().getAddressInfo(userId, userInfo?.mailingAddress));
+  const preferredLanguage = userInfo.preferredLanguage && (await getLookupService().getPreferredLanguage(userInfo.preferredLanguage));
+  const homeAddressInfo = userInfo.homeAddress && (await getAddressService().getAddressInfo(userId, userInfo.homeAddress));
+  const mailingAddressInfo = userInfo.mailingAddress && (await getAddressService().getAddressInfo(userId, userInfo.mailingAddress));
 
   return json({ user: userInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, countryList, regionList });
 }
@@ -62,10 +62,10 @@ export default function PersonalInformationIndex() {
         <DescriptionListItem term={t('personal-information:index.home-address')}>
           {homeAddressInfo ? (
             <Address
-              address={homeAddressInfo?.address}
-              city={homeAddressInfo?.city}
+              address={homeAddressInfo.address}
+              city={homeAddressInfo.city}
               provinceState={regionList.find((region) => region.provinceTerritoryStateId === homeAddressInfo.province)?.provinceTerritoryStateId}
-              postalZipCode={homeAddressInfo?.postalCode}
+              postalZipCode={homeAddressInfo.postalCode}
               country={countryList.find((country) => country.countryId === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFrench' : 'nameEnglish'] ?? ' '}
             />
           ) : (
@@ -78,10 +78,10 @@ export default function PersonalInformationIndex() {
         <DescriptionListItem term={t('personal-information:index.mailing-address')}>
           {mailingAddressInfo ? (
             <Address
-              address={mailingAddressInfo?.address}
-              city={mailingAddressInfo?.city}
+              address={mailingAddressInfo.address}
+              city={mailingAddressInfo.city}
               provinceState={regionList.find((region) => region.provinceTerritoryStateId === mailingAddressInfo.province)?.provinceTerritoryStateId}
-              postalZipCode={mailingAddressInfo?.postalCode}
+              postalZipCode={mailingAddressInfo.postalCode}
               country={countryList.find((country) => country.countryId === mailingAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFrench' : 'nameEnglish'] ?? ''}
             />
           ) : (

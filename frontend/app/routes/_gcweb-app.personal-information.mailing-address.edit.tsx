@@ -103,7 +103,7 @@ export async function action({ request }: ActionFunctionArgs) {
       throw new Response(null, { status: 404 });
     }
 
-    const homeAddress = await getAddressService().getAddressInfo(userId, userInfo?.homeAddress ?? '');
+    const homeAddress = await getAddressService().getAddressInfo(userId, userInfo.homeAddress ?? '');
     session.set('newMailingAddress', homeAddress);
   } else {
     session.set('newMailingAddress', parsedDataResult.data);
