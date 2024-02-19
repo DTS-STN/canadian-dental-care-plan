@@ -1,4 +1,4 @@
-import { createCookie } from '@remix-run/node';
+import { type CookieOptions, createCookie } from '@remix-run/node';
 
 import { parse, serialize } from 'cookie';
 import { type Namespace, createInstance } from 'i18next';
@@ -19,19 +19,34 @@ export function createLangCookie() {
 
   const cookieName = env.LANG_COOKIE_NAME;
 
-  const cookieOptions = {
+  const cookieOptions: CookieOptions = {
     domain: env.LANG_COOKIE_DOMAIN,
     httpOnly: env.LANG_COOKIE_HTTP_ONLY,
     path: env.LANG_COOKIE_PATH,
+    sameSite: env.LANG_COOKIE_SAME_SITE,
     secure: env.LANG_COOKIE_SECURE,
   };
 
   const cookie = createCookie(cookieName, cookieOptions);
   log.debug(`Created language cookie [${cookieName}] with options: [${JSON.stringify(cookieOptions)}]`);
 
+  //
   // Remix will JSON.stringify() cookies by default; to prevent this, we supply custom parse() and serialize() functions
-  cookie.parse = async (cookieHeader, parseOptions) => cookieHeader && parse(cookieHeader, { ...cookieOptions, ...parseOptions })[cookieName];
-  cookie.serialize = async (value, serializeOptions) => serialize(cookieName, value, { ...cookieOptions, ...serializeOptions });
+  //
+
+  cookie.parse = async (cookieHeader, parseOptions) => {
+    return cookieHeader && parse(cookieHeader, { ...cookieOptions, ...parseOptions })[cookieName];
+  };
+
+  cookie.serialize = async (value, serializeOptions) => {
+    return serialize(cookieName, value, {
+      // although it is possible to set the `expires` flag when creating the cookie,
+      // doing so causes Remix to emit a warning suggesting to set it during serialization
+      expires: new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000), // ~1y
+      ...cookieOptions,
+      ...serializeOptions,
+    });
+  };
 
   return cookie;
 }

@@ -17,9 +17,12 @@ export function generateContentSecurityPolicy(nonce: string) {
     `default-src 'none'`,
     `connect-src 'self'` + (isDevelopment ? ' ws://localhost:3001' : ''),
     `font-src 'self' fonts.gstatic.com`,
+    `form-action 'self'`,
+    `frame-ancestors 'self'`,
     `frame-src 'self'`,
     `img-src 'self' data:`,
     `script-src 'strict-dynamic' 'nonce-${nonce}'`,
+    // unsafe-inline is required by remix-toast 💩
     `style-src 'self' 'unsafe-inline'`,
   ].join('; ');
 

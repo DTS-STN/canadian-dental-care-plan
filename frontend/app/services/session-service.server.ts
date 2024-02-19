@@ -44,6 +44,7 @@ async function createSessionService() {
     path: env.SESSION_COOKIE_PATH,
     domain: env.SESSION_COOKIE_DOMAIN,
     maxAge: env.SESSION_COOKIE_MAX_AGE,
+    sameSite: env.SESSION_COOKIE_SAME_SITE,
     secrets: [env.SESSION_COOKIE_SECRET],
     secure: env.SESSION_COOKIE_SECURE,
     httpOnly: env.SESSION_COOKIE_HTTP_ONLY,

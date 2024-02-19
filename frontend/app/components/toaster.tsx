@@ -3,7 +3,7 @@ import { ComponentProps, forwardRef, useEffect } from 'react';
 import { AlertCircle as AlertCircleIcon, AlertTriangle as AlertTriangleIcon, CheckCircle2 as CheckCircle2Icon, XCircle as XCircleIcon } from 'lucide-react';
 import { MaterialDesignContent, SnackbarProvider, enqueueSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
-import type { ToastMessage } from 'remix-toast';
+import { type ToastMessage, setToastCookieOptions } from 'remix-toast';
 
 import { useI18nNamespaces } from '~/utils/route-utils';
 import { cn } from '~/utils/tw-utils';
@@ -13,6 +13,12 @@ export interface ToasterProps {
 }
 
 export function Toaster({ toast }: ToasterProps) {
+  setToastCookieOptions({
+    // TODO :: GjB :: make these configurable
+    sameSite: 'strict',
+    secure: true,
+  });
+
   useEffect(() => {
     if (toast?.message) {
       enqueueSnackbar(toast.message, { variant: toast.type });
