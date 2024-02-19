@@ -31,6 +31,7 @@ declare module 'i18next' {
       'data-unavailable': typeof dataUnavailable;
       letters: typeof letters;
       index: typeof index;
+      'new-application': typeof newApplication;
     };
   }
 }
