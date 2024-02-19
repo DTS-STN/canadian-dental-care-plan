@@ -21,10 +21,19 @@ export function getCCTApiMockHandlers() {
     //
     // Handler for GET requests to retrieve pdf
     //
-    http.get('https://api.example.com/cct/letters/:referenceId', async ({ params, request }) => {
+    http.get('https://api.example.com/cctws/OnDemand/api/GetPdfByLetterId', async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
 
-      const pdfEntity = getPdfEntity(params.referenceId);
+      const url = new URL(request.url);
+      const community = url.searchParams.get('community');
+      const userId = url.searchParams.get('userid');
+      const referenceId = url.searchParams.get('id');
+
+      if (community === null || userId === null || referenceId === null) {
+        return new HttpResponse(null, { status: 404 });
+      }
+
+      const pdfEntity = getPdfEntity(referenceId);
       const filePath = path.join(__dirname, '..', 'public', 'test.pdf');
 
       try {

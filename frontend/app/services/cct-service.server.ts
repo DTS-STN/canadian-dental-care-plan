@@ -15,10 +15,14 @@ export type PdfInfo = z.infer<typeof pdfSchema>;
 export const getCCTService = moize(createCCTService, { onCacheAdd: () => log.info('Creating new CCT service') });
 
 function createCCTService() {
-  const { CCT_API_BASE_URI } = getEnv();
+  const { CCT_API_BASE_URI, CCT_VAULT_COMMUNITY } = getEnv();
 
-  async function getPdf(referenceId: string) {
-    const url = `${CCT_API_BASE_URI}/cct/letters/${referenceId}`;
+  async function getPdf(userId: string, referenceId: string) {
+    const url = new URL(`${CCT_API_BASE_URI}/cctws/OnDemand/api/GetPdfByLetterId`);
+    url.searchParams.set('community', CCT_VAULT_COMMUNITY);
+    url.searchParams.set('id', referenceId);
+    url.searchParams.set('userid', userId);
+
     const response = await fetch(url);
 
     if (response.ok || response.status === 404) {
