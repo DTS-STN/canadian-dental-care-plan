@@ -5,7 +5,7 @@ import { HttpResponse, http } from 'msw';
 import { privateKeyPemToCryptoKey, publicKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
-import { type JWKSet, type ServerMetadata, type TokenEndpointResponse, type UserinfoResponse } from '~/utils/raoidc-utils.server';
+import type { JWKSet, ServerMetadata, TokenEndpointResponse, UserinfoResponse } from '~/utils/raoidc-utils.server';
 
 const log = getLogger('raoidc.server');
 

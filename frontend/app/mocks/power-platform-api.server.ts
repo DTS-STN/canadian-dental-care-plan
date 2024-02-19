@@ -1,4 +1,5 @@
-import jsonpatch, { type Operation } from 'fast-json-patch';
+import jsonpatch from 'fast-json-patch';
+import type { Operation } from 'fast-json-patch';
 import { HttpResponse, http } from 'msw';
 import { z } from 'zod';
 

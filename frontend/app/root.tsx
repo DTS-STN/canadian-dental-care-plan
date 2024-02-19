@@ -1,6 +1,7 @@
 import { Suspense, useContext } from 'react';
 
-import { type LinksFunction, type LoaderFunctionArgs, json } from '@remix-run/node';
+import { json } from '@remix-run/node';
+import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';

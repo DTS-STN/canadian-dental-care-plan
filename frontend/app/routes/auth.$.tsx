@@ -1,4 +1,5 @@
-import { type LoaderFunctionArgs, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
+import type { LoaderFunctionArgs } from '@remix-run/node';
 
 import { z } from 'zod';
 
@@ -7,7 +8,8 @@ import { getSessionService } from '~/services/session-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { type IdToken, generateCallbackUri, generateRandomString } from '~/utils/raoidc-utils.server';
+import { generateCallbackUri, generateRandomString } from '~/utils/raoidc-utils.server';
+import type { IdToken } from '~/utils/raoidc-utils.server';
 
 const log = getLogger('auth.$');
 const defaultProviderId = 'raoidc';

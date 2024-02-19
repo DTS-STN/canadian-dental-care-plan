@@ -3,7 +3,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
-import { type IIdleTimerProps, useIdleTimer } from 'react-idle-timer';
+import { useIdleTimer } from 'react-idle-timer';
+import type { IIdleTimerProps } from 'react-idle-timer';
 
 import { Button } from './buttons';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';

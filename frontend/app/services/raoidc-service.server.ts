@@ -31,7 +31,8 @@ import { getSessionService } from '~/services/session-service.server';
 import { generateJwkId, privateKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
-import { type ClientMetadata, type FetchFunctionInit, type IdToken, fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState, validateSession } from '~/utils/raoidc-utils.server';
+import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState, validateSession } from '~/utils/raoidc-utils.server';
+import type { ClientMetadata, FetchFunctionInit, IdToken } from '~/utils/raoidc-utils.server';
 import { expandTemplate } from '~/utils/string-utils';
 
 const log = getLogger('raoidc-service.server');

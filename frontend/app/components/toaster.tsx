@@ -1,9 +1,11 @@
-import { ComponentProps, forwardRef, useEffect } from 'react';
+import { forwardRef, useEffect } from 'react';
+import type { ComponentProps } from 'react';
 
 import { AlertCircle as AlertCircleIcon, AlertTriangle as AlertTriangleIcon, CheckCircle2 as CheckCircle2Icon, XCircle as XCircleIcon } from 'lucide-react';
 import { MaterialDesignContent, SnackbarProvider, enqueueSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
-import { type ToastMessage, setToastCookieOptions } from 'remix-toast';
+import { setToastCookieOptions } from 'remix-toast';
+import type { ToastMessage } from 'remix-toast';
 
 import { useI18nNamespaces } from '~/utils/route-utils';
 import { cn } from '~/utils/tw-utils';

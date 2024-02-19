@@ -1,4 +1,5 @@
-import { type ComponentProps, type ReactNode, forwardRef } from 'react';
+import { forwardRef } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 
 import { InputError } from './input-error';
 import { InputHelp } from './input-help';

@@ -1,6 +1,6 @@
-import { type ScriptProps } from '@remix-run/react/dist/components';
+import type { ScriptProps } from '@remix-run/react/dist/components';
 
-import { type PublicEnv } from '~/utils/env.server';
+import type { PublicEnv } from '~/utils/env.server';
 
 export type ClientEnvProps = ScriptProps & { env: PublicEnv };
 

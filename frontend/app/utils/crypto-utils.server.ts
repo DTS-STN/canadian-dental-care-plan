@@ -1,7 +1,8 @@
 /**
  * Useful utility functions for crypto stuff.
  */
-import { createHash, subtle, type webcrypto } from 'node:crypto';
+import { createHash, subtle } from 'node:crypto';
+import type { webcrypto } from 'node:crypto';
 
 /**
  * Generate a JWK ID from the modulus of the JWK.

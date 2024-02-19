@@ -1,11 +1,13 @@
-import { type FlatNamespace, createInstance } from 'i18next';
+import { createInstance } from 'i18next';
+import type { FlatNamespace } from 'i18next';
 import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import I18NextHttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
-import { type SwitchLanguageData } from '~/routes/api.switch-language';
+import type { SwitchLanguageData } from '~/routes/api.switch-language';
 import { getClientEnv } from '~/utils/env-utils';
 import { i18nNamespacesSchema } from '~/utils/route-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
 
 /**
  * Returns the alternate language for the given input language.

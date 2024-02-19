@@ -3,7 +3,8 @@ import { setupServer } from 'msw/node';
 import { afterAll, afterEach, beforeAll, describe, expect, expectTypeOf, it, vi } from 'vitest';
 
 import { getLetterEntities } from '~/mocks/power-platform-api.server';
-import { type LettersInfo, getLettersService } from '~/services/letters-service.server';
+import { getLettersService } from '~/services/letters-service.server';
+import type { LettersInfo } from '~/services/letters-service.server';
 
 vi.mock('~/utils/logging.server', () => ({
   getLogger: vi.fn().mockReturnValue({

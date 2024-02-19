@@ -69,6 +69,7 @@ module.exports = {
       rules: {
         '@typescript-eslint/prefer-nullish-coalescing': 'error',
         '@typescript-eslint/prefer-optional-chain': 'error',
+        'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
       },
     },
 
