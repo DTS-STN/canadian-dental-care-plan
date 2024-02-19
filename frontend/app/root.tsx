@@ -6,6 +6,7 @@ import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderD
 import { useTranslation } from 'react-i18next';
 import { getToast } from 'remix-toast';
 
+import SessionTimeout from './components/session-timeout';
 import { Toaster } from './components/toaster';
 // import cdcpStyleSheet from '~/cdcp.css';
 import { ClientEnv } from '~/components/client-env';
@@ -85,6 +86,7 @@ export default function App() {
         <Suspense>
           <Outlet />
           <Toaster toast={toast} />
+          <SessionTimeout />
         </Suspense>
         {javascriptEnabled && (
           <>

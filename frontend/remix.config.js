@@ -4,4 +4,5 @@
 export default {
   cacheDirectory: './node_modules/.cache/remix',
   ignoredRouteFiles: ['**/.*'],
+  serverDependenciesToBundle: ['react-idle-timer'],
 };
