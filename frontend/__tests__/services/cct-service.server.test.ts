@@ -18,8 +18,11 @@ vi.mock('~/utils/env.server.ts', () => ({
 }));
 
 const handlers = [
-  http.get('https://api.example.com/cct/letters/:referenceId', async ({ params }) => {
-    const pdfEntity = getPdfEntity(params.referenceId);
+  http.get('https://api.example.com/cctws/OnDemand/api/GetPdfByLetterId', async ({ request }) => {
+    const url = new URL(request.url);
+    const referenceId = url.searchParams.get('id') as string;
+
+    const pdfEntity = getPdfEntity(referenceId);
     const content = 'Hello, PDF!';
     const header = '%PDF-1.4\n';
     const body = `1 0 obj\n<< /Length ${content.length} >>\nstream\n${content}\nendstream\nendobj\n`;
@@ -50,22 +53,22 @@ describe('cct-service.server.ts', () => {
   });
 
   it('it should return a 200 response when given a valid referenceID', async () => {
-    const response = await cctService.getPdf('liDTgtchkp');
+    const response = await cctService.getPdf('00000000-0000-0000-0000-000000000000', 'liDTgtchkp');
     expect(response.status).toBe(200);
   });
 
   it('it should return "application/pdf" as a the response content-type when given a valid referenceId', async () => {
-    const response = await cctService.getPdf('liDTgtchkp');
+    const response = await cctService.getPdf('00000000-0000-0000-0000-000000000000', 'liDTgtchkp');
     expect(response.headers.get('content-type')).toBe('application/pdf');
   });
 
   it('it should return a ReadableStream when given a valid referenceId', async () => {
-    const response = await cctService.getPdf('liDTgtchkp');
+    const response = await cctService.getPdf('00000000-0000-0000-0000-000000000000', 'liDTgtchkp');
     expectTypeOf(response.body).toMatchTypeOf<ReadableStream<Uint8Array> | null>();
   });
 
   it('it should return a 404 when given an invalid referenceID', async () => {
-    const response = await cctService.getPdf('invalidReferenceId');
+    const response = await cctService.getPdf('00000000-0000-0000-0000-000000000000', 'invalidReferenceId');
     expect(response.status).toBe(404);
   });
 });

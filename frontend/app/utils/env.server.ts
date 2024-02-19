@@ -78,6 +78,9 @@ const serverEnv = z.object({
   // mocks settings
   ENABLED_MOCKS: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidMockNames).default(''),
   MOCK_AUTH_ALLOWED_REDIRECTS: z.string().transform(emptyToUndefined).transform(csvToArray).default('http://localhost:3000/auth/callback/raoidc'),
+
+  // CCT get PDF settings
+  CCT_VAULT_COMMUNITY: z.string().default('community_default'),
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;
