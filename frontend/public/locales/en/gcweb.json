@@ -67,5 +67,11 @@
     "header_one": "The following error was found in the form:",
     "header_other": "The following {{count}} errors were found in the form:"
   },
-  "asterisk-indicates-required-field": "An asterisk (*) indicates a required field"
+  "asterisk-indicates-required-field": "An asterisk (*) indicates a required field",
+  "session-timeout": {
+    "continue-session": "Continue session",
+    "description": "Your session will expire automatically in {{timeRemaining}}. Select \"Continue Session\" to extend your session.",
+    "end-session": "End session now",
+    "header": "Session timeout warning"
+  }
 }

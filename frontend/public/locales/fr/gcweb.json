@@ -67,5 +67,11 @@
     "header_one": "L'erreur suivante a été trouvée dans le formulaire\u00a0:",
     "header_other": "Les {{count}} erreurs suivantes ont été trouvées dans le formulaire\u00a0:"
   },
-  "asterisk-indicates-required-field": "Un astérisque (*) indique un champ requis"
+  "asterisk-indicates-required-field": "Un astérisque (*) indique un champ requis",
+  "session-timeout": {
+    "continue-session": "Continuer la session",
+    "description": "Votre session expirera automatiquement dans {{timeRemaining}}. Sélectionnez «\u00a0Continuer la session\u00a0» pour prolonger votre session.",
+    "end-session": "Mettre fin à la session",
+    "header": "Avertissement d'expiration de la session"
+  }
 }
