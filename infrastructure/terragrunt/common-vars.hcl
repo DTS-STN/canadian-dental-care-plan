@@ -14,7 +14,7 @@ locals {
     "Division"                  = "Digital Technology Solutions"
     "IaCToolChain"              = "Terragrunt/Terraform"
     "ProjectName"               = "Canadian Dental Care Plan"
-    "ProductOwner"              = "Geoff Anderton <geoff.anderton@servicecanada.gc.ca>"
+    "ProductOwner"              = "Kyle Butts <kyle.butts@hrsdc-rhdcc.gc.ca>"
     # core_it_points_of_contact is required by CloudOps starting Nov. 2023
     "core_it_points_of_contact" = "Amy Wong <amy.wong@hrsdc-rhdcc.gc.ca>; Greg Baker <gregory.j.baker@hrsdc-rhdcc.gc.ca>; Guillaume Liddle <guillaume.liddle@hrsdc-rhdcc.gc.ca>"
   }
