@@ -10,5 +10,13 @@
     "apply-now": "Apply now",
     "start-application": "Start application",
     "start-note": "By starting this application, you consent to the terms of the above privacy notice statement."
+  },
+  "application-type": {
+    "page-title": "Type of Application",
+    "appliying-myself": "Applying for myslef",
+    "applying-else": "Applying on behalf of someone else",
+    "button-back": "Back",
+    "button-continue": "Continue",
+    "i-am": "I am"
   }
 }

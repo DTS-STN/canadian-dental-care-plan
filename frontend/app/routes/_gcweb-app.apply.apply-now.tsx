@@ -40,7 +40,7 @@ export default function ApplyNow() {
       <p className="mb-8 text-lg text-gray-500">{t('intake-forms:apply-form.apply-now')}</p>
       <p>{t('intake-forms:apply-form.start-note')}</p>
 
-      <ButtonLink id="apply-now-button" to="/personal-information">
+      <ButtonLink id="apply-now-button" to="/apply/application-type">
         {t('intake-forms:apply-form.start-application')}
       </ButtonLink>
     </>
