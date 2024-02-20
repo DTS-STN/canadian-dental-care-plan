@@ -23,7 +23,7 @@ const handlers = [
     const letterEntities = getLetterEntities(params.userId);
     return HttpResponse.json(letterEntities);
   }),
-  http.get('https://api.example.com/letters-types', () => {
+  http.get('https://api.example.com/letter-types', () => {
     const letterEntities = getAllLetterTypes();
     return HttpResponse.json(letterEntities);
   }),

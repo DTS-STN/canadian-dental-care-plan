@@ -110,7 +110,7 @@ export function getPowerPlatformApiMockHandlers() {
     /**
      * Handler for GET requests to retrieve letters details.
      */
-    http.get('https://api.example.com/letters-types', () => {
+    http.get('https://api.example.com/letter-types', () => {
       return HttpResponse.json(
         getAllLetterTypes().map((letterType) => {
           return {

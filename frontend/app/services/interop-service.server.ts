@@ -64,7 +64,7 @@ function createInteropService() {
    * @returns returns all the lettersTypeCodes
    */
   async function getAllLetterTypes() {
-    const url = `${INTEROP_API_BASE_URI}/letters-types`;
+    const url = `${INTEROP_API_BASE_URI}/letter-types`;
     const response = await fetch(url);
 
     if (!response.ok) {
