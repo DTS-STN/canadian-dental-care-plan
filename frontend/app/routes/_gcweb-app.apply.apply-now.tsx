@@ -1,4 +1,5 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
+import { json } from '@remix-run/node';
 
 import { useTranslation } from 'react-i18next';
 
@@ -12,7 +13,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request);
 
-  return '';
+  return json({ ok: true });
 }
 
 export default function ApplyNow() {
@@ -22,13 +23,13 @@ export default function ApplyNow() {
     <>
       <p className="mb-8 text-lg text-gray-500">{t('intake-forms:apply-form.privacy-statement')}</p>
       <p>{t('intake-forms:apply-form.privacy-message')}</p>
-      <p />
+
       <p className="mb-8 text-lg text-gray-500">{t('intake-forms:apply-form.identity-information')}</p>
       <p>{t('intake-forms:apply-form.identity-message')}</p>
-      <p />
+
       <p className="mb-8 text-lg text-gray-500">{t('intake-forms:apply-form.terms-and-conditions')}</p>
       <p>{t('intake-forms:apply-form.terms-and-conditions-message')}</p>
-      <p />
+
       <p className="mb-8 text-lg text-gray-500">{t('intake-forms:apply-form.apply-now')}</p>
       <p>{t('intake-forms:apply-form.start-note')}</p>
 
