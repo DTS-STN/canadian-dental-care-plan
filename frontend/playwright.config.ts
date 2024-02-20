@@ -26,6 +26,7 @@ export default defineConfig({
       AUTH_LOGOUT_REDIRECT_URL: 'http://localhost:3000/',
       AUTH_RAOIDC_BASE_URL: 'http://localhost:3000/auth',
       AUTH_RAOIDC_CLIENT_ID: 'CDCP',
+      AUTH_RASCL_LOGOUT_URL: 'http://localhost:3000/',
       ENABLED_MOCKS: 'cct,lookup,power-platform,raoidc,wsaddress',
       PORT: port,
       MOCK_AUTH_ALLOWED_REDIRECTS: 'http://localhost:3000/auth/callback/raoidc',
