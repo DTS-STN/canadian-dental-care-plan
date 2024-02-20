@@ -3,8 +3,8 @@ import { setupServer } from 'msw/node';
 import { afterAll, afterEach, beforeAll, describe, expect, expectTypeOf, it, vi } from 'vitest';
 
 import { getLetterEntities } from '~/mocks/power-platform-api.server';
-import { getLettersService } from '~/services/letters-service.server';
-import type { LettersInfo } from '~/services/letters-service.server';
+import { getInteropService } from '~/services/interop-service.server';
+import type { LettersInfo } from '~/services/interop-service.server';
 
 vi.mock('~/utils/logging.server', () => ({
   getLogger: vi.fn().mockReturnValue({
@@ -27,9 +27,9 @@ const handlers = [
 
 const server = setupServer(...handlers);
 
-const letterService = getLettersService();
+const interopService = getInteropService();
 
-describe('letters-service.server.ts', () => {
+describe('interop-service.server.ts', () => {
   beforeAll(() => server.listen({ onUnhandledRequest: 'bypass' }));
   afterAll(() => {
     server.close();
@@ -39,21 +39,21 @@ describe('letters-service.server.ts', () => {
   });
 
   it('it should return letters associated with a valid user', async () => {
-    const letters = await letterService.getLetters('00000000-0000-0000-0000-000000000000');
+    const letters = await interopService.getLetters('00000000-0000-0000-0000-000000000000');
     expect(letters.length).toBeGreaterThan(0);
   });
 
   it('it should return letters that match the corresponding type', async () => {
-    const letters = await letterService.getLetters('00000000-0000-0000-0000-000000000000');
+    const letters = await interopService.getLetters('00000000-0000-0000-0000-000000000000');
     expectTypeOf(letters[0]).toMatchTypeOf<Partial<LettersInfo[number]>>();
   });
 
   it('it should not return letters associated with an invalid user', async () => {
-    const letters = await letterService.getLetters('00000000-0000-0000-0000-000000000001');
+    const letters = await interopService.getLetters('00000000-0000-0000-0000-000000000001');
     expect(letters.length).toBe(0);
   });
 
   it('it should throw and error when given an invalid user', () => {
-    expect(async () => await letterService.getLetters('invalidUserId')).rejects.toThrowError();
+    expect(async () => await interopService.getLetters('invalidUserId')).rejects.toThrowError();
   });
 });

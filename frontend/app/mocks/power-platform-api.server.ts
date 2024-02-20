@@ -8,6 +8,17 @@ import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('power-platform-api.server');
 
+const letterTypeCodeSchema = z.object({
+  code: z.string(),
+  nameFr: z.string(),
+  nameEn: z.string(),
+  id: z.string().optional(),
+});
+
+const listOfLetterTypeCodeSchema = z.array(letterTypeCodeSchema);
+
+export type LetterTypeCodeList = z.infer<typeof listOfLetterTypeCodeSchema>;
+
 /**
  * Server-side MSW mocks for the Power Platform API.
  */
@@ -96,7 +107,35 @@ export function getPowerPlatformApiMockHandlers() {
         }),
       );
     }),
+    /**
+     * Handler for GET requests to retrieve letters details.
+     */
+    http.get('https://api.example.com/letters-types', () => {
+      const letterTypesEntities = getAllLetterTypes();
+
+      return HttpResponse.json(
+        letterTypesEntities?.map((letterType) => {
+          return {
+            nameEn: letterType.nameEn,
+            nameFr: letterType.nameFr,
+            code: letterType.code,
+            id: letterType.id,
+          };
+        }),
+      );
+    }),
   ];
+}
+
+/**
+ * Retrieves list of letter types.
+ *
+ * @returns All the letter types found.
+ */
+export function getAllLetterTypes() {
+  const letterTypesEntities = db.letterType.getAll();
+
+  return letterTypesEntities;
 }
 
 /**

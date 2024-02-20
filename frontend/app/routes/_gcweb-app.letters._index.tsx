@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { InputSelect } from '~/components/input-select';
-import { getLettersService } from '~/services/letters-service.server';
+import { getInteropService } from '~/services/interop-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -38,9 +38,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const sortOrder = orderEnumSchema.catch('desc').parse(url.searchParams.get('sort'));
 
   const userService = getUserService();
-  const letterService = getLettersService();
+  const interopService = getInteropService();
   const userId = await userService.getUserId();
-  const letters = await letterService.getLetters(userId, sortOrder);
+  const letters = await interopService.getLetters(userId, sortOrder);
 
   return json({ letters: letters, sortOrder });
 }
@@ -91,7 +91,7 @@ export default function LettersIndex() {
             <Link reloadDocument to={`/letters/${letter.referenceId}/download`} className="font-medium hover:underline">
               {i18n.language === 'en' ? letter.nameEn : letter.nameFr}
             </Link>
-            <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: getFormattedDate(letter.dateSent) })}</p>
+            <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: getFormattedDate(letter?.dateSent) })}</p>
           </li>
         ))}
       </ul>
