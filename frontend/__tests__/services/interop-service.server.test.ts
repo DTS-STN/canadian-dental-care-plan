@@ -2,7 +2,7 @@ import { HttpResponse, http } from 'msw';
 import { setupServer } from 'msw/node';
 import { afterAll, afterEach, beforeAll, describe, expect, expectTypeOf, it, vi } from 'vitest';
 
-import { getLetterEntities } from '~/mocks/power-platform-api.server';
+import { getAllLetterTypes, getLetterEntities } from '~/mocks/power-platform-api.server';
 import { getInteropService } from '~/services/interop-service.server';
 import type { LettersInfo } from '~/services/interop-service.server';
 
@@ -21,6 +21,10 @@ vi.mock('~/utils/env.server.ts', () => ({
 const handlers = [
   http.get('https://api.example.com/users/:userId/letters', ({ params }) => {
     const letterEntities = getLetterEntities(params.userId);
+    return HttpResponse.json(letterEntities);
+  }),
+  http.get('https://api.example.com/letters-types', () => {
+    const letterEntities = getAllLetterTypes();
     return HttpResponse.json(letterEntities);
   }),
 ];
@@ -55,5 +59,10 @@ describe('interop-service.server.ts', () => {
 
   it('it should throw and error when given an invalid user', () => {
     expect(async () => await interopService.getLetters('invalidUserId')).rejects.toThrowError();
+  });
+
+  it('it should return all the letter types', async () => {
+    const letterTypes = await interopService.getLetterTypes();
+    expect(letterTypes.length).toBeGreaterThan(0);
   });
 });
