@@ -55,9 +55,11 @@ export default function PersonalInformationIndex() {
         <DescriptionListItem term={t('personal-information:index.full-name')}>{`${user.firstName} ${user.lastName}`}</DescriptionListItem>
         <DescriptionListItem term={t('personal-information:index.preferred-language')}>
           <p>{preferredLanguage ? getNameByLanguage(i18n.language, preferredLanguage) : t('personal-information:index.no-preferred-language-on-file')}</p>
-          <InlineLink id="change-preferred-language-button" to="/personal-information/preferred-language/edit" className="mt-3 block">
-            {t('personal-information:index.change-preferred-language')}
-          </InlineLink>
+          <p>
+            <InlineLink id="change-preferred-language-button" to="/personal-information/preferred-language/edit">
+              {t('personal-information:index.change-preferred-language')}
+            </InlineLink>
+          </p>
         </DescriptionListItem>
         <DescriptionListItem term={t('personal-information:index.home-address')}>
           {homeAddressInfo ? (
@@ -71,9 +73,11 @@ export default function PersonalInformationIndex() {
           ) : (
             <p>{t('personal-information:index.no-address-on-file')}</p>
           )}
-          <InlineLink id="change-home-address-button" to="/personal-information/home-address/edit" className="mt-3 block">
-            {t('personal-information:index.change-home-address')}
-          </InlineLink>
+          <p>
+            <InlineLink id="change-home-address-button" to="/personal-information/home-address/edit">
+              {t('personal-information:index.change-home-address')}
+            </InlineLink>
+          </p>
         </DescriptionListItem>
         <DescriptionListItem term={t('personal-information:index.mailing-address')}>
           {mailingAddressInfo ? (
@@ -87,15 +91,19 @@ export default function PersonalInformationIndex() {
           ) : (
             <p>{t('personal-information:index.no-address-on-file')}</p>
           )}
-          <InlineLink id="change-mailing-address-button" to="/personal-information/mailing-address/edit" className="mt-3 block">
-            {t('personal-information:index.change-mailing-address')}
-          </InlineLink>
+          <p>
+            <InlineLink id="change-mailing-address-button" to="/personal-information/mailing-address/edit">
+              {t('personal-information:index.change-mailing-address')}
+            </InlineLink>
+          </p>
         </DescriptionListItem>
         <DescriptionListItem term={t('personal-information:index.phone-number')}>
           <p>{user.phoneNumber}</p>
-          <InlineLink id="change-phone-number-button" to="/personal-information/phone-number/edit" className="mt-3 block">
-            {t('personal-information:index.change-phone-number')}
-          </InlineLink>
+          <p>
+            <InlineLink id="change-phone-number-button" to="/personal-information/phone-number/edit">
+              {t('personal-information:index.change-phone-number')}
+            </InlineLink>
+          </p>
         </DescriptionListItem>
       </dl>
     </>
@@ -106,7 +114,7 @@ function DescriptionListItem({ children, term }: { children: ReactNode; term: Re
   return (
     <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
       <dt className="font-medium">{term}</dt>
-      <dd className="mt-3 sm:col-span-2 sm:mt-0">{children}</dd>
+      <dd className="mt-3 space-y-3 sm:col-span-2 sm:mt-0">{children}</dd>
     </div>
   );
 }
