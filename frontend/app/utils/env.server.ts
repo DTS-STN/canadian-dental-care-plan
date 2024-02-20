@@ -51,7 +51,7 @@ const serverEnv = z.object({
   LANG_COOKIE_DOMAIN: z.string().optional(),
   LANG_COOKIE_PATH: z.string().default('/'),
   LANG_COOKIE_HTTP_ONLY: z.string().transform(toBoolean).default('true'),
-  LANG_COOKIE_SAME_SITE: z.enum(['lax', 'strict', 'none']).default('strict'),
+  LANG_COOKIE_SAME_SITE: z.enum(['lax', 'strict', 'none']).default('lax'),
   LANG_COOKIE_SECURE: z.string().transform(toBoolean).default('true'),
   LANG_QUERY_PARAM: z.string().default('lang'),
 
@@ -61,7 +61,7 @@ const serverEnv = z.object({
   SESSION_COOKIE_NAME: z.string().trim().min(1).default('__CDCP//session'),
   SESSION_COOKIE_DOMAIN: z.string().trim().min(1).optional(),
   SESSION_COOKIE_PATH: z.string().trim().min(1).default('/'),
-  SESSION_COOKIE_SAME_SITE: z.enum(['lax', 'strict', 'none']).default('strict'),
+  SESSION_COOKIE_SAME_SITE: z.enum(['lax', 'strict', 'none']).default('lax'),
   SESSION_COOKIE_SECRET: z.string().trim().min(16).default(randomUUID()),
   SESSION_COOKIE_MAX_AGE: z.coerce.number().default(1200),
   SESSION_COOKIE_HTTP_ONLY: z.string().transform(toBoolean).default('true'),

@@ -42,7 +42,7 @@ describe('locale-utils.server', () => {
         LANG_COOKIE_DOMAIN: 'example.com',
         LANG_COOKIE_PATH: '/',
         LANG_COOKIE_HTTP_ONLY: true,
-        LANG_COOKIE_SAME_SITE: 'strict',
+        LANG_COOKIE_SAME_SITE: 'lax',
         LANG_COOKIE_SECURE: true,
       });
 
