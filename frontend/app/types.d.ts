@@ -1,5 +1,6 @@
 import type gcweb from '../public/locales/en/gcweb.json';
 import type index from '../public/locales/en/index.json';
+import type intakeforms from '../public/locales/en/intake-forms.json';
 import type letters from '../public/locales/en/letters.json';
 import type personalInformation from '../public/locales/en/personal-information.json';
 import type dataUnavailable from '../public/locales/en/udata-unavailable.json';
@@ -29,6 +30,7 @@ declare module 'i18next' {
       'personal-information': typeof personalInformation;
       'update-phone-number': typeof updatePhoneNumber;
       'data-unavailable': typeof dataUnavailable;
+      'intake-forms': typeof intakeforms;
       letters: typeof letters;
       index: typeof index;
     };
