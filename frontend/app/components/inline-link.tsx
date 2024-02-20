@@ -8,7 +8,7 @@ export interface InlineLinkProps extends ComponentProps<typeof Link> {}
 
 export function InlineLink({ className, children, ...props }: InlineLinkProps) {
   return (
-    <Link className={cn('text-blue-600 hover:underline', className)} {...props}>
+    <Link className={cn('text-blue-700 hover:underline', className)} {...props}>
       {children}
     </Link>
   );
