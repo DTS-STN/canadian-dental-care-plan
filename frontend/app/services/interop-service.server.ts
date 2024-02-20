@@ -18,12 +18,22 @@ const letterSchema = z.array(
 
 export type LettersInfo = z.infer<typeof letterSchema>;
 
-/**
- * Return a singleton instance (by means of memomization) of the letter service.
- */
-export const getLettersService = moize(createLettersService, { onCacheAdd: () => log.info('Creating new letter service') });
+const letterTypeCodeSchema = z.object({
+  code: z.string(),
+  nameFr: z.string(),
+  nameEn: z.string(),
+  id: z.string().optional(),
+});
 
-function createLettersService() {
+const listOfLetterTypeCodeSchema = z.array(letterTypeCodeSchema);
+export type LetterTypeCode = z.infer<typeof letterTypeCodeSchema>;
+
+/**
+ * Return a singleton instance (by means of memomization) of the interop service.
+ */
+export const getInteropService = moize(createInteropService, { onCacheAdd: () => log.info('Creating new interop service') });
+
+function createInteropService() {
   const { INTEROP_API_BASE_URI } = getEnv();
 
   /**
@@ -50,5 +60,27 @@ function createLettersService() {
     return letterSchema.parse(await response.json());
   }
 
-  return { getLetters };
+  /**
+   * @returns returns all the lettersTypeCodes
+   */
+  async function getAllLetterTypes() {
+    const url = `${INTEROP_API_BASE_URI}/letter-types`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed to fetch data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
+
+    return listOfLetterTypeCodeSchema.parse(await response.json());
+  }
+
+  return { getLetters, getAllLetterTypes };
 }
