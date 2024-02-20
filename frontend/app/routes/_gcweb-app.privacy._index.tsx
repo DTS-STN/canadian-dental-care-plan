@@ -1,7 +1,6 @@
-import { Link } from '@remix-run/react';
-
 import { useTranslation } from 'react-i18next';
 
+import { ButtonLink } from '~/components/buttons';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
@@ -18,24 +17,24 @@ export default function Privacy() {
   return (
     <>
       <section className="mt-8">
-        <h2 className="mb-4 font-bold">{t('privacy:privacy-statement-title')}</h2>
+        <h2 className="mb-4 text-lg font-bold">{t('privacy:privacy-statement-title')}</h2>
         <p dangerouslySetInnerHTML={{ __html: t('privacy:privacy-statement-content') }} />
       </section>
       <section className="mt-8">
-        <h2 className="mb-4 font-bold">{t('privacy:identity-info-title')}</h2>
+        <h2 className="mb-4 text-lg font-bold">{t('privacy:identity-info-title')}</h2>
         <p dangerouslySetInnerHTML={{ __html: t('privacy:identity-info-content') }} />
       </section>
       <section className="mt-8">
-        <h2 className="mb-4 font-bold">{t('privacy:terms-title')}</h2>
+        <h2 className="mb-4 text-lg font-bold">{t('privacy:terms-title')}</h2>
         <p dangerouslySetInnerHTML={{ __html: t('privacy:terms-content') }} />
       </section>
       <section className="my-8">
-        <h2 className="mb-4 font-bold">{t('privacy:apply-title')}</h2>
+        <h2 className="mb-4 text-lg font-bold">{t('privacy:apply-title')}</h2>
         <p dangerouslySetInnerHTML={{ __html: t('privacy:apply-content') }} />
       </section>
-      <Link className="rounded-sm bg-[#318000] px-4 py-2 text-white" to="/application-form">
+      <ButtonLink size="base" variant="green" className="rounded-sm" to="/application">
         {t('privacy:button.start-app')}
-      </Link>
+      </ButtonLink>
     </>
   );
 }
