@@ -1,0 +1,14 @@
+{
+  "apply-form": {
+    "page-title": "(FR) Apply for CDCP",
+    "privacy-statement": "(FR) Privacy Statement",
+    "privacy-message": "(FR) Privacy statement message",
+    "identity-information": "(FR) Identity information",
+    "identity-message": "(FR) Identity message",
+    "terms-and-conditions": "(FR) Terms and conditions",
+    "terms-and-conditions-message": "(FR) terms and conditions message",
+    "apply-now": "(FR) Apply now",
+    "start-application": "(FR) Start application",
+    "start-note": "By starting this application, you consent to the terms of the above privacy notice statement."
+  }
+}
