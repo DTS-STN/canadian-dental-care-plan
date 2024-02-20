@@ -18,5 +18,11 @@
     "button-back": "(FR) Back",
     "button-continue": "(FR) Continue",
     "i-am": "(FR) I am"
+  },
+  "date-of-birth": {
+    "page-title": "(FR) Date of birth",
+    "enter-dob-message": "(FR) Please enter your date of birth",
+    "button-back": "(FR) Back",
+    "button-continue": "(FR) Continue"
   }
 }
