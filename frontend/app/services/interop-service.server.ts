@@ -34,15 +34,19 @@ export type LetterTypeCode = z.infer<typeof letterTypeCodeSchema>;
 export const getInteropService = moize(createInteropService, { onCacheAdd: () => log.info('Creating new interop service') });
 
 function createInteropService() {
-  const { INTEROP_API_BASE_URI } = getEnv();
+  const { INTEROP_API_BASE_URI, CCT_API_BASE_URI, CCT_VAULT_COMMUNITY } = getEnv();
 
   /**
-   *
-   * @param { userId }
-   * @returns returns the letters based off  @param userId
+   * @returns array of letters given the userId and clientId with optional sort parameter
    */
-  async function getLetters(userId: string, sortOrder: 'asc' | 'desc' = 'desc') {
-    const url = `${INTEROP_API_BASE_URI}/users/${userId}/letters?sort=${sortOrder}`;
+  async function getLetterInfoByClientId(userId: string, clientId: string, sortOrder: 'asc' | 'desc' = 'desc') {
+    const url = new URL(`${CCT_API_BASE_URI}/cctws/OnDemand/api/GetDocInfoByClientId`);
+    url.searchParams.set('userid', userId);
+    url.searchParams.set('clientid', clientId);
+    url.searchParams.set('community', CCT_VAULT_COMMUNITY);
+    url.searchParams.set('Exact', 'true');
+    url.searchParams.set('sort', sortOrder);
+
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -82,5 +86,5 @@ function createInteropService() {
     return listOfLetterTypeCodeSchema.parse(await response.json());
   }
 
-  return { getLetters, getAllLetterTypes };
+  return { getLetterInfoByClientId, getAllLetterTypes };
 }

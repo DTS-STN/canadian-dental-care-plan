@@ -40,7 +40,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userService = getUserService();
   const interopService = getInteropService();
   const userId = await userService.getUserId();
-  const letters = await interopService.getLetters(userId, sortOrder);
+  const letters = await interopService.getLetterInfoByClientId(userId, 'clientId', sortOrder); // TODO where and what is clientId?
 
   return json({ letters: letters, sortOrder });
 }
