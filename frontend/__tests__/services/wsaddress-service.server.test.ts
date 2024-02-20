@@ -1,13 +1,14 @@
-import { HttpResponse, http } from 'msw';
-import { setupServer } from 'msw/node';
-import { afterAll, afterEach, beforeAll, describe, expectTypeOf, it, vi } from 'vitest';
+import { HttpResponse } from 'msw';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { getWSAddressService } from '~/services/wsaddress-service.server';
-import type { CorrectWSAddressResponseDTO, ParseWSAddressResponseDTO, ValidateWSAddressResponseDTO } from '~/services/wsaddress-service.server';
+
+global.fetch = vi.fn();
 
 vi.mock('~/utils/logging.server', () => ({
   getLogger: vi.fn().mockReturnValue({
     info: vi.fn(),
+    error: vi.fn(),
   }),
 }));
 
@@ -15,116 +16,119 @@ vi.mock('~/utils/env.server', () => ({
   getEnv: vi.fn().mockReturnValue({ INTEROP_API_BASE_URI: 'https://api.example.com' }),
 }));
 
-//TODO: add invalid request tests when changing to use Interop's WSAddress endpoint instead of MSW
-
-const handlers = [
-  /**
-   * Handler for POST requests to WSAddress correction service
-   */
-  http.post('https://api.example.com/address/correction', () => {
-    return HttpResponse.json({
-      responseType: 'CA',
-      addressLine: '23 Coronation St',
-      city: "St. John's",
-      province: 'NL',
-      postalCode: 'A1C5B9',
-      deliveryInformation: 'deliveryInformation',
-      extraInformation: 'extraInformation',
-      statusCode: 'Valid',
-      country: 'CAN',
-      message: '',
-      warnings: '',
-      functionalMessages: [
-        { action: 'OriginalInput', message: '111 WELLINGTON ST   OTTAWA   ON   K1A0A4   CAN' },
-        { action: 'Information', message: 'Dept = SENAT   Branch = SENAT   Lang = F' },
-      ],
-    });
-  }),
-
-  /**
-   * Handler for POST requests to WSAddress parse service
-   */
-  http.post('https://api.example.com/address/parse', () => {
-    return HttpResponse.json({
-      responseType: 'CA',
-      addressLine: '23 CORONATION ST',
-      city: 'ST JOHNS',
-      province: 'NL',
-      postalCode: 'A1C5B9',
-      streetNumberSuffix: 'streetNumberSuffix',
-      streetDirection: 'streetDirection',
-      unitType: 'unitType',
-      unitNumber: '000',
-      serviceAreaName: 'serviceAreaName',
-      serviceAreaType: 'serviceAreaType',
-      serviceAreaQualifier: '',
-      cityLong: 'cityLong',
-      cityShort: 'cityShort',
-      deliveryInformation: 'deliveryInformation',
-      extraInformation: 'extraInformation',
-      statusCode: 'Valid',
-      canadaPostInformation: [],
-      message: 'message',
-      addressType: 'Urban',
-      streetNumber: '23',
-      streetName: 'CORONATION',
-      streetType: 'ST',
-      serviceType: 'Unknown',
-      serviceNumber: '000',
-      country: 'CAN',
-      warnings: '',
-      functionalMessages: [{ action: 'action', message: 'message' }],
-    });
-  }),
-
-  /**
-   * Handler for POST requests to WSAddress validate service
-   */
-  http.post('https://api.example.com/address/validate', () => {
-    return HttpResponse.json({
-      responseType: 'CA',
-      statusCode: 'Valid',
-      functionalMessages: [
-        { action: 'OriginalInput', message: '111 WELLINGTON ST   OTTAWA   ON   K1A0A4   CAN' },
-        { action: 'Information', message: 'Dept = SENAT   Branch = SENAT   Lang = F' },
-      ],
-      message: '',
-      warnings: '',
-    });
-  }),
-];
-
-const server = setupServer(...handlers);
-
-const wsAddressService = await getWSAddressService();
-
 describe('wsaddress-service.server tests', () => {
-  beforeAll(() => server.listen({ onUnhandledRequest: 'bypass' }));
-  afterAll(() => {
-    server.close();
-  });
   afterEach(() => {
     vi.clearAllMocks();
+    vi.resetModules();
   });
 
-  describe('correctWSAddress()', () => {
+  describe('correctAddress()', () => {
     it('should correct an address successfully', async () => {
-      const result = await wsAddressService.correctWSAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' });
-      expectTypeOf(result).toMatchTypeOf<CorrectWSAddressResponseDTO>();
-    });
-  });
+      vi.mocked(fetch).mockResolvedValue(
+        HttpResponse.json({
+          '@context': 'some-context',
+          'wsaddr:CorrectionRequest': 'some-correction-request',
+          'wsaddr:CorrectionResults': {
+            'nc:AddressFullText': '23 CORONATION ST',
+            'nc:AddressCityName': "ST. JOHN'S",
+            'nc:ProvinceCode': 'NL',
+            'nc:AddressPostalCode': 'A1C5B9',
+            'nc:CountryCode': 'CAN',
+            'wsaddr:StatusCode': 'Corrected',
+          },
+          'wsaddr:FunctionalMessages': 'some-functional-messages',
+          'wsaddr:Messages': 'some-messages',
+          'wsaddr:Statistics': 'some-statistics',
+        }),
+      );
 
-  describe('validateWSAddress()', () => {
-    it('should validate an address successfully', async () => {
-      const result = await wsAddressService.validateWSAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' });
-      expectTypeOf(result).toMatchTypeOf<ValidateWSAddressResponseDTO>();
+      const wsAddressService = await getWSAddressService();
+      const result = await wsAddressService.correctAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' });
+      expect(result).toStrictEqual({
+        status: 'Corrected',
+        address: '23 CORONATION ST',
+        city: "ST. JOHN'S",
+        province: 'NL',
+        postalCode: 'A1C5B9',
+        country: 'CAN',
+      });
+    });
+
+    it('should throw error if response is not ok', async () => {
+      vi.mocked(fetch).mockResolvedValue(new HttpResponse(null, { status: 500 }));
+
+      const wsAddressService = await getWSAddressService();
+      await expect(() => wsAddressService.correctAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' })).rejects.toThrowError();
     });
   });
 
   describe('parseAddress()', () => {
     it('should parse an address successfully', async () => {
-      const result = await wsAddressService.parseWSAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' });
-      expectTypeOf(result).toMatchTypeOf<ParseWSAddressResponseDTO>();
+      vi.mocked(fetch).mockResolvedValue(
+        HttpResponse.json({
+          '@context': 'some-context',
+          'wsaddr:ParsedRequest': 'some-parsed-request',
+          'wsaddr:ParsedResults': {
+            'nc:AddressFullText': '500 RUE DU BINOME',
+            'nc:AddressCityName': 'QUEBEC',
+            'can:ProvinceCode': 'QC',
+            'nc:AddressPostalCode': 'G1P4P1',
+            'nc:CountryCode': 'CAN',
+            'wsaddr:AddressSecondaryUnitNumber': '100',
+          },
+          'wsaddr:FunctionalMessages': 'some-functional-messages',
+          'wsaddr:Messages': 'some-messages',
+          'wsaddr:Statistics': 'some-statistics',
+        }),
+      );
+
+      const wsAddressService = await getWSAddressService();
+      const result = await wsAddressService.parseAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' });
+      expect(result).toStrictEqual({
+        apartmentUnitNumber: '100',
+        address: '500 RUE DU BINOME',
+        city: 'QUEBEC',
+        province: 'QC',
+        postalCode: 'G1P4P1',
+        country: 'CAN',
+      });
+    });
+
+    it('should throw error if response is not ok', async () => {
+      vi.mocked(fetch).mockResolvedValue(new HttpResponse(null, { status: 500 }));
+
+      const wsAddressService = await getWSAddressService();
+      await expect(() => wsAddressService.parseAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' })).rejects.toThrowError();
+    });
+  });
+
+  describe('validateAddress()', () => {
+    it('should validate an address successfully', async () => {
+      vi.mocked(fetch).mockResolvedValue(
+        HttpResponse.json({
+          '@context': 'some-context',
+          'wsaddr:ValidationRequest': 'some-validation-request',
+          'wsaddr:ValidationResults': {
+            'wsaddr:Information': {
+              'wsaddr:StatusCode': 'Valid',
+            },
+          },
+          'wsaddr:FunctionalMessages': 'some-functional-messages',
+          'wsaddr:Messages': 'some-messages',
+          'wsaddr:Statistics': 'some-statistics',
+        }),
+      );
+
+      const wsAddressService = await getWSAddressService();
+      const result = await wsAddressService.validateAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' });
+      expect(result).toBe(true);
+    });
+
+    it('should throw error if response is not ok', async () => {
+      vi.mocked(fetch).mockResolvedValue(new HttpResponse(null, { status: 500 }));
+
+      const wsAddressService = await getWSAddressService();
+      await expect(() => wsAddressService.validateAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' })).rejects.toThrowError();
     });
   });
 });
