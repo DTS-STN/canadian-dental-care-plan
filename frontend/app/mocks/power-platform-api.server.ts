@@ -85,7 +85,7 @@ export function getPowerPlatformApiMockHandlers() {
       const letterEntities = getLetterEntities(params.userId, sort);
 
       return HttpResponse.json(
-        letterEntities?.map((letter) => {
+        letterEntities.map((letter) => {
           return {
             id: letter.id,
             dateSent: new Date(letter.dateSent),
@@ -132,24 +132,21 @@ function getAddressEntity(userId: string | readonly string[], addressId: string 
  */
 export function getLetterEntities(userId: string | readonly string[], sortOrder: 'asc' | 'desc' = 'desc') {
   const parsedUserId = z.string().uuid().safeParse(userId);
-  if (!parsedUserId) {
-    throw new HttpResponse('Invalid userId: ' + parsedUserId, { status: 400, headers: { 'Content-Type': 'text/plain' } });
+
+  if (!parsedUserId.success) {
+    throw new HttpResponse('Invalid userId: ' + userId, { status: 400, headers: { 'Content-Type': 'text/plain' } });
   }
 
-  const letterEntities = !parsedUserId.success
-    ? undefined
-    : db.letter.findMany({
-        where: {
-          userId: {
-            equals: parsedUserId.data,
-          },
-        },
-        orderBy: {
-          dateSent: sortOrder,
-        },
-      });
-
-  return letterEntities;
+  return db.letter.findMany({
+    where: {
+      userId: {
+        equals: parsedUserId.data,
+      },
+    },
+    orderBy: {
+      dateSent: sortOrder,
+    },
+  });
 }
 
 /**

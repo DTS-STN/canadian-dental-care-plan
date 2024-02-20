@@ -70,7 +70,7 @@ export interface RouteHandleData extends Record<string, unknown | undefined> {
 export function useBreadcrumbs() {
   return (
     useMatches()
-      .map((route) => route?.handle as RouteHandleData | undefined)
+      .map((route) => route.handle as RouteHandleData | undefined)
       .map((handle) => breadcrumbsSchema.safeParse(handle?.breadcrumbs))
       .map((result) => (result.success ? result.data : undefined))
       .reduce(coalesce) ?? []

@@ -439,7 +439,7 @@ function validateUserInfoToken(userInfoResponse: UserinfoResponse) {
  * Throw if the JWK set is fubar.
  */
 function validateJwkSet(jwkSet: JWKSet) {
-  if (!jwkSet.keys || jwkSet.keys.length === 0) {
+  if (jwkSet.keys.length === 0) {
     throw new Error('JWK set has no keys');
   }
 

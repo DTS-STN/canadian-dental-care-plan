@@ -183,19 +183,19 @@ function PageDetails() {
             </dd>
           </div>
         )}
-        {!!buildInfo?.buildDate && (
+        {!!buildInfo.buildDate && (
           <div className="flex gap-2">
             <dt>{t('gcweb:page-details.date-modfied')}</dt>
             <dd>
-              <time property="dateModified">{buildInfo?.buildDate.slice(0, 10)}</time>
+              <time property="dateModified">{buildInfo.buildDate.slice(0, 10)}</time>
             </dd>
           </div>
         )}
-        {!!buildInfo?.buildVersion && (
+        {!!buildInfo.buildVersion && (
           <div className="flex gap-2">
             <dt>{t('gcweb:page-details.version')}</dt>
             <dd>
-              <span property="version">{buildInfo?.buildVersion}</span>
+              <span property="version">{buildInfo.buildVersion}</span>
             </dd>
           </div>
         )}

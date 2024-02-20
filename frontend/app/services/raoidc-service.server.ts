@@ -121,12 +121,13 @@ async function createRaoidcService() {
 
     const sessionService = await getSessionService();
     const session = await sessionService.getSession(request);
-    const idToken: IdToken = session.get('idToken');
 
-    if (!idToken) {
+    if (!session.has('idToken')) {
       log.debug(`User has not authenticated; redirecting to /auth/login?returnto=${returnTo}`);
       throw redirect(`/auth/login?returnto=${returnTo}`);
     }
+
+    const idToken: IdToken = session.get('idToken');
 
     // idToken.sid is the RAOIDC session id
     const sessionValid = await validateSession(AUTH_RAOIDC_BASE_URL, AUTH_RAOIDC_CLIENT_ID, idToken.sid, fetchFn);

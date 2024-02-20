@@ -67,6 +67,7 @@ module.exports = {
       },
       extends: ['plugin:@typescript-eslint/recommended', 'plugin:import/recommended', 'plugin:import/typescript', 'prettier'],
       rules: {
+        '@typescript-eslint/no-unnecessary-condition': 'error',
         '@typescript-eslint/prefer-nullish-coalescing': 'error',
         '@typescript-eslint/prefer-optional-chain': 'error',
         'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],

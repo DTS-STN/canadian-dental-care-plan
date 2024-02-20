@@ -53,7 +53,6 @@ export function createErrorSummaryItems(obj: Record<string, string | undefined>)
  */
 export function hasErrors(obj: Record<string, string | undefined>) {
   return (
-    obj &&
     Object.keys(obj)
       .map((key) => obj[key])
       .filter(Boolean).length > 0

@@ -98,8 +98,8 @@ function createAddressService() {
 
 function toAddressDto(addressForm: AddressInfo): AddressDto {
   return {
-    addressApartmentUnitNumber: String(addressForm.address?.match(/[\d|-]+/)),
-    addressStreet: addressForm.address?.substring(addressForm.address?.indexOf(' ') + 1),
+    addressApartmentUnitNumber: String(addressForm.address.match(/[\d|-]+/)),
+    addressStreet: addressForm.address.substring(addressForm.address.indexOf(' ') + 1),
     addressCity: addressForm.city,
     addressProvince: addressForm.province ?? '',
     addressPostalZipCode: addressForm.postalCode ?? '',
