@@ -140,10 +140,12 @@ function PageHeader() {
         </div>
         <section className="bg-gray-700 py-2 text-white">
           <div className="container">
-            <div className="gep-6 flex items-center justify-between ">
-              <Link to="/" className="text-2xl font-semibold hover:underline">
-                <h2>{t('gcweb:header.application-title')}</h2>
-              </Link>
+            <div className="flex items-center justify-between gap-6">
+              <h2 className="text-2xl font-semibold">
+                <Link to="/" className="hover:underline">
+                  {t('gcweb:header.application-title')}
+                </Link>
+              </h2>
               <NavigationMenu />
             </div>
           </div>
