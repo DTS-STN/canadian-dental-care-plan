@@ -68,12 +68,12 @@ async function createSessionService() {
 
   async function createRedisSessionStorage() {
     const redisService = await getRedisService();
-    const sessionId = randomUUID();
     const setCommandOptions = { EX: env.SESSION_EXPIRES_SECONDS };
 
     return createSessionStorage({
       cookie: sessionCookie,
       createData: async (data) => {
+        const sessionId = randomUUID();
         log.debug(`Creating new session storage slot with id=[${sessionId}]`);
         await redisService.set(sessionId, JSON.stringify(data), setCommandOptions);
         return sessionId;
