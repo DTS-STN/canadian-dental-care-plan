@@ -18,5 +18,11 @@
     "button-back": "Back",
     "button-continue": "Continue",
     "i-am": "I am"
+  },
+  "date-of-birth": {
+    "page-title": "Date of birth",
+    "enter-dob-message": "Please enter your date of birth",
+    "button-back": "Back",
+    "button-continue": "Continue"
   }
 }
