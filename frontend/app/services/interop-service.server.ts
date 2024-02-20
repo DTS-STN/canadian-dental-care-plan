@@ -26,12 +26,12 @@ const letterTypeCodeSchema = z.object({
 });
 
 const listOfLetterTypeCodeSchema = z.array(letterTypeCodeSchema);
-export type LetterTypeCodeList = z.infer<typeof listOfLetterTypeCodeSchema>;
+export type LetterTypeCode = z.infer<typeof letterTypeCodeSchema>;
 
 /**
  * Return a singleton instance (by means of memomization) of the interop service.
  */
-export const getInteropService = moize(createInteropService, { onCacheAdd: () => log.info('Creating new letter service') });
+export const getInteropService = moize(createInteropService, { onCacheAdd: () => log.info('Creating new interop service') });
 
 function createInteropService() {
   const { INTEROP_API_BASE_URI } = getEnv();
@@ -63,7 +63,7 @@ function createInteropService() {
   /**
    * @returns returns all the lettersTypeCodes
    */
-  async function getLetterTypes() {
+  async function getAllLetterTypes() {
     const url = `${INTEROP_API_BASE_URI}/letters-types`;
     const response = await fetch(url);
 
@@ -82,5 +82,5 @@ function createInteropService() {
     return listOfLetterTypeCodeSchema.parse(await response.json());
   }
 
-  return { getLetters, getLetterTypes };
+  return { getLetters, getAllLetterTypes };
 }

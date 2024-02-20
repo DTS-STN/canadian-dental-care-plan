@@ -111,10 +111,8 @@ export function getPowerPlatformApiMockHandlers() {
      * Handler for GET requests to retrieve letters details.
      */
     http.get('https://api.example.com/letters-types', () => {
-      const letterTypesEntities = getAllLetterTypes();
-
       return HttpResponse.json(
-        letterTypesEntities?.map((letterType) => {
+        getAllLetterTypes().map((letterType) => {
           return {
             nameEn: letterType.nameEn,
             nameFr: letterType.nameFr,
@@ -133,9 +131,7 @@ export function getPowerPlatformApiMockHandlers() {
  * @returns All the letter types found.
  */
 export function getAllLetterTypes() {
-  const letterTypesEntities = db.letterType.getAll();
-
-  return letterTypesEntities;
+  return db.letterType.getAll();
 }
 
 /**

@@ -91,7 +91,7 @@ export default function LettersIndex() {
             <Link reloadDocument to={`/letters/${letter.referenceId}/download`} className="font-medium hover:underline">
               {i18n.language === 'en' ? letter.nameEn : letter.nameFr}
             </Link>
-            <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: getFormattedDate(letter?.dateSent) })}</p>
+            <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: getFormattedDate(letter.dateSent) })}</p>
           </li>
         ))}
       </ul>

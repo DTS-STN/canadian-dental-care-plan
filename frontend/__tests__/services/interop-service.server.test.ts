@@ -62,7 +62,7 @@ describe('interop-service.server.ts', () => {
   });
 
   it('it should return all the letter types', async () => {
-    const letterTypes = await interopService.getLetterTypes();
+    const letterTypes = await interopService.getAllLetterTypes();
     expect(letterTypes.length).toBeGreaterThan(0);
   });
 });
