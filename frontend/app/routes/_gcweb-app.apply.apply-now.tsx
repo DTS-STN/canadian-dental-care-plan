@@ -6,8 +6,15 @@ import { useTranslation } from 'react-i18next';
 import { ButtonLink } from '~/components/buttons';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('intake-forms');
+export const handle = {
+  breadcrumbs: [{ labelI18nKey: 'intake-forms:apply-form.page-title' }],
+  i18nNamespaces,
+  pageIdentifier: 'CDCP-1111',
+  pageTitleI18nKey: 'intake-forms:apply-form.page-title',
+} as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
