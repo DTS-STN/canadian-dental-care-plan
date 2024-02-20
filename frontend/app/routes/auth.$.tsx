@@ -67,8 +67,15 @@ async function handleLoginRequest({ request }: LoaderFunctionArgs) {
  * Handler for /auth/logout requests
  */
 async function handleLogoutRequest({ request }: LoaderFunctionArgs) {
+  const { AUTH_RASCL_LOGOUT_URL } = getEnv();
+
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
+
+  if (!session.has('idToken')) {
+    log.debug(`User has not authenticated; bypassing RAOIDC logout and redirecting to RASCL logout`);
+    throw redirect(AUTH_RASCL_LOGOUT_URL);
+  }
 
   const idToken: IdToken = session.get('idToken');
   const locale = await getLocale(request);

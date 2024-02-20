@@ -44,6 +44,7 @@ const serverEnv = z.object({
   AUTH_RAOIDC_BASE_URL: z.string().trim().min(1),
   AUTH_RAOIDC_CLIENT_ID: z.string().trim().min(1),
   AUTH_RAOIDC_PROXY_URL: z.string().trim().transform(emptyToUndefined).optional(),
+  AUTH_RASCL_LOGOUT_URL: z.string().trim().min(1),
 
   // language cookie settings
   LANG_COOKIE_NAME: z.string().default('_gc_lang'),
