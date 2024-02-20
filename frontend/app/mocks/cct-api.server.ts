@@ -65,6 +65,37 @@ export function getCCTApiMockHandlers() {
         return new Response('Failed to fetch PDF', { status: 500 });
       }
     }),
+
+    /**
+     * Handler for GET requests to retrieve letter details.
+     */
+    http.get('https://api.example.com/cctws/OnDemand/api/GetDocInfoByClientId', ({ request }) => {
+      const url = new URL(request.url);
+      const userId = url.searchParams.get('userid');
+      const clientId = url.searchParams.get('clientid');
+      const community = url.searchParams.get('community');
+      const exact = url.searchParams.get('Exact');
+      const sortParam = url.searchParams.get('sort') ?? 'asc';
+
+      if (userId === null || clientId === null || community === null || exact !== 'true') {
+        throw new HttpResponse(null, { status: 404 });
+      }
+
+      const sort = sortParam === 'desc' ? 'desc' : 'asc';
+      const letterEntities = getLetterEntities(userId, sort);
+
+      return HttpResponse.json(
+        letterEntities.map((letter) => {
+          return {
+            id: letter.id,
+            dateSent: new Date(letter.dateSent),
+            nameEn: letter.nameEn,
+            nameFr: letter.nameFr,
+            referenceId: letter.referenceId,
+          };
+        }),
+      );
+    }),
   ];
 }
 
@@ -90,4 +121,29 @@ export function getPdfEntity(referenceId: string | readonly string[]) {
   }
 
   return parsedPdfEntity;
+}
+
+/**
+ * Retrieves list of letter entities based on the provided user ID.
+ *
+ * @param userId - The user ID to look up in the database.
+ * @returns The letter entity if found, otherwise throws a 404 error.
+ */
+export function getLetterEntities(userId: string | readonly string[], sortOrder: 'asc' | 'desc' = 'desc') {
+  const parsedUserId = z.string().uuid().safeParse(userId);
+
+  if (!parsedUserId.success) {
+    throw new HttpResponse('Invalid userId: ' + userId, { status: 400, headers: { 'Content-Type': 'text/plain' } });
+  }
+
+  return db.letter.findMany({
+    where: {
+      userId: {
+        equals: parsedUserId.data,
+      },
+    },
+    orderBy: {
+      dateSent: sortOrder,
+    },
+  });
 }

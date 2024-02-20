@@ -89,27 +89,6 @@ export function getPowerPlatformApiMockHandlers() {
     /**
      * Handler for GET requests to retrieve letters details.
      */
-    http.get('https://api.example.com/users/:userId/letters', ({ params, request }) => {
-      const url = new URL(request.url);
-      const sortParam = url.searchParams.get('sort') ?? 'asc';
-      const sort = sortParam === 'desc' ? 'desc' : 'asc';
-      const letterEntities = getLetterEntities(params.userId, sort);
-
-      return HttpResponse.json(
-        letterEntities.map((letter) => {
-          return {
-            id: letter.id,
-            dateSent: new Date(letter.dateSent),
-            nameEn: letter.nameEn,
-            nameFr: letter.nameFr,
-            referenceId: letter.referenceId,
-          };
-        }),
-      );
-    }),
-    /**
-     * Handler for GET requests to retrieve letters details.
-     */
     http.get('https://api.example.com/letter-types', () => {
       return HttpResponse.json(
         getAllLetterTypes().map((letterType) => {
@@ -157,31 +136,6 @@ function getAddressEntity(userId: string | readonly string[], addressId: string 
   }
 
   return parsedAddress;
-}
-
-/**
- * Retrieves list of letter entities based on the provided user ID.
- *
- * @param userId - The user ID to look up in the database.
- * @returns The letter entity if found, otherwise throws a 404 error.
- */
-export function getLetterEntities(userId: string | readonly string[], sortOrder: 'asc' | 'desc' = 'desc') {
-  const parsedUserId = z.string().uuid().safeParse(userId);
-
-  if (!parsedUserId.success) {
-    throw new HttpResponse('Invalid userId: ' + userId, { status: 400, headers: { 'Content-Type': 'text/plain' } });
-  }
-
-  return db.letter.findMany({
-    where: {
-      userId: {
-        equals: parsedUserId.data,
-      },
-    },
-    orderBy: {
-      dateSent: sortOrder,
-    },
-  });
 }
 
 /**
