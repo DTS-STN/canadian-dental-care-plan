@@ -1,0 +1,10 @@
+{
+  "title": "Application form",
+  "button": {
+    "back": "Back",
+    "continue": "Continue"
+  },
+  "form": {
+    "required": "required"
+  }
+}
