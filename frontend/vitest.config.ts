@@ -15,7 +15,8 @@ export default defineConfig({
     setupFiles: ['./__tests__/setup-test-env.ts'],
     exclude: [...configDefaults.exclude, '**/build/**', '**/e2e/**'],
     coverage: {
-      exclude: [...(configDefaults.coverage.exclude ?? []), '**/build/**', '**/e2e/**'],
+      include: ['**/app/**'],
+      exclude: ['**/app/**/*.d.ts', '**/app/mocks/**'],
     },
   },
 });
