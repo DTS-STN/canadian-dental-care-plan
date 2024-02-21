@@ -8,6 +8,7 @@ import { useIdleTimer } from 'react-idle-timer';
 
 import { Button } from '~/components/buttons';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
+import { getClientEnv } from '~/utils/env-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('gcweb');
@@ -18,6 +19,8 @@ const SessionTimeout = ({ promptBeforeIdle, timeout }: SessionTimeoutProps) => {
   const { t } = useTranslation(i18nNamespaces);
   const [modalOpen, setModalOpen] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState('');
+  const { SESSION_TIMEOUT_SECONDS: timeoutParam } = getClientEnv();
+  const { SESSION_TIMEOUT_PROMPT_SECONDS: timeoutPromptParam } = getClientEnv();
   const navigate = useNavigate();
 
   const handleOnIdle = () => {
@@ -28,8 +31,8 @@ const SessionTimeout = ({ promptBeforeIdle, timeout }: SessionTimeoutProps) => {
   const { reset, getRemainingTime } = useIdleTimer({
     onIdle: handleOnIdle,
     onPrompt: () => setModalOpen(true),
-    promptBeforeIdle: promptBeforeIdle ?? 5 * 60 * 1000, //5 minutes
-    timeout: timeout ?? 20 * 60 * 1000, //20 minutes
+    promptBeforeIdle: promptBeforeIdle ?? timeoutPromptParam * 1000,
+    timeout: timeout ?? timeoutParam * 1000,
   });
 
   const handleOnIdleContinueSession = async () => {
@@ -69,6 +72,7 @@ const SessionTimeout = ({ promptBeforeIdle, timeout }: SessionTimeoutProps) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <p>{Math.ceil(getRemainingTime() / 1000)} seconds remaining</p>
     </div>
   );
 };
