@@ -18,11 +18,7 @@ import { getLogger } from '~/utils/logging.server';
 const abortDelay = 5_000;
 const log = getLogger('entry.server');
 
-const { ENABLED_MOCKS, JAVASCRIPT_ENABLED } = getEnv();
-
-if (!JAVASCRIPT_ENABLED) {
-  log.warn('‼️ Client-side javascript has been disabled');
-}
+const { ENABLED_MOCKS } = getEnv();
 
 if (ENABLED_MOCKS.length > 0) {
   server.listen({ onUnhandledRequest: 'bypass' });

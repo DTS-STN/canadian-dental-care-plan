@@ -11,7 +11,6 @@ describe('<ClientEnv>', () => {
     const env = {
       I18NEXT_DEBUG: true,
       LANG_QUERY_PARAM: 'locale',
-      JAVASCRIPT_ENABLED: false,
       SCCH_BASE_URI: 'http://www.example.com',
     };
 

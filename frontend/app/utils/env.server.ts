@@ -73,9 +73,6 @@ const serverEnv = z.object({
   REDIS_USERNAME: z.string().trim().min(1).optional(),
   REDIS_PASSWORD: z.string().trim().min(1).optional(),
 
-  // feature flags (ie: THING_ENABLED=true/false)
-  JAVASCRIPT_ENABLED: z.string().transform(toBoolean).default('true'),
-
   // mocks settings
   ENABLED_MOCKS: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidMockNames).default(''),
   MOCK_AUTH_ALLOWED_REDIRECTS: z.string().transform(emptyToUndefined).transform(csvToArray).default('http://localhost:3000/auth/callback/raoidc'),
@@ -93,7 +90,6 @@ export type ServerEnv = z.infer<typeof serverEnv>;
 const publicEnv = serverEnv.pick({
   I18NEXT_DEBUG: true,
   LANG_QUERY_PARAM: true,
-  JAVASCRIPT_ENABLED: true,
   SCCH_BASE_URI: true,
 });
 
