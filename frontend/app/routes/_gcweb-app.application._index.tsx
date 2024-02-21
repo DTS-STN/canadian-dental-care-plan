@@ -1,4 +1,6 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
+
+import { useSearchParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -16,27 +18,28 @@ export const handle = {
 
 export default function Application() {
   const { t } = useTranslation(i18nNamespaces);
-  const [currentStep, setCurrentStep] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentStep = parseInt(searchParams.get('step') ?? '1', 10);
 
   // Placeholder for form fields
   const steps = [
-    { id: '1', name: 'Step 1', content: <div>Type of application</div>, required: true },
-    { id: '2', name: 'Step 2', content: <div>Date of birth</div>, required: true },
-    { id: '3', name: 'Step 3', content: <div>Applicant information</div>, required: true },
-    { id: '4', name: 'Step 4', content: <div>Review your information</div>, required: false },
+    { id: '1', title: 'Type of application', content: <div>Type of application content</div>, required: true },
+    { id: '2', title: 'Date of birth', content: <div>Date of birth content</div>, required: true },
+    { id: '3', title: 'Applicant information', content: <div>Applicant information content</div>, required: true },
+    { id: '4', title: 'Review your information', content: <div>Review your information content</div>, required: false },
   ];
 
   const handlePrevious = () => {
-    setCurrentStep((prevStep) => Math.max(prevStep - 1, 1));
+    setSearchParams({ step: Math.max(currentStep - 1, 1).toString() });
   };
 
   const handleNext = () => {
-    setCurrentStep((prevStep) => Math.min(prevStep + 1, steps.length));
+    setSearchParams({ step: Math.min(currentStep + 1, steps.length).toString() });
   };
   return (
     <>
       <Stepper
-        name={steps[currentStep - 1].name}
+        title={steps[currentStep - 1].title}
         previousProps={{
           id: 'prev',
           onClick: handlePrevious,
@@ -67,19 +70,19 @@ interface StepperProps {
   children: ReactNode;
   previousProps?: StepButtonProps;
   nextProps?: StepButtonProps;
-  name: string;
+  title: string;
   required: boolean;
   prevPageUrl: string;
   currentStep: number;
 }
 
-export function Stepper({ children, previousProps, nextProps, name, required, prevPageUrl, currentStep }: StepperProps) {
+export function Stepper({ children, previousProps, nextProps, title, required, prevPageUrl, currentStep }: StepperProps) {
   const { t } = useTranslation(i18nNamespaces);
   return (
     // TODO: div should be replace by Remix Form once action and form fields are implemented
     <div className="py-24">
       <div className="pb-8">
-        <h1 className="text-lg font-bold">{name}</h1>
+        <h1 className="text-lg font-bold">{title}</h1>
         {required && <span className="text-xs font-bold text-red-500">*{t('application-form:form.required')}</span>}
       </div>
       {children}
