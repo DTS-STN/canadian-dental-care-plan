@@ -67,6 +67,14 @@ const serverEnv = z.object({
   SESSION_COOKIE_HTTP_ONLY: z.string().transform(toBoolean).default('true'),
   SESSION_COOKIE_SECURE: z.string().transform(toBoolean).default('true'),
   SESSION_FILE_DIR: z.string().trim().min(1).default('./node_modules/cache/sessions/'),
+  SESSION_TIMEOUT_SECONDS: z.coerce
+    .number()
+    .min(0)
+    .default(19 * 60),
+  SESSION_TIMEOUT_PROMPT_SECONDS: z.coerce
+    .number()
+    .min(0)
+    .default(5 * 60),
 
   // redis server configuration
   REDIS_URL: z.string().trim().min(1).default('redis://localhost'),
@@ -91,6 +99,8 @@ const publicEnv = serverEnv.pick({
   I18NEXT_DEBUG: true,
   LANG_QUERY_PARAM: true,
   SCCH_BASE_URI: true,
+  SESSION_TIMEOUT_SECONDS: true,
+  SESSION_TIMEOUT_PROMPT_SECONDS: true,
 });
 
 export type PublicEnv = z.infer<typeof publicEnv>;
