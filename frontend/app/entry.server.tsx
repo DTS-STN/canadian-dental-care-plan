@@ -1,5 +1,5 @@
+import type { ActionFunctionArgs, EntryContext, LoaderFunctionArgs } from '@remix-run/node';
 import { createReadableStreamFromReadable } from '@remix-run/node';
-import type { EntryContext } from '@remix-run/node';
 import { RemixServer } from '@remix-run/react';
 
 import { isbot } from 'isbot';
@@ -9,6 +9,7 @@ import { I18nextProvider } from 'react-i18next';
 
 import { NonceProvider, generateNonce } from '~/components/nonce-context';
 import { server } from '~/mocks/node';
+import { getSessionService } from '~/services/session-service.server';
 import { generateContentSecurityPolicy } from '~/utils/csp-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getNamespaces } from '~/utils/locale-utils';
@@ -23,6 +24,28 @@ const { ENABLED_MOCKS } = getEnv();
 if (ENABLED_MOCKS.length > 0) {
   server.listen({ onUnhandledRequest: 'bypass' });
   log.info('‼️ Mock Service Worker has been enabled with the following mocks: %s', ENABLED_MOCKS);
+}
+
+/**
+ * We need to extend the server-side session lifetime whenever a client-side
+ * navigation happens. Since all client-side navigation will make a data request
+ * for the root loader, we can use the handleDataRequest function to effectively
+ * 'touch' the session, extending it by the default session lifetime.
+ *
+ * Extending the session lifetime will update the expires/maxage field of the
+ * session cookie, and will also update the TTL value of the session data when
+ * using Redis as a backing store.
+ *
+ * @see https://remix.run/docs/en/main/file-conventions/entry.server#handledatarequest
+ */
+export async function handleDataRequest(response: Response, { request }: LoaderFunctionArgs | ActionFunctionArgs) {
+  log.debug('Touching session to extend its lifetime');
+
+  const sessionService = await getSessionService();
+  const session = await sessionService.getSession(request);
+  response.headers.append('Set-Cookie', await sessionService.commitSession(session));
+
+  return response;
 }
 
 export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, remixContext: EntryContext) {
