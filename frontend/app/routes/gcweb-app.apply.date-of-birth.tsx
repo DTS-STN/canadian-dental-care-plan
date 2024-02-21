@@ -34,14 +34,17 @@ export default function EnterDoB() {
 
   return (
     <>
-      <div>
-        <ButtonLink id="back-button" to="/apply/application-type">
-          {t('intake-forms:date-of-birth.button-back')}
-        </ButtonLink>
-        <Button id="confirm-button" variant="primary">
-          {t('intake-forms:date-of-birth.button-continue')}
-        </Button>
-      </div>
+      <Form method="post">
+        <input name="email" placeholder="Email Address" />
+        <div>
+          <ButtonLink id="back-button" to="/apply/application-type">
+            {t('intake-forms:date-of-birth.button-back')}
+          </ButtonLink>
+          <Button id="confirm-button" variant="primary">
+            {t('intake-forms:date-of-birth.button-continue')}
+          </Button>
+        </div>
+      </Form>
     </>
   );
 }
