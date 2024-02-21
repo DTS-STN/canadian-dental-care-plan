@@ -126,8 +126,10 @@ export default function PhoneNumberEdit() {
           <InputField id="phoneNumber" name="phoneNumber" type="tel" label={t('personal-information:phone-number.edit.component.phone')} required defaultValue={defaultValues.phoneNumber} errorMessage={errorMessages.phoneNumber} />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <Button variant="primary">{t('personal-information:phone-number.edit.button.save')}</Button>
-          <ButtonLink id="cancelButton" to="/personal-information">
+          <Button id="submit" variant="primary">
+            {t('personal-information:phone-number.edit.button.save')}
+          </Button>
+          <ButtonLink id="cancel" to="/personal-information">
             {t('personal-information:phone-number.edit.button.cancel')}
           </ButtonLink>
         </div>
