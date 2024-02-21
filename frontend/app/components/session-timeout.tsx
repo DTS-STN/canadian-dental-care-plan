@@ -3,10 +3,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
-import { useIdleTimer } from 'react-idle-timer';
 import type { IIdleTimerProps } from 'react-idle-timer';
+import { useIdleTimer } from 'react-idle-timer';
 
-import { Button } from './buttons';
+import { Button } from '~/components/buttons';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '~/components/dialog';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -32,7 +32,8 @@ const SessionTimeout = ({ promptBeforeIdle, timeout }: SessionTimeoutProps) => {
     timeout: timeout ?? 20 * 60 * 1000, //20 minutes
   });
 
-  const handleOnIdleContinueSession = () => {
+  const handleOnIdleContinueSession = async () => {
+    await fetch('/api/refresh-session');
     setModalOpen(false);
     reset();
   };
