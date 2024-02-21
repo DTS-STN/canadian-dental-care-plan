@@ -1,7 +1,7 @@
 import { Suspense, useContext } from 'react';
 
-import { json } from '@remix-run/node';
 import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
@@ -15,7 +15,7 @@ import { NonceContext } from '~/components/nonce-context';
 import fontInterStyleSheet from '~/fonts/inter.css';
 import tailwindStyleSheet from '~/tailwind.css';
 import { readBuildInfo } from '~/utils/build-info.server';
-import { getEnv, getPublicEnv } from '~/utils/env.server';
+import { getPublicEnv } from '~/utils/env.server';
 import { useDocumentTitleI18nKey, useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
 
 export const links: LinksFunction = () => [
@@ -26,7 +26,6 @@ export const links: LinksFunction = () => [
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const buildInfo = readBuildInfo('build-info.json');
-  const privateEnv = getEnv();
   const publicEnv = getPublicEnv();
   const { toast, headers } = await getToast(request);
 
@@ -39,7 +38,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
         buildVersion: '0.0.0-00000000-0000',
       },
       env: publicEnv,
-      javascriptEnabled: privateEnv.JAVASCRIPT_ENABLED,
       toast,
     },
     {
@@ -69,7 +67,7 @@ function useDocumentTitle() {
 
 export default function App() {
   const { nonce } = useContext(NonceContext);
-  const { env, javascriptEnabled, toast } = useLoaderData<typeof loader>();
+  const { env, toast } = useLoaderData<typeof loader>();
   const ns = useI18nNamespaces();
   const { i18n } = useTranslation(ns);
   const documentTitle = useDocumentTitle();
@@ -89,13 +87,9 @@ export default function App() {
           <Toaster toast={toast} />
           <SessionTimeout />
         </Suspense>
-        {javascriptEnabled && (
-          <>
-            <ClientEnv env={env} nonce={nonce} />
-            <ScrollRestoration nonce={nonce} />
-            <Scripts nonce={nonce} />
-          </>
-        )}
+        <ScrollRestoration nonce={nonce} />
+        <Scripts nonce={nonce} />
+        <ClientEnv env={env} nonce={nonce} />
         <LiveReload nonce={nonce} />
       </body>
     </html>
