@@ -68,6 +68,9 @@ module.exports = {
       extends: ['plugin:@typescript-eslint/recommended', 'plugin:import/recommended', 'plugin:import/typescript', 'prettier'],
       rules: {
         '@typescript-eslint/no-unnecessary-condition': 'error',
+        // Note: you must disable the base rule as it can report incorrect errors
+        'no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': ['error', { args: 'none' }],
         '@typescript-eslint/prefer-nullish-coalescing': 'error',
         '@typescript-eslint/prefer-optional-chain': 'error',
         'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
