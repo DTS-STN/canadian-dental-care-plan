@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 
 import { json } from '@remix-run/node';
@@ -41,32 +40,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const interopService = getInteropService();
   const userId = await userService.getUserId();
   const letters = await interopService.getLetterInfoByClientId(userId, 'clientId', sortOrder); // TODO where and what is clientId?
-
-  return json({ letters: letters, sortOrder });
+  const letterTypes = (await interopService.getAllLetterTypes()).filter(({ code }) => letters.some(({ name }) => name === code));
+  return json({ letters, letterTypes, sortOrder });
 }
 
 export default function LettersIndex() {
   const [, setSearchParams] = useSearchParams();
   const { i18n, t } = useTranslation(i18nNamespaces);
-  const { letters, sortOrder } = useLoaderData<typeof loader>();
-  const [dateTimeFormat, setDateTimeFormat] = useState<Intl.DateTimeFormat | undefined>();
-
-  useEffect(() => {
-    setDateTimeFormat(new Intl.DateTimeFormat(`${i18n.language}-CA`));
-  }, [i18n.language]);
+  const { letters, letterTypes, sortOrder } = useLoaderData<typeof loader>();
 
   function handleOnSortOrderChange(e: ChangeEvent<HTMLSelectElement>) {
     setSearchParams((prev) => {
       prev.set('sort', e.target.value);
       return prev;
     });
-  }
-
-  function getFormattedDate(date: string | undefined) {
-    if (!date || !dateTimeFormat) {
-      return date;
-    }
-    return dateTimeFormat.format(new Date(date));
   }
 
   return (
@@ -86,14 +73,18 @@ export default function LettersIndex() {
         />
       </div>
       <ul className="divide-y border-y">
-        {letters.map((letter) => (
-          <li key={letter.id} className="py-4 sm:py-6">
-            <Link reloadDocument to={`/letters/${letter.referenceId}/download`} className="font-medium hover:underline">
-              {i18n.language === 'en' ? letter.nameEn : letter.nameFr}
-            </Link>
-            <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: getFormattedDate(letter.dateSent) })}</p>
-          </li>
-        ))}
+        {letters.map((letter) => {
+          const letterType = letterTypes.find(({ code }) => code === letter.name);
+          const letterName = letterType ? letterType[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] : letter.name;
+          return (
+            <li key={letter.id} className="py-4 sm:py-6">
+              <Link reloadDocument to={`/letters/${letter.referenceId}/download`} className="font-medium hover:underline">
+                {letterName}
+              </Link>
+              <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: letter.issuedOn })}</p>
+            </li>
+          );
+        })}
       </ul>
     </>
   );

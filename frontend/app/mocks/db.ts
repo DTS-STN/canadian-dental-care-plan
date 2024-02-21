@@ -39,17 +39,15 @@ const db = factory({
     nameFr: String,
   },
   letter: {
-    referenceId: () => faker.string.alphanumeric(10),
-    dateSent: () => faker.date.past({ years: 1 }),
-    userId: String,
-    nameEn: String,
-    nameFr: String,
-    letterType: oneOf('letterType'),
     id: primaryKey(faker.string.uuid),
+    issuedOn: () => faker.date.past({ years: 1 }).toISOString().split('T')[0],
+    letterType: oneOf('letterType'),
+    referenceId: String,
+    userId: String,
   },
   pdf: {
-    referenceId: String,
     id: primaryKey(faker.string.uuid),
+    referenceId: () => faker.string.alphanumeric(10),
   },
   country: {
     countryId: primaryKey(String),
@@ -95,35 +93,33 @@ const defaultUser = db.user.create({
 });
 
 // seed letter type list
-const letterTypeAccepted = db.letterType.create({
-  code: 'ACC',
-  nameEn: 'Accepted',
-  nameFr: '(FR) Accepted',
-});
+const seededLetterTypes = [
+  db.letterType.create({
+    code: 'ACC',
+    nameEn: 'Accepted',
+    nameFr: '(FR) Accepted',
+  }),
 
-const letterTypeDenied = db.letterType.create({
-  code: 'DEN',
-  nameEn: 'DENIED',
-  nameFr: '(FR) DENIED',
-});
+  db.letterType.create({
+    code: 'DEN',
+    nameEn: 'Denied',
+    nameFr: '(FR) Denied',
+  }),
+];
 
 // seed available letters
 const numberOfLetters = faker.number.int({ min: 10, max: 20 }); // Adjust min and max as needed
 for (let i = 0; i < numberOfLetters; i++) {
-  const name = faker.lorem.words({ min: 5, max: 7 });
+  // seed avaliable pdf
+  const seededPDF = db.pdf.create();
 
-  const sampleLetter = db.letter.create({
+  db.letter.create({
     userId: defaultUser.id,
-    nameEn: name,
-    nameFr: `(FR) ${name}`,
-    letterType: faker.helpers.arrayElement([letterTypeAccepted, letterTypeDenied]),
-  });
-
-  // seed avaliable pdf (after letter)
-  db.pdf.create({
-    referenceId: sampleLetter.referenceId,
+    letterType: faker.helpers.arrayElement(seededLetterTypes),
+    referenceId: seededPDF.referenceId,
   });
 }
+
 // seed country list
 db.country.create({
   countryId: 'CAN',
