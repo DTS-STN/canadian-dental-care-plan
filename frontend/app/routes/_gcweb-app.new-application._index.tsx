@@ -1,50 +1,57 @@
-import { json } from '@remix-run/node';
-import type { LoaderFunctionArgs } from '@remix-run/node';
-
 import { useTranslation } from 'react-i18next';
 
-import { getAddressService } from '~/services/address-service.server';
-import { getLookupService } from '~/services/lookup-service.server';
-import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getUserService } from '~/services/user-service.server';
+import { ButtonLink } from '~/components/buttons';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('new-application');
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'new-application:index.page-title' }],
+  breadcrumbs: [{ labelI18nKey: 'new-application:privacy-statement.breadcrumbs.new-application' }, { labelI18nKey: 'new-application:privacy-statement.breadcrumbs.privacy-statement' }],
   i18nNamespaces,
   pageIdentifier: 'CDCP-0015',
-  pageTitleI18nKey: 'new-application:index.page-title',
+  pageTitleI18nKey: 'new-application:privacy-statement.page-title',
 } as const satisfies RouteHandleData;
-
-export async function loader({ request }: LoaderFunctionArgs) {
-  const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request);
-
-  const userService = getUserService();
-  const userId = await userService.getUserId();
-  const userInfo = await userService.getUserInfo(userId);
-  const countryList = await getLookupService().getAllCountries();
-  const regionList = await getLookupService().getAllRegions();
-
-  if (!userInfo) {
-    throw new Response(null, { status: 404 });
-  }
-
-  const preferredLanguage = userInfo.preferredLanguage && (await getLookupService().getPreferredLanguage(userInfo?.preferredLanguage));
-  const homeAddressInfo = userInfo.homeAddress && (await getAddressService().getAddressInfo(userId, userInfo?.homeAddress));
-  const mailingAddressInfo = userInfo.mailingAddress && (await getAddressService().getAddressInfo(userId, userInfo?.mailingAddress));
-
-  return json({ user: userInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, countryList, regionList });
-}
 
 export default function NewApplicationIndex() {
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <p className="mb-8 text-lg text-gray-500">{t('new-application:index.subtitle')}</p>
+      <p className="mb-8 text-lg font-bold">{t('new-application:privacy-statement.privacy-statement.subtitle')}</p>
+      <p>{t('new-application:privacy-statement.privacy-statement.paragraph-one')}</p>
+      <br />
+      <p>{t('new-application:privacy-statement.privacy-statement.paragraph-two')}</p>
+      <br />
+      <p>{t('new-application:privacy-statement.privacy-statement.paragraph-three')}</p>
+      <br />
+      <p>{t('new-application:privacy-statement.privacy-statement.paragraph-four')}</p>
+      <br />
+      <br />
+
+      <p className="mb-8 text-lg font-bold">{t('new-application:privacy-statement.identity-information.subtitle')}</p>
+      <p>{t('new-application:privacy-statement.identity-information.paragraph-one')}</p>
+      <ul className="list-disc pl-10">
+        <li>{t('new-application:privacy-statement.identity-information.listitem-one')}</li>
+        <li>{t('new-application:privacy-statement.identity-information.listitem-two')}</li>
+      </ul>
+      <br />
+      <p>{t('new-application:privacy-statement.identity-information.paragraph-two')}</p>
+      <br />
+      <p>{t('new-application:privacy-statement.identity-information.paragraph-three')}</p>
+      <br />
+      <br />
+      <p className="mb-8 text-lg font-bold">{t('new-application:privacy-statement.terms-and-conditions.subtitle')}</p>
+      <p>{t('new-application:privacy-statement.terms-and-conditions.paragraph-one')}</p>
+      <br />
+      <br />
+      <p className="mb-8 text-lg font-bold">{t('new-application:privacy-statement.apply-now.subtitle')}</p>
+      <p>{t('new-application:privacy-statement.apply-now.paragraph-one')}</p>
+      <br />
+      <div className="flex flex-wrap items-center gap-3">
+        <ButtonLink className="bg-green-800 text-white" id="apply-button" to="/new-application/a2">
+          {t('new-application:privacy-statement.apply-now.button')}
+        </ButtonLink>
+      </div>
     </>
   );
 }
