@@ -85,7 +85,7 @@ export default function App() {
         <Suspense>
           <Outlet />
           <Toaster toast={toast} />
-          <SessionTimeout />
+          <SessionTimeout promptBeforeIdle={env.SESSION_TIMEOUT_PROMPT_SECONDS * 1000} timeout={env.SESSION_TIMEOUT_SECONDS * 1000} />
         </Suspense>
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
