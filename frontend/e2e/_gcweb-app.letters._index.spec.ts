@@ -26,7 +26,7 @@ test.describe('letters page', () => {
     const downloadPromise = page.waitForEvent('download');
     await page.locator('a[href$="/download"]').first().click();
     const download = await downloadPromise;
-    expect(download.suggestedFilename()).toMatch(/.pdf/);
+    expect(download.suggestedFilename()).toMatch(/\.pdf$/);
   });
 
   test('should not have any automatically detectable accessibility issues', async ({ page }) => {
