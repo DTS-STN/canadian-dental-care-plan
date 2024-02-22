@@ -7,16 +7,13 @@ test.describe('letters page', () => {
     await expect(page).toHaveURL('/letters');
   });
 
-  test('it should sort list in ascending order by date', async ({ page }) => {
+  test('it should sort letters oldest to newest', async ({ page }) => {
     await page.goto('/letters');
-    await page.locator('select').selectOption('asc');
-    await expect(page).toHaveURL('/letters?sort=asc');
-  });
-
-  test('it should sort list in descending order by date', async ({ page }) => {
-    await page.goto('/letters');
-    await page.locator('select').selectOption('desc');
-    await expect(page).toHaveURL('/letters?sort=desc');
+    const selectLocator = page.locator('select#sort-order');
+    await expect(selectLocator).toHaveValue('desc');
+    await selectLocator.selectOption('asc');
+    await expect(page).toHaveURL(/\/letters?.*sort=asc/);
+    await expect(selectLocator).toHaveValue('asc');
   });
 
   test('it should click on a pdf and successfully download', async ({ page }) => {
