@@ -100,14 +100,12 @@ export default function EnterDoB() {
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post">
-        <div>
-          <p>{t('intake-forms:date-of-birth.enter-dob-message')}</p>
-          <fieldset id="dateOfBirthFieldSet">
-            <InputField id="year" label={t('intake-forms:date-of-birth.field.year')} placeholder="YYYY" name="year" required errorMessage={errorMessages.year} maxLength={4} />
-            <InputField id="month" label={t('intake-forms:date-of-birth.field.month')} placeholder="MM" name="month" required errorMessage={errorMessages.month} maxLength={2} />
-            <InputField id="day" label={t('intake-forms:date-of-birth.field.day')} placeholder="DD" name="day" required errorMessage={errorMessages.day} maxLength={2} />
-          </fieldset>
-        </div>
+        <p>{t('intake-forms:date-of-birth.enter-dob-message')}</p>
+        <fieldset id="dateOfBirthFieldSet">
+          <InputField id="year" label={t('intake-forms:date-of-birth.field.year')} placeholder="YYYY" name="year" required errorMessage={errorMessages.year} maxLength={4} />
+          <InputField id="month" label={t('intake-forms:date-of-birth.field.month')} placeholder="MM" name="month" required errorMessage={errorMessages.month} maxLength={2} />
+          <InputField id="day" label={t('intake-forms:date-of-birth.field.day')} placeholder="DD" name="day" required errorMessage={errorMessages.day} maxLength={2} />
+        </fieldset>
         <div>
           <ButtonLink id="back-button" to="/apply/application-type">
             {t('intake-forms:date-of-birth.button-back')}
