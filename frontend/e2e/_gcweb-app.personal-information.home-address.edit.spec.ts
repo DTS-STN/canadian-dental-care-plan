@@ -44,7 +44,7 @@ test.describe('personal informaiton home address edit page', () => {
     });
   });
 
-  test('should redirect to home address confirm page', async ({ page }) => {
+  test('should redirect to home address suggested page', async ({ page }) => {
     await test.step('navigate', async () => {
       await page.goto('/personal-information/home-address/edit');
       await expect(page).toHaveURL(/.*personal-information\/home-address\/edit/);
@@ -55,8 +55,8 @@ test.describe('personal informaiton home address edit page', () => {
       await page.locator('button#change-button').click();
     });
 
-    await test.step('detect home address confirm page', async () => {
-      await expect(page).toHaveURL(/.*personal-information\/home-address\/confirm/);
+    await test.step('detect home address suggested page', async () => {
+      await expect(page).toHaveURL(/.*personal-information\/home-address\/suggested/);
     });
   });
 
