@@ -18,6 +18,7 @@ import type { RegionInfo } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
+import { getWSAddressService } from '~/services/wsaddress-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
@@ -87,21 +88,30 @@ export async function action({ request }: ActionFunctionArgs) {
   const session = await sessionService.getSession(request);
   session.set('newHomeAddress', parsedDataResult.data);
 
-  // TODO the validateWSAddress(..) call below must be corrected to consume the correct response
-  // const wsAddressWebService = await getWSAddressService();
-  // const { address, city, country, postalCode, province } = parsedDataResult.data;
-  // const validateResultAddress = await wsAddressWebService.validateWSAddress({ address, city, country, postalCode: postalCode ?? '', province: province ?? '' });
+  const wsAddressService = await getWSAddressService();
+  const { address, city, country, postalCode, province } = parsedDataResult.data;
+  const correctedAddress = await wsAddressService.correctAddress({ address, city, country, postalCode, province });
 
-  // TODO the following line must be removed once the validateWSAddress(..) call above is corrected
-  const validateResultAddress = { statusCode: 'Valid' };
+  if (correctedAddress.status === 'Corrected') {
+    const { address, city, province, postalCode, country } = correctedAddress;
+    session.set('suggestedAddress', { address, city, province, postalCode, country });
+  }
 
-  const redirectUrl = validateResultAddress.statusCode === 'Invalid' ? '/personal-information/home-address/address-accuracy' : '/personal-information/home-address/confirm';
-
-  return redirect(redirectUrl, {
+  return redirect(getRedirectUrl(correctedAddress.status), {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),
     },
   });
+}
+
+function getRedirectUrl(correctedAddressStatus: string) {
+  if (correctedAddressStatus === 'Corrected') {
+    return '/personal-information/home-address/suggested';
+  }
+  if (correctedAddressStatus === 'NotCorrect') {
+    return '/personal-information/home-address/address-accuracy';
+  }
+  return '/personal-information/home-address/confirm';
 }
 
 export default function PersonalInformationHomeAddressEdit() {

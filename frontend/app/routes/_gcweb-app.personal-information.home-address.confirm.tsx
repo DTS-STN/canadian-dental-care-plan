@@ -35,13 +35,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
   const homeAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.homeAddress ?? '');
-  const countryList = await getLookupService().getAllCountries();
-  const regionList = await getLookupService().getAllRegions();
 
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
-  const newHomeAddress = await session.get('newHomeAddress');
-  return json({ homeAddressInfo, newHomeAddress, countryList, regionList });
+  const newHomeAddress = session.get('newHomeAddress');
+  const useSuggestedAddress = session.get('useSuggestedAddress');
+  const suggestedAddress = session.get('suggestedAddress');
+
+  const countryList = await getLookupService().getAllCountries();
+  const regionList = await getLookupService().getAllRegions();
+
+  return json({ homeAddressInfo, newHomeAddress, useSuggestedAddress, suggestedAddress, countryList, regionList });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -51,18 +55,37 @@ export async function action({ request }: ActionFunctionArgs) {
   const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
+
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
+  const newHomeAddress = session.get('useSuggestedAddress') ? session.get('suggestedAddress') : session.get('newHomeAddress');
 
-  await getAddressService().updateAddressInfo(userId, userInfo?.homeAddress ?? '', session.get('newHomeAddress'));
+  await getAddressService().updateAddressInfo(userId, userInfo?.homeAddress ?? '', newHomeAddress);
 
   // TODO remove new home address from session and handle case when it is missing
   return redirectWithSuccess('/personal-information', 'personal-information:home-address.confirm.updated-notification');
 }
 
 export default function PersonalInformationHomeAddressConfirm() {
-  const { homeAddressInfo, newHomeAddress, countryList, regionList } = useLoaderData<typeof loader>();
+  const { homeAddressInfo, newHomeAddress, useSuggestedAddress, suggestedAddress, countryList, regionList } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
+
+  // TODO extract to util for all address routes to use
+  function getCountryName(countryId: string) {
+    const country = countryList.find((country) => country.countryId === countryId);
+    if (!country) {
+      throw new Error(`Unexpected country with id: ${countryId}`);
+    }
+    return i18n.language === 'fr' ? country.nameFrench : country.nameEnglish;
+  }
+
+  const newAddress = useSuggestedAddress ? suggestedAddress : newHomeAddress;
+  const { address, city, province, postalCode, country } = newAddress;
+
+  const region = regionList.find((region) => region.provinceTerritoryStateId === province);
+  const provinceState = region?.provinceTerritoryStateId;
+  const countryName = getCountryName(country);
+
   return (
     <>
       <p className="mb-8 text-lg text-gray-500">{t('personal-information:home-address.confirm.subtitle')}</p>
@@ -77,7 +100,7 @@ export default function PersonalInformationHomeAddressConfirm() {
                   city={homeAddressInfo.city}
                   provinceState={regionList.find((region) => region.provinceTerritoryStateId === homeAddressInfo.province)?.provinceTerritoryStateId}
                   postalZipCode={homeAddressInfo.postalCode}
-                  country={countryList.find((country) => country.countryId === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFrench' : 'nameEnglish'] ?? ' '}
+                  country={getCountryName(homeAddressInfo.country)}
                 />
               </dd>
             </div>
@@ -85,13 +108,7 @@ export default function PersonalInformationHomeAddressConfirm() {
           <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
             <dt className="font-medium">{t('personal-information:home-address.confirm.new-home-address')}</dt>
             <dd className="mt-3 sm:col-span-2 sm:mt-0">
-              <Address
-                address={newHomeAddress.address}
-                city={newHomeAddress.city}
-                provinceState={regionList.find((region) => region.provinceTerritoryStateId === newHomeAddress.province)?.provinceTerritoryStateId}
-                postalZipCode={newHomeAddress.postalCode}
-                country={countryList.find((country) => country.countryId === newHomeAddress.country)?.[i18n.language === 'fr' ? 'nameFrench' : 'nameEnglish'] ?? ' '}
-              />
+              <Address address={address} city={city} provinceState={provinceState} postalZipCode={postalCode} country={countryName} />
             </dd>
           </div>
         </dl>

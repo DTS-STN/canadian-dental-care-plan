@@ -67,14 +67,17 @@ describe('_gcweb-app.personal-information.home-address.confirm', () => {
   });
 
   describe('loader()', () => {
-    it('should return homeAddressInfo and newHomeAddress objects', async () => {
+    it('should return all necessary address objects and countries/regions list', async () => {
       const userService = getUserService();
       const sessionService = await getSessionService();
       const session = await sessionService.getSession(new Request('https://example.com/'));
 
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', firstName: 'John', lastName: 'Maverick' });
       vi.mocked(getAddressService().getAddressInfo).mockResolvedValue({ address: '111 Fake Home St', city: 'city', country: 'country' });
-      vi.mocked(session.get).mockResolvedValue({ address: '123 Fake Home St.', city: 'city', country: 'country' });
+      vi.mocked(session.get)
+        .mockReturnValueOnce({ address: '123 Fake Home St.', city: 'city', country: 'country' }) // return value for session.get('newHomeAddress')
+        .mockReturnValueOnce(true) // return value for session.get('useSuggestedAddress')
+        .mockReturnValueOnce({ address: '123 Fake Suggested St.', city: 'city', country: 'country' }); // return value for session.get('suggestedAddress')
 
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information/home-address/confirm'),
@@ -106,6 +109,8 @@ describe('_gcweb-app.personal-information.home-address.confirm', () => {
             nameFr: '(FR) sample',
           },
         ],
+        useSuggestedAddress: true,
+        suggestedAddress: { address: '123 Fake Suggested St.', city: 'city', country: 'country' },
       });
     });
   });

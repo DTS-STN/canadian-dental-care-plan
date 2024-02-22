@@ -41,12 +41,12 @@ export const getWSAddressService = moize.promise(createWSAddressService, { onCac
 async function createWSAddressService() {
   const { INTEROP_API_BASE_URI } = getEnv();
 
-  async function correctAddress({ address, city, province, postalCode, country }: { address: string; city: string; province: string; postalCode: string; country: string }) {
+  async function correctAddress({ address, city, province, postalCode, country }: { address: string; city: string; province?: string; postalCode?: string; country: string }) {
     const searchParams = new URLSearchParams({
       addressLine: address,
       city,
-      province,
-      postalCode,
+      ...(province && { province }),
+      ...(postalCode && { postalCode }),
       country,
       formatResult: 'true',
       language: 'English', // TODO confirm that we should always have this as "English"
