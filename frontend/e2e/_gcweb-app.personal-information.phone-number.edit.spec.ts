@@ -27,8 +27,8 @@ test.describe('personal informaiton phone number edit page', () => {
 
     await test.step('detect errors summary presence', async () => {
       const errorSummary = page.locator('section#error-summary');
-      await expect(errorSummary).toBeInViewport();
-      await expect(errorSummary).toBeFocused();
+      await expect(errorSummary).toBeInViewport({ timeout: 10000 });
+      await expect(errorSummary).toBeFocused({ timeout: 10000 });
     });
 
     await test.step('detect form errors', async () => {

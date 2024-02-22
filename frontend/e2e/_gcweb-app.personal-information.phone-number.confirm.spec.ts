@@ -12,7 +12,7 @@ test.describe('phone number change confirmation page', () => {
 
   test('should not have any automatically detectable accessibility issues', async ({ page }) => {
     await page.goto('/personal-information/phone-number/edit');
-    await page.locator('button', { hasText: /change/i }).click();
+    await page.locator('button#submit').click();
     await expect(page).toHaveURL(/.*personal-information\/phone-number\/confirm/);
 
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();

@@ -3,7 +3,8 @@ import { expect, test } from '@playwright/test';
 
 test.describe('not found page', () => {
   test('should navigate to not found page', async ({ page }) => {
-    await page.goto('/page-does-not-exist');
+    const response = await page.goto('/page-does-not-exist');
+    expect(response?.status()).toEqual(404);
     await expect(page).toHaveURL('/page-does-not-exist');
   });
 
