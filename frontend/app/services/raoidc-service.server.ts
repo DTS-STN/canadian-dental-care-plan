@@ -85,7 +85,7 @@ async function createRaoidcService() {
     }
 
     if (state !== expectedState) {
-      throw new Error('CSRF error: state does not match');
+      throw new Error(`CSRF error: incoming state [${state}] does not match expected state [${expectedState}]`);
     }
 
     const privateCryptoKey = await privateKeyPemToCryptoKey(AUTH_JWT_PRIVATE_KEY);
