@@ -31,8 +31,8 @@
     },
 
     "error-message": {
-      "empty-field": "Enter a value",
-      "invalid-date": "That's not a date!"
+      "empty-field": "(FR) Enter a value",
+      "invalid-date": "(FR) That's not a date!"
     }
   }
 }

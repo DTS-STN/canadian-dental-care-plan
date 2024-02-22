@@ -41,30 +41,26 @@ export async function action({ request }: ActionFunctionArgs) {
       .string()
       .min(1, { message: 'empty-field' })
       .transform((val) => val.trim()),
-    day: z.string().trim().optional(),
+    day: z
+      .string()
+      .min(1, { message: 'empty-field' })
+      .transform((val) => val.trim()),
   });
   const formData = Object.fromEntries(await request.formData());
 
   const dateOfBirth = formData['year'] + '-' + formData['month'] + '-' + formData['day']; //2024-11-14
   const dateSchema = z.coerce.date();
   type DateSchema = z.infer<typeof dateSchema>;
-  console.debug('date scheeeemmm ' + JSON.stringify(dateSchema.safeParse(dateOfBirth))); // false
   const dateParsedResult = dateSchema.safeParse(dateOfBirth);
 
   //const myDateSchema = z.coerce.date();
   if (!dateParsedResult.success) {
     return json({
-      errors: dateParsedResult.error.flatten(),
+      errors: 'invalid-date',
       formData: formData as Partial<z.infer<typeof dateOfBirthFormSchema>>,
     });
   }
 
-  //if (!parsedDataResult.success) {
-  // return json({
-  //   errors: parsedDataResult.error.flatten(),
-  //   formData: formData as Partial<z.infer<typeof dateOfBirthFormSchema>>,
-  // });
-  // }
   //TODO
   //COMPLETE ONCE THE NEXT PAGE IS ADDED
 
@@ -92,9 +88,7 @@ export default function EnterDoB() {
     return t(`intake-forms:date-of-birth.error-message.${errorI18nKey}` as any);
   }
   const errorMessages = {
-    //year: getErrorMessage(actionData?.errors.fieldErrors.fieldErrors.year?.[0]),
-    // month: getErrorMessage(actionData?.errors.fieldErrors.month?.[0]),
-    // day: getErrorMessage(actionData?.errors.fieldErrors.day?.[0]),
+    dateOfBirthFieldSet: getErrorMessage(actionData?.errors),
   };
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 
@@ -110,9 +104,11 @@ export default function EnterDoB() {
       <Form method="post">
         <div>
           <p>{t('intake-forms:date-of-birth.enter-dob-message')}</p>
-          <InputField id="year" label={t('intake-forms:date-of-birth.field.year')} placeholder="YYYY" name="year" required errorMessage={errorMessages.year} maxLength={4} />
-          <InputField id="month" label={t('intake-forms:date-of-birth.field.month')} placeholder="MM" name="month" required errorMessage={errorMessages.month} maxLength={2} />
-          <InputField id="day" label={t('intake-forms:date-of-birth.field.day')} placeholder="DD" name="day" required errorMessage={errorMessages.day} maxLength={2} />
+          <fieldset id="dateOfBirthFieldSet">
+            <InputField id="year" label={t('intake-forms:date-of-birth.field.year')} placeholder="YYYY" name="year" required errorMessage={errorMessages.year} maxLength={4} />
+            <InputField id="month" label={t('intake-forms:date-of-birth.field.month')} placeholder="MM" name="month" required errorMessage={errorMessages.month} maxLength={2} />
+            <InputField id="day" label={t('intake-forms:date-of-birth.field.day')} placeholder="DD" name="day" required errorMessage={errorMessages.day} maxLength={2} />
+          </fieldset>
         </div>
         <div>
           <ButtonLink id="back-button" to="/apply/application-type">
