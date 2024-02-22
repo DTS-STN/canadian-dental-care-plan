@@ -87,6 +87,12 @@ const serverEnv = z.object({
 
   // CCT get PDF settings
   CCT_VAULT_COMMUNITY: z.string().default('community_default'),
+
+  //Memo cache max age
+  MEMO_MAXAGE_ALLPREFERREDLANGUAGES: z.coerce.number().optional(),
+  MEMO_MAXAGE_PREFERREDLANGUAGE: z.coerce.number().optional(),
+  MEMO_MAXAGE_ALLCOUNTRIES: z.coerce.number().optional(),
+  MEMO_MAXAGE_ALLREGIONS: z.coerce.number().optional(),
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;

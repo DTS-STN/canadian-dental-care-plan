@@ -34,7 +34,7 @@ export type RegionInfo = z.infer<typeof regionSchema>;
 export const getLookupService = moize(createLookupService, { onCacheAdd: () => log.info('Creating new lookup service') });
 
 function createLookupService() {
-  const { INTEROP_API_BASE_URI } = getEnv();
+  const { INTEROP_API_BASE_URI, MEMO_MAXAGE_ALLPREFERREDLANGUAGES, MEMO_MAXAGE_PREFERREDLANGUAGE, MEMO_MAXAGE_ALLCOUNTRIES, MEMO_MAXAGE_ALLREGIONS } = getEnv();
 
   async function getAllPreferredLanguages() {
     const url = `${INTEROP_API_BASE_URI}/lookups/preferred-languages/`;
@@ -134,9 +134,9 @@ function createLookupService() {
   }
 
   return {
-    getAllPreferredLanguages,
-    getPreferredLanguage,
-    getAllCountries,
-    getAllRegions,
+    getAllPreferredLanguages: moize(getAllPreferredLanguages, { maxAge: MEMO_MAXAGE_ALLPREFERREDLANGUAGES, onCacheAdd: () => log.info('Creating new AllPreferredLanguages memo') }),
+    getPreferredLanguage: moize(getPreferredLanguage, { maxAge: MEMO_MAXAGE_PREFERREDLANGUAGE, onCacheAdd: () => log.info('Creating new PreferredLanguage memo') }),
+    getAllCountries: moize(getAllCountries, { maxAge: MEMO_MAXAGE_ALLCOUNTRIES, onCacheAdd: () => log.info('Creating new AllCountries memo') }),
+    getAllRegions: moize(getAllRegions, { maxAge: MEMO_MAXAGE_ALLREGIONS, onCacheAdd: () => log.info('Creating new AllRegions memo') }),
   };
 }
