@@ -18,5 +18,21 @@
     "button-back": "Back",
     "button-continue": "Continue",
     "i-am": "I am"
+  },
+  "date-of-birth": {
+    "page-title": "Date of birth",
+    "enter-dob-message": "Please enter your date of birth",
+    "button-back": "Back",
+    "button-continue": "Continue",
+    "field": {
+      "year": "Year",
+      "month": "Month",
+      "day": "Day"
+    },
+
+    "error-message": {
+      "empty-field": "Enter a value",
+      "invalid-date": "That's not a date!"
+    }
   }
 }
