@@ -23,6 +23,16 @@
     "page-title": "(FR) Date of birth",
     "enter-dob-message": "(FR) Please enter your date of birth",
     "button-back": "(FR) Back",
-    "button-continue": "(FR) Continue"
+    "button-continue": "(FR) Continue",
+    "field": {
+      "year": "(FR) Year",
+      "month": "(FR) Month",
+      "day": "(FR) Day"
+    },
+
+    "error-message": {
+      "empty-field": "Enter a value",
+      "invalid-date": "That's not a date!"
+    }
   }
 }
