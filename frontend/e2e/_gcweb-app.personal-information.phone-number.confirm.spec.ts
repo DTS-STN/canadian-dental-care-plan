@@ -4,7 +4,9 @@ import { expect, test } from '@playwright/test';
 test.describe('phone number change confirmation page', () => {
   test('should navigate to phone number change confirmation page', async ({ page }) => {
     await page.goto('/personal-information/phone-number/edit');
-    await page.locator('button', { hasText: /change/i }).click();
+    await expect(page).toHaveURL('/personal-information/phone-number/edit');
+
+    await page.locator('button#submit').click();
     await expect(page).toHaveURL(/.*personal-information\/phone-number\/confirm/);
   });
 
