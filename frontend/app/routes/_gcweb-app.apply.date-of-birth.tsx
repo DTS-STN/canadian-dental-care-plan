@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
@@ -50,10 +50,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const dateOfBirth = formData['year'] + '-' + formData['month'] + '-' + formData['day']; //2024-11-14
   const dateSchema = z.coerce.date();
-  type DateSchema = z.infer<typeof dateSchema>;
   const dateParsedResult = dateSchema.safeParse(dateOfBirth);
 
-  //const myDateSchema = z.coerce.date();
   if (!dateParsedResult.success) {
     return json({
       errors: 'invalid-date',
