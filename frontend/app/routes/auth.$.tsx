@@ -113,10 +113,9 @@ async function handleRaoidcLoginRequest({ request }: LoaderFunctionArgs) {
   log.debug('Storing [codeVerifier] and [state] in session for future validation');
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
-  // set as flash values so they're removed after the first get()
-  session.flash('codeVerifier', codeVerifier);
-  session.flash('returnUrl', returnUrl ?? '/');
-  session.flash('state', state);
+  session.set('codeVerifier', codeVerifier);
+  session.set('returnUrl', returnUrl ?? '/');
+  session.set('state', state);
 
   log.debug('Redirecting to RAOIDC signin URL [%s]', authUrl.href);
   return redirect(authUrl.href, {
