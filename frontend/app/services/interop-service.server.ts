@@ -7,38 +7,31 @@ import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('lookup-service.server');
 
-const letterSchema = z.array(
-  z.object({
-    LetterRecordId: z.string().optional(),
-    LetterDate: z.string().optional(),
-    LetterId: z.string().optional(),
-    LetterName: z.string().optional(),
-  }),
-);
+const letterSchema = z.object({
+  LetterDate: z.coerce.date().optional(),
+  LetterRecordId: z.string().optional(),
+  LetterId: z.string().optional(),
+  LetterName: z.string().optional(),
+});
+
+const listOfLetterSchema = z.array(letterSchema);
 
 export type LettersInfo = z.infer<typeof letterSchema>;
-
-const parsedLetterSchema = z.array(
-  z.object({
-    id: z.string().optional(),
-    issuedOn: z.string().optional(),
-    name: z.string().optional(),
-    referenceId: z.string().optional(),
-  }),
-);
-
-export type ParsedLetterInfo = z.infer<typeof parsedLetterSchema>;
+export type ListOfLettersInfo = z.infer<typeof listOfLetterSchema>;
 
 const letterTypeCodeSchema = z.object({
+  code: z.string(),
+  nameFr: z.string().optional(),
+  nameEn: z.string().optional(),
   id: z.string().optional(),
   code: z.string().optional(),
   nameFr: z.string().optional(),
   nameEn: z.string().optional(),
 });
-
 const listOfLetterTypeCodeSchema = z.array(letterTypeCodeSchema);
-export type LetterTypeCode = z.infer<typeof letterTypeCodeSchema>;
 
+export type LetterTypeCode = z.infer<typeof letterTypeCodeSchema>;
+export type ListOfLetterTypeCode = z.infer<typeof listOfLetterTypeCodeSchema>;
 /**
  * Return a singleton instance (by means of memomization) of the interop service.
  */
@@ -71,17 +64,12 @@ function createInteropService() {
       throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const letters = letterSchema.parse(await response.json()).map((letter) => ({
-      id: letter.LetterRecordId,
-      issuedOn: letter.LetterDate,
+    return listOfLetterSchema.parse(await response.json()).map((letter) => ({
+      id: letter.LetterId,
       name: letter.LetterName,
-      referenceId: letter.LetterId,
+      referenceId: letter.LetterRecordId,
+      issuedOn: letter.LetterDate,
     }));
-
-    return sort(letters, {
-      order: sortOrder,
-      by: (item) => item.issuedOn ?? 'undefined',
-    });
   }
 
   /**

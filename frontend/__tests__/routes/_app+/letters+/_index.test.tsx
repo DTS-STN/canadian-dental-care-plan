@@ -50,4 +50,28 @@ describe('Letters Page', () => {
       expect(data.letters[2].issuedOn).toBeUndefined();
     });
   });
+  it('retrieves letter types', async () => {
+    const response = await loader({
+      request: new Request('http://localhost/letters'),
+      params: {},
+      context: {},
+    });
+
+    const data = await response.json();
+
+    expect(
+      data.letterTypes.includes({
+        code: 'DEN',
+        nameEn: 'DENIED',
+        nameFr: '(FR) DENIED',
+      }),
+    );
+    expect(
+      data.letterTypes.includes({
+        code: 'ACC',
+        nameEn: 'Accepted',
+        nameFr: '(FR) Accepted',
+      }),
+    );
+  });
 });
