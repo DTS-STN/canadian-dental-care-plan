@@ -54,7 +54,6 @@ describe('cct-service.server.ts', () => {
 
   it('it should return a 200 response when given a valid referenceID', async () => {
     const response = await cctService.getPdf('00000000-0000-0000-0000-000000000000', '1');
-    console.log(response);
     expect(response.status).toBe(200);
   });
 
