@@ -75,16 +75,13 @@ export function getCCTApiMockHandlers() {
       const clientId = url.searchParams.get('clientid');
       const community = url.searchParams.get('community');
       const exact = url.searchParams.get('Exact');
-      const sortParam = url.searchParams.get('sort') ?? 'asc';
 
       if (userId === null || clientId === null || community === null || exact !== 'true') {
         throw new HttpResponse(null, { status: 404 });
       }
 
-      const sort = sortParam === 'desc' ? 'desc' : 'asc';
-
       return HttpResponse.json(
-        getLetterEntities(userId, sort).map((letter) => ({
+        getLetterEntities(userId).map((letter) => ({
           LetterRecordId: letter.id,
           LetterDate: letter.issuedOn,
           LetterId: letter.referenceId,
@@ -125,15 +122,12 @@ export function getPdfEntity(referenceId: string | readonly string[]) {
  * @param userId - The user ID to look up in the database.
  * @returns The letter entity if found, otherwise throws a 404 error.
  */
-export function getLetterEntities(userId: string | readonly string[], sortOrder: 'asc' | 'desc' = 'desc') {
+export function getLetterEntities(userId: string | readonly string[]) {
   const parsedUserId = z.string().uuid().safeParse(userId);
 
   if (!parsedUserId.success) {
     throw new HttpResponse('Invalid userId: ' + userId, { status: 400, headers: { 'Content-Type': 'text/plain' } });
   }
 
-  return db.letter.findMany({
-    where: { userId: { equals: parsedUserId.data } },
-    orderBy: { issuedOn: sortOrder },
-  });
+  return db.letter.findMany({ where: { userId: { equals: parsedUserId.data } } });
 }

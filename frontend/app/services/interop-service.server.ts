@@ -1,3 +1,4 @@
+import { sort } from 'moderndash';
 import moize from 'moize';
 import { z } from 'zod';
 
@@ -55,7 +56,6 @@ function createInteropService() {
     url.searchParams.set('clientid', clientId);
     url.searchParams.set('community', CCT_VAULT_COMMUNITY);
     url.searchParams.set('Exact', 'true');
-    url.searchParams.set('sort', sortOrder);
 
     const response = await fetch(url);
 
@@ -71,12 +71,17 @@ function createInteropService() {
       throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    return letterSchema.parse(await response.json()).map((letter) => ({
+    const letters = letterSchema.parse(await response.json()).map((letter) => ({
       id: letter.LetterRecordId,
       issuedOn: letter.LetterDate,
       name: letter.LetterName,
       referenceId: letter.LetterId,
     }));
+
+    return sort(letters, {
+      order: sortOrder,
+      by: (item) => item.issuedOn ?? 'undefined',
+    });
   }
 
   /**
