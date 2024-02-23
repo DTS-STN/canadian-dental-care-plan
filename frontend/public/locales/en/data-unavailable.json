@@ -8,9 +8,9 @@
   "more-information": "For more information on how to apply, please visit <howtoapply>How to apply - Canada.ca</howtoapply>.",
   "how-to-apply.href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
   "other-enquiry": "For other enquiries, please visit the <contactus>Contact us</contactus> page to find out how to reach us",
-  "contact-us.href": "{{baseUri}}/en/contact-us",   
+  "contact-us.href": "{{baseUri}}/en/contact-us",
   "service-delay": "If you have recently applied, please note that there could be a delay in your application appearing within the My Service Canada Account.  For any enquiries on the status of your application please visit \"link to online status checker\".",
   "my-dashboard": "<mydashboard>My Dashboard</mydashboard>",
-  "my-dashboard.href": "{{baseUri}}/en/my-dashboard",  
+  "my-dashboard.href": "{{baseUri}}/en/my-dashboard",
   "go-back-to-msca": "MSCA portal link"
 }
