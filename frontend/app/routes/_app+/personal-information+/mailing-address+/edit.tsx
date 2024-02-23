@@ -146,24 +146,26 @@ export default function PersonalInformationMailingAddressEdit() {
     postalCode: actionData?.formData.postalCode ?? addressInfo?.postalCode,
   };
 
-  const countries: InputOptionProps[] = countryList.map((country) => {
-    return {
-      label: i18n.language === 'fr' ? country.nameFrench : country.nameEnglish,
-      value: country.countryId,
-      id: country.countryId,
-    };
-  }) as InputOptionProps[];
+  const countries: InputOptionProps[] = countryList
+    .map((country) => {
+      return {
+        children: i18n.language === 'fr' ? country.nameFrench : country.nameEnglish,
+        value: country.countryId,
+        id: country.countryId,
+      };
+    })
+    .sort((country1, country2) => country1.children.localeCompare(country2.children));
 
-  //populate region/province/state list with selected country or current address country
+  // populate region/province/state list with selected country or current address country
   const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter((region) => region.countryId === defaultValues.country))
     .map((region) => {
       return {
-        label: i18n.language === 'fr' ? region.nameFrench : region.nameEnglish,
+        children: i18n.language === 'fr' ? region.nameFrench : region.nameEnglish,
         value: region.provinceTerritoryStateId,
         id: region.provinceTerritoryStateId,
       };
     })
-    .sort((r1, r2) => r1.label.localeCompare(r2.label)) as InputOptionProps[];
+    .sort((region1, region2) => region1.children.localeCompare(region2.children));
 
   /**
    * Gets an error message based on the provided internationalization (i18n) key.
