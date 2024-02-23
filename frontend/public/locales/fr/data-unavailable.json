@@ -3,6 +3,13 @@
   "breadcrumbs": {
     "unable-to-continue": "(FR) Unable to continue"
   },
-  "service-unavailable": "(FR) This service is not available to you. We did not find any record for your account.",
+  "service-eligible": "(FR) You are currently not a participant in the Canadian Dental Care Plan, to find out if you are eligible please visit <doyouqualify>Do you qualify - Canada.ca</doyouqualify>.",
+  "do-you-qualify.href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/admissibilite.html",
+  "more-information": "(FR) For more information on how to apply, please visit <howtoapply>How to apply - Canada.ca</howtoapply>.",
+  "how-to-apply.href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html",
+  "other-enquiry": "(FR) For other enquiries, please visit the <contactus>Contact us</contactus> page to find out how to reach us.",  "contact-us.href": "{{baseUri}}/fr/contact-us",   
+  "service-delay": "(FR) If you have recently applied, please note that there could be a delay in your application appearing within the My Service Canada Account.  For any enquiries on the status of your application please visit \"link to online status checker\".",
+  "my-dashboard": "<mydashboard>Mon tableau de bord</mydashboard>",
+  "my-dashboard.href": "{{baseUri}}/fr/mon-tableau-de-bord",
   "go-back-to-msca": "(FR) MSCA portal link"
 }
