@@ -124,19 +124,19 @@ for (let i = 0; i < numberOfLetters; i++) {
 db.country.create({
   countryId: 'CAN',
   nameEnglish: 'Canada',
-  nameFrench: '(FR) Canada',
+  nameFrench: 'Canada',
 });
 
 db.country.create({
   countryId: 'USA',
-  nameEnglish: 'USA',
-  nameFrench: '(FR) USA',
+  nameEnglish: 'United States of America',
+  nameFrench: "États-Unis d'Amérique",
 });
 
 db.country.create({
   countryId: 'MEX',
   nameEnglish: 'Mexico',
-  nameFrench: '(FR) Mexico',
+  nameFrench: 'Mexique',
 });
 
 // seed province list
@@ -144,49 +144,56 @@ db.region.create({
   provinceTerritoryStateId: 'ON',
   countryId: 'CAN',
   nameEnglish: 'Ontario',
-  nameFrench: '(FR) Ontario',
+  nameFrench: 'Ontario',
 });
 
 db.region.create({
   provinceTerritoryStateId: 'MB',
   countryId: 'CAN',
   nameEnglish: 'Manitoba',
-  nameFrench: '(FR) Manitoba',
+  nameFrench: 'Manitoba',
 });
 
 db.region.create({
   provinceTerritoryStateId: 'QC',
   countryId: 'CAN',
   nameEnglish: 'Quebec',
-  nameFrench: '(FR) Quebec',
+  nameFrench: 'Québec',
 });
 
 db.region.create({
   provinceTerritoryStateId: 'NS',
   countryId: 'CAN',
   nameEnglish: 'Nova Scotia',
-  nameFrench: '(FR) Nova Scotia',
+  nameFrench: 'Nouvelle-Écosse',
+});
+
+db.region.create({
+  provinceTerritoryStateId: 'NL',
+  countryId: 'CAN',
+  nameEnglish: 'Newfoundland and Labrador',
+  nameFrench: 'Terre-Neuve-et-Labrador',
 });
 
 db.region.create({
   provinceTerritoryStateId: 'PE',
   countryId: 'CAN',
   nameEnglish: 'Prince Edward Island',
-  nameFrench: '(FR) Prince Edward Island',
+  nameFrench: 'Île-du-Prince-Édouard',
 });
 
 db.region.create({
   provinceTerritoryStateId: 'UT',
   countryId: 'USA',
   nameEnglish: 'Utah',
-  nameFrench: '(FR) Utah',
+  nameFrench: 'Utah',
 });
 
 db.region.create({
   provinceTerritoryStateId: 'NY',
   countryId: 'USA',
   nameEnglish: 'New York',
-  nameFrench: '(FR) New York',
+  nameFrench: 'État de New York',
 });
 
 export { db };
