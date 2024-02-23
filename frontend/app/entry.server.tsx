@@ -48,6 +48,17 @@ export async function handleDataRequest(response: Response, { request }: LoaderF
   return response;
 }
 
+/**
+ * Log any errors using the application logger (Remix will log using console.error() by default, which we don't want).
+ *
+ * @see https://remix.run/docs/en/main/file-conventions/entry.server#handleerror
+ */
+export function handleError(error: unknown, { request }: LoaderFunctionArgs | ActionFunctionArgs) {
+  if (!request.signal.aborted) {
+    log.error(error);
+  }
+}
+
 export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, remixContext: EntryContext) {
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
   log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
