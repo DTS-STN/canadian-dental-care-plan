@@ -1,7 +1,8 @@
-import { redirectWithSuccess } from 'remix-toast';
+import { redirect } from '@remix-run/node';
+
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/_gcweb-app.personal-information.home-address.confirm';
+import { action, loader } from '~/routes/_app+/personal-information+/mailing-address+/edit';
 import { getAddressService } from '~/services/address-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
@@ -47,9 +48,7 @@ vi.mock('~/services/session-service.server', () => ({
   getSessionService: vi.fn().mockResolvedValue({
     commitSession: vi.fn(),
     getSession: vi.fn().mockReturnValue({
-      has: vi.fn(),
-      get: vi.fn(),
-      unset: vi.fn(),
+      set: vi.fn(),
     }),
   }),
 }));
@@ -61,26 +60,21 @@ vi.mock('~/services/user-service.server', () => ({
   }),
 }));
 
-describe('_gcweb-app.personal-information.home-address.confirm', () => {
+describe('_gcweb-app.personal-information.mailing-address.edit', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
   describe('loader()', () => {
-    it('should return all necessary address objects and countries/regions list', async () => {
+    it('should return addressInfo', async () => {
       const userService = getUserService();
-      const sessionService = await getSessionService();
-      const session = await sessionService.getSession(new Request('https://example.com/'));
+      const addressService = getAddressService();
 
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', firstName: 'John', lastName: 'Maverick' });
-      vi.mocked(getAddressService().getAddressInfo).mockResolvedValue({ address: '111 Fake Home St', city: 'city', country: 'country' });
-      vi.mocked(session.get)
-        .mockReturnValueOnce({ address: '123 Fake Home St.', city: 'city', country: 'country' }) // return value for session.get('newHomeAddress')
-        .mockReturnValueOnce(true) // return value for session.get('useSuggestedAddress')
-        .mockReturnValueOnce({ address: '123 Fake Suggested St.', city: 'city', country: 'country' }); // return value for session.get('suggestedAddress')
+      vi.mocked(addressService.getAddressInfo).mockResolvedValue({ address: '111 Fake Home St', city: 'city', country: 'country' });
 
       const response = await loader({
-        request: new Request('http://localhost:3000/personal-information/home-address/confirm'),
+        request: new Request('http://localhost:3000/personal-information/mailing-address/edit'),
         context: {},
         params: {},
       });
@@ -88,8 +82,8 @@ describe('_gcweb-app.personal-information.home-address.confirm', () => {
       const data = await response.json();
 
       expect(data).toEqual({
+        addressInfo: { address: '111 Fake Home St', city: 'city', country: 'country' },
         homeAddressInfo: { address: '111 Fake Home St', city: 'city', country: 'country' },
-        newHomeAddress: { address: '123 Fake Home St.', city: 'city', country: 'country' },
         countryList: [
           {
             code: 'SUP',
@@ -109,21 +103,60 @@ describe('_gcweb-app.personal-information.home-address.confirm', () => {
             nameFr: '(FR) sample',
           },
         ],
-        useSuggestedAddress: true,
-        suggestedAddress: { address: '123 Fake Suggested St.', city: 'city', country: 'country' },
       });
+    });
+
+    it('should throw 404 response if addressInfo is not found', async () => {
+      vi.mocked(getAddressService().getAddressInfo).mockResolvedValue(null);
+
+      try {
+        await loader({
+          request: new Request('http://localhost:3000/personal-information/mailing-address/edit'),
+          context: {},
+          params: {},
+        });
+      } catch (error) {
+        expect((error as Response).status).toEqual(404);
+      }
     });
   });
 
   describe('action()', () => {
-    it('should redirect with toast message to personal information page when updating user info is successful', async () => {
+    it('should redirect to confirm page', async () => {
+      const sessionService = await getSessionService();
+
+      vi.mocked(sessionService.commitSession).mockResolvedValue('some-set-cookie-header');
+
+      const formData = new FormData();
+      formData.append('address', '111 Fake Home St');
+      formData.append('city', 'city');
+      formData.append('province', 'province');
+      formData.append('postalCode', 'postalCode');
+      formData.append('country', 'country');
+
       const response = await action({
-        request: new Request('http://localhost:3000/personal-information/home-address/confirm', { method: 'POST' }),
+        request: new Request('http://localhost:3000/personal-information/mailing-address/edit', { method: 'POST', body: formData }),
         context: {},
         params: {},
       });
 
-      expect(response).toEqual(await redirectWithSuccess('/personal-information', 'personal-information:home-address.confirm.updated-notification'));
+      expect(response).toEqual(redirect('/personal-information/mailing-address/confirm', { headers: { 'Set-Cookie': 'some-set-cookie-header' } }));
+    });
+
+    it('should throw 404 response if userInfo is not found', async () => {
+      const userService = getUserService();
+
+      vi.mocked(userService.getUserId).mockResolvedValue('');
+
+      try {
+        await loader({
+          request: new Request('http://localhost:3000/personal-information/mailing-address/edit'),
+          context: {},
+          params: {},
+        });
+      } catch (error) {
+        expect((error as Response).status).toEqual(404);
+      }
     });
   });
 });
