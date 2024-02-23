@@ -2,11 +2,12 @@ import type { ChangeEvent } from 'react';
 
 import { json } from '@remix-run/node';
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { Link, useLoaderData, useSearchParams } from '@remix-run/react';
+import { useLoaderData, useSearchParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
 import { getInteropService } from '~/services/interop-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -78,9 +79,9 @@ export default function LettersIndex() {
           const letterName = letterType ? letterType[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] : letter.name;
           return (
             <li key={letter.id} className="py-4 sm:py-6">
-              <Link reloadDocument to={`/letters/${letter.referenceId}/download`} className="font-medium hover:underline">
+              <InlineLink reloadDocument to={`/letters/${letter.referenceId}/download`} className="font-medium">
                 {letterName}
-              </Link>
+              </InlineLink>
               <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: letter.issuedOn })}</p>
             </li>
           );
