@@ -82,18 +82,14 @@ export function getCCTApiMockHandlers() {
       }
 
       const sort = sortParam === 'desc' ? 'desc' : 'asc';
-      const letterEntities = getLetterEntities(userId, sort);
 
       return HttpResponse.json(
-        letterEntities.map((letter) => {
-          return {
-            id: letter.id,
-            dateSent: new Date(letter.dateSent),
-            nameEn: letter.nameEn,
-            nameFr: letter.nameFr,
-            referenceId: letter.referenceId,
-          };
-        }),
+        getLetterEntities(userId, sort).map((letter) => ({
+          LetterRecordId: letter.id,
+          LetterDate: letter.issuedOn,
+          LetterId: letter.referenceId,
+          LetterName: letter.letterType?.code,
+        })),
       );
     }),
   ];
@@ -137,13 +133,7 @@ export function getLetterEntities(userId: string | readonly string[], sortOrder:
   }
 
   return db.letter.findMany({
-    where: {
-      userId: {
-        equals: parsedUserId.data,
-      },
-    },
-    orderBy: {
-      dateSent: sortOrder,
-    },
+    where: { userId: { equals: parsedUserId.data } },
+    orderBy: { issuedOn: sortOrder },
   });
 }

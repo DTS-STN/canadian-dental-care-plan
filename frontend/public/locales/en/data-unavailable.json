@@ -3,6 +3,14 @@
   "breadcrumbs": {
     "unable-to-continue": "Unable to continue"
   },
-  "service-unavailable": "This service is not available to you. We did not find any record for your account.",
+  "service-eligible": "You are currently not a participant in the Canadian Dental Care Plan, to find out if you are eligible please visit <doyouqualify>Do you qualify - Canada.ca</doyouqualify>.",
+  "do-you-qualify.href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/qualify.html",
+  "more-information": "For more information on how to apply, please visit <howtoapply>How to apply - Canada.ca</howtoapply>.",
+  "how-to-apply.href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
+  "other-enquiry": "For other enquiries, please visit the <contactus>Contact us</contactus> page to find out how to reach us",
+  "contact-us.href": "{{baseUri}}/en/contact-us",
+  "service-delay": "If you have recently applied, please note that there could be a delay in your application appearing within the My Service Canada Account.  For any enquiries on the status of your application please visit \"link to online status checker\".",
+  "my-dashboard": "<mydashboard>My Dashboard</mydashboard>",
+  "my-dashboard.href": "{{baseUri}}/en/my-dashboard",
   "go-back-to-msca": "MSCA portal link"
 }

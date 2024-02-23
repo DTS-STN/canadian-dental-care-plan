@@ -8,21 +8,31 @@ const log = getLogger('lookup-service.server');
 
 const letterSchema = z.array(
   z.object({
-    dateSent: z.coerce.date().optional(),
-    referenceId: z.string().optional(),
-    nameEn: z.string().optional(),
-    nameFr: z.string().optional(),
-    id: z.string().optional(),
+    LetterRecordId: z.string().optional(),
+    LetterDate: z.string().optional(),
+    LetterId: z.string().optional(),
+    LetterName: z.string().optional(),
   }),
 );
 
 export type LettersInfo = z.infer<typeof letterSchema>;
 
+const parsedLetterSchema = z.array(
+  z.object({
+    id: z.string().optional(),
+    issuedOn: z.string().optional(),
+    name: z.string().optional(),
+    referenceId: z.string().optional(),
+  }),
+);
+
+export type ParsedLetterInfo = z.infer<typeof parsedLetterSchema>;
+
 const letterTypeCodeSchema = z.object({
-  code: z.string(),
-  nameFr: z.string(),
-  nameEn: z.string(),
   id: z.string().optional(),
+  code: z.string().optional(),
+  nameFr: z.string().optional(),
+  nameEn: z.string().optional(),
 });
 
 const listOfLetterTypeCodeSchema = z.array(letterTypeCodeSchema);
@@ -61,7 +71,12 @@ function createInteropService() {
       throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    return letterSchema.parse(await response.json());
+    return letterSchema.parse(await response.json()).map((letter) => ({
+      id: letter.LetterRecordId,
+      issuedOn: letter.LetterDate,
+      name: letter.LetterName,
+      referenceId: letter.LetterId,
+    }));
   }
 
   /**
@@ -86,5 +101,8 @@ function createInteropService() {
     return listOfLetterTypeCodeSchema.parse(await response.json());
   }
 
-  return { getLetterInfoByClientId, getAllLetterTypes };
+  return {
+    getAllLetterTypes: moize(getAllLetterTypes, { isPromise: true, maxAge: 5000 }),
+    getLetterInfoByClientId,
+  };
 }

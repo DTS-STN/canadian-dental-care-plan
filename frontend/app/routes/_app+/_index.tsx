@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactNode } from 'react';
 
-import { json } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 
@@ -28,7 +28,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userInfo = await userService.getUserInfo(userId);
 
   if (!userInfo) {
-    throw new Response(null, { status: 404 });
+    return redirect('/data-unavailable');
   }
 
   return json({ userInfo });

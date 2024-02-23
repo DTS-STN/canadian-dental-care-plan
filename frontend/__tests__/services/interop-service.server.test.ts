@@ -5,7 +5,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, expectTypeOf, it, vi 
 import { getLetterEntities } from '~/mocks/cct-api.server';
 import { getAllLetterTypes } from '~/mocks/power-platform-api.server';
 import { getInteropService } from '~/services/interop-service.server';
-import type { LettersInfo } from '~/services/interop-service.server';
+import type { ParsedLetterInfo } from '~/services/interop-service.server';
 
 vi.mock('~/utils/logging.server', () => ({
   getLogger: vi.fn().mockReturnValue({
@@ -26,7 +26,7 @@ const handlers = [
     const url = new URL(request.url);
     const userId = url.searchParams.get('userid') as string;
     const letterEntities = getLetterEntities(userId);
-    return HttpResponse.json(letterEntities);
+    return HttpResponse.json(letterEntities.map((letter) => ({ LetterRecordId: letter.id, LetterDate: letter.issuedOn, LetterId: letter.referenceId, LetterName: letter.letterType?.code })));
   }),
   http.get('https://api.example.com/letter-types', () => {
     const letterEntities = getAllLetterTypes();
@@ -54,7 +54,7 @@ describe('interop-service.server.ts', () => {
 
   it('it should return letters that match the corresponding type', async () => {
     const letters = await interopService.getLetterInfoByClientId('00000000-0000-0000-0000-000000000000', 'clientId');
-    expectTypeOf(letters[0]).toMatchTypeOf<Partial<LettersInfo[number]>>();
+    expectTypeOf(letters).toMatchTypeOf<ParsedLetterInfo>();
   });
 
   it('it should not return letters associated with an invalid user', async () => {
