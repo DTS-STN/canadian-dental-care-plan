@@ -81,12 +81,14 @@ export function getCCTApiMockHandlers() {
       }
 
       return HttpResponse.json(
-        getLetterEntities(userId).map((letter) => ({
-          LetterRecordId: letter.id,
-          LetterDate: letter.issuedOn,
-          LetterId: letter.referenceId,
-          LetterName: letter.letterType?.code,
-        })),
+        letterEntities.map((letter) => {
+          return {
+            LetterId: letter.id,
+            LetterRecordId: letter.referenceId,
+            LetterDate: letter.dateSent,
+            LetterName: letter.letterType?.code,
+          };
+        }),
       );
     }),
   ];

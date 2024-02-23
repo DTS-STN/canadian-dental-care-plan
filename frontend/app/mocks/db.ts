@@ -46,8 +46,8 @@ const db = factory({
     userId: String,
   },
   pdf: {
+    referenceId: String,
     id: primaryKey(faker.string.uuid),
-    referenceId: () => faker.string.alphanumeric(10),
   },
   country: {
     countryId: primaryKey(String),
