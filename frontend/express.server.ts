@@ -75,11 +75,16 @@ async function runServer() {
   const buildPath = path.resolve(buildPathArg);
   const versionPath = path.resolve(buildPathArg, '..', 'version.txt');
   const build = await reimportServer(buildPath);
-  const loggingOptions = {
+
+  const loggingRequestHandler = morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'tiny', {
+    skip: (request, response) => {
+      const ignoredUrls = ['/api/readyz'];
+      return request.url ? ignoredUrls.includes(request.url) : false;
+    },
     stream: {
       write: (str: string) => log.info(str.trim()),
     },
-  };
+  });
 
   const app = express();
   app.disable('x-powered-by');
@@ -87,7 +92,7 @@ async function runServer() {
   app.use(express.static('public', { maxAge: '1h' }));
   // since remix fingerprints assets served from build/ we can use aggressive caching
   app.use(build.publicPath, express.static(build.assetsBuildDirectory, { immutable: true, maxAge: '1y' }));
-  app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'tiny', loggingOptions));
+  app.use(loggingRequestHandler);
   app.set('trust proxy', true); // enable X-Forwarded-* header support to build OAuth callback URLs
   app.all('*', process.env.NODE_ENV === 'development' ? createDevRequestHandler(build, buildPath, versionPath) : createRequestHandler({ build, mode: process.env.NODE_ENV }));
 
