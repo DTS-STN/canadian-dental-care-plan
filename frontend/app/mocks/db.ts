@@ -46,7 +46,7 @@ const db = factory({
     id: primaryKey(faker.string.uuid),
   },
   pdf: {
-    referenceId: () => faker.string.alphanumeric(10),
+    referenceId: String,
     id: primaryKey(faker.string.uuid),
   },
   country: {
@@ -109,7 +109,7 @@ const seededLetterTypes = [
 // seed available letters
 const numberOfLetters = faker.number.int({ min: 10, max: 20 }); // Adjust min and max as needed
 for (let i = 0; i < numberOfLetters; i++) {
-  const seededPdf = db.pdf.create();
+  const seededPdf = db.pdf.create({ referenceId: i.toLocaleString() });
 
   db.letter.create({
     userId: defaultUser.id,
