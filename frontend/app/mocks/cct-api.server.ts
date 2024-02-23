@@ -87,11 +87,10 @@ export function getCCTApiMockHandlers() {
       return HttpResponse.json(
         letterEntities.map((letter) => {
           return {
-            id: letter.id,
-            dateSent: new Date(letter.dateSent),
-            nameEn: letter.nameEn,
-            nameFr: letter.nameFr,
-            referenceId: letter.referenceId,
+            LetterId: letter.referenceId,
+            LetterRecordId: letter.id,
+            LetterDate: letter.dateSent,
+            LetterName: letter.letterType?.code,
           };
         }),
       );

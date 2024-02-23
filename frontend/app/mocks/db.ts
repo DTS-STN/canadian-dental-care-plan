@@ -39,16 +39,14 @@ const db = factory({
     nameFr: String,
   },
   letter: {
-    referenceId: () => faker.string.alphanumeric(10),
-    dateSent: () => faker.date.past({ years: 1 }),
+    referenceId: String,
+    dateSent: () => faker.date.past({ years: 1 }).toISOString().split('T')[0],
     userId: String,
-    nameEn: String,
-    nameFr: String,
     letterType: oneOf('letterType'),
     id: primaryKey(faker.string.uuid),
   },
   pdf: {
-    referenceId: String,
+    referenceId: () => faker.string.alphanumeric(10),
     id: primaryKey(faker.string.uuid),
   },
   country: {
@@ -95,33 +93,28 @@ const defaultUser = db.user.create({
 });
 
 // seed letter type list
-const letterTypeAccepted = db.letterType.create({
-  code: 'ACC',
-  nameEn: 'Accepted',
-  nameFr: '(FR) Accepted',
-});
-
-const letterTypeDenied = db.letterType.create({
-  code: 'DEN',
-  nameEn: 'DENIED',
-  nameFr: '(FR) DENIED',
-});
+const seededLetterTypes = [
+  db.letterType.create({
+    code: 'ACC',
+    nameEn: 'Accepted',
+    nameFr: '(FR) Accepted',
+  }),
+  db.letterType.create({
+    code: 'DEN',
+    nameEn: 'Denied',
+    nameFr: '(FR) DENIED',
+  }),
+];
 
 // seed available letters
 const numberOfLetters = faker.number.int({ min: 10, max: 20 }); // Adjust min and max as needed
 for (let i = 0; i < numberOfLetters; i++) {
-  const name = faker.lorem.words({ min: 5, max: 7 });
+  const seededPdf = db.pdf.create();
 
-  const sampleLetter = db.letter.create({
+  db.letter.create({
     userId: defaultUser.id,
-    nameEn: name,
-    nameFr: `(FR) ${name}`,
-    letterType: faker.helpers.arrayElement([letterTypeAccepted, letterTypeDenied]),
-  });
-
-  // seed avaliable pdf (after letter)
-  db.pdf.create({
-    referenceId: sampleLetter.referenceId,
+    referenceId: seededPdf.referenceId,
+    letterType: faker.helpers.arrayElement(seededLetterTypes),
   });
 }
 // seed country list

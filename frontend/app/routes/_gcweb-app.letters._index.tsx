@@ -12,7 +12,7 @@ import { InputSelect } from '~/components/input-select';
 import { getInteropService } from '~/services/interop-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('letters');
@@ -41,14 +41,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const interopService = getInteropService();
   const userId = await userService.getUserId();
   const letters = await interopService.getLetterInfoByClientId(userId, 'clientId', sortOrder); // TODO where and what is clientId?
+  const letterTypes = (await interopService.getAllLetterTypes()).filter((code) => letters.map((letter: any) => letter.name).includes(code.code));
 
-  return json({ letters: letters, sortOrder });
+  return json({ letters: letters, sortOrder, letterTypes: letterTypes });
 }
 
 export default function LettersIndex() {
   const [, setSearchParams] = useSearchParams();
   const { i18n, t } = useTranslation(i18nNamespaces);
-  const { letters, sortOrder } = useLoaderData<typeof loader>();
+  const { letters, sortOrder, letterTypes } = useLoaderData<typeof loader>();
   const [dateTimeFormat, setDateTimeFormat] = useState<Intl.DateTimeFormat | undefined>();
 
   useEffect(() => {
@@ -86,14 +87,19 @@ export default function LettersIndex() {
         />
       </div>
       <ul className="divide-y border-y">
-        {letters.map((letter) => (
-          <li key={letter.id} className="py-4 sm:py-6">
-            <Link reloadDocument to={`/letters/${letter.referenceId}/download`} className="font-medium hover:underline">
-              {i18n.language === 'en' ? letter.nameEn : letter.nameFr}
-            </Link>
-            <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: getFormattedDate(letter.dateSent) })}</p>
-          </li>
-        ))}
+        {letters.map((letter) => {
+          const letterTypeCd = letterTypes.find((letterType) => letterType.code == letter.name);
+          const letterTypeCode = { nameEn: letterTypeCd?.nameEn, nameFr: letterTypeCd?.nameFr };
+          console.log(letter);
+          return (
+            <li key={letter.id} className="py-4 sm:py-6">
+              <Link reloadDocument to={`/letters/${letter.referenceId}/download`} className="font-medium hover:underline">
+                {getNameByLanguage(i18n.language, letterTypeCode)}
+              </Link>
+              <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: getFormattedDate(letter.issuedOn) })}</p>
+            </li>
+          );
+        })}
       </ul>
     </>
   );

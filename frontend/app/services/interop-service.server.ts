@@ -6,28 +6,28 @@ import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('lookup-service.server');
 
-const letterSchema = z.array(
-  z.object({
-    dateSent: z.coerce.date().optional(),
-    referenceId: z.string().optional(),
-    nameEn: z.string().optional(),
-    nameFr: z.string().optional(),
-    id: z.string().optional(),
-  }),
-);
+const letterSchema = z.object({
+  LetterDate: z.coerce.date().optional(),
+  LetterRecordId: z.string().optional(),
+  LetterId: z.string().optional(),
+  LetterName: z.string().optional(),
+});
+
+const listOfLetterSchema = z.array(letterSchema);
 
 export type LettersInfo = z.infer<typeof letterSchema>;
+export type ListOfLettersInfo = z.infer<typeof listOfLetterSchema>;
 
 const letterTypeCodeSchema = z.object({
   code: z.string(),
-  nameFr: z.string(),
-  nameEn: z.string(),
+  nameFr: z.string().optional(),
+  nameEn: z.string().optional(),
   id: z.string().optional(),
 });
-
 const listOfLetterTypeCodeSchema = z.array(letterTypeCodeSchema);
-export type LetterTypeCode = z.infer<typeof letterTypeCodeSchema>;
 
+export type LetterTypeCode = z.infer<typeof letterTypeCodeSchema>;
+export type ListOfLetterTypeCode = z.infer<typeof listOfLetterTypeCodeSchema>;
 /**
  * Return a singleton instance (by means of memomization) of the interop service.
  */
@@ -61,7 +61,12 @@ function createInteropService() {
       throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    return letterSchema.parse(await response.json());
+    return listOfLetterSchema.parse(await response.json()).map((letter) => ({
+      id: letter.LetterId,
+      name: letter.LetterName,
+      referenceId: letter.LetterRecordId,
+      issuedOn: letter.LetterDate,
+    }));
   }
 
   /**
