@@ -89,10 +89,10 @@ const serverEnv = z.object({
   CCT_VAULT_COMMUNITY: z.string().default('community_default'),
 
   //Memo cache max age
-  MEMO_MAXAGE_ALLPREFERREDLANGUAGES: z.coerce.number().optional(),
-  MEMO_MAXAGE_PREFERREDLANGUAGE: z.coerce.number().optional(),
-  MEMO_MAXAGE_ALLCOUNTRIES: z.coerce.number().optional(),
-  MEMO_MAXAGE_ALLREGIONS: z.coerce.number().optional(),
+  LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILISECONDS: z.coerce.number().default(3600000),
+  LOOKUP_SVC_PREFERREDLANGUAGE_CACHE_TTL_MILISECONDS: z.coerce.number().default(3600000),
+  LOOKUP_SVC_ALLCOUNTRIES_CACHE_TTL_MILISECONDS: z.coerce.number().default(3600000),
+  LOOKUP_SVC_ALLREGIONS_CACHE_TTL_MILISECONDS: z.coerce.number().default(3600000),
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;

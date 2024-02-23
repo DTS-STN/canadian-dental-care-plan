@@ -34,7 +34,7 @@ export type RegionInfo = z.infer<typeof regionSchema>;
 export const getLookupService = moize(createLookupService, { onCacheAdd: () => log.info('Creating new lookup service') });
 
 function createLookupService() {
-  const { INTEROP_API_BASE_URI, MEMO_MAXAGE_ALLPREFERREDLANGUAGES, MEMO_MAXAGE_PREFERREDLANGUAGE, MEMO_MAXAGE_ALLCOUNTRIES, MEMO_MAXAGE_ALLREGIONS } = getEnv();
+  const { INTEROP_API_BASE_URI, LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILISECONDS, LOOKUP_SVC_PREFERREDLANGUAGE_CACHE_TTL_MILISECONDS, LOOKUP_SVC_ALLCOUNTRIES_CACHE_TTL_MILISECONDS, LOOKUP_SVC_ALLREGIONS_CACHE_TTL_MILISECONDS } = getEnv();
 
   async function getAllPreferredLanguages() {
     const url = `${INTEROP_API_BASE_URI}/lookups/preferred-languages/`;
@@ -134,9 +134,9 @@ function createLookupService() {
   }
 
   return {
-    getAllPreferredLanguages: moize(getAllPreferredLanguages, { maxAge: MEMO_MAXAGE_ALLPREFERREDLANGUAGES, onCacheAdd: () => log.info('Creating new AllPreferredLanguages memo') }),
-    getPreferredLanguage: moize(getPreferredLanguage, { maxAge: MEMO_MAXAGE_PREFERREDLANGUAGE, onCacheAdd: () => log.info('Creating new PreferredLanguage memo') }),
-    getAllCountries: moize(getAllCountries, { maxAge: MEMO_MAXAGE_ALLCOUNTRIES, onCacheAdd: () => log.info('Creating new AllCountries memo') }),
-    getAllRegions: moize(getAllRegions, { maxAge: MEMO_MAXAGE_ALLREGIONS, onCacheAdd: () => log.info('Creating new AllRegions memo') }),
+    getAllPreferredLanguages: moize(getAllPreferredLanguages, { maxAge: LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILISECONDS, onCacheAdd: () => log.info('Creating new AllPreferredLanguages memo') }),
+    getPreferredLanguage: moize(getPreferredLanguage, { maxAge: LOOKUP_SVC_PREFERREDLANGUAGE_CACHE_TTL_MILISECONDS, onCacheAdd: () => log.info('Creating new PreferredLanguage memo') }),
+    getAllCountries: moize(getAllCountries, { maxAge: LOOKUP_SVC_ALLCOUNTRIES_CACHE_TTL_MILISECONDS, onCacheAdd: () => log.info('Creating new AllCountries memo') }),
+    getAllRegions: moize(getAllRegions, { maxAge: LOOKUP_SVC_ALLREGIONS_CACHE_TTL_MILISECONDS, onCacheAdd: () => log.info('Creating new AllRegions memo') }),
   };
 }
