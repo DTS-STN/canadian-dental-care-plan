@@ -34,5 +34,33 @@
       "empty-field": "Enter a value",
       "invalid-date": "That's not a date!"
     }
+  },
+  "applicant-information": {
+    "page-title": "Applicant Information",
+    "social-insurance-number": "Social Insurance Number (SIN)",
+    "date-of-birth": "Date of Birth",
+    "last-name": "Last Name",
+    "first-name": "First Name",
+    "marital-status": "Marital Status",
+    "contact-information": "Contact Information",
+    "telephone": "Telephone",
+    "alternative-telephone": "Alternative Telephone",
+    "home-address": "Home Address",
+    "province-of-residence": "What is your province of residence?",
+    "mailing-address": "Mailing Address",
+    "address": "Address",
+    "city-town": "City/Town",
+    "province-territory-state-region": "Province / Territory / State / Region",
+    "country": "Country",
+    "postal-code-zip-code": "Postal Code / Zip Code",
+    "field": {
+      "year": "Year",
+      "month": "Month",
+      "day": "Day"
+    },
+    "error-message": {
+      "empty-field": "Enter a value",
+      "invalid-date": "That's not a date!"
+    }
   }
 }
