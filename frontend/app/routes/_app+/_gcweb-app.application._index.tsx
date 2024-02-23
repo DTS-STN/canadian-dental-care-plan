@@ -26,8 +26,11 @@ export default function Application() {
   });
 
   useEffect(() => {
+    if (!searchParams.get('title')) {
+      setSearchParams({ title: 'type-of-application' });
+    }
     sessionStorage.setItem('option', selectedOption);
-  }, [selectedOption]);
+  }, [selectedOption, searchParams, setSearchParams]);
 
   const options = ['Applying for myself', 'Applying on behalf of someone else'];
 
