@@ -44,7 +44,7 @@ export type LetterTypeCode = z.infer<typeof letterTypeCodeSchema>;
 export const getInteropService = moize(createInteropService, { onCacheAdd: () => log.info('Creating new interop service') });
 
 function createInteropService() {
-  const { INTEROP_API_BASE_URI, CCT_API_BASE_URI, CCT_VAULT_COMMUNITY } = getEnv();
+  const { INTEROP_API_BASE_URI, CCT_API_BASE_URI, CCT_VAULT_COMMUNITY, GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS } = getEnv();
 
   /**
    * @returns array of letters given the userId and clientId with optional sort parameter
@@ -102,7 +102,7 @@ function createInteropService() {
   }
 
   return {
-    getAllLetterTypes: moize(getAllLetterTypes, { isPromise: true, maxAge: 5000 }),
+    getAllLetterTypes: moize(getAllLetterTypes, { isPromise: true, maxAge: 1000 * GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new getAllLetterTypes memo') }),
     getLetterInfoByClientId,
   };
 }
