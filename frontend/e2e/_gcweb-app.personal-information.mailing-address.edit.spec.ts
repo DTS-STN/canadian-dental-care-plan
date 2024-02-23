@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-test.describe('personal informaiton mailing address edit page', () => {
+test.describe('personal information mailing address edit page', () => {
   test('should navigate to mailing address edit page', async ({ page }) => {
     await test.step('navigate', async () => {
       await page.goto('/personal-information/mailing-address/edit');
