@@ -34,7 +34,7 @@ export type RegionInfo = z.infer<typeof regionSchema>;
 export const getLookupService = moize(createLookupService, { onCacheAdd: () => log.info('Creating new lookup service') });
 
 function createLookupService() {
-  const { INTEROP_API_BASE_URI } = getEnv();
+  const { INTEROP_API_BASE_URI, LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS, LOOKUP_SVC_PREFERREDLANGUAGE_CACHE_TTL_MILLISECONDS, LOOKUP_SVC_ALLCOUNTRIES_CACHE_TTL_MILLISECONDS, LOOKUP_SVC_ALLREGIONS_CACHE_TTL_MILLISECONDS } = getEnv();
 
   async function getAllPreferredLanguages() {
     const url = `${INTEROP_API_BASE_URI}/lookups/preferred-languages/`;
@@ -134,9 +134,9 @@ function createLookupService() {
   }
 
   return {
-    getAllPreferredLanguages,
-    getPreferredLanguage,
-    getAllCountries,
-    getAllRegions,
+    getAllPreferredLanguages: moize(getAllPreferredLanguages, { maxAge: LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllPreferredLanguages memo') }),
+    getPreferredLanguage: moize(getPreferredLanguage, { maxAge: LOOKUP_SVC_PREFERREDLANGUAGE_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new PreferredLanguage memo') }),
+    getAllCountries: moize(getAllCountries, { maxAge: LOOKUP_SVC_ALLCOUNTRIES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllCountries memo') }),
+    getAllRegions: moize(getAllRegions, { maxAge: LOOKUP_SVC_ALLREGIONS_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllRegions memo') }),
   };
 }
