@@ -23,7 +23,8 @@ test.describe('personal information mailing edit page', () => {
   });
 
   test('should not have any automatically detectable accessibility issues', async ({ page }) => {
-    await page.goto('/letters');
+    await page.goto('/personal-information/mailing-address/edit');
+    await page.locator('button#change-button').click();
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
     expect(accessibilityScanResults.violations).toEqual([]);
   });
