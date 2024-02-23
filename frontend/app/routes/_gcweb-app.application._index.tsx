@@ -1,10 +1,11 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 import { useSearchParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
 import { Button, ButtonLink } from '~/components/buttons';
+import { InputRadios } from '~/components/input-radios';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
@@ -19,27 +20,57 @@ export const handle = {
 export default function Application() {
   const { t } = useTranslation(i18nNamespaces);
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentStep = parseInt(searchParams.get('step') ?? '1', 10);
+  const currentStep = searchParams.get('title') ?? 'type-of-application';
+  const [selectedOption, setSelectedOption] = useState(() => {
+    return sessionStorage.getItem('option') ?? '';
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem('option', selectedOption);
+  }, [selectedOption]);
+
+  const options = ['Applying for myself', 'Applying on behalf of someone else'];
 
   // Placeholder for form fields
   const steps = [
-    { id: '1', title: 'Type of application', content: <div>Type of application content</div>, required: true },
+    {
+      id: 'type-of-application',
+      title: 'Type of application',
+      content: (
+        <div>
+          <InputRadios
+            id="type-of-application"
+            name="option"
+            legend="I am:*"
+            options={options.map((option) => ({
+              children: option,
+              value: option,
+              defaultChecked: option === selectedOption,
+              onChange: (e) => setSelectedOption(e.target.value),
+            }))}
+          />
+        </div>
+      ),
+      required: true,
+    },
     { id: '2', title: 'Date of birth', content: <div>Date of birth content</div>, required: true },
     { id: '3', title: 'Applicant information', content: <div>Applicant information content</div>, required: true },
     { id: '4', title: 'Review your information', content: <div>Review your information content</div>, required: false },
   ];
 
+  const index = steps.findIndex((step) => step.id === currentStep);
+
   const handlePrevious = () => {
-    setSearchParams({ step: Math.max(currentStep - 1, 1).toString() });
+    setSearchParams({ title: steps[index - 1].id });
   };
 
   const handleNext = () => {
-    setSearchParams({ step: Math.min(currentStep + 1, steps.length).toString() });
+    setSearchParams({ title: steps[index + 1].id });
   };
   return (
     <>
       <Stepper
-        title={steps[currentStep - 1].title}
+        title={steps[index].title}
         previousProps={{
           id: 'prev',
           onClick: handlePrevious,
@@ -50,11 +81,11 @@ export default function Application() {
           onClick: handleNext,
           text: t('application-form:button.continue'),
         }}
-        required={steps[currentStep - 1].required}
-        currentStep={currentStep}
+        required={steps[index].required}
+        currentStep={index}
         prevPageUrl="/privacy"
       >
-        {steps[currentStep - 1].content}
+        {steps[index].content}
       </Stepper>
     </>
   );
@@ -89,7 +120,7 @@ export function Stepper({ children, previousProps, nextProps, title, required, p
       <div className="mt-12 items-center md:flex">
         {
           // If current step is the first step, clicking on back button should go back to the previous page
-          previousProps && currentStep === 1 && prevPageUrl ? (
+          previousProps && currentStep === 0 && prevPageUrl ? (
             <ButtonLink to={prevPageUrl} size="base" variant="alternative" className="my-2 mr-4 w-24 rounded-sm border-2 hover:text-black">
               {previousProps.text}
             </ButtonLink>
