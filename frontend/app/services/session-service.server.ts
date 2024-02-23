@@ -54,7 +54,29 @@ async function createSessionService() {
     case 'file': {
       log.warn('Using file-backed sessions. This is not recommended for production.');
       const sessionStorage = createFileSessionStorage({ cookie: sessionCookie, dir: env.SESSION_FILE_DIR });
-      return { ...sessionStorage, getSession: (request: Request) => sessionStorage.getSession(request.headers.get('Cookie')) };
+      return {
+        ...sessionStorage,
+        getSession: async (request: Request) => {
+          // BUG :: GjB :: **POTENTIALLY INCONSISTENT SESSION FILE READS**
+          //
+          // Under certain circumstances, reading the session store file using
+          // `fs.readFile()` can sometimes return an empty string. The exact
+          // cause of this behavior is unknown, but immediately retrying the
+          // read seems to resolve the issue. As a temporary workaround,
+          // a `try/catch` block is implemented to attempt reading the file twice.
+          //
+          // Since file-based sessions are intended to only be used during
+          // development, I think this is an acceptable fix.
+          //
+          // @see node_modules/@remix-run/node/dist/sessions/fileStorage.js · async readData(id) { .. }
+          try {
+            return await sessionStorage.getSession(request.headers.get('Cookie'));
+          } catch (error) {
+            log.warn(`Session file read failed: [${error}]; retrying one time`);
+            return sessionStorage.getSession(request.headers.get('Cookie'));
+          }
+        },
+      };
     }
     case 'redis': {
       log.info('Using Redis-backed sessions.');
