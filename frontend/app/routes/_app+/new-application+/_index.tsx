@@ -18,35 +18,23 @@ export default function NewApplicationIndex() {
   return (
     <>
       <p className="mb-8 text-lg font-bold">{t('new-application:privacy-statement.privacy-statement.subtitle')}</p>
-      <p>{t('new-application:privacy-statement.privacy-statement.paragraph-one')}</p>
-      <br />
-      <p>{t('new-application:privacy-statement.privacy-statement.paragraph-two')}</p>
-      <br />
-      <p>{t('new-application:privacy-statement.privacy-statement.paragraph-three')}</p>
-      <br />
-      <p>{t('new-application:privacy-statement.privacy-statement.paragraph-four')}</p>
-      <br />
-      <br />
+      <p className="mb-4">{t('new-application:privacy-statement.privacy-statement.paragraph-one')}</p>
+      <p className="mb-4">{t('new-application:privacy-statement.privacy-statement.paragraph-two')}</p>
+      <p className="mb-4">{t('new-application:privacy-statement.privacy-statement.paragraph-three')}</p>
+      <p className="mb-8">{t('new-application:privacy-statement.privacy-statement.paragraph-four')}</p>
 
       <p className="mb-8 text-lg font-bold">{t('new-application:privacy-statement.identity-information.subtitle')}</p>
       <p>{t('new-application:privacy-statement.identity-information.paragraph-one')}</p>
-      <ul className="list-disc pl-10">
+      <ul className="mb-4 list-disc pl-10">
         <li>{t('new-application:privacy-statement.identity-information.listitem-one')}</li>
         <li>{t('new-application:privacy-statement.identity-information.listitem-two')}</li>
       </ul>
-      <br />
-      <p>{t('new-application:privacy-statement.identity-information.paragraph-two')}</p>
-      <br />
-      <p>{t('new-application:privacy-statement.identity-information.paragraph-three')}</p>
-      <br />
-      <br />
+      <p className="mb-4">{t('new-application:privacy-statement.identity-information.paragraph-two')}</p>
+      <p className="mb-8">{t('new-application:privacy-statement.identity-information.paragraph-three')}</p>
       <p className="mb-8 text-lg font-bold">{t('new-application:privacy-statement.terms-and-conditions.subtitle')}</p>
-      <p>{t('new-application:privacy-statement.terms-and-conditions.paragraph-one')}</p>
-      <br />
-      <br />
+      <p className="mb-8">{t('new-application:privacy-statement.terms-and-conditions.paragraph-one')}</p>
       <p className="mb-8 text-lg font-bold">{t('new-application:privacy-statement.apply-now.subtitle')}</p>
-      <p>{t('new-application:privacy-statement.apply-now.paragraph-one')}</p>
-      <br />
+      <p className="mb-4">{t('new-application:privacy-statement.apply-now.paragraph-one')}</p>
       <div className="flex flex-wrap items-center gap-3">
         <ButtonLink className="bg-green-800 text-white" id="apply-button" to="/new-application/a2">
           {t('new-application:privacy-statement.apply-now.button')}
