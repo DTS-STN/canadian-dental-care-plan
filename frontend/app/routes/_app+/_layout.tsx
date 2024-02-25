@@ -2,10 +2,11 @@ import type { ComponentProps, MouseEvent, ReactNode } from 'react';
 
 import { Link, Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
-import { ChevronDown as ChevronDownIcon, ChevronRight as ChevronRightIcon, CircleUserRound as CircleUserRoundIcon, LogOut as LogOutIcon } from 'lucide-react';
+import { faArrowRightFromBracket, faChevronDown, faChevronRight, faCircleUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Button, ButtonLink } from '~/components/buttons';
+import { ButtonLink } from '~/components/buttons';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '~/components/dropdown-menu';
 import { InlineLink } from '~/components/inline-link';
 import { LanguageSwitcher } from '~/components/language-switcher';
@@ -66,13 +67,15 @@ function NavigationMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="sm" className="gap-2" id="dropdownNavbarLink" pill aria-haspopup="true" data-testid="menuButton">
-          <CircleUserRoundIcon className="h-4 w-4 flex-shrink-0" />
-          <span>{t('header.menu-title')}</span>
-          <ChevronDownIcon className="h-4 w-4 flex-shrink-0" />
-        </Button>
+        <button className="inline-flex w-full items-center justify-between bg-slate-200 px-4 py-3 align-middle font-bold text-slate-700 outline-offset-2 hover:bg-neutral-300 focus:bg-neutral-300" id="dropdownNavbarLink" data-testid="menuButton">
+          <span className="inline-flex w-full appearance-none items-center gap-4">
+            <FontAwesomeIcon icon={faCircleUser} className="size-9 flex-shrink-0" />
+            <span>{t('header.menu-title')}</span>
+          </span>
+          <FontAwesomeIcon icon={faChevronDown} className="size-3 flex-shrink-0" />
+        </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-60" align="end">
+      <DropdownMenuContent className="w-svw rounded-t-none sm:w-[260px]" sideOffset={0} align="center">
         <DropdownMenuItem asChild className="cursor-pointer">
           <Link to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-dashboard.text')}</Link>
         </DropdownMenuItem>
@@ -88,7 +91,7 @@ function NavigationMenu() {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild className="cursor-pointer">
           <Link to="/auth/logout" className="flex items-center justify-between gap-2">
-            {t('gcweb:header.menu-sign-out.text')} <LogOutIcon className="h-4 w-4 flex-shrink-0" />
+            {t('gcweb:header.menu-sign-out.text')} <FontAwesomeIcon icon={faArrowRightFromBracket} className="size-4 flex-shrink-0" />
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -123,7 +126,7 @@ function PageHeader() {
           </ButtonLink>
         ))}
       </div>
-      <header className="border-b border-slate-300 shadow">
+      <header>
         <div id="wb-bnr" className="border border-b border-gray-200 bg-gray-50">
           <div className="container flex items-center justify-between gap-6 py-2.5 sm:py-3.5">
             <div property="publisher" typeof="GovernmentOrganization">
@@ -145,15 +148,17 @@ function PageHeader() {
             </section>
           </div>
         </div>
-        <section className="bg-gray-700 py-2 text-white">
-          <div className="container">
-            <div className="flex items-center justify-between gap-6">
-              <h2 className="text-2xl font-semibold">
+        <section className="bg-gray-700 text-white">
+          <div className="sm:container">
+            <div className="flex flex-col items-stretch justify-between sm:flex-row sm:items-center">
+              <h2 className="p-4 text-xl font-semibold sm:p-0 sm:text-2xl">
                 <Link to="/" className="hover:underline">
                   {t('gcweb:header.application-title')}
                 </Link>
               </h2>
-              <NavigationMenu />
+              <div className="sm:w-[260px]">
+                <NavigationMenu />
+              </div>
             </div>
           </div>
         </section>
@@ -268,7 +273,7 @@ function Breadcrumbs() {
           {breadcrumbs.map(({ labelI18nKey, to }) => {
             return (
               <li key={labelI18nKey} property="itemListElement" typeof="ListItem" className="flex items-center">
-                <ChevronRightIcon className="mr-2 size-5 text-slate-700" />
+                <FontAwesomeIcon icon={faChevronRight} className="mr-2 size-3 text-slate-700" />
                 <Breadcrumb to={to}>{t(labelI18nKey)}</Breadcrumb>
               </li>
             );

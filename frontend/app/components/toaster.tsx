@@ -1,7 +1,8 @@
 import { forwardRef, useEffect } from 'react';
 import type { ComponentProps } from 'react';
 
-import { AlertCircle as AlertCircleIcon, AlertTriangle as AlertTriangleIcon, CheckCircle2 as CheckCircle2Icon, XCircle as XCircleIcon } from 'lucide-react';
+import { faCircleCheck, faCircleInfo, faExclamationCircle, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MaterialDesignContent, SnackbarProvider, enqueueSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
 import { setToastCookieOptions } from 'remix-toast';
@@ -38,10 +39,10 @@ export function Toaster({ toast }: ToasterProps) {
         warning: WarningSnackbar,
       }}
       iconVariant={{
-        error: <XCircleIcon className="me-2 h-5 w-5" />,
-        info: <AlertCircleIcon className="me-2 h-5 w-5" />,
-        success: <CheckCircle2Icon className="me-2 h-5 w-5" />,
-        warning: <AlertTriangleIcon className="me-2 h-5 w-5" />,
+        error: <FontAwesomeIcon icon={faExclamationCircle} className="me-2 size-5" />,
+        info: <FontAwesomeIcon icon={faCircleInfo} className="me-2 size-5" />,
+        success: <FontAwesomeIcon icon={faCircleCheck} className="me-2 size-5" />,
+        warning: <FontAwesomeIcon icon={faTriangleExclamation} className="me-2 size-5" />,
       }}
     />
   );

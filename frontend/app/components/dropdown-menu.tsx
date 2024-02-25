@@ -3,9 +3,11 @@
 // https://ui.shadcn.com/docs/components/dropdown-menu#installation
 import * as React from 'react';
 
+import { faCircle } from '@fortawesome/free-regular-svg-icons';
+import { faCheck, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import clsx from 'clsx';
-import { Check, ChevronRight, Circle } from 'lucide-react';
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
 
@@ -27,7 +29,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
 >(({ className, inset, children, ...props }, ref) => (
   <DropdownMenuPrimitive.SubTrigger ref={ref} className={clsx('flex cursor-default select-none items-center rounded px-2 py-1.5 outline-none focus:bg-zinc-100 data-[state=open]:bg-zinc-100', inset && 'pl-8', className)} {...props}>
     {children}
-    <ChevronRight className="ml-auto h-4 w-4" />
+    <FontAwesomeIcon icon={faChevronRight} className="ml-auto size-4" />
   </DropdownMenuPrimitive.SubTrigger>
 ));
 DropdownMenuSubTrigger.displayName = DropdownMenuPrimitive.SubTrigger.displayName;
@@ -82,7 +84,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<React.ElementRef<typeof Dropdo
   >
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
-        <Check className="h-4 w-4" />
+        <FontAwesomeIcon icon={faCheck} className="size-4" />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}
@@ -98,7 +100,7 @@ const DropdownMenuRadioItem = React.forwardRef<React.ElementRef<typeof DropdownM
   >
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
-        <Circle className="h-2 w-2 fill-current" />
+        <FontAwesomeIcon icon={faCircle} className="size-2 fill-current" />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}
