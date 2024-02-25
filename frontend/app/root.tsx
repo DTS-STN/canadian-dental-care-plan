@@ -7,43 +7,26 @@ import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderD
 import { useTranslation } from 'react-i18next';
 import { getToast } from 'remix-toast';
 
-import SessionTimeout from './components/session-timeout';
-import { Toaster } from './components/toaster';
-// import cdcpStyleSheet from '~/cdcp.css';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
+import SessionTimeout from '~/components/session-timeout';
+import { Toaster } from '~/components/toaster';
 import fontNotoSansStyleSheet from '~/fonts/noto-sans.css';
+import { getBuildInfoService } from '~/services/build-info-service.server';
 import tailwindStyleSheet from '~/tailwind.css';
-import { readBuildInfo } from '~/utils/build-info.server';
 import { getPublicEnv } from '~/utils/env.server';
 import { useDocumentTitleI18nKey, useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: fontNotoSansStyleSheet },
   { rel: 'stylesheet', href: tailwindStyleSheet },
-  // { rel: 'stylesheet', href: cdcpStyleSheet },
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const buildInfo = readBuildInfo('build-info.json');
-  const publicEnv = getPublicEnv();
+  const buildInfoService = getBuildInfoService();
   const { toast, headers } = await getToast(request);
 
-  return json(
-    {
-      buildInfo: buildInfo ?? {
-        buildDate: '2000-01-01T00:00:00Z',
-        buildId: '0000',
-        buildRevision: '00000000',
-        buildVersion: '0.0.0-00000000-0000',
-      },
-      env: publicEnv,
-      toast,
-    },
-    {
-      headers,
-    },
-  );
+  return json({ buildInfo: buildInfoService.getBuildInfo(), env: getPublicEnv(), toast }, { headers });
 }
 
 /**
