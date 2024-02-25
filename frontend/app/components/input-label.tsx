@@ -15,7 +15,7 @@ export function InputLabel(props: InputLabelProps) {
   const { children, className, required, ...restProps } = props;
 
   return (
-    <label className={cn('inline-block text-sm font-medium', className)} data-testid="input-label" {...restProps}>
+    <label className={cn('inline-block font-medium', className)} data-testid="input-label" {...restProps}>
       <span>{children}</span>
       {required && (
         <>
