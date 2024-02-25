@@ -1,17 +1,18 @@
-import type { ComponentProps, ReactNode } from 'react';
+import type { ComponentProps, MouseEvent, ReactNode } from 'react';
 
 import { Link, Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
-import { ChevronDown as ChevronDownIcon, ChevronRight as ChevronRightIcon, CircleUserRound as CircleUserRoundIcon, Home as HomeIcon, LogOut as LogOutIcon } from 'lucide-react';
+import { faArrowRightFromBracket, faChevronDown, faChevronRight, faCircleUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { AnchorLink } from '~/components/anchor-link';
-import { Button } from '~/components/buttons';
+import { ButtonLink } from '~/components/buttons';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '~/components/dropdown-menu';
 import { InlineLink } from '~/components/inline-link';
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { PageTitle } from '~/components/page-title';
 import { getClientEnv } from '~/utils/env-utils';
+import { scrollAndFocusFromAnchorLink } from '~/utils/link-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -66,13 +67,15 @@ function NavigationMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="sm" className="gap-2" id="dropdownNavbarLink" pill aria-haspopup="true" data-testid="menuButton">
-          <CircleUserRoundIcon className="h-4 w-4 flex-shrink-0" />
-          <span>{t('header.menu-title')}</span>
-          <ChevronDownIcon className="h-4 w-4 flex-shrink-0" />
-        </Button>
+        <button className="inline-flex w-full items-center justify-between bg-slate-200 px-4 py-3 align-middle font-bold text-slate-700 outline-offset-2 hover:bg-neutral-300 focus:bg-neutral-300" id="dropdownNavbarLink" data-testid="menuButton">
+          <span className="inline-flex w-full appearance-none items-center gap-4">
+            <FontAwesomeIcon icon={faCircleUser} className="size-9 flex-shrink-0" />
+            <span>{t('header.menu-title')}</span>
+          </span>
+          <FontAwesomeIcon icon={faChevronDown} className="size-3 flex-shrink-0" />
+        </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-60" align="end">
+      <DropdownMenuContent className="w-svw rounded-t-none sm:w-[260px]" sideOffset={0} align="center">
         <DropdownMenuItem asChild className="cursor-pointer">
           <Link to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-dashboard.text')}</Link>
         </DropdownMenuItem>
@@ -88,7 +91,7 @@ function NavigationMenu() {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild className="cursor-pointer">
           <Link to="/auth/logout" className="flex items-center justify-between gap-2">
-            {t('gcweb:header.menu-sign-out.text')} <LogOutIcon className="h-4 w-4 flex-shrink-0" />
+            {t('gcweb:header.menu-sign-out.text')} <FontAwesomeIcon icon={faArrowRightFromBracket} className="size-4 flex-shrink-0" />
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -100,28 +103,35 @@ function PageHeader() {
   const { i18n, t } = useTranslation(i18nNamespaces);
   // const { SCCH_BASE_URI } = getClientEnv();
 
+  /**
+   * handleOnSkipLinkClick is the click event handler for the anchor link.
+   * It prevents the default anchor link behavior, scrolls to and focuses
+   * on the target element specified by 'anchorElementId', and invokes
+   * the optional 'onClick' callback.
+   */
+  function handleOnSkipLinkClick(e: MouseEvent<HTMLAnchorElement>) {
+    e.preventDefault();
+    scrollAndFocusFromAnchorLink(e.currentTarget.href);
+  }
+
   return (
     <>
       <div id="skip-to-content">
         {[
-          { anchorElementId: 'wb-cont', children: t('gcweb:nav.skip-to-content') },
-          { anchorElementId: 'wb-info', children: t('gcweb:nav.skip-to-about') },
-        ].map(({ anchorElementId, children }) => (
-          <AnchorLink
-            key={anchorElementId}
-            anchorElementId={anchorElementId}
-            className="absolute z-10 mx-2 -translate-y-full rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-blue-800 focus:mt-2 focus:translate-y-0 focus:outline-none focus:ring-4 focus:ring-blue-300"
-          >
+          { to: '#wb-cont', children: t('gcweb:nav.skip-to-content') },
+          { to: '#wb-info', children: t('gcweb:nav.skip-to-about') },
+        ].map(({ to, children }) => (
+          <ButtonLink key={to} to={to} onClick={handleOnSkipLinkClick} variant="primary" className="absolute z-10 mx-2 -translate-y-full transition-all focus:mt-2 focus:translate-y-0">
             {children}
-          </AnchorLink>
+          </ButtonLink>
         ))}
       </div>
-      <header className="border-b border-slate-300 shadow">
+      <header>
         <div id="wb-bnr" className="border border-b border-gray-200 bg-gray-50">
-          <div className="container flex items-center justify-between gap-6 py-2">
+          <div className="container flex items-center justify-between gap-6 py-2.5 sm:py-3.5">
             <div property="publisher" typeof="GovernmentOrganization">
               <Link to={t('gcweb:header.govt-of-canada.href')} property="url">
-                <img className="h-6 w-auto" src={`/assets/sig-blk-${i18n.language}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
+                <img className="h-8 w-auto" src={`/assets/sig-blk-${i18n.language}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
               </Link>
               <meta property="name" content={t('gcweb:header.govt-of-canada.text')} />
               <meta property="areaServed" typeof="Country" content="Canada" />
@@ -129,7 +139,7 @@ function PageHeader() {
             </div>
             <section id="wb-lng">
               <h2 className="sr-only">{t('gcweb:header.language-selection')}</h2>
-              <LanguageSwitcher className="font-semibold underline">
+              <LanguageSwitcher>
                 <span className="hidden md:block">{t('gcweb:language-switcher.alt-lang')}</span>
                 <abbr title={t('gcweb:language-switcher.alt-lang')} className="cursor-help uppercase md:hidden">
                   {t('gcweb:language-switcher.alt-lang-abbr')}
@@ -138,15 +148,17 @@ function PageHeader() {
             </section>
           </div>
         </div>
-        <section className="bg-gray-700 py-2 text-white">
-          <div className="container">
-            <div className="flex items-center justify-between gap-6">
-              <h2 className="text-2xl font-semibold">
+        <section className="bg-gray-700 text-white">
+          <div className="sm:container">
+            <div className="flex flex-col items-stretch justify-between sm:flex-row sm:items-center">
+              <h2 className="p-4 text-xl font-semibold sm:p-0 sm:text-2xl">
                 <Link to="/" className="hover:underline">
                   {t('gcweb:header.application-title')}
                 </Link>
               </h2>
-              <NavigationMenu />
+              <div className="sm:w-[260px]">
+                <NavigationMenu />
+              </div>
             </div>
           </div>
         </section>
@@ -210,7 +222,7 @@ function PageFooter() {
   const { t } = useTranslation(i18nNamespaces);
 
   return (
-    <footer id="wb-info" className="border-t bg-stone-50 py-8">
+    <footer id="wb-info" className="border-t bg-stone-50 py-7">
       <div className="container">
         <h2 className="sr-only">{t('gcweb:footer.about-site')}</h2>
         <div className=" flex items-center justify-between gap-4">
@@ -219,13 +231,17 @@ function PageFooter() {
               {t('gcweb:footer.gc-corporate')}
             </h3>
             <div className="flex flex-col items-start gap-2 text-sm leading-6 sm:flex-row sm:items-center sm:gap-4">
-              <Link to={t('gcweb:footer.terms-conditions.href')}>{t('gcweb:footer.terms-conditions.text')}</Link>
-              <div className="hidden h-4 w-px bg-slate-500/20 sm:block"></div>
-              <Link to={t('gcweb:footer.privacy.href')}>{t('gcweb:footer.privacy.text')}</Link>
+              <Link className="text-slate-700 hover:underline" to={t('gcweb:footer.terms-conditions.href')}>
+                {t('gcweb:footer.terms-conditions.text')}
+              </Link>
+              <div className="hidden size-0 rounded-full border-[3px] border-slate-700 sm:block"></div>
+              <Link className="text-slate-700 hover:underline" to={t('gcweb:footer.privacy.href')}>
+                {t('gcweb:footer.privacy.text')}
+              </Link>
             </div>
           </nav>
           <div>
-            <img src="/assets/wmms-blk.svg" alt={t('gcweb:footer.gc-symbol')} width={300} height={71} className="h-8 w-auto" />
+            <img src="/assets/wmms-blk.svg" alt={t('gcweb:footer.gc-symbol')} width={300} height={71} className="h-10 w-auto" />
           </div>
         </div>
       </div>
@@ -251,14 +267,13 @@ function Breadcrumbs() {
       </h2>
       <div className="container mt-4">
         <ol className="flex flex-wrap items-center gap-x-3 gap-y-1" typeof="BreadcrumbList">
-          <li property="itemListElement" typeof="ListItem" className="flex items-center gap-2">
-            <HomeIcon className="h-4 w-4 flex-shrink-0" />
+          <li property="itemListElement" typeof="ListItem">
             <Breadcrumb to={breadcrumbs.length !== 0 ? '/' : undefined}>{t('gcweb:breadcrumbs.home')}</Breadcrumb>
           </li>
           {breadcrumbs.map(({ labelI18nKey, to }) => {
             return (
               <li key={labelI18nKey} property="itemListElement" typeof="ListItem" className="flex items-center">
-                <ChevronRightIcon className="mr-2 mt-0.5 h-4 w-4 text-gray-400" />
+                <FontAwesomeIcon icon={faChevronRight} className="mr-2 size-3 text-slate-700" />
                 <Breadcrumb to={to}>{t(labelI18nKey)}</Breadcrumb>
               </li>
             );

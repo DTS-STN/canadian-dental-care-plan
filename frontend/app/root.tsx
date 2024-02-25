@@ -12,14 +12,14 @@ import { Toaster } from './components/toaster';
 // import cdcpStyleSheet from '~/cdcp.css';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
-import fontInterStyleSheet from '~/fonts/inter.css';
+import fontNotoSansStyleSheet from '~/fonts/noto-sans.css';
 import tailwindStyleSheet from '~/tailwind.css';
 import { readBuildInfo } from '~/utils/build-info.server';
 import { getPublicEnv } from '~/utils/env.server';
 import { useDocumentTitleI18nKey, useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
 
 export const links: LinksFunction = () => [
-  { rel: 'stylesheet', href: fontInterStyleSheet },
+  { rel: 'stylesheet', href: fontNotoSansStyleSheet },
   { rel: 'stylesheet', href: tailwindStyleSheet },
   // { rel: 'stylesheet', href: cdcpStyleSheet },
 ];

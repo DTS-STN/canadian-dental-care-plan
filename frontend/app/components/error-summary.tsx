@@ -1,4 +1,5 @@
-import { AlertCircle as AlertCircleIcon } from 'lucide-react';
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import { AnchorLink } from '~/components/anchor-link';
@@ -93,7 +94,7 @@ export function ErrorSummary({ errors, id }: ErrorSummaryProps) {
 
   return (
     <section id={id} className="my-5 flex gap-3 rounded-lg border border-red-300 bg-red-50 p-4 text-red-800" tabIndex={-1} role="alert">
-      <AlertCircleIcon className="mt-1.5 inline h-4 w-4 flex-shrink-0" />
+      <FontAwesomeIcon icon={faCircleExclamation} className="mt-1.5 inline size-4 flex-shrink-0" />
       <div>
         <h2 className="text-lg font-semibold">{t('gcweb:error-summary.header', { count: errors.length })}</h2>
         {errors.length > 0 && (

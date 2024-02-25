@@ -12,7 +12,7 @@ describe('Button Component', () => {
     const button = getByText('Click me');
     expect(button).toBeInTheDocument();
     expect(button.tagName).toEqual('BUTTON');
-    expect(button).toHaveClass('inline-flex', 'items-center', 'justify-center', 'align-middle', 'font-medium', 'focus:outline-none', 'focus:ring-4');
+    expect(button).toHaveClass('inline-flex', 'items-center', 'justify-center', 'rounded', 'align-middle', 'font-medium', 'outline-offset-2');
   });
 
   it('renders button with custom size and variant', () => {
@@ -22,7 +22,7 @@ describe('Button Component', () => {
       </Button>,
     );
     const button = getByText('Click me');
-    expect(button).toHaveClass('px-5', 'py-3', 'text-base', 'bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300');
+    expect(button).toHaveClass('px-5', 'py-3', 'text-base', 'bg-slate-700', 'text-white', 'hover:bg-sky-800');
   });
 
   it('renders disabled button', () => {
@@ -60,7 +60,7 @@ describe('ButtonLink Component', () => {
     const link = getByText('Click me');
     expect(link).toBeInTheDocument();
     expect(link.tagName).toEqual('A');
-    expect(link).toHaveClass('inline-flex', 'items-center', 'justify-center', 'align-middle', 'font-medium', 'focus:outline-none', 'focus:ring-4');
+    expect(link).toHaveClass('inline-flex', 'items-center', 'justify-center', 'rounded', 'align-middle', 'font-medium', 'outline-offset-2');
   });
 
   it('renders link with custom size and variant', () => {
@@ -77,7 +77,7 @@ describe('ButtonLink Component', () => {
 
     const { getByText } = render(<RemixStub />);
     const link = getByText('Click me');
-    expect(link).toHaveClass('px-5', 'py-3', 'text-base', 'bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300');
+    expect(link).toHaveClass('px-5', 'py-3', 'text-base', 'bg-slate-700', 'text-white', 'hover:bg-sky-800');
   });
 
   it('renders pill link', () => {
