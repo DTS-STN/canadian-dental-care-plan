@@ -16,6 +16,7 @@ import { InputSelect } from '~/components/input-select';
 import type { RegionInfo } from '~/services/lookup-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
+import { getSessionService } from '~/services/session-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
@@ -38,7 +39,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request);
-  const dateOfBirthFormSchema = z.object({
+  const applicantInformationFormSchema = z.object({
     year: z
       .string()
       .min(1, { message: 'empty-field' })
@@ -75,9 +76,29 @@ export async function action({ request }: ActionFunctionArgs) {
   if (!dateParsedResult.success) {
     return json({
       errors: 'invalid-date',
-      formData: formData as Partial<z.infer<typeof dateOfBirthFormSchema>>,
+      formData: formData as Partial<z.infer<typeof applicantInformationFormSchema>>,
     });
   }
+  //TODO
+  //COMPLETE ONCE THE NEXT PAGE IS ADDED
+
+  const parsedDataResult = await applicantInformationFormSchema.safeParseAsync(formData);
+  if (!parsedDataResult.success) {
+    return json({
+      errors: 'invalid-date',
+      formData: formData as Partial<z.infer<typeof applicantInformationFormSchema>>,
+    });
+  }
+
+  const sessionService = await getSessionService();
+  const session = await sessionService.getSession(request);
+  session.set('pageA4-DoB', dateOfBirth);
+  session.set('applicant-information-form', parsedDataResult.data);
+  return redirect('/apply/applicant-information', {
+    headers: {
+      'Set-Cookie': await sessionService.commitSession(session),
+    },
+  });
 }
 export default function EnterApplicantInformation() {
   const actionData = useActionData<typeof action>();
@@ -136,11 +157,11 @@ export default function EnterApplicantInformation() {
 
   const errorMessages = {
     dateOfBirthFieldSet: getErrorMessage(actionData?.errors),
-    address: getErrorMessage(actionData?.errors.fieldErrors.address?.[0]),
-    city: getErrorMessage(actionData?.errors.fieldErrors.city?.[0]),
-    province: getErrorMessage(actionData?.errors.fieldErrors.province?.[0]),
-    postalCode: getErrorMessage(actionData?.errors.fieldErrors.postalCode?.[0]),
-    country: getErrorMessage(actionData?.errors.fieldErrors.country?.[0]),
+    //address: getErrorMessage(actionData?.errors.fieldErrors.address?.[0]),
+    //city: getErrorMessage(actionData?.errors.fieldErrors.city?.[0]),
+    //province: getErrorMessage(actionData?.errors.fieldErrors.province?.[0]),
+    //postalCode: getErrorMessage(actionData?.errors.fieldErrors.postalCode?.[0]),
+    //country: getErrorMessage(actionData?.errors.fieldErrors.country?.[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -189,32 +210,38 @@ export default function EnterApplicantInformation() {
         </fieldset>
 
         <p>{t('intake-forms:applicant-information.home-address')}</p>
-        <InputField id="address" label={t('intake-forms:applicant-information.address')} name="address" />
-        <InputField id="city" label={t('intake-forms:applicant-information.city-town')} name="city-town" />
-
-        {regions.length > 0 && (
-          <InputSelect
-            id="province"
-            className="w-full sm:w-1/2"
-            label={t('intake-forms:applicant-information.province-territory-state-region')}
-            name="province"
-            defaultValue={defaultValues.province}
-            options={regions}
-            errorMessage={errorMessages.province}
-          />
-        )}
-        <InputField id="postalCode" label={t('intake-forms:applicant-information.postal-code-zip-code')} name="postalCode" errorMessage={errorMessages.postalCode} />
+        <InputField id="address" label={t('intake-forms:applicant-information.address')} name="address" required />
+        <InputField id="city" label={t('intake-forms:applicant-information.city-town')} name="city-town" required />
+        <InputField id="postalCode" label={t('intake-forms:applicant-information.postal-code-zip-code')} name="postalCode" required />
         <InputSelect
           id="country"
           className="w-full sm:w-1/2"
           label={t('intake-forms:applicant-information.country')}
           name="country"
-          defaultValue={defaultValues.country}
           required
           options={countries}
           onChange={countryChangeHandler}
-          errorMessage={errorMessages.country}
+          defaultValue={defaultValues.country}
+          //errorMessage={errorMessages.country}
         />
+        <InputSelect
+          id="province"
+          className="w-full sm:w-1/2"
+          label={t('intake-forms:applicant-information.province-territory-state-region')}
+          name="province"
+          options={regions}
+          defaultValue={defaultValues.province}
+          required
+          //errorMessage={errorMessages.province}
+        />
+        <div>
+          <ButtonLink id="back-button" to="/apply/application-type">
+            {t('intake-forms:applicant-information.button-back')}
+          </ButtonLink>
+          <Button id="confirm-button" variant="primary">
+            {t('intake-forms:applicant-information.button-continue')}
+          </Button>
+        </div>
       </Form>
     </>
   );

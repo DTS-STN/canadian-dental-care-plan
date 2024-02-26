@@ -11,6 +11,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { getRaoidcService } from '~/services/raoidc-service.server';
+import { getSessionService } from '~/services/session-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
@@ -61,8 +62,14 @@ export async function action({ request }: ActionFunctionArgs) {
 
   //TODO
   //COMPLETE ONCE THE NEXT PAGE IS ADDED
-
-  return redirect('/apply/date-of-birth', {});
+  const sessionService = await getSessionService();
+  const session = await sessionService.getSession(request);
+  session.set('pageA3-DoB', dateOfBirth);
+  return redirect('/apply/applicant-information', {
+    headers: {
+      'Set-Cookie': await sessionService.commitSession(session),
+    },
+  });
 }
 
 export default function EnterDoB() {

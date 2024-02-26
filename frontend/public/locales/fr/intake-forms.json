@@ -68,6 +68,8 @@
     "error-message": {
       "empty-field": "(FR) Enter a value",
       "invalid-date": "(FR) That's not a date!"
-    }
+    },
+    "button-back": "(FR) Back",
+    "button-continue": "(FR) Continue"
   }
 }
