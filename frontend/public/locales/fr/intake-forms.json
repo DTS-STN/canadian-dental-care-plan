@@ -41,7 +41,14 @@
     "date-of-birth": "(FR) Date of Birth",
     "last-name": "(FR) Last Name",
     "first-name": "(FR) First Name",
-    "marital-status": "(FR) Marital Status",
+    "marital-status": {
+      "radio-buttons-title": "Marital Status",
+      "single": "single",
+      "married-or-commonlaw": "Married or Common-law",
+      "widowed": "Widowed",
+      "divorced": "Divorced",
+      "seperated": "Seperated"
+    },
     "contact-information": "(FR) Contact Information",
     "telephone": "(FR) Telephone",
     "alternative-telephone": "(FR) Alternative Telephone",

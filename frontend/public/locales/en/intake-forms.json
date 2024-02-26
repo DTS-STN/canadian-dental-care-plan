@@ -41,7 +41,14 @@
     "date-of-birth": "Date of Birth",
     "last-name": "Last Name",
     "first-name": "First Name",
-    "marital-status": "Marital Status",
+    "marital-status": {
+      "radio-buttons-title": "Marital Status",
+      "single": "single",
+      "married-or-commonlaw": "Married or Common-law",
+      "widowed": "Widowed",
+      "divorced": "Divorced",
+      "seperated": "Seperated"
+    },
     "contact-information": "Contact Information",
     "telephone": "Telephone",
     "alternative-telephone": "Alternative Telephone",
