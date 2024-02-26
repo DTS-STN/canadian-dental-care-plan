@@ -21,19 +21,19 @@ test.describe('personal information home address edit page', () => {
     });
 
     await test.step('submit invalid form data', async () => {
-      await page.locator('input#address').evaluate((e) => ((e as HTMLInputElement).required = false));
-      await page.locator('input#address').fill('');
-      await page.locator('button#change-button').click();
+      await page.getByRole('textbox', { name: 'address' }).evaluate((e) => ((e as HTMLInputElement).required = false));
+      await page.getByRole('textbox', { name: 'address' }).fill('');
+      await page.getByRole('button', { name: 'change' }).click();
     });
 
     await test.step('detect errors summary presence', async () => {
-      const errorSummary = page.locator('section#error-summary');
+      const errorSummary = page.getByRole('alert').first();
       await expect(errorSummary).toBeInViewport();
       await expect(errorSummary).toBeFocused();
     });
 
     await test.step('detect form errors', async () => {
-      const input = page.locator('input#address');
+      const input = page.getByRole('textbox', { name: 'address' });
       const errorMessage = await input.evaluate((element) => (element as HTMLInputElement).validationMessage);
       expect(errorMessage).toEqual(expect.anything());
     });
@@ -51,8 +51,8 @@ test.describe('personal information home address edit page', () => {
     });
 
     await test.step('enter and submit form data', async () => {
-      await page.locator('input#address').fill('123 New Address Avenue');
-      await page.locator('button#change-button').click();
+      await page.getByRole('textbox', { name: 'address' }).fill('123 New Address Avenue');
+      await page.getByRole('button', { name: 'change' }).click();
     });
 
     await test.step('detect home address suggested page', async () => {
@@ -67,7 +67,7 @@ test.describe('personal information home address edit page', () => {
     });
 
     await test.step('click cancel', async () => {
-      await page.locator('a#cancel-button').click();
+      await page.getByRole('link', { name: 'cancel' }).click();
     });
 
     await test.step('detect personal information page', async () => {
