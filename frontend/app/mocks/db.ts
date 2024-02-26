@@ -40,10 +40,10 @@ const db = factory({
   },
   letter: {
     id: primaryKey(faker.string.uuid),
-    issuedOn: () => faker.date.past({ years: 1 }).toISOString().split('T')[0],
-    letterType: oneOf('letterType'),
     referenceId: String,
     userId: String,
+    letterType: oneOf('letterType'),
+    issuedOn: () => faker.date.past({ years: 1 }).toISOString().split('T')[0],
   },
   pdf: {
     id: primaryKey(faker.string.uuid),
@@ -111,12 +111,12 @@ const seededLetterTypes = [
 const numberOfLetters = faker.number.int({ min: 10, max: 20 }); // Adjust min and max as needed
 for (let i = 0; i < numberOfLetters; i++) {
   // seed avaliable pdf
-  const seededPDF = db.pdf.create();
+  const seededPdf = db.pdf.create();
 
   db.letter.create({
     userId: defaultUser.id,
+    referenceId: seededPdf.referenceId,
     letterType: faker.helpers.arrayElement(seededLetterTypes),
-    referenceId: seededPDF.referenceId,
   });
 }
 

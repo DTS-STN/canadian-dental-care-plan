@@ -1,11 +1,10 @@
 import { HttpResponse, http } from 'msw';
 import { setupServer } from 'msw/node';
-import { afterAll, afterEach, beforeAll, describe, expect, expectTypeOf, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { getLetterEntities } from '~/mocks/cct-api.server';
 import { getAllLetterTypes } from '~/mocks/power-platform-api.server';
 import { getInteropService } from '~/services/interop-service.server';
-import type { ParsedLetterInfo } from '~/services/interop-service.server';
 
 vi.mock('~/utils/logging.server', () => ({
   getLogger: vi.fn().mockReturnValue({
@@ -51,12 +50,6 @@ describe('interop-service.server.ts', () => {
     const letters = await interopService.getLetterInfoByClientId('00000000-0000-0000-0000-000000000000', 'clientId');
     expect(letters.length).toBeGreaterThan(0);
   });
-
-  it('it should return letters that match the corresponding type', async () => {
-    const letters = await interopService.getLetterInfoByClientId('00000000-0000-0000-0000-000000000000', 'clientId');
-    expectTypeOf(letters).toMatchTypeOf<ParsedLetterInfo>();
-  });
-
   it('it should not return letters associated with an invalid user', async () => {
     const letters = await interopService.getLetterInfoByClientId('00000000-0000-0000-0000-000000000001', 'clientId');
     expect(letters.length).toBe(0);

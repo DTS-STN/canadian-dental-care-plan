@@ -12,7 +12,7 @@ import { InputSelect } from '~/components/input-select';
 import { getInteropService } from '~/services/interop-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('letters');
@@ -41,7 +41,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const interopService = getInteropService();
   const userId = await userService.getUserId();
   const letters = await interopService.getLetterInfoByClientId(userId, 'clientId', sortOrder); // TODO where and what is clientId?
-  const letterTypes = (await interopService.getAllLetterTypes()).filter(({ code }) => letters.some(({ name }) => name === code));
+  const letterTypes = (await interopService.getAllLetterTypes()).filter(({ code }) => letters.some((letter) => letter.name === code));
   return json({ letters, letterTypes, sortOrder });
 }
 
@@ -75,8 +75,8 @@ export default function LettersIndex() {
       </div>
       <ul className="divide-y border-y">
         {letters.map((letter) => {
-          const letterType = letterTypes.find(({ code }) => code === letter.name);
-          const letterName = letterType ? letterType[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] : letter.name;
+          const letterTypeCd = letterTypes.find(({ code }) => code == letter.name);
+          const letterName = letterTypeCd ? getNameByLanguage(i18n.language, letterTypeCd) : letter.name;
           return (
             <li key={letter.id} className="py-4 sm:py-6">
               <InlineLink reloadDocument to={`/letters/${letter.referenceId}/download`} className="font-lato font-semibold">

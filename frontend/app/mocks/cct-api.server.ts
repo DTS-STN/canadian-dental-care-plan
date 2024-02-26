@@ -82,9 +82,9 @@ export function getCCTApiMockHandlers() {
 
       return HttpResponse.json(
         getLetterEntities(userId).map((letter) => ({
-          LetterRecordId: letter.id,
+          LetterId: letter.id,
+          LetterRecordId: letter.referenceId,
           LetterDate: letter.issuedOn,
-          LetterId: letter.referenceId,
           LetterName: letter.letterType?.code,
         })),
       );
