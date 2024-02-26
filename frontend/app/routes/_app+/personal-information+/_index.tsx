@@ -113,7 +113,7 @@ export default function PersonalInformationIndex() {
 function DescriptionListItem({ children, term }: { children: ReactNode; term: ReactNode }) {
   return (
     <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
-      <dt className="font-medium">{term}</dt>
+      <dt className="font-semibold">{term}</dt>
       <dd className="mt-3 space-y-3 sm:col-span-2 sm:mt-0">{children}</dd>
     </div>
   );

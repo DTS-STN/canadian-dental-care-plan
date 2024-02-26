@@ -24,7 +24,7 @@ export function InputCheckbox(props: InputCheckboxProps) {
         data-testid="input-checkbox"
         {...restProps}
       />
-      <label id={inputLabelId} htmlFor={inputCheckboxId} className={cn('ml-3 block font-medium leading-6', restProps.disabled && disableClassName)}>
+      <label id={inputLabelId} htmlFor={inputCheckboxId} className={cn('ml-3 block leading-6', restProps.disabled && disableClassName)}>
         {children}
       </label>
     </div>

@@ -14,7 +14,7 @@ export function InputLegend(props: InputLegendProps) {
   const { children, className, required, ...restProps } = props;
 
   return (
-    <legend className={cn('block font-medium', className)} data-testid="input-legend" {...restProps}>
+    <legend className={cn('block font-semibold', className)} data-testid="input-legend" {...restProps}>
       <span>{children}</span>
       {required && (
         <>

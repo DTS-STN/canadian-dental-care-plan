@@ -24,7 +24,7 @@ export function InputRadio(props: InputRadioProps) {
         data-testid="input-radio"
         {...restProps}
       />
-      <label id={inputLabelId} htmlFor={inputRadioId} className={cn('ml-3 block font-medium leading-6', restProps.disabled && disableClassName)}>
+      <label id={inputLabelId} htmlFor={inputRadioId} className={cn('ml-3 block leading-6', restProps.disabled && disableClassName)}>
         {children}
       </label>
     </div>

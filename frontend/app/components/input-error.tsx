@@ -10,7 +10,7 @@ export interface InputErrorProps extends ComponentProps<'span'> {
 export function InputError(props: InputErrorProps) {
   const { children, className, ...restProps } = props;
   return (
-    <span className={cn('block max-w-prose text-sm font-medium text-red-600', className)} data-testid="input-error-test-id" role="alert" {...restProps}>
+    <span className={cn('block max-w-prose text-sm font-semibold text-red-600', className)} data-testid="input-error-test-id" role="alert" {...restProps}>
       {children}
     </span>
   );

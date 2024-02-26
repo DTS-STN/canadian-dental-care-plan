@@ -93,7 +93,7 @@ export default function PersonalInformationHomeAddressConfirm() {
         <dl className="my-6 divide-y border-y">
           {homeAddressInfo && (
             <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
-              <dt className="font-medium">{t('personal-information:home-address.confirm.previous-home-address')}</dt>
+              <dt className="font-semibold">{t('personal-information:home-address.confirm.previous-home-address')}</dt>
               <dd className="mt-3 sm:col-span-2 sm:mt-0">
                 <Address
                   address={homeAddressInfo.address}
@@ -106,7 +106,7 @@ export default function PersonalInformationHomeAddressConfirm() {
             </div>
           )}
           <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
-            <dt className="font-medium">{t('personal-information:home-address.confirm.new-home-address')}</dt>
+            <dt className="font-semibold">{t('personal-information:home-address.confirm.new-home-address')}</dt>
             <dd className="mt-3 sm:col-span-2 sm:mt-0">
               <Address address={address} city={city} provinceState={provinceState} postalZipCode={postalCode} country={countryName} />
             </dd>

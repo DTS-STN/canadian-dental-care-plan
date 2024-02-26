@@ -69,7 +69,7 @@ export default function HomeAddressSuggested() {
         <p className="mb-4">{t('personal-information:home-address.suggested.note')}</p>
         <dl className="my-6 divide-y border-y">
           <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
-            <dt className="font-medium">{t('personal-information:home-address.suggested.address-entered')}</dt>
+            <dt className="font-semibold">{t('personal-information:home-address.suggested.address-entered')}</dt>
             <dd className="mt-3 sm:col-span-2 sm:mt-0">
               {homeAddressInfo ? (
                 <Address
@@ -85,7 +85,7 @@ export default function HomeAddressSuggested() {
             </dd>
           </div>
           <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
-            <dt className="font-medium">{t('personal-information:home-address.suggested.address-suggested')}</dt>
+            <dt className="font-semibold">{t('personal-information:home-address.suggested.address-suggested')}</dt>
             <dd className="mt-3 sm:col-span-2 sm:mt-0">
               {suggestedAddressInfo ? (
                 <Address

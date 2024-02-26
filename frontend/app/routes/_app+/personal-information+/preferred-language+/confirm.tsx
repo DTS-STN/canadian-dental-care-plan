@@ -80,7 +80,7 @@ export default function PreferredLanguageConfirm() {
       <Form method="post">
         <dl className="my-6 border-y">
           <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
-            <dt className="font-medium">{t('personal-information:preferred-language.edit.language')}</dt>
+            <dt className="font-semibold">{t('personal-information:preferred-language.edit.language')}</dt>
             <dd className="mt-3 sm:col-span-2 sm:mt-0">{preferredLanguage && getNameByLanguage(i18n.language, preferredLanguage)}</dd>
           </div>
         </dl>

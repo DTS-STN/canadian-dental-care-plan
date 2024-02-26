@@ -71,7 +71,7 @@ export default function PersonalInformationMailingAddressConfirm() {
         <dl className="my-6 divide-y border-y">
           {mailingAddressInfo && (
             <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
-              <dt className="font-medium">{t('personal-information:mailing-address.confirm.previous-mailing-address')}</dt>
+              <dt className="font-semibold">{t('personal-information:mailing-address.confirm.previous-mailing-address')}</dt>
               <dd className="mt-3 sm:col-span-2 sm:mt-0">
                 <Address
                   address={mailingAddressInfo.address}
@@ -84,7 +84,7 @@ export default function PersonalInformationMailingAddressConfirm() {
             </div>
           )}
           <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
-            <dt className="font-medium">{t('personal-information:mailing-address.confirm.new-mailing-address')}</dt>
+            <dt className="font-semibold">{t('personal-information:mailing-address.confirm.new-mailing-address')}</dt>
             <dd className="mt-3 sm:col-span-2 sm:mt-0">
               <Address
                 address={newMailingAddress.address}
