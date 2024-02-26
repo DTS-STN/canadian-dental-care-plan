@@ -12,7 +12,7 @@ import { InputSelect } from '~/components/input-select';
 import { getInteropService } from '~/services/interop-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('letters');
@@ -76,7 +76,7 @@ export default function LettersIndex() {
       <ul className="divide-y border-y">
         {letters.map((letter) => {
           const letterType = letterTypes.find(({ code }) => code === letter.name);
-          const letterName = letterType ? letterType[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] : letter.name;
+          const letterName = letterType ? getNameByLanguage(i18n.language, letterType) : letter.name;
           return (
             <li key={letter.id} className="py-4 sm:py-6">
               <InlineLink reloadDocument to={`/letters/${letter.referenceId}/download`} className="font-lato font-semibold">
