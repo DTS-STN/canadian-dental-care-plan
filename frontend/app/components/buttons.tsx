@@ -22,7 +22,7 @@ const variants = {
   red: 'bg-red-700 text-white hover:bg-red-800',
 };
 
-const baseClassName = 'inline-flex items-center justify-center rounded align-middle font-medium outline-offset-2';
+const baseClassName = 'inline-flex items-center justify-center rounded align-middle font-lato outline-offset-2';
 const disableClassName = 'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
 
 export interface ButtonProps extends ComponentProps<'button'> {

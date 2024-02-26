@@ -11,6 +11,7 @@ import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import SessionTimeout from '~/components/session-timeout';
 import { Toaster } from '~/components/toaster';
+import fontLatoStyleSheet from '~/fonts/lato.css';
 import fontNotoSansStyleSheet from '~/fonts/noto-sans.css';
 import { getBuildInfoService } from '~/services/build-info-service.server';
 import tailwindStyleSheet from '~/tailwind.css';
@@ -18,6 +19,7 @@ import { getPublicEnv } from '~/utils/env.server';
 import { useDocumentTitleI18nKey, useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
 
 export const links: LinksFunction = () => [
+  { rel: 'stylesheet', href: fontLatoStyleSheet },
   { rel: 'stylesheet', href: fontNotoSansStyleSheet },
   { rel: 'stylesheet', href: tailwindStyleSheet },
 ];
