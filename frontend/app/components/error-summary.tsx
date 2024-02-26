@@ -96,7 +96,7 @@ export function ErrorSummary({ errors, id }: ErrorSummaryProps) {
     <section id={id} className="my-5 flex gap-3 rounded-lg border border-red-300 bg-red-50 p-4 text-red-800" tabIndex={-1} role="alert">
       <FontAwesomeIcon icon={faCircleExclamation} className="mt-1.5 inline size-4 flex-shrink-0" />
       <div>
-        <h2 className="text-lg font-semibold">{t('gcweb:error-summary.header', { count: errors.length })}</h2>
+        <h2 className="font-lato text-lg font-semibold">{t('gcweb:error-summary.header', { count: errors.length })}</h2>
         {errors.length > 0 && (
           <ul className="mt-1.5 list-inside list-disc">
             {errors.map(({ feildId, errorMessage }) => (

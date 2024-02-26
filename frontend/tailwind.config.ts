@@ -8,6 +8,7 @@ export default {
       padding: '1rem',
     },
     fontFamily: {
+      lato: ['"Lato"', 'sans-serif'],
       sans: ['"Noto Sans"', 'sans-serif'],
     },
     // @see https://wet-boew.github.io/wet-boew-styleguide/design/grids-en.html#responsive

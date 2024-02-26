@@ -67,7 +67,7 @@ export default function Index() {
 function CardLink({ children, inProgress, title, to }: { children: ReactNode; inProgress?: boolean; title: ReactNode; to: ComponentProps<typeof Link>['to'] }) {
   return (
     <Link className="flex flex-col gap-4 rounded-xl border border-slate-300 bg-slate-50 p-6 hover:shadow-md " to={to}>
-      <h2 className="text-2xl font-semibold leading-8">{title}</h2>
+      <h2 className="font-lato text-2xl font-semibold leading-8">{title}</h2>
       <p>{children}</p>
       {inProgress && (
         <div className="mt-auto">
