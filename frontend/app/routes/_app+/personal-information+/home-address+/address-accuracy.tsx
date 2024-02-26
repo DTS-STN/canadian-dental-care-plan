@@ -57,7 +57,7 @@ export default function PersonalInformationHomeAddressAccuracy() {
         <p>{t('personal-information:home-address.address-accuracy.note')}</p>
         <dl className="my-6 divide-y border-y">
           <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
-            <dt className="font-medium">{t('personal-information:home-address.address-accuracy.requested-change')}</dt>
+            <dt className="font-semibold">{t('personal-information:home-address.address-accuracy.requested-change')}</dt>
             <dd className="mt-3 sm:col-span-2 sm:mt-0">
               {newHomeAddress ? (
                 <Address

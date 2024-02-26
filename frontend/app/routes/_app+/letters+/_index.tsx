@@ -79,7 +79,7 @@ export default function LettersIndex() {
           const letterName = letterType ? letterType[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] : letter.name;
           return (
             <li key={letter.id} className="py-4 sm:py-6">
-              <InlineLink reloadDocument to={`/letters/${letter.referenceId}/download`} className="font-medium">
+              <InlineLink reloadDocument to={`/letters/${letter.referenceId}/download`} className="font-lato font-semibold">
                 {letterName}
               </InlineLink>
               <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: letter.issuedOn })}</p>

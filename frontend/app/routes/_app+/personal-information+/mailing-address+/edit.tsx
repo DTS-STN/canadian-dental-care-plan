@@ -216,7 +216,7 @@ export default function PersonalInformationMailingAddressEdit() {
           {isCopyAddressChecked && homeAddressInfo && (
             <dl className="border-y py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
               <dt>
-                <strong className="font-medium">{t('personal-information:mailing-address.edit.copy-home-address-note')}</strong>
+                <strong className="font-semibold">{t('personal-information:mailing-address.edit.copy-home-address-note')}</strong>
               </dt>
               <dd className="mt-3 sm:col-span-2 sm:mt-0">
                 <Address
