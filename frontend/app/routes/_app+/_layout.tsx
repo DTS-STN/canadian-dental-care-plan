@@ -151,7 +151,7 @@ function PageHeader() {
         <section className="bg-gray-700 text-white">
           <div className="sm:container">
             <div className="flex flex-col items-stretch justify-between sm:flex-row sm:items-center">
-              <h2 className="font-lato p-4 text-xl font-semibold sm:p-0 sm:text-2xl">
+              <h2 className="p-4 font-lato text-xl font-semibold sm:p-0 sm:text-2xl">
                 <Link to="/" className="hover:underline">
                   {t('gcweb:header.application-title')}
                 </Link>
