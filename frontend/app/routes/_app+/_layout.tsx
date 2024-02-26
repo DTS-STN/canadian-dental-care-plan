@@ -297,18 +297,23 @@ function ServerError({ error }: ServerErrorProps) {
   const home = <InlineLink to="/" />;
 
   return (
-    <ApplicationLayout>
-      <PageTitle>
-        {t('gcweb:server-error.page-title')}
-        &#32;<small className="block text-2xl font-normal text-neutral-500">{t('gcweb:server-error.page-subtitle')}</small>
-      </PageTitle>
-      <p className="mb-8 text-lg text-gray-500">{t('gcweb:server-error.page-message')}</p>
-      <ul className="list-disc space-y-2 pl-10">
-        <li>{t('gcweb:server-error.option-01')}</li>
-        <li>
-          <Trans ns={i18nNamespaces} i18nKey="gcweb:server-error.option-02" components={{ home }} />
-        </li>
-      </ul>
-    </ApplicationLayout>
+    <>
+      <PageHeader />
+      <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
+        <PageTitle>
+          {t('gcweb:server-error.page-title')}
+          &#32;<small className="block text-2xl font-normal text-neutral-500">{t('gcweb:server-error.page-subtitle')}</small>
+        </PageTitle>
+        <p className="mb-8 text-lg text-gray-500">{t('gcweb:server-error.page-message')}</p>
+        <ul className="list-disc space-y-2 pl-10">
+          <li>{t('gcweb:server-error.option-01')}</li>
+          <li>
+            <Trans ns={i18nNamespaces} i18nKey="gcweb:server-error.option-02" components={{ home }} />
+          </li>
+        </ul>
+        <PageDetails />
+      </main>
+      <PageFooter />
+    </>
   );
 }
