@@ -21,18 +21,18 @@ test.describe('personal information phone number edit page', () => {
     });
 
     await test.step('submit invalid form data', async () => {
-      await page.locator('input#phoneNumber').fill('ASDF');
-      await page.locator('button#submit').click();
+      await page.getByRole('textbox', { name: 'phone number' }).fill('ASDF');
+      await page.getByRole('button', { name: 'change' }).click();
     });
 
     await test.step('detect errors summary presence', async () => {
-      const errorSummary = page.locator('section#error-summary');
+      const errorSummary = page.getByRole('alert').first();
       await expect(errorSummary).toBeInViewport();
       await expect(errorSummary).toBeFocused();
     });
 
     await test.step('detect form errors', async () => {
-      const input = page.locator('input#phoneNumber');
+      const input = page.getByRole('textbox', { name: 'phone number' });
       const errorMessage = await input.evaluate((element) => (element as HTMLInputElement).validationMessage);
       expect(errorMessage).toEqual(expect.anything());
     });
@@ -50,8 +50,8 @@ test.describe('personal information phone number edit page', () => {
     });
 
     await test.step('enter and submit form data', async () => {
-      await page.locator('input#phoneNumber').fill('(506) 555-5555');
-      await page.locator('button#submit').click();
+      await page.getByRole('textbox', { name: 'phone number' }).fill('(506) 555-5555');
+      await page.getByRole('button', { name: 'change' }).click();
     });
 
     await test.step('detect phone number confirm page', async () => {
@@ -66,7 +66,7 @@ test.describe('personal information phone number edit page', () => {
     });
 
     await test.step('click cancel', async () => {
-      await page.locator('a#cancel').click();
+      await page.getByRole('link', { name: 'cancel' }).click();
     });
 
     await test.step('detect personal information page', async () => {

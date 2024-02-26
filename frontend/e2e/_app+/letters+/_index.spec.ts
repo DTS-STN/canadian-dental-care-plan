@@ -9,7 +9,7 @@ test.describe('letters page', () => {
 
   test('it should sort letters oldest to newest', async ({ page }) => {
     await page.goto('/letters');
-    const selectLocator = page.locator('select#sort-order');
+    const selectLocator = page.getByRole('combobox', { name: 'filter by' });
     await expect(selectLocator).toHaveValue('desc');
     await selectLocator.selectOption('asc');
     await expect(page).toHaveURL(/\/letters?.*sort=asc/);
@@ -21,7 +21,7 @@ test.describe('letters page', () => {
     // in chromium, however, this isn't the case. Instead, the pdf will fire a download event
     await page.goto('/letters');
     const downloadPromise = page.waitForEvent('download');
-    await page.locator('a[href$="/download"]').first().click();
+    await page.getByRole('main').getByRole('listitem').first().getByRole('link').click();
     const download = await downloadPromise;
     expect(download.suggestedFilename()).toMatch(/\.pdf$/);
   });
