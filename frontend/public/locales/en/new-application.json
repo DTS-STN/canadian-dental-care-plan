@@ -29,5 +29,18 @@
       "paragraph-one": "By starting this application, you consent to the terms of the above privacy notice statement.",
       "button": "Start application"
     }
+  },
+  "a2": {
+    "page-title": "Type of application",
+    "breadcrumbs": {
+      "new-application": "New Application",
+      "a2": "Type of Application"
+    },
+    "choose-type": "I am",
+    "self": "Applying for myself",
+    "else": "Applying on behalf of someone else",
+    "back": "Back",
+    "continue": "Continue",
+    "required": "Please select one of these options"
   }
 }
