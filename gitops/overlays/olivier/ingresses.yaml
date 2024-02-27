@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: cdcp-dev.olivier-dp.dts-stn.com
+    - host: cdcp-olivier.dev-dp.dts-stn.com
       http:
         paths:
           - path: /
