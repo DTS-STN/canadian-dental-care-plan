@@ -30,15 +30,15 @@
       "button": "(FR) Start application"
     }
   },
-  "a2": {
+  "application-type": {
     "page-title": "(FR) Type of application",
     "breadcrumbs": {
       "new-application": "(FR) New Application",
-      "a2": "(FR) Type of Application"
+      "application-type": "(FR) Type of Application"
     },
     "choose-type": "(FR) I am",
     "self": "(FR) Applying for myself",
-    "else": "(FR) Applying on behalf of someone else",
+    "other": "(FR) Applying on behalf of someone else",
     "back": "(FR) Back",
     "continue": "(FR) Continue",
     "required": "(FR) Please select one of these options"

@@ -36,7 +36,7 @@ export default function NewApplicationIndex() {
       <p className="mb-8 text-lg font-bold">{t('new-application:privacy-statement.apply-now.subtitle')}</p>
       <p className="mb-4">{t('new-application:privacy-statement.apply-now.paragraph-one')}</p>
       <div className="flex flex-wrap items-center gap-3">
-        <ButtonLink className="bg-green-800 text-white" id="apply-button" to="/new-application/a2">
+        <ButtonLink className="bg-green-800 text-white" id="apply-button" to="/new-application/application-type">
           {t('new-application:privacy-statement.apply-now.button')}
         </ButtonLink>
       </div>
