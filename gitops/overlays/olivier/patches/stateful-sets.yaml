@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+spec:
+  serviceName: redis
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis
+  template:
+    spec:
+      containers:
+        - name: redis
+          image: docker.io/redis:7.2
