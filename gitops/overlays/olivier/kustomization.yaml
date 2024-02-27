@@ -16,7 +16,9 @@ labels:
 resources:
   - ../../base/frontend/
   - ./ingresses.yaml
-
+patches:
+  - path: ./patches/deployments.yaml
+  - path: ./patches/services.yaml
 configMapGenerator:
   - name: frontend
     behavior: replace
