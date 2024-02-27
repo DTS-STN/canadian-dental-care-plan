@@ -1,26 +1,23 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: canada-dental-care-plan
-nameSuffix: -dev
+nameSuffix: -olivier
 commonLabels:
   # commonLabels must have at least one unique label
   # per environment to ensure selectors are applied correctly
-  app.kubernetes.io/instance: dev
+  app.kubernetes.io/instance: olivier
 labels:
   - pairs:
       app.kubernetes.io/part-of: canada-dental-care-plan
       app.kubernetes.io/managed-by: teamcity
-      app.kubernetes.io/cluster: dts-dev-sced-rhp-spoke-aks
-      app.kubernetes.io/environment: dev
+      app.kubernetes.io/cluster: dts-olivier-sced-rhp-spoke-aks
+      app.kubernetes.io/environment: olivier
       app.kubernetes.io/tier: nonprod
 resources:
   - ../../base/frontend/
   - ../../base/redis/
   - ./ingresses.yaml
-patches:
-  - path: ./patches/deployments.yaml
-  - path: ./patches/services.yaml
-  - path: ./patches/stateful-sets.yaml
+
 configMapGenerator:
   - name: frontend
     behavior: replace
@@ -30,10 +27,6 @@ configMapGenerator:
     behavior: create
     files:
       - ./configs/oauth-proxy.conf
-  - name: redis
-    behavior: replace
-    files:
-      - ./configs/redis-config.conf
 secretGenerator:
   - name: frontend
     behavior: replace
@@ -43,7 +36,4 @@ secretGenerator:
     behavior: create
     envs:
       - ./configs/oauth-proxy-secrets.conf
-  - name: redis
-    behavior: replace
-    envs:
-      - ./configs/redis-secrets.conf
+  
