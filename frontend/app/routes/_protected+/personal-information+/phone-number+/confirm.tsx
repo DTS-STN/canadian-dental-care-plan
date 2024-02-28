@@ -75,7 +75,7 @@ export default function PhoneNumberConfirm() {
   return (
     <>
       <p className="mb-8 text-lg text-gray-500">{t('personal-information:phone-number.confirm.subtitle')}</p>
-      <Form method="post">
+      <Form method="post" noValidate>
         <dl className="my-6 divide-y border-y">
           <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
             <dt className="font-semibold">{t('personal-information:phone-number.edit.component.previous')}</dt>

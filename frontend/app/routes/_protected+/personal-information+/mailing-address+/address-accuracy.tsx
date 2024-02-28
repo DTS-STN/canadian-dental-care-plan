@@ -52,7 +52,7 @@ export default function PersonalInformationMailingAddressAccuracy() {
   return (
     <>
       <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:mailing-address.address-accuracy.subtitle')}</p>
-      <Form method="post">
+      <Form method="post" noValidate>
         <p className="mb-4">{t('personal-information:mailing-address.address-accuracy.invalid-address-info')}</p>
         <p>{t('personal-information:mailing-address.address-accuracy.note')}</p>
         <dl className="my-6 divide-y border-y">

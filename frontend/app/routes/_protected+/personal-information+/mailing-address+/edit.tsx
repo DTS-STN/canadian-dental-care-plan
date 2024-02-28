@@ -204,7 +204,7 @@ export default function PersonalInformationMailingAddressEdit() {
     <>
       <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:mailing-address.edit.subtitle')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post">
+      <Form method="post" noValidate>
         {homeAddressInfo && (
           <div className="my-6">
             <InputCheckbox id="copy-home-address" name="copyHomeAddress" checked={isCopyAddressChecked} onChange={checkHandler}>

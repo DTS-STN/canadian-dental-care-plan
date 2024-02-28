@@ -77,7 +77,7 @@ export default function PreferredLanguageEdit() {
   return (
     <>
       <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:preferred-language.edit.subtitle')}</p>
-      <Form method="post">
+      <Form method="post" noValidate>
         <div className="my-6">
           <p className="mb-4 text-red-600">{t('gcweb:asterisk-indicates-required-field')}</p>
           {preferredLanguages.length > 0 && (

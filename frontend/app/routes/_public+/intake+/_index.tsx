@@ -18,7 +18,7 @@ export default function IntakeIndex() {
     <>
       <h3>Intake Form Index</h3>
       <p>Privacy Statements</p>
-      <Form method="post">
+      <Form method="post" noValidate>
         <Button>Accept and start intake flow!</Button>
       </Form>
     </>
