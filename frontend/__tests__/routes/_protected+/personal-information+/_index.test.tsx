@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { loader } from '~/routes/_app+/personal-information+/_index';
+import { loader } from '~/routes/_protected+/personal-information+/_index';
 
 vi.mock('~/services/address-service.server', () => ({
   getAddressService: vi.fn().mockReturnValue({

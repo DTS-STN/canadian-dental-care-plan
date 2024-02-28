@@ -2,7 +2,7 @@ import { redirect } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/_app+/personal-information+/phone-number+/edit';
+import { action, loader } from '~/routes/_protected+/personal-information+/phone-number+/edit';
 import { getUserService } from '~/services/user-service.server';
 
 vi.mock('~/services/raoidc-service.server', () => ({
