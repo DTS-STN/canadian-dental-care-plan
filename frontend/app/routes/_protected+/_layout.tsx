@@ -14,16 +14,16 @@ export function ErrorBoundary() {
     switch (error.status) {
       // TODO :: GjB :: handle other status codes
       default:
-        return <ServerError error={error} />;
+        return <ServerError error={error} showAccountMenu />;
     }
   }
 
-  return <ServerError error={error} />;
+  return <ServerError error={error} showAccountMenu />;
 }
 
 export default function Layout() {
   return (
-    <ApplicationLayout>
+    <ApplicationLayout showAccountMenu>
       <Outlet />
     </ApplicationLayout>
   );

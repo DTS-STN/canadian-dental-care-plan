@@ -20,16 +20,17 @@ export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
 export interface ApplicationLayoutProps {
   children?: ReactNode;
+  showAccountMenu?: boolean;
 }
 
 /**
  * GCWeb Application page template.
  * see: https://wet-boew.github.io/GCWeb/templates/application/application-docs-en.html
  */
-export default function ApplicationLayout({ children }: ApplicationLayoutProps) {
+export default function ApplicationLayout({ children, showAccountMenu }: ApplicationLayoutProps) {
   return (
     <>
-      <PageHeader />
+      <PageHeader showAccountMenu={showAccountMenu} />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
         <AppPageTitle />
         {children}
@@ -45,41 +46,47 @@ function NavigationMenu() {
   const { SCCH_BASE_URI } = getClientEnv();
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="inline-flex w-full items-center justify-between bg-slate-200 px-4 py-3 align-middle font-bold text-slate-700 outline-offset-2 hover:bg-neutral-300 focus:bg-neutral-300" id="dropdownNavbarLink" data-testid="menuButton">
-          <span className="inline-flex w-full appearance-none items-center gap-4">
-            <FontAwesomeIcon icon={faCircleUser} className="size-9 flex-shrink-0" />
-            <span>{t('header.menu-title')}</span>
-          </span>
-          <FontAwesomeIcon icon={faChevronDown} className="size-3 flex-shrink-0" />
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-svw rounded-t-none sm:w-[260px]" sideOffset={0} align="center">
-        <DropdownMenuItem asChild className="cursor-pointer">
-          <Link to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-dashboard.text')}</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild className="cursor-pointer">
-          <Link to={t('gcweb:header.menu-profile.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-profile.text')}</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild className="cursor-pointer">
-          <Link to={t('gcweb:header.menu-security-settings.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-security-settings.text')}</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild className="cursor-pointer">
-          <Link to={t('gcweb:header.menu-contact-us.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-contact-us.text')}</Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild className="cursor-pointer">
-          <Link to="/auth/logout" className="flex items-center justify-between gap-2">
-            {t('gcweb:header.menu-sign-out.text')} <FontAwesomeIcon icon={faArrowRightFromBracket} className="size-4 flex-shrink-0" />
-          </Link>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="sm:w-[260px]">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className="inline-flex w-full items-center justify-between bg-slate-200 px-4 py-3 align-middle font-bold text-slate-700 outline-offset-2 hover:bg-neutral-300 focus:bg-neutral-300" id="dropdownNavbarLink" data-testid="menuButton">
+            <span className="inline-flex w-full appearance-none items-center gap-4">
+              <FontAwesomeIcon icon={faCircleUser} className="size-9 flex-shrink-0" />
+              <span>{t('header.menu-title')}</span>
+            </span>
+            <FontAwesomeIcon icon={faChevronDown} className="size-3 flex-shrink-0" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-svw rounded-t-none sm:w-[260px]" sideOffset={0} align="center">
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-dashboard.text')}</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link to={t('gcweb:header.menu-profile.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-profile.text')}</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link to={t('gcweb:header.menu-security-settings.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-security-settings.text')}</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link to={t('gcweb:header.menu-contact-us.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-contact-us.text')}</Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link to="/auth/logout" className="flex items-center justify-between gap-2">
+              {t('gcweb:header.menu-sign-out.text')} <FontAwesomeIcon icon={faArrowRightFromBracket} className="size-4 flex-shrink-0" />
+            </Link>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }
 
-function PageHeader() {
+interface PageHeaderProps {
+  showAccountMenu?: boolean;
+}
+
+function PageHeader({ showAccountMenu }: PageHeaderProps) {
   const { i18n, t } = useTranslation(i18nNamespaces);
 
   /**
@@ -130,14 +137,12 @@ function PageHeader() {
         <section className="bg-gray-700 text-white">
           <div className="sm:container">
             <div className="flex flex-col items-stretch justify-between sm:flex-row sm:items-center">
-              <h2 className="p-4 font-lato text-xl font-semibold sm:p-0 sm:text-2xl">
+              <h2 className="p-4 font-lato text-xl font-semibold sm:p-0 sm:py-3 sm:text-2xl">
                 <Link to="/" className="hover:underline">
                   {t('gcweb:header.application-title')}
                 </Link>
               </h2>
-              <div className="sm:w-[260px]">
-                <NavigationMenu />
-              </div>
+              {showAccountMenu && <NavigationMenu />}
             </div>
           </div>
         </section>
@@ -265,16 +270,16 @@ function Breadcrumbs() {
 
 export interface ServerErrorProps {
   error: unknown;
+  showAccountMenu?: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function ServerError({ error }: ServerErrorProps) {
+export function ServerError({ error, showAccountMenu }: ServerErrorProps) {
   const { t } = useTranslation(i18nNamespaces);
   const home = <InlineLink to="/" />;
 
   return (
     <>
-      <PageHeader />
+      <PageHeader showAccountMenu={showAccountMenu} />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
         <PageTitle>
           {t('gcweb:server-error.page-title')}
