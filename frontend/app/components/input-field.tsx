@@ -17,7 +17,7 @@ export interface InputFieldProps extends Omit<React.ComponentProps<'input'>, 'ar
 }
 
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) => {
-  const { errorMessage, className, helpMessage, id, label, required, type, ...restInputProps } = props;
+  const { errorMessage, className, helpMessage, id, label, required, type = 'text', ...restInputProps } = props;
 
   const inputErrorId = `input-${id}-error`;
   const inputHelpMessageId = `input-${id}-help`;
@@ -46,7 +46,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) =>
         data-testid="input-field"
         id={id}
         required={required}
-        type={type ?? 'text'}
+        type={type}
         {...restInputProps}
       />
       {errorMessage && (
