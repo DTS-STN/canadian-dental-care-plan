@@ -172,7 +172,7 @@ function PageDetails() {
   return (
     <section className="mb-8 mt-16">
       <h2 className="sr-only">{t('gcweb:page-details.page-details')}</h2>
-      <dl id="wb-dtmd" className="space-y-1 text-sm text-gray-500">
+      <dl id="wb-dtmd" className="space-y-1">
         {!!pageIdentifier && (
           <div className="flex gap-2">
             <dt>{t('gcweb:page-details.screen-id')}</dt>
@@ -206,10 +206,26 @@ function PageFooter() {
   const { t } = useTranslation(i18nNamespaces);
 
   return (
-    <footer id="wb-info" className="border-t bg-stone-50 py-7">
-      <div className="container">
+    <footer id="wb-info" className="bg-stone-50">
+      <div className="bg-gray-700 text-white">
+        <section className="container py-6">
+          <h2 className="mb-4">My Service Canada Account</h2>
+          <div className="grid gap-x-4 gap-y-2 text-sm sm:grid-cols-3">
+            <Link className="hover:underline" to="https://example.com/contact-us">
+              Contact Us
+            </Link>
+            <Link className="hover:underline" to="https://example.com/link-1">
+              [Link1]
+            </Link>
+            <Link className="hover:underline" to="https://example.com/link-2">
+              [Link2]
+            </Link>
+          </div>
+        </section>
+      </div>
+      <div className="container py-7">
         <h2 className="sr-only">{t('gcweb:footer.about-site')}</h2>
-        <div className=" flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-4">
           <nav aria-labelledby="gc-corporate">
             <h3 id="gc-corporate" className="sr-only">
               {t('gcweb:footer.gc-corporate')}
