@@ -15,7 +15,7 @@ export function InputCheckbox(props: InputCheckboxProps) {
   const inputLabelId = `input-checkbox-${id}-label`;
   const inputCheckboxId = `input-checkbox-${id}`;
   return (
-    <div className={'flex items-center'}>
+    <div className="flex items-center">
       <input
         type="checkbox"
         id={inputCheckboxId}

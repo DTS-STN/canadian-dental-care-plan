@@ -15,7 +15,7 @@ export function InputRadio(props: InputRadioProps) {
   const inputLabelId = `input-radio-${id}-label`;
   const inputRadioId = `input-radio-${id}`;
   return (
-    <div className={'flex items-center'}>
+    <div className="flex items-center">
       <input
         type="radio"
         id={inputRadioId}
