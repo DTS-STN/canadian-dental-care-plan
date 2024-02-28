@@ -123,7 +123,7 @@ export default function PersonalInformationMailingAddressEdit() {
   const [countryRegions, setCountryRegions] = useState<RegionInfo[]>([]);
   const { i18n, t } = useTranslation(i18nNamespaces);
   const errorSummaryId = 'error-summary';
-  const [isCopyAddressChecked, setCopyAddressChecked] = useState(false);
+  const [copyAddressChecked, setCopyAddressChecked] = useState(false);
 
   useEffect(() => {
     const filteredRegions = regionList.filter((region) => region.countryId === selectedCountry);
@@ -206,14 +206,12 @@ export default function PersonalInformationMailingAddressEdit() {
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post" noValidate>
         {homeAddressInfo && (
-          <div className="my-6">
-            <InputCheckbox id="copy-home-address" name="copyHomeAddress" checked={isCopyAddressChecked} onChange={checkHandler}>
-              {t('personal-information:mailing-address.edit.copy-home-address')}
-            </InputCheckbox>
-          </div>
+          <InputCheckbox id="copy-home-address" name="copyHomeAddress" checked={copyAddressChecked} onChange={checkHandler} className="my-6">
+            {t('personal-information:mailing-address.edit.copy-home-address')}
+          </InputCheckbox>
         )}
         <div className="my-6">
-          {isCopyAddressChecked && homeAddressInfo && (
+          {copyAddressChecked && homeAddressInfo && (
             <dl className="border-y py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
               <dt>
                 <strong className="font-semibold">{t('personal-information:mailing-address.edit.copy-home-address-note')}</strong>
@@ -229,7 +227,7 @@ export default function PersonalInformationMailingAddressEdit() {
               </dd>
             </dl>
           )}
-          {!isCopyAddressChecked && (
+          {!copyAddressChecked && (
             <div className="max-w-prose">
               <p className="mb-4 text-red-600">{t('gcweb:asterisk-indicates-required-field')}</p>
               <InputField id="address" className="w-full" label={t('personal-information:mailing-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />
