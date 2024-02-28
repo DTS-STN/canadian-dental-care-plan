@@ -68,7 +68,7 @@ export default function IntakeFlowEmail() {
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <p className="mb-3 font-semibold">State:</p>
       <pre className="mb-6 block max-w-prose border border-slate-100 bg-slate-50 p-3">{JSON.stringify(state, undefined, 2)}</pre>
-      <Form method="post">
+      <Form method="post" noValidate>
         <InputField id="emailAddress" name="emailAddress" label="Email address" required defaultValue={defaultValues.emailAddress} errorMessage={errorMessages.emailAddress} />
         <Button variant="primary">Next step</Button>
       </Form>

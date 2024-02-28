@@ -72,7 +72,7 @@ export default function IntakeFlowPersonalInfo() {
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <p className="mb-3 font-semibold">State:</p>
       <pre className="mb-6 block max-w-prose border border-slate-100 bg-slate-50 p-3">{JSON.stringify(state, undefined, 2)}</pre>
-      <Form method="post">
+      <Form method="post" noValidate>
         <InputField id="givenName" name="givenName" label="Given Name" required defaultValue={defaultValues.givenName} errorMessage={errorMessages.givenName} />
         <InputField id="surname" name="surname" label="Surname" required defaultValue={defaultValues.surname} errorMessage={errorMessages.surname} />
         <InputField id="age" name="age" label="Age" type="number" min={0} required defaultValue={defaultValues.age} errorMessage={errorMessages.age} />

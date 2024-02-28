@@ -30,7 +30,7 @@ export default function IntakeFlowConfirm() {
       <h3>Intake Form Flow Index: {id}</h3>
       <p className="mb-3 font-semibold">State:</p>
       <pre className="mb-6 block max-w-prose border border-slate-100 bg-slate-50 p-3">{JSON.stringify(state, undefined, 2)}</pre>
-      <Form method="post">
+      <Form method="post" noValidate>
         <Button variant="primary">Submit</Button>
       </Form>
     </>

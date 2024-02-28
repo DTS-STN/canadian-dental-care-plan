@@ -77,7 +77,7 @@ export default function PreferredLanguageConfirm() {
   return (
     <>
       <p className="mb-8 text-lg text-gray-500">{t('personal-information:preferred-language.confirm.subtitle')}</p>
-      <Form method="post">
+      <Form method="post" noValidate>
         <dl className="my-6 border-y">
           <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
             <dt className="font-semibold">{t('personal-information:preferred-language.edit.language')}</dt>

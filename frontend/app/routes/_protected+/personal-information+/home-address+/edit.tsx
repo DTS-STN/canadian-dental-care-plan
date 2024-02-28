@@ -197,7 +197,7 @@ export default function PersonalInformationHomeAddressEdit() {
     <>
       <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:home-address.edit.subtitle')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form className="max-w-prose" method="post">
+      <Form className="max-w-prose" method="post" noValidate>
         <div className="my-6">
           <p className="mb-4 text-red-600">{t('gcweb:asterisk-indicates-required-field')}</p>
           <InputField id="address" className="w-full" label={t('personal-information:home-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />

@@ -65,7 +65,7 @@ export default function HomeAddressSuggested() {
   return (
     <>
       <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:home-address.suggested.subtitle')}</p>
-      <Form method="post">
+      <Form method="post" noValidate>
         <p className="mb-4">{t('personal-information:home-address.suggested.note')}</p>
         <dl className="my-6 divide-y border-y">
           <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
