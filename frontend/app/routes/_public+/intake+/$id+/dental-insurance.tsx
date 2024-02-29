@@ -75,7 +75,7 @@ export default function AccessQuestion() {
                 value: option,
               }))}
               helpMessagePrimary={helpMessage}
-              helpMessagePrimaryClassName="pl-8 text-[#333333]"
+              helpMessagePrimaryClassName="pl-8 text-black"
             />
           )}
         </div>
