@@ -24,6 +24,15 @@ export function getLookupApiMockHandlers() {
     }),
 
     //
+    // Handler for GET request to retrieve all sex-at-birth types
+    //
+    http.get('https://api.example.com/lookups/sex-at-birth-types', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const sexAtBirthTypes = demographicDB.sexAtBirthType.getAll();
+      return HttpResponse.json(sexAtBirthTypes);
+    }),
+
+    //
     // Handler for GET request to retrieve all born types
     //
     http.get('https://api.example.com/lookups/born-types', ({ request }) => {
