@@ -9,12 +9,17 @@ import { I18nextProvider } from 'react-i18next';
 
 import { NonceProvider, generateNonce } from '~/components/nonce-context';
 import { server } from '~/mocks/node';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { generateContentSecurityPolicy } from '~/utils/csp-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getNamespaces } from '~/utils/locale-utils';
 import { createLangCookie, getLocale, initI18n } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+
+// instrumentation should be started as early as possible to ensure proper initialization
+const instrumentationService = getInstrumentationService();
+instrumentationService.startInstrumentation();
 
 const abortDelay = 5_000;
 const log = getLogger('entry.server');
@@ -39,6 +44,7 @@ if (ENABLED_MOCKS.length > 0) {
  */
 export async function handleDataRequest(response: Response, { request }: LoaderFunctionArgs | ActionFunctionArgs) {
   log.debug('Touching session to extend its lifetime');
+  instrumentationService.createCounter('entry.server.requests.count').add(1);
 
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
@@ -53,14 +59,19 @@ export async function handleDataRequest(response: Response, { request }: LoaderF
  * @see https://remix.run/docs/en/main/file-conventions/entry.server#handleerror
  */
 export function handleError(error: unknown, { request }: LoaderFunctionArgs | ActionFunctionArgs) {
+  // note that you generally want to avoid logging when the request was aborted, since remix's
+  // cancellation and race-condition handling can cause a lot of requests to be aborted
   if (!request.signal.aborted) {
     log.error(error);
+    instrumentationService.createCounter('entry.server.requests.failed.count').add(1);
   }
 }
 
 export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, remixContext: EntryContext) {
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
   log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
+
+  instrumentationService.createCounter('entry.server.requests.count').add(1);
 
   const routes = Object.values(remixContext.routeModules);
   const locale = await getLocale(request);

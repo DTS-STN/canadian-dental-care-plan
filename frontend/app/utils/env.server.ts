@@ -1,7 +1,11 @@
+import { DiagLogLevel } from '@opentelemetry/api';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
 import { privateKeyPemToCryptoKey, publicKeyPemToCryptoKey } from './crypto-utils.server';
+
+// none, error, warn, info, debug, verbose, all
+const otelLogLevels = Object.keys(DiagLogLevel).map((key) => key.toLowerCase());
 
 /**
  * returns false if and only if the passed-in function throws
@@ -32,10 +36,12 @@ const toBoolean = (val?: string) => val === 'true';
 /**
  * Environment variables that will be available to server only.
  */
+// prettier-ignore
 const serverEnv = z.object({
   NODE_ENV: z.enum(['production', 'development', 'test']),
   ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default(validFeatureNames.join(',')),
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
+  COMMUNICATION_METHOD_DIGITAL_ID: z.string().trim().min(1).default('digital'),
 
   // TODO :: GjB :: these base URIs should not have defaults
   INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
@@ -71,14 +77,8 @@ const serverEnv = z.object({
   SESSION_COOKIE_HTTP_ONLY: z.string().transform(toBoolean).default('true'),
   SESSION_COOKIE_SECURE: z.string().transform(toBoolean).default('true'),
   SESSION_FILE_DIR: z.string().trim().min(1).default('./node_modules/cache/sessions/'),
-  SESSION_TIMEOUT_SECONDS: z.coerce
-    .number()
-    .min(0)
-    .default(19 * 60),
-  SESSION_TIMEOUT_PROMPT_SECONDS: z.coerce
-    .number()
-    .min(0)
-    .default(5 * 60),
+  SESSION_TIMEOUT_SECONDS: z.coerce.number().min(0).default(19 * 60),
+  SESSION_TIMEOUT_PROMPT_SECONDS: z.coerce.number().min(0).default(5 * 60),
 
   // redis server configuration
   REDIS_URL: z.string().trim().min(1).default('redis://localhost'),
@@ -92,7 +92,7 @@ const serverEnv = z.object({
   // CCT get PDF settings
   CCT_VAULT_COMMUNITY: z.string().default('community_default'),
 
-  //Memo cache max age
+  // Memo cache max age
   LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_PREFERREDLANGUAGE_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_ALLCOUNTRIES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
@@ -102,7 +102,15 @@ const serverEnv = z.object({
   LOOKUP_SVC_ALLSEXATBIRTHTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
 
-  COMMUNICATION_METHOD_DIGITAL_ID: z.string().trim().min(1).default('digital'),
+  // OpenTelemetry/Dynatrace settings
+  OTEL_LOG_LEVEL: z.string().refine((val) => otelLogLevels.includes(val)).default('info'),
+  OTEL_API_KEY: z.string().trim().transform(emptyToUndefined).optional(),
+  OTEL_ENVIRONMENT: z.string().trim().min(1).default('local'),
+  OTEL_METRICS_ENDPOINT: z.string().trim().transform(emptyToUndefined).optional(),
+  OTEL_METRICS_EXPORT_INTERVAL_MILLIS: z.coerce.number().default(60 * 1000),
+  OTEL_METRICS_EXPORT_TIMEOUT_MILLIS: z.coerce.number().default(30 * 1000),
+  OTEL_SERVICE_NAME: z.string().trim().min(1).default('canadian-dental-care-plan'),
+  OTEL_TRACES_ENDPOINT: z.string().trim().transform(emptyToUndefined).optional(),
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;
