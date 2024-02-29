@@ -12,10 +12,6 @@ import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils'
 const i18nNamespaces = getTypedI18nNamespaces('demographics-oral-health-questions', 'gcweb');
 
 export const handle = {
-  breadcrumbs: [
-    // prettier-ignore
-    { labelI18nKey: 'demographics-oral-health-questions:part1.breadcrumbs.canada-ca', to: 'www.google.ca' },
-  ],
   i18nNamespaces,
   pageIdentifier: 'CDCP-1111',
   pageTitleI18nKey: 'demographics-oral-health-questions:part1.page-title',
@@ -37,8 +33,8 @@ export default function DemographicsPart1() {
   return (
     <>
       <Form method="post">
-        <p className="mb-8 text-lg text-gray-500">{t('demographics-oral-health-questions:part1.paragraph1')}</p>
-        <p className="mb-8 text-lg text-gray-500">{t('demographics-oral-health-questions:part1.paragraph2')}</p>
+        <p className="mb-8 text-lg">{t('demographics-oral-health-questions:part1.paragraph1')}</p>
+        <p className="mb-8 text-lg">{t('demographics-oral-health-questions:part1.paragraph2')}</p>
         <div className="my-6">
           {bornTypes.length > 0 && (
             <InputRadios

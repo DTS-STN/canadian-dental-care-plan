@@ -24,12 +24,12 @@ export function getLookupApiMockHandlers() {
     }),
 
     //
-    // Handler for GET request to retrieve all preferred languages
+    // Handler for GET request to retrieve all born types
     //
     http.get('https://api.example.com/lookups/born-types', ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
-      const bithPlacesList = demographicDB.bornType.getAll();
-      return HttpResponse.json(bithPlacesList);
+      const bornTypes = demographicDB.bornType.getAll();
+      return HttpResponse.json(bornTypes);
     }),
 
     //
