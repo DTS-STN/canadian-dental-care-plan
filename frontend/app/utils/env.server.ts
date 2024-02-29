@@ -47,7 +47,7 @@ const serverEnv = z.object({
   AUTH_RASCL_LOGOUT_URL: z.string().trim().min(1),
 
   // language cookie settings
-  LANG_COOKIE_NAME: z.string().default('_gc_lang'),
+  LANG_COOKIE_NAME: z.string().default('__CDCP//lang'),
   LANG_COOKIE_DOMAIN: z.string().optional(),
   LANG_COOKIE_PATH: z.string().default('/'),
   LANG_COOKIE_HTTP_ONLY: z.string().transform(toBoolean).default('true'),
