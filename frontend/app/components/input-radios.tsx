@@ -4,10 +4,14 @@ import { InputError } from './input-error';
 import { InputHelp } from './input-help';
 import { InputRadio } from './input-radio';
 import { InputLegend } from '~/components/input-legend';
+import { cn } from '~/utils/tw-utils';
 
 export interface InputRadiosProps {
   errorMessage?: string;
-  helpMessage?: React.ReactNode;
+  helpMessagePrimary?: React.ReactNode;
+  helpMessagePrimaryClassName?: string;
+  helpMessageSecondary?: React.ReactNode;
+  helpMessageSecondaryClassName?: string;
   id: string;
   options: Omit<ComponentProps<typeof InputRadio>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-required' | 'id' | 'name' | 'required'>[];
   legend: ReactNode;
@@ -15,15 +19,17 @@ export interface InputRadiosProps {
   required?: boolean;
 }
 
-const InputRadios = ({ errorMessage, helpMessage, id, legend, name, options, required }: InputRadiosProps) => {
+const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, name, options, required }: InputRadiosProps) => {
   const inputErrorId = `input-radios-${id}-error`;
-  const inputHelpMessageId = `input-radios-${id}-help`;
+  const inputHelpMessagePrimaryId = `input-radios-${id}-help-primary`;
+  const inputHelpMessageSecondaryId = `input-radios-${id}-help-secondary`;
   const inputLegendId = `input-radios-${id}-legend`;
   const inputWrapperId = `input-radios-${id}`;
 
   function getAriaDescribedby() {
     const ariaDescribedby = [inputLegendId];
-    if (helpMessage) ariaDescribedby.push(inputHelpMessageId);
+    if (helpMessagePrimary) ariaDescribedby.push(inputHelpMessagePrimaryId);
+    if (helpMessageSecondary) ariaDescribedby.push(inputHelpMessageSecondaryId);
     return ariaDescribedby.length > 0 ? ariaDescribedby.join(' ') : undefined;
   }
 
@@ -32,6 +38,11 @@ const InputRadios = ({ errorMessage, helpMessage, id, legend, name, options, req
       <InputLegend id={inputLegendId} required={required} className="mb-2">
         {legend}
       </InputLegend>
+      {helpMessagePrimary && (
+        <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="input-field-help-primary">
+          {helpMessagePrimary}
+        </InputHelp>
+      )}
       <ul className="space-y-2">
         {options.map((option, index) => {
           const inputRadioId = `${id}-option-${index}`;
@@ -47,9 +58,9 @@ const InputRadios = ({ errorMessage, helpMessage, id, legend, name, options, req
           {errorMessage}
         </InputError>
       )}
-      {helpMessage && (
-        <InputHelp id={inputHelpMessageId} className="mt-2" data-testid="input-field-help">
-          {helpMessage}
+      {helpMessageSecondary && (
+        <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)} data-testid="input-field-help-secondary">
+          {helpMessageSecondary}
         </InputHelp>
       )}
     </fieldset>
