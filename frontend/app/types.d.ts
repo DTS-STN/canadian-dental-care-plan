@@ -1,3 +1,4 @@
+import type communicationPreference from '../public/locales/en/communication-preferences.json';
 import type demographicsOralHealthQuestions from '../public/locales/en/demographics-oral-health-questions.json';
 import type gcweb from '../public/locales/en/gcweb.json';
 import type index from '../public/locales/en/index.json';
@@ -30,6 +31,7 @@ declare module 'i18next' {
       'personal-information': typeof personalInformation;
       'update-phone-number': typeof updatePhoneNumber;
       'data-unavailable': typeof dataUnavailable;
+      'communication-preference': typeof communicationPreference;
       letters: typeof letters;
       index: typeof index;
       'demographics-oral-health-questions': typeof demographicsOralHealthQuestions;

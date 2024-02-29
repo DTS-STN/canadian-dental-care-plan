@@ -48,6 +48,15 @@ export function getLookupApiMockHandlers() {
     //
     // Handler for GET request to retrieve all countries
     //
+    http.get('https://api.example.com/lookups/preferred-communication-methods', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const preferredCommunicationMethodList = db.preferredCommunicationMethod.getAll();
+      return HttpResponse.json(preferredCommunicationMethodList);
+    }),
+
+    //
+    // Handler for GET request to retrieve all countries
+    //
     http.get('https://api.example.com/lookups/countries', ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       const countryList = db.country.getAll();
