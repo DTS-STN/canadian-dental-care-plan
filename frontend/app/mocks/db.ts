@@ -32,6 +32,11 @@ const db = factory({
     nameEn: String,
     nameFr: String,
   },
+  preferredCommunicationMethod: {
+    id: primaryKey(String),
+    nameEn: String,
+    nameFr: String,
+  },
   letterType: {
     id: primaryKey(faker.string.uuid),
     code: String,
@@ -73,6 +78,19 @@ const frenchLanguage = db.preferredLanguage.create({
   id: 'fr',
   nameEn: 'French',
   nameFr: 'Français',
+});
+
+// seed avaliable communication methods
+db.preferredCommunicationMethod.create({
+  id: 'digital',
+  nameEn: 'Digital',
+  nameFr: '(FR) Digital',
+});
+
+db.preferredCommunicationMethod.create({
+  id: 'mail',
+  nameEn: 'Postal mail',
+  nameFr: '(FR) Postal mail',
 });
 
 // seed avaliable addresses (before user)
