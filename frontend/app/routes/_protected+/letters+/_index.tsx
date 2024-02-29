@@ -12,14 +12,13 @@ import { InputSelect } from '~/components/input-select';
 import { getInteropService } from '~/services/interop-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
+import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('letters');
-
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'letters:index.page-title' }],
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('letters'),
   pageIdentifier: 'CDCP-0002',
   pageTitleI18nKey: 'letters:index.page-title',
 } as const satisfies RouteHandleData;
@@ -27,6 +26,10 @@ export const handle = {
 const orderEnumSchema = z.enum(['asc', 'desc']);
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  if (!featureEnabled('view-letters')) {
+    throw new Response('Not Found', { status: 404 });
+  }
+
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request);
 
@@ -47,7 +50,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function LettersIndex() {
   const [, setSearchParams] = useSearchParams();
-  const { i18n, t } = useTranslation(i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const { letters, letterTypes, sortOrder } = useLoaderData<typeof loader>();
 
   function handleOnSortOrderChange(e: ChangeEvent<HTMLSelectElement>) {

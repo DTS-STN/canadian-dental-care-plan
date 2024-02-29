@@ -12,19 +12,22 @@ import { getAddressService } from '~/services/address-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
+import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('personal-information');
-
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'personal-information:index.page-title' }],
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('personal-information'),
   pageIdentifier: 'CDCP-0002',
   pageTitleI18nKey: 'personal-information:index.page-title',
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  if (!featureEnabled('update-personal-info')) {
+    throw new Response(null, { status: 404 });
+  }
+
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request);
 
@@ -47,7 +50,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function PersonalInformationIndex() {
   const { user, preferredLanguage, homeAddressInfo, mailingAddressInfo, countryList, regionList } = useLoaderData<typeof loader>();
-  const { i18n, t } = useTranslation(i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
   return (
     <>
       <p className="mb-8 text-lg text-gray-500">{t('personal-information:index.on-file')}</p>

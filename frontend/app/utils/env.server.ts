@@ -12,11 +12,15 @@ function tryOrElseFalse(fn: () => unknown) {
   catch { return false; }
 }
 
-// @see app/mocks/node.ts
-const validMockNames = ['cct', 'lookup', 'power-platform', 'raoidc', 'wsaddress'];
+const validMockNames = ['cct', 'lookup', 'power-platform', 'raoidc', 'wsaddress'] as const;
+export type MockName = (typeof validMockNames)[number];
+
+const validFeatureNames = ['doc-upload', 'email-alerts', 'update-personal-info', 'view-applications', 'view-letters', 'view-messages'] as const;
+export type FeatureName = (typeof validFeatureNames)[number];
 
 // refiners
-const areValidMockNames = (arr: Array<string>) => arr.every((str) => validMockNames.includes(str));
+const areValidFeatureNames = (arr: Array<string>) => arr.every((featureName) => validFeatureNames.includes(featureName as FeatureName));
+const areValidMockNames = (arr: Array<string>) => arr.every((mockName) => validMockNames.includes(mockName as MockName));
 const isValidPublicKey = (val: string) => tryOrElseFalse(() => publicKeyPemToCryptoKey(val));
 const isValidPrivateKey = (val: string) => tryOrElseFalse(() => privateKeyPemToCryptoKey(val));
 
@@ -30,6 +34,7 @@ const toBoolean = (val?: string) => val === 'true';
  */
 const serverEnv = z.object({
   NODE_ENV: z.enum(['production', 'development', 'test']),
+  ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default(validFeatureNames.join(',')),
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
 
   // TODO :: GjB :: these base URIs should not have defaults
@@ -88,10 +93,10 @@ const serverEnv = z.object({
   CCT_VAULT_COMMUNITY: z.string().default('community_default'),
 
   //Memo cache max age
-  LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(3600000),
-  LOOKUP_SVC_PREFERREDLANGUAGE_CACHE_TTL_MILLISECONDS: z.coerce.number().default(3600000),
-  LOOKUP_SVC_ALLCOUNTRIES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(3600000),
-  LOOKUP_SVC_ALLREGIONS_CACHE_TTL_MILLISECONDS: z.coerce.number().default(3600000),
+  LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
+  LOOKUP_SVC_PREFERREDLANGUAGE_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
+  LOOKUP_SVC_ALLCOUNTRIES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
+  LOOKUP_SVC_ALLREGIONS_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
 });
 
@@ -102,6 +107,7 @@ export type ServerEnv = z.infer<typeof serverEnv>;
  * ⚠️ IMPORTANT: DO NOT PUT SENSITIVE CONFIGURATIONS HERE ⚠️
  */
 const publicEnv = serverEnv.pick({
+  ENABLED_FEATURES: true,
   I18NEXT_DEBUG: true,
   LANG_QUERY_PARAM: true,
   SCCH_BASE_URI: true,
@@ -129,4 +135,20 @@ export function getPublicEnv() {
   }
 
   return result.data;
+}
+
+/**
+ * Return true if the given feature flag is enabled
+ */
+export function featureEnabled(feature: FeatureName) {
+  const { ENABLED_FEATURES } = getEnv();
+  return ENABLED_FEATURES.includes(feature);
+}
+
+/**
+ * Return true if the given mock is enabled
+ */
+export function mockEnabled(mock: MockName) {
+  const { ENABLED_MOCKS } = getEnv();
+  return ENABLED_MOCKS.includes(mock);
 }
