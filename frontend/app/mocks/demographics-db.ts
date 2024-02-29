@@ -17,6 +17,12 @@ const demographicDB = factory({
     nameEn: String,
     nameFr: String,
   },
+
+  sexAtBirthType: {
+    id: primaryKey(faker.string.uuid),
+    nameEn: String,
+    nameFr: String,
+  },
 });
 
 demographicDB.bornType.create({
@@ -48,6 +54,21 @@ demographicDB.disabilityType.create({
 });
 
 demographicDB.disabilityType.create({
+  nameEn: 'Prefer not to answer',
+  nameFr: '(FR) Prefer not to answer',
+});
+
+demographicDB.sexAtBirthType.create({
+  nameEn: 'Male',
+  nameFr: 'Mâle',
+});
+
+demographicDB.sexAtBirthType.create({
+  nameEn: 'Female',
+  nameFr: 'Femelle',
+});
+
+demographicDB.sexAtBirthType.create({
   nameEn: 'Prefer not to answer',
   nameFr: '(FR) Prefer not to answer',
 });
