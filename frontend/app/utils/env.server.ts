@@ -97,6 +97,7 @@ const serverEnv = z.object({
   LOOKUP_SVC_PREFERREDLANGUAGE_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_ALLCOUNTRIES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_ALLREGIONS_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
+  LOOKUP_SVC_ALLBORNTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
 });
 

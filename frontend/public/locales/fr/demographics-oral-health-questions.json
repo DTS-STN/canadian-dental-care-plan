@@ -1,0 +1,18 @@
+{
+  "part1": {
+    "page-title": "(FR) Voluntary demographic and oral health questions part 1 of 2",
+    "breadcrumbs": {
+      "canada-ca": "Canada.ca",
+      "benefits": "(Fr) Benefits",
+      "dental-coverage": "(FR) Dental coverage",
+      "canadian-dental-care-plan": "(FR) Canadian Dental Care Plan"
+    },
+    "paragraph1": "(FR) Answering the following questions will not impact your application in the CDCP. Providing a response to the questions below is voluntary. Your input, will help Health Canada evaluate and improve the Canadian Dental Care Plan, including understanding if there are potential access or inequity issues. ",
+    "paragraph2": "(FR) All responses have an option of “prefer not to answer”. All responses are kept confidential and are only used for program monitoring, evaluation and reporting purposes.",
+
+    "question1": "(FR) Where were you born?",
+
+    "button-back": "(FR) Back < ",
+    "button-continue": "(FR) Continue > "
+  }
+}
