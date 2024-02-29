@@ -52,7 +52,7 @@ export default function DemographicsPart1() {
         </div>
 
         <div className="my-6">
-          {bornTypes.length > 0 && (
+          {disabilityTypes.length > 0 && (
             <InputRadios
               id="disability-type"
               name="disabilityType"
