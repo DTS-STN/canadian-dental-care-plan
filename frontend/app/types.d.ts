@@ -1,3 +1,4 @@
+import type accessQuestion from '../public/locales/en/access-question.json';
 import type communicationPreference from '../public/locales/en/communication-preferences.json';
 import type demographicsOralHealthQuestions from '../public/locales/en/demographics-oral-health-questions.json';
 import type gcweb from '../public/locales/en/gcweb.json';
@@ -28,15 +29,16 @@ declare module 'i18next' {
   interface CustomTypeOptions {
     defaultNS: false;
     resources: {
+      'access-question': typeof accessQuestion;
+      'communication-preference': typeof communicationPreference;
+      'data-unavailable': typeof dataUnavailable;
+      'demographics-oral-health-questions': typeof demographicsOralHealthQuestions;
       gcweb: typeof gcweb;
+      index: typeof index;
+      intake: typeof intake;
+      letters: typeof letters;
       'personal-information': typeof personalInformation;
       'update-phone-number': typeof updatePhoneNumber;
-      'data-unavailable': typeof dataUnavailable;
-      'communication-preference': typeof communicationPreference;
-      letters: typeof letters;
-      index: typeof index;
-      'demographics-oral-health-questions': typeof demographicsOralHealthQuestions;
-      intake: typeof intake;
     };
   }
 }

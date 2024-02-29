@@ -1,0 +1,29 @@
+{
+  "title": "Access to dental insurance",
+  "content1": "Do you have access to dental insurance or coverage through one of the following four situations?",
+  "list-item1": "your employment benefits or a family member’s employment benefits, including health and wellness accounts",
+  "list-item2": "your pension benefits or a family member’s pension benefits",
+  "list-item3": "purchased by you or a family member or through a group plan from an insurance or benefits company",
+  "list-item4": "through a professional or student organization",
+  "content2": "You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your employer/pension (see exception)  benefits or through a professional or student organization. As such, you are not eligible for CDCP.",
+  "yes": "yes",
+  "no": "no",
+  "option1": "I have access to dental insurance.",
+  "option2": "I do not have access to dental insurance.",
+  "button": {
+    "back": "Back",
+    "continue": "Continue"
+  },
+  "detail": {
+    "exception": {
+      "title": "Exception",
+      "content": "You may be eligible for the CDCP if you’re retired and:",
+      "list-item1": "you opted out of pension benefits before December 11, 2023, and",
+      "list-item2": "you can’t opt back in under the pension rules"
+    },
+    "note": {
+      "title": "Note",
+      "content": "If you purchased your current dental insurance policy privately on your own (and not as part of any of the coverage described above), you’re not eligible for the CDCP while that coverage is in effect."
+    }
+  }
+}
