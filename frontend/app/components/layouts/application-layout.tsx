@@ -284,6 +284,36 @@ function Breadcrumbs() {
   );
 }
 
+export interface NotFoundErrorProps {
+  error?: unknown;
+  showAccountMenu?: boolean;
+}
+
+export function NotFoundError({ error, showAccountMenu }: NotFoundErrorProps) {
+  const { t } = useTranslation(i18nNamespaces);
+  const home = <InlineLink to="/" />;
+
+  return (
+    <>
+      <PageHeader showAccountMenu={showAccountMenu} />
+      <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
+        <PageTitle>
+          <span>{t('gcweb:not-found.page-title')}</span>
+          <small className="block text-2xl font-normal text-neutral-500">{t('gcweb:not-found.page-subtitle')}</small>
+        </PageTitle>
+        <p className="mb-8 text-lg text-gray-500">{t('gcweb:not-found.page-message')}</p>
+        <ul className="list-disc space-y-2 pl-10">
+          <li>
+            <Trans ns={i18nNamespaces} i18nKey="gcweb:not-found.page-link" components={{ home }} />
+          </li>
+        </ul>
+        <PageDetails />
+      </main>
+      <PageFooter />
+    </>
+  );
+}
+
 export interface ServerErrorProps {
   error: unknown;
   showAccountMenu?: boolean;
@@ -298,7 +328,7 @@ export function ServerError({ error, showAccountMenu }: ServerErrorProps) {
       <PageHeader showAccountMenu={showAccountMenu} />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
         <PageTitle>
-          {t('gcweb:server-error.page-title')}
+          <span>{t('gcweb:server-error.page-title')}</span>
           <small className="block text-2xl font-normal text-neutral-500">{t('gcweb:server-error.page-subtitle')}</small>
         </PageTitle>
         <p className="mb-8 text-lg text-gray-500">{t('gcweb:server-error.page-message')}</p>

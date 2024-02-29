@@ -1,6 +1,6 @@
 import { Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
-import ApplicationLayout, { ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/application-layout';
+import ApplicationLayout, { NotFoundError, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/application-layout';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
@@ -12,9 +12,9 @@ export function ErrorBoundary() {
 
   if (isRouteErrorResponse(error)) {
     switch (error.status) {
-      // TODO :: GjB :: handle other status codes
-      default:
-        return <ServerError error={error} />;
+      case 404: {
+        return <NotFoundError error={error} />;
+      }
     }
   }
 
