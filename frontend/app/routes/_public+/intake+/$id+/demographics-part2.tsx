@@ -32,7 +32,7 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function DemographicsPart2() {
   const { sexAtBirthTypes, id } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
-  const backUrl = `/intake/${id}/demographics-part1`;
+
   return (
     <>
       <Form method="post">
@@ -52,7 +52,7 @@ export default function DemographicsPart2() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="cancel-button" to={backUrl}>
+          <ButtonLink id="cancel-button" to={`/intake/${id}/demographics-part1`}>
             {t('demographics-oral-health-questions:part2.button-back')}
           </ButtonLink>
           <Button id="change-button" variant="primary">
