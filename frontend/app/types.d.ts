@@ -6,6 +6,7 @@ import type index from '../public/locales/en/index.json';
 import type intake from '../public/locales/en/intake.json';
 import type letters from '../public/locales/en/letters.json';
 import type personalInformation from '../public/locales/en/personal-information.json';
+import type reviewInformation from '../public/locales/en/review-information.json';
 import type dataUnavailable from '../public/locales/en/udata-unavailable.json';
 import type updatePhoneNumber from '../public/locales/en/update-phone-number.json';
 import type { PublicEnv } from '~/utils/env.server';
@@ -40,6 +41,7 @@ declare module 'i18next' {
       letters: typeof letters;
       'personal-information': typeof personalInformation;
       'update-phone-number': typeof updatePhoneNumber;
+      'review-information': typeof reviewInformation;
     };
   }
 }
