@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, ButtonLink } from '~/components/buttons';
 import { InputRadios } from '~/components/input-radios';
-import { getIntakeFlow } from '~/routes-flow/intake-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -18,11 +17,10 @@ export const handle = {
   pageTitleI18nKey: 'demographics-oral-health-questions:part2.page-title',
 };
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const sexAtBirthTypes = await getLookupService().getAllSexAtBirthTypes();
-  const intakeFlow = getIntakeFlow();
-  const { id, state } = await intakeFlow.loadState({ request, params });
-  return json({ sexAtBirthTypes, id, state });
+
+  return json({ sexAtBirthTypes });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -30,7 +28,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function DemographicsPart2() {
-  const { sexAtBirthTypes, id } = useLoaderData<typeof loader>();
+  const { sexAtBirthTypes } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
 
   return (
@@ -52,7 +50,7 @@ export default function DemographicsPart2() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="cancel-button" to={`/intake/${id}/demographics-part1`}>
+          <ButtonLink id="cancel-button" to="/personal-information">
             {t('demographics-oral-health-questions:part2.button-back')}
           </ButtonLink>
           <Button id="change-button" variant="primary">
