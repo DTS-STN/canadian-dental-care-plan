@@ -68,11 +68,11 @@ async function loadState({ params, request, fallbackRedirectUrl = '/intake' }: L
 
   const sessionName = getSessionName(id.data);
 
-  if (!(await session.has(sessionName))) {
+  if (!session.has(sessionName)) {
     throw redirect(fallbackRedirectUrl, 302);
   }
 
-  const sessionState = await session.get(sessionName);
+  const sessionState = session.get(sessionName);
   const state = intakeStateSchema.parse(sessionState);
 
   return { id: id.data, state };
@@ -97,7 +97,7 @@ async function saveState({ params, request, state }: SaveStateArgs) {
   const session = await sessionService.getSession(request);
 
   const sessionName = getSessionName(id);
-  await session.set(sessionName, newState);
+  session.set(sessionName, newState);
 
   return {
     headers: {
@@ -123,7 +123,7 @@ async function clearState({ params, request }: ClearStateArgs) {
   const session = await sessionService.getSession(request);
 
   const sessionName = getSessionName(id);
-  await session.unset(sessionName);
+  session.unset(sessionName);
 
   return {
     headers: {
@@ -150,7 +150,7 @@ async function start({ id, request }: StartArgs) {
   const session = await sessionService.getSession(request);
 
   const sessionName = getSessionName(parsedId);
-  await session.set(sessionName, initialState);
+  session.set(sessionName, initialState);
 
   return {
     headers: {

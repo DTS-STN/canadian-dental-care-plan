@@ -30,9 +30,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
-  if (!session.has('newHomeAddress')) return redirect('/');
-  const newHomeAddress = await session.get('newHomeAddress');
 
+  if (!session.has('newHomeAddress')) {
+    return redirect('/');
+  }
+
+  const newHomeAddress = session.get('newHomeAddress');
   const countryList = await getLookupService().getAllCountries();
   const regionList = await getLookupService().getAllRegions();
 
