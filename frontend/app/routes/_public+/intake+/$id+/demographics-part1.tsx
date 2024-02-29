@@ -56,7 +56,7 @@ export default function DemographicsPart1() {
             <InputRadios
               id="disability-type"
               name="disabilityType"
-              helpMessage={t('demographics-oral-health-questions:part1.question4-note')}
+              helpMessagePrimary={t('demographics-oral-health-questions:part1.question4-note')}
               legend={t('demographics-oral-health-questions:part1.question4')}
               options={disabilityTypes.map((disabilityType) => ({
                 children: getNameByLanguage(i18n.language, disabilityType),
