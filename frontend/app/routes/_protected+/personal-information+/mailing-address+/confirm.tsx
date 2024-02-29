@@ -40,7 +40,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
-  const newMailingAddress = await session.get('newMailingAddress');
+  const newMailingAddress = session.get('newMailingAddress');
+
   return json({ mailingAddressInfo, newMailingAddress, countryList, regionList });
 }
 
