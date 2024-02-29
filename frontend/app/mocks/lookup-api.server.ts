@@ -33,6 +33,15 @@ export function getLookupApiMockHandlers() {
     }),
 
     //
+    // Handler for GET request to retrieve all disability types
+    //
+    http.get('https://api.example.com/lookups/disability-types', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const disabilityTypes = demographicDB.disabilityType.getAll();
+      return HttpResponse.json(disabilityTypes);
+    }),
+
+    //
     // Handler for GET requests to retrieve preferred languages by id
     //
     http.get('https://api.example.com/lookups/preferred-languages/:id', ({ params, request }) => {

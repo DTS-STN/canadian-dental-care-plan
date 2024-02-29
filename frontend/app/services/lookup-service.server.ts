@@ -37,6 +37,12 @@ const bornTypeSchema = z.object({
   nameFr: z.string().optional(),
 });
 
+const disabilityTypeSchema = z.object({
+  id: z.string(),
+  nameEn: z.string().optional(),
+  nameFr: z.string().optional(),
+});
+
 export type PreferredLanguageInfo = z.infer<typeof preferredLanguageSchema>;
 export type RegionInfo = z.infer<typeof regionSchema>;
 
@@ -53,6 +59,7 @@ function createLookupService() {
     LOOKUP_SVC_ALLCOUNTRIES_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_ALLREGIONS_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_ALLBORNTYPES_CACHE_TTL_MILLISECONDS,
+    LOOKUP_SVC_ALLDISABILITYTYPES_CACHE_TTL_MILLISECONDS,
   } = getEnv();
 
   async function getAllPreferredLanguages() {
@@ -63,6 +70,27 @@ function createLookupService() {
 
     if (response.ok) {
       return preferredLanguageSchemaList.parse(await response.json());
+    }
+
+    log.error('%j', {
+      message: 'Failed to fetch data',
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+
+    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+  }
+
+  async function getAllDisabilityTypes() {
+    const url = `${INTEROP_API_BASE_URI}/lookups/disability-types/`;
+    const response = await fetch(url);
+
+    const disabilityTypeSchemaList = z.array(disabilityTypeSchema);
+
+    if (response.ok) {
+      return disabilityTypeSchemaList.parse(await response.json());
     }
 
     log.error('%j', {
@@ -201,5 +229,6 @@ function createLookupService() {
     getAllCountries: moize(getAllCountries, { maxAge: LOOKUP_SVC_ALLCOUNTRIES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllCountries memo') }),
     getAllRegions: moize(getAllRegions, { maxAge: LOOKUP_SVC_ALLREGIONS_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllRegions memo') }),
     getAllBornTypes: moize(getAllBornTypes, { maxAge: LOOKUP_SVC_ALLBORNTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllBornTypes memo') }),
+    getAllDisabilityTypes: moize(getAllDisabilityTypes, { maxAge: LOOKUP_SVC_ALLDISABILITYTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllDisabilityTypes memo') }),
   };
 }

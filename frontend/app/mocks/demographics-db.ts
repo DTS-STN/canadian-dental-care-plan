@@ -12,7 +12,7 @@ const demographicDB = factory({
     nameFr: String,
   },
 
-  question2: {
+  disabilityType: {
     id: primaryKey(faker.string.uuid),
     nameEn: String,
     nameFr: String,
@@ -33,10 +33,23 @@ demographicDB.bornType.create({
   nameFr: '(FR) Prefer not to answer',
 });
 
-demographicDB.question2.create({
-  id: 'question2',
-  nameEn: 'English2',
-  nameFr: 'Anglais2',
+demographicDB.disabilityType.create({
+  nameEn: 'Yes',
+  nameFr: 'Oui',
+});
+demographicDB.disabilityType.create({
+  nameEn: 'No',
+  nameFr: 'Non',
+});
+
+demographicDB.disabilityType.create({
+  nameEn: "Don't know",
+  nameFr: 'Ne sais pas',
+});
+
+demographicDB.disabilityType.create({
+  nameEn: 'Prefer not to answer',
+  nameFr: '(FR) Prefer not to answer',
 });
 
 export { demographicDB };

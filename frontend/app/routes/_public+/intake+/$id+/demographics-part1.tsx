@@ -19,7 +19,8 @@ export const handle = {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const bornTypes = await getLookupService().getAllBornTypes();
-  return json({ bornTypes });
+  const disabilityTypes = await getLookupService().getAllDisabilityTypes();
+  return json({ bornTypes, disabilityTypes });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -27,7 +28,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function DemographicsPart1() {
-  const { bornTypes } = useLoaderData<typeof loader>();
+  const { bornTypes, disabilityTypes } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
 
   return (
@@ -49,6 +50,23 @@ export default function DemographicsPart1() {
             />
           )}
         </div>
+
+        <div className="my-6">
+          {bornTypes.length > 0 && (
+            <InputRadios
+              id="disability-type"
+              name="disabilityType"
+              helpMessage={t('demographics-oral-health-questions:part1.question4-note')}
+              legend={t('demographics-oral-health-questions:part1.question4')}
+              options={disabilityTypes.map((disabilityType) => ({
+                children: getNameByLanguage(i18n.language, disabilityType),
+                value: disabilityType.id,
+              }))}
+              required
+            />
+          )}
+        </div>
+
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="cancel-button" to="/personal-information">
             {t('demographics-oral-health-questions:part1.button-back')}
