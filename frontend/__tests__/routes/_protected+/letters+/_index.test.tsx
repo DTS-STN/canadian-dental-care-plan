@@ -28,6 +28,10 @@ vi.mock('~/services/user-service.server', () => ({
   }),
 }));
 
+vi.mock('~/utils/env.server', () => ({
+  featureEnabled: vi.fn().mockReturnValue(true),
+}));
+
 describe('Letters Page', () => {
   afterEach(() => {
     vi.clearAllMocks();

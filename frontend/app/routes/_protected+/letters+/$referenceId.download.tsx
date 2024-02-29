@@ -3,11 +3,16 @@ import type { LoaderFunctionArgs } from '@remix-run/node';
 import { getCCTService } from '~/services/cct-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
+import { featureEnabled } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('_gcweb-app.letters.$referenceId.download');
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
+  if (!featureEnabled('view-letters')) {
+    throw new Response('Not Found', { status: 404 });
+  }
+
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request);
 

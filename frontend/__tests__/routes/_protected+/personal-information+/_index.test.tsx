@@ -47,6 +47,10 @@ vi.mock('~/services/user-service.server', () => ({
   }),
 }));
 
+vi.mock('~/utils/env.server', () => ({
+  featureEnabled: vi.fn().mockReturnValue(true),
+}));
+
 describe('_gcweb-app.personal-information._index', () => {
   afterEach(() => {
     vi.clearAllMocks();

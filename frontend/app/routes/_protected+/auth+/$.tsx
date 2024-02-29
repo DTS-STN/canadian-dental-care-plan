@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
-import { getEnv } from '~/utils/env.server';
+import { getEnv, mockEnabled } from '~/utils/env.server';
 import { getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { generateCallbackUri, generateRandomString } from '~/utils/raoidc-utils.server';
@@ -37,9 +37,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     // A mock authorize route for testing purposes
     //
     case 'authorize': {
-      const { ENABLED_MOCKS } = getEnv();
-
-      if (!ENABLED_MOCKS.includes('raoidc')) {
+      if (!mockEnabled('raoidc')) {
         log.warn('Call to mock authorize endpoint when mocks are not enabled');
         return new Response(null, { status: 404 });
       }
