@@ -2,6 +2,7 @@ import { HttpResponse, http } from 'msw';
 import { z } from 'zod';
 
 import { db } from '~/mocks/db';
+import { demographicDB } from '~/mocks/demographics-db';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('lookup-api.server');
@@ -20,6 +21,15 @@ export function getLookupApiMockHandlers() {
       log.debug('Handling request for [%s]', request.url);
       const preferredLanguageList = db.preferredLanguage.getAll();
       return HttpResponse.json(preferredLanguageList);
+    }),
+
+    //
+    // Handler for GET request to retrieve all preferred languages
+    //
+    http.get('https://api.example.com/lookups/born-types', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const bithPlacesList = demographicDB.bornType.getAll();
+      return HttpResponse.json(bithPlacesList);
     }),
 
     //

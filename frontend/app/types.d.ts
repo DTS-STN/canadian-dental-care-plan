@@ -1,3 +1,4 @@
+import type demographicsOralHealthQuestions from '../public/locales/en/demographics-oral-health-questions.json';
 import type gcweb from '../public/locales/en/gcweb.json';
 import type index from '../public/locales/en/index.json';
 import type letters from '../public/locales/en/letters.json';
@@ -31,6 +32,7 @@ declare module 'i18next' {
       'data-unavailable': typeof dataUnavailable;
       letters: typeof letters;
       index: typeof index;
+      'demographics-oral-health-questions': typeof demographicsOralHealthQuestions;
     };
   }
 }
