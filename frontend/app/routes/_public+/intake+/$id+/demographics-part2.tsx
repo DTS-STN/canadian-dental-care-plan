@@ -20,9 +20,10 @@ export const handle = {
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const sexAtBirthTypes = await getLookupService().getAllSexAtBirthTypes();
+  const mouthPainTypes = await getLookupService().getAllMouthPaintTypes();
   const intakeFlow = getIntakeFlow();
   const { id, state } = await intakeFlow.loadState({ request, params });
-  return json({ sexAtBirthTypes, id, state });
+  return json({ sexAtBirthTypes, mouthPainTypes, id, state });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -30,7 +31,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function DemographicsPart2() {
-  const { sexAtBirthTypes, id } = useLoaderData<typeof loader>();
+  const { sexAtBirthTypes, mouthPainTypes, id } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
 
   return (
@@ -45,6 +46,21 @@ export default function DemographicsPart2() {
               options={sexAtBirthTypes.map((sexAtBirthType) => ({
                 children: getNameByLanguage(i18n.language, sexAtBirthType),
                 value: sexAtBirthType.id,
+              }))}
+              required
+            />
+          )}
+        </div>
+
+        <div className="my-6">
+          {mouthPainTypes.length > 0 && (
+            <InputRadios
+              id="mouth-pain-type"
+              name="mouthPainType"
+              legend={t('demographics-oral-health-questions:part2.question7')}
+              options={mouthPainTypes.map((mouthPainType) => ({
+                children: getNameByLanguage(i18n.language, mouthPainType),
+                value: mouthPainType.id,
               }))}
               required
             />
