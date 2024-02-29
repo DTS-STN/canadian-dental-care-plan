@@ -54,6 +54,7 @@ async function createSessionService() {
     case 'file': {
       log.warn('Using file-backed sessions. This is not recommended for production.');
       const sessionStorage = createFileSessionStorage({ cookie: sessionCookie, dir: env.SESSION_FILE_DIR });
+
       return {
         ...sessionStorage,
         getSession: async (request: Request) => {
@@ -73,19 +74,28 @@ async function createSessionService() {
             return await sessionStorage.getSession(request.headers.get('Cookie'));
           } catch (error) {
             log.warn(`Session file read failed: [${error}]; retrying one time`);
-            return sessionStorage.getSession(request.headers.get('Cookie'));
+            return await sessionStorage.getSession(request.headers.get('Cookie'));
           }
         },
       };
     }
+
     case 'redis': {
       log.info('Using Redis-backed sessions.');
       const sessionStorage = await createRedisSessionStorage();
-      return { ...sessionStorage, getSession: (request: Request) => sessionStorage.getSession(request.headers.get('Cookie')) };
+
+      return {
+        ...sessionStorage,
+        getSession: async (request: Request) => {
+          return await sessionStorage.getSession(request.headers.get('Cookie'));
+        },
+      };
     }
-    default:
+
+    default: {
       // this should never happen (because: typescript)
       throw new Error(`Unknown session storage type: ${env.SESSION_STORAGE_TYPE}`);
+    }
   }
 
   async function createRedisSessionStorage() {
@@ -97,16 +107,16 @@ async function createSessionService() {
       createData: async (data) => {
         const sessionId = randomUUID();
         log.debug(`Creating new session storage slot with id=[${sessionId}]`);
-        await redisService.set(sessionId, JSON.stringify(data), setCommandOptions);
+        await redisService.set(sessionId, data, setCommandOptions);
         return sessionId;
       },
       readData: async (id) => {
         log.debug(`Reading session data for session id=[${id}]`);
-        return JSON.parse(await redisService.get(id));
+        return await redisService.get(id);
       },
       updateData: async (id, data) => {
         log.debug(`Updating session data for session id=[${id}]`);
-        await redisService.set(id, JSON.stringify(data), setCommandOptions);
+        await redisService.set(id, data, setCommandOptions);
       },
       deleteData: async (id) => {
         log.debug(`Deleting all session data for session id=[${id}]`);
