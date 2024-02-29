@@ -67,6 +67,21 @@ export default function DemographicsPart2() {
           </div>
         )}
 
+        <div className="my-6">
+          {mouthPainTypes.length > 0 && (
+            <InputRadios
+              id="mouth-pain-type"
+              name="mouthPainType"
+              legend={t('demographics-oral-health-questions:part2.question7')}
+              options={mouthPainTypes.map((mouthPainType) => ({
+                children: getNameByLanguage(i18n.language, mouthPainType),
+                value: mouthPainType.id,
+              }))}
+              required
+            />
+          )}
+        </div>
+
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="cancel-button" to={`/intake/${id}/demographics-part1`}>
             {t('demographics-oral-health-questions:part2.button-back')}
