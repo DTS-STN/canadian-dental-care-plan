@@ -111,6 +111,7 @@ const serverEnv = z.object({
   OTEL_METRICS_EXPORT_TIMEOUT_MILLIS: z.coerce.number().default(30 * 1000),
   OTEL_SERVICE_NAME: z.string().trim().min(1).default('canadian-dental-care-plan'),
   OTEL_TRACES_ENDPOINT: z.string().trim().transform(emptyToUndefined).optional(),
+  LOOKUP_SVC_MARITALSTATUSES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;

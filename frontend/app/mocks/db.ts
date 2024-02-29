@@ -65,6 +65,12 @@ const db = factory({
     nameEnglish: String,
     nameFrench: String,
   },
+  maritalStatus: {
+    id: primaryKey(faker.string.uuid),
+    code: String,
+    nameEn: String,
+    nameFr: String,
+  },
 });
 
 // seed avaliable languages (before user)
@@ -137,6 +143,38 @@ for (let i = 0; i < numberOfLetters; i++) {
     referenceId: seededPDF.referenceId,
   });
 }
+
+// seed marirtal statuses
+db.maritalStatus.create({
+  code: 'MARRIED',
+  nameEn: 'Married',
+  nameFr: '(FR) Married',
+});
+db.maritalStatus.create({
+  code: 'COMMONLAW',
+  nameEn: 'Common Law',
+  nameFr: '(FR) Common Law',
+});
+db.maritalStatus.create({
+  code: 'SINGLE',
+  nameEn: 'Single',
+  nameFr: '(FR) Single',
+});
+db.maritalStatus.create({
+  code: 'WIDOWED',
+  nameEn: 'Widowed',
+  nameFr: '(FR) Widowed',
+});
+db.maritalStatus.create({
+  code: 'DIVORCED',
+  nameEn: 'Divorced',
+  nameFr: '(FR) Divorced',
+});
+db.maritalStatus.create({
+  code: 'SEPARATED',
+  nameEn: 'Separated',
+  nameFr: '(FR) Separated',
+});
 
 // seed country list
 db.country.create({

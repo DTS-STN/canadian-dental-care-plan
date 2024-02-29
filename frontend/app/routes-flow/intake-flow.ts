@@ -4,6 +4,7 @@ import { Params } from '@remix-run/react';
 import { z } from 'zod';
 
 import { getSessionService } from '~/services/session-service.server';
+import { isValidSin } from '~/utils/intake-utils';
 
 /**
  * Schema for validating UUID.
@@ -27,11 +28,21 @@ const emailStateSchema = z.object({
 });
 
 /**
+ * Schema for social insurance number.
+ */
+const applicantInformationSchema = z.object({
+  socialInsuranceNumber: z.string().refine(isValidSin, { message: 'valid-sin' }),
+  lastName: z.string().min(1, { message: 'last-name' }),
+  maritalStatus: z.string(),
+});
+
+/**
  * Schema for intake state.
  */
 const intakeStateSchema = z.object({
   personalInfo: personalInfoStateSchema.optional(),
   email: emailStateSchema.optional(),
+  applicantInformation: applicantInformationSchema.optional(),
 });
 
 type IntakeState = z.infer<typeof intakeStateSchema>;
@@ -167,6 +178,7 @@ export function getIntakeFlow() {
   return {
     clearState,
     emailStateSchema,
+    applicantInformationSchema,
     idSchema,
     intakeStateSchema,
     loadState,
