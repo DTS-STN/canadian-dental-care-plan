@@ -49,6 +49,13 @@ const sexAtBirthTypeSchema = z.object({
   nameFr: z.string().optional(),
 });
 
+const maritalStatusSchema = z.object({
+  id: z.string(),
+  code: z.string(),
+  nameEn: z.string(),
+  nameFr: z.string(),
+});
+
 export type PreferredLanguageInfo = z.infer<typeof preferredLanguageSchema>;
 export type RegionInfo = z.infer<typeof regionSchema>;
 
@@ -67,6 +74,7 @@ function createLookupService() {
     LOOKUP_SVC_ALLBORNTYPES_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_ALLDISABILITYTYPES_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_ALLSEXATBIRTHTYPES_CACHE_TTL_MILLISECONDS,
+    LOOKUP_SVC_MARITALSTATUSES_CACHE_TTL_MILLISECONDS,
   } = getEnv();
 
   async function getAllPreferredLanguages() {
@@ -250,6 +258,27 @@ function createLookupService() {
     throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
+  async function getAllMaritalStatuses() {
+    const url = `${INTEROP_API_BASE_URI}/lookups/marital-statuses`;
+    const response = await fetch(url);
+
+    const maritalStatusSchemaList = z.array(maritalStatusSchema);
+
+    if (response.ok) {
+      return maritalStatusSchemaList.parse(await response.json());
+    }
+
+    log.error('%j', {
+      message: 'Failed to fetch data',
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+
+    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+  }
+
   return {
     getAllPreferredLanguages: moize(getAllPreferredLanguages, { maxAge: LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllPreferredLanguages memo') }),
     getPreferredLanguage: moize(getPreferredLanguage, { maxAge: LOOKUP_SVC_PREFERREDLANGUAGE_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new PreferredLanguage memo') }),
@@ -259,5 +288,6 @@ function createLookupService() {
     getAllBornTypes: moize(getAllBornTypes, { maxAge: LOOKUP_SVC_ALLBORNTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllBornTypes memo') }),
     getAllDisabilityTypes: moize(getAllDisabilityTypes, { maxAge: LOOKUP_SVC_ALLDISABILITYTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllDisabilityTypes memo') }),
     getAllSexAtBirthTypes: moize(getAllSexAtBirthTypes, { maxAge: LOOKUP_SVC_ALLSEXATBIRTHTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllDisabilityTypes memo') }),
+    getAllMaritalStatuses: moize(getAllMaritalStatuses, { maxAge: LOOKUP_SVC_MARITALSTATUSES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllMaritalStatuses memo') }),
   };
 }

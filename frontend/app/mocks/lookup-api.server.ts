@@ -89,6 +89,15 @@ export function getLookupApiMockHandlers() {
       const provinceList = db.region.getAll();
       return HttpResponse.json(provinceList);
     }),
+
+    //
+    // Handler for GET request to retrieve all marital statuses
+    //
+    http.get('https://api.example.com/lookups/marital-statuses', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const maritalStatusList = db.maritalStatus.getAll();
+      return HttpResponse.json(maritalStatusList);
+    }),
   ];
 }
 

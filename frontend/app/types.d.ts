@@ -2,6 +2,7 @@ import type communicationPreference from '../public/locales/en/communication-pre
 import type demographicsOralHealthQuestions from '../public/locales/en/demographics-oral-health-questions.json';
 import type gcweb from '../public/locales/en/gcweb.json';
 import type index from '../public/locales/en/index.json';
+import type intake from '../public/locales/en/intake.json';
 import type letters from '../public/locales/en/letters.json';
 import type personalInformation from '../public/locales/en/personal-information.json';
 import type dataUnavailable from '../public/locales/en/udata-unavailable.json';
@@ -35,6 +36,7 @@ declare module 'i18next' {
       letters: typeof letters;
       index: typeof index;
       'demographics-oral-health-questions': typeof demographicsOralHealthQuestions;
+      intake: typeof intake;
     };
   }
 }
