@@ -33,6 +33,34 @@ export default function AccessQuestion() {
   const { options } = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
 
+  const helpMessage = (
+    <>
+      <ul className="mb-4 list-disc">
+        <li>{t('dental-insurance-question:list-item1')}</li>
+        <li>
+          {t('dental-insurance-question:list-item2')}
+          <Details id={t('dental-insurance-question:detail.exception.title')} title={t('dental-insurance-question:detail.exception.title')}>
+            <div>
+              <p>{t('dental-insurance-question:detail.exception.content')}</p>
+              <ul className="list-disc pl-6">
+                <li>{t('dental-insurance-question:detail.exception.list-item1')}</li>
+                <li>{t('dental-insurance-question:detail.exception.list-item2')}</li>
+              </ul>
+            </div>
+          </Details>
+        </li>
+        <li>
+          {t('dental-insurance-question:list-item3')}
+          <Details id={t('dental-insurance-question:detail.note.title')} title={t('dental-insurance-question:detail.note.title')}>
+            <p>{t('dental-insurance-question:detail.note.content')}</p>
+          </Details>
+        </li>
+        <li>{t('dental-insurance-question:list-item4')}</li>
+      </ul>
+      <p className="mb-4">{t('dental-insurance-question:content2')}</p>
+    </>
+  );
+
   return (
     <>
       <Form method="post">
@@ -46,34 +74,16 @@ export default function AccessQuestion() {
                 children: option,
                 value: option,
               }))}
-            >
-              <ul className="mb-4 list-disc pl-4">
-                <li>{t('dental-insurance-question:list-item1')}</li>
-                <li>{t('dental-insurance-question:list-item2')}</li>
-                <Details id={t('dental-insurance-question:detail.exception.title')} title={t('dental-insurance-question:detail.exception.title')}>
-                  <div>
-                    <p>{t('dental-insurance-question:detail.exception.content')}</p>
-                    <ul className="list-disc pl-6">
-                      <li>{t('dental-insurance-question:detail.exception.list-item1')}</li>
-                      <li>{t('dental-insurance-question:detail.exception.list-item2')}</li>
-                    </ul>
-                  </div>
-                </Details>
-                <li>{t('dental-insurance-question:list-item3')}</li>
-                <Details id={t('dental-insurance-question:detail.note.title')} title={t('dental-insurance-question:detail.note.title')}>
-                  <p>{t('dental-insurance-question:detail.note.content')}</p>
-                </Details>
-                <li>{t('dental-insurance-question:list-item4')}</li>
-              </ul>
-              <p className="mb-4">{t('dental-insurance-question:content2')}</p>
-            </InputRadios>
+              helpMessagePrimary={helpMessage}
+              helpMessagePrimaryClassName="pl-8 text-[#333333]"
+            />
           )}
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="cancel-button" variant="alternative" to="/personal-information" className="w-24 border-blue-800 py-2 text-blue-800">
+          <ButtonLink id="back-button" to="/intake">
             {t('dental-insurance-question:button.back')}
           </ButtonLink>
-          <Button id="change-button" variant="primary" className="border py-2">
+          <Button id="continue-button" variant="primary">
             {t('dental-insurance-question:button.continue')}
           </Button>
         </div>
