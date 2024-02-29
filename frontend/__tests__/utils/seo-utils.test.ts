@@ -8,7 +8,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { getClientEnv } from '~/utils/env-utils';
 import { useI18nNamespaces } from '~/utils/route-utils';
-import { useCanonicalURL } from '~/utils/seo-utils';
+import { useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
 
 vi.mock('@remix-run/react');
 vi.mock('react-i18next');
@@ -34,7 +34,7 @@ describe('useCanonicalURL', () => {
     const { result } = renderHook(() => useCanonicalURL(mockOrigin));
 
     const expectedURL = `${mockOrigin}${mockPathname}${mockSearch}&lang=${mockLanguage}`;
-    console.log({ currect: result.current, expectedURL });
+
     expect(result.current).toBe(expectedURL);
   });
 
@@ -52,7 +52,44 @@ describe('useCanonicalURL', () => {
     const { result } = renderHook(() => useCanonicalURL(mockOrigin));
 
     const expectedURL = `${mockOrigin}${mockPathname}${mockSearch}`;
-    console.log({ currect: result.current, expectedURL });
+
     expect(result.current).toBe(expectedURL);
+  });
+});
+
+describe('useAlternateLanguages', () => {
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
+
+  it('should return alternate language URLs with default languages', () => {
+    vi.mocked(useLocation, { partial: true }).mockReturnValue({ pathname: '/path', search: '?param=value' });
+    vi.mocked(getClientEnv, { partial: true }).mockReturnValue({ LANG_QUERY_PARAM: 'lang' });
+
+    const origin = 'http://example.com';
+    const expectedUrls = [
+      { href: 'http://example.com/path?param=value&lang=en', hrefLang: 'en' },
+      { href: 'http://example.com/path?param=value&lang=fr', hrefLang: 'fr' },
+    ];
+
+    const { result } = renderHook(() => useAlternateLanguages(origin));
+
+    expect(result.current).toEqual(expectedUrls);
+  });
+
+  it('should return alternate language URLs with custom languages', () => {
+    vi.mocked(useLocation, { partial: true }).mockReturnValue({ pathname: '/path', search: '?param=value' });
+    vi.mocked(getClientEnv, { partial: true }).mockReturnValue({ LANG_QUERY_PARAM: 'lang' });
+
+    const origin = 'http://example.com';
+    const languages = ['en', 'de'];
+    const expectedUrls = [
+      { href: 'http://example.com/path?param=value&lang=en', hrefLang: 'en' },
+      { href: 'http://example.com/path?param=value&lang=de', hrefLang: 'de' },
+    ];
+
+    const { result } = renderHook(() => useAlternateLanguages(origin, languages));
+
+    expect(result.current).toEqual(expectedUrls);
   });
 });

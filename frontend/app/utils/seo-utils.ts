@@ -28,3 +28,27 @@ export function useCanonicalURL(origin: string) {
 
   return url.toString();
 }
+
+/**
+ * Custom hook to generate alternate language URLs based on the current location.
+ * @param origin - The origin URL. For more information on the origin URL, see {@link https://developer.mozilla.org/en-US/docs/Web/API/URL/origin}.
+ * @returns An array of objects containing the hreflang and href for alternate language URLs.
+ */
+export function useAlternateLanguages(origin: string, languages: Array<string> = ['en', 'fr']) {
+  const { LANG_QUERY_PARAM } = getClientEnv();
+  const location = useLocation();
+
+  const baseUrl = new URL(`${origin}${location.pathname}`);
+  new URLSearchParams(location.search).forEach((value, name) => {
+    baseUrl.searchParams.set(name, value);
+  });
+
+  return languages.map((lang) => {
+    const url = new URL(baseUrl);
+    url.searchParams.set(LANG_QUERY_PARAM, lang);
+    return {
+      href: url.toString(),
+      hrefLang: lang,
+    };
+  });
+}
