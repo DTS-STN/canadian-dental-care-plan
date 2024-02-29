@@ -18,6 +18,7 @@ export interface ToasterProps {
 export function Toaster({ toast }: ToasterProps) {
   setToastCookieOptions({
     // TODO :: GjB :: make these configurable
+    name: '__CDCP//toast',
     sameSite: 'lax',
     secure: true,
   });
