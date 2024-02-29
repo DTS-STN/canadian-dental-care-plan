@@ -32,8 +32,7 @@ if (ENABLED_MOCKS.length > 0) {
  * for the root loader, we can use the handleDataRequest function to effectively
  * 'touch' the session, extending it by the default session lifetime.
  *
- * Extending the session lifetime will update the expires/maxage field of the
- * session cookie, and will also update the TTL value of the session data when
+ * Extending the session lifetime  update the TTL value of the session data when
  * using Redis as a backing store.
  *
  * @see https://remix.run/docs/en/main/file-conventions/entry.server#handledatarequest

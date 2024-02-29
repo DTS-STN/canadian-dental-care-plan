@@ -43,7 +43,6 @@ async function createSessionService() {
   const sessionCookie = createCookie(env.SESSION_COOKIE_NAME, {
     path: env.SESSION_COOKIE_PATH,
     domain: env.SESSION_COOKIE_DOMAIN,
-    maxAge: env.SESSION_COOKIE_MAX_AGE_SECONDS,
     sameSite: env.SESSION_COOKIE_SAME_SITE,
     secrets: [env.SESSION_COOKIE_SECRET],
     secure: env.SESSION_COOKIE_SECURE,
