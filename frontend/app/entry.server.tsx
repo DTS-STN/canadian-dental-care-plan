@@ -44,7 +44,7 @@ if (ENABLED_MOCKS.length > 0) {
  */
 export async function handleDataRequest(response: Response, { request }: LoaderFunctionArgs | ActionFunctionArgs) {
   log.debug('Touching session to extend its lifetime');
-  instrumentationService.createCounter('entry.server.requests.count').add(1);
+  instrumentationService.createCounter('http.server.requests').add(1);
 
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
@@ -63,7 +63,7 @@ export function handleError(error: unknown, { request }: LoaderFunctionArgs | Ac
   // cancellation and race-condition handling can cause a lot of requests to be aborted
   if (!request.signal.aborted) {
     log.error(error);
-    instrumentationService.createCounter('entry.server.requests.failed.count').add(1);
+    instrumentationService.createCounter('http.server.requests.failed').add(1);
   }
 }
 
@@ -71,7 +71,7 @@ export default async function handleRequest(request: Request, responseStatusCode
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
   log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
 
-  instrumentationService.createCounter('entry.server.requests.count').add(1);
+  instrumentationService.createCounter('http.server.requests').add(1);
 
   const routes = Object.values(remixContext.routeModules);
   const locale = await getLocale(request);
