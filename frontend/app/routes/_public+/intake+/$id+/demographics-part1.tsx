@@ -37,12 +37,13 @@ export default function DemographicsPart1() {
   return (
     <>
       <Form method="post">
+        <p className="mb-8 text-lg text-gray-500">{t('demographics-oral-health-questions:part1.paragraph1')}</p>
+        <p className="mb-8 text-lg text-gray-500">{t('demographics-oral-health-questions:part1.paragraph2')}</p>
         <div className="my-6">
-          <p className="mb-4 text-red-600">{t('gcweb:asterisk-indicates-required-field')}</p>
           {bornTypes.length > 0 && (
             <InputRadios
-              id="preferred-language"
-              name="preferredLanguage"
+              id="born-type"
+              name="bornType"
               legend={t('demographics-oral-health-questions:part1.question1')}
               options={bornTypes.map((bornType) => ({
                 children: getNameByLanguage(i18n.language, bornType),

@@ -22,17 +22,17 @@ const demographicDB = factory({
 });
 
 demographicDB.bornType.create({
-  nameEn: 'English1',
-  nameFr: 'Anglais1',
+  nameEn: 'Born in Canada',
+  nameFr: '(FR) Born in Canada',
 });
 
 demographicDB.bornType.create({
-  nameEn: 'English2',
-  nameFr: 'Anglais2',
+  nameEn: 'Born outside Canada',
+  nameFr: '(FR) Born outside Canada',
 });
 demographicDB.bornType.create({
-  nameEn: 'English3',
-  nameFr: 'Anglais3',
+  nameEn: 'Prefer not to answer',
+  nameFr: '(FR) Prefer not to answer',
 });
 
 demographicDB.question2.create({
