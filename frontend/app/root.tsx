@@ -18,6 +18,7 @@ import tailwindStyleSheet from '~/tailwind.css';
 import { getPublicEnv } from '~/utils/env.server';
 import type { FeatureName } from '~/utils/env.server';
 import { useDocumentTitleI18nKey, useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
+import { useCanonicalURL } from '~/utils/seo-utils';
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: fontLatoStyleSheet },
@@ -28,16 +29,26 @@ export const links: LinksFunction = () => [
 export async function loader({ request }: LoaderFunctionArgs) {
   const buildInfoService = getBuildInfoService();
   const { toast, headers } = await getToast(request);
+  const requestUrl = new URL(request.url);
 
-  return json({ buildInfo: buildInfoService.getBuildInfo(), env: getPublicEnv(), toast }, { headers });
+  return json(
+    {
+      buildInfo: buildInfoService.getBuildInfo(),
+      env: getPublicEnv(),
+      origin: requestUrl.origin,
+      toast,
+    },
+    { headers },
+  );
 }
 
 export default function App() {
   const { nonce } = useContext(NonceContext);
-  const { env, toast } = useLoaderData<typeof loader>();
+  const { env, origin, toast } = useLoaderData<typeof loader>();
   const ns = useI18nNamespaces();
   const { i18n } = useTranslation(ns);
   const documentTitle = useDocumentTitle();
+  const canonicalURL = useCanonicalURL(origin);
 
   return (
     <html lang={i18n.language}>
@@ -46,6 +57,7 @@ export default function App() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{documentTitle}</title>
         <Meta />
+        <link rel="canonical" href={canonicalURL} />
         <Links />
       </head>
       <body vocab="http://schema.org/" typeof="WebPage">
