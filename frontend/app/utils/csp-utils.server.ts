@@ -15,15 +15,15 @@ export function generateContentSecurityPolicy(nonce: string) {
     // prettier-ignore
     `base-uri 'none'`,
     `default-src 'none'`,
-    `connect-src 'self'` + (isDevelopment ? ' ws://localhost:3001' : ''),
+    `connect-src 'self' https://hcaptcha.com https://*.hcaptcha.com` + (isDevelopment ? ' ws://localhost:3001' : ''),
     `font-src 'self' fonts.gstatic.com`,
     `form-action 'self'`,
     `frame-ancestors 'self'`,
-    `frame-src 'self'`,
+    `frame-src 'self' https://hcaptcha.com https://*.hcaptcha.com`,
     `img-src 'self' data:`,
-    `script-src 'strict-dynamic' 'nonce-${nonce}'`,
+    `script-src 'strict-dynamic' 'nonce-${nonce}' https://hcaptcha.com https://*.hcaptcha.com`,
     // unsafe-inline is required by remix-toast 💩
-    `style-src 'self' 'unsafe-inline'`,
+    `style-src 'self' 'unsafe-inline' https://hcaptcha.com https://*.hcaptcha.com`,
   ].join('; ');
 
   log.debug(`Generated content security policy: [${contentSecurityPolicy}]`);

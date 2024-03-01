@@ -57,6 +57,11 @@ const serverEnv = z.object({
   AUTH_RAOIDC_PROXY_URL: z.string().trim().transform(emptyToUndefined).optional(),
   AUTH_RASCL_LOGOUT_URL: z.string().trim().min(1),
 
+  // hCaptcha settings
+  HCAPTCHA_SECRET_KEY: z.string().trim().min(1),
+  HCAPTCHA_SITE_KEY: z.string().trim().min(1),
+  HCAPTCHA_VERIFY_URL: z.string().url(),
+
   // language cookie settings
   LANG_COOKIE_NAME: z.string().default('__CDCP//lang'),
   LANG_COOKIE_DOMAIN: z.string().optional(),

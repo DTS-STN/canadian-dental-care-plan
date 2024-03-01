@@ -30,6 +30,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@hcaptcha/react-hcaptcha": "^1.10.1",
     "@mswjs/data": "^0.16.1",
     "@opentelemetry/api": "^1.8.0",
     "@opentelemetry/exporter-metrics-otlp-proto": "^0.49.1",
