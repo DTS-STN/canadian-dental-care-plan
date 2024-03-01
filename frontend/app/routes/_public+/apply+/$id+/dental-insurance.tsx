@@ -29,26 +29,26 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
-  const intakeFlow = getApplyFlow();
-  const { id } = await intakeFlow.loadState({ request, params });
+  const applyFlow = getApplyFlow();
+  const { id } = await applyFlow.loadState({ request, params });
 
   const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = intakeFlow.accessStateSchema.safeParse(formData);
+  const parsedDataResult = applyFlow.accessStateSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof intakeFlow.accessStateSchema>>,
+      formData: formData as Partial<z.infer<typeof applyFlow.accessStateSchema>>,
     });
   }
 
-  const sessionResponseInit = await intakeFlow.saveState({
+  const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
     state: { access: parsedDataResult.data },
   });
 
-  return redirect(`/intake/${id}/confirm`, sessionResponseInit);
+  return redirect(`/apply/${id}/confirm`, sessionResponseInit);
 }
 
 export default function AccessToDentalInsuranceQuestion() {
@@ -99,7 +99,7 @@ export default function AccessToDentalInsuranceQuestion() {
                     {`, ${option.id === 'yes' ? t('dental-insurance-question:option1') : t('dental-insurance-question:option2')}`}
                   </div>
                 ),
-                value: getNameByLanguage(i18n.language, option),
+                value: option.id,
                 defaultChecked: state.access?.dentalInsurance === option.id,
               }))}
               helpMessagePrimary={helpMessage}
