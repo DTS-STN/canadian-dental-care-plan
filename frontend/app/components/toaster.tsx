@@ -54,7 +54,8 @@ interface SnackbarProps extends ComponentProps<typeof MaterialDesignContent> {}
 const Snackbar = forwardRef<HTMLDivElement, SnackbarProps>(({ className, message, ...props }, ref) => {
   const ns = useI18nNamespaces();
   const { t } = useTranslation(ns);
-  const translatedMessage = t(message, { defaultValue: message });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const translatedMessage = t(message as any, { defaultValue: message });
   return <MaterialDesignContent ref={ref} className={cn('!rounded-lg !border', className)} message={translatedMessage} {...props} />;
 });
 
