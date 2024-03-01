@@ -67,7 +67,15 @@ export async function action({ request, params }: ActionFunctionArgs) {
       confirmEmail: z.string().min(1, { message: 'empty-field' }).optional(),
       preferredLanguage: z.string({ required_error: 'empty-radio' }),
     })
-    .refine(emailsMatch, { message: 'not-the-same' });
+    .superRefine((val, ctx) => {
+      if (!emailsMatch(val)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'not-the-same',
+          path: ['confirmEmail'],
+        });
+      }
+    });
 
   const formData = Object.fromEntries(await request.formData());
   const parsedDataResult = formSchema.safeParse(formData);
