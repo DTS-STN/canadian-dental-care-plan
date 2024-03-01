@@ -33,7 +33,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     sin: '123456789',
     martialStatus: 'Married',
     email: 'myemail@example.com',
-    communicationPreference: 'digital',
+    communicationPreference: 'email',
   };
   const spouseInfo = {
     firstName: 'Phil',
@@ -184,7 +184,7 @@ export default function ReviewInformation() {
       <h2 className="mt-8 text-2xl font-semibold ">{t('review-information:comm-prefs-title')}</h2>
       <dl>
         <DescriptionListItem term={t('review-information:comm-pref-title')}>
-          {userInfo.communicationPreference === 'digital' ? (
+          {userInfo.communicationPreference === 'email' ? (
             <div className="grid grid-cols-1">
               <p className="mt-4">{t('review-information:comm-electronic')}</p> <span>{userInfo.email}</span>
             </div>

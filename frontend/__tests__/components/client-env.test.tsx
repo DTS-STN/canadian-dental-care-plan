@@ -16,7 +16,6 @@ describe('<ClientEnv>', () => {
       SCCH_BASE_URI: 'http://www.example.com',
       SESSION_TIMEOUT_SECONDS: 120,
       SESSION_TIMEOUT_PROMPT_SECONDS: 30,
-      COMMUNICATION_METHOD_DIGITAL_ID: 'digital',
     };
 
     const { container } = render(<ClientEnv env={env} nonce={nonce} />);
