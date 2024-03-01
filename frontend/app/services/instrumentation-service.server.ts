@@ -20,7 +20,7 @@
  *   - https://www.npmjs.com/package/@opentelemetry/sdk-node
  *   - https://www.dynatrace.com/support/help/extend-dynatrace/opentelemetry
  */
-import { MetricOptions, metrics } from '@opentelemetry/api';
+import { MetricOptions, Span, metrics, trace } from '@opentelemetry/api';
 import { ExportResultCode } from '@opentelemetry/core';
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-proto';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto';
@@ -49,6 +49,9 @@ function createInstrumentationService() {
   const buildInfoService = getBuildInfoService();
   const buildInfo = buildInfoService.getBuildInfo();
 
+  /**
+   * Configure OpenTelemetry's NodeSDK and call the .start() function
+   */
   function startInstrumentation() {
     new NodeSDK({
       metricReader: new PeriodicExportingMetricReader({
@@ -60,8 +63,8 @@ function createInstrumentationService() {
         // Note: any attributes added here must be configured in Dynatrace under
         // Settings → Metrics → OpenTelemetry metrics → Allow list: resource and scope attributes
         //
-        // see: node_modules/@opentelemetry/semantic-conventions/build/src/resource/SemanticResourceAttributes.js
-        // see: node_modules/@opentelemetry/semantic-conventions/build/src/trace/SemanticResourceAttributes.js
+        // @see: node_modules/@opentelemetry/semantic-conventions/build/src/resource/SemanticResourceAttributes.js
+        // @see: node_modules/@opentelemetry/semantic-conventions/build/src/trace/SemanticResourceAttributes.js
         [SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: env.OTEL_ENVIRONMENT,
         [SEMRESATTRS_SERVICE_NAME]: env.OTEL_SERVICE_NAME,
         [SEMRESATTRS_SERVICE_VERSION]: buildInfo.buildVersion,
@@ -125,17 +128,32 @@ function createInstrumentationService() {
     };
   };
 
+  /**
+   * @see https://opentelemetry.io/docs/languages/js/instrumentation/#create-counters
+   */
   function createCounter(name: string, options?: MetricOptions) {
     return metrics.getMeter(env.OTEL_SERVICE_NAME, buildInfo.buildVersion).createCounter(name, options);
   }
 
+  /**
+   * @see https://opentelemetry.io/docs/languages/js/instrumentation/#using-histograms
+   */
   function createHistogram(name: string, options?: MetricOptions) {
     return metrics.getMeter(env.OTEL_SERVICE_NAME, buildInfo.buildVersion).createHistogram(name, options);
+  }
+
+  /**
+   * @see https://opentelemetry.io/docs/languages/js/instrumentation/#create-spans
+   */
+  function startActiveSpan<T extends (span: Span) => unknown>(name: string, fn: T) {
+    return trace.getTracer(env.OTEL_SERVICE_NAME, buildInfo.buildVersion).startActiveSpan(name, fn);
   }
 
   return {
     createCounter,
     createHistogram,
+    startActiveSpan,
+    // the OpenTelemetry SDK should only be started once during runtime, so memoize the call to be sure it is
     startInstrumentation: moize(startInstrumentation, { onCacheAdd: () => log.info('Starting OpenTelemetry instrumentation service') }),
   };
 }
