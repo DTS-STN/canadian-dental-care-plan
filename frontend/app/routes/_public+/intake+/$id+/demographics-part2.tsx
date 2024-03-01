@@ -44,7 +44,7 @@ export default function DemographicsPart2() {
             <InputRadios
               id="born-type"
               name="bornType"
-              legend={t('demographics-oral-health-questions:part2.question6')}
+              legend={t('demographics-oral-health-questions:part2.question-sex-at-birth')}
               options={sexAtBirthTypes.map((sexAtBirthType) => ({
                 children: getNameByLanguage(i18n.language, sexAtBirthType),
                 value: sexAtBirthType.id,
@@ -59,7 +59,7 @@ export default function DemographicsPart2() {
             <InputRadios
               id="mouth-pain-type"
               name="mouthPainType"
-              legend={t('demographics-oral-health-questions:part2.question7')}
+              legend={t('demographics-oral-health-questions:part2.question-mouth-pain')}
               options={mouthPainTypes.map((mouthPainType) => ({
                 children: getNameByLanguage(i18n.language, mouthPainType),
                 value: mouthPainType.id,
@@ -72,9 +72,9 @@ export default function DemographicsPart2() {
         {lastTimeDentistVisitTypes.length > 0 && (
           <div className="my-6">
             <InputRadios
-              id="mouth-pain-type"
-              name="mouthPainType"
-              legend={t('demographics-oral-health-questions:part2.question8')}
+              id="last-time-dentist-visit-type"
+              name="lastTimeDentistVisitType"
+              legend={t('demographics-oral-health-questions:part2.question-last-dental-visit')}
               options={lastTimeDentistVisitTypes.map((lastTimeDentistVisitType) => ({
                 children: getNameByLanguage(i18n.language, lastTimeDentistVisitType),
                 value: lastTimeDentistVisitType.id,
@@ -87,9 +87,9 @@ export default function DemographicsPart2() {
         {avoidedDentalCostTypes.length > 0 && (
           <div className="my-6">
             <InputRadios
-              id="mouth-pain-type"
-              name="mouthPainType"
-              legend={t('demographics-oral-health-questions:part2.question9')}
+              id="avoided-dental-cost-type"
+              name="avoidedDentalCostType"
+              legend={t('demographics-oral-health-questions:part2.question-avoided-dental-cost')}
               options={avoidedDentalCostTypes.map((avoidedDentalCostType) => ({
                 children: getNameByLanguage(i18n.language, avoidedDentalCostType),
                 value: avoidedDentalCostType.id,

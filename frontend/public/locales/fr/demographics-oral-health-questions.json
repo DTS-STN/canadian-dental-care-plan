@@ -21,10 +21,10 @@
   "part2": {
     "page-title": "(FR) Voluntary demographic and oral health questions part 2 of 2",
 
-    "question6": "6.(FR) What was your sex at birth? Sex refers to sex assigned at birth.",
-    "question7": "7.(FR) In the past 12 months, how often have you had any persistent or on-going mouth pain? Mouth pain includes pain in teeth, gums, tongue, jaw, jaw joints.",
-    "question8": "8. (FR) When was the last time you saw a dentist, denturist, dental hygienist or any other dental specialist? Services may have been provided in any setting where the oral health professional is licensed to practice",
-    "question9": "9. (FR) In the past 12 months, have you avoided going to a dental professional for dental care due to the cost of care?",
+    "question-sex-at-birth": "6.(FR) What was your sex at birth? Sex refers to sex assigned at birth.",
+    "question-mouth-pain": "7.(FR) In the past 12 months, how often have you had any persistent or on-going mouth pain? Mouth pain includes pain in teeth, gums, tongue, jaw, jaw joints.",
+    "question-last-dental-visit": "8. (FR) When was the last time you saw a dentist, denturist, dental hygienist or any other dental specialist? Services may have been provided in any setting where the oral health professional is licensed to practice",
+    "question-avoided-dental-cost": "9. (FR) In the past 12 months, have you avoided going to a dental professional for dental care due to the cost of care?",
 
     "button-back": "(FR) Back < ",
     "button-continue": "(FR) Continue > "
