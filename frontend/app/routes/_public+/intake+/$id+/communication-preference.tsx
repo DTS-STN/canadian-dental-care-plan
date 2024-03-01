@@ -44,9 +44,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { COMMUNICATION_METHOD_DIGITAL_ID } = getClientEnv();
 
   const emailsMatch = (val: { preferredMethod: string; email?: string; confirmEmail?: string }) => {
+    if (!val.email || !val.confirmEmail) return true;
     if (val.preferredMethod === COMMUNICATION_METHOD_DIGITAL_ID) {
       // emails have to match only when the preferred method is digital id
-      return val.email?.trim() === val.confirmEmail?.trim();
+      return val.email.trim() === val.confirmEmail.trim();
     }
     return true;
   };
@@ -149,15 +150,19 @@ export default function IntakeFlowCommunicationPreferencePage() {
       value: digitalCommunicationMethodId,
       defaultChecked: state?.preferredMethod === digitalMethod.id,
       append: digitalMethodChecked && (
-        <div className="grid gap-6 md:grid-cols-4">
-          <InputField id="email" className="w-full" label={t('communication-preference:email')} name="email" errorMessage={errorMessages.email} defaultValue={state?.email} />
-          <InputField id="confirmEmail" className="w-full" label={t('communication-preference:confirm-email')} name="confirmEmail" errorMessage={errorMessages.confirmEmail} defaultValue={state?.confirmEmail} />
-          {errorMessages.sameEmail && (
-            <InputError id="sameEmail" className="mt-2">
-              {errorMessages.sameEmail}
-            </InputError>
-          )}
-        </div>
+        <>
+          <div className="grid gap-6 md:grid-cols-4">
+            <InputField id="email" className="w-full" label={t('communication-preference:email')} name="email" errorMessage={errorMessages.email} defaultValue={state?.email} />
+            <InputField id="confirmEmail" className="w-full" label={t('communication-preference:confirm-email')} name="confirmEmail" errorMessage={errorMessages.confirmEmail} defaultValue={state?.confirmEmail} />
+          </div>
+          <div>
+            {errorMessages.sameEmail && (
+              <InputError id="sameEmail" className="mt-2">
+                {errorMessages.sameEmail}
+              </InputError>
+            )}
+          </div>
+        </>
       ),
       onClick: digitalMethodHandler,
     },
