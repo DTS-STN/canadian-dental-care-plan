@@ -33,6 +33,15 @@ export function getLookupApiMockHandlers() {
     }),
 
     //
+    // Handler for GET request to retrieve all mouth pain types
+    //
+    http.get('https://api.example.com/lookups/mouth-pain-types', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const mouthPainTypes = demographicDB.mouthPainType.getAll();
+      return HttpResponse.json(mouthPainTypes);
+    }),
+
+    //
     // Handler for GET request to retrieve all born types
     //
     http.get('https://api.example.com/lookups/born-types', ({ request }) => {

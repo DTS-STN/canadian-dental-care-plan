@@ -23,6 +23,12 @@ const demographicDB = factory({
     nameEn: String,
     nameFr: String,
   },
+
+  mouthPainType: {
+    id: primaryKey(faker.string.uuid),
+    nameEn: String,
+    nameFr: String,
+  },
 });
 
 demographicDB.bornType.create({
@@ -73,4 +79,33 @@ demographicDB.sexAtBirthType.create({
   nameFr: '(FR) Prefer not to answer',
 });
 
+demographicDB.mouthPainType.create({
+  nameEn: 'Often',
+  nameFr: '(FR) Often',
+});
+
+demographicDB.mouthPainType.create({
+  nameEn: 'Sometimes',
+  nameFr: '(FR) Sometimes',
+});
+
+demographicDB.mouthPainType.create({
+  nameEn: 'Rarely',
+  nameFr: '(FR) Rarely',
+});
+
+demographicDB.mouthPainType.create({
+  nameEn: 'Never',
+  nameFr: '(FR) Never',
+});
+
+demographicDB.mouthPainType.create({
+  nameEn: "Don't know",
+  nameFr: 'Ne sais pas',
+});
+
+demographicDB.mouthPainType.create({
+  nameEn: 'Prefer not to say',
+  nameFr: '(FR) Prefer not to say',
+});
 export { demographicDB };

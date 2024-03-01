@@ -20,9 +20,10 @@ export const handle = {
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const sexAtBirthTypes = await getLookupService().getAllSexAtBirthTypes();
+  const mouthPainTypes = await getLookupService().getAllMouthPaintTypes();
   const intakeFlow = getIntakeFlow();
   const { id, state } = await intakeFlow.loadState({ request, params });
-  return json({ sexAtBirthTypes, id, state });
+  return json({ sexAtBirthTypes, mouthPainTypes, id, state });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -30,14 +31,14 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function DemographicsPart2() {
-  const { sexAtBirthTypes, id } = useLoaderData<typeof loader>();
+  const { sexAtBirthTypes, mouthPainTypes, id } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
 
   return (
     <>
       <Form method="post">
-        <div className="my-6">
-          {sexAtBirthTypes.length > 0 && (
+        {sexAtBirthTypes.length > 0 && (
+          <div className="my-6">
             <InputRadios
               id="born-type"
               name="bornType"
@@ -48,8 +49,23 @@ export default function DemographicsPart2() {
               }))}
               required
             />
-          )}
-        </div>
+          </div>
+        )}
+
+        {mouthPainTypes.length > 0 && (
+          <div className="my-6">
+            <InputRadios
+              id="mouth-pain-type"
+              name="mouthPainType"
+              legend={t('demographics-oral-health-questions:part2.question7')}
+              options={mouthPainTypes.map((mouthPainType) => ({
+                children: getNameByLanguage(i18n.language, mouthPainType),
+                value: mouthPainType.id,
+              }))}
+              required
+            />
+          </div>
+        )}
 
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="cancel-button" to={`/intake/${id}/demographics-part1`}>
