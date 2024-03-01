@@ -100,6 +100,7 @@ const serverEnv = z.object({
   LOOKUP_SVC_ALLBORNTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_ALLDISABILITYTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_ALLSEXATBIRTHTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
+  LOOKUP_SVC_MARITALSTATUSES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_ALLMOUTHPAINTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_LASTTIMEDENTISTVISITTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_AVOIDEDDENTALCOSTTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
@@ -114,7 +115,7 @@ const serverEnv = z.object({
   OTEL_METRICS_EXPORT_TIMEOUT_MILLIS: z.coerce.number().default(30 * 1000),
   OTEL_SERVICE_NAME: z.string().trim().min(1).default('canadian-dental-care-plan'),
   OTEL_TRACES_ENDPOINT: z.string().trim().transform(emptyToUndefined).optional(),
-  LOOKUP_SVC_MARITALSTATUSES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
+  OTEL_USE_CONSOLE_EXPORTERS: z.string().transform(toBoolean).default('false')
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;
