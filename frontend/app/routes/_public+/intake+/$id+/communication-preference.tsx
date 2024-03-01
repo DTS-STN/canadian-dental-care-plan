@@ -44,7 +44,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { COMMUNICATION_METHOD_DIGITAL_ID } = getClientEnv();
 
   const emailsMatch = (val: { preferredMethod: string; email?: string; confirmEmail?: string }) => {
-    if (!val.email || !val.confirmEmail) return true;
+    if (!val.email || !val.confirmEmail) {
+      // if either email is omitted, skip the matching
+      // check and render 'please enter a value'
+      return true;
+    }
     if (val.preferredMethod === COMMUNICATION_METHOD_DIGITAL_ID) {
       // emails have to match only when the preferred method is digital id
       return val.email.trim() === val.confirmEmail.trim();
