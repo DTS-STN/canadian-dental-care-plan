@@ -18,7 +18,7 @@ import tailwindStyleSheet from '~/tailwind.css';
 import { getPublicEnv } from '~/utils/env.server';
 import type { FeatureName } from '~/utils/env.server';
 import { useDocumentTitleI18nKey, useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
-import { useCanonicalURL } from '~/utils/seo-utils';
+import { useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: fontLatoStyleSheet },
@@ -49,6 +49,7 @@ export default function App() {
   const { i18n } = useTranslation(ns);
   const documentTitle = useDocumentTitle();
   const canonicalURL = useCanonicalURL(origin);
+  const alternateLanguages = useAlternateLanguages(origin);
 
   return (
     <html lang={i18n.language}>
@@ -58,6 +59,9 @@ export default function App() {
         <title>{documentTitle}</title>
         <Meta />
         <link rel="canonical" href={canonicalURL} />
+        {alternateLanguages.map(({ href, hrefLang }) => (
+          <link key={hrefLang} rel="alternate" hrefLang={hrefLang} href={href} />
+        ))}
         <Links />
       </head>
       <body vocab="http://schema.org/" typeof="WebPage">
