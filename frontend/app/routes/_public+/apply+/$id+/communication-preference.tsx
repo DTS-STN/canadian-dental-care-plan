@@ -9,7 +9,6 @@ import { z } from 'zod';
 
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
-import { InputError } from '~/components/input-error';
 import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
@@ -153,10 +152,9 @@ export default function ApplyFlowCommunicationPreferencePage() {
       value: communicationMethodEmail.id,
       defaultChecked: state?.preferredMethod === communicationMethodEmail.id,
       append: emailMethodChecked && (
-        <div className="grid gap-6 md:grid-cols-2">
-          <InputField id="email" className="w-full" label={t('communication-preference:email')} name="email" errorMessage={errorMessages.email} defaultValue={state?.email} />
-          <InputField id="confirmEmail" className="w-full" label={t('communication-preference:confirm-email')} name="confirmEmail" errorMessage={errorMessages.confirmEmail} defaultValue={state?.confirmEmail} />
-          <div className="col-span-2">{errorMessages.sameEmail && <InputError id="sameEmail">{errorMessages.sameEmail}</InputError>}</div>
+        <div className="mb-4 grid max-w-prose gap-6 md:grid-cols-2 ">
+          <InputField id="email" type="email" className="w-full" label={t('communication-preference:email')} name="email" errorMessage={errorMessages.email} defaultValue={state?.email} />
+          <InputField id="confirmEmail" type="email" className="w-full" label={t('communication-preference:confirm-email')} name="confirmEmail" errorMessage={errorMessages.confirmEmail ?? errorMessages.sameEmail} defaultValue={state?.confirmEmail} />
         </div>
       ),
       onClick: emailMethodHandler,
@@ -167,31 +165,23 @@ export default function ApplyFlowCommunicationPreferencePage() {
   return (
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <p>{t('communication-preference:note')}</p>
-      <Form method="post" noValidate>
-        <div id="preferredMethod" className="my-6">
-          {preferredCommunicationMethods.length > 0 && (
-            <div className="my-6">
-              <InputRadios id="preferred-methods" legend={t('communication-preference:preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages.preferredMethod} required></InputRadios>
-            </div>
-          )}
-        </div>
-        <div id="preferredLanguage" className="my-6">
-          {preferredLanguages.length > 0 && (
-            <InputRadios
-              id="preferred-language"
-              name="preferredLanguage"
-              legend={t('communication-preference:preferred-language')}
-              options={preferredLanguages.map((language) => ({
-                defaultChecked: state?.preferredLanguage === language.id,
-                children: getNameByLanguage(i18n.language, language),
-                value: language.id,
-              }))}
-              errorMessage={errorMessages.preferredLanguage}
-              required
-            />
-          )}
-        </div>
+      <p className="mb-6">{t('communication-preference:note')}</p>
+      <Form method="post" noValidate className="space-y-6">
+        {preferredCommunicationMethods.length > 0 && <InputRadios id="preferred-methods" legend={t('communication-preference:preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages.preferredMethod} required></InputRadios>}
+        {preferredLanguages.length > 0 && (
+          <InputRadios
+            id="preferred-language"
+            name="preferredLanguage"
+            legend={t('communication-preference:preferred-language')}
+            options={preferredLanguages.map((language) => ({
+              defaultChecked: state?.preferredLanguage === language.id,
+              children: getNameByLanguage(i18n.language, language),
+              value: language.id,
+            }))}
+            errorMessage={errorMessages.preferredLanguage}
+            required
+          />
+        )}
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="back-button" to="/apply">
             {t('communication-preference:back')}

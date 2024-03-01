@@ -69,7 +69,9 @@ export default function ApplyFlowEmail() {
       <p className="mb-3 font-semibold">State:</p>
       <pre className="mb-6 block max-w-prose border border-slate-100 bg-slate-50 p-3">{JSON.stringify(state, undefined, 2)}</pre>
       <Form method="post" noValidate>
-        <InputField id="emailAddress" name="emailAddress" label="Email address" required defaultValue={defaultValues.emailAddress} errorMessage={errorMessages.emailAddress} />
+        <div className="mb-6">
+          <InputField id="emailAddress" name="emailAddress" label="Email address" required defaultValue={defaultValues.emailAddress} errorMessage={errorMessages.emailAddress} />
+        </div>
         <Button variant="primary">Next step</Button>
       </Form>
     </>
