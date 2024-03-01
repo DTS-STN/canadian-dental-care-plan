@@ -21,9 +21,11 @@ export const handle = {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const sexAtBirthTypes = await getLookupService().getAllSexAtBirthTypes();
   const mouthPainTypes = await getLookupService().getAllMouthPaintTypes();
+  const lastTimeDentistVisitTypes = await getLookupService().getAllLastTimeDentistVisitTypes();
+  const avoidedDentalCostTypes = await getLookupService().getAllAvoidedDentalCostTypes();
   const intakeFlow = getIntakeFlow();
   const { id, state } = await intakeFlow.loadState({ request, params });
-  return json({ sexAtBirthTypes, mouthPainTypes, id, state });
+  return json({ sexAtBirthTypes, mouthPainTypes, lastTimeDentistVisitTypes, avoidedDentalCostTypes, id, state });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -31,7 +33,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function DemographicsPart2() {
-  const { sexAtBirthTypes, mouthPainTypes, id } = useLoaderData<typeof loader>();
+  const { sexAtBirthTypes, mouthPainTypes, lastTimeDentistVisitTypes, avoidedDentalCostTypes, id } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
 
   return (
@@ -42,7 +44,7 @@ export default function DemographicsPart2() {
             <InputRadios
               id="born-type"
               name="bornType"
-              legend={t('demographics-oral-health-questions:part2.question6')}
+              legend={t('demographics-oral-health-questions:part2.question-sex-at-birth')}
               options={sexAtBirthTypes.map((sexAtBirthType) => ({
                 children: getNameByLanguage(i18n.language, sexAtBirthType),
                 value: sexAtBirthType.id,
@@ -57,7 +59,7 @@ export default function DemographicsPart2() {
             <InputRadios
               id="mouth-pain-type"
               name="mouthPainType"
-              legend={t('demographics-oral-health-questions:part2.question7')}
+              legend={t('demographics-oral-health-questions:part2.question-mouth-pain')}
               options={mouthPainTypes.map((mouthPainType) => ({
                 children: getNameByLanguage(i18n.language, mouthPainType),
                 value: mouthPainType.id,
@@ -67,6 +69,35 @@ export default function DemographicsPart2() {
           </div>
         )}
 
+        {lastTimeDentistVisitTypes.length > 0 && (
+          <div className="my-6">
+            <InputRadios
+              id="last-time-dentist-visit-type"
+              name="lastTimeDentistVisitType"
+              legend={t('demographics-oral-health-questions:part2.question-last-dental-visit')}
+              options={lastTimeDentistVisitTypes.map((lastTimeDentistVisitType) => ({
+                children: getNameByLanguage(i18n.language, lastTimeDentistVisitType),
+                value: lastTimeDentistVisitType.id,
+              }))}
+              required
+            />
+          </div>
+        )}
+
+        {avoidedDentalCostTypes.length > 0 && (
+          <div className="my-6">
+            <InputRadios
+              id="avoided-dental-cost-type"
+              name="avoidedDentalCostType"
+              legend={t('demographics-oral-health-questions:part2.question-avoided-dental-cost')}
+              options={avoidedDentalCostTypes.map((avoidedDentalCostType) => ({
+                children: getNameByLanguage(i18n.language, avoidedDentalCostType),
+                value: avoidedDentalCostType.id,
+              }))}
+              required
+            />
+          </div>
+        )}
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="cancel-button" to={`/intake/${id}/demographics-part1`}>
             {t('demographics-oral-health-questions:part2.button-back')}

@@ -35,6 +35,33 @@ export function getLookupApiMockHandlers() {
     //
     // Handler for GET request to retrieve all mouth pain types
     //
+    http.get('https://api.example.com/lookups/last-time-visited-dentist-types', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const lastTimeDentistVisitTypes = demographicDB.lastTimeDentistVisitType.getAll();
+      return HttpResponse.json(lastTimeDentistVisitTypes);
+    }),
+
+    //
+    // Handler for GET request to retrieve all mouth pain types
+    //
+    http.get('https://api.example.com/lookups/avoided-dental-cost-types', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const avoidedDentalCostTypes = demographicDB.avoidedDentalCostType.getAll();
+      return HttpResponse.json(avoidedDentalCostTypes);
+    }),
+
+    //
+    // Handler for GET request to retrieve all mouth pain types
+    //
+    http.get('https://api.example.com/lookups/mouth-pain-types', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const mouthPainTypes = demographicDB.mouthPainType.getAll();
+      return HttpResponse.json(mouthPainTypes);
+    }),
+
+    //
+    // Handler for GET request to retrieve all mouth pain types
+    //
     http.get('https://api.example.com/lookups/mouth-pain-types', ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       const mouthPainTypes = demographicDB.mouthPainType.getAll();
