@@ -55,6 +55,18 @@ const sexAtBirthTypeSchema = z.object({
   nameFr: z.string().optional(),
 });
 
+const lastTimeDentistVisitTypeSchema = z.object({
+  id: z.string(),
+  nameEn: z.string().optional(),
+  nameFr: z.string().optional(),
+});
+
+const avoidedDentalCostTypeSchema = z.object({
+  id: z.string(),
+  nameEn: z.string().optional(),
+  nameFr: z.string().optional(),
+});
+
 const maritalStatusSchema = z.object({
   id: z.string(),
   code: z.string(),
@@ -82,6 +94,8 @@ function createLookupService() {
     LOOKUP_SVC_ALLSEXATBIRTHTYPES_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_MARITALSTATUSES_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_ALLMOUTHPAINTYPES_CACHE_TTL_MILLISECONDS,
+    LOOKUP_SVC_LASTTIMEDENTISTVISITTYPES_CACHE_TTL_MILLISECONDS,
+    LOOKUP_SVC_AVOIDEDDENTALCOSTTYPES_CACHE_TTL_MILLISECONDS,
   } = getEnv();
 
   async function getAllPreferredLanguages() {
@@ -92,6 +106,48 @@ function createLookupService() {
 
     if (response.ok) {
       return preferredLanguageSchemaList.parse(await response.json());
+    }
+
+    log.error('%j', {
+      message: 'Failed to fetch data',
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+
+    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+  }
+
+  async function getAllAvoidedDentalCostTypes() {
+    const url = `${INTEROP_API_BASE_URI}/lookups/avoided-dental-cost-types/`;
+    const response = await fetch(url);
+
+    const avoidedDentalCostTypeSchemaList = z.array(avoidedDentalCostTypeSchema);
+
+    if (response.ok) {
+      return avoidedDentalCostTypeSchemaList.parse(await response.json());
+    }
+
+    log.error('%j', {
+      message: 'Failed to fetch data',
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+
+    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+  }
+
+  async function getAllLastTimeDentistVisitTypes() {
+    const url = `${INTEROP_API_BASE_URI}/lookups/last-time-visited-dentist-types/`;
+    const response = await fetch(url);
+
+    const lastTimeDentistVisitTypeSchemaList = z.array(lastTimeDentistVisitTypeSchema);
+
+    if (response.ok) {
+      return lastTimeDentistVisitTypeSchemaList.parse(await response.json());
     }
 
     log.error('%j', {
@@ -315,8 +371,10 @@ function createLookupService() {
     getAllRegions: moize(getAllRegions, { maxAge: LOOKUP_SVC_ALLREGIONS_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllRegions memo') }),
     getAllBornTypes: moize(getAllBornTypes, { maxAge: LOOKUP_SVC_ALLBORNTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllBornTypes memo') }),
     getAllDisabilityTypes: moize(getAllDisabilityTypes, { maxAge: LOOKUP_SVC_ALLDISABILITYTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllDisabilityTypes memo') }),
-    getAllSexAtBirthTypes: moize(getAllSexAtBirthTypes, { maxAge: LOOKUP_SVC_ALLSEXATBIRTHTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllDisabilityTypes memo') }),
+    getAllSexAtBirthTypes: moize(getAllSexAtBirthTypes, { maxAge: LOOKUP_SVC_ALLSEXATBIRTHTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllSexAtBirthTypes memo') }),
     getAllMaritalStatuses: moize(getAllMaritalStatuses, { maxAge: LOOKUP_SVC_MARITALSTATUSES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllMaritalStatuses memo') }),
-    getAllMouthPaintTypes: moize(getAllMouthPainTypes, { maxAge: LOOKUP_SVC_ALLMOUTHPAINTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllDisabilityTypes memo') }),
+    getAllMouthPaintTypes: moize(getAllMouthPainTypes, { maxAge: LOOKUP_SVC_ALLMOUTHPAINTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllMouthPaintTypes memo') }),
+    getAllAvoidedDentalCostTypes: moize(getAllAvoidedDentalCostTypes, { maxAge: LOOKUP_SVC_AVOIDEDDENTALCOSTTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllAvoidedDentalCostTypes memo') }),
+    getAllLastTimeDentistVisitTypes: moize(getAllLastTimeDentistVisitTypes, { maxAge: LOOKUP_SVC_LASTTIMEDENTISTVISITTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllLastTimeDentistVisitTypes memo') }),
   };
 }
