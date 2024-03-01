@@ -37,12 +37,23 @@ const applicantInformationSchema = z.object({
 });
 
 /**
+ * Schema for communication reference.
+ */
+const communicationPreferencesStateSchema = z.object({
+  preferredMethod: z.string().min(1),
+  email: z.string().min(1).optional(),
+  confirmEmail: z.string().min(1).optional(),
+  preferredLanguage: z.string().min(1),
+});
+
+/**
  * Schema for intake state.
  */
 const intakeStateSchema = z.object({
   personalInfo: personalInfoStateSchema.optional(),
   email: emailStateSchema.optional(),
   applicantInformation: applicantInformationSchema.optional(),
+  communicationPreferences: communicationPreferencesStateSchema.optional(),
 });
 
 type IntakeState = z.infer<typeof intakeStateSchema>;

@@ -6,5 +6,11 @@
   "email": "(FR) Email address",
   "confirm-email": "(FR) Confirm email address",
   "back": "(FR) Back",
-  "continue": "(FR) Continue"
+  "continue": "(FR) Continue",
+  "error-message": {
+    "empty-radio": "(FR) Please select a value",
+    "empty-field": "(FR) Please enter a value",
+    "invalid-email": "(FR) Invalid email address",
+    "not-the-same": "(FR) Confirm email is not the same as the entered email"
+  }
 }
