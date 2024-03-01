@@ -99,7 +99,7 @@ export default function AccessToDentalInsuranceQuestion() {
                     {`, ${option.id === 'yes' ? t('dental-insurance-question:option1') : t('dental-insurance-question:option2')}`}
                   </div>
                 ),
-                value: option.id,
+                value: getNameByLanguage(i18n.language, option),
                 defaultChecked: state.access?.dentalInsurance === option.id,
               }))}
               helpMessagePrimary={helpMessage}
