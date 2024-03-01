@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, ButtonLink } from '~/components/buttons';
 import { InputRadios } from '~/components/input-radios';
-import { getIntakeFlow } from '~/routes-flow/intake-flow';
+import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -21,8 +21,8 @@ export const handle = {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const bornTypes = await getLookupService().getAllBornTypes();
   const disabilityTypes = await getLookupService().getAllDisabilityTypes();
-  const intakeFlow = getIntakeFlow();
-  const { id, state } = await intakeFlow.loadState({ request, params });
+  const applyFlow = getApplyFlow();
+  const { id, state } = await applyFlow.loadState({ request, params });
   return json({ id, state, bornTypes, disabilityTypes });
 }
 

@@ -80,7 +80,7 @@ export default function AccessQuestion() {
           )}
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to="/intake">
+          <ButtonLink id="back-button" to="/apply">
             {t('dental-insurance-question:button.back')}
           </ButtonLink>
           <Button id="continue-button" variant="primary">

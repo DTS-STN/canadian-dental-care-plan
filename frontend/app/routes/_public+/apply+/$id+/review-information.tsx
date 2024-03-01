@@ -21,7 +21,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  //TODO: Get User/intake form information
+  //TODO: Get User/apply form information
   const userInfo = {
     firstName: 'John',
     id: '00000000-0000-0000-0000-000000000000',
@@ -72,8 +72,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  //TODO: Add intake form logic
-  return redirect(`/intake`);
+  //TODO: Add apply form logic
+  return redirect(`/apply`);
 }
 
 export default function ReviewInformation() {
