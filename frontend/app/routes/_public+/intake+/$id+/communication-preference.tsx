@@ -14,7 +14,7 @@ import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { getIntakeFlow } from '~/routes-flow/intake-flow';
 import { getLookupService } from '~/services/lookup-service.server';
-import { getClientEnv } from '~/utils/env-utils';
+import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
@@ -27,21 +27,25 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  const { COMMUNICATION_METHOD_DIGITAL_ID } = getClientEnv();
-  const preferredLanguages = await getLookupService().getAllPreferredLanguages();
-  const preferredCommunicationMethods = await getLookupService().getAllPreferredCommunicationMethods();
-
   const intakeFlow = getIntakeFlow();
   const { state } = await intakeFlow.loadState({ request, params });
+  const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
+  const lookupService = getLookupService();
+  const preferredLanguages = await lookupService.getAllPreferredLanguages();
+  const preferredCommunicationMethods = await lookupService.getAllPreferredCommunicationMethods();
 
-  return json({ digitalCommunicationMethodId: COMMUNICATION_METHOD_DIGITAL_ID, preferredLanguages, preferredCommunicationMethods, state: state.communicationPreferences });
+  const communicationMethodEmail = preferredCommunicationMethods.find((method) => method.id === COMMUNICATION_METHOD_EMAIL_ID);
+  if (!communicationMethodEmail) {
+    throw new Response('Expected communication method email not found!', { status: 500 });
+  }
+
+  return json({ communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, state: state.communicationPreferences });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const intakeFlow = getIntakeFlow();
   const { id } = await intakeFlow.loadState({ request, params });
-
-  const { COMMUNICATION_METHOD_DIGITAL_ID } = getClientEnv();
+  const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
 
   const emailsMatch = (val: { preferredMethod: string; email?: string; confirmEmail?: string }) => {
     if (!val.email || !val.confirmEmail) {
@@ -49,8 +53,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
       // check and render 'please enter a value'
       return true;
     }
-    if (val.preferredMethod === COMMUNICATION_METHOD_DIGITAL_ID) {
-      // emails have to match only when the preferred method is digital id
+    if (val.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID) {
+      // emails have to match only when the preferred method is email id
       return val.email.trim() === val.confirmEmail.trim();
     }
     return true;
@@ -68,7 +72,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const formData = Object.fromEntries(await request.formData());
   const parsedDataResult = formSchema.safeParse(formData);
 
-  console.log(formData);
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
@@ -86,19 +89,19 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function IntakeFlowCommunicationPreferencePage() {
-  const { digitalCommunicationMethodId, preferredLanguages, preferredCommunicationMethods, state } = useLoaderData<typeof loader>();
+  const { communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, state } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
-  const [digitalMethodChecked, setDigitalMethodChecked] = useState(state?.preferredMethod === digitalCommunicationMethodId);
+  const [emailMethodChecked, setEmailMethodChecked] = useState(state?.preferredMethod === communicationMethodEmail.id);
 
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
 
-  const digitalMethodHandler = () => {
-    setDigitalMethodChecked(true);
+  const emailMethodHandler = () => {
+    setEmailMethodChecked(true);
   };
 
-  const nonDigitalMethodHandler = () => {
-    setDigitalMethodChecked(false);
+  const nonEmailMethodHandler = () => {
+    setEmailMethodChecked(false);
   };
 
   /**
@@ -134,35 +137,30 @@ export default function IntakeFlowCommunicationPreferencePage() {
     }
   }, [actionData]);
 
-  const digitalMethod = preferredCommunicationMethods.find((method) => method.id === digitalCommunicationMethodId);
-  if (!digitalMethod) {
-    throw new Error('Unexpected digital communication method');
-  }
-
-  const nonDigitalOptions: InputRadiosProps['options'] = preferredCommunicationMethods
-    .filter((method) => method.id !== digitalCommunicationMethodId)
+  const nonEmailOptions: InputRadiosProps['options'] = preferredCommunicationMethods
+    .filter((method) => method.id !== communicationMethodEmail.id)
     .map((method) => ({
       children: i18n.language === 'fr' ? method.nameFr : method.nameEn,
       value: method.id,
-      defaultChecked: state && state.preferredMethod !== digitalMethod.id,
-      onClick: nonDigitalMethodHandler,
+      defaultChecked: state && state.preferredMethod !== communicationMethodEmail.id,
+      onClick: nonEmailMethodHandler,
     }));
 
   const options: InputRadiosProps['options'] = [
     {
-      children: i18n.language === 'fr' ? digitalMethod.nameFr : digitalMethod.nameEn,
-      value: digitalCommunicationMethodId,
-      defaultChecked: state?.preferredMethod === digitalMethod.id,
-      append: digitalMethodChecked && (
+      children: getNameByLanguage(i18n.language, communicationMethodEmail),
+      value: communicationMethodEmail.id,
+      defaultChecked: state?.preferredMethod === communicationMethodEmail.id,
+      append: emailMethodChecked && (
         <div className="grid gap-6 md:grid-cols-2">
           <InputField id="email" className="w-full" label={t('communication-preference:email')} name="email" errorMessage={errorMessages.email} defaultValue={state?.email} />
           <InputField id="confirmEmail" className="w-full" label={t('communication-preference:confirm-email')} name="confirmEmail" errorMessage={errorMessages.confirmEmail} defaultValue={state?.confirmEmail} />
           <div className="col-span-2">{errorMessages.sameEmail && <InputError id="sameEmail">{errorMessages.sameEmail}</InputError>}</div>
         </div>
       ),
-      onClick: digitalMethodHandler,
+      onClick: emailMethodHandler,
     },
-    ...nonDigitalOptions,
+    ...nonEmailOptions,
   ];
 
   return (
