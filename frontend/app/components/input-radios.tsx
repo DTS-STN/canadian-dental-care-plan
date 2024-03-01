@@ -34,7 +34,7 @@ const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClass
   }
 
   return (
-    <fieldset id={inputWrapperId} data-testid={inputWrapperId} className="mb-6">
+    <fieldset id={inputWrapperId} data-testid={inputWrapperId}>
       <InputLegend id={inputLegendId} required={required} className="mb-2">
         {legend}
       </InputLegend>

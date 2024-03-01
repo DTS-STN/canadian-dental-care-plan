@@ -109,7 +109,7 @@ export default function ApplyFlowApplicationInformation() {
         {t('applicant-information.form-instructions')}
       </p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post" aria-describedby="form-instructions" noValidate className="max-w-prose">
+      <Form method="post" aria-describedby="form-instructions" noValidate className="max-w-prose space-y-6">
         <InputField
           id="socialInsuranceNumber"
           name="socialInsuranceNumber"
@@ -122,9 +122,9 @@ export default function ApplyFlowApplicationInformation() {
           defaultValue={defaultValues.socialInsuranceNumber}
           errorMessage={errorMessages.socialInsuranceNumber}
         />
-        <div className="grid gap-3 md:grid-cols-2">
-          <InputField id="lastName" name="lastName" label={t('applicant-information.last-name')} required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} />
-          <InputField id="firstName" name="firstName" label={t('applicant-information.first-name')} />
+        <div className="grid gap-6 md:grid-cols-2">
+          <InputField id="lastName" name="lastName" label={t('applicant-information.last-name')} className="w-full" required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} />
+          <InputField id="firstName" name="firstName" label={t('applicant-information.first-name')} className="w-full" />
         </div>
         <InputRadios
           id="marital-status"

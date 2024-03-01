@@ -62,33 +62,31 @@ export default function AccessQuestion() {
   );
 
   return (
-    <>
-      <Form method="post">
+    <Form method="post">
+      {options.length > 0 && (
         <div className="my-6">
-          {options.length > 0 && (
-            <InputRadios
-              id="born-type"
-              name="bornType"
-              legend={t('dental-insurance-question:legend')}
-              options={options.map((option) => ({
-                children: option,
-                value: option,
-              }))}
-              helpMessagePrimary={helpMessage}
-              helpMessagePrimaryClassName="pl-8 text-black"
-            />
-          )}
+          <InputRadios
+            id="born-type"
+            name="bornType"
+            legend={t('dental-insurance-question:legend')}
+            options={options.map((option) => ({
+              children: option,
+              value: option,
+            }))}
+            helpMessagePrimary={helpMessage}
+            helpMessagePrimaryClassName="pl-8 text-black"
+          />
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to="/apply">
-            {t('dental-insurance-question:button.back')}
-          </ButtonLink>
-          <Button id="continue-button" variant="primary">
-            {t('dental-insurance-question:button.continue')}
-          </Button>
-        </div>
-      </Form>
-    </>
+      )}
+      <div className="flex flex-wrap items-center gap-3">
+        <ButtonLink id="back-button" to="/apply">
+          {t('dental-insurance-question:button.back')}
+        </ButtonLink>
+        <Button id="continue-button" variant="primary">
+          {t('dental-insurance-question:button.continue')}
+        </Button>
+      </div>
+    </Form>
   );
 }
 

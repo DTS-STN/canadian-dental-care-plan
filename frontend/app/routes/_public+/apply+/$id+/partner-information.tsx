@@ -120,7 +120,7 @@ export default function ApplyFlowApplicationInformation() {
         {t('partner-information.required-information')}
       </p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post" aria-describedby="form-instructions-provide-sin form-instructions-required-information" noValidate className="max-w-prose">
+      <Form method="post" aria-describedby="form-instructions-provide-sin form-instructions-required-information" noValidate className="max-w-prose space-y-6">
         <InputField
           id="socialInsuranceNumber"
           name="socialInsuranceNumber"
@@ -133,15 +133,17 @@ export default function ApplyFlowApplicationInformation() {
           defaultValue={defaultValues.socialInsuranceNumber}
           errorMessage={errorMessages.socialInsuranceNumber}
         />
-        <fieldset className="flex flex-wrap gap-2">
-          <legend>{t('partner-information.dob')}</legend>
-          <InputSelect id="month" label={t('partner-information.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} />
-          <InputField id="day" label={t('partner-information.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} />
-          <InputField id="year" label={t('partner-information.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} />
+        <fieldset>
+          <legend className="mb-2 font-semibold">{t('partner-information.dob')}</legend>
+          <div className="flex flex-col gap-6 sm:flex-row">
+            <InputSelect id="month" label={t('partner-information.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} />
+            <InputField id="day" label={t('partner-information.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} />
+            <InputField id="year" label={t('partner-information.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} />
+          </div>
         </fieldset>
-        <div className="grid gap-3 md:grid-cols-2">
-          <InputField id="lastName" name="lastName" label={t('applicant-information.last-name')} required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} />
-          <InputField id="firstName" name="firstName" label={t('applicant-information.first-name')} />
+        <div className="grid gap-6 md:grid-cols-2">
+          <InputField id="lastName" name="lastName" className="w-full" label={t('applicant-information.last-name')} required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} />
+          <InputField id="firstName" name="firstName" className="w-full" label={t('applicant-information.first-name')} />
         </div>
         <InputCheckbox id="confirm" name="confirm" required errorMessage={errorMessages.confirm}>
           {t('partner-information.confirm-checkbox')}

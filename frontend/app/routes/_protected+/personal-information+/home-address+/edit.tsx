@@ -200,23 +200,25 @@ export default function PersonalInformationHomeAddressEdit() {
       <Form className="max-w-prose" method="post" noValidate>
         <div className="my-6">
           <p className="mb-4 text-red-600">{t('gcweb:asterisk-indicates-required-field')}</p>
-          <InputField id="address" className="w-full" label={t('personal-information:home-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />
-          <InputField id="city" className="w-full" label={t('personal-information:home-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
-          {regions.length > 0 && (
-            <InputSelect id="province" className="w-full sm:w-1/2" label={t('personal-information:home-address.edit.field.province')} name="province" defaultValue={defaultValues.province} options={regions} errorMessage={errorMessages.province} />
-          )}
-          <InputField id="postalCode" label={t('personal-information:home-address.edit.field.postal-code')} name="postalCode" defaultValue={defaultValues.postalCode} errorMessage={errorMessages.postalCode} />
-          <InputSelect
-            id="country"
-            className="w-full sm:w-1/2"
-            label={t('personal-information:home-address.edit.field.country')}
-            name="country"
-            defaultValue={defaultValues.country}
-            required
-            options={countries}
-            onChange={countryChangeHandler}
-            errorMessage={errorMessages.country}
-          />
+          <div className="space-y-6">
+            <InputField id="address" className="w-full" label={t('personal-information:home-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />
+            <InputField id="city" className="w-full" label={t('personal-information:home-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
+            {regions.length > 0 && (
+              <InputSelect id="province" className="w-full sm:w-1/2" label={t('personal-information:home-address.edit.field.province')} name="province" defaultValue={defaultValues.province} options={regions} errorMessage={errorMessages.province} />
+            )}
+            <InputField id="postalCode" label={t('personal-information:home-address.edit.field.postal-code')} name="postalCode" defaultValue={defaultValues.postalCode} errorMessage={errorMessages.postalCode} />
+            <InputSelect
+              id="country"
+              className="w-full sm:w-1/2"
+              label={t('personal-information:home-address.edit.field.country')}
+              name="country"
+              defaultValue={defaultValues.country}
+              required
+              options={countries}
+              onChange={countryChangeHandler}
+              errorMessage={errorMessages.country}
+            />
+          </div>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <Button id="change-button" variant="primary">
