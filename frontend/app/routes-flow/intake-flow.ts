@@ -37,11 +37,19 @@ const applicantInformationSchema = z.object({
 });
 
 /**
+ * Schema for application delegate.
+ */
+const typeOfApplicationSchema = z.object({
+  applicationDelegate: z.string(),
+});
+
+/**
  * Schema for intake state.
  */
 const intakeStateSchema = z.object({
   personalInfo: personalInfoStateSchema.optional(),
   email: emailStateSchema.optional(),
+  applicationDelegate: typeOfApplicationSchema.optional(),
   applicantInformation: applicantInformationSchema.optional(),
 });
 
@@ -185,5 +193,6 @@ export function getIntakeFlow() {
     personalInfoStateSchema,
     saveState,
     start,
+    typeOfApplicationSchema,
   };
 }

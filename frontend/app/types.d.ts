@@ -2,6 +2,7 @@ import type communicationPreference from '../public/locales/en/communication-pre
 import type dataUnavailable from '../public/locales/en/data-unavailable.json';
 import type demographicsOralHealthQuestions from '../public/locales/en/demographics-oral-health-questions.json';
 import type dentalInsuranceQuestion from '../public/locales/en/dental-insurance-question.json';
+import type eligibility from '../public/locales/en/eligibility.json';
 import type gcweb from '../public/locales/en/gcweb.json';
 import type index from '../public/locales/en/index.json';
 import type intake from '../public/locales/en/intake.json';
@@ -33,6 +34,7 @@ declare module 'i18next' {
       'data-unavailable': typeof dataUnavailable;
       'demographics-oral-health-questions': typeof demographicsOralHealthQuestions;
       'dental-insurance-question': typeof dentalInsuranceQuestion;
+      eligibility: typeof eligibility;
       gcweb: typeof gcweb;
       index: typeof index;
       intake: typeof intake;

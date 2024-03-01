@@ -1,0 +1,22 @@
+{
+  "type-of-application": {
+    "page-title": "(FR) Type of Application",
+    "breadcrumbs": {
+      "canada-ca": "(FR) Canada.ca",
+      "benefits": "(FR) Benefits",
+      "dental-coverage": "(FR) Dental coverage",
+      "canadian-dental-care-plan": "(FR) Canadian Dental Care Plan"
+    },
+    "form-instructions": "(FR) Who is this application for?",
+    "radio-options": {
+      "personal": "(FR) I am applying for myself",
+      "delegate": "(FR) I am applying on behalf of someone else"
+    },
+    "marital-status": "(FR) Marital Status",
+    "back-btn": "(FR) Back",
+    "continue-btn": "(FR) Continue",
+    "error-message": {
+      "Required": "(FR) Applicant type must be provided"
+    }
+  }
+}
