@@ -37,8 +37,8 @@ export default function DemographicsPart2() {
   return (
     <>
       <Form method="post">
-        <div className="my-6">
-          {sexAtBirthTypes.length > 0 && (
+        {sexAtBirthTypes.length > 0 && (
+          <div className="my-6">
             <InputRadios
               id="born-type"
               name="bornType"
@@ -49,11 +49,11 @@ export default function DemographicsPart2() {
               }))}
               required
             />
-          )}
-        </div>
+          </div>
+        )}
 
-        <div className="my-6">
-          {mouthPainTypes.length > 0 && (
+        {mouthPainTypes.length > 0 && (
+          <div className="my-6">
             <InputRadios
               id="mouth-pain-type"
               name="mouthPainType"
@@ -64,8 +64,8 @@ export default function DemographicsPart2() {
               }))}
               required
             />
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="cancel-button" to={`/intake/${id}/demographics-part1`}>
