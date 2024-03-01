@@ -26,9 +26,10 @@ import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-proto';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto';
 import { CompressionAlgorithm } from '@opentelemetry/otlp-exporter-base';
 import { Resource, envDetector, hostDetector, osDetector, processDetector } from '@opentelemetry/resources';
-import { AggregationTemporality, PeriodicExportingMetricReader, PushMetricExporter } from '@opentelemetry/sdk-metrics';
+import { AggregationTemporality, ConsoleMetricExporter, PeriodicExportingMetricReader, PushMetricExporter } from '@opentelemetry/sdk-metrics';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { SpanExporter } from '@opentelemetry/sdk-trace-base';
+import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-node';
 import { SEMRESATTRS_DEPLOYMENT_ENVIRONMENT, SEMRESATTRS_SERVICE_NAME, SEMRESATTRS_SERVICE_VERSION } from '@opentelemetry/semantic-conventions';
 import moize from 'moize';
 
@@ -75,9 +76,12 @@ function createInstrumentationService() {
   }
 
   const getMetricExporter = (): PushMetricExporter => {
-    const exportMetrics = env.OTEL_METRICS_ENDPOINT;
+    if (env.OTEL_USE_CONSOLE_EXPORTERS) {
+      log.info(`Exporting metrics to console every ${env.OTEL_METRICS_EXPORT_INTERVAL_MILLIS} ms`);
+      return new ConsoleMetricExporter();
+    }
 
-    if (exportMetrics) {
+    if (env.OTEL_METRICS_ENDPOINT) {
       if (!env.OTEL_API_KEY) {
         throw new Error('OTEL_API_KEY must be configured when OTEL_METRICS_ENDPOINT is set');
       }
@@ -92,7 +96,7 @@ function createInstrumentationService() {
       });
     }
 
-    log.info('Metrics exporting is disabled; set OTEL_METRICS_ENDPOINT to enable.');
+    log.info('Metrics exporting is disabled; set OTEL_METRICS_ENDPOINT or OTEL_USE_CONSOLE_EXPORTERS to enable.');
 
     return {
       // a no-op PushMetricExporter implementation
@@ -103,13 +107,17 @@ function createInstrumentationService() {
   };
 
   const getTraceExporter = (): SpanExporter => {
-    const exportTraces = env.OTEL_TRACES_ENDPOINT;
+    if (env.OTEL_USE_CONSOLE_EXPORTERS) {
+      log.info(`Exporting traces to console every 30000 ms`);
+      return new ConsoleSpanExporter();
+    }
 
-    if (exportTraces) {
+    if (env.OTEL_TRACES_ENDPOINT) {
       if (!env.OTEL_API_KEY) {
         throw new Error('OTEL_API_KEY must be configured when OTEL_TRACES_ENDPOINT is set');
       }
 
+      // TODO :: GjB :: can this 30000 ms be configured? (spoiler: I don't think so...)
       log.info(`Exporting traces to ${env.OTEL_TRACES_ENDPOINT} every 30000 ms`);
 
       return new OTLPTraceExporter({
@@ -119,7 +127,7 @@ function createInstrumentationService() {
       });
     }
 
-    log.info('Traces exporting is disabled; set OTEL_TRACES_ENDPOINT to enable.');
+    log.info('Traces exporting is disabled; set OTEL_TRACES_ENDPOINT or OTEL_USE_CONSOLE_EXPORTERS to enable.');
 
     return {
       // a no-op SpanExporter implementation
@@ -154,6 +162,6 @@ function createInstrumentationService() {
     createHistogram,
     startActiveSpan,
     // the OpenTelemetry SDK should only be started once during runtime, so memoize the call to be sure it is
-    startInstrumentation: moize(startInstrumentation, { onCacheAdd: () => log.info('Starting OpenTelemetry instrumentation service') }),
+    startInstrumentation: moize(startInstrumentation, { onCacheAdd: () => log.info('Starting OpenTelemetry instrumentation listener') }),
   };
 }
