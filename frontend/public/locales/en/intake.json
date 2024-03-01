@@ -3,15 +3,38 @@
     "page-title": "Applicant Information",
     "form-instructions": "Please provide your legal name (as indicated on your SIN card/letter). We will use the information you provided to verify your identity. Any information that does not match the information on your SIN appliation may cause delay in the processing of your application.",
     "sin": "Social Insurance Number",
-    "last-name": "Last Name",
-    "first-name": "First Name",
-    "marital-status": "Marital Status",
+    "last-name": "Last name",
+    "first-name": "First name",
+    "marital-status": "Marital status",
     "back-btn": "Back",
     "continue-btn": "Continue",
     "error-message": {
       "valid-sin": "Must be a valid SIN",
       "last-name": "Last name must be provided",
-      "Required": "Marital status must be provided"
+      "marital-status": "Marital status must be provided"
+    }
+  },
+  "partner-information": {
+    "page-title": "Spouse / Common-law partner information",
+    "provide-sin": "Provide information on your current spouse or common-law partner as indicated on their SIN card/letter.",
+    "required-information": "This information is required to calculate the adjusted family net income. Please note that the spouse or common-law partner will need to submit their own application to the plan.",
+    "sin": "Social Insurance Number",
+    "dob": "Date of birth",
+    "year": "Year",
+    "month": "Month",
+    "day": "Day",
+    "last-name": "Last name",
+    "first-name": "First name",
+    "confirm-checkbox": "I confirm that my spouse or common-law partner is aware and has consented to the sharing of their personal information.",
+    "back-btn": "Back",
+    "continue-btn": "Continue",
+    "error-message": {
+      "valid-sin": "Must be a valid SIN",
+      "last-name": "Last name must be provided",
+      "month": "Month must be valid",
+      "day": "Day must be valid for the given month and year",
+      "year": "Year must be valid",
+      "confirm": "Checkbox must be selected"
     }
   }
 }
