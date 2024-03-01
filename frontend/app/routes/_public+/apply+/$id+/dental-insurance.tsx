@@ -52,7 +52,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function AccessToDentalInsuranceQuestion() {
-  const { options } = useLoaderData<typeof loader>();
+  const { options, state } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
 
   const helpMessage = (
@@ -100,6 +100,7 @@ export default function AccessToDentalInsuranceQuestion() {
                   </div>
                 ),
                 value: option.id,
+                defaultChecked: state.access?.dentalInsurance === option.id,
               }))}
               helpMessagePrimary={helpMessage}
               helpMessagePrimaryClassName="pl-8 text-black"
