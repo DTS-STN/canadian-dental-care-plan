@@ -3,6 +3,7 @@ import type { LoaderFunctionArgs } from '@remix-run/node';
 
 import { z } from 'zod';
 
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getEnv, mockEnabled } from '~/utils/env.server';
@@ -47,6 +48,8 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
   }
 
   log.warn('Invalid authentication route requested: [%s]', slug);
+  getInstrumentationService().createCounter('auth.unknown.requests').add(1);
+
   return new Response(null, { status: 404 });
 }
 
@@ -54,6 +57,9 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
  * Handler for /auth/login requests
  */
 async function handleLoginRequest({ request }: LoaderFunctionArgs) {
+  log.debug('Handling login request');
+  getInstrumentationService().createCounter('auth.login.requests').add(1);
+
   const url = new URL(`/auth/login/${defaultProviderId}`, request.url);
   url.search = new URL(request.url).search;
 
@@ -65,6 +71,9 @@ async function handleLoginRequest({ request }: LoaderFunctionArgs) {
  * Handler for /auth/logout requests
  */
 async function handleLogoutRequest({ request }: LoaderFunctionArgs) {
+  log.debug('Handling RAOIDC logout request');
+  getInstrumentationService().createCounter('auth.logout.requests').add(1);
+
   const { AUTH_RASCL_LOGOUT_URL } = getEnv();
 
   const sessionService = await getSessionService();
@@ -72,6 +81,8 @@ async function handleLogoutRequest({ request }: LoaderFunctionArgs) {
 
   if (!session.has('idToken')) {
     log.debug(`User has not authenticated; bypassing RAOIDC logout and redirecting to RASCL logout`);
+    getInstrumentationService().createCounter('auth.logout.requests.unauthenticated').add(1);
+
     throw redirect(AUTH_RASCL_LOGOUT_URL);
   }
 
@@ -83,9 +94,7 @@ async function handleLogoutRequest({ request }: LoaderFunctionArgs) {
 
   log.debug('Destroying CDCP application session session and redirecting to downstream logout handler: [%s]', signoutUrl);
   return redirect(signoutUrl, {
-    headers: {
-      'Set-Cookie': await sessionService.destroySession(session),
-    },
+    headers: { 'Set-Cookie': await sessionService.destroySession(session) },
   });
 }
 
@@ -94,12 +103,15 @@ async function handleLogoutRequest({ request }: LoaderFunctionArgs) {
  */
 async function handleRaoidcLoginRequest({ request }: LoaderFunctionArgs) {
   log.debug('Handling RAOIDC login request');
+  getInstrumentationService().createCounter('auth.login.raoidc.requests').add(1);
 
   const { origin, searchParams } = new URL(request.url);
   const returnUrl = searchParams.get('returnto');
 
   if (returnUrl && !returnUrl.startsWith('/')) {
     log.warn('Invalid return URL [%s]', returnUrl);
+    getInstrumentationService().createCounter('auth.login.raoidc.requests.invalid-return-url').add(1);
+
     return new Response(null, { status: 400 });
   }
 
@@ -126,6 +138,7 @@ async function handleRaoidcLoginRequest({ request }: LoaderFunctionArgs) {
  */
 async function handleRaoidcCallbackRequest({ request }: LoaderFunctionArgs) {
   log.debug('Handling RAOIDC callback request');
+  getInstrumentationService().createCounter('auth.callback.raoidc.requests').add(1);
 
   const raoidcService = await getRaoidcService();
   const sessionService = await getSessionService();
@@ -152,6 +165,7 @@ async function handleRaoidcCallbackRequest({ request }: LoaderFunctionArgs) {
  */
 function handleMockAuthorizeRequest({ request }: LoaderFunctionArgs) {
   log.debug('Handling (mock) RAOIDC authorize request');
+  getInstrumentationService().createCounter('auth.authorize.requests').add(1);
 
   const { MOCK_AUTH_ALLOWED_REDIRECTS } = getEnv();
   const isValidRedirectUri = (val: string): boolean => MOCK_AUTH_ALLOWED_REDIRECTS.includes(val);
@@ -182,6 +196,8 @@ function handleMockAuthorizeRequest({ request }: LoaderFunctionArgs) {
 
   if (!result.success) {
     log.warn('Invalid authorize request [%j]', result.error.flatten().fieldErrors);
+    getInstrumentationService().createCounter('auth.authorize.requests.invalid').add(1);
+
     return new Response(JSON.stringify(result.error.flatten().fieldErrors), { status: 400 });
   }
 
