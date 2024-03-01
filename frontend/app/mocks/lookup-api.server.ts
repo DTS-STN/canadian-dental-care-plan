@@ -109,6 +109,15 @@ export function getLookupApiMockHandlers() {
     }),
 
     //
+    // Handler for GET request to retrieve dental insurance question options
+    //
+    http.get('https://api.example.com/lookups/access-to-dental-insurance', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const accessToDentalInsuranceOptions = db.accessToDentalInsurance.getAll();
+      return HttpResponse.json(accessToDentalInsuranceOptions);
+    }),
+
+    //
     // Handler for GET request to retrieve all countries
     //
     http.get('https://api.example.com/lookups/countries', ({ request }) => {

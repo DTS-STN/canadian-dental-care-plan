@@ -27,6 +27,10 @@ const emailStateSchema = z.object({
   emailAddress: z.string().email(),
 });
 
+const accessStateSchema = z.object({
+  dentalInsurance: z.string().min(1),
+});
+
 /**
  * Schema applicant information.
  */
@@ -67,6 +71,7 @@ const applyStateSchema = z.object({
   applicantInformation: applicantInformationSchema.optional(),
   communicationPreferences: communicationPreferencesStateSchema.optional(),
   partnerInformation: partnerInformationSchema.optional(),
+  access: accessStateSchema.optional(),
 });
 
 type ApplyState = z.infer<typeof applyStateSchema>;
@@ -208,6 +213,7 @@ export function getApplyFlow() {
     applyStateSchema,
     loadState,
     personalInfoStateSchema,
+    accessStateSchema,
     saveState,
     start,
   };
