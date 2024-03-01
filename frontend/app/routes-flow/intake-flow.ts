@@ -28,12 +28,24 @@ const emailStateSchema = z.object({
 });
 
 /**
- * Schema for social insurance number.
+ * Schema applicant information.
  */
 const applicantInformationSchema = z.object({
   socialInsuranceNumber: z.string().refine(isValidSin, { message: 'valid-sin' }),
   lastName: z.string().min(1, { message: 'last-name' }),
-  maritalStatus: z.string(),
+  maritalStatus: z.string({ required_error: 'marital-status' }),
+});
+
+/**
+ * Schema partner information.
+ */
+const partnerInformationSchema = z.object({
+  socialInsuranceNumber: z.string().refine(isValidSin, { message: 'valid-sin' }),
+  lastName: z.string().min(1, { message: 'last-name' }),
+  month: z.coerce.number({ required_error: 'month' }).int().min(0, { message: 'month' }).max(11, { message: 'month' }),
+  day: z.coerce.number({ required_error: 'day' }).int().min(1, { message: 'day' }).max(31, { message: 'day' }),
+  year: z.coerce.number({ required_error: 'year' }).int().min(1, { message: 'year' }).max(new Date().getFullYear(), { message: 'year' }),
+  confirm: z.string({ required_error: 'confirm' }),
 });
 
 /**
@@ -54,6 +66,7 @@ const intakeStateSchema = z.object({
   email: emailStateSchema.optional(),
   applicantInformation: applicantInformationSchema.optional(),
   communicationPreferences: communicationPreferencesStateSchema.optional(),
+  partnerInformation: partnerInformationSchema.optional(),
 });
 
 type IntakeState = z.infer<typeof intakeStateSchema>;
@@ -190,6 +203,7 @@ export function getIntakeFlow() {
     clearState,
     emailStateSchema,
     applicantInformationSchema,
+    partnerInformationSchema,
     idSchema,
     intakeStateSchema,
     loadState,

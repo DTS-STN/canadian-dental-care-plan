@@ -11,7 +11,30 @@
     "error-message": {
       "valid-sin": "(FR) Must be a valid SIN",
       "last-name": "(FR) Last name must be provided",
-      "Required": "(FR) Marital status must be provided"
+      "marital-status": "(FR) Marital status must be provided"
+    }
+  },
+  "partner-information": {
+    "page-title": "(FR) Spouse / Common-law partner information",
+    "provide-sin": "(FR) Provide information on your current spouse or common-law partner as indicated on their SIN card/letter.",
+    "required-information": "(FR) This information is required to calculate the adjusted family net income. Please note that the spouse or common-law partner will need to submit their own application to the plan.",
+    "sin": "(FR) Social Insurance Number",
+    "dob": "(FR) Date of birth",
+    "year": "(FR) Year",
+    "month": "(FR) Month",
+    "day": "(FR) Day",
+    "last-name": "(FR) Last name",
+    "first-name": "(FR) First name",
+    "confirm-checkbox": "(FR) I confirm that my spouse or common-law partner is aware and has consented to the sharing of their personal information.",
+    "back-btn": "(FR) Back",
+    "continue-btn": "(FR) Continue",
+    "error-message": {
+      "valid-sin": "(FR) Must be a valid SIN",
+      "last-name": "(FR) Last name must be provided",
+      "month": "(FR) Month must be valid",
+      "day": "(FR) Day must be valid for the given month and year",
+      "year": "(FR) Year must be valid",
+      "confirm": "(FR) Checkbox must be selected"
     }
   }
 }

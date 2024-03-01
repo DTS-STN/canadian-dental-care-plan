@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 
+import { InputError } from './input-error';
 import { cn } from '~/utils/tw-utils';
 
 export interface InputCheckboxProps extends Omit<React.ComponentProps<'input'>, 'aria-labelledby' | 'children' | 'type'> {
@@ -10,12 +11,14 @@ export interface InputCheckboxProps extends Omit<React.ComponentProps<'input'>, 
   inputClassName?: string;
   labelClassName?: string;
   name: string;
+  errorMessage?: string;
 }
 
 const disableClassName = 'pointer-events-none cursor-not-allowed opacity-70';
 
 export function InputCheckbox(props: InputCheckboxProps) {
-  const { append, appendClassName, children, className, id, inputClassName, labelClassName, ...restProps } = props;
+  const { errorMessage, append, appendClassName, children, className, id, inputClassName, labelClassName, ...restProps } = props;
+  const inputErrorId = `input-${id}-error`;
   const inputLabelId = `input-checkbox-${id}-label`;
   const inputCheckboxId = `input-checkbox-${id}`;
   return (
@@ -34,6 +37,11 @@ export function InputCheckbox(props: InputCheckboxProps) {
         </label>
       </div>
       {append && <div className={cn('ml-7 mt-4', appendClassName)}>{append}</div>}
+      {errorMessage && (
+        <InputError id={inputErrorId} className="mt-2">
+          {errorMessage}
+        </InputError>
+      )}
     </div>
   );
 }
