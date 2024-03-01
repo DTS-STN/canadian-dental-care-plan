@@ -84,7 +84,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function IntakeFlowCommunicationPreferencePage() {
   const { digitalCommunicationMethodId, preferredLanguages, preferredCommunicationMethods, state } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
-  const [digitalMethodChecked, setDigitalMethodChecked] = useState(state && state.preferredMethod === digitalCommunicationMethodId);
+  const [digitalMethodChecked, setDigitalMethodChecked] = useState(state?.preferredMethod === digitalCommunicationMethodId);
 
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
@@ -150,19 +150,11 @@ export default function IntakeFlowCommunicationPreferencePage() {
       value: digitalCommunicationMethodId,
       defaultChecked: state?.preferredMethod === digitalMethod.id,
       append: digitalMethodChecked && (
-        <>
-          <div className="grid gap-6 md:grid-cols-4">
-            <InputField id="email" className="w-full" label={t('communication-preference:email')} name="email" errorMessage={errorMessages.email} defaultValue={state?.email} />
-            <InputField id="confirmEmail" className="w-full" label={t('communication-preference:confirm-email')} name="confirmEmail" errorMessage={errorMessages.confirmEmail} defaultValue={state?.confirmEmail} />
-          </div>
-          <div>
-            {errorMessages.sameEmail && (
-              <InputError id="sameEmail" className="mt-2">
-                {errorMessages.sameEmail}
-              </InputError>
-            )}
-          </div>
-        </>
+        <div className="grid gap-6 md:grid-cols-2">
+          <InputField id="email" className="w-full" label={t('communication-preference:email')} name="email" errorMessage={errorMessages.email} defaultValue={state?.email} />
+          <InputField id="confirmEmail" className="w-full" label={t('communication-preference:confirm-email')} name="confirmEmail" errorMessage={errorMessages.confirmEmail} defaultValue={state?.confirmEmail} />
+          <div className="col-span-2">{errorMessages.sameEmail && <InputError id="sameEmail">{errorMessages.sameEmail}</InputError>}</div>
+        </div>
       ),
       onClick: digitalMethodHandler,
     },
