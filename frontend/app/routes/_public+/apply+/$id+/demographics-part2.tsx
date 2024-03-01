@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, ButtonLink } from '~/components/buttons';
 import { InputRadios } from '~/components/input-radios';
-import { getIntakeFlow } from '~/routes-flow/intake-flow';
+import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -23,8 +23,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const mouthPainTypes = await getLookupService().getAllMouthPaintTypes();
   const lastTimeDentistVisitTypes = await getLookupService().getAllLastTimeDentistVisitTypes();
   const avoidedDentalCostTypes = await getLookupService().getAllAvoidedDentalCostTypes();
-  const intakeFlow = getIntakeFlow();
-  const { id, state } = await intakeFlow.loadState({ request, params });
+  const applyFlow = getApplyFlow();
+  const { id, state } = await applyFlow.loadState({ request, params });
   return json({ sexAtBirthTypes, mouthPainTypes, lastTimeDentistVisitTypes, avoidedDentalCostTypes, id, state });
 }
 
@@ -99,7 +99,7 @@ export default function DemographicsPart2() {
           </div>
         )}
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="cancel-button" to={`/intake/${id}/demographics-part1`}>
+          <ButtonLink id="cancel-button" to={`/apply/${id}/demographics-part1`}>
             {t('demographics-oral-health-questions:part2.button-back')}
           </ButtonLink>
           <Button id="change-button" variant="primary">

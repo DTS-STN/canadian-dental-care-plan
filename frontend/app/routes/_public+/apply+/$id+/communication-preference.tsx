@@ -12,7 +12,7 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputError } from '~/components/input-error';
 import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
-import { getIntakeFlow } from '~/routes-flow/intake-flow';
+import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -27,12 +27,13 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  const intakeFlow = getIntakeFlow();
-  const { state } = await intakeFlow.loadState({ request, params });
   const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
   const lookupService = getLookupService();
   const preferredLanguages = await lookupService.getAllPreferredLanguages();
   const preferredCommunicationMethods = await lookupService.getAllPreferredCommunicationMethods();
+
+  const applyFlow = getApplyFlow();
+  const { state } = await applyFlow.loadState({ request, params });
 
   const communicationMethodEmail = preferredCommunicationMethods.find((method) => method.id === COMMUNICATION_METHOD_EMAIL_ID);
   if (!communicationMethodEmail) {
@@ -43,9 +44,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
-  const intakeFlow = getIntakeFlow();
-  const { id } = await intakeFlow.loadState({ request, params });
   const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
+  const applyFlow = getApplyFlow();
+  const { id } = await applyFlow.loadState({ request, params });
 
   const emailsMatch = (val: { preferredMethod: string; email?: string; confirmEmail?: string }) => {
     if (!val.email || !val.confirmEmail) {
@@ -79,16 +80,16 @@ export async function action({ request, params }: ActionFunctionArgs) {
     });
   }
 
-  const sessionResponseInit = await intakeFlow.saveState({
+  const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
     state: { communicationPreferences: parsedDataResult.data },
   });
 
-  return redirect(`/intake/${id}/personal-info`, sessionResponseInit);
+  return redirect(`/apply/${id}/personal-info`, sessionResponseInit);
 }
 
-export default function IntakeFlowCommunicationPreferencePage() {
+export default function ApplyFlowCommunicationPreferencePage() {
   const { communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, state } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
   const [emailMethodChecked, setEmailMethodChecked] = useState(state?.preferredMethod === communicationMethodEmail.id);
@@ -192,7 +193,7 @@ export default function IntakeFlowCommunicationPreferencePage() {
           )}
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to="/intake">
+          <ButtonLink id="back-button" to="/apply">
             {t('communication-preference:back')}
           </ButtonLink>
           <Button id="continue-button" variant="primary">

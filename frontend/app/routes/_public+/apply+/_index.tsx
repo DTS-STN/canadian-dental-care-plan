@@ -6,7 +6,7 @@ import { randomUUID } from 'crypto';
 import { z } from 'zod';
 
 import { Button } from '~/components/buttons';
-import { getIntakeFlow } from '~/routes-flow/intake-flow';
+import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getHCaptchaService } from '~/services/hcaptcha-service.server';
 import { getEnv } from '~/utils/env.server';
 
@@ -37,23 +37,22 @@ export async function action({ request }: ActionFunctionArgs) {
   // TODO handle the hCaptchaResult (eg. log the result or redirect to another page)
   console.log(hCaptchaResult);
 
-  const intakeFlow = getIntakeFlow();
+  const applyFlow = getApplyFlow();
   const id = randomUUID().toString();
-  const sessionResponseInit = await intakeFlow.start({ id, request });
+  const sessionResponseInit = await applyFlow.start({ id, request });
 
-  return redirect(`/intake/${id}/personal-info`, sessionResponseInit);
+  return redirect(`/apply/${id}/personal-info`, sessionResponseInit);
 }
 
-export default function IntakeIndex() {
+export default function ApplyIndex() {
   const { siteKey } = useLoaderData<typeof loader>();
-
   return (
     <>
-      <h3>Intake Form Index</h3>
+      <h3>Apply Form Index</h3>
       <p>Privacy Statements</p>
       <Form method="post" noValidate>
         <HCaptcha sitekey={siteKey} />
-        <Button>Accept and start intake flow!</Button>
+        <Button>Accept and start apply flow!</Button>
       </Form>
     </>
   );

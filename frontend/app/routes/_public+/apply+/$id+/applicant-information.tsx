@@ -10,56 +10,56 @@ import { Button } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
-import { getIntakeFlow } from '~/routes-flow/intake-flow';
+import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 
-export const intakeIdParamSchema = z.string().uuid();
+export const applyIdParamSchema = z.string().uuid();
 
-const i18nNamespaces = getTypedI18nNamespaces('intake');
+const i18nNamespaces = getTypedI18nNamespaces('apply');
 
 export const handle = {
   i18nNamespaces,
   pageIdentifier: 'CDCP-00XX',
-  pageTitleI18nKey: 'intake:applicant-information.page-title',
+  pageTitleI18nKey: 'apply:applicant-information.page-title',
 } as const satisfies RouteHandleData;
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  const intakeFlow = getIntakeFlow();
-  const { id, state } = await intakeFlow.loadState({ request, params });
+  const applyFlow = getApplyFlow();
+  const { id, state } = await applyFlow.loadState({ request, params });
   const maritalStatuses = await getLookupService().getAllMaritalStatuses();
 
   return json({ id, state: state.applicantInformation, maritalStatuses });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
-  const intakeFlow = getIntakeFlow();
-  const { id } = await intakeFlow.loadState({ request, params });
+  const applyFlow = getApplyFlow();
+  const { id } = await applyFlow.loadState({ request, params });
 
   const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = intakeFlow.applicantInformationSchema.safeParse(formData);
+  const parsedDataResult = applyFlow.applicantInformationSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof intakeFlow.applicantInformationSchema>>,
+      formData: formData as Partial<z.infer<typeof applyFlow.applicantInformationSchema>>,
     });
   }
 
-  const sessionResponseInit = await intakeFlow.saveState({
+  const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
     state: { applicantInformation: parsedDataResult.data },
   });
 
   if (['MARRIED', 'COMMONLAW'].includes(parsedDataResult.data.maritalStatus)) {
-    return redirect(`/intake/${id}/partner-information`, sessionResponseInit);
+    return redirect(`/apply/${id}/partner-information`, sessionResponseInit);
   }
-  return redirect(`/intake/${id}/contact-information`, sessionResponseInit);
+  return redirect(`/apply/${id}/contact-information`, sessionResponseInit);
 }
 
-export default function IntakeFlowApplicationInformation() {
+export default function ApplyFlowApplicationInformation() {
   const { state, maritalStatuses } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
@@ -80,7 +80,7 @@ export default function IntakeFlowApplicationInformation() {
      * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`intake:applicant-information.error-message.${errorI18nKey}` as any);
+    return t(`apply:applicant-information.error-message.${errorI18nKey}` as any);
   }
 
   const defaultValues = {
