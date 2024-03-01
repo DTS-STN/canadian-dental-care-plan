@@ -88,9 +88,9 @@ const frenchLanguage = db.preferredLanguage.create({
 
 // seed avaliable communication methods
 db.preferredCommunicationMethod.create({
-  id: 'digital',
-  nameEn: 'Digital',
-  nameFr: '(FR) Digital',
+  id: 'email',
+  nameEn: 'Email',
+  nameFr: '(FR) Email',
 });
 
 db.preferredCommunicationMethod.create({
