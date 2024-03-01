@@ -1,4 +1,5 @@
-import type communicationPreference from '../public/locales/en/communication-preferences.json';
+import type communicationPreference from '../public/locales/en/communication-preference.json';
+import type dataUnavailable from '../public/locales/en/data-unavailable.json';
 import type demographicsOralHealthQuestions from '../public/locales/en/demographics-oral-health-questions.json';
 import type dentalInsuranceQuestion from '../public/locales/en/dental-insurance-question.json';
 import type gcweb from '../public/locales/en/gcweb.json';
@@ -7,8 +8,6 @@ import type intake from '../public/locales/en/intake.json';
 import type letters from '../public/locales/en/letters.json';
 import type personalInformation from '../public/locales/en/personal-information.json';
 import type reviewInformation from '../public/locales/en/review-information.json';
-import type dataUnavailable from '../public/locales/en/udata-unavailable.json';
-import type updatePhoneNumber from '../public/locales/en/update-phone-number.json';
 import type { PublicEnv } from '~/utils/env.server';
 
 /**
@@ -30,7 +29,6 @@ declare module 'i18next' {
   interface CustomTypeOptions {
     defaultNS: false;
     resources: {
-      'access-question': typeof accessQuestion;
       'communication-preference': typeof communicationPreference;
       'data-unavailable': typeof dataUnavailable;
       'demographics-oral-health-questions': typeof demographicsOralHealthQuestions;
@@ -40,7 +38,6 @@ declare module 'i18next' {
       intake: typeof intake;
       letters: typeof letters;
       'personal-information': typeof personalInformation;
-      'update-phone-number': typeof updatePhoneNumber;
       'review-information': typeof reviewInformation;
     };
   }
