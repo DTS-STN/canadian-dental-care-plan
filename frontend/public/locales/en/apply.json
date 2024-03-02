@@ -36,5 +36,37 @@
       "year": "Year must be valid",
       "confirm": "Checkbox must be selected"
     }
+  },
+
+  "personal-information": {
+    "page-title": "Personal information",
+    "form-instructions": "Adding a telephone number helps Service Canada reach you if there is an issue with your application and may help reduce delays in processing your application. Otherwise, we will contact you by mail using the mailing address you provide.",
+    "telephone-number": "Telephone number (optional)",
+    "telephone-number-alt": "Telephone number (alternate) (optional)",
+    "mailing-address": {
+      "header": "Mailing address",
+      "note": "We may send you letters by mail related to your CDCP application."
+    },
+    "home-address": {
+      "header": "Home address",
+      "use-mailing-address": "My home address and mailing address are the same",
+      "use-different-address": "Use different home address"
+    },
+    "address-field": {
+      "address": "Address",
+      "address-note": "Include street number and name.",
+      "apartment": "Apartment, suite, etc. (optional)",
+      "country": "Country",
+      "province": "Province, territory, state, or region",
+      "city": "City or town",
+      "postal-code": "Postal code or ZIP code",
+      "select-one": "Select one"
+    },
+    "back": "Back",
+    "continue": "Continue",
+    "error-message": {
+      "empty-radio": "Please select a value",
+      "empty-field": "Please enter a value"
+    }   
   }
 }
