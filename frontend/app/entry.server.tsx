@@ -70,25 +70,16 @@ export function handleError(error: unknown, { request }: LoaderFunctionArgs | Ac
 export default async function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, remixContext: EntryContext) {
   const handlerFnName = isbot(request.headers.get('user-agent')) ? 'onAllReady' : 'onShellReady';
   log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
-
   instrumentationService.createCounter('http.server.requests').add(1);
 
-  const routes = Object.values(remixContext.routeModules);
+  const nonce = generateNonce(32);
   const locale = await getLocale(request);
-  const langCookie = await createLangCookie().serialize(locale);
+  const routes = Object.values(remixContext.routeModules);
   const i18n = await initI18n(locale, getNamespaces(routes));
 
-  const nonce = generateNonce(32);
-  const contentSecurityPolicy = generateContentSecurityPolicy(nonce);
-
-  // @see: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
-  responseHeaders.set('Content-Security-Policy', contentSecurityPolicy);
   responseHeaders.set('Content-Type', 'text/html; charset=UTF-8');
-  responseHeaders.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  responseHeaders.set('X-Content-Type-Options', 'nosniff');
-  responseHeaders.set('X-Frame-Options', 'deny');
-  // .append() because there can be more than one cookie in a response
-  responseHeaders.append('Set-Cookie', langCookie);
+  responseHeaders.set('Content-Security-Policy', generateContentSecurityPolicy(nonce));
+  responseHeaders.append('Set-Cookie', await createLangCookie().serialize(locale));
 
   return new Promise((resolve, reject) => {
     let shellRendered = false;
