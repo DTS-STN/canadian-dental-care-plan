@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { generateContentSecurityPolicy } from '~/utils/csp-utils.server';
 import { getEnv } from '~/utils/env.server';
+import { generateContentSecurityPolicy, generatePermissionsPolicy } from '~/utils/security-utils.server';
 
 vi.mock('~/utils/env.server', () => ({
   getEnv: vi.fn(),
@@ -13,7 +13,7 @@ vi.mock('~/utils/logging.server', () => ({
   }),
 }));
 
-describe('csp.server', () => {
+describe('security-utils.server', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -42,6 +42,20 @@ describe('csp.server', () => {
       const csp = generateContentSecurityPolicy(nonce);
 
       expect(csp).toContain(`connect-src 'self' https://hcaptcha.com https://*.hcaptcha.com ws://localhost:3001;`);
+    });
+  });
+
+  describe('generatePermissionsPolicy', () => {
+    it('should generate a secure permissions policy', () => {
+      const permissionsPolicy = generatePermissionsPolicy();
+
+      expect(permissionsPolicy).toContain('camera=()');
+      expect(permissionsPolicy).toContain('display-capture=()');
+      expect(permissionsPolicy).toContain('fullscreen=()');
+      expect(permissionsPolicy).toContain('geolocation=()');
+      expect(permissionsPolicy).toContain('microphone=()');
+      expect(permissionsPolicy).toContain('publickey-credentials-get=()');
+      expect(permissionsPolicy).toContain('screen-wake-lock=()');
     });
   });
 });

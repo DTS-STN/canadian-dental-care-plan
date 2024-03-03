@@ -11,11 +11,11 @@ import { NonceProvider, generateNonce } from '~/components/nonce-context';
 import { server } from '~/mocks/node';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getSessionService } from '~/services/session-service.server';
-import { generateContentSecurityPolicy } from '~/utils/csp-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getNamespaces } from '~/utils/locale-utils';
 import { createLangCookie, getLocale, initI18n } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { generateContentSecurityPolicy, generatePermissionsPolicy } from '~/utils/security-utils.server';
 
 // instrumentation should be started as early as possible to ensure proper initialization
 const instrumentationService = getInstrumentationService();
@@ -80,10 +80,12 @@ export default async function handleRequest(request: Request, responseStatusCode
 
   const nonce = generateNonce(32);
   const contentSecurityPolicy = generateContentSecurityPolicy(nonce);
+  const permissionsPolicy = generatePermissionsPolicy();
 
   // @see: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
   responseHeaders.set('Content-Security-Policy', contentSecurityPolicy);
   responseHeaders.set('Content-Type', 'text/html; charset=UTF-8');
+  responseHeaders.set('Permissions-Policy', permissionsPolicy);
   responseHeaders.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   responseHeaders.set('X-Content-Type-Options', 'nosniff');
   responseHeaders.set('X-Frame-Options', 'deny');

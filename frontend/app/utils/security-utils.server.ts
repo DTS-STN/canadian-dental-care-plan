@@ -29,3 +29,23 @@ export function generateContentSecurityPolicy(nonce: string) {
   log.debug(`Generated content security policy: [${contentSecurityPolicy}]`);
   return contentSecurityPolicy;
 }
+
+/**
+ * Generate a secure permissions policy.
+ * @see https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#permissions-policy-formerly-feature-policy
+ */
+export function generatePermissionsPolicy() {
+  // prettier-ignore
+  const permissionsPolicy = [
+    'camera=()',
+    'display-capture=()',
+    'fullscreen=()',
+    'geolocation=()',
+    'microphone=()',
+    'publickey-credentials-get=()',
+    'screen-wake-lock=()',
+  ].join(', ');
+
+  log.debug(`Generated content security policy: [${permissionsPolicy}]`);
+  return permissionsPolicy;
+}
