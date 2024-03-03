@@ -85,6 +85,7 @@ export default async function handleRequest(request: Request, responseStatusCode
   responseHeaders.set('Content-Security-Policy', contentSecurityPolicy);
   responseHeaders.set('Content-Type', 'text/html; charset=UTF-8');
   responseHeaders.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  responseHeaders.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains');
   responseHeaders.set('X-Content-Type-Options', 'nosniff');
   responseHeaders.set('X-Frame-Options', 'deny');
   // .append() because there can be more than one cookie in a response
