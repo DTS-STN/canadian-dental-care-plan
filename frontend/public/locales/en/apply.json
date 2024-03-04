@@ -29,11 +29,9 @@
     "back-btn": "Back",
     "continue-btn": "Continue",
     "error-message": {
-      "valid-sin": "Must be a valid SIN",
+      "valid-sin": "SIN must be in the proper format",
       "last-name": "Last name must be provided",
-      "month": "Month must be valid",
-      "day": "Day must be valid for the given month and year",
-      "year": "Year must be valid",
+      "valid-date": "Must be a valid date",
       "confirm": "Checkbox must be selected"
     }
   },

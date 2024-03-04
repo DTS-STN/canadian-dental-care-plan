@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { Button } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
+import { InputError } from '~/components/input-error';
 import { InputField } from '~/components/input-field';
 import { InputSelect } from '~/components/input-select';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
@@ -42,7 +43,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { id } = await applyFlow.loadState({ request, params });
 
   const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = applyFlow.partnerInformationSchema.safeParse(formData);
+  const parsedDataResult = applyFlow.partnerInformationSchema.safeParse({
+    ...formData,
+    dateOfBirth: {
+      month: formData.month,
+      day: formData.day,
+      year: formData.year,
+    },
+  });
 
   if (!parsedDataResult.success) {
     return json({
@@ -64,7 +72,6 @@ export default function ApplyFlowApplicationInformation() {
   const { state } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
-
   const { i18n, t } = useTranslation(i18nNamespaces);
 
   /**
@@ -87,18 +94,16 @@ export default function ApplyFlowApplicationInformation() {
   const defaultValues = {
     socialInsuranceNumber: actionData?.formData.socialInsuranceNumber ?? state?.socialInsuranceNumber ?? '',
     lastName: actionData?.formData.lastName ?? state?.lastName ?? '',
-    month: actionData?.formData.month ?? state?.month ?? '',
-    day: actionData?.formData.day ?? state?.day ?? '',
-    year: actionData?.formData.year ?? state?.year ?? '',
+    month: actionData?.formData.dateOfBirth?.month ?? state?.dateOfBirth.month ?? '',
+    day: actionData?.formData.dateOfBirth?.day ?? state?.dateOfBirth.day ?? '',
+    year: actionData?.formData.dateOfBirth?.year ?? state?.dateOfBirth.year ?? '',
     confirm: actionData?.formData.confirm ?? state?.confirm ?? '',
   };
 
   const errorMessages = {
     socialInsuranceNumber: getErrorMessage(actionData?.errors.socialInsuranceNumber?._errors[0]),
     lastName: getErrorMessage(actionData?.errors.lastName?._errors[0]),
-    month: getErrorMessage(actionData?.errors.month?._errors[0]),
-    day: getErrorMessage(actionData?.errors.day?._errors[0]),
-    year: getErrorMessage(actionData?.errors.year?._errors[0]),
+    dateOfBirth: getErrorMessage(actionData?.errors.dateOfBirth?._errors[0]),
     confirm: getErrorMessage(actionData?.errors.confirm?._errors[0]),
   };
 
@@ -133,13 +138,18 @@ export default function ApplyFlowApplicationInformation() {
           defaultValue={defaultValues.socialInsuranceNumber}
           errorMessage={errorMessages.socialInsuranceNumber}
         />
-        <fieldset>
+        <fieldset id="dateOfBirth" aria-describedby="date-of-birth-error">
           <legend className="mb-2 font-semibold">{t('partner-information.dob')}</legend>
           <div className="flex flex-col gap-6 sm:flex-row">
-            <InputSelect id="month" label={t('partner-information.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} />
-            <InputField id="day" label={t('partner-information.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} />
-            <InputField id="year" label={t('partner-information.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} />
+            <InputSelect id="month" label={t('partner-information.month')} options={monthOptions} name="month" required />
+            <InputField id="day" label={t('partner-information.day')} name="day" type="number" min={1} max={31} required />
+            <InputField id="year" label={t('partner-information.year')} name="year" type="number" min={1900} required />
           </div>
+          {errorMessages.dateOfBirth && (
+            <InputError id="date-of-birth-error" className="mt-2">
+              {errorMessages.dateOfBirth}
+            </InputError>
+          )}
         </fieldset>
         <div className="grid gap-6 md:grid-cols-2">
           <InputField id="lastName" name="lastName" className="w-full" label={t('applicant-information.last-name')} required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} />

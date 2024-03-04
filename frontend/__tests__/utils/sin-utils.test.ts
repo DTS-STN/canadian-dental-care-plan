@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { isValidSin } from '~/utils/apply-utils';
+import { isValidSin } from '~/utils/sin-utils';
 
 describe('isValidSin', () => {
   it('should return true for a valid SIN', () => {

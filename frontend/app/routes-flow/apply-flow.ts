@@ -4,7 +4,8 @@ import { Params } from '@remix-run/react';
 import { z } from 'zod';
 
 import { getSessionService } from '~/services/session-service.server';
-import { isValidSin } from '~/utils/apply-utils';
+import { isValidDateOfBirth } from '~/utils/date-utils';
+import { isValidSin } from '~/utils/sin-utils';
 
 /**
  * Schema for validating UUID.
@@ -46,9 +47,13 @@ const applicantInformationSchema = z.object({
 const partnerInformationSchema = z.object({
   socialInsuranceNumber: z.string().refine(isValidSin, { message: 'valid-sin' }),
   lastName: z.string().min(1, { message: 'last-name' }),
-  month: z.coerce.number({ required_error: 'month' }).int().min(0, { message: 'month' }).max(11, { message: 'month' }),
-  day: z.coerce.number({ required_error: 'day' }).int().min(1, { message: 'day' }).max(31, { message: 'day' }),
-  year: z.coerce.number({ required_error: 'year' }).int().min(1, { message: 'year' }).max(new Date().getFullYear(), { message: 'year' }),
+  dateOfBirth: z
+    .object({
+      month: z.coerce.number().int().min(0).max(11),
+      day: z.coerce.number().int().min(1).max(31),
+      year: z.coerce.number().int().min(1900).max(new Date().getFullYear()),
+    })
+    .refine(isValidDateOfBirth, { message: 'valid-date' }),
   confirm: z.string({ required_error: 'confirm' }),
 });
 

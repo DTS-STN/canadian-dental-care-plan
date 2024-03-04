@@ -52,7 +52,7 @@ export function createErrorSummaryItems(obj: Record<string, string | undefined>)
  * @param obj - A record containing field IDs and associated error messages.
  * @returns True if there are errors, false otherwise.
  */
-export function hasErrors(obj: Record<string, string | number | undefined>) {
+export function hasErrors(obj: Record<string, string | number | object | undefined>) {
   return (
     Object.keys(obj)
       .map((key) => obj[key])
