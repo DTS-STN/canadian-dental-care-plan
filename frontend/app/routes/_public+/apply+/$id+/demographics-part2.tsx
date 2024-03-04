@@ -1,10 +1,11 @@
 import { useState } from 'react';
 
-import { json } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { Form, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import { Button, ButtonLink } from '~/components/buttons';
 import { InputField } from '~/components/input-field';
@@ -40,9 +41,32 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return json({ otherGenderCode, genderTypes, sexAtBirthTypes, mouthPainTypes, lastTimeDentistVisitTypes, avoidedDentalCostTypes, id, state: state.genderType });
 }
 
-export async function action({ request }: ActionFunctionArgs) {
-  const { OTHER_GENDER_TYPE_ID } = getEnv();
-  return json('');
+export async function action({ request, params }: ActionFunctionArgs) {
+  const applyFlow = getApplyFlow();
+  const { id } = await applyFlow.loadState({ request, params });
+
+  const formSchema = z.object({
+    genderTypeChoosen: z.string({ required_error: 'empty-radio' }),
+    otherGenderField: z.string().min(1, { message: 'empty-field' }).optional(),
+  });
+
+  const formData = Object.fromEntries(await request.formData());
+  const parsedDataResult = formSchema.safeParse(formData);
+
+  if (!parsedDataResult.success) {
+    return json({
+      errors: parsedDataResult.error.format(),
+      formData: formData as Partial<z.infer<typeof formSchema>>,
+    });
+  }
+
+  const sessionResponseInit = await applyFlow.saveState({
+    request,
+    params,
+    state: { genderType: parsedDataResult.data },
+  });
+
+  return redirect(`/apply/${id}/review-information`, sessionResponseInit);
 }
 
 export default function DemographicsPart2() {
