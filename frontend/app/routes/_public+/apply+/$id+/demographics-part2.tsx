@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, useActionData, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { Button, ButtonLink } from '~/components/buttons';
+import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
@@ -35,10 +36,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const otherGenderCode = genderTypes.find((method) => method.id === OTHER_GENDER_TYPE_ID);
   if (!otherGenderCode) {
-    throw new Response('Expected communication method email not found!', { status: 500 });
+    throw new Response('Expected gender type!', { status: 500 });
   }
 
-  return json({ otherGenderCode, genderTypes, sexAtBirthTypes, mouthPainTypes, lastTimeDentistVisitTypes, avoidedDentalCostTypes, id, state: state.genderType });
+  return json({ otherGenderCode, genderTypes, sexAtBirthTypes, mouthPainTypes, lastTimeDentistVisitTypes, avoidedDentalCostTypes, id, state: state.demographicsPart2 });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -48,6 +49,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const formSchema = z.object({
     genderTypeChoosen: z.string({ required_error: 'empty-radio' }),
     otherGenderField: z.string().min(1, { message: 'empty-field' }).optional(),
+    mouthPainType: z.string({ required_error: 'empty-radio' }),
+    lastDentalVisitType: z.string({ required_error: 'empty-radio' }),
+    avoidedDentalCareDueToCost: z.string({ required_error: 'empty-radio' }),
   });
 
   const formData = Object.fromEntries(await request.formData());
@@ -63,16 +67,18 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
-    state: { genderType: parsedDataResult.data },
+    state: { demographicsPart2: parsedDataResult.data },
   });
 
   return redirect(`/apply/${id}/review-information`, sessionResponseInit);
 }
 
 export default function DemographicsPart2() {
-  const { otherGenderCode, genderTypes, sexAtBirthTypes, mouthPainTypes, lastTimeDentistVisitTypes, avoidedDentalCostTypes, id, state } = useLoaderData<typeof loader>();
+  const { otherGenderCode, genderTypes, mouthPainTypes, lastTimeDentistVisitTypes, avoidedDentalCostTypes, id, state } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
   const [otherGenderChecked, setOtherGenderChecked] = useState(state?.genderTypeChoosen === otherGenderCode.id);
+  const actionData = useActionData<typeof action>();
+  const errorSummaryId = 'error-summary';
 
   const otherGenderHandler = () => {
     setOtherGenderChecked(true);
@@ -81,6 +87,38 @@ export default function DemographicsPart2() {
   const nonOtherGenderHandler = () => {
     setOtherGenderChecked(false);
   };
+
+  /**
+   * Gets an error message based on the provided internationalization (i18n) key.
+   *
+   * @param errorI18nKey - The i18n key for the error message.
+   * @returns The corresponding error message, or undefined if no key is provided.
+   */
+  function getErrorMessage(errorI18nKey?: string): string | undefined {
+    if (!errorI18nKey) return undefined;
+
+    /**
+     * The 'as any' is employed to circumvent typechecking, as the type of
+     * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
+     */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return t(`demographics-oral-health-questions:part2.error-message.${errorI18nKey}` as any);
+  }
+
+  const errorMessages = {
+    genderTypeChoosen: getErrorMessage(actionData?.errors.genderTypeChoosen?._errors[0]),
+    otherGenderField: getErrorMessage(actionData?.errors.otherGenderField?._errors[0]),
+    mouthPainType: getErrorMessage(actionData?.errors.mouthPainType?._errors[0]),
+    lastDentalVisitType: getErrorMessage(actionData?.errors.lastDentalVisitType?._errors[0]),
+    avoidedDentalCareDueToCost: getErrorMessage(actionData?.errors.avoidedDentalCareDueToCost?._errors[0]),
+  };
+
+  const errorSummaryItems = createErrorSummaryItems(errorMessages);
+  useEffect(() => {
+    if (actionData?.formData && hasErrors(actionData.formData)) {
+      scrollAndFocusToErrorSummary(errorSummaryId);
+    }
+  }, [actionData]);
 
   const nonOtherGenderTypeOptions: InputRadiosProps['options'] = genderTypes
     .filter((method) => method.id !== otherGenderCode.id)
@@ -98,7 +136,15 @@ export default function DemographicsPart2() {
       defaultChecked: state?.genderTypeChoosen === otherGenderCode.id,
       append: otherGenderChecked && (
         <div className="mb-4 grid max-w-prose gap-6 md:grid-cols-2 ">
-          <InputField id="otherGenderField" type="text" className="w-full" label={t('demographics-oral-health-questions:part2.question-gender-other-specify')} name="otherGenderFieldName" defaultValue={state?.genderTypeChoosen} />
+          <InputField
+            id="otherGenderField"
+            type="text"
+            className="w-full"
+            label={t('demographics-oral-health-questions:part2.question-gender-other-specify')}
+            name="otherGenderFieldName"
+            errorMessage={errorMessages.otherGenderField}
+            defaultValue={state?.genderInputField}
+          />
         </div>
       ),
       onClick: otherGenderHandler,
@@ -107,65 +153,59 @@ export default function DemographicsPart2() {
   ];
 
   return (
-    <Form method="post" className="space-y-6">
-      {genderTypes.length > 0 && <InputRadios id="gender-type" legend={t('demographics-oral-health-questions:part2.question-gender')} name="preferredMethod" options={options} required></InputRadios>}
+    <>
+      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+      <Form method="post" className="space-y-6">
+        {genderTypes.length > 0 && <InputRadios id="genderTypeChoosen" legend={t('demographics-oral-health-questions:part2.question-gender')} name="genderTypeChoosen" errorMessage={errorMessages.genderTypeChoosen} options={options} required></InputRadios>}
 
-      {sexAtBirthTypes.length > 0 && (
-        <InputRadios
-          id="born-type"
-          name="bornType"
-          legend={t('demographics-oral-health-questions:part2.question-sex-at-birth')}
-          options={sexAtBirthTypes.map((sexAtBirthType) => ({
-            children: getNameByLanguage(i18n.language, sexAtBirthType),
-            value: sexAtBirthType.id,
-          }))}
-          required
-        />
-      )}
-      {mouthPainTypes.length > 0 && (
-        <InputRadios
-          id="mouth-pain-type"
-          name="mouthPainType"
-          legend={t('demographics-oral-health-questions:part2.question-mouth-pain')}
-          options={mouthPainTypes.map((mouthPainType) => ({
-            children: getNameByLanguage(i18n.language, mouthPainType),
-            value: mouthPainType.id,
-          }))}
-          required
-        />
-      )}
-      {lastTimeDentistVisitTypes.length > 0 && (
-        <InputRadios
-          id="last-time-dentist-visit-type"
-          name="lastTimeDentistVisitType"
-          legend={t('demographics-oral-health-questions:part2.question-last-dental-visit')}
-          options={lastTimeDentistVisitTypes.map((lastTimeDentistVisitType) => ({
-            children: getNameByLanguage(i18n.language, lastTimeDentistVisitType),
-            value: lastTimeDentistVisitType.id,
-          }))}
-          required
-        />
-      )}
-      {avoidedDentalCostTypes.length > 0 && (
-        <InputRadios
-          id="avoided-dental-cost-type"
-          name="avoidedDentalCostType"
-          legend={t('demographics-oral-health-questions:part2.question-avoided-dental-cost')}
-          options={avoidedDentalCostTypes.map((avoidedDentalCostType) => ({
-            children: getNameByLanguage(i18n.language, avoidedDentalCostType),
-            value: avoidedDentalCostType.id,
-          }))}
-          required
-        />
-      )}
-      <div className="flex flex-wrap items-center gap-3">
-        <ButtonLink id="cancel-button" to={`/apply/${id}/demographics-part1`}>
-          {t('demographics-oral-health-questions:part2.button-back')}
-        </ButtonLink>
-        <Button id="change-button" variant="primary">
-          {t('demographics-oral-health-questions:part2.button-continue')}
-        </Button>
-      </div>
-    </Form>
+        {mouthPainTypes.length > 0 && (
+          <InputRadios
+            id="mouthPainType"
+            name="mouthPainType"
+            legend={t('demographics-oral-health-questions:part2.question-mouth-pain')}
+            options={mouthPainTypes.map((mouthPainType) => ({
+              children: getNameByLanguage(i18n.language, mouthPainType),
+              value: mouthPainType.id,
+            }))}
+            errorMessage={errorMessages.mouthPainType}
+            required
+          />
+        )}
+        {lastTimeDentistVisitTypes.length > 0 && (
+          <InputRadios
+            id="lastDentalVisitType"
+            name="lastDentalVisitType"
+            legend={t('demographics-oral-health-questions:part2.question-last-dental-visit')}
+            options={lastTimeDentistVisitTypes.map((lastTimeDentistVisitType) => ({
+              children: getNameByLanguage(i18n.language, lastTimeDentistVisitType),
+              value: lastTimeDentistVisitType.id,
+            }))}
+            errorMessage={errorMessages.lastDentalVisitType}
+            required
+          />
+        )}
+        {avoidedDentalCostTypes.length > 0 && (
+          <InputRadios
+            id="avoidedDentalCareDueToCost"
+            name="avoidedDentalCareDueToCost"
+            legend={t('demographics-oral-health-questions:part2.question-avoided-dental-cost')}
+            options={avoidedDentalCostTypes.map((avoidedDentalCostType) => ({
+              children: getNameByLanguage(i18n.language, avoidedDentalCostType),
+              value: avoidedDentalCostType.id,
+            }))}
+            errorMessage={errorMessages.avoidedDentalCareDueToCost}
+            required
+          />
+        )}
+        <div className="flex flex-wrap items-center gap-3">
+          <ButtonLink id="cancel-button" to={`/apply/${id}/demographics-part1`}>
+            {t('demographics-oral-health-questions:part2.button-back')}
+          </ButtonLink>
+          <Button id="change-button" variant="primary">
+            {t('demographics-oral-health-questions:part2.button-continue')}
+          </Button>
+        </div>
+      </Form>
+    </>
   );
 }

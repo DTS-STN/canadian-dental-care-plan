@@ -23,12 +23,16 @@
 
     "question-gender": "5. (FR) What is your gender? Gender refers to current gender which may be different from sex assigned at birth and may be different from what is indicated on legal documents.",
     "question-gender-other-specify": "Specify",
-    "question-sex-at-birth": "6.(FR) What was your sex at birth? Sex refers to sex assigned at birth.",
-    "question-mouth-pain": "7.(FR) In the past 12 months, how often have you had any persistent or on-going mouth pain? Mouth pain includes pain in teeth, gums, tongue, jaw, jaw joints.",
+    "question-mouth-pain": "6.(FR) In the past 12 months, how often have you had any persistent or on-going mouth pain? Mouth pain includes pain in teeth, gums, tongue, jaw, jaw joints.",
     "question-last-dental-visit": "8. (FR) When was the last time you saw a dentist, denturist, dental hygienist or any other dental specialist? Services may have been provided in any setting where the oral health professional is licensed to practice",
-    "question-avoided-dental-cost": "9. (FR) In the past 12 months, have you avoided going to a dental professional for dental care due to the cost of care?",
+    "question-avoided-dental-cost": "8. (FR) In the past 12 months, have you avoided going to a dental professional for dental care due to the cost of care?",
 
     "button-back": "(FR) Back < ",
-    "button-continue": "(FR) Continue > "
+    "button-continue": "(FR) Continue > ",
+
+    "error-message": {
+      "empty-radio": "(FR) Please select a value",
+      "empty-field": "(FR) Please enter a value"
+    }
   }
 }
