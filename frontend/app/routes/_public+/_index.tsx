@@ -26,13 +26,13 @@ export default function RootIndex() {
           <div className="mb-2 mt-9 grid grid-cols-2 gap-8 md:mx-4 lg:mx-8">
             <section lang="en">
               <h2 className="sr-only">Government of Canada</h2>
-              <ButtonLink variant="primary" to="/apply?lang=en" id="english-button" lang="en" size="lg" className="w-full">
+              <ButtonLink variant="primary" to="/apply?lang=en" id="english-button" lang="en" size="lg" className="w-full" reloadDocument>
                 English
               </ButtonLink>
             </section>
             <section lang="fr">
               <h2 className="sr-only">Gouvernement du Canada</h2>
-              <ButtonLink variant="primary" to="/apply?lang=fr" id="french-button" lang="fr" size="lg" className="w-full">
+              <ButtonLink variant="primary" to="/apply?lang=fr" id="french-button" lang="fr" size="lg" className="w-full" reloadDocument>
                 Français
               </ButtonLink>
             </section>

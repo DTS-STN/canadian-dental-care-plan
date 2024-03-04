@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { loader } from '~/routes/_secured+/personal-information+/preferred-language+/edit';
+import { loader } from '~/routes/_protected+/personal-information+/preferred-language+/edit';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getUserService } from '~/services/user-service.server';
 

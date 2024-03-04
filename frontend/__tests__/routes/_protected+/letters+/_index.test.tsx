@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { loader } from '~/routes/_secured+/letters+/_index';
+import { loader } from '~/routes/_protected+/letters+/_index';
 
 vi.mock('~/services/interop-service.server', () => ({
   getInteropService: vi.fn().mockReturnValue({
