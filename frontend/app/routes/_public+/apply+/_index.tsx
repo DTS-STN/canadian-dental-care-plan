@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
 import { Form, useLoaderData } from '@remix-run/react';
 
 import HCaptcha from '@hcaptcha/react-hcaptcha';
@@ -9,11 +9,16 @@ import { Button } from '~/components/buttons';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getHCaptchaService } from '~/services/hcaptcha-service.server';
 import { getEnv } from '~/utils/env.server';
+import { mergeMeta } from '~/utils/meta-utils';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { HCAPTCHA_SITE_KEY } = getEnv();
   return { siteKey: HCAPTCHA_SITE_KEY };
 }
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  return [{ name: 'robots', content: 'index' }];
+});
 
 export async function action({ request }: ActionFunctionArgs) {
   const formDataSchema = z.object({
