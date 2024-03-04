@@ -59,24 +59,23 @@ export default function AccessToDentalInsuranceQuestion() {
     <>
       <ul className="mb-4 list-disc">
         <li>
-          <Trans ns={i18nNamespaces} i18nKey="dental-insurance-question:list-item1" />
+          <Trans ns={i18nNamespaces} i18nKey="dental-insurance-question:list.employer" />
         </li>
         <li>
-          <Trans ns={i18nNamespaces} i18nKey="dental-insurance-question:list-item2" />
+          <Trans ns={i18nNamespaces} i18nKey="dental-insurance-question:list.pension" />
         </li>
         <li>
-          <Trans ns={i18nNamespaces} i18nKey="dental-insurance-question:list-item3" />
+          <Trans ns={i18nNamespaces} i18nKey="dental-insurance-question:list.dental-coverage" />
         </li>
         <li className="list-none">
           <Details id={t('dental-insurance-question:detail.additional-info.title')} title={t('dental-insurance-question:detail.additional-info.title')}>
             <div>
-              <p>{t('dental-insurance-question:detail.additional-info.content1')}</p>
+              <p>{t('dental-insurance-question:detail.additional-info.eligible')}</p>
               <ul className="mb-4 list-disc pl-6">
-                <li>{t('dental-insurance-question:detail.additional-info.list-item1')}</li>
-                <li>{t('dental-insurance-question:detail.additional-info.list-item2')}</li>
+                <li>{t('dental-insurance-question:detail.additional-info.list.opted')}</li>
+                <li>{t('dental-insurance-question:detail.additional-info.list.cannot-opt')}</li>
               </ul>
-              <p className="mb-4">{t('dental-insurance-question:detail.additional-info.content2')}</p>
-              <p>{t('dental-insurance-question:detail.additional-info.content3')}</p>
+              <Trans ns={i18nNamespaces} i18nKey="dental-insurance-question:detail.additional-info.not-eligible" />
             </div>
           </Details>
         </li>
@@ -97,7 +96,7 @@ export default function AccessToDentalInsuranceQuestion() {
                 children: (
                   <div>
                     <strong>{getNameByLanguage(i18n.language, option)}</strong>
-                    {`, ${option.id === 'yes' ? t('dental-insurance-question:option1') : t('dental-insurance-question:option2')}`}
+                    {`, ${option.id === 'yes' ? t('dental-insurance-question:option-yes') : t('dental-insurance-question:option-no')}`}
                   </div>
                 ),
                 value: option.id,
