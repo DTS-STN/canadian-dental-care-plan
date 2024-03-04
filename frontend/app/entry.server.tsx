@@ -7,7 +7,7 @@ import { PassThrough } from 'node:stream';
 import { renderToPipeableStream } from 'react-dom/server';
 import { I18nextProvider } from 'react-i18next';
 
-import { NonceProvider, generateNonce } from '~/components/nonce-context';
+import { NonceProvider } from '~/components/nonce-context';
 import { server } from '~/mocks/node';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getSessionService } from '~/services/session-service.server';
@@ -16,6 +16,7 @@ import { getEnv } from '~/utils/env.server';
 import { getNamespaces } from '~/utils/locale-utils';
 import { createLangCookie, getLocale, initI18n } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { randomHexString } from '~/utils/string-utils';
 
 // instrumentation should be started as early as possible to ensure proper initialization
 const instrumentationService = getInstrumentationService();
@@ -72,11 +73,15 @@ export default async function handleRequest(request: Request, responseStatusCode
   log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
   instrumentationService.createCounter('http.server.requests').add(1);
 
-  const nonce = generateNonce(32);
   const locale = await getLocale(request);
   const routes = Object.values(remixContext.routeModules);
   const i18n = await initI18n(locale, getNamespaces(routes));
 
+  const nonce = randomHexString(32);
+  const contentSecurityPolicy = generateContentSecurityPolicy(nonce);
+
+  // @see: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
+  responseHeaders.set('Content-Security-Policy', contentSecurityPolicy);
   responseHeaders.set('Content-Type', 'text/html; charset=UTF-8');
   responseHeaders.set('Content-Security-Policy', generateContentSecurityPolicy(nonce));
   responseHeaders.append('Set-Cookie', await createLangCookie().serialize(locale));
