@@ -72,22 +72,12 @@ function getAgeEligibility(day: number, month: number, year: number): boolean {
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
 
-  console.log('currentDate: ' + currentDate);
-  console.log('currentDay: ' + currentDay);
-  console.log('currentMonth :' + currentMonth);
-  console.log('currentYear: ' + currentYear);
-  console.log(currentYear - year);
-
   if (currentYear - year > 65) {
     return true;
   } else if (currentYear - year == 65) {
-    console.log('currentMonth: ' + currentMonth);
-    console.log('month: ' + month);
     if (month < currentMonth) {
       return true;
     } else if (month == currentMonth) {
-      console.log('currentDay: ' + currentDay);
-      console.log('day: ' + day);
       if (day <= currentDay) return true;
     }
   }
