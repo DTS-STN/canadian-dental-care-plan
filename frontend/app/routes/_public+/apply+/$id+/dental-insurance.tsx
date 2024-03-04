@@ -4,7 +4,7 @@ import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { Form, useLoaderData } from '@remix-run/react';
 
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { Button, ButtonLink } from '~/components/buttons';
@@ -58,28 +58,29 @@ export default function AccessToDentalInsuranceQuestion() {
   const helpMessage = (
     <>
       <ul className="mb-4 list-disc">
-        <li>{t('dental-insurance-question:list-item1')}</li>
         <li>
-          {t('dental-insurance-question:list-item2')}
-          <Details id={t('dental-insurance-question:detail.exception.title')} title={t('dental-insurance-question:detail.exception.title')}>
+          <Trans ns={i18nNamespaces} i18nKey="dental-insurance-question:list-item1" />
+        </li>
+        <li>
+          <Trans ns={i18nNamespaces} i18nKey="dental-insurance-question:list-item2" />
+        </li>
+        <li>
+          <Trans ns={i18nNamespaces} i18nKey="dental-insurance-question:list-item3" />
+        </li>
+        <li className="list-none">
+          <Details id={t('dental-insurance-question:detail.additional-info.title')} title={t('dental-insurance-question:detail.additional-info.title')}>
             <div>
-              <p>{t('dental-insurance-question:detail.exception.content')}</p>
-              <ul className="list-disc pl-6">
-                <li>{t('dental-insurance-question:detail.exception.list-item1')}</li>
-                <li>{t('dental-insurance-question:detail.exception.list-item2')}</li>
+              <p>{t('dental-insurance-question:detail.additional-info.content1')}</p>
+              <ul className="mb-4 list-disc pl-6">
+                <li>{t('dental-insurance-question:detail.additional-info.list-item1')}</li>
+                <li>{t('dental-insurance-question:detail.additional-info.list-item2')}</li>
               </ul>
+              <p className="mb-4">{t('dental-insurance-question:detail.additional-info.content2')}</p>
+              <p>{t('dental-insurance-question:detail.additional-info.content3')}</p>
             </div>
           </Details>
         </li>
-        <li>
-          {t('dental-insurance-question:list-item3')}
-          <Details id={t('dental-insurance-question:detail.note.title')} title={t('dental-insurance-question:detail.note.title')}>
-            <p>{t('dental-insurance-question:detail.note.content')}</p>
-          </Details>
-        </li>
-        <li>{t('dental-insurance-question:list-item4')}</li>
       </ul>
-      <p className="mb-4">{t('dental-insurance-question:content2')}</p>
     </>
   );
 
