@@ -37,6 +37,11 @@ const db = factory({
     nameEn: String,
     nameFr: String,
   },
+  accessToDentalInsurance: {
+    id: primaryKey(String),
+    nameEn: String,
+    nameFr: String,
+  },
   letterType: {
     id: primaryKey(faker.string.uuid),
     code: String,
@@ -88,15 +93,27 @@ const frenchLanguage = db.preferredLanguage.create({
 
 // seed avaliable communication methods
 db.preferredCommunicationMethod.create({
-  id: 'digital',
-  nameEn: 'Digital',
-  nameFr: '(FR) Digital',
+  id: 'email',
+  nameEn: 'Email',
+  nameFr: '(FR) Email',
 });
 
 db.preferredCommunicationMethod.create({
   id: 'mail',
   nameEn: 'Postal mail',
   nameFr: '(FR) Postal mail',
+});
+
+db.accessToDentalInsurance.create({
+  id: 'yes',
+  nameEn: 'Yes',
+  nameFr: '(Fr) Yes',
+});
+
+db.accessToDentalInsurance.create({
+  id: 'no',
+  nameEn: 'No',
+  nameFr: '(Fr) No',
 });
 
 // seed avaliable addresses (before user)

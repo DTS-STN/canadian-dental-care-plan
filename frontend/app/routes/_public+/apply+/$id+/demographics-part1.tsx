@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, ButtonLink } from '~/components/buttons';
 import { InputRadios } from '~/components/input-radios';
-import { getIntakeFlow } from '~/routes-flow/intake-flow';
+import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -21,8 +21,8 @@ export const handle = {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const bornTypes = await getLookupService().getAllBornTypes();
   const disabilityTypes = await getLookupService().getAllDisabilityTypes();
-  const intakeFlow = getIntakeFlow();
-  const { id, state } = await intakeFlow.loadState({ request, params });
+  const applyFlow = getApplyFlow();
+  const { id, state } = await applyFlow.loadState({ request, params });
   return json({ id, state, bornTypes, disabilityTypes });
 }
 
@@ -36,11 +36,11 @@ export default function DemographicsPart1() {
 
   return (
     <>
+      <p className="mb-6">{t('demographics-oral-health-questions:part1.paragraph1')}</p>
+      <p className="mb-6">{t('demographics-oral-health-questions:part1.paragraph2')}</p>
       <Form method="post">
-        <p className="mb-8 text-lg">{t('demographics-oral-health-questions:part1.paragraph1')}</p>
-        <p className="mb-8 text-lg">{t('demographics-oral-health-questions:part1.paragraph2')}</p>
-        <div className="my-6">
-          {bornTypes.length > 0 && (
+        {bornTypes.length > 0 && (
+          <div className="my-6">
             <InputRadios
               id="born-type"
               name="bornType"
@@ -51,11 +51,10 @@ export default function DemographicsPart1() {
               }))}
               required
             />
-          )}
-        </div>
-
-        <div className="my-6">
-          {disabilityTypes.length > 0 && (
+          </div>
+        )}
+        {disabilityTypes.length > 0 && (
+          <div className="my-6">
             <InputRadios
               id="disability-type"
               name="disabilityType"
@@ -67,9 +66,8 @@ export default function DemographicsPart1() {
               }))}
               required
             />
-          )}
-        </div>
-
+          </div>
+        )}
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="cancel-button" to="/personal-information">
             {t('demographics-oral-health-questions:part1.button-back')}

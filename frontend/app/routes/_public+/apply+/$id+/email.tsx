@@ -8,54 +8,50 @@ import { z } from 'zod';
 import { Button } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
-import { getIntakeFlow } from '~/routes-flow/intake-flow';
+import { getApplyFlow } from '~/routes-flow/apply-flow';
 
-export const intakeIdParamSchema = z.string().uuid();
+export const applyIdParamSchema = z.string().uuid();
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  const intakeFlow = getIntakeFlow();
-  const { id, state } = await intakeFlow.loadState({ request, params });
-  return json({ id, state: state.personalInfo });
+  const applyFlow = getApplyFlow();
+  const { id, state } = await applyFlow.loadState({ request, params });
+  return json({ id, state: state.email });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
-  const intakeFlow = getIntakeFlow();
-  const { id } = await intakeFlow.loadState({ request, params });
+  const applyFlow = getApplyFlow();
+  const { id } = await applyFlow.loadState({ request, params });
 
   const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = intakeFlow.personalInfoStateSchema.safeParse(formData);
+  const parsedDataResult = applyFlow.emailStateSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof intakeFlow.personalInfoStateSchema>>,
+      formData: formData as Partial<z.infer<typeof applyFlow.emailStateSchema>>,
     });
   }
 
-  const sessionResponseInit = await intakeFlow.saveState({
+  const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
-    state: { personalInfo: parsedDataResult.data },
+    state: { email: parsedDataResult.data },
   });
 
-  return redirect(`/intake/${id}/email`, sessionResponseInit);
+  return redirect(`/apply/${id}/confirm`, sessionResponseInit);
 }
 
-export default function IntakeFlowPersonalInfo() {
+export default function ApplyFlowEmail() {
   const { id, state } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
 
   const defaultValues = {
-    age: actionData?.formData.age ?? state?.age ?? '',
-    givenName: actionData?.formData.givenName ?? state?.givenName ?? '',
-    surname: actionData?.formData.surname ?? state?.surname ?? '',
+    emailAddress: actionData?.formData.emailAddress ?? state?.emailAddress ?? '',
   };
 
   const errorMessages = {
-    age: actionData?.errors.age?._errors[0],
-    givenName: actionData?.errors.givenName?._errors[0],
-    surname: actionData?.errors.surname?._errors[0],
+    emailAddress: actionData?.errors.emailAddress?._errors[0],
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -68,14 +64,14 @@ export default function IntakeFlowPersonalInfo() {
 
   return (
     <>
-      <h3>Intake Form Flow Index: {id}</h3>
+      <h3>Apply Form Flow Index: {id}</h3>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <p className="mb-3 font-semibold">State:</p>
       <pre className="mb-6 block max-w-prose border border-slate-100 bg-slate-50 p-3">{JSON.stringify(state, undefined, 2)}</pre>
       <Form method="post" noValidate>
-        <InputField id="givenName" name="givenName" label="Given Name" required defaultValue={defaultValues.givenName} errorMessage={errorMessages.givenName} />
-        <InputField id="surname" name="surname" label="Surname" required defaultValue={defaultValues.surname} errorMessage={errorMessages.surname} />
-        <InputField id="age" name="age" label="Age" type="number" min={0} required defaultValue={defaultValues.age} errorMessage={errorMessages.age} />
+        <div className="mb-6">
+          <InputField id="emailAddress" name="emailAddress" label="Email address" required defaultValue={defaultValues.emailAddress} errorMessage={errorMessages.emailAddress} />
+        </div>
         <Button variant="primary">Next step</Button>
       </Form>
     </>

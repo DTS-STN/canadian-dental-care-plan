@@ -1,0 +1,72 @@
+{
+  "applicant-information": {
+    "page-title": "(FR) Applicant Information",
+    "form-instructions": "(FR) Please provide your legal name (as indicated on your SIN card/letter). We will use the information you provided to verify your identity. Any information that does not match the information on your SIN appliation may cause delay in the processing of your application.",
+    "sin": "(FR) Social Insurance Number",
+    "last-name": "(FR) Last Name",
+    "first-name": "(FR) First Name",
+    "marital-status": "(FR) Marital Status",
+    "back-btn": "(FR) Back",
+    "continue-btn": "(FR) Continue",
+    "error-message": {
+      "valid-sin": "(FR) Must be a valid SIN",
+      "last-name": "(FR) Last name must be provided",
+      "marital-status": "(FR) Marital status must be provided"
+    }
+  },
+  "partner-information": {
+    "page-title": "(FR) Spouse / Common-law partner information",
+    "provide-sin": "(FR) Provide information on your current spouse or common-law partner as indicated on their SIN card/letter.",
+    "required-information": "(FR) This information is required to calculate the adjusted family net income. Please note that the spouse or common-law partner will need to submit their own application to the plan.",
+    "sin": "(FR) Social Insurance Number",
+    "dob": "(FR) Date of birth",
+    "year": "(FR) Year",
+    "month": "(FR) Month",
+    "day": "(FR) Day",
+    "last-name": "(FR) Last name",
+    "first-name": "(FR) First name",
+    "confirm-checkbox": "(FR) I confirm that my spouse or common-law partner is aware and has consented to the sharing of their personal information.",
+    "back-btn": "(FR) Back",
+    "continue-btn": "(FR) Continue",
+    "error-message": {
+      "valid-sin": "(FR) Must be a valid SIN",
+      "last-name": "(FR) Last name must be provided",
+      "month": "(FR) Month must be valid",
+      "day": "(FR) Day must be valid for the given month and year",
+      "year": "(FR) Year must be valid",
+      "confirm": "(FR) Checkbox must be selected"
+    }
+  },
+
+  "personal-information": {
+    "page-title": "(FR) Personal information",
+    "form-instructions": "(FR) Adding a telephone number helps Service Canada reach you if there is an issue with your application and may help reduce delays in processing your application. Otherwise, we will contact you by mail using the mailing address you provide.",
+    "telephone-number": "(FR) Telephone number (optional)",
+    "telephone-number-alt": "(FR) Telephone number (alternate) (optional)",
+    "mailing-address": {
+      "header": "(FR) Mailing address",
+      "note": "(FR) We may send you letters by mail related to your CDCP application."
+    },
+    "home-address": {
+      "header": "(FR) Home address",
+      "use-mailing-address": "(FR) My home address and mailing address are the same",
+      "use-different-address": "(FR) Use different home address"
+    },
+    "address-field": {
+      "address": "(FR) Address",
+      "address-note": "(FR) Include street number and name.",
+      "apartment": "(FR) Apartment, suite, etc. (optional)",
+      "country": "(FR) Country",
+      "province": "(FR) Province, territory, state, or region",
+      "city": "(FR) City or town",
+      "postal-code": "(FR) Postal code or ZIP code",
+      "select-one": "(FR) Select one"
+    },
+    "back": "(FR) Back",
+    "continue": "(FR) Continue",
+    "error-message": {
+      "empty-radio": "(FR) Please select a value",
+      "empty-field": "(FR) Please enter a value"
+    }
+  }
+}

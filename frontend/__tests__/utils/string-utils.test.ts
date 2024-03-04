@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { expandTemplate } from '~/utils/string-utils';
+import { expandTemplate, randomHexString, randomString } from '~/utils/string-utils';
 
 describe('expandTemplate', () => {
   it('should expand a template', () => {
@@ -22,5 +22,23 @@ describe('expandTemplate', () => {
     const variables = { greeting: 'Hello', subject: 'world', extra: 'variable' };
 
     expect(expandTemplate(template, variables)).toEqual('Hello, world!');
+  });
+
+  describe('randomHexString', () => {
+    it('should generate a random hex string of specified length with the correct characters', () => {
+      const str = randomHexString(8192);
+
+      expect(str.length).toEqual(8192);
+      expect(str).toMatch(/[0-9a-f]+/);
+    });
+  });
+
+  describe('randomString', () => {
+    it('should generate a random alphanumeric string of specified length with the correct characters', () => {
+      const str = randomString(8192);
+
+      expect(str.length).toEqual(8192);
+      expect(str).toMatch(/[0-9a-z]+/);
+    });
   });
 });

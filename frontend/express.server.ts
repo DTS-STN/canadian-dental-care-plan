@@ -5,7 +5,7 @@ import type { ServerBuild } from '@remix-run/node';
 
 import chokidar from 'chokidar';
 import compression from 'compression';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import getPort from 'get-port';
 import morgan from 'morgan';
 import fs from 'node:fs';
@@ -86,15 +86,43 @@ async function runServer() {
     },
   });
 
+  // @see: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
+  const securityRequestHandler = (req: Request, res: Response, next: NextFunction) => {
+    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+    res.setHeader('Cross-Origin-Resource-Policy', 'same-origin');
+    res.setHeader('Permissions-Policy', 'camera=(), display-capture=(), fullscreen=(), geolocation=(), interest-cohort=(), microphone=(), publickey-credentials-get=(), screen-wake-lock=()');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Server', 'webserver');
+    res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'deny');
+    next();
+  };
+
+  // prettier-ignore
+  const remixRequestHandler = process.env.NODE_ENV === 'development'
+    ? createDevRequestHandler(build, buildPath, versionPath)
+    : createRequestHandler({ build, mode: process.env.NODE_ENV });
+
   const app = express();
+  // disable the X-Powered-By header to make it harder to fingerprint the server
+  // (GjB :: yes, I acknowledge that this is rather moot, since our application is open source)
   app.disable('x-powered-by');
+  // use gzip compression for all responses
   app.use(compression());
+  // note: securityRequestHandler must execute before any static-content handlers
+  app.use(securityRequestHandler);
+  // serve static files from the 'public/' directory with a 1 hour cache-control
   app.use(express.static('public', { maxAge: '1h' }));
-  // since remix fingerprints assets served from build/ we can use aggressive caching
+  // since remix fingerprints assets served from build/ we can use more aggressive caching
   app.use(build.publicPath, express.static(build.assetsBuildDirectory, { immutable: true, maxAge: '1y' }));
+  // log all requests using the loggingRequestHandler
   app.use(loggingRequestHandler);
-  app.set('trust proxy', true); // enable X-Forwarded-* header support to build OAuth callback URLs
-  app.all('*', process.env.NODE_ENV === 'development' ? createDevRequestHandler(build, buildPath, versionPath) : createRequestHandler({ build, mode: process.env.NODE_ENV }));
+  // enable X-Forwarded-* header support to build OAuth callback URLs
+  app.set('trust proxy', true);
+  // hand off all requests processing to one of the remix request handlers
+  app.all('*', remixRequestHandler);
 
   const server = app.listen(port, () => {
     log.info(`Server listening at http://localhost:${port}/`);

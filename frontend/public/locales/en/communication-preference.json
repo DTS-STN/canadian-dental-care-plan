@@ -6,5 +6,11 @@
   "email": "Email address",
   "confirm-email": "Confirm email address",
   "back": "Back",
-  "continue": "Continue"
+  "continue": "Continue",
+  "error-message": {
+    "empty-radio": "Please select a value",
+    "empty-field": "Please enter a value",
+    "invalid-email": "Invalid email address",
+    "not-the-same": "Confirm email is not the same as the entered email"
+  }
 }

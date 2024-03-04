@@ -101,16 +101,18 @@ export default function HomeAddressSuggested() {
             </dd>
           </div>
         </dl>
-        <InputRadios
-          id="selected-address"
-          name="selectedAddress"
-          legend={t('personal-information:home-address.suggested.choose-address')}
-          options={[
-            { value: 'home', children: t('personal-information:home-address.suggested.use-entered') },
-            { value: 'suggested', children: t('personal-information:home-address.suggested.use-suggested') },
-          ]}
-          required
-        />
+        <div className="my-6">
+          <InputRadios
+            id="selected-address"
+            name="selectedAddress"
+            legend={t('personal-information:home-address.suggested.choose-address')}
+            options={[
+              { value: 'home', children: t('personal-information:home-address.suggested.use-entered') },
+              { value: 'suggested', children: t('personal-information:home-address.suggested.use-suggested') },
+            ]}
+            required
+          />
+        </div>
         <p className="mb-4">{t('personal-information:home-address.suggested.re-enter-address')}</p>
         <div className="flex flex-wrap items-center gap-3">
           <Button id="confirm-button" variant="primary">

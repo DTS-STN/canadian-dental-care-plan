@@ -41,7 +41,7 @@ const serverEnv = z.object({
   NODE_ENV: z.enum(['production', 'development', 'test']),
   ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default(validFeatureNames.join(',')),
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
-  COMMUNICATION_METHOD_DIGITAL_ID: z.string().trim().min(1).default('digital'),
+  COMMUNICATION_METHOD_EMAIL_ID: z.string().trim().min(1).default('email'),
 
   // TODO :: GjB :: these base URIs should not have defaults
   INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
@@ -56,6 +56,11 @@ const serverEnv = z.object({
   AUTH_RAOIDC_CLIENT_ID: z.string().trim().min(1),
   AUTH_RAOIDC_PROXY_URL: z.string().trim().transform(emptyToUndefined).optional(),
   AUTH_RASCL_LOGOUT_URL: z.string().trim().min(1),
+
+  // hCaptcha settings
+  HCAPTCHA_SECRET_KEY: z.string().trim().min(1),
+  HCAPTCHA_SITE_KEY: z.string().trim().min(1),
+  HCAPTCHA_VERIFY_URL: z.string().url(),
 
   // language cookie settings
   LANG_COOKIE_NAME: z.string().default('__CDCP//lang'),
@@ -131,7 +136,6 @@ const publicEnv = serverEnv.pick({
   SCCH_BASE_URI: true,
   SESSION_TIMEOUT_SECONDS: true,
   SESSION_TIMEOUT_PROMPT_SECONDS: true,
-  COMMUNICATION_METHOD_DIGITAL_ID: true,
 });
 
 export type PublicEnv = z.infer<typeof publicEnv>;
