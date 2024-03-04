@@ -63,6 +63,14 @@ const communicationPreferencesStateSchema = z.object({
 });
 
 /**
+ * Schema for communication reference.
+ */
+const genderTypeStateSchema = z.object({
+  genderTypeChoosen: z.string().min(1),
+  genderInputField: z.string().min(1).optional(),
+});
+
+/**
  * Schema for apply state.
  */
 const applyStateSchema = z.object({
@@ -70,6 +78,7 @@ const applyStateSchema = z.object({
   email: emailStateSchema.optional(),
   applicantInformation: applicantInformationSchema.optional(),
   communicationPreferences: communicationPreferencesStateSchema.optional(),
+  genderType: genderTypeStateSchema.optional(),
   partnerInformation: partnerInformationSchema.optional(),
   access: accessStateSchema.optional(),
 });

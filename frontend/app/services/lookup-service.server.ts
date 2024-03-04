@@ -67,6 +67,12 @@ const lastTimeDentistVisitTypeSchema = z.object({
   nameFr: z.string().optional(),
 });
 
+const genderTypeSchema = z.object({
+  id: z.string(),
+  nameEn: z.string().optional(),
+  nameFr: z.string().optional(),
+});
+
 const avoidedDentalCostTypeSchema = z.object({
   id: z.string(),
   nameEn: z.string().optional(),
@@ -109,6 +115,7 @@ function createLookupService() {
     LOOKUP_SVC_ALLMOUTHPAINTYPES_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_LASTTIMEDENTISTVISITTYPES_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_AVOIDEDDENTALCOSTTYPES_CACHE_TTL_MILLISECONDS,
+    LOOKUP_SVC_GENDERTYPES_CACHE_TTL_MILLISECONDS,
   } = getEnv();
 
   async function getAllPreferredLanguages() {
@@ -142,6 +149,26 @@ function createLookupService() {
       return avoidedDentalCostTypeSchemaList.parse(await response.json());
     }
 
+    log.error('%j', {
+      message: 'Failed to fetch data',
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+
+    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+  }
+
+  async function getAllGenderTypes() {
+    const url = `${INTEROP_API_BASE_URI}/lookups/gender-types/`;
+    const response = await fetch(url);
+
+    const genderTypeSchemaList = z.array(genderTypeSchema);
+
+    if (response.ok) {
+      return genderTypeSchemaList.parse(await response.json());
+    }
     log.error('%j', {
       message: 'Failed to fetch data',
       status: response.status,
@@ -433,5 +460,6 @@ function createLookupService() {
     getAllAvoidedDentalCostTypes: moize(getAllAvoidedDentalCostTypes, { maxAge: LOOKUP_SVC_AVOIDEDDENTALCOSTTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllAvoidedDentalCostTypes memo') }),
     getAllLastTimeDentistVisitTypes: moize(getAllLastTimeDentistVisitTypes, { maxAge: LOOKUP_SVC_LASTTIMEDENTISTVISITTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllLastTimeDentistVisitTypes memo') }),
     getAllTaxFilingIndications: moize(getAllTaxFilingIndications, { maxAge: LOOKUP_SVC_LASTTIMEDENTISTVISITTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllTaxFilingIndications memo') }),
+    getAllGenderTypes: moize(getAllGenderTypes, { maxAge: LOOKUP_SVC_GENDERTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllGenderTypes memo') }),
   };
 }
