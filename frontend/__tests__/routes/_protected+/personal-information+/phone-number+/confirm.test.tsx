@@ -2,7 +2,7 @@ import { redirect } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/_protected+/personal-information+/phone-number+/confirm';
+import { action, loader } from '~/routes/_secured+/personal-information+/phone-number+/confirm';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 

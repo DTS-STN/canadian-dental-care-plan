@@ -1,7 +1,7 @@
 import { redirectWithSuccess } from 'remix-toast';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/_protected+/personal-information+/home-address+/confirm';
+import { action, loader } from '~/routes/_secured+/personal-information+/home-address+/confirm';
 import { getAddressService } from '~/services/address-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
