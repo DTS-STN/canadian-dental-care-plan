@@ -27,14 +27,14 @@ export const handle = {
   ],
   i18nNamespaces,
   pageIdentifier: 'CDCP-00XX',
-  pageTitleI18nKey: 'eligibility:type-of-application.page-title',
+  pageTitleI18nKey: 'eligibility:tax-filing.page-title',
 } as const satisfies RouteHandleData;
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
 
-  return json({ id, state: state.applicationDelegate });
+  return json({ id, state: state.taxFiling2023 });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -42,29 +42,29 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { id } = await applyFlow.loadState({ request, params });
 
   const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = applyFlow.typeOfApplicationSchema.safeParse(formData);
+  const parsedDataResult = applyFlow.taxFilingSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof applyFlow.typeOfApplicationSchema>>,
+      formData: formData as Partial<z.infer<typeof applyFlow.taxFilingSchema>>,
     });
   }
 
   const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
-    state: { applicationDelegate: parsedDataResult.data },
+    state: { taxFiling2023: parsedDataResult.data },
   });
 
-  if (['TRUE'].includes(parsedDataResult.data.applicationDelegate)) {
-    return redirect(`/apply/${id}/application-delegate`, sessionResponseInit);
+  if (['FALSE'].includes(parsedDataResult.data.taxFiling2023)) {
+    return redirect(`/apply/${id}/file-your-taxes`, sessionResponseInit);
   }
-  return redirect(`/apply/${id}/tax-filing`, sessionResponseInit);
+  return redirect(`/apply/${id}/date-of-birth`, sessionResponseInit);
 }
 
-export default function ApplyFlowTypeOfApplication() {
-  const { state } = useLoaderData<typeof loader>();
+export default function ApplyFlowTaxFiling() {
+  const { id, state } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
 
@@ -79,11 +79,11 @@ export default function ApplyFlowTypeOfApplication() {
   function getErrorMessage(errorI18nKey?: string): string | undefined {
     if (!errorI18nKey) return undefined;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`eligibility:type-of-application.error-message.${errorI18nKey}` as any);
+    return t(`eligibility:tax-filing.error-message.${errorI18nKey}` as any);
   }
 
   const errorMessages = {
-    applicationDelegate: getErrorMessage(actionData?.errors.applicationDelegate?._errors[0]),
+    taxFiling2023: getErrorMessage(actionData?.errors.taxFiling2023?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -94,19 +94,19 @@ export default function ApplyFlowTypeOfApplication() {
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post" aria-describedby="form-instructions" noValidate className="max-w-prose">
         <InputRadios
-          id="application-delegate"
-          name="applicationDelegate"
-          legend={t('type-of-application.form-instructions')}
+          id="tax-filing-2023"
+          name="taxFiling2023"
+          legend={t('tax-filing.form-instructions')}
           options={[
-            { value: 'FALSE', children: t('type-of-application.radio-options.personal'), defaultChecked: state?.applicationDelegate === 'FALSE' },
-            { value: 'TRUE', children: t('type-of-application.radio-options.delegate'), defaultChecked: state?.applicationDelegate === 'TRUE' },
+            { value: 'TRUE', children: t('tax-filing.radio-options.yes'), defaultChecked: state?.taxFiling2023 === 'TRUE' },
+            { value: 'FALSE', children: t('tax-filing.radio-options.no'), defaultChecked: state?.taxFiling2023 === 'FALSE' },
           ]}
           required={errorSummaryItems.length > 0}
-          errorMessage={errorMessages.applicationDelegate}
+          errorMessage={errorMessages.taxFiling2023}
         />
         <br />
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink type="button" variant="alternative" to="/apply">
+          <ButtonLink type="button" variant="alternative" to={'/apply/' + id + '/type-of-application'}>
             {t('back-btn')}
             <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
           </ButtonLink>

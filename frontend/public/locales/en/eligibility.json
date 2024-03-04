@@ -1,22 +1,68 @@
 {
+  "breadcrumbs": {
+    "canada-ca": "Canada.ca",
+    "benefits": "Benefits",
+    "dental-coverage": "Dental coverage",
+    "canadian-dental-care-plan": "Canadian Dental Care Plan"
+  },
   "type-of-application": {
-    "page-title": "Type of Application",
-    "breadcrumbs": {
-      "canada-ca": "Canada.ca",
-      "benefits": "Benefits",
-      "dental-coverage": "Dental coverage",
-      "canadian-dental-care-plan": "Canadian Dental Care Plan"
-    },
+    "page-title": "Type of application",
     "form-instructions": "Who is this application for?",
     "radio-options": {
       "personal": "I am applying for myself",
       "delegate": "I am applying on behalf of someone else"
     },
-    "marital-status": "Marital Status",
-    "back-btn": "Back",
-    "continue-btn": "Continue",
     "error-message": {
       "Required": "Applicant type must be provided"
     }
-  }
+  },
+  "tax-filing": {
+    "page-title": "Tax filing",
+    "form-instructions": "Have you and/or your spouse/common-law partner (if applicable) filed your tax return for 2023 and have received your Notice of Assessment?",
+    "radio-options": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "error-message": {
+      "Required": "Tax filing must be provided"
+    }
+  },
+  "date-of-birth": {
+    "page-title": "Date of birth",
+    "description": "Applications for the Canadian Dental Care Plan (CDCP) will open in phases. Your date of birth determines when you can apply.",
+    "form-instructions": "Please enter your date of birth",
+    "month": "Month",
+    "day": "Day",
+    "year": "Year",
+    "error-message": {
+      "day": "Day must be provided",
+      "month": "Month must be provided",
+      "year": "Year must be provided"
+    }
+  },
+  "application-delegate": {
+    "page-title": "Applying on behalf of someone cannot be completed online at this time",
+    "description1": "You must <contactservicecanada>speak to a Service Canada representative</contactservicecanada> to apply on behalf of someone. Please contact Service Canada at 1-833-537-4342 or visit a Service Canada office near you.",
+    "description2": "<preparingtoapply>Preparing to apply on behalf of someone</preparingtoapply>",
+    "contact-service-canada-href": "/",
+    "preparing-to-apply-href": "/"
+  },
+  "file-your-taxes": {
+    "page-title": "File your taxes",
+    "description1": "You are not eligible to apply for the Canada Dental Care Plan at this time.",
+    "description2": "You and/or your spouse/common-law partner have not filed a tax return for 2023 with the Canada Revenue Agency.",
+    "description3": "We use the information from your tax file to verify that you meet the income eligibility for the CDCP. Until you file your 2023 taxes, we won't be able to assess your eligibility.",
+    "description4": "For more information on how to file your taxes, visit <taxinfo>Get ready to do your taxes.</taxinfo>",
+    "description5": "Please apply for the plan after you have filed your taxes and received your Notice of Assessment.",
+    "tax-info-href": "/"
+  },
+  "dob-eligibility": {
+    "page-title": "Find out when you can apply",
+    "description1": "You are not currently eligible to apply for the Canada Dental Care Plan. Applications for the Canada Dental Care Plan is opening in phases.",
+    "description2": "<eligibilityinfo>Find out when you can apply for the Canada Dental Care Plan</eligibilityinfo>",
+    "eligibility-info-href": "/"
+  },
+  "back-btn": "Back",
+  "continue-btn": "Continue",
+  "return-btn": "Return main page"
 }
