@@ -15,7 +15,7 @@ export function CollapsibleSummary({ id, children, className, ...props }: Collap
   const headerId = `${id}-header`;
 
   return (
-    <summary>
+    <summary {...props}>
       <span id={headerId} className={cn('inline text-blue-900 underline', className)}>
         {children}
       </span>
