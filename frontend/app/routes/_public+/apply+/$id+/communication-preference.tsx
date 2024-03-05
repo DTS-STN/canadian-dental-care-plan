@@ -32,14 +32,14 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const preferredCommunicationMethods = await lookupService.getAllPreferredCommunicationMethods();
 
   const applyFlow = getApplyFlow();
-  const { state } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ request, params });
 
   const communicationMethodEmail = preferredCommunicationMethods.find((method) => method.id === COMMUNICATION_METHOD_EMAIL_ID);
   if (!communicationMethodEmail) {
     throw new Response('Expected communication method email not found!', { status: 500 });
   }
 
-  return json({ communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, state: state.communicationPreferences });
+  return json({ communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, id, state: state.communicationPreferences });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -97,7 +97,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ApplyFlowCommunicationPreferencePage() {
-  const { communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, state } = useLoaderData<typeof loader>();
+  const { communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, id, state } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
   const [emailMethodChecked, setEmailMethodChecked] = useState(state?.preferredMethod === communicationMethodEmail.id);
 
@@ -175,23 +175,29 @@ export default function ApplyFlowCommunicationPreferencePage() {
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <p className="mb-6">{t('communication-preference:note')}</p>
       <Form method="post" noValidate className="space-y-6">
-        {preferredCommunicationMethods.length > 0 && <InputRadios id="preferred-methods" legend={t('communication-preference:preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages.preferredMethod} required></InputRadios>}
+        {preferredCommunicationMethods.length > 0 && (
+          <div id="preferredMethod">
+            <InputRadios id="preferred-methods" legend={t('communication-preference:preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages.preferredMethod} required></InputRadios>
+          </div>
+        )}
         {preferredLanguages.length > 0 && (
-          <InputRadios
-            id="preferred-language"
-            name="preferredLanguage"
-            legend={t('communication-preference:preferred-language')}
-            options={preferredLanguages.map((language) => ({
-              defaultChecked: state?.preferredLanguage === language.id,
-              children: getNameByLanguage(i18n.language, language),
-              value: language.id,
-            }))}
-            errorMessage={errorMessages.preferredLanguage}
-            required
-          />
+          <div id="preferredLanguage">
+            <InputRadios
+              id="preferred-language"
+              name="preferredLanguage"
+              legend={t('communication-preference:preferred-language')}
+              options={preferredLanguages.map((language) => ({
+                defaultChecked: state?.preferredLanguage === language.id,
+                children: getNameByLanguage(i18n.language, language),
+                value: language.id,
+              }))}
+              errorMessage={errorMessages.preferredLanguage}
+              required
+            />
+          </div>
         )}
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to="/apply">
+          <ButtonLink id="back-button" to={'/apply/' + id + '/personal-information'}>
             {t('communication-preference:back')}
           </ButtonLink>
           <Button id="continue-button" variant="primary">
