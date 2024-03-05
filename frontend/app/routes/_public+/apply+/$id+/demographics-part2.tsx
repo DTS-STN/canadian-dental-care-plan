@@ -34,7 +34,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
 
-  const otherGenderCode = genderTypes.find((method) => method.id === OTHER_GENDER_TYPE_ID);
+  const otherGenderCode = genderTypes.find((genderType) => genderType.id === OTHER_GENDER_TYPE_ID);
   if (!otherGenderCode) {
     throw new Response(`Unexpected 'Other' gender type: ${OTHER_GENDER_TYPE_ID}`, { status: 500 });
   }
@@ -121,9 +121,9 @@ export default function DemographicsPart2() {
 
   const nonOtherGenderTypeOptions: InputRadiosProps['options'] = genderTypes
     .filter((genderType) => genderType.id !== otherGenderCode.id)
-    .map((method) => ({
-      children: i18n.language === 'fr' ? method.nameFr : method.nameEn,
-      value: method.id,
+    .map((genderType) => ({
+      children: getNameByLanguage(i18n.language, genderType),
+      value: genderType.id,
       //defaultChecked: state && state.gender !== otherGenderCode.id,
       onClick: nonOtherGenderHandler,
     }));
