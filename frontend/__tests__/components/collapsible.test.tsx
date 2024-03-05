@@ -20,6 +20,7 @@ describe('Collapsible Details', () => {
 
     const collapsibleDetailsSummaryElement = getByText(additionalProps.summary);
     expect(collapsibleDetailsSummaryElement.tagName).toBe('SPAN');
-    expect(collapsibleDetailsSummaryElement.id).toBe(additionalProps.id + '-summary-header');
+    expect(collapsibleDetailsSummaryElement.parentElement?.tagName).toBe('SUMMARY');
+    expect(collapsibleDetailsSummaryElement.parentElement?.id).toBe(additionalProps.id + '-summary');
   });
 });
