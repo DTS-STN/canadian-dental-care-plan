@@ -21,6 +21,11 @@ const personalInfoStateSchema = z.object({
 });
 
 /**
+ * Schema for terms and conditions
+ */
+const termsAndConditionSchema = z.object({});
+
+/**
  * Schema for email address.
  */
 const emailStateSchema = z.object({
@@ -83,6 +88,7 @@ const applyStateSchema = z.object({
   communicationPreferences: communicationPreferencesStateSchema.optional(),
   demographicsPart2: demographicsPart2StateSchema.optional(),
   partnerInformation: partnerInformationSchema.optional(),
+  termsAndConditions: termsAndConditionSchema.optional(),
   access: accessStateSchema.optional(),
 });
 
@@ -228,5 +234,6 @@ export function getApplyFlow() {
     accessStateSchema,
     saveState,
     start,
+    termsAndConditionSchema,
   };
 }
