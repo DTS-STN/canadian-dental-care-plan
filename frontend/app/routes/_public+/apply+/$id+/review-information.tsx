@@ -67,7 +67,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   };
   const dentalInsurance = {
     private: [],
-    public: [{ id: 'benefit-id', benefitEn: 'Dental and Optcial Assistance for Senioirs (65+)', benefitFR: '(FR) Dental and Optcial Assistance for Senioirs (65+)' }],
+    public: [{ id: 'benefit-id', benefitEn: 'Dental and Optical Assistance for Senioirs (65+)', benefitFR: '(FR) Dental and Optical Assistance for Senioirs (65+)' }],
   };
 
   return json({ userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance });
