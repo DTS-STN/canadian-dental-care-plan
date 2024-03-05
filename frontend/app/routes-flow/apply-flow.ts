@@ -66,8 +66,8 @@ const communicationPreferencesStateSchema = z.object({
  * Schema for communication reference.
  */
 const demographicsPart2StateSchema = z.object({
-  genderTypeChoosen: z.string().min(1),
-  genderInputField: z.string().min(1).optional(),
+  gender: z.string().min(1),
+  otherGender: z.string().min(1).optional(),
   mouthPainType: z.string().min(1),
   lastDentalVisitType: z.string().min(1),
   avoidedDentalCareDueToCost: z.string().min(1),

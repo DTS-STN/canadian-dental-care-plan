@@ -36,7 +36,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const otherGenderCode = genderTypes.find((method) => method.id === OTHER_GENDER_TYPE_ID);
   if (!otherGenderCode) {
-    throw new Response('Expected gender type!', { status: 500 });
+    throw new Response(`Unexpected 'Other' gender type: ${OTHER_GENDER_TYPE_ID}`, { status: 500 });
   }
 
   return json({ otherGenderCode, genderTypes, sexAtBirthTypes, mouthPainTypes, lastTimeDentistVisitTypes, avoidedDentalCostTypes, id, state: state.demographicsPart2 });
@@ -47,8 +47,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { id } = await applyFlow.loadState({ request, params });
 
   const formSchema = z.object({
-    genderTypeChoosen: z.string({ required_error: 'empty-radio' }),
-    otherGenderField: z.string().min(1, { message: 'empty-field' }).optional(),
+    gender: z.string({ required_error: 'empty-radio' }),
+    otherGender: z.string().min(1, { message: 'empty-field' }).optional(),
     mouthPainType: z.string({ required_error: 'empty-radio' }),
     lastDentalVisitType: z.string({ required_error: 'empty-radio' }),
     avoidedDentalCareDueToCost: z.string({ required_error: 'empty-radio' }),
@@ -76,17 +76,17 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function DemographicsPart2() {
   const { otherGenderCode, genderTypes, mouthPainTypes, lastTimeDentistVisitTypes, avoidedDentalCostTypes, id, state } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
-  const [otherGenderChecked, setOtherGenderChecked] = useState(state?.genderTypeChoosen === otherGenderCode.id);
+  const [otherGenderChecked, setOtherGenderChecked] = useState(state?.gender === otherGenderCode.id);
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
 
-  const otherGenderHandler = () => {
+  function otherGenderHandler() {
     setOtherGenderChecked(true);
-  };
+  }
 
-  const nonOtherGenderHandler = () => {
+  function nonOtherGenderHandler() {
     setOtherGenderChecked(false);
-  };
+  }
 
   /**
    * Gets an error message based on the provided internationalization (i18n) key.
@@ -106,8 +106,7 @@ export default function DemographicsPart2() {
   }
 
   const errorMessages = {
-    genderTypeChoosen: getErrorMessage(actionData?.errors.genderTypeChoosen?._errors[0]),
-    otherGenderField: getErrorMessage(actionData?.errors.otherGenderField?._errors[0]),
+    gender: getErrorMessage(actionData?.errors.gender?._errors[0]),
     mouthPainType: getErrorMessage(actionData?.errors.mouthPainType?._errors[0]),
     lastDentalVisitType: getErrorMessage(actionData?.errors.lastDentalVisitType?._errors[0]),
     avoidedDentalCareDueToCost: getErrorMessage(actionData?.errors.avoidedDentalCareDueToCost?._errors[0]),
@@ -121,11 +120,11 @@ export default function DemographicsPart2() {
   }, [actionData]);
 
   const nonOtherGenderTypeOptions: InputRadiosProps['options'] = genderTypes
-    .filter((method) => method.id !== otherGenderCode.id)
+    .filter((genderType) => genderType.id !== otherGenderCode.id)
     .map((method) => ({
       children: i18n.language === 'fr' ? method.nameFr : method.nameEn,
       value: method.id,
-      defaultChecked: state && state.genderTypeChoosen !== otherGenderCode.id,
+      //defaultChecked: state && state.gender !== otherGenderCode.id,
       onClick: nonOtherGenderHandler,
     }));
 
@@ -134,18 +133,10 @@ export default function DemographicsPart2() {
     {
       children: getNameByLanguage(i18n.language, otherGenderCode),
       value: otherGenderCode.id,
-      defaultChecked: state?.genderTypeChoosen === otherGenderCode.id,
+      defaultChecked: state?.gender === otherGenderCode.id,
       append: otherGenderChecked && (
         <div className="mb-4 grid max-w-prose gap-6 md:grid-cols-2 ">
-          <InputField
-            id="otherGenderField"
-            type="text"
-            className="w-full"
-            label={t('demographics-oral-health-questions:part2.question-gender-other-specify')}
-            name="otherGenderFieldName"
-            errorMessage={errorMessages.otherGenderField}
-            defaultValue={state?.genderInputField}
-          />
+          <InputField id="otherGender" type="text" className="w-full" label={t('demographics-oral-health-questions:part2.question-gender-other-specify')} name="otherGenderFieldName" defaultValue={state?.otherGender} />
         </div>
       ),
       onClick: otherGenderHandler,
@@ -156,7 +147,7 @@ export default function DemographicsPart2() {
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post" className="space-y-6">
-        {genderTypes.length > 0 && <InputRadios id="genderTypeChoosen" legend={t('demographics-oral-health-questions:part2.question-gender')} name="genderTypeChoosen" errorMessage={errorMessages.genderTypeChoosen} options={options} required></InputRadios>}
+        {genderTypes.length > 0 && <InputRadios id="gender" legend={t('demographics-oral-health-questions:part2.question-gender')} name="gender" errorMessage={errorMessages.gender} options={options} required></InputRadios>}
 
         {mouthPainTypes.length > 0 && (
           <InputRadios
