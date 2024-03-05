@@ -1,5 +1,7 @@
+import { FormEvent, useRef } from 'react';
+
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, useLoaderData, useSubmit } from '@remix-run/react';
 
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { randomUUID } from 'crypto';
@@ -51,12 +53,27 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function ApplyIndex() {
   const { siteKey } = useLoaderData<typeof loader>();
+  const captchaRef = useRef<HCaptcha>(null);
+  const submit = useSubmit();
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (captchaRef.current) {
+      const formData = new FormData(event.currentTarget);
+      const { response } = await captchaRef.current.execute({ async: true });
+      formData.set('h-captcha-response', response);
+      submit(formData, { method: 'POST' });
+
+      captchaRef.current.resetCaptcha();
+    }
+  }
+
   return (
     <>
       <h3>Apply Form Index</h3>
       <p>Privacy Statements</p>
-      <Form method="post" noValidate>
-        <HCaptcha sitekey={siteKey} />
+      <Form method="post" onSubmit={handleSubmit} noValidate>
+        <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />
         <Button>Accept and start apply flow!</Button>
       </Form>
     </>
