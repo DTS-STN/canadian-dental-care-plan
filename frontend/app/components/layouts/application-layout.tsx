@@ -20,17 +20,20 @@ export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
 export interface ApplicationLayoutProps {
   children?: ReactNode;
-  showAccountMenu?: boolean;
+  layout: 'protected' | 'public';
 }
 
 /**
  * GCWeb Application page template.
  * see: https://wet-boew.github.io/GCWeb/templates/application/application-docs-en.html
  */
-export default function ApplicationLayout({ children, showAccountMenu }: ApplicationLayoutProps) {
+export default function ApplicationLayout({ children, layout }: ApplicationLayoutProps) {
   return (
     <>
-      <PageHeader showAccountMenu={showAccountMenu} />
+      <SkipNavigationLinks />
+      {layout === 'protected' && <ProtectedPageHeader />}
+      {layout === 'public' && <PublicPageHeader />}
+      <Breadcrumbs />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
         <AppPageTitle />
         {children}
@@ -82,73 +85,33 @@ function NavigationMenu() {
   );
 }
 
-interface PageHeaderProps {
-  showAccountMenu?: boolean;
-}
-
-function PageHeader({ showAccountMenu }: PageHeaderProps) {
-  const { i18n, t } = useTranslation(i18nNamespaces);
-
-  /**
-   * handleOnSkipLinkClick is the click event handler for the anchor link.
-   * It prevents the default anchor link behavior, scrolls to and focuses
-   * on the target element specified by 'anchorElementId', and invokes
-   * the optional 'onClick' callback.
-   */
-  function handleOnSkipLinkClick(e: MouseEvent<HTMLAnchorElement>) {
-    e.preventDefault();
-    scrollAndFocusFromAnchorLink(e.currentTarget.href);
-  }
+function ProtectedPageHeader() {
+  const { t } = useTranslation(i18nNamespaces);
 
   return (
-    <>
-      <div id="skip-to-content">
-        {[
-          { to: '#wb-cont', children: t('gcweb:nav.skip-to-content') },
-          { to: '#wb-info', children: t('gcweb:nav.skip-to-about') },
-        ].map(({ to, children }) => (
-          <ButtonLink key={to} to={to} onClick={handleOnSkipLinkClick} variant="primary" className="absolute z-10 mx-2 -translate-y-full transition-all focus:mt-2 focus:translate-y-0">
-            {children}
-          </ButtonLink>
-        ))}
-      </div>
-      <header>
-        <div id="wb-bnr" className="border border-b border-gray-200 bg-gray-50">
-          <div className="container flex items-center justify-between gap-6 py-2.5 sm:py-3.5">
-            <div property="publisher" typeof="GovernmentOrganization">
-              <Link to={t('gcweb:header.govt-of-canada.href')} property="url">
-                <img className="h-8 w-auto" src={`/assets/sig-blk-${i18n.language}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
+    <header>
+      <PageHeaderBrand />
+      <section className="bg-gray-700 text-white">
+        <div className="sm:container">
+          <div className="flex flex-col items-stretch justify-between sm:flex-row sm:items-center">
+            <h2 className="p-4 font-lato text-xl font-semibold sm:p-0 sm:py-3 sm:text-2xl">
+              <Link to="/" className="hover:underline">
+                {t('gcweb:header.application-title')}
               </Link>
-              <meta property="name" content={t('gcweb:header.govt-of-canada.text')} />
-              <meta property="areaServed" typeof="Country" content="Canada" />
-              <link property="logo" href="/assets/wmms-blk.svg" />
-            </div>
-            <section id="wb-lng">
-              <h2 className="sr-only">{t('gcweb:header.language-selection')}</h2>
-              <LanguageSwitcher>
-                <span className="hidden md:block">{t('gcweb:language-switcher.alt-lang')}</span>
-                <abbr title={t('gcweb:language-switcher.alt-lang')} className="cursor-help uppercase md:hidden">
-                  {t('gcweb:language-switcher.alt-lang-abbr')}
-                </abbr>
-              </LanguageSwitcher>
-            </section>
+            </h2>
+            <NavigationMenu />
           </div>
         </div>
-        <section className="bg-gray-700 text-white">
-          <div className="sm:container">
-            <div className="flex flex-col items-stretch justify-between sm:flex-row sm:items-center">
-              <h2 className="p-4 font-lato text-xl font-semibold sm:p-0 sm:py-3 sm:text-2xl">
-                <Link to="/" className="hover:underline">
-                  {t('gcweb:header.application-title')}
-                </Link>
-              </h2>
-              {showAccountMenu && <NavigationMenu />}
-            </div>
-          </div>
-        </section>
-      </header>
-      <Breadcrumbs />
-    </>
+      </section>
+    </header>
+  );
+}
+
+function PublicPageHeader() {
+  return (
+    <header className="border-b-[3px] border-slate-700">
+      <PageHeaderBrand />
+    </header>
   );
 }
 
@@ -286,16 +249,17 @@ function Breadcrumbs() {
 
 export interface NotFoundErrorProps {
   error?: unknown;
-  showAccountMenu?: boolean;
+  layout: 'protected' | 'public';
 }
 
-export function NotFoundError({ error, showAccountMenu }: NotFoundErrorProps) {
+export function NotFoundError({ error, layout }: NotFoundErrorProps) {
   const { t } = useTranslation(i18nNamespaces);
   const home = <InlineLink to="/" />;
 
   return (
     <>
-      <PageHeader showAccountMenu={showAccountMenu} />
+      {layout === 'protected' && <ProtectedPageHeader />}
+      {layout === 'public' && <PublicPageHeader />}
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
         <PageTitle>
           <span>{t('gcweb:not-found.page-title')}</span>
@@ -316,16 +280,17 @@ export function NotFoundError({ error, showAccountMenu }: NotFoundErrorProps) {
 
 export interface ServerErrorProps {
   error: unknown;
-  showAccountMenu?: boolean;
+  layout: 'protected' | 'public';
 }
 
-export function ServerError({ error, showAccountMenu }: ServerErrorProps) {
+export function ServerError({ error, layout }: ServerErrorProps) {
   const { t } = useTranslation(i18nNamespaces);
   const home = <InlineLink to="/" />;
 
   return (
     <>
-      <PageHeader showAccountMenu={showAccountMenu} />
+      {layout === 'protected' && <ProtectedPageHeader />}
+      {layout === 'public' && <PublicPageHeader />}
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
         <PageTitle>
           <span>{t('gcweb:server-error.page-title')}</span>
@@ -342,5 +307,60 @@ export function ServerError({ error, showAccountMenu }: ServerErrorProps) {
       </main>
       <PageFooter />
     </>
+  );
+}
+
+export function SkipNavigationLinks() {
+  const { t } = useTranslation(i18nNamespaces);
+
+  /**
+   * handleOnSkipLinkClick is the click event handler for the anchor link.
+   * It prevents the default anchor link behavior, scrolls to and focuses
+   * on the target element specified by 'anchorElementId', and invokes
+   * the optional 'onClick' callback.
+   */
+  function handleOnSkipLinkClick(e: MouseEvent<HTMLAnchorElement>) {
+    e.preventDefault();
+    scrollAndFocusFromAnchorLink(e.currentTarget.href);
+  }
+
+  return (
+    <div id="skip-to-content">
+      {[
+        { to: '#wb-cont', children: t('gcweb:nav.skip-to-content') },
+        { to: '#wb-info', children: t('gcweb:nav.skip-to-about') },
+      ].map(({ to, children }) => (
+        <ButtonLink key={to} to={to} onClick={handleOnSkipLinkClick} variant="primary" className="absolute z-10 mx-2 -translate-y-full transition-all focus:mt-2 focus:translate-y-0">
+          {children}
+        </ButtonLink>
+      ))}
+    </div>
+  );
+}
+
+export function PageHeaderBrand() {
+  const { i18n, t } = useTranslation(i18nNamespaces);
+  return (
+    <div id="wb-bnr">
+      <div className="container flex items-center justify-between gap-6 py-2.5 sm:py-3.5">
+        <div property="publisher" typeof="GovernmentOrganization">
+          <Link to={t('gcweb:header.govt-of-canada.href')} property="url">
+            <img className="h-8 w-auto" src={`/assets/sig-blk-${i18n.language}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
+          </Link>
+          <meta property="name" content={t('gcweb:header.govt-of-canada.text')} />
+          <meta property="areaServed" typeof="Country" content="Canada" />
+          <link property="logo" href="/assets/wmms-blk.svg" />
+        </div>
+        <section id="wb-lng">
+          <h2 className="sr-only">{t('gcweb:header.language-selection')}</h2>
+          <LanguageSwitcher>
+            <span className="hidden md:block">{t('gcweb:language-switcher.alt-lang')}</span>
+            <abbr title={t('gcweb:language-switcher.alt-lang')} className="cursor-help uppercase md:hidden">
+              {t('gcweb:language-switcher.alt-lang-abbr')}
+            </abbr>
+          </LanguageSwitcher>
+        </section>
+      </div>
+    </div>
   );
 }

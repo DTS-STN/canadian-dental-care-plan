@@ -13,17 +13,17 @@ export function ErrorBoundary() {
   if (isRouteErrorResponse(error)) {
     switch (error.status) {
       case 404: {
-        return <NotFoundError error={error} />;
+        return <NotFoundError layout="public" error={error} />;
       }
     }
   }
 
-  return <ServerError error={error} />;
+  return <ServerError layout="public" error={error} />;
 }
 
 export default function Layout() {
   return (
-    <ApplicationLayout>
+    <ApplicationLayout layout="public">
       <Outlet />
     </ApplicationLayout>
   );

@@ -12,5 +12,5 @@ export async function loader() {
 }
 
 export default function NotFound() {
-  return <NotFoundError />; // delegate rendering to the layout's 404 component
+  return <NotFoundError layout="public" />; // delegate rendering to the layout's 404 component
 }
