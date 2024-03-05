@@ -69,5 +69,37 @@
       "invalid-postal-code": "(FR) Invalid postal code (A1A 1A1)",
       "invalid-zip-code": "(FR) Invalid zip code (12345)"
     }
+  },
+  "confirm": {
+    "page-title": "(FR) Confirmation",
+    "p-one": "(FR) You can use the CDCP Status Checker or call 1-833-537-4342 to verify the status of your application. Your status should be available within the next 48 hours.",
+    "p-two": "(FR) If you haven't already, sign up for a <MSCALink>My Service Canada Account (MSCA)</MSCALink> — a secure online portal designed to streamline your application management process.",
+    "p-three": "(FR) Once your application is processed, you will be able to sign in to MSCA to view/update your personal information and view any letters sent to you by the Government of Canada regarding the CDCP.",
+    "p-four": "(FR) If you are deemed eligible, Sun Life will send you a welcome package by mail. Your welcome package will include your member card and details about the CDCP, including your coverage start date. The CDCP will not reimburse you for dental services received before that date.",
+    "p-five": "(FR) If you are deemed ineligible and circumstances change that may impact your eligibility for the CDCP, you can submit a new application.",
+    "p-six": "(FR) For more information, please contact <dentalContactUsLink>Service Canada.</dentalContactUsLink>",
+    "application-summ": "(FR) Application Summary",
+    "applicant-title": "(FR) Applicant Information",
+    "spouse-info": "(FR) Spouse / Common-law Information",
+    "contact-info": "(FR) Contact Information",
+    "comm-prefs": "(FR) Communication Preferences",
+    "dental-insurance": "(FR) Access to Dental Insurance",
+    "dob": "(FR) Date of Birth: {{dob}}",
+    "sin": "(FR) Social Insurance Number (SIN): {{sin}}",
+    "full-name": "(FR) Full Name: {{name}}",
+    "martial-status": "(FR) Martial Status: {{status}}",
+    "consent": "(FR) Consent: My spouse or common-law partner is aware and has consented to sharing of their personal information.",
+    "no-consent": "(FR) Consent: My spouse or common-law partner is aware and has not consented to sharing of their personal information.",
+    "phone-number": "(FR) Telephone Number: {{phone}}",
+    "alt-phone-number": "(FR) Alternate Telephone Number: {{altPhone}}",
+    "mailing": "(FR) Mailing Address: {{address}}",
+    "home": "(FR) Home Address: {{address}}",
+    "comm-pref": "(FR) Communication Preference: {{pref}}",
+    "lang-pref": "(FR) Language Preference: {{pref}}",
+    "dental-private": "(FR) Access to dental insurance: {{access}}",
+    "dental-public": "(FR) Access to dental government insurance: {{access}}",
+    "print": "(FR) Print Application",
+    "keep-record": "(FR) Keep a record of your application.",
+    "print-btn": "(FR) Print"
   }
 }

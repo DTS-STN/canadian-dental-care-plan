@@ -69,5 +69,37 @@
       "invalid-postal-code": "Invalid postal code (A1A 1A1)",
       "invalid-zip-code": "Invalid zip code (12345)"
     }
+  },
+  "confirm": {
+    "page-title": "Confirmation",
+    "p-one": "You can use the CDCP Status Checker or call 1-833-537-4342 to verify the status of your application. Your status should be available within the next 48 hours.",
+    "p-two": "If you haven't already, sign up for a <MSCALink>My Service Canada Account (MSCA)</MSCALink> — a secure online portal designed to streamline your application management process.",
+    "p-three": "Once your application is processed, you will be able to sign in to MSCA to view/update your personal information and view any letters sent to you by the Government of Canada regarding the CDCP.",
+    "p-four": "If you are deemed eligible, Sun Life will send you a welcome package by mail. Your welcome package will include your member card and details about the CDCP, including your coverage start date. The CDCP will not reimburse you for dental services received before that date.",
+    "p-five": "If you are deemed ineligible and circumstances change that may impact your eligibility for the CDCP, you can submit a new application.",
+    "p-six": "For more information, please contact <dentalContactUsLink>Service Canada.</dentalContactUsLink>",
+    "application-summ": "Application Summary",
+    "applicant-title": "Applicant Information",
+    "spouse-info": "Spouse / Common-law Information",
+    "contact-info": "Contact Information",
+    "comm-prefs": "Communication Preferences",
+    "dental-insurance": "Access to Dental Insurance",
+    "dob": "Date of Birth: {{dob}}",
+    "sin": "Social Insurance Number (SIN): {{sin}}",
+    "full-name": "Full Name: {{name}}",
+    "martial-status": "Martial Status: {{status}}",
+    "consent": "Consent: My spouse or common-law partner is aware and has consented to sharing of their personal information.",
+    "no-consent": "Consent: My spouse or common-law partner is aware and has not consented to sharing of their personal information.",
+    "phone-number": "Telephone Number: {{phone}}",
+    "alt-phone-number": "Alternate Telephone Number: {{altPhone}}",
+    "mailing": "Mailing Address: {{address}}",
+    "home": "Home Address: {{address}}",
+    "comm-pref": "Communication Preference: {{pref}}",
+    "lang-pref": "Language Preference: {{pref}}",
+    "dental-private": "Access to dental insurance: {{access}}",
+    "dental-public": "Access to dental government insurance: {{access}}",
+    "print": "Print Application",
+    "keep-record": "Keep a record of your application.",
+    "print-btn": "Print"
   }
 }

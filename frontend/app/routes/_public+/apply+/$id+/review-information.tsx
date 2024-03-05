@@ -1,14 +1,16 @@
 import type { ReactNode } from 'react';
 
-import { json, redirect } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { Form, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
+import { redirectWithSuccess } from 'remix-toast';
 
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
+import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 
@@ -65,15 +67,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   };
   const dentalInsurance = {
     private: [],
-    public: [{ id: 'benefit-id', benefitEn: 'Dental and Opcial Assistance for Senioirs (65+)', benefitFR: '(FR) Dental and Opcial Assistance for Senioirs (65+)' }],
+    public: [{ id: 'benefit-id', benefitEn: 'Dental and Optcial Assistance for Senioirs (65+)', benefitFR: '(FR) Dental and Optcial Assistance for Senioirs (65+)' }],
   };
 
   return json({ userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance });
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
+  const applyFlow = getApplyFlow();
+  const { id } = await applyFlow.loadState({ request, params });
   //TODO: Add apply form logic
-  return redirect(`/apply`);
+  const sessionResponseInit = await applyFlow.clearState({ request, params });
+  return redirectWithSuccess(`/apply/${id}/confirm`, 'Form Submitted!', sessionResponseInit);
 }
 
 export default function ReviewInformation() {
@@ -143,7 +148,7 @@ export default function ReviewInformation() {
           </p>
         </DescriptionListItem>
         <DescriptionListItem term="Consent">
-          {spouseInfo.consent ? 'My spoyse or common-law partner is aware and has consented to sharing of their personal information.' : 'My spoyse or common-law partner is aware and has not consented to sharing of their personal information.'}
+          {spouseInfo.consent ? 'My spouse or common-law partner is aware and has consented to sharing of their personal information.' : 'My spouse or common-law partner is aware and has not consented to sharing of their personal information.'}
         </DescriptionListItem>
       </dl>
       <h2 className="mt-2 text-2xl font-semibold ">{t('review-information:contact-info-title')}</h2>
