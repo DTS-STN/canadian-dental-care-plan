@@ -42,6 +42,12 @@ const db = factory({
     nameEn: String,
     nameFr: String,
   },
+  taxFilingIndications: {
+    id: primaryKey(faker.string.uuid),
+    code: String,
+    nameEn: String,
+    nameFr: String,
+  },
   letterType: {
     id: primaryKey(faker.string.uuid),
     code: String,
@@ -112,6 +118,18 @@ db.accessToDentalInsurance.create({
 
 db.accessToDentalInsurance.create({
   id: 'no',
+  nameEn: 'No',
+  nameFr: '(Fr) No',
+});
+
+db.taxFilingIndications.create({
+  code: 'yes',
+  nameEn: 'Yes',
+  nameFr: '(Fr) Yes',
+});
+
+db.taxFilingIndications.create({
+  code: 'no',
   nameEn: 'No',
   nameFr: '(Fr) No',
 });
