@@ -268,7 +268,19 @@ function Breadcrumbs() {
       <div className="container mt-4">
         <ol className="flex flex-wrap items-center gap-x-3 gap-y-1" typeof="BreadcrumbList">
           <li property="itemListElement" typeof="ListItem">
-            <Breadcrumb to={breadcrumbs.length !== 0 ? '/' : undefined}>{t('gcweb:breadcrumbs.home')}</Breadcrumb>
+            <Breadcrumb to={breadcrumbs.length !== 0 ? '/' : undefined}>{t('gcweb:breadcrumbs.canada-ca')}</Breadcrumb>
+          </li>
+          <li property="itemListElement" typeof="ListItem" className="flex items-center">
+            <FontAwesomeIcon icon={faChevronRight} className="mr-2 size-3 text-slate-700" />
+            <Breadcrumb to={breadcrumbs.length !== 0 ? '/' : undefined}>{t('gcweb:breadcrumbs.benefits')}</Breadcrumb>
+          </li>
+          <li property="itemListElement" typeof="ListItem" className="flex items-center">
+            <FontAwesomeIcon icon={faChevronRight} className="mr-2 size-3 text-slate-700" />
+            <Breadcrumb to={breadcrumbs.length !== 0 ? '/' : undefined}>{t('gcweb:breadcrumbs.dental-coverage')}</Breadcrumb>
+          </li>
+          <li property="itemListElement" typeof="ListItem" className="flex items-center">
+            <FontAwesomeIcon icon={faChevronRight} className="mr-2 size-3 text-slate-700" />
+            <Breadcrumb to={breadcrumbs.length !== 0 ? '/' : undefined}>{t('gcweb:breadcrumbs.canadian-dental-care-plan')}</Breadcrumb>
           </li>
           {breadcrumbs.map(({ labelI18nKey, to }) => {
             return (

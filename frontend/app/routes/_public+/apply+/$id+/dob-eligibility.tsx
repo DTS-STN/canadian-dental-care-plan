@@ -14,13 +14,6 @@ import { RouteHandleData } from '~/utils/route-utils';
 const i18nNamespaces = getTypedI18nNamespaces('eligibility');
 
 export const handle = {
-  breadcrumbs: [
-    // prettier-ignore
-    { labelI18nKey: 'eligibility:breadcrumbs.canada-ca', to: '/personal-information' },
-    { labelI18nKey: 'eligibility:breadcrumbs.benefits' },
-    { labelI18nKey: 'eligibility:breadcrumbs.dental-coverage' },
-    { labelI18nKey: 'eligibility:breadcrumbs.canadian-dental-care-plan' },
-  ],
   i18nNamespaces,
   pageIdentifier: 'CDCP-00XX',
   pageTitleI18nKey: 'eligibility:dob-eligibility.page-title',
@@ -37,28 +30,23 @@ export default function ApplyFlowFileYourTaxes() {
   const { id } = useLoaderData<typeof loader>();
   const { t } = useTranslation(i18nNamespaces);
 
-  const eligibilityinfo = <InlineLink to={t('dob-eligibility.eligibility-info-href')} />;
+  const eligibilityInfo = <InlineLink to={t('dob-eligibility.eligibility-info-href')} />;
 
   return (
-    <>
-      <br />
-      <div className="max-w-prose">
-        <p>{t('dob-eligibility.description1')}</p>
-        <br />
-        <p>
-          <Trans ns={i18nNamespaces} i18nKey="dob-eligibility.description2" components={{ eligibilityinfo }} />
-        </p>
-        <br />
-        <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink type="button" variant="alternative" to={'/apply/' + id + '/date-of-birth'}>
-            {t('back-btn')}
-            <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
-          </ButtonLink>
-          <ButtonLink type="submit" variant="primary" to="/">
-            {t('return-btn')}
-          </ButtonLink>
-        </div>
+    <div className="mt-6">
+      <p className="mb-6">{t('dob-eligibility.ineligible-to-apply')}</p>
+      <p className="mb-6">
+        <Trans ns={i18nNamespaces} i18nKey="dob-eligibility.eligibility-info" components={{ eligibilityInfo }} />
+      </p>
+      <div className="flex flex-wrap items-center gap-3">
+        <ButtonLink type="button" variant="alternative" to={`/apply/${id}/date-of-birth`}>
+          {t('dob-eligibility.back-btn')}
+          <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
+        </ButtonLink>
+        <ButtonLink type="submit" variant="primary" to="/">
+          {t('dob-eligibility.return-btn')}
+        </ButtonLink>
       </div>
-    </>
+    </div>
   );
 }

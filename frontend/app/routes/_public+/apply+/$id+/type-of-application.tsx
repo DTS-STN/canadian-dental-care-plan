@@ -18,13 +18,6 @@ import { RouteHandleData } from '~/utils/route-utils';
 const i18nNamespaces = getTypedI18nNamespaces('eligibility');
 
 export const handle = {
-  breadcrumbs: [
-    // prettier-ignore
-    { labelI18nKey: 'eligibility:breadcrumbs.canada-ca', to: '/personal-information' },
-    { labelI18nKey: 'eligibility:breadcrumbs.benefits' },
-    { labelI18nKey: 'eligibility:breadcrumbs.dental-coverage' },
-    { labelI18nKey: 'eligibility:breadcrumbs.canadian-dental-care-plan' },
-  ],
   i18nNamespaces,
   pageIdentifier: 'CDCP-00XX',
   pageTitleI18nKey: 'eligibility:type-of-application.page-title',
@@ -57,10 +50,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     state: { applicationDelegate: parsedDataResult.data },
   });
 
-  if (['TRUE'].includes(parsedDataResult.data.applicationDelegate)) {
-    return redirect(`/apply/${id}/application-delegate`, sessionResponseInit);
-  }
-  return redirect(`/apply/${id}/tax-filing`, sessionResponseInit);
+  return parsedDataResult.data.applicationDelegate === 'TRUE' ? redirect(`/apply/${id}/application-delegate`, sessionResponseInit) : redirect(`/apply/${id}/tax-filing`, sessionResponseInit);
 }
 
 export default function ApplyFlowTypeOfApplication() {
@@ -90,9 +80,8 @@ export default function ApplyFlowTypeOfApplication() {
 
   return (
     <>
-      <br />
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post" aria-describedby="form-instructions" noValidate className="max-w-prose">
+      <Form method="post" aria-describedby="form-instructions" noValidate className="mt-6 max-w-prose">
         <InputRadios
           id="application-delegate"
           name="applicationDelegate"
@@ -104,14 +93,13 @@ export default function ApplyFlowTypeOfApplication() {
           required={errorSummaryItems.length > 0}
           errorMessage={errorMessages.applicationDelegate}
         />
-        <br />
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="mt-6 flex flex-wrap items-center gap-3">
           <ButtonLink type="button" variant="alternative" to="/apply">
-            {t('back-btn')}
+            {t('type-of-application.back-btn')}
             <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
           </ButtonLink>
           <Button type="submit" variant="primary">
-            {t('continue-btn')}
+            {t('type-of-application.continue-btn')}
             <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
           </Button>
         </div>

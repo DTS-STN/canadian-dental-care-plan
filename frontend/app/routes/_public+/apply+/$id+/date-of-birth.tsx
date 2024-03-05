@@ -14,19 +14,13 @@ import { InputField } from '~/components/input-field';
 import { InputLegend } from '~/components/input-legend';
 import { InputSelect } from '~/components/input-select';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
+import { yearsBetween } from '~/utils/apply-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('eligibility');
 
 export const handle = {
-  breadcrumbs: [
-    // prettier-ignore
-    { labelI18nKey: 'eligibility:breadcrumbs.canada-ca', to: '/personal-information' },
-    { labelI18nKey: 'eligibility:breadcrumbs.benefits' },
-    { labelI18nKey: 'eligibility:breadcrumbs.dental-coverage' },
-    { labelI18nKey: 'eligibility:breadcrumbs.canadian-dental-care-plan' },
-  ],
   i18nNamespaces,
   pageIdentifier: 'CDCP-00XX',
   pageTitleI18nKey: 'eligibility:date-of-birth.page-title',
@@ -58,30 +52,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
     params,
     state: { dob: parsedDataResult.data },
   });
-
-  if (getAgeEligibility(parsedDataResult.data.day, parsedDataResult.data.month, parsedDataResult.data.year)) {
-    return redirect(`/apply/${id}/personal-info`, sessionResponseInit);
-  }
-  return redirect(`/apply/${id}/dob-eligibility`, sessionResponseInit);
-}
-
-//Returns true for applicants who are 65 years of age or older
-function getAgeEligibility(day: number, month: number, year: number): boolean {
-  const currentDate = new Date();
-  const currentDay = currentDate.getDate();
-  const currentMonth = currentDate.getMonth();
-  const currentYear = currentDate.getFullYear();
-
-  if (currentYear - year > 65) {
-    return true;
-  } else if (currentYear - year == 65) {
-    if (month < currentMonth) {
-      return true;
-    } else if (month == currentMonth) {
-      if (day <= currentDay) return true;
-    }
-  }
-  return false;
+  const applicantDob = new Date(parsedDataResult.data.year, parsedDataResult.data.month, parsedDataResult.data.day);
+  return yearsBetween(new Date(), applicantDob) >= 65 ? redirect(`/apply/${id}/personal-info`, sessionResponseInit) : redirect(`/apply/${id}/dob-eligibility`, sessionResponseInit);
 }
 
 export default function ApplyFlowDateOfBirth() {
@@ -114,8 +86,7 @@ export default function ApplyFlowDateOfBirth() {
 
   return (
     <>
-      <p className="max-w-prose">{t('date-of-birth.description')}</p>
-      <br />
+      <p className="mb-6 mt-6 max-w-prose">{t('date-of-birth.description')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post" aria-describedby="form-instructions" noValidate className="max-w-prose">
         <InputLegend id="dobLegend" required={errorSummaryItems.length > 0} className="mb-2">
@@ -126,14 +97,13 @@ export default function ApplyFlowDateOfBirth() {
           <InputField id="day" label={t('date-of-birth.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} defaultValue={state?.day} />
           <InputField id="year" label={t('date-of-birth.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} defaultValue={state?.year} />
         </div>
-        <br />
-        <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink type="button" variant="alternative" to={'/apply/' + id + '/tax-filing'}>
-            {t('back-btn')}
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          <ButtonLink type="button" variant="alternative" to={`/apply/${id}/tax-filing`}>
+            {t('date-of-birth.back-btn')}
             <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
           </ButtonLink>
           <Button type="submit" variant="primary">
-            {t('continue-btn')}
+            {t('date-of-birth.continue-btn')}
             <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
           </Button>
         </div>

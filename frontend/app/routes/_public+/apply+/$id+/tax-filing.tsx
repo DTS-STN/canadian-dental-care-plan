@@ -18,13 +18,6 @@ import { RouteHandleData } from '~/utils/route-utils';
 const i18nNamespaces = getTypedI18nNamespaces('eligibility');
 
 export const handle = {
-  breadcrumbs: [
-    // prettier-ignore
-    { labelI18nKey: 'eligibility:breadcrumbs.canada-ca', to: '/personal-information' },
-    { labelI18nKey: 'eligibility:breadcrumbs.benefits' },
-    { labelI18nKey: 'eligibility:breadcrumbs.dental-coverage' },
-    { labelI18nKey: 'eligibility:breadcrumbs.canadian-dental-care-plan' },
-  ],
   i18nNamespaces,
   pageIdentifier: 'CDCP-00XX',
   pageTitleI18nKey: 'eligibility:tax-filing.page-title',
@@ -57,10 +50,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     state: { taxFiling2023: parsedDataResult.data },
   });
 
-  if (['FALSE'].includes(parsedDataResult.data.taxFiling2023)) {
-    return redirect(`/apply/${id}/file-your-taxes`, sessionResponseInit);
-  }
-  return redirect(`/apply/${id}/date-of-birth`, sessionResponseInit);
+  return parsedDataResult.data.taxFiling2023 === 'FALSE' ? redirect(`/apply/${id}/file-your-taxes`, sessionResponseInit) : redirect(`/apply/${id}/date-of-birth`, sessionResponseInit);
 }
 
 export default function ApplyFlowTaxFiling() {
@@ -90,9 +80,8 @@ export default function ApplyFlowTaxFiling() {
 
   return (
     <>
-      <br />
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post" aria-describedby="form-instructions" noValidate className="max-w-prose">
+      <Form method="post" aria-describedby="form-instructions" noValidate className="mt-6 max-w-prose">
         <InputRadios
           id="tax-filing-2023"
           name="taxFiling2023"
@@ -104,14 +93,13 @@ export default function ApplyFlowTaxFiling() {
           required={errorSummaryItems.length > 0}
           errorMessage={errorMessages.taxFiling2023}
         />
-        <br />
-        <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink type="button" variant="alternative" to={'/apply/' + id + '/type-of-application'}>
-            {t('back-btn')}
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          <ButtonLink type="button" variant="alternative" to={`/apply/${id}/type-of-application`}>
+            {t('tax-filing.back-btn')}
             <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
           </ButtonLink>
           <Button type="submit" variant="primary">
-            {t('continue-btn')}
+            {t('tax-filing.continue-btn')}
             <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
           </Button>
         </div>

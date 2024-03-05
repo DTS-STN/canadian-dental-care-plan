@@ -1,10 +1,4 @@
 {
-  "breadcrumbs": {
-    "canada-ca": "Canada.ca",
-    "benefits": "Benefits",
-    "dental-coverage": "Dental coverage",
-    "canadian-dental-care-plan": "Canadian Dental Care Plan"
-  },
   "type-of-application": {
     "page-title": "Type of application",
     "form-instructions": "Who is this application for?",
@@ -14,7 +8,9 @@
     },
     "error-message": {
       "Required": "Applicant type must be provided"
-    }
+    },
+    "back-btn": "Back",
+    "continue-btn": "Continue"
   },
   "tax-filing": {
     "page-title": "Tax filing",
@@ -25,7 +21,9 @@
     },
     "error-message": {
       "Required": "Tax filing must be provided"
-    }
+    },
+    "back-btn": "Back",
+    "continue-btn": "Continue"
   },
   "date-of-birth": {
     "page-title": "Date of birth",
@@ -38,31 +36,36 @@
       "day": "Day must be provided",
       "month": "Month must be provided",
       "year": "Year must be provided"
-    }
+    },
+    "back-btn": "Back",
+    "continue-btn": "Continue"
   },
   "application-delegate": {
     "page-title": "Applying on behalf of someone cannot be completed online at this time",
-    "description1": "You must <contactservicecanada>speak to a Service Canada representative</contactservicecanada> to apply on behalf of someone. Please contact Service Canada at 1-833-537-4342 or visit a Service Canada office near you.",
-    "description2": "<preparingtoapply>Preparing to apply on behalf of someone</preparingtoapply>",
-    "contact-service-canada-href": "/",
-    "preparing-to-apply-href": "/"
+    "contact-representative": "You must <contactServiceCanada>speak to a Service Canada representative</contactServiceCanada> to apply on behalf of someone. Please contact Service Canada at <span>1-833-537-4342</span> or visit a Service Canada office near you.",
+    "prepare-to-apply": "<preparingToApply>Preparing to apply on behalf of someone</preparingToApply>",
+    "contact-service-canada-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html",
+    "preparing-to-apply-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#helping",
+    "back-btn": "Back",
+    "return-btn": "Return main page"
   },
   "file-your-taxes": {
     "page-title": "File your taxes",
-    "description1": "You are not eligible to apply for the Canada Dental Care Plan at this time.",
-    "description2": "You and/or your spouse/common-law partner have not filed a tax return for 2023 with the Canada Revenue Agency.",
-    "description3": "We use the information from your tax file to verify that you meet the income eligibility for the CDCP. Until you file your 2023 taxes, we won't be able to assess your eligibility.",
-    "description4": "For more information on how to file your taxes, visit <taxinfo>Get ready to do your taxes.</taxinfo>",
-    "description5": "Please apply for the plan after you have filed your taxes and received your Notice of Assessment.",
-    "tax-info-href": "/"
+    "ineligible-to-apply": "You are not eligible to apply for the Canada Dental Care Plan at this time.",
+    "tax-not-filed": "You and/or your spouse/common-law partner have not filed a tax return for 2023 with the Canada Revenue Agency.",
+    "unable-to-assess": "We use the information from your tax file to verify that you meet the income eligibility for the CDCP. Until you file your 2023 taxes, we won't be able to assess your eligibility.",
+    "tax-info": "For more information on how to file your taxes, visit <taxInfo>Get ready to do your taxes.</taxInfo>",
+    "apply-after": "Please apply for the plan after you have filed your taxes and received your Notice of Assessment.",
+    "tax-info-href": "https://www.canada.ca/en/services/taxes/income-tax/personal-income-tax/get-ready-taxes.html",
+    "back-btn": "Back",
+    "return-btn": "Return main page"
   },
   "dob-eligibility": {
     "page-title": "Find out when you can apply",
-    "description1": "You are not currently eligible to apply for the Canada Dental Care Plan. Applications for the Canada Dental Care Plan is opening in phases.",
-    "description2": "<eligibilityinfo>Find out when you can apply for the Canada Dental Care Plan</eligibilityinfo>",
-    "eligibility-info-href": "/"
-  },
-  "back-btn": "Back",
-  "continue-btn": "Continue",
-  "return-btn": "Return main page"
+    "ineligible-to-apply": "You are not currently eligible to apply for the Canada Dental Care Plan. Applications for the Canada Dental Care Plan is opening in phases.",
+    "eligibility-info": "<eligibilityInfo>Find out when you can apply for the Canada Dental Care Plan</eligibilityInfo>",
+    "eligibility-info-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#when",
+    "back-btn": "Back",
+    "return-btn": "Return main page"
+  }
 }
