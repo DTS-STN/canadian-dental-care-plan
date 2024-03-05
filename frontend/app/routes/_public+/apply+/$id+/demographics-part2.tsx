@@ -124,7 +124,6 @@ export default function DemographicsPart2() {
     .map((genderType) => ({
       children: getNameByLanguage(i18n.language, genderType),
       value: genderType.id,
-      //defaultChecked: state && state.gender !== otherGenderCode.id,
       onClick: nonOtherGenderHandler,
     }));
 
