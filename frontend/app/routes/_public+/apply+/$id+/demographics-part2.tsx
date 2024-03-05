@@ -130,6 +130,7 @@ export default function DemographicsPart2() {
     }));
 
   const options: InputRadiosProps['options'] = [
+    ...nonOtherGenderTypeOptions,
     {
       children: getNameByLanguage(i18n.language, otherGenderCode),
       value: otherGenderCode.id,
@@ -149,7 +150,6 @@ export default function DemographicsPart2() {
       ),
       onClick: otherGenderHandler,
     },
-    ...nonOtherGenderTypeOptions,
   ];
 
   return (

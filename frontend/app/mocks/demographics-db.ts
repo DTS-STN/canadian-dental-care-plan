@@ -50,22 +50,25 @@ const demographicDB = factory({
 });
 
 demographicDB.genderType.create({
+  id: 'gender-male',
   nameEn: 'Male',
   nameFr: '(FR) Male',
 });
 
 demographicDB.genderType.create({
+  id: 'gender-female',
   nameEn: 'Female',
   nameFr: '(FR) Female',
 });
 
 demographicDB.genderType.create({
-  id: 'other',
+  id: 'gender-other',
   nameEn: 'Other',
   nameFr: '(FR) Other',
 });
 
 demographicDB.genderType.create({
+  id: 'gender-prefer-not-to-say',
   nameEn: 'Prefer not to answer',
   nameFr: '(FR) Prefer not to answer',
 });
