@@ -41,6 +41,11 @@ export default function Index() {
     <>
       <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.lastName })}</p>
       <div className="grid gap-4">
+        {useFeature('apply') && (
+          <CardLink title={t('index:apply')} to="/apply" inProgress>
+            {t('index:intake-desc')}
+          </CardLink>
+        )}
         {useFeature('update-personal-info') && (
           <CardLink title={t('index:personal-info')} to="/personal-information">
             {t('index:personal-info-desc')}

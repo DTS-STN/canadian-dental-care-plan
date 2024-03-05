@@ -2,6 +2,7 @@
   "page-title": "(FR) Home",
   "welcome": "Bienvenue {{firstName}} {{lastName}}",
   "personal-info": "(FR) Personal information",
+  "apply": "Apply",
   "personal-info-desc": "(FR) In this section, you can see and update your personal information.",
   "upload": "(FR) Upload document for CDCP",
   "upload-desc": "(FR) In this section, you can your upload documents.",
