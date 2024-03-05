@@ -17,7 +17,11 @@ export default {
       md: '992px',
       lg: '1200px',
     },
-    extend: {},
+    extend: {
+      backgroundImage: () => ({
+        'splash-page': 'url(/assets/sp-bg-1.e0bf1ea7.jpg)',
+      }),
+    },
   },
   plugins: [require('tailwindcss-animate')],
 } satisfies Config;
