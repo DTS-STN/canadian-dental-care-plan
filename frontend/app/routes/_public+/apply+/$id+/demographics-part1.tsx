@@ -76,8 +76,8 @@ export default function DemographicsPart1() {
             <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
           </ButtonLink>
           <Button id="change-button" variant="primary">
-            {t('demographics-oral-health-questions:part1.button-continue')}
             <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
+            {t('demographics-oral-health-questions:part1.button-continue')}
           </Button>
         </div>
       </Form>
