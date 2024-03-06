@@ -33,19 +33,19 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { id } = await applyFlow.loadState({ request, params });
 
   const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = applyFlow.accessStateSchema.safeParse(formData);
+  const parsedDataResult = applyFlow.dentalInsuranceStateSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof applyFlow.accessStateSchema>>,
+      formData: formData as Partial<z.infer<typeof applyFlow.dentalInsuranceStateSchema>>,
     });
   }
 
   const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
-    state: { access: parsedDataResult.data },
+    state: { dentalInsurance: parsedDataResult.data },
   });
 
   return redirect(`/apply/${id}/confirm`, sessionResponseInit);
@@ -100,7 +100,7 @@ export default function AccessToDentalInsuranceQuestion() {
                   </div>
                 ),
                 value: option.id,
-                defaultChecked: state.access?.dentalInsurance === option.id,
+                defaultChecked: state.dentalInsurance?.dentalInsurance === option.id,
               }))}
               helpMessagePrimary={helpMessage}
               helpMessagePrimaryClassName="pl-8 text-black"

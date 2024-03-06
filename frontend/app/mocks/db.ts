@@ -42,6 +42,20 @@ const db = factory({
     nameEn: String,
     nameFr: String,
   },
+  accessToProvincialTerritorialDentalBenefit: {
+    id: primaryKey(faker.string.uuid),
+    code: String,
+    nameEn: String,
+    nameFr: String,
+  },
+
+  federalSocialProgram: {
+    id: primaryKey(faker.string.uuid),
+    code: String,
+    nameEn: String,
+    nameFr: String,
+  },
+
   taxFilingIndications: {
     id: primaryKey(faker.string.uuid),
     code: String,
@@ -128,6 +142,18 @@ db.accessToDentalInsurance.create({
   nameFr: '(Fr) No',
 });
 
+db.accessToProvincialTerritorialDentalBenefit.create({
+  code: 'no',
+  nameEn: 'No',
+  nameFr: '(Fr) No',
+});
+
+db.accessToProvincialTerritorialDentalBenefit.create({
+  code: 'yes',
+  nameEn: 'Yes',
+  nameFr: '(Fr) Yes',
+});
+
 db.taxFilingIndications.create({
   code: 'yes',
   nameEn: 'Yes',
@@ -151,6 +177,29 @@ db.applicationTypes.create({
   nameEn: 'I am applying on behalf of someone else',
   nameFr: '(FR) I am applying on behalf of someone else',
 });
+db.federalSocialProgram.create({
+  code: 'nonInsuredHealthBenefitsProgram',
+  nameEn: 'Non-Insured Health Benefits Program',
+  nameFr: '(Fr) Non-Insured Health Benefits Program'
+})
+
+db.federalSocialProgram.create({
+  code: 'vacDentalServicesProgram',
+  nameEn: 'VAC Dental Services Program ',
+  nameFr: '(Fr) VAC Dental Services Program '
+})
+
+db.federalSocialProgram.create({
+  code: 'interimFederalHealthProgram',
+  nameEn: 'Interim Federal Health Program',
+  nameFr: '(Fr) Interim Federal Health Program'
+})
+
+db.federalSocialProgram.create({
+  code: 'correctionalServiceCanadaHealthServices',
+  nameEn: 'Correctional Service Canada Health Services',
+  nameFr: '(Fr) Correctional Service Canada Health Services'
+})
 
 // seed avaliable addresses (before user)
 db.address.create({

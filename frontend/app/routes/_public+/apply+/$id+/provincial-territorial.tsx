@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { Form, useLoaderData } from '@remix-run/react';
@@ -16,14 +18,15 @@ const i18nNamespaces = getTypedI18nNamespaces('provincial-territorial');
 export const handle = {
   i18nNamespaces,
   pageIdentifier: 'CDCP-1115',
-  pageTitleI18nKey: 'dental-insurance-question:title',
+  pageTitleI18nKey: 'provincial-territorial:title',
 };
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
-  const options = await getLookupService().getAllAccessToDentalInsuranceOptions();
-  return json({ id, state, options });
+  const options = await getLookupService().getAllAccessToProvincialTerritorialDentalBenefit();
+  const federalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
+  return json({ id, state, options, federalSocialPrograms });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -31,47 +34,66 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { id } = await applyFlow.loadState({ request, params });
 
   const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = applyFlow.accessStateSchema.safeParse(formData);
+  const parsedDataResult = applyFlow.dentalBenefitsStateSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof applyFlow.accessStateSchema>>,
+      formData: formData as Partial<z.infer<typeof applyFlow.dentalBenefitsStateSchema>>,
     });
   }
 
   const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
-    state: { access: parsedDataResult.data },
+    state: { dentalBenefit: parsedDataResult.data },
   });
 
   return redirect(`/apply/${id}/confirm`, sessionResponseInit);
 }
 
 export default function AccessToDentalInsuranceQuestion() {
-  const { options, state } = useLoaderData<typeof loader>();
+  const { federalSocialPrograms, options, state } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
+  const [checked, setChecked] = useState(state.dentalBenefit?.federalBenefit ?? '');
 
   return (
     <Form method="post">
-      <Trans ns={i18nNamespaces} i18nKey="provincial-territorial:main-content" />
+      <p className="mb-4">{t('provincial-territorial:access-to-dental')}</p>
+      <p>{t('provincial-territorial:eligibility-criteria')}</p>
       {options.length > 0 && (
         <div className="my-6">
           {options.length > 0 && (
             <InputRadios
-              id="dental-insurance"
-              name="dentalInsurance"
-              legend={t('provincial-territorial:federal-benefit.legend')}
+              id="federal-benefit"
+              name="federalBenefit"
+              legend={t('provincial-territorial:federal-benefits.legend')}
               options={options.map((option) => ({
                 children: (
                   <div>
-                    <strong>{getNameByLanguage(i18n.language, option)}</strong>
-                    {`, ${option.id === 'yes' ? t('provincial-territorial:provincial-territorial.option-yes') : t('provincial-territorial:provincial-territorial.option-no')}`}
+                    <strong>{getNameByLanguage(i18n.language, option)}</strong>,&nbsp;
+                    {option.code === 'yes' ? <Trans ns={i18nNamespaces} i18nKey="provincial-territorial:federal-benefits.option-yes" /> : <Trans ns={i18nNamespaces} i18nKey="provincial-territorial:federal-benefits.option-no" />}
                   </div>
                 ),
-                value: option.id,
-                defaultChecked: state.access?.dentalInsurance === option.id,
+                value: option.code,
+                defaultChecked: state.dentalBenefit?.federalBenefit === option.code,
+                onChange: (e) => setChecked(e.target.value),
+                append: option.code === 'yes' && checked === 'yes' && (
+                  <InputRadios
+                    id="federal-social-programs"
+                    name="federalSocialProgram"
+                    legend={t('provincial-territorial:federal-benefits.social-programs.legend')}
+                    options={federalSocialPrograms.map((option) => ({
+                      children: (
+                        <div>
+                          <strong>{getNameByLanguage(i18n.language, option)}</strong>
+                        </div>
+                      ),
+                      value: option.code,
+                      defaultChecked: state.dentalBenefit?.federalSocialProgram === option.code,
+                    }))}
+                  />
+                ),
               }))}
             />
           )}
