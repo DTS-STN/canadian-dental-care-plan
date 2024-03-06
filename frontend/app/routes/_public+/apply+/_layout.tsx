@@ -4,6 +4,13 @@ import ApplicationLayout, { NotFoundError, ServerError, i18nNamespaces as layout
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
+  breadcrumbs: [
+    // prettier-ignore
+    { labelI18nKey: 'gcweb:breadcrumbs.canada-ca'},
+    { labelI18nKey: 'gcweb:breadcrumbs.benefits' },
+    { labelI18nKey: 'gcweb:breadcrumbs.dental-coverage' },
+    { labelI18nKey: 'gcweb:breadcrumbs.canadian-dental-care-plan', to: '/' },
+  ],
   i18nNamespaces: [...layoutI18nNamespaces],
 } as const satisfies RouteHandleData;
 

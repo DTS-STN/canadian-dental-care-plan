@@ -34,7 +34,11 @@
   },
   "breadcrumbs": {
     "you-are-here": "Vous êtes ici\u00a0:",
-    "home": "Accueil"
+    "home": "Accueil",
+    "canada-ca": "(FR) Canada.ca",
+    "benefits": "(FR) Benefits",
+    "dental-coverage": "(FR) Dental coverage",
+    "canadian-dental-care-plan": "(FR) Canadian Dental Care Plan"
   },
   "page-details": {
     "page-details": "Détails de la page",

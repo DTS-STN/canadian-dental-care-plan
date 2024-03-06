@@ -12,6 +12,15 @@ import { isValidSin } from '~/utils/apply-utils';
 const idSchema = z.string().uuid();
 
 /**
+ * Schema for date of birth.
+ */
+const dobSchema = z.object({
+  month: z.coerce.number({ required_error: 'month' }).int().min(0, { message: 'month' }).max(11, { message: 'month' }),
+  day: z.coerce.number({ required_error: 'day' }).int().min(1, { message: 'day' }).max(31, { message: 'day' }),
+  year: z.coerce.number({ required_error: 'year' }).int().min(1, { message: 'year' }).max(new Date().getFullYear(), { message: 'year' }),
+});
+
+/**
  * Schema for personal information.
  */
 const personalInfoStateSchema = z.object({
@@ -46,7 +55,21 @@ const applicantInformationSchema = z.object({
 });
 
 /**
- * Schema partner information.
+ * Schema for tax filing.
+ */
+const taxFilingSchema = z.object({
+  taxFiling2023: z.string(),
+});
+
+/**
+ * Schema for application delegate.
+ */
+const typeOfApplicationSchema = z.object({
+  applicationDelegate: z.string(),
+});
+
+/**
+ * Schema for intake state.
  */
 const partnerInformationSchema = z.object({
   socialInsuranceNumber: z.string().refine(isValidSin, { message: 'valid-sin' }),
@@ -82,14 +105,17 @@ const demographicsPart2StateSchema = z.object({
  * Schema for apply state.
  */
 const applyStateSchema = z.object({
+  dob: dobSchema.optional(),
   personalInfo: personalInfoStateSchema.optional(),
   email: emailStateSchema.optional(),
+  applicationDelegate: typeOfApplicationSchema.optional(),
   applicantInformation: applicantInformationSchema.optional(),
   communicationPreferences: communicationPreferencesStateSchema.optional(),
   demographicsPart2: demographicsPart2StateSchema.optional(),
   partnerInformation: partnerInformationSchema.optional(),
   termsAndConditions: termsAndConditionSchema.optional(),
   access: accessStateSchema.optional(),
+  taxFiling2023: taxFilingSchema.optional(),
 });
 
 type ApplyState = z.infer<typeof applyStateSchema>;
@@ -224,6 +250,7 @@ async function start({ id, request }: StartArgs) {
 export function getApplyFlow() {
   return {
     clearState,
+    dobSchema,
     emailStateSchema,
     applicantInformationSchema,
     partnerInformationSchema,
@@ -234,6 +261,8 @@ export function getApplyFlow() {
     accessStateSchema,
     saveState,
     start,
+    taxFilingSchema,
+    typeOfApplicationSchema,
     termsAndConditionSchema,
   };
 }
