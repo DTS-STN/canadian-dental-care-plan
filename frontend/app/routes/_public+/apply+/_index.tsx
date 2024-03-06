@@ -47,8 +47,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const id = randomUUID().toString();
   const sessionResponseInit = await applyFlow.start({ id, request });
-
-  return redirect(`/apply/${id}/personal-info`, sessionResponseInit);
+  return redirect(`/apply/${id}/terms-and-conditions`, sessionResponseInit);
 }
 
 export default function ApplyIndex() {
