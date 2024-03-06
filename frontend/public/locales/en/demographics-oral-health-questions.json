@@ -1,12 +1,6 @@
 {
   "part1": {
     "page-title": "Voluntary demographic and oral health questions part 1 of 2",
-    "breadcrumbs": {
-      "canada-ca": "Canada.ca",
-      "benefits": "Benefits",
-      "dental-coverage": "Dental coverage",
-      "canadian-dental-care-plan": "Canadian Dental Care Plan"
-    },
     "paragraph1": "Answering the following questions will not impact your application in the CDCP. Providing a response to the questions below is voluntary. Your input, will help Health Canada evaluate and improve the Canadian Dental Care Plan, including understanding if there are potential access or inequity issues. ",
     "paragraph2": "All responses have an option of “prefer not to answer”. All responses are kept confidential and are only used for program monitoring, evaluation and reporting purposes.",
 
@@ -20,12 +14,6 @@
   },
   "part2": {
     "page-title": "Voluntary demographic and oral health questions part 2 of 2",
-    "breadcrumbs": {
-      "canada-ca": "Canada.ca",
-      "benefits": "Benefits",
-      "dental-coverage": "Dental coverage",
-      "canadian-dental-care-plan": "Canadian Dental Care Plan"
-    },
     "question-gender": "5. What is your gender? Gender refers to current gender which may be different from sex assigned at birth and may be different from what is indicated on legal documents.",
     "question-gender-other-specify": "Specify",
     "question-mouth-pain": "6. In the past 12 months, how often have you had any persistent or on-going mouth pain? Mouth pain includes pain in teeth, gums, tongue, jaw, jaw joints.",
@@ -42,12 +30,6 @@
   },
 
   "optional-demographic-oral-health-questions": {
-    "breadcrumbs": {
-      "canada-ca": "Canada.ca",
-      "benefits": "Benefits",
-      "dental-coverage": "Dental coverage",
-      "canadian-dental-care-plan": "Canadian Dental Care Plan"
-    },
     "page-title": "Voluntary demographic and oral health questions",
     "paragraph2": "Your answers will be used by Health Canada for programme design and monitoring purposes. All responses will be kept confidential.",
     "paragraph1": "<strong>These questions are voluntary.</strong> Answering them does not affect your eligibility for the Canadian Dental Care Plan. All questions have an option of 'prefer not to answer'.",
