@@ -1,10 +1,9 @@
-import { json } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import { json } from '@remix-run/node';
 
 import { z } from 'zod';
 
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
-import { getRaoidcService } from '~/services/raoidc-service.server';
 import { createLangCookie } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
@@ -36,9 +35,6 @@ export async function action({ request }: ActionFunctionArgs) {
     logger.warn(`Unsupported Media Type: The server cannot process the request because the content type of the request entity (${contentType}) is not supported. Supported media type: application/json.`);
     throw json({ error: 'Unsupported Media Type', message: 'The server cannot process the request because the content type of the request entity is not supported. Supported media type: application/json.' }, { status: 415 });
   }
-
-  const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request);
 
   getInstrumentationService().createCounter('switch-language.requests').add(1);
 

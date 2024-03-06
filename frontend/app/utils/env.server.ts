@@ -42,7 +42,7 @@ const serverEnv = z.object({
   ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default(validFeatureNames.join(',')),
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
   COMMUNICATION_METHOD_EMAIL_ID: z.string().trim().min(1).default('email'),
-
+  OTHER_GENDER_TYPE_ID: z.string().trim().min(1).default('gender-other'),
   // TODO :: GjB :: these base URIs should not have defaults
   INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
   CCT_API_BASE_URI: z.string().url().default('https://api.example.com'),
@@ -109,6 +109,7 @@ const serverEnv = z.object({
   LOOKUP_SVC_ALLMOUTHPAINTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_LASTTIMEDENTISTVISITTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_AVOIDEDDENTALCOSTTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
+  LOOKUP_SVC_GENDERTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
 
   // OpenTelemetry/Dynatrace settings

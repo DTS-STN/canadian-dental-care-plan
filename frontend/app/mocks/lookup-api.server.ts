@@ -24,6 +24,15 @@ export function getLookupApiMockHandlers() {
     }),
 
     //
+    // Handler for GET request to retrieve all gender types
+    //
+    http.get('https://api.example.com/lookups/gender-types', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const genderTypes = demographicDB.genderType.getAll();
+      return HttpResponse.json(genderTypes);
+    }),
+
+    //
     // Handler for GET request to retrieve all sex-at-birth types
     //
     http.get('https://api.example.com/lookups/sex-at-birth-types', ({ request }) => {
@@ -48,15 +57,6 @@ export function getLookupApiMockHandlers() {
       log.debug('Handling request for [%s]', request.url);
       const avoidedDentalCostTypes = demographicDB.avoidedDentalCostType.getAll();
       return HttpResponse.json(avoidedDentalCostTypes);
-    }),
-
-    //
-    // Handler for GET request to retrieve all mouth pain types
-    //
-    http.get('https://api.example.com/lookups/mouth-pain-types', ({ request }) => {
-      log.debug('Handling request for [%s]', request.url);
-      const mouthPainTypes = demographicDB.mouthPainType.getAll();
-      return HttpResponse.json(mouthPainTypes);
     }),
 
     //
@@ -142,6 +142,15 @@ export function getLookupApiMockHandlers() {
       log.debug('Handling request for [%s]', request.url);
       const maritalStatusList = db.maritalStatus.getAll();
       return HttpResponse.json(maritalStatusList);
+    }),
+
+    //
+    // Handler for GET request to retrieve all tax filing indication codes
+    //
+    http.get('https://api.example.com/lookups/tax-filing-indications', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const taxFilingIndicationsList = db.taxFilingIndications.getAll();
+      return HttpResponse.json(taxFilingIndicationsList);
     }),
   ];
 }

@@ -41,6 +41,36 @@ const demographicDB = factory({
     nameEn: String,
     nameFr: String,
   },
+
+  genderType: {
+    id: primaryKey(faker.string.uuid),
+    nameEn: String,
+    nameFr: String,
+  },
+});
+
+demographicDB.genderType.create({
+  id: 'gender-male',
+  nameEn: 'Male',
+  nameFr: '(FR) Male',
+});
+
+demographicDB.genderType.create({
+  id: 'gender-female',
+  nameEn: 'Female',
+  nameFr: '(FR) Female',
+});
+
+demographicDB.genderType.create({
+  id: 'gender-other',
+  nameEn: 'Other',
+  nameFr: '(FR) Other',
+});
+
+demographicDB.genderType.create({
+  id: 'gender-prefer-not-to-say',
+  nameEn: 'Prefer not to answer',
+  nameFr: '(FR) Prefer not to answer',
 });
 
 demographicDB.avoidedDentalCostType.create({

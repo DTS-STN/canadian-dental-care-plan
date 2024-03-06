@@ -6,12 +6,14 @@ test.describe('phone number change confirmation page', () => {
     await page.goto('/personal-information/phone-number/edit');
     await expect(page).toHaveURL('/personal-information/phone-number/edit');
 
+    await page.getByRole('textbox', { name: 'phone number' }).fill('(506) 555-5555');
     await page.getByRole('button', { name: 'change' }).click();
     await expect(page).toHaveURL(/.*personal-information\/phone-number\/confirm/);
   });
 
   test('should not have any automatically detectable accessibility issues', async ({ page }) => {
     await page.goto('/personal-information/phone-number/edit');
+    await page.getByRole('textbox', { name: 'phone number' }).fill('(506) 555-5555');
     await page.getByRole('button', { name: 'change' }).click();
     await expect(page).toHaveURL(/.*personal-information\/phone-number\/confirm/);
 

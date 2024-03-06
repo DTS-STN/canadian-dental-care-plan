@@ -30,6 +30,11 @@ const personalInfoStateSchema = z.object({
 });
 
 /**
+ * Schema for terms and conditions
+ */
+const termsAndConditionSchema = z.object({});
+
+/**
  * Schema for email address.
  */
 const emailStateSchema = z.object({
@@ -86,6 +91,17 @@ const communicationPreferencesStateSchema = z.object({
 });
 
 /**
+ * Schema for communication reference.
+ */
+const demographicsPart2StateSchema = z.object({
+  gender: z.string().min(1),
+  otherGender: z.string().min(1).optional(),
+  mouthPainType: z.string().min(1),
+  lastDentalVisitType: z.string().min(1),
+  avoidedDentalCareDueToCost: z.string().min(1),
+});
+
+/**
  * Schema for apply state.
  */
 const applyStateSchema = z.object({
@@ -95,7 +111,9 @@ const applyStateSchema = z.object({
   applicationDelegate: typeOfApplicationSchema.optional(),
   applicantInformation: applicantInformationSchema.optional(),
   communicationPreferences: communicationPreferencesStateSchema.optional(),
+  demographicsPart2: demographicsPart2StateSchema.optional(),
   partnerInformation: partnerInformationSchema.optional(),
+  termsAndConditions: termsAndConditionSchema.optional(),
   access: accessStateSchema.optional(),
   taxFiling2023: taxFilingSchema.optional(),
 });
@@ -245,5 +263,6 @@ export function getApplyFlow() {
     start,
     taxFilingSchema,
     typeOfApplicationSchema,
+    termsAndConditionSchema,
   };
 }

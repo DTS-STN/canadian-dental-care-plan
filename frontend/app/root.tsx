@@ -1,6 +1,6 @@
 import { Suspense, useContext } from 'react';
 
-import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
+import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRouteLoaderData } from '@remix-run/react';
 
@@ -25,6 +25,10 @@ export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: fontNotoSansStyleSheet },
   { rel: 'stylesheet', href: tailwindStyleSheet },
 ];
+
+export const meta: MetaFunction<typeof loader> = (args) => {
+  return [{ name: 'robots', content: 'noindex' }];
+};
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const buildInfoService = getBuildInfoService();
