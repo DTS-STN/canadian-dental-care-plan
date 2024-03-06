@@ -2,6 +2,8 @@ import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { Form, useLoaderData } from '@remix-run/react';
 
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Button, ButtonLink } from '~/components/buttons';
@@ -44,11 +46,13 @@ export default function Demographics() {
         <div>
           <Button id="change-button" variant="primary">
             {t('demographics-oral-health-questions:optional-demographic-oral-health-questions.answer-button')}
+            <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
           </Button>
         </div>
         <div>
           <ButtonLink id="cancel-button" to={`/apply/${id}/review-information`}>
             {t('demographics-oral-health-questions:optional-demographic-oral-health-questions.skip-button')}
+            <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
           </ButtonLink>
         </div>
       </Form>

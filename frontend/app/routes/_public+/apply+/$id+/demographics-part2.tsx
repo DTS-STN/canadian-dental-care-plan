@@ -4,6 +4,8 @@ import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { Form, useActionData, useLoaderData } from '@remix-run/react';
 
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -191,9 +193,11 @@ export default function DemographicsPart2() {
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="cancel-button" to={`/apply/${id}/demographics-part1`}>
             {t('demographics-oral-health-questions:part2.button-back')}
+            <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
           </ButtonLink>
           <Button id="change-button" variant="primary">
             {t('demographics-oral-health-questions:part2.button-continue')}
+            <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
           </Button>
         </div>
       </Form>

@@ -15,8 +15,8 @@
     "question4": "4. Do you identify as a person with a disability?",
     "question4-note": "A person with a disability is a person who has a long-term difficulty or  condition, such as vision, hearing, mobility, flexibility, dexterity, pain, learning, developmental, memory or mental health-related impairments, that limit their daily activities inside or outside the home such as at school, work, or in the community in general.",
 
-    "button-back": " < Back",
-    "button-continue": "Continue > "
+    "button-back": "Back",
+    "button-continue": "Continue"
   },
   "part2": {
     "page-title": "Voluntary demographic and oral health questions part 2 of 2",
@@ -32,8 +32,8 @@
     "question-last-dental-visit": "7. When was the last time you saw a dentist, denturist, dental hygienist or any other dental specialist? Services may have been provided in any setting where the oral health professional is licensed to practice",
     "question-avoided-dental-cost": "8. In the past 12 months, have you avoided going to a dental professional for dental care due to the cost of care?",
 
-    "button-back": " < Back",
-    "button-continue": "Continue > ",
+    "button-back": "Back",
+    "button-continue": "Continue",
 
     "error-message": {
       "empty-radio": "Please select a value",
@@ -51,7 +51,7 @@
     "page-title": "Voluntary demographic and oral health questions",
     "paragraph2": "Your answers will be used by Health Canada for programme design and monitoring purposes. All responses will be kept confidential.",
     "paragraph1": "<strong>These questions are voluntary.</strong> Answering them does not affect your eligibility for the Canadian Dental Care Plan. All questions have an option of 'prefer not to answer'.",
-    "answer-button": "Answer voluntary questions >",
-    "skip-button": "Continue >"
+    "answer-button": "Answer voluntary questions",
+    "skip-button": "Continue"
   }
 }
