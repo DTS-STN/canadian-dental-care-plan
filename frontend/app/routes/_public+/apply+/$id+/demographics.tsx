@@ -28,7 +28,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { id, state } = await applyFlow.loadState({ request, params });
 
   const formDataSchema = z.object({
-    demographics: z.enum(['answer', 'skip']),
+    demographics: z.enum(['answerQuestions', 'continueToReview']),
   });
 
   const formData = Object.fromEntries(await request.formData());
@@ -39,23 +39,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
       formData: formData as Partial<z.infer<typeof formDataSchema>>,
     });
   }
-
-  if (parsedDataResult.data.demographics === 'answer') {
-    const sessionResponseInit = await applyFlow.saveState({
-      request,
-      params,
-      state,
-    });
-    return redirect(`/apply/${id}/demographics-part1`, sessionResponseInit);
-  } else if (parsedDataResult.data.demographics === 'skip') {
-    const sessionResponseInit = await applyFlow.saveState({
-      request,
-      params,
-      state,
-    });
-    return redirect(`/apply/${id}/review-information`, sessionResponseInit);
-  }
-  throw new Response('Not Found', { status: 404 });
+  const redirectUrl = parsedDataResult.data.demographics === 'answerQuestions' ? `/apply/${id}/demographics-part1` : `/apply/${id}/review-information`;
+  const sessionResponseInit = await applyFlow.saveState({
+    request,
+    params,
+    state,
+  });
+  return redirect(redirectUrl, sessionResponseInit);
 }
 
 export default function Demographics() {
