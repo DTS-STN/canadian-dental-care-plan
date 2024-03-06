@@ -77,22 +77,47 @@ export default function ApplyFlowConfirm() {
   const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
 
-  const MSCALink = <InlineLink to={`https://www.canada.ca/${i18n.language === 'en' ? 'en/employment-social-development/services/my-account.html' : 'fr/emploi-developpement-social/services/mon-dossier.html'}`} />;
-  const dentalContactUsLink = <InlineLink to={`https://www.canada.ca/${i18n.language === 'en' ? 'en/services/benefits/dental/dental-care-plan/contact.html' : 'fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html'}`} />;
+  const mscaLink = <InlineLink to={t('apply:confirm.msca-link')} />;
+  const dentalContactUsLink = <InlineLink to={t('apply:confirm.dental-link')} />;
+  const cdcpLink = <InlineLink to={t('apply:confirm.cdcp-checker-link')} />;
+  const moreInfoLink = <InlineLink to={t('apply:confirm.cdcp-checker-link')} />;
 
   return (
-    <>
+    <div className="max-w-3xl">
       <span>TODO: Contextual Alert Information</span>
-
-      <p className="mt-4">{t('apply:confirm.p-one')}</p>
+      <h2 className="mt-8 text-3xl font-semibold">{t('apply:confirm.keep-copy')}</h2>
       <p className="mt-4">
-        <Trans ns={i18nNamespaces} i18nKey="apply:confirm.p-two" components={{ MSCALink }} />
+        {t('apply:confirm.print-copy-one')} <b>{t('apply:confirm.not-bold')}</b> {t('apply:confirm.print-copy-two')} <b>{t('apply:confirm.confirm-email-bold')}</b> {t('apply:confirm.print-copy-three')}
       </p>
-      <p className="mt-4">{t('apply:confirm.p-three')}</p>
-      <p className="mt-4">{t('apply:confirm.p-four')}</p>
-      <p className="mt-4">{t('apply:confirm.p-five')}</p>
+      <button
+        className="mt-8 inline-flex w-44 items-center justify-center rounded bg-gray-800 px-5 py-2.5 align-middle font-lato text-xl font-semibold text-white outline-offset-2 hover:bg-gray-900"
+        onClick={(event) => {
+          event.preventDefault();
+          window.print();
+        }}
+      >
+        {t('apply:confirm.print-btn')}
+      </button>
+      <h2 className="mt-8 text-3xl font-semibold">{t('apply:confirm.whats-next')}</h2>
+      <p className="mt-4">{t('apply:confirm.begin-process')}</p>
       <p className="mt-4">
-        <Trans ns={i18nNamespaces} i18nKey="apply:confirm.p-six" components={{ dentalContactUsLink }} />
+        <Trans ns={i18nNamespaces} i18nKey="apply:confirm.cdcp-checker" components={{ cdcpLink }} />
+      </p>
+      <p className="mt-4">{t('apply:confirm.use-code')}</p>
+      <h2 className="mt-8 text-3xl font-semibold">{t('apply:confirm.register-msca-title')}</h2>
+      <p className="mt-4">
+        <Trans ns={i18nNamespaces} i18nKey="apply:confirm.register-msca-text" components={{ mscaLink }} />
+      </p>
+      <p className="mt-4">{t('apply:confirm.msca-notify')}</p>
+      <h2 className="mt-8 text-3xl font-semibold">{t('apply:confirm.how-insurance')}</h2>
+      <p className="mt-4">{t('apply:confirm.eligible-text')}</p>
+      <p className="mt-4">
+        <Trans ns={i18nNamespaces} i18nKey="apply:confirm.more-info-cdcp" components={{ moreInfoLink }} />
+      </p>
+
+      <p className="mt-4">{t('apply:confirm.ineligible-text')}</p>
+      <p className="mt-4">
+        <Trans ns={i18nNamespaces} i18nKey="apply:confirm.more-info-service" components={{ dentalContactUsLink }} />
       </p>
 
       <h2 className="mt-8 text-3xl font-semibold">{t('apply:confirm.application-summ')}</h2>
@@ -122,19 +147,7 @@ export default function ApplyFlowConfirm() {
         <li className="my-1">{t('apply:confirm.dental-private', { access: dentalInsurance.private.length === 0 ? 'No' : 'Yes' })}</li>
         <li className="my-1">{t('apply:confirm.dental-public', { access: dentalInsurance.public.length === 0 ? 'No' : 'Yes' })}</li>
       </UnorderedList>
-
-      <h2 className="mt-8 text-3xl font-semibold">{t('apply:confirm.print')}</h2>
-      <p className="mt-4">{t('apply:confirm.keep-record')}</p>
-      <button
-        className="mt-8 inline-flex w-44 items-center justify-center rounded bg-gray-800 px-5 py-2.5 align-middle font-lato text-xl font-semibold text-white outline-offset-2 hover:bg-gray-900"
-        onClick={(event) => {
-          event.preventDefault();
-          window.print();
-        }}
-      >
-        {t('apply:confirm.print-btn')}
-      </button>
-    </>
+    </div>
   );
 }
 
