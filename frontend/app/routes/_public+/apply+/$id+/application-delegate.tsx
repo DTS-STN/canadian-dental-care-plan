@@ -32,7 +32,7 @@ export default function ApplyFlowApplicationDelegate() {
 
   const contactServiceCanada = <InlineLink to={t('application-delegate.contact-service-canada-href')} />;
   const preparingToApply = <InlineLink to={t('application-delegate.preparing-to-apply-href')} />;
-  const span = <span style={{ whiteSpace: 'nowrap' }} />;
+  const span = <span className="whiteSpace-nowrap" />;
 
   return (
     <div className="mt-6">
