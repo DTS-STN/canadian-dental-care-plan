@@ -15,7 +15,7 @@
     "question4": "4.(FR) Do you identify as a person with a disability?",
     "question4-note": "(FR) A person with a disability is a person who has a long-term difficulty or  condition, such as vision, hearing, mobility, flexibility, dexterity, pain, learning, developmental, memory or mental health-related impairments, that limit their daily activities inside or outside the home such as at school, work, or in the community in general.",
 
-    "button-back": "(FR) Back < ",
+    "button-back": "(FR) <  Back",
     "button-continue": "(FR) Continue > "
   },
   "part2": {
@@ -27,12 +27,26 @@
     "question-last-dental-visit": "8. (FR) When was the last time you saw a dentist, denturist, dental hygienist or any other dental specialist? Services may have been provided in any setting where the oral health professional is licensed to practice",
     "question-avoided-dental-cost": "8. (FR) In the past 12 months, have you avoided going to a dental professional for dental care due to the cost of care?",
 
-    "button-back": "(FR) Back < ",
+    "button-back": "(FR) < Back",
     "button-continue": "(FR) Continue > ",
 
     "error-message": {
       "empty-radio": "(FR) Please select a value",
       "empty-field": "(FR) Please enter a value"
     }
+  },
+
+  "optional-demographic-oral-health-questions": {
+    "page-title": "(FR) Voluntary demographic and oral health questions",
+    "breadcrumbs": {
+      "canada-ca": "Canada.ca",
+      "benefits": "Benefits",
+      "dental-coverage": "Dental coverage",
+      "canadian-dental-care-plan": "Canadian Dental Care Plan"
+    },
+    "paragraph2": "(FR) Your answers will be used by Health Canada for programme design and monitoring purposes. All responses will be kept confidential.",
+    "paragraph1": "(FR) <strong>These questions are voluntary.</strong> Answering them does not affect your eligibility for the Canadian Dental Care Plan. All questions have an option of 'prefer not to answer'.",
+    "answer-button": "(FR) Answer voluntary questions > ",
+    "skip-button": "(FR) Continue > "
   }
 }
