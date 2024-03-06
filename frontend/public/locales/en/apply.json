@@ -37,7 +37,6 @@
       "confirm": "Checkbox must be selected"
     }
   },
-
   "personal-information": {
     "page-title": "Personal information",
     "form-instructions": "Adding a telephone number helps Service Canada reach you if there is an issue with your application and may help reduce delays in processing your application. Otherwise, we will contact you by mail using the mailing address you provide.",
@@ -49,8 +48,7 @@
     },
     "home-address": {
       "header": "Home address",
-      "use-mailing-address": "My home address and mailing address are the same",
-      "use-different-address": "Use different home address"
+      "use-mailing-address": "My home address and mailing address are the same"
     },
     "address-field": {
       "address": "Address",
@@ -66,7 +64,10 @@
     "continue": "Continue",
     "error-message": {
       "empty-radio": "Please select a value",
-      "empty-field": "Please enter a value"
+      "empty-field": "Please enter a value",
+      "invalid-phone": "Invalid phone number",
+      "invalid-postal-code": "Invalid postal code (A1A 1A1)",
+      "invalid-zip-code": "Invalid zip code (12345)"
     }
   }
 }

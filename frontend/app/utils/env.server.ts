@@ -43,6 +43,8 @@ const serverEnv = z.object({
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
   COMMUNICATION_METHOD_EMAIL_ID: z.string().trim().min(1).default('email'),
   OTHER_GENDER_TYPE_ID: z.string().trim().min(1).default('gender-other'),
+  COUNTRY_CODE_CANADA: z.string().trim().min(1).default('CAN'),
+  COUNTRY_CODE_USA: z.string().trim().min(1).default('USA'),
   // TODO :: GjB :: these base URIs should not have defaults
   INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
   CCT_API_BASE_URI: z.string().url().default('https://api.example.com'),

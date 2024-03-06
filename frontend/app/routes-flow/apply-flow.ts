@@ -102,6 +102,27 @@ const demographicsPart2StateSchema = z.object({
 });
 
 /**
+ * Schema for personal information.
+ */
+const personalInformationStateSchema = z.object({
+  phoneNumber: z.string().optional(),
+  phoneNumberAlt: z.string().optional(),
+  mailingAddress: z.string().min(1),
+  mailingApartment: z.string().optional(),
+  mailingCountry: z.string().min(1),
+  mailingProvince: z.string().min(1).optional(),
+  mailingCity: z.string().min(1),
+  mailingPostalCode: z.string().min(1),
+  copyMailingAddress: z.string().optional(),
+  homeAddress: z.string().optional(),
+  homeApartment: z.string().optional(),
+  homeCountry: z.string().optional(),
+  homeProvince: z.string().optional(),
+  homeCity: z.string().optional(),
+  homePostalCode: z.string().optional(),
+});
+
+/**
  * Schema for apply state.
  */
 const applyStateSchema = z.object({
@@ -110,6 +131,7 @@ const applyStateSchema = z.object({
   email: emailStateSchema.optional(),
   applicationDelegate: typeOfApplicationSchema.optional(),
   applicantInformation: applicantInformationSchema.optional(),
+  personalInformation: personalInformationStateSchema.optional(),
   communicationPreferences: communicationPreferencesStateSchema.optional(),
   demographicsPart2: demographicsPart2StateSchema.optional(),
   partnerInformation: partnerInformationSchema.optional(),

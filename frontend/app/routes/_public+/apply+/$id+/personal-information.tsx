@@ -1,22 +1,27 @@
 import { useEffect, useState } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, useActionData, useLoaderData } from '@remix-run/react';
 
+import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { Button, ButtonLink } from '~/components/buttons';
+import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import { InputOptionProps } from '~/components/input-option';
-import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { RegionInfo, getLookupService } from '~/services/lookup-service.server';
+import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('apply');
+const validPostalCode = new RegExp('^[ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy]\\d[A-Za-z] \\d[A-Za-z]\\d{1}$');
+const validZipCode = new RegExp('^\\d{5}$');
 
 export const handle = {
   i18nNamespaces,
@@ -31,50 +36,189 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const countryList = await getLookupService().getAllCountries();
   const regionList = await getLookupService().getAllRegions();
 
-  return json({ id, state: state.personalInfo, countryList, regionList });
+  return json({ id, state: state.personalInformation, countryList, regionList });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
+  const { COUNTRY_CODE_CANADA, COUNTRY_CODE_USA } = getEnv();
   const applyFlow = getApplyFlow();
   const { id } = await applyFlow.loadState({ request, params });
 
+  const isEmpty = (value: string | undefined) => {
+    if (!value) {
+      return true;
+    }
+    return !value.trim();
+  };
+
+  const isValidPostalCode = (countryCode: string | undefined, postalCode: string | undefined) => {
+    if (!countryCode || !postalCode) {
+      // if either field is omitted, skip the check
+      // check and render 'please enter a value'
+      return true;
+    }
+    switch (countryCode) {
+      case COUNTRY_CODE_CANADA:
+        return validPostalCode.test(postalCode);
+      case COUNTRY_CODE_USA:
+        return validZipCode.test(postalCode);
+      default:
+        return true;
+    }
+  };
+
+  const personalInformationFormSchema = z
+    .object({
+      phoneNumber: z
+        .string()
+        .refine((val) => !val || (val && isValidPhoneNumber(val, 'CA')), { message: 'invalid-phone' })
+        .optional(),
+      phoneNumberAlt: z
+        .string()
+        .refine((val) => !val || (val && isValidPhoneNumber(val, 'CA')), { message: 'invalid-phone' })
+        .optional(),
+      mailingAddress: z
+        .string()
+        .min(1, { message: 'empty-field' })
+        .transform((val) => val.trim()),
+      mailingApartment: z.string().trim().optional(),
+      mailingCountry: z
+        .string()
+        .min(1, { message: 'empty-field' })
+        .transform((val) => val.trim()),
+      mailingProvince: z.string().min(1, { message: 'empty-field' }).optional(),
+      mailingCity: z
+        .string()
+        .min(1, { message: 'empty-field' })
+        .transform((val) => val.trim()),
+      mailingPostalCode: z.string().min(1, { message: 'empty-field' }).trim(),
+      copyMailingAddress: z.string().optional(),
+      homeAddress: z.string().optional(),
+      homeApartment: z.string().optional(),
+      homeCountry: z.string().optional(),
+      homeProvince: z.string().optional(),
+      homeCity: z.string().optional(),
+      homePostalCode: z.string().optional(),
+    })
+    .superRefine((val, ctx) => {
+      if (!isValidPostalCode(val.mailingCountry, val.mailingPostalCode)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: val.mailingCountry === COUNTRY_CODE_CANADA ? 'invalid-postal-code' : 'invalid-zip-code',
+          path: ['mailingPostalCode'],
+        });
+      }
+
+      if (val.copyMailingAddress !== 'on') {
+        const homeAddessFields: (keyof typeof val)[] = ['homeAddress', 'homeCountry', 'homeCity', 'homePostalCode'];
+        homeAddessFields.forEach((field) => {
+          if (isEmpty(val[field])) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-field', path: [field] });
+          }
+        });
+
+        if (!isEmpty(val.homeCountry)) {
+          if ((val.homeCountry === COUNTRY_CODE_CANADA || val.homeCountry === COUNTRY_CODE_USA) && isEmpty(val.homeProvince)) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-field', path: ['homeProvince'] });
+          }
+        }
+
+        if (!isValidPostalCode(val.homeCountry, val.homePostalCode)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: val.homeCountry === COUNTRY_CODE_CANADA ? 'invalid-postal-code' : 'invalid-zip-code', path: ['homePostalCode'] });
+        }
+      }
+    });
+
   const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = applyFlow.personalInfoStateSchema.safeParse(formData);
+
+  const parsedDataResult = personalInformationFormSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof applyFlow.personalInfoStateSchema>>,
+      formData: formData as Partial<z.infer<typeof personalInformationFormSchema>>,
     });
   }
+
+  const updatedData =
+    parsedDataResult.data.copyMailingAddress === 'on'
+      ? {
+          ...parsedDataResult.data,
+          homeAddress: parsedDataResult.data.mailingAddress,
+          homeApartment: parsedDataResult.data.mailingApartment,
+          homeCountry: parsedDataResult.data.mailingCountry,
+          homeProvince: parsedDataResult.data.mailingProvince,
+          homeCity: parsedDataResult.data.mailingCity,
+          homePostalCode: parsedDataResult.data.mailingPostalCode,
+        }
+      : parsedDataResult.data;
 
   const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
-    state: { personalInfo: parsedDataResult.data },
+    state: { personalInformation: updatedData },
   });
 
-  return redirect(`/apply/${id}/email`, sessionResponseInit);
+  return redirect(`/apply/${id}/communication-preference`, sessionResponseInit);
 }
 
 export default function ApplyFlowPersonalInformation() {
-  const { countryList, regionList } = useLoaderData<typeof loader>();
+  const { id, state, countryList, regionList } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
-  const [selectedMailingCountry, setSelectedMailingCountry] = useState('');
+  const [selectedMailingCountry, setSelectedMailingCountry] = useState(state?.mailingCountry);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<RegionInfo[]>([]);
-  const [useDifferentAddress, setUseDifferentAddress] = useState(false);
-  const [selectedHomeCountry, setSelectedHomeCountry] = useState('');
+  const [copyAddressChecked, setCopyAddressChecked] = useState(state?.copyMailingAddress === 'on');
+  const [selectedHomeCountry, setSelectedHomeCountry] = useState(state?.homeCountry);
   const [homeCountryRegions, setHomeCountryRegions] = useState<RegionInfo[]>([]);
 
-  const copyMailingAddressHandler = () => {
-    setUseDifferentAddress(false);
-    //reset selected home country if copy mailing address radio is clicked
-    setSelectedHomeCountry('');
+  const actionData = useActionData<typeof action>();
+  const errorSummaryId = 'error-summary';
+
+  /**
+   * Gets an error message based on the provided internationalization (i18n) key.
+   *
+   * @param errorI18nKey - The i18n key for the error message.
+   * @returns The corresponding error message, or undefined if no key is provided.
+   */
+  function getErrorMessage(errorI18nKey?: string): string | undefined {
+    if (!errorI18nKey) return undefined;
+
+    /**
+     * The 'as any' is employed to circumvent typechecking, as the type of
+     * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
+     */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return t(`apply:personal-information.error-message.${errorI18nKey}` as any);
+  }
+
+  const errorMessages = {
+    phoneNumber: getErrorMessage(actionData?.errors.phoneNumber?._errors[0]),
+    phoneNumberAlt: getErrorMessage(actionData?.errors.phoneNumberAlt?._errors[0]),
+    mailingAddress: getErrorMessage(actionData?.errors.mailingAddress?._errors[0]),
+    mailingApartment: getErrorMessage(actionData?.errors.mailingApartment?._errors[0]),
+    mailingProvince: getErrorMessage(actionData?.errors.mailingProvince?._errors[0]),
+    mailingCountry: getErrorMessage(actionData?.errors.mailingCountry?._errors[0]),
+    mailingCity: getErrorMessage(actionData?.errors.mailingCity?._errors[0]),
+    mailingPostalCode: getErrorMessage(actionData?.errors.mailingPostalCode?._errors[0]),
+    copyMailingAddress: getErrorMessage(actionData?.errors.copyMailingAddress?._errors[0]),
+    homeAddress: getErrorMessage(actionData?.errors.homeAddress?._errors[0]),
+    homeApartment: getErrorMessage(actionData?.errors.homeApartment?._errors[0]),
+    homeProvince: getErrorMessage(actionData?.errors.homeProvince?._errors[0]),
+    homeCountry: getErrorMessage(actionData?.errors.homeCountry?._errors[0]),
+    homeCity: getErrorMessage(actionData?.errors.homeCity?._errors[0]),
+    homePostalCode: getErrorMessage(actionData?.errors.homePostalCode?._errors[0]),
   };
 
-  const useDifferentAddressHandler = () => {
-    //display address input fields to enter home address
-    setUseDifferentAddress(true);
+  const errorSummaryItems = createErrorSummaryItems(errorMessages);
+
+  useEffect(() => {
+    if (actionData?.formData && hasErrors(actionData.formData)) {
+      scrollAndFocusToErrorSummary(errorSummaryId);
+    }
+  }, [actionData]);
+
+  const checkHandler = () => {
+    setCopyAddressChecked((curState) => !curState);
   };
 
   useEffect(() => {
@@ -131,64 +275,102 @@ export default function ApplyFlowPersonalInformation() {
 
   return (
     <>
+      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <p id="form-instructions" className="mb-6">
         {t('apply:personal-information.form-instructions')}
       </p>
       <Form method="post" noValidate>
         <div className="mb-6 grid gap-4 md:grid-cols-2">
-          <InputField id="phone-number" name="phoneNumber" className="w-full" label={t('apply:personal-information.telephone-number')} />
-          <InputField id="phone-number-alt" name="phoneNumberAlt" className="w-full" label={t('apply:personal-information.telephone-number-alt')} />
+          <InputField id="phone-number" name="phoneNumber" className="w-full" label={t('apply:personal-information.telephone-number')} defaultValue={state?.phoneNumber} errorMessage={errorMessages.phoneNumber} />
+          <InputField id="phone-number-alt" name="phoneNumberAlt" className="w-full" label={t('apply:personal-information.telephone-number-alt')} defaultValue={state?.phoneNumberAlt} errorMessage={errorMessages.phoneNumberAlt} />
         </div>
         <div className="mb-6">
           <p className="text-2xl font-semibold"> {t('apply:personal-information.mailing-address.header')}</p>
           <p className="mb-4"> {t('apply:personal-information.mailing-address.note')}</p>
           <div className="max-w-prose space-y-6">
-            <InputField id="mailing-address" name="mailingAddress" className="w-full" label={t('apply:personal-information.address-field.address')} required />
-            <InputField id="mailing-apartment" name="mailingApartment" className="w-full" label={t('apply:personal-information.address-field.apartment')} />
-            <InputSelect id="mailing-country" name="mailingCountry" className="w-full sm:w-1/2" label={t('apply:personal-information.address-field.country')} required options={[dummyOption, ...countries]} onChange={mailingCountryChangeHandler} />
-            {mailingRegions.length > 0 && <InputSelect id="mailing-province" name="mailingProvince" className="w-full sm:w-1/2" label={t('apply:personal-information.address-field.province')} required options={[dummyOption, ...mailingRegions]} />}
+            <InputField id="mailingAddress" name="mailingAddress" className="w-full" label={t('apply:personal-information.address-field.address')} defaultValue={state?.mailingAddress} errorMessage={errorMessages.mailingAddress} required />
+            <InputField id="mailingApartment" name="mailingApartment" className="w-full" label={t('apply:personal-information.address-field.apartment')} defaultValue={state?.mailingApartment} errorMessage={errorMessages.mailingApartment} />
+            <InputSelect
+              id="mailingCountry"
+              name="mailingCountry"
+              className="w-full sm:w-1/2"
+              label={t('apply:personal-information.address-field.country')}
+              defaultValue={state?.mailingCountry}
+              errorMessage={errorMessages.mailingCountry}
+              required
+              options={[dummyOption, ...countries]}
+              onChange={mailingCountryChangeHandler}
+            />
+            {mailingRegions.length > 0 && (
+              <InputSelect
+                id="mailingProvince"
+                name="mailingProvince"
+                className="w-full sm:w-1/2"
+                label={t('apply:personal-information.address-field.province')}
+                defaultValue={state?.mailingProvince}
+                errorMessage={errorMessages.mailingProvince}
+                required
+                options={[dummyOption, ...mailingRegions]}
+              />
+            )}
             <div className="mb-4 grid gap-4 md:grid-cols-2">
-              <InputField id="mailing-city" name="mailingCity" label={t('apply:personal-information.address-field.city')} required />
-              <InputField id="mailing-postalCode" name="mailingPostalCode" label={t('apply:personal-information.address-field.postal-code')} />
+              <InputField id="mailingCity" name="mailingCity" label={t('apply:personal-information.address-field.city')} defaultValue={state?.mailingCity} errorMessage={errorMessages.mailingCity} required />
+              <InputField id="mailingPostalCode" name="mailingPostalCode" label={t('apply:personal-information.address-field.postal-code')} defaultValue={state?.mailingPostalCode} errorMessage={errorMessages.mailingPostalCode} required />
             </div>
           </div>
         </div>
         <div>
           <p className="text-2xl font-semibold"> {t('apply:personal-information.home-address.header')}</p>
-          <div className="my-6">
-            <InputRadios
-              id="home-address"
-              legend=""
-              name="copyHomeAddress"
-              options={[
-                {
-                  children: t('apply:personal-information.home-address.use-mailing-address'),
-                  onClick: copyMailingAddressHandler,
-                  value: 'true',
-                },
-                {
-                  children: t('apply:personal-information.home-address.use-different-address'),
-                  onClick: useDifferentAddressHandler,
-                  value: 'false',
-                },
-              ]}
-            />
+          <div id="copyMailingAddress">
+            <InputCheckbox
+              id="copyMailingAddress"
+              name="copyMailingAddress"
+              className="my-6"
+              checked={copyAddressChecked}
+              onChange={checkHandler}
+              append={
+                !copyAddressChecked && (
+                  <div className="max-w-prose space-y-6">
+                    <InputField id="homeAddress" name="homeAddress" className="w-full" label={t('apply:personal-information.address-field.address')} defaultValue={state?.homeAddress} errorMessage={errorMessages.homeAddress} required />
+                    <InputField id="homeApartment" name="homeApartment" className="w-full" label={t('apply:personal-information.address-field.apartment')} defaultValue={state?.homeApartment} errorMessage={errorMessages.homeApartment} />
+                    <InputSelect
+                      id="homeCountry"
+                      name="homeCountry"
+                      className="w-full sm:w-1/2"
+                      label={t('apply:personal-information.address-field.country')}
+                      defaultValue={state?.homeCountry}
+                      errorMessage={errorMessages.homeCountry}
+                      required
+                      options={[dummyOption, ...countries]}
+                      onChange={homeCountryChangeHandler}
+                    />
+                    {homeRegions.length > 0 && (
+                      <InputSelect
+                        id="homeProvince"
+                        name="homeProvince"
+                        className="w-full sm:w-1/2"
+                        label={t('apply:personal-information.address-field.province')}
+                        defaultValue={state?.homeProvince}
+                        errorMessage={errorMessages.homeProvince}
+                        required
+                        options={[dummyOption, ...homeRegions]}
+                      />
+                    )}
+                    <div className="mb-4 grid gap-4 md:grid-cols-2">
+                      <InputField id="homeCity" name="homeCity" label={t('apply:personal-information.address-field.city')} defaultValue={state?.homeCity} errorMessage={errorMessages.homeCity} required />
+                      <InputField id="homePostalCode" name="homePostalCode" label={t('apply:personal-information.address-field.postal-code')} defaultValue={state?.homePostalCode} errorMessage={errorMessages.homePostalCode} required />
+                    </div>
+                  </div>
+                )
+              }
+            >
+              {t('apply:personal-information.home-address.use-mailing-address')}
+            </InputCheckbox>
           </div>
-          {useDifferentAddress && (
-            <div className="max-w-prose space-y-6">
-              <InputField id="home-address" name="homeAddress" className="w-full" label={t('apply:personal-information.address-field.address')} required />
-              <InputField id="home-apartment" name="homeApartment" className="w-full" label={t('apply:personal-information.address-field.apartment')} />
-              <InputSelect id="home-country" name="homeCountry" className="w-full sm:w-1/2" label={t('apply:personal-information.address-field.country')} required options={[dummyOption, ...countries]} onChange={homeCountryChangeHandler} />
-              {homeRegions.length > 0 && <InputSelect id="home-province" name="homeProvince" className="w-full sm:w-1/2" label={t('apply:personal-information.address-field.province')} required options={[dummyOption, ...homeRegions]} />}
-              <div className="mb-4 grid gap-4 md:grid-cols-2">
-                <InputField id="home-city" name="homeCity" label={t('apply:personal-information.address-field.city')} required />
-                <InputField id="home-postalCode" name="homePostalCode" label={t('apply:personal-information.address-field.postal-code')} />
-              </div>
-            </div>
-          )}
         </div>
+
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to="/apply">
+          <ButtonLink id="back-button" to={'/apply/' + id + '/personal-info'}>
             {t('apply:personal-information.back')}
           </ButtonLink>
           <Button id="continue-button" variant="primary">
