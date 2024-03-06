@@ -110,6 +110,9 @@ const serverEnv = z.object({
   LOOKUP_SVC_LASTTIMEDENTISTVISITTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_AVOIDEDDENTALCOSTTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_GENDERTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
+  LOOKUP_SVC_TAXFILINGINDICATIONS_CACHE_TTL_MILLISECONDS:  z.coerce.number().default(60 * 60 * 1000),
+  LOOKUP_SVC_APPLICATIONTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
+  
   GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
 
   // OpenTelemetry/Dynatrace settings

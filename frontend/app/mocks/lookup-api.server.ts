@@ -152,6 +152,15 @@ export function getLookupApiMockHandlers() {
       const taxFilingIndicationsList = db.taxFilingIndications.getAll();
       return HttpResponse.json(taxFilingIndicationsList);
     }),
+
+    //
+    // Handler for GET request to retrieve all tax filing indication codes
+    //
+    http.get('https://api.example.com/lookups/application-types', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const applicationTypesList = db.applicationTypes.getAll();
+      return HttpResponse.json(applicationTypesList);
+    }),
   ];
 }
 

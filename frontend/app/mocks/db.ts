@@ -48,6 +48,12 @@ const db = factory({
     nameEn: String,
     nameFr: String,
   },
+  applicationTypes: {
+    id: primaryKey(faker.string.uuid),
+    code: String,
+    nameEn: String,
+    nameFr: String,
+  },
   letterType: {
     id: primaryKey(faker.string.uuid),
     code: String,
@@ -132,6 +138,18 @@ db.taxFilingIndications.create({
   code: 'no',
   nameEn: 'No',
   nameFr: '(Fr) No',
+});
+
+db.applicationTypes.create({
+  code: 'self',
+  nameEn: 'I am applying for myself',
+  nameFr: '(FR) I am applying for myself',
+});
+
+db.applicationTypes.create({
+  code: 'other',
+  nameEn: 'I am applying on behalf of someone else',
+  nameFr: '(FR) I am applying on behalf of someone else',
 });
 
 // seed avaliable addresses (before user)
