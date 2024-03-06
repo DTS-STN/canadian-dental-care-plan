@@ -42,7 +42,7 @@ const db = factory({
     nameEn: String,
     nameFr: String,
   },
-  accessToProvincialTerritorialDentalBenefit: {
+  federalDentalBenefit: {
     id: primaryKey(faker.string.uuid),
     code: String,
     nameEn: String,
@@ -142,13 +142,13 @@ db.accessToDentalInsurance.create({
   nameFr: '(Fr) No',
 });
 
-db.accessToProvincialTerritorialDentalBenefit.create({
+db.federalDentalBenefit.create({
   code: 'no',
   nameEn: 'No',
   nameFr: '(Fr) No',
 });
 
-db.accessToProvincialTerritorialDentalBenefit.create({
+db.federalDentalBenefit.create({
   code: 'yes',
   nameEn: 'Yes',
   nameFr: '(Fr) Yes',
@@ -177,6 +177,7 @@ db.applicationTypes.create({
   nameEn: 'I am applying on behalf of someone else',
   nameFr: '(FR) I am applying on behalf of someone else',
 });
+
 db.federalSocialProgram.create({
   code: 'nonInsuredHealthBenefitsProgram',
   nameEn: 'Non-Insured Health Benefits Program',

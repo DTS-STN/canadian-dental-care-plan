@@ -24,9 +24,9 @@ export const handle = {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
-  const options = await getLookupService().getAllAccessToProvincialTerritorialDentalBenefit();
+  const federalDentalBenefits = await getLookupService().getAllFederalDentalBenefit();
   const federalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
-  return json({ id, state, options, federalSocialPrograms });
+  return json({ id, state, federalDentalBenefits, federalSocialPrograms });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -53,7 +53,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function AccessToDentalInsuranceQuestion() {
-  const { federalSocialPrograms, options, state } = useLoaderData<typeof loader>();
+  const { federalSocialPrograms, federalDentalBenefits, state } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
   const [checked, setChecked] = useState(state.dentalBenefit?.federalBenefit ?? '');
 
@@ -61,14 +61,14 @@ export default function AccessToDentalInsuranceQuestion() {
     <Form method="post">
       <p className="mb-4">{t('provincial-territorial:access-to-dental')}</p>
       <p>{t('provincial-territorial:eligibility-criteria')}</p>
-      {options.length > 0 && (
+      {federalDentalBenefits.length > 0 && (
         <div className="my-6">
-          {options.length > 0 && (
+          {federalDentalBenefits.length > 0 && (
             <InputRadios
               id="federal-benefit"
               name="federalBenefit"
               legend={t('provincial-territorial:federal-benefits.legend')}
-              options={options.map((option) => ({
+              options={federalDentalBenefits.map((option) => ({
                 children: (
                   <div>
                     <strong>{getNameByLanguage(i18n.language, option)}</strong>,&nbsp;

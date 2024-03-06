@@ -129,10 +129,10 @@ export function getLookupApiMockHandlers() {
     //
     // Handler for GET request to retrieve provincial territorial dental benefit
     //
-    http.get('https://api.example.com/lookups/provincial-territorial', ({ request }) => {
+    http.get('https://api.example.com/lookups/federal-dental-benefit', ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
-      const accessToProvincialTerritorialDentalBenefit = db.accessToProvincialTerritorialDentalBenefit.getAll();
-      return HttpResponse.json(accessToProvincialTerritorialDentalBenefit);
+      const federalDentalBenefit = db.federalDentalBenefit.getAll();
+      return HttpResponse.json(federalDentalBenefit);
     }),
 
     //

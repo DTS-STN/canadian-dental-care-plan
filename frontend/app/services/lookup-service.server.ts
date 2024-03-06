@@ -24,7 +24,7 @@ const accessToDentalInsurance = z.object({
   nameFr: z.string().optional(),
 });
 
-const accessToDentalProvincialTerritorialDentalBenefit = z.object({
+const federalDentalBenefit = z.object({
   code: z.string(),
   nameEn: z.string().optional(),
   nameFr: z.string().optional(),
@@ -371,14 +371,14 @@ function createLookupService() {
     throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
-  async function getAllAccessToProvincialTerritorialDentalBenefit() {
-    const url = `${INTEROP_API_BASE_URI}/lookups/provincial-territorial/`;
+  async function getAllFederalDentalBenefit() {
+    const url = `${INTEROP_API_BASE_URI}/lookups/federal-dental-benefit/`;
     const response = await fetch(url);
 
-    const accessToProvincialTerritorialDentalBenefit = z.array(accessToDentalProvincialTerritorialDentalBenefit);
+    const federalDentalBenefits = z.array(federalDentalBenefit);
 
     if (response.ok) {
-      return accessToProvincialTerritorialDentalBenefit.parse(await response.json());
+      return federalDentalBenefits.parse(await response.json());
     }
 
     log.error('%j', {
@@ -534,7 +534,7 @@ function createLookupService() {
     getPreferredLanguage: moize(getPreferredLanguage, { maxAge: LOOKUP_SVC_PREFERREDLANGUAGE_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new PreferredLanguage memo') }),
     getAllPreferredCommunicationMethods: moize(getAllPreferredCommunicationMethods, { maxAge: LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllPreferredCommunicationMethods memo') }),
     getAllAccessToDentalInsuranceOptions: moize(getAllAccessToDentalInsuranceOptions, { maxAge: LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllAccessToDentalInsuranceOptions memo') }),
-    getAllAccessToProvincialTerritorialDentalBenefit: moize(getAllAccessToProvincialTerritorialDentalBenefit, { maxAge: LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllAccessToDentalInsuranceOptions memo') }),
+    getAllFederalDentalBenefit: moize(getAllFederalDentalBenefit, { maxAge: LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllAccessToDentalInsuranceOptions memo') }),
     getAllFederalSocialPrograms: moize(getAllFederalSocialPrograms, { maxAge: LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllAccessToDentalInsuranceOptions memo') }),
     getAllCountries: moize(getAllCountries, { maxAge: LOOKUP_SVC_ALLCOUNTRIES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllCountries memo') }),
     getAllRegions: moize(getAllRegions, { maxAge: LOOKUP_SVC_ALLREGIONS_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllRegions memo') }),
