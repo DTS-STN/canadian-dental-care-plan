@@ -44,7 +44,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id } = await applyFlow.loadState({ request, params });
 
-  const isValidPostalCode = (countryCode: string, postalCode: string | undefined) => {
+  const isEmpty = (value: string | undefined) => {
+    if (!value) {
+      return true;
+    }
+    return !value.trim();
+  };
+
+  const isValidPostalCode = (countryCode: string | undefined, postalCode: string | undefined) => {
     if (!countryCode || !postalCode) {
       // if either field is omitted, skip the check
       // check and render 'please enter a value'
@@ -60,71 +67,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     }
   };
 
-  const copyMailingAddressSchema = z.object({
-    copyMailingAddress: z.string(),
-  });
-
   const personalInformationFormSchema = z
-    .object({
-      phoneNumber: z
-        .string()
-        .refine((val) => !val || (val && isValidPhoneNumber(val, 'CA')), { message: 'invalid-phone' })
-        .optional(),
-      phoneNumberAlt: z
-        .string()
-        .refine((val) => !val || (val && isValidPhoneNumber(val, 'CA')), { message: 'invalid-phone' })
-        .optional(),
-      mailingAddress: z
-        .string()
-        .min(1, { message: 'empty-field' })
-        .transform((val) => val.trim()),
-      mailingApartment: z.string().trim().optional(),
-      mailingCountry: z
-        .string()
-        .min(1, { message: 'empty-field' })
-        .transform((val) => val.trim()),
-      mailingProvince: z.string().min(1, { message: 'empty-field' }).optional(),
-      mailingCity: z
-        .string()
-        .min(1, { message: 'empty-field' })
-        .transform((val) => val.trim()),
-      mailingPostalCode: z.string().min(1, { message: 'empty-field' }).trim(),
-      copyMailingAddress: z.string().optional(),
-      homeAddress: z
-        .string()
-        .min(1, { message: 'empty-field' })
-        .transform((val) => val.trim()),
-      homeApartment: z.string().trim().optional(),
-      homeCountry: z
-        .string()
-        .min(1, { message: 'empty-field' })
-        .transform((val) => val.trim()),
-      homeProvince: z.string().min(1, { message: 'empty-field' }).optional(),
-      homeCity: z
-        .string()
-        .min(1, { message: 'empty-field' })
-        .transform((val) => val.trim()),
-      homePostalCode: z.string().min(1, { message: 'empty-field' }).trim(),
-    })
-    .superRefine((val, ctx) => {
-      if (!isValidPostalCode(val.mailingCountry, val.mailingPostalCode)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: val.mailingCountry === 'CAN' ? 'invalid-postal-code' : 'invalid-zip-code',
-          path: ['mailingPostalCode'],
-        });
-      }
-      if (!isValidPostalCode(val.homeCountry, val.homePostalCode)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: val.homeCountry === 'CAN' ? 'invalid-postal-code' : 'invalid-zip-code',
-          path: ['homePostalCode'],
-        });
-      }
-    });
-
-  //schema for copy mailing address to home address
-  const mailingAddressOnlyFormSchema = z
     .object({
       phoneNumber: z
         .string()
@@ -161,22 +104,34 @@ export async function action({ request, params }: ActionFunctionArgs) {
       if (!isValidPostalCode(val.mailingCountry, val.mailingPostalCode)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: val.mailingCountry === 'CAN' ? 'invalid-postal-code' : 'invalid-zip-code',
+          message: val.mailingCountry === COUNTRY_CODE_CANADA ? 'invalid-postal-code' : 'invalid-zip-code',
           path: ['mailingPostalCode'],
         });
+      }
+
+      if (val.copyMailingAddress !== 'on') {
+        const homeAddessFields: (keyof typeof val)[] = ['homeAddress', 'homeCountry', 'homeCity', 'homePostalCode'];
+        homeAddessFields.forEach((field) => {
+          if (isEmpty(val[field])) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-field', path: [field] });
+          }
+        });
+
+        if (!isEmpty(val.homeCountry)) {
+          if ((val.homeCountry === COUNTRY_CODE_CANADA || val.homeCountry === COUNTRY_CODE_USA) && isEmpty(val.homeProvince)) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-field', path: ['homeProvince'] });
+          }
+        }
+
+        if (!isValidPostalCode(val.homeCountry, val.homePostalCode)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: val.homeCountry === COUNTRY_CODE_CANADA ? 'invalid-postal-code' : 'invalid-zip-code', path: ['homePostalCode'] });
+        }
       }
     });
 
   const formData = Object.fromEntries(await request.formData());
-  const { copyMailingAddress } = formData as Partial<z.infer<typeof copyMailingAddressSchema>>;
 
-  let parsedDataResult;
-  //only parse mailing address since home address will be copied
-  if (copyMailingAddress === 'on') {
-    parsedDataResult = mailingAddressOnlyFormSchema.safeParse(formData);
-  } else {
-    parsedDataResult = personalInformationFormSchema.safeParse(formData);
-  }
+  const parsedDataResult = personalInformationFormSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
     return json({
@@ -185,18 +140,18 @@ export async function action({ request, params }: ActionFunctionArgs) {
     });
   }
 
-  let saveData = parsedDataResult.data;
-  if (parsedDataResult.data.copyMailingAddress === 'on') {
-    saveData = {
-      ...parsedDataResult.data,
-      homeAddress: parsedDataResult.data.mailingAddress,
-      homeApartment: parsedDataResult.data.mailingApartment,
-      homeCountry: parsedDataResult.data.mailingCountry,
-      homeProvince: parsedDataResult.data.mailingProvince,
-      homeCity: parsedDataResult.data.mailingCity,
-      homePostalCode: parsedDataResult.data.mailingPostalCode,
-    };
-  }
+  const saveData =
+    parsedDataResult.data.copyMailingAddress === 'on'
+      ? {
+          ...parsedDataResult.data,
+          homeAddress: parsedDataResult.data.mailingAddress,
+          homeApartment: parsedDataResult.data.mailingApartment,
+          homeCountry: parsedDataResult.data.mailingCountry,
+          homeProvince: parsedDataResult.data.mailingProvince,
+          homeCity: parsedDataResult.data.mailingCity,
+          homePostalCode: parsedDataResult.data.mailingPostalCode,
+        }
+      : parsedDataResult.data;
 
   const sessionResponseInit = await applyFlow.saveState({
     request,
@@ -402,7 +357,7 @@ export default function ApplyFlowPersonalInformation() {
                       />
                     )}
                     <div className="mb-4 grid gap-4 md:grid-cols-2">
-                      <InputField id="homeCity" name="homeCity" label={t('apply:personal-information.address-field.city')} defaultValue={state?.homeCity} errorMessage={errorMessages.mailingCity} required />
+                      <InputField id="homeCity" name="homeCity" label={t('apply:personal-information.address-field.city')} defaultValue={state?.homeCity} errorMessage={errorMessages.homeCity} required />
                       <InputField id="homePostalCode" name="homePostalCode" label={t('apply:personal-information.address-field.postal-code')} defaultValue={state?.homePostalCode} errorMessage={errorMessages.homePostalCode} required />
                     </div>
                   </div>
