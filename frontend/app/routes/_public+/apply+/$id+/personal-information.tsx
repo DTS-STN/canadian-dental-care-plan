@@ -140,7 +140,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     });
   }
 
-  const saveData =
+  const updatedData =
     parsedDataResult.data.copyMailingAddress === 'on'
       ? {
           ...parsedDataResult.data,
@@ -156,7 +156,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
-    state: { personalInformation: saveData },
+    state: { personalInformation: updatedData },
   });
 
   return redirect(`/apply/${id}/communication-preference`, sessionResponseInit);
