@@ -15,11 +15,6 @@ import { RouteHandleData } from '~/utils/route-utils';
 const i18nNamespaces = getTypedI18nNamespaces('terms-and-conditions');
 
 export const handle = {
-  breadcrumbs: [
-    {
-      labelI18nKey: 'terms-and-conditions:terms-and-conditions.index.breadcrumbs.terms-and-conditions',
-    },
-  ],
   i18nNamespaces,
   pageTitleI18nKey: 'terms-and-conditions:terms-and-conditions.index.page-heading',
 } as const satisfies RouteHandleData;
@@ -54,27 +49,20 @@ export default function TermsAndConditions() {
 
   return (
     <>
-      <p className="mb-2">{t('terms-and-conditions:terms-and-conditions.index.intro-text')}</p>
-
+      <p className="mb-6">{t('terms-and-conditions:terms-and-conditions.index.intro-text')}</p>
       <CollapsibleDetails id="collapsable-description-first-part" summary={t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-heading')}>
-        <p className="mb-2">{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-part-one')}</p>
-
-        <p className="mb-2">{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-part-two')}</p>
-
-        <p className="mb-2">
+        <p className="mb-6">{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-part-one')}</p>
+        <p className="mb-6">{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-part-two')}</p>
+        <p className="mb-6">
           <strong>{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-part-three-bold')}</strong>
           {t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-part-three-text')}
         </p>
+        <p className="mb-6">{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-part-four')}</p>
+        <p className="mb-6">{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-part-five')}</p>
+        <p className="mb-6">{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-part-six')}</p>
 
-        <p className="mb-2">{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-part-four')}</p>
-
-        <p className="mb-2">{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-part-five')}</p>
-
-        <p className="mb-2">{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-part-six')}</p>
-
-        <h2 className="mb-2 font-bold"> {t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-terms-of-use-of-the-online-application-heading')}</h2>
-
-        <ul className="list-disc space-y-2 pl-10">
+        <h2 className="font-bold"> {t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-terms-of-use-of-the-online-application-heading')}</h2>
+        <ul className="mb-6 list-disc pl-10">
           <li>{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-self-agreement')}</li>
           <li>{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-on-behalf-of-someone-else')}</li>
           <li>{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-at-your-own-risk')}</li>
@@ -87,54 +75,47 @@ export default function TermsAndConditions() {
           </li>
         </ul>
 
-        <h2 className="mb-2 font-bold"> {t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-disclaimers-heading')}</h2>
-        <p className="mb-2">{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-disclaimers-text')}</p>
-
-        <ul className="list-disc space-y-2 pl-10">
+        <h2 className="font-bold"> {t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-disclaimers-heading')}</h2>
+        <p>{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-disclaimers-text')}</p>
+        <ul className="mb-6 list-disc pl-10">
           <li>{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-disclaimers-bullet-one')}</li>
           <li>{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-disclaimers-bullet-two')}</li>
           <li>{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-disclaimers-bullet-three')}</li>
         </ul>
-        <h2 className="mb-2 font-bold"> {t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-disclaimers-text-continued')}</h2>
+        <p className="mb-6">{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-disclaimers-text-continued')}</p>
 
-        <p className="mb-2 ">{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-changes-to-these-terms-of-use-heading')}</p>
-
-        <p className="mb-2">{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-changes-to-these-terms-of-use-text')}</p>
+        <h2 className="font-bold">{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-changes-to-these-terms-of-use-heading')}</h2>
+        <p>{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-changes-to-these-terms-of-use-text')}</p>
       </CollapsibleDetails>
 
       <CollapsibleDetails id="collapsable-description-second-part" summary={t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-heading')}>
-        <h2 className="mb-2 font-bold"> {t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-personal-information-heading')}</h2>
-        <p className="mb-2">{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-personal-information-text')}</p>
+        <h2 className="font-bold"> {t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-personal-information-heading')}</h2>
+        <p className="mb-6">{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-personal-information-text')}</p>
 
-        <h2 className="mb-2 font-bold"> {t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-how-we-protect-your-privacy-heading')}</h2>
-        <p className="mb-2">{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-how-we-protect-your-privacy-text-part-one')}</p>
-
-        <p className="mb-2">{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-how-we-protect-your-privacy-text-part-two')}</p>
-
-        <ul className="list-disc space-y-2 pl-10">
+        <h2 className="font-bold"> {t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-how-we-protect-your-privacy-heading')}</h2>
+        <p className="mb-6">{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-how-we-protect-your-privacy-text-part-one')}</p>
+        <p className="mb-6">{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-how-we-protect-your-privacy-text-part-two')}</p>
+        <ul className="mb-6 list-disc space-y-2 pl-10">
           <li>{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-how-we-protect-your-privacy-bullet-one')}</li>
         </ul>
 
-        <p className="mb-2">
+        <p className="mb-6">
           <Trans ns={i18nNamespaces} i18nKey="terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-how-we-protect-your-privacy-text-part-three" components={{ infosource }} />
         </p>
-        <p className="mb-2">
+        <p className="mb-6">
           <Trans ns={i18nNamespaces} i18nKey="terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-how-we-protect-your-privacy-text-part-four" components={{ microsoftDataPrivacyPolicy }} />
         </p>
-
-        <p className="mb-2">
+        <p className="mb-6">
           <Trans ns={i18nNamespaces} i18nKey="terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-how-we-protect-your-privacy-text-part-five" components={{ fileacomplaint }} />
         </p>
 
-        <h2 className="mb-2 font-bold"> {t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-who-we-can-share-your-information-with-heading')}</h2>
-        <p className="mb-2">{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-who-we-can-share-your-information-with-text-part-one')}</p>
+        <h2 className="font-bold"> {t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-who-we-can-share-your-information-with-heading')}</h2>
+        <p className="mb-6">{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-who-we-can-share-your-information-with-text-part-one')}</p>
+        <p className="mb-6">{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-who-we-can-share-your-information-with-text-part-two')}</p>
+        <p className="mb-6">{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-who-we-can-share-your-information-with-text-part-three')}</p>
 
-        <p className="mb-2">{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-who-we-can-share-your-information-with-text-part-two')}</p>
-
-        <p className="mb-2">{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-who-we-can-share-your-information-with-text-part-three')}</p>
-
-        <h2 className="mb-2 font-bold">{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-what-happens-if-you-dont-give-us-your-information-heading')} </h2>
-        <p className="mb-2">{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-what-happens-if-you-dont-give-us-your-information-text')}</p>
+        <h2 className="font-bold">{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-what-happens-if-you-dont-give-us-your-information-heading')} </h2>
+        <p>{t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-what-happens-if-you-dont-give-us-your-information-text')}</p>
       </CollapsibleDetails>
       <p className="mb-4 mt-2">{t('terms-and-conditions:terms-and-conditions.index.apply-now.text')}</p>
 
@@ -143,7 +124,7 @@ export default function TermsAndConditions() {
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('terms-and-conditions:terms-and-conditions.index.apply-now.back-button')}
         </ButtonLink>
-        <ButtonLink id="continue-button" to={`/apply/${id}/personal-info`}>
+        <ButtonLink variant="primary" id="continue-button" to={`/apply/${id}/personal-info`}>
           {t('terms-and-conditions:terms-and-conditions.index.apply-now.start-button')}
           <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
         </ButtonLink>
