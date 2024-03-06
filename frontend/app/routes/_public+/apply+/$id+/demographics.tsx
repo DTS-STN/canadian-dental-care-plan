@@ -28,7 +28,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     params,
     state,
   });
-  return redirect(`/apply/${id}/review-information`, sessionResponseInit);
+  return redirect(`/apply/${id}/demographics-part1`, sessionResponseInit);
 }
 
 export default function Demographics() {
