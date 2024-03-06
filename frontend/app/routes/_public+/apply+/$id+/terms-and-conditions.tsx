@@ -35,7 +35,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     state: {},
   });
 
-  return redirect(`/apply/${id}/personal-info`, sessionResponseInit);
+  return redirect(`/apply/${id}/type-of-application`, sessionResponseInit);
 }
 
 export default function TermsAndConditions() {
@@ -124,7 +124,7 @@ export default function TermsAndConditions() {
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('terms-and-conditions:terms-and-conditions.index.apply-now.back-button')}
         </ButtonLink>
-        <ButtonLink variant="primary" id="continue-button" to={`/apply/${id}/personal-info`}>
+        <ButtonLink variant="primary" id="continue-button" to={`/apply/${id}/type-of-application`}>
           {t('terms-and-conditions:terms-and-conditions.index.apply-now.start-button')}
           <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
         </ButtonLink>
