@@ -65,6 +65,8 @@ export default function ApplyIndex() {
 
       captchaRef.current.resetCaptcha();
     }
+
+    sessionStorage.setItem('flow.state', 'active');
   }
 
   return (

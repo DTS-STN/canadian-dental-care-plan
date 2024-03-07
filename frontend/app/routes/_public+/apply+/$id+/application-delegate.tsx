@@ -51,7 +51,7 @@ export default function ApplyFlowApplicationDelegate() {
           {t('application-delegate.back-btn')}
           <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
         </ButtonLink>
-        <ButtonLink type="submit" variant="primary" to="/">
+        <ButtonLink type="submit" variant="primary" to="/" onClick={() => sessionStorage.removeItem('flow.state')}>
           {t('application-delegate.return-btn')}
         </ButtonLink>
       </div>

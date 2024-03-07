@@ -47,7 +47,7 @@ export default function ApplyFlowFileYourTaxes() {
           {t('dob-eligibility.back-btn')}
           <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
         </ButtonLink>
-        <ButtonLink type="submit" variant="primary" to="/">
+        <ButtonLink type="submit" variant="primary" to="/" onClick={() => sessionStorage.removeItem('flow.state')}>
           {t('dob-eligibility.return-btn')}
         </ButtonLink>
       </div>

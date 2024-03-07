@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 import { Form, MetaFunction, useActionData, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
