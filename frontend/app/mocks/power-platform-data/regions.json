@@ -1,0 +1,557 @@
+{
+  "@odata.context": "https://canadadental-uat.crm3.dynamics.com/api/data/v9.2/$metadata#esdc_provinceterritorystates(esdc_provinceterritorystateid,_esdc_countryid_value,esdc_nameenglish,esdc_namefrench,esdc_internationalalphacode)",
+  "value": [
+    {
+      "@odata.etag": "W/\"1398952923\"",
+      "esdc_provinceterritorystateid": "701091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Alabama",
+      "esdc_namefrench": "Alabama",
+      "esdc_internationalalphacode": "AL"
+    },
+    {
+      "@odata.etag": "W/\"1398952930\"",
+      "esdc_provinceterritorystateid": "721091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Alaska",
+      "esdc_namefrench": "Alaska",
+      "esdc_internationalalphacode": "AK"
+    },
+    {
+      "@odata.etag": "W/\"1398952936\"",
+      "esdc_provinceterritorystateid": "741091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Arizona",
+      "esdc_namefrench": "Arizona",
+      "esdc_internationalalphacode": "AZ"
+    },
+    {
+      "@odata.etag": "W/\"1398952942\"",
+      "esdc_provinceterritorystateid": "761091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Arkansas",
+      "esdc_namefrench": "Arkansas",
+      "esdc_internationalalphacode": "AR"
+    },
+    {
+      "@odata.etag": "W/\"1398952948\"",
+      "esdc_provinceterritorystateid": "781091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "California",
+      "esdc_namefrench": "Californie",
+      "esdc_internationalalphacode": "CA"
+    },
+    {
+      "@odata.etag": "W/\"1398952954\"",
+      "esdc_provinceterritorystateid": "7a1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Colorado",
+      "esdc_namefrench": "Colorado",
+      "esdc_internationalalphacode": "CO"
+    },
+    {
+      "@odata.etag": "W/\"1398952961\"",
+      "esdc_provinceterritorystateid": "7c1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Connecticut",
+      "esdc_namefrench": "Connecticut",
+      "esdc_internationalalphacode": "CT"
+    },
+    {
+      "@odata.etag": "W/\"1398952967\"",
+      "esdc_provinceterritorystateid": "7e1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Delaware",
+      "esdc_namefrench": "Delaware",
+      "esdc_internationalalphacode": "DE"
+    },
+    {
+      "@odata.etag": "W/\"1398952973\"",
+      "esdc_provinceterritorystateid": "801091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Florida",
+      "esdc_namefrench": "Floride",
+      "esdc_internationalalphacode": "FL"
+    },
+    {
+      "@odata.etag": "W/\"1398952979\"",
+      "esdc_provinceterritorystateid": "821091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Georgia",
+      "esdc_namefrench": "Géorgie",
+      "esdc_internationalalphacode": "GA"
+    },
+    {
+      "@odata.etag": "W/\"1398952985\"",
+      "esdc_provinceterritorystateid": "841091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Hawaii",
+      "esdc_namefrench": "Hawaï",
+      "esdc_internationalalphacode": "HI"
+    },
+    {
+      "@odata.etag": "W/\"1398952991\"",
+      "esdc_provinceterritorystateid": "861091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Idaho",
+      "esdc_namefrench": "Idaho",
+      "esdc_internationalalphacode": "ID"
+    },
+    {
+      "@odata.etag": "W/\"1398952997\"",
+      "esdc_provinceterritorystateid": "881091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Illinois",
+      "esdc_namefrench": "Illinois",
+      "esdc_internationalalphacode": "IL"
+    },
+    {
+      "@odata.etag": "W/\"1398953003\"",
+      "esdc_provinceterritorystateid": "8a1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Indiana",
+      "esdc_namefrench": "Indiana",
+      "esdc_internationalalphacode": "IN"
+    },
+    {
+      "@odata.etag": "W/\"1398953009\"",
+      "esdc_provinceterritorystateid": "8c1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Iowa",
+      "esdc_namefrench": "Iowa",
+      "esdc_internationalalphacode": "IA"
+    },
+    {
+      "@odata.etag": "W/\"1398953015\"",
+      "esdc_provinceterritorystateid": "8e1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Kansas",
+      "esdc_namefrench": "Kansas",
+      "esdc_internationalalphacode": "KS"
+    },
+    {
+      "@odata.etag": "W/\"1398953021\"",
+      "esdc_provinceterritorystateid": "901091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Kentucky",
+      "esdc_namefrench": "Kentucky",
+      "esdc_internationalalphacode": "KY"
+    },
+    {
+      "@odata.etag": "W/\"1398953027\"",
+      "esdc_provinceterritorystateid": "921091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Louisiana",
+      "esdc_namefrench": "Louisiane",
+      "esdc_internationalalphacode": "LA"
+    },
+    {
+      "@odata.etag": "W/\"1398953033\"",
+      "esdc_provinceterritorystateid": "941091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Maine",
+      "esdc_namefrench": "Maine",
+      "esdc_internationalalphacode": "ME"
+    },
+    {
+      "@odata.etag": "W/\"1398953039\"",
+      "esdc_provinceterritorystateid": "961091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Maryland",
+      "esdc_namefrench": "Maryland",
+      "esdc_internationalalphacode": "MD"
+    },
+    {
+      "@odata.etag": "W/\"1398953045\"",
+      "esdc_provinceterritorystateid": "981091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Massachusetts",
+      "esdc_namefrench": "Massachusetts",
+      "esdc_internationalalphacode": "MA"
+    },
+    {
+      "@odata.etag": "W/\"1398953051\"",
+      "esdc_provinceterritorystateid": "9a1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Michigan",
+      "esdc_namefrench": "Michigan",
+      "esdc_internationalalphacode": "MI"
+    },
+    {
+      "@odata.etag": "W/\"1398953057\"",
+      "esdc_provinceterritorystateid": "9c1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Minnesota",
+      "esdc_namefrench": "Minnesota",
+      "esdc_internationalalphacode": "MN"
+    },
+    {
+      "@odata.etag": "W/\"1398953063\"",
+      "esdc_provinceterritorystateid": "9e1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Mississippi",
+      "esdc_namefrench": "Mississippi",
+      "esdc_internationalalphacode": "MS"
+    },
+    {
+      "@odata.etag": "W/\"1398953069\"",
+      "esdc_provinceterritorystateid": "a01091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Missouri",
+      "esdc_namefrench": "Missouri",
+      "esdc_internationalalphacode": "MO"
+    },
+    {
+      "@odata.etag": "W/\"1398953075\"",
+      "esdc_provinceterritorystateid": "a21091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Montana",
+      "esdc_namefrench": "Montana",
+      "esdc_internationalalphacode": "MT"
+    },
+    {
+      "@odata.etag": "W/\"1398953081\"",
+      "esdc_provinceterritorystateid": "a41091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Nebraska",
+      "esdc_namefrench": "Nebraska",
+      "esdc_internationalalphacode": "NE"
+    },
+    {
+      "@odata.etag": "W/\"1398953087\"",
+      "esdc_provinceterritorystateid": "a61091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Nevada",
+      "esdc_namefrench": "Nevada",
+      "esdc_internationalalphacode": "NV"
+    },
+    {
+      "@odata.etag": "W/\"1398953093\"",
+      "esdc_provinceterritorystateid": "a81091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "New Hampshire",
+      "esdc_namefrench": "New Hampshire",
+      "esdc_internationalalphacode": "NH"
+    },
+    {
+      "@odata.etag": "W/\"1398953099\"",
+      "esdc_provinceterritorystateid": "aa1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "New Jersey",
+      "esdc_namefrench": "New Jersey",
+      "esdc_internationalalphacode": "NJ"
+    },
+    {
+      "@odata.etag": "W/\"1398953105\"",
+      "esdc_provinceterritorystateid": "ac1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "New Mexico",
+      "esdc_namefrench": "Nouveau-Mexique",
+      "esdc_internationalalphacode": "NM"
+    },
+    {
+      "@odata.etag": "W/\"1398953111\"",
+      "esdc_provinceterritorystateid": "ae1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "New York",
+      "esdc_namefrench": "État de New York",
+      "esdc_internationalalphacode": "NY"
+    },
+    {
+      "@odata.etag": "W/\"1398953117\"",
+      "esdc_provinceterritorystateid": "b01091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "North Carolina",
+      "esdc_namefrench": "Caroline du Nord",
+      "esdc_internationalalphacode": "NC"
+    },
+    {
+      "@odata.etag": "W/\"1398953123\"",
+      "esdc_provinceterritorystateid": "b21091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "North Dakota",
+      "esdc_namefrench": "Dakota du Nord",
+      "esdc_internationalalphacode": "ND"
+    },
+    {
+      "@odata.etag": "W/\"1398953129\"",
+      "esdc_provinceterritorystateid": "b41091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Ohio",
+      "esdc_namefrench": "Ohio",
+      "esdc_internationalalphacode": "OH"
+    },
+    {
+      "@odata.etag": "W/\"1398953135\"",
+      "esdc_provinceterritorystateid": "b61091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Oklahoma",
+      "esdc_namefrench": "Oklahoma",
+      "esdc_internationalalphacode": "OK"
+    },
+    {
+      "@odata.etag": "W/\"1398953141\"",
+      "esdc_provinceterritorystateid": "b81091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Oregon",
+      "esdc_namefrench": "Oregon",
+      "esdc_internationalalphacode": "OR"
+    },
+    {
+      "@odata.etag": "W/\"1398953147\"",
+      "esdc_provinceterritorystateid": "ba1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Pennsylvania",
+      "esdc_namefrench": "Pennsylvanie",
+      "esdc_internationalalphacode": "PA"
+    },
+    {
+      "@odata.etag": "W/\"1398953153\"",
+      "esdc_provinceterritorystateid": "bc1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Rhode Island",
+      "esdc_namefrench": "Rhode Island",
+      "esdc_internationalalphacode": "RI"
+    },
+    {
+      "@odata.etag": "W/\"1398953159\"",
+      "esdc_provinceterritorystateid": "c01091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "South Carolina",
+      "esdc_namefrench": "Caroline du Sud",
+      "esdc_internationalalphacode": "SC"
+    },
+    {
+      "@odata.etag": "W/\"1398953165\"",
+      "esdc_provinceterritorystateid": "c21091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "South Dakota",
+      "esdc_namefrench": "Dakota du Sud",
+      "esdc_internationalalphacode": "SD"
+    },
+    {
+      "@odata.etag": "W/\"1398953171\"",
+      "esdc_provinceterritorystateid": "c41091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Tennessee",
+      "esdc_namefrench": "Tennessee",
+      "esdc_internationalalphacode": "TN"
+    },
+    {
+      "@odata.etag": "W/\"1398953177\"",
+      "esdc_provinceterritorystateid": "c61091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Texas",
+      "esdc_namefrench": "Texas",
+      "esdc_internationalalphacode": "TX"
+    },
+    {
+      "@odata.etag": "W/\"1398953183\"",
+      "esdc_provinceterritorystateid": "c81091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Utah",
+      "esdc_namefrench": "Utah",
+      "esdc_internationalalphacode": "UT"
+    },
+    {
+      "@odata.etag": "W/\"1398953189\"",
+      "esdc_provinceterritorystateid": "ca1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Vermont",
+      "esdc_namefrench": "Vermont",
+      "esdc_internationalalphacode": "VT"
+    },
+    {
+      "@odata.etag": "W/\"1398953195\"",
+      "esdc_provinceterritorystateid": "cc1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Virginia",
+      "esdc_namefrench": "Virginie",
+      "esdc_internationalalphacode": "VA"
+    },
+    {
+      "@odata.etag": "W/\"1398953201\"",
+      "esdc_provinceterritorystateid": "ce1091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Washington",
+      "esdc_namefrench": "État de Washington",
+      "esdc_internationalalphacode": "WA"
+    },
+    {
+      "@odata.etag": "W/\"1398953207\"",
+      "esdc_provinceterritorystateid": "d01091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "West Virginia",
+      "esdc_namefrench": "Virginie-Occidentale",
+      "esdc_internationalalphacode": "WV"
+    },
+    {
+      "@odata.etag": "W/\"1398953213\"",
+      "esdc_provinceterritorystateid": "d21091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Wisconsin",
+      "esdc_namefrench": "Wisconsin",
+      "esdc_internationalalphacode": "WI"
+    },
+    {
+      "@odata.etag": "W/\"1398953219\"",
+      "esdc_provinceterritorystateid": "d41091c1-03b4-eb11-8236-0022486d8555",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Wyoming",
+      "esdc_namefrench": "Wyoming",
+      "esdc_internationalalphacode": "WY"
+    },
+    {
+      "@odata.etag": "W/\"1398953225\"",
+      "esdc_provinceterritorystateid": "3b17d494-35b3-eb11-8236-0022486d8d5f",
+      "_esdc_countryid_value": "0cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Alberta",
+      "esdc_namefrench": "Alberta",
+      "esdc_internationalalphacode": "AB"
+    },
+    {
+      "@odata.etag": "W/\"1415001203\"",
+      "esdc_provinceterritorystateid": "9c440baa-35b3-eb11-8236-0022486d8d5f",
+      "_esdc_countryid_value": "0cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "British Columbia",
+      "esdc_namefrench": "Colombie-Britannique",
+      "esdc_internationalalphacode": "BC"
+    },
+    {
+      "@odata.etag": "W/\"1398953232\"",
+      "esdc_provinceterritorystateid": "6d861c55-36b3-eb11-8236-0022486d8d5f",
+      "_esdc_countryid_value": "0cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Manitoba",
+      "esdc_namefrench": "Manitoba",
+      "esdc_internationalalphacode": "MB"
+    },
+    {
+      "@odata.etag": "W/\"1398953238\"",
+      "esdc_provinceterritorystateid": "23dc27a2-36b3-eb11-8236-0022486d8d5f",
+      "_esdc_countryid_value": "0cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "New Brunswick",
+      "esdc_namefrench": "Nouveau-Brunswick",
+      "esdc_internationalalphacode": "NB"
+    },
+    {
+      "@odata.etag": "W/\"1398953244\"",
+      "esdc_provinceterritorystateid": "fc2243c9-36b3-eb11-8236-0022486d8d5f",
+      "_esdc_countryid_value": "0cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Nova Scotia",
+      "esdc_namefrench": "Nouvelle-Écosse",
+      "esdc_internationalalphacode": "NS"
+    },
+    {
+      "@odata.etag": "W/\"1398953250\"",
+      "esdc_provinceterritorystateid": "daf4d05b-37b3-eb11-8236-0022486d8d5f",
+      "_esdc_countryid_value": "0cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Ontario",
+      "esdc_namefrench": "Ontario",
+      "esdc_internationalalphacode": "ON"
+    },
+    {
+      "@odata.etag": "W/\"1398953256\"",
+      "esdc_provinceterritorystateid": "39449f70-37b3-eb11-8236-0022486d8d5f",
+      "_esdc_countryid_value": "0cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Quebec",
+      "esdc_namefrench": "Québec",
+      "esdc_internationalalphacode": "QC"
+    },
+    {
+      "@odata.etag": "W/\"1398953262\"",
+      "esdc_provinceterritorystateid": "5bc09caf-38b3-eb11-8236-0022486d8d5f",
+      "_esdc_countryid_value": "0cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Saskatchewan",
+      "esdc_namefrench": "Saskatchewan",
+      "esdc_internationalalphacode": "SK"
+    },
+    {
+      "@odata.etag": "W/\"1398953268\"",
+      "esdc_provinceterritorystateid": "5abc28c9-38b3-eb11-8236-0022486d8d5f",
+      "_esdc_countryid_value": "0cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Newfoundland and Labrador",
+      "esdc_namefrench": "Terre-Neuve-et-Labrador",
+      "esdc_internationalalphacode": "NL"
+    },
+    {
+      "@odata.etag": "W/\"1398953274\"",
+      "esdc_provinceterritorystateid": "3b8110df-38b3-eb11-8236-0022486d8d5f",
+      "_esdc_countryid_value": "0cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Prince Edward Island",
+      "esdc_namefrench": "Île-du-Prince-Édouard",
+      "esdc_internationalalphacode": "PE"
+    },
+    {
+      "@odata.etag": "W/\"1398953280\"",
+      "esdc_provinceterritorystateid": "9936c08e-39b3-eb11-8236-0022486d8d5f",
+      "_esdc_countryid_value": "0cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Nunavut",
+      "esdc_namefrench": "Nunavut",
+      "esdc_internationalalphacode": "NU"
+    },
+    {
+      "@odata.etag": "W/\"1398953286\"",
+      "esdc_provinceterritorystateid": "6026aca2-39b3-eb11-8236-0022486d8d5f",
+      "_esdc_countryid_value": "0cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Northwest Territories",
+      "esdc_namefrench": "Territoires du Nord-Ouest",
+      "esdc_internationalalphacode": "NT"
+    },
+    {
+      "@odata.etag": "W/\"1398953292\"",
+      "esdc_provinceterritorystateid": "8fef32b7-39b3-eb11-8236-0022486d8d5f",
+      "_esdc_countryid_value": "0cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Yukon",
+      "esdc_namefrench": "Yukon",
+      "esdc_internationalalphacode": "YT"
+    },
+    {
+      "@odata.etag": "W/\"1398953298\"",
+      "esdc_provinceterritorystateid": "21341235-1ae4-eb11-bacb-0022486d8f50",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "District of Columbia",
+      "esdc_namefrench": "District de Colombie",
+      "esdc_internationalalphacode": "DC"
+    },
+    {
+      "@odata.etag": "W/\"1398953304\"",
+      "esdc_provinceterritorystateid": "18c5680b-1be4-eb11-bacb-0022486d8f50",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "American Samoa",
+      "esdc_namefrench": "Samoa américaines",
+      "esdc_internationalalphacode": "AS"
+    },
+    {
+      "@odata.etag": "W/\"1398953310\"",
+      "esdc_provinceterritorystateid": "18dd6b1d-1be4-eb11-bacb-0022486d8f50",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Guam",
+      "esdc_namefrench": "Guam",
+      "esdc_internationalalphacode": "GU"
+    },
+    {
+      "@odata.etag": "W/\"1398953316\"",
+      "esdc_provinceterritorystateid": "90f46e2f-1be4-eb11-bacb-0022486d8f50",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Northern Mariana Islands",
+      "esdc_namefrench": "Îles Mariannes du Nord",
+      "esdc_internationalalphacode": "MP"
+    },
+    {
+      "@odata.etag": "W/\"1398953322\"",
+      "esdc_provinceterritorystateid": "06ca9e47-1be4-eb11-bacb-0022486d8f50",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Puerto Rico",
+      "esdc_namefrench": "Porto Rico",
+      "esdc_internationalalphacode": "PR"
+    },
+    {
+      "@odata.etag": "W/\"1398953328\"",
+      "esdc_provinceterritorystateid": "cf6c8c59-1be4-eb11-bacb-0022486d8f50",
+      "_esdc_countryid_value": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "U.S. Virgin Islands",
+      "esdc_namefrench": "Îles Vierges américaines",
+      "esdc_internationalalphacode": "VI"
+    }
+  ]
+}

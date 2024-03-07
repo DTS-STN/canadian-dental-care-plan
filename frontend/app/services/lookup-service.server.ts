@@ -38,15 +38,16 @@ const federalSocialProgram = z.object({
 
 const countrySchema = z.object({
   countryId: z.string(),
-  nameEnglish: z.string(),
-  nameFrench: z.string(),
+  countryCode: z.string(),
+  nameEn: z.string(),
+  nameFr: z.string(),
 });
 
 const regionSchema = z.object({
   provinceTerritoryStateId: z.string(),
   countryId: z.string(),
-  nameEnglish: z.string(),
-  nameFrench: z.string(),
+  nameEn: z.string(),
+  nameFr: z.string(),
 });
 
 const bornTypeSchema = z.object({
@@ -424,9 +425,9 @@ function createLookupService() {
     if (response.ok) {
       const parsedCountries = countryListSchema.parse(await response.json());
       return parsedCountries.map((country) => ({
-        countryId: country.countryId,
-        nameEnglish: country.nameEnglish,
-        nameFrench: country.nameFrench,
+        countryId: country.countryCode,
+        nameEn: country.nameEn,
+        nameFr: country.nameFr,
       }));
     }
 
@@ -452,8 +453,8 @@ function createLookupService() {
       return parsedRegions.map((region) => ({
         provinceTerritoryStateId: region.provinceTerritoryStateId,
         countryId: region.countryId,
-        nameEnglish: region.nameEnglish,
-        nameFrench: region.nameFrench,
+        nameEn: region.nameEn,
+        nameFr: region.nameFr,
       }));
     }
 

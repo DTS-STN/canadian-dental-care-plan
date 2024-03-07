@@ -1,0 +1,19 @@
+{
+  "@odata.context": "https://canadadental-uat.crm3.dynamics.com/api/data/v9.2/$metadata#esdc_countries(esdc_countryid,esdc_nameenglish,esdc_namefrench,esdc_countrycodealpha3)",
+  "value": [
+    {
+      "@odata.etag": "W/\"1398948575\"",
+      "esdc_countryid": "0cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Canada",
+      "esdc_namefrench": "Canada",
+      "esdc_countrycodealpha3": "CAN"
+    },
+    {
+      "@odata.etag": "W/\"1398951850\"",
+      "esdc_countryid": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "United States of America",
+      "esdc_namefrench": "États-Unis d'Amérique,",
+      "esdc_countrycodealpha3": "USA"
+    }
+  ]
+}
