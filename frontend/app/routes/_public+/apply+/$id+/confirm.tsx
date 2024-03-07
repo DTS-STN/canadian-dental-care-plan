@@ -101,7 +101,7 @@ export default function ApplyFlowConfirm() {
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.whats-next')}</h2>
       <p className="mt-4">{t('confirm.begin-process')}</p>
       <p className="mt-4">
-        <Trans ns={i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink }} />
+        <Trans ns={i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
       </p>
       <p className="mt-4">{t('confirm.use-code')}</p>
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.register-msca-title')}</h2>
