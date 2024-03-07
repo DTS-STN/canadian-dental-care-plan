@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 
 import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
@@ -69,10 +69,10 @@ export default function AccessToDentalInsuranceQuestion() {
             legend={t('provincial-territorial:federal-benefits.legend')}
             options={federalDentalBenefits.map((option) => ({
               children: (
-                <>
+                <Fragment key={option.code}>
                   <strong>{getNameByLanguage(i18n.language, option)}</strong>,&nbsp;
                   {option.code === 'yes' ? <Trans ns={i18nNamespaces} i18nKey="provincial-territorial:federal-benefits.option-yes" /> : <Trans ns={i18nNamespaces} i18nKey="provincial-territorial:federal-benefits.option-no" />}
-                </>
+                </Fragment>
               ),
               value: option.code,
               defaultChecked: state.dentalBenefit?.federalBenefit === option.code,
