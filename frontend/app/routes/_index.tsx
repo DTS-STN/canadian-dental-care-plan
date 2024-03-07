@@ -1,17 +1,21 @@
-import { Link } from '@remix-run/react';
+import { Link, MetaFunction } from '@remix-run/react';
 
 import { ButtonLink } from '~/components/buttons';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('gcweb'),
-  documentTitleI18nKey: 'gcweb:header.application-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction = mergeMeta((args) => {
+  return [{ title: 'Canadian Dental Care Plan | Régime canadien de soins dentaires - Canada.ca' }];
+});
 
 export default function RootIndex() {
   return (
-    <main role="main" className="flex h-svh bg-splash-page bg-cover bg-center" property="mainContentOfPage">
+    <main role="main" className="bg-splash-page flex h-svh bg-cover bg-center" property="mainContentOfPage">
       <div className="m-auto w-[300px] bg-white md:w-[400px] lg:w-[500px]">
         <div className="p-8">
           <h1 className="sr-only">Canadian Dental Care Plan | Régime canadien de soins dentaires</h1>

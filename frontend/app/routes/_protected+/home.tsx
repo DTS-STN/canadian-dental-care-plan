@@ -2,7 +2,7 @@ import type { ComponentProps, ReactNode } from 'react';
 
 import { json, redirect } from '@remix-run/node';
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import { Link, MetaFunction, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -10,13 +10,19 @@ import { useFeature } from '~/root';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('index'),
+  i18nNamespaces: getTypedI18nNamespaces('index', 'gcweb'),
   pageIdentifier: 'CDCP-0001',
   pageTitleI18nKey: 'index:page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('index:page-title') }) }];
+});
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();

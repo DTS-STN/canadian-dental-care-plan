@@ -1,6 +1,6 @@
 import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
@@ -10,9 +10,8 @@ import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
-
-const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
   breadcrumbs: [
@@ -20,10 +19,15 @@ export const handle = {
     { labelI18nKey: 'personal-information:phone-number.confirm.breadcrumbs.personal-information', to: '/personal-information' },
     { labelI18nKey: 'personal-information:phone-number.confirm.breadcrumbs.confirm-phone-number' },
   ],
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
   pageIdentifier: 'CDCP-0009',
   pageTitleI18nKey: 'personal-information:phone-number.confirm.page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('personal-information:phone-number.confirm.page-title') }) }];
+});
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
@@ -71,7 +75,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function PhoneNumberConfirm() {
   const loaderData = useLoaderData<typeof loader>();
-  const { t } = useTranslation(i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   return (
     <>
       <p className="mb-8 text-lg text-gray-500">{t('personal-information:phone-number.confirm.subtitle')}</p>

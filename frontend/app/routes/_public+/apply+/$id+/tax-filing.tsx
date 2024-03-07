@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from '@remix-run/node';
-import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useActionData, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,15 +13,19 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputRadios } from '~/components/input-radios';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('eligibility');
-
 export const handle = {
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('eligibility', 'gcweb'),
   pageIdentifier: 'CDCP-00XX',
   pageTitleI18nKey: 'eligibility:tax-filing.page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('eligibility:tax-filing.page-title') }) }];
+});
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
@@ -58,7 +62,7 @@ export default function ApplyFlowTaxFiling() {
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
 
-  const { t } = useTranslation(i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
 
   useEffect(() => {
     if (actionData?.formData && hasErrors(actionData.formData)) {

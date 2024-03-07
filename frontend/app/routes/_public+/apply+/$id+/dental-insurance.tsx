@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useLoaderData } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -12,14 +12,18 @@ import { InputRadios } from '~/components/input-radios';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-
-const i18nNamespaces = getTypedI18nNamespaces('dental-insurance-question');
+import { mergeMeta } from '~/utils/meta-utils';
 
 export const handle = {
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('dental-insurance-question', 'gcweb'),
   pageIdentifier: 'CDCP-1115',
   pageTitleI18nKey: 'dental-insurance-question:title',
 };
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('dental-insurance-question:title') }) }];
+});
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
@@ -53,19 +57,19 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function AccessToDentalInsuranceQuestion() {
   const { options, state } = useLoaderData<typeof loader>();
-  const { i18n, t } = useTranslation(i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
 
   const helpMessage = (
     <>
       <ul className="mb-4 list-disc">
         <li>
-          <Trans ns={i18nNamespaces} i18nKey="dental-insurance-question:list.employer" />
+          <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance-question:list.employer" />
         </li>
         <li>
-          <Trans ns={i18nNamespaces} i18nKey="dental-insurance-question:list.pension" />
+          <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance-question:list.pension" />
         </li>
         <li>
-          <Trans ns={i18nNamespaces} i18nKey="dental-insurance-question:list.dental-coverage" />
+          <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance-question:list.dental-coverage" />
         </li>
         <li className="list-none">
           <Details id={t('dental-insurance-question:detail.additional-info.title')} title={t('dental-insurance-question:detail.additional-info.title')}>
@@ -75,7 +79,7 @@ export default function AccessToDentalInsuranceQuestion() {
                 <li>{t('dental-insurance-question:detail.additional-info.list.opted')}</li>
                 <li>{t('dental-insurance-question:detail.additional-info.list.cannot-opt')}</li>
               </ul>
-              <Trans ns={i18nNamespaces} i18nKey="dental-insurance-question:detail.additional-info.not-eligible" />
+              <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance-question:detail.additional-info.not-eligible" />
             </div>
           </Details>
         </li>

@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs, json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { MetaFunction, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,15 +9,19 @@ import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('eligibility');
-
 export const handle = {
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('eligibility', 'gcweb'),
   pageIdentifier: 'CDCP-00XX',
   pageTitleI18nKey: 'eligibility:application-delegate.page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('eligibility:application-delegate.page-title') }) }];
+});
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
@@ -28,7 +32,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function ApplyFlowApplicationDelegate() {
   const { id } = useLoaderData<typeof loader>();
-  const { t } = useTranslation(i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
 
   const contactServiceCanada = <InlineLink to={t('application-delegate.contact-service-canada-href')} />;
   const preparingToApply = <InlineLink to={t('application-delegate.preparing-to-apply-href')} />;
@@ -37,10 +41,10 @@ export default function ApplyFlowApplicationDelegate() {
   return (
     <div className="mt-6">
       <p className="mb-6">
-        <Trans ns={i18nNamespaces} i18nKey="application-delegate.contact-representative" components={{ contactServiceCanada, span }} />
+        <Trans ns={handle.i18nNamespaces} i18nKey="application-delegate.contact-representative" components={{ contactServiceCanada, span }} />
       </p>
       <p className="mb-6">
-        <Trans ns={i18nNamespaces} i18nKey="application-delegate.prepare-to-apply" components={{ preparingToApply }} />
+        <Trans ns={handle.i18nNamespaces} i18nKey="application-delegate.prepare-to-apply" components={{ preparingToApply }} />
       </p>
       <div className="flex flex-wrap items-center gap-3">
         <ButtonLink type="button" variant="alternative" to={`/apply/${id}/type-of-application`}>

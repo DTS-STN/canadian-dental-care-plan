@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { MetaFunction, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,14 +10,18 @@ import { CollapsibleDetails } from '~/components/collapsible';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('terms-and-conditions');
-
 export const handle = {
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('terms-and-conditions', 'gcweb'),
   pageTitleI18nKey: 'terms-and-conditions:terms-and-conditions.index.page-heading',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('terms-and-conditions:terms-and-conditions.index.page-heading') }) }];
+});
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
@@ -40,7 +44,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function TermsAndConditions() {
   const { id } = useLoaderData<typeof loader>();
-  const { t } = useTranslation(i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
 
   const hcaptchaTermsOfService = <InlineLink to="https://www.hcaptcha.com/terms" />;
   const infosource = <InlineLink to="https://www.canada.ca/en/employment-social-development/corporate/transparency/access-information/reports/infosource.html?utm_campaign=not-applicable&utm_medium=vanity-url&utm_source=canada-ca_infosource-esdc" />;
@@ -71,7 +75,7 @@ export default function TermsAndConditions() {
           <li>{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-inactive')}</li>
           <li>{t('terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-msdc')}</li>
           <li>
-            <Trans ns={i18nNamespaces} i18nKey="terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-antibot" components={{ hcaptchaTermsOfService }} />
+            <Trans ns={handle.i18nNamespaces} i18nKey="terms-and-conditions:terms-and-conditions.index.terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-antibot" components={{ hcaptchaTermsOfService }} />
           </li>
         </ul>
 
@@ -100,13 +104,13 @@ export default function TermsAndConditions() {
         </ul>
 
         <p className="mb-6">
-          <Trans ns={i18nNamespaces} i18nKey="terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-how-we-protect-your-privacy-text-part-three" components={{ infosource }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-how-we-protect-your-privacy-text-part-three" components={{ infosource }} />
         </p>
         <p className="mb-6">
-          <Trans ns={i18nNamespaces} i18nKey="terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-how-we-protect-your-privacy-text-part-four" components={{ microsoftDataPrivacyPolicy }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-how-we-protect-your-privacy-text-part-four" components={{ microsoftDataPrivacyPolicy }} />
         </p>
         <p className="mb-6">
-          <Trans ns={i18nNamespaces} i18nKey="terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-how-we-protect-your-privacy-text-part-five" components={{ fileacomplaint }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-how-we-protect-your-privacy-text-part-five" components={{ fileacomplaint }} />
         </p>
 
         <h2 className="font-bold"> {t('terms-and-conditions:terms-and-conditions.index.privacy-notice-statement-who-we-can-share-your-information-with-heading')}</h2>

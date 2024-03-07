@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react';
 
 import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useLoaderData } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -12,14 +12,18 @@ import { InputRadios } from '~/components/input-radios';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-
-const i18nNamespaces = getTypedI18nNamespaces('provincial-territorial');
+import { mergeMeta } from '~/utils/meta-utils';
 
 export const handle = {
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('provincial-territorial', 'gcweb'),
   pageIdentifier: 'CDCP-1115',
   pageTitleI18nKey: 'provincial-territorial:title',
 };
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('provincial-territorial:title') }) }];
+});
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
@@ -54,7 +58,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function AccessToDentalInsuranceQuestion() {
   const { federalSocialPrograms, federalDentalBenefits, state } = useLoaderData<typeof loader>();
-  const { i18n, t } = useTranslation(i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const [checked, setChecked] = useState(state.dentalBenefit?.federalBenefit ?? '');
 
   return (
@@ -71,7 +75,7 @@ export default function AccessToDentalInsuranceQuestion() {
               children: (
                 <Fragment key={option.code}>
                   <strong>{getNameByLanguage(i18n.language, option)}</strong>,&nbsp;
-                  {option.code === 'yes' ? <Trans ns={i18nNamespaces} i18nKey="provincial-territorial:federal-benefits.option-yes" /> : <Trans ns={i18nNamespaces} i18nKey="provincial-territorial:federal-benefits.option-no" />}
+                  {option.code === 'yes' ? <Trans ns={handle.i18nNamespaces} i18nKey="provincial-territorial:federal-benefits.option-yes" /> : <Trans ns={handle.i18nNamespaces} i18nKey="provincial-territorial:federal-benefits.option-no" />}
                 </Fragment>
               ),
               value: option.code,
