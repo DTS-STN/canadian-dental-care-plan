@@ -30,11 +30,24 @@ const federalDentalBenefit = z.object({
   nameFr: z.string().optional(),
 });
 
+const provincialTerritorialDentalBenefit = z.object({
+  code: z.string(),
+  nameEn: z.string().optional(),
+  nameFr: z.string().optional(),
+});
+
 const federalSocialProgram = z.object({
   code: z.string(),
   nameEn: z.string().optional(),
   nameFr: z.string().optional(),
 });
+
+const provincialTerritorialSocialProgram = z.object({
+  code: z.string(),
+  provinceTerritoryStateId: z.string(),
+  nameEn: z.string().optional(),
+  nameFr: z.string().optional(),
+})
 
 const countrySchema = z.object({
   countryId: z.string(),
@@ -140,6 +153,8 @@ function createLookupService() {
     LOOKUP_SVC_APPLICATIONTYPES_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_ALLFEDERALBENEFITS_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_ALLFEDERALSOCIALPROGRAMS_CACHE_TTL_MILLISECONDS,
+    LOOKUP_SVC_PROVINCIAL_TERRITORIAL_CACHE_TTL_MILLISECONDS,
+    LOOKUP_SVC_PROVINCIAL_TERRITORIAL_SOCIALPROGRAMS_CACHE_TTL_MILLISECONDS,
   } = getEnv();
 
   async function getAllPreferredLanguages() {
@@ -395,6 +410,27 @@ function createLookupService() {
     throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
+  async function getAllProvincialTerritorialDentalBenefits() {
+    const url = `${INTEROP_API_BASE_URI}/lookups/provincial-territorial-dental-benefit/`;
+    const response = await fetch(url);
+
+    const provincialTerritorialDentalBenefits = z.array(provincialTerritorialDentalBenefit);
+
+    if (response.ok) {
+      return provincialTerritorialDentalBenefits.parse(await response.json());
+    }
+
+    log.error('%j', {
+      message: 'Failed to fetch data',
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+
+    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+  }
+
   async function getAllFederalSocialPrograms() {
     const url = `${INTEROP_API_BASE_URI}/lookups/federal-social-programs/`;
     const response = await fetch(url);
@@ -403,6 +439,27 @@ function createLookupService() {
 
     if (response.ok) {
       return federalSocialPrograms.parse(await response.json());
+    }
+
+    log.error('%j', {
+      message: 'Failed to fetch data',
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+
+    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+  }
+
+  async function getAllProvincialTerritorialSocialPrograms() {
+    const url = `${INTEROP_API_BASE_URI}/lookups/provincial-territorial-social-programs/`;
+    const response = await fetch(url);
+
+    const provincialTerritorialSocialPrograms= z.array(provincialTerritorialSocialProgram);
+
+    if (response.ok) {
+      return provincialTerritorialSocialPrograms.parse(await response.json());
     }
 
     log.error('%j', {
@@ -551,5 +608,7 @@ function createLookupService() {
     getAllTaxFilingIndications: moize(getAllTaxFilingIndications, { maxAge: LOOKUP_SVC_TAXFILINGINDICATIONS_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllTaxFilingIndications memo') }),
     getAllGenderTypes: moize(getAllGenderTypes, { maxAge: LOOKUP_SVC_GENDERTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllGenderTypes memo') }),
     getAllApplicationTypes: moize(getAllApplicationTypes, { maxAge: LOOKUP_SVC_APPLICATIONTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllApplicationTypes memo') }),
+    getAllProvincialTerritorialDentalBenefits: moize(getAllProvincialTerritorialDentalBenefits, { maxAge: LOOKUP_SVC_PROVINCIAL_TERRITORIAL_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllApplicationTypes memo') }),
+    getAllProvincialTerritorialSocialPrograms: moize(getAllProvincialTerritorialSocialPrograms, { maxAge: LOOKUP_SVC_PROVINCIAL_TERRITORIAL_SOCIALPROGRAMS_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllApplicationTypes memo') }),
   };
 }

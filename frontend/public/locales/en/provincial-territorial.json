@@ -15,7 +15,11 @@
     "title": "Provincial or territorial benefits",
     "legend": "Do you have dental benefits through a social program offered by your province or territory?",
     "option-yes": "I have <strong>provincial or territorial</strong> benefits.",
-    "option-no": "I do not have <strong>provincial or territorial</strong> benefits."
+    "option-no": "I do not have <strong>provincial or territorial</strong> benefits.",
+    "social-programs": {
+      "input-legend": "If yes, through which province or territory?",
+      "radio-legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."
+    }
   },
   "button": {
     "back": "Back",
