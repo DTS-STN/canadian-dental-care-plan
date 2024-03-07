@@ -2,9 +2,9 @@ import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { Form } from '@remix-run/react';
 
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { Button } from '~/components/buttons';
@@ -39,7 +39,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       formData: formData as Partial<z.infer<typeof formDataSchema>>,
     });
   }
-  const redirectUrl = parsedDataResult.data.button === 'answerQuestions' ? `/apply/${id}/demographics-part1` : `/apply/${id}/review-information`;
+  const redirectUrl = parsedDataResult.data.button === 'answerQuestions' ? `/apply/${id}/demographics-part1` : `/apply/${id}/terms-and-conditions`;
   const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
@@ -54,18 +54,17 @@ export default function Demographics() {
   return (
     <>
       <Form method="post" className="space-y-6">
-        <Trans ns={i18nNamespaces} i18nKey="demographics-oral-health-questions:optional-demographic-oral-health-questions.questions-are-voluntary" />
-        <p className="mb-6">{t('demographics-oral-health-questions:optional-demographic-oral-health-questions.answers-will-be-used')}</p>
+        <p className="mb-6">{t('optional-demographic-oral-health-questions.responses-will-be-confidential')}</p>
+        <p className="mb-6">{t('optional-demographic-oral-health-questions.questions-are-voluntary')}</p>
+        <p className="mb-6">{t('optional-demographic-oral-health-questions.anwsers-will-not-affect-eligibility')}</p>
 
-        <div>
-          <Button id="answer-button" variant="primary" name="button" value="answerQuestions">
-            {t('demographics-oral-health-questions:optional-demographic-oral-health-questions.answer-button')}
-            <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
-          </Button>
-        </div>
-        <div>
+        <div className="mt-6 flex flex-wrap items-center gap-3">
           <Button id="continue-button" variant="alternative" name="button" value="continueToReview">
-            {t('demographics-oral-health-questions:optional-demographic-oral-health-questions.skip-button')}
+            {t('optional-demographic-oral-health-questions.back-button')}
+            <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
+          </Button>
+          <Button id="answer-button" variant="primary" name="button" value="answerQuestions">
+            {t('optional-demographic-oral-health-questions.answer-button')}
             <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
           </Button>
         </div>

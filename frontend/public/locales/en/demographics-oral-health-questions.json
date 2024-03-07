@@ -31,9 +31,10 @@
 
   "optional-demographic-oral-health-questions": {
     "page-title": "Voluntary demographic and oral health questions",
-    "answers-will-be-used": "Your answers will be used by Health Canada for programme design and monitoring purposes. All responses will be kept confidential.",
-    "questions-are-voluntary": "<strong>These questions are voluntary.</strong> Answering them does not affect your eligibility for the Canadian Dental Care Plan. All questions have an option of 'prefer not to answer'.",
-    "answer-button": "Answer voluntary questions",
-    "skip-button": "Continue"
+    "responses-will-be-confidential": "The following questions will help Health Canada understand how the program could be improved over time. All responses will be kept confidential.",
+    "questions-are-voluntary": "Answering these questions is optional.",
+    "anwsers-will-not-affect-eligibility": "Your answers will not affect your eligibility for the Canadian Dental Care Plan.",
+    "answer-button": "Continue",
+    "back-button": "Back"
   }
 }
