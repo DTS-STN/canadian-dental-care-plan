@@ -21,25 +21,9 @@ const dobSchema = z.object({
 });
 
 /**
- * Schema for personal information.
- */
-const personalInfoStateSchema = z.object({
-  givenName: z.string().min(1),
-  age: z.coerce.number().int().min(0),
-  surname: z.string().min(1),
-});
-
-/**
  * Schema for terms and conditions
  */
 const termsAndConditionSchema = z.object({});
-
-/**
- * Schema for email address.
- */
-const emailStateSchema = z.object({
-  emailAddress: z.string().email(),
-});
 
 const dentalInsuranceStateSchema = z.object({
   dentalInsurance: z.string().min(1),
@@ -48,7 +32,7 @@ const dentalInsuranceStateSchema = z.object({
 const dentalBenefitsStateSchema = z.object({
   federalBenefit: z.string().min(1),
   federalSocialProgram: z.string().min(1),
-})
+});
 
 /**
  * Schema applicant information.
@@ -132,8 +116,6 @@ const personalInformationStateSchema = z.object({
  */
 const applyStateSchema = z.object({
   dob: dobSchema.optional(),
-  personalInfo: personalInfoStateSchema.optional(),
-  email: emailStateSchema.optional(),
   applicationDelegate: typeOfApplicationSchema.optional(),
   applicantInformation: applicantInformationSchema.optional(),
   personalInformation: personalInformationStateSchema.optional(),
@@ -279,13 +261,11 @@ export function getApplyFlow() {
   return {
     clearState,
     dobSchema,
-    emailStateSchema,
     applicantInformationSchema,
     partnerInformationSchema,
     idSchema,
     applyStateSchema,
     loadState,
-    personalInfoStateSchema,
     dentalInsuranceStateSchema,
     dentalBenefitsStateSchema,
     saveState,
