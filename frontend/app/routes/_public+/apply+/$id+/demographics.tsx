@@ -28,7 +28,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { id, state } = await applyFlow.loadState({ request, params });
 
   const formDataSchema = z.object({
-    demographics: z.enum(['answerQuestions', 'continueToReview']),
+    button: z.enum(['answerQuestions', 'continueToReview']),
   });
 
   const formData = Object.fromEntries(await request.formData());
@@ -39,7 +39,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       formData: formData as Partial<z.infer<typeof formDataSchema>>,
     });
   }
-  const redirectUrl = parsedDataResult.data.demographics === 'answerQuestions' ? `/apply/${id}/demographics-part1` : `/apply/${id}/review-information`;
+  const redirectUrl = parsedDataResult.data.button === 'answerQuestions' ? `/apply/${id}/demographics-part1` : `/apply/${id}/review-information`;
   const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
@@ -54,8 +54,8 @@ export default function Demographics() {
   return (
     <>
       <Form method="post" className="space-y-6">
-        <Trans ns={i18nNamespaces} i18nKey="demographics-oral-health-questions:optional-demographic-oral-health-questions.paragraph1" />
-        <p className="mb-6">{t('demographics-oral-health-questions:optional-demographic-oral-health-questions.paragraph2')}</p>
+        <Trans ns={i18nNamespaces} i18nKey="demographics-oral-health-questions:optional-demographic-oral-health-questions.questions-are-voluntary" />
+        <p className="mb-6">{t('demographics-oral-health-questions:optional-demographic-oral-health-questions.answers-will-be-used')}</p>
 
         <div>
           <Button id="answer-button" variant="primary" name="button" value="answerQuestions">
