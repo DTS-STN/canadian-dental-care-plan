@@ -79,19 +79,19 @@ export async function action({ request, params }: ActionFunctionArgs) {
         .optional(),
       mailingAddress: z
         .string()
-        .min(1, { message: 'empty-field' })
+        .min(1, { message: 'empty-address' })
         .transform((val) => val.trim()),
       mailingApartment: z.string().trim().optional(),
       mailingCountry: z
         .string()
-        .min(1, { message: 'empty-field' })
+        .min(1, { message: 'empty-country' })
         .transform((val) => val.trim()),
-      mailingProvince: z.string().min(1, { message: 'empty-field' }).optional(),
+      mailingProvince: z.string().min(1, { message: 'empty-province' }).optional(),
       mailingCity: z
         .string()
-        .min(1, { message: 'empty-field' })
+        .min(1, { message: 'empty-city' })
         .transform((val) => val.trim()),
-      mailingPostalCode: z.string().min(1, { message: 'empty-field' }).trim(),
+      mailingPostalCode: z.string().min(1, { message: 'empty-postal-code' }).trim(),
       copyMailingAddress: z.string().optional(),
       homeAddress: z.string().optional(),
       homeApartment: z.string().optional(),
@@ -110,16 +110,21 @@ export async function action({ request, params }: ActionFunctionArgs) {
       }
 
       if (val.copyMailingAddress !== 'on') {
-        const homeAddessFields: (keyof typeof val)[] = ['homeAddress', 'homeCountry', 'homeCity', 'homePostalCode'];
-        homeAddessFields.forEach((field) => {
-          if (isEmpty(val[field])) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-field', path: [field] });
+        const homeAddessFields: { fieldName: keyof typeof val; errorMessage: string }[] = [
+          { fieldName: 'homeAddress', errorMessage: 'empty-address' },
+          { fieldName: 'homeCountry', errorMessage: 'empty-country' },
+          { fieldName: 'homeCity', errorMessage: 'empty-city' },
+          { fieldName: 'homePostalCode', errorMessage: 'empty-postal-code' },
+        ];
+        homeAddessFields.forEach(({ fieldName, errorMessage }) => {
+          if (isEmpty(val[fieldName])) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: errorMessage, path: [fieldName] });
           }
         });
 
         if (!isEmpty(val.homeCountry)) {
           if ((val.homeCountry === COUNTRY_CODE_CANADA || val.homeCountry === COUNTRY_CODE_USA) && isEmpty(val.homeProvince)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-field', path: ['homeProvince'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-province', path: ['homeProvince'] });
           }
         }
 
@@ -235,7 +240,6 @@ export default function ApplyFlowPersonalInformation() {
       return {
         children: i18n.language === 'fr' ? country.nameFrench : country.nameEnglish,
         value: country.countryId,
-        id: country.countryId,
       };
     })
     .sort((country1, country2) => country1.children.localeCompare(country2.children));
@@ -246,7 +250,6 @@ export default function ApplyFlowPersonalInformation() {
       return {
         children: i18n.language === 'fr' ? region.nameFrench : region.nameEnglish,
         value: region.provinceTerritoryStateId,
-        id: region.provinceTerritoryStateId,
       };
     })
     .sort((region1, region2) => region1.children.localeCompare(region2.children));
@@ -266,7 +269,6 @@ export default function ApplyFlowPersonalInformation() {
       return {
         children: i18n.language === 'fr' ? region.nameFrench : region.nameEnglish,
         value: region.provinceTerritoryStateId,
-        id: region.provinceTerritoryStateId,
       };
     })
     .sort((region1, region2) => region1.children.localeCompare(region2.children));
@@ -288,7 +290,17 @@ export default function ApplyFlowPersonalInformation() {
           <p className="text-2xl font-semibold"> {t('apply:personal-information.mailing-address.header')}</p>
           <p className="mb-4"> {t('apply:personal-information.mailing-address.note')}</p>
           <div className="max-w-prose space-y-6">
-            <InputField id="mailingAddress" name="mailingAddress" className="w-full" label={t('apply:personal-information.address-field.address')} defaultValue={state?.mailingAddress} errorMessage={errorMessages.mailingAddress} required />
+            <InputField
+              id="mailingAddress"
+              name="mailingAddress"
+              className="w-full"
+              label={t('apply:personal-information.address-field.address')}
+              helpMessagePrimary={t('apply:personal-information.address-field.address-note')}
+              helpMessagePrimaryClassName="text-black"
+              defaultValue={state?.mailingAddress}
+              errorMessage={errorMessages.mailingAddress}
+              required
+            />
             <InputField id="mailingApartment" name="mailingApartment" className="w-full" label={t('apply:personal-information.address-field.apartment')} defaultValue={state?.mailingApartment} errorMessage={errorMessages.mailingApartment} />
             <InputSelect
               id="mailingCountry"
@@ -321,56 +333,64 @@ export default function ApplyFlowPersonalInformation() {
         </div>
         <div>
           <p className="text-2xl font-semibold"> {t('apply:personal-information.home-address.header')}</p>
-          <div id="copyMailingAddress">
-            <InputCheckbox
-              id="copyMailingAddress"
-              name="copyMailingAddress"
-              className="my-6"
-              checked={copyAddressChecked}
-              onChange={checkHandler}
-              append={
-                !copyAddressChecked && (
-                  <div className="max-w-prose space-y-6">
-                    <InputField id="homeAddress" name="homeAddress" className="w-full" label={t('apply:personal-information.address-field.address')} defaultValue={state?.homeAddress} errorMessage={errorMessages.homeAddress} required />
-                    <InputField id="homeApartment" name="homeApartment" className="w-full" label={t('apply:personal-information.address-field.apartment')} defaultValue={state?.homeApartment} errorMessage={errorMessages.homeApartment} />
+          <InputCheckbox
+            id="copyMailingAddress"
+            name="copyMailingAddress"
+            className="my-6"
+            checked={copyAddressChecked}
+            onChange={checkHandler}
+            append={
+              !copyAddressChecked && (
+                <div className="max-w-prose space-y-6">
+                  <InputField
+                    id="homeAddress"
+                    name="homeAddress"
+                    className="w-full"
+                    label={t('apply:personal-information.address-field.address')}
+                    helpMessagePrimary={t('apply:personal-information.address-field.address-note')}
+                    helpMessagePrimaryClassName="text-black"
+                    defaultValue={state?.homeAddress}
+                    errorMessage={errorMessages.homeAddress}
+                    required
+                  />
+                  <InputField id="homeApartment" name="homeApartment" className="w-full" label={t('apply:personal-information.address-field.apartment')} defaultValue={state?.homeApartment} errorMessage={errorMessages.homeApartment} />
+                  <InputSelect
+                    id="homeCountry"
+                    name="homeCountry"
+                    className="w-full sm:w-1/2"
+                    label={t('apply:personal-information.address-field.country')}
+                    defaultValue={state?.homeCountry}
+                    errorMessage={errorMessages.homeCountry}
+                    required
+                    options={[dummyOption, ...countries]}
+                    onChange={homeCountryChangeHandler}
+                  />
+                  {homeRegions.length > 0 && (
                     <InputSelect
-                      id="homeCountry"
-                      name="homeCountry"
+                      id="homeProvince"
+                      name="homeProvince"
                       className="w-full sm:w-1/2"
-                      label={t('apply:personal-information.address-field.country')}
-                      defaultValue={state?.homeCountry}
-                      errorMessage={errorMessages.homeCountry}
+                      label={t('apply:personal-information.address-field.province')}
+                      defaultValue={state?.homeProvince}
+                      errorMessage={errorMessages.homeProvince}
                       required
-                      options={[dummyOption, ...countries]}
-                      onChange={homeCountryChangeHandler}
+                      options={[dummyOption, ...homeRegions]}
                     />
-                    {homeRegions.length > 0 && (
-                      <InputSelect
-                        id="homeProvince"
-                        name="homeProvince"
-                        className="w-full sm:w-1/2"
-                        label={t('apply:personal-information.address-field.province')}
-                        defaultValue={state?.homeProvince}
-                        errorMessage={errorMessages.homeProvince}
-                        required
-                        options={[dummyOption, ...homeRegions]}
-                      />
-                    )}
-                    <div className="mb-4 grid gap-4 md:grid-cols-2">
-                      <InputField id="homeCity" name="homeCity" label={t('apply:personal-information.address-field.city')} defaultValue={state?.homeCity} errorMessage={errorMessages.homeCity} required />
-                      <InputField id="homePostalCode" name="homePostalCode" label={t('apply:personal-information.address-field.postal-code')} defaultValue={state?.homePostalCode} errorMessage={errorMessages.homePostalCode} required />
-                    </div>
+                  )}
+                  <div className="mb-4 grid gap-4 md:grid-cols-2">
+                    <InputField id="homeCity" name="homeCity" label={t('apply:personal-information.address-field.city')} defaultValue={state?.homeCity} errorMessage={errorMessages.homeCity} required />
+                    <InputField id="homePostalCode" name="homePostalCode" label={t('apply:personal-information.address-field.postal-code')} defaultValue={state?.homePostalCode} errorMessage={errorMessages.homePostalCode} required />
                   </div>
-                )
-              }
-            >
-              {t('apply:personal-information.home-address.use-mailing-address')}
-            </InputCheckbox>
-          </div>
+                </div>
+              )
+            }
+          >
+            {t('apply:personal-information.home-address.use-mailing-address')}
+          </InputCheckbox>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={'/apply/' + id + '/personal-info'}>
+          <ButtonLink id="back-button" variant="alternative" to={`/apply/${id}/partner-information`}>
             {t('apply:personal-information.back')}
           </ButtonLink>
           <Button id="continue-button" variant="primary">

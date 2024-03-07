@@ -8,8 +8,10 @@
   "back": "Back",
   "continue": "Continue",
   "error-message": {
-    "empty-radio": "Please select a value",
-    "empty-field": "Please enter a value",
+    "empty-method": "Preferred method of communication must be selected",
+    "empty-language": "Preferred offical language must be selected",
+    "empty-email": "Email must be provided",
+    "empty-confirm-email": "Confirm email must be provided",
     "invalid-email": "Invalid email address",
     "not-the-same": "Confirm email is not the same as the entered email"
   }

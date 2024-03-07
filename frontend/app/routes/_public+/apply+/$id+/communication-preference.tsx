@@ -62,10 +62,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const formSchema = z
     .object({
-      preferredMethod: z.string({ required_error: 'empty-radio' }),
-      email: z.string().min(1, { message: 'empty-field' }).email({ message: 'invalid-email' }).optional(),
-      confirmEmail: z.string().min(1, { message: 'empty-field' }).optional(),
-      preferredLanguage: z.string({ required_error: 'empty-radio' }),
+      preferredMethod: z.string({ required_error: 'empty-method' }),
+      email: z.string().min(1, { message: 'empty-email' }).email({ message: 'invalid-email' }).optional(),
+      confirmEmail: z.string().min(1, { message: 'empty-confirm-email' }).optional(),
+      preferredLanguage: z.string({ required_error: 'empty-language' }),
     })
     .superRefine((val, ctx) => {
       if (!emailsMatch(val)) {
@@ -197,7 +197,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
           </div>
         )}
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={'/apply/' + id + '/personal-information'}>
+          <ButtonLink id="back-button" variant="alternative" to={`/apply/${id}/personal-information`}>
             {t('communication-preference:back')}
           </ButtonLink>
           <Button id="continue-button" variant="primary">

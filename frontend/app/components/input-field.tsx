@@ -9,7 +9,10 @@ const disableClassName = 'disable:bg-gray-100 disabled:pointer-events-none disab
 
 export interface InputFieldProps extends Omit<React.ComponentProps<'input'>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children'> {
   errorMessage?: string;
-  helpMessage?: React.ReactNode;
+  helpMessagePrimary?: React.ReactNode;
+  helpMessagePrimaryClassName?: string;
+  helpMessageSecondary?: React.ReactNode;
+  helpMessageSecondaryClassName?: string;
   id: string;
   label: string;
   name: string;
@@ -17,16 +20,18 @@ export interface InputFieldProps extends Omit<React.ComponentProps<'input'>, 'ar
 }
 
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) => {
-  const { errorMessage, className, helpMessage, id, label, required, type = 'text', ...restInputProps } = props;
+  const { errorMessage, className, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, required, type = 'text', ...restInputProps } = props;
 
   const inputErrorId = `input-${id}-error`;
-  const inputHelpMessageId = `input-${id}-help`;
+  const inputHelpMessagePrimaryId = `input-${id}-help-primary`;
+  const inputHelpMessageSecondaryId = `input-${id}-help-secondary`;
   const inputLabelId = `input-${id}-label`;
   const inputWrapperId = `input-${id}`;
 
   function getAriaDescribedby() {
     const ariaDescribedby = [];
-    if (helpMessage) ariaDescribedby.push(inputHelpMessageId);
+    if (helpMessagePrimary) ariaDescribedby.push(inputHelpMessagePrimaryId);
+    if (helpMessageSecondary) ariaDescribedby.push(inputHelpMessageSecondaryId);
     return ariaDescribedby.length > 0 ? ariaDescribedby.join(' ') : undefined;
   }
 
@@ -35,6 +40,11 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) =>
       <InputLabel id={inputLabelId} htmlFor={id} required={required} className="mb-2">
         {label}
       </InputLabel>
+      {helpMessagePrimary && (
+        <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="input-field-help-primary">
+          {helpMessagePrimary}
+        </InputHelp>
+      )}
       <input
         ref={ref}
         aria-describedby={getAriaDescribedby()}
@@ -54,9 +64,9 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) =>
           {errorMessage}
         </InputError>
       )}
-      {helpMessage && (
-        <InputHelp id={inputHelpMessageId} className="mt-2" data-testid="input-field-help-secondary">
-          {helpMessage}
+      {helpMessageSecondary && (
+        <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)} data-testid="input-field-help-secondary">
+          {helpMessageSecondary}
         </InputHelp>
       )}
     </div>

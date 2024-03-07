@@ -30,7 +30,7 @@ describe('InputLabel', () => {
   });
 
   it('should render with help message', async () => {
-    render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" helpMessage="help message" />);
+    render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" helpMessageSecondary="help message" />);
 
     const actual = screen.getByTestId('input-field');
 
