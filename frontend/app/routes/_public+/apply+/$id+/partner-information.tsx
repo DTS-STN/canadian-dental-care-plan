@@ -7,10 +7,10 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { Button } from '~/components/buttons';
+import { DatePicker } from '~/components/date-picker';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
-import { InputSelect } from '~/components/input-select';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { RouteHandleData } from '~/utils/route-utils';
@@ -103,7 +103,6 @@ export default function ApplyFlowApplicationInformation() {
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
-  const monthOptions = Array.from({ length: 12 }, (_, i) => ({ children: new Intl.DateTimeFormat(`${i18n.language}-ca`, { month: 'long' }).format(new Date(2023, i, 1)), value: i, id: `month-${i}` }));
 
   useEffect(() => {
     if (actionData?.formData && hasErrors(actionData.formData)) {
@@ -133,14 +132,20 @@ export default function ApplyFlowApplicationInformation() {
           defaultValue={defaultValues.socialInsuranceNumber}
           errorMessage={errorMessages.socialInsuranceNumber}
         />
-        <fieldset>
-          <legend className="mb-2 font-semibold">{t('partner-information.dob')}</legend>
-          <div className="flex flex-col gap-6 sm:flex-row">
-            <InputSelect id="month" label={t('partner-information.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} />
-            <InputField id="day" label={t('partner-information.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} />
-            <InputField id="year" label={t('partner-information.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} />
-          </div>
-        </fieldset>
+        <DatePicker
+          id="date-of-birth"
+          lang={i18n.language}
+          legend={t('apply:partner-information.dob')}
+          monthLabel={t('apply:partner-information.month')}
+          dayLabel={t('apply:partner-information.day')}
+          yearLabel={t('apply:partner-information.year')}
+          monthDefault={state?.month}
+          dayDefault={state?.day}
+          yearDefault={state?.year}
+          errorMessageMonth={errorMessages.month}
+          errorMessageDay={errorMessages.day}
+          errorMessageYear={errorMessages.year}
+        />
         <div className="grid gap-6 md:grid-cols-2">
           <InputField id="lastName" name="lastName" className="w-full" label={t('applicant-information.last-name')} required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} />
           <InputField id="firstName" name="firstName" className="w-full" label={t('applicant-information.first-name')} />

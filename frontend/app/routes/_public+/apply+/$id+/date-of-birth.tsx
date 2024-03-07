@@ -9,10 +9,8 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { Button, ButtonLink } from '~/components/buttons';
+import { DatePicker } from '~/components/date-picker';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
-import { InputField } from '~/components/input-field';
-import { InputLegend } from '~/components/input-legend';
-import { InputSelect } from '~/components/input-select';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { yearsBetween } from '~/utils/apply-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -75,6 +73,7 @@ export default function ApplyFlowDateOfBirth() {
     return t(`eligibility:date-of-birth.error-message.${errorI18nKey}` as any);
   }
 
+  console.log(actionData?.errors);
   const errorMessages = {
     day: getErrorMessage(actionData?.errors.day?._errors[0]),
     month: getErrorMessage(actionData?.errors.month?._errors[0]),
@@ -82,21 +81,26 @@ export default function ApplyFlowDateOfBirth() {
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
-  const monthOptions = Array.from({ length: 12 }, (_, i) => ({ children: new Intl.DateTimeFormat(`${i18n.language}-ca`, { month: 'long' }).format(new Date(2023, i, 1)), value: i, id: `month-${i}` }));
 
   return (
     <>
       <p className="mb-6 mt-6 max-w-prose">{t('date-of-birth.description')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post" aria-describedby="form-instructions" noValidate className="max-w-prose">
-        <InputLegend id="dobLegend" required={errorSummaryItems.length > 0} className="mb-2">
-          {t('date-of-birth.form-instructions')}
-        </InputLegend>
-        <div className="flex flex-col gap-6 sm:flex-row">
-          <InputSelect id="month" label={t('date-of-birth.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} defaultValue={state?.month} />
-          <InputField id="day" label={t('date-of-birth.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} defaultValue={state?.day} />
-          <InputField id="year" label={t('date-of-birth.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} defaultValue={state?.year} />
-        </div>
+        <DatePicker
+          id="date-of-birth"
+          lang={i18n.language}
+          legend={t('date-of-birth.form-instructions')}
+          monthLabel={t('date-of-birth.month')}
+          dayLabel={t('date-of-birth.day')}
+          yearLabel={t('date-of-birth.year')}
+          monthDefault={state?.month}
+          dayDefault={state?.day}
+          yearDefault={state?.year}
+          errorMessageMonth={errorMessages.month}
+          errorMessageDay={errorMessages.day}
+          errorMessageYear={errorMessages.year}
+        />
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <ButtonLink type="button" variant="alternative" to={`/apply/${id}/tax-filing`}>
             {t('date-of-birth.back-btn')}

@@ -68,7 +68,7 @@
       "empty-country": "(FR) Country must be selected",
       "empty-province": "(FR) Province must be selected",
       "empty-city": "(FR) City must be provided",
-      "empty-postal-code": "Postal code or Zip code must be provided",      
+      "empty-postal-code": "Postal code or Zip code must be provided",
       "invalid-postal-code": "(FR) Invalid postal code (A1A 1A1)",
       "invalid-zip-code": "(FR) Invalid zip code (12345)"
     }
