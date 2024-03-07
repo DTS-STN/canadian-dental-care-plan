@@ -41,9 +41,14 @@ const emailStateSchema = z.object({
   emailAddress: z.string().email(),
 });
 
-const accessStateSchema = z.object({
+const dentalInsuranceStateSchema = z.object({
   dentalInsurance: z.string().min(1),
 });
+
+const dentalBenefitsStateSchema = z.object({
+  federalBenefit: z.string().min(1),
+  federalSocialProgram: z.string().min(1),
+})
 
 /**
  * Schema applicant information.
@@ -136,8 +141,9 @@ const applyStateSchema = z.object({
   demographicsPart2: demographicsPart2StateSchema.optional(),
   partnerInformation: partnerInformationSchema.optional(),
   termsAndConditions: termsAndConditionSchema.optional(),
-  access: accessStateSchema.optional(),
   taxFiling2023: taxFilingSchema.optional(),
+  dentalInsurance: dentalInsuranceStateSchema.optional(),
+  dentalBenefit: dentalBenefitsStateSchema.optional(),
 });
 
 type ApplyState = z.infer<typeof applyStateSchema>;
@@ -280,7 +286,8 @@ export function getApplyFlow() {
     applyStateSchema,
     loadState,
     personalInfoStateSchema,
-    accessStateSchema,
+    dentalInsuranceStateSchema,
+    dentalBenefitsStateSchema,
     saveState,
     start,
     taxFilingSchema,

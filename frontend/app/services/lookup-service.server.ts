@@ -24,6 +24,18 @@ const accessToDentalInsurance = z.object({
   nameFr: z.string().optional(),
 });
 
+const federalDentalBenefit = z.object({
+  code: z.string(),
+  nameEn: z.string().optional(),
+  nameFr: z.string().optional(),
+});
+
+const federalSocialProgram = z.object({
+  code: z.string(),
+  nameEn: z.string().optional(),
+  nameFr: z.string().optional(),
+})
+
 const countrySchema = z.object({
   countryId: z.string(),
   nameEnglish: z.string(),
@@ -125,6 +137,8 @@ function createLookupService() {
     LOOKUP_SVC_GENDERTYPES_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_TAXFILINGINDICATIONS_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_APPLICATIONTYPES_CACHE_TTL_MILLISECONDS,
+    LOOKUP_SVC_ALLFEDERALBENEFITS_CACHE_TTL_MILLISECONDS,
+    LOOKUP_SVC_ALLFEDERALSOCIALPROGRAMS_CACHE_TTL_MILLISECONDS
   } = getEnv();
 
   async function getAllPreferredLanguages() {
@@ -359,6 +373,48 @@ function createLookupService() {
     throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
+  async function getAllFederalDentalBenefit() {
+    const url = `${INTEROP_API_BASE_URI}/lookups/federal-dental-benefit/`;
+    const response = await fetch(url);
+
+    const federalDentalBenefits = z.array(federalDentalBenefit);
+
+    if (response.ok) {
+      return federalDentalBenefits.parse(await response.json());
+    }
+
+    log.error('%j', {
+      message: 'Failed to fetch data',
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+
+    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+  }
+
+  async function getAllFederalSocialPrograms() {
+    const url = `${INTEROP_API_BASE_URI}/lookups/federal-social-programs/`;
+    const response = await fetch(url);
+
+    const federalSocialPrograms= z.array(federalSocialProgram);
+
+    if (response.ok) {
+      return federalSocialPrograms.parse(await response.json());
+    }
+
+    log.error('%j', {
+      message: 'Failed to fetch data',
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+
+    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+  }
+
   async function getAllCountries() {
     const url = `${INTEROP_API_BASE_URI}/lookups/countries/`;
     const response = await fetch(url);
@@ -480,6 +536,8 @@ function createLookupService() {
     getPreferredLanguage: moize(getPreferredLanguage, { maxAge: LOOKUP_SVC_PREFERREDLANGUAGE_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new PreferredLanguage memo') }),
     getAllPreferredCommunicationMethods: moize(getAllPreferredCommunicationMethods, { maxAge: LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllPreferredCommunicationMethods memo') }),
     getAllAccessToDentalInsuranceOptions: moize(getAllAccessToDentalInsuranceOptions, { maxAge: LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllAccessToDentalInsuranceOptions memo') }),
+    getAllFederalDentalBenefit: moize(getAllFederalDentalBenefit, { maxAge: LOOKUP_SVC_ALLFEDERALBENEFITS_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllAccessToDentalInsuranceOptions memo') }),
+    getAllFederalSocialPrograms: moize(getAllFederalSocialPrograms, { maxAge: LOOKUP_SVC_ALLFEDERALSOCIALPROGRAMS_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllAccessToDentalInsuranceOptions memo') }),
     getAllCountries: moize(getAllCountries, { maxAge: LOOKUP_SVC_ALLCOUNTRIES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllCountries memo') }),
     getAllRegions: moize(getAllRegions, { maxAge: LOOKUP_SVC_ALLREGIONS_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllRegions memo') }),
     getAllBornTypes: moize(getAllBornTypes, { maxAge: LOOKUP_SVC_ALLBORNTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllBornTypes memo') }),

@@ -118,6 +118,24 @@ export function getLookupApiMockHandlers() {
     }),
 
     //
+    // Handler for GET request to retrieve federal social programs
+    //
+    http.get('https://api.example.com/lookups/federal-social-programs', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const federalSocialProgram = db.federalSocialProgram.getAll();
+      return HttpResponse.json(federalSocialProgram);
+    }),
+
+    //
+    // Handler for GET request to retrieve provincial territorial dental benefit
+    //
+    http.get('https://api.example.com/lookups/federal-dental-benefit', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const federalDentalBenefit = db.federalDentalBenefit.getAll();
+      return HttpResponse.json(federalDentalBenefit);
+    }),
+
+    //
     // Handler for GET request to retrieve all countries
     //
     http.get('https://api.example.com/lookups/countries', ({ request }) => {
