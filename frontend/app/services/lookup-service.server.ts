@@ -34,7 +34,7 @@ const federalSocialProgram = z.object({
   code: z.string(),
   nameEn: z.string().optional(),
   nameFr: z.string().optional(),
-})
+});
 
 const countrySchema = z.object({
   countryId: z.string(),
@@ -138,7 +138,7 @@ function createLookupService() {
     LOOKUP_SVC_TAXFILINGINDICATIONS_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_APPLICATIONTYPES_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_ALLFEDERALBENEFITS_CACHE_TTL_MILLISECONDS,
-    LOOKUP_SVC_ALLFEDERALSOCIALPROGRAMS_CACHE_TTL_MILLISECONDS
+    LOOKUP_SVC_ALLFEDERALSOCIALPROGRAMS_CACHE_TTL_MILLISECONDS,
   } = getEnv();
 
   async function getAllPreferredLanguages() {
@@ -398,7 +398,7 @@ function createLookupService() {
     const url = `${INTEROP_API_BASE_URI}/lookups/federal-social-programs/`;
     const response = await fetch(url);
 
-    const federalSocialPrograms= z.array(federalSocialProgram);
+    const federalSocialPrograms = z.array(federalSocialProgram);
 
     if (response.ok) {
       return federalSocialPrograms.parse(await response.json());
