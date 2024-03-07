@@ -77,17 +77,17 @@ export default function ApplyFlowConfirm() {
   const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
 
-  const mscaLink = <InlineLink to={t('apply:confirm.msca-link')} />;
-  const dentalContactUsLink = <InlineLink to={t('apply:confirm.dental-link')} />;
-  const cdcpLink = <InlineLink to={t('apply:confirm.cdcp-checker-link')} />;
-  const moreInfoLink = <InlineLink to={t('apply:confirm.cdcp-checker-link')} />;
+  const mscaLink = <InlineLink to={t('confirm.msca-link')} />;
+  const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} />;
+  const cdcpLink = <InlineLink to={t('confirm.cdcp-checker-link')} />;
+  const moreInfoLink = <InlineLink to={t('confirm.more-info-link')} />;
 
   return (
     <div className="max-w-3xl">
       <span>TODO: Contextual Alert Information</span>
-      <h2 className="mt-8 text-3xl font-semibold">{t('apply:confirm.keep-copy')}</h2>
+      <h2 className="mt-8 text-3xl font-semibold">{t('confirm.keep-copy')}</h2>
       <p className="mt-4">
-        {t('apply:confirm.print-copy-one')} <b>{t('apply:confirm.not-bold')}</b> {t('apply:confirm.print-copy-two')} <b>{t('apply:confirm.confirm-email-bold')}</b> {t('apply:confirm.print-copy-three')}
+        <Trans ns={i18nNamespaces} i18nKey="confirm.print-copy-text" components={{ bold: <strong /> }} />
       </p>
       <button
         className="mt-8 inline-flex w-44 items-center justify-center rounded bg-gray-800 px-5 py-2.5 align-middle font-lato text-xl font-semibold text-white outline-offset-2 hover:bg-gray-900"
@@ -96,56 +96,56 @@ export default function ApplyFlowConfirm() {
           window.print();
         }}
       >
-        {t('apply:confirm.print-btn')}
+        {t('confirm.print-btn')}
       </button>
-      <h2 className="mt-8 text-3xl font-semibold">{t('apply:confirm.whats-next')}</h2>
-      <p className="mt-4">{t('apply:confirm.begin-process')}</p>
+      <h2 className="mt-8 text-3xl font-semibold">{t('confirm.whats-next')}</h2>
+      <p className="mt-4">{t('confirm.begin-process')}</p>
       <p className="mt-4">
-        <Trans ns={i18nNamespaces} i18nKey="apply:confirm.cdcp-checker" components={{ cdcpLink }} />
+        <Trans ns={i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink }} />
       </p>
-      <p className="mt-4">{t('apply:confirm.use-code')}</p>
-      <h2 className="mt-8 text-3xl font-semibold">{t('apply:confirm.register-msca-title')}</h2>
+      <p className="mt-4">{t('confirm.use-code')}</p>
+      <h2 className="mt-8 text-3xl font-semibold">{t('confirm.register-msca-title')}</h2>
       <p className="mt-4">
-        <Trans ns={i18nNamespaces} i18nKey="apply:confirm.register-msca-text" components={{ mscaLink }} />
+        <Trans ns={i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLink }} />
       </p>
-      <p className="mt-4">{t('apply:confirm.msca-notify')}</p>
-      <h2 className="mt-8 text-3xl font-semibold">{t('apply:confirm.how-insurance')}</h2>
-      <p className="mt-4">{t('apply:confirm.eligible-text')}</p>
+      <p className="mt-4">{t('confirm.msca-notify')}</p>
+      <h2 className="mt-8 text-3xl font-semibold">{t('confirm.how-insurance')}</h2>
+      <p className="mt-4">{t('confirm.eligible-text')}</p>
       <p className="mt-4">
-        <Trans ns={i18nNamespaces} i18nKey="apply:confirm.more-info-cdcp" components={{ moreInfoLink }} />
-      </p>
-
-      <p className="mt-4">{t('apply:confirm.ineligible-text')}</p>
-      <p className="mt-4">
-        <Trans ns={i18nNamespaces} i18nKey="apply:confirm.more-info-service" components={{ dentalContactUsLink }} />
+        <Trans ns={i18nNamespaces} i18nKey="confirm.more-info-cdcp" components={{ moreInfoLink }} />
       </p>
 
-      <h2 className="mt-8 text-3xl font-semibold">{t('apply:confirm.application-summ')}</h2>
-      <UnorderedList term={t('apply:confirm.applicant-title')}>
-        <li className="my-1">{t('apply:confirm.dob', { dob: userInfo.birthday })}</li>
-        <li className="my-1">{t('apply:confirm.sin', { sin: userInfo.sin })}</li>
-        <li className="my-1">{t('apply:confirm.full-name', { name: `${userInfo.firstName} ${userInfo.lastName}` })}</li>
-        <li className="my-1">{t('apply:confirm.sin', { status: userInfo.martialStatus })}</li>
+      <p className="mt-4">{t('confirm.ineligible-text')}</p>
+      <p className="mt-4">
+        <Trans ns={i18nNamespaces} i18nKey="confirm.more-info-service" components={{ dentalContactUsLink }} />
+      </p>
+
+      <h2 className="mt-8 text-3xl font-semibold">{t('confirm.application-summ')}</h2>
+      <UnorderedList term={t('confirm.applicant-title')}>
+        <li className="my-1">{t('confirm.dob', { dob: userInfo.birthday })}</li>
+        <li className="my-1">{t('confirm.sin', { sin: userInfo.sin })}</li>
+        <li className="my-1">{t('confirm.full-name', { name: `${userInfo.firstName} ${userInfo.lastName}` })}</li>
+        <li className="my-1">{t('confirm.sin', { status: userInfo.martialStatus })}</li>
       </UnorderedList>
-      <UnorderedList term={t('apply:confirm.spouse-info')}>
-        <li className="my-1">{t('apply:confirm.dob', { dob: spouseInfo.birthday })}</li>
-        <li className="my-1">{t('apply:confirm.sin', { sin: spouseInfo.sin })}</li>
-        <li className="my-1">{t('apply:confirm.full-name', { name: `${spouseInfo.firstName} ${spouseInfo.lastName}` })}</li>
-        {spouseInfo.consent ? <li className="my-1">{t('apply:confirm.consent')}</li> : <li className="my-1">{t('apply:confirm.no-consent')}</li>}
+      <UnorderedList term={t('confirm.spouse-info')}>
+        <li className="my-1">{t('confirm.dob', { dob: spouseInfo.birthday })}</li>
+        <li className="my-1">{t('confirm.sin', { sin: spouseInfo.sin })}</li>
+        <li className="my-1">{t('confirm.full-name', { name: `${spouseInfo.firstName} ${spouseInfo.lastName}` })}</li>
+        {spouseInfo.consent ? <li className="my-1">{t('confirm.consent')}</li> : <li className="my-1">{t('confirm.no-consent')}</li>}
       </UnorderedList>
-      <UnorderedList term={t('apply:confirm.contact-info')}>
-        <li className="my-1">{t('apply:confirm.phone-number', { phone: userInfo.phoneNumber })}</li>
-        <li className="my-1">{t('apply:confirm.alt-phone-number', { altPhone: userInfo.altPhoneNumber })}</li>
-        <li className="my-1">{t('apply:confirm.mailing', { address: mailingAddressInfo.address })}</li>
-        <li className="my-1">{t('apply:confirm.home', { address: homeAddressInfo.address })}</li>
+      <UnorderedList term={t('confirm.contact-info')}>
+        <li className="my-1">{t('confirm.phone-number', { phone: userInfo.phoneNumber })}</li>
+        <li className="my-1">{t('confirm.alt-phone-number', { altPhone: userInfo.altPhoneNumber })}</li>
+        <li className="my-1">{t('confirm.mailing', { address: mailingAddressInfo.address })}</li>
+        <li className="my-1">{t('confirm.home', { address: homeAddressInfo.address })}</li>
       </UnorderedList>
-      <UnorderedList term={t('apply:confirm.comm-prefs')}>
-        <li className="my-1">{t('apply:confirm.comm-pref', { pref: userInfo.communicationPreference })}</li>
-        <li className="my-1">{t('apply:confirm.lang-pref', { pref: getNameByLanguage(i18n.language, preferredLanguage) })}</li>
+      <UnorderedList term={t('confirm.comm-prefs')}>
+        <li className="my-1">{t('confirm.comm-pref', { pref: userInfo.communicationPreference })}</li>
+        <li className="my-1">{t('confirm.lang-pref', { pref: getNameByLanguage(i18n.language, preferredLanguage) })}</li>
       </UnorderedList>
-      <UnorderedList term={t('apply:confirm.dental-insurance')}>
-        <li className="my-1">{t('apply:confirm.dental-private', { access: dentalInsurance.private.length === 0 ? 'No' : 'Yes' })}</li>
-        <li className="my-1">{t('apply:confirm.dental-public', { access: dentalInsurance.public.length === 0 ? 'No' : 'Yes' })}</li>
+      <UnorderedList term={t('confirm.dental-insurance')}>
+        <li className="my-1">{t('confirm.dental-private', { access: dentalInsurance.private.length === 0 ? 'No' : 'Yes' })}</li>
+        <li className="my-1">{t('confirm.dental-public', { access: dentalInsurance.public.length === 0 ? 'No' : 'Yes' })}</li>
       </UnorderedList>
     </div>
   );

@@ -73,11 +73,7 @@
   "confirm": {
     "page-title": "(FR) Confirmation",
     "keep-copy": "(FR) Keep a copy of your application",
-    "print-copy-one": "(FR) You will",
-    "not-bold": "not",
-    "print-copy-two": "be receiving a",
-    "confirm-email-bold": "confirmation email",
-    "print-copy-three": ". It is important to keep a copy of your application. You can use this button to print.",
+    "print-copy-text": "(FR) You will <bold>not</bold> be receiving a <strong>confirmation email</strong>. It is important to keep a copy of your application. You can use this button to print.",
     "print-btn": "(FR) Print",
     "whats-next": "(FR) What happens next?",
     "begin-process": "(FR) We will begin processing your application immediately.",
