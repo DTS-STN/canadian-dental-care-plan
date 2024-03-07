@@ -7,6 +7,7 @@ import { MetaFunction, useLoaderData } from '@remix-run/react';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -88,7 +89,14 @@ export default function ApplyFlowConfirm() {
 
   return (
     <div className="max-w-3xl">
-      <span>TODO: Contextual Alert Information</span>
+      <ContextualAlert type="success">
+        <h2 className="mb-1 text-xl font-semibold">{t('confirm.alert-heading')}</h2>
+        <div className="ml-0.5 text-lg">
+          <p>{t('confirm.app-code-is')}</p>
+          <span className="font-semibold">XXX-XXX-XXX</span>
+          <p>{t('confirm.make-note')}</p>
+        </div>
+      </ContextualAlert>
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.keep-copy')}</h2>
       <p className="mt-4">
         <Trans ns={handle.i18nNamespaces} i18nKey="confirm.print-copy-text" />
