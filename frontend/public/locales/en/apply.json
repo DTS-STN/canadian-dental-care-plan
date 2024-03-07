@@ -76,7 +76,7 @@
   "confirm": {
     "page-title": "Confirmation",
     "keep-copy": "Keep a copy of your application",
-    "print-copy-text": "You will <bold>not</bold> be receiving a <bold>confirmation email</bold>. It is important to keep a copy of your application. You can use this button to print.",
+    "print-copy-text": "You will <strong>not</strong> be receiving a <strong>confirmation email</strong>. It is important to keep a copy of your application. You can use this button to print.",
     "print-btn": "Print",
     "whats-next": "What happens next?",
     "begin-process": "We will begin processing your application immediately.",
