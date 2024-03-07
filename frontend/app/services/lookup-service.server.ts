@@ -137,6 +137,7 @@ function createLookupService() {
     LOOKUP_SVC_GENDERTYPES_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_TAXFILINGINDICATIONS_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_APPLICATIONTYPES_CACHE_TTL_MILLISECONDS,
+    LOOKUP_SVC_ALLFEDERALBENEFITS_CASHE_TTL_MILLISECONDS,
   } = getEnv();
 
   async function getAllPreferredLanguages() {
@@ -534,8 +535,8 @@ function createLookupService() {
     getPreferredLanguage: moize(getPreferredLanguage, { maxAge: LOOKUP_SVC_PREFERREDLANGUAGE_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new PreferredLanguage memo') }),
     getAllPreferredCommunicationMethods: moize(getAllPreferredCommunicationMethods, { maxAge: LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllPreferredCommunicationMethods memo') }),
     getAllAccessToDentalInsuranceOptions: moize(getAllAccessToDentalInsuranceOptions, { maxAge: LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllAccessToDentalInsuranceOptions memo') }),
-    getAllFederalDentalBenefit: moize(getAllFederalDentalBenefit, { maxAge: LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllAccessToDentalInsuranceOptions memo') }),
-    getAllFederalSocialPrograms: moize(getAllFederalSocialPrograms, { maxAge: LOOKUP_SVC_ALLPREFERREDLANGUAGES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllAccessToDentalInsuranceOptions memo') }),
+    getAllFederalDentalBenefit: moize(getAllFederalDentalBenefit, { maxAge: LOOKUP_SVC_ALLFEDERALBENEFITS_CASHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllAccessToDentalInsuranceOptions memo') }),
+    getAllFederalSocialPrograms: moize(getAllFederalSocialPrograms, { maxAge: LOOKUP_SVC_ALLFEDERALBENEFITS_CASHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllAccessToDentalInsuranceOptions memo') }),
     getAllCountries: moize(getAllCountries, { maxAge: LOOKUP_SVC_ALLCOUNTRIES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllCountries memo') }),
     getAllRegions: moize(getAllRegions, { maxAge: LOOKUP_SVC_ALLREGIONS_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllRegions memo') }),
     getAllBornTypes: moize(getAllBornTypes, { maxAge: LOOKUP_SVC_ALLBORNTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllBornTypes memo') }),

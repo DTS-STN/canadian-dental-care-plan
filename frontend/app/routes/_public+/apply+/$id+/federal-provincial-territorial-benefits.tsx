@@ -63,40 +63,34 @@ export default function AccessToDentalInsuranceQuestion() {
       <p>{t('provincial-territorial:eligibility-criteria')}</p>
       {federalDentalBenefits.length > 0 && (
         <div className="my-6">
-          {federalDentalBenefits.length > 0 && (
-            <InputRadios
-              id="federal-benefit"
-              name="federalBenefit"
-              legend={t('provincial-territorial:federal-benefits.legend')}
-              options={federalDentalBenefits.map((option) => ({
-                children: (
-                  <div>
-                    <strong>{getNameByLanguage(i18n.language, option)}</strong>,&nbsp;
-                    {option.code === 'yes' ? <Trans ns={i18nNamespaces} i18nKey="provincial-territorial:federal-benefits.option-yes" /> : <Trans ns={i18nNamespaces} i18nKey="provincial-territorial:federal-benefits.option-no" />}
-                  </div>
-                ),
-                value: option.code,
-                defaultChecked: state.dentalBenefit?.federalBenefit === option.code,
-                onChange: (e) => setChecked(e.target.value),
-                append: option.code === 'yes' && checked === 'yes' && (
-                  <InputRadios
-                    id="federal-social-programs"
-                    name="federalSocialProgram"
-                    legend={t('provincial-territorial:federal-benefits.social-programs.legend')}
-                    options={federalSocialPrograms.map((option) => ({
-                      children: (
-                        <div>
-                          <strong>{getNameByLanguage(i18n.language, option)}</strong>
-                        </div>
-                      ),
-                      value: option.code,
-                      defaultChecked: state.dentalBenefit?.federalSocialProgram === option.code,
-                    }))}
-                  />
-                ),
-              }))}
-            />
-          )}
+          <InputRadios
+            id="federal-benefit"
+            name="federalBenefit"
+            legend={t('provincial-territorial:federal-benefits.legend')}
+            options={federalDentalBenefits.map((option) => ({
+              children: (
+                <>
+                  <strong>{getNameByLanguage(i18n.language, option)}</strong>,&nbsp;
+                  {option.code === 'yes' ? <Trans ns={i18nNamespaces} i18nKey="provincial-territorial:federal-benefits.option-yes" /> : <Trans ns={i18nNamespaces} i18nKey="provincial-territorial:federal-benefits.option-no" />}
+                </>
+              ),
+              value: option.code,
+              defaultChecked: state.dentalBenefit?.federalBenefit === option.code,
+              onChange: (e) => setChecked(e.target.value),
+              append: option.code === 'yes' && checked === 'yes' && (
+                <InputRadios
+                  id="federal-social-programs"
+                  name="federalSocialProgram"
+                  legend={t('provincial-territorial:federal-benefits.social-programs.legend')}
+                  options={federalSocialPrograms.map((option) => ({
+                    children: <p className="font-bold">{getNameByLanguage(i18n.language, option)}</p>,
+                    value: option.code,
+                    defaultChecked: state.dentalBenefit?.federalSocialProgram === option.code,
+                  }))}
+                />
+              ),
+            }))}
+          />
         </div>
       )}
       <div className="flex flex-wrap items-center gap-3">
