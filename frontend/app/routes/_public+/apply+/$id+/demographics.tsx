@@ -1,13 +1,13 @@
 import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form } from '@remix-run/react';
+import { Form, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import { Button } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
@@ -27,29 +27,17 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
 
-  const formDataSchema = z.object({
-    button: z.enum(['answerQuestions', 'continueToReview']),
-  });
-
-  const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = await formDataSchema.safeParseAsync(formData);
-  if (!parsedDataResult.success) {
-    return json({
-      errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof formDataSchema>>,
-    });
-  }
-  const redirectUrl = parsedDataResult.data.button === 'answerQuestions' ? `/apply/${id}/demographics-part1` : `/apply/${id}/terms-and-conditions`;
   const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
     state,
   });
-  return redirect(redirectUrl, sessionResponseInit);
+  return redirect(`/apply/${id}/demographics-part1`, sessionResponseInit);
 }
 
 export default function Demographics() {
   const { t } = useTranslation(i18nNamespaces);
+  const { id } = useLoaderData<typeof loader>();
 
   return (
     <>
@@ -59,11 +47,11 @@ export default function Demographics() {
         <p className="mb-6">{t('optional-demographic-oral-health-questions.anwsers-will-not-affect-eligibility')}</p>
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <Button id="continue-button" variant="alternative" name="button" value="continueToReview">
+          <ButtonLink id="back-button" variant="alternative" to={`/apply/${id}/federal-provincial-territorial-benefits`}>
             {t('optional-demographic-oral-health-questions.back-button')}
             <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
-          </Button>
-          <Button id="answer-button" variant="primary" name="button" value="answerQuestions">
+          </ButtonLink>
+          <Button id="answer-button" variant="primary">
             {t('optional-demographic-oral-health-questions.answer-button')}
             <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
           </Button>
