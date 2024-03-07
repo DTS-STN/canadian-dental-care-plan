@@ -93,7 +93,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     state: { communicationPreferences: parsedDataResult.data },
   });
 
-  return redirect(`/apply/${id}/personal-info`, sessionResponseInit);
+  return redirect(`/apply/${id}/dental-insurance`, sessionResponseInit);
 }
 
 export default function ApplyFlowCommunicationPreferencePage() {

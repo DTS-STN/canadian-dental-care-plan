@@ -53,7 +53,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     state: { dob: parsedDataResult.data },
   });
   const applicantDob = new Date(parsedDataResult.data.year, parsedDataResult.data.month, parsedDataResult.data.day);
-  return yearsBetween(new Date(), applicantDob) >= 65 ? redirect(`/apply/${id}/personal-info`, sessionResponseInit) : redirect(`/apply/${id}/dob-eligibility`, sessionResponseInit);
+  return yearsBetween(new Date(), applicantDob) >= 65 ? redirect(`/apply/${id}/applicant-information`, sessionResponseInit) : redirect(`/apply/${id}/dob-eligibility`, sessionResponseInit);
 }
 
 export default function ApplyFlowDateOfBirth() {

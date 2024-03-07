@@ -181,26 +181,26 @@ db.applicationTypes.create({
 db.federalSocialProgram.create({
   code: 'nonInsuredHealthBenefitsProgram',
   nameEn: 'Non-Insured Health Benefits Program',
-  nameFr: '(Fr) Non-Insured Health Benefits Program'
-})
+  nameFr: '(Fr) Non-Insured Health Benefits Program',
+});
 
 db.federalSocialProgram.create({
   code: 'vacDentalServicesProgram',
   nameEn: 'VAC Dental Services Program ',
-  nameFr: '(Fr) VAC Dental Services Program '
-})
+  nameFr: '(Fr) VAC Dental Services Program ',
+});
 
 db.federalSocialProgram.create({
   code: 'interimFederalHealthProgram',
   nameEn: 'Interim Federal Health Program',
-  nameFr: '(Fr) Interim Federal Health Program'
-})
+  nameFr: '(Fr) Interim Federal Health Program',
+});
 
 db.federalSocialProgram.create({
   code: 'correctionalServiceCanadaHealthServices',
   nameEn: 'Correctional Service Canada Health Services',
-  nameFr: '(Fr) Correctional Service Canada Health Services'
-})
+  nameFr: '(Fr) Correctional Service Canada Health Services',
+});
 
 // seed avaliable addresses (before user)
 db.address.create({
