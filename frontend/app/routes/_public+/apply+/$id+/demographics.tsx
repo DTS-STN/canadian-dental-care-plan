@@ -1,6 +1,6 @@
 import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,13 +9,19 @@ import { useTranslation } from 'react-i18next';
 import { Button, ButtonLink } from '~/components/buttons';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('demographics-oral-health-questions');
 export const handle = {
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('demographics-oral-health-questions', 'gcweb'),
   pageIdentifier: 'CDCP-1110',
   pageTitleI18nKey: 'demographics-oral-health-questions:optional-demographic-oral-health-questions.page-title',
 };
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('demographics-oral-health-questions:optional-demographic-oral-health-questions.page-title') }) }];
+});
+
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
@@ -35,7 +41,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function Demographics() {
-  const { t } = useTranslation(i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { id } = useLoaderData<typeof loader>();
 
   return (

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from '@remix-run/node';
-import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useActionData, useLoaderData } from '@remix-run/react';
 
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
@@ -17,17 +17,22 @@ import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { RegionInfo, getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('apply');
 const validPostalCode = new RegExp('^[ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy]\\d[A-Za-z] \\d[A-Za-z]\\d{1}$');
 const validZipCode = new RegExp('^\\d{5}$');
 
 export const handle = {
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: 'CDCP-00XX',
   pageTitleI18nKey: 'apply:personal-information.page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('apply:personal-information.page-title') }) }];
+});
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
@@ -169,7 +174,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function ApplyFlowPersonalInformation() {
   const { id, state, countryList, regionList } = useLoaderData<typeof loader>();
-  const { i18n, t } = useTranslation(i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(state?.mailingCountry);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<RegionInfo[]>([]);
   const [copyAddressChecked, setCopyAddressChecked] = useState(state?.copyMailingAddress === 'on');

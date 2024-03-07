@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useActionData, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -20,9 +20,8 @@ import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getWSAddressService } from '~/services/wsaddress-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
-
-const i18nNamespaces = getTypedI18nNamespaces('personal-information', 'gcweb');
 
 export const handle = {
   breadcrumbs: [
@@ -30,10 +29,15 @@ export const handle = {
     { labelI18nKey: 'personal-information:home-address.edit.breadcrumbs.personal-information', to: '/personal-information' },
     { labelI18nKey: 'personal-information:home-address.edit.breadcrumbs.home-address-change' },
   ],
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
   pageIdentifier: 'CDCP-0004',
   pageTitleI18nKey: 'personal-information:home-address.edit.page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('personal-information:home-address.edit.page-title') }) }];
+});
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
@@ -119,7 +123,7 @@ export default function PersonalInformationHomeAddressEdit() {
   const { addressInfo, countryList, regionList } = useLoaderData<typeof loader>();
   const [selectedCountry, setSelectedCountry] = useState('');
   const [countryRegions, setCountryRegions] = useState<RegionInfo[]>([]);
-  const { i18n, t } = useTranslation(i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const errorSummaryId = 'error-summary';
 
   useEffect(() => {

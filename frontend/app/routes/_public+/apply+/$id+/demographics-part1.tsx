@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,14 +11,18 @@ import { InputRadios } from '~/components/input-radios';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-
-const i18nNamespaces = getTypedI18nNamespaces('demographics-oral-health-questions', 'gcweb');
+import { mergeMeta } from '~/utils/meta-utils';
 
 export const handle = {
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('demographics-oral-health-questions', 'gcweb'),
   pageIdentifier: 'CDCP-1111',
   pageTitleI18nKey: 'demographics-oral-health-questions:part1.page-title',
 };
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('demographics-oral-health-questions:part1.page-title') }) }];
+});
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const bornTypes = await getLookupService().getAllBornTypes();
@@ -34,7 +38,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function DemographicsPart1() {
   const { bornTypes, disabilityTypes } = useLoaderData<typeof loader>();
-  const { i18n, t } = useTranslation(i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
 
   return (
     <>

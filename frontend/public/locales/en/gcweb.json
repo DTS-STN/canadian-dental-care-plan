@@ -1,4 +1,10 @@
 {
+  "meta": {
+    "title": {
+      "default": "Canadian Dental Care Plan - Canada.ca",
+      "template": "{{title}} - Canadian Dental Care Plan - Canada.ca"
+    }
+  },
   "nav": {
     "skip-to-content": "Skip to main content",
     "skip-to-about": "Skip to About this site"

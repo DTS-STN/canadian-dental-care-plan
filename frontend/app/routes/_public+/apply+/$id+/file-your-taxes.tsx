@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs, json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { MetaFunction, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,15 +9,19 @@ import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('eligibility');
-
 export const handle = {
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('eligibility', 'gcweb'),
   pageIdentifier: 'CDCP-00XX',
   pageTitleI18nKey: 'eligibility:file-your-taxes.page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('eligibility:file-your-taxes.page-title') }) }];
+});
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
@@ -28,7 +32,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function ApplyFlowFileYourTaxes() {
   const { id } = useLoaderData<typeof loader>();
-  const { t } = useTranslation(i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
 
   const taxInfo = <InlineLink to={t('file-your-taxes.tax-info-href')} />;
 
@@ -38,7 +42,7 @@ export default function ApplyFlowFileYourTaxes() {
       <p className="mb-6">{t('file-your-taxes.tax-not-filed')}</p>
       <p className="mb-6">{t('file-your-taxes.unable-to-assess')}</p>
       <p className="mb-6">
-        <Trans ns={i18nNamespaces} i18nKey="file-your-taxes.tax-info" components={{ taxInfo }} />
+        <Trans ns={handle.i18nNamespaces} i18nKey="file-your-taxes.tax-info" components={{ taxInfo }} />
       </p>
       <p className="mb-6">{t('file-your-taxes.apply-after')}</p>
 

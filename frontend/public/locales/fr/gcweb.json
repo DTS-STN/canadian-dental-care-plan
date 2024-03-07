@@ -1,4 +1,10 @@
 {
+  "meta": {
+    "title": {
+      "default": "Régime canadien de soins dentaires - Canada.ca",
+      "template": "{{title}} - Régime canadien de soins dentaires - Canada.ca"
+    }
+  },
   "nav": {
     "skip-to-content": "Passer au contenu principal",
     "skip-to-about": "Passer à « À propos de ce site »"
@@ -38,7 +44,7 @@
     "canada-ca": "(FR) Canada.ca",
     "benefits": "(FR) Benefits",
     "dental-coverage": "(FR) Dental coverage",
-    "canadian-dental-care-plan": "(FR) Canadian Dental Care Plan"
+    "canadian-dental-care-plan": "Régime canadien de soins dentaires"
   },
   "page-details": {
     "page-details": "Détails de la page",

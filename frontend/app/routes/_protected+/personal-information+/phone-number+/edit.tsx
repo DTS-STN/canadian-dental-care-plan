@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useActionData, useLoaderData } from '@remix-run/react';
 
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
@@ -15,19 +15,24 @@ import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('personal-information', 'gcweb');
 export const handle = {
   breadcrumbs: [
     // prettier-ignore
     { labelI18nKey: 'personal-information:phone-number.edit.breadcrumbs.personal-information', to: '/personal-information' },
     { labelI18nKey: 'personal-information:phone-number.edit.breadcrumbs.change-phone-number' },
   ],
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
   pageIdentifier: 'CDCP-0008',
   pageTitleI18nKey: 'personal-information:phone-number.edit.page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('personal-information:phone-number.edit.page-title') }) }];
+});
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
@@ -81,7 +86,7 @@ export default function PhoneNumberEdit() {
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
 
-  const { t } = useTranslation(i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
 
   const defaultValues = {
     phoneNumber: actionData?.formData.phoneNumber ?? userInfo.phoneNumber ?? '',
