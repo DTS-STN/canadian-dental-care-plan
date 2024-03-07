@@ -63,9 +63,12 @@
     "back": "Back",
     "continue": "Continue",
     "error-message": {
-      "empty-radio": "Please select a value",
-      "empty-field": "Please enter a value",
       "invalid-phone": "Invalid phone number",
+      "empty-address": "Address must be provided",
+      "empty-country": "Country must be selected",
+      "empty-province": "Province must be selected",
+      "empty-city": "City must be provided",
+      "empty-postal-code": "Postal code or Zip code must be provided",
       "invalid-postal-code": "Invalid postal code (A1A 1A1)",
       "invalid-zip-code": "Invalid zip code (12345)"
     }

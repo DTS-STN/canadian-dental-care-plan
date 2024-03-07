@@ -38,34 +38,37 @@
     }
   },
   "personal-information": {
-    "page-title": "(FR) Personal information",
-    "form-instructions": "(FR) Adding a telephone number helps Service Canada reach you if there is an issue with your application and may help reduce delays in processing your application. Otherwise, we will contact you by mail using the mailing address you provide.",
-    "telephone-number": "(FR) Telephone number (optional)",
-    "telephone-number-alt": "(FR) Telephone number (alternate) (optional)",
+    "page-title": "Renseignements personnels",
+    "form-instructions": "L'ajout d'un numéro de téléphone aide Service Canada à vous joindre en cas de problème avec votre demande et peut contribuer à réduire les délais de traitement de votre demande. Sinon, nous communiquerons avec vous par la poste en utilisant l'adresse postale que vous fournissez.",
+    "telephone-number": "Numéro de téléphone (facultatif)",
+    "telephone-number-alt": "Le numéro de téléphone secondaire (facultatif)",
     "mailing-address": {
-      "header": "(FR) Mailing address",
-      "note": "(FR) We may send you letters by mail related to your CDCP application."
+      "header": "Adresse postale",
+      "note": "Nous pouvons vous envoyer des lettres par la poste au sujet de votre demande au RCSD."
     },
     "home-address": {
-      "header": "(FR) Home address",
+      "header": "Adresse du domicile",
       "use-mailing-address": "(FR) My mailing address is the same as my home address"
     },
     "address-field": {
-      "address": "(FR) Address",
-      "address-note": "(FR) Include street number and name.",
-      "apartment": "(FR) Apartment, suite, etc. (optional)",
-      "country": "(FR) Country",
-      "province": "(FR) Province, territory, state, or region",
-      "city": "(FR) City or town",
-      "postal-code": "(FR) Postal code or ZIP code",
-      "select-one": "(FR) Select one"
+      "address": "Adresse",
+      "address-note": "Indiquez le numéro et le nom de la rue.",
+      "apartment": "Appartement, bureau, etc. (facultatif)",
+      "country": "Pays",
+      "province": "Province, territoire, État ou région",
+      "city": "Ville ou municipalité",
+      "postal-code": "Code postal ou code ZIP",
+      "select-one": "Choisissez une option"
     },
-    "back": "(FR) Back",
-    "continue": "(FR) Continue",
+    "back": "Retour",
+    "continue": "Continuer",
     "error-message": {
-      "empty-radio": "(FR) Please select a value",
-      "empty-field": "(FR) Please enter a value",
       "invalid-phone": "(FR) Invalid phone number",
+      "empty-address": "(FR) Address must be provided",
+      "empty-country": "(FR) Country must be selected",
+      "empty-province": "(FR) Province must be selected",
+      "empty-city": "(FR) City must be provided",
+      "empty-postal-code": "Postal code or Zip code must be provided",      
       "invalid-postal-code": "(FR) Invalid postal code (A1A 1A1)",
       "invalid-zip-code": "(FR) Invalid zip code (12345)"
     }

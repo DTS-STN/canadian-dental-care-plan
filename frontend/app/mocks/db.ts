@@ -107,13 +107,13 @@ const frenchLanguage = db.preferredLanguage.create({
 db.preferredCommunicationMethod.create({
   id: 'email',
   nameEn: 'Email',
-  nameFr: '(FR) Email',
+  nameFr: 'Adresse courriel',
 });
 
 db.preferredCommunicationMethod.create({
   id: 'mail',
   nameEn: 'Postal mail',
-  nameFr: '(FR) Postal mail',
+  nameFr: 'Courrier postal',
 });
 
 db.accessToDentalInsurance.create({

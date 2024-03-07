@@ -1,15 +1,17 @@
 {
-  "page-title": "(FR) Communication preferences",
-  "note": "(FR) If eligible, we will share your membership information with Sun Life Assurance Company of Canada (Sun Life), who will be responsible for handling member enrolment and administering claims processing and benefits for the Canadian Dental Care Plan.",
-  "preferred-method": "(FR) What is your preferred method of communication for both Sun Life and the Government of Canada?",
-  "preferred-language": "(FR) What is your preferred official language of communication?",
-  "email": "(FR) Email address",
-  "confirm-email": "(FR) Confirm email address",
-  "back": "(FR) Back",
-  "continue": "(FR) Continue",
+  "page-title": "Préférences en matière de communication",
+  "note": "Si vous êtes admissible, nous communiquerons les détails liés à votre adhésion à la Sun Life du Canada, compagnie d'assurance-vie, qui sera responsable du traitement de l'adhésion des membres et de la gestion des demandes de règlement et des prestations du Régime canadien de soins dentaires.",
+  "preferred-method": "Quel est votre mode de communication préféré pour la Sun Life et le gouvernement du Canada?",
+  "preferred-language": "Quelle langue officielle de communication préférez-vous?",
+  "email": "Adresse courriel",
+  "confirm-email": "Confirmer l'adresse courriel",
+  "back": "Retour",
+  "continue": "Continuer",
   "error-message": {
-    "empty-radio": "(FR) Please select a value",
-    "empty-field": "(FR) Please enter a value",
+    "empty-method": "(FR) Preferred method of communication must be selected",
+    "empty-language": "(FR) Preferred offical language must be selected",
+    "empty-email": "(FR) Email must be provided",
+    "empty-confirm-email": "(FR) Confirm email must be provided",
     "invalid-email": "(FR) Invalid email address",
     "not-the-same": "(FR) Confirm email is not the same as the entered email"
   }
