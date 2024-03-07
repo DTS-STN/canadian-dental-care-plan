@@ -5,7 +5,6 @@ import { Form, useLoaderData } from '@remix-run/react';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
 
 import { Button, ButtonLink } from '~/components/buttons';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
