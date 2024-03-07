@@ -64,48 +64,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function AccessToDentalInsuranceQuestion() {
-<<<<<<< HEAD
-  const { federalSocialPrograms, federalDentalBenefits, state } = useLoaderData<typeof loader>();
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const [checked, setChecked] = useState(state.dentalBenefit?.federalBenefit ?? '');
-
-  return (
-    <Form method="post">
-      <p className="mb-4">{t('provincial-territorial:access-to-dental')}</p>
-      <p>{t('provincial-territorial:eligibility-criteria')}</p>
-      {federalDentalBenefits.length > 0 && (
-        <div className="my-6">
-          <InputRadios
-            id="federal-benefit"
-            name="federalBenefit"
-            legend={t('provincial-territorial:federal-benefits.legend')}
-            options={federalDentalBenefits.map((option) => ({
-              children: (
-                <Fragment key={option.code}>
-                  <strong>{getNameByLanguage(i18n.language, option)}</strong>,&nbsp;
-                  {option.code === 'yes' ? <Trans ns={handle.i18nNamespaces} i18nKey="provincial-territorial:federal-benefits.option-yes" /> : <Trans ns={handle.i18nNamespaces} i18nKey="provincial-territorial:federal-benefits.option-no" />}
-                </Fragment>
-              ),
-              value: option.code,
-              defaultChecked: state.dentalBenefit?.federalBenefit === option.code,
-              onChange: (e) => setChecked(e.target.value),
-              append: option.code === 'yes' && checked === 'yes' && (
-                <InputRadios
-                  id="federal-social-programs"
-                  name="federalSocialProgram"
-                  legend={t('provincial-territorial:federal-benefits.social-programs.legend')}
-                  options={federalSocialPrograms.map((option) => ({
-                    children: <span className="font-bold">{getNameByLanguage(i18n.language, option)}</span>,
-                    value: option.code,
-                    defaultChecked: state.dentalBenefit?.federalSocialProgram === option.code,
-                  }))}
-                />
-              ),
-            }))}
-          />
-        </div>
-      )}
-=======
   const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, state } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(i18nNamespaces);
   const [federalBenefitChecked, setFederalBenefitChecked] = useState(state.dentalBenefit?.federalBenefit ?? '');
@@ -211,7 +169,6 @@ export default function AccessToDentalInsuranceQuestion() {
           </div>
         )}
       </section>
->>>>>>> b531651 (create provincial territorial social program mock)
       <div className="flex flex-wrap items-center gap-3">
         <ButtonLink id="back-button" to="/apply">
           {t('provincial-territorial:button.back')}
