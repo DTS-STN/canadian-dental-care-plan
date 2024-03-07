@@ -83,7 +83,7 @@ export default function AccessToDentalInsuranceQuestion() {
                   name="federalSocialProgram"
                   legend={t('provincial-territorial:federal-benefits.social-programs.legend')}
                   options={federalSocialPrograms.map((option) => ({
-                    children: <p className="font-bold">{getNameByLanguage(i18n.language, option)}</p>,
+                    children: <span className="font-bold">{getNameByLanguage(i18n.language, option)}</span>,
                     value: option.code,
                     defaultChecked: state.dentalBenefit?.federalSocialProgram === option.code,
                   }))}
