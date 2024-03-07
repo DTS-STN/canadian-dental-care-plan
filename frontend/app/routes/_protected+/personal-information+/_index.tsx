@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { json } from '@remix-run/node';
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { MetaFunction, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -14,14 +14,20 @@ import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'personal-information:index.page-title' }],
-  i18nNamespaces: getTypedI18nNamespaces('personal-information'),
+  i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
   pageIdentifier: 'CDCP-0002',
   pageTitleI18nKey: 'personal-information:index.page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) }];
+});
 
 export async function loader({ request }: LoaderFunctionArgs) {
   if (!featureEnabled('update-personal-info')) {

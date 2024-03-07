@@ -48,8 +48,6 @@ export type Breadcrumbs = z.infer<typeof breadcrumbsSchema>;
 
 export type BuildInfo = z.infer<typeof buildInfoSchema>;
 
-export type DocumentTitleI18nKey = z.infer<typeof i18nKeySchema>;
-
 export type I18nNamespaces = z.infer<typeof i18nNamespacesSchema>;
 
 export type PageIdentifier = z.infer<typeof pageIdentifierSchema>;
@@ -61,7 +59,6 @@ export type PageTitleI18nKey = z.infer<typeof i18nKeySchema>;
  */
 export interface RouteHandleData extends Record<string, unknown | undefined> {
   breadcrumbs?: Breadcrumbs;
-  documentTitleI18nKey?: PageTitleI18nKey;
   i18nNamespaces?: I18nNamespaces;
   pageIdentifier?: PageIdentifier;
   pageTitleI18nKey?: PageTitleI18nKey;
@@ -81,14 +78,6 @@ export function useBuildInfo() {
   return useMatches()
     .map(({ data }) => data as { buildInfo?: BuildInfo } | undefined)
     .map((data) => buildInfoSchema.safeParse(data?.buildInfo))
-    .map((result) => (result.success ? result.data : undefined))
-    .reduce(coalesce);
-}
-
-export function useDocumentTitleI18nKey() {
-  return useMatches()
-    .map(({ handle }) => handle as RouteHandleData | undefined)
-    .map((handle) => i18nKeySchema.safeParse(handle?.documentTitleI18nKey))
     .map((result) => (result.success ? result.data : undefined))
     .reduce(coalesce);
 }

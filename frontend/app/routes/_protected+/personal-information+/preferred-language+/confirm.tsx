@@ -1,6 +1,6 @@
 import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
@@ -11,9 +11,8 @@ import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
-
-const i18nNamespaces = getTypedI18nNamespaces('personal-information');
 
 export const handle = {
   breadcrumbs: [
@@ -21,10 +20,15 @@ export const handle = {
     { labelI18nKey: 'personal-information:preferred-language.confirm.breadcrumbs.preferred-language-edit', to: '/personal-information/preferred-language/edit' },
     { labelI18nKey: 'personal-information:preferred-language.confirm.breadcrumbs.preferred-language-confirm' },
   ],
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
   pageIdentifier: 'CDCP-00010',
   pageTitleI18nKey: 'personal-information:preferred-language.confirm.page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('personal-information:preferred-language.confirm.page-title') }) }];
+});
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
@@ -73,7 +77,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function PreferredLanguageConfirm() {
   const { preferredLanguage } = useLoaderData<typeof loader>();
-  const { i18n, t } = useTranslation(i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
   return (
     <>
       <p className="mb-8 text-lg text-gray-500">{t('personal-information:preferred-language.confirm.subtitle')}</p>

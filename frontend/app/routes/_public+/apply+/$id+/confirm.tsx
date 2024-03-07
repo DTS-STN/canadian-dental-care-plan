@@ -2,24 +2,28 @@ import type { ReactNode } from 'react';
 
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { MetaFunction, useLoaderData } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { InlineLink } from '~/components/inline-link';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
-
-const i18nNamespaces = getTypedI18nNamespaces('apply');
 
 export const applyIdParamSchema = z.string().uuid();
 
 export const handle = {
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: 'CDCP-0013',
   pageTitleI18nKey: 'apply:confirm.page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('apply:confirm.page-title') }) }];
+});
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   //TODO: Get User/apply form information
@@ -75,7 +79,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function ApplyFlowConfirm() {
   const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance } = useLoaderData<typeof loader>();
-  const { i18n, t } = useTranslation(i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
 
   const mscaLink = <InlineLink to={t('confirm.msca-link')} />;
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} />;
@@ -87,7 +91,7 @@ export default function ApplyFlowConfirm() {
       <span>TODO: Contextual Alert Information</span>
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.keep-copy')}</h2>
       <p className="mt-4">
-        <Trans ns={i18nNamespaces} i18nKey="confirm.print-copy-text" />
+        <Trans ns={handle.i18nNamespaces} i18nKey="confirm.print-copy-text" />
       </p>
       <button
         className="mt-8 inline-flex w-44 items-center justify-center rounded bg-gray-800 px-5 py-2.5 align-middle font-lato text-xl font-semibold text-white outline-offset-2 hover:bg-gray-900"
@@ -101,23 +105,23 @@ export default function ApplyFlowConfirm() {
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.whats-next')}</h2>
       <p className="mt-4">{t('confirm.begin-process')}</p>
       <p className="mt-4">
-        <Trans ns={i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
+        <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
       </p>
       <p className="mt-4">{t('confirm.use-code')}</p>
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.register-msca-title')}</h2>
       <p className="mt-4">
-        <Trans ns={i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLink }} />
+        <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLink }} />
       </p>
       <p className="mt-4">{t('confirm.msca-notify')}</p>
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.how-insurance')}</h2>
       <p className="mt-4">{t('confirm.eligible-text')}</p>
       <p className="mt-4">
-        <Trans ns={i18nNamespaces} i18nKey="confirm.more-info-cdcp" components={{ moreInfoLink }} />
+        <Trans ns={handle.i18nNamespaces} i18nKey="confirm.more-info-cdcp" components={{ moreInfoLink }} />
       </p>
 
       <p className="mt-4">{t('confirm.ineligible-text')}</p>
       <p className="mt-4">
-        <Trans ns={i18nNamespaces} i18nKey="confirm.more-info-service" components={{ dentalContactUsLink }} />
+        <Trans ns={handle.i18nNamespaces} i18nKey="confirm.more-info-service" components={{ dentalContactUsLink }} />
       </p>
 
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.application-summ')}</h2>

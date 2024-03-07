@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { json } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
@@ -12,15 +12,19 @@ import { Button } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('review-information');
-
 export const handle = {
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('review-information', 'gcweb'),
   pageIdentifier: 'CDCP-0002',
   pageTitleI18nKey: 'review-information:page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('review-information:page-title') }) }];
+});
 
 export async function loader({ request }: LoaderFunctionArgs) {
   //TODO: Get User/apply form information
@@ -83,7 +87,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function ReviewInformation() {
   const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance } = useLoaderData<typeof loader>();
-  const { i18n, t } = useTranslation(i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
   return (
     <>
       <h2 className="text-2xl font-semibold">{t('review-information:page-sub-title')}</h2>

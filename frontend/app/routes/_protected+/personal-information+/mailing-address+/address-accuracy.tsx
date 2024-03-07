@@ -1,6 +1,6 @@
 import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -10,8 +10,7 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-
-const i18nNamespaces = getTypedI18nNamespaces('personal-information');
+import { mergeMeta } from '~/utils/meta-utils';
 
 export const handle = {
   breadcrumbs: [
@@ -19,10 +18,15 @@ export const handle = {
     { labelI18nKey: 'personal-information:mailing-address.address-accuracy.breadcrumbs.personal-information', to: '/personal-information' },
     { labelI18nKey: 'personal-information:mailing-address.address-accuracy.page-title' },
   ],
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
   pageIdentifier: 'CDCP-0014',
   pageTitleI18nKey: 'personal-information:mailing-address.address-accuracy.page-title',
 };
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('personal-information:mailing-address.address-accuracy.page-title') }) }];
+});
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
@@ -50,7 +54,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function PersonalInformationMailingAddressAccuracy() {
   const { newMailingAddress, countryList, regionList } = useLoaderData<typeof loader>();
-  const { i18n, t } = useTranslation(i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
 
   return (
     <>

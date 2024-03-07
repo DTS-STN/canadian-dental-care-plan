@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from '@remix-run/node';
-import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useActionData, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -13,17 +13,21 @@ import { InputField } from '~/components/input-field';
 import { InputSelect } from '~/components/input-select';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 
 export const applyIdParamSchema = z.string().uuid();
 
-const i18nNamespaces = getTypedI18nNamespaces('apply');
-
 export const handle = {
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: 'CDCP-00XX',
   pageTitleI18nKey: 'apply:partner-information.page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('apply:partner-information.page-title') }) }];
+});
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
@@ -65,7 +69,7 @@ export default function ApplyFlowApplicationInformation() {
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
 
-  const { i18n, t } = useTranslation(i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
 
   /**
    * Gets an error message based on the provided internationalization (i18n) key.

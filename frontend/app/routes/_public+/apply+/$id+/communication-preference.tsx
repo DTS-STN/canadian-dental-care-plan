@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useActionData, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -15,15 +15,19 @@ import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
-const i18nNamespaces = getTypedI18nNamespaces('communication-preference');
-
 export const handle = {
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('communication-preference', 'gcweb'),
   pageIdentifier: 'CDCP-00XX',
   pageTitleI18nKey: 'communication-preference:page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('communication-preference:page-title') }) }];
+});
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
@@ -98,7 +102,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function ApplyFlowCommunicationPreferencePage() {
   const { communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, id, state } = useLoaderData<typeof loader>();
-  const { i18n, t } = useTranslation(i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const [emailMethodChecked, setEmailMethodChecked] = useState(state?.preferredMethod === communicationMethodEmail.id);
 
   const actionData = useActionData<typeof action>();

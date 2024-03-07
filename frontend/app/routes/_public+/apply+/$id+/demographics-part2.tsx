@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useActionData, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,14 +17,18 @@ import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-
-const i18nNamespaces = getTypedI18nNamespaces('demographics-oral-health-questions', 'gcweb');
+import { mergeMeta } from '~/utils/meta-utils';
 
 export const handle = {
-  i18nNamespaces,
+  i18nNamespaces: getTypedI18nNamespaces('demographics-oral-health-questions', 'gcweb'),
   pageIdentifier: 'CDCP-1112',
   pageTitleI18nKey: 'demographics-oral-health-questions:part2.page-title',
 };
+
+export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  return [{ title: t('gcweb:meta.title.template', { title: t('demographics-oral-health-questions:part2.page-title') }) }];
+});
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { OTHER_GENDER_TYPE_ID } = getEnv();
@@ -77,7 +81,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function DemographicsPart2() {
   const { otherGenderCode, genderTypes, mouthPainTypes, lastTimeDentistVisitTypes, avoidedDentalCostTypes, id, state } = useLoaderData<typeof loader>();
-  const { i18n, t } = useTranslation(i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const [otherGenderChecked, setOtherGenderChecked] = useState(state?.gender === otherGenderCode.id);
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
