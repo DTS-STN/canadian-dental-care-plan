@@ -17,6 +17,10 @@ vi.mock('~/utils/env.server.ts', () => ({
   }),
 }));
 
+vi.mock('~/mocks/cct-api.server.ts', () => ({
+  getPdfEntity: vi.fn().mockReturnValue({ id: '0000000000' }),
+}));
+
 const handlers = [
   http.get('https://api.example.com/cctws/OnDemand/api/GetPdfByLetterId', async ({ request }) => {
     const url = new URL(request.url);
@@ -53,21 +57,23 @@ describe('cct-service.server.ts', () => {
   });
 
   it('it should return a 200 response when given a valid referenceID', async () => {
-    const response = await cctService.getPdf('00000000-0000-0000-0000-000000000000', '0000000000');
+    const response = await cctService.getPdf('00000000-0000-0000-0000-000000000000', 'v37j3ykKVI');
     expect(response.status).toBe(200);
   });
 
   it('it should return "application/pdf" as a the response content-type when given a valid referenceId', async () => {
-    const response = await cctService.getPdf('00000000-0000-0000-0000-000000000000', '0000000000');
+    const response = await cctService.getPdf('00000000-0000-0000-0000-000000000000', 'v37j3ykKVI');
     expect(response.headers.get('content-type')).toBe('application/pdf');
   });
 
   it('it should return a ReadableStream when given a valid referenceId', async () => {
-    const response = await cctService.getPdf('00000000-0000-0000-0000-000000000000', '0000000000');
+    const response = await cctService.getPdf('00000000-0000-0000-0000-000000000000', 'v37j3ykKVI');
     expectTypeOf(response.body).toMatchTypeOf<ReadableStream<Uint8Array> | null>();
   });
 
   it('it should return a 404 when given an invalid referenceID', async () => {
+    const cctApiService = await import('~/mocks/cct-api.server');
+    cctApiService.getPdfEntity = (await vi.importActual<typeof import('~/mocks/cct-api.server')>('~/mocks/cct-api.server.ts')).getPdfEntity;
     const response = await cctService.getPdf('00000000-0000-0000-0000-000000000000', 'invalidReferenceId');
     expect(response.status).toBe(404);
   });
