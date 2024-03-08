@@ -87,6 +87,15 @@ export function getLookupApiMockHandlers() {
     }),
 
     //
+    // Handler for GET request to retrieve all equity types
+    //
+    http.get('https://api.example.com/lookups/equity-types', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const equityTypes = demographicDB.equityType.getAll();
+      return HttpResponse.json(equityTypes);
+    }),
+
+    //
     // Handler for GET requests to retrieve preferred languages by id
     //
     http.get('https://api.example.com/lookups/preferred-languages/:id', ({ params, request }) => {

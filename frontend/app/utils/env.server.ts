@@ -45,6 +45,7 @@ const serverEnv = z.object({
   OTHER_GENDER_TYPE_ID: z.string().trim().min(1).default('gender-other'),
   COUNTRY_CODE_CANADA: z.string().trim().min(1).default('CAN'),
   COUNTRY_CODE_USA: z.string().trim().min(1).default('USA'),
+  OTHER_EQUITY_TYPE_ID: z.string().trim().min(1).default('equity-other'),
   // TODO :: GjB :: these base URIs should not have defaults
   INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
   CCT_API_BASE_URI: z.string().url().default('https://api.example.com'),
@@ -116,6 +117,7 @@ const serverEnv = z.object({
   LOOKUP_SVC_APPLICATIONTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_ALLFEDERALBENEFITS_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_ALLFEDERALSOCIALPROGRAMS_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
+  LOOKUP_SVC_ALLEQUITYTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_PROVINCIAL_TERRITORIAL_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_PROVINCIAL_TERRITORIAL_SOCIALPROGRAMS_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   
