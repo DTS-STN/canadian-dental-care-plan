@@ -72,7 +72,7 @@ export default function PersonalInformationHomeAddressAccuracy() {
                   city={newHomeAddress.city}
                   provinceState={regionList.find((region) => region.provinceTerritoryStateId === newHomeAddress.province)?.provinceTerritoryStateId}
                   postalZipCode={newHomeAddress.postalCode}
-                  country={countryList.find((country) => country.countryId === newHomeAddress.country)?.[i18n.language === 'fr' ? 'nameFrench' : 'nameEnglish'] ?? ' '}
+                  country={countryList.find((country) => country.countryId === newHomeAddress.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
                 />
               ) : (
                 <p>{t('personal-information:index.no-address-on-file')}</p>

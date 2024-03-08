@@ -80,7 +80,7 @@ export default function PersonalInformationHomeAddressConfirm() {
     if (!country) {
       throw new Error(`Unexpected country with id: ${countryId}`);
     }
-    return i18n.language === 'fr' ? country.nameFrench : country.nameEnglish;
+    return i18n.language === 'fr' ? country.nameFr : country.nameEn;
   }
 
   const newAddress = useSuggestedAddress ? suggestedAddress : newHomeAddress;

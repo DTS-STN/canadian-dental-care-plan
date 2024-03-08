@@ -153,7 +153,7 @@ export default function PersonalInformationMailingAddressEdit() {
   const countries: InputOptionProps[] = countryList
     .map((country) => {
       return {
-        children: i18n.language === 'fr' ? country.nameFrench : country.nameEnglish,
+        children: i18n.language === 'fr' ? country.nameFr : country.nameEn,
         value: country.countryId,
         id: country.countryId,
       };
@@ -164,7 +164,7 @@ export default function PersonalInformationMailingAddressEdit() {
   const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter((region) => region.countryId === defaultValues.country))
     .map((region) => {
       return {
-        children: i18n.language === 'fr' ? region.nameFrench : region.nameEnglish,
+        children: i18n.language === 'fr' ? region.nameFr : region.nameEn,
         value: region.provinceTerritoryStateId,
         id: region.provinceTerritoryStateId,
       };
@@ -224,9 +224,9 @@ export default function PersonalInformationMailingAddressEdit() {
                 <Address
                   address={homeAddressInfo.address}
                   city={homeAddressInfo.city}
-                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === homeAddressInfo.province)?.[i18n.language === 'fr' ? 'nameFrench' : 'nameEnglish']}
+                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === homeAddressInfo.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
                   postalZipCode={homeAddressInfo.postalCode}
-                  country={countryList.find((country) => country.countryId === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFrench' : 'nameEnglish'] ?? ' '}
+                  country={countryList.find((country) => country.countryId === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
                 />
               </dd>
             </dl>

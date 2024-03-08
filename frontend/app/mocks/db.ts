@@ -1,6 +1,10 @@
 import { fakerEN_CA as faker } from '@faker-js/faker';
 import { factory, oneOf, primaryKey } from '@mswjs/data';
 
+import countriesJson from './power-platform-data/countries.json';
+import federalProgramsJson from './power-platform-data/federal-programs.json';
+import regionsJson from './power-platform-data/regions.json';
+
 // (Optional) Seed `faker` to ensure reproducible
 // random values of model properties.
 faker.seed(123);
@@ -86,15 +90,16 @@ const db = factory({
     referenceId: () => faker.string.alphanumeric(10),
   },
   country: {
-    countryId: primaryKey(String),
-    nameEnglish: String,
-    nameFrench: String,
+    countryId: primaryKey(faker.string.uuid),
+    countryCode: String,
+    nameEn: String,
+    nameFr: String,
   },
   region: {
     provinceTerritoryStateId: primaryKey(String),
     countryId: String,
-    nameEnglish: String,
-    nameFrench: String,
+    nameEn: String,
+    nameFr: String,
   },
   maritalStatus: {
     id: primaryKey(faker.string.uuid),
@@ -178,30 +183,6 @@ db.applicationTypes.create({
   nameFr: '(FR) I am applying on behalf of someone else',
 });
 
-db.federalSocialProgram.create({
-  code: 'nonInsuredHealthBenefitsProgram',
-  nameEn: 'Non-Insured Health Benefits Program',
-  nameFr: '(Fr) Non-Insured Health Benefits Program',
-});
-
-db.federalSocialProgram.create({
-  code: 'vacDentalServicesProgram',
-  nameEn: 'VAC Dental Services Program ',
-  nameFr: '(Fr) VAC Dental Services Program ',
-});
-
-db.federalSocialProgram.create({
-  code: 'interimFederalHealthProgram',
-  nameEn: 'Interim Federal Health Program',
-  nameFr: '(Fr) Interim Federal Health Program',
-});
-
-db.federalSocialProgram.create({
-  code: 'correctionalServiceCanadaHealthServices',
-  nameEn: 'Correctional Service Canada Health Services',
-  nameFr: '(Fr) Correctional Service Canada Health Services',
-});
-
 // seed avaliable addresses (before user)
 db.address.create({
   id: 'home-address-id',
@@ -282,79 +263,32 @@ db.maritalStatus.create({
 });
 
 // seed country list
-db.country.create({
-  countryId: 'CAN',
-  nameEnglish: 'Canada',
-  nameFrench: 'Canada',
-});
+countriesJson.value.forEach((country) =>
+  db.country.create({
+    countryId: country.esdc_countryid,
+    countryCode: country.esdc_countrycodealpha3,
+    nameEn: country.esdc_nameenglish,
+    nameFr: country.esdc_namefrench,
+  }),
+);
 
-db.country.create({
-  countryId: 'USA',
-  nameEnglish: 'United States of America',
-  nameFrench: "États-Unis d'Amérique",
-});
+// seed region list
+regionsJson.value.forEach((region) =>
+  db.region.create({
+    countryId: db.country.findFirst({ where: { countryId: { equals: region._esdc_countryid_value } } })?.countryCode,
+    provinceTerritoryStateId: region.esdc_internationalalphacode,
+    nameEn: region.esdc_nameenglish,
+    nameFr: region.esdc_namefrench,
+  }),
+);
 
-db.country.create({
-  countryId: 'MEX',
-  nameEnglish: 'Mexico',
-  nameFrench: 'Mexique',
-});
-
-// seed province list
-db.region.create({
-  provinceTerritoryStateId: 'ON',
-  countryId: 'CAN',
-  nameEnglish: 'Ontario',
-  nameFrench: 'Ontario',
-});
-
-db.region.create({
-  provinceTerritoryStateId: 'MB',
-  countryId: 'CAN',
-  nameEnglish: 'Manitoba',
-  nameFrench: 'Manitoba',
-});
-
-db.region.create({
-  provinceTerritoryStateId: 'QC',
-  countryId: 'CAN',
-  nameEnglish: 'Quebec',
-  nameFrench: 'Québec',
-});
-
-db.region.create({
-  provinceTerritoryStateId: 'NS',
-  countryId: 'CAN',
-  nameEnglish: 'Nova Scotia',
-  nameFrench: 'Nouvelle-Écosse',
-});
-
-db.region.create({
-  provinceTerritoryStateId: 'NL',
-  countryId: 'CAN',
-  nameEnglish: 'Newfoundland and Labrador',
-  nameFrench: 'Terre-Neuve-et-Labrador',
-});
-
-db.region.create({
-  provinceTerritoryStateId: 'PE',
-  countryId: 'CAN',
-  nameEnglish: 'Prince Edward Island',
-  nameFrench: 'Île-du-Prince-Édouard',
-});
-
-db.region.create({
-  provinceTerritoryStateId: 'UT',
-  countryId: 'USA',
-  nameEnglish: 'Utah',
-  nameFrench: 'Utah',
-});
-
-db.region.create({
-  provinceTerritoryStateId: 'NY',
-  countryId: 'USA',
-  nameEnglish: 'New York',
-  nameFrench: 'État de New York',
-});
+// seed federal social program list
+federalProgramsJson.value.forEach((program) =>
+  db.federalSocialProgram.create({
+    code: program.esdc_code,
+    nameEn: program.esdc_nameenglish,
+    nameFr: program.esdc_namefrench,
+  }),
+);
 
 export { db };

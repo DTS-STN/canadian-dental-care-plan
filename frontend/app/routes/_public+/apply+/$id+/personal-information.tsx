@@ -243,7 +243,7 @@ export default function ApplyFlowPersonalInformation() {
   const countries: InputOptionProps[] = countryList
     .map((country) => {
       return {
-        children: i18n.language === 'fr' ? country.nameFrench : country.nameEnglish,
+        children: i18n.language === 'fr' ? country.nameFr : country.nameEn,
         value: country.countryId,
       };
     })
@@ -253,7 +253,7 @@ export default function ApplyFlowPersonalInformation() {
   const mailingRegions: InputOptionProps[] = mailingCountryRegions
     .map((region) => {
       return {
-        children: i18n.language === 'fr' ? region.nameFrench : region.nameEnglish,
+        children: i18n.language === 'fr' ? region.nameFr : region.nameEn,
         value: region.provinceTerritoryStateId,
       };
     })
@@ -272,7 +272,7 @@ export default function ApplyFlowPersonalInformation() {
   const homeRegions: InputOptionProps[] = homeCountryRegions
     .map((region) => {
       return {
-        children: i18n.language === 'fr' ? region.nameFrench : region.nameEnglish,
+        children: i18n.language === 'fr' ? region.nameFr : region.nameEn,
         value: region.provinceTerritoryStateId,
       };
     })
