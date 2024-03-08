@@ -1,8 +1,8 @@
 import type { ComponentProps, ReactNode } from 'react';
 
-import { InputCheckbox } from './input-checkbox';
-import { InputError } from './input-error';
-import { InputHelp } from './input-help';
+import { InputCheckbox } from '~/components/input-checkbox';
+import { InputError } from '~/components/input-error';
+import { InputHelp } from '~/components/input-help';
 import { InputLegend } from '~/components/input-legend';
 import { cn } from '~/utils/tw-utils';
 
@@ -19,7 +19,7 @@ export interface InputCheckboxesProps {
   required?: boolean;
 }
 
-const InputCheckboxes = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, name, options, required }: InputCheckboxesProps) => {
+export function InputCheckboxes({ errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, name, options, required }: InputCheckboxesProps) {
   const inputErrorId = `input-checkboxes-${id}-error`;
   const inputHelpMessagePrimaryId = `input-checkboxes-${id}-help-primary`;
   const inputHelpMessageSecondaryId = `input-checkboxes-${id}-help-secondary`;
@@ -44,8 +44,8 @@ const InputCheckboxes = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryC
         </InputHelp>
       )}
       <ul className="space-y-2">
-        {options.map((option, index) => {
-          const inputCheckboxId = `${id}-option-${index}`;
+        {options.map((option) => {
+          const inputCheckboxId = `${id}-option-${option.itemID}`;
           return (
             <li key={inputCheckboxId}>
               <InputCheckbox aria-describedby={getAriaDescribedby()} aria-errormessage={errorMessage && inputErrorId} aria-invalid={!!errorMessage} aria-required={required} id={inputCheckboxId} name={name} required={required} {...option} />
@@ -65,8 +65,6 @@ const InputCheckboxes = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryC
       )}
     </fieldset>
   );
-};
+}
 
 InputCheckboxes.displayName = 'InputCheckboxes';
-
-export { InputCheckboxes };
