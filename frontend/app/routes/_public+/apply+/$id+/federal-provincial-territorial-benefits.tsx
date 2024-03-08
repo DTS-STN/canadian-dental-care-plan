@@ -35,14 +35,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const provincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
   const regions = await getLookupService().getAllRegions();
 
-  const language = request.headers.get('Accept-Language')?.includes('fr') ? 'fr' : 'en';
-
-  regions.sort((a, b) => {
-    const nameA = language === 'en' ? a.nameEn : a.nameFr;
-    const nameB = language === 'fr' ? b.nameEn : b.nameFr;
-    return nameA.localeCompare(nameB);
-  });
-
   return json({ id, state, federalDentalBenefits, provincialTerritorialDentalBenefits, federalSocialPrograms, provincialTerritorialSocialPrograms, regions });
 }
 
@@ -75,14 +67,21 @@ export default function AccessToDentalInsuranceQuestion() {
   const [federalBenefitChecked, setFederalBenefitChecked] = useState(state.dentalBenefit?.federalBenefit ?? '');
   const [provincialTerritorialBenefitChecked, setProvincialTerritorialBenefitChecked] = useState(state.dentalBenefit?.provincialTerritorialBenefit ?? '');
   const [selectedRegion, setSelectedRegion] = useState(state.dentalBenefit?.provincialTerritorialSocialProgram ?? 'AB');
+
+  const sortedRegions = regions.sort((a, b) => {
+    const nameA = i18n.language === 'en' ? a.nameEn : a.nameFr;
+    const nameB = i18n.language === 'en' ? b.nameEn : b.nameFr;
+    return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
+  });
+
   return (
     <Form method="post">
       <section>
         <p className="mb-4">{t('dental-benefits.access-to-dental')}</p>
         <p className="mb-6">{t('dental-benefits.eligibility-criteria')}</p>
         {federalDentalBenefits.length > 0 && (
-          <div className="my-6">
-            <h2 className="mb-4 text-xl font-bold">{t('dental-benefits.federal-benefits.title')}</h2>
+          <>
+            <h2 className="mb-4 mt-6 text-xl font-bold">{t('dental-benefits.federal-benefits.title')}</h2>
             <InputRadios
               id="federal-benefit"
               name="federalBenefit"
@@ -106,10 +105,10 @@ export default function AccessToDentalInsuranceQuestion() {
                 ),
               }))}
             />
-          </div>
+          </>
         )}
       </section>
-      <section>
+      <section className="mt-8">
         <h2 className="mb-4 text-xl font-bold">{t('dental-benefits.provincial-territorial-benefits.title')}</h2>
         {provincialTerritorialDentalBenefits.length > 0 && (
           <div className="my-6">
@@ -132,7 +131,7 @@ export default function AccessToDentalInsuranceQuestion() {
                       defaultValue={state.dentalBenefit?.provincialTerritorialBenefit}
                       required
                       onChange={(e) => setSelectedRegion(e.target.value)}
-                      options={regions
+                      options={sortedRegions
                         .filter((region) => region.countryId === 'CAN')
                         .map((region) => ({
                           key: region.provinceTerritoryStateId,
