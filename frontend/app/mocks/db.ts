@@ -238,7 +238,9 @@ const seededLetterTypes = [
 const numberOfLetters = faker.number.int({ min: 10, max: 20 }); // Adjust min and max as needed
 for (let i = 0; i < numberOfLetters; i++) {
   // seed avaliable pdf
-  const seededPDF = db.pdf.create();
+  // if i===0 create a pdf with a hardcoded reference ID to prevent unit tests from needing to be updated
+  // (relevant when the db schema changes since faker will re-run with new randomly generated values)
+  const seededPDF = i === 0 ? db.pdf.create({ referenceId: '0000000000' }) : db.pdf.create();
 
   db.letter.create({
     userId: defaultUser.id,
