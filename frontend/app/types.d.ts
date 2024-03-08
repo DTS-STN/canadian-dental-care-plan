@@ -8,7 +8,6 @@ import type gcweb from '../public/locales/en/gcweb.json';
 import type index from '../public/locales/en/index.json';
 import type letters from '../public/locales/en/letters.json';
 import type personalInformation from '../public/locales/en/personal-information.json';
-import type provincialTerritorial from '../public/locales/en/provincial-territorial.json';
 import type reviewInformation from '../public/locales/en/review-information.json';
 import type termsAndConditions from '../public/locales/en/terms-and-conditions.json';
 import type { PublicEnv } from '~/utils/env.server';
@@ -44,7 +43,6 @@ declare module 'i18next' {
       'personal-information': typeof personalInformation;
       'review-information': typeof reviewInformation;
       'terms-and-conditions': typeof termsAndConditions;
-      'provincial-territorial': typeof provincialTerritorial;
     };
   }
 }

@@ -127,12 +127,30 @@ export function getLookupApiMockHandlers() {
     }),
 
     //
+    // Handler for GET request to retrieve provincial or territorial social programs
+    //
+    http.get('https://api.example.com/lookups/provincial-territorial-social-programs', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const provincialTerritorialSocialProgram = db.provincialTerritorialSocialProgram.getAll();
+      return HttpResponse.json(provincialTerritorialSocialProgram);
+    }),
+
+    //
     // Handler for GET request to retrieve provincial territorial dental benefit
     //
     http.get('https://api.example.com/lookups/federal-dental-benefit', ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       const federalDentalBenefit = db.federalDentalBenefit.getAll();
       return HttpResponse.json(federalDentalBenefit);
+    }),
+
+    //
+    // Handler for GET request to retrieve provincial territorial dental benefit
+    //
+    http.get('https://api.example.com/lookups/provincial-territorial-dental-benefit', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const provincialTerritorialDentalBenefit = db.provincialTerritorialDentalBenefit.getAll();
+      return HttpResponse.json(provincialTerritorialDentalBenefit);
     }),
 
     //
