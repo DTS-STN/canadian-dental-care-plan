@@ -33,7 +33,7 @@ export default function ApplicationLayout({ children, layout }: ApplicationLayou
       <SkipNavigationLinks />
       {layout === 'protected' && <ProtectedPageHeader />}
       {layout === 'public' && <PublicPageHeader />}
-      <Breadcrumbs />
+      <Breadcrumbs layout={layout} />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
         <AppPageTitle />
         {children}
@@ -219,7 +219,7 @@ function Breadcrumb({ children, to }: { children: ReactNode; to?: string }) {
     : <InlineLink to={to} property="item" typeof="WebPage"><span property="name">{children}</span></InlineLink>;
 }
 
-function Breadcrumbs() {
+function Breadcrumbs({ layout }: { layout: 'protected' | 'public' }) {
   const { t } = useTranslation([...i18nNamespaces, ...useI18nNamespaces()]);
   const breadcrumbs = useBreadcrumbs();
 
@@ -230,17 +230,30 @@ function Breadcrumbs() {
       </h2>
       <div className="container mt-4">
         <ol className="flex flex-wrap items-center gap-x-3 gap-y-1" typeof="BreadcrumbList">
-          <li property="itemListElement" typeof="ListItem">
-            <Breadcrumb to={breadcrumbs.length !== 0 ? '/' : undefined}>{t('gcweb:breadcrumbs.home')}</Breadcrumb>
-          </li>
-          {breadcrumbs.map(({ labelI18nKey, to }) => {
-            return (
-              <li key={labelI18nKey} property="itemListElement" typeof="ListItem" className="flex items-center">
-                <FontAwesomeIcon icon={faChevronRight} className="mr-2 size-3 text-slate-700" />
-                <Breadcrumb to={to}>{t(labelI18nKey)}</Breadcrumb>
+          {layout === 'protected' && (
+            <>
+              <li property="itemListElement" typeof="ListItem">
+                <Breadcrumb to={breadcrumbs.length !== 0 ? '/home' : undefined}>{t('gcweb:breadcrumbs.home')}</Breadcrumb>
               </li>
-            );
-          })}
+              {breadcrumbs.map(({ labelI18nKey, to }) => {
+                return (
+                  <li key={labelI18nKey} property="itemListElement" typeof="ListItem" className="flex items-center">
+                    <FontAwesomeIcon icon={faChevronRight} className="mr-2 size-3 text-slate-700" />
+                    <Breadcrumb to={to}>{t(labelI18nKey)}</Breadcrumb>
+                  </li>
+                );
+              })}
+            </>
+          )}
+          {layout === 'public' &&
+            breadcrumbs.map(({ labelI18nKey, to }, index) => {
+              return (
+                <li key={labelI18nKey} property="itemListElement" typeof="ListItem" className="flex items-center">
+                  {index !== 0 && <FontAwesomeIcon icon={faChevronRight} className="mr-2 size-3 text-slate-700" />}
+                  <Breadcrumb to={to}>{t(labelI18nKey)}</Breadcrumb>
+                </li>
+              );
+            })}
         </ol>
       </div>
     </nav>
