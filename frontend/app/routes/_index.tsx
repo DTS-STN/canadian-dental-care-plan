@@ -15,7 +15,7 @@ export const meta: MetaFunction = mergeMeta((args) => {
 
 export default function RootIndex() {
   return (
-    <main role="main" className="bg-splash-page flex h-svh bg-cover bg-center" property="mainContentOfPage">
+    <main role="main" className="flex h-svh bg-splash-page bg-cover bg-center" property="mainContentOfPage">
       <div className="m-auto w-[300px] bg-white md:w-[400px] lg:w-[500px]">
         <div className="p-8">
           <h1 className="sr-only">Canadian Dental Care Plan | Régime canadien de soins dentaires</h1>
