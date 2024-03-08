@@ -18,12 +18,12 @@ import { mergeMeta } from '~/utils/meta-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: 'CDCP-1115',
-  pageTitleI18nKey: 'dental-benefits.title',
+  pageTitleI18nKey: 'apply:dental-benefits.title',
 };
 
 export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
   const { t } = useTranslation(handle.i18nNamespaces);
-  return [{ title: t('gcweb:meta.title.template', { title: t('dental-benefits.title') }) }];
+  return [{ title: t('gcweb:meta.title.template', { title: t('apply:dental-benefits.title') }) }];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -38,8 +38,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const language = request.headers.get('Accept-Language')?.includes('fr') ? 'fr' : 'en';
 
   regions.sort((a, b) => {
-    const nameA = language === 'en' ? a.nameEnglish : a.nameFrench;
-    const nameB = language === 'fr' ? b.nameEnglish : b.nameFrench;
+    const nameA = language === 'en' ? a.nameEn : a.nameFr;
+    const nameB = language === 'fr' ? b.nameEn : b.nameFr;
     return nameA.localeCompare(nameB);
   });
 
@@ -138,7 +138,7 @@ export default function AccessToDentalInsuranceQuestion() {
                           key: region.provinceTerritoryStateId,
                           id: region.provinceTerritoryStateId,
                           value: region.provinceTerritoryStateId,
-                          children: i18n.language === 'en' ? region.nameEnglish : region.nameFrench,
+                          children: i18n.language === 'en' ? region.nameEn : region.nameFr,
                         }))}
                     />
                     <InputRadios

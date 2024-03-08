@@ -54,7 +54,6 @@ const db = factory({
   },
   provincialTerritorialDentalBenefit: {
     id: primaryKey(faker.string.uuid),
-
     code: String,
     nameEn: String,
     nameFr: String,
