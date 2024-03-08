@@ -414,49 +414,46 @@ function createLookupService() {
     const url = `${INTEROP_API_BASE_URI}/lookups/provincial-territorial-dental-benefit/`;
     const response = await fetch(url);
 
-    const provincialTerritorialDentalBenefits = z.array(provincialTerritorialDentalBenefit);
-
-    if (response.ok) {
-      return provincialTerritorialDentalBenefits.parse(await response.json());
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed to fetch data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    log.error('%j', {
-      message: 'Failed to fetch data',
-      status: response.status,
-      statusText: response.statusText,
-      url: url,
-      responseBody: await response.text(),
-    });
-
-    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    const provincialTerritorialDentalBenefits = z.array(provincialTerritorialDentalBenefit);
+    return provincialTerritorialDentalBenefits.parse(await response.json());
   }
 
   async function getAllFederalSocialPrograms() {
     const url = `${INTEROP_API_BASE_URI}/lookups/federal-social-programs/`;
     const response = await fetch(url);
 
-    const federalSocialPrograms = z.array(federalSocialProgram);
-
-    if (response.ok) {
-      return federalSocialPrograms.parse(await response.json());
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed to fetch data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    log.error('%j', {
-      message: 'Failed to fetch data',
-      status: response.status,
-      statusText: response.statusText,
-      url: url,
-      responseBody: await response.text(),
-    });
-
-    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    const federalSocialPrograms = z.array(federalSocialProgram);
+    return federalSocialPrograms.parse(await response.json());
+    
   }
 
   async function getAllProvincialTerritorialSocialPrograms() {
     const url = `${INTEROP_API_BASE_URI}/lookups/provincial-territorial-social-programs/`;
     const response = await fetch(url);
 
-    const provincialTerritorialSocialPrograms= z.array(provincialTerritorialSocialProgram);
+    const provincialTerritorialSocialPrograms = z.array(provincialTerritorialSocialProgram);
 
     if (response.ok) {
       return provincialTerritorialSocialPrograms.parse(await response.json());
