@@ -12,14 +12,14 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('demographics-oral-health-questions', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: 'CDCP-1110',
-  pageTitleI18nKey: 'demographics-oral-health-questions:optional-demographic-oral-health-questions.page-title',
+  pageTitleI18nKey: 'apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.page-title',
 };
 
 export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
   const { t } = useTranslation(handle.i18nNamespaces);
-  return [{ title: t('gcweb:meta.title.template', { title: t('demographics-oral-health-questions:optional-demographic-oral-health-questions.page-title') }) }];
+  return [{ title: t('gcweb:meta.title.template', { title: t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.page-title') }) }];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -47,23 +47,20 @@ export default function Demographics() {
   const { id } = useLoaderData<typeof loader>();
 
   return (
-    <>
-      <Form method="post" className="space-y-6">
-        <p className="mb-6">{t('optional-demographic-oral-health-questions.responses-will-be-confidential')}</p>
-        <p className="mb-6">{t('optional-demographic-oral-health-questions.questions-are-voluntary')}</p>
-        <p className="mb-6">{t('optional-demographic-oral-health-questions.anwsers-will-not-affect-eligibility')}</p>
-
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" variant="alternative" to={`/apply/${id}/federal-provincial-territorial-benefits`}>
-            {t('optional-demographic-oral-health-questions.back-button')}
-            <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
-          </ButtonLink>
-          <Button id="answer-button" variant="primary">
-            {t('optional-demographic-oral-health-questions.answer-button')}
-            <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
-          </Button>
-        </div>
-      </Form>
-    </>
+    <Form method="post" className="space-y-6">
+      <p className="mb-6">{t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.responses-will-be-confidential')}</p>
+      <p className="mb-6">{t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.questions-are-voluntary')}</p>
+      <p className="mb-6">{t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.anwsers-will-not-affect-eligibility')}</p>
+      <div className="mt-6 flex flex-wrap items-center gap-3">
+        <ButtonLink id="back-button" variant="alternative" to={`/apply/${id}/federal-provincial-territorial-benefits`}>
+          {t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.back-button')}
+          <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
+        </ButtonLink>
+        <Button id="answer-button" variant="primary">
+          {t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.answer-button')}
+          <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
+        </Button>
+      </div>
+    </Form>
   );
 }
