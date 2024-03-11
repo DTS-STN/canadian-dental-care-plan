@@ -65,17 +65,18 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function AccessToDentalInsuranceQuestion() {
-  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, state } = useLoaderData<typeof loader>();
+  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, state, id } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const [federalBenefitChecked, setFederalBenefitChecked] = useState(state.dentalBenefit?.federalBenefit ?? '');
   const [provincialTerritorialBenefitChecked, setProvincialTerritorialBenefitChecked] = useState(state.dentalBenefit?.provincialTerritorialBenefit ?? '');
-  const [selectedRegion, setSelectedRegion] = useState(state.dentalBenefit?.provincialTerritorialSocialProgram ?? 'AB');
 
   const sortedRegions = regions.sort((a, b) => {
     const nameA = i18n.language === 'en' ? a.nameEn : a.nameFr;
     const nameB = i18n.language === 'en' ? b.nameEn : b.nameFr;
     return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
   });
+
+  const [selectedRegion, setSelectedRegion] = useState(state.dentalBenefit?.provincialTerritorialSocialProgram ?? sortedRegions.find((region) => region.countryId === 'CAN')?.provinceTerritoryStateId);
 
   return (
     <Form method="post">
@@ -163,13 +164,13 @@ export default function AccessToDentalInsuranceQuestion() {
         )}
       </section>
       <div className="flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to="/apply">
+        <ButtonLink type="button" variant="alternative" to={`/apply/${id}/dental-insurance`}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-          {t('dental-benefits.button.back')}
+          {t('dental-insurance.button.back')}
         </ButtonLink>
-        <Button variant="primary" id="continue-button">
-          {t('dental-benefits.button.continue')}
-          <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
+        <Button type="submit" variant="primary">
+          {t('dental-insurance.button.continue')}
+          <FontAwesomeIcon icon={faChevronRight} className="me-3 block size-4" />
         </Button>
       </div>
     </Form>
