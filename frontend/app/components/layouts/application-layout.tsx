@@ -2,10 +2,11 @@ import type { ComponentProps, MouseEvent, ReactNode } from 'react';
 
 import { Link } from '@remix-run/react';
 
-import { faArrowRightFromBracket, faChevronDown, faChevronRight, faCircleUser } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightFromBracket, faChevronDown, faCircleUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { Breadcrumbs } from '~/components/breadcrumbs';
 import { ButtonLink } from '~/components/buttons';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '~/components/dropdown-menu';
 import { InlineLink } from '~/components/inline-link';
@@ -33,7 +34,8 @@ export default function ApplicationLayout({ children, layout }: ApplicationLayou
       <SkipNavigationLinks />
       {layout === 'protected' && <ProtectedPageHeader />}
       {layout === 'public' && <PublicPageHeader />}
-      <Breadcrumbs layout={layout} />
+      {layout === 'protected' && <ProtectedBreadcrumbs />}
+      {layout === 'public' && <PublicBreadcrumbs />}
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
         <AppPageTitle />
         {children}
@@ -212,61 +214,33 @@ function PageFooter() {
   );
 }
 
-function Breadcrumb({ children, to }: { children: ReactNode; to?: string }) {
-  // prettier-ignore
-  return to === undefined
-    ? <span property="name">{children}</span>
-    : <InlineLink to={to} property="item" typeof="WebPage"><span property="name">{children}</span></InlineLink>;
-}
-
-function Breadcrumbs({ layout }: { layout: 'protected' | 'public' }) {
+function ProtectedBreadcrumbs() {
   const { t } = useTranslation([...i18nNamespaces, ...useI18nNamespaces()]);
   const breadcrumbs = useBreadcrumbs();
-
   return (
-    <nav id="wb-bc" property="breadcrumb" aria-labelledby="breadcrumbs">
-      <h2 id="breadcrumbs" className="sr-only">
-        {t('gcweb:breadcrumbs.you-are-here')}
-      </h2>
-      <div className="container mt-4">
-        <ol className="flex flex-wrap items-center gap-x-3 gap-y-1" typeof="BreadcrumbList">
-          {layout === 'protected' && (
-            <>
-              <li property="itemListElement" typeof="ListItem">
-                <Breadcrumb to={breadcrumbs.length !== 0 ? '/home' : undefined}>{t('gcweb:breadcrumbs.home')}</Breadcrumb>
-              </li>
-              {breadcrumbs.map(({ labelI18nKey, to }) => {
-                return (
-                  <li key={labelI18nKey} property="itemListElement" typeof="ListItem" className="flex items-center">
-                    <FontAwesomeIcon icon={faChevronRight} className="mr-2 size-3 text-slate-700" />
-                    <Breadcrumb to={to}>{t(labelI18nKey)}</Breadcrumb>
-                  </li>
-                );
-              })}
-            </>
-          )}
-          {layout === 'public' && (
-            <>
-              <li property="itemListElement" typeof="ListItem" className="flex items-center">
-                <Breadcrumb to={t('gcweb:breadcrumbs.canada-ca-url')}>{t('gcweb:breadcrumbs.canada-ca')}</Breadcrumb>
-              </li>
-              <li property="itemListElement" typeof="ListItem" className="flex items-center">
-                <FontAwesomeIcon icon={faChevronRight} className="mr-2 size-3 text-slate-700" />
-                <Breadcrumb to={t('gcweb:breadcrumbs.benefits-url')}>{t('gcweb:breadcrumbs.benefits')}</Breadcrumb>
-              </li>
-              <li property="itemListElement" typeof="ListItem" className="flex items-center">
-                <FontAwesomeIcon icon={faChevronRight} className="mr-2 size-3 text-slate-700" />
-                <Breadcrumb to={t('gcweb:breadcrumbs.dental-coverage-url')}>{t('gcweb:breadcrumbs.dental-coverage')}</Breadcrumb>
-              </li>
-              <li property="itemListElement" typeof="ListItem" className="flex items-center">
-                <FontAwesomeIcon icon={faChevronRight} className="mr-2 size-3 text-slate-700" />
-                <Breadcrumb to={t('gcweb:breadcrumbs.canadian-dental-care-plan-url')}>{t('gcweb:breadcrumbs.canadian-dental-care-plan')}</Breadcrumb>
-              </li>
-            </>
-          )}
-        </ol>
-      </div>
-    </nav>
+    <Breadcrumbs
+      items={[
+        { content: t('gcweb:breadcrumbs.home'), to: breadcrumbs.length !== 0 ? '/home' : undefined },
+        ...breadcrumbs.map((item) => ({
+          content: t(item.labelI18nKey),
+          to: item.to,
+        })),
+      ]}
+    />
+  );
+}
+
+function PublicBreadcrumbs() {
+  const { t } = useTranslation([...i18nNamespaces, ...useI18nNamespaces()]);
+  return (
+    <Breadcrumbs
+      items={[
+        { content: t('gcweb:breadcrumbs.canada-ca'), to: t('gcweb:breadcrumbs.canada-ca-url') },
+        { content: t('gcweb:breadcrumbs.benefits'), to: t('gcweb:breadcrumbs.benefits-url') },
+        { content: t('gcweb:breadcrumbs.dental-coverage'), to: t('gcweb:breadcrumbs.dental-coverage-url') },
+        { content: t('gcweb:breadcrumbs.canadian-dental-care-plan'), to: t('gcweb:breadcrumbs.canadian-dental-care-plan-url') },
+      ]}
+    />
   );
 }
 
