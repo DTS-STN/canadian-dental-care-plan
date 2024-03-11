@@ -113,6 +113,65 @@
       "back-button": "Back"
     }
   },
+  "dental-benefits": {
+    "title": "Access to other federal, provincial or territorial dental benefits",
+    "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social program will not impact your eligibility for the Canadian Dental Care Plan.",
+    "eligibility-criteria": "If you meet all the eligibility criteria, your coverage will be coordinated between the plans to ensure there are no duplication or gaps in coverage.",
+    "federal-benefits": {
+      "title": "Federal benefits",
+      "legend": "Do you have dental benefits through a social program offered by a federal program?",
+      "option-yes": "<strong>Yes</strong>, I have <strong>federal</strong> benefits.",
+      "option-no": "<strong>No</strong>, I do not have <strong>federal</strong> benefits.",
+      "social-programs": {
+        "legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."
+      }
+    },
+    "provincial-territorial-benefits": {
+      "title": "Provincial or territorial benefits",
+      "legend": "Do you have dental benefits through a social program offered by your province or territory?",
+      "option-yes": "<strong>Yes</strong>, I have <strong>provincial or territorial</strong> benefits.",
+      "option-no": "<strong>No</strong>, I do not have <strong>provincial or territorial</strong> benefits.",
+      "social-programs": {
+        "input-legend": "If yes, through which province or territory?",
+        "radio-legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."
+      }
+    },
+    "button": {
+      "back": "Back",
+      "continue": "Continue"
+    }
+  },
+  "dental-insurance": {
+    "title": "Access to other dental insurance",
+    "legend": "Do you have access to dental insurance or coverage through one of the following four situations?",
+    "list": {
+      "employment": "Your employment benefits or a family member’s employment benefits, including health and wellness account",
+      "pension": "Your pension benefits or a family member’s pension benefits",
+      "purchased": "Purchased by you or a family member or through a group plan from an insurance or benefits company",
+      "professional": "Through a professional or student organization"
+    },
+    "option-yes": "<strong>Yes</strong>, I have access to dental insurance or coverage.",
+    "option-no": "<strong>No</strong>, I do not have access to dental insurance or coverage.",
+    "button": {
+      "back": "Back",
+      "continue": "Continue"
+    },
+    "detail": {
+      "additional-info": {
+        "title": "Additional information",
+        "eligible": "Exception: You may still be eligible if you retired and:",
+        "list": {
+          "opted": "you opted out of pension benefits before December 11, 2023, and",
+          "cannot-opt": "you can’t opt back in under the pension rules"
+        },
+        "not-eligible": "You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your employer/pension (see exception) benefits or through a professional or student organization. As such, you are not eligible for the CDCP.",
+        "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own (and not as part of any of the coverage described above), you’re not eligible for the CDCP while that coverage is in effect."
+      }
+    },
+    "error-message": {
+      "required": "Access to dental insurance must be selected"
+    }
+  },
   "eligibility": {
     "type-of-application": {
       "page-title": "Type of application",
@@ -285,65 +344,6 @@
     "print-app-title": "Print application",
     "submit-p-three": "Keep a record of your application so that you can refer back to it.",
     "submit-button": "Submit Application"
-  },
-  "dental-benefits": {
-    "title": "Access to other federal, provincial or territorial dental benefits",
-    "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social program will not impact your eligibility for the Canadian Dental Care Plan.",
-    "eligibility-criteria": "If you meet all the eligibility criteria, your coverage will be coordinated between the plans to ensure there are no duplication or gaps in coverage.",
-    "federal-benefits": {
-      "title": "Federal benefits",
-      "legend": "Do you have dental benefits through a social program offered by a federal program?",
-      "option-yes": "<strong>Yes</strong>, I have <strong>federal</strong> benefits.",
-      "option-no": "<strong>No</strong>, I do not have <strong>federal</strong> benefits.",
-      "social-programs": {
-        "legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."
-      }
-    },
-    "provincial-territorial-benefits": {
-      "title": "Provincial or territorial benefits",
-      "legend": "Do you have dental benefits through a social program offered by your province or territory?",
-      "option-yes": "<strong>Yes</strong>, I have <strong>provincial or territorial</strong> benefits.",
-      "option-no": "<strong>No</strong>, I do not have <strong>provincial or territorial</strong> benefits.",
-      "social-programs": {
-        "input-legend": "If yes, through which province or territory?",
-        "radio-legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."
-      }
-    },
-    "button": {
-      "back": "Back",
-      "continue": "Continue"
-    }
-  },
-  "dental-insurance": {
-    "title": "Access to other dental insurance",
-    "legend": "Do you have access to dental insurance or coverage through one of the following four situations?",
-    "list": {
-      "employment": "Your employment benefits or a family member’s employment benefits, including health and wellness account",
-      "pension": "Your pension benefits or a family member’s pension benefits",
-      "purchased": "Purchased by you or a family member or through a group plan from an insurance or benefits company",
-      "professional": "Through a professional or student organization"
-    },
-    "option-yes": "<strong>Yes</strong>, I have access to dental insurance or coverage.",
-    "option-no": "<strong>No</strong>, I do not have access to dental insurance or coverage.",
-    "button": {
-      "back": "Back",
-      "continue": "Continue"
-    },
-    "detail": {
-      "additional-info": {
-        "title": "Additional information",
-        "eligible": "Exception: You may still be eligible if you retired and:",
-        "list": {
-          "opted": "you opted out of pension benefits before December 11, 2023, and",
-          "cannot-opt": "you can’t opt back in under the pension rules"
-        },
-        "not-eligible": "You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your employer/pension (see exception) benefits or through a professional or student organization. As such, you are not eligible for the CDCP.",
-        "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own (and not as part of any of the coverage described above), you’re not eligible for the CDCP while that coverage is in effect."
-      }
-    },
-    "error-message": {
-      "required": "Access to dental insurance must be selected"
-    }
   },
   "terms-and-conditions": {
     "terms-and-conditions": {
