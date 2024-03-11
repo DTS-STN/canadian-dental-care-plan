@@ -83,7 +83,7 @@
   "devDependencies": {
     "@playwright/test": "^1.42.1",
     "@remix-run/dev": "^2.8.0",
-    "@remix-run/testing": "^2.8.0",
+    "@remix-run/testing": "^2.8.1",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
