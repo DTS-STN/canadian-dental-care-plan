@@ -164,7 +164,7 @@ export default function AccessToDentalInsuranceQuestion() {
         )}
       </section>
       <div className="flex flex-wrap items-center gap-3">
-        <ButtonLink type="button" variant="alternative" to={`/apply/${id}/dental-insurance`}>
+        <ButtonLink to={`/apply/${id}/dental-insurance`}>
           <FontAwesomeIcon icon={faChevronLeft} className="ms-3 block size-4" />
           {t('dental-benefits.button.back')}
         </ButtonLink>
