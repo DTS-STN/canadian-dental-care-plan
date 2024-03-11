@@ -16,14 +16,14 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('review-information', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: 'CDCP-0002',
-  pageTitleI18nKey: 'review-information:page-title',
+  pageTitleI18nKey: 'apply:review-information.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
   const { t } = useTranslation(handle.i18nNamespaces);
-  return [{ title: t('gcweb:meta.title.template', { title: t('review-information:page-title') }) }];
+  return [{ title: t('gcweb:meta.title.template', { title: t('apply:review-information.page-title') }) }];
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -90,64 +90,64 @@ export default function ReviewInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   return (
     <>
-      <h2 className="text-2xl font-semibold">{t('review-information:page-sub-title')}</h2>
+      <h2 className="text-2xl font-semibold">{t('apply:review-information.page-sub-title')}</h2>
       <dl>
-        <DescriptionListItem term={t('review-information:dob-title')}>
+        <DescriptionListItem term={t('apply:review-information.dob-title')}>
           {userInfo.birthday}
           <p className="mt-4">
             <InlineLink id="change-date-of-birth" to="/">
-              {t('review-information:dob-change')}
+              {t('apply:review-information.dob-change')}
             </InlineLink>
           </p>
         </DescriptionListItem>
-        <DescriptionListItem term={t('review-information:sin-title')}>
+        <DescriptionListItem term={t('apply:review-information.sin-title')}>
           {userInfo.sin}
           <p className="mt-4">
             <InlineLink id="change-sin" to="/">
-              {t('review-information:sin-change')}
+              {t('apply:review-information.sin-change')}
             </InlineLink>
           </p>
         </DescriptionListItem>
-        <DescriptionListItem term={t('review-information:full-name-title')}>
+        <DescriptionListItem term={t('apply:review-information.full-name-title')}>
           {`${userInfo.firstName} ${userInfo.lastName}`}
           <p className="mt-4">
             <InlineLink id="change-full-name" to="/">
-              {t('review-information:full-name-change')}
+              {t('apply:review-information.full-name-change')}
             </InlineLink>
           </p>
         </DescriptionListItem>
-        <DescriptionListItem term={t('review-information:martial-title')}>
+        <DescriptionListItem term={t('apply:review-information.martial-title')}>
           {userInfo.martialStatus}
           <p className="mt-4">
             <InlineLink id="change-martial-status" to="/">
-              {t('review-information:martial-change')}
+              {t('apply:review-information.martial-change')}
             </InlineLink>
           </p>
         </DescriptionListItem>
       </dl>
-      <h2 className="mt-8 text-2xl font-semibold ">{t('review-information:spouse-title')}</h2>
+      <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.spouse-title')}</h2>
       <dl>
-        <DescriptionListItem term={t('review-information:dob-title')}>
+        <DescriptionListItem term={t('apply:review-information.dob-title')}>
           {spouseInfo.birthday}
           <p className="mt-4">
             <InlineLink id="change-spouse-date-of-birth" to="/">
-              {t('review-information:dob-change')}
+              {t('apply:review-information.dob-change')}
             </InlineLink>
           </p>
         </DescriptionListItem>
-        <DescriptionListItem term={t('review-information:sin-title')}>
+        <DescriptionListItem term={t('apply:review-information.sin-title')}>
           {spouseInfo.sin}
           <p className="mt-4">
             <InlineLink id="change-spouse-sin" to="/">
-              {t('review-information:sin-change')}
+              {t('apply:review-information.sin-change')}
             </InlineLink>
           </p>
         </DescriptionListItem>
-        <DescriptionListItem term={t('review-information:full-name-title')}>
+        <DescriptionListItem term={t('apply:review-information.full-name-title')}>
           {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
           <p className="mt-4">
             <InlineLink id="change-spouse-full-name" to="/">
-              {t('review-information:full-name-change')}
+              {t('apply:review-information.full-name-change')}
             </InlineLink>
           </p>
         </DescriptionListItem>
@@ -155,86 +155,86 @@ export default function ReviewInformation() {
           {spouseInfo.consent ? 'My spouse or common-law partner is aware and has consented to sharing of their personal information.' : 'My spouse or common-law partner is aware and has not consented to sharing of their personal information.'}
         </DescriptionListItem>
       </dl>
-      <h2 className="mt-2 text-2xl font-semibold ">{t('review-information:contact-info-title')}</h2>
+      <h2 className="mt-2 text-2xl font-semibold ">{t('apply:review-information.contact-info-title')}</h2>
       <dl className="sm: grid grid-cols-1 sm:grid-cols-2">
-        <DescriptionListItem term={t('review-information:phone-title')}>
+        <DescriptionListItem term={t('apply:review-information.phone-title')}>
           {userInfo.phoneNumber}
           <p className="mt-4">
             <InlineLink id="change-phone-number" to="/">
-              {t('review-information:phone-change')}
+              {t('apply:review-information.phone-change')}
             </InlineLink>
           </p>
         </DescriptionListItem>
-        <DescriptionListItem term={t('review-information:alt-phone-title')}>
+        <DescriptionListItem term={t('apply:review-information.alt-phone-title')}>
           {userInfo.altPhoneNumber}
           <p className="mt-4">
             <InlineLink id="change-alternate-phone-number" to="/">
-              {t('review-information:alt-phone-change')}
+              {t('apply:review-information.alt-phone-change')}
             </InlineLink>
           </p>
         </DescriptionListItem>
-        <DescriptionListItem term={t('review-information:mailing-title')}>
+        <DescriptionListItem term={t('apply:review-information.mailing-title')}>
           <Address address={mailingAddressInfo.address} city={mailingAddressInfo.city} provinceState={mailingAddressInfo.province} postalZipCode={mailingAddressInfo.postalCode} country={mailingAddressInfo.country} />
           <p className="mt-4">
             <InlineLink id="change-mailing-address" to="/">
-              {t('review-information:mailing-change')}
+              {t('apply:review-information.mailing-change')}
             </InlineLink>
           </p>
         </DescriptionListItem>
-        <DescriptionListItem term={t('review-information:home-title')}>
+        <DescriptionListItem term={t('apply:review-information.home-title')}>
           <Address address={homeAddressInfo.address} city={homeAddressInfo.city} provinceState={homeAddressInfo.province} postalZipCode={homeAddressInfo.postalCode} country={homeAddressInfo.country} />
           <p className="mt-4">
             <InlineLink id="change-home-address" to="/">
-              {t('review-information:home-change')}
+              {t('apply:review-information.home-change')}
             </InlineLink>
           </p>
         </DescriptionListItem>
       </dl>
-      <h2 className="mt-8 text-2xl font-semibold ">{t('review-information:comm-prefs-title')}</h2>
+      <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.comm-prefs-title')}</h2>
       <dl>
-        <DescriptionListItem term={t('review-information:comm-pref-title')}>
+        <DescriptionListItem term={t('apply:review-information.comm-pref-title')}>
           {userInfo.communicationPreference === 'email' ? (
             <div className="grid grid-cols-1">
-              <p className="mt-4">{t('review-information:comm-electronic')}</p> <span>{userInfo.email}</span>
+              <p className="mt-4">{t('apply:review-information.comm-electronic')}</p> <span>{userInfo.email}</span>
             </div>
           ) : (
             <div className="grid grid-cols-1">
-              <p className="mt-4">{t('review-information:comm-mail')}</p> <span>{t('review-information:home-title')}</span>
+              <p className="mt-4">{t('apply:review-information.comm-mail')}</p> <span>{t('apply:review-information.home-title')}</span>
             </div>
           )}
           <p className="mt-4">
             <InlineLink id="change-communication-preference" to="/">
-              {t('review-information:comm-pref-change')}
+              {t('apply:review-information.comm-pref-change')}
             </InlineLink>
           </p>
         </DescriptionListItem>
-        <DescriptionListItem term={t('review-information:lang-pref-title')}>
+        <DescriptionListItem term={t('apply:review-information.lang-pref-title')}>
           {getNameByLanguage(i18n.language, preferredLanguage)}
           <p className="mt-4">
             <InlineLink id="change-language-preference" to="/">
-              {t('review-information:lang-pref-change')}
+              {t('apply:review-information.lang-pref-change')}
             </InlineLink>
           </p>
         </DescriptionListItem>
       </dl>
-      <h2 className="mt-8 text-2xl font-semibold ">{t('review-information:dental-title')}</h2>
+      <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.dental-title')}</h2>
       <dl>
-        <DescriptionListItem term={t('review-information:dental-private-title')}>
+        <DescriptionListItem term={t('apply:review-information.dental-private-title')}>
           {dentalInsurance.private.length > 0
             ? dentalInsurance.private.map((benefit) => {
                 return benefit;
               })
-            : t('review-information:dental-has-no-access')}
+            : t('apply:review-information.dental-has-no-access')}
           <p className="mt-4">
             <InlineLink id="change-access-dental" to="/">
-              {t('review-information:dental-private-change')}
+              {t('apply:review-information.dental-private-change')}
             </InlineLink>
           </p>
         </DescriptionListItem>
-        <DescriptionListItem term={t('review-information:dental-public-title')}>
+        <DescriptionListItem term={t('apply:review-information.dental-public-title')}>
           {dentalInsurance.public.length > 0 ? (
             <div>
-              <span>{t('review-information:dental-has-access')}</span>
+              <span>{t('apply:review-information.dental-has-access')}</span>
               <ul className="ml-6 list-disc">
                 {dentalInsurance.public.map((benefit) => {
                   // eslint-disable-next-line react/jsx-key
@@ -243,23 +243,23 @@ export default function ReviewInformation() {
               </ul>
             </div>
           ) : (
-            t('review-information:dental-has-no-access')
+            t('apply:review-information.dental-has-no-access')
           )}
           <p className="mt-4">
             <InlineLink id="change-dental-benefits" to="/">
-              {t('review-information:dental-public-change')}
+              {t('apply:review-information.dental-public-change')}
             </InlineLink>
           </p>
         </DescriptionListItem>
       </dl>
-      <h2 className="mb-5 mt-8 text-2xl font-semibold">{t('review-information:submit-app-title')}</h2>
-      <p className="mb-4">{t('review-information:submit-p-one')}</p>
-      <p className="mb-4">{t('review-information:submit-p-two')}</p>
-      <h3 className="font-semibold">{t('review-information:print-app-title')}</h3>
-      <p className="mb-4">{t('review-information:submit-p-three')}</p>
+      <h2 className="mb-5 mt-8 text-2xl font-semibold">{t('apply:review-information.submit-app-title')}</h2>
+      <p className="mb-4">{t('apply:review-information.submit-p-one')}</p>
+      <p className="mb-4">{t('apply:review-information.submit-p-two')}</p>
+      <h3 className="font-semibold">{t('apply:review-information.print-app-title')}</h3>
+      <p className="mb-4">{t('apply:review-information.submit-p-three')}</p>
       <Form method="post">
         <Button id="confirm-button" variant="green">
-          {t('review-information:submit-button')}
+          {t('apply:review-information.submit-button')}
         </Button>
       </Form>
     </>
