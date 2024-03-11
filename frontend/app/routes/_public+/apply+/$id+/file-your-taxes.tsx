@@ -13,14 +13,14 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('eligibility', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: 'CDCP-00XX',
-  pageTitleI18nKey: 'eligibility:file-your-taxes.page-title',
+  pageTitleI18nKey: 'apply:eligibility.file-your-taxes.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
   const { t } = useTranslation(handle.i18nNamespaces);
-  return [{ title: t('gcweb:meta.title.template', { title: t('eligibility:file-your-taxes.page-title') }) }];
+  return [{ title: t('gcweb:meta.title.template', { title: t('apply:eligibility.file-your-taxes.page-title') }) }];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -34,25 +34,25 @@ export default function ApplyFlowFileYourTaxes() {
   const { id } = useLoaderData<typeof loader>();
   const { t } = useTranslation(handle.i18nNamespaces);
 
-  const taxInfo = <InlineLink to={t('file-your-taxes.tax-info-href')} />;
+  const taxInfo = <InlineLink to={t('apply:eligibility.file-your-taxes.tax-info-href')} />;
 
   return (
     <div className="mt-6">
-      <p className="mb-6">{t('file-your-taxes.ineligible-to-apply')}</p>
-      <p className="mb-6">{t('file-your-taxes.tax-not-filed')}</p>
-      <p className="mb-6">{t('file-your-taxes.unable-to-assess')}</p>
+      <p className="mb-6">{t('apply:eligibility.file-your-taxes.ineligible-to-apply')}</p>
+      <p className="mb-6">{t('apply:eligibility.file-your-taxes.tax-not-filed')}</p>
+      <p className="mb-6">{t('apply:eligibility.file-your-taxes.unable-to-assess')}</p>
       <p className="mb-6">
-        <Trans ns={handle.i18nNamespaces} i18nKey="file-your-taxes.tax-info" components={{ taxInfo }} />
+        <Trans ns={handle.i18nNamespaces} i18nKey="apply:eligibility.file-your-taxes.tax-info" components={{ taxInfo }} />
       </p>
-      <p className="mb-6">{t('file-your-taxes.apply-after')}</p>
+      <p className="mb-6">{t('apply:eligibility.file-your-taxes.apply-after')}</p>
 
       <div className="flex flex-wrap items-center gap-3">
         <ButtonLink type="button" variant="alternative" to={`/apply/${id}/tax-filing`}>
-          {t('file-your-taxes.back-btn')}
+          {t('apply:eligibility.file-your-taxes.back-btn')}
           <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
         </ButtonLink>
         <ButtonLink type="submit" variant="primary" to="/" onClick={() => sessionStorage.removeItem('flow.state')}>
-          {t('file-your-taxes.return-btn')}
+          {t('apply:eligibility.file-your-taxes.return-btn')}
         </ButtonLink>
       </div>
     </div>

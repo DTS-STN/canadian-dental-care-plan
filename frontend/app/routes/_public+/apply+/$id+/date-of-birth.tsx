@@ -20,14 +20,14 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('eligibility', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: 'CDCP-00XX',
-  pageTitleI18nKey: 'eligibility:date-of-birth.page-title',
+  pageTitleI18nKey: 'apply:eligibility.date-of-birth.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
   const { t } = useTranslation(handle.i18nNamespaces);
-  return [{ title: t('gcweb:meta.title.template', { title: t('eligibility:date-of-birth.page-title') }) }];
+  return [{ title: t('gcweb:meta.title.template', { title: t('apply:eligibility.date-of-birth.page-title') }) }];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -76,7 +76,7 @@ export default function ApplyFlowDateOfBirth() {
   function getErrorMessage(errorI18nKey?: string): string | undefined {
     if (!errorI18nKey) return undefined;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`eligibility:date-of-birth.error-message.${errorI18nKey}` as any);
+    return t(`apply:eligibility.date-of-birth.error-message.${errorI18nKey}` as any);
   }
 
   const errorMessages = {
@@ -90,24 +90,24 @@ export default function ApplyFlowDateOfBirth() {
 
   return (
     <>
-      <p className="mb-6 mt-6 max-w-prose">{t('date-of-birth.description')}</p>
+      <p className="mb-6 mt-6 max-w-prose">{t('apply:eligibility.date-of-birth.description')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post" aria-describedby="form-instructions" noValidate className="max-w-prose">
         <InputLegend id="dobLegend" required={errorSummaryItems.length > 0} className="mb-2">
-          {t('date-of-birth.form-instructions')}
+          {t('apply:eligibility.date-of-birth.form-instructions')}
         </InputLegend>
         <div className="flex flex-col gap-6 sm:flex-row">
-          <InputSelect id="month" label={t('date-of-birth.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} defaultValue={state?.month} />
-          <InputField id="day" label={t('date-of-birth.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} defaultValue={state?.day} />
-          <InputField id="year" label={t('date-of-birth.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} defaultValue={state?.year} />
+          <InputSelect id="month" label={t('apply:eligibility.date-of-birth.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} defaultValue={state?.month} />
+          <InputField id="day" label={t('apply:eligibility.date-of-birth.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} defaultValue={state?.day} />
+          <InputField id="year" label={t('apply:eligibility.date-of-birth.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} defaultValue={state?.year} />
         </div>
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <ButtonLink type="button" variant="alternative" to={`/apply/${id}/tax-filing`}>
-            {t('date-of-birth.back-btn')}
+            {t('apply:eligibility.date-of-birth.back-btn')}
             <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
           </ButtonLink>
           <Button type="submit" variant="primary">
-            {t('date-of-birth.continue-btn')}
+            {t('apply:eligibility.date-of-birth.continue-btn')}
             <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
           </Button>
         </div>

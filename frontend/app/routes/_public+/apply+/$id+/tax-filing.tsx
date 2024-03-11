@@ -17,14 +17,14 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('eligibility', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: 'CDCP-00XX',
-  pageTitleI18nKey: 'eligibility:tax-filing.page-title',
+  pageTitleI18nKey: 'apply:eligibility.tax-filing.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
   const { t } = useTranslation(handle.i18nNamespaces);
-  return [{ title: t('gcweb:meta.title.template', { title: t('eligibility:tax-filing.page-title') }) }];
+  return [{ title: t('gcweb:meta.title.template', { title: t('apply:eligibility.tax-filing.page-title') }) }];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -73,7 +73,7 @@ export default function ApplyFlowTaxFiling() {
   function getErrorMessage(errorI18nKey?: string): string | undefined {
     if (!errorI18nKey) return undefined;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`eligibility:tax-filing.error-message.${errorI18nKey}` as any);
+    return t(`apply:eligibility.tax-filing.error-message.${errorI18nKey}` as any);
   }
 
   const errorMessages = {
@@ -89,21 +89,21 @@ export default function ApplyFlowTaxFiling() {
         <InputRadios
           id="tax-filing-2023"
           name="taxFiling2023"
-          legend={t('tax-filing.form-instructions')}
+          legend={t('apply:eligibility.tax-filing.form-instructions')}
           options={[
-            { value: 'TRUE', children: t('tax-filing.radio-options.yes'), defaultChecked: state?.taxFiling2023 === 'TRUE' },
-            { value: 'FALSE', children: t('tax-filing.radio-options.no'), defaultChecked: state?.taxFiling2023 === 'FALSE' },
+            { value: 'TRUE', children: t('apply:eligibility.tax-filing.radio-options.yes'), defaultChecked: state?.taxFiling2023 === 'TRUE' },
+            { value: 'FALSE', children: t('apply:eligibility.tax-filing.radio-options.no'), defaultChecked: state?.taxFiling2023 === 'FALSE' },
           ]}
           required={errorSummaryItems.length > 0}
           errorMessage={errorMessages.taxFiling2023}
         />
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <ButtonLink type="button" variant="alternative" to={`/apply/${id}/type-of-application`}>
-            {t('tax-filing.back-btn')}
+            {t('apply:eligibility.tax-filing.back-btn')}
             <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
           </ButtonLink>
           <Button type="submit" variant="primary">
-            {t('tax-filing.continue-btn')}
+            {t('apply:eligibility.tax-filing.continue-btn')}
             <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
           </Button>
         </div>
