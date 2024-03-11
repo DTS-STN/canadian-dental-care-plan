@@ -1,39 +1,29 @@
 /**
- * This is intended to be a basic starting point for linting in your app.
- * It relies on recommended configs out of the box for simplicity, but you can
- * and should modify this configuration to best suit your team's needs.
+ * @type {import('eslint').Linter.Config}
  */
-
-/** @type {import('eslint').Linter.Config} */
 module.exports = {
   root: true,
-  parserOptions: {
-    ecmaVersion: 2022,
-    sourceType: 'module',
-    ecmaFeatures: {
-      jsx: true,
-    },
-    project: ['./tsconfig.json'],
-  },
+  extends: ['eslint:recommended'],
   env: {
     browser: true,
     commonjs: true,
     es6: true,
   },
-
-  // Base config
-  extends: ['eslint:recommended'],
-
+  parserOptions: {
+    ecmaVersion: 2022,
+    sourceType: 'module',
+    ecmaFeatures: { jsx: true },
+    project: ['./tsconfig.json'],
+  },
   overrides: [
-    // React
     {
+      // React sources
       files: ['**/*.{js,jsx,ts,tsx}'],
+      excludedFiles: ['./tmp/**'],
       plugins: ['react', 'jsx-a11y'],
       extends: ['plugin:react/recommended', 'plugin:react/jsx-runtime', 'plugin:react-hooks/recommended', 'plugin:jsx-a11y/recommended', 'prettier'],
       settings: {
-        react: {
-          version: 'detect',
-        },
+        react: { version: 'detect' },
         formComponents: ['Form'],
         linkComponents: [
           { name: 'Link', linkAttribute: 'to' },
@@ -48,10 +38,10 @@ module.exports = {
         'react/prop-types': 'off',
       },
     },
-
-    // Typescript
     {
+      // Typescript sources
       files: ['**/*.{ts,tsx}'],
+      excludedFiles: ['./tmp/**'],
       plugins: ['@typescript-eslint', 'import'],
       parser: '@typescript-eslint/parser',
       settings: {
@@ -76,13 +66,11 @@ module.exports = {
         'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
       },
     },
-
-    // Node
     {
+      // Node sources
       files: ['.eslintrc.js'],
-      env: {
-        node: true,
-      },
+      excludedFiles: ['./tmp/**'],
+      env: { node: true },
       settings: {
         'import/resolver': {
           typescript: {},
