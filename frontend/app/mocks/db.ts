@@ -2,7 +2,8 @@ import { fakerEN_CA as faker } from '@faker-js/faker';
 import { factory, oneOf, primaryKey } from '@mswjs/data';
 
 import countriesJson from './power-platform-data/countries.json';
-import socialProgramsJson from './power-platform-data/social-programs.json';
+import federalProgramsJson from './power-platform-data/federal-programs.json';
+import provincialProgramsJson from './power-platform-data/provincial-programs.json';
 import regionsJson from './power-platform-data/regions.json';
 
 // (Optional) Seed `faker` to ensure reproducible
@@ -307,7 +308,7 @@ regionsJson.value.forEach((region) =>
 );
 
 // seed federal social program list
-socialProgramsJson.value.filter((program) => program._esdc_provinceterritorystateid_value === null).forEach((program) => 
+federalProgramsJson.value.forEach((program) => 
   db.federalSocialProgram.create({
     code: program.esdc_code,
     nameEn: program.esdc_nameenglish,
@@ -316,10 +317,10 @@ socialProgramsJson.value.filter((program) => program._esdc_provinceterritorystat
 );
 
 // seed provincial and territorial program list
-socialProgramsJson.value.filter((program) => program._esdc_provinceterritorystateid_value !== null).forEach((program) => 
+provincialProgramsJson.value.forEach((program) => 
   db.provincialTerritorialSocialProgram.create({
     code: program.esdc_code,
-    provinceTerritoryStateId: program._esdc_provinceterritorystateid_value ?? "",
+    provinceTerritoryStateId: program._esdc_provinceterritorystateid_value,
     nameEn: program.esdc_nameenglish,
     nameFr: program.esdc_namefrench,
   }),
