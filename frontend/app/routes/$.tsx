@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { NotFoundError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/application-layout';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   i18nNamespaces: [...layoutI18nNamespaces],
@@ -13,7 +14,7 @@ export const handle = {
 
 export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
   const { t } = useTranslation(handle.i18nNamespaces);
-  return [{ title: t('gcweb:meta.title.template', { title: t('gcweb:not-found.document-title') }) }];
+  return getTitleMetaTags(t('gcweb:meta.title.template', { title: t('gcweb:not-found.document-title') }));
 });
 
 export async function loader() {

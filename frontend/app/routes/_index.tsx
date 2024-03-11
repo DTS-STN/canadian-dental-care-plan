@@ -4,13 +4,35 @@ import { ButtonLink } from '~/components/buttons';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getDescriptionMetaTags, getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('gcweb'),
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction = mergeMeta((args) => {
-  return [{ title: 'Canadian Dental Care Plan | Régime canadien de soins dentaires - Canada.ca' }];
+  // Meta tags are constructed for a bilingual page.
+  const description =
+    'The Canadian Dental Care Plan (CDCP) will help cover some of the cost of various oral health care services for eligible Canadian residents. | Le Régime canadien de soins dentaires (RCSD) permet de couvrir une partie du coût de divers services de santé buccodentaire pour les résidents canadiens éligibles.';
+  const title = 'Canadian Dental Care Plan | Régime canadien de soins dentaires - Canada.ca';
+  return [
+    ...getTitleMetaTags(title),
+    ...getDescriptionMetaTags(description),
+    { name: 'author', content: 'Employment and Social Development Canada' },
+    { name: 'author', lang: 'fr', content: 'Emploi et Développement social Canada' },
+    { name: 'dcterms.accessRights', content: '2' },
+    { name: 'dcterms.creator', content: 'Employment and Social Development Canada' },
+    { name: 'dcterms.creator', lang: 'fr', content: 'Emploi et Développement social Canada' },
+    { name: 'dcterms.language', content: 'eng' },
+    { name: 'dcterms.language', lang: 'fr', content: 'fra' },
+    { name: 'dcterms.service', content: 'ESDC-EDSC_CDCP-RCSD' },
+    { name: 'dcterms.spatial', content: 'Canada' },
+    { name: 'dcterms.subject', content: 'Economics and Industry;Insurance;Dental insurance' },
+    { name: 'dcterms.subject', lang: 'fr', content: 'Économie et industrie;Assurance;Assurance dentaire' },
+    { property: 'og:locale', content: 'en_CA' },
+    { property: 'og:site_name', content: 'Canadian Dental Care Plan | Régime canadien de soins dentaires - Canada.ca' },
+    { property: 'og:type', content: 'website' },
+  ];
 });
 
 export default function RootIndex() {

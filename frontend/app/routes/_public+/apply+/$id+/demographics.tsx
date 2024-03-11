@@ -10,6 +10,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
+import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -19,7 +20,7 @@ export const handle = {
 
 export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
   const { t } = useTranslation(handle.i18nNamespaces);
-  return [{ title: t('gcweb:meta.title.template', { title: t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.page-title') }) }];
+  return getTitleMetaTags(t('gcweb:meta.title.template', { title: t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.page-title') }));
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
