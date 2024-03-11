@@ -2,6 +2,14 @@ import { useEffect } from 'react';
 
 import { Outlet, useNavigate } from '@remix-run/react';
 
+import { handle as layoutHandle } from '~/routes/_public+/apply+/_layout';
+import { RouteHandleData } from '~/utils/route-utils';
+
+export const handle = {
+  // ensure that the parent layout's i18n namespaces are loaded
+  i18nNamespaces: [...layoutHandle.i18nNamespaces],
+} as const satisfies RouteHandleData;
+
 /**
  * The parent route of all /apply/{id}/* routes, used to
  * redirect to /apply if the flow has not yet been initialized.
