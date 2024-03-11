@@ -15,14 +15,14 @@ import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils'
 import { mergeMeta } from '~/utils/meta-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('dental-insurance-question', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: 'CDCP-1115',
-  pageTitleI18nKey: 'dental-insurance-question:title',
+  pageTitleI18nKey: 'apply:dental-insurance-question.title',
 };
 
 export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
   const { t } = useTranslation(handle.i18nNamespaces);
-  return [{ title: t('gcweb:meta.title.template', { title: t('dental-insurance-question:title') }) }];
+  return [{ title: t('gcweb:meta.title.template', { title: t('apply:dental-insurance-question.title') }) }];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -63,23 +63,23 @@ export default function AccessToDentalInsuranceQuestion() {
     <>
       <ul className="mb-4 list-disc">
         <li>
-          <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance-question:list.employer" />
+          <Trans ns={handle.i18nNamespaces} i18nKey="apply:dental-insurance-question.list.employer" />
         </li>
         <li>
-          <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance-question:list.pension" />
+          <Trans ns={handle.i18nNamespaces} i18nKey="apply:dental-insurance-question.list.pension" />
         </li>
         <li>
-          <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance-question:list.dental-coverage" />
+          <Trans ns={handle.i18nNamespaces} i18nKey="apply:dental-insurance-question.list.dental-coverage" />
         </li>
         <li className="list-none">
-          <Details id={t('dental-insurance-question:detail.additional-info.title')} title={t('dental-insurance-question:detail.additional-info.title')}>
+          <Details id={t('apply:dental-insurance-question.detail.additional-info.title')} title={t('apply:dental-insurance-question.detail.additional-info.title')}>
             <div>
-              <p>{t('dental-insurance-question:detail.additional-info.eligible')}</p>
+              <p>{t('apply:dental-insurance-question.detail.additional-info.eligible')}</p>
               <ul className="mb-4 list-disc pl-6">
-                <li>{t('dental-insurance-question:detail.additional-info.list.opted')}</li>
-                <li>{t('dental-insurance-question:detail.additional-info.list.cannot-opt')}</li>
+                <li>{t('apply:dental-insurance-question.detail.additional-info.list.opted')}</li>
+                <li>{t('apply:dental-insurance-question.detail.additional-info.list.cannot-opt')}</li>
               </ul>
-              <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance-question:detail.additional-info.not-eligible" />
+              <Trans ns={handle.i18nNamespaces} i18nKey="apply:dental-insurance-question.detail.additional-info.not-eligible" />
             </div>
           </Details>
         </li>
@@ -95,12 +95,12 @@ export default function AccessToDentalInsuranceQuestion() {
             <InputRadios
               id="dental-insurance"
               name="dentalInsurance"
-              legend={t('dental-insurance-question:legend')}
+              legend={t('apply:dental-insurance-question.legend')}
               options={options.map((option) => ({
                 children: (
                   <div>
                     <strong>{getNameByLanguage(i18n.language, option)}</strong>
-                    {`, ${option.id === 'yes' ? t('dental-insurance-question:option-yes') : t('dental-insurance-question:option-no')}`}
+                    {`, ${option.id === 'yes' ? t('apply:dental-insurance-question.option-yes') : t('apply:dental-insurance-question.option-no')}`}
                   </div>
                 ),
                 value: option.id,
@@ -114,10 +114,10 @@ export default function AccessToDentalInsuranceQuestion() {
       )}
       <div className="flex flex-wrap items-center gap-3">
         <ButtonLink id="back-button" to="/apply">
-          {t('dental-insurance-question:button.back')}
+          {t('apply:dental-insurance-question.button.back')}
         </ButtonLink>
         <Button id="continue-button" variant="primary">
-          {t('dental-insurance-question:button.continue')}
+          {t('apply:dental-insurance-question.button.continue')}
         </Button>
       </div>
     </Form>

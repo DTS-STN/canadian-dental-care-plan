@@ -76,6 +76,32 @@
       "back-button": "(FR) Back"
     }
   },
+  "dental-insurance-question": {
+    "title": "(FR) Access to other dental insurance",
+    "legend": "(FR) Do you have access to private dental benefits through any of the following situations?",
+    "list": {
+      "employer": "(FR) Your <strong>employer</strong> or a family member’s employer dental insurance plan",
+      "pension": "(FR) Your <strong>pension</strong> or a family member’s pension dental insurance plan",
+      "dental-coverage": "(FR) You or your family member <strong>purchased dental insurance coverage</strong> from an insurance or benefits provider"
+    },
+    "option-yes": "(FR) I have access to private dental insurance.",
+    "option-no": "(FR) I do not have access to private dental insurance.",
+    "button": {
+      "back": "(FR) Back",
+      "continue": "(FR) Continue"
+    },
+    "detail": {
+      "additional-info": {
+        "title": "(FR) Additional information",
+        "eligible": "(FR) You may be eligible for the CDCP if you are retired and:",
+        "list": {
+          "opted": "(FR) you opted out of pension benefits before December 11, 2023, and",
+          "cannot-opt": "(FR) you can’t opt back in under the pension rules"
+        },
+        "not-eligible": "(FR) If you purchased your current dental insurance policy privately on your own (and not as part of any of the coverage described above), you’re not eligible for the CDCP while that coverage is in effect.<br><br>You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your employer/pension (see exception)  benefits or through a professional or student organization. As such, you are not eligible for CDCP."
+      }
+    }
+  },
   "partner-information": {
     "page-title": "(FR) Spouse / Common-law partner information",
     "provide-sin": "(FR) Provide information on your current spouse or common-law partner as indicated on their SIN card/letter.",
