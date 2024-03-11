@@ -19,14 +19,14 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('communication-preference', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: 'CDCP-00XX',
-  pageTitleI18nKey: 'communication-preference:page-title',
+  pageTitleI18nKey: 'apply:communication-preference.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
   const { t } = useTranslation(handle.i18nNamespaces);
-  return [{ title: t('gcweb:meta.title.template', { title: t('communication-preference:page-title') }) }];
+  return [{ title: t('gcweb:meta.title.template', { title: t('apply:communication-preference.page-title') }) }];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -130,7 +130,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
      * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`communication-preference:error-message.${errorI18nKey}` as any);
+    return t(`apply:communication-preference.error-message.${errorI18nKey}` as any);
   }
 
   const errorMessages = {
@@ -165,8 +165,8 @@ export default function ApplyFlowCommunicationPreferencePage() {
       defaultChecked: state?.preferredMethod === communicationMethodEmail.id,
       append: emailMethodChecked && (
         <div className="mb-4 grid max-w-prose gap-6 md:grid-cols-2 ">
-          <InputField id="email" type="email" className="w-full" label={t('communication-preference:email')} name="email" errorMessage={errorMessages.email} defaultValue={state?.email} />
-          <InputField id="confirmEmail" type="email" className="w-full" label={t('communication-preference:confirm-email')} name="confirmEmail" errorMessage={errorMessages.confirmEmail ?? errorMessages.sameEmail} defaultValue={state?.confirmEmail} />
+          <InputField id="email" type="email" className="w-full" label={t('apply:communication-preference.email')} name="email" errorMessage={errorMessages.email} defaultValue={state?.email} />
+          <InputField id="confirmEmail" type="email" className="w-full" label={t('apply:communication-preference.confirm-email')} name="confirmEmail" errorMessage={errorMessages.confirmEmail ?? errorMessages.sameEmail} defaultValue={state?.confirmEmail} />
         </div>
       ),
       onClick: emailMethodHandler,
@@ -177,11 +177,11 @@ export default function ApplyFlowCommunicationPreferencePage() {
   return (
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <p className="mb-6">{t('communication-preference:note')}</p>
+      <p className="mb-6">{t('apply:communication-preference.note')}</p>
       <Form method="post" noValidate className="space-y-6">
         {preferredCommunicationMethods.length > 0 && (
           <div id="preferredMethod">
-            <InputRadios id="preferred-methods" legend={t('communication-preference:preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages.preferredMethod} required></InputRadios>
+            <InputRadios id="preferred-methods" legend={t('apply:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages.preferredMethod} required></InputRadios>
           </div>
         )}
         {preferredLanguages.length > 0 && (
@@ -189,7 +189,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             <InputRadios
               id="preferred-language"
               name="preferredLanguage"
-              legend={t('communication-preference:preferred-language')}
+              legend={t('apply:communication-preference.preferred-language')}
               options={preferredLanguages.map((language) => ({
                 defaultChecked: state?.preferredLanguage === language.id,
                 children: getNameByLanguage(i18n.language, language),
@@ -202,10 +202,10 @@ export default function ApplyFlowCommunicationPreferencePage() {
         )}
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="back-button" variant="alternative" to={`/apply/${id}/personal-information`}>
-            {t('communication-preference:back')}
+            {t('apply:communication-preference.back')}
           </ButtonLink>
           <Button id="continue-button" variant="primary">
-            {t('communication-preference:continue')}
+            {t('apply:communication-preference.continue')}
           </Button>
         </div>
       </Form>
