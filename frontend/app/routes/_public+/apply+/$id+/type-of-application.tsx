@@ -17,14 +17,14 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('eligibility', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: 'CDCP-00XX',
-  pageTitleI18nKey: 'eligibility:type-of-application.page-title',
+  pageTitleI18nKey: 'apply:eligibility.type-of-application.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
   const { t } = useTranslation(handle.i18nNamespaces);
-  return [{ title: t('gcweb:meta.title.template', { title: t('eligibility:type-of-application.page-title') }) }];
+  return [{ title: t('gcweb:meta.title.template', { title: t('apply:eligibility.type-of-application.page-title') }) }];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -73,7 +73,7 @@ export default function ApplyFlowTypeOfApplication() {
   function getErrorMessage(errorI18nKey?: string): string | undefined {
     if (!errorI18nKey) return undefined;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`eligibility:type-of-application.error-message.${errorI18nKey}` as any);
+    return t(`apply:eligibility.type-of-application.error-message.${errorI18nKey}` as any);
   }
 
   const errorMessages = {
@@ -89,21 +89,21 @@ export default function ApplyFlowTypeOfApplication() {
         <InputRadios
           id="application-delegate"
           name="applicationDelegate"
-          legend={t('type-of-application.form-instructions')}
+          legend={t('apply:eligibility.type-of-application.form-instructions')}
           options={[
-            { value: 'FALSE', children: t('type-of-application.radio-options.personal'), defaultChecked: state?.applicationDelegate === 'FALSE' },
-            { value: 'TRUE', children: t('type-of-application.radio-options.delegate'), defaultChecked: state?.applicationDelegate === 'TRUE' },
+            { value: 'FALSE', children: t('apply:eligibility.type-of-application.radio-options.personal'), defaultChecked: state?.applicationDelegate === 'FALSE' },
+            { value: 'TRUE', children: t('apply:eligibility.type-of-application.radio-options.delegate'), defaultChecked: state?.applicationDelegate === 'TRUE' },
           ]}
           required={errorSummaryItems.length > 0}
           errorMessage={errorMessages.applicationDelegate}
         />
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <ButtonLink type="button" variant="alternative" to="/apply">
-            {t('type-of-application.back-btn')}
+            {t('apply:eligibility.type-of-application.back-btn')}
             <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
           </ButtonLink>
           <Button type="submit" variant="primary">
-            {t('type-of-application.continue-btn')}
+            {t('apply:eligibility.type-of-application.continue-btn')}
             <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
           </Button>
         </div>

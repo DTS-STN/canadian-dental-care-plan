@@ -102,6 +102,77 @@
       }
     }
   },
+  "eligibility": {
+    "type-of-application": {
+      "page-title": "Type de demande",
+      "form-instructions": "Qui présente la demande?",
+      "radio-options": {
+        "personal": "Je présente une demande pour moi-même",
+        "delegate": "Je présente une demande pour quelqu'un d'autre"
+      },
+      "error-message": {
+        "Required": "Le type de demandeur doit être fourni"
+      },
+      "back-btn": "Retour",
+      "continue-btn": "Continuer"
+    },
+    "tax-filing": {
+      "page-title": "Déclaration de revenus",
+      "form-instructions": "Est-ce que vous ou votre époux/épouse ou conjoint/conjointe de fait (s'il y a lieu) avez produit votre déclaration de revenus pour 2023 et avez reçu votre avis de cotisation?",
+      "radio-options": {
+        "yes": "Oui",
+        "no": "Non"
+      },
+      "error-message": {
+        "Required": "La déclaration de revenus doit être fournie"
+      },
+      "back-btn": "Retour",
+      "continue-btn": "Continuer"
+    },
+    "date-of-birth": {
+      "page-title": "Date de naissance",
+      "description": "Les demandes au titre du Régime canadien de soins dentaires (RCSD) seront traitées par étapes. Votre date de naissance détermine le moment où vous pouvez présenter une demande.",
+      "form-instructions": "Veuillez entrer votre date de naissance",
+      "month": "(FR) Month",
+      "day": "(FR) Day",
+      "year": "(FR) Year",
+      "error-message": {
+        "day": "Jour",
+        "month": "Mois",
+        "year": "Année"
+      },
+      "back-btn": "Retour",
+      "continue-btn": "Continuer"
+    },
+    "application-delegate": {
+      "page-title": "La demande au nom d'une autre personne ne peut pas être effectuée en ligne pour le moment.",
+      "contact-representative": "Vous devez <contactServiceCanada>parler à un représentant de Service Canada</contactServiceCanada> pour présenter une demande au nom de quelqu'un. Veuillez communiquer avec Service Canada au <span>1-833-537-4342</span> ou visiter un bureau de Service Canada près de chez vous.",
+      "prepare-to-apply": "<preparingToApply>Se préparer à présenter une demande au nom de quelqu'un</preparingToApply>",
+      "contact-service-canada-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
+      "preparing-to-apply-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#aide",
+      "back-btn": "Retour",
+      "return-btn": "Revenir à la page principale"
+    },
+    "file-your-taxes": {
+      "page-title": "Produire votre déclaration de revenus",
+      "ineligible-to-apply": "Vous n'êtes pas admissible au Régime canadien de soins dentaires pour le moment.",
+      "tax-not-filed": "Vous ou votre épouse/époux ou conjoint/conjointe de fait n'avez pas produit de déclaration de revenus pour l'année 2023 auprès de l'Agence du revenu du Canada.",
+      "unable-to-assess": "Nous utilisons les renseignements de votre déclaration de revenus pour nous assurer que vous répondez aux critères d'admissibilité au RCSD. Tant que vous n'aurez pas produit votre déclaration de revenus de 2023, nous ne pourrons pas évaluer votre admissibilité.",
+      "tax-info": "Pour en savoir plus sur la façon de produire votre déclaration de revenus, consultez la page <taxInfo>Préparez-vous à faire vos impôts.</taxInfo>",
+      "apply-after": "Veuillez présenter une demande de participation au régime après avoir produit votre déclaration de revenus et reçu votre avis de cotisation.",
+      "tax-info-href": "https://www.canada.ca/fr/services/impots/impot-sur-le-revenu/impot-sur-le-revenu-des-particuliers/preparez-vous-impots.html",
+      "back-btn": "Retour",
+      "return-btn": "Revenir à la page principale"
+    },
+    "dob-eligibility": {
+      "page-title": "Découvrez quand vous pouvez présenter une demande",
+      "ineligible-to-apply": "Vous n'êtes actuellement pas admissible au Régime canadien de soins dentaires. Les demandes au titre du Régime canadien de soins dentaires se font par étapes.",
+      "eligibility-info": "<eligibilityInfo>Découvrez quand vous pouvez faire une demande au Régime canadien de soins dentaires.</eligibilityInfo>",
+      "eligibility-info-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#quand",
+      "back-btn": "Retour",
+      "return-btn": "Revenir à la page principale"
+    }
+  },
   "partner-information": {
     "page-title": "(FR) Spouse / Common-law partner information",
     "provide-sin": "(FR) Provide information on your current spouse or common-law partner as indicated on their SIN card/letter.",

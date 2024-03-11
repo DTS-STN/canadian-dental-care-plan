@@ -1,6 +1,5 @@
 import type apply from '../public/locales/en/apply.json';
 import type dataUnavailable from '../public/locales/en/data-unavailable.json';
-import type eligibility from '../public/locales/en/eligibility.json';
 import type gcweb from '../public/locales/en/gcweb.json';
 import type index from '../public/locales/en/index.json';
 import type letters from '../public/locales/en/letters.json';
@@ -26,11 +25,10 @@ declare module 'i18next' {
   interface CustomTypeOptions {
     defaultNS: false;
     resources: {
+      apply: typeof apply;
       'data-unavailable': typeof dataUnavailable;
-      eligibility: typeof eligibility;
       gcweb: typeof gcweb;
       index: typeof index;
-      apply: typeof apply;
       letters: typeof letters;
       'personal-information': typeof personalInformation;
     };
