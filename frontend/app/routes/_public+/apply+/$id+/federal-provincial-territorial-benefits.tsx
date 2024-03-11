@@ -14,6 +14,7 @@ import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
+import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -65,6 +66,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function AccessToDentalInsuranceQuestion() {
+  const { COUNTRY_CODE_CANADA } = getEnv();
   const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, state, id } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const [federalBenefitChecked, setFederalBenefitChecked] = useState(state.dentalBenefit?.federalBenefit ?? '');
@@ -76,7 +78,7 @@ export default function AccessToDentalInsuranceQuestion() {
     return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
   });
 
-  const [selectedRegion, setSelectedRegion] = useState(state.dentalBenefit?.provincialTerritorialSocialProgram ?? sortedRegions.find((region) => region.countryId === 'CAN')?.provinceTerritoryStateId);
+  const [selectedRegion, setSelectedRegion] = useState(state.dentalBenefit?.provincialTerritorialSocialProgram ?? sortedRegions.find((region) => region.countryId === COUNTRY_CODE_CANADA)?.provinceTerritoryStateId);
 
   return (
     <Form method="post">
@@ -136,7 +138,7 @@ export default function AccessToDentalInsuranceQuestion() {
                       required
                       onChange={(e) => setSelectedRegion(e.target.value)}
                       options={sortedRegions
-                        .filter((region) => region.countryId === 'CAN')
+                        .filter((region) => region.countryId === COUNTRY_CODE_CANADA)
                         .map((region) => ({
                           key: region.provinceTerritoryStateId,
                           id: region.provinceTerritoryStateId,
