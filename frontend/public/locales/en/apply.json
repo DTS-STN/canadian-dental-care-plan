@@ -14,6 +14,24 @@
       "marital-status": "Marital status must be provided"
     }
   },
+  "communication-preference": {
+    "page-title": "Communication preferences",
+    "note": "If eligible, we will share your membership information with Sun Life Assurance Company of Canada (Sun Life), who will be responsible for handling member enrolment and administering claims processing and benefits for the Canadian Dental Care Plan.",
+    "preferred-method": "What is your preferred method of communication for both Sun Life and the Government of Canada?",
+    "preferred-language": "What is your preferred official language of communication?",
+    "email": "Email address",
+    "confirm-email": "Confirm email address",
+    "back": "Back",
+    "continue": "Continue",
+    "error-message": {
+      "empty-method": "Preferred method of communication must be selected",
+      "empty-language": "Preferred offical language must be selected",
+      "empty-email": "Email must be provided",
+      "empty-confirm-email": "Confirm email must be provided",
+      "invalid-email": "Invalid email address",
+      "not-the-same": "Confirm email is not the same as the entered email"
+    }
+  },
   "partner-information": {
     "page-title": "Spouse / Common-law partner information",
     "provide-sin": "Provide information on your current spouse or common-law partner as indicated on their SIN card/letter.",
