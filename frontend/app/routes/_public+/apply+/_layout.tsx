@@ -1,6 +1,6 @@
 import { Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
-import ApplicationLayout, { NotFoundError, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/application-layout';
+import { NotFoundError, PublicLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
@@ -14,18 +14,18 @@ export function ErrorBoundary() {
   if (isRouteErrorResponse(error)) {
     switch (error.status) {
       case 404: {
-        return <NotFoundError layout="public" error={error} />;
+        return <NotFoundError error={error} />;
       }
     }
   }
 
-  return <ServerError layout="public" error={error} />;
+  return <ServerError error={error} />;
 }
 
 export default function Layout() {
   return (
-    <ApplicationLayout layout="public">
+    <PublicLayout>
       <Outlet />
-    </ApplicationLayout>
+    </PublicLayout>
   );
 }

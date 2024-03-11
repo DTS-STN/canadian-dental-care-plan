@@ -2,7 +2,7 @@ import { MetaFunction } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
-import { NotFoundError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/application-layout';
+import { NotFoundError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -22,5 +22,5 @@ export async function loader() {
 }
 
 export default function NotFound() {
-  return <NotFoundError layout="public" />; // delegate rendering to the layout's 404 component
+  return <NotFoundError />; // delegate rendering to the layout's 404 component
 }
