@@ -31,14 +31,15 @@ export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
+  const { COUNTRY_CODE_CANADA } = getEnv();
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
   const federalDentalBenefits = await getLookupService().getAllFederalDentalBenefit();
   const provincialTerritorialDentalBenefits = await getLookupService().getAllProvincialTerritorialDentalBenefits();
   const federalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
   const provincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
-  const regions = await getLookupService().getAllRegions();
-
+  const allRegions = await getLookupService().getAllRegions();
+  const regions = allRegions.filter((region) => region.countryId === COUNTRY_CODE_CANADA);
   return json({ id, state, federalDentalBenefits, provincialTerritorialDentalBenefits, federalSocialPrograms, provincialTerritorialSocialPrograms, regions });
 }
 
@@ -66,7 +67,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function AccessToDentalInsuranceQuestion() {
-  const { COUNTRY_CODE_CANADA } = getEnv();
   const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, state, id } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const [federalBenefitChecked, setFederalBenefitChecked] = useState(state.dentalBenefit?.federalBenefit ?? '');
@@ -78,7 +78,7 @@ export default function AccessToDentalInsuranceQuestion() {
     return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
   });
 
-  const [selectedRegion, setSelectedRegion] = useState(state.dentalBenefit?.provincialTerritorialSocialProgram ?? sortedRegions.find((region) => region.countryId === COUNTRY_CODE_CANADA)?.provinceTerritoryStateId);
+  const [selectedRegion, setSelectedRegion] = useState(state.dentalBenefit?.provincialTerritorialSocialProgram ?? sortedRegions[0].provinceTerritoryStateId);
 
   return (
     <Form method="post">
@@ -137,14 +137,12 @@ export default function AccessToDentalInsuranceQuestion() {
                       defaultValue={state.dentalBenefit?.provincialTerritorialBenefit}
                       required
                       onChange={(e) => setSelectedRegion(e.target.value)}
-                      options={sortedRegions
-                        .filter((region) => region.countryId === COUNTRY_CODE_CANADA)
-                        .map((region) => ({
-                          key: region.provinceTerritoryStateId,
-                          id: region.provinceTerritoryStateId,
-                          value: region.provinceTerritoryStateId,
-                          children: i18n.language === 'en' ? region.nameEn : region.nameFr,
-                        }))}
+                      options={sortedRegions.map((region) => ({
+                        key: region.provinceTerritoryStateId,
+                        id: region.provinceTerritoryStateId,
+                        value: region.provinceTerritoryStateId,
+                        children: i18n.language === 'en' ? region.nameEn : region.nameFr,
+                      }))}
                     />
                     <InputRadios
                       id="provincial-territorial-social-programs"
