@@ -28,6 +28,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   return json({ id, state });
 }
+
 export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
@@ -37,6 +38,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     params,
     state,
   });
+
   return redirect(`/apply/${id}/demographics-part1`, sessionResponseInit);
 }
 

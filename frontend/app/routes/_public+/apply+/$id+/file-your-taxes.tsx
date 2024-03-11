@@ -51,7 +51,7 @@ export default function ApplyFlowFileYourTaxes() {
           {t('file-your-taxes.back-btn')}
           <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
         </ButtonLink>
-        <ButtonLink type="submit" variant="primary" to="/">
+        <ButtonLink type="submit" variant="primary" to="/" onClick={() => sessionStorage.removeItem('flow.state')}>
           {t('file-your-taxes.return-btn')}
         </ButtonLink>
       </div>
