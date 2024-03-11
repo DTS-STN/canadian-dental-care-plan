@@ -166,10 +166,10 @@ export default function AccessToDentalInsuranceQuestion() {
       <div className="flex flex-wrap items-center gap-3">
         <ButtonLink type="button" variant="alternative" to={`/apply/${id}/dental-insurance`}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-          {t('dental-insurance.button.back')}
+          {t('dental-benefits.button.back')}
         </ButtonLink>
         <Button type="submit" variant="primary">
-          {t('dental-insurance.button.continue')}
+          {t('dental-benefits.button.continue')}
           <FontAwesomeIcon icon={faChevronRight} className="me-3 block size-4" />
         </Button>
       </div>
