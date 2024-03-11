@@ -26,7 +26,7 @@ const dobSchema = z.object({
 const termsAndConditionSchema = z.object({});
 
 const dentalInsuranceStateSchema = z.object({
-  dentalInsurance: z.string({ required_error: 'required' }),
+  dentalInsurance: z.string({ required_error: 'required' }).min(1),
 });
 
 const dentalBenefitsStateSchema = z.object({

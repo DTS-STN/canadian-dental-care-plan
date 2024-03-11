@@ -81,8 +81,6 @@ export default function AccessToDentalInsuranceQuestion() {
     dentalInsurance: getErrorMessage(actionData?.errors.dentalInsurance?._errors[0]),
   };
 
-  console.log('error: ', errorMessages);
-
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 
   const helpMessage = (
@@ -95,7 +93,8 @@ export default function AccessToDentalInsuranceQuestion() {
         <li className="list-none">
           <CollapsibleDetails id={t('dental-insurance.detail.additional-info.title')} summary={t('dental-insurance.detail.additional-info.title')}>
             <div>
-              <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance.detail.additional-info.not-eligible" />
+              <p className="mt-4">{t('dental-insurance.detail.additional-info.not-eligible')}</p>
+              <p className="mt-4">{t('dental-insurance.detail.additional-info.not-eligible-purchased')}</p>
               <p className="mt-4">{t('dental-insurance.detail.additional-info.eligible')}</p>
               <ul className="mb-4 list-disc pl-6">
                 <li>{t('dental-insurance.detail.additional-info.list.opted')}</li>
@@ -112,26 +111,24 @@ export default function AccessToDentalInsuranceQuestion() {
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post">
-        {options.length > 0 && (
-          <div className="my-6">
-            {options.length > 0 && (
-              <InputRadios
-                id="dental-insurance"
-                name="dentalInsurance"
-                legend={t('dental-insurance.legend')}
-                options={options.map((option) => ({
-                  children: <Trans ns={handle.i18nNamespaces}>{`dental-insurance.option-${option.id}`}</Trans>,
-                  value: option.id,
-                  defaultChecked: state.dentalInsurance?.dentalInsurance === option.id,
-                }))}
-                helpMessagePrimary={helpMessage}
-                helpMessagePrimaryClassName="pl-8 text-black"
-                required={errorSummaryItems.length > 0}
-                errorMessage={errorMessages.dentalInsurance}
-              />
-            )}
-          </div>
-        )}
+        <div className="my-6">
+          {options.length > 0 && (
+            <InputRadios
+              id="dental-insurance"
+              name="dentalInsurance"
+              legend={t('dental-insurance.legend')}
+              options={options.map((option) => ({
+                children: <Trans ns={handle.i18nNamespaces}>{`dental-insurance.option-${option.id}`}</Trans>,
+                value: option.id,
+                defaultChecked: state.dentalInsurance?.dentalInsurance === option.id,
+              }))}
+              helpMessagePrimary={helpMessage}
+              helpMessagePrimaryClassName="pl-8 text-black"
+              required={errorSummaryItems.length > 0}
+              errorMessage={errorMessages.dentalInsurance}
+            />
+          )}
+        </div>
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink type="button" variant="alternative" to={`/apply/${id}/communication-preference`}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
