@@ -40,7 +40,15 @@
   },
   "breadcrumbs": {
     "you-are-here": "You are here:",
-    "home": "Home"
+    "home": "Home",
+    "canada-ca": "Canada.ca",
+    "canada-ca-url": "https://www.canada.ca/en.html",
+    "benefits": "Benefits",
+    "benefits-url": "https://www.canada.ca/en/services/benefits.html",
+    "dental-coverage": "Dental coverage",
+    "dental-coverage-url": "https://www.canada.ca/en/services/benefits/dental.html",
+    "canadian-dental-care-plan": "Canadian Dental Care Plan",
+    "canadian-dental-care-plan-url": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   },
   "page-details": {
     "page-details": "Page details",
