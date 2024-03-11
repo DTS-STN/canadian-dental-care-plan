@@ -111,8 +111,8 @@ export default function AccessToDentalInsuranceQuestion() {
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post">
-        <div className="my-6">
-          {options.length > 0 && (
+        {options.length > 0 && (
+          <div className="my-6">
             <InputRadios
               id="dental-insurance"
               name="dentalInsurance"
@@ -127,8 +127,8 @@ export default function AccessToDentalInsuranceQuestion() {
               required={errorSummaryItems.length > 0}
               errorMessage={errorMessages.dentalInsurance}
             />
-          )}
-        </div>
+          </div>
+        )}
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink type="button" variant="alternative" to={`/apply/${id}/communication-preference`}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
