@@ -4,6 +4,8 @@ import { json, redirect } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { Form, MetaFunction, useLoaderData } from '@remix-run/react';
 
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -161,10 +163,12 @@ export default function AccessToDentalInsuranceQuestion() {
       </section>
       <div className="flex flex-wrap items-center gap-3">
         <ButtonLink id="back-button" to="/apply">
+          <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('dental-benefits.button.back')}
         </ButtonLink>
-        <Button id="continue-button" variant="primary">
+        <Button variant="primary" id="continue-button">
           {t('dental-benefits.button.continue')}
+          <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
         </Button>
       </div>
     </Form>
