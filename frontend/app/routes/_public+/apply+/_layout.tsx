@@ -5,14 +5,7 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
-  breadcrumbs: [
-    // prettier-ignore
-    { labelI18nKey: 'apply:breadcrumbs.canada-ca', to: 'apply:breadcrumbs.canada-ca-url'},
-    { labelI18nKey: 'apply:breadcrumbs.benefits', to: 'apply:breadcrumbs.benefits-url' },
-    { labelI18nKey: 'apply:breadcrumbs.dental-coverage', to: 'apply:breadcrumbs.dental-coverage-url' },
-    { labelI18nKey: 'apply:breadcrumbs.canadian-dental-care-plan', to: 'apply:breadcrumbs.canadian-dental-care-plan-url' },
-  ],
-  i18nNamespaces: getTypedI18nNamespaces(...layoutI18nNamespaces, 'apply'),
+  i18nNamespaces: getTypedI18nNamespaces(...layoutI18nNamespaces),
 } as const satisfies RouteHandleData;
 
 export function ErrorBoundary() {

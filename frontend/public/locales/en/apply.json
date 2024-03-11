@@ -16,16 +16,6 @@
       "marital-status": "Marital status must be provided"
     }
   },
-  "breadcrumbs": {
-    "canada-ca": "Canada.ca",
-    "canada-ca-url": "https://www.canada.ca/en.html",
-    "benefits": "Benefits",
-    "benefits-url": "https://www.canada.ca/en/services/benefits.html",
-    "dental-coverage": "Dental coverage",
-    "dental-coverage-url": "https://www.canada.ca/en/services/benefits/dental.html",
-    "canadian-dental-care-plan": "Canadian Dental Care Plan",
-    "canadian-dental-care-plan-url": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
-  },
   "communication-preference": {
     "page-title": "Communication preferences",
     "note": "If eligible, we will share your membership information with Sun Life Assurance Company of Canada (Sun Life), who will be responsible for handling member enrolment and administering claims processing and benefits for the Canadian Dental Care Plan.",

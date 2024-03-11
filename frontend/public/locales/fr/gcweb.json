@@ -40,7 +40,15 @@
   },
   "breadcrumbs": {
     "you-are-here": "Vous êtes ici\u00a0:",
-    "home": "Accueil"
+    "home": "Accueil",
+    "canada-ca": "Canada.ca",
+    "canada-ca-url": "https://www.canada.ca/fr.html",
+    "benefits": "Prestations",
+    "benefits-url": "https://www.canada.ca/fr/services/prestations.html",
+    "dental-coverage": "Couverture dentaire",
+    "dental-coverage-url": "https://www.canada.ca/fr/services/prestations/dentaire.html",
+    "canadian-dental-care-plan": "Régime canadien de soins dentaires ",
+    "canadian-dental-care-plan-url": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
   "page-details": {
     "page-details": "Détails de la page",

@@ -16,16 +16,6 @@
       "marital-status": "(FR) Marital status must be provided"
     }
   },
-  "breadcrumbs": {
-    "canada-ca": "Canada.ca",
-    "canada-ca-url": "https://www.canada.ca/fr.html",
-    "benefits": "Prestations",
-    "benefits-url": "https://www.canada.ca/fr/services/prestations.html",
-    "dental-coverage": "Couverture dentaire",
-    "dental-coverage-url": "https://www.canada.ca/fr/services/prestations/dentaire.html",
-    "canadian-dental-care-plan": "Régime canadien de soins dentaires ",
-    "canadian-dental-care-plan-url": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
-  },
   "communication-preference": {
     "page-title": "Préférences en matière de communication",
     "note": "Si vous êtes admissible, nous communiquerons les détails liés à votre adhésion à la Sun Life du Canada, compagnie d'assurance-vie, qui sera responsable du traitement de l'adhésion des membres et de la gestion des demandes de règlement et des prestations du Régime canadien de soins dentaires.",
