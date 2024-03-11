@@ -1,4 +1,14 @@
 {
+  "breadcrumbs": {
+    "canada-ca": "Canada.ca",
+    "canada-ca-url": "https://www.canada.ca/fr.html",
+    "benefits": "Prestations",
+    "benefits-url": "https://www.canada.ca/fr/services/prestations.html",
+    "dental-coverage": "Couverture dentaire",
+    "dental-coverage-url": "https://www.canada.ca/fr/services/prestations/dentaire.html",
+    "canadian-dental-care-plan": "Régime canadien de soins dentaires ",
+    "canadian-dental-care-plan-url": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+  },
   "applicant-information": {
     "page-title": "(FR) Applicant Information",
     "form-instructions": "(FR) Please provide your legal name (as indicated on your SIN card/letter). We will use the information you provided to verify your identity. Any information that does not match the information on your SIN appliation may cause delay in the processing of your application.",
