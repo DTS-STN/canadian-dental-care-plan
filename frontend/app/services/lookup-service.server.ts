@@ -47,7 +47,7 @@ const provincialTerritorialSocialProgram = z.object({
   provinceTerritoryStateId: z.string(),
   nameEn: z.string().optional(),
   nameFr: z.string().optional(),
-})
+});
 
 const countrySchema = z.object({
   countryId: z.string(),
@@ -446,7 +446,6 @@ function createLookupService() {
 
     const federalSocialPrograms = z.array(federalSocialProgram);
     return federalSocialPrograms.parse(await response.json());
-    
   }
 
   async function getAllProvincialTerritorialSocialPrograms() {
