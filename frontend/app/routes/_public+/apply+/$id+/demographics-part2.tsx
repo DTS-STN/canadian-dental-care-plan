@@ -20,14 +20,14 @@ import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils'
 import { mergeMeta } from '~/utils/meta-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('demographics-oral-health-questions', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: 'CDCP-1112',
-  pageTitleI18nKey: 'demographics-oral-health-questions:part2.page-title',
+  pageTitleI18nKey: 'apply:demographics-oral-health-questions.part2.page-title',
 };
 
 export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
   const { t } = useTranslation(handle.i18nNamespaces);
-  return [{ title: t('gcweb:meta.title.template', { title: t('demographics-oral-health-questions:part2.page-title') }) }];
+  return [{ title: t('gcweb:meta.title.template', { title: t('apply:demographics-oral-health-questions.part2.page-title') }) }];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -108,7 +108,7 @@ export default function DemographicsPart2() {
      * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`demographics-oral-health-questions:part2.error-message.${errorI18nKey}` as any);
+    return t(`apply:demographics-oral-health-questions.part2.error-message.${errorI18nKey}` as any);
   }
 
   const errorMessages = {
@@ -142,7 +142,7 @@ export default function DemographicsPart2() {
       defaultChecked: state?.gender === otherGenderCode.id,
       append: otherGenderChecked && (
         <div className="mb-4 grid max-w-prose gap-6 md:grid-cols-2 ">
-          <InputField id="otherGender" type="text" className="w-full" label={t('demographics-oral-health-questions:part2.question-gender-other-specify')} name="otherGenderFieldName" defaultValue={state?.otherGender} />
+          <InputField id="otherGender" type="text" className="w-full" label={t('apply:demographics-oral-health-questions.part2.question-gender-other-specify')} name="otherGenderFieldName" defaultValue={state?.otherGender} />
         </div>
       ),
       onClick: otherGenderHandler,
@@ -153,13 +153,13 @@ export default function DemographicsPart2() {
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post" className="space-y-6">
-        {genderTypes.length > 0 && <InputRadios id="gender" legend={t('demographics-oral-health-questions:part2.question-gender')} name="gender" errorMessage={errorMessages.gender} options={options} required></InputRadios>}
+        {genderTypes.length > 0 && <InputRadios id="gender" legend={t('apply:demographics-oral-health-questions.part2.question-gender')} name="gender" errorMessage={errorMessages.gender} options={options} required></InputRadios>}
 
         {mouthPainTypes.length > 0 && (
           <InputRadios
             id="mouthPainType"
             name="mouthPainType"
-            legend={t('demographics-oral-health-questions:part2.question-mouth-pain')}
+            legend={t('apply:demographics-oral-health-questions.part2.question-mouth-pain')}
             options={mouthPainTypes.map((mouthPainType) => ({
               children: getNameByLanguage(i18n.language, mouthPainType),
               value: mouthPainType.id,
@@ -172,7 +172,7 @@ export default function DemographicsPart2() {
           <InputRadios
             id="lastDentalVisitType"
             name="lastDentalVisitType"
-            legend={t('demographics-oral-health-questions:part2.question-last-dental-visit')}
+            legend={t('apply:demographics-oral-health-questions.part2.question-last-dental-visit')}
             options={lastTimeDentistVisitTypes.map((lastTimeDentistVisitType) => ({
               children: getNameByLanguage(i18n.language, lastTimeDentistVisitType),
               value: lastTimeDentistVisitType.id,
@@ -185,7 +185,7 @@ export default function DemographicsPart2() {
           <InputRadios
             id="avoidedDentalCareDueToCost"
             name="avoidedDentalCareDueToCost"
-            legend={t('demographics-oral-health-questions:part2.question-avoided-dental-cost')}
+            legend={t('apply:demographics-oral-health-questions.part2.question-avoided-dental-cost')}
             options={avoidedDentalCostTypes.map((avoidedDentalCostType) => ({
               children: getNameByLanguage(i18n.language, avoidedDentalCostType),
               value: avoidedDentalCostType.id,
@@ -196,12 +196,12 @@ export default function DemographicsPart2() {
         )}
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="cancel-button" to={`/apply/${id}/demographics-part1`}>
-            {t('demographics-oral-health-questions:part2.button-back')}
+            {t('apply:demographics-oral-health-questions.part2.button-back')}
             <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
           </ButtonLink>
           <Button id="change-button" variant="primary">
             <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
-            {t('demographics-oral-health-questions:part2.button-continue')}
+            {t('apply:demographics-oral-health-questions.part2.button-continue')}
           </Button>
         </div>
       </Form>

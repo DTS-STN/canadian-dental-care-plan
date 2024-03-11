@@ -1,6 +1,5 @@
 import type apply from '../public/locales/en/apply.json';
 import type dataUnavailable from '../public/locales/en/data-unavailable.json';
-import type demographicsOralHealthQuestions from '../public/locales/en/demographics-oral-health-questions.json';
 import type dentalInsuranceQuestion from '../public/locales/en/dental-insurance-question.json';
 import type eligibility from '../public/locales/en/eligibility.json';
 import type gcweb from '../public/locales/en/gcweb.json';
@@ -30,7 +29,6 @@ declare module 'i18next' {
     defaultNS: false;
     resources: {
       'data-unavailable': typeof dataUnavailable;
-      'demographics-oral-health-questions': typeof demographicsOralHealthQuestions;
       'dental-insurance-question': typeof dentalInsuranceQuestion;
       eligibility: typeof eligibility;
       gcweb: typeof gcweb;
