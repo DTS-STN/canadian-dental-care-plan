@@ -98,13 +98,13 @@ export default function ApplyFlowTaxFiling() {
           errorMessage={errorMessages.taxFiling2023}
         />
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink type="button" variant="alternative" to={`/apply/${id}/type-of-application`}>
+          <ButtonLink id="back-button" to={`/apply/${id}/type-of-application`}>
+            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:eligibility.tax-filing.back-btn')}
-            <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
           </ButtonLink>
-          <Button type="submit" variant="primary">
+          <Button variant="primary" id="continue-button">
             {t('apply:eligibility.tax-filing.continue-btn')}
-            <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
+            <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
           </Button>
         </div>
       </Form>

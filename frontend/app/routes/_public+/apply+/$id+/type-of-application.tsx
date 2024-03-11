@@ -98,13 +98,13 @@ export default function ApplyFlowTypeOfApplication() {
           errorMessage={errorMessages.applicationDelegate}
         />
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink type="button" variant="alternative" to="/apply">
+          <ButtonLink id="back-button" to="/apply">
+            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:eligibility.type-of-application.back-btn')}
-            <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
           </ButtonLink>
-          <Button type="submit" variant="primary">
+          <Button variant="primary" id="continue-button">
             {t('apply:eligibility.type-of-application.continue-btn')}
-            <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
+            <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
           </Button>
         </div>
       </Form>

@@ -124,7 +124,7 @@ export default function TermsAndConditions() {
       <p className="mb-4 mt-2">{t('apply:terms-and-conditions.terms-and-conditions.index.apply-now.text')}</p>
 
       <div className="flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to={`/apply`}>
+        <ButtonLink id="back-button" to="/apply">
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:terms-and-conditions.terms-and-conditions.index.apply-now.back-button')}
         </ButtonLink>

@@ -61,7 +61,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ApplyFlowDateOfBirth() {
-  const { id, state } = useLoaderData<typeof loader>();
+  const { state } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
 
@@ -102,13 +102,13 @@ export default function ApplyFlowDateOfBirth() {
           <InputField id="year" label={t('apply:eligibility.date-of-birth.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} defaultValue={state?.year} />
         </div>
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink type="button" variant="alternative" to={`/apply/${id}/tax-filing`}>
+          <ButtonLink id="back-button" to="/apply">
+            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:eligibility.date-of-birth.back-btn')}
-            <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
           </ButtonLink>
-          <Button type="submit" variant="primary">
+          <Button variant="primary" id="continue-button">
             {t('apply:eligibility.date-of-birth.continue-btn')}
-            <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
+            <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
           </Button>
         </div>
       </Form>

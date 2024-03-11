@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, MetaFunction, useActionData, useLoaderData } from '@remix-run/react';
 
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -395,11 +397,13 @@ export default function ApplyFlowPersonalInformation() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" variant="alternative" to={`/apply/${id}/partner-information`}>
+          <ButtonLink id="back-button" to={`/apply/${id}/partner-information`}>
+            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:personal-information.back')}
           </ButtonLink>
-          <Button id="continue-button" variant="primary">
+          <Button variant="primary" id="continue-button">
             {t('apply:personal-information.continue')}
+            <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
           </Button>
         </div>
       </Form>

@@ -3,10 +3,12 @@ import { useEffect } from 'react';
 import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, MetaFunction, useActionData, useLoaderData } from '@remix-run/react';
 
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import { Button } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
@@ -139,8 +141,14 @@ export default function ApplyFlowApplicationInformation() {
           errorMessage={errorMessages.maritalStatus}
         />
         <div className="flex flex-wrap items-center gap-3">
-          <Button variant="alternative">{t('applicant-information.back-btn')}</Button>
-          <Button variant="primary">{t('applicant-information.continue-btn')}</Button>
+          <ButtonLink id="back-button" to="/apply">
+            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+            {t('applicant-information.back-btn')}
+          </ButtonLink>
+          <Button variant="primary" id="continue-button">
+            {t('applicant-information.continue-btn')}
+            <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
+          </Button>
         </div>
       </Form>
     </>

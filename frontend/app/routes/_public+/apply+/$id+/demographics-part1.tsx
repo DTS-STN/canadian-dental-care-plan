@@ -75,13 +75,13 @@ export default function DemographicsPart1() {
           </div>
         )}
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="cancel-button" to="/personal-information">
+          <ButtonLink id="back-button" to="/personal-information">
+            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:demographics-oral-health-questions.part1.button-back')}
-            <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
           </ButtonLink>
-          <Button id="change-button" variant="primary">
-            <FontAwesomeIcon icon={faChevronRight} className="pl-2" />
+          <Button variant="primary" id="continue-button">
             {t('apply:demographics-oral-health-questions.part1.button-continue')}
+            <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
           </Button>
         </div>
       </Form>
