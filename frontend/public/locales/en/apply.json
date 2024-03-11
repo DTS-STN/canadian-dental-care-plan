@@ -123,7 +123,7 @@
       "option-yes": "<strong>Yes</strong>, I have <strong>federal</strong> benefits.",
       "option-no": "<strong>No</strong>, I do not have <strong>federal</strong> benefits.",
       "social-programs": {
-        "legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."
+        "legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."
       }
     },
     "provincial-territorial-benefits": {
@@ -141,16 +141,17 @@
       "continue": "Continue"
     }
   },
-  "dental-insurance-question": {
+  "dental-insurance": {
     "title": "Access to other dental insurance",
-    "legend": "Do you have access to private dental benefits through any of the following situations?",
+    "legend": "Do you have access to dental insurance or coverage through one of the following four situations?",
     "list": {
-      "employer": "Your <strong>employer</strong> or a family member's employer dental insurance plan",
-      "pension": "Your <strong>pension</strong> or a family member's pension dental insurance plan",
-      "dental-coverage": "You or your family member <strong>purchased dental insurance coverage</strong> from an insurance or benefits provider"
+      "employment": "Your employment benefits or a family member’s employment benefits, including health and wellness account",
+      "pension": "Your pension benefits or a family member’s pension benefits",
+      "purchased": "Purchased by you or a family member or through a group plan from an insurance or benefits company",
+      "professional": "Through a professional or student organization"
     },
-    "option-yes": "I have access to private dental insurance.",
-    "option-no": "I do not have access to private dental insurance.",
+    "option-yes": "<strong>Yes</strong>, I have access to dental insurance or coverage.",
+    "option-no": "<strong>No</strong>, I do not have access to dental insurance or coverage.",
     "button": {
       "back": "Back",
       "continue": "Continue"
@@ -158,13 +159,17 @@
     "detail": {
       "additional-info": {
         "title": "Additional information",
-        "eligible": "You may be eligible for the CDCP if you are retired and:",
+        "eligible": "Exception: You may still be eligible if you retired and:",
         "list": {
           "opted": "you opted out of pension benefits before December 11, 2023, and",
-          "cannot-opt": "you can't opt back in under the pension rules"
+          "cannot-opt": "you can’t opt back in under the pension rules"
         },
-        "not-eligible": "If you purchased your current dental insurance policy privately on your own (and not as part of any of the coverage described above), you're not eligible for the CDCP while that coverage is in effect.<br><br>You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your employer/pension (see exception) benefits or through a professional or student organization. As such, you are not eligible for CDCP."
+        "not-eligible": "You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your employer/pension (see exception) benefits or through a professional or student organization. As such, you are not eligible for the CDCP.",
+        "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own (and not as part of any of the coverage described above), you’re not eligible for the CDCP while that coverage is in effect."
       }
+    },
+    "error-message": {
+      "required": "Access to dental insurance must be selected"
     }
   },
   "eligibility": {
