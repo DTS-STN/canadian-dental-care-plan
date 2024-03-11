@@ -1,5 +1,9 @@
 {
   "meta": {
+    "author": "Employment and Social Development Canada",
+    "description": "The Canadian Dental Care Plan (CDCP) will help cover some of the cost of various oral health care services for eligible Canadian residents.",
+    "site-name": "Canadian Dental Care Plan - Canada.ca",
+    "subject": "Economics and Industry;Insurance;Dental insurance",
     "title": {
       "default": "Canadian Dental Care Plan - Canada.ca",
       "template": "{{title}} - Canadian Dental Care Plan - Canada.ca"

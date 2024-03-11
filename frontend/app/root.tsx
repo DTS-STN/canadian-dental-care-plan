@@ -1,8 +1,8 @@
 import { Suspense, useContext } from 'react';
 
-import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRouteLoaderData } from '@remix-run/react';
+import { Links, LiveReload, Meta, MetaFunction, Outlet, Scripts, ScrollRestoration, useLoaderData, useRouteLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { getToast } from 'remix-toast';
@@ -18,7 +18,7 @@ import tailwindStyleSheet from '~/tailwind.css';
 import { getPublicEnv } from '~/utils/env.server';
 import type { FeatureName } from '~/utils/env.server';
 import { useI18nNamespaces } from '~/utils/route-utils';
-import { useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
+import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: fontLatoStyleSheet },
@@ -26,8 +26,33 @@ export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: tailwindStyleSheet },
 ];
 
-export const meta: MetaFunction<typeof loader> = (args) => {
-  return [{ name: 'robots', content: 'noindex' }];
+export const meta: MetaFunction = (args) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const ns = useI18nNamespaces();
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { i18n, t } = useTranslation(ns);
+  const author = t('gcweb:meta.author');
+  const description = t('gcweb:meta.description');
+  const language = i18n.language === 'fr' ? 'fra' : 'eng';
+  const locale = `${i18n.language}_CA`;
+  const siteName = t('gcweb:meta.site-name');
+  const subject = t('gcweb:meta.subject');
+  const title = t('gcweb:meta.title.default');
+  return [
+    ...getTitleMetaTags(title),
+    ...getDescriptionMetaTags(description),
+    { name: 'author', content: author },
+    { name: 'dcterms.accessRights', content: '2' },
+    { name: 'dcterms.creator', content: author },
+    { name: 'dcterms.language', content: language },
+    { name: 'dcterms.service', content: 'ESDC-EDSC_CDCP-RCSD' },
+    { name: 'dcterms.spatial', content: 'Canada' },
+    { name: 'dcterms.subject', content: subject },
+    { name: 'robots', content: 'noindex' },
+    { property: 'og:locale', content: locale },
+    { property: 'og:site_name', content: siteName },
+    { property: 'og:type', content: 'website' },
+  ];
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {

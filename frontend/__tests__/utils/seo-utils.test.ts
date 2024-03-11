@@ -8,7 +8,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { getClientEnv } from '~/utils/env-utils';
 import { useI18nNamespaces } from '~/utils/route-utils';
-import { useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
+import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
 
 vi.mock('@remix-run/react');
 vi.mock('react-i18next');
@@ -91,5 +91,24 @@ describe('useAlternateLanguages', () => {
     const { result } = renderHook(() => useAlternateLanguages(origin, languages));
 
     expect(result.current).toEqual(expectedUrls);
+  });
+});
+
+describe('getTitleMetaTags', () => {
+  it('returns an array with title meta tags', () => {
+    const title = 'Test Title';
+    const expected = [{ title: title }, { property: 'og:title', content: title }];
+    expect(getTitleMetaTags(title)).toEqual(expected);
+  });
+});
+
+describe('getDescriptionMetaTags', () => {
+  it('returns an array with description meta tags', () => {
+    const description = 'Test Description';
+    const expected = [
+      { name: 'description', content: description },
+      { property: 'og:description', content: description },
+    ];
+    expect(getDescriptionMetaTags(description)).toEqual(expected);
   });
 });

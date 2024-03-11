@@ -52,3 +52,24 @@ export function useAlternateLanguages(origin: string, languages: Array<string> =
     };
   });
 }
+
+/**
+ * Generates meta tags for title.
+ * @param title - The title to be included in meta tags.
+ * @returns An array of meta tag objects.
+ */
+export function getTitleMetaTags(title: string) {
+  return [{ title: title }, { property: 'og:title', content: title }];
+}
+
+/**
+ * Generates meta tags for description.
+ * @param description - The description to be included in meta tags.
+ * @returns An array of meta tag objects.
+ */
+export function getDescriptionMetaTags(description: string) {
+  return [
+    { name: 'description', content: description },
+    { property: 'og:description', content: description },
+  ];
+}

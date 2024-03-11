@@ -1,5 +1,9 @@
 {
   "meta": {
+    "author": "Emploi et Développement social Canada",
+    "description": "Le Régime canadien de soins dentaires (RCSD) permet de couvrir une partie du coût de divers services de santé buccodentaire pour les résidents canadiens éligibles.",
+    "site-name": "Régime canadien de soins dentaires - Canada.ca",
+    "subject": "Économie et industrie;Assurance;Assurance dentaire",
     "title": {
       "default": "Régime canadien de soins dentaires - Canada.ca",
       "template": "{{title}} - Régime canadien de soins dentaires - Canada.ca"
