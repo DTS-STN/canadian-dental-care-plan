@@ -169,7 +169,7 @@ function parseNumber(raw?: string) {
   return maybe;
 }
 
-function reimportServer(buildPath: string) {
+function reimportServer(buildPath: string): Promise<ServerBuild> {
   // TODO :: GjB :: do we need to bust the ESM import cache here?
   // use a timestamp query parameter to bust the import cache
   return import(url.pathToFileURL(buildPath).href + '?t=' + fs.statSync(buildPath).mtimeMs);
