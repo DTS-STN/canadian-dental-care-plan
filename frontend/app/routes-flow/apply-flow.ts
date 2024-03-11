@@ -103,7 +103,7 @@ const personalInformationStateSchema = z.object({
   mailingCountry: z.string().min(1),
   mailingProvince: z.string().min(1).optional(),
   mailingCity: z.string().min(1),
-  mailingPostalCode: z.string().min(1),
+  mailingPostalCode: z.string().optional(),
   copyMailingAddress: z.string().optional(),
   homeAddress: z.string().optional(),
   homeApartment: z.string().optional(),

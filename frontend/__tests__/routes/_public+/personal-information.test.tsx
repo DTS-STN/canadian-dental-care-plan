@@ -85,6 +85,8 @@ describe('_public.apply.id.personal-information', () => {
             nameFr: '(FR) sample',
           },
         ],
+        COUNTRY_CODE_CANADA: 'CAN',
+        COUNTRY_CODE_USA: 'USA',
       });
     });
   });
