@@ -119,14 +119,37 @@ export default function ApplyFlowApplicationInformation() {
 
   return (
     <>
-      <p id="form-instructions-provide-sin" className="mb-5">
+      <p id="form-instructions-provide-sin" className="mb-5 max-w-prose">
         {t('partner-information.provide-sin')}
       </p>
-      <p id="form-instructions-required-information" className="mb-10">
+      <p id="form-instructions-required-information" className="mb-10 max-w-prose">
         {t('partner-information.required-information')}
       </p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post" aria-describedby="form-instructions-provide-sin form-instructions-required-information" noValidate className="max-w-prose space-y-6">
+        <div className="grid gap-6 md:grid-cols-2">
+          <InputField id="firstName" name="firstName" className="w-full" label={t('applicant-information.first-name')} aria-labelledby="name-instructions" />
+          <InputField id="lastName" name="lastName" className="w-full" label={t('applicant-information.last-name')} required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} aria-labelledby="name-instructions" />
+        </div>
+        <p id="name-instructions">{t('partner-information.name-instructions')}</p>
+        <fieldset>
+          <legend className="mb-2 font-semibold">{t('partner-information.dob')}</legend>
+          <div className="flex flex-col gap-6 sm:flex-row">
+            {i18n.language === 'en' && (
+              <>
+                <InputSelect id="month" label={t('partner-information.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} />
+                <InputField id="day" label={t('partner-information.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} />
+              </>
+            )}
+            {i18n.language === 'fr' && (
+              <>
+                <InputField id="day" label={t('partner-information.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} />
+                <InputSelect id="month" label={t('partner-information.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} />
+              </>
+            )}
+            <InputField id="year" label={t('partner-information.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} />
+          </div>
+        </fieldset>
         <InputField
           id="socialInsuranceNumber"
           name="socialInsuranceNumber"
@@ -134,26 +157,16 @@ export default function ApplyFlowApplicationInformation() {
           required
           inputMode="numeric"
           pattern="\d{9}"
+          placeholder="000-000-000"
           minLength={9}
           maxLength={9}
           defaultValue={defaultValues.socialInsuranceNumber}
           errorMessage={errorMessages.socialInsuranceNumber}
         />
-        <fieldset>
-          <legend className="mb-2 font-semibold">{t('partner-information.dob')}</legend>
-          <div className="flex flex-col gap-6 sm:flex-row">
-            <InputSelect id="month" label={t('partner-information.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} />
-            <InputField id="day" label={t('partner-information.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} />
-            <InputField id="year" label={t('partner-information.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} />
-          </div>
-        </fieldset>
-        <div className="grid gap-6 md:grid-cols-2">
-          <InputField id="lastName" name="lastName" className="w-full" label={t('applicant-information.last-name')} required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} />
-          <InputField id="firstName" name="firstName" className="w-full" label={t('applicant-information.first-name')} />
-        </div>
         <InputCheckbox id="confirm" name="confirm" required errorMessage={errorMessages.confirm}>
           {t('partner-information.confirm-checkbox')}
         </InputCheckbox>
+
         <div className="mt-5 flex flex-wrap items-center gap-3">
           <ButtonLink id="back-button" to="/apply">
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />

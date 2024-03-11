@@ -1,10 +1,12 @@
 {
   "applicant-information": {
     "page-title": "Applicant Information",
-    "form-instructions": "Please provide your legal name (as indicated on your SIN card/letter). We will use the information you provided to verify your identity. Any information that does not match the information on your SIN appliation may cause delay in the processing of your application.",
+    "form-instructions-sin": "Please provide your legal name as indicated on your Social Insurance Number (SIN) card or letter.",
+    "form-instructions-info": "We'll use the information you provide to verify your identity. Any information that does not match the information on your SIN application may cause a delay in the processing of your application.",
     "sin": "Social Insurance Number",
     "last-name": "Last name",
     "first-name": "First name",
+    "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
     "marital-status": "Marital status",
     "back-btn": "Back",
     "continue-btn": "Continue",
@@ -257,6 +259,7 @@
     "day": "Day",
     "last-name": "Last name",
     "first-name": "First name",
+    "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
     "confirm-checkbox": "I confirm that my spouse or common-law partner is aware and has consented to the sharing of their personal information.",
     "back-btn": "Back",
     "continue-btn": "Continue",

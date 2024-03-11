@@ -111,11 +111,19 @@ export default function ApplyFlowApplicationInformation() {
 
   return (
     <>
-      <p id="form-instructions" className="mb-10">
-        {t('applicant-information.form-instructions')}
+      <p id="form-instructions-sin" className="mb-5 max-w-prose">
+        {t('applicant-information.form-instructions-sin')}
+      </p>
+      <p id="form-instructions-info" className="mb-10 max-w-prose">
+        {t('applicant-information.form-instructions-info')}
       </p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post" aria-describedby="form-instructions" noValidate className="max-w-prose space-y-6">
+      <Form method="post" aria-describedby="form-instructions-sin form-instructions-info" noValidate className="max-w-prose space-y-6">
+        <div className="grid gap-6 md:grid-cols-2">
+          <InputField id="firstName" name="firstName" label={t('applicant-information.first-name')} className="w-full" aria-labelledby="name-instructions" />
+          <InputField id="lastName" name="lastName" label={t('applicant-information.last-name')} className="w-full" required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} aria-labelledby="name-instructions" />
+        </div>
+        <p id="name-instructions">{t('applicant-information.name-instructions')}</p>
         <InputField
           id="socialInsuranceNumber"
           name="socialInsuranceNumber"
@@ -123,15 +131,12 @@ export default function ApplyFlowApplicationInformation() {
           required
           inputMode="numeric"
           pattern="\d{9}"
+          placeholder="000-000-000"
           minLength={9}
           maxLength={9}
           defaultValue={defaultValues.socialInsuranceNumber}
           errorMessage={errorMessages.socialInsuranceNumber}
         />
-        <div className="grid gap-6 md:grid-cols-2">
-          <InputField id="lastName" name="lastName" label={t('applicant-information.last-name')} className="w-full" required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} />
-          <InputField id="firstName" name="firstName" label={t('applicant-information.first-name')} className="w-full" />
-        </div>
         <InputRadios
           id="marital-status"
           name="maritalStatus"
