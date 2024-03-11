@@ -1,14 +1,4 @@
 {
-  "breadcrumbs": {
-    "canada-ca": "Canada.ca",
-    "canada-ca-url": "https://www.canada.ca/fr.html",
-    "benefits": "Prestations",
-    "benefits-url": "https://www.canada.ca/fr/services/prestations.html",
-    "dental-coverage": "Couverture dentaire",
-    "dental-coverage-url": "https://www.canada.ca/fr/services/prestations/dentaire.html",
-    "canadian-dental-care-plan": "Régime canadien de soins dentaires ",
-    "canadian-dental-care-plan-url": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
-  },
   "applicant-information": {
     "page-title": "(FR) Applicant Information",
     "form-instructions": "(FR) Please provide your legal name (as indicated on your SIN card/letter). We will use the information you provided to verify your identity. Any information that does not match the information on your SIN appliation may cause delay in the processing of your application.",
@@ -23,6 +13,16 @@
       "last-name": "(FR) Last name must be provided",
       "marital-status": "(FR) Marital status must be provided"
     }
+  },
+  "breadcrumbs": {
+    "canada-ca": "Canada.ca",
+    "canada-ca-url": "https://www.canada.ca/fr.html",
+    "benefits": "Prestations",
+    "benefits-url": "https://www.canada.ca/fr/services/prestations.html",
+    "dental-coverage": "Couverture dentaire",
+    "dental-coverage-url": "https://www.canada.ca/fr/services/prestations/dentaire.html",
+    "canadian-dental-care-plan": "Régime canadien de soins dentaires ",
+    "canadian-dental-care-plan-url": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
   "communication-preference": {
     "page-title": "Préférences en matière de communication",
@@ -41,6 +41,51 @@
       "invalid-email": "(FR) Invalid email address",
       "not-the-same": "(FR) Confirm email is not the same as the entered email"
     }
+  },
+  "confirm": {
+    "page-title": "(FR) Confirmation",
+    "alert-heading": "(FR) You have successfully applied for the Canadian Dental Care Plan!",
+    "app-code-is": "(FR) Your application code is:",
+    "make-note": "(FR) Make note of this code, as you will need it to check the status of your application.",
+    "keep-copy": "(FR) Keep a copy of your application",
+    "print-copy-text": "(FR) You will <strong>not</strong> be receiving a <strong>confirmation email</strong>. It is important to keep a copy of your application. You can use this button to print.",
+    "print-btn": "(FR) Print",
+    "whats-next": "(FR) What happens next?",
+    "begin-process": "(FR) We will begin processing your application immediately.",
+    "cdcp-checker": "(FR) You can use the <cdcpLink>Canadian Dental Care Plan Status Checker</cdcpLink> or call 1-833-537-4342 to track the progress of your application.",
+    "cdcp-checker-link": "https://canadadental-uat.powerappsportals.com/fr/status-etat/",
+    "use-code": "(FR) You can use your application code to begin tracking the progress within 48 hours of applying.",
+    "register-msca-title": "(FR) Register for a My Service Canada Account",
+    "register-msca-text": "(FR) Once your application is processed, you will be able to sign into <mscaLink>My Service Canada Account(MSCA)</mscaLink> to view or update your personal information. You will also be able to view any letters sent to you from the Government of Canada regarding the Canadian Dental Care Plan.",
+    "msca-notify": "(FR) You will be notified of your acceptance into the Canadian Dental Care Plan in MSCA.",
+    "msca-link": "https://www.canada.ca/fr/emploi-developpement-social/services/mon-dossier.html",
+    "how-insurance": "(FR) How do I use my insurance?",
+    "eligible-text": "(FR) If you are deemed eligible, Sun Life will send you a welcome package by mail. Your welcome package will include your member card and details about the Canadian Dental Care Plan, including your coverage start date. The Canadian Dental Care Plan will not reimburse you for dental services received before that date.",
+    "more-info-cdcp": "(FR) For more information on what services and how much will be covered, visit <moreInfoLink>Canadian Dental Care Plan - What is covered</moreInfoLink>.",
+    "more-linfo-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/couverture.html",
+    "ineligible-text": "(FR) If you are deemed ineligible and your circumstances change that may impact your eligibility for the Canadian Dental Care Plan, you can submit a new application.",
+    "more-info-service": "(FR) For more information, please contact <dentalContactUsLink>Service Canada.</dentalContactUsLink>",
+    "dental-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
+    "application-summ": "(FR) Application Summary",
+    "applicant-title": "(FR) Applicant Information",
+    "spouse-info": "(FR) Spouse / Common-law Information",
+    "contact-info": "(FR) Contact Information",
+    "comm-prefs": "(FR) Communication Preferences",
+    "dental-insurance": "(FR) Access to Dental Insurance",
+    "dob": "(FR) Date of Birth: {{dob}}",
+    "sin": "(FR) Social Insurance Number (SIN): {{sin}}",
+    "full-name": "(FR) Full Name: {{name}}",
+    "martial-status": "(FR) Martial Status: {{status}}",
+    "consent": "(FR) Consent: My spouse or common-law partner is aware and has consented to sharing of their personal information.",
+    "no-consent": "(FR) Consent: My spouse or common-law partner is aware and has not consented to sharing of their personal information.",
+    "phone-number": "(FR) Telephone Number: {{phone}}",
+    "alt-phone-number": "(FR) Alternate Telephone Number: {{altPhone}}",
+    "mailing": "(FR) Mailing Address: {{address}}",
+    "home": "(FR) Home Address: {{address}}",
+    "comm-pref": "(FR) Communication Preference: {{pref}}",
+    "lang-pref": "(FR) Language Preference: {{pref}}",
+    "dental-private": "(FR) Access to dental insurance: {{access}}",
+    "dental-public": "(FR) Access to dental government insurance: {{access}}"
   },
   "demographics-oral-health-questions": {
     "part1": {
@@ -76,12 +121,40 @@
       "back-button": "(FR) Back"
     }
   },
+  "dental-benefits": {
+    "title": "(Fr) Access to other federal, provincial or territorial dental benefits",
+    "access-to-dental": "(Fr) Access to dental coverage through a provincial, territorial or federal government social program will not impact your eligibility for the Canadian Dental Care Plan.",
+    "eligibility-criteria": "(Fr) If you meet all the eligibility criteria, your coverage will be coordinated between the plans to ensure there are no duplication or gaps in coverage.",
+    "federal-benefits": {
+      "title": "(Fr) Federal benefits",
+      "legend": "(Fr) Do you have dental benefits through a social program offered by a federal program?",
+      "option-yes": "(Fr)<strong>Yes</strong>, I have <strong>federal</strong> benefits.",
+      "option-no": "(Fr)<strong>No</strong>, I do not have <strong>federal</strong> benefits.",
+      "social-programs": {
+        "legend": "(Fr) Please select which social program you are covered under. If you have more than one, please select the one you use most."
+      }
+    },
+    "provincial-territorial-benefits": {
+      "title": "(Fr) Provincial or territorial benefits",
+      "legend": "(Fr) Do you have dental benefits through a social program offered by your province or territory?",
+      "option-yes": "(Fr)<strong>Yes</strong>, I have <strong>provincial or territorial</strong> benefits.",
+      "option-no": "(Fr)<strong>No</strong>, I do not have <strong>provincial or territorial</strong> benefits.",
+      "social-programs": {
+        "input-legend": "(Fr) If yes, through which province or territory?",
+        "radio-legend": "(Fr) Please select which social program you are covered under. If you have more than one, please select the one you use most."
+      }
+    },
+    "button": {
+      "back": "(Fr) Back",
+      "continue": "(Fr) Continue"
+    }
+  },
   "dental-insurance-question": {
     "title": "(FR) Access to other dental insurance",
     "legend": "(FR) Do you have access to private dental benefits through any of the following situations?",
     "list": {
-      "employer": "(FR) Your <strong>employer</strong> or a family member’s employer dental insurance plan",
-      "pension": "(FR) Your <strong>pension</strong> or a family member’s pension dental insurance plan",
+      "employer": "(FR) Your <strong>employer</strong> or a family member's employer dental insurance plan",
+      "pension": "(FR) Your <strong>pension</strong> or a family member's pension dental insurance plan",
       "dental-coverage": "(FR) You or your family member <strong>purchased dental insurance coverage</strong> from an insurance or benefits provider"
     },
     "option-yes": "(FR) I have access to private dental insurance.",
@@ -96,9 +169,9 @@
         "eligible": "(FR) You may be eligible for the CDCP if you are retired and:",
         "list": {
           "opted": "(FR) you opted out of pension benefits before December 11, 2023, and",
-          "cannot-opt": "(FR) you can’t opt back in under the pension rules"
+          "cannot-opt": "(FR) you can't opt back in under the pension rules"
         },
-        "not-eligible": "(FR) If you purchased your current dental insurance policy privately on your own (and not as part of any of the coverage described above), you’re not eligible for the CDCP while that coverage is in effect.<br><br>You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your employer/pension (see exception)  benefits or through a professional or student organization. As such, you are not eligible for CDCP."
+        "not-eligible": "(FR) If you purchased your current dental insurance policy privately on your own (and not as part of any of the coverage described above), you're not eligible for the CDCP while that coverage is in effect.<br><br>You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your employer/pension (see exception) benefits or through a professional or student organization. As such, you are not eligible for CDCP."
       }
     }
   },
@@ -274,94 +347,20 @@
     "submit-p-three": "(FR) Keep a record of your application so that you can refer back to it.",
     "submit-button": "(FR) Submit Application"
   },
-  "dental-benefits": {
-    "title": "(Fr) Access to other federal, provincial or territorial dental benefits",
-    "access-to-dental": "(Fr) Access to dental coverage through a provincial, territorial or federal government social program will not impact your eligibility for the Canadian Dental Care Plan.",
-    "eligibility-criteria": "(Fr) If you meet all the eligibility criteria, your coverage will be coordinated between the plans to ensure there are no duplication or gaps in coverage.",
-    "federal-benefits": {
-      "title": "(Fr) Federal benefits",
-      "legend": "(Fr) Do you have dental benefits through a social program offered by a federal program?",
-      "option-yes": "(Fr)<strong>Yes</strong>, I have <strong>federal</strong> benefits.",
-      "option-no": "(Fr)<strong>No</strong>, I do not have <strong>federal</strong> benefits.",
-      "social-programs": {
-        "legend": "(Fr) Please select which social program you are covered under. If you have more than one, please select the one you use most."
-      }
-    },
-    "provincial-territorial-benefits": {
-      "title": "(Fr) Provincial or territorial benefits",
-      "legend": "(Fr) Do you have dental benefits through a social program offered by your province or territory?",
-      "option-yes": "(Fr)<strong>Yes</strong>, I have <strong>provincial or territorial</strong> benefits.",
-      "option-no": "(Fr)<strong>No</strong>, I do not have <strong>provincial or territorial</strong> benefits.",
-      "social-programs": {
-        "input-legend": "(Fr) If yes, through which province or territory?",
-        "radio-legend": "(Fr) Please select which social program you are covered under. If you have more than one, please select the one you use most."
-      }
-    },
-    "button": {
-      "back": "(Fr) Back",
-      "continue": "(Fr) Continue"
-    }
-  },
-  "confirm": {
-    "page-title": "(FR) Confirmation",
-    "alert-heading": "(FR) You have successfully applied for the Canadian Dental Care Plan!",
-    "app-code-is": "(FR) Your application code is:",
-    "make-note": "(FR) Make note of this code, as you will need it to check the status of your application.",
-    "keep-copy": "(FR) Keep a copy of your application",
-    "print-copy-text": "(FR) You will <strong>not</strong> be receiving a <strong>confirmation email</strong>. It is important to keep a copy of your application. You can use this button to print.",
-    "print-btn": "(FR) Print",
-    "whats-next": "(FR) What happens next?",
-    "begin-process": "(FR) We will begin processing your application immediately.",
-    "cdcp-checker": "(FR) You can use the <cdcpLink>Canadian Dental Care Plan Status Checker</cdcpLink> or call 1-833-537-4342 to track the progress of your application.",
-    "cdcp-checker-link": "https://canadadental-uat.powerappsportals.com/fr/status-etat/",
-    "use-code": "(FR) You can use your application code to begin tracking the progress within 48 hours of applying.",
-    "register-msca-title": "(FR) Register for a My Service Canada Account",
-    "register-msca-text": "(FR) Once your application is processed, you will be able to sign into <mscaLink>My Service Canada Account(MSCA)</mscaLink> to view or update your personal information. You will also be able to view any letters sent to you from the Government of Canada regarding the Canadian Dental Care Plan.",
-    "msca-notify": "(FR) You will be notified of your acceptance into the Canadian Dental Care Plan in MSCA.",
-    "msca-link": "https://www.canada.ca/fr/emploi-developpement-social/services/mon-dossier.html",
-    "how-insurance": "(FR) How do I use my insurance?",
-    "eligible-text": "(FR) If you are deemed eligible, Sun Life will send you a welcome package by mail. Your welcome package will include your member card and details about the Canadian Dental Care Plan, including your coverage start date. The Canadian Dental Care Plan will not reimburse you for dental services received before that date.",
-    "more-info-cdcp": "(FR) For more information on what services and how much will be covered, visit <moreInfoLink>Canadian Dental Care Plan - What is covered</moreInfoLink>.",
-    "more-linfo-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/couverture.html",
-    "ineligible-text": "(FR) If you are deemed ineligible and your circumstances change that may impact your eligibility for the Canadian Dental Care Plan, you can submit a new application.",
-    "more-info-service": "(FR) For more information, please contact <dentalContactUsLink>Service Canada.</dentalContactUsLink>",
-    "dental-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
-
-    "application-summ": "(FR) Application Summary",
-    "applicant-title": "(FR) Applicant Information",
-    "spouse-info": "(FR) Spouse / Common-law Information",
-    "contact-info": "(FR) Contact Information",
-    "comm-prefs": "(FR) Communication Preferences",
-    "dental-insurance": "(FR) Access to Dental Insurance",
-    "dob": "(FR) Date of Birth: {{dob}}",
-    "sin": "(FR) Social Insurance Number (SIN): {{sin}}",
-    "full-name": "(FR) Full Name: {{name}}",
-    "martial-status": "(FR) Martial Status: {{status}}",
-    "consent": "(FR) Consent: My spouse or common-law partner is aware and has consented to sharing of their personal information.",
-    "no-consent": "(FR) Consent: My spouse or common-law partner is aware and has not consented to sharing of their personal information.",
-    "phone-number": "(FR) Telephone Number: {{phone}}",
-    "alt-phone-number": "(FR) Alternate Telephone Number: {{altPhone}}",
-    "mailing": "(FR) Mailing Address: {{address}}",
-    "home": "(FR) Home Address: {{address}}",
-    "comm-pref": "(FR) Communication Preference: {{pref}}",
-    "lang-pref": "(FR) Language Preference: {{pref}}",
-    "dental-private": "(FR) Access to dental insurance: {{access}}",
-    "dental-public": "(FR) Access to dental government insurance: {{access}}"
-  },
   "terms-and-conditions": {
     "terms-and-conditions": {
       "index": {
         "page-heading": "FR Terms and Conditions of Use and Privacy Statement",
         "intro-text": "FR We are glad you are using the Canadian Dental Care Plan (CDCP) Online Application (“the Online Application”). We have developed some terms and conditions for using this service (“Terms of Use” or “Terms”). Please read them carefully.",
-        "terms-and-conditions-of-use-heading": "FR Conditions d’utilisation du vérificateur de l’état d’une demande",
+        "terms-and-conditions-of-use-heading": "FR Conditions d'utilisation du vérificateur de l'état d'une demande",
         "terms-and-conditions-of-use-part-one": "FR We are glad you are using the Canadian Dental Care Plan (CDCP) Online Application (“the Online Application”). We have developed some important terms and conditions for using this service (“Terms of Use” or “Terms”). Please read them carefully.",
         "terms-and-conditions-of-use-part-two": "FR Terms and Conditions of Use for the Canadian Dental Care Plan Online Application.",
         "terms-and-conditions-of-use-part-three-bold": "VEUILLEZ LIRE ATTENTIVEMENT. ",
-        "terms-and-conditions-of-use-part-three-text": "Nous sommes heureux que vous utilisiez le vérificateur de l’état d’une demande du Régime canadien de soins dentaires. Certaines conditions générales d’utilisation importantes s’appliquent à l’utilisation de ce service (« conditions d’utilisation » ou « conditions »). Veuillez les lire attentivement. Elles sont importantes parce qu’elles régissent votre utilisation du vérificateur de l’état d’une demande. Nous vous invitons à lire attentivement les présentes conditions, car elles ont une incidence ou peuvent avoir une incidence sur vos droits et vos obligations juridiques. En cas de divergence, les présentes conditions d’utilisation ont préséance sur celles du site Canada.ca.",
-        "terms-and-conditions-of-use-part-four": "Votre accès au vérificateur de l’état d’une demande et votre utilisation de celui‑ci, y compris tout renseignement qu’il contient, sont assujettis à (1) votre acceptation des présentes conditions d’utilisation et à (2) votre conformité à celles‑ci.",
-        "terms-and-conditions-of-use-part-five": "Chaque fois que vous utilisez le vérificateur de l’état d’une demande, ces conditions d’utilisation continuent de s’appliquer. En l’utilisant, vous acceptez de respecter ces conditions. Il vous incombe de comprendre et de retenir ces conditions générales d’utilisation.",
-        "terms-and-conditions-of-use-part-six": "Vous pouvez toujours décider de ne pas accepter ces conditions. Le cas échéant, vous ne serez pas autorisé à accéder au vérificateur de l’état d’une demande et à l’utiliser.",
-        "terms-and-conditions-of-use-part-seven": "Aux fins des présentes conditions d’utilisation, « EDSC » s’entend de Sa Majesté le Roi du chef du Canada, représenté par le ministre de l’Emploi et du Développement social du Canada.",
+        "terms-and-conditions-of-use-part-three-text": "Nous sommes heureux que vous utilisiez le vérificateur de l'état d'une demande du Régime canadien de soins dentaires. Certaines conditions générales d'utilisation importantes s'appliquent à l'utilisation de ce service\u00a0(«\u00a0conditions d'utilisation\u00a0» ou «\u00a0conditions\u00a0»). Veuillez les lire attentivement. Elles sont importantes parce qu'elles régissent votre utilisation du vérificateur de l'état d'une demande. Nous vous invitons à lire attentivement les présentes conditions, car elles ont une incidence ou peuvent avoir une incidence sur vos droits et vos obligations juridiques. En cas de divergence, les présentes conditions d'utilisation ont préséance sur celles du site Canada.ca.",
+        "terms-and-conditions-of-use-part-four": "Votre accès au vérificateur de l'état d'une demande et votre utilisation de celui-ci, y compris tout renseignement qu'il contient, sont assujettis à\u00a0(1)\u00a0votre acceptation des présentes conditions d'utilisation et à\u00a0(2)\u00a0votre conformité à celles-ci.",
+        "terms-and-conditions-of-use-part-five": "Chaque fois que vous utilisez le vérificateur de l'état d'une demande, ces conditions d'utilisation continuent de s'appliquer. En l'utilisant, vous acceptez de respecter ces conditions. Il vous incombe de comprendre et de retenir ces conditions générales d'utilisation.",
+        "terms-and-conditions-of-use-part-six": "Vous pouvez toujours décider de ne pas accepter ces conditions. Le cas échéant, vous ne serez pas autorisé à accéder au vérificateur de l'état d'une demande et à l'utiliser.",
+        "terms-and-conditions-of-use-part-seven": "Aux fins des présentes conditions d'utilisation, «\u00a0EDSC\u00a0» s'entend de Sa Majesté le Roi du chef du Canada, représenté par le ministre de l'Emploi et du Développement social du Canada.",
         "terms-and-conditions-of-use-terms-of-use-of-the-online-application-heading": "FR Terms of Use of the Online Application.",
         "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-self-agreement": "FR Using the Online Application means that you have read and agree to these Terms of Use and the Privacy Notice Statement. If, at any time, you withdraw your agreement to any of the Terms and Conditions of Use you must stop use of the Online Application; or",
         "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-on-behalf-of-someone-else": "FR If you are using the Application on behalf of another individual, by using the Application, you certify that you have all the necessary authority, permission, and authorities to agree to the Terms of Use on behalf of that individual, and that you agree to the Terms on your own personal behalf and on behalf of the individual you are representing.",
@@ -369,8 +368,8 @@
         "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-only-use": "FR Only use the Online Application to apply to the Canadian Dental Care Plan.",
         "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-maintenance": "FR There will be times when the system might be down for maintenance.",
         "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-inactive": "FR If you are inactive for 15 minutes on the Online Application, your session will end and you will lose any information you entered.",
-        "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-msdc": "FR ESDC uses services from Microsoft Corporation to run the Online Application. The Microsoft data centers used by ESDC are in Canada in accordance with Microsoft Corporation’s Terms of Service Agreement.",
-        "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-antibot": "FR ESDC uses hCaptcha anti-bot services for our online tools in accordance with hCaptcha’s <hcaptchaTermsOfService> Terms of Service.<hcaptchaTermsOfService>",
+        "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-msdc": "FR ESDC uses services from Microsoft Corporation to run the Online Application. The Microsoft data centers used by ESDC are in Canada in accordance with Microsoft Corporation's Terms of Service Agreement.",
+        "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-antibot": "FR ESDC uses hCaptcha anti-bot services for our online tools in accordance with hCaptcha's <hcaptchaTermsOfService> Terms of Service.<hcaptchaTermsOfService>",
         "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-hcaptcha-link": "FR https://www.hcaptcha.com/terms",
         "terms-and-conditions-of-use-disclaimers-heading": "FR Disclaimers",
         "terms-and-conditions-of-use-disclaimers-text": "FR You understand and agree that ESDC provides the Canadian Dental Care Plan Online Application 'as is' with no representation, warranty or guarantee, implied or express, of any kind whatsoever and that ESDC disclaims any and all liability in relation to the use of the Online Application, including any loss, damage or injury arising from or related to:",
@@ -392,12 +391,12 @@
         "privacy-notice-statement-how-we-protect-your-privacy-text-part-five": "FR If you don't agree with the way your personal information was handled by Service Canada, you can contact the Privacy Commissioner of Canada to <fileacomplaint>file a complaint</fileacomplaint>.",
         "privacy-notice-statement-who-we-can-share-your-information-with-heading": "FR Who we can share your information with",
         "privacy-notice-statement-who-we-can-share-your-information-with-text-part-one": "FR ESDC will share your personal information with partners in administrating the plan to validate your eligibility and register you for the CDCP.",
-        "privacy-notice-statement-who-we-can-share-your-information-with-text-part-two": "FR Your data may also be disclosed to the CDCP benefits administrator and the benefits administrator’s agents and service providers for the purpose of underwriting, verification, administration, adjudication and investigation of claims under CDCP.",
+        "privacy-notice-statement-who-we-can-share-your-information-with-text-part-two": "FR Your data may also be disclosed to the CDCP benefits administrator and the benefits administrator's agents and service providers for the purpose of underwriting, verification, administration, adjudication and investigation of claims under CDCP.",
         "privacy-notice-statement-who-we-can-share-your-information-with-text-part-three": "FR ESDC may use or share the information you provide for policy analysis, research, monitoring and/or evaluation activities within ESDC and HC. These uses or activities will not affect any administrative decisions made about you.",
-        "privacy-notice-statement-what-happens-if-you-dont-give-us-your-information-heading": "FR What happens if you don’t give us your information",
+        "privacy-notice-statement-what-happens-if-you-dont-give-us-your-information-heading": "FR What happens if you don't give us your information",
         "privacy-notice-statement-what-happens-if-you-dont-give-us-your-information-text": "FR Participation in the CDCP is voluntary; however, if you do not provide your personal information in your application, you cannot be considered for the CDCP.",
         "apply-now": {
-          "text": "En commençant ce processus de demande de prestations, vous consentez aux modalités de l’énoncé de confidentialité ci-dessus.",
+          "text": "En commençant ce processus de demande de prestations, vous consentez aux modalités de l'énoncé de confidentialité ci-dessus.",
           "start-button": "Commencer à remplir une demande >",
           "back-button": "Retour"
         }
