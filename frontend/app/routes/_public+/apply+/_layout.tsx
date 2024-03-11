@@ -1,6 +1,7 @@
 import { Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
 
 import ApplicationLayout, { NotFoundError, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/application-layout';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
@@ -11,7 +12,7 @@ export const handle = {
     { labelI18nKey: 'apply:breadcrumbs.dental-coverage', to: 'apply:breadcrumbs.dental-coverage-url' },
     { labelI18nKey: 'apply:breadcrumbs.canadian-dental-care-plan', to: 'apply:breadcrumbs.canadian-dental-care-plan-url' },
   ],
-  i18nNamespaces: [...layoutI18nNamespaces],
+  i18nNamespaces: getTypedI18nNamespaces(...layoutI18nNamespaces, 'apply'),
 } as const satisfies RouteHandleData;
 
 export function ErrorBoundary() {
