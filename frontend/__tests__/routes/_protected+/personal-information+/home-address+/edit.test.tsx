@@ -67,6 +67,10 @@ vi.mock('~/services/wsaddress-service.server', () => ({
   }),
 }));
 
+vi.mock('~/utils/locale-utils.server', () => ({
+  getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+}));
+
 describe('_gcweb-app.personal-information.home-address.edit', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -89,7 +93,11 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
       const data = await response.json();
 
       expect(data).toEqual({
-        addressInfo: { address: '111 Fake Home St', city: 'city', country: 'country' },
+        addressInfo: {
+          address: '111 Fake Home St',
+          city: 'city',
+          country: 'country',
+        },
         countryList: [
           {
             code: 'SUP',
@@ -97,6 +105,7 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
             nameFr: '(FR) super country',
           },
         ],
+        meta: {},
         regionList: [
           {
             code: 'SP',

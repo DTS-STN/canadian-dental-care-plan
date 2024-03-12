@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, MetaFunction, useLoaderData } from '@remix-run/react';
+import { Form, useLoaderData } from '@remix-run/react';
 
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,6 +14,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -24,9 +25,9 @@ export const handle = {
   pageTitleI18nKey: 'apply:review-information.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  return getTitleMetaTags(t('gcweb:meta.title.template', { title: t('apply:review-information.page-title') }));
+export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
+  if (!data) return [];
+  return getTitleMetaTags(data.meta.title);
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -80,7 +81,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     public: [{ id: 'benefit-id', benefitEn: 'Dental and Optical Assistance for Senioirs (65+)', benefitFR: '(FR) Dental and Optical Assistance for Senioirs (65+)' }],
   };
 
-  return json({ id, userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance });
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:review-information.page-title') }) };
+
+  return json({ dentalInsurance, homeAddressInfo, id, mailingAddressInfo, meta, preferredLanguage, spouseInfo, userInfo });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

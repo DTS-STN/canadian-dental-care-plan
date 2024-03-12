@@ -43,6 +43,10 @@ vi.mock('~/utils/env.server', () => ({
   getEnv: vi.fn(),
 }));
 
+vi.mock('~/utils/locale-utils.server', () => ({
+  getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+}));
+
 describe('_gcweb-app.personal-information.preferred-language.confirm', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -74,6 +78,7 @@ describe('_gcweb-app.personal-information.preferred-language.confirm', () => {
       const data = await response.json();
 
       expect(data).toEqual({
+        meta: {},
         userInfo: { id: 'some-id', preferredLanguage: 'fr' },
         preferredLanguage: { id: 'fr', nameEn: 'French', nameFr: 'Français' },
       });

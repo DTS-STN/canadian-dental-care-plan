@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
-import { Form, MetaFunction, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, useActionData, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,6 +17,7 @@ import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -26,9 +27,9 @@ export const handle = {
   pageTitleI18nKey: 'apply:demographics-oral-health-questions.part2.page-title',
 };
 
-export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  return getTitleMetaTags(t('gcweb:meta.title.template', { title: t('apply:demographics-oral-health-questions.part2.page-title') }));
+export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
+  if (!data) return [];
+  return getTitleMetaTags(data.meta.title);
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -46,7 +47,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     throw new Response(`Unexpected 'Other' gender type: ${OTHER_GENDER_TYPE_ID}`, { status: 500 });
   }
 
-  return json({ otherGenderCode, genderTypes, sexAtBirthTypes, mouthPainTypes, lastTimeDentistVisitTypes, avoidedDentalCostTypes, id, state: state.demographicsPart2 });
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:demographics-oral-health-questions.part2.page-title') }) };
+
+  return json({ avoidedDentalCostTypes, genderTypes, id, lastTimeDentistVisitTypes, meta, mouthPainTypes, otherGenderCode, sexAtBirthTypes, state: state.demographicsPart2 });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

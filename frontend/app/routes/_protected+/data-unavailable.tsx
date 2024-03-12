@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node';
-import type { LoaderFunctionArgs } from '@remix-run/node';
-import { MetaFunction, useLoaderData } from '@remix-run/react';
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -8,6 +8,7 @@ import { InlineLink } from '~/components/inline-link';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getClientEnv } from '~/utils/env-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -19,9 +20,9 @@ export const handle = {
   pageTitleI18nKey: 'data-unavailable:page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  return getTitleMetaTags(t('gcweb:meta.title.template', { title: t('data-unavailable:page-title') }));
+export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
+  if (!data) return [];
+  return getTitleMetaTags(data.meta.title);
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -30,7 +31,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const { SCCH_BASE_URI } = getClientEnv();
 
-  return json({ SCCH_BASE_URI });
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const meta = { title: t('gcweb:meta.title.template', { title: t('data-unavailable:page-title') }) };
+
+  return json({ meta, SCCH_BASE_URI });
 }
 
 export default function DataUnavailable() {
@@ -53,7 +57,6 @@ export default function DataUnavailable() {
         <Trans ns={handle.i18nNamespaces} i18nKey="other-enquiry" components={{ contactus }} />
       </p>
       <p className="mb-8">{t('service-delay')}</p>
-
       <Trans ns={handle.i18nNamespaces} i18nKey="my-dashboard" components={{ mydashboard }} />
     </>
   );

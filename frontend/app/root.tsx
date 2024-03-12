@@ -1,12 +1,13 @@
 import { Suspense, useContext } from 'react';
 
-import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
+import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Links, LiveReload, Meta, MetaFunction, Outlet, Scripts, ScrollRestoration, useLoaderData, useRouteLoaderData } from '@remix-run/react';
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRouteLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { getToast } from 'remix-toast';
 
+import { getFixedT, getLocale } from './utils/locale-utils.server';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import SessionTimeout from '~/components/session-timeout';
@@ -26,31 +27,21 @@ export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: tailwindStyleSheet },
 ];
 
-export const meta: MetaFunction = (args) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const ns = useI18nNamespaces();
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { i18n, t } = useTranslation(ns);
-  const author = t('gcweb:meta.author');
-  const description = t('gcweb:meta.description');
-  const language = i18n.language === 'fr' ? 'fra' : 'eng';
-  const locale = `${i18n.language}_CA`;
-  const siteName = t('gcweb:meta.site-name');
-  const subject = t('gcweb:meta.subject');
-  const title = t('gcweb:meta.title.default');
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  if (!data) return [];
   return [
-    ...getTitleMetaTags(title),
-    ...getDescriptionMetaTags(description),
-    { name: 'author', content: author },
+    ...getTitleMetaTags(data.meta.title),
+    ...getDescriptionMetaTags(data.meta.description),
+    { name: 'author', content: data.meta.author },
     { name: 'dcterms.accessRights', content: '2' },
-    { name: 'dcterms.creator', content: author },
-    { name: 'dcterms.language', content: language },
+    { name: 'dcterms.creator', content: data.meta.author },
+    { name: 'dcterms.language', content: data.meta.language },
     { name: 'dcterms.service', content: 'ESDC-EDSC_CDCP-RCSD' },
     { name: 'dcterms.spatial', content: 'Canada' },
-    { name: 'dcterms.subject', content: subject },
+    { name: 'dcterms.subject', content: data.meta.subject },
     { name: 'robots', content: 'noindex' },
-    { property: 'og:locale', content: locale },
-    { property: 'og:site_name', content: siteName },
+    { property: 'og:locale', content: data.meta.locale },
+    { property: 'og:site_name', content: data.meta.siteName },
     { property: 'og:type', content: 'website' },
   ];
 };
@@ -59,16 +50,23 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const buildInfoService = getBuildInfoService();
   const { toast, headers } = await getToast(request);
   const requestUrl = new URL(request.url);
+  const locale = await getLocale(request);
+  const t = await getFixedT(request, ['gcweb']);
 
-  return json(
-    {
-      buildInfo: buildInfoService.getBuildInfo(),
-      env: getPublicEnv(),
-      origin: requestUrl.origin,
-      toast,
-    },
-    { headers },
-  );
+  const buildInfo = buildInfoService.getBuildInfo();
+  const env = getPublicEnv();
+  const meta = {
+    author: t('gcweb:meta.author'),
+    description: t('gcweb:meta.description'),
+    language: locale === 'fr' ? 'fra' : 'eng',
+    locale: `${locale}_CA`,
+    siteName: t('gcweb:meta.site-name'),
+    subject: t('gcweb:meta.subject'),
+    title: t('gcweb:meta.title.default'),
+  };
+  const origin = requestUrl.origin;
+
+  return json({ buildInfo, env, meta, origin, toast }, { headers });
 }
 
 export default function App() {
