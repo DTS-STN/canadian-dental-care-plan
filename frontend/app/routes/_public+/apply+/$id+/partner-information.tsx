@@ -68,11 +68,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
     state: { partnerInformation: parsedDataResult.data },
   });
 
-  return redirect(`/apply/${id}/contact-information`, sessionResponseInit);
+  return redirect(`/apply/${id}/personal-information`, sessionResponseInit);
 }
 
 export default function ApplyFlowApplicationInformation() {
-  const { state } = useLoaderData<typeof loader>();
+  const { id, state } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
 
@@ -173,7 +173,7 @@ export default function ApplyFlowApplicationInformation() {
         </InputCheckbox>
 
         <div className="mt-5 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to="/apply">
+          <ButtonLink id="back-button" to={`/apply/${id}/applicant-information`}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('applicant-information.back-btn')}
           </ButtonLink>
