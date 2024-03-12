@@ -1,4 +1,4 @@
-import type { ComponentProps, PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
 import { Link } from '@remix-run/react';
 
@@ -40,10 +40,10 @@ export function ProtectedLayout({ children }: PropsWithChildren) {
   );
 }
 
-function AppPageTitle(props: Omit<ComponentProps<typeof PageTitle>, 'children'>) {
+function AppPageTitle() {
   const { t } = useTranslation(useI18nNamespaces());
   const pageTitleI18nKey = usePageTitleI18nKey();
-  return pageTitleI18nKey && <PageTitle {...props}>{t(pageTitleI18nKey)}</PageTitle>;
+  return pageTitleI18nKey && <PageTitle className="mb-2 mt-6">{t(pageTitleI18nKey)}</PageTitle>;
 }
 
 function NavigationMenu() {
@@ -114,6 +114,7 @@ function PageBreadcrumbs() {
   const breadcrumbs = useBreadcrumbs();
   return (
     <Breadcrumbs
+      className="my-4"
       items={[
         { content: t('gcweb:breadcrumbs.home'), to: breadcrumbs.length !== 0 ? '/home' : undefined },
         ...breadcrumbs.map((item) => ({

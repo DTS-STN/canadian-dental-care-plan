@@ -8,17 +8,18 @@ import type { To } from 'react-router';
 import { InlineLink } from './inline-link';
 
 export interface BreadcrumbsProps {
+  className?: string;
   items: Array<{ content: string; to?: To }>;
 }
 
-export function Breadcrumbs({ items }: BreadcrumbsProps) {
+export function Breadcrumbs({ className, items }: BreadcrumbsProps) {
   const { t } = useTranslation(['gcweb']);
   return (
-    <nav id="wb-bc" property="breadcrumb" aria-labelledby="breadcrumbs">
+    <nav id="wb-bc" className={className} property="breadcrumb" aria-labelledby="breadcrumbs">
       <h2 id="breadcrumbs" className="sr-only">
         {t('gcweb:breadcrumbs.you-are-here')}
       </h2>
-      <div className="container mt-4">
+      <div className="container">
         <ol className="flex flex-wrap items-center gap-x-3 gap-y-1" typeof="BreadcrumbList">
           {items.map(({ content, to }, idx) => {
             return (
