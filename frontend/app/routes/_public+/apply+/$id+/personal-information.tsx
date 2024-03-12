@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, MetaFunction, useActionData, useLoaderData } from '@remix-run/react';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -21,7 +19,6 @@ import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
-import { getTitleMetaTags } from '~/utils/seo-utils';
 
 const validPostalCode = new RegExp('^[ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy]\\d[A-Za-z] \\d[A-Za-z]\\d{1}$');
 const validZipCode = new RegExp('^\\d{5}$');
@@ -34,17 +31,18 @@ export const handle = {
 
 export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
   const { t } = useTranslation(handle.i18nNamespaces);
-  return getTitleMetaTags(t('gcweb:meta.title.template', { title: t('apply:personal-information.page-title') }));
+  return [{ title: t('gcweb:meta.title.template', { title: t('apply:personal-information.page-title') }) }];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
+  const { COUNTRY_CODE_CANADA, COUNTRY_CODE_USA } = getEnv();
 
   const countryList = await getLookupService().getAllCountries();
   const regionList = await getLookupService().getAllRegions();
 
-  return json({ id, state: state.personalInformation, countryList, regionList });
+  return json({ id, state: state.personalInformation, countryList, regionList, COUNTRY_CODE_CANADA, COUNTRY_CODE_USA });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -62,7 +60,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const isValidPostalCode = (countryCode: string | undefined, postalCode: string | undefined) => {
     if (!countryCode || !postalCode) {
       // if either field is omitted, skip the check
-      // check and render 'please enter a value'
+      // check and render empty field error
       return true;
     }
     switch (countryCode) {
@@ -99,7 +97,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         .string()
         .min(1, { message: 'empty-city' })
         .transform((val) => val.trim()),
-      mailingPostalCode: z.string().min(1, { message: 'empty-postal-code' }).trim(),
+      mailingPostalCode: z.string().trim().optional(),
       copyMailingAddress: z.string().optional(),
       homeAddress: z.string().optional(),
       homeApartment: z.string().optional(),
@@ -109,12 +107,18 @@ export async function action({ request, params }: ActionFunctionArgs) {
       homePostalCode: z.string().optional(),
     })
     .superRefine((val, ctx) => {
-      if (!isValidPostalCode(val.mailingCountry, val.mailingPostalCode)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: val.mailingCountry === COUNTRY_CODE_CANADA ? 'invalid-postal-code' : 'invalid-zip-code',
-          path: ['mailingPostalCode'],
-        });
+      if (!isEmpty(val.mailingCountry)) {
+        if ((val.mailingCountry === COUNTRY_CODE_CANADA || val.mailingCountry === COUNTRY_CODE_USA) && isEmpty(val.mailingPostalCode)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-postal-code', path: ['mailingPostalCode'] });
+        }
+
+        if (!isValidPostalCode(val.mailingCountry, val.mailingPostalCode)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: val.mailingCountry === COUNTRY_CODE_CANADA ? 'invalid-postal-code' : 'invalid-zip-code',
+            path: ['mailingPostalCode'],
+          });
+        }
       }
 
       if (val.copyMailingAddress !== 'on') {
@@ -122,7 +126,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
           { fieldName: 'homeAddress', errorMessage: 'empty-address' },
           { fieldName: 'homeCountry', errorMessage: 'empty-country' },
           { fieldName: 'homeCity', errorMessage: 'empty-city' },
-          { fieldName: 'homePostalCode', errorMessage: 'empty-postal-code' },
         ];
         homeAddessFields.forEach(({ fieldName, errorMessage }) => {
           if (isEmpty(val[fieldName])) {
@@ -133,6 +136,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
         if (!isEmpty(val.homeCountry)) {
           if ((val.homeCountry === COUNTRY_CODE_CANADA || val.homeCountry === COUNTRY_CODE_USA) && isEmpty(val.homeProvince)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-province', path: ['homeProvince'] });
+          }
+          if ((val.homeCountry === COUNTRY_CODE_CANADA || val.homeCountry === COUNTRY_CODE_USA) && isEmpty(val.homePostalCode)) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-postal-code', path: ['homePostalCode'] });
           }
         }
 
@@ -176,7 +182,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ApplyFlowPersonalInformation() {
-  const { id, state, countryList, regionList } = useLoaderData<typeof loader>();
+  const { id, state, countryList, regionList, COUNTRY_CODE_CANADA, COUNTRY_CODE_USA } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(state?.mailingCountry);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<RegionInfo[]>([]);
@@ -335,7 +341,14 @@ export default function ApplyFlowPersonalInformation() {
             )}
             <div className="mb-4 grid gap-4 md:grid-cols-2">
               <InputField id="mailingCity" name="mailingCity" label={t('apply:personal-information.address-field.city')} defaultValue={state?.mailingCity} errorMessage={errorMessages.mailingCity} required />
-              <InputField id="mailingPostalCode" name="mailingPostalCode" label={t('apply:personal-information.address-field.postal-code')} defaultValue={state?.mailingPostalCode} errorMessage={errorMessages.mailingPostalCode} required />
+              <InputField
+                id="mailingPostalCode"
+                name="mailingPostalCode"
+                label={t('apply:personal-information.address-field.postal-code')}
+                defaultValue={state?.mailingPostalCode}
+                errorMessage={errorMessages.mailingPostalCode}
+                required={selectedMailingCountry === COUNTRY_CODE_CANADA || selectedMailingCountry === COUNTRY_CODE_USA}
+              />
             </div>
           </div>
         </div>
@@ -387,7 +400,14 @@ export default function ApplyFlowPersonalInformation() {
                   )}
                   <div className="mb-4 grid gap-4 md:grid-cols-2">
                     <InputField id="homeCity" name="homeCity" label={t('apply:personal-information.address-field.city')} defaultValue={state?.homeCity} errorMessage={errorMessages.homeCity} required />
-                    <InputField id="homePostalCode" name="homePostalCode" label={t('apply:personal-information.address-field.postal-code')} defaultValue={state?.homePostalCode} errorMessage={errorMessages.homePostalCode} required />
+                    <InputField
+                      id="homePostalCode"
+                      name="homePostalCode"
+                      label={t('apply:personal-information.address-field.postal-code')}
+                      defaultValue={state?.homePostalCode}
+                      errorMessage={errorMessages.homePostalCode}
+                      required={selectedHomeCountry === COUNTRY_CODE_CANADA || selectedHomeCountry === COUNTRY_CODE_USA}
+                    />
                   </div>
                 </div>
               )
@@ -398,13 +418,11 @@ export default function ApplyFlowPersonalInformation() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/partner-information`}>
-            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+          <ButtonLink id="back-button" variant="alternative" to={`/apply/${id}/partner-information`}>
             {t('apply:personal-information.back')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button">
+          <Button id="continue-button" variant="primary">
             {t('apply:personal-information.continue')}
-            <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
           </Button>
         </div>
       </Form>
