@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
-import { Form, MetaFunction, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, useActionData, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,6 +17,7 @@ import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -27,9 +28,9 @@ export const handle = {
   pageTitleI18nKey: 'apply:communication-preference.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  return getTitleMetaTags(t('gcweb:meta.title.template', { title: t('apply:communication-preference.page-title') }));
+export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
+  if (!data) return [];
+  return getTitleMetaTags(data.meta.title);
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -46,7 +47,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     throw new Response('Expected communication method email not found!', { status: 500 });
   }
 
-  return json({ communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, id, state: state.communicationPreferences });
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:communication-preference.page-title') }) };
+
+  return json({ communicationMethodEmail, id, meta, preferredCommunicationMethods, preferredLanguages, state: state.communicationPreferences });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

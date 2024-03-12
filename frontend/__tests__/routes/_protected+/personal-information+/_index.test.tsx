@@ -51,6 +51,10 @@ vi.mock('~/utils/env.server', () => ({
   featureEnabled: vi.fn().mockReturnValue(true),
 }));
 
+vi.mock('~/utils/locale-utils.server', () => ({
+  getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+}));
+
 describe('_gcweb-app.personal-information._index', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -87,29 +91,6 @@ describe('_gcweb-app.personal-information._index', () => {
       const data = await response.json();
 
       expect(data).toEqual({
-        user: {
-          firstName: 'John',
-          homeAddress: '123 Home Street',
-          lastName: 'Maverick',
-          mailingAddress: '123 Mailing Street',
-          phoneNumber: '(555) 555-5555',
-          preferredLanguage: 'fr',
-        },
-        preferredLanguage: { id: 'fr', nameEn: 'French', nameFr: 'Français' },
-        homeAddressInfo: {
-          address: 'address',
-          city: 'mega-city',
-          province: 'mega province',
-          postalCode: 'postal code',
-          country: 'super country',
-        },
-        mailingAddressInfo: {
-          address: 'address',
-          city: 'mega-city',
-          province: 'mega province',
-          postalCode: 'postal code',
-          country: 'super country',
-        },
         countryList: [
           {
             code: 'SUP',
@@ -117,6 +98,26 @@ describe('_gcweb-app.personal-information._index', () => {
             nameFr: '(FR) super country',
           },
         ],
+        homeAddressInfo: {
+          address: 'address',
+          city: 'mega-city',
+          country: 'super country',
+          postalCode: 'postal code',
+          province: 'mega province',
+        },
+        mailingAddressInfo: {
+          address: 'address',
+          city: 'mega-city',
+          country: 'super country',
+          postalCode: 'postal code',
+          province: 'mega province',
+        },
+        meta: {},
+        preferredLanguage: {
+          id: 'fr',
+          nameEn: 'French',
+          nameFr: 'Français',
+        },
         regionList: [
           {
             code: 'SP',
@@ -129,6 +130,14 @@ describe('_gcweb-app.personal-information._index', () => {
             nameFr: '(FR) sample',
           },
         ],
+        user: {
+          firstName: 'John',
+          homeAddress: '123 Home Street',
+          lastName: 'Maverick',
+          mailingAddress: '123 Mailing Street',
+          phoneNumber: '(555) 555-5555',
+          preferredLanguage: 'fr',
+        },
       });
     });
   });

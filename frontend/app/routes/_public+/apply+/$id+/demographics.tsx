@@ -1,6 +1,6 @@
 import { json, redirect } from '@remix-run/node';
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, MetaFunction, useLoaderData } from '@remix-run/react';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { Form, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, ButtonLink } from '~/components/buttons';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -18,16 +19,19 @@ export const handle = {
   pageTitleI18nKey: 'apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.page-title',
 };
 
-export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  return getTitleMetaTags(t('gcweb:meta.title.template', { title: t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.page-title') }));
+export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
+  if (!data) return [];
+  return getTitleMetaTags(data.meta.title);
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
 
-  return json({ id, state });
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.page-title') }) };
+
+  return json({ id, meta, state });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

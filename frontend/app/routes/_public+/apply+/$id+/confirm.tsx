@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 
-import type { LoaderFunctionArgs } from '@remix-run/node';
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { MetaFunction, useLoaderData } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -22,9 +23,9 @@ export const handle = {
   pageTitleI18nKey: 'apply:confirm.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  return getTitleMetaTags(t('gcweb:meta.title.template', { title: t('apply:confirm.page-title') }));
+export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
+  if (!data) return [];
+  return getTitleMetaTags(data.meta.title);
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -76,7 +77,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     public: [{ id: 'benefit-id', benefitEn: 'Dental and Optcial Assistance for Senioirs (65+)', benefitFR: '(FR) Dental and Optcial Assistance for Senioirs (65+)' }],
   };
 
-  return json({ userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance });
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:confirm.page-title') }) };
+
+  return json({ dentalInsurance, homeAddressInfo, mailingAddressInfo, meta, preferredLanguage, spouseInfo, userInfo });
 }
 
 export default function ApplyFlowConfirm() {

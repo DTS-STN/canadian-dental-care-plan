@@ -61,6 +61,10 @@ vi.mock('~/services/user-service.server', () => ({
   }),
 }));
 
+vi.mock('~/utils/locale-utils.server', () => ({
+  getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+}));
+
 describe('_gcweb-app.personal-information.home-address.confirm', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -88,8 +92,6 @@ describe('_gcweb-app.personal-information.home-address.confirm', () => {
       const data = await response.json();
 
       expect(data).toEqual({
-        homeAddressInfo: { address: '111 Fake Home St', city: 'city', country: 'country' },
-        newHomeAddress: { address: '123 Fake Home St.', city: 'city', country: 'country' },
         countryList: [
           {
             code: 'SUP',
@@ -97,6 +99,17 @@ describe('_gcweb-app.personal-information.home-address.confirm', () => {
             nameFr: '(FR) super country',
           },
         ],
+        homeAddressInfo: {
+          address: '111 Fake Home St',
+          city: 'city',
+          country: 'country',
+        },
+        meta: {},
+        newHomeAddress: {
+          address: '123 Fake Home St.',
+          city: 'city',
+          country: 'country',
+        },
         regionList: [
           {
             code: 'SP',
@@ -109,8 +122,12 @@ describe('_gcweb-app.personal-information.home-address.confirm', () => {
             nameFr: '(FR) sample',
           },
         ],
+        suggestedAddress: {
+          address: '123 Fake Suggested St.',
+          city: 'city',
+          country: 'country',
+        },
         useSuggestedAddress: true,
-        suggestedAddress: { address: '123 Fake Suggested St.', city: 'city', country: 'country' },
       });
     });
   });

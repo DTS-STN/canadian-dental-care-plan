@@ -53,6 +53,10 @@ vi.mock('~/utils/env.server', () => ({
   }),
 }));
 
+vi.mock('~/utils/locale-utils.server', () => ({
+  getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+}));
+
 describe('_public.apply.id.communication-preference', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -74,18 +78,8 @@ describe('_public.apply.id.communication-preference', () => {
           nameEn: 'Email',
           nameFr: 'Adresse courriel',
         },
-        preferredLanguages: [
-          {
-            id: 'en',
-            nameEn: 'English',
-            nameFr: 'Anglais',
-          },
-          {
-            id: 'fr',
-            nameEn: 'French',
-            nameFr: 'Français',
-          },
-        ],
+        id: '123',
+        meta: {},
         preferredCommunicationMethods: [
           {
             id: 'email',
@@ -98,7 +92,18 @@ describe('_public.apply.id.communication-preference', () => {
             nameFr: 'Courrier postal',
           },
         ],
-        id: '123',
+        preferredLanguages: [
+          {
+            id: 'en',
+            nameEn: 'English',
+            nameFr: 'Anglais',
+          },
+          {
+            id: 'fr',
+            nameEn: 'French',
+            nameFr: 'Français',
+          },
+        ],
       });
     });
   });

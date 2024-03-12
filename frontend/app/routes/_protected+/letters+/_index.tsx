@@ -1,8 +1,8 @@
 import type { ChangeEvent } from 'react';
 
 import { json } from '@remix-run/node';
-import type { LoaderFunctionArgs } from '@remix-run/node';
-import { MetaFunction, useLoaderData, useSearchParams } from '@remix-run/react';
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { useLoaderData, useSearchParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -14,6 +14,7 @@ import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -25,9 +26,9 @@ export const handle = {
   pageTitleI18nKey: 'letters:index.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  return getTitleMetaTags(t('gcweb:meta.title.template', { title: t('letters:index.page-title') }));
+export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
+  if (!data) return [];
+  return getTitleMetaTags(data.meta.title);
 });
 
 const orderEnumSchema = z.enum(['asc', 'desc']);
@@ -52,7 +53,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const letters = await interopService.getLetterInfoByClientId(userId, 'clientId', sortOrder); // TODO where and what is clientId?
   const letterTypes = (await interopService.getAllLetterTypes()).filter(({ code }) => letters.some(({ name }) => name === code));
-  return json({ letters, letterTypes, sortOrder });
+
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const meta = { title: t('gcweb:meta.title.template', { title: t('letters:index.page-title') }) };
+
+  return json({ letters, letterTypes, meta, sortOrder });
 }
 
 export default function LettersIndex() {

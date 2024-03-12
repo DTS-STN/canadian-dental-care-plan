@@ -1,6 +1,6 @@
 import { json, redirect } from '@remix-run/node';
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, MetaFunction, useLoaderData } from '@remix-run/react';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { Form, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
@@ -11,6 +11,7 @@ import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -26,9 +27,9 @@ export const handle = {
   pageTitleI18nKey: 'personal-information:preferred-language.confirm.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  return getTitleMetaTags(t('gcweb:meta.title.template', { title: t('personal-information:preferred-language.confirm.page-title') }));
+export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
+  if (!data) return [];
+  return getTitleMetaTags(data.meta.title);
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -48,7 +49,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (!session.has('newPreferredLanguage')) return redirect('/');
 
   const preferredLanguage = await getLookupService().getPreferredLanguage(session.get('newPreferredLanguage'));
-  return json({ userInfo, preferredLanguage });
+
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:preferred-language.confirm.page-title') }) };
+
+  return json({ meta, preferredLanguage, userInfo });
 }
 
 export async function action({ request }: ActionFunctionArgs) {

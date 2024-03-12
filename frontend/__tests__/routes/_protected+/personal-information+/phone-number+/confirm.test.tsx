@@ -31,6 +31,10 @@ vi.mock('~/services/user-service.server', () => ({
   }),
 }));
 
+vi.mock('~/utils/locale-utils.server', () => ({
+  getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+}));
+
 describe('_gcweb-app.personal-information.phone-number.confirm', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -56,6 +60,7 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
       const data = await response.json();
 
       expect(data).toEqual({
+        meta: {},
         userInfo: { id: 'some-id', phoneNumber: '(111) 222-3333' },
         newPhoneNumber: '(444) 555-6666',
       });
