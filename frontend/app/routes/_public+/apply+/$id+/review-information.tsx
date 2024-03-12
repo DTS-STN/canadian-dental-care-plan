@@ -265,7 +265,7 @@ export default function ReviewInformation() {
       <div className="flex flex-wrap items-center gap-3">
         <ButtonLink to={`/apply/${id}/exit-application`} variant="alternative">
           {t('apply:review-information.exit-button')}
-          <FontAwesomeIcon icon={faX} className="h-3 w-3 pl-2" />
+          <FontAwesomeIcon icon={faX} className="ms-3 block size-4" />
         </ButtonLink>
         <Form method="post">
           <Button id="confirm-button" variant="green">
