@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import { json, redirect } from '@remix-run/node';
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { Form, MetaFunction, useActionData, useLoaderData } from '@remix-run/react';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { Form, useActionData, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -46,7 +46,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   if (!otherEquityCode) {
     throw new Response(`Unexpected 'Other' equity type: ${OTHER_EQUITY_TYPE_ID}`, { status: 500 });
   }
-  return json({ id, state, bornTypes, meta, disabilityTypes });
+  return json({ id, bornTypes, meta, disabilityTypes, otherEquityCode, equityTypes, state: state.demographicsPart1 });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -83,10 +83,6 @@ export default function DemographicsPart1() {
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
 
-  function otherEquityHandler() {
-    setOtherEquityChecked(!otherEquityChecked);
-  }
-
   /**
    * Gets an error message based on the provided internationalization (i18n) key.
    *
@@ -120,6 +116,7 @@ export default function DemographicsPart1() {
     .map((equityType) => ({
       children: getNameByLanguage(i18n.language, equityType),
       value: equityType.id,
+      id: equityType.id,
     }));
 
   const options: InputCheckboxesProps['options'] = [
@@ -133,7 +130,7 @@ export default function DemographicsPart1() {
           <InputField id="otherEquity" type="text" className="w-full" label={t('apply:demographics-oral-health-questions.part1.question3-other-specify')} name="otherEquityFieldName" defaultValue={state?.otherEquity} />
         </div>
       ),
-      onClick: otherEquityHandler,
+      onClick: () => setOtherEquityChecked(!otherEquityChecked),
     },
   ];
 
@@ -157,7 +154,7 @@ export default function DemographicsPart1() {
             />
           </div>
         )}
-        {equityTypes.length > 0 && <InputCheckboxes id="equity" legend={t('demographics-oral-health-questions.part1.question3')} name="equity" errorMessage={errorMessages.equity} options={options} required></InputCheckboxes>}
+        {equityTypes.length > 0 && <InputCheckboxes id="equity" legend={t('demographics-oral-health-questions.part1.question3')} name="equity" errorMessage={errorMessages.equity} options={options} required />}
         {disabilityTypes.length > 0 && (
           <div className="my-6">
             <InputRadios
