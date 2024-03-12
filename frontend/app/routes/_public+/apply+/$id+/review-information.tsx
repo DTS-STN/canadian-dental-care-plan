@@ -264,7 +264,8 @@ export default function ReviewInformation() {
       <p className="mb-4">{t('apply:review-information.submit-p-false-info')}</p>
       <div className="flex flex-wrap items-center gap-3">
         <ButtonLink to={`/apply/${id}/exit-application`} variant="alternative">
-          <span className="font-semibold">{t('apply:review-information.exit-button')}</span> <FontAwesomeIcon icon={faX} className="h-3 w-3 pl-2" />
+          {t('apply:review-information.exit-button')}
+          <FontAwesomeIcon icon={faX} className="h-3 w-3 pl-2" />
         </ButtonLink>
         <Form method="post">
           <Button id="confirm-button" variant="green">
