@@ -44,9 +44,9 @@ export default function ApplyFlowFileYourTaxes() {
         <Trans ns={handle.i18nNamespaces} i18nKey="apply:eligibility.dob-eligibility.eligibility-info" components={{ eligibilityInfo }} />
       </p>
       <div className="flex flex-wrap items-center gap-3">
-        <ButtonLink type="button" variant="alternative" to={`/apply/${id}/date-of-birth`}>
+        <ButtonLink type="button" to={`/apply/${id}/date-of-birth`}>
+          <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:eligibility.dob-eligibility.back-btn')}
-          <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
         </ButtonLink>
         <ButtonLink type="submit" variant="primary" to="/" onClick={() => sessionStorage.removeItem('flow.state')}>
           {t('apply:eligibility.dob-eligibility.return-btn')}

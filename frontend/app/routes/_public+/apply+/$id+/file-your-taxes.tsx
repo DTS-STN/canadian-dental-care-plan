@@ -48,9 +48,9 @@ export default function ApplyFlowFileYourTaxes() {
       <p className="mb-6">{t('apply:eligibility.file-your-taxes.apply-after')}</p>
 
       <div className="flex flex-wrap items-center gap-3">
-        <ButtonLink type="button" variant="alternative" to={`/apply/${id}/tax-filing`}>
+        <ButtonLink type="button" to={`/apply/${id}/tax-filing`}>
+          <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:eligibility.file-your-taxes.back-btn')}
-          <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
         </ButtonLink>
         <ButtonLink type="submit" variant="primary" to="/" onClick={() => sessionStorage.removeItem('flow.state')}>
           {t('apply:eligibility.file-your-taxes.return-btn')}

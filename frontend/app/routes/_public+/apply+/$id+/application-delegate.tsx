@@ -48,9 +48,9 @@ export default function ApplyFlowApplicationDelegate() {
         <Trans ns={handle.i18nNamespaces} i18nKey="apply:eligibility.application-delegate.prepare-to-apply" components={{ preparingToApply }} />
       </p>
       <div className="flex flex-wrap items-center gap-3">
-        <ButtonLink type="button" variant="alternative" to={`/apply/${id}/type-of-application`}>
+        <ButtonLink type="button" to={`/apply/${id}/type-of-application`}>
+          <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:eligibility.application-delegate.back-btn')}
-          <FontAwesomeIcon icon={faChevronLeft} className="pl-2" />
         </ButtonLink>
         <ButtonLink type="submit" variant="primary" to="/" onClick={() => sessionStorage.removeItem('flow.state')}>
           {t('apply:eligibility.application-delegate.return-btn')}
