@@ -14,6 +14,7 @@ import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
+import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -30,14 +31,15 @@ export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
+  const { COUNTRY_CODE_CANADA } = getEnv();
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
   const federalDentalBenefits = await getLookupService().getAllFederalDentalBenefit();
   const provincialTerritorialDentalBenefits = await getLookupService().getAllProvincialTerritorialDentalBenefits();
   const federalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
   const provincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
-  const regions = await getLookupService().getAllRegions();
-
+  const allRegions = await getLookupService().getAllRegions();
+  const regions = allRegions.filter((region) => region.countryId === COUNTRY_CODE_CANADA);
   return json({ id, state, federalDentalBenefits, provincialTerritorialDentalBenefits, federalSocialPrograms, provincialTerritorialSocialPrograms, regions });
 }
 
@@ -65,17 +67,18 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function AccessToDentalInsuranceQuestion() {
-  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, state } = useLoaderData<typeof loader>();
+  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, state, id } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const [federalBenefitChecked, setFederalBenefitChecked] = useState(state.dentalBenefit?.federalBenefit ?? '');
   const [provincialTerritorialBenefitChecked, setProvincialTerritorialBenefitChecked] = useState(state.dentalBenefit?.provincialTerritorialBenefit ?? '');
-  const [selectedRegion, setSelectedRegion] = useState(state.dentalBenefit?.provincialTerritorialSocialProgram ?? 'AB');
 
   const sortedRegions = regions.sort((a, b) => {
     const nameA = i18n.language === 'en' ? a.nameEn : a.nameFr;
     const nameB = i18n.language === 'en' ? b.nameEn : b.nameFr;
     return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
   });
+
+  const [selectedRegion, setSelectedRegion] = useState(state.dentalBenefit?.provincialTerritorialSocialProgram ?? sortedRegions[0].provinceTerritoryStateId);
 
   return (
     <Form method="post">
@@ -134,14 +137,12 @@ export default function AccessToDentalInsuranceQuestion() {
                       defaultValue={state.dentalBenefit?.provincialTerritorialBenefit}
                       required
                       onChange={(e) => setSelectedRegion(e.target.value)}
-                      options={sortedRegions
-                        .filter((region) => region.countryId === 'CAN')
-                        .map((region) => ({
-                          key: region.provinceTerritoryStateId,
-                          id: region.provinceTerritoryStateId,
-                          value: region.provinceTerritoryStateId,
-                          children: i18n.language === 'en' ? region.nameEn : region.nameFr,
-                        }))}
+                      options={sortedRegions.map((region) => ({
+                        key: region.provinceTerritoryStateId,
+                        id: region.provinceTerritoryStateId,
+                        value: region.provinceTerritoryStateId,
+                        children: i18n.language === 'en' ? region.nameEn : region.nameFr,
+                      }))}
                     />
                     <InputRadios
                       id="provincial-territorial-social-programs"
@@ -163,7 +164,7 @@ export default function AccessToDentalInsuranceQuestion() {
         )}
       </section>
       <div className="flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to="/apply">
+        <ButtonLink to={`/apply/${id}/dental-insurance`}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('dental-benefits.button.back')}
         </ButtonLink>
