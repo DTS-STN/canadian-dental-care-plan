@@ -14,6 +14,13 @@
       "esdc_nameenglish": "United States of America",
       "esdc_namefrench": "États-Unis d'Amérique,",
       "esdc_countrycodealpha3": "USA"
+    },
+    {
+      "@odata.etag": "W/\"1398949801\"",
+      "esdc_countryid": "aef6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Mexico",
+      "esdc_namefrench": "Mexique",
+      "esdc_countrycodealpha3": "MEX"
     }
   ]
 }

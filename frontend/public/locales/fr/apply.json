@@ -26,12 +26,12 @@
     "back": "Retour",
     "continue": "Continuer",
     "error-message": {
-      "empty-method": "(FR) Preferred method of communication must be selected",
-      "empty-language": "(FR) Preferred offical language must be selected",
-      "empty-email": "(FR) Email must be provided",
-      "empty-confirm-email": "(FR) Confirm email must be provided",
-      "invalid-email": "(FR) Invalid email address",
-      "not-the-same": "(FR) Confirm email is not the same as the entered email"
+      "empty-method": "Le mode de communication doit être sélectionné",
+      "empty-language": "Le language doit être sélectionné",
+      "empty-email": "L'adresse courriel doit être fournie",
+      "empty-confirm-email": "La confirmation de l'adresse courriel doit être fournie",
+      "invalid-email": "Adresse courriel invalide",
+      "not-the-same": "Les adresses courriel sont différentes"
     }
   },
   "confirm": {
@@ -278,7 +278,7 @@
     },
     "home-address": {
       "header": "Adresse du domicile",
-      "use-mailing-address": "(FR) My mailing address is the same as my home address"
+      "use-mailing-address": "L'adresse postale est identique à l'adresse à la maison"
     },
     "address-field": {
       "address": "Adresse",
@@ -293,14 +293,14 @@
     "back": "Retour",
     "continue": "Continuer",
     "error-message": {
-      "invalid-phone": "(FR) Invalid phone number",
-      "empty-address": "(FR) Address must be provided",
-      "empty-country": "(FR) Country must be selected",
-      "empty-province": "(FR) Province must be selected",
-      "empty-city": "(FR) City must be provided",
-      "empty-postal-code": "Postal code or Zip code must be provided",
-      "invalid-postal-code": "(FR) Invalid postal code (A1A 1A1)",
-      "invalid-zip-code": "(FR) Invalid zip code (12345)"
+      "invalid-phone": "Numéro de téléphone invalide",
+      "empty-address": "Une adresse doit être fournie",
+      "empty-country": "Un pays doit être sélectionné",
+      "empty-province": "Une province doit être sélectionnée",
+      "empty-city": "Une ville doit être fournie",
+      "empty-postal-code": "Le code postal ou le code zip doit être fourni",
+      "invalid-postal-code": "Code postal invalide (A1A 1A1)",
+      "invalid-zip-code": "Code zip invalide (12345)"
     }
   },
   "review-information": {
