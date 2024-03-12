@@ -48,9 +48,9 @@ export default function ApplyFlowTaxFiling() {
       <p>{t('apply:exit-application.click-back')}</p>
       <div className="flex flex-wrap items-center gap-3">
         <Form method="post" noValidate>
-          <ButtonLink variant="alternative" id="back-button" to={`/apply/${id}/review-information`}>
-            {t('apply:exit-application.back-btn')}
+          <ButtonLink id="back-button" to={`/apply/${id}/review-information`}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+            {t('apply:exit-application.back-btn')}
           </ButtonLink>
           <Button variant="primary">{t('apply:exit-application.exit-btn')}</Button>
         </Form>
