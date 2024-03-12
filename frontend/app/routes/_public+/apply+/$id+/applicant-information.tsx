@@ -67,11 +67,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
   if (['MARRIED', 'COMMONLAW'].includes(parsedDataResult.data.maritalStatus)) {
     return redirect(`/apply/${id}/partner-information`, sessionResponseInit);
   }
-  return redirect(`/apply/${id}/contact-information`, sessionResponseInit);
+  return redirect(`/apply/${id}/personal-information`, sessionResponseInit);
 }
 
 export default function ApplyFlowApplicationInformation() {
-  const { state, maritalStatuses } = useLoaderData<typeof loader>();
+  const { id, state, maritalStatuses } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
 
@@ -151,7 +151,7 @@ export default function ApplyFlowApplicationInformation() {
           errorMessage={errorMessages.maritalStatus}
         />
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to="/apply">
+          <ButtonLink id="back-button" to={`/apply/${id}/date-of-birth`}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('applicant-information.back-btn')}
           </ButtonLink>

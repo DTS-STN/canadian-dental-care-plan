@@ -44,7 +44,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const countryList = await getLookupService().getAllCountries();
   const regionList = await getLookupService().getAllRegions();
 
-  return json({ id, state: state.personalInformation, countryList, regionList, COUNTRY_CODE_CANADA, COUNTRY_CODE_USA });
+  return json({ id, state: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, COUNTRY_CODE_CANADA, COUNTRY_CODE_USA });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -184,7 +184,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ApplyFlowPersonalInformation() {
-  const { id, state, countryList, regionList, COUNTRY_CODE_CANADA, COUNTRY_CODE_USA } = useLoaderData<typeof loader>();
+  const { id, state, countryList, maritalStatus, regionList, COUNTRY_CODE_CANADA, COUNTRY_CODE_USA } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(state?.mailingCountry);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<RegionInfo[]>([]);
@@ -420,7 +420,7 @@ export default function ApplyFlowPersonalInformation() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/partner-information`}>
+          <ButtonLink id="back-button" to={['MARRIED', 'COMMONLAW'].includes(maritalStatus ?? '') ? `/apply/${id}/partner-information` : `/apply/${id}/applicant-information`}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:personal-information.back')}
           </ButtonLink>
