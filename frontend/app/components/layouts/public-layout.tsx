@@ -1,4 +1,4 @@
-import type { ComponentProps, PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -19,13 +19,17 @@ export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
  * see: https://wet-boew.github.io/GCWeb/templates/application/application-docs-en.html
  */
 export function PublicLayout({ children }: PropsWithChildren) {
+  const { t } = useTranslation(i18nNamespaces);
   return (
     <>
       <SkipNavigationLinks />
       <PageHeader />
       <PageBreadcrumbs />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
-        <AppPageTitle />
+        <div className="my-8 border-b border-red-800">
+          <h2 className="font-lato text-lg text-stone-500 sm:text-xl">{t('gcweb:header.application-title')}</h2>
+          <AppPageTitle />
+        </div>
         <div>{children}</div>
         <PageDetails />
       </main>
@@ -34,10 +38,10 @@ export function PublicLayout({ children }: PropsWithChildren) {
   );
 }
 
-function AppPageTitle(props: Omit<ComponentProps<typeof PageTitle>, 'children'>) {
+function AppPageTitle() {
   const { t } = useTranslation(useI18nNamespaces());
   const pageTitleI18nKey = usePageTitleI18nKey();
-  return pageTitleI18nKey && <PageTitle {...props}>{t(pageTitleI18nKey)}</PageTitle>;
+  return pageTitleI18nKey && <PageTitle>{t(pageTitleI18nKey)}</PageTitle>;
 }
 
 function PageHeader() {
@@ -52,6 +56,7 @@ function PageBreadcrumbs() {
   const { t } = useTranslation([...i18nNamespaces, ...useI18nNamespaces()]);
   return (
     <Breadcrumbs
+      className="my-4"
       items={[
         { content: t('gcweb:breadcrumbs.canada-ca'), to: t('gcweb:breadcrumbs.canada-ca-url') },
         { content: t('gcweb:breadcrumbs.benefits'), to: t('gcweb:breadcrumbs.benefits-url') },
