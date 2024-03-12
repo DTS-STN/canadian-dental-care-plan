@@ -596,21 +596,19 @@ function createLookupService() {
     const url = `${INTEROP_API_BASE_URI}/lookups/equity-types/`;
     const response = await fetch(url);
 
-    const equityTypeSchemaList = z.array(equityTypeSchema);
-
-    if (response.ok) {
-      return equityTypeSchemaList.parse(await response.json());
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed to fetch data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    log.error('%j', {
-      message: 'Failed to fetch data',
-      status: response.status,
-      statusText: response.statusText,
-      url: url,
-      responseBody: await response.text(),
-    });
-
-    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    const equityTypeSchemaList = z.array(equityTypeSchema);
+    return equityTypeSchemaList.parse(await response.json());
   }
 
   return {
@@ -632,5 +630,8 @@ function createLookupService() {
     getAllTaxFilingIndications: moize(getAllTaxFilingIndications, { maxAge: LOOKUP_SVC_TAXFILINGINDICATIONS_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllTaxFilingIndications memo') }),
     getAllGenderTypes: moize(getAllGenderTypes, { maxAge: LOOKUP_SVC_GENDERTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllGenderTypes memo') }),
     getAllApplicationTypes: moize(getAllApplicationTypes, { maxAge: LOOKUP_SVC_APPLICATIONTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllApplicationTypes memo') }),
+    getAllEquityTypes: moize(getAllEquityTypes, { maxAge: LOOKUP_SVC_ALLEQUITYTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllEquityTypes memo') }),
+    getAllProvincialTerritorialDentalBenefits: moize(getAllProvincialTerritorialDentalBenefits, { maxAge: LOOKUP_SVC_PROVINCIAL_TERRITORIAL_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllApplicationTypes memo') }),
+    getAllProvincialTerritorialSocialPrograms: moize(getAllProvincialTerritorialSocialPrograms, { maxAge: LOOKUP_SVC_PROVINCIAL_TERRITORIAL_SOCIALPROGRAMS_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllApplicationTypes memo') }),
   };
 }

@@ -11,8 +11,9 @@ import { z } from 'zod';
 
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { InputCheckboxes, InputCheckboxesProps } from '~/components/input-checkboxes';
 import { InputField } from '~/components/input-field';
-import { InputRadios, InputRadiosProps } from '~/components/input-radios';
+import { InputRadios } from '~/components/input-radios';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
@@ -53,10 +54,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { id } = await applyFlow.loadState({ request, params });
 
   const formSchema = z.object({
-    bornType: z.string({ required_error: 'empty-radio' }),
-    equity: z.string({ required_error: 'empty-radio' }),
     otherEquity: z.string().min(1, { message: 'empty-field' }).optional(),
-    disabilityType: z.string({ required_error: 'empty-radio' }),
   });
 
   const formData = Object.fromEntries(await request.formData());
@@ -81,16 +79,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function DemographicsPart1() {
   const { bornTypes, disabilityTypes, otherEquityCode, equityTypes, state } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const [otherEquityChecked, setOtherEquityChecked] = useState(state?.equity === otherEquityCode.id);
+  const [otherEquityChecked, setOtherEquityChecked] = useState(state?.otherEquity === otherEquityCode.id);
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
 
   function otherEquityHandler() {
-    setOtherEquityChecked(true);
-  }
-
-  function nonOtherEquityHandler() {
-    setOtherEquityChecked(false);
+    setOtherEquityChecked(!otherEquityChecked);
   }
 
   /**
@@ -111,9 +105,7 @@ export default function DemographicsPart1() {
   }
 
   const errorMessages = {
-    bornType: getErrorMessage(actionData?.errors.bornType?._errors[0]),
-    equity: getErrorMessage(actionData?.errors.equity?._errors[0]),
-    disabilityType: getErrorMessage(actionData?.errors.disabilityType?._errors[0]),
+    equity: getErrorMessage(actionData?.errors.otherEquity?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -123,24 +115,22 @@ export default function DemographicsPart1() {
     }
   }, [actionData]);
 
-  const nonOtherEquityTypeOptions: InputRadiosProps['options'] = equityTypes
+  const nonOtherEquityTypeOptions: InputCheckboxesProps['options'] = equityTypes
     .filter((equityType) => equityType.id !== otherEquityCode.id)
     .map((equityType) => ({
       children: getNameByLanguage(i18n.language, equityType),
       value: equityType.id,
-      //defaultChecked: state && state.equity !== otherEquityCode.id,
-      onClick: nonOtherEquityHandler,
     }));
 
-  const options: InputRadiosProps['options'] = [
+  const options: InputCheckboxesProps['options'] = [
     ...nonOtherEquityTypeOptions,
     {
       children: getNameByLanguage(i18n.language, otherEquityCode),
       value: otherEquityCode.id,
-      defaultChecked: state?.equity === otherEquityCode.id,
+      defaultChecked: state?.otherEquity === otherEquityCode.id,
       append: otherEquityChecked && (
         <div className="mb-4 grid max-w-prose gap-6 md:grid-cols-2 ">
-          <InputField id="otherEquity" type="text" className="w-full" label={t('demographics-oral-health-questions:part1.question3-other-specify')} name="otherEquityFieldName" defaultValue={state?.otherEquity} />
+          <InputField id="otherEquity" type="text" className="w-full" label={t('apply:demographics-oral-health-questions.part1.question3-other-specify')} name="otherEquityFieldName" defaultValue={state?.otherEquity} />
         </div>
       ),
       onClick: otherEquityHandler,
@@ -149,6 +139,7 @@ export default function DemographicsPart1() {
 
   return (
     <>
+      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <p className="mb-6">{t('apply:demographics-oral-health-questions.part1.paragraph1')}</p>
       <p className="mb-6">{t('apply:demographics-oral-health-questions.part1.paragraph2')}</p>
       <Form method="post">
@@ -166,7 +157,7 @@ export default function DemographicsPart1() {
             />
           </div>
         )}
-        {equityTypes.length > 0 && <InputRadios id="equity" legend={t('demographics-oral-health-questions:part1.question3')} name="equity" errorMessage={errorMessages.equity} options={options} required></InputRadios>}
+        {equityTypes.length > 0 && <InputCheckboxes id="equity" legend={t('demographics-oral-health-questions.part1.question3')} name="equity" errorMessage={errorMessages.equity} options={options} required></InputCheckboxes>}
         {disabilityTypes.length > 0 && (
           <div className="my-6">
             <InputRadios

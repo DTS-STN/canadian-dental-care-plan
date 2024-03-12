@@ -87,10 +87,7 @@ const communicationPreferencesStateSchema = z.object({
  * Schema for demographic reference.
  */
 const demographicsPart1StateSchema = z.object({
-  bornType: z.string().min(1),
-  equity: z.string().min(1),
   otherEquity: z.string().min(1).optional(),
-  disabilityType: z.string().min(1),
 });
 
 /**
