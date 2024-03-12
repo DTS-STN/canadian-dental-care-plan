@@ -308,7 +308,7 @@ regionsJson.value.forEach((region) =>
 );
 
 // seed federal social program list
-federalProgramsJson.value.forEach((program) => 
+federalProgramsJson.value.forEach((program) =>
   db.federalSocialProgram.create({
     code: program.esdc_code,
     nameEn: program.esdc_nameenglish,
@@ -317,7 +317,7 @@ federalProgramsJson.value.forEach((program) =>
 );
 
 // seed provincial and territorial program list
-provincialProgramsJson.value.forEach((program) => 
+provincialProgramsJson.value.forEach((program) =>
   db.provincialTerritorialSocialProgram.create({
     code: program.esdc_code,
     provinceTerritoryStateId: program._esdc_provinceterritorystateid_value,
