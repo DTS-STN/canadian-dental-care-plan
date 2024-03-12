@@ -23,6 +23,9 @@
     "preferred-language": "What is your preferred official language of communication?",
     "email": "Email address",
     "confirm-email": "Confirm email address",
+    "future-email-note": "Add your email to receive future communication from Service Canada and Health Canada for the purpose of the Canadian Dental Care Plan.",
+    "future-email": "Email address(optional)",
+    "future-confirm-email": "Confirm email address(optional)",
     "back": "Back",
     "continue": "Continue",
     "error-message": {

@@ -75,10 +75,12 @@ const partnerInformationSchema = z.object({
  * Schema for communication reference.
  */
 const communicationPreferencesStateSchema = z.object({
+  preferredLanguage: z.string().min(1),
   preferredMethod: z.string().min(1),
   email: z.string().min(1).optional(),
   confirmEmail: z.string().min(1).optional(),
-  preferredLanguage: z.string().min(1),
+  emailForFuture: z.string().optional(),
+  confirmEmailForFuture: z.string().optional(),
 });
 
 /**
