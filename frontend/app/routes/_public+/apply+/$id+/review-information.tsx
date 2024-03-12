@@ -262,12 +262,12 @@ export default function ReviewInformation() {
       <h2 className="mb-5 mt-8 text-2xl font-semibold">{t('apply:review-information.submit-app-title')}</h2>
       <p className="mb-4">{t('apply:review-information.submit-p-proceed')}</p>
       <p className="mb-4">{t('apply:review-information.submit-p-false-info')}</p>
-      <div className="flex">
-        <ButtonLink to={`/apply/${id}/exit-application`} className="mr-4 rounded  border border-sky-900 bg-white">
+      <div className="flex flex-wrap items-center gap-3">
+        <ButtonLink to={`/apply/${id}/exit-application`} variant="alternative">
           <span className="font-semibold">{t('apply:review-information.exit-button')}</span> <FontAwesomeIcon icon={faX} className="h-3 w-3 pl-2" />
         </ButtonLink>
         <Form method="post">
-          <Button id="confirm-button" variant="green" className="font-semibold">
+          <Button id="confirm-button" variant="green">
             {t('apply:review-information.submit-button')}
           </Button>
         </Form>
