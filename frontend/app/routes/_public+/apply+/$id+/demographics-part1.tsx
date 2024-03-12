@@ -54,7 +54,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { id } = await applyFlow.loadState({ request, params });
 
   const formSchema = z.object({
-    otherEquity: z.string().min(1, { message: 'empty-field' }).optional(),
+    otherEquity: z.string().trim().min(1, { message: 'empty-field' }).optional(),
   });
 
   const formData = Object.fromEntries(await request.formData());
@@ -130,7 +130,7 @@ export default function DemographicsPart1() {
           <InputField id="otherEquity" type="text" className="w-full" label={t('apply:demographics-oral-health-questions.part1.question3-other-specify')} name="otherEquityFieldName" defaultValue={state?.otherEquity} />
         </div>
       ),
-      onClick: () => setOtherEquityChecked(!otherEquityChecked),
+      onClick: () => setOtherEquityChecked((checked) => !checked),
     },
   ];
 
