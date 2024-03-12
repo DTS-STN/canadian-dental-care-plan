@@ -304,6 +304,7 @@
     }
   },
   "review-information": {
+    "read-carefully": "Please review this information carefully. The information provided will be used by Sun Life to create your member account and will be reflected on your member card.",
     "page-title": "Review Information",
     "page-sub-title": "Applicant Information",
     "dob-title": "Date of birth",
@@ -315,21 +316,21 @@
     "martial-title": "Martial status",
     "martial-change": "Change martial status",
     "spouse-title": "Spouse / Commom-law information",
-    "contact-info-title": "Contact Information",
-    "phone-title": "Telephone number",
+    "personal-info-title": "Personal Information",
+    "phone-title": "Phone number",
     "phone-change": "Change phone number",
-    "alt-phone-title": "Alternate telephone number",
+    "alt-phone-title": "Alternate phone number",
     "alt-phone-change": "Change alternate phone number",
     "mailing-title": "Mailing address",
     "mailing-change": "Change mailing address",
     "home-title": "Home address",
     "home-change": "Change home address",
-    "comm-prefs-title": "Communication preferences",
+    "comm-title": "Communication",
     "comm-electronic": "Electronic",
     "comm-mail": "Postal mail",
     "comm-pref-title": "Communication preference",
     "comm-pref-change": "Change communication preference",
-    "lang-pref-title": "Language preferences",
+    "lang-pref-title": "Language preference",
     "lang-pref-change": "Change language preference",
     "dental-title": "Access to dental insurance",
     "dental-private-title": "Access to dental insurance",
@@ -339,11 +340,10 @@
     "dental-has-access": "Has access to the following:",
     "dental-has-no-access": "No access to dental benefits",
     "submit-app-title": "Submit your application",
-    "submit-p-one": "By submitting the application, you confirm that the information provided is accurate to the best of your knowledge.",
-    "submit-p-two": "Submitting false information for you and your family may result in you being removed from the plan and have to repay the full cost of care received through CDCP.",
-    "print-app-title": "Print application",
-    "submit-p-three": "Keep a record of your application so that you can refer back to it.",
-    "submit-button": "Submit Application"
+    "submit-p-proceed": "By proceeding with this application, you are agreeing to attest truthfully to the information provided.",
+    "submit-p-false-info": "Submitting false information for you and your family may result in you being removed from the plan and have to repay the full cost of care received through CDCP.",
+    "submit-button": "Submit Application",
+    "exit-button": "Exit application"
   },
   "terms-and-conditions": {
     "terms-and-conditions": {
@@ -400,5 +400,12 @@
         }
       }
     }
+  },
+  "exit-application": {
+    "page-title": "Exit Application",
+    "are-you-sure": "Are you sure you want to exit this application? If you click \"Exit\", the form will reset and your information will be lost.",
+    "click-back": "Click \"Back\" to return to the form.",
+    "back-btn": "Back",
+    "exit-btn": "Exit"
   }
 }

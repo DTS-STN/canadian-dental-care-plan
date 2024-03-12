@@ -4,11 +4,13 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Form, MetaFunction, useLoaderData } from '@remix-run/react';
 
+import { faX } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
 
 import { Address } from '~/components/address';
-import { Button } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -27,8 +29,11 @@ export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
   return getTitleMetaTags(t('gcweb:meta.title.template', { title: t('apply:review-information.page-title') }));
 });
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   //TODO: Get User/apply form information
+  const applyFlow = getApplyFlow();
+  const { id } = await applyFlow.loadState({ request, params });
+
   const userInfo = {
     firstName: 'John',
     id: '00000000-0000-0000-0000-000000000000',
@@ -75,7 +80,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     public: [{ id: 'benefit-id', benefitEn: 'Dental and Optical Assistance for Senioirs (65+)', benefitFR: '(FR) Dental and Optical Assistance for Senioirs (65+)' }],
   };
 
-  return json({ userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance });
+  return json({ id, userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -87,12 +92,21 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ReviewInformation() {
-  const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance } = useLoaderData<typeof loader>();
+  const { id, userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   return (
     <>
+      <p className="my-4 max-w-3xl text-lg">{t('apply:review-information.read-carefully')}</p>
       <h2 className="text-2xl font-semibold">{t('apply:review-information.page-sub-title')}</h2>
       <dl>
+        <DescriptionListItem term={t('apply:review-information.full-name-title')}>
+          {`${userInfo.firstName} ${userInfo.lastName}`}
+          <p className="mt-4">
+            <InlineLink id="change-full-name" to="/">
+              {t('apply:review-information.full-name-change')}
+            </InlineLink>
+          </p>
+        </DescriptionListItem>
         <DescriptionListItem term={t('apply:review-information.dob-title')}>
           {userInfo.birthday}
           <p className="mt-4">
@@ -109,14 +123,6 @@ export default function ReviewInformation() {
             </InlineLink>
           </p>
         </DescriptionListItem>
-        <DescriptionListItem term={t('apply:review-information.full-name-title')}>
-          {`${userInfo.firstName} ${userInfo.lastName}`}
-          <p className="mt-4">
-            <InlineLink id="change-full-name" to="/">
-              {t('apply:review-information.full-name-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
         <DescriptionListItem term={t('apply:review-information.martial-title')}>
           {userInfo.martialStatus}
           <p className="mt-4">
@@ -128,6 +134,14 @@ export default function ReviewInformation() {
       </dl>
       <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.spouse-title')}</h2>
       <dl>
+        <DescriptionListItem term={t('apply:review-information.full-name-title')}>
+          {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
+          <p className="mt-4">
+            <InlineLink id="change-spouse-full-name" to="/">
+              {t('apply:review-information.full-name-change')}
+            </InlineLink>
+          </p>
+        </DescriptionListItem>
         <DescriptionListItem term={t('apply:review-information.dob-title')}>
           {spouseInfo.birthday}
           <p className="mt-4">
@@ -144,19 +158,11 @@ export default function ReviewInformation() {
             </InlineLink>
           </p>
         </DescriptionListItem>
-        <DescriptionListItem term={t('apply:review-information.full-name-title')}>
-          {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
-          <p className="mt-4">
-            <InlineLink id="change-spouse-full-name" to="/">
-              {t('apply:review-information.full-name-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
         <DescriptionListItem term="Consent">
           {spouseInfo.consent ? 'My spouse or common-law partner is aware and has consented to sharing of their personal information.' : 'My spouse or common-law partner is aware and has not consented to sharing of their personal information.'}
         </DescriptionListItem>
       </dl>
-      <h2 className="mt-2 text-2xl font-semibold ">{t('apply:review-information.contact-info-title')}</h2>
+      <h2 className="mt-2 text-2xl font-semibold ">{t('apply:review-information.personal-info-title')}</h2>
       <dl className="sm: grid grid-cols-1 sm:grid-cols-2">
         <DescriptionListItem term={t('apply:review-information.phone-title')}>
           {userInfo.phoneNumber}
@@ -191,7 +197,7 @@ export default function ReviewInformation() {
           </p>
         </DescriptionListItem>
       </dl>
-      <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.comm-prefs-title')}</h2>
+      <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.comm-title')}</h2>
       <dl>
         <DescriptionListItem term={t('apply:review-information.comm-pref-title')}>
           {userInfo.communicationPreference === 'email' ? (
@@ -254,15 +260,18 @@ export default function ReviewInformation() {
         </DescriptionListItem>
       </dl>
       <h2 className="mb-5 mt-8 text-2xl font-semibold">{t('apply:review-information.submit-app-title')}</h2>
-      <p className="mb-4">{t('apply:review-information.submit-p-one')}</p>
-      <p className="mb-4">{t('apply:review-information.submit-p-two')}</p>
-      <h3 className="font-semibold">{t('apply:review-information.print-app-title')}</h3>
-      <p className="mb-4">{t('apply:review-information.submit-p-three')}</p>
-      <Form method="post">
-        <Button id="confirm-button" variant="green">
-          {t('apply:review-information.submit-button')}
-        </Button>
-      </Form>
+      <p className="mb-4">{t('apply:review-information.submit-p-proceed')}</p>
+      <p className="mb-4">{t('apply:review-information.submit-p-false-info')}</p>
+      <div className="flex">
+        <ButtonLink to={`/apply/${id}/exit-application`} className="mr-4 rounded  border border-sky-900 bg-white">
+          <span className="font-semibold">{t('apply:review-information.exit-button')}</span> <FontAwesomeIcon icon={faX} className="h-3 w-3 pl-2" />
+        </ButtonLink>
+        <Form method="post">
+          <Button id="confirm-button" variant="green" className="font-semibold">
+            {t('apply:review-information.submit-button')}
+          </Button>
+        </Form>
+      </div>
     </>
   );
 }
