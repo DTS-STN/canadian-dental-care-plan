@@ -150,8 +150,8 @@
     "title": "Access to other dental insurance",
     "legend": "Do you have access to dental insurance or coverage through one of the following four situations?",
     "list": {
-      "employment": "Your employment benefits or a family member’s employment benefits, including health and wellness account",
-      "pension": "Your pension benefits or a family member’s pension benefits",
+      "employment": "Your employment benefits or a family member's employment benefits, including health and wellness account",
+      "pension": "Your pension benefits or a family member's pension benefits",
       "purchased": "Purchased by you or a family member or through a group plan from an insurance or benefits company",
       "professional": "Through a professional or student organization"
     },
@@ -167,10 +167,10 @@
         "eligible": "Exception: You may still be eligible if you retired and:",
         "list": {
           "opted": "you opted out of pension benefits before December 11, 2023, and",
-          "cannot-opt": "you can’t opt back in under the pension rules"
+          "cannot-opt": "you can't opt back in under the pension rules"
         },
         "not-eligible": "You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your employer/pension (see exception) benefits or through a professional or student organization. As such, you are not eligible for the CDCP.",
-        "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own (and not as part of any of the coverage described above), you’re not eligible for the CDCP while that coverage is in effect."
+        "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own (and not as part of any of the coverage described above), you're not eligible for the CDCP while that coverage is in effect."
       }
     },
     "error-message": {
@@ -249,8 +249,132 @@
     }
   },
   "index": {
+    "application-phases": "Applications for the CDCP is opening in phases. <whenApplyCDCPLink>Find out when you can apply for the CDCP.</whenApplyCDCPLink>",
+    "apply-behalf": {
+      "delegate": {
+        "delegate-definition": "Delegates are individuals who have the legal authority to represent you and make decisions on your behalf.",
+        "delegate-requirements": "Before you apply for the CDCP, delegates must provide the powers of attorney, mandates or trusteeship documents that prove they have legal authority to represent you. Original documents or certified copies can be sent by mail or submitted in person at any Service Canada office.",
+        "delegates-on-document": "They can represent you if they're listed as your delegate on documents such as:",
+        "document-processing": "Once the documents have been processed, a representative will contact the delegate to let them know we've accepted and added the documents to your file. Once they receive this confirmation, the delegate can apply for the CDCP on your behalf.",
+        "submit-delegate-proof": {
+          "by-mail": {
+            "cover-letter-details": {
+              "applicant-full-name": "the applicant's full name",
+              "applicant-sin": "the applicant's Social Insurance Number (SIN)",
+              "delegate-phone": "the delegate's phone number and",
+              "return-address": "a return address for us to send the original documents or certified copies back to once we've processed them",
+              "submission-statement": "a statement that the documents are being submitted for the CDCP"
+            },
+            "document-submission-by-mail": "If you or the delegate are sending the documents by mail, please include a cover letter that details:",
+            "heading": "By mail",
+            "mailing-addresses": {
+              "atlantic-canada": {
+                "address": "Service Canada\nCanadian Dental Care Plan\nPO Box 250 Station A\nFredericton, NB E3B 4Z6",
+                "name": "Atlantic Canada"
+              },
+              "caption": "Mailing addresses by region",
+              "headers": {
+                "mailing-address": "Mailing address",
+                "province-region": "Province/Region"
+              },
+              "ontario": {
+                "address": "Service Canada\nCanadian Dental Care Plan\nPO Box 5100 Station D\nScarborough, ON M1R 5C8",
+                "name": "Ontario"
+              },
+              "quebec": {
+                "address": "Service Canada\nCanadian Dental Care Plan\nPO Box 60\nBoucherville, QC J4B 5E6",
+                "name": "Quebec"
+              },
+              "western-canada-and-territories": {
+                "address": "Service Canada\nCanadian Dental Care Plan\nPO Box 2710 Station Main\nEdmonton, AB T5J 2G4",
+                "name": "Western Canada and Territories"
+              }
+            }
+          },
+          "heading": "Submit your proof of delegate documents:",
+          "in-person": {
+            "document-processing-note": "We will take a copy of your documents and send them to our processing team.",
+            "document-submission-at-service-canada": "If you or the delegate provide the documents at a <serviceCanadaOfficeLink>Service Canada office</serviceCanadaOfficeLink>, please come prepared with:",
+            "heading": "In person",
+            "submission-requirements": {
+              "applicant-full-name": "the applicant's full name, and",
+              "applicant-sin": "the applicant's Social Insurance Number (SIN)"
+            }
+          }
+        },
+        "summary": "Applying through a delegate",
+        "valid-delegates": {
+          "powers-of-attorney-mandates": "powers of attorney/mandates, or",
+          "trusteeships": "trusteeships"
+        }
+      },
+      "delegate-assisted-cdcp-application": "You can apply for the CDCP with the help of a trusted person or a delegate. Both must be done through a Service Canada representative in person at a <serviceCanadaOfficeLink>Service Canada office</serviceCanadaOfficeLink> or by <contactCDCPLink>phone</contactCDCPLink>.",
+      "heading": "Applying on behalf of someone else",
+      "trusted-person": {
+        "details": {
+          "application-assistance": "You can ask a trusted person to help you apply by phone or visiting us at a <serviceCanadaOfficeLink>Service Canada office</serviceCanadaOfficeLink>. You must give clear consent that you agree to let them help you. This could be a:",
+          "types-of-assistants": {
+            "caregiver": "caregiver",
+            "friend": "friend",
+            "interpreter": "interpreter",
+            "relative": "relative",
+            "translator": "translator, or"
+          }
+        },
+        "summary": "Applying with the help of a trusted person"
+      }
+    },
+    "intro-text": "The Canadian Dental Care Plan (CDCP) will help ease financial barriers to accessing oral health care for eligible Canadian residents.",
+    "links": {
+      "contact-cdcp": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html",
+      "filed-tax-return": "https://www.canada.ca/en/services/taxes/income-tax/personal-income-tax/get-ready-taxes.html",
+      "service-canada-office": "https://www.servicecanada.gc.ca/tbsc-fsco/sc-hme.jsp?lang=eng",
+      "when-apply-cdcp": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#when"
+    },
     "page-title": "Applying for the Canadian Dental Care Plan",
-    "submit": "Continue"
+    "submit": "Continue",
+    "to-qualify": {
+      "conditions": {
+        "income": {
+          "details": {
+            "adjusted-family-net-income": "<strong>\u003D adjusted family net income</strong>",
+            "family-net-income-definition": "Your family net income (line 23600 of your tax return plus line 23600 of your spouse's or common-law partner's tax return, and any world income not reported in a tax return to the CRA, such as by a new resident)",
+            "summary": "What is adjusted new family income?",
+            "uccb-and-rdsp-amounts-repaid": "<strong>\u2212 any UCCB and RDSP amounts repaid</strong> (line 21300 and line 23200 of your or your spouse's or common-law partner's tax return)",
+            "uccb-and-rdsp-income-received": "<strong>\u002B any universal child care benefit(UCCB) and registered disability savings plan (RDSP) income received</strong> (line 11700 and line 12500 of your or your spouse's or common-law partner's tax return)"
+          },
+          "heading": "have an adjusted family net income of less than $90,000"
+        },
+        "insurance-access": {
+          "details": {
+            "access-methods": {
+              "purchased-insurance": "purchased by you or a family member or through a group plan from an insurance or benefits company",
+              "through-employer-benefits": "through your employer or a family member's employer benefits, including health and wellness accounts",
+              "through-pension-benefits": "through your pension (previous employer) or a family member's pension benefits",
+              "through-professional-or-student-organization": "through a professional or student organization"
+            },
+            "access-to-dental-insurance-definition": "\"Access to dental insurance\" means access to any type of dental insurance or coverage through other channels, such as:",
+            "opt-out-consideration": "You're still considered to have access to dental insurance if you choose to opt out of available benefits like these.",
+            "summary": "What counts as access to dental insurance?"
+          },
+          "heading": "not have access to private dental coverage"
+        },
+        "resident-status": "be a Canadian resident for tax purposes",
+        "tax-return": "have <filedTaxReturnLink>filed your tax return</filedTaxReturnLink> for the previous year and received your Notice of Assessment"
+      },
+      "heading": "To qualify for the CDCP, you must:"
+    },
+    "what-you-need": {
+      "heading": "What you need before you start:",
+      "preparation-instructions": "Save time when filling out your application by gathering all the necessary information before you begin. To complete your application, you will need to provide the following information for yourself, and your spouse/common-law partner and dependents (if applicable):",
+      "requirements": {
+        "date-of-birth": "Date of birth",
+        "dental-coverage": "List of the dental coverage you have through government social programs (if applicable)",
+        "full-name": "Full name",
+        "home-and-mailing-address": "Home and mailing address",
+        "social-insurance-number": "Social Insurance Number"
+      }
+    }
   },
   "partner-information": {
     "page-title": "Spouse / Common-law partner information",
