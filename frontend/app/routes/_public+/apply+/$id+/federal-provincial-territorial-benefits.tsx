@@ -53,31 +53,23 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id } = await applyFlow.loadState({ request, params });
 
-  const dentalBenefitSchema = z
-    .object({
-      federalBenefit: z.string({ required_error: 'federal-benefit' }).trim().min(1),
-      federalSocialProgram: z.string().trim().optional(),
-      provincialTerritorialBenefit: z.string({ required_error: 'provincial-benefit' }).trim().min(1),
-      provincialTerritorialSocialProgram: z.string().trim().optional(),
-    })
-    .superRefine((val, ctx) => {
-      if (!val.federalBenefit) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'federal-program',
-          path: ['federalSocialProgram'],
-        });
-      }
-      if (!val.provincialTerritorialBenefit) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'provincial-program',
-          path: ['provincialTerritorialSocialProgram'],
-        });
-      }
-    });
-
   const formData = Object.fromEntries(await request.formData());
+  const dentalBenefitSchema = applyFlow.dentalBenefitsStateSchema.superRefine((val, ctx) => {
+    if (val.federalBenefit === 'yes' && (!val.federalSocialProgram || val.federalSocialProgram.trim().length === 0)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'federal-program',
+        path: ['federalSocialProgram'],
+      });
+    }
+    if (val.provincialTerritorialBenefit === 'yes' && (!val.provincialTerritorialSocialProgram || val.provincialTerritorialSocialProgram.trim().length === 0)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'provincial-program',
+        path: ['provincialTerritorialSocialProgram'],
+      });
+    }
+  });
   const parsedDataResult = dentalBenefitSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
@@ -98,10 +90,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function AccessToDentalInsuranceQuestion() {
   const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, state, id } = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const [federalBenefitChecked, setFederalBenefitChecked] = useState(state?.federalBenefit ?? '');
   const [provincialTerritorialBenefitChecked, setProvincialTerritorialBenefitChecked] = useState(state?.provincialTerritorialBenefit ?? '');
-  const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
 
   const sortedRegions = regions.sort((a, b) => {
@@ -124,11 +116,9 @@ export default function AccessToDentalInsuranceQuestion() {
     return t(`dental-benefits.error-message.${errorI18nKey}` as any);
   }
 
-  console.log('form: ', actionData?.formData);
-
   const errorMessages = {
     federalBenefit: getErrorMessage(actionData?.errors.federalBenefit?._errors[0]),
-    federalSocalProgram: getErrorMessage(actionData?.errors.federalSocialProgram?._errors[0]),
+    federalSocialProgram: getErrorMessage(actionData?.errors.federalSocialProgram?._errors[0]),
     provincialTerritorialBenefit: getErrorMessage(actionData?.errors.provincialTerritorialBenefit?._errors[0]),
     provincialTerritorialSocialProgram: getErrorMessage(actionData?.errors.provincialTerritorialSocialProgram?._errors[0]),
   };
@@ -161,11 +151,11 @@ export default function AccessToDentalInsuranceQuestion() {
                       legend={<span className="font-normal">{t('dental-benefits.federal-benefits.social-programs.legend')}</span>}
                       options={federalSocialPrograms.map((option) => ({
                         children: <span className="font-bold">{getNameByLanguage(i18n.language, option)}</span>,
-                        value: option.code ?? null,
-                        defaultChecked: state?.federalSocialProgram === option.code,
+                        value: getNameByLanguage(i18n.language, option),
+                        defaultChecked: state?.federalSocialProgram === getNameByLanguage(i18n.language, option),
                       }))}
-                      errorMessage={errorMessages.federalSocalProgram}
-                      required
+                      errorMessage={errorMessages.federalSocialProgram}
+                      required={errorSummaryItems.length > 0}
                     />
                   ),
                 }))}
@@ -210,12 +200,13 @@ export default function AccessToDentalInsuranceQuestion() {
                         name="provincialTerritorialSocialProgram"
                         legend={<span className="font-normal">{t('dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}</span>}
                         errorMessage={errorMessages.provincialTerritorialSocialProgram}
+                        required={errorSummaryItems.length > 0}
                         options={provincialTerritorialSocialPrograms
                           .filter((program) => program.provinceTerritoryStateId === selectedRegion)
                           .map((option) => ({
                             children: <span className="font-bold">{getNameByLanguage(i18n.language, option)}</span>,
-                            value: option.code,
-                            defaultChecked: state?.provincialTerritorialSocialProgram === option.code,
+                            value: getNameByLanguage(i18n.language, option),
+                            defaultChecked: state?.provincialTerritorialSocialProgram === getNameByLanguage(i18n.language, option),
                           }))}
                       />
                     </Fragment>
