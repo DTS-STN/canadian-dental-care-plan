@@ -22,7 +22,6 @@ export function PublicLayout({ children }: PropsWithChildren) {
   const { t } = useTranslation(i18nNamespaces);
   return (
     <>
-      <SkipNavigationLinks />
       <PageHeader />
       <PageBreadcrumbs />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
@@ -47,6 +46,7 @@ function AppPageTitle() {
 function PageHeader() {
   return (
     <header className="border-b-[3px] border-slate-700">
+      <SkipNavigationLinks />
       <PageHeaderBrand />
     </header>
   );

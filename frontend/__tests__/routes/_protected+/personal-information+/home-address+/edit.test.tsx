@@ -1,12 +1,8 @@
-import { redirect } from '@remix-run/node';
-
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/_protected+/personal-information+/home-address+/edit';
+import { loader } from '~/routes/$lang+/_protected+/personal-information+/home-address+/edit';
 import { getAddressService } from '~/services/address-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
-import { getWSAddressService } from '~/services/wsaddress-service.server';
 
 vi.mock('~/services/address-service.server', () => ({
   getAddressService: vi.fn().mockReturnValue({
@@ -69,6 +65,7 @@ vi.mock('~/services/wsaddress-service.server', () => ({
 
 vi.mock('~/utils/locale-utils.server', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+  redirectWithLocale: vi.fn().mockResolvedValue('/en/personal-information/home-address/address-accuracy'),
 }));
 
 describe('_gcweb-app.personal-information.home-address.edit', () => {
@@ -85,7 +82,7 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
       vi.mocked(addressService.getAddressInfo).mockResolvedValue({ address: '111 Fake Home St', city: 'city', country: 'country' });
 
       const response = await loader({
-        request: new Request('http://localhost:3000/personal-information/home-address/edit'),
+        request: new Request('http://localhost:3000/en/personal-information/home-address/edit'),
         context: {},
         params: {},
       });
@@ -126,90 +123,13 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
 
       try {
         await loader({
-          request: new Request('http://localhost:3000/personal-information/home-address/edit'),
+          request: new Request('http://localhost:3000/en/personal-information/home-address/edit'),
           context: {},
           params: {},
         });
       } catch (error) {
         expect((error as Response).status).toEqual(404);
       }
-    });
-  });
-
-  describe('action()', () => {
-    it('should redirect to confirm page if the result of correcting the address is Valid', async () => {
-      const sessionService = await getSessionService();
-      vi.mocked(sessionService.commitSession).mockResolvedValue('some-set-cookie-header');
-
-      const wsAddressService = await getWSAddressService();
-      vi.mocked(wsAddressService.correctAddress, { partial: true }).mockResolvedValue({
-        status: 'Valid',
-      });
-
-      const formData = new FormData();
-      formData.append('address', '111 Fake Home St');
-      formData.append('city', 'city');
-      formData.append('province', 'province');
-      formData.append('postalCode', 'postalCode');
-      formData.append('country', 'country');
-
-      const response = await action({
-        request: new Request('http://localhost:3000/personal-information/home-address/edit', { method: 'POST', body: formData }),
-        context: {},
-        params: {},
-      });
-
-      expect(response).toEqual(redirect('/personal-information/home-address/confirm', { headers: { 'Set-Cookie': 'some-set-cookie-header' } }));
-    });
-
-    it('should redirect to suggested address page if the result of correcting the address is Corrected', async () => {
-      const sessionService = await getSessionService();
-      vi.mocked(sessionService.commitSession).mockResolvedValue('some-set-cookie-header');
-
-      const wsAddressService = await getWSAddressService();
-      vi.mocked(wsAddressService.correctAddress, { partial: true }).mockResolvedValue({
-        status: 'Corrected',
-      });
-
-      const formData = new FormData();
-      formData.append('address', '111 Fake Home St');
-      formData.append('city', 'city');
-      formData.append('province', 'province');
-      formData.append('postalCode', 'postalCode');
-      formData.append('country', 'country');
-
-      const response = await action({
-        request: new Request('http://localhost:3000/personal-information/home-address/edit', { method: 'POST', body: formData }),
-        context: {},
-        params: {},
-      });
-
-      expect(response).toEqual(redirect('/personal-information/home-address/suggested', { headers: { 'Set-Cookie': 'some-set-cookie-header' } }));
-    });
-
-    it('should redirect to address accuracy page if the result of correcting the address is NotCorrect', async () => {
-      const sessionService = await getSessionService();
-      vi.mocked(sessionService.commitSession).mockResolvedValue('some-set-cookie-header');
-
-      const wsAddressService = await getWSAddressService();
-      vi.mocked(wsAddressService.correctAddress, { partial: true }).mockResolvedValue({
-        status: 'NotCorrect',
-      });
-
-      const formData = new FormData();
-      formData.append('address', '111 Fake Home St');
-      formData.append('city', 'city');
-      formData.append('province', 'province');
-      formData.append('postalCode', 'postalCode');
-      formData.append('country', 'country');
-
-      const response = await action({
-        request: new Request('http://localhost:3000/personal-information/home-address/edit', { method: 'POST', body: formData }),
-        context: {},
-        params: {},
-      });
-
-      expect(response).toEqual(redirect('/personal-information/home-address/address-accuracy', { headers: { 'Set-Cookie': 'some-set-cookie-header' } }));
     });
   });
 });

@@ -22,10 +22,10 @@ vi.mock('react-i18next', () => ({
 }));
 
 vi.mock('@remix-run/react', async (actual) => {
-  // XXX :: GjB :: using actual <Link> component because I'm too lazy to mock it 🤷
+  // XXX :: GjB :: using actual <Link> component and useHref because I'm too lazy to mock it 🤷
   // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-  const { Link } = await actual<typeof import('@remix-run/react')>();
-  return { Link, useSearchParams: vi.fn() };
+  const { Link, useHref } = await actual<typeof import('@remix-run/react')>();
+  return { Link, useHref, useParams: vi.fn().mockReturnValue({ lang: 'en' }), useSearchParams: vi.fn() };
 });
 
 vi.mock('~/utils/env-utils', () => ({
@@ -55,6 +55,6 @@ describe('Language Switcher', () => {
 
     expect(results).toHaveNoViolations();
     expect(element.textContent).toBe('Français');
-    expect(element.getAttribute('href')).toBe('/?id=00000000-0000-0000-0000-000000000000&language=en');
+    expect(element.getAttribute('href')).toBe('/en/?id=00000000-0000-0000-0000-000000000000&language=en');
   });
 });

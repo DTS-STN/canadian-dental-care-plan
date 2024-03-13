@@ -1,4 +1,4 @@
-import { createCookie } from '@remix-run/node';
+import { createCookie, redirect } from '@remix-run/node';
 import type { CookieOptions } from '@remix-run/node';
 
 import { parse, serialize } from 'cookie';
@@ -129,4 +129,9 @@ export async function initI18n<N extends Namespace>(locale: string | undefined, 
 
   log.debug('i18next initialization complete');
   return i18n;
+}
+
+export async function redirectWithLocale(request: Request, url: string, init?: number | ResponseInit) {
+  const locale = await getLocale(request);
+  return redirect(`/${locale}${url}`, init);
 }

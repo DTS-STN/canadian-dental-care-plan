@@ -1,8 +1,7 @@
-import { forwardRef } from 'react';
 import type { ComponentProps } from 'react';
+import { forwardRef } from 'react';
 
-import { Link } from '@remix-run/react';
-
+import { AppLink } from '~/components/app-link';
 import { cn } from '~/utils/tw-utils';
 
 const sizes = {
@@ -41,7 +40,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, pill, si
 
 Button.displayName = 'Button';
 
-export interface ButtonLinkProps extends ComponentProps<typeof Link> {
+export interface ButtonLinkProps extends ComponentProps<typeof AppLink> {
   size?: keyof typeof sizes;
   variant?: keyof typeof variants;
   pill?: boolean;
@@ -53,9 +52,9 @@ export interface ButtonLinkProps extends ComponentProps<typeof Link> {
  */
 const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(({ children, className, pill, size = 'base', variant = 'default', ...props }, ref) => {
   return (
-    <Link className={cn(baseClassName, sizes[size], variants[variant], pill && 'rounded-full', className)} {...props} ref={ref}>
+    <AppLink className={cn(baseClassName, sizes[size], variants[variant], pill && 'rounded-full', className)} {...props} ref={ref}>
       {children}
-    </Link>
+    </AppLink>
   );
 });
 

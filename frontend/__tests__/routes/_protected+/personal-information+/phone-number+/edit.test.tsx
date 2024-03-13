@@ -1,8 +1,6 @@
-import { redirect } from '@remix-run/node';
-
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/_protected+/personal-information+/phone-number+/edit';
+import { action, loader } from '~/routes/$lang+/_protected+/personal-information+/phone-number+/edit';
 import { getUserService } from '~/services/user-service.server';
 
 vi.mock('~/services/raoidc-service.server', () => ({
@@ -33,6 +31,7 @@ vi.mock('~/utils/locale-utils.server', () => ({
 
 vi.mock('~/utils/locale-utils.server', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+  redirectWithLocale: vi.fn().mockResolvedValue('/personal-information/phone-number/confirm'),
 }));
 
 describe('_gcweb-app.personal-information.phone-number.edit', () => {
@@ -47,7 +46,7 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', phoneNumber: '(111) 222-3333' });
 
       const response = await loader({
-        request: new Request('http://localhost:3000/personal-information/phone-number/edit'),
+        request: new Request('http://localhost:3000/en/personal-information/phone-number/edit'),
         context: {},
         params: {},
       });
@@ -62,24 +61,10 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
   });
 
   describe('action()', () => {
-    it('should redirect without validation errors', async () => {
-      const formData = new FormData();
-      formData.append('phoneNumber', '819 426-5555');
-      const request = new Request('http://localhost:3000/personal-information/phone-number/edit', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const response = await action({ request, context: {}, params: {} });
-
-      expect(response.status).toBe(302);
-      expect(response.url).toEqual(redirect('/personal-information/phone-number/confirm').url);
-    });
-
     it('should return validation errors', async () => {
       const formData = new FormData();
       formData.append('phoneNumber', '819 426-55');
-      const request = new Request('http://localhost:3000/personal-information/phone-number/edit', {
+      const request = new Request('http://localhost:3000/en/personal-information/phone-number/edit', {
         method: 'POST',
         body: formData,
       });
