@@ -85,7 +85,7 @@
   "demographics-oral-health-questions": {
     "part1": {
       "page-title": "(FR) Voluntary demographic and oral health questions part 1 of 2",
-      "paragraph1": "(FR) Answering the following questions will not impact your application in the CDCP. Providing a response to the questions below is voluntary. Your input, will help Health Canada evaluate and improve the Canadian Dental Care Plan, including understanding if there are potential access or inequity issues. ",
+      "paragraph1": "(FR) Answering the following questions will not impact your application in the CDCP. Providing a response to the questions below is voluntary. Your input, will help Health Canada evaluate and improve the Canadian Dental Care Plan, including understanding if there are potential access or inequity issues.\u00a0",
       "paragraph2": "(FR) All responses have an option of \"prefer not to answer\". All responses are kept confidential and are only used for program monitoring, evaluation and reporting purposes.",
       "question1": "1.(FR) Where were you born?",
       "question3": "3. (FR) Which of the following best describes your racial or ethnic group? Check all that apply:",
@@ -128,7 +128,7 @@
       "option-yes": "(Fr)<strong>Yes</strong>, I have <strong>federal</strong> benefits.",
       "option-no": "(Fr)<strong>No</strong>, I do not have <strong>federal</strong> benefits.",
       "social-programs": {
-        "legend": "(Fr) Please select which social program you are covered under. If you have more than one, please select the one you use most."
+        "legend": "(Fr) Please select which social program you are covered under.\u00a0If you have more than one, please select the one you use most."
       }
     },
     "provincial-territorial-benefits": {
@@ -150,8 +150,8 @@
     "title": "(Fr) Access to other dental insurance",
     "legend": "(Fr) Do you have access to dental insurance or coverage through one of the following four situations?",
     "list": {
-      "employment": "(Fr) Your employment benefits or a family member’s employment benefits, including health and wellness account",
-      "pension": "(Fr) Your pension benefits or a family member’s pension benefits",
+      "employment": "(Fr) Your employment benefits or a family member's employment benefits, including health and wellness account",
+      "pension": "(Fr) Your pension benefits or a family member's pension benefits",
       "purchased": "(Fr) Purchased by you or a family member or through a group plan from an insurance or benefits company",
       "professional": "(Fr) Through a professional or student organization"
     },
@@ -167,10 +167,10 @@
         "eligible": "(Fr) Exception: You may still be eligible if you retired and:",
         "list": {
           "opted": "(Fr) you opted out of pension benefits before December 11, 2023, and",
-          "cannot-opt": "(Fr) you can’t opt back in under the pension rules"
+          "cannot-opt": "(Fr) you can't opt back in under the pension rules"
         },
         "not-eligible": "(Fr) You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your employer/pension (see exception) benefits or through a professional or student organization. As such, you are not eligible for the CDCP.",
-        "not-eligible-purchased": "(Fr) If you purchased your current dental insurance policy privately on your own (and not as part of any of the coverage described above), you’re not eligible for the CDCP while that coverage is in effect."
+        "not-eligible-purchased": "(Fr) If you purchased your current dental insurance policy privately on your own (and not as part of any of the coverage described above), you're not eligible for the CDCP while that coverage is in effect."
       }
     },
     "error-message": {
@@ -249,8 +249,132 @@
     }
   },
   "index": {
+    "application-phases": "Dans le cadre du RCSD, les demandes seront acceptées progressivement. <whenApplyCDCPLink>Vérifiez à quel moment vous pouvez présenter une demande d'adhésion au RCSD.</whenApplyCDCPLink>",
+    "apply-behalf": {
+      "delegate": {
+        "delegate-definition": "Les délégués sont des personnes qui ont l'autorité légale de vous représenter et de prendre des décisions en votre nom",
+        "delegate-requirements": "Avant de présenter la demande pour le RCSD, les délégués doivent fournir les procurations, mandats ou documents de tutelle prouvant qu'ils ont l'autorité légale de vous représenter. Les documents originaux ou des copies certifiées peuvent être envoyés par la poste ou soumis en personne à n'importe quel bureau de Service Canada.",
+        "delegates-on-document": "Ils peuvent vous représenter s'ils figurent sur la liste de vos délégués dans des documents tels que\u00a0:",
+        "document-processing": "Une fois que les documents auront été traités, un représentant contactera le délégué pour l'informer que nous avons accepté les documents et les avons ajoutés à votre dossier. Une fois que le délégué reçoit cette confirmation, il est en mesure de présenter une demande au RCSD en votre nom.",
+        "submit-delegate-proof": {
+          "by-mail": {
+            "cover-letter-details": {
+              "applicant-full-name": "le nom complet du demandeur",
+              "applicant-sin": "le numéro d'assurance sociale du demandeur (NAS)",
+              "delegate-phone": "le numéro de téléphone du délégué",
+              "return-address": "et une adresse de retour afin que nous puissions vous retourner les documents originaux ou les copies certifiées une fois que nous les aurons traités",
+              "submission-statement": "une déclaration indiquant que les documents sont présentés pour le RCSD"
+            },
+            "document-submission-by-mail": "Si vous ou votre délégué envoyez les documents par la poste, veuillez inclure une page couverture comprenant:",
+            "heading": "Par la poste",
+            "mailing-addresses": {
+              "atlantic-canada": {
+                "address": "Service Canada\nRégime canadien de soins dentaires\nCP 250, Succursale A\nFredericton, NB E3B 4Z6",
+                "name": "Canada atlantique"
+              },
+              "caption": "Adresses postales par province/région",
+              "headers": {
+                "mailing-address": "Adresse postale",
+                "province-region": "Province/région"
+              },
+              "ontario": {
+                "address": "Service Canada\nRégime canadien de soins dentaires\nCP 5100, Succursale D\nScarborough, ON M1R 5C8",
+                "name": "Ontario"
+              },
+              "quebec": {
+                "address": "Service Canada\nRégime canadien de soins dentaires\nCP 60\nBoucherville, QC J4B 5E6",
+                "name": "Québec"
+              },
+              "western-canada-and-territories": {
+                "address": "Service Canada\nRégime canadien de soins dentaires\nCP 2710, Succursale Main\nEdmonton, AB T5J 2G44",
+                "name": "Ouest du Canada et Territoires"
+              }
+            }
+          },
+          "heading": "Soumettez vos documents de preuve de délégation\u00a0:",
+          "in-person": {
+            "document-processing-note": "Nous ferons une copie de vos documents et l'enverrons à notre équipe de traitement.",
+            "document-submission-at-service-canada": "Si vous ou votre délégué soumettez les documents en personne, dans un <serviceCanadaOfficeLink>bureau de Service Canada</serviceCanadaOfficeLink>, veuillez vous préparer à fournir\u00a0:",
+            "heading": "En personne",
+            "submission-requirements": {
+              "applicant-full-name": "le nom complet du demandeur",
+              "applicant-sin": "le numéro d'assurance sociale du demandeur"
+            }
+          }
+        },
+        "summary": "Présenter la demande par l'intermédiaire d'un délégué",
+        "valid-delegates": {
+          "powers-of-attorney-mandates": "procurations/mandats",
+          "trusteeships": "tutelles"
+        }
+      },
+      "delegate-assisted-cdcp-application": "Vous pouvez présenter la demande avec l'aide d'une personne de confiance ou d'un délégué. Les deux doivent être effectués par l'intermédiaire d'un représentant de Service Canada en personne dans un <serviceCanadaOfficeLink>bureau de Service Canada</serviceCanadaOfficeLink> ou par <contactCDCPLink>téléphone</contactCDCPLink>.",
+      "heading": "Présenter une demande pour quelqu'un d'autre",
+      "trusted-person": {
+        "details": {
+          "application-assistance": "Vous pouvez demander à une personne de confiance de vous aider à présenter la demande par téléphone ou en nous visitant un <serviceCanadaOfficeLink>bureau de Service Canada</serviceCanadaOfficeLink>. Vous devez donner clairement votre consentement confirmant que vous acceptez que cette personne vous aide. Cette personne peut être\u00a0:",
+          "types-of-assistants": {
+            "caregiver": "celui ou celle qui vous fournit des soins",
+            "friend": "un ami ou une amie",
+            "interpreter": "un ou une interprète",
+            "relative": "un proche",
+            "translator": "un traducteur ou une traductrice"
+          }
+        },
+        "summary": "Présenter la demande avec l'aide d'une personne de confiance"
+      }
+    },
+    "intro-text": "Le Régime canadien de soins dentaires (RCSD) contribuera à réduire les obstacles financiers à l'accès aux soins de soins dentaires pour les résidents du Canada admissibles.",
+    "links": {
+      "contact-cdcp": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
+      "filed-tax-return": "https://www.canada.ca/fr/services/impots/impot-sur-le-revenu/impot-sur-le-revenu-des-particuliers/preparez-vous-impots.html",
+      "service-canada-office": "https://www.servicecanada.gc.ca/tbsc-fsco/sc-hme.jsp?lang=fra",
+      "when-apply-cdcp": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#quand"
+    },
     "page-title": "Présentation d'une demande d'adhésion au Régime canadien de soins dentaires",
-    "submit": "Continuer"
+    "submit": "Continuer",
+    "to-qualify": {
+      "conditions": {
+        "income": {
+          "details": {
+            "adjusted-family-net-income": "<strong>\u003D revenu familial net rajusté</strong>",
+            "family-net-income-definition": "Votre revenu familial net (ligne\u00a023600 de votre déclaration de revenus, plus la ligne\u00a023600 de la déclaration de votre époux ou conjoint de fait, plus, le cas échéant, le revenu de toutes provenances non déclaré à l'Agence du revenu du Canada [ARC] dans une déclaration de revenus, comme dans le cas d'un nouveau résident)",
+            "summary": "Qu'est-ce que le revenu familial net rajusté?",
+            "uccb-and-rdsp-amounts-repaid": "<strong>\u2212 tout montant de la PUGE et du REEI remboursé</strong> (ligne\u00a021300 et ligne\u00a023200 de votre déclaration de revenus ou de celle de votre époux ou conjoint de fait)",
+            "uccb-and-rdsp-income-received": "<strong>\u002B tout revenu reçu de la Prestation universelle pour la garde d'enfants (PUGE) et du Régime enregistré d'épargne-invalidité (REEI)</strong> (ligne\u00a011700 et ligne\u00a012500 de votre déclaration de revenus ou de celle de votre époux ou conjoint de fait)"
+          },
+          "heading": "Avoir un revenu familial net rajusté de moins de 90\u00a0000\u00a0$"
+        },
+        "insurance-access": {
+          "details": {
+            "access-methods": {
+              "purchased-insurance": "une assurance ou une couverture souscrite par vous ou un membre de votre famille ou par le biais d'un plan de groupe auprès d'une compagnie d'assurance ou de prestations.",
+              "through-employer-benefits": "dans le cadre des avantages sociaux de votre employeur ou de l'employeur d'un membre de votre famille, y compris les comptes de santé et de bien-être;",
+              "through-pension-benefits": "par le biais de votre pension (employeur précédent) ou des prestations du régime de pension d'un membre de votre famille;",
+              "through-professional-or-student-organization": "par l'entremise d'une organisation professionnelle ou étudiante;"
+            },
+            "access-to-dental-insurance-definition": "L'«\u00a0accès à une assurance dentaire\u00a0» signifie l'accès à tout type d'assurance ou de couverture dentaire offerte par d'autres moyens, par exemple\u00a0:",
+            "opt-out-consideration": "On considère tout de même que vous avez accès à une assurance dentaire si vous décidez de ne pas opter pour ce type de prestations offertes.",
+            "summary": "Qu'est-ce qui est considéré comme l'accès à une assurance dentaire?"
+          },
+          "heading": "Ne pas avoir accès à une assurance dentaire privée"
+        },
+        "resident-status": "Être un résident canadien aux fins de l'impôt",
+        "tax-return": "Avoir <filedTaxReturnLink>produit votre déclaration de revenus</filedTaxReturnLink> pour l'année précédente et avoir reçu votre Avis de cotisation"
+      },
+      "heading": "Pour être admissible au RCSD, vous devez\u00a0:"
+    },
+    "what-you-need": {
+      "heading": "Ce dont vous avez besoin avant de commencer\u00a0:",
+      "preparation-instructions": "Gagnez du temps lorsque vous remplissez votre demande en recueillant tous les renseignements nécessaires avant de commencer. Pour remplir votre demande, vous devrez fournir les renseignements suivants pour vous-même, votre époux ou conjoint de fait, ainsi que les renseignements sur les personnes à votre charge (s'il y a lieu)\u00a0:",
+      "requirements": {
+        "date-of-birth": "Date de naissance",
+        "dental-coverage": "Liste des assurances dentaires auxquelles vous avez accès par l'intermédiaire de programmes sociaux du gouvernement (le cas échéant)",
+        "full-name": "Nom complet",
+        "home-and-mailing-address": "Adresse domiciliaire et adresse postale",
+        "social-insurance-number": "Numéro d'assurance sociale"
+      }
+    }
   },
   "partner-information": {
     "page-title": "Renseignements sur l'époux/épouse ou le conjoint/conjointe de fait",
@@ -394,10 +518,10 @@
         "privacy-notice-statement-personal-information-heading": "FR Personal Information",
         "privacy-notice-statement-personal-information-text": "FR Service Canada, which is part of Employment and Social Development Canada (ESDC),administers applications for the Canada Dental Care Plan (CDCP) on behalf of Health Canada (HC). Service Canada will collect the personal information you include in your CDCP application to validate eligibility against the CDCP criteria.",
         "privacy-notice-statement-how-we-protect-your-privacy-heading": "FR How we protect your privacy",
-        "privacy-notice-statement-how-we-protect-your-privacy-text-part-one": "FR The collection and use of your personal information is authorized under the Privacy Act, the Department of Health Act, the Dental Care Measures Act, the Department of Employment and Social Development Act, and other applicable laws.",
+        "privacy-notice-statement-how-we-protect-your-privacy-text-part-one": "FR The collection and use of your personal information is authorized under the Privacy Act, the Department of Health Act, the Dental Care Measures Act, the\u00a0Department of Employment and Social Development Act, and other applicable laws.",
         "privacy-notice-statement-how-we-protect-your-privacy-text-part-two": "FR You have the right to the protection of, access to, and where applicable, the correction of your personal information. It is kept in the following personal information banks:",
         "privacy-notice-statement-how-we-protect-your-privacy-bullet-one": "FR [LIST PIBS WITH THEIR NUMBERS]",
-        "privacy-notice-statement-how-we-protect-your-privacy-text-part-three": "FR You can learn how to access this information in the government publication called  <infosource>Info Source</infosource>. You can also access Info Source online at any Service Canada Centre.",
+        "privacy-notice-statement-how-we-protect-your-privacy-text-part-three": "FR You can learn how to access this information in the government publication called\u00a0 <infosource>Info Source</infosource>. You can also access Info Source online at any Service Canada Centre.",
         "privacy-notice-statement-how-we-protect-your-privacy-text-part-four": "FR ESDC carries out this application using services from third-party provider Microsoft Corporation, which may be subject to foreign laws. For more information, see: <microsoftDataPrivacyPolicy>Microsoft Data Privacy Policy & Privacy Principles</microsoftDataPrivacyPolicy>.",
         "privacy-notice-statement-how-we-protect-your-privacy-text-part-five": "FR If you don't agree with the way your personal information was handled by Service Canada, you can contact the Privacy Commissioner of Canada to <fileacomplaint>file a complaint</fileacomplaint>.",
         "privacy-notice-statement-who-we-can-share-your-information-with-heading": "FR Who we can share your information with",
