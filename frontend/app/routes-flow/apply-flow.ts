@@ -87,7 +87,7 @@ const communicationPreferencesStateSchema = z.object({
  * Schema for demographic reference.
  */
 const demographicsPart1StateSchema = z.object({
-  otherEquity: z.string().min(1).optional(),
+  otherEquity: z.string().trim().min(1).optional(),
 });
 
 /**
