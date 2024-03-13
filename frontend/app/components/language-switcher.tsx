@@ -1,54 +1,25 @@
-import type { MouseEvent } from 'react';
+import { useHref, useLocation, useParams } from '@remix-run/react';
 
-import { useSearchParams } from '@remix-run/react';
+import type { InlineLinkProps } from '~/components/inline-link';
+import { InlineLink } from '~/components/inline-link';
+import { getAltLanguage, removeLanguageFromPath } from '~/utils/locale-utils';
 
-import { useTranslation } from 'react-i18next';
-
-import { InlineLink } from './inline-link';
-import type { InlineLinkProps } from './inline-link';
-import { getClientEnv } from '~/utils/env-utils';
-import { getAltLanguage, switchLanguageCookie } from '~/utils/locale-utils';
-
-export type LanguageSwitcherProps = Omit<InlineLinkProps, 'to' | 'reloadDocument' | 'onClick'>;
+export type LanguageSwitcherProps = Omit<InlineLinkProps, 'to' | 'reloadDocument'>;
 
 /**
  * Component that can be used to switch from one language to another.
  * (ie: 'en' → 'fr'; 'fr' → 'en')
  */
 export function LanguageSwitcher({ children, ...props }: LanguageSwitcherProps) {
-  const { i18n } = useTranslation(['gcweb']);
-  const [currentSearchParams] = useSearchParams();
+  const location = useLocation();
+  const params = useParams();
 
-  const { LANG_QUERY_PARAM: langParam } = getClientEnv();
-  const langValue = getAltLanguage(i18n.language);
-
-  const searchParams = new URLSearchParams(currentSearchParams);
-  searchParams.set(langParam, langValue);
-
-  const search = searchParams.toString();
-
-  /**
-   * Asynchronously changes the language based on a user interaction event.
-   *
-   * @param {MouseEvent<HTMLAnchorElement>} event - The mouse event triggering the language change.
-   * @returns {Promise<void>} A promise that resolves when the language change operation is complete.
-   *
-   * @param {MouseEvent<HTMLAnchorElement>} event - The mouse event triggering the language change.
-   */
-  async function changeLanguage(event: MouseEvent<HTMLAnchorElement>) {
-    event.preventDefault();
-
-    // Changes the language cookie client-side.
-    const status = await switchLanguageCookie(langValue);
-
-    if (status >= 200 && status < 300) {
-      // Changes the language client-side.
-      i18n.changeLanguage(langValue);
-    }
-  }
+  const altLang = getAltLanguage(params.lang);
+  const pathname = removeLanguageFromPath(location.pathname);
+  const href = useHref({ ...location, pathname });
 
   return (
-    <InlineLink data-testid="language-switcher" onClick={changeLanguage} reloadDocument to={{ search }} {...props}>
+    <InlineLink data-testid="language-switcher" reloadDocument to={href} targetLang={altLang} {...props}>
       {children}
     </InlineLink>
   );

@@ -1,19 +1,18 @@
-import { createInstance } from 'i18next';
 import type { FlatNamespace } from 'i18next';
+import { createInstance } from 'i18next';
 import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import I18NextHttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
-import type { SwitchLanguageData } from '~/routes/api+/switch-language';
 import { getClientEnv } from '~/utils/env-utils';
-import { i18nNamespacesSchema } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { i18nNamespacesSchema } from '~/utils/route-utils';
 
 /**
  * Returns the alternate language for the given input language.
  * (ie: 'en' → 'fr'; 'fr' → 'en')
  */
-export function getAltLanguage(language: string) {
+export function getAltLanguage(language?: string) {
   switch (language) {
     case 'en':
       return 'fr';
@@ -92,28 +91,6 @@ export function getTypedI18nNamespaces<const T extends Readonly<FlatNamespace>, 
 }
 
 /**
- * Asynchronously switches the language using a language cookie.
- *
- * @template T - The type of language to switch to, which should be a subtype of `SwitchLanguageData['language']`.
- * @param {T} language - The language to switch to.
- * @returns {Promise<number>} A promise that resolves to the HTTP status code of the switch operation.
- *
- * @example
- * const statusCode = await switchLanguageCookie('en');
- * console.log(statusCode); // Output: 204
- *
- * @param {SwitchLanguageData['language']} language - The language to switch to.
- */
-export async function switchLanguageCookie<T extends SwitchLanguageData['language']>(language: T) {
-  const response = await fetch('/api/switch-language', {
-    body: JSON.stringify({ language }),
-    headers: { 'Content-Type': 'application/json' },
-    method: 'PUT',
-  });
-  return response.status;
-}
-
-/**
  * Returns translation based off provided locale
  *
  * @param language
@@ -122,4 +99,11 @@ export async function switchLanguageCookie<T extends SwitchLanguageData['languag
  */
 export function getNameByLanguage(language: string, obj: { nameEn?: string; nameFr?: string }) {
   return language == 'fr' ? obj.nameFr : obj.nameEn;
+}
+
+/**
+ * Indiscriminately removes the language from a path.
+ */
+export function removeLanguageFromPath(path: string) {
+  return path.replace(/^(\/en|\/fr)/, '');
 }

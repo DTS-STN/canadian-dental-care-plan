@@ -1,15 +1,13 @@
 import { render, screen, waitFor } from '@testing-library/react';
 
-import { useSearchParams } from '@remix-run/react';
+import { useLocation, useParams } from '@remix-run/react';
 import { createRemixStub } from '@remix-run/testing';
 
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { useTranslation } from 'react-i18next';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { LanguageSwitcher } from '~/components/language-switcher';
-import { getClientEnv } from '~/utils/env-utils';
-import { getAltLanguage } from '~/utils/locale-utils';
+import { getAltLanguage, removeLanguageFromPath } from '~/utils/locale-utils';
 
 expect.extend(toHaveNoViolations);
 
@@ -22,10 +20,16 @@ vi.mock('react-i18next', () => ({
 }));
 
 vi.mock('@remix-run/react', async (actual) => {
-  // XXX :: GjB :: using actual <Link> component and useHref because I'm too lazy to mock it 🤷
+  // XXX :: GjB :: using actual <Link> component and useHref hook because I'm too lazy to mock it 🤷
   // eslint-disable-next-line @typescript-eslint/consistent-type-imports
   const { Link, useHref } = await actual<typeof import('@remix-run/react')>();
-  return { Link, useHref, useParams: vi.fn().mockReturnValue({ lang: 'en' }), useSearchParams: vi.fn() };
+
+  return {
+    Link,
+    useHref,
+    useLocation: vi.fn(),
+    useParams: vi.fn(),
+  };
 });
 
 vi.mock('~/utils/env-utils', () => ({
@@ -34,6 +38,7 @@ vi.mock('~/utils/env-utils', () => ({
 
 vi.mock('~/utils/locale-utils', () => ({
   getAltLanguage: vi.fn(),
+  removeLanguageFromPath: vi.fn(),
 }));
 
 describe('Language Switcher', () => {
@@ -42,10 +47,18 @@ describe('Language Switcher', () => {
   });
 
   it('Should render with correct search params, and not have a11y issues', async () => {
-    vi.mocked(getAltLanguage).mockReturnValue('en');
-    vi.mocked(getClientEnv, { partial: true }).mockReturnValue({ LANG_QUERY_PARAM: 'language' });
-    vi.mocked(useSearchParams, { partial: true }).mockReturnValue([new URLSearchParams({ id: '00000000-0000-0000-0000-000000000000' })]);
-    vi.mocked(useTranslation().i18n).language = 'fr';
+    const basePath = '/home';
+
+    const requestedLang = 'en';
+    const responseLang = 'fr';
+
+    const requestedPath = `/${requestedLang}${basePath}`;
+    const requestedSearch = 'id=00000000-0000-0000-0000-000000000000';
+
+    vi.mocked(useLocation, { partial: true }).mockReturnValue({ pathname: requestedPath, search: requestedSearch });
+    vi.mocked(useParams).mockReturnValue({ lang: requestedLang });
+    vi.mocked(getAltLanguage).mockReturnValue(responseLang);
+    vi.mocked(removeLanguageFromPath).mockReturnValue(basePath);
 
     const RemixStub = createRemixStub([{ Component: () => <LanguageSwitcher>Français</LanguageSwitcher>, path: '/' }]);
     const { container } = render(<RemixStub />);
@@ -55,6 +68,6 @@ describe('Language Switcher', () => {
 
     expect(results).toHaveNoViolations();
     expect(element.textContent).toBe('Français');
-    expect(element.getAttribute('href')).toBe('/en/?id=00000000-0000-0000-0000-000000000000&language=en');
+    expect(element.getAttribute('href')).toBe(`/${responseLang}${basePath}?${requestedSearch}`);
   });
 });
