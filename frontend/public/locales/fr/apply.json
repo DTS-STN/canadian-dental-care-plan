@@ -491,59 +491,76 @@
     "exit-button": "(FR) Exit application"
   },
   "terms-and-conditions": {
-    "terms-and-conditions": {
-      "index": {
-        "page-heading": "FR Terms and Conditions of Use and Privacy Statement",
-        "intro-text": "FR We are glad you are using the Canadian Dental Care Plan (CDCP) Online Application (\"the Online Application\"). We have developed some terms and conditions for using this service (\"Terms of Use\" or \"Terms\"). Please read them carefully.",
-        "terms-and-conditions-of-use-heading": "FR Conditions d'utilisation du vérificateur de l'état d'une demande",
-        "terms-and-conditions-of-use-part-one": "FR We are glad you are using the Canadian Dental Care Plan (CDCP) Online Application (\"the Online Application\"). We have developed some important terms and conditions for using this service (\"Terms of Use\" or \"Terms\"). Please read them carefully.",
-        "terms-and-conditions-of-use-part-two": "FR Terms and Conditions of Use for the Canadian Dental Care Plan Online Application.",
-        "terms-and-conditions-of-use-part-three-bold": "VEUILLEZ LIRE ATTENTIVEMENT. ",
-        "terms-and-conditions-of-use-part-three-text": "Nous sommes heureux que vous utilisiez le vérificateur de l'état d'une demande du Régime canadien de soins dentaires. Certaines conditions générales d'utilisation importantes s'appliquent à l'utilisation de ce service («\u00a0conditions d'utilisation\u00a0» ou «\u00a0conditions\u00a0»). Veuillez les lire attentivement. Elles sont importantes parce qu'elles régissent votre utilisation du vérificateur de l'état d'une demande. Nous vous invitons à lire attentivement les présentes conditions, car elles ont une incidence ou peuvent avoir une incidence sur vos droits et vos obligations juridiques. En cas de divergence, les présentes conditions d'utilisation ont préséance sur celles du site Canada.ca.",
-        "terms-and-conditions-of-use-part-four": "Votre accès au vérificateur de l'état d'une demande et votre utilisation de celui-ci, y compris tout renseignement qu'il contient, sont assujettis à (1) votre acceptation des présentes conditions d'utilisation et à (2) votre conformité à celles-ci.",
-        "terms-and-conditions-of-use-part-five": "Chaque fois que vous utilisez le vérificateur de l'état d'une demande, ces conditions d'utilisation continuent de s'appliquer. En l'utilisant, vous acceptez de respecter ces conditions. Il vous incombe de comprendre et de retenir ces conditions générales d'utilisation.",
-        "terms-and-conditions-of-use-part-six": "Vous pouvez toujours décider de ne pas accepter ces conditions. Le cas échéant, vous ne serez pas autorisé à accéder au vérificateur de l'état d'une demande et à l'utiliser.",
-        "terms-and-conditions-of-use-part-seven": "Aux fins des présentes conditions d'utilisation, «\u00a0EDSC\u00a0» s'entend de Sa Majesté le Roi du chef du Canada, représenté par le ministre de l'Emploi et du Développement social du Canada.",
-        "terms-and-conditions-of-use-terms-of-use-of-the-online-application-heading": "FR Terms of Use of the Online Application.",
-        "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-self-agreement": "FR Using the Online Application means that you have read and agree to these Terms of Use and the Privacy Notice Statement. If, at any time, you withdraw your agreement to any of the Terms and Conditions of Use you must stop use of the Online Application; or",
-        "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-on-behalf-of-someone-else": "FR If you are using the Application on behalf of another individual, by using the Application, you certify that you have all the necessary authority, permission, and authorities to agree to the Terms of Use on behalf of that individual, and that you agree to the Terms on your own personal behalf and on behalf of the individual you are representing.",
-        "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-at-your-own-risk": "FR You are using this service at your own risk, and you need to keep any personal information safe. Make sure to close the browser or log out when you are done.",
-        "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-only-use": "FR Only use the Online Application to apply to the Canadian Dental Care Plan.",
-        "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-maintenance": "FR There will be times when the system might be down for maintenance.",
-        "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-inactive": "FR If you are inactive for 15 minutes on the Online Application, your session will end and you will lose any information you entered.",
-        "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-msdc": "FR ESDC uses services from Microsoft Corporation to run the Online Application. The Microsoft data centers used by ESDC are in Canada in accordance with Microsoft Corporation's Terms of Service Agreement.",
-        "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-antibot": "FR ESDC uses hCaptcha anti-bot services for our online tools in accordance with hCaptcha's <hcaptchaTermsOfService> Terms of Service.<hcaptchaTermsOfService>",
-        "terms-and-conditions-of-use-terms-of-use-of-the-online-application-bullet-hcaptcha-link": "FR https://www.hcaptcha.com/terms",
-        "terms-and-conditions-of-use-disclaimers-heading": "FR Disclaimers",
-        "terms-and-conditions-of-use-disclaimers-text": "FR You understand and agree that ESDC provides the Canadian Dental Care Plan Online Application 'as is' with no representation, warranty or guarantee, implied or express, of any kind whatsoever and that ESDC disclaims any and all liability in relation to the use of the Online Application, including any loss, damage or injury arising from or related to:",
-        "terms-and-conditions-of-use-disclaimers-bullet-one": "FR any matters or factors outside of its control, including the availability or unavailability of the internet, or telecommunications or other infrastructure systems; or",
-        "terms-and-conditions-of-use-disclaimers-bullet-two": "FR the non-acceptance of information provided through the Online Application; or",
-        "terms-and-conditions-of-use-disclaimers-bullet-three": "FR non-compliance with any of these Terms.",
-        "terms-and-conditions-of-use-disclaimers-text-continued": "FR I hereby agree to indentify and hold ESDC harmless from any such liability.",
-        "terms-and-conditions-of-use-changes-to-these-terms-of-use-heading": "FR Changes to these Terms of Use",
-        "terms-and-conditions-of-use-changes-to-these-terms-of-use-text": "FR ESDC may amend these Terms of Use at any time and without notice. Such changes shall be effective immediately on the date they are published. By using the Online Application, you agree to abide by the amended Terms. You are responsible to ensure you understand and retain the amended Terms.",
-        "privacy-notice-statement-heading": "FR Énoncé de confidentialité",
-        "privacy-notice-statement-personal-information-heading": "FR Personal Information",
-        "privacy-notice-statement-personal-information-text": "FR Service Canada, which is part of Employment and Social Development Canada (ESDC),administers applications for the Canada Dental Care Plan (CDCP) on behalf of Health Canada (HC). Service Canada will collect the personal information you include in your CDCP application to validate eligibility against the CDCP criteria.",
-        "privacy-notice-statement-how-we-protect-your-privacy-heading": "FR How we protect your privacy",
-        "privacy-notice-statement-how-we-protect-your-privacy-text-part-one": "FR The collection and use of your personal information is authorized under the Privacy Act, the Department of Health Act, the Dental Care Measures Act, the\u00a0Department of Employment and Social Development Act, and other applicable laws.",
-        "privacy-notice-statement-how-we-protect-your-privacy-text-part-two": "FR You have the right to the protection of, access to, and where applicable, the correction of your personal information. It is kept in the following personal information banks:",
-        "privacy-notice-statement-how-we-protect-your-privacy-bullet-one": "FR [LIST PIBS WITH THEIR NUMBERS]",
-        "privacy-notice-statement-how-we-protect-your-privacy-text-part-three": "FR You can learn how to access this information in the government publication called\u00a0 <infosource>Info Source</infosource>. You can also access Info Source online at any Service Canada Centre.",
-        "privacy-notice-statement-how-we-protect-your-privacy-text-part-four": "FR ESDC carries out this application using services from third-party provider Microsoft Corporation, which may be subject to foreign laws. For more information, see: <microsoftDataPrivacyPolicy>Microsoft Data Privacy Policy & Privacy Principles</microsoftDataPrivacyPolicy>.",
-        "privacy-notice-statement-how-we-protect-your-privacy-text-part-five": "FR If you don't agree with the way your personal information was handled by Service Canada, you can contact the Privacy Commissioner of Canada to <fileacomplaint>file a complaint</fileacomplaint>.",
-        "privacy-notice-statement-who-we-can-share-your-information-with-heading": "FR Who we can share your information with",
-        "privacy-notice-statement-who-we-can-share-your-information-with-text-part-one": "FR ESDC will share your personal information with partners in administrating the plan to validate your eligibility and register you for the CDCP.",
-        "privacy-notice-statement-who-we-can-share-your-information-with-text-part-two": "FR Your data may also be disclosed to the CDCP benefits administrator and the benefits administrator's agents and service providers for the purpose of underwriting, verification, administration, adjudication and investigation of claims under CDCP.",
-        "privacy-notice-statement-who-we-can-share-your-information-with-text-part-three": "FR ESDC may use or share the information you provide for policy analysis, research, monitoring and/or evaluation activities within ESDC and HC. These uses or activities will not affect any administrative decisions made about you.",
-        "privacy-notice-statement-what-happens-if-you-dont-give-us-your-information-heading": "FR What happens if you don't give us your information",
-        "privacy-notice-statement-what-happens-if-you-dont-give-us-your-information-text": "FR Participation in the CDCP is voluntary; however, if you do not provide your personal information in your application, you cannot be considered for the CDCP.",
-        "apply-now": {
-          "text": "En commençant ce processus de demande de prestations, vous consentez aux modalités de l'énoncé de confidentialité ci-dessus.",
-          "start-button": "Commencer à remplir une demande >",
-          "back-button": "Retour"
-        }
+    "page-heading": "Conditions d'utilisation de la demande en ligne du Régime canadien de soins dentaires",
+    "intro-text": "Nous sommes heureux que vous utilisiez la demande en ligne du Régime canadien de soins dentaires (RCSD) («\u00a0la demande en ligne\u00a0»). Certaines conditions d'utilisation importantes s'appliquent à l'utilisation de ce service. Veuillez les lire attentivement.",
+    "terms-and-conditions-of-use": {
+      "summary": "Conditions générales d'utilisation",
+      "heading": "Terms and Conditions of Use for the Canadian Dental Care Plan Online Application",
+      "online-application-legal-terms": "<strong>VEUILLEZ LIRE ATTENTIVEMENT</strong> les présentes conditions générales d'utilisation de la demande en ligne du Régime canadien de soins dentaires (RCSD), car elles contiennent des renseignements sur vos droits et obligations juridiques et régissent votre utilisation de la demande en ligne. Les présentes conditions générales d'utilisation doivent être lues conjointement avec celles du site Web Canada.ca. En cas de divergence, les présentes conditions générales d'utilisation ont préséance sur celles du site Web Canada.ca.",
+      "online-application-access-terms": "Votre accès à la demande en ligne et votre utilisation de celle-ci, y compris tout le contenu, sont assujettis à (1) votre acceptation des présentes conditions générales d'utilisation et (2) votre respect de celles-ci.",
+      "online-application-usage-terms": "Chaque fois que vous utilisez la demande en ligne, ces conditions continuent de s'appliquer. En utilisant la demande en ligne, vous acceptez de respecter les conditions générales suivantes. Il vous incombe de comprendre ces conditions générales et de les conserver.",
+      "terms-rejection-policy": "Vous pouvez toujours décider de ne pas accepter les conditions générales, auquel cas vous ne serez pas autorisé à accéder à la demande en ligne et à l'utiliser.",
+      "esdc-definition-clarification": "Aux fins des présentes conditions d'utilisation, «\u00a0EDSC\u00a0» s'entend du Roi du Canada, représenté par le ministre de l'Emploi et du Développement social du Canada.",
+      "online-application": {
+        "heading": "Conditions générales d'utilisation\u00a0:",
+        "self-agreement": "Votre utilisation de la demande en ligne signifie que vous avez lu et accepté les présentes conditions générales d'utilisation et l'énoncé de confidentialité. Si, à tout moment, vous cessez d'accepter l'une ou l'autre des conditions générales d'utilisation, vous devez renoncer à utiliser la demande en ligne.",
+        "on-behalf-of-someone-else": "Si vous utilisez la demande au nom d'une autre personne, en utilisant la demande, vous certifiez que vous avez toutes les permissions et les autorisations nécessaires pour accepter les conditions générales d'utilisation au nom de cette personne, et que vous acceptez les conditions générales en votre nom personnel et au nom de la personne que vous représentez.",
+        "at-your-own-risk": "Vous utilisez ce service à vos propres risques et vous devez protéger vos renseignements personnels. Veillez à fermer le navigateur ou à vous déconnecter lorsque vous avez terminé.",
+        "personal-information-usage-responsibility": "Vous êtes responsable de la façon dont la demande est utilisée avec vos renseignements personnels.",
+        "only-use": "Utilisez uniquement la demande en ligne pour faire une demande au Régime canadien de soins dentaires.",
+        "maintenance": "Il peut arriver que le système soit indisponible pour des raisons de maintenance.",
+        "inactive": "Si vous êtes inactif pendant 15\u00a0minutes dans la demande en ligne, votre séance prendra fin et vous perdrez tous les renseignements que vous avez saisis.",
+        "msdc": "EDSC a recours aux services de Microsoft Corporation pour exécuter la demande en ligne. Les centres de données Microsoft utilisés par EDSC se trouvent au Canada conformément à l'entente sur les conditions de service de Microsoft Corporation.",
+        "antibot": "EDSC utilise les services de protection contre les robots hCaptcha pour ses outils en ligne conformément aux <hcaptchaTermsOfService>conditions de service</hcaptchaTermsOfService> de hCaptcha."
+      },
+      "disclaimers": {
+        "heading": "Avis de non-responsabilité",
+        "online-application-disclaimer": "Vous comprenez et acceptez qu'EDSC fournit la demande en ligne du Régime canadien de soins dentaires «\u00a0telle quelle\u00a0» sans représentation ni garantie, implicite ou expresse, de quelque nature que ce soit, et qu'EDSC décline toute responsabilité relativement à l'utilisation de la demande en ligne, y compris toute perte, tout dommage ou toute blessure découlant de ce qui suit\u00a0:",
+        "external-factors-disclaimer": "toute question ou tout facteur indépendant de sa volonté, y compris la disponibilité ou l'indisponibilité de l'Internet, de systèmes de télécommunications ou d'autres infrastructures;",
+        "online-application-information-non-acceptance": "la non-acceptation des renseignements transmis le refus des renseignements fournis dans la demande en ligne;",
+        "non-compliance": "le non-respect des présentes conditions générales.",
+        "esdc-liability-indemnification": "Vous acceptez par la présente de tenir EDSC indemne et de le dégager de toute responsabilité à cet égard."
+      },
+      "changes-to-these-terms-of-use": {
+        "heading": "Changements apportés aux présentes conditions générales d'utilisation",
+        "esdc-terms-amendment-policy": "EDSC peut modifier les présentes conditions générales d'utilisation à tout moment et sans préavis. Ces changements prennent effet immédiatement à la date de leur publication. En utilisant la demande en ligne, vous acceptez de respecter les conditions générales modifiées. Vous devez vous assurer de comprendre et de conserver les conditions générales modifiées."
       }
+    },
+    "privacy-notice-statement": {
+      "summary": "Énoncé de confidentialité",
+      "personal-information": {
+        "heading": "Renseignements personnels",
+        "service-canada-application-administration": "Service Canada, qui fait partie d'Emploi et Développement social Canada (EDSC), administre les demandes au titre du Régime canadien de soins dentaires (RCSD) au nom de Santé Canada (SC). Service Canada recueillera les renseignements personnels que vous inclurez dans votre demande au RCSD afin de valider l'admissibilité en fonction des critères du RCSD."
+      },
+      "how-we-protect-your-privacy": {
+        "heading": "Comment protégeons-nous vos renseignements personnels?",
+        "personal-information-collection-and-use-authorization": "La collecte et l'utilisation de vos renseignements personnels sont autorisées en vertu de la Loi sur la protection des renseignements personnels, de la Loi sur le ministère de la Santé, de la Loi sur les mesures de soins dentaires, de la Loi sur le ministère de l'Emploi et du Développement social et d'autres lois applicables.",
+        "personal-information-rights-and-access": "Vous avez droit à la protection de vos renseignements personnels, à l'accès à ceux-ci et, le cas échéant, à leur correction. Ils sont conservés dans les fichiers de renseignements personnels suivants\u00a0:",
+        "file-hc-ppu-440": "Régime canadien de soins dentaires HC PPU\u00a0440",
+        "info-source-access": "Vous pouvez apprendre comment accéder à cette information dans la publication du gouvernement intitulée <infosource>Info Source</infosource>. Vous pouvez également accéder à Info Source en ligne dans n'importe quel Centre Service Canada.",
+        "esdc-application-third-party-provider": "Emploi et Développement social Canada exécute cette demande en utilisant les services du fournisseur tiers Microsoft Corporation, qui peuvent être soumis à des lois étrangères. Pour plus d'information, consultez\u00a0: <microsoftDataPrivacyPolicy>Politique de confidentialité des données et principes de confidentialité de Microsoft</microsoftDataPrivacyPolicy>.",
+        "personal-information-handling-complaint-process": "Si vous n'êtes pas d'accord avec la façon dont vos renseignements personnels ont été traités par Service Canada, vous pouvez communiquer avec le commissaire à la protection de la vie privée du Canada pour <fileacomplaint>déposer une plainte</fileacomplaint>."
+      },
+      "who-we-can-share-your-information-with": {
+        "heading": "Avec qui nous pouvons partager vos renseignements",
+        "esdc-personal-information-sharing": "EDSC communiquera vos renseignements personnels à nos partenaires dans l'administration du régime afin de valider votre admissibilité et de vous inscrire au RCSD.",
+        "benefits-administration-data-disclosure": "Vos données peuvent également être divulguées à l'administrateur des prestations du RCSD et aux agents et fournisseurs de services de l'administrateur des prestations aux fins de souscription, de vérification, d'administration, de décision et d'enquête concernant les prestations versées au titre du RCSD.",
+        "esdc-information-usage-policy": "EDSC peut utiliser ou partager les renseignements que vous fournissez pour les activités d'analyse des politiques, de recherche, de surveillance et d'évaluation au sein d'EDSC et de SC. Ces utilisations ou activités n'auront aucune incidence sur les décisions administratives prises à votre sujet."
+      },
+      "what-happens-if-you-dont-give-us-your-information-heading": "Que se passe-t-il si vous ne nous fournissez pas vos renseignements?",
+      "what-happens-if-you-dont-give-us-your-information-text": "La participation au RCSD est volontaire. Toutefois, si vous ne fournissez pas vos renseignements personnels dans la demande, vous ne pouvez pas vous inscrire au RCSD."
+    },
+    "apply-now": {
+      "heading": "Présenter une demande maintenant",
+      "application-start-consent": "En lançant la demande, vous consentez aux conditions générales d'utilisation ci-dessus et à l'énoncé de confidentialité.",
+      "start-button": "Commencer à remplir une demande",
+      "back-button": "Retour"
+    },
+    "links": {
+      "file-complaint": "https://www.priv.gc.ca/fr/signaler-un-probleme/",
+      "hcaptcha": "https://www.hcaptcha.com/terms",
+      "info-source": "https://www.canada.ca/fr/emploi-developpement-social/ministere/transparence/aai/rapports/infosource.html",
+      "microsoft-data-privacy-policy": "https://www.microsoft.com/fr-ca/trust-center/privacy"
     }
   },
   "exit-application": {
