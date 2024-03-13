@@ -58,33 +58,49 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id } = await applyFlow.loadState({ request, params });
 
-  const emailsMatch = (val: { preferredMethod: string; email?: string; confirmEmail?: string }) => {
-    if (!val.email || !val.confirmEmail) {
+  const emailsMatch = (email: string | undefined, confirmEmail: string | undefined) => {
+    if (!email || !confirmEmail) {
       // if either email is omitted, skip the matching
       // check and render 'please enter a value'
       return true;
     }
-    if (val.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID) {
-      // emails have to match only when the preferred method is email id
-      return val.email.trim() === val.confirmEmail.trim();
-    }
-    return true;
+
+    return email.trim() === confirmEmail.trim();
   };
 
   const formSchema = z
     .object({
+      preferredLanguage: z.string({ required_error: 'empty-language' }),
       preferredMethod: z.string({ required_error: 'empty-method' }),
       email: z.string().min(1, { message: 'empty-email' }).email({ message: 'invalid-email' }).optional(),
       confirmEmail: z.string().min(1, { message: 'empty-confirm-email' }).optional(),
-      preferredLanguage: z.string({ required_error: 'empty-language' }),
+      emailForFuture: z.preprocess((arg) => (arg === '' ? undefined : arg), z.string().email({ message: 'invalid-email' }).optional()),
+      confirmEmailForFuture: z.string().optional(),
     })
     .superRefine((val, ctx) => {
-      if (!emailsMatch(val)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'not-the-same',
-          path: ['confirmEmail'],
-        });
+      if (val.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID) {
+        if (!emailsMatch(val.email, val.confirmEmail)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'not-the-same',
+            path: ['confirmEmail'],
+          });
+        }
+      } else {
+        if (val.emailForFuture && !val.confirmEmailForFuture) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'empty-confirm-email',
+            path: ['confirmEmailForFuture'],
+          });
+        }
+        if (!emailsMatch(val.emailForFuture, val.confirmEmailForFuture)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'not-the-same',
+            path: ['confirmEmailForFuture'],
+          });
+        }
       }
     });
 
@@ -111,16 +127,19 @@ export default function ApplyFlowCommunicationPreferencePage() {
   const { id, communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, state } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const [emailMethodChecked, setEmailMethodChecked] = useState(state?.preferredMethod === communicationMethodEmail.id);
+  const [nonEmailMethodChecked, setNonEmailMethodChecked] = useState(state && state.preferredMethod !== communicationMethodEmail.id);
 
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
 
   const emailMethodHandler = () => {
     setEmailMethodChecked(true);
+    setNonEmailMethodChecked(false);
   };
 
   const nonEmailMethodHandler = () => {
     setEmailMethodChecked(false);
+    setNonEmailMethodChecked(true);
   };
 
   /**
@@ -141,10 +160,12 @@ export default function ApplyFlowCommunicationPreferencePage() {
   }
 
   const errorMessages = {
+    preferredLanguage: getErrorMessage(actionData?.errors.preferredLanguage?._errors[0]),
     preferredMethod: getErrorMessage(actionData?.errors.preferredMethod?._errors[0]),
     email: getErrorMessage(actionData?.errors.email?._errors[0]),
     confirmEmail: getErrorMessage(actionData?.errors.confirmEmail?._errors[0]),
-    preferredLanguage: getErrorMessage(actionData?.errors.preferredLanguage?._errors[0]),
+    emailForFuture: getErrorMessage(actionData?.errors.emailForFuture?._errors[0]),
+    confirmEmailForFuture: getErrorMessage(actionData?.errors.confirmEmailForFuture?._errors[0]),
     sameEmail: getErrorMessage(actionData?.errors._errors[0]),
   };
 
@@ -162,6 +183,23 @@ export default function ApplyFlowCommunicationPreferencePage() {
       children: i18n.language === 'fr' ? method.nameFr : method.nameEn,
       value: method.id,
       defaultChecked: state && state.preferredMethod !== communicationMethodEmail.id,
+      append: nonEmailMethodChecked && (
+        <div className="mb-4 grid max-w-prose gap-6 md:grid-cols-2 ">
+          <p className="col-span-2" id="future-email-note">
+            {t('apply:communication-preference.future-email-note')}
+          </p>
+          <InputField id="emailForFuture" type="email" className="w-full" label={t('apply:communication-preference.future-email')} name="emailForFuture" errorMessage={errorMessages.emailForFuture} defaultValue={state?.emailForFuture} />
+          <InputField
+            id="confirmEmailForFuture"
+            type="email"
+            className="w-full"
+            label={t('apply:communication-preference.future-confirm-email')}
+            name="confirmEmailForFuture"
+            errorMessage={errorMessages.confirmEmailForFuture ?? errorMessages.sameEmail}
+            defaultValue={state?.confirmEmailForFuture}
+          />
+        </div>
+      ),
       onClick: nonEmailMethodHandler,
     }));
 
@@ -186,11 +224,6 @@ export default function ApplyFlowCommunicationPreferencePage() {
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <p className="mb-6">{t('apply:communication-preference.note')}</p>
       <Form method="post" noValidate className="space-y-6">
-        {preferredCommunicationMethods.length > 0 && (
-          <div id="preferredMethod">
-            <InputRadios id="preferred-methods" legend={t('apply:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages.preferredMethod} required></InputRadios>
-          </div>
-        )}
         {preferredLanguages.length > 0 && (
           <div id="preferredLanguage">
             <InputRadios
@@ -205,6 +238,12 @@ export default function ApplyFlowCommunicationPreferencePage() {
               errorMessage={errorMessages.preferredLanguage}
               required
             />
+          </div>
+        )}
+
+        {preferredCommunicationMethods.length > 0 && (
+          <div id="preferredMethod">
+            <InputRadios id="preferred-methods" legend={t('apply:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages.preferredMethod} required />
           </div>
         )}
         <div className="flex flex-wrap items-center gap-3">
