@@ -246,6 +246,10 @@
       "return-btn": "Revenir à la page principale"
     }
   },
+  "index": {
+    "page-title": "Présentation d'une demande d'adhésion au Régime canadien de soins dentaires",
+    "submit": "Continuer"
+  },
   "partner-information": {
     "page-title": "Renseignements sur l'époux/épouse ou le conjoint/conjointe de fait",
     "provide-sin": "Fournissez les renseignements sur votre époux/épouse ou conjoint/conjointe de fait actuel tels qu'ils figurent sur sa carte ou lettre d'assurance sociale.",
