@@ -30,10 +30,10 @@ const dentalInsuranceStateSchema = z.object({
 });
 
 const dentalBenefitsStateSchema = z.object({
-  federalBenefit: z.string().min(1),
-  federalSocialProgram: z.string().min(1),
-  provincialTerritorialBenefit: z.string().min(1),
-  provincialTerritorialSocialProgram: z.string().min(1),
+  federalBenefit: z.string({ required_error: 'federal-benefit' }).min(1).trim(),
+  federalSocialProgram: z.string().min(1).trim().optional(),
+  provincialTerritorialBenefit: z.string({ required_error: 'provincial-benefit' }).min(1).trim(),
+  provincialTerritorialSocialProgram: z.string().min(1).trim().optional(),
 });
 
 /**

@@ -136,13 +136,13 @@ export default function AccessToDentalInsuranceQuestion() {
           </div>
         )}
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink type="button" variant="alternative" to={`/apply/${id}/communication-preference`}>
+          <ButtonLink to={`/apply/${id}/communication-preference`}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('dental-insurance.button.back')}
           </ButtonLink>
-          <Button type="submit" variant="primary">
+          <Button variant="primary">
             {t('dental-insurance.button.continue')}
-            <FontAwesomeIcon icon={faChevronRight} className="me-3 block size-4" />
+            <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
           </Button>
         </div>
       </Form>
