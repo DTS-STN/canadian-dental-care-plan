@@ -54,7 +54,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const indigenousYesCode = indigenousTypes.find((indigenousType) => indigenousType.id === FIRST_NATIONS_YES_TYPE_ID);
   if (!indigenousYesCode) {
-    throw new Response(`Unexpected 'Other' indigenous type: ${FIRST_NATIONS_YES_TYPE_ID}`, { status: 500 });
+    throw new Response(`Unexpected 'Yes' indigenous type: ${FIRST_NATIONS_YES_TYPE_ID}`, { status: 500 });
   }
 
   return json({ id, meta, state: state.demographicsPart1, bornTypes, disabilityTypes, otherEquityCode, equityTypes, indigenousTypes, indigenousGroup, indigenousYesCode });
