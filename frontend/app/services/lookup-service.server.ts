@@ -132,6 +132,18 @@ const equityTypeSchema = z.object({
   nameFr: z.string().optional(),
 });
 
+const indigenousTypeSchema = z.object({
+  id: z.string(),
+  nameEn: z.string().optional(),
+  nameFr: z.string().optional(),
+});
+
+const indigenousGroupSchema = z.object({
+  id: z.string(),
+  nameEn: z.string().optional(),
+  nameFr: z.string().optional(),
+});
+
 export type PreferredLanguageInfo = z.infer<typeof preferredLanguageSchema>;
 export type RegionInfo = z.infer<typeof regionSchema>;
 
@@ -162,6 +174,8 @@ function createLookupService() {
     LOOKUP_SVC_ALLEQUITYTYPES_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_PROVINCIAL_TERRITORIAL_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_PROVINCIAL_TERRITORIAL_SOCIALPROGRAMS_CACHE_TTL_MILLISECONDS,
+    LOOKUP_SVC_INDIGENOUSTYPES_CACHE_TTL_MILLISECONDS,
+    LOOKUP_SVC_INDIGENOUSGROUPTYPES_CACHE_TTL_MILLISECONDS,
   } = getEnv();
 
   async function getAllPreferredLanguages() {
@@ -172,6 +186,47 @@ function createLookupService() {
 
     if (response.ok) {
       return preferredLanguageSchemaList.parse(await response.json());
+    }
+
+    log.error('%j', {
+      message: 'Failed to fetch data',
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+
+    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+  }
+
+  async function getAllIndigenousTypes() {
+    const url = `${INTEROP_API_BASE_URI}/lookups/indigenous-types/`;
+    const response = await fetch(url);
+
+    const indigenousTypeSchemaList = z.array(indigenousTypeSchema);
+
+    if (response.ok) {
+      return indigenousTypeSchemaList.parse(await response.json());
+    }
+
+    log.error('%j', {
+      message: 'Failed to fetch data',
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
+
+    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+  }
+  async function getAllIndigenousGroupTypes() {
+    const url = `${INTEROP_API_BASE_URI}/lookups/indigenous-group-types/`;
+    const response = await fetch(url);
+
+    const indigenousGroupSchemaList = z.array(indigenousGroupSchema);
+
+    if (response.ok) {
+      return indigenousGroupSchemaList.parse(await response.json());
     }
 
     log.error('%j', {
@@ -633,5 +688,7 @@ function createLookupService() {
     getAllEquityTypes: moize(getAllEquityTypes, { maxAge: LOOKUP_SVC_ALLEQUITYTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllEquityTypes memo') }),
     getAllProvincialTerritorialDentalBenefits: moize(getAllProvincialTerritorialDentalBenefits, { maxAge: LOOKUP_SVC_PROVINCIAL_TERRITORIAL_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllApplicationTypes memo') }),
     getAllProvincialTerritorialSocialPrograms: moize(getAllProvincialTerritorialSocialPrograms, { maxAge: LOOKUP_SVC_PROVINCIAL_TERRITORIAL_SOCIALPROGRAMS_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllApplicationTypes memo') }),
+    getAllIndigenousTypes: moize(getAllIndigenousTypes, { maxAge: LOOKUP_SVC_INDIGENOUSTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllIndigenousTypes memo') }),
+    getAllIndigenousGroupTypes: moize(getAllIndigenousGroupTypes, { maxAge: LOOKUP_SVC_INDIGENOUSGROUPTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllIndigenousGroupTypes memo') }),
   };
 }

@@ -90,6 +90,8 @@
       "question1": "1.(FR) Where were you born?",
       "question3": "3. (FR) Which of the following best describes your racial or ethnic group? Check all that apply:",
       "question3-other-specify": "(FR) Please specify",
+      "first-nations": "Êtes-vous membre des Premières Nations, Inuit(e) ou Métis(se)? Les Premières Nations (Indiens de l'Amérique du Nord) comprennent les Indiens inscrits et non inscrits. Si «\u00a0Oui\u00a0», sélectionnez les réponses qui vous décrivent le mieux.",
+      "first-nations-specify": "(FR) Please specify",
       "question4": "4.(FR) Do you identify as a person with a disability?",
       "question4-note": "(FR) A person with a disability is a person who has a long-term difficulty or  condition, such as vision, hearing, mobility, flexibility, dexterity, pain, learning, developmental, memory or mental health-related impairments, that limit their daily activities inside or outside the home such as at school, work, or in the community in general.",
       "button-back": "(FR) Back",

@@ -53,8 +53,55 @@ const demographicDB = factory({
     nameEn: String,
     nameFr: String,
   },
+
+  indigenousType: {
+    id: primaryKey(faker.string.uuid),
+    nameEn: String,
+    nameFr: String,
+  },
+
+  indigenousGroup: {
+    id: primaryKey(faker.string.uuid),
+    nameEn: String,
+    nameFr: String,
+  },
 });
 
+demographicDB.indigenousGroup.create({
+  id: 'firstNations',
+  nameEn: 'First Nations (North American Indian)',
+  nameFr: '(FR) First Nations (North American Indian)',
+});
+
+demographicDB.indigenousGroup.create({
+  id: 'metis',
+  nameEn: 'Métis',
+  nameFr: '(FR) Métis',
+});
+
+demographicDB.indigenousGroup.create({
+  id: 'inuk',
+  nameEn: 'Inuk (Inuit)',
+  nameFr: '(FR) Inuk (Inuit)',
+});
+
+demographicDB.indigenousType.create({
+  id: 'first-nations-no',
+  nameEn: 'No',
+  nameFr: 'Non',
+});
+
+demographicDB.indigenousType.create({
+  id: 'first-nations-yes',
+  nameEn: 'Yes',
+  nameFr: 'Oui',
+});
+
+demographicDB.indigenousType.create({
+  id: 'first-nations-prefer',
+  nameEn: 'Prefer not to answer',
+  nameFr: 'Je préfère ne pas répondre',
+});
 demographicDB.genderType.create({
   id: 'gender-male',
   nameEn: 'Male',
@@ -80,134 +127,161 @@ demographicDB.genderType.create({
 });
 
 demographicDB.avoidedDentalCostType.create({
+  id: 'yes',
   nameEn: 'Yes',
   nameFr: 'Oui',
 });
 
 demographicDB.avoidedDentalCostType.create({
+  id: 'no',
   nameEn: 'No',
   nameFr: 'Non',
 });
 
 demographicDB.avoidedDentalCostType.create({
+  id: 'dontKnow',
   nameEn: "Don't know",
   nameFr: 'Ne sais pas',
 });
 
 demographicDB.avoidedDentalCostType.create({
+  id: 'noAnswer',
   nameEn: 'Prefer not to answer',
   nameFr: '(FR) Prefer not to answer',
 });
 
 demographicDB.lastTimeDentistVisitType.create({
+  id: 'lessThanAYear',
   nameEn: 'Less than a year ago',
   nameFr: '(FR) Less than a year ago',
 });
 
 demographicDB.lastTimeDentistVisitType.create({
+  id: 'oneToThreeYears',
   nameEn: '1 year to less than 3 years ago',
   nameFr: '(FR) 1 year to less than 3 years ago',
 });
 
 demographicDB.lastTimeDentistVisitType.create({
+  id: 'threeYearsOrMore',
   nameEn: '3 years ago, or more',
   nameFr: '(FR) 3 years ago, or more',
 });
 
 demographicDB.lastTimeDentistVisitType.create({
+  id: 'rarely',
   nameEn: 'Rarely',
   nameFr: '(FR) Rarely',
 });
 
 demographicDB.lastTimeDentistVisitType.create({
+  id: 'never',
   nameEn: 'Never seen an oral health professional',
   nameFr: '(FR) Never seen an oral health professional',
 });
 
 demographicDB.lastTimeDentistVisitType.create({
+  id: 'dontKnow',
   nameEn: "Don't know",
   nameFr: 'Ne sais pas',
 });
 
 demographicDB.lastTimeDentistVisitType.create({
+  id: 'noAnswer',
   nameEn: 'Prefer not to answer',
   nameFr: '(FR) Prefer not to answer',
 });
 
 demographicDB.bornType.create({
+  id: 'bornInCanada',
   nameEn: 'Born in Canada',
   nameFr: '(FR) Born in Canada',
 });
 
 demographicDB.bornType.create({
+  id: 'bornOutsideCanada',
   nameEn: 'Born outside Canada',
   nameFr: '(FR) Born outside Canada',
 });
 demographicDB.bornType.create({
+  id: 'noAnswer',
   nameEn: 'Prefer not to answer',
   nameFr: '(FR) Prefer not to answer',
 });
 
 demographicDB.disabilityType.create({
+  id: 'yes',
   nameEn: 'Yes',
   nameFr: 'Oui',
 });
 demographicDB.disabilityType.create({
+  id: 'no',
   nameEn: 'No',
   nameFr: 'Non',
 });
 
 demographicDB.disabilityType.create({
+  id: 'dontKnow',
   nameEn: "Don't know",
   nameFr: 'Ne sais pas',
 });
 
 demographicDB.disabilityType.create({
+  id: 'noAnswer',
   nameEn: 'Prefer not to answer',
   nameFr: '(FR) Prefer not to answer',
 });
 
 demographicDB.sexAtBirthType.create({
+  id: 'male',
   nameEn: 'Male',
   nameFr: 'Mâle',
 });
 
 demographicDB.sexAtBirthType.create({
+  id: 'female',
   nameEn: 'Female',
   nameFr: 'Femelle',
 });
 
 demographicDB.sexAtBirthType.create({
+  id: 'noAnswer',
   nameEn: 'Prefer not to answer',
   nameFr: '(FR) Prefer not to answer',
 });
 
 demographicDB.mouthPainType.create({
+  id: 'often',
   nameEn: 'Often',
   nameFr: '(FR) Often',
 });
 
 demographicDB.mouthPainType.create({
+  id: 'sometimes',
   nameEn: 'Sometimes',
   nameFr: '(FR) Sometimes',
 });
 
 demographicDB.mouthPainType.create({
+  id: 'rarely',
   nameEn: 'Rarely',
   nameFr: '(FR) Rarely',
 });
 
 demographicDB.mouthPainType.create({
+  id: 'never',
   nameEn: 'Never',
   nameFr: '(FR) Never',
 });
 
 demographicDB.mouthPainType.create({
+  id: 'dontKnow',
   nameEn: "Don't know",
   nameFr: 'Ne sais pas',
 });
 
 demographicDB.mouthPainType.create({
+  id: 'noAnswer',
   nameEn: 'Prefer not to answer',
   nameFr: '(FR) Prefer not to answer',
 });
