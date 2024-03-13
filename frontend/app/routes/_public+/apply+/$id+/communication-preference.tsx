@@ -243,7 +243,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
 
         {preferredCommunicationMethods.length > 0 && (
           <div id="preferredMethod">
-            <InputRadios id="preferred-methods" legend={t('apply:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages.preferredMethod} required></InputRadios>
+            <InputRadios id="preferred-methods" legend={t('apply:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages.preferredMethod} required />
           </div>
         )}
         <div className="flex flex-wrap items-center gap-3">
