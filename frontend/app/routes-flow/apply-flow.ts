@@ -84,6 +84,13 @@ const communicationPreferencesStateSchema = z.object({
 });
 
 /**
+ * Schema for demographic reference.
+ */
+const demographicsPart1StateSchema = z.object({
+  otherEquity: z.string().trim().min(1).optional(),
+});
+
+/**
  * Schema for communication reference.
  */
 const demographicsPart2StateSchema = z.object({
@@ -124,6 +131,7 @@ const applyStateSchema = z.object({
   applicantInformation: applicantInformationSchema.optional(),
   personalInformation: personalInformationStateSchema.optional(),
   communicationPreferences: communicationPreferencesStateSchema.optional(),
+  demographicsPart1: demographicsPart1StateSchema.optional(),
   demographicsPart2: demographicsPart2StateSchema.optional(),
   partnerInformation: partnerInformationSchema.optional(),
   termsAndConditions: termsAndConditionSchema.optional(),

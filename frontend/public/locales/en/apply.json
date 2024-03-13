@@ -88,6 +88,8 @@
       "paragraph1": "Answering the following questions will not impact your application in the CDCP. Providing a response to the questions below is voluntary. Your input, will help Health Canada evaluate and improve the Canadian Dental Care Plan, including understanding if there are potential access or inequity issues. ",
       "paragraph2": "All responses have an option of \"prefer not to answer\". All responses are kept confidential and are only used for program monitoring, evaluation and reporting purposes.",
       "question1": "1. Where were you born?",
+      "question3": "3. Which of the following best describes your racial or ethnic group? Check all that apply:",
+      "question3-other-specify": "Please specify",
       "question4": "4. Do you identify as a person with a disability?",
       "question4-note": "A person with a disability is a person who has a long-term difficulty or  condition, such as vision, hearing, mobility, flexibility, dexterity, pain, learning, developmental, memory or mental health-related impairments, that limit their daily activities inside or outside the home such as at school, work, or in the community in general.",
       "button-back": "Back",

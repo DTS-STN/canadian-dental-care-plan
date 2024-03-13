@@ -47,6 +47,12 @@ const demographicDB = factory({
     nameEn: String,
     nameFr: String,
   },
+
+  equityType: {
+    id: primaryKey(faker.string.uuid),
+    nameEn: String,
+    nameFr: String,
+  },
 });
 
 demographicDB.genderType.create({
@@ -205,4 +211,60 @@ demographicDB.mouthPainType.create({
   nameEn: 'Prefer not to answer',
   nameFr: '(FR) Prefer not to answer',
 });
+demographicDB.equityType.create({
+  id: 'equity-black',
+  nameEn: 'Black (African, African Canadian, Afro-Caribbean descent)',
+  nameFr: '(FR) Black (African, African Canadian, Afro-Caribbean descent)',
+});
+demographicDB.equityType.create({
+  id: 'equity-easian',
+  nameEn: 'East Asian (Chinese, Japanese, Korean, Taiwanese descent)',
+  nameFr: '(FR) East Asian (Chinese, Japanese, Korean, Taiwanese descent)',
+});
+demographicDB.equityType.create({
+  id: 'equity-indigenous',
+  nameEn: 'Indigenous (First Nations, Inuk/Inuit, Métis descent)',
+  nameFr: '(FR) Indigenous (First Nations, Inuk/Inuit, Métis descent)',
+});
+demographicDB.equityType.create({
+  id: 'equity-lamerican',
+  nameEn: 'Latin Amercian (Hispanic or Latin American descent)',
+  nameFr: '(FR) Latin Amercian (Hispanic or Latin American descent)',
+});
+demographicDB.equityType.create({
+  id: 'equity-meastern',
+  nameEn: 'Middle Eastern (Arab, Persian, West Asian descent (e.g., Afghan, Egyptian, Iranian, Kurdish, Lebanese, Turkish))',
+  nameFr: '(FR) Middle Eastern (Arab, Persian, West Asian descent (e.g., Afghan, Egyptian, Iranian, Kurdish, Lebanese, Turkish))',
+});
+demographicDB.equityType.create({
+  id: 'equity-sasian',
+  nameEn: 'South Asian (South Asian descent (e.g., Bangladeshi, Indian, Indo-Caribean, Pakistani, Sri Lankan))',
+  nameFr: '(FR) South Asian (South Asian descent (e.g., Bangladeshi, Indian, Indo-Caribean, Pakistani, Sri Lankan))',
+});
+demographicDB.equityType.create({
+  id: 'equity-seasian',
+  nameEn: 'Southeast Asian (Cambodian, Filipino, Indonesian, Thai, Vietnamese or other Southeast Asian descent)',
+  nameFr: '(FR) Southeast Asian Southeast Asian (Cambodian, Filipino, Indonesian, Thai, Vietnamese or other Southeast Asian descent)',
+});
+demographicDB.equityType.create({
+  id: 'equity-white',
+  nameEn: 'White (European Descent)',
+  nameFr: '(FR) White (European Descent)',
+});
+demographicDB.equityType.create({
+  id: 'equity-other',
+  nameEn: 'Another race category',
+  nameFr: '(FR) Another race category',
+});
+demographicDB.equityType.create({
+  id: 'equity-unknown',
+  nameEn: "Don't know",
+  nameFr: "(FR) Don't know",
+});
+demographicDB.equityType.create({
+  id: 'equity-unanswered',
+  nameEn: 'Prefer not to answer',
+  nameFr: '(FR) Prefer not to answer',
+});
+
 export { demographicDB };
