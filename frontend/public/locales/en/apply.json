@@ -246,6 +246,10 @@
       "return-btn": "Return main page"
     }
   },
+  "index": {
+    "page-title": "Applying for the Canadian Dental Care Plan",
+    "submit": "Continue"
+  },
   "partner-information": {
     "page-title": "Spouse / Common-law partner information",
     "provide-sin": "Provide information on your current spouse or common-law partner as indicated on their SIN card/letter.",
