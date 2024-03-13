@@ -13,6 +13,7 @@ import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
+import { getLookupService } from '~/services/lookup-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -33,58 +34,66 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   //TODO: Get User/apply form information
   const applyFlow = getApplyFlow();
-  const { id } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ request, params });
+  const dob = { year: state.dob?.year ?? 2024, month: state.dob?.month ?? 1, day: state.dob?.day ?? 1 };
+  const partnerDob = { year: state.partnerInformation?.year ?? 2024, month: state.partnerInformation?.month ?? 1, day: state.partnerInformation?.day ?? 1 };
 
   const userInfo = {
     firstName: 'John',
     id: '00000000-0000-0000-0000-000000000000',
-    lastName: 'Maverick',
-    phoneNumber: '(754) 628-4776',
-    altPhoneNumber: '(819) 777-1234',
-    preferredLanguage: 'fr',
-    birthday: new Date().toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' }),
-    sin: '123456789',
-    martialStatus: 'Married',
-    email: 'myemail@example.com',
-    communicationPreference: 'email',
+    lastName: state.applicantInformation?.lastName,
+    phoneNumber: state.personalInformation?.phoneNumber,
+    altPhoneNumber: state.personalInformation?.phoneNumberAlt,
+    preferredLanguage: state.communicationPreferences?.preferredLanguage ?? 'en',
+    birthday: new Date(dob.year, dob.month, dob.day).toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' }),
+    sin: state.applicantInformation?.socialInsuranceNumber,
+    martialStatus: state.applicantInformation?.maritalStatus,
+    email: state.communicationPreferences?.email,
+    communicationPreference: state.communicationPreferences?.preferredMethod,
   };
   const spouseInfo = {
     firstName: 'Phil',
     id: '00000000-0000-0000-0000-000000000001',
-    lastName: 'Doe',
+    lastName: state.partnerInformation?.lastName,
     phoneNumber: '(754) 628-4776',
-    birthday: new Date().toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' }),
+    birthday: new Date(partnerDob.year, partnerDob.month, partnerDob.day).toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' }),
     sin: '123456789',
-    consent: true,
+    consent: state.partnerInformation?.confirm === 'on' ? true : false,
   };
-  const preferredLanguage = {
-    id: 'fr',
-    nameEn: 'French',
-    nameFr: 'Français',
-  };
+  const preferredLanguage = (await getLookupService().getPreferredLanguage(userInfo.preferredLanguage)) ?? { id: 'en', nameEn: 'English', nameFr: 'Anglais' };
   const mailingAddressInfo = {
-    address: '44367 Ibrahim Field',
-    city: 'Lake Granvillestead',
-    province: 'PE',
-    postalCode: 'P1L 1C5',
-    country: 'CAN',
+    address: state.personalInformation?.mailingAddress ?? 'Unknown',
+    appartment: state.personalInformation?.mailingApartment ?? 'Unknown',
+    city: state.personalInformation?.mailingCity ?? 'Unknown',
+    province: state.personalInformation?.mailingProvince ?? 'Unknown',
+    postalCode: state.personalInformation?.mailingPostalCode ?? 'Unknown',
+    country: state.personalInformation?.mailingCountry ?? 'Unknown',
   };
   const homeAddressInfo = {
-    address: '724 Mason Mission',
-    city: 'Reichelmouth',
-    province: 'NS',
-    postalCode: 'T9K 6P4',
-    country: 'CAN',
+    address: state.personalInformation?.homeAddress ?? 'Unknown',
+    appartment: state.personalInformation?.homeApartment ?? 'Unknown',
+    city: state.personalInformation?.homeCity ?? 'Unknown',
+    province: state.personalInformation?.homeProvince ?? 'Unknown',
+    postalCode: state.personalInformation?.homePostalCode ?? 'Unknown',
+    country: state.personalInformation?.homeCountry ?? 'Unknown',
   };
-  const dentalInsurance = {
-    private: [],
-    public: [{ id: 'benefit-id', benefitEn: 'Dental and Optical Assistance for Senioirs (65+)', benefitFR: '(FR) Dental and Optical Assistance for Senioirs (65+)' }],
+  const dentalInsurance = state.dentalInsurance?.dentalInsurance;
+
+  const dentalBenefit = {
+    federalBenefit: {
+      access: state.dentalBenefit?.federalBenefit,
+      benefit: state.dentalBenefit?.federalSocialProgram,
+    },
+    provTerrBenefit: {
+      access: state.dentalBenefit?.provincialTerritorialBenefit,
+      benefit: state.dentalBenefit?.provincialTerritorialSocialProgram,
+    },
   };
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:review-information.page-title') }) };
 
-  return json({ dentalInsurance, homeAddressInfo, id, mailingAddressInfo, meta, preferredLanguage, spouseInfo, userInfo });
+  return json({ id, userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, meta });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -96,8 +105,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ReviewInformation() {
-  const { id, userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance } = useLoaderData<typeof loader>();
+  const { id, userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
+
   return (
     <>
       <p className="my-4 max-w-3xl text-lg">{t('apply:review-information.read-carefully')}</p>
@@ -231,11 +241,8 @@ export default function ReviewInformation() {
       <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.dental-title')}</h2>
       <dl>
         <DescriptionListItem term={t('apply:review-information.dental-private-title')}>
-          {dentalInsurance.private.length > 0
-            ? dentalInsurance.private.map((benefit) => {
-                return benefit;
-              })
-            : t('apply:review-information.dental-has-no-access')}
+          {t('apply:review-information.dental-insurance-has-access')}
+          {dentalInsurance === 'yes' ? t('apply:review-information.yes') : t('apply:review-information.no')}
           <p className="mt-4">
             <InlineLink id="change-access-dental" to="/">
               {t('apply:review-information.dental-private-change')}
@@ -243,18 +250,25 @@ export default function ReviewInformation() {
           </p>
         </DescriptionListItem>
         <DescriptionListItem term={t('apply:review-information.dental-public-title')}>
-          {dentalInsurance.public.length > 0 ? (
+          {dentalBenefit.federalBenefit.access === 'yes' ? (
             <div>
               <span>{t('apply:review-information.dental-has-access')}</span>
               <ul className="ml-6 list-disc">
-                {dentalInsurance.public.map((benefit) => {
-                  // eslint-disable-next-line react/jsx-key
-                  return <li key={benefit.id}>{benefit.benefitEn}</li>;
-                })}
+                <li>{dentalBenefit.federalBenefit.benefit}</li>
               </ul>
             </div>
           ) : (
-            t('apply:review-information.dental-has-no-access')
+            t('apply:review-information.dental-federal-no-access')
+          )}
+          {dentalBenefit.provTerrBenefit.access === 'yes' ? (
+            <div>
+              <span>{t('apply:review-information.dental-has-access')}</span>
+              <ul className="ml-6 list-disc">
+                <li>{dentalBenefit.provTerrBenefit.benefit}</li>
+              </ul>
+            </div>
+          ) : (
+            t('apply:review-information.dental-provincial-no-access')
           )}
           <p className="mt-4">
             <InlineLink id="change-dental-benefits" to="/">
