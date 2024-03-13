@@ -68,6 +68,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return email.trim() === confirmEmail.trim();
   };
 
+  const isEmpty = (value: string | undefined) => {
+    if (!value) {
+      return true;
+    }
+    return !value.trim();
+  };
+
   const formSchema = z
     .object({
       preferredLanguage: z.string({ required_error: 'empty-language' }),
@@ -87,11 +94,18 @@ export async function action({ request, params }: ActionFunctionArgs) {
           });
         }
       } else {
-        if (val.emailForFuture && !val.confirmEmailForFuture) {
+        if (val.emailForFuture && isEmpty(val.confirmEmailForFuture)) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: 'empty-confirm-email',
             path: ['confirmEmailForFuture'],
+          });
+        }
+        if (isEmpty(val.emailForFuture) && val.confirmEmailForFuture) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'empty-email',
+            path: ['emailForFuture'],
           });
         }
         if (!emailsMatch(val.emailForFuture, val.confirmEmailForFuture)) {
