@@ -76,12 +76,9 @@ export default async function handleRequest(request: Request, responseStatusCode
   const locale = await getLocale(request);
   const routes = Object.values(remixContext.routeModules);
   const i18n = await initI18n(locale, getNamespaces(routes));
-
   const nonce = randomHexString(32);
-  const contentSecurityPolicy = generateContentSecurityPolicy(nonce);
 
   // @see: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
-  responseHeaders.set('Content-Security-Policy', contentSecurityPolicy);
   responseHeaders.set('Content-Type', 'text/html; charset=UTF-8');
   responseHeaders.set('Content-Security-Policy', generateContentSecurityPolicy(nonce));
   responseHeaders.append('Set-Cookie', await createLangCookie().serialize(locale));
