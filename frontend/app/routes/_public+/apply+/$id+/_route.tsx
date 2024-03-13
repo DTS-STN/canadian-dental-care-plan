@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { Outlet, useNavigate } from '@remix-run/react';
 
-import { handle as layoutHandle } from '~/routes/_public+/apply+/_layout';
+import { handle as layoutHandle } from '~/routes/_public+/apply+/_route';
 import { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
