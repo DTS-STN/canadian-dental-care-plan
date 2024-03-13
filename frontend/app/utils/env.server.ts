@@ -46,11 +46,13 @@ const serverEnv = z.object({
   COUNTRY_CODE_CANADA: z.string().trim().min(1).default('CAN'),
   COUNTRY_CODE_USA: z.string().trim().min(1).default('USA'),
   OTHER_EQUITY_TYPE_ID: z.string().trim().min(1).default('equity-other'),
+  FIRST_NATIONS_YES_TYPE_ID: z.string().trim().min(1).default('first-nations-yes'),
+  
   // TODO :: GjB :: these base URIs should not have defaults
   INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
   CCT_API_BASE_URI: z.string().url().default('https://api.example.com'),
   SCCH_BASE_URI: z.string().url().default('https://www.example.com'),
-
+  
   // auth/oidc settings
   AUTH_JWT_PRIVATE_KEY: z.string().refine(isValidPrivateKey),
   AUTH_JWT_PUBLIC_KEY: z.string().refine(isValidPublicKey),
@@ -120,7 +122,8 @@ const serverEnv = z.object({
   LOOKUP_SVC_ALLEQUITYTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_PROVINCIAL_TERRITORIAL_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   LOOKUP_SVC_PROVINCIAL_TERRITORIAL_SOCIALPROGRAMS_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
-  
+  LOOKUP_SVC_INDIGENOUSTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
+  LOOKUP_SVC_INDIGENOUSGROUPTYPES_CACHE_TTL_MILLISECONDS: z.coerce.number().default(60 * 60 * 1000),
   GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
 
   // OpenTelemetry/Dynatrace settings

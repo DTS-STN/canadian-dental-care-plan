@@ -58,11 +58,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { id } = await applyFlow.loadState({ request, params });
 
   const formSchema = z.object({
-    gender: z.string({ required_error: 'empty-radio' }),
+    gender: z.string().trim().optional(),
     otherGender: z.string().min(1, { message: 'empty-field' }).optional(),
-    mouthPainType: z.string({ required_error: 'empty-radio' }),
-    lastDentalVisitType: z.string({ required_error: 'empty-radio' }),
-    avoidedDentalCareDueToCost: z.string({ required_error: 'empty-radio' }),
+    mouthPainType: z.string().trim().optional(),
+    lastDentalVisitType: z.string().trim().optional(),
+    avoidedDentalCareDueToCost: z.string().trim().optional(),
   });
 
   const formData = Object.fromEntries(await request.formData());
@@ -135,7 +135,7 @@ export default function DemographicsPart2() {
     .map((genderType) => ({
       children: getNameByLanguage(i18n.language, genderType),
       value: genderType.id,
-      //defaultChecked: state && state.gender !== otherGenderCode.id,
+      defaultChecked: state && state.gender !== otherGenderCode.id,
       onClick: nonOtherGenderHandler,
     }));
 
@@ -157,8 +157,8 @@ export default function DemographicsPart2() {
   return (
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post" className="space-y-6">
-        {genderTypes.length > 0 && <InputRadios id="gender" legend={t('apply:demographics-oral-health-questions.part2.question-gender')} name="gender" errorMessage={errorMessages.gender} options={options} required></InputRadios>}
+      <Form method="post" noValidate className="space-y-6">
+        {genderTypes.length > 0 && <InputRadios id="gender" legend={t('apply:demographics-oral-health-questions.part2.question-gender')} name="gender" errorMessage={errorMessages.gender} options={options} />}
 
         {mouthPainTypes.length > 0 && (
           <InputRadios
@@ -166,11 +166,11 @@ export default function DemographicsPart2() {
             name="mouthPainType"
             legend={t('apply:demographics-oral-health-questions.part2.question-mouth-pain')}
             options={mouthPainTypes.map((mouthPainType) => ({
+              defaultChecked: state?.mouthPainType === mouthPainType.id,
               children: getNameByLanguage(i18n.language, mouthPainType),
               value: mouthPainType.id,
             }))}
             errorMessage={errorMessages.mouthPainType}
-            required
           />
         )}
         {lastTimeDentistVisitTypes.length > 0 && (
@@ -179,11 +179,11 @@ export default function DemographicsPart2() {
             name="lastDentalVisitType"
             legend={t('apply:demographics-oral-health-questions.part2.question-last-dental-visit')}
             options={lastTimeDentistVisitTypes.map((lastTimeDentistVisitType) => ({
+              defaultChecked: state?.lastDentalVisitType === lastTimeDentistVisitType.id,
               children: getNameByLanguage(i18n.language, lastTimeDentistVisitType),
               value: lastTimeDentistVisitType.id,
             }))}
             errorMessage={errorMessages.lastDentalVisitType}
-            required
           />
         )}
         {avoidedDentalCostTypes.length > 0 && (
@@ -192,11 +192,11 @@ export default function DemographicsPart2() {
             name="avoidedDentalCareDueToCost"
             legend={t('apply:demographics-oral-health-questions.part2.question-avoided-dental-cost')}
             options={avoidedDentalCostTypes.map((avoidedDentalCostType) => ({
+              defaultChecked: state?.avoidedDentalCareDueToCost === avoidedDentalCostType.id,
               children: getNameByLanguage(i18n.language, avoidedDentalCostType),
               value: avoidedDentalCostType.id,
             }))}
             errorMessage={errorMessages.avoidedDentalCareDueToCost}
-            required
           />
         )}
         <div className="flex flex-wrap items-center gap-3">

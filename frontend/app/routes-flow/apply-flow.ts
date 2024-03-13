@@ -88,17 +88,21 @@ const communicationPreferencesStateSchema = z.object({
  */
 const demographicsPart1StateSchema = z.object({
   otherEquity: z.string().trim().min(1).optional(),
+  indigenousType: z.string().trim().optional(),
+  indigenousGroup: z.string().trim().optional(),
+  bornType: z.string().trim().optional(),
+  disabilityType: z.string().trim().optional(),
 });
 
 /**
  * Schema for communication reference.
  */
 const demographicsPart2StateSchema = z.object({
-  gender: z.string().min(1),
+  gender: z.string().trim().optional(),
   otherGender: z.string().min(1).optional(),
-  mouthPainType: z.string().min(1),
-  lastDentalVisitType: z.string().min(1),
-  avoidedDentalCareDueToCost: z.string().min(1),
+  mouthPainType: z.string().trim().optional(),
+  lastDentalVisitType: z.string().trim().optional(),
+  avoidedDentalCareDueToCost: z.string().trim().optional(),
 });
 
 /**
@@ -285,5 +289,7 @@ export function getApplyFlow() {
     taxFilingSchema,
     typeOfApplicationSchema,
     termsAndConditionSchema,
+    demographicsPart2StateSchema,
+    demographicsPart1StateSchema,
   };
 }

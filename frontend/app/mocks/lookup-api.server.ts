@@ -33,6 +33,24 @@ export function getLookupApiMockHandlers() {
     }),
 
     //
+    // Handler for GET request to retrieve all first nations types
+    //
+    http.get('https://api.example.com/lookups/indigenous-types', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const indigenousTypes = demographicDB.indigenousType.getAll();
+      return HttpResponse.json(indigenousTypes);
+    }),
+
+    //
+    // Handler for GET request to retrieve all first nations enum types
+    //
+    http.get('https://api.example.com/lookups/indigenous-group-types', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const indigenousGroup = demographicDB.indigenousGroup.getAll();
+      return HttpResponse.json(indigenousGroup);
+    }),
+
+    //
     // Handler for GET request to retrieve all sex-at-birth types
     //
     http.get('https://api.example.com/lookups/sex-at-birth-types', ({ request }) => {
