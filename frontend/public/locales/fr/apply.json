@@ -146,6 +146,12 @@
     "button": {
       "back": "(Fr) Back",
       "continue": "(Fr) Continue"
+    },
+    "error-message": {
+      "federal-benefit": "(Fr) Federal benefit must be selected",
+      "federal-program": "(Fr) Federal program must be selected",
+      "provincial-benefit": "(Fr) Provincial benefit must be selected",
+      "provincial-program": "(Fr) Provincial program must be selected"
     }
   },
   "dental-insurance": {
