@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { ButtonLink } from '~/components/buttons';
-import { CollapsibleDetails } from '~/components/collapsible';
+import { Collapsible } from '~/components/collapsible';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -59,9 +59,9 @@ export default function TermsAndConditions() {
 
   return (
     <div className="max-w-prose">
-      <div className="space-y-4">
+      <div className="space-y-6">
         <p>{t('apply:terms-and-conditions.intro-text')}</p>
-        <CollapsibleDetails id="collapsable-description-first-part" summary={t('apply:terms-and-conditions.terms-and-conditions-of-use.summary')}>
+        <Collapsible summary={t('apply:terms-and-conditions.terms-and-conditions-of-use.summary')}>
           <div className="space-y-4">
             <h2 className="font-bold">{t('apply:terms-and-conditions.terms-and-conditions-of-use.heading')}</h2>
             <p>
@@ -99,9 +99,9 @@ export default function TermsAndConditions() {
             <h2 className="font-bold">{t('apply:terms-and-conditions.terms-and-conditions-of-use.changes-to-these-terms-of-use.heading')}</h2>
             <p>{t('apply:terms-and-conditions.terms-and-conditions-of-use.changes-to-these-terms-of-use.esdc-terms-amendment-policy')}</p>
           </div>
-        </CollapsibleDetails>
+        </Collapsible>
 
-        <CollapsibleDetails id="collapsable-description-second-part" summary={t('apply:terms-and-conditions.privacy-notice-statement.summary')}>
+        <Collapsible summary={t('apply:terms-and-conditions.privacy-notice-statement.summary')}>
           <div className="space-y-4">
             <h2 className="font-bold"> {t('apply:terms-and-conditions.privacy-notice-statement.personal-information.heading')}</h2>
             <p>{t('apply:terms-and-conditions.privacy-notice-statement.personal-information.service-canada-application-administration')}</p>
@@ -130,7 +130,7 @@ export default function TermsAndConditions() {
             <h2 className="font-bold">{t('apply:terms-and-conditions.privacy-notice-statement.what-happens-if-you-dont-give-us-your-information-heading')} </h2>
             <p>{t('apply:terms-and-conditions.privacy-notice-statement.what-happens-if-you-dont-give-us-your-information-text')}</p>
           </div>
-        </CollapsibleDetails>
+        </Collapsible>
       </div>
       <h2 className="my-8 font-lato text-2xl font-bold">{t('apply:terms-and-conditions.apply-now.heading')}</h2>
       <p>{t('apply:terms-and-conditions.apply-now.application-start-consent')}</p>
