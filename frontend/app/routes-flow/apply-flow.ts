@@ -1,10 +1,10 @@
-import { redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
 
 import { z } from 'zod';
 
 import { getSessionService } from '~/services/session-service.server';
 import { isValidSin } from '~/utils/apply-utils';
+import { redirectWithLocale } from '~/utils/locale-utils.server';
 
 /**
  * Schema for validating UUID.
@@ -170,7 +170,7 @@ async function loadState({ params, request, fallbackRedirectUrl = '/apply' }: Lo
   const id = idSchema.safeParse(params.id);
 
   if (!id.success) {
-    throw redirect(fallbackRedirectUrl, 302);
+    throw redirectWithLocale(request, fallbackRedirectUrl, 302);
   }
 
   const sessionService = await getSessionService();
@@ -179,7 +179,7 @@ async function loadState({ params, request, fallbackRedirectUrl = '/apply' }: Lo
   const sessionName = getSessionName(id.data);
 
   if (!session.has(sessionName)) {
-    throw redirect(fallbackRedirectUrl, 302);
+    throw redirectWithLocale(request, fallbackRedirectUrl, 302);
   }
 
   const sessionState = session.get(sessionName);

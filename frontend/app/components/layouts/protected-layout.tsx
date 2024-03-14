@@ -6,6 +6,7 @@ import { faArrowRightFromBracket, faChevronDown, faCircleUser } from '@fortaweso
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { AppLink } from '../app-link';
 import { Breadcrumbs } from '~/components/breadcrumbs';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '~/components/dropdown-menu';
 import { InlineLink } from '~/components/inline-link';
@@ -27,7 +28,6 @@ export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 export function ProtectedLayout({ children }: PropsWithChildren) {
   return (
     <>
-      <SkipNavigationLinks />
       <PageHeader />
       <PageBreadcrumbs />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
@@ -92,14 +92,15 @@ function PageHeader() {
 
   return (
     <header>
+      <SkipNavigationLinks />
       <PageHeaderBrand />
       <section className="bg-gray-700 text-white">
         <div className="sm:container">
           <div className="flex flex-col items-stretch justify-between sm:flex-row sm:items-center">
             <h2 className="p-4 font-lato text-xl font-semibold sm:p-0 sm:py-3 sm:text-2xl">
-              <Link to="/" className="hover:underline">
+              <AppLink to="/" className="hover:underline">
                 {t('gcweb:header.application-title')}
-              </Link>
+              </AppLink>
             </h2>
             <NavigationMenu />
           </div>

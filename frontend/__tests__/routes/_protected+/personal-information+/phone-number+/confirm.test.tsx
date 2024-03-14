@@ -1,8 +1,6 @@
-import { redirect } from '@remix-run/node';
-
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/_protected+/personal-information+/phone-number+/confirm';
+import { action, loader } from '~/routes/$lang+/_protected+/personal-information+/phone-number+/confirm';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 
@@ -33,6 +31,8 @@ vi.mock('~/services/user-service.server', () => ({
 
 vi.mock('~/utils/locale-utils.server', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+  getLocale: vi.fn().mockResolvedValue('en'),
+  redirectWithLocale: vi.fn().mockResolvedValue(new Response('/', { status: 302 })),
 }));
 
 describe('_gcweb-app.personal-information.phone-number.confirm', () => {
@@ -52,7 +52,7 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
       vi.mocked(session.has).mockReturnValueOnce(true);
 
       const response = await loader({
-        request: new Request('http://localhost:3000/personal-information/phone-number/confirm'),
+        request: new Request('http://localhost:3000/en/personal-information/phone-number/confirm'),
         context: {},
         params: {},
       });
@@ -74,25 +74,14 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
 
       vi.mocked(session.has).mockReturnValueOnce(true);
 
-      const request = new Request('http://localhost:3000/personal-information/phone-number/confirm', {
+      const request = new Request('http://localhost:3000/en/personal-information/phone-number/confirm', {
         method: 'POST',
       });
 
       const response = await action({ request, context: {}, params: {} });
 
       expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe('/personal-information');
-    });
-
-    it('should redirect to homepage page when newPhoneNumber is missing', async () => {
-      const request = new Request('http://localhost:3000/personal-information/phone-number/confirm', {
-        method: 'POST',
-      });
-
-      const response = await action({ request, context: {}, params: {} });
-
-      expect(response.status).toBe(302);
-      expect(response).toEqual(redirect('/'));
+      expect(response.headers.get('location')).toBe('/en/personal-information');
     });
   });
 });

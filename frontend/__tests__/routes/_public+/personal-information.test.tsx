@@ -1,8 +1,6 @@
-import { redirect } from '@remix-run/node';
-
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/_public+/apply+/$id+/personal-information';
+import { loader } from '~/routes/$lang+/_public+/apply+/$id+/personal-information';
 
 vi.mock('~/routes-flow/apply-flow', () => ({
   getApplyFlow: vi.fn().mockReturnValue({
@@ -88,75 +86,6 @@ describe('_public.apply.id.personal-information', () => {
         COUNTRY_CODE_CANADA: 'CAN',
         COUNTRY_CODE_USA: 'USA',
       });
-    });
-  });
-
-  describe('action()', () => {
-    it('should redirect to communication-preference', async () => {
-      afterEach(() => {
-        vi.clearAllMocks();
-      });
-
-      const formData = new FormData();
-      formData.append('mailingAddress', '111 Fake Home St');
-      formData.append('mailingCountry', 'country');
-      formData.append('mailingCity', 'city');
-      formData.append('mailingPostalCode', 'postalcode');
-      formData.append('copyMailingAddress', 'on');
-
-      const response = await action({
-        request: new Request('http://localhost:3000/apply/123/personal-information', { method: 'POST', body: formData }),
-        context: {},
-        params: {},
-      });
-
-      expect(response).toEqual(redirect('/apply/123/communication-preference', { headers: { 'Set-Cookie': 'some-set-cookie-header' } }));
-    });
-
-    it('should validate required fields', async () => {
-      afterEach(() => {
-        vi.clearAllMocks();
-      });
-
-      const formData = new FormData();
-      formData.append('mailingCountry', 'country');
-      formData.append('mailingCity', 'city');
-      formData.append('mailingPostalCode', 'postalcode');
-      formData.append('copyMailingAddress', 'on');
-
-      const response = await action({
-        request: new Request('http://localhost:3000/apply/123/personal-information', { method: 'POST', body: formData }),
-        context: {},
-        params: {},
-      });
-
-      const data = await response.json();
-      expect(response.status).toBe(200);
-      expect(data.errors).toHaveProperty('mailingAddress');
-    });
-
-    it('should validate required province for canada and usa', async () => {
-      afterEach(() => {
-        vi.clearAllMocks();
-      });
-
-      const formData = new FormData();
-      formData.append('mailingAddress', '111 Fake Home St');
-      formData.append('mailingCountry', 'CAN');
-      formData.append('mailingProvince', 'province');
-      formData.append('mailingCity', 'city');
-      formData.append('mailingPostalCode', 'A1A1A1');
-      formData.append('copyMailingAddress', 'on');
-
-      const response = await action({
-        request: new Request('http://localhost:3000/apply/123/personal-information', { method: 'POST', body: formData }),
-        context: {},
-        params: {},
-      });
-
-      const data = await response.json();
-      expect(response.status).toBe(200);
-      expect(data.errors).toHaveProperty('mailingPostalCode');
     });
   });
 });

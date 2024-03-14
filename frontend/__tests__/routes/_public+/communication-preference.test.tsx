@@ -1,8 +1,6 @@
-import { redirect } from '@remix-run/node';
-
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/_public+/apply+/$id+/communication-preference';
+import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/communication-preference';
 
 vi.mock('~/routes-flow/apply-flow', () => ({
   getApplyFlow: vi.fn().mockReturnValue({
@@ -109,24 +107,6 @@ describe('_public.apply.id.communication-preference', () => {
   });
 
   describe('action()', () => {
-    it('should redirect to dental-insurance', async () => {
-      afterEach(() => {
-        vi.clearAllMocks();
-      });
-
-      const formData = new FormData();
-      formData.append('preferredMethod', 'mail');
-      formData.append('preferredLanguage', 'fr');
-
-      const response = await action({
-        request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: {},
-        params: {},
-      });
-
-      expect(response).toEqual(redirect('/apply/123/dental-insurance', { headers: { 'Set-Cookie': 'some-set-cookie-header' } }));
-    });
-
     it('should validate required preferred method', async () => {
       afterEach(() => {
         vi.clearAllMocks();

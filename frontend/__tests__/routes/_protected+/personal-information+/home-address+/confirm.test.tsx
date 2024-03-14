@@ -1,7 +1,7 @@
 import { redirectWithSuccess } from 'remix-toast';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/_protected+/personal-information+/home-address+/confirm';
+import { action, loader } from '~/routes/$lang+/_protected+/personal-information+/home-address+/confirm';
 import { getAddressService } from '~/services/address-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
@@ -63,6 +63,7 @@ vi.mock('~/services/user-service.server', () => ({
 
 vi.mock('~/utils/locale-utils.server', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+  getLocale: vi.fn().mockResolvedValue('en'),
 }));
 
 describe('_gcweb-app.personal-information.home-address.confirm', () => {
@@ -135,12 +136,12 @@ describe('_gcweb-app.personal-information.home-address.confirm', () => {
   describe('action()', () => {
     it('should redirect with toast message to personal information page when updating user info is successful', async () => {
       const response = await action({
-        request: new Request('http://localhost:3000/personal-information/home-address/confirm', { method: 'POST' }),
+        request: new Request('http://localhost:3000/en/personal-information/home-address/confirm', { method: 'POST' }),
         context: {},
         params: {},
       });
 
-      expect(response).toEqual(await redirectWithSuccess('/personal-information', 'personal-information:home-address.confirm.updated-notification'));
+      expect(response).toEqual(await redirectWithSuccess('/en/personal-information', 'personal-information:home-address.confirm.updated-notification'));
     });
   });
 });

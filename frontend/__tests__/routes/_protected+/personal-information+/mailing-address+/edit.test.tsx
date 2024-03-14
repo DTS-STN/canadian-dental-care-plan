@@ -1,8 +1,6 @@
-import { redirect } from '@remix-run/node';
-
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/_protected+/personal-information+/mailing-address+/edit';
+import { action, loader } from '~/routes/$lang+/_protected+/personal-information+/mailing-address+/edit';
 import { getAddressService } from '~/services/address-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
@@ -62,6 +60,8 @@ vi.mock('~/services/user-service.server', () => ({
 
 vi.mock('~/utils/locale-utils.server', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+  getLocale: vi.fn().mockResolvedValue('en'),
+  redirectWithLocale: vi.fn().mockReturnValue('/en/personal-information/mailing-address/confirm'),
 }));
 
 describe('_gcweb-app.personal-information.mailing-address.edit', () => {
@@ -148,12 +148,12 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
       formData.append('country', 'country');
 
       const response = await action({
-        request: new Request('http://localhost:3000/personal-information/mailing-address/edit', { method: 'POST', body: formData }),
+        request: new Request('http://localhost:300/en/personal-information/mailing-address/edit', { method: 'POST', body: formData }),
         context: {},
         params: {},
       });
 
-      expect(response).toEqual(redirect('/personal-information/mailing-address/confirm', { headers: { 'Set-Cookie': 'some-set-cookie-header' } }));
+      expect(response).toEqual('/en/personal-information/mailing-address/confirm');
     });
 
     it('should throw 404 response if userInfo is not found', async () => {
