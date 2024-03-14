@@ -49,20 +49,6 @@ const provincialTerritorialSocialProgram = z.object({
   nameFr: z.string().optional(),
 });
 
-const countrySchema = z.object({
-  countryId: z.string(),
-  countryCode: z.string(),
-  nameEn: z.string(),
-  nameFr: z.string(),
-});
-
-const regionSchema = z.object({
-  provinceTerritoryStateId: z.string(),
-  countryId: z.string(),
-  nameEn: z.string(),
-  nameFr: z.string(),
-});
-
 const bornTypeSchema = z.object({
   id: z.string(),
   nameEn: z.string().optional(),
@@ -143,9 +129,6 @@ const indigenousGroupSchema = z.object({
   nameEn: z.string().optional(),
   nameFr: z.string().optional(),
 });
-
-export type PreferredLanguageInfo = z.infer<typeof preferredLanguageSchema>;
-export type RegionInfo = z.infer<typeof regionSchema>;
 
 /**
  * Return a singleton instance (by means of memomization) of the lookup service.
@@ -535,53 +518,72 @@ function createLookupService() {
     const url = `${INTEROP_API_BASE_URI}/lookups/countries/`;
     const response = await fetch(url);
 
-    const countryListSchema = z.array(countrySchema);
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed to fetch data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
 
-    if (response.ok) {
-      const parsedCountries = countryListSchema.parse(await response.json());
-      return parsedCountries.map((country) => ({
-        countryId: country.countryCode,
-        nameEn: country.nameEn,
-        nameFr: country.nameFr,
-      }));
+      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    log.error('%j', {
-      message: 'Failed to fetch data',
-      status: response.status,
-      statusText: response.statusText,
-      url: url,
-      responseBody: await response.text(),
+    const countriesSchema = z.object({
+      value: z.array(
+        z.object({
+          esdc_countryid: z.string(),
+          esdc_nameenglish: z.string(),
+          esdc_namefrench: z.string(),
+        }),
+      ),
     });
 
-    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    const parsedCountries = countriesSchema.parse(await response.json());
+    return parsedCountries.value.map((country) => ({
+      countryId: country.esdc_countryid,
+      nameEn: country.esdc_nameenglish,
+      nameFr: country.esdc_namefrench,
+    }));
   }
 
   async function getAllRegions() {
     const url = `${INTEROP_API_BASE_URI}/lookups/regions`;
     const response = await fetch(url);
 
-    const regionListSchema = z.array(regionSchema);
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed to fetch data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
 
-    if (response.ok) {
-      const parsedRegions = regionListSchema.parse(await response.json());
-      return parsedRegions.map((region) => ({
-        provinceTerritoryStateId: region.provinceTerritoryStateId,
-        countryId: region.countryId,
-        nameEn: region.nameEn,
-        nameFr: region.nameFr,
-      }));
+      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    log.error('%j', {
-      message: 'Failed to fetch data',
-      status: response.status,
-      statusText: response.statusText,
-      url: url,
-      responseBody: await response.text(),
+    const regionsSchema = z.object({
+      value: z.array(
+        z.object({
+          esdc_provinceterritorystateid: z.string(),
+          _esdc_countryid_value: z.string(),
+          esdc_nameenglish: z.string(),
+          esdc_namefrench: z.string(),
+          esdc_internationalalphacode: z.string(),
+        }),
+      ),
     });
 
-    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    const parsedRegions = regionsSchema.parse(await response.json());
+    return parsedRegions.value.map((region) => ({
+      provinceTerritoryStateId: region.esdc_provinceterritorystateid,
+      countryId: region._esdc_countryid_value,
+      nameEn: region.esdc_nameenglish,
+      nameFr: region.esdc_namefrench,
+      abbr: region.esdc_internationalalphacode,
+    }));
   }
 
   async function getAllMaritalStatuses() {

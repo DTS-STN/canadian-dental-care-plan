@@ -84,7 +84,7 @@ export default function HomeAddressSuggested() {
                 <Address
                   address={homeAddressInfo.address}
                   city={homeAddressInfo.city}
-                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === homeAddressInfo.province)?.provinceTerritoryStateId}
+                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === homeAddressInfo.province)?.abbr}
                   postalZipCode={homeAddressInfo.postalCode}
                   country={countryList.find((country) => country.countryId === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
                 />
@@ -100,7 +100,7 @@ export default function HomeAddressSuggested() {
                 <Address
                   address={suggestedAddressInfo.address}
                   city={suggestedAddressInfo.city}
-                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === suggestedAddressInfo.province)?.provinceTerritoryStateId}
+                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === suggestedAddressInfo.province)?.abbr}
                   postalZipCode={suggestedAddressInfo.postalCode}
                   country={countryList.find((country) => country.countryId === suggestedAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
                 />

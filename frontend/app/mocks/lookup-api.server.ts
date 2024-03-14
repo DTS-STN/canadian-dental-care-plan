@@ -1,6 +1,8 @@
 import { HttpResponse, http } from 'msw';
 import { z } from 'zod';
 
+import countriesJson from './power-platform-data/countries.json';
+import regionsJson from './power-platform-data/regions.json';
 import { db } from '~/mocks/db';
 import { demographicDB } from '~/mocks/demographics-db';
 import { getLogger } from '~/utils/logging.server';
@@ -185,8 +187,7 @@ export function getLookupApiMockHandlers() {
     //
     http.get('https://api.example.com/lookups/countries', ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
-      const countryList = db.country.getAll();
-      return HttpResponse.json(countryList);
+      return HttpResponse.json(countriesJson);
     }),
 
     //
@@ -194,8 +195,7 @@ export function getLookupApiMockHandlers() {
     //
     http.get('https://api.example.com/lookups/regions', ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
-      const provinceList = db.region.getAll();
-      return HttpResponse.json(provinceList);
+      return HttpResponse.json(regionsJson);
     }),
 
     //
