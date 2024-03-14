@@ -70,7 +70,7 @@
     "dob": "Date of Birth: {{dob}}",
     "sin": "Social Insurance Number (SIN): {{sin}}",
     "full-name": "Full Name: {{name}}",
-    "martial-status": "Martial Status: {{status}}",
+    "marital-status": "Martial Status: {{status}}",
     "consent": "Consent: My spouse or common-law partner is aware and has consented to sharing of their personal information.",
     "no-consent": "Consent: My spouse or common-law partner is aware and has not consented to sharing of their personal information.",
     "phone-number": "Telephone Number: {{phone}}",

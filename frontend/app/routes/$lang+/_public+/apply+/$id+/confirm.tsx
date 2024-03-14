@@ -14,6 +14,7 @@ import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { formatSin } from '~/utils/sin-utils';
 
 export const applyIdParamSchema = z.string().uuid();
 
@@ -140,13 +141,13 @@ export default function ApplyFlowConfirm() {
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.application-summ')}</h2>
       <UnorderedList term={t('confirm.applicant-title')}>
         <li className="my-1">{t('confirm.dob', { dob: userInfo.birthday })}</li>
-        <li className="my-1">{t('confirm.sin', { sin: userInfo.sin })}</li>
+        <li className="my-1">{t('confirm.sin', { sin: formatSin(userInfo.sin) })}</li>
         <li className="my-1">{t('confirm.full-name', { name: `${userInfo.firstName} ${userInfo.lastName}` })}</li>
-        <li className="my-1">{t('confirm.sin', { status: userInfo.martialStatus })}</li>
+        <li className="my-1">{t('confirm.marital-status', { status: userInfo.martialStatus })}</li>
       </UnorderedList>
       <UnorderedList term={t('confirm.spouse-info')}>
         <li className="my-1">{t('confirm.dob', { dob: spouseInfo.birthday })}</li>
-        <li className="my-1">{t('confirm.sin', { sin: spouseInfo.sin })}</li>
+        <li className="my-1">{t('confirm.sin', { sin: formatSin(spouseInfo.sin) })}</li>
         <li className="my-1">{t('confirm.full-name', { name: `${spouseInfo.firstName} ${spouseInfo.lastName}` })}</li>
         {spouseInfo.consent ? <li className="my-1">{t('confirm.consent')}</li> : <li className="my-1">{t('confirm.no-consent')}</li>}
       </UnorderedList>

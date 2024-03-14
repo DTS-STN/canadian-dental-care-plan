@@ -19,6 +19,7 @@ import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { formatSin } from '~/utils/sin-utils';
 
 export const applyIdParamSchema = z.string().uuid();
 
@@ -136,7 +137,7 @@ export default function ApplyFlowApplicationInformation() {
           required
           inputMode="numeric"
           pattern="\d{9}"
-          placeholder="000-000-000"
+          placeholder={formatSin('000000000', '-')}
           minLength={9}
           maxLength={9}
           defaultValue={defaultValues.socialInsuranceNumber}
