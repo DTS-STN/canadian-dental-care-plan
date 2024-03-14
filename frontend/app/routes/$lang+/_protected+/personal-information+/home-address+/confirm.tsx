@@ -93,7 +93,7 @@ export default function PersonalInformationHomeAddressConfirm() {
   const { address, city, province, postalCode, country } = newAddress;
 
   const region = regionList.find((region) => region.provinceTerritoryStateId === province);
-  const provinceState = region?.provinceTerritoryStateId;
+  const provinceState = region?.abbr;
   const countryName = getCountryName(country);
 
   return (
@@ -108,7 +108,7 @@ export default function PersonalInformationHomeAddressConfirm() {
                 <Address
                   address={homeAddressInfo.address}
                   city={homeAddressInfo.city}
-                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === homeAddressInfo.province)?.provinceTerritoryStateId}
+                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === homeAddressInfo.province)?.abbr}
                   postalZipCode={homeAddressInfo.postalCode}
                   country={getCountryName(homeAddressInfo.country)}
                 />

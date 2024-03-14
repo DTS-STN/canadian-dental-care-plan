@@ -75,7 +75,7 @@ export default function PersonalInformationHomeAddressAccuracy() {
                 <Address
                   address={newHomeAddress.address}
                   city={newHomeAddress.city}
-                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === newHomeAddress.province)?.provinceTerritoryStateId}
+                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === newHomeAddress.province)?.abbr}
                   postalZipCode={newHomeAddress.postalCode}
                   country={countryList.find((country) => country.countryId === newHomeAddress.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
                 />

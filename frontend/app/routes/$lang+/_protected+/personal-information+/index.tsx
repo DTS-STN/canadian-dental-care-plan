@@ -80,7 +80,7 @@ export default function PersonalInformationIndex() {
             <Address
               address={homeAddressInfo.address}
               city={homeAddressInfo.city}
-              provinceState={regionList.find((region) => region.provinceTerritoryStateId === homeAddressInfo.province)?.provinceTerritoryStateId}
+              provinceState={regionList.find((region) => region.provinceTerritoryStateId === homeAddressInfo.province)?.abbr}
               postalZipCode={homeAddressInfo.postalCode}
               country={countryList.find((country) => country.countryId === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
             />
@@ -98,7 +98,7 @@ export default function PersonalInformationIndex() {
             <Address
               address={mailingAddressInfo.address}
               city={mailingAddressInfo.city}
-              provinceState={regionList.find((region) => region.provinceTerritoryStateId === mailingAddressInfo.province)?.provinceTerritoryStateId}
+              provinceState={regionList.find((region) => region.provinceTerritoryStateId === mailingAddressInfo.province)?.abbr}
               postalZipCode={mailingAddressInfo.postalCode}
               country={countryList.find((country) => country.countryId === mailingAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ''}
             />

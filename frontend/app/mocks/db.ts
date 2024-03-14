@@ -1,10 +1,8 @@
 import { fakerEN_CA as faker } from '@faker-js/faker';
 import { factory, oneOf, primaryKey } from '@mswjs/data';
 
-import countriesJson from './power-platform-data/countries.json';
 import federalProgramsJson from './power-platform-data/federal-programs.json';
 import provincialProgramsJson from './power-platform-data/provincial-programs.json';
-import regionsJson from './power-platform-data/regions.json';
 
 // (Optional) Seed `faker` to ensure reproducible
 // random values of model properties.
@@ -28,9 +26,9 @@ const db = factory({
     addressApartmentUnitNumber: faker.location.buildingNumber,
     addressStreet: faker.location.street,
     addressCity: faker.location.city,
-    addressProvince: () => faker.location.state({ abbreviated: true }),
+    addressProvince: String,
     addressPostalZipCode: faker.location.zipCode,
-    addressCountry: () => 'CAN',
+    addressCountry: String,
   },
   preferredLanguage: {
     id: primaryKey(String),
@@ -213,10 +211,14 @@ db.applicationTypes.create({
 // seed avaliable addresses (before user)
 db.address.create({
   id: 'home-address-id',
+  addressProvince: 'daf4d05b-37b3-eb11-8236-0022486d8d5f', // "Ontario", @see /power-platform-data/regions.json
+  addressCountry: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', // "Canada", @see /power-platform-data/countries.json
 });
 
 db.address.create({
   id: 'mailing-address-id',
+  addressProvince: '5abc28c9-38b3-eb11-8236-0022486d8d5f', // "Newfoundland and Labrador", @see /power-platform-data/regions.json
+  addressCountry: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', // "Canada", @see /power-platform-data/countries.json
 });
 
 // seed users
@@ -286,26 +288,6 @@ db.maritalStatus.create({
   nameEn: 'Separated',
   nameFr: '(FR) Separated',
 });
-
-// seed country list
-countriesJson.value.forEach((country) =>
-  db.country.create({
-    countryId: country.esdc_countryid,
-    countryCode: country.esdc_countrycodealpha3,
-    nameEn: country.esdc_nameenglish,
-    nameFr: country.esdc_namefrench,
-  }),
-);
-
-// seed region list
-regionsJson.value.forEach((region) =>
-  db.region.create({
-    countryId: db.country.findFirst({ where: { countryId: { equals: region._esdc_countryid_value } } })?.countryCode,
-    provinceTerritoryStateId: region.esdc_provinceterritorystateid,
-    nameEn: region.esdc_nameenglish,
-    nameFr: region.esdc_namefrench,
-  }),
-);
 
 // seed federal social program list
 federalProgramsJson.value.forEach((program) =>

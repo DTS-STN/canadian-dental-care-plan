@@ -15,7 +15,6 @@ import { InputField } from '~/components/input-field';
 import type { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { getAddressService } from '~/services/address-service.server';
-import type { RegionInfo } from '~/services/lookup-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
@@ -129,7 +128,7 @@ export default function PersonalInformationMailingAddressEdit() {
   const actionData = useActionData<typeof action>();
   const { addressInfo, homeAddressInfo, countryList, regionList } = useLoaderData<typeof loader>();
   const [selectedCountry, setSelectedCountry] = useState('');
-  const [countryRegions, setCountryRegions] = useState<RegionInfo[]>([]);
+  const [countryRegions, setCountryRegions] = useState<typeof regionList>([]);
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const errorSummaryId = 'error-summary';
   const [copyAddressChecked, setCopyAddressChecked] = useState(false);

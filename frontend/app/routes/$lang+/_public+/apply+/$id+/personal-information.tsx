@@ -16,7 +16,7 @@ import { InputField } from '~/components/input-field';
 import { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
-import { RegionInfo, getLookupService } from '~/services/lookup-service.server';
+import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { redirectWithLocale } from '~/utils/locale-utils.server';
@@ -188,10 +188,10 @@ export default function ApplyFlowPersonalInformation() {
   const { id, state, countryList, maritalStatus, regionList, COUNTRY_CODE_CANADA, COUNTRY_CODE_USA } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(state?.mailingCountry);
-  const [mailingCountryRegions, setMailingCountryRegions] = useState<RegionInfo[]>([]);
+  const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
   const [copyAddressChecked, setCopyAddressChecked] = useState(state?.copyMailingAddress === 'on');
   const [selectedHomeCountry, setSelectedHomeCountry] = useState(state?.homeCountry);
-  const [homeCountryRegions, setHomeCountryRegions] = useState<RegionInfo[]>([]);
+  const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
 
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
