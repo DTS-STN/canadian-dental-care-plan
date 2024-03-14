@@ -102,7 +102,7 @@ export default function AccessToDentalInsuranceQuestion() {
     return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
   });
 
-  const [selectedRegion, setSelectedRegion] = useState(state?.provincialTerritorialSocialProgram ?? sortedRegions[0].provinceTerritoryStateId);
+  const [selectedRegion, setSelectedRegion] = useState(state?.province ?? sortedRegions[0].provinceTerritoryStateId);
 
   useEffect(() => {
     if (actionData?.formData && hasErrors(actionData.formData)) {
@@ -192,7 +192,7 @@ export default function AccessToDentalInsuranceQuestion() {
                           value: region.provinceTerritoryStateId,
                           children: i18n.language === 'en' ? region.nameEn : region.nameFr,
                         }))}
-                        defaultValue={state?.provincialTerritorialBenefit}
+                        defaultValue={state?.province}
                         required
                       />
                       <InputRadios
