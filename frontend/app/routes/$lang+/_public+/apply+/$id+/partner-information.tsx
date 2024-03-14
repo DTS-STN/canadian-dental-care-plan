@@ -110,7 +110,7 @@ export default function ApplyFlowApplicationInformation() {
     month: getErrorMessage(actionData?.errors.month?._errors[0]),
     day: getErrorMessage(actionData?.errors.day?._errors[0]),
     year: getErrorMessage(actionData?.errors.year?._errors[0]),
-    confirm: getErrorMessage(actionData?.errors.confirm?._errors[0]),
+    'input-confirm-error': getErrorMessage(actionData?.errors.confirm?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -168,7 +168,7 @@ export default function ApplyFlowApplicationInformation() {
           defaultValue={defaultValues.socialInsuranceNumber}
           errorMessage={errorMessages.socialInsuranceNumber}
         />
-        <InputCheckbox id="confirm" name="confirm" required errorMessage={errorMessages.confirm}>
+        <InputCheckbox id="confirm" name="confirm" required errorMessage={errorMessages['input-confirm-error']}>
           {t('partner-information.confirm-checkbox')}
         </InputCheckbox>
 

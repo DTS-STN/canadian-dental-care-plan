@@ -82,7 +82,7 @@ export default function ApplyFlowTypeOfApplication() {
   }
 
   const errorMessages = {
-    applicationDelegate: getErrorMessage(actionData?.errors.applicationDelegate?._errors[0]),
+    'input-radios-application-delegate': getErrorMessage(actionData?.errors.applicationDelegate?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -100,7 +100,7 @@ export default function ApplyFlowTypeOfApplication() {
             { value: 'TRUE', children: t('apply:eligibility.type-of-application.radio-options.delegate'), defaultChecked: state?.applicationDelegate === 'TRUE' },
           ]}
           required={errorSummaryItems.length > 0}
-          errorMessage={errorMessages.applicationDelegate}
+          errorMessage={errorMessages['input-radios-application-delegate']}
         />
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <ButtonLink id="back-button" to="/apply">
