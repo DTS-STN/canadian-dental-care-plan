@@ -42,7 +42,7 @@ const dentalBenefitsStateSchema = z.object({
  */
 const applicantInformationSchema = z.object({
   socialInsuranceNumber: z.string().refine(isValidSin, { message: 'valid-sin' }),
-  firstName: z.string(),
+  firstName: z.string().optional(),
   lastName: z.string().min(1, { message: 'last-name' }),
   maritalStatus: z.string({ required_error: 'marital-status' }),
 });
@@ -66,7 +66,7 @@ const typeOfApplicationSchema = z.object({
  */
 const partnerInformationSchema = z.object({
   socialInsuranceNumber: z.string().refine(isValidSin, { message: 'valid-sin' }),
-  firstName: z.string(),
+  firstName: z.string().optional(),
   lastName: z.string().min(1, { message: 'last-name' }),
   month: z.coerce.number({ required_error: 'month' }).int().min(0, { message: 'month' }).max(11, { message: 'month' }),
   day: z.coerce.number({ required_error: 'day' }).int().min(1, { message: 'day' }).max(31, { message: 'day' }),
