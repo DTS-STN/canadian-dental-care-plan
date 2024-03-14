@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 export function PageFooter() {
   const { t } = useTranslation(['gcweb']);
   return (
-    <footer id="wb-info" className="bg-stone-50">
+    <footer id="wb-info" className="bg-stone-50 print:hidden">
       <div className="bg-gray-700 text-white">
         <section className="container py-6">
           <h2 className="mb-4">My Service Canada Account</h2>

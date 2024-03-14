@@ -108,7 +108,7 @@ export default function ApplyFlowConfirm() {
         <Trans ns={handle.i18nNamespaces} i18nKey="confirm.print-copy-text" />
       </p>
       <button
-        className="mt-8 inline-flex w-44 items-center justify-center rounded bg-gray-800 px-5 py-2.5 align-middle font-lato text-xl font-semibold text-white outline-offset-2 hover:bg-gray-900"
+        className="mt-8 inline-flex w-44 items-center justify-center rounded bg-gray-800 px-5 py-2.5 align-middle font-lato text-xl font-semibold text-white outline-offset-2 hover:bg-gray-900 print:hidden"
         onClick={(event) => {
           event.preventDefault();
           window.print();
