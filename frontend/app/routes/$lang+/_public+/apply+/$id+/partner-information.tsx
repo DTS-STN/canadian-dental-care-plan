@@ -98,6 +98,7 @@ export default function ApplyFlowApplicationInformation() {
 
   const defaultValues = {
     socialInsuranceNumber: actionData?.formData.socialInsuranceNumber ?? state?.socialInsuranceNumber ?? '',
+    firstName: actionData?.formData.firstName ?? state?.firstName ?? '',
     lastName: actionData?.formData.lastName ?? state?.lastName ?? '',
     month: actionData?.formData.month ?? state?.month ?? '',
     day: actionData?.formData.day ?? state?.day ?? '',
@@ -134,7 +135,7 @@ export default function ApplyFlowApplicationInformation() {
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post" aria-describedby="form-instructions-provide-sin form-instructions-required-information" noValidate className="max-w-prose space-y-6">
         <div className="grid gap-6 md:grid-cols-2">
-          <InputField id="firstName" name="firstName" className="w-full" label={t('applicant-information.first-name')} aria-labelledby="name-instructions" />
+          <InputField id="firstName" name="firstName" className="w-full" label={t('applicant-information.first-name')} aria-labelledby="name-instructions" defaultValue={defaultValues.firstName} />
           <InputField id="lastName" name="lastName" className="w-full" label={t('applicant-information.last-name')} required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} aria-labelledby="name-instructions" />
         </div>
         <p id="name-instructions">{t('partner-information.name-instructions')}</p>
