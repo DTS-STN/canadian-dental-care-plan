@@ -70,7 +70,7 @@
     "dob": "(FR) Date of Birth: {{dob}}",
     "sin": "(FR) Social Insurance Number (SIN): {{sin}}",
     "full-name": "(FR) Full Name: {{name}}",
-    "martial-status": "(FR) Martial Status: {{status}}",
+    "marital-status": "(FR) Martial Status: {{status}}",
     "consent": "(FR) Consent: My spouse or common-law partner is aware and has consented to sharing of their personal information.",
     "no-consent": "(FR) Consent: My spouse or common-law partner is aware and has not consented to sharing of their personal information.",
     "phone-number": "(FR) Telephone Number: {{phone}}",

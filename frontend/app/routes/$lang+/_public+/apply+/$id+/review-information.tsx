@@ -19,6 +19,7 @@ import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { formatSin } from '~/utils/sin-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -46,7 +47,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     altPhoneNumber: state.personalInformation?.phoneNumberAlt,
     preferredLanguage: state.communicationPreferences?.preferredLanguage ?? 'en',
     birthday: new Date(dob.year, dob.month, dob.day).toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' }),
-    sin: state.applicantInformation?.socialInsuranceNumber,
+    sin: state.applicantInformation?.socialInsuranceNumber ?? '',
     martialStatus: state.applicantInformation?.maritalStatus,
     email: state.communicationPreferences?.email,
     communicationPreference: state.communicationPreferences?.preferredMethod,
@@ -132,7 +133,7 @@ export default function ReviewInformation() {
           </p>
         </DescriptionListItem>
         <DescriptionListItem term={t('apply:review-information.sin-title')}>
-          {userInfo.sin}
+          {formatSin(userInfo.sin)}
           <p className="mt-4">
             <InlineLink id="change-sin" to="/">
               {t('apply:review-information.sin-change')}
@@ -167,7 +168,7 @@ export default function ReviewInformation() {
           </p>
         </DescriptionListItem>
         <DescriptionListItem term={t('apply:review-information.sin-title')}>
-          {spouseInfo.sin}
+          {formatSin(spouseInfo.sin)}
           <p className="mt-4">
             <InlineLink id="change-spouse-sin" to="/">
               {t('apply:review-information.sin-change')}

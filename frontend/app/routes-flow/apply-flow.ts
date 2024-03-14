@@ -3,8 +3,8 @@ import { Params } from '@remix-run/react';
 import { z } from 'zod';
 
 import { getSessionService } from '~/services/session-service.server';
-import { isValidSin } from '~/utils/apply-utils';
 import { redirectWithLocale } from '~/utils/locale-utils.server';
+import { isValidSin } from '~/utils/sin-utils';
 
 /**
  * Schema for validating UUID.
