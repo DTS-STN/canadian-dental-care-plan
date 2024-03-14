@@ -103,7 +103,7 @@ export default function ApplyFlowApplicationInformation() {
   const errorMessages = {
     socialInsuranceNumber: getErrorMessage(actionData?.errors.socialInsuranceNumber?._errors[0]),
     lastName: getErrorMessage(actionData?.errors.lastName?._errors[0]),
-    maritalStatus: getErrorMessage(actionData?.errors.maritalStatus?._errors[0]),
+    'input-radios-marital-status': getErrorMessage(actionData?.errors.maritalStatus?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -148,7 +148,7 @@ export default function ApplyFlowApplicationInformation() {
           legend={t('applicant-information.marital-status')}
           options={maritalStatuses.map((status) => ({ defaultChecked: status.code === state?.maritalStatus, children: getNameByLanguage(i18n.language, status), value: status.code }))}
           required
-          errorMessage={errorMessages.maritalStatus}
+          errorMessage={errorMessages['input-radios-marital-status']}
         />
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="back-button" to={`/apply/${id}/date-of-birth`}>
