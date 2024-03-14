@@ -82,7 +82,7 @@ export default function ApplyFlowTaxFiling() {
   }
 
   const errorMessages = {
-    taxFiling2023: getErrorMessage(actionData?.errors.taxFiling2023?._errors[0]),
+    'input-radios-tax-filing-2023': getErrorMessage(actionData?.errors.taxFiling2023?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -100,7 +100,7 @@ export default function ApplyFlowTaxFiling() {
             { value: 'FALSE', children: t('apply:eligibility.tax-filing.radio-options.no'), defaultChecked: state?.taxFiling2023 === 'FALSE' },
           ]}
           required={errorSummaryItems.length > 0}
-          errorMessage={errorMessages.taxFiling2023}
+          errorMessage={errorMessages['input-radios-tax-filing-2023']}
         />
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <ButtonLink id="back-button" to={`/apply/${id}/type-of-application`}>
