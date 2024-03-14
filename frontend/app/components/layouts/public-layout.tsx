@@ -45,7 +45,7 @@ function AppPageTitle() {
 
 function PageHeader() {
   return (
-    <header className="border-b-[3px] border-slate-700">
+    <header className="border-b-[3px] border-slate-700 print:hidden">
       <SkipNavigationLinks />
       <PageHeaderBrand />
     </header>
@@ -56,7 +56,7 @@ function PageBreadcrumbs() {
   const { t } = useTranslation([...i18nNamespaces, ...useI18nNamespaces()]);
   return (
     <Breadcrumbs
-      className="my-4"
+      className="my-4 print:hidden"
       items={[
         { content: t('gcweb:breadcrumbs.canada-ca'), to: t('gcweb:breadcrumbs.canada-ca-url') },
         { content: t('gcweb:breadcrumbs.benefits'), to: t('gcweb:breadcrumbs.benefits-url') },

@@ -114,3 +114,9 @@
     @apply rounded-full;
   }
 }
+
+@media print {
+  a[href]:after {
+    content: ' (' attr(href) ')';
+  }
+}
