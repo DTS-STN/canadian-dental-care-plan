@@ -2,14 +2,14 @@ import { render } from '@testing-library/react';
 
 import { describe, expect, it } from 'vitest';
 
-import { CollapsibleDetails } from '~/components/collapsible';
+import { Collapsible } from '~/components/collapsible';
 
 describe('Collapsible Details', () => {
   it('renders children and applies additional props', () => {
     const additionalProps = { id: 'joke', summary: 'How do we make the Internet more eco-friendly?' };
     const children = 'Integrate botany.';
 
-    const { getByText } = render(<CollapsibleDetails {...additionalProps}>{children}</CollapsibleDetails>);
+    const { getByText } = render(<Collapsible {...additionalProps}>{children}</Collapsible>);
 
     const collapsibleDetailsElement = getByText(children);
 

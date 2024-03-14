@@ -10,7 +10,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { Button, ButtonLink } from '~/components/buttons';
-import { CollapsibleDetails } from '~/components/collapsible';
+import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
@@ -90,27 +90,25 @@ export default function AccessToDentalInsuranceQuestion() {
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 
   const helpMessage = (
-    <>
-      <ul className="mb-4 list-disc">
-        <li>{t('dental-insurance.list.employment')}</li>
-        <li>{t('dental-insurance.list.pension')}</li>
-        <li>{t('dental-insurance.list.purchased')}</li>
-        <li>{t('dental-insurance.list.professional')}</li>
-        <li className="list-none">
-          <CollapsibleDetails id={t('dental-insurance.detail.additional-info.title')} summary={t('dental-insurance.detail.additional-info.title')}>
-            <div>
-              <p className="mt-4">{t('dental-insurance.detail.additional-info.not-eligible')}</p>
-              <p className="mt-4">{t('dental-insurance.detail.additional-info.not-eligible-purchased')}</p>
-              <p className="mt-4">{t('dental-insurance.detail.additional-info.eligible')}</p>
-              <ul className="mb-4 list-disc pl-6">
-                <li>{t('dental-insurance.detail.additional-info.list.opted')}</li>
-                <li>{t('dental-insurance.detail.additional-info.list.cannot-opt')}</li>
-              </ul>
-            </div>
-          </CollapsibleDetails>
-        </li>
-      </ul>
-    </>
+    <ul className="mb-4 list-disc space-y-1 pl-7">
+      <li>{t('dental-insurance.list.employment')}</li>
+      <li>{t('dental-insurance.list.pension')}</li>
+      <li>{t('dental-insurance.list.purchased')}</li>
+      <li>{t('dental-insurance.list.professional')}</li>
+      <li className="list-none">
+        <Collapsible summary={t('dental-insurance.detail.additional-info.title')} className="mt-2">
+          <div className="space-y-4">
+            <p>{t('dental-insurance.detail.additional-info.not-eligible')}</p>
+            <p>{t('dental-insurance.detail.additional-info.not-eligible-purchased')}</p>
+            <p>{t('dental-insurance.detail.additional-info.eligible')}</p>
+            <ul className="list-disc space-y-1 pl-7">
+              <li>{t('dental-insurance.detail.additional-info.list.opted')}</li>
+              <li>{t('dental-insurance.detail.additional-info.list.cannot-opt')}</li>
+            </ul>
+          </div>
+        </Collapsible>
+      </li>
+    </ul>
   );
 
   return (
@@ -129,7 +127,7 @@ export default function AccessToDentalInsuranceQuestion() {
                 defaultChecked: state.dentalInsurance?.dentalInsurance === option.id,
               }))}
               helpMessagePrimary={helpMessage}
-              helpMessagePrimaryClassName="pl-8 text-black"
+              helpMessagePrimaryClassName="text-black"
               required={errorSummaryItems.length > 0}
               errorMessage={errorMessages.dentalInsurance}
             />

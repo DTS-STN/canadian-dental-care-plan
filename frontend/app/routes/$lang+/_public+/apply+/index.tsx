@@ -11,7 +11,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { Button } from '~/components/buttons';
-import { CollapsibleDetails } from '~/components/collapsible';
+import { Collapsible } from '~/components/collapsible';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getHCaptchaService } from '~/services/hcaptcha-service.server';
@@ -106,7 +106,7 @@ export default function ApplyIndex() {
         <ul className="list-disc space-y-1 pl-7">
           <li>
             <p>{t('apply:index.to-qualify.conditions.insurance-access.heading')}</p>
-            <CollapsibleDetails summary={t('apply:index.to-qualify.conditions.insurance-access.details.summary')}>
+            <Collapsible summary={t('apply:index.to-qualify.conditions.insurance-access.details.summary')} className="my-4">
               <div className="space-y-4">
                 <p>{t('apply:index.to-qualify.conditions.insurance-access.details.access-to-dental-insurance-definition')}</p>
                 <ul className="list-disc space-y-1 pl-7">
@@ -117,11 +117,11 @@ export default function ApplyIndex() {
                 </ul>
                 <p>{t('apply:index.to-qualify.conditions.insurance-access.details.opt-out-consideration')}</p>
               </div>
-            </CollapsibleDetails>
+            </Collapsible>
           </li>
           <li>
             <p>{t('apply:index.to-qualify.conditions.income.heading')}</p>
-            <CollapsibleDetails summary={t('apply:index.to-qualify.conditions.income.details.summary')}>
+            <Collapsible summary={t('apply:index.to-qualify.conditions.income.details.summary')} className="my-4">
               <div className="space-y-4">
                 <p>{t('apply:index.to-qualify.conditions.income.details.family-net-income-definition')}</p>
                 <p>
@@ -135,7 +135,7 @@ export default function ApplyIndex() {
                   <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.to-qualify.conditions.income.details.adjusted-family-net-income" />
                 </p>
               </div>
-            </CollapsibleDetails>
+            </Collapsible>
           </li>
           <li>{t('apply:index.to-qualify.conditions.resident-status')}</li>
           <li>
@@ -155,11 +155,11 @@ export default function ApplyIndex() {
         </ul>
       </div>
       <h2 className="my-8 font-lato text-2xl font-bold">{t('apply:index.apply-behalf.heading')}</h2>
-      <div className="space-y-4">
+      <div className="space-y-6">
         <p>
           <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.apply-behalf.delegate-assisted-cdcp-application" components={{ contactCDCPLink, serviceCanadaOfficeLink }} />
         </p>
-        <CollapsibleDetails summary={t('apply:index.apply-behalf.trusted-person.summary')}>
+        <Collapsible summary={t('apply:index.apply-behalf.trusted-person.summary')}>
           <div className="space-y-4">
             <p>
               <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.apply-behalf.trusted-person.details.application-assistance" components={{ serviceCanadaOfficeLink }} />
@@ -172,8 +172,8 @@ export default function ApplyIndex() {
               <li>{t('apply:index.apply-behalf.trusted-person.details.types-of-assistants.interpreter')}</li>
             </ul>
           </div>
-        </CollapsibleDetails>
-        <CollapsibleDetails summary={t('apply:index.apply-behalf.delegate.summary')}>
+        </Collapsible>
+        <Collapsible summary={t('apply:index.apply-behalf.delegate.summary')}>
           <div className="space-y-4">
             <p>{t('apply:index.apply-behalf.delegate.delegate-definition')}</p>
             <p>{t('apply:index.apply-behalf.delegate.delegates-on-document')}</p>
@@ -238,7 +238,7 @@ export default function ApplyIndex() {
             </ul>
             <p>{t('apply:index.apply-behalf.delegate.submit-delegate-proof.in-person.document-processing-note')}</p>
           </div>
-        </CollapsibleDetails>
+        </Collapsible>
       </div>
       <Form method="post" onSubmit={handleSubmit} noValidate className="mt-8">
         <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />

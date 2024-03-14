@@ -1,10 +1,7 @@
+import { useId } from 'react';
 import type { ComponentProps, ReactNode } from 'react';
 
 import { cn } from '~/utils/tw-utils';
-
-export interface CollapsibleDetailsProps extends ComponentProps<'details'> {
-  summary: ReactNode;
-}
 
 export interface CollapsibleSummaryProps extends ComponentProps<'summary'> {}
 
@@ -16,13 +13,19 @@ export function CollapsibleSummary({ children, className, ...props }: Collapsibl
   );
 }
 
-export function CollapsibleDetails({ children, id, className, summary, ...props }: CollapsibleDetailsProps) {
-  const summaryId = `${id}-summary`;
-  const contentId = `${id}-content`;
+export interface CollapsibleProps extends ComponentProps<'details'> {
+  contentClassName?: string;
+  summary: ReactNode;
+}
+
+export function Collapsible({ children, contentClassName, id, summary, ...props }: CollapsibleProps) {
+  const uniqueId = useId();
+  const summaryId = `${id ?? uniqueId}-summary`;
+  const contentId = `${id ?? uniqueId}-content`;
   return (
-    <details className="mb-4 mt-4" {...props}>
+    <details id={id ?? uniqueId} {...props}>
       <CollapsibleSummary id={summaryId}>{summary}</CollapsibleSummary>
-      <div id={contentId} className={cn('mt-2 border-l-[6px] border-gray-400 px-6 py-4', className)}>
+      <div id={contentId} className={cn('mt-2 border-l-[6px] border-gray-400 px-6 py-4', contentClassName)}>
         {children}
       </div>
     </details>
