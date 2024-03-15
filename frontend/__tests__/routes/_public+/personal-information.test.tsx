@@ -42,8 +42,8 @@ vi.mock('~/services/lookup-service.server', () => ({
 
 vi.mock('~/utils/env.server', () => ({
   getEnv: vi.fn().mockReturnValue({
-    COUNTRY_CODE_CANADA: 'CAN',
-    COUNTRY_CODE_USA: 'USA',
+    CANADA_COUNTRY_ID: 'CAN',
+    USA_COUNTRY_ID: 'USA',
   }),
 }));
 
@@ -83,8 +83,8 @@ describe('_public.apply.id.personal-information', () => {
             nameFr: '(FR) sample',
           },
         ],
-        COUNTRY_CODE_CANADA: 'CAN',
-        COUNTRY_CODE_USA: 'USA',
+        CANADA_COUNTRY_ID: 'CAN',
+        USA_COUNTRY_ID: 'USA',
       });
     });
   });

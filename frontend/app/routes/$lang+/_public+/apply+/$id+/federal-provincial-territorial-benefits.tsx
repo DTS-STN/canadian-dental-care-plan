@@ -33,7 +33,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  const { COUNTRY_CODE_CANADA } = getEnv();
+  const { CANADA_COUNTRY_ID } = getEnv();
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
   const federalDentalBenefits = await getLookupService().getAllFederalDentalBenefit();
@@ -41,7 +41,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const federalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
   const provincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
   const allRegions = await getLookupService().getAllRegions();
-  const regions = allRegions.filter((region) => region.countryId === COUNTRY_CODE_CANADA);
+  const regions = allRegions.filter((region) => region.countryId === CANADA_COUNTRY_ID);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:dental-benefits.title') }) };

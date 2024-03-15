@@ -40,16 +40,16 @@ export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
-  const { COUNTRY_CODE_CANADA, COUNTRY_CODE_USA } = getEnv();
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
   const countryList = await getLookupService().getAllCountries();
   const regionList = await getLookupService().getAllRegions();
 
-  return json({ id, state: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, COUNTRY_CODE_CANADA, COUNTRY_CODE_USA });
+  return json({ id, state: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
-  const { COUNTRY_CODE_CANADA, COUNTRY_CODE_USA } = getEnv();
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
   const applyFlow = getApplyFlow();
   const { id } = await applyFlow.loadState({ request, params });
 
@@ -67,9 +67,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
       return true;
     }
     switch (countryCode) {
-      case COUNTRY_CODE_CANADA:
+      case CANADA_COUNTRY_ID:
         return validPostalCode.test(postalCode);
-      case COUNTRY_CODE_USA:
+      case USA_COUNTRY_ID:
         return validZipCode.test(postalCode);
       default:
         return true;
@@ -111,14 +111,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
     })
     .superRefine((val, ctx) => {
       if (!isEmpty(val.mailingCountry)) {
-        if ((val.mailingCountry === COUNTRY_CODE_CANADA || val.mailingCountry === COUNTRY_CODE_USA) && isEmpty(val.mailingPostalCode)) {
+        if ((val.mailingCountry === CANADA_COUNTRY_ID || val.mailingCountry === USA_COUNTRY_ID) && isEmpty(val.mailingPostalCode)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-postal-code', path: ['mailingPostalCode'] });
         }
 
         if (!isValidPostalCode(val.mailingCountry, val.mailingPostalCode)) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: val.mailingCountry === COUNTRY_CODE_CANADA ? 'invalid-postal-code' : 'invalid-zip-code',
+            message: val.mailingCountry === CANADA_COUNTRY_ID ? 'invalid-postal-code' : 'invalid-zip-code',
             path: ['mailingPostalCode'],
           });
         }
@@ -137,16 +137,16 @@ export async function action({ request, params }: ActionFunctionArgs) {
         });
 
         if (!isEmpty(val.homeCountry)) {
-          if ((val.homeCountry === COUNTRY_CODE_CANADA || val.homeCountry === COUNTRY_CODE_USA) && isEmpty(val.homeProvince)) {
+          if ((val.homeCountry === CANADA_COUNTRY_ID || val.homeCountry === USA_COUNTRY_ID) && isEmpty(val.homeProvince)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-province', path: ['homeProvince'] });
           }
-          if ((val.homeCountry === COUNTRY_CODE_CANADA || val.homeCountry === COUNTRY_CODE_USA) && isEmpty(val.homePostalCode)) {
+          if ((val.homeCountry === CANADA_COUNTRY_ID || val.homeCountry === USA_COUNTRY_ID) && isEmpty(val.homePostalCode)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-postal-code', path: ['homePostalCode'] });
           }
         }
 
         if (!isValidPostalCode(val.homeCountry, val.homePostalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: val.homeCountry === COUNTRY_CODE_CANADA ? 'invalid-postal-code' : 'invalid-zip-code', path: ['homePostalCode'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: val.homeCountry === CANADA_COUNTRY_ID ? 'invalid-postal-code' : 'invalid-zip-code', path: ['homePostalCode'] });
         }
       }
     });
@@ -185,7 +185,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ApplyFlowPersonalInformation() {
-  const { id, state, countryList, maritalStatus, regionList, COUNTRY_CODE_CANADA, COUNTRY_CODE_USA } = useLoaderData<typeof loader>();
+  const { id, state, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(state?.mailingCountry);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
@@ -350,7 +350,7 @@ export default function ApplyFlowPersonalInformation() {
                 label={t('apply:personal-information.address-field.postal-code')}
                 defaultValue={state?.mailingPostalCode}
                 errorMessage={errorMessages.mailingPostalCode}
-                required={selectedMailingCountry === COUNTRY_CODE_CANADA || selectedMailingCountry === COUNTRY_CODE_USA}
+                required={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID}
               />
             </div>
           </div>
@@ -409,7 +409,7 @@ export default function ApplyFlowPersonalInformation() {
                       label={t('apply:personal-information.address-field.postal-code')}
                       defaultValue={state?.homePostalCode}
                       errorMessage={errorMessages.homePostalCode}
-                      required={selectedHomeCountry === COUNTRY_CODE_CANADA || selectedHomeCountry === COUNTRY_CODE_USA}
+                      required={selectedHomeCountry === CANADA_COUNTRY_ID || selectedHomeCountry === USA_COUNTRY_ID}
                     />
                   </div>
                 </div>

@@ -41,13 +41,15 @@ const serverEnv = z.object({
   NODE_ENV: z.enum(['production', 'development', 'test']),
   ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default(validFeatureNames.join(',')),
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
+  
+  // lookup identifiers
+  CANADA_COUNTRY_ID: z.string().trim().min(1),
   COMMUNICATION_METHOD_EMAIL_ID: z.string().trim().min(1).default('email'),
-  OTHER_GENDER_TYPE_ID: z.string().trim().min(1).default('gender-other'),
-  COUNTRY_CODE_CANADA: z.string().trim().min(1).default('CAN'),
-  COUNTRY_CODE_USA: z.string().trim().min(1).default('USA'),
-  OTHER_EQUITY_TYPE_ID: z.string().trim().min(1).default('equity-other'),
   FIRST_NATIONS_YES_TYPE_ID: z.string().trim().min(1).default('first-nations-yes'),
-
+  OTHER_EQUITY_TYPE_ID: z.string().trim().min(1).default('equity-other'),
+  OTHER_GENDER_TYPE_ID: z.string().trim().min(1).default('gender-other'),
+  USA_COUNTRY_ID: z.string().trim().min(1),
+  
   // TODO :: GjB :: these base URIs should not have defaults
   INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
   CCT_API_BASE_URI: z.string().url().default('https://api.example.com'),
