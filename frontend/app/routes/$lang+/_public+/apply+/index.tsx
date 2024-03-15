@@ -1,9 +1,9 @@
 import { FormEvent, useRef } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { Form, useLoaderData, useSubmit } from '@remix-run/react';
+import { Form, useLoaderData, useNavigation, useSubmit } from '@remix-run/react';
 
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { randomUUID } from 'crypto';
@@ -21,6 +21,7 @@ import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -73,6 +74,8 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function ApplyIndex() {
   const { siteKey } = useLoaderData<typeof loader>();
   const captchaRef = useRef<HCaptcha>(null);
+  const navigation = useNavigation();
+
   const submit = useSubmit();
   const { t } = useTranslation(handle.i18nNamespaces);
 
@@ -242,9 +245,9 @@ export default function ApplyIndex() {
       </div>
       <Form method="post" onSubmit={handleSubmit} noValidate className="mt-8">
         <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />
-        <Button variant="primary" id="continue-button">
+        <Button variant="primary" id="continue-button" disabled={navigation.state !== 'idle'}>
           {t('apply:index.submit')}
-          <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
+          <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
         </Button>
       </Form>
     </div>

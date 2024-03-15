@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -19,6 +19,7 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -70,6 +71,7 @@ export default function AccessToDentalInsuranceQuestion() {
   const actionData = useActionData<typeof action>();
   const { t } = useTranslation(handle.i18nNamespaces);
   const errorSummaryId = 'error-summary';
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (actionData?.formData && hasErrors(actionData.formData)) {
@@ -134,13 +136,13 @@ export default function AccessToDentalInsuranceQuestion() {
           </div>
         )}
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink to={`/apply/${id}/communication-preference`}>
+          <ButtonLink to={`/apply/${id}/communication-preference`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('dental-insurance.button.back')}
           </ButtonLink>
           <Button variant="primary">
             {t('dental-insurance.button.continue')}
-            <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
+            <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
           </Button>
         </div>
       </Form>

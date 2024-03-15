@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -20,6 +20,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
+import { cn } from '~/utils/tw-utils';
 
 export const applyIdParamSchema = z.string().uuid();
 
@@ -76,6 +77,7 @@ export default function ApplyFlowApplicationInformation() {
   const { id, state } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
+  const navigation = useNavigation();
 
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
 
@@ -175,13 +177,13 @@ export default function ApplyFlowApplicationInformation() {
         </InputCheckbox>
 
         <div className="mt-5 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/applicant-information`}>
+          <ButtonLink id="back-button" to={`/apply/${id}/applicant-information`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('applicant-information.back-btn')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button">
+          <Button variant="primary" id="continue-button" disabled={navigation.state !== 'idle'}>
             {t('applicant-information.continue-btn')}
-            <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
+            <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
           </Button>
         </div>
       </Form>

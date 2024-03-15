@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from '@remix-run/node';
-import { Form, MetaFunction, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +22,7 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
+import { cn } from '~/utils/tw-utils';
 
 const validPostalCode = new RegExp('^[ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy]\\d[A-Za-z] \\d[A-Za-z]\\d{1}$');
 const validZipCode = new RegExp('^\\d{5}$');
@@ -192,6 +193,7 @@ export default function ApplyFlowPersonalInformation() {
   const [copyAddressChecked, setCopyAddressChecked] = useState(state?.copyMailingAddress === 'on');
   const [selectedHomeCountry, setSelectedHomeCountry] = useState(state?.homeCountry);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
+  const navigation = useNavigation();
 
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
@@ -421,13 +423,13 @@ export default function ApplyFlowPersonalInformation() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={['MARRIED', 'COMMONLAW'].includes(maritalStatus ?? '') ? `/apply/${id}/partner-information` : `/apply/${id}/applicant-information`}>
+          <ButtonLink id="back-button" to={['MARRIED', 'COMMONLAW'].includes(maritalStatus ?? '') ? `/apply/${id}/partner-information` : `/apply/${id}/applicant-information`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:personal-information.back')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button">
+          <Button variant="primary" id="continue-button" disabled={navigation.state !== 'idle'}>
             {t('apply:personal-information.continue')}
-            <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
+            <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
           </Button>
         </div>
       </Form>

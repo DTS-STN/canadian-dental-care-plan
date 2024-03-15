@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -20,6 +20,7 @@ import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils'
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -90,6 +91,7 @@ export default function DemographicsPart2() {
   const [otherGenderChecked, setOtherGenderChecked] = useState(state?.gender === otherGenderCode.id);
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
+  const navigation = useNavigation();
 
   function otherGenderHandler() {
     setOtherGenderChecked(true);
@@ -200,13 +202,13 @@ export default function DemographicsPart2() {
           />
         )}
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/demographics-part1`}>
+          <ButtonLink id="back-button" to={`/apply/${id}/demographics-part1`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:demographics-oral-health-questions.part2.button-back')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button">
+          <Button variant="primary" id="continue-button" disabled={navigation.state !== 'idle'}>
             {t('apply:demographics-oral-health-questions.part2.button-continue')}
-            <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
+            <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
           </Button>
         </div>
       </Form>

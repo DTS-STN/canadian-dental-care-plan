@@ -1,7 +1,7 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from '@remix-run/node';
-import { Form, MetaFunction, useLoaderData } from '@remix-run/react';
+import { Form, MetaFunction, useLoaderData, useNavigation } from '@remix-run/react';
 
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
@@ -11,6 +11,7 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
+import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -40,6 +41,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function ApplyFlowTaxFiling() {
   const { id } = useLoaderData<typeof loader>();
+  const navigation = useNavigation();
 
   const { t } = useTranslation(handle.i18nNamespaces);
 
@@ -49,11 +51,14 @@ export default function ApplyFlowTaxFiling() {
       <p>{t('apply:exit-application.click-back')}</p>
       <div className="flex flex-wrap items-center gap-3">
         <Form method="post" noValidate>
-          <ButtonLink id="back-button" to={`/apply/${id}/review-information`}>
+          <ButtonLink id="back-button" to={`/apply/${id}/review-information`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:exit-application.back-btn')}
           </ButtonLink>
-          <Button variant="primary">{t('apply:exit-application.exit-btn')}</Button>
+          <Button variant="primary" disabled={navigation.state !== 'idle'}>
+            {t('apply:exit-application.exit-btn')}
+            {navigation.state !== 'idle' && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
+          </Button>
         </Form>
       </div>
     </div>
