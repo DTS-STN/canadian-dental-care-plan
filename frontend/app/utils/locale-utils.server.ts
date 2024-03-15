@@ -1,9 +1,7 @@
-import { createCookie, redirect } from '@remix-run/node';
-import type { CookieOptions } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 
-import { parse, serialize } from 'cookie';
-import { createInstance } from 'i18next';
 import type { Namespace } from 'i18next';
+import { createInstance } from 'i18next';
 import I18NexFsBackend from 'i18next-fs-backend';
 import { resolve } from 'node:path';
 import { initReactI18next } from 'react-i18next';
@@ -12,46 +10,6 @@ import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('locale-utils.server');
-
-/**
- * Creates a cookie object for the language.
- */
-export function createLangCookie() {
-  const env = getEnv();
-
-  const cookieName = env.LANG_COOKIE_NAME;
-
-  const cookieOptions: CookieOptions = {
-    domain: env.LANG_COOKIE_DOMAIN,
-    httpOnly: env.LANG_COOKIE_HTTP_ONLY,
-    path: env.LANG_COOKIE_PATH,
-    sameSite: env.LANG_COOKIE_SAME_SITE,
-    secure: env.LANG_COOKIE_SECURE,
-  };
-
-  const cookie = createCookie(cookieName, cookieOptions);
-  log.debug(`Created language cookie [${cookieName}] with options: [${JSON.stringify(cookieOptions)}]`);
-
-  //
-  // Remix will JSON.stringify() cookies by default; to prevent this, we supply custom parse() and serialize() functions
-  //
-
-  cookie.parse = async (cookieHeader, parseOptions) => {
-    return cookieHeader && parse(cookieHeader, { ...cookieOptions, ...parseOptions })[cookieName];
-  };
-
-  cookie.serialize = async (value, serializeOptions) => {
-    return serialize(cookieName, value, {
-      // although it is possible to set the `expires` flag when creating the cookie,
-      // doing so causes Remix to emit a warning suggesting to set it during serialization
-      expires: new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000), // ~1y
-      ...cookieOptions,
-      ...serializeOptions,
-    });
-  };
-
-  return cookie;
-}
 
 /**
  * Returns a t function that defaults to the language resolved through the request.
@@ -67,33 +25,15 @@ export async function getFixedT<N extends Namespace>(request: Request, namespace
  * Retrieves the locale using a deterministic lookup algorithm (URL → cookies → 🤷).
  */
 export async function getLocale(request: Request) {
-  const env = getEnv();
+  const url = new URL(request.url);
 
-  const searchParams = new URL(request.url).searchParams;
-  const searchParamsLang = searchParams.get(env.LANG_QUERY_PARAM);
-
-  if (searchParamsLang === 'en') {
-    log.debug('Locale [en] detected in URL search params');
+  if (url.pathname.startsWith('/en')) {
+    log.debug('Locale [en] detected in URL');
     return 'en';
   }
 
-  if (searchParamsLang === 'fr') {
-    log.debug('Locale [fr] detected in URL search params');
-    return 'fr';
-  }
-
-  log.debug('No locale detected in URL search params; checking cookies');
-
-  const langCookie = createLangCookie();
-  const lang = await langCookie.parse(request.headers.get('Cookie'));
-
-  if (lang === 'en') {
-    log.debug('Locale [en] detected cookies');
-    return 'en';
-  }
-
-  if (lang === 'fr') {
-    log.debug('Locale [fr] detected cookies');
+  if (url.pathname.startsWith('/fr')) {
+    log.debug('Locale [fr] detected in URL');
     return 'fr';
   }
 

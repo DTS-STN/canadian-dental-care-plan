@@ -12,7 +12,6 @@ describe('<ClientEnv>', () => {
     const env: PublicEnv = {
       ENABLED_FEATURES: ['feature1', 'feature2'],
       I18NEXT_DEBUG: true,
-      LANG_QUERY_PARAM: 'locale',
       SCCH_BASE_URI: 'http://www.example.com',
       SESSION_TIMEOUT_SECONDS: 120,
       SESSION_TIMEOUT_PROMPT_SECONDS: 30,

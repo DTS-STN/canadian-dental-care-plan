@@ -1,9 +1,6 @@
 import { useLocation } from '@remix-run/react';
 
-import { useTranslation } from 'react-i18next';
-
-import { getClientEnv } from '~/utils/env-utils';
-import { useI18nNamespaces } from '~/utils/route-utils';
+import { removeLanguageFromPath } from '~/utils/locale-utils';
 
 /**
  * Custom hook to generate a canonical URL based on the current location and language.
@@ -11,20 +8,10 @@ import { useI18nNamespaces } from '~/utils/route-utils';
  * @returns The canonical URL.
  */
 export function useCanonicalURL(origin: string) {
-  const { LANG_QUERY_PARAM } = getClientEnv();
-  const location = useLocation();
-  const ns = useI18nNamespaces();
-  const { i18n } = useTranslation(ns);
+  const { pathname, search } = useLocation();
 
-  const url = new URL(`${origin}${location.pathname}`);
-  new URLSearchParams(location.search).forEach((value, name) => {
-    url.searchParams.set(name, value);
-  });
-
-  // add lang query if pathname not root
-  if (url.pathname !== '/') {
-    url.searchParams.set(LANG_QUERY_PARAM, i18n.language);
-  }
+  const url = new URL(pathname, origin);
+  url.search = new URLSearchParams(search).toString();
 
   return url.toString();
 }
@@ -35,21 +22,13 @@ export function useCanonicalURL(origin: string) {
  * @returns An array of objects containing the hreflang and href for alternate language URLs.
  */
 export function useAlternateLanguages(origin: string, languages: Array<string> = ['en', 'fr']) {
-  const { LANG_QUERY_PARAM } = getClientEnv();
-  const location = useLocation();
-
-  const baseUrl = new URL(`${origin}${location.pathname}`);
-  new URLSearchParams(location.search).forEach((value, name) => {
-    baseUrl.searchParams.set(name, value);
-  });
+  const { pathname, search } = useLocation();
+  const pathWithoutLang = removeLanguageFromPath(pathname);
 
   return languages.map((lang) => {
-    const url = new URL(baseUrl);
-    url.searchParams.set(LANG_QUERY_PARAM, lang);
-    return {
-      href: url.toString(),
-      hrefLang: lang,
-    };
+    const url = new URL(`/${lang}${pathWithoutLang}`, origin);
+    url.search = new URLSearchParams(search).toString();
+    return { href: url.toString(), hrefLang: lang };
   });
 }
 

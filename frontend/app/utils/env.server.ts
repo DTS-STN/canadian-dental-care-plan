@@ -47,12 +47,12 @@ const serverEnv = z.object({
   COUNTRY_CODE_USA: z.string().trim().min(1).default('USA'),
   OTHER_EQUITY_TYPE_ID: z.string().trim().min(1).default('equity-other'),
   FIRST_NATIONS_YES_TYPE_ID: z.string().trim().min(1).default('first-nations-yes'),
-  
+
   // TODO :: GjB :: these base URIs should not have defaults
   INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
   CCT_API_BASE_URI: z.string().url().default('https://api.example.com'),
   SCCH_BASE_URI: z.string().url().default('https://www.example.com'),
-  
+
   // auth/oidc settings
   AUTH_JWT_PRIVATE_KEY: z.string().refine(isValidPrivateKey),
   AUTH_JWT_PUBLIC_KEY: z.string().refine(isValidPublicKey),
@@ -66,15 +66,6 @@ const serverEnv = z.object({
   HCAPTCHA_SECRET_KEY: z.string().trim().min(1),
   HCAPTCHA_SITE_KEY: z.string().trim().min(1),
   HCAPTCHA_VERIFY_URL: z.string().url(),
-
-  // language cookie settings
-  LANG_COOKIE_NAME: z.string().default('__CDCP//lang'),
-  LANG_COOKIE_DOMAIN: z.string().optional(),
-  LANG_COOKIE_PATH: z.string().default('/'),
-  LANG_COOKIE_HTTP_ONLY: z.string().transform(toBoolean).default('true'),
-  LANG_COOKIE_SAME_SITE: z.enum(['lax', 'strict', 'none']).default('lax'),
-  LANG_COOKIE_SECURE: z.string().transform(toBoolean).default('true'),
-  LANG_QUERY_PARAM: z.string().default('lang'),
 
   // session configuration
   SESSION_STORAGE_TYPE: z.enum(['file', 'redis']).default('file'),

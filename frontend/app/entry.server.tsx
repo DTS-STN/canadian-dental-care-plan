@@ -14,7 +14,7 @@ import { getSessionService } from '~/services/session-service.server';
 import { generateContentSecurityPolicy } from '~/utils/csp-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getNamespaces } from '~/utils/locale-utils';
-import { createLangCookie, getLocale, initI18n } from '~/utils/locale-utils.server';
+import { getLocale, initI18n } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { randomHexString } from '~/utils/string-utils';
 
@@ -81,7 +81,6 @@ export default async function handleRequest(request: Request, responseStatusCode
   // @see: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
   responseHeaders.set('Content-Type', 'text/html; charset=UTF-8');
   responseHeaders.set('Content-Security-Policy', generateContentSecurityPolicy(nonce));
-  responseHeaders.append('Set-Cookie', await createLangCookie().serialize(locale));
 
   return new Promise((resolve, reject) => {
     let shellRendered = false;
