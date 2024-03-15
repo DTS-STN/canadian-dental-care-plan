@@ -1,0 +1,10 @@
+{
+  "index": {
+    "page-title": "Edit the SIN",
+    "edit-id-field": "SIN to use/stub",
+    "edit-id-button": "Apply SIN",
+    "error-message": {
+      "valid-sin": "Must be a valid SIN"
+    }
+  }
+}
