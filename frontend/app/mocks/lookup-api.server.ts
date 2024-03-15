@@ -2,6 +2,8 @@ import { HttpResponse, http } from 'msw';
 import { z } from 'zod';
 
 import countriesJson from './power-platform-data/countries.json';
+import federalProgramsJson from './power-platform-data/federal-programs.json';
+import provincialProgramsJson from './power-platform-data/provincial-programs.json';
 import regionsJson from './power-platform-data/regions.json';
 import { db } from '~/mocks/db';
 import { demographicDB } from '~/mocks/demographics-db';
@@ -151,8 +153,7 @@ export function getLookupApiMockHandlers() {
     //
     http.get('https://api.example.com/lookups/federal-social-programs', ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
-      const federalSocialProgram = db.federalSocialProgram.getAll();
-      return HttpResponse.json(federalSocialProgram);
+      return HttpResponse.json(federalProgramsJson);
     }),
 
     //
@@ -160,8 +161,7 @@ export function getLookupApiMockHandlers() {
     //
     http.get('https://api.example.com/lookups/provincial-territorial-social-programs', ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
-      const provincialTerritorialSocialProgram = db.provincialTerritorialSocialProgram.getAll();
-      return HttpResponse.json(provincialTerritorialSocialProgram);
+      return HttpResponse.json(provincialProgramsJson);
     }),
 
     //

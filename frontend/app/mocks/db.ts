@@ -1,9 +1,6 @@
 import { fakerEN_CA as faker } from '@faker-js/faker';
 import { factory, oneOf, primaryKey } from '@mswjs/data';
 
-import federalProgramsJson from './power-platform-data/federal-programs.json';
-import provincialProgramsJson from './power-platform-data/provincial-programs.json';
-
 // (Optional) Seed `faker` to ensure reproducible
 // random values of model properties.
 faker.seed(123);
@@ -288,24 +285,5 @@ db.maritalStatus.create({
   nameEn: 'Separated',
   nameFr: '(FR) Separated',
 });
-
-// seed federal social program list
-federalProgramsJson.value.forEach((program) =>
-  db.federalSocialProgram.create({
-    code: program.esdc_code,
-    nameEn: program.esdc_nameenglish,
-    nameFr: program.esdc_namefrench,
-  }),
-);
-
-// seed provincial and territorial program list
-provincialProgramsJson.value.forEach((program) =>
-  db.provincialTerritorialSocialProgram.create({
-    code: program.esdc_code,
-    provinceTerritoryStateId: program._esdc_provinceterritorystateid_value,
-    nameEn: program.esdc_nameenglish,
-    nameFr: program.esdc_namefrench,
-  }),
-);
 
 export { db };
