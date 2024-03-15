@@ -124,6 +124,7 @@
     "title": "(Fr) Access to other federal, provincial or territorial dental benefits",
     "access-to-dental": "(Fr) Access to dental coverage through a provincial, territorial or federal government social program will not impact your eligibility for the Canadian Dental Care Plan.",
     "eligibility-criteria": "(Fr) If you meet all the eligibility criteria, your coverage will be coordinated between the plans to ensure there are no duplication or gaps in coverage.",
+    "select-one": "(Fr) Select one",
     "federal-benefits": {
       "title": "(Fr) Federal benefits",
       "legend": "(Fr) Do you have dental benefits through a social program offered by a federal program?",
@@ -151,7 +152,8 @@
       "federal-benefit": "(Fr) Federal benefit must be selected",
       "federal-program": "(Fr) Federal program must be selected",
       "provincial-benefit": "(Fr) Provincial benefit must be selected",
-      "provincial-program": "(Fr) Provincial program must be selected"
+      "provincial-program": "(Fr) Provincial program must be selected",
+      "empty-province": "(Fr) Province must be selected"
     }
   },
   "dental-insurance": {

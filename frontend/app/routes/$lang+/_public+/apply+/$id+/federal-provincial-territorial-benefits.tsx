@@ -11,6 +11,7 @@ import { z } from 'zod';
 
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { InputOptionProps } from '~/components/input-option';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
@@ -63,12 +64,21 @@ export async function action({ request, params }: ActionFunctionArgs) {
         path: ['federalSocialProgram'],
       });
     }
-    if (val.provincialTerritorialBenefit === 'yes' && (!val.provincialTerritorialSocialProgram || val.provincialTerritorialSocialProgram.trim().length === 0)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'provincial-program',
-        path: ['provincialTerritorialSocialProgram'],
-      });
+    if (val.provincialTerritorialBenefit === 'yes') {
+      if (!val.province) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'empty-province',
+          path: ['province'],
+        });
+      }
+      if (val.province && !val.provincialTerritorialSocialProgram) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'provincial-program',
+          path: ['provincialTerritorialSocialProgram'],
+        });
+      }
     }
   });
   const parsedDataResult = dentalBenefitSchema.safeParse(formData);
@@ -93,8 +103,9 @@ export default function AccessToDentalInsuranceQuestion() {
   const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, state, id } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const [federalBenefitChecked, setFederalBenefitChecked] = useState(state?.federalBenefit ?? '');
-  const [provincialTerritorialBenefitChecked, setProvincialTerritorialBenefitChecked] = useState(state?.provincialTerritorialBenefit ?? '');
+  const [checkedFederalOption, setCheckedFederalOption] = useState(state?.federalBenefit);
+  const [checkedProvincialOption, setCheckedProvincialOption] = useState(state?.provincialTerritorialBenefit);
+  const [provincialProgramOption, setProvincialProgramOption] = useState(state?.provincialTerritorialSocialProgram);
   const errorSummaryId = 'error-summary';
   const navigation = useNavigation();
 
@@ -104,7 +115,7 @@ export default function AccessToDentalInsuranceQuestion() {
     return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
   });
 
-  const [selectedRegion, setSelectedRegion] = useState(state?.province ?? sortedRegions[0].provinceTerritoryStateId);
+  const [selectedRegion, setSelectedRegion] = useState(state?.province);
 
   useEffect(() => {
     if (actionData?.formData && hasErrors(actionData.formData)) {
@@ -123,14 +134,22 @@ export default function AccessToDentalInsuranceQuestion() {
     federalSocialProgram: getErrorMessage(actionData?.errors.federalSocialProgram?._errors[0]),
     provincialTerritorialBenefit: getErrorMessage(actionData?.errors.provincialTerritorialBenefit?._errors[0]),
     provincialTerritorialSocialProgram: getErrorMessage(actionData?.errors.provincialTerritorialSocialProgram?._errors[0]),
+    province: getErrorMessage(actionData?.errors.province?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 
+  const dummyOption: InputOptionProps = { children: t('dental-benefits.select-one'), value: '' };
+
+  function handleSelectRegion(event: React.ChangeEvent<HTMLSelectElement>) {
+    setSelectedRegion(event.target.value);
+    setProvincialProgramOption('');
+  }
+
   return (
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post">
+      <Form method="post" noValidate>
         <section>
           <p className="mb-4">{t('dental-benefits.access-to-dental')}</p>
           <p className="mb-6">{t('dental-benefits.eligibility-criteria')}</p>
@@ -145,8 +164,8 @@ export default function AccessToDentalInsuranceQuestion() {
                   children: <Trans ns={handle.i18nNamespaces}>{`dental-benefits.federal-benefits.option-${option.code}`}</Trans>,
                   value: option.code,
                   defaultChecked: state?.federalBenefit === option.code,
-                  onChange: (e) => setFederalBenefitChecked(e.target.value),
-                  append: option.code === 'yes' && federalBenefitChecked === 'yes' && (
+                  onChange: (e) => setCheckedFederalOption(e.target.value),
+                  append: option.code === 'yes' && checkedFederalOption === 'yes' && (
                     <InputRadios
                       id="federal-social-programs"
                       name="federalSocialProgram"
@@ -179,36 +198,40 @@ export default function AccessToDentalInsuranceQuestion() {
                   children: <Trans ns={handle.i18nNamespaces}>{`dental-benefits.provincial-territorial-benefits.option-${option.code}`}</Trans>,
                   value: option.code,
                   defaultChecked: state?.provincialTerritorialBenefit === option.code,
-                  onChange: (e) => setProvincialTerritorialBenefitChecked(e.target.value),
-                  append: option.code === 'yes' && provincialTerritorialBenefitChecked === 'yes' && regions.length > 0 && (
+                  onChange: (e) => setCheckedProvincialOption(e.target.value),
+                  append: option.code === 'yes' && checkedProvincialOption === 'yes' && regions.length > 0 && (
                     <Fragment key={option.code}>
                       <InputSelect
                         id="province"
                         name="province"
                         className="mb-4 w-full sm:w-1/2"
                         label={t('dental-benefits.provincial-territorial-benefits.social-programs.input-legend')}
-                        onChange={(e) => setSelectedRegion(e.target.value)}
-                        options={sortedRegions.map((region) => ({
-                          key: region.provinceTerritoryStateId,
-                          id: region.provinceTerritoryStateId,
-                          value: region.provinceTerritoryStateId,
-                          children: i18n.language === 'en' ? region.nameEn : region.nameFr,
-                        }))}
+                        onChange={handleSelectRegion}
+                        options={[
+                          dummyOption,
+                          ...sortedRegions.map((region) => ({
+                            key: region.provinceTerritoryStateId,
+                            id: region.provinceTerritoryStateId,
+                            value: region.provinceTerritoryStateId,
+                            children: getNameByLanguage(i18n.language, region),
+                          })),
+                        ]}
                         defaultValue={state?.province}
-                        required
+                        errorMessage={errorMessages.province}
+                        required={errorSummaryItems.length > 0}
                       />
                       <InputRadios
                         id="provincial-territorial-social-programs"
                         name="provincialTerritorialSocialProgram"
-                        legend={<span className="font-normal">{t('dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}</span>}
+                        legend={selectedRegion && <span className="font-normal">{t('dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}</span>}
                         errorMessage={errorMessages.provincialTerritorialSocialProgram}
-                        required={errorSummaryItems.length > 0}
                         options={provincialTerritorialSocialPrograms
                           .filter((program) => program.provinceTerritoryStateId === selectedRegion)
                           .map((option) => ({
                             children: <span className="font-bold">{getNameByLanguage(i18n.language, option)}</span>,
-                            value: getNameByLanguage(i18n.language, option),
-                            defaultChecked: state?.provincialTerritorialSocialProgram === getNameByLanguage(i18n.language, option),
+                            value: option.id,
+                            checked: provincialProgramOption === option.id,
+                            onChange: (e) => setProvincialProgramOption(e.target.value),
                           }))}
                       />
                     </Fragment>
