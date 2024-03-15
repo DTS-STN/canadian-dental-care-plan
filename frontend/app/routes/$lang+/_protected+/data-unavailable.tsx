@@ -43,7 +43,6 @@ export default function DataUnavailable() {
   const doyouqualify = <InlineLink to={t('do-you-qualify.href')} />;
   const howtoapply = <InlineLink to={t('how-to-apply.href')} />;
   const contactus = <InlineLink to={t('contact-us.href', { baseUri: SCCH_BASE_URI })} />;
-  const mydashboard = <InlineLink to={t('my-dashboard.href', { baseUri: SCCH_BASE_URI })} />;
 
   return (
     <>
@@ -57,7 +56,6 @@ export default function DataUnavailable() {
         <Trans ns={handle.i18nNamespaces} i18nKey="other-enquiry" components={{ contactus }} />
       </p>
       <p className="mb-8">{t('service-delay')}</p>
-      <Trans ns={handle.i18nNamespaces} i18nKey="my-dashboard" components={{ mydashboard }} />
     </>
   );
 }
