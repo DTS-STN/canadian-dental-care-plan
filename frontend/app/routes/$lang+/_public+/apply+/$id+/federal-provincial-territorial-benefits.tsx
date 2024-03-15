@@ -64,17 +64,21 @@ export async function action({ request, params }: ActionFunctionArgs) {
         path: ['federalSocialProgram'],
       });
     }
-    if (val.provincialTerritorialBenefit === 'yes' && (!val.provincialTerritorialSocialProgram || val.provincialTerritorialSocialProgram.trim().length === 0)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'provincial-program',
-        path: ['provincialTerritorialSocialProgram'],
-      });
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'empty-province',
-        path: ['province'],
-      });
+    if (val.provincialTerritorialBenefit === 'yes') {
+      if (!val.province) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'empty-province',
+          path: ['province'],
+        });
+      }
+      if (val.province && !val.provincialTerritorialSocialProgram) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'provincial-program',
+          path: ['provincialTerritorialSocialProgram'],
+        });
+      }
     }
   });
   const parsedDataResult = dentalBenefitSchema.safeParse(formData);
@@ -145,7 +149,7 @@ export default function AccessToDentalInsuranceQuestion() {
   return (
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post">
+      <Form method="post" noValidate>
         <section>
           <p className="mb-4">{t('dental-benefits.access-to-dental')}</p>
           <p className="mb-6">{t('dental-benefits.eligibility-criteria')}</p>
@@ -209,25 +213,24 @@ export default function AccessToDentalInsuranceQuestion() {
                             key: region.provinceTerritoryStateId,
                             id: region.provinceTerritoryStateId,
                             value: region.provinceTerritoryStateId,
-                            children: i18n.language === 'en' ? region.nameEn : region.nameFr,
+                            children: getNameByLanguage(i18n.language, region),
                           })),
                         ]}
-                        defaultValue={selectedRegion}
+                        defaultValue={state?.province}
                         errorMessage={errorMessages.province}
                         required={errorSummaryItems.length > 0}
                       />
                       <InputRadios
                         id="provincial-territorial-social-programs"
                         name="provincialTerritorialSocialProgram"
-                        legend={<span className="font-normal">{t('dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}</span>}
+                        legend={selectedRegion && <span className="font-normal">{t('dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}</span>}
                         errorMessage={errorMessages.provincialTerritorialSocialProgram}
-                        required={errorSummaryItems.length > 0}
                         options={provincialTerritorialSocialPrograms
                           .filter((program) => program.provinceTerritoryStateId === selectedRegion)
                           .map((option) => ({
                             children: <span className="font-bold">{getNameByLanguage(i18n.language, option)}</span>,
-                            value: getNameByLanguage(i18n.language, option),
-                            checked: provincialProgramOption === getNameByLanguage(i18n.language, option),
+                            value: option.id,
+                            checked: provincialProgramOption === option.id,
                             onChange: (e) => setProvincialProgramOption(e.target.value),
                           }))}
                       />
