@@ -11,6 +11,7 @@ import { z } from 'zod';
 
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { InputOptionProps } from '~/components/input-option';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
@@ -69,6 +70,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
         message: 'provincial-program',
         path: ['provincialTerritorialSocialProgram'],
       });
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'empty-province',
+        path: ['province'],
+      });
     }
   });
   const parsedDataResult = dentalBenefitSchema.safeParse(formData);
@@ -93,8 +99,9 @@ export default function AccessToDentalInsuranceQuestion() {
   const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, state, id } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const [federalBenefitChecked, setFederalBenefitChecked] = useState(state?.federalBenefit ?? '');
-  const [provincialTerritorialBenefitChecked, setProvincialTerritorialBenefitChecked] = useState(state?.provincialTerritorialBenefit ?? '');
+  const [federalBenefitChecked, setFederalBenefitChecked] = useState(state?.federalBenefit);
+  const [provincialTerritorialBenefitChecked, setProvincialTerritorialBenefitChecked] = useState(state?.provincialTerritorialBenefit);
+  const [provincialProgramOption, setProvincialProgramOption] = useState(state?.provincialTerritorialSocialProgram);
   const errorSummaryId = 'error-summary';
   const navigation = useNavigation();
 
@@ -104,13 +111,16 @@ export default function AccessToDentalInsuranceQuestion() {
     return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
   });
 
-  const [selectedRegion, setSelectedRegion] = useState(state?.province ?? sortedRegions[0].provinceTerritoryStateId);
+  const [selectedRegion, setSelectedRegion] = useState(state?.province);
 
   useEffect(() => {
+    if (provincialTerritorialBenefitChecked !== 'yes') {
+      setSelectedRegion('');
+    }
     if (actionData?.formData && hasErrors(actionData.formData)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
-  }, [actionData]);
+  }, [actionData, provincialTerritorialBenefitChecked]);
 
   function getErrorMessage(errorI18nKey?: string): string | undefined {
     if (!errorI18nKey) return undefined;
@@ -123,9 +133,17 @@ export default function AccessToDentalInsuranceQuestion() {
     federalSocialProgram: getErrorMessage(actionData?.errors.federalSocialProgram?._errors[0]),
     provincialTerritorialBenefit: getErrorMessage(actionData?.errors.provincialTerritorialBenefit?._errors[0]),
     provincialTerritorialSocialProgram: getErrorMessage(actionData?.errors.provincialTerritorialSocialProgram?._errors[0]),
+    province: getErrorMessage(actionData?.errors.province?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
+
+  const dummyOption: InputOptionProps = { children: t('dental-benefits.select-one'), value: '' };
+
+  function handleSelectRegion(event: React.ChangeEvent<HTMLSelectElement>) {
+    setSelectedRegion(event.target.value);
+    setProvincialProgramOption('');
+  }
 
   return (
     <>
@@ -187,15 +205,19 @@ export default function AccessToDentalInsuranceQuestion() {
                         name="province"
                         className="mb-4 w-full sm:w-1/2"
                         label={t('dental-benefits.provincial-territorial-benefits.social-programs.input-legend')}
-                        onChange={(e) => setSelectedRegion(e.target.value)}
-                        options={sortedRegions.map((region) => ({
-                          key: region.provinceTerritoryStateId,
-                          id: region.provinceTerritoryStateId,
-                          value: region.provinceTerritoryStateId,
-                          children: i18n.language === 'en' ? region.nameEn : region.nameFr,
-                        }))}
+                        onChange={handleSelectRegion}
+                        options={[
+                          dummyOption,
+                          ...sortedRegions.map((region) => ({
+                            key: region.provinceTerritoryStateId,
+                            id: region.provinceTerritoryStateId,
+                            value: region.provinceTerritoryStateId,
+                            children: i18n.language === 'en' ? region.nameEn : region.nameFr,
+                          })),
+                        ]}
                         defaultValue={state?.province}
-                        required
+                        errorMessage={errorMessages.province}
+                        required={errorSummaryItems.length > 0}
                       />
                       <InputRadios
                         id="provincial-territorial-social-programs"
@@ -208,7 +230,8 @@ export default function AccessToDentalInsuranceQuestion() {
                           .map((option) => ({
                             children: <span className="font-bold">{getNameByLanguage(i18n.language, option)}</span>,
                             value: getNameByLanguage(i18n.language, option),
-                            defaultChecked: state?.provincialTerritorialSocialProgram === getNameByLanguage(i18n.language, option),
+                            defaultChecked: provincialProgramOption === getNameByLanguage(i18n.language, option),
+                            onChange: (e) => setProvincialProgramOption(e.target.value),
                           }))}
                       />
                     </Fragment>
