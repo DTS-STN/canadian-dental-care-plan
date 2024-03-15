@@ -36,19 +36,6 @@ const provincialTerritorialDentalBenefit = z.object({
   nameFr: z.string().optional(),
 });
 
-const federalSocialProgram = z.object({
-  code: z.string(),
-  nameEn: z.string().optional(),
-  nameFr: z.string().optional(),
-});
-
-const provincialTerritorialSocialProgram = z.object({
-  code: z.string(),
-  provinceTerritoryStateId: z.string(),
-  nameEn: z.string().optional(),
-  nameFr: z.string().optional(),
-});
-
 const bornTypeSchema = z.object({
   id: z.string(),
   nameEn: z.string().optional(),
@@ -489,29 +476,58 @@ function createLookupService() {
       throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const federalSocialPrograms = z.array(federalSocialProgram);
-    return federalSocialPrograms.parse(await response.json());
+    const federalSocialProgramsSchema = z.object({
+      value: z.array(
+        z.object({
+          esdc_governmentinsuranceplanid: z.string(),
+          esdc_nameenglish: z.string(),
+          esdc_namefrench: z.string(),
+        }),
+      ),
+    });
+
+    const federalSocialPrograms = federalSocialProgramsSchema.parse(await response.json());
+    return federalSocialPrograms.value.map((federalSocialProgram) => ({
+      id: federalSocialProgram.esdc_governmentinsuranceplanid,
+      nameEn: federalSocialProgram.esdc_nameenglish,
+      nameFr: federalSocialProgram.esdc_namefrench,
+    }));
   }
 
   async function getAllProvincialTerritorialSocialPrograms() {
     const url = `${INTEROP_API_BASE_URI}/lookups/provincial-territorial-social-programs/`;
     const response = await fetch(url);
 
-    const provincialTerritorialSocialPrograms = z.array(provincialTerritorialSocialProgram);
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed to fetch data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
 
-    if (response.ok) {
-      return provincialTerritorialSocialPrograms.parse(await response.json());
+      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    log.error('%j', {
-      message: 'Failed to fetch data',
-      status: response.status,
-      statusText: response.statusText,
-      url: url,
-      responseBody: await response.text(),
+    const provincialSocialProgramsSchema = z.object({
+      value: z.array(
+        z.object({
+          esdc_governmentinsuranceplanid: z.string(),
+          esdc_nameenglish: z.string(),
+          esdc_namefrench: z.string(),
+          _esdc_provinceterritorystateid_value: z.string(),
+        }),
+      ),
     });
 
-    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    const provincialSocialPrograms = provincialSocialProgramsSchema.parse(await response.json());
+    return provincialSocialPrograms.value.map((provincialSocialProgram) => ({
+      id: provincialSocialProgram.esdc_governmentinsuranceplanid,
+      nameEn: provincialSocialProgram.esdc_nameenglish,
+      nameFr: provincialSocialProgram.esdc_namefrench,
+      provinceTerritoryStateId: provincialSocialProgram._esdc_provinceterritorystateid_value,
+    }));
   }
 
   async function getAllCountries() {
