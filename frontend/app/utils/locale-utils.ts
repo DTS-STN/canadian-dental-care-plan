@@ -65,6 +65,7 @@ export async function initI18n(namespaces: Array<string>) {
         escapeValue: false,
       },
       ns: namespaces,
+      preload: ['en', 'fr'],
     });
 
   return i18n;
