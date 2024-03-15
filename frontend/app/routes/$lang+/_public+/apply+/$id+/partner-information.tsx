@@ -144,17 +144,17 @@ export default function ApplyFlowApplicationInformation() {
           <div className="flex flex-col gap-6 sm:flex-row">
             {i18n.language === 'en' && (
               <>
-                <InputSelect id="month" label={t('partner-information.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} />
-                <InputField id="day" label={t('partner-information.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} />
+                <InputSelect id="month" label={t('partner-information.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} defaultValue={defaultValues.month} />
+                <InputField id="day" label={t('partner-information.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} defaultValue={defaultValues.day} />
               </>
             )}
             {i18n.language === 'fr' && (
               <>
-                <InputField id="day" label={t('partner-information.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} />
-                <InputSelect id="month" label={t('partner-information.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} />
+                <InputField id="day" label={t('partner-information.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} defaultValue={defaultValues.day} />
+                <InputSelect id="month" label={t('partner-information.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} defaultValue={defaultValues.month} />
               </>
             )}
-            <InputField id="year" label={t('partner-information.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} />
+            <InputField id="year" label={t('partner-information.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} defaultValue={defaultValues.year} />
           </div>
         </fieldset>
         <InputField
@@ -170,7 +170,7 @@ export default function ApplyFlowApplicationInformation() {
           defaultValue={defaultValues.socialInsuranceNumber}
           errorMessage={errorMessages.socialInsuranceNumber}
         />
-        <InputCheckbox id="confirm" name="confirm" required errorMessage={errorMessages['input-confirm-error']}>
+        <InputCheckbox id="confirm" name="confirm" required errorMessage={errorMessages['input-confirm-error']} defaultChecked={!!defaultValues.confirm}>
           {t('partner-information.confirm-checkbox')}
         </InputCheckbox>
 
