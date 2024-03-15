@@ -1,7 +1,7 @@
 import { LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, useNavigation } from '@remix-run/react';
 
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -13,6 +13,7 @@ import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -38,6 +39,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export default function ApplyFlowFileYourTaxes() {
   const { id } = useLoaderData<typeof loader>();
   const { t } = useTranslation(handle.i18nNamespaces);
+  const navigation = useNavigation();
 
   const eligibilityInfo = <InlineLink to={t('apply:eligibility.dob-eligibility.eligibility-info-href')} />;
 
@@ -48,12 +50,13 @@ export default function ApplyFlowFileYourTaxes() {
         <Trans ns={handle.i18nNamespaces} i18nKey="apply:eligibility.dob-eligibility.eligibility-info" components={{ eligibilityInfo }} />
       </p>
       <div className="flex flex-wrap items-center gap-3">
-        <ButtonLink type="button" to={`/apply/${id}/date-of-birth`}>
+        <ButtonLink type="button" to={`/apply/${id}/date-of-birth`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:eligibility.dob-eligibility.back-btn')}
         </ButtonLink>
         <ButtonLink type="submit" variant="primary" to="/" onClick={() => sessionStorage.removeItem('flow.state')}>
           {t('apply:eligibility.dob-eligibility.return-btn')}
+          {navigation.state !== 'idle' && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </ButtonLink>
       </div>
     </div>

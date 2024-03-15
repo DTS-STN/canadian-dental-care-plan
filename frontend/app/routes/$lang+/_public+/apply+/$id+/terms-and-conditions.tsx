@@ -1,7 +1,7 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, useNavigation } from '@remix-run/react';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -14,6 +14,7 @@ import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -51,6 +52,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function TermsAndConditions() {
   const { id } = useLoaderData<typeof loader>();
   const { t } = useTranslation(handle.i18nNamespaces);
+  const navigation = useNavigation();
 
   const fileacomplaint = <InlineLink to={t('apply:terms-and-conditions.links.file-complaint')} />;
   const hcaptchaTermsOfService = <InlineLink to={t('apply:terms-and-conditions.links.hcaptcha')} />;
@@ -135,13 +137,13 @@ export default function TermsAndConditions() {
       <h2 className="my-8 font-lato text-2xl font-bold">{t('apply:terms-and-conditions.apply-now.heading')}</h2>
       <p>{t('apply:terms-and-conditions.apply-now.application-start-consent')}</p>
       <div className="mt-8 flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to="/apply">
+        <ButtonLink id="back-button" to="/apply" className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:terms-and-conditions.apply-now.back-button')}
         </ButtonLink>
         <ButtonLink variant="primary" id="continue-button" to={`/apply/${id}/type-of-application`}>
           {t('apply:terms-and-conditions.apply-now.start-button')}
-          <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
+          <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
         </ButtonLink>
       </div>
     </div>

@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -21,6 +21,7 @@ import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils'
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -94,7 +95,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function DemographicsPart1() {
   const { bornTypes, disabilityTypes, otherEquityCode, equityTypes, indigenousTypes, indigenousGroup, indigenousYesCode, state, id } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-
+  const navigation = useNavigation();
   const [otherEquityChecked, setOtherEquityChecked] = useState(state?.otherEquity === otherEquityCode.id);
   const [firstNationsYesChecked, setFirstNationsYesChecked] = useState(state?.indigenousType === indigenousYesCode.id);
   const actionData = useActionData<typeof action>();
@@ -227,13 +228,13 @@ export default function DemographicsPart1() {
           </div>
         )}
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/demographics`}>
+          <ButtonLink id="back-button" to={`/apply/${id}/demographics`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:demographics-oral-health-questions.part1.button-back')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button">
+          <Button variant="primary" id="continue-button" disabled={navigation.state !== 'idle'}>
             {t('apply:demographics-oral-health-questions.part1.button-continue')}
-            <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
+            <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
           </Button>
         </div>
       </Form>

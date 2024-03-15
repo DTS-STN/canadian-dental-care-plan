@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -17,6 +17,7 @@ import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -66,6 +67,7 @@ export default function ApplyFlowTypeOfApplication() {
   const { state } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
+  const navigation = useNavigation();
 
   const { t } = useTranslation(handle.i18nNamespaces);
 
@@ -103,13 +105,13 @@ export default function ApplyFlowTypeOfApplication() {
           errorMessage={errorMessages['input-radios-application-delegate']}
         />
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to="/apply">
+          <ButtonLink id="back-button" to="/apply" className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:eligibility.type-of-application.back-btn')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button">
+          <Button variant="primary" id="continue-button" disabled={navigation.state !== 'idle'}>
             {t('apply:eligibility.type-of-application.continue-btn')}
-            <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />
+            <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
           </Button>
         </div>
       </Form>
