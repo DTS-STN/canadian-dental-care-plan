@@ -9,8 +9,5 @@
   "how-to-apply.href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html",
   "other-enquiry": "(FR) For other enquiries, please visit the <contactus>Contact us</contactus> page to find out how to reach us.",
   "contact-us.href": "{{baseUri}}/fr/contact-us",
-  "service-delay": "(FR) If you have recently applied, please note that there could be a delay in your application appearing within the My Service Canada Account.  For any enquiries on the status of your application please visit \"link to online status checker\".",
-  "my-dashboard": "<mydashboard>Mon tableau de bord</mydashboard>",
-  "my-dashboard.href": "{{baseUri}}/fr/mon-tableau-de-bord",
-  "go-back-to-msca": "(FR) MSCA portal link"
+  "service-delay": "(FR) If you have recently applied, please note that there could be a delay in your application appearing within the My Service Canada Account.  For any enquiries on the status of your application please visit \"link to online status checker\"."
 }
