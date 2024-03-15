@@ -99,8 +99,8 @@ export default function AccessToDentalInsuranceQuestion() {
   const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, state, id } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const [federalBenefitChecked, setFederalBenefitChecked] = useState(state?.federalBenefit);
-  const [provincialTerritorialBenefitChecked, setProvincialTerritorialBenefitChecked] = useState(state?.provincialTerritorialBenefit);
+  const [checkedFederalOption, setCheckedFederalOption] = useState(state?.federalBenefit);
+  const [checkedProvincialOption, setCheckedProvincialOption] = useState(state?.provincialTerritorialBenefit);
   const [provincialProgramOption, setProvincialProgramOption] = useState(state?.provincialTerritorialSocialProgram);
   const errorSummaryId = 'error-summary';
   const navigation = useNavigation();
@@ -114,13 +114,10 @@ export default function AccessToDentalInsuranceQuestion() {
   const [selectedRegion, setSelectedRegion] = useState(state?.province);
 
   useEffect(() => {
-    if (provincialTerritorialBenefitChecked !== 'yes') {
-      setSelectedRegion('');
-    }
     if (actionData?.formData && hasErrors(actionData.formData)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
-  }, [actionData, provincialTerritorialBenefitChecked]);
+  }, [actionData]);
 
   function getErrorMessage(errorI18nKey?: string): string | undefined {
     if (!errorI18nKey) return undefined;
@@ -163,8 +160,8 @@ export default function AccessToDentalInsuranceQuestion() {
                   children: <Trans ns={handle.i18nNamespaces}>{`dental-benefits.federal-benefits.option-${option.code}`}</Trans>,
                   value: option.code,
                   defaultChecked: state?.federalBenefit === option.code,
-                  onChange: (e) => setFederalBenefitChecked(e.target.value),
-                  append: option.code === 'yes' && federalBenefitChecked === 'yes' && (
+                  onChange: (e) => setCheckedFederalOption(e.target.value),
+                  append: option.code === 'yes' && checkedFederalOption === 'yes' && (
                     <InputRadios
                       id="federal-social-programs"
                       name="federalSocialProgram"
@@ -197,8 +194,8 @@ export default function AccessToDentalInsuranceQuestion() {
                   children: <Trans ns={handle.i18nNamespaces}>{`dental-benefits.provincial-territorial-benefits.option-${option.code}`}</Trans>,
                   value: option.code,
                   defaultChecked: state?.provincialTerritorialBenefit === option.code,
-                  onChange: (e) => setProvincialTerritorialBenefitChecked(e.target.value),
-                  append: option.code === 'yes' && provincialTerritorialBenefitChecked === 'yes' && regions.length > 0 && (
+                  onChange: (e) => setCheckedProvincialOption(e.target.value),
+                  append: option.code === 'yes' && checkedProvincialOption === 'yes' && regions.length > 0 && (
                     <Fragment key={option.code}>
                       <InputSelect
                         id="province"
@@ -215,7 +212,7 @@ export default function AccessToDentalInsuranceQuestion() {
                             children: i18n.language === 'en' ? region.nameEn : region.nameFr,
                           })),
                         ]}
-                        defaultValue={state?.province}
+                        defaultValue={selectedRegion}
                         errorMessage={errorMessages.province}
                         required={errorSummaryItems.length > 0}
                       />
@@ -230,7 +227,7 @@ export default function AccessToDentalInsuranceQuestion() {
                           .map((option) => ({
                             children: <span className="font-bold">{getNameByLanguage(i18n.language, option)}</span>,
                             value: getNameByLanguage(i18n.language, option),
-                            defaultChecked: provincialProgramOption === getNameByLanguage(i18n.language, option),
+                            checked: provincialProgramOption === getNameByLanguage(i18n.language, option),
                             onChange: (e) => setProvincialProgramOption(e.target.value),
                           }))}
                       />
