@@ -15,6 +15,7 @@ import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { getUserOrigin, userOriginCookie } from '~/utils/user-origin-utils.server';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('index', 'gcweb'),
@@ -35,8 +36,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
 
+  const userOrigin = await getUserOrigin(request);
+
   if (!userInfo) {
-    return redirectWithLocale(request, '/data-unavailable');
+    return redirectWithLocale(request, '/data-unavailable', { headers: { 'Set-Cookie': await userOriginCookie.serialize(userOrigin) } });
   }
 
   const t = await getFixedT(request, handle.i18nNamespaces);

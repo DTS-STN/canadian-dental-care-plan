@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { getToast } from 'remix-toast';
 
 import { getFixedT, getLocale } from './utils/locale-utils.server';
+import { getUserOrigin, userOriginCookie } from './utils/user-origin-utils.server';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import SessionTimeout from '~/components/session-timeout';
@@ -48,7 +49,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const buildInfoService = getBuildInfoService();
-  const { toast, headers } = await getToast(request);
+  const { toast, headers: toastHeaders } = await getToast(request);
   const requestUrl = new URL(request.url);
   const locale = await getLocale(request);
   const t = await getFixedT(request, ['gcweb']);
@@ -66,7 +67,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   };
   const origin = requestUrl.origin;
 
-  return json({ buildInfo, env, meta, origin, toast }, { headers });
+  const userOrigin = await getUserOrigin(request);
+
+  return json({ buildInfo, env, meta, origin, toast, userOrigin }, { headers: { ...toastHeaders, 'Set-Cookie': await userOriginCookie.serialize(userOrigin) } });
 }
 
 export default function App() {

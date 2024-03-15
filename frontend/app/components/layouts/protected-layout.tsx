@@ -18,6 +18,7 @@ import { SkipNavigationLinks } from '~/components/skip-navigation-links';
 import { getClientEnv } from '~/utils/env-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useBreadcrumbs, useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
+import { useUserOrigin } from '~/utils/user-origin-utils';
 
 export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
@@ -49,6 +50,7 @@ function AppPageTitle() {
 function NavigationMenu() {
   const { t } = useTranslation(i18nNamespaces);
   const { SCCH_BASE_URI } = getClientEnv();
+  const userOrigin = useUserOrigin();
 
   return (
     <div className="sm:w-[260px]">
@@ -63,9 +65,11 @@ function NavigationMenu() {
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-svw rounded-t-none sm:w-[260px]" sideOffset={0} align="center">
-          <DropdownMenuItem asChild className="cursor-pointer">
-            <Link to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-dashboard.text')}</Link>
-          </DropdownMenuItem>
+          {userOrigin && (
+            <DropdownMenuItem asChild className="cursor-pointer">
+              <Link to={userOrigin.to}>{userOrigin.text}</Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem asChild className="cursor-pointer">
             <Link to={t('gcweb:header.menu-profile.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-profile.text')}</Link>
           </DropdownMenuItem>

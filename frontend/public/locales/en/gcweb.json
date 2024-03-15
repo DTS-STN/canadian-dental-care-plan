@@ -21,6 +21,7 @@
     "menu-title": "Account",
     "menu-dashboard.text": "My Dashboard",
     "menu-dashboard.href": "{{baseUri}}/en/my-dashboard",
+    "menu-msca-home.href": "{{baseUri}}/sc/msca-mdsc/portal-portail/pro/home-accueil?Lang=eng",
     "menu-profile.text": "Profile",
     "menu-profile.href": "{{baseUri}}/en/profile",
     "menu-security-settings.text": "Security Settings",

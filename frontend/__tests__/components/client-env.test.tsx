@@ -13,6 +13,7 @@ describe('<ClientEnv>', () => {
       ENABLED_FEATURES: ['feature1', 'feature2'],
       I18NEXT_DEBUG: true,
       SCCH_BASE_URI: 'http://www.example.com',
+      MSCA_HOME_URI: 'http://srv136.services.gc.ca',
       SESSION_TIMEOUT_SECONDS: 120,
       SESSION_TIMEOUT_PROMPT_SECONDS: 30,
     };
