@@ -125,6 +125,7 @@ export async function initI18n<N extends Namespace>(locale: string | undefined, 
       },
       lng: locale,
       ns: namespaces,
+      preload: ['en', 'fr'],
     });
 
   log.debug('i18next initialization complete');
