@@ -1,34 +1,38 @@
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from '@remix-run/node';
-import { Form, MetaFunction, useLoaderData, useNavigation } from '@remix-run/react';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
+import { Form, useLoaderData, useNavigation } from '@remix-run/react';
 
 import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
+import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
+import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
-  pageIdentifier: 'CDCP-00XX',
+  pageIdentifier: pageIds.public.apply.exitApplication,
   pageTitleI18nKey: 'apply:exit-application.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  return [{ title: t('gcweb:meta.title.template', { title: t('apply:exit-application.page-title') }) }];
+export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
+  return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id } = await applyFlow.loadState({ request, params });
 
-  return json({ id });
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:exit-application.page-title') }) };
+
+  return json({ id, meta });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {

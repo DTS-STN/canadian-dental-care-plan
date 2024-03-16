@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
@@ -24,13 +25,12 @@ import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
-  pageIdentifier: 'CDCP-1112',
+  pageIdentifier: pageIds.public.apply.demographicsPart2,
   pageTitleI18nKey: 'apply:demographics-oral-health-questions.part2.page-title',
 };
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  if (!data) return [];
-  return getTitleMetaTags(data.meta.title);
+  return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {

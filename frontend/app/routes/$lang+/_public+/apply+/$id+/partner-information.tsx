@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
@@ -26,13 +27,12 @@ export const applyIdParamSchema = z.string().uuid();
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
-  pageIdentifier: 'CDCP-00XX',
+  pageIdentifier: pageIds.public.apply.partnerInformation,
   pageTitleI18nKey: 'apply:partner-information.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  if (!data) return [];
-  return getTitleMetaTags(data.meta.title);
+  return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {

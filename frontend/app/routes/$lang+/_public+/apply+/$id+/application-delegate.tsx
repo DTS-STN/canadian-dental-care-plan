@@ -5,6 +5,7 @@ import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
+import pageIds from '../../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
@@ -17,13 +18,12 @@ import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
-  pageIdentifier: 'CDCP-00XX',
+  pageIdentifier: pageIds.public.apply.applicationDelegate,
   pageTitleI18nKey: 'apply:eligibility.application-delegate.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  if (!data) return [];
-  return getTitleMetaTags(data.meta.title);
+  return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
