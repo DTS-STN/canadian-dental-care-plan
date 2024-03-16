@@ -1,6 +1,13 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { loader } from '~/routes/$lang+/_protected+/letters+/index';
+import { getSessionService } from '~/services/session-service.server';
+
+vi.mock('~/services/audit-service.server', () => ({
+  getAuditService: vi.fn().mockReturnValue({
+    audit: vi.fn(),
+  }),
+}));
 
 vi.mock('~/services/interop-service.server', () => ({
   getInteropService: vi.fn().mockReturnValue({
@@ -19,6 +26,14 @@ vi.mock('~/services/interop-service.server', () => ({
 vi.mock('~/services/raoidc-service.server', () => ({
   getRaoidcService: vi.fn().mockResolvedValue({
     handleSessionValidation: vi.fn().mockResolvedValue(true),
+  }),
+}));
+
+vi.mock('~/services/session-service.server', () => ({
+  getSessionService: vi.fn().mockResolvedValue({
+    getSession: vi.fn().mockResolvedValue({
+      get: vi.fn(),
+    }),
   }),
 }));
 
@@ -43,11 +58,18 @@ describe('Letters Page', () => {
 
   describe('loader()', () => {
     it('should return sorted letters', async () => {
-      const response = await loader({
-        request: new Request('http://localhost/letters?sort=desc'),
-        params: {},
-        context: {},
+      const request = new Request('http://localhost/letters?sort=desc');
+
+      const sessionService = await getSessionService();
+      const session = await sessionService.getSession(request);
+
+      vi.mocked(session.get).mockImplementation((key) => {
+        return {
+          idToken: { sub: '00000000-0000-0000-0000-000000000000' },
+        }[key];
       });
+
+      const response = await loader({ request, params: {}, context: {} });
 
       const data = await response.json();
 
@@ -58,28 +80,24 @@ describe('Letters Page', () => {
       expect(data.letters[2].issuedOn).toBeUndefined();
     });
   });
+
   it('retrieves letter types', async () => {
-    const response = await loader({
-      request: new Request('http://localhost/letters'),
-      params: {},
-      context: {},
+    const request = new Request('http://localhost/letters');
+
+    const sessionService = await getSessionService();
+    const session = await sessionService.getSession(request);
+
+    vi.mocked(session.get).mockImplementation((key) => {
+      return {
+        idToken: { sub: '00000000-0000-0000-0000-000000000000' },
+      }[key];
     });
+
+    const response = await loader({ request, params: {}, context: {} });
 
     const data = await response.json();
 
-    expect(
-      data.letterTypes.includes({
-        code: 'DEN',
-        nameEn: 'DENIED',
-        nameFr: '(FR) DENIED',
-      }),
-    );
-    expect(
-      data.letterTypes.includes({
-        code: 'ACC',
-        nameEn: 'Accepted',
-        nameFr: '(FR) Accepted',
-      }),
-    );
+    expect(data.letterTypes.includes({ code: 'DEN', nameEn: 'DENIED', nameFr: '(FR) DENIED' }));
+    expect(data.letterTypes.includes({ code: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' }));
   });
 });

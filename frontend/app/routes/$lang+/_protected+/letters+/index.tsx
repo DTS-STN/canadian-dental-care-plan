@@ -9,13 +9,16 @@ import { z } from 'zod';
 
 import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
+import { getAuditService } from '~/services/audit-service.server';
 import { getInteropService } from '~/services/interop-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
+import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -40,6 +43,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request);
+
+  const sessionService = await getSessionService();
+  const session = await sessionService.getSession(request);
+  const idToken: IdToken = session.get('idToken');
+  getAuditService().audit('page-view.letters', { userId: idToken.sub });
 
   /**
    * @url Create a new URL object from request URL

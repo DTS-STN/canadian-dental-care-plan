@@ -70,6 +70,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const id = randomUUID().toString();
   const sessionResponseInit = await applyFlow.start({ id, request });
+
   return redirectWithLocale(request, `/apply/${id}/terms-and-conditions`, sessionResponseInit);
 }
 

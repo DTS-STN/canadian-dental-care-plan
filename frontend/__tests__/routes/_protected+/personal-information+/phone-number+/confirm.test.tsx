@@ -4,6 +4,12 @@ import { action, loader } from '~/routes/$lang+/_protected+/personal-information
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 
+vi.mock('~/services/audit-service.server', () => ({
+  getAuditService: vi.fn().mockReturnValue({
+    audit: vi.fn(),
+  }),
+}));
+
 vi.mock('~/services/raoidc-service.server', () => ({
   getRaoidcService: vi.fn().mockResolvedValue({
     handleSessionValidation: vi.fn().mockResolvedValue(true),
@@ -73,6 +79,11 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
       const session = await sessionService.getSession(new Request('https://example.com/'));
 
       vi.mocked(session.has).mockReturnValueOnce(true);
+      vi.mocked(session.get).mockImplementation((key) => {
+        return {
+          idToken: { sub: '00000000-0000-0000-0000-000000000000' },
+        }[key];
+      });
 
       const request = new Request('http://localhost:3000/en/personal-information/phone-number/confirm', {
         method: 'POST',

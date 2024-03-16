@@ -13,6 +13,12 @@ vi.mock('~/services/address-service.server', () => ({
   }),
 }));
 
+vi.mock('~/services/audit-service.server', () => ({
+  getAuditService: vi.fn().mockReturnValue({
+    audit: vi.fn(),
+  }),
+}));
+
 vi.mock('~/services/lookup-service.server', () => ({
   getLookupService: vi.fn().mockReturnValue({
     getAllCountries: vi.fn().mockReturnValue([
@@ -73,19 +79,25 @@ describe('_gcweb-app.personal-information.home-address.confirm', () => {
 
   describe('loader()', () => {
     it('should return all necessary address objects and countries/regions list', async () => {
+      const request = new Request('http://localhost:3000/personal-information/home-address/confirm');
+
       const userService = getUserService();
       const sessionService = await getSessionService();
-      const session = await sessionService.getSession(new Request('https://example.com/'));
+      const session = await sessionService.getSession(request);
 
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', firstName: 'John', lastName: 'Maverick' });
       vi.mocked(getAddressService().getAddressInfo).mockResolvedValue({ address: '111 Fake Home St', city: 'city', country: 'country' });
-      vi.mocked(session.get)
-        .mockReturnValueOnce({ address: '123 Fake Home St.', city: 'city', country: 'country' }) // return value for session.get('newHomeAddress')
-        .mockReturnValueOnce(true) // return value for session.get('useSuggestedAddress')
-        .mockReturnValueOnce({ address: '123 Fake Suggested St.', city: 'city', country: 'country' }); // return value for session.get('suggestedAddress')
+      vi.mocked(session.get).mockImplementation((key) => {
+        return {
+          idToken: { sub: '00000000-0000-0000-0000-000000000000' },
+          newHomeAddress: { address: '123 Fake Home St.', city: 'city', country: 'country' },
+          suggestedAddress: { address: '123 Fake Suggested St.', city: 'city', country: 'country' },
+          useSuggestedAddress: true,
+        }[key];
+      });
 
       const response = await loader({
-        request: new Request('http://localhost:3000/personal-information/home-address/confirm'),
+        request: request,
         context: {},
         params: {},
       });
