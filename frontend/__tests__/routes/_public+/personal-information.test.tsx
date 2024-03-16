@@ -62,7 +62,7 @@ describe('_public.apply.id.personal-information', () => {
 
       const data = await response.json();
 
-      expect(data).toEqual({
+      expect(data).toMatchObject({
         id: '123',
         countryList: [
           {

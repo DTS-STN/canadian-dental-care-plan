@@ -7,6 +7,7 @@ import { useLoaderData } from '@remix-run/react';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import pageIds from '../../../page-ids.json';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -20,13 +21,12 @@ export const applyIdParamSchema = z.string().uuid();
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
-  pageIdentifier: 'CDCP-0013',
+  pageIdentifier: pageIds.public.apply.confirmation,
   pageTitleI18nKey: 'apply:confirm.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  if (!data) return [];
-  return getTitleMetaTags(data.meta.title);
+  return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {

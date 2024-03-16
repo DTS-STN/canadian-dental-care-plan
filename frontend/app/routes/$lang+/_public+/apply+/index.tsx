@@ -10,6 +10,7 @@ import { randomUUID } from 'crypto';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import pageIds from '../../page-ids.json';
 import { Button } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { InlineLink } from '~/components/inline-link';
@@ -25,7 +26,7 @@ import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
-  pageIdentifier: 'CDCP-00XX',
+  pageIdentifier: pageIds.public.apply.index,
   pageTitleI18nKey: 'apply:index.page-title',
 } as const satisfies RouteHandleData;
 
@@ -45,6 +46,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function action({ request }: ActionFunctionArgs) {
   const formDataSchema = z.object({
+    // TODO :: GjB : translate this? (do we even still need it)
     'h-captcha-response': z.string().min(1, { message: 'Please indicate that you are human.' }),
   });
 

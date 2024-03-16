@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from '@remix-run/node';
-import { Form, MetaFunction, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
+import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +9,7 @@ import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
@@ -19,9 +20,10 @@ import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
+import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
 const validPostalCode = new RegExp('^[ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy]\\d[A-Za-z] \\d[A-Za-z]\\d{1}$');
@@ -29,13 +31,12 @@ const validZipCode = new RegExp('^\\d{5}$');
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
-  pageIdentifier: 'CDCP-00XX',
+  pageIdentifier: pageIds.public.apply.personalInformation,
   pageTitleI18nKey: 'apply:personal-information.page-title',
 } as const satisfies RouteHandleData;
 
-export const meta: MetaFunction<typeof loader> = mergeMeta((args) => {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  return [{ title: t('gcweb:meta.title.template', { title: t('apply:personal-information.page-title') }) }];
+export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
+  return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -46,7 +47,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const countryList = await getLookupService().getAllCountries();
   const regionList = await getLookupService().getAllRegions();
 
-  return json({ id, state: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID });
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:personal-information.page-title') }) };
+
+  return json({ id, meta, state: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
