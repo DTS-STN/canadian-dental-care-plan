@@ -47,13 +47,19 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id } = await applyFlow.loadState({ request, params });
 
+  const formSchema = z.object({
+    month: z.coerce.number({ required_error: 'month' }).int().min(0, { message: 'month' }).max(11, { message: 'month' }),
+    day: z.coerce.number({ required_error: 'day' }).int().min(1, { message: 'day' }).max(31, { message: 'day' }),
+    year: z.coerce.number({ required_error: 'year' }).int().min(1, { message: 'year' }).max(new Date().getFullYear(), { message: 'year' }),
+  });
+
   const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = applyFlow.dobSchema.safeParse(formData);
+  const parsedDataResult = formSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof applyFlow.dobSchema>>,
+      formData: formData as Partial<z.infer<typeof formSchema>>,
     });
   }
 
