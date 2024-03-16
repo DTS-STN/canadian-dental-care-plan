@@ -6,6 +6,7 @@ import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-soli
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
+import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -16,13 +17,12 @@ import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
-  pageIdentifier: 'CDCP-1110',
+  pageIdentifier: pageIds.public.apply.demographics,
   pageTitleI18nKey: 'apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.page-title',
 };
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  if (!data) return [];
-  return getTitleMetaTags(data.meta.title);
+  return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -62,11 +62,9 @@ export default function Demographics() {
         <ButtonLink id="back-button" to={`/apply/${id}/federal-provincial-territorial-benefits`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.back-button')}
-          {t('apply:eligibility.tax-filing.back-btn')}
         </ButtonLink>
         <Button variant="primary" id="continue-button" disabled={navigation.state !== 'idle'}>
           {t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.answer-button')}
-          {t('apply:eligibility.tax-filing.continue-btn')}
           <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
         </Button>
       </div>

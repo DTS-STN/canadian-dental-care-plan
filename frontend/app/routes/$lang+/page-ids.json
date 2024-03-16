@@ -1,0 +1,29 @@
+{
+  "protected": {
+    "TODO :: GjB :: Add protected page IDs": "🤪"
+  },
+  "public": {
+    "apply": {
+      "index": "CDCP-APPL-0001",
+      "termsAndConditions": "CDCP-APPL-0002",
+      "typeOfApplication": "CDCP-APPL-0003",
+      "applicationDelegate": "CDCP-APPL-0004",
+      "taxFiling": "CDCP-APPL-0005",
+      "fileYourTaxes": "CDCP-APPL-0006",
+      "dateOfBirth": "CDCP-APPL-0007",
+      "dataOfBirthEligibility": "CDCP-APPL-0008",
+      "applicantInformation": "CDCP-APPL-0009",
+      "partnerInformation": "CDCP-APPL-0010",
+      "personalInformation": "CDCP-APPL-0011",
+      "communicationPreference": "CDCP-APPL-0012",
+      "dentalInsurance": "CDCP-APPL-0013",
+      "federalProvincialTerritorialBenefits": "CDCP-APPL-0014",
+      "demographics": "CDCP-APPL-0015",
+      "demographicsPart1": "CDCP-APPL-0016",
+      "demographicsPart2": "CDCP-APPL-0017",
+      "reviewInformation": "CDCP-APPL-0018",
+      "exitApplication": "CDCP-APPL-0019",
+      "confirmation": "CDCP-APPL-0020"
+    }
+  }
+}
