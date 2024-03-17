@@ -1,7 +1,7 @@
 import { LoaderFunctionArgs, json } from '@remix-run/node';
-import { Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
+import { Outlet, isRouteErrorResponse, useParams, useRouteError } from '@remix-run/react';
 
-import { NotFoundError, ServerError } from '~/components/layouts/public-layout';
+import { BilingualNotFoundError, NotFoundError, ServerError } from '~/components/layouts/public-layout';
 import { getLogger } from '~/utils/logging.server';
 
 export function loader({ request, params }: LoaderFunctionArgs) {
@@ -25,14 +25,25 @@ export default function Route() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
+  const { lang: langParam } = useParams();
 
   if (isRouteErrorResponse(error)) {
     switch (error.status) {
       case 404: {
-        return <NotFoundError error={error} />;
+        // prettier-ignore
+        return isValidLang(langParam)
+          ? <NotFoundError error={error} />
+          : <BilingualNotFoundError error={error}/>;
       }
     }
   }
 
-  return <ServerError error={error} />;
+  //prettier-ignore
+  return isValidLang(langParam)
+    ? <ServerError error={error} />
+    : <ServerError error={error} />; // TODO :: GjB :: create bilingual 500 page
+}
+
+function isValidLang(lang?: string) {
+  return lang && ['en', 'fr'].includes(lang);
 }
