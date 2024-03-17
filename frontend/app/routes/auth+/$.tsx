@@ -3,6 +3,7 @@ import type { LoaderFunctionArgs } from '@remix-run/node';
 
 import { z } from 'zod';
 
+import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
@@ -93,6 +94,8 @@ async function handleLogoutRequest({ request }: LoaderFunctionArgs) {
   const signoutUrl = raoidcService.generateSignoutRequest(idToken.sid, locale);
 
   log.debug('Destroying CDCP application session session and redirecting to downstream logout handler: [%s]', signoutUrl);
+  getAuditService().audit('auth.session-destroyed', { userId: idToken.sub });
+
   return redirect(signoutUrl, {
     headers: { 'Set-Cookie': await sessionService.destroySession(session) },
   });
@@ -155,6 +158,8 @@ async function handleRaoidcCallbackRequest({ request }: LoaderFunctionArgs) {
   session.set('userInfoToken', userInfoToken);
 
   log.debug('RAOIDC login successful; redirecting to [%s]', returnUrl);
+  getAuditService().audit('auth.session-created', { userId: idToken.sub });
+
   return redirect(returnUrl, {
     headers: { 'Set-Cookie': await sessionService.commitSession(session) },
   });

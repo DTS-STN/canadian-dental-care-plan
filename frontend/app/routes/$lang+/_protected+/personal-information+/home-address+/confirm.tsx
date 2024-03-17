@@ -8,6 +8,7 @@ import { redirectWithSuccess } from 'remix-toast';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { getAddressService } from '~/services/address-service.server';
+import { getAuditService } from '~/services/audit-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
@@ -15,6 +16,7 @@ import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { IdToken } from '~/utils/raoidc-utils.server';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
@@ -70,6 +72,10 @@ export async function action({ request }: ActionFunctionArgs) {
   const newHomeAddress = session.get('useSuggestedAddress') ? session.get('suggestedAddress') : session.get('newHomeAddress');
 
   await getAddressService().updateAddressInfo(userId, userInfo?.homeAddress ?? '', newHomeAddress);
+
+  const idToken: IdToken = session.get('idToken');
+  getAuditService().audit('update-data.home-address', { userId: idToken.sub });
+
   const locale = await getLocale(request);
 
   // TODO remove new home address from session and handle case when it is missing

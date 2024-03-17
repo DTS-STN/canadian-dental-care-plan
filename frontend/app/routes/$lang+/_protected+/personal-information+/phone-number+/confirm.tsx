@@ -6,12 +6,14 @@ import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
 
 import { Button, ButtonLink } from '~/components/buttons';
+import { getAuditService } from '~/services/audit-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -59,17 +61,20 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const userService = getUserService();
   const sessionService = await getSessionService();
+  const session = await sessionService.getSession(request);
 
   const userId = await userService.getUserId();
   if (!userId) return redirectWithLocale(request, '/');
 
   const userInfo = await userService.getUserInfo(userId);
   if (!userInfo) return redirectWithLocale(request, '/');
-
-  const session = await sessionService.getSession(request);
   if (!session.has('newPhoneNumber')) return redirectWithLocale(request, '/');
 
   await userService.updateUserInfo(userId, { phoneNumber: session.get('newPhoneNumber') });
+
+  const idToken: IdToken = session.get('idToken');
+  getAuditService().audit('update-data.phone-number', { userId: idToken.sub });
+
   session.unset('newPhoneNumber');
   const locale = await getLocale(request);
 

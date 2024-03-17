@@ -8,11 +8,14 @@ import { useTranslation } from 'react-i18next';
 
 import { AppLink } from '~/components/app-link';
 import { useFeature } from '~/root';
+import { getAuditService } from '~/services/audit-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
+import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { getUserOrigin, userOriginCookie } from '~/utils/user-origin-utils.server';
@@ -31,6 +34,11 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request);
+
+  const sessionService = await getSessionService();
+  const session = await sessionService.getSession(request);
+  const idToken: IdToken = session.get('idToken');
+  getAuditService().audit('page-view.home', { userId: idToken.sub });
 
   const userService = getUserService();
   const userId = await userService.getUserId();
