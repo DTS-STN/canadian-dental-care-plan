@@ -222,6 +222,7 @@
       "day": "Day",
       "year": "Year",
       "error-message": {
+        "date-required": "The date of birth is required and must be a valid date.",
         "day": "Day must be provided",
         "month": "Month must be provided",
         "year": "Year must be provided"
