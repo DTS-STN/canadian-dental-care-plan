@@ -52,6 +52,7 @@ export default function Demographics() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { id } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
 
   return (
     <div className="max-w-prose">
@@ -61,13 +62,13 @@ export default function Demographics() {
         <p>{t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.anwsers-will-not-affect-eligibility')}</p>
       </div>
       <fetcher.Form method="post" className="mt-8 flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to={`/apply/${id}/federal-provincial-territorial-benefits`} disabled={fetcher.state !== 'idle'}>
+        <ButtonLink id="back-button" to={`/apply/${id}/federal-provincial-territorial-benefits`} disabled={isSubmitting}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.back-button')}
         </ButtonLink>
-        <Button variant="primary" id="continue-button" disabled={fetcher.state !== 'idle'}>
+        <Button variant="primary" id="continue-button" disabled={isSubmitting}>
           {t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.answer-button')}
-          <FontAwesomeIcon icon={fetcher.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', fetcher.state !== 'idle' && 'animate-spin')} />
+          <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
         </Button>
       </fetcher.Form>
     </div>

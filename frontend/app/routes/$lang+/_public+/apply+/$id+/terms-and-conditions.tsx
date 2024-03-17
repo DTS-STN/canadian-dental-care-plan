@@ -46,6 +46,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function TermsAndConditions() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
 
   const fileacomplaint = <InlineLink to={t('apply:terms-and-conditions.links.file-complaint')} />;
   const hcaptchaTermsOfService = <InlineLink to={t('apply:terms-and-conditions.links.hcaptcha')} />;
@@ -130,13 +131,13 @@ export default function TermsAndConditions() {
       <h2 className="my-8 font-lato text-2xl font-bold">{t('apply:terms-and-conditions.apply-now.heading')}</h2>
       <p>{t('apply:terms-and-conditions.apply-now.application-start-consent')}</p>
       <fetcher.Form method="post" noValidate className="mt-8 flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to="/apply" disabled={fetcher.state !== 'idle'}>
+        <ButtonLink id="back-button" to="/apply" disabled={isSubmitting}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:terms-and-conditions.apply-now.back-button')}
         </ButtonLink>
         <Button variant="primary" id="continue-button">
           {t('apply:terms-and-conditions.apply-now.start-button')}
-          <FontAwesomeIcon icon={fetcher.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', fetcher.state !== 'idle' && 'animate-spin')} />
+          <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
         </Button>
       </fetcher.Form>
     </div>

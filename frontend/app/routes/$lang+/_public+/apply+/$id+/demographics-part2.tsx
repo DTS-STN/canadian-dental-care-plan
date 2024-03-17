@@ -86,12 +86,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function DemographicsPart2() {
-  const { otherGenderCode, genderTypes, mouthPainTypes, lastTimeDentistVisitTypes, avoidedDentalCostTypes, id, state } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const [otherGenderChecked, setOtherGenderChecked] = useState(state?.gender === otherGenderCode.id);
-
-  const errorSummaryId = 'error-summary';
+  const { otherGenderCode, genderTypes, mouthPainTypes, lastTimeDentistVisitTypes, avoidedDentalCostTypes, id, state } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
+  const [otherGenderChecked, setOtherGenderChecked] = useState(state?.gender === otherGenderCode.id);
+  const errorSummaryId = 'error-summary';
 
   function otherGenderHandler() {
     setOtherGenderChecked(true);
@@ -203,13 +203,13 @@ export default function DemographicsPart2() {
           )}
         </div>
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/demographics-part1`} disabled={fetcher.state !== 'idle'}>
+          <ButtonLink id="back-button" to={`/apply/${id}/demographics-part1`} disabled={isSubmitting}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:demographics-oral-health-questions.part2.button-back')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={fetcher.state !== 'idle'}>
+          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
             {t('apply:demographics-oral-health-questions.part2.button-continue')}
-            <FontAwesomeIcon icon={fetcher.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', fetcher.state !== 'idle' && 'animate-spin')} />
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
         </div>
       </fetcher.Form>

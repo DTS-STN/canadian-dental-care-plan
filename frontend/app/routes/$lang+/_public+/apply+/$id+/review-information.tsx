@@ -108,9 +108,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ReviewInformation() {
-  const { id, userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { id, userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
 
   return (
     <div className="max-w-prose">
@@ -285,13 +286,13 @@ export default function ReviewInformation() {
       <p className="mb-4">{t('apply:review-information.submit-p-proceed')}</p>
       <p className="mb-4">{t('apply:review-information.submit-p-false-info')}</p>
       <fetcher.Form method="post" className="flex flex-wrap items-center gap-3">
-        <ButtonLink to={`/apply/${id}/exit-application`} variant="alternative" disabled={fetcher.state !== 'idle'}>
+        <ButtonLink to={`/apply/${id}/exit-application`} variant="alternative" disabled={isSubmitting}>
           {t('apply:review-information.exit-button')}
           <FontAwesomeIcon icon={faX} className="ms-3 block size-4" />
         </ButtonLink>
-        <Button id="confirm-button" variant="green" disabled={fetcher.state !== 'idle'}>
+        <Button id="confirm-button" variant="green" disabled={isSubmitting}>
           {t('apply:review-information.submit-button')}
-          {fetcher.state !== 'idle' && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
+          {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>
       </fetcher.Form>
     </div>

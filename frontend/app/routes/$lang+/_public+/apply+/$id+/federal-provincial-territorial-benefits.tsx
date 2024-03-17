@@ -100,14 +100,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function AccessToDentalInsuranceQuestion() {
-  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, state, id } = useLoaderData<typeof loader>();
-
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, state, id } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
   const [checkedFederalOption, setCheckedFederalOption] = useState(state?.federalBenefit);
   const [checkedProvincialOption, setCheckedProvincialOption] = useState(state?.provincialTerritorialBenefit);
   const [provincialProgramOption, setProvincialProgramOption] = useState(state?.provincialTerritorialSocialProgram);
   const errorSummaryId = 'error-summary';
-  const fetcher = useFetcher<typeof action>();
 
   const sortedRegions = regions.sort((a, b) => {
     const nameA = i18n.language === 'en' ? a.nameEn : a.nameFr;
@@ -242,13 +242,13 @@ export default function AccessToDentalInsuranceQuestion() {
           )}
         </section>
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <ButtonLink to={`/apply/${id}/dental-insurance`} disabled={fetcher.state !== 'idle'}>
+          <ButtonLink to={`/apply/${id}/dental-insurance`} disabled={isSubmitting}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('dental-benefits.button.back')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={fetcher.state !== 'idle'}>
+          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
             {t('dental-benefits.button.continue')}
-            <FontAwesomeIcon icon={fetcher.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', fetcher.state !== 'idle' && 'animate-spin')} />
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
         </div>
       </fetcher.Form>

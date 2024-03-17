@@ -139,12 +139,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ApplyFlowCommunicationPreferencePage() {
-  const { id, communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, state } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { id, communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, state } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
   const [emailMethodChecked, setEmailMethodChecked] = useState(state?.preferredMethod === communicationMethodEmail.id);
   const [nonEmailMethodChecked, setNonEmailMethodChecked] = useState(state && state.preferredMethod !== communicationMethodEmail.id);
-  const fetcher = useFetcher<typeof action>();
-
   const errorSummaryId = 'error-summary';
 
   const emailMethodHandler = () => {
@@ -257,13 +257,13 @@ export default function ApplyFlowCommunicationPreferencePage() {
           {preferredCommunicationMethods.length > 0 && <InputRadios id="preferred-methods" legend={t('apply:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages.preferredMethod} required />}
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/personal-information`} disabled={fetcher.state !== 'idle'}>
+          <ButtonLink id="back-button" to={`/apply/${id}/personal-information`} disabled={isSubmitting}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:communication-preference.back')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={fetcher.state !== 'idle'}>
+          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
             {t('apply:communication-preference.continue')}
-            <FontAwesomeIcon icon={fetcher.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', fetcher.state !== 'idle' && 'animate-spin')} />
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
         </div>
       </fetcher.Form>

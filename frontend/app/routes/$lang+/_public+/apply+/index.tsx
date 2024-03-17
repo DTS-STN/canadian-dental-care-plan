@@ -75,11 +75,11 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function ApplyIndex() {
-  const { siteKey } = useLoaderData<typeof loader>();
-  const captchaRef = useRef<HCaptcha>(null);
-  const fetcher = useFetcher<typeof action>();
-
   const { t } = useTranslation(handle.i18nNamespaces);
+  const { siteKey } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
+  const captchaRef = useRef<HCaptcha>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -247,9 +247,9 @@ export default function ApplyIndex() {
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="mt-8">
         <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />
-        <Button variant="primary" id="continue-button" disabled={fetcher.state !== 'idle'}>
+        <Button variant="primary" id="continue-button" disabled={isSubmitting}>
           {t('apply:index.submit')}
-          <FontAwesomeIcon icon={fetcher.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', fetcher.state !== 'idle' && 'animate-spin')} />
+          <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
         </Button>
       </fetcher.Form>
     </div>

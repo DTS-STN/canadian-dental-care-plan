@@ -45,9 +45,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ApplyFlowFileYourTaxes() {
-  const { id } = useLoaderData<typeof loader>();
   const { t } = useTranslation(handle.i18nNamespaces);
+  const { id } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
 
   const eligibilityInfo = <InlineLink to={t('apply:eligibility.dob-eligibility.eligibility-info-href')} />;
 
@@ -66,13 +67,13 @@ export default function ApplyFlowFileYourTaxes() {
         </p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
-        <ButtonLink type="button" to={`/apply/${id}/date-of-birth`} disabled={fetcher.state !== 'idle'}>
+        <ButtonLink type="button" to={`/apply/${id}/date-of-birth`} disabled={isSubmitting}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:eligibility.dob-eligibility.back-btn')}
         </ButtonLink>
         <Button variant="primary">
           {t('apply:eligibility.dob-eligibility.return-btn')}
-          {fetcher.state !== 'idle' && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
+          {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>
       </fetcher.Form>
     </div>

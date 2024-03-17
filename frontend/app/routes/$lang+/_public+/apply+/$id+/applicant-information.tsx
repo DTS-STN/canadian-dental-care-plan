@@ -73,11 +73,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ApplyFlowApplicationInformation() {
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const { id, state, maritalStatuses } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
-
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
 
   /**
    * Gets an error message based on the provided internationalization (i18n) key.
@@ -156,13 +156,13 @@ export default function ApplyFlowApplicationInformation() {
           />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/date-of-birth`} disabled={fetcher.state !== 'idle'}>
+          <ButtonLink id="back-button" to={`/apply/${id}/date-of-birth`} disabled={isSubmitting}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('applicant-information.back-btn')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={fetcher.state !== 'idle'}>
+          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
             {t('applicant-information.continue-btn')}
-            <FontAwesomeIcon icon={fetcher.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', fetcher.state !== 'idle' && 'animate-spin')} />
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
         </div>
       </fetcher.Form>
