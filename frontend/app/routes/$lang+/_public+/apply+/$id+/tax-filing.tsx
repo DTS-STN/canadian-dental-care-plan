@@ -105,7 +105,7 @@ export default function ApplyFlowTaxFiling() {
           errorMessage={errorMessages['input-radios-tax-filing-2023']}
         />
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/type-of-application`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+          <ButtonLink id="back-button" to={`/apply/${id}/type-of-application`} disabled={navigation.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:eligibility.tax-filing.back-btn')}
           </ButtonLink>

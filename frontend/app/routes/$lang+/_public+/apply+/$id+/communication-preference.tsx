@@ -262,7 +262,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
           </div>
         )}
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/personal-information`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+          <ButtonLink id="back-button" to={`/apply/${id}/personal-information`} disabled={navigation.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:communication-preference.back')}
           </ButtonLink>

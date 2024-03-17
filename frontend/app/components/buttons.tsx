@@ -22,7 +22,6 @@ const variants = {
 };
 
 const baseClassName = 'inline-flex items-center justify-center rounded align-middle font-lato outline-offset-2';
-const disableClassName = 'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
 
 export interface ButtonProps extends ComponentProps<'button'> {
   size?: keyof typeof sizes;
@@ -35,12 +34,15 @@ export interface ButtonProps extends ComponentProps<'button'> {
  * @see https://flowbite.com/docs/components/buttons/
  */
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, pill, size = 'base', variant = 'default', ...props }, ref) => {
-  return <button className={cn(baseClassName, sizes[size], variants[variant], props.disabled && disableClassName, pill && 'rounded-full', className)} {...props} ref={ref} />;
+  const disabledClassName = 'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
+  const buttonClassName = cn(baseClassName, sizes[size], variants[variant], disabledClassName, pill && 'rounded-full', className);
+  return <button className={buttonClassName} {...props} ref={ref} />;
 });
 
 Button.displayName = 'Button';
 
 export interface ButtonLinkProps extends ComponentProps<typeof AppLink> {
+  disabled?: boolean;
   size?: keyof typeof sizes;
   variant?: keyof typeof variants;
   pill?: boolean;
@@ -49,10 +51,24 @@ export interface ButtonLinkProps extends ComponentProps<typeof AppLink> {
 /**
  * Tailwind CSS Buttons from Flowbite
  * @see https://flowbite.com/docs/components/buttons/
+ *
+ * Disabling a link
+ * @see https://www.scottohara.me/blog/2021/05/28/disabled-links.html
  */
-const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(({ children, className, pill, size = 'base', variant = 'default', ...props }, ref) => {
+const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(({ children, className, disabled, pill, size = 'base', to, variant = 'default', ...props }, ref) => {
+  const disabledClassName = 'pointer-events-none cursor-not-allowed opacity-70';
+  const buttonLinkClassName = cn(baseClassName, sizes[size], variants[variant], pill && 'rounded-full', className);
+
+  if (disabled) {
+    return (
+      <a className={cn(buttonLinkClassName, disabledClassName)} role="link" aria-disabled="true" {...props} ref={ref}>
+        {children}
+      </a>
+    );
+  }
+
   return (
-    <AppLink className={cn(baseClassName, sizes[size], variants[variant], pill && 'rounded-full', className)} {...props} ref={ref}>
+    <AppLink className={buttonLinkClassName} to={to} {...props} ref={ref}>
       {children}
     </AppLink>
   );

@@ -155,7 +155,7 @@ export default function ApplyFlowApplicationInformation() {
           errorMessage={errorMessages['input-radios-marital-status']}
         />
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/date-of-birth`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+          <ButtonLink id="back-button" to={`/apply/${id}/date-of-birth`} disabled={navigation.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('applicant-information.back-btn')}
           </ButtonLink>

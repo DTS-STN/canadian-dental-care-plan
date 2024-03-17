@@ -136,7 +136,7 @@ export default function AccessToDentalInsuranceQuestion() {
           </div>
         )}
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink to={`/apply/${id}/communication-preference`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+          <ButtonLink to={`/apply/${id}/communication-preference`} disabled={navigation.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('dental-insurance.button.back')}
           </ButtonLink>

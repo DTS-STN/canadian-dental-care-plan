@@ -14,7 +14,6 @@ import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -54,7 +53,7 @@ export default function ApplyFlowApplicationDelegate() {
         <Trans ns={handle.i18nNamespaces} i18nKey="apply:eligibility.application-delegate.prepare-to-apply" components={{ preparingToApply }} />
       </p>
       <div className="flex flex-wrap items-center gap-3">
-        <ButtonLink type="button" to={`/apply/${id}/type-of-application`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+        <ButtonLink type="button" to={`/apply/${id}/type-of-application`} disabled={navigation.state !== 'idle'}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:eligibility.application-delegate.back-btn')}
         </ButtonLink>

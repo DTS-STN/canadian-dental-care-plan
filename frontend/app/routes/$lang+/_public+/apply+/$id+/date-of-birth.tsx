@@ -109,7 +109,7 @@ export default function ApplyFlowDateOfBirth() {
           <InputField id="year" label={t('apply:eligibility.date-of-birth.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} defaultValue={state?.year} />
         </div>
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/tax-filing`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+          <ButtonLink id="back-button" to={`/apply/${id}/tax-filing`} disabled={navigation.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:eligibility.date-of-birth.back-btn')}
           </ButtonLink>

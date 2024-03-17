@@ -138,7 +138,7 @@ export default function TermsAndConditions() {
       <h2 className="my-8 font-lato text-2xl font-bold">{t('apply:terms-and-conditions.apply-now.heading')}</h2>
       <p>{t('apply:terms-and-conditions.apply-now.application-start-consent')}</p>
       <div className="mt-8 flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to="/apply" className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+        <ButtonLink id="back-button" to="/apply" disabled={navigation.state !== 'idle'}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:terms-and-conditions.apply-now.back-button')}
         </ButtonLink>
