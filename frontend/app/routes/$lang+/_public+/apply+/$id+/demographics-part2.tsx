@@ -202,7 +202,7 @@ export default function DemographicsPart2() {
           />
         )}
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/demographics-part1`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+          <ButtonLink id="back-button" to={`/apply/${id}/demographics-part1`} disabled={navigation.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:demographics-oral-health-questions.part2.button-back')}
           </ButtonLink>

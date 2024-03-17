@@ -228,7 +228,7 @@ export default function DemographicsPart1() {
           </div>
         )}
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/demographics`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+          <ButtonLink id="back-button" to={`/apply/${id}/demographics`} disabled={navigation.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:demographics-oral-health-questions.part1.button-back')}
           </ButtonLink>

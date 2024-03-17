@@ -244,7 +244,7 @@ export default function AccessToDentalInsuranceQuestion() {
           )}
         </section>
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink to={`/apply/${id}/dental-insurance`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+          <ButtonLink to={`/apply/${id}/dental-insurance`} disabled={navigation.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('dental-benefits.button.back')}
           </ButtonLink>

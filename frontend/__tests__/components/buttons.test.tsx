@@ -96,4 +96,16 @@ describe('ButtonLink Component', () => {
     const link = getByText('Click me');
     expect(link).toHaveClass('rounded-full');
   });
+
+  it('renders disabled link', () => {
+    const { getByText } = render(
+      <ButtonLink disabled to="/">
+        Click me
+      </ButtonLink>,
+    );
+    const button = getByText('Click me') as HTMLButtonElement;
+    expect(button.role).toEqual('link');
+    expect(button.ariaDisabled).toEqual('true');
+    expect(button).toHaveClass('pointer-events-none', 'cursor-not-allowed', 'opacity-70');
+  });
 });

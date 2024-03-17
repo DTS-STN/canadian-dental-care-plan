@@ -59,7 +59,7 @@ export default function Demographics() {
       <p className="mb-6">{t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.questions-are-voluntary')}</p>
       <p className="mb-6">{t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.anwsers-will-not-affect-eligibility')}</p>
       <div className="mt-6 flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to={`/apply/${id}/federal-provincial-territorial-benefits`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+        <ButtonLink id="back-button" to={`/apply/${id}/federal-provincial-territorial-benefits`} disabled={navigation.state !== 'idle'}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.back-button')}
         </ButtonLink>

@@ -14,7 +14,6 @@ import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -50,7 +49,7 @@ export default function ApplyFlowFileYourTaxes() {
         <Trans ns={handle.i18nNamespaces} i18nKey="apply:eligibility.dob-eligibility.eligibility-info" components={{ eligibilityInfo }} />
       </p>
       <div className="flex flex-wrap items-center gap-3">
-        <ButtonLink type="button" to={`/apply/${id}/date-of-birth`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+        <ButtonLink type="button" to={`/apply/${id}/date-of-birth`} disabled={navigation.state !== 'idle'}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:eligibility.dob-eligibility.back-btn')}
         </ButtonLink>

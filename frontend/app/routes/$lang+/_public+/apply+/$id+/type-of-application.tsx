@@ -105,7 +105,7 @@ export default function ApplyFlowTypeOfApplication() {
           errorMessage={errorMessages['input-radios-application-delegate']}
         />
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to="/apply" className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+          <ButtonLink id="back-button" to="/apply" disabled={navigation.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:eligibility.type-of-application.back-btn')}
           </ButtonLink>

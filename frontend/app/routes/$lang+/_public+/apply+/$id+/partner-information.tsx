@@ -177,7 +177,7 @@ export default function ApplyFlowApplicationInformation() {
         </InputCheckbox>
 
         <div className="mt-5 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/applicant-information`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+          <ButtonLink id="back-button" to={`/apply/${id}/applicant-information`} disabled={navigation.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('applicant-information.back-btn')}
           </ButtonLink>

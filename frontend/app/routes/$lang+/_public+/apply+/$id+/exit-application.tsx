@@ -13,7 +13,6 @@ import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -55,7 +54,7 @@ export default function ApplyFlowTaxFiling() {
       <p>{t('apply:exit-application.click-back')}</p>
       <div className="flex flex-wrap items-center gap-3">
         <Form method="post" noValidate>
-          <ButtonLink id="back-button" to={`/apply/${id}/review-information`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+          <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={navigation.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:exit-application.back-btn')}
           </ButtonLink>
