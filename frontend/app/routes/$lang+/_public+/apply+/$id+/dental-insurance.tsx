@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -68,16 +68,16 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function AccessToDentalInsuranceQuestion() {
   const { options, state, id } = useLoaderData<typeof loader>();
-  const actionData = useActionData<typeof action>();
+
   const { t } = useTranslation(handle.i18nNamespaces);
   const errorSummaryId = 'error-summary';
-  const navigation = useNavigation();
+  const fetcher = useFetcher<typeof action>();
 
   useEffect(() => {
-    if (actionData?.formData && hasErrors(actionData.formData)) {
+    if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
-  }, [actionData]);
+  }, [fetcher.data]);
 
   function getErrorMessage(errorI18nKey?: string): string | undefined {
     if (!errorI18nKey) return undefined;
@@ -86,19 +86,19 @@ export default function AccessToDentalInsuranceQuestion() {
   }
 
   const errorMessages = {
-    dentalInsurance: getErrorMessage(actionData?.errors.dentalInsurance?._errors[0]),
+    dentalInsurance: getErrorMessage(fetcher.data?.errors.dentalInsurance?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 
   const helpMessage = (
-    <ul className="mb-4 list-disc space-y-1 pl-7">
+    <ul className="mb-6 list-disc space-y-1 pl-7">
       <li>{t('dental-insurance.list.employment')}</li>
       <li>{t('dental-insurance.list.pension')}</li>
       <li>{t('dental-insurance.list.purchased')}</li>
       <li>{t('dental-insurance.list.professional')}</li>
       <li className="list-none">
-        <Collapsible summary={t('dental-insurance.detail.additional-info.title')} className="mt-2">
+        <Collapsible summary={t('dental-insurance.detail.additional-info.title')} className="mt-4">
           <div className="space-y-4">
             <p>{t('dental-insurance.detail.additional-info.not-eligible')}</p>
             <p>{t('dental-insurance.detail.additional-info.not-eligible-purchased')}</p>
@@ -114,9 +114,9 @@ export default function AccessToDentalInsuranceQuestion() {
   );
 
   return (
-    <>
+    <div className="max-w-prose">
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post">
+      <fetcher.Form method="post" noValidate>
         {options.length > 0 && (
           <div className="my-6">
             <InputRadios
@@ -130,22 +130,22 @@ export default function AccessToDentalInsuranceQuestion() {
               }))}
               helpMessagePrimary={helpMessage}
               helpMessagePrimaryClassName="text-black"
-              required={errorSummaryItems.length > 0}
+              required
               errorMessage={errorMessages.dentalInsurance}
             />
           </div>
         )}
-        <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink to={`/apply/${id}/communication-preference`} disabled={navigation.state !== 'idle'}>
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <ButtonLink to={`/apply/${id}/communication-preference`} disabled={fetcher.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('dental-insurance.button.back')}
           </ButtonLink>
           <Button variant="primary">
             {t('dental-insurance.button.continue')}
-            <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
+            <FontAwesomeIcon icon={fetcher.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', fetcher.state !== 'idle' && 'animate-spin')} />
           </Button>
         </div>
-      </Form>
-    </>
+      </fetcher.Form>
+    </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -64,18 +64,18 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ApplyFlowTypeOfApplication() {
-  const { state } = useLoaderData<typeof loader>();
-  const actionData = useActionData<typeof action>();
+  const { id, state } = useLoaderData<typeof loader>();
+
   const errorSummaryId = 'error-summary';
-  const navigation = useNavigation();
+  const fetcher = useFetcher<typeof action>();
 
   const { t } = useTranslation(handle.i18nNamespaces);
 
   useEffect(() => {
-    if (actionData?.formData && hasErrors(actionData.formData)) {
+    if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
-  }, [actionData]);
+  }, [fetcher.data]);
 
   function getErrorMessage(errorI18nKey?: string): string | undefined {
     if (!errorI18nKey) return undefined;
@@ -84,15 +84,15 @@ export default function ApplyFlowTypeOfApplication() {
   }
 
   const errorMessages = {
-    'input-radios-application-delegate': getErrorMessage(actionData?.errors.applicationDelegate?._errors[0]),
+    'input-radios-application-delegate': getErrorMessage(fetcher.data?.errors.applicationDelegate?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 
   return (
-    <>
+    <div className="max-w-prose">
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post" aria-describedby="form-instructions" noValidate className="mt-6 max-w-prose">
+      <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
         <InputRadios
           id="application-delegate"
           name="applicationDelegate"
@@ -101,20 +101,20 @@ export default function ApplyFlowTypeOfApplication() {
             { value: 'FALSE', children: t('apply:eligibility.type-of-application.radio-options.personal'), defaultChecked: state?.applicationDelegate === 'FALSE' },
             { value: 'TRUE', children: t('apply:eligibility.type-of-application.radio-options.delegate'), defaultChecked: state?.applicationDelegate === 'TRUE' },
           ]}
-          required={errorSummaryItems.length > 0}
+          required
           errorMessage={errorMessages['input-radios-application-delegate']}
         />
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to="/apply" disabled={navigation.state !== 'idle'}>
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <ButtonLink id="back-button" to={`/apply/${id}/terms-and-conditions`} disabled={fetcher.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:eligibility.type-of-application.back-btn')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={navigation.state !== 'idle'}>
+          <Button variant="primary" id="continue-button" disabled={fetcher.state !== 'idle'}>
             {t('apply:eligibility.type-of-application.continue-btn')}
-            <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
+            <FontAwesomeIcon icon={fetcher.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', fetcher.state !== 'idle' && 'animate-spin')} />
           </Button>
         </div>
-      </Form>
-    </>
+      </fetcher.Form>
+    </div>
   );
 }
