@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -89,9 +89,9 @@ export default function DemographicsPart2() {
   const { otherGenderCode, genderTypes, mouthPainTypes, lastTimeDentistVisitTypes, avoidedDentalCostTypes, id, state } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const [otherGenderChecked, setOtherGenderChecked] = useState(state?.gender === otherGenderCode.id);
-  const actionData = useActionData<typeof action>();
+
   const errorSummaryId = 'error-summary';
-  const navigation = useNavigation();
+  const fetcher = useFetcher<typeof action>();
 
   function otherGenderHandler() {
     setOtherGenderChecked(true);
@@ -119,18 +119,18 @@ export default function DemographicsPart2() {
   }
 
   const errorMessages = {
-    gender: getErrorMessage(actionData?.errors.gender?._errors[0]),
-    mouthPainType: getErrorMessage(actionData?.errors.mouthPainType?._errors[0]),
-    lastDentalVisitType: getErrorMessage(actionData?.errors.lastDentalVisitType?._errors[0]),
-    avoidedDentalCareDueToCost: getErrorMessage(actionData?.errors.avoidedDentalCareDueToCost?._errors[0]),
+    gender: getErrorMessage(fetcher.data?.errors.gender?._errors[0]),
+    mouthPainType: getErrorMessage(fetcher.data?.errors.mouthPainType?._errors[0]),
+    lastDentalVisitType: getErrorMessage(fetcher.data?.errors.lastDentalVisitType?._errors[0]),
+    avoidedDentalCareDueToCost: getErrorMessage(fetcher.data?.errors.avoidedDentalCareDueToCost?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
   useEffect(() => {
-    if (actionData?.formData && hasErrors(actionData.formData)) {
+    if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
-  }, [actionData]);
+  }, [fetcher.data]);
 
   const nonOtherGenderTypeOptions: InputRadiosProps['options'] = genderTypes
     .filter((genderType) => genderType.id !== otherGenderCode.id)
@@ -148,7 +148,7 @@ export default function DemographicsPart2() {
       value: otherGenderCode.id,
       defaultChecked: state?.gender === otherGenderCode.id,
       append: otherGenderChecked && (
-        <div className="mb-4 grid max-w-prose gap-6 md:grid-cols-2 ">
+        <div className="mb-4 grid gap-6 md:grid-cols-2">
           <InputField id="otherGender" type="text" className="w-full" label={t('apply:demographics-oral-health-questions.part2.question-gender-other-specify')} name="otherGenderFieldName" defaultValue={state?.otherGender} />
         </div>
       ),
@@ -157,61 +157,62 @@ export default function DemographicsPart2() {
   ];
 
   return (
-    <>
+    <div className="max-w-prose">
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post" noValidate className="space-y-6">
-        {genderTypes.length > 0 && <InputRadios id="gender" legend={t('apply:demographics-oral-health-questions.part2.question-gender')} name="gender" errorMessage={errorMessages.gender} options={options} />}
-
-        {mouthPainTypes.length > 0 && (
-          <InputRadios
-            id="mouthPainType"
-            name="mouthPainType"
-            legend={t('apply:demographics-oral-health-questions.part2.question-mouth-pain')}
-            options={mouthPainTypes.map((mouthPainType) => ({
-              defaultChecked: state?.mouthPainType === mouthPainType.id,
-              children: getNameByLanguage(i18n.language, mouthPainType),
-              value: mouthPainType.id,
-            }))}
-            errorMessage={errorMessages.mouthPainType}
-          />
-        )}
-        {lastTimeDentistVisitTypes.length > 0 && (
-          <InputRadios
-            id="lastDentalVisitType"
-            name="lastDentalVisitType"
-            legend={t('apply:demographics-oral-health-questions.part2.question-last-dental-visit')}
-            options={lastTimeDentistVisitTypes.map((lastTimeDentistVisitType) => ({
-              defaultChecked: state?.lastDentalVisitType === lastTimeDentistVisitType.id,
-              children: getNameByLanguage(i18n.language, lastTimeDentistVisitType),
-              value: lastTimeDentistVisitType.id,
-            }))}
-            errorMessage={errorMessages.lastDentalVisitType}
-          />
-        )}
-        {avoidedDentalCostTypes.length > 0 && (
-          <InputRadios
-            id="avoidedDentalCareDueToCost"
-            name="avoidedDentalCareDueToCost"
-            legend={t('apply:demographics-oral-health-questions.part2.question-avoided-dental-cost')}
-            options={avoidedDentalCostTypes.map((avoidedDentalCostType) => ({
-              defaultChecked: state?.avoidedDentalCareDueToCost === avoidedDentalCostType.id,
-              children: getNameByLanguage(i18n.language, avoidedDentalCostType),
-              value: avoidedDentalCostType.id,
-            }))}
-            errorMessage={errorMessages.avoidedDentalCareDueToCost}
-          />
-        )}
-        <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/demographics-part1`} disabled={navigation.state !== 'idle'}>
+      <fetcher.Form method="post" noValidate>
+        <div className="space-y-6">
+          {genderTypes.length > 0 && <InputRadios id="gender" legend={t('apply:demographics-oral-health-questions.part2.question-gender')} name="gender" errorMessage={errorMessages.gender} options={options} />}
+          {mouthPainTypes.length > 0 && (
+            <InputRadios
+              id="mouthPainType"
+              name="mouthPainType"
+              legend={t('apply:demographics-oral-health-questions.part2.question-mouth-pain')}
+              options={mouthPainTypes.map((mouthPainType) => ({
+                defaultChecked: state?.mouthPainType === mouthPainType.id,
+                children: getNameByLanguage(i18n.language, mouthPainType),
+                value: mouthPainType.id,
+              }))}
+              errorMessage={errorMessages.mouthPainType}
+            />
+          )}
+          {lastTimeDentistVisitTypes.length > 0 && (
+            <InputRadios
+              id="lastDentalVisitType"
+              name="lastDentalVisitType"
+              legend={t('apply:demographics-oral-health-questions.part2.question-last-dental-visit')}
+              options={lastTimeDentistVisitTypes.map((lastTimeDentistVisitType) => ({
+                defaultChecked: state?.lastDentalVisitType === lastTimeDentistVisitType.id,
+                children: getNameByLanguage(i18n.language, lastTimeDentistVisitType),
+                value: lastTimeDentistVisitType.id,
+              }))}
+              errorMessage={errorMessages.lastDentalVisitType}
+            />
+          )}
+          {avoidedDentalCostTypes.length > 0 && (
+            <InputRadios
+              id="avoidedDentalCareDueToCost"
+              name="avoidedDentalCareDueToCost"
+              legend={t('apply:demographics-oral-health-questions.part2.question-avoided-dental-cost')}
+              options={avoidedDentalCostTypes.map((avoidedDentalCostType) => ({
+                defaultChecked: state?.avoidedDentalCareDueToCost === avoidedDentalCostType.id,
+                children: getNameByLanguage(i18n.language, avoidedDentalCostType),
+                value: avoidedDentalCostType.id,
+              }))}
+              errorMessage={errorMessages.avoidedDentalCareDueToCost}
+            />
+          )}
+        </div>
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <ButtonLink id="back-button" to={`/apply/${id}/demographics-part1`} disabled={fetcher.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:demographics-oral-health-questions.part2.button-back')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={navigation.state !== 'idle'}>
+          <Button variant="primary" id="continue-button" disabled={fetcher.state !== 'idle'}>
             {t('apply:demographics-oral-health-questions.part2.button-continue')}
-            <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
+            <FontAwesomeIcon icon={fetcher.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', fetcher.state !== 'idle' && 'animate-spin')} />
           </Button>
         </div>
-      </Form>
-    </>
+      </fetcher.Form>
+    </div>
   );
 }

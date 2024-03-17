@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -95,10 +95,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function DemographicsPart1() {
   const { bornTypes, disabilityTypes, otherEquityCode, equityTypes, indigenousTypes, indigenousGroup, indigenousYesCode, state, id } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const navigation = useNavigation();
+  const fetcher = useFetcher<typeof action>();
   const [otherEquityChecked, setOtherEquityChecked] = useState(state?.otherEquity === otherEquityCode.id);
   const [firstNationsYesChecked, setFirstNationsYesChecked] = useState(state?.indigenousType === indigenousYesCode.id);
-  const actionData = useActionData<typeof action>();
+
   const errorSummaryId = 'error-summary';
 
   const nonFirstNationsTypeOptions: InputRadiosProps['options'] = indigenousTypes
@@ -150,18 +150,18 @@ export default function DemographicsPart1() {
   }
 
   const errorMessages = {
-    equity: getErrorMessage(actionData?.errors.otherEquity?._errors[0]),
-    bornType: getErrorMessage(actionData?.errors.bornType?._errors[0]),
-    firstNations: getErrorMessage(actionData?.errors.indigenousType?._errors[0]),
-    disability: getErrorMessage(actionData?.errors.disabilityType?._errors[0]),
+    equity: getErrorMessage(fetcher.data?.errors.otherEquity?._errors[0]),
+    bornType: getErrorMessage(fetcher.data?.errors.bornType?._errors[0]),
+    firstNations: getErrorMessage(fetcher.data?.errors.indigenousType?._errors[0]),
+    disability: getErrorMessage(fetcher.data?.errors.disabilityType?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
   useEffect(() => {
-    if (actionData?.formData && hasErrors(actionData.formData)) {
+    if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
-  }, [actionData]);
+  }, [fetcher.data]);
 
   const nonOtherEquityTypeOptions: InputCheckboxesProps['options'] = equityTypes
     .filter((equityType) => equityType.id !== otherEquityCode.id)
@@ -178,7 +178,7 @@ export default function DemographicsPart1() {
       value: otherEquityCode.id,
       defaultChecked: state?.otherEquity === otherEquityCode.id,
       append: otherEquityChecked && (
-        <div className="mb-4 grid max-w-prose gap-6 md:grid-cols-2 ">
+        <div className="mb-4 grid gap-6 md:grid-cols-2 ">
           <InputField id="otherEquity" type="text" className="w-full" label={t('apply:demographics-oral-health-questions.part1.question3-other-specify')} name="otherEquityFieldName" defaultValue={state?.otherEquity} />
         </div>
       ),
@@ -187,57 +187,55 @@ export default function DemographicsPart1() {
   ];
 
   return (
-    <>
+    <div className="max-w-prose">
+      <p className="mb-4">{t('apply:demographics-oral-health-questions.part1.paragraph1')}</p>
+      <p className="mb-4">{t('apply:demographics-oral-health-questions.part1.paragraph2')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <p className="mb-6">{t('apply:demographics-oral-health-questions.part1.paragraph1')}</p>
-      <p className="mb-6">{t('apply:demographics-oral-health-questions.part1.paragraph2')}</p>
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post" noValidate className="space-y-6">
-        {bornTypes.length > 0 && (
-          <div className="my-6">
-            <InputRadios
-              id="bornType"
-              name="bornType"
-              legend={t('apply:demographics-oral-health-questions.part1.question1')}
-              options={bornTypes.map((bornType) => ({
-                defaultChecked: state?.bornType === bornType.id,
-                children: getNameByLanguage(i18n.language, bornType),
-                value: bornType.id,
-              }))}
-            />
-          </div>
-        )}
-
-        {indigenousTypes.length > 0 && <InputRadios id="indigenousType" legend={t('apply:demographics-oral-health-questions.part1.first-nations')} name="indigenousType" options={indigenousOptions} required />}
-
-        {equityTypes.length > 0 && <InputCheckboxes id="equity" legend={t('demographics-oral-health-questions.part1.question3')} name="equity" errorMessage={errorMessages.equity} options={equityOptions} required />}
-
-        {disabilityTypes.length > 0 && (
-          <div className="my-6">
-            <InputRadios
-              id="disabilityType"
-              name="disabilityType"
-              helpMessagePrimary={t('apply:demographics-oral-health-questions.part1.question4-note')}
-              legend={t('apply:demographics-oral-health-questions.part1.question4')}
-              options={disabilityTypes.map((disabilityType) => ({
-                defaultChecked: state?.disabilityType === disabilityType.id,
-                children: getNameByLanguage(i18n.language, disabilityType),
-                value: disabilityType.id,
-              }))}
-            />
-          </div>
-        )}
-        <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/demographics`} disabled={navigation.state !== 'idle'}>
+      <fetcher.Form method="post" noValidate>
+        <div className="space-y-6">
+          {bornTypes.length > 0 && (
+            <div className="my-6">
+              <InputRadios
+                id="bornType"
+                name="bornType"
+                legend={t('apply:demographics-oral-health-questions.part1.question1')}
+                options={bornTypes.map((bornType) => ({
+                  defaultChecked: state?.bornType === bornType.id,
+                  children: getNameByLanguage(i18n.language, bornType),
+                  value: bornType.id,
+                }))}
+              />
+            </div>
+          )}
+          {indigenousTypes.length > 0 && <InputRadios id="indigenousType" legend={t('apply:demographics-oral-health-questions.part1.first-nations')} name="indigenousType" options={indigenousOptions} required />}
+          {equityTypes.length > 0 && <InputCheckboxes id="equity" legend={t('demographics-oral-health-questions.part1.question3')} name="equity" errorMessage={errorMessages.equity} options={equityOptions} required />}
+          {disabilityTypes.length > 0 && (
+            <div className="my-6">
+              <InputRadios
+                id="disabilityType"
+                name="disabilityType"
+                helpMessagePrimary={t('apply:demographics-oral-health-questions.part1.question4-note')}
+                legend={t('apply:demographics-oral-health-questions.part1.question4')}
+                options={disabilityTypes.map((disabilityType) => ({
+                  defaultChecked: state?.disabilityType === disabilityType.id,
+                  children: getNameByLanguage(i18n.language, disabilityType),
+                  value: disabilityType.id,
+                }))}
+              />
+            </div>
+          )}
+        </div>
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <ButtonLink id="back-button" to={`/apply/${id}/demographics`} disabled={fetcher.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:demographics-oral-health-questions.part1.button-back')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={navigation.state !== 'idle'}>
+          <Button variant="primary" id="continue-button" disabled={fetcher.state !== 'idle'}>
             {t('apply:demographics-oral-health-questions.part1.button-continue')}
-            <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
+            <FontAwesomeIcon icon={fetcher.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', fetcher.state !== 'idle' && 'animate-spin')} />
           </Button>
         </div>
-      </Form>
-    </>
+      </fetcher.Form>
+    </div>
   );
 }

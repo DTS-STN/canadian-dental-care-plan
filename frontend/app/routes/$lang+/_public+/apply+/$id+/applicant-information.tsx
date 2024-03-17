@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -74,9 +74,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function ApplyFlowApplicationInformation() {
   const { id, state, maritalStatuses } = useLoaderData<typeof loader>();
-  const actionData = useActionData<typeof action>();
+  const fetcher = useFetcher<typeof action>();
   const errorSummaryId = 'error-summary';
-  const navigation = useNavigation();
 
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
 
@@ -98,73 +97,75 @@ export default function ApplyFlowApplicationInformation() {
   }
 
   const defaultValues = {
-    socialInsuranceNumber: actionData?.formData.socialInsuranceNumber ?? state?.socialInsuranceNumber ?? '',
-    firstName: actionData?.formData.firstName ?? state?.firstName ?? '',
-    lastName: actionData?.formData.lastName ?? state?.lastName ?? '',
-    maritalStatus: actionData?.formData.maritalStatus ?? state?.maritalStatus ?? '',
+    socialInsuranceNumber: fetcher.data?.formData.socialInsuranceNumber ?? state?.socialInsuranceNumber ?? '',
+    firstName: fetcher.data?.formData.firstName ?? state?.firstName ?? '',
+    lastName: fetcher.data?.formData.lastName ?? state?.lastName ?? '',
+    maritalStatus: fetcher.data?.formData.maritalStatus ?? state?.maritalStatus ?? '',
   };
 
   const errorMessages = {
-    socialInsuranceNumber: getErrorMessage(actionData?.errors.socialInsuranceNumber?._errors[0]),
-    lastName: getErrorMessage(actionData?.errors.lastName?._errors[0]),
-    'input-radios-marital-status': getErrorMessage(actionData?.errors.maritalStatus?._errors[0]),
+    socialInsuranceNumber: getErrorMessage(fetcher.data?.errors.socialInsuranceNumber?._errors[0]),
+    lastName: getErrorMessage(fetcher.data?.errors.lastName?._errors[0]),
+    'input-radios-marital-status': getErrorMessage(fetcher.data?.errors.maritalStatus?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 
   useEffect(() => {
-    if (actionData?.formData && hasErrors(actionData.formData)) {
+    if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
-  }, [actionData]);
+  }, [fetcher.data]);
 
   return (
-    <>
-      <p id="form-instructions-sin" className="mb-5 max-w-prose">
+    <div className="max-w-prose">
+      <p id="form-instructions-sin" className="mb-4">
         {t('applicant-information.form-instructions-sin')}
       </p>
-      <p id="form-instructions-info" className="mb-10 max-w-prose">
+      <p id="form-instructions-info" className="mb-6">
         {t('applicant-information.form-instructions-info')}
       </p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post" aria-describedby="form-instructions-sin form-instructions-info" noValidate className="max-w-prose space-y-6">
-        <div className="grid gap-6 md:grid-cols-2">
-          <InputField id="firstName" name="firstName" label={t('applicant-information.first-name')} className="w-full" aria-labelledby="name-instructions" defaultValue={defaultValues.firstName} />
-          <InputField id="lastName" name="lastName" label={t('applicant-information.last-name')} className="w-full" required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} aria-labelledby="name-instructions" />
+      <fetcher.Form method="post" aria-describedby="form-instructions-sin form-instructions-info" noValidate>
+        <div className="mb-8 space-y-6">
+          <div className="grid gap-6 md:grid-cols-2">
+            <InputField id="firstName" name="firstName" label={t('applicant-information.first-name')} className="w-full" aria-labelledby="name-instructions" defaultValue={defaultValues.firstName} />
+            <InputField id="lastName" name="lastName" label={t('applicant-information.last-name')} className="w-full" required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} aria-labelledby="name-instructions" />
+          </div>
+          <p id="name-instructions">{t('applicant-information.name-instructions')}</p>
+          <InputField
+            id="socialInsuranceNumber"
+            name="socialInsuranceNumber"
+            label={t('applicant-information.sin')}
+            required
+            inputMode="numeric"
+            pattern="\d{9}"
+            placeholder={formatSin('000000000', '-')}
+            minLength={9}
+            maxLength={9}
+            defaultValue={defaultValues.socialInsuranceNumber}
+            errorMessage={errorMessages.socialInsuranceNumber}
+          />
+          <InputRadios
+            id="marital-status"
+            name="maritalStatus"
+            legend={t('applicant-information.marital-status')}
+            options={maritalStatuses.map((status) => ({ defaultChecked: status.code === state?.maritalStatus, children: getNameByLanguage(i18n.language, status), value: status.code }))}
+            required
+            errorMessage={errorMessages['input-radios-marital-status']}
+          />
         </div>
-        <p id="name-instructions">{t('applicant-information.name-instructions')}</p>
-        <InputField
-          id="socialInsuranceNumber"
-          name="socialInsuranceNumber"
-          label={t('applicant-information.sin')}
-          required
-          inputMode="numeric"
-          pattern="\d{9}"
-          placeholder={formatSin('000000000', '-')}
-          minLength={9}
-          maxLength={9}
-          defaultValue={defaultValues.socialInsuranceNumber}
-          errorMessage={errorMessages.socialInsuranceNumber}
-        />
-        <InputRadios
-          id="marital-status"
-          name="maritalStatus"
-          legend={t('applicant-information.marital-status')}
-          options={maritalStatuses.map((status) => ({ defaultChecked: status.code === state?.maritalStatus, children: getNameByLanguage(i18n.language, status), value: status.code }))}
-          required
-          errorMessage={errorMessages['input-radios-marital-status']}
-        />
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/date-of-birth`} disabled={navigation.state !== 'idle'}>
+          <ButtonLink id="back-button" to={`/apply/${id}/date-of-birth`} disabled={fetcher.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('applicant-information.back-btn')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={navigation.state !== 'idle'}>
+          <Button variant="primary" id="continue-button" disabled={fetcher.state !== 'idle'}>
             {t('applicant-information.continue-btn')}
-            <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
+            <FontAwesomeIcon icon={fetcher.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', fetcher.state !== 'idle' && 'animate-spin')} />
           </Button>
         </div>
-      </Form>
-    </>
+      </fetcher.Form>
+    </div>
   );
 }

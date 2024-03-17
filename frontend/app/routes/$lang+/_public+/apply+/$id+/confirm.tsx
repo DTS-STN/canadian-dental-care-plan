@@ -94,7 +94,7 @@ export default function ApplyFlowConfirm() {
   const moreInfoLink = <InlineLink to={t('confirm.more-info-link')} />;
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-prose">
       <ContextualAlert type="success">
         <h2 className="mb-1 text-xl font-semibold">{t('confirm.alert-heading')}</h2>
         <div className="ml-0.5 text-lg">

@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { Form, useLoaderData, useNavigation } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -44,26 +44,26 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function ApplyFlowTaxFiling() {
   const { id } = useLoaderData<typeof loader>();
-  const navigation = useNavigation();
+  const fetcher = useFetcher<typeof action>();
 
   const { t } = useTranslation(handle.i18nNamespaces);
 
   return (
-    <div className="space-y-6">
-      <p>{t('apply:exit-application.are-you-sure')}</p>
-      <p>{t('apply:exit-application.click-back')}</p>
-      <div className="flex flex-wrap items-center gap-3">
-        <Form method="post" noValidate>
-          <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={navigation.state !== 'idle'}>
-            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-            {t('apply:exit-application.back-btn')}
-          </ButtonLink>
-          <Button variant="primary" disabled={navigation.state !== 'idle'}>
-            {t('apply:exit-application.exit-btn')}
-            {navigation.state !== 'idle' && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
-          </Button>
-        </Form>
+    <div className="max-w-prose">
+      <div className="mb-8 space-y-4">
+        <p>{t('apply:exit-application.are-you-sure')}</p>
+        <p>{t('apply:exit-application.click-back')}</p>
       </div>
+      <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
+        <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={fetcher.state !== 'idle'}>
+          <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+          {t('apply:exit-application.back-btn')}
+        </ButtonLink>
+        <Button variant="primary" disabled={fetcher.state !== 'idle'}>
+          {t('apply:exit-application.exit-btn')}
+          {fetcher.state !== 'idle' && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
+        </Button>
+      </fetcher.Form>
     </div>
   );
 }

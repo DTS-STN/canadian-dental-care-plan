@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -143,8 +143,8 @@ export default function ApplyFlowCommunicationPreferencePage() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const [emailMethodChecked, setEmailMethodChecked] = useState(state?.preferredMethod === communicationMethodEmail.id);
   const [nonEmailMethodChecked, setNonEmailMethodChecked] = useState(state && state.preferredMethod !== communicationMethodEmail.id);
-  const navigation = useNavigation();
-  const actionData = useActionData<typeof action>();
+  const fetcher = useFetcher<typeof action>();
+
   const errorSummaryId = 'error-summary';
 
   const emailMethodHandler = () => {
@@ -175,22 +175,22 @@ export default function ApplyFlowCommunicationPreferencePage() {
   }
 
   const errorMessages = {
-    preferredLanguage: getErrorMessage(actionData?.errors.preferredLanguage?._errors[0]),
-    preferredMethod: getErrorMessage(actionData?.errors.preferredMethod?._errors[0]),
-    email: getErrorMessage(actionData?.errors.email?._errors[0]),
-    confirmEmail: getErrorMessage(actionData?.errors.confirmEmail?._errors[0]),
-    emailForFuture: getErrorMessage(actionData?.errors.emailForFuture?._errors[0]),
-    confirmEmailForFuture: getErrorMessage(actionData?.errors.confirmEmailForFuture?._errors[0]),
-    sameEmail: getErrorMessage(actionData?.errors._errors[0]),
+    preferredLanguage: getErrorMessage(fetcher.data?.errors.preferredLanguage?._errors[0]),
+    preferredMethod: getErrorMessage(fetcher.data?.errors.preferredMethod?._errors[0]),
+    email: getErrorMessage(fetcher.data?.errors.email?._errors[0]),
+    confirmEmail: getErrorMessage(fetcher.data?.errors.confirmEmail?._errors[0]),
+    emailForFuture: getErrorMessage(fetcher.data?.errors.emailForFuture?._errors[0]),
+    confirmEmailForFuture: getErrorMessage(fetcher.data?.errors.confirmEmailForFuture?._errors[0]),
+    sameEmail: getErrorMessage(fetcher.data?.errors._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 
   useEffect(() => {
-    if (actionData?.formData && hasErrors(actionData.formData)) {
+    if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
-  }, [actionData]);
+  }, [fetcher.data]);
 
   const nonEmailOptions: InputRadiosProps['options'] = preferredCommunicationMethods
     .filter((method) => method.id !== communicationMethodEmail.id)
@@ -199,7 +199,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
       value: method.id,
       defaultChecked: state && state.preferredMethod !== communicationMethodEmail.id,
       append: nonEmailMethodChecked && (
-        <div className="mb-4 grid max-w-prose gap-6 md:grid-cols-2 ">
+        <div className="mb-6 grid gap-6 md:grid-cols-2">
           <p className="col-span-2" id="future-email-note">
             {t('apply:communication-preference.future-email-note')}
           </p>
@@ -224,7 +224,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
       value: communicationMethodEmail.id,
       defaultChecked: state?.preferredMethod === communicationMethodEmail.id,
       append: emailMethodChecked && (
-        <div className="mb-4 grid max-w-prose gap-6 md:grid-cols-2 ">
+        <div className="mb-6 grid gap-6 md:grid-cols-2">
           <InputField id="email" type="email" className="w-full" label={t('apply:communication-preference.email')} name="email" errorMessage={errorMessages.email} defaultValue={state?.email} />
           <InputField id="confirmEmail" type="email" className="w-full" label={t('apply:communication-preference.confirm-email')} name="confirmEmail" errorMessage={errorMessages.confirmEmail ?? errorMessages.sameEmail} defaultValue={state?.confirmEmail} />
         </div>
@@ -235,12 +235,12 @@ export default function ApplyFlowCommunicationPreferencePage() {
   ];
 
   return (
-    <>
+    <div className="max-w-prose">
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <p className="mb-6">{t('apply:communication-preference.note')}</p>
-      <Form method="post" noValidate className="space-y-6">
-        {preferredLanguages.length > 0 && (
-          <div id="preferredLanguage">
+      <fetcher.Form method="post" noValidate>
+        <div className="mb-8 space-y-6">
+          {preferredLanguages.length > 0 && (
             <InputRadios
               id="preferred-language"
               name="preferredLanguage"
@@ -253,25 +253,20 @@ export default function ApplyFlowCommunicationPreferencePage() {
               errorMessage={errorMessages.preferredLanguage}
               required
             />
-          </div>
-        )}
-
-        {preferredCommunicationMethods.length > 0 && (
-          <div id="preferredMethod">
-            <InputRadios id="preferred-methods" legend={t('apply:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages.preferredMethod} required />
-          </div>
-        )}
+          )}
+          {preferredCommunicationMethods.length > 0 && <InputRadios id="preferred-methods" legend={t('apply:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages.preferredMethod} required />}
+        </div>
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/personal-information`} disabled={navigation.state !== 'idle'}>
+          <ButtonLink id="back-button" to={`/apply/${id}/personal-information`} disabled={fetcher.state !== 'idle'}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:communication-preference.back')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={navigation.state !== 'idle'}>
+          <Button variant="primary" id="continue-button" disabled={fetcher.state !== 'idle'}>
             {t('apply:communication-preference.continue')}
-            <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
+            <FontAwesomeIcon icon={fetcher.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', fetcher.state !== 'idle' && 'animate-spin')} />
           </Button>
         </div>
-      </Form>
-    </>
+      </fetcher.Form>
+    </div>
   );
 }
