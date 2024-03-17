@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -73,18 +73,17 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ApplyFlowDateOfBirth() {
-  const { id, state } = useLoaderData<typeof loader>();
-  const actionData = useActionData<typeof action>();
-  const errorSummaryId = 'error-summary';
-  const navigation = useNavigation();
-
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { id, state } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
+  const errorSummaryId = 'error-summary';
 
   useEffect(() => {
-    if (actionData?.formData && hasErrors(actionData.formData)) {
+    if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
-  }, [actionData]);
+  }, [fetcher.data]);
 
   function getErrorMessage(errorI18nKey?: string): string | undefined {
     if (!errorI18nKey) return undefined;
@@ -93,20 +92,20 @@ export default function ApplyFlowDateOfBirth() {
   }
 
   const errorMessages = {
-    day: getErrorMessage(actionData?.errors.day?._errors[0]),
-    month: getErrorMessage(actionData?.errors.month?._errors[0]),
-    year: getErrorMessage(actionData?.errors.year?._errors[0]),
+    day: getErrorMessage(fetcher.data?.errors.day?._errors[0]),
+    month: getErrorMessage(fetcher.data?.errors.month?._errors[0]),
+    year: getErrorMessage(fetcher.data?.errors.year?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
   const monthOptions = Array.from({ length: 12 }, (_, i) => ({ children: new Intl.DateTimeFormat(`${i18n.language}-ca`, { month: 'long' }).format(new Date(2023, i, 1)), value: i, id: `month-${i}` }));
 
   return (
-    <>
-      <p className="mb-6 mt-6 max-w-prose">{t('apply:eligibility.date-of-birth.description')}</p>
+    <div className="max-w-prose">
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post" aria-describedby="form-instructions" noValidate className="max-w-prose">
-        <InputLegend id="dobLegend" required={errorSummaryItems.length > 0} className="mb-2">
+      <p className="mb-6">{t('apply:eligibility.date-of-birth.description')}</p>
+      <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
+        <InputLegend id="dobLegend" required className="mb-2">
           {t('apply:eligibility.date-of-birth.form-instructions')}
         </InputLegend>
         <div className="flex flex-col gap-6 sm:flex-row">
@@ -114,17 +113,17 @@ export default function ApplyFlowDateOfBirth() {
           <InputField id="day" label={t('apply:eligibility.date-of-birth.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} defaultValue={state?.day} />
           <InputField id="year" label={t('apply:eligibility.date-of-birth.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} defaultValue={state?.year} />
         </div>
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/tax-filing`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <ButtonLink id="back-button" to={`/apply/${id}/tax-filing`} disabled={isSubmitting}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:eligibility.date-of-birth.back-btn')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={navigation.state !== 'idle'}>
+          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
             {t('apply:eligibility.date-of-birth.continue-btn')}
-            <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
         </div>
-      </Form>
-    </>
+      </fetcher.Form>
+    </div>
   );
 }

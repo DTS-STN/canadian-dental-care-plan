@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useLoaderData, useNavigation } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -51,23 +51,26 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function Demographics() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { id } = useLoaderData<typeof loader>();
-  const navigation = useNavigation();
+  const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
 
   return (
-    <Form method="post" className="space-y-6">
-      <p className="mb-6">{t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.responses-will-be-confidential')}</p>
-      <p className="mb-6">{t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.questions-are-voluntary')}</p>
-      <p className="mb-6">{t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.anwsers-will-not-affect-eligibility')}</p>
-      <div className="mt-6 flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to={`/apply/${id}/federal-provincial-territorial-benefits`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+    <div className="max-w-prose">
+      <div className="space-y-4">
+        <p>{t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.responses-will-be-confidential')}</p>
+        <p>{t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.questions-are-voluntary')}</p>
+        <p>{t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.anwsers-will-not-affect-eligibility')}</p>
+      </div>
+      <fetcher.Form method="post" className="mt-8 flex flex-wrap items-center gap-3">
+        <ButtonLink id="back-button" to={`/apply/${id}/federal-provincial-territorial-benefits`} disabled={isSubmitting}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.back-button')}
         </ButtonLink>
-        <Button variant="primary" id="continue-button" disabled={navigation.state !== 'idle'}>
+        <Button variant="primary" id="continue-button" disabled={isSubmitting}>
           {t('apply:demographics-oral-health-questions.optional-demographic-oral-health-questions.answer-button')}
-          <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
+          <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
         </Button>
-      </div>
-    </Form>
+      </fetcher.Form>
+    </div>
   );
 }

@@ -1,7 +1,7 @@
 import { FormEvent, useRef } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { Form, useLoaderData, useNavigation, useSubmit } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -70,16 +70,16 @@ export async function action({ request }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const id = randomUUID().toString();
   const sessionResponseInit = await applyFlow.start({ id, request });
+
   return redirectWithLocale(request, `/apply/${id}/terms-and-conditions`, sessionResponseInit);
 }
 
 export default function ApplyIndex() {
-  const { siteKey } = useLoaderData<typeof loader>();
-  const captchaRef = useRef<HCaptcha>(null);
-  const navigation = useNavigation();
-
-  const submit = useSubmit();
   const { t } = useTranslation(handle.i18nNamespaces);
+  const { siteKey } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
+  const captchaRef = useRef<HCaptcha>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -87,7 +87,7 @@ export default function ApplyIndex() {
       const formData = new FormData(event.currentTarget);
       const { response } = await captchaRef.current.execute({ async: true });
       formData.set('h-captcha-response', response);
-      submit(formData, { method: 'POST' });
+      fetcher.submit(formData, { method: 'POST' });
 
       captchaRef.current.resetCaptcha();
     }
@@ -245,13 +245,13 @@ export default function ApplyIndex() {
           </div>
         </Collapsible>
       </div>
-      <Form method="post" onSubmit={handleSubmit} noValidate className="mt-8">
+      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="mt-8">
         <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />
-        <Button variant="primary" id="continue-button" disabled={navigation.state !== 'idle'}>
+        <Button variant="primary" id="continue-button" disabled={isSubmitting}>
           {t('apply:index.submit')}
-          <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
+          <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
         </Button>
-      </Form>
+      </fetcher.Form>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -68,18 +68,17 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ApplyFlowTaxFiling() {
-  const { id, state } = useLoaderData<typeof loader>();
-  const actionData = useActionData<typeof action>();
-  const errorSummaryId = 'error-summary';
-  const navigation = useNavigation();
-
   const { t } = useTranslation(handle.i18nNamespaces);
+  const { id, state } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
+  const errorSummaryId = 'error-summary';
 
   useEffect(() => {
-    if (actionData?.formData && hasErrors(actionData.formData)) {
+    if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
-  }, [actionData]);
+  }, [fetcher.data]);
 
   function getErrorMessage(errorI18nKey?: string): string | undefined {
     if (!errorI18nKey) return undefined;
@@ -88,15 +87,15 @@ export default function ApplyFlowTaxFiling() {
   }
 
   const errorMessages = {
-    'input-radios-tax-filing-2023': getErrorMessage(actionData?.errors.taxFiling2023?._errors[0]),
+    'input-radios-tax-filing-2023': getErrorMessage(fetcher.data?.errors.taxFiling2023?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 
   return (
-    <>
+    <div className="max-w-prose">
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post" aria-describedby="form-instructions" noValidate className="mt-6 max-w-prose">
+      <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
         <InputRadios
           id="tax-filing-2023"
           name="taxFiling2023"
@@ -105,20 +104,20 @@ export default function ApplyFlowTaxFiling() {
             { value: 'TRUE', children: t('apply:eligibility.tax-filing.radio-options.yes'), defaultChecked: state?.taxFiling2023 === 'TRUE' },
             { value: 'FALSE', children: t('apply:eligibility.tax-filing.radio-options.no'), defaultChecked: state?.taxFiling2023 === 'FALSE' },
           ]}
-          required={errorSummaryItems.length > 0}
+          required
           errorMessage={errorMessages['input-radios-tax-filing-2023']}
         />
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/type-of-application`} className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <ButtonLink id="back-button" to={`/apply/${id}/type-of-application`} disabled={isSubmitting}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:eligibility.tax-filing.back-btn')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={navigation.state !== 'idle'}>
+          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
             {t('apply:eligibility.tax-filing.continue-btn')}
-            <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
         </div>
-      </Form>
-    </>
+      </fetcher.Form>
+    </div>
   );
 }

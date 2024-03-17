@@ -1,12 +1,12 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { useLoaderData, useNavigation } from '@remix-run/react';
+import { useFetcher } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
 import pageIds from '../../../page-ids.json';
-import { ButtonLink } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
@@ -40,20 +40,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id } = await applyFlow.loadState({ request, params });
-
-  const sessionResponseInit = await applyFlow.saveState({
-    request,
-    params,
-    state: {},
-  });
-
-  return redirectWithLocale(request, `/apply/${id}/type-of-application`, sessionResponseInit);
+  return redirectWithLocale(request, `/apply/${id}/type-of-application`);
 }
 
 export default function TermsAndConditions() {
-  const { id } = useLoaderData<typeof loader>();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const navigation = useNavigation();
+  const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
 
   const fileacomplaint = <InlineLink to={t('apply:terms-and-conditions.links.file-complaint')} />;
   const hcaptchaTermsOfService = <InlineLink to={t('apply:terms-and-conditions.links.hcaptcha')} />;
@@ -137,16 +130,16 @@ export default function TermsAndConditions() {
       </div>
       <h2 className="my-8 font-lato text-2xl font-bold">{t('apply:terms-and-conditions.apply-now.heading')}</h2>
       <p>{t('apply:terms-and-conditions.apply-now.application-start-consent')}</p>
-      <div className="mt-8 flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to="/apply" className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+      <fetcher.Form method="post" noValidate className="mt-8 flex flex-wrap items-center gap-3">
+        <ButtonLink id="back-button" to="/apply" disabled={isSubmitting}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:terms-and-conditions.apply-now.back-button')}
         </ButtonLink>
-        <ButtonLink variant="primary" id="continue-button" to={`/apply/${id}/type-of-application`}>
+        <Button variant="primary" id="continue-button">
           {t('apply:terms-and-conditions.apply-now.start-button')}
-          <FontAwesomeIcon icon={navigation.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', navigation.state !== 'idle' && 'animate-spin')} />
-        </ButtonLink>
-      </div>
+          <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+        </Button>
+      </fetcher.Form>
     </div>
   );
 }

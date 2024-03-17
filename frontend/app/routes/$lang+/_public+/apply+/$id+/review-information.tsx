@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useLoaderData, useNavigation } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faSpinner, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -21,7 +21,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
-import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -109,13 +108,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ReviewInformation() {
-  const { id, userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const navigation = useNavigation();
+  const { id, userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
 
   return (
-    <>
-      <p className="my-4 max-w-3xl text-lg">{t('apply:review-information.read-carefully')}</p>
+    <div className="max-w-prose">
+      <p className="my-4 text-lg">{t('apply:review-information.read-carefully')}</p>
       <h2 className="text-2xl font-semibold">{t('apply:review-information.page-sub-title')}</h2>
       <dl>
         <DescriptionListItem term={t('apply:review-information.full-name-title')}>
@@ -285,19 +285,17 @@ export default function ReviewInformation() {
       <h2 className="mb-5 mt-8 text-2xl font-semibold">{t('apply:review-information.submit-app-title')}</h2>
       <p className="mb-4">{t('apply:review-information.submit-p-proceed')}</p>
       <p className="mb-4">{t('apply:review-information.submit-p-false-info')}</p>
-      <div className="flex flex-wrap items-center gap-3">
-        <ButtonLink to={`/apply/${id}/exit-application`} variant="alternative" className={cn(navigation.state !== 'idle' && 'pointer-events-none')}>
+      <fetcher.Form method="post" className="flex flex-wrap items-center gap-3">
+        <ButtonLink to={`/apply/${id}/exit-application`} variant="alternative" disabled={isSubmitting}>
           {t('apply:review-information.exit-button')}
           <FontAwesomeIcon icon={faX} className="ms-3 block size-4" />
         </ButtonLink>
-        <Form method="post">
-          <Button id="confirm-button" variant="green" disabled={navigation.state !== 'idle'}>
-            {t('apply:review-information.submit-button')}
-            {navigation.state !== 'idle' && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
-          </Button>
-        </Form>
-      </div>
-    </>
+        <Button id="confirm-button" variant="green" disabled={isSubmitting}>
+          {t('apply:review-information.submit-button')}
+          {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
+        </Button>
+      </fetcher.Form>
+    </div>
   );
 }
 

@@ -85,8 +85,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 export default function ApplyFlowConfirm() {
-  const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance } = useLoaderData<typeof loader>();
 
   const mscaLink = <InlineLink to={t('confirm.msca-link')} />;
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} />;
@@ -94,7 +94,7 @@ export default function ApplyFlowConfirm() {
   const moreInfoLink = <InlineLink to={t('confirm.more-info-link')} />;
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-prose">
       <ContextualAlert type="success">
         <h2 className="mb-1 text-xl font-semibold">{t('confirm.alert-heading')}</h2>
         <div className="ml-0.5 text-lg">

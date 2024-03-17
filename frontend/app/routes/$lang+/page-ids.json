@@ -24,6 +24,7 @@
       "reviewInformation": "CDCP-APPL-0018",
       "exitApplication": "CDCP-APPL-0019",
       "confirmation": "CDCP-APPL-0020"
-    }
+    },
+    "notFound": "CDCP-ERR-0404"
   }
 }
