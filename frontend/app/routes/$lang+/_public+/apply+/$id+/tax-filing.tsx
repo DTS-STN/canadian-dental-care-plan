@@ -64,12 +64,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ApplyFlowTaxFiling() {
-  const { id, state } = useLoaderData<typeof loader>();
-
-  const errorSummaryId = 'error-summary';
-  const fetcher = useFetcher<typeof action>();
-
   const { t } = useTranslation(handle.i18nNamespaces);
+  const { id, state } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
+  const errorSummaryId = 'error-summary';
 
   useEffect(() => {
     if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
@@ -105,13 +104,13 @@ export default function ApplyFlowTaxFiling() {
           errorMessage={errorMessages['input-radios-tax-filing-2023']}
         />
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/type-of-application`} disabled={fetcher.state !== 'idle'}>
+          <ButtonLink id="back-button" to={`/apply/${id}/type-of-application`} disabled={isSubmitting}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:eligibility.tax-filing.back-btn')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={fetcher.state !== 'idle'}>
+          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
             {t('apply:eligibility.tax-filing.continue-btn')}
-            <FontAwesomeIcon icon={fetcher.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', fetcher.state !== 'idle' && 'animate-spin')} />
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
         </div>
       </fetcher.Form>

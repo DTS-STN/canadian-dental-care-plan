@@ -45,13 +45,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ApplyFlowApplicationDelegate() {
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { id } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const isSubmitting = fetcher.state !== 'idle';
 
   const contactServiceCanada = <InlineLink to={t('apply:eligibility.application-delegate.contact-service-canada-href')} />;
   const preparingToApply = <InlineLink to={t('apply:eligibility.application-delegate.preparing-to-apply-href')} />;
-  const span = <span className="whiteSpace-nowrap" />;
+  const span = <span className="whitespace-nowrap" />;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -70,13 +71,13 @@ export default function ApplyFlowApplicationDelegate() {
         </p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
-        <ButtonLink type="button" to={`/apply/${id}/type-of-application`} disabled={fetcher.state !== 'idle'}>
+        <ButtonLink type="button" to={`/apply/${id}/type-of-application`} disabled={isSubmitting}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:eligibility.application-delegate.back-btn')}
         </ButtonLink>
         <Button type="submit" variant="primary" onClick={() => sessionStorage.removeItem('flow.state')}>
           {t('apply:eligibility.application-delegate.return-btn')}
-          {fetcher.state !== 'idle' && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
+          {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>
       </fetcher.Form>
     </>

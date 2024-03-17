@@ -67,11 +67,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function AccessToDentalInsuranceQuestion() {
-  const { options, state, id } = useLoaderData<typeof loader>();
-
   const { t } = useTranslation(handle.i18nNamespaces);
-  const errorSummaryId = 'error-summary';
+  const { options, state, id } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
+  const errorSummaryId = 'error-summary';
 
   useEffect(() => {
     if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
@@ -136,13 +136,13 @@ export default function AccessToDentalInsuranceQuestion() {
           </div>
         )}
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <ButtonLink to={`/apply/${id}/communication-preference`} disabled={fetcher.state !== 'idle'}>
+          <ButtonLink to={`/apply/${id}/communication-preference`} disabled={isSubmitting}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('dental-insurance.button.back')}
           </ButtonLink>
           <Button variant="primary">
             {t('dental-insurance.button.continue')}
-            <FontAwesomeIcon icon={fetcher.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', fetcher.state !== 'idle' && 'animate-spin')} />
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
         </div>
       </fetcher.Form>

@@ -190,15 +190,15 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function ApplyFlowPersonalInformation() {
-  const { id, state, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { id, state, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(state?.mailingCountry);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
   const [copyAddressChecked, setCopyAddressChecked] = useState(state?.copyMailingAddress === 'on');
   const [selectedHomeCountry, setSelectedHomeCountry] = useState(state?.homeCountry);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
-  const fetcher = useFetcher<typeof action>();
-
   const errorSummaryId = 'error-summary';
 
   /**
@@ -418,13 +418,13 @@ export default function ApplyFlowPersonalInformation() {
           )}
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={['MARRIED', 'COMMONLAW'].includes(maritalStatus ?? '') ? `/apply/${id}/partner-information` : `/apply/${id}/applicant-information`} disabled={fetcher.state !== 'idle'}>
+          <ButtonLink id="back-button" to={['MARRIED', 'COMMONLAW'].includes(maritalStatus ?? '') ? `/apply/${id}/partner-information` : `/apply/${id}/applicant-information`} disabled={isSubmitting}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:personal-information.back')}
           </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={fetcher.state !== 'idle'}>
+          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
             {t('apply:personal-information.continue')}
-            <FontAwesomeIcon icon={fetcher.state !== 'idle' ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', fetcher.state !== 'idle' && 'animate-spin')} />
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
         </div>
       </fetcher.Form>
