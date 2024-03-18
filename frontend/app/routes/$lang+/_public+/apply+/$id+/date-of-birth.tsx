@@ -5,6 +5,7 @@ import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { differenceInYears, isValid, parse } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -13,8 +14,6 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, createErrorSummaryItems, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
-import { yearsBetween } from '~/utils/apply-utils';
-import { parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -59,13 +58,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       required_error: t('apply:eligibility.date-of-birth.error-message.date-required'),
     })
     .min(1, { message: t('apply:eligibility.date-of-birth.error-message.date-required') })
-    .refine(
-      (val) => {
-        const { year, month, day } = parseDateString(val);
-        return year && month && day;
-      },
-      { message: t('apply:eligibility.date-of-birth.error-message.date-required') },
-    );
+    .refine((val) => isValid(parse(val, 'yyyy-MM-dd', new Date())), { message: t('apply:eligibility.date-of-birth.error-message.date-required') });
 
   const parsedDataResult = dateOfBirthSchema.safeParse(dateOfBirth);
 
@@ -82,9 +75,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
     state: { dateOfBirth: parsedDataResult.data },
   });
 
-  const parsedDateString = parseDateString(parsedDataResult.data);
-  const applicantDob = new Date(Number.parseInt(parsedDateString.year ?? ''), Number.parseInt(parsedDateString.month ?? ''), Number.parseInt(parsedDateString.day ?? ''));
-  const age = yearsBetween(new Date(), applicantDob);
+  const parseDateOfBirth = parse(parsedDataResult.data, 'yyyy-MM-dd', new Date());
+  const age = differenceInYears(new Date(), parseDateOfBirth);
 
   if (age < 65) {
     return redirectWithLocale(request, `/apply/${id}/dob-eligibility`, sessionResponseInit);

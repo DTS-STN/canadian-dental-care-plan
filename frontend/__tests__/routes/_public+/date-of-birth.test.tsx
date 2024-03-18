@@ -1,8 +1,11 @@
 import { redirect } from '@remix-run/node';
 
+import { differenceInYears, isValid, parse } from 'date-fns';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
+
+vi.mock('date-fns');
 
 vi.mock('~/routes-flow/apply-flow', () => ({
   getApplyFlow: vi.fn().mockReturnValue({
@@ -16,10 +19,6 @@ vi.mock('~/routes-flow/apply-flow', () => ({
       },
     }),
   }),
-}));
-
-vi.mock('~/utils/apply-utils', () => ({
-  yearsBetween: vi.fn().mockReturnValueOnce(65).mockReturnValueOnce(1),
 }));
 
 vi.mock('~/utils/locale-utils.server', async (importOriginal) => {
@@ -72,6 +71,10 @@ describe('_public.apply.id.date-of-birth', () => {
       const formData = new FormData();
       formData.append('dateOfBirth', '1959-01-01');
 
+      vi.mocked(isValid).mockReturnValueOnce(true);
+      vi.mocked(parse).mockReturnValueOnce(new Date(1959, 0, 1));
+      vi.mocked(differenceInYears).mockReturnValueOnce(65);
+
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/date-of-birth', { method: 'POST', body: formData }),
         context: {},
@@ -86,6 +89,10 @@ describe('_public.apply.id.date-of-birth', () => {
       const formData = new FormData();
       formData.append('dateOfBirth', '2000-01-01');
 
+      vi.mocked(isValid).mockReturnValueOnce(true);
+      vi.mocked(parse).mockReturnValueOnce(new Date(2000, 0, 1));
+      vi.mocked(differenceInYears).mockReturnValueOnce(64);
+
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/date-of-birth', { method: 'POST', body: formData }),
         context: {},
@@ -94,6 +101,8 @@ describe('_public.apply.id.date-of-birth', () => {
 
       expect(response.status).toBe(302);
       expect(response.headers.get('location')).toBe('/en/apply/123/dob-eligibility');
+      expect(parse).toBeCalled();
+      expect(differenceInYears).toBeCalled();
     });
   });
 });
