@@ -60,7 +60,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     if (val.federalBenefit === 'yes' && (!val.federalSocialProgram || val.federalSocialProgram.trim().length === 0)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'federal-program',
+        message: 'empty-program',
         path: ['federalSocialProgram'],
       });
     }
@@ -75,7 +75,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       if (val.province && !val.provincialTerritorialSocialProgram) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: 'provincial-program',
+          message: 'empty-program',
           path: ['provincialTerritorialSocialProgram'],
         });
       }

@@ -121,39 +121,38 @@
     }
   },
   "dental-benefits": {
-    "title": "(Fr) Access to other federal, provincial or territorial dental benefits",
-    "access-to-dental": "(Fr) Access to dental coverage through a provincial, territorial or federal government social program will not impact your eligibility for the Canadian Dental Care Plan.",
-    "eligibility-criteria": "(Fr) If you meet all the eligibility criteria, your coverage will be coordinated between the plans to ensure there are no duplication or gaps in coverage.",
-    "select-one": "(Fr) Select one",
+    "title": "Accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
+    "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",
+    "eligibility-criteria": "Si vous répondez à tous les critères d'admissibilité, votre couverture doit être coordonnée entre les régimes afin qu'il n'y ait pas de dédoublement ou de lacunes dans la couverture.",
+    "select-one": "Choisissez une option",
     "federal-benefits": {
-      "title": "(Fr) Federal benefits",
-      "legend": "(Fr) Do you have dental benefits through a social program offered by a federal program?",
-      "option-yes": "(Fr)<strong>Yes</strong>, I have <strong>federal</strong> benefits.",
-      "option-no": "(Fr)<strong>No</strong>, I do not have <strong>federal</strong> benefits.",
+      "title": "Assurances fédérales",
+      "legend": "Bénéficiez-vous d'une assurance dentaire dans le cadre d'un programme social offert par un programme fédéral?",
+      "option-yes": "<strong>Oui</strong>, je bénéficie d'assurances fédérales",
+      "option-no": "<strong>Non</strong>, je ne bénéficie pas d'assurances fédérales",
       "social-programs": {
-        "legend": "(Fr) Please select which social program you are covered under.\u00a0If you have more than one, please select the one you use most."
+        "legend": "Veuillez sélectionner le programme social dont vous bénéficiez. Si vous en avez plusieurs, veuillez sélectionner celui que vous utilisez le plus."
       }
     },
     "provincial-territorial-benefits": {
-      "title": "(Fr) Provincial or territorial benefits",
-      "legend": "(Fr) Do you have dental benefits through a social program offered by your province or territory?",
-      "option-yes": "(Fr)<strong>Yes</strong>, I have <strong>provincial or territorial</strong> benefits.",
-      "option-no": "(Fr)<strong>No</strong>, I do not have <strong>provincial or territorial</strong> benefits.",
+      "title": "Assurances provinciales ou territoriales",
+      "legend": "Bénéficiez-vous d'une assurance dentaire dans le cadre d'un programme social offert par votre province ou territoire?",
+      "option-yes": "<strong>Oui</strong>, j'ai accès à une assurance <strong>provinciale ou territoriale</strong>",
+      "option-no": "<strong>Non</strong>, je n'ai pas accès à une assurance <strong>provinciale ou territoriale</strong>",
       "social-programs": {
-        "input-legend": "(Fr) If yes, through which province or territory?",
-        "radio-legend": "(Fr) Please select which social program you are covered under. If you have more than one, please select the one you use most."
+        "input-legend": "Si oui, dans quelle province ou territoire?",
+        "radio-legend": "Veuillez sélectionner le programme social dont vous bénéficiez. Si vous en avez plusieurs, veuillez sélectionner celui que vous utilisez le plus."
       }
     },
     "button": {
-      "back": "(Fr) Back",
-      "continue": "(Fr) Continue"
+      "back": "Retour",
+      "continue": "Continuer"
     },
     "error-message": {
-      "federal-benefit": "(Fr) Federal benefit must be selected",
-      "federal-program": "(Fr) Federal program must be selected",
-      "provincial-benefit": "(Fr) Provincial benefit must be selected",
-      "provincial-program": "(Fr) Provincial program must be selected",
-      "empty-province": "(Fr) Province must be selected"
+      "federal-benefit": "Un bénéfice dentaire fédéral doit être fourni",
+      "provincial-benefit": "Un bénéfice dentaire provincial doit être fourni",
+      "empty-program": "Un programme social doit être fourni",
+      "empty-province": "Une province doit être sélectionnée"
     }
   },
   "dental-insurance": {

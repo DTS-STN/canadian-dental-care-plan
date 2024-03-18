@@ -149,10 +149,9 @@
       "continue": "Continue"
     },
     "error-message": {
-      "federal-benefit": "Federal benefit must be selected",
-      "federal-program": "Federal program must be selected",
-      "provincial-benefit": "Provincial benefit must be selected",
-      "provincial-program": "Provincial program must be selected",
+      "federal-benefit": "Federal dental benefit must be provided",
+      "provincial-benefit": "Provincial dental benefit must be provided",
+      "empty-program": "A social program must be provided",
       "empty-province": "Province must be selected"
     }
   },
