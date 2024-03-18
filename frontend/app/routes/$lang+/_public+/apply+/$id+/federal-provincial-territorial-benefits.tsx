@@ -117,6 +117,18 @@ export default function AccessToDentalInsuranceQuestion() {
 
   const [selectedRegion, setSelectedRegion] = useState(state?.province);
 
+  const defaultState = {
+    checkedProvincialOption: '',
+    selectedRegion: '',
+    provincialProgramOption: '',
+  };
+
+  function resetProvincialOptionState() {
+    setCheckedProvincialOption(defaultState.checkedProvincialOption);
+    setSelectedRegion(defaultState.selectedRegion);
+    setProvincialProgramOption(defaultState.provincialProgramOption);
+  }
+
   useEffect(() => {
     if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
@@ -195,7 +207,12 @@ export default function AccessToDentalInsuranceQuestion() {
                 children: <Trans ns={handle.i18nNamespaces}>{`dental-benefits.provincial-territorial-benefits.option-${option.code}`}</Trans>,
                 value: option.code,
                 defaultChecked: state?.provincialTerritorialBenefit === option.code,
-                onChange: (e) => setCheckedProvincialOption(e.target.value),
+                onChange: (e) => {
+                  setCheckedProvincialOption(e.target.value);
+                  if (e.target.value !== 'yes') {
+                    resetProvincialOptionState();
+                  }
+                },
                 append: option.code === 'yes' && checkedProvincialOption === 'yes' && regions.length > 0 && (
                   <Fragment key={option.code}>
                     <div className="space-y-6">
@@ -214,7 +231,7 @@ export default function AccessToDentalInsuranceQuestion() {
                             children: getNameByLanguage(i18n.language, region),
                           })),
                         ]}
-                        defaultValue={state?.province}
+                        defaultValue={selectedRegion}
                         errorMessage={errorMessages.province}
                         required
                       />
