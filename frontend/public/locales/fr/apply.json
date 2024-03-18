@@ -222,6 +222,7 @@
       "day": "(FR) Day",
       "year": "(FR) Year",
       "error-message": {
+        "date-required": "La date de naissance est obligatoire et doit être une date valide.",
         "day": "Jour",
         "month": "Mois",
         "year": "Année"

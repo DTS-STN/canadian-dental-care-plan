@@ -2,6 +2,7 @@ import { Params } from '@remix-run/react';
 
 import { z } from 'zod';
 
+import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
 import { getSessionService } from '~/services/session-service.server';
 import { redirectWithLocale } from '~/utils/locale-utils.server';
 import { isValidSin } from '~/utils/sin-utils';
@@ -10,15 +11,6 @@ import { isValidSin } from '~/utils/sin-utils';
  * Schema for validating UUID.
  */
 const idSchema = z.string().uuid();
-
-/**
- * Schema for date of birth.
- */
-const dobSchema = z.object({
-  month: z.coerce.number({ required_error: 'month' }).int().min(0, { message: 'month' }).max(11, { message: 'month' }),
-  day: z.coerce.number({ required_error: 'day' }).int().min(1, { message: 'day' }).max(31, { message: 'day' }),
-  year: z.coerce.number({ required_error: 'year' }).int().min(1, { message: 'year' }).max(new Date().getFullYear(), { message: 'year' }),
-});
 
 /**
  * Schema for terms and conditions
@@ -133,7 +125,6 @@ const personalInformationStateSchema = z.object({
  * Schema for apply state.
  */
 const applyStateSchema = z.object({
-  dob: dobSchema.optional(),
   applicationDelegate: typeOfApplicationSchema.optional(),
   applicantInformation: applicantInformationSchema.optional(),
   personalInformation: personalInformationStateSchema.optional(),
@@ -147,7 +138,9 @@ const applyStateSchema = z.object({
   dentalBenefit: dentalBenefitsStateSchema.optional(),
 });
 
-type ApplyState = z.infer<typeof applyStateSchema>;
+interface ApplyState extends z.infer<typeof applyStateSchema> {
+  dateOfBirth?: DateOfBirthState;
+}
 
 /**
  * Gets the session name.
@@ -185,9 +178,7 @@ async function loadState({ params, request, fallbackRedirectUrl = '/apply' }: Lo
     throw redirectWithLocale(request, fallbackRedirectUrl, 302);
   }
 
-  const sessionState = session.get(sessionName);
-  const state = applyStateSchema.parse(sessionState);
-
+  const state = session.get(sessionName) as ApplyState;
   return { id: id.data, state };
 }
 
@@ -204,7 +195,7 @@ interface SaveStateArgs {
  */
 async function saveState({ params, request, state }: SaveStateArgs) {
   const { id, state: currentState } = await loadState({ params, request });
-  const newState = applyStateSchema.parse({ ...currentState, ...state });
+  const newState = { ...currentState, ...state };
 
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
@@ -257,7 +248,7 @@ interface StartArgs {
  */
 async function start({ id, request }: StartArgs) {
   const parsedId = idSchema.parse(id);
-  const initialState = applyStateSchema.parse({});
+  const initialState = {};
 
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
@@ -279,7 +270,6 @@ async function start({ id, request }: StartArgs) {
 export function getApplyFlow() {
   return {
     clearState,
-    dobSchema,
     applicantInformationSchema,
     partnerInformationSchema,
     idSchema,
