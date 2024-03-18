@@ -403,6 +403,7 @@
     "continue-btn": "Continuer",
     "error-message": {
       "valid-sin": "(FR) Must be a valid SIN",
+      "unique-sins": "(FR) SINs must be unique",
       "last-name": "(FR) Last name must be provided",
       "month": "(FR) Month must be valid",
       "day": "(FR) Day must be valid for the given month and year",
@@ -412,12 +413,11 @@
   },
   "personal-information": {
     "page-title": "Renseignements personnels",
-    "form-instructions": "L'ajout d'un numéro de téléphone aide Service Canada à vous joindre en cas de problème avec votre demande et peut contribuer à réduire les délais de traitement de votre demande. Sinon, nous communiquerons avec vous par la poste en utilisant l'adresse postale que vous fournissez.",
+    "form-instructions": "L'ajout d'un numéro de téléphone permet à Service Canada de vous joindre en cas de problème avec votre demande. Si vous ne fournissez pas de numéro de téléphone, nous communiquerons avec vous par la poste.",
     "telephone-number": "Numéro de téléphone (facultatif)",
-    "telephone-number-alt": "Le numéro de téléphone secondaire (facultatif)",
+    "telephone-number-alt": "Autre numéro de téléphone (facultatif)",
     "mailing-address": {
-      "header": "Adresse postale",
-      "note": "Nous pouvons vous envoyer des lettres par la poste au sujet de votre demande au RCSD."
+      "header": "Adresse postale"
     },
     "home-address": {
       "header": "Adresse du domicile",
@@ -425,7 +425,7 @@
     },
     "address-field": {
       "address": "Adresse",
-      "address-note": "Indiquez le numéro et le nom de la rue.",
+      "address-note": "Indiquez le numéro et le nom de la rue",
       "apartment": "Appartement, bureau, etc. (facultatif)",
       "country": "Pays",
       "province": "Province, territoire, État ou région",

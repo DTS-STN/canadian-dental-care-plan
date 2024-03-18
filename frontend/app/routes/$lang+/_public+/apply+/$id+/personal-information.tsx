@@ -26,8 +26,8 @@ import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
-const validPostalCode = new RegExp('^[ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy]\\d[A-Za-z] \\d[A-Za-z]\\d{1}$');
-const validZipCode = new RegExp('^\\d{5}$');
+const validPostalCode = /^[ABCEGHJKLMNPRSTVXY]\d[A-Z]\d[A-Z]\d$/i;
+const validZipCode = /^\d{5}$/;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -105,14 +105,21 @@ export async function action({ request, params }: ActionFunctionArgs) {
         .string()
         .min(1, { message: 'empty-city' })
         .transform((val) => val.trim()),
-      mailingPostalCode: z.string().trim().optional(),
+      mailingPostalCode: z
+        .string()
+        .trim()
+        .optional()
+        .transform((val) => val?.replace(/\s/g, '')),
       copyMailingAddress: z.string().optional(),
       homeAddress: z.string().optional(),
       homeApartment: z.string().optional(),
       homeCountry: z.string().optional(),
       homeProvince: z.string().optional(),
       homeCity: z.string().optional(),
-      homePostalCode: z.string().optional(),
+      homePostalCode: z
+        .string()
+        .optional()
+        .transform((val) => val?.replace(/\s/g, '')),
     })
     .superRefine((val, ctx) => {
       if (!isEmpty(val.mailingCountry)) {
@@ -159,7 +166,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const formData = Object.fromEntries(await request.formData());
 
   const parsedDataResult = personalInformationFormSchema.safeParse(formData);
-
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
@@ -200,7 +206,6 @@ export default function ApplyFlowPersonalInformation() {
   const [selectedHomeCountry, setSelectedHomeCountry] = useState(state?.homeCountry);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
   const errorSummaryId = 'error-summary';
-
   /**
    * Gets an error message based on the provided internationalization (i18n) key.
    *
@@ -309,7 +314,6 @@ export default function ApplyFlowPersonalInformation() {
           <InputField id="phone-number-alt" name="phoneNumberAlt" className="w-full" label={t('apply:personal-information.telephone-number-alt')} defaultValue={state?.phoneNumberAlt} errorMessage={errorMessages.phoneNumberAlt} />
         </div>
         <h2 className="mb-4 font-lato text-2xl font-bold">{t('apply:personal-information.mailing-address.header')}</h2>
-        <p className="mb-4">{t('apply:personal-information.mailing-address.note')}</p>
         <div className="my-6 space-y-6">
           <InputField
             id="mailingAddress"
