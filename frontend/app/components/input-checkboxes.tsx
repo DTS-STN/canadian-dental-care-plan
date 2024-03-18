@@ -44,11 +44,21 @@ export function InputCheckboxes({ errorMessage, helpMessagePrimary, helpMessageP
         </InputHelp>
       )}
       <ul className="space-y-2">
-        {options.map((option) => {
-          const inputCheckboxId = `${id}-option-${option.itemID}`;
+        {options.map((optionProps, index) => {
+          const inputCheckboxId = `${id}-option-${index}`;
           return (
             <li key={inputCheckboxId}>
-              <InputCheckbox aria-describedby={getAriaDescribedby()} aria-errormessage={errorMessage && inputErrorId} aria-invalid={!!errorMessage} aria-required={required} id={inputCheckboxId} name={name} required={required} {...option} />
+              <InputCheckbox
+                aria-describedby={getAriaDescribedby()}
+                aria-errormessage={errorMessage && inputErrorId}
+                aria-invalid={!!errorMessage}
+                aria-required={required}
+                hasError={!!errorMessage}
+                id={inputCheckboxId}
+                name={name}
+                required={required}
+                {...optionProps}
+              />
             </li>
           );
         })}
