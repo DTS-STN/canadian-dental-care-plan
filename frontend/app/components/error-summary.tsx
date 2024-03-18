@@ -1,5 +1,3 @@
-import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import { AnchorLink } from '~/components/anchor-link';
@@ -11,20 +9,20 @@ import { scrollAndFocusFromAnchorLink } from '~/utils/link-utils';
  */
 export interface ErrorSummaryItem {
   errorMessage: string;
-  feildId: string;
+  fieldId: string;
 }
 
 /**
  * Creates an ErrorSummaryItem with the specified field ID and error message.
  *
- * @param feildId - The field ID where the error occurred.
+ * @param fieldId - The field ID where the error occurred.
  * @param errorMessage - The error message describing the issue.
  * @returns An object of type ErrorSummaryItem.
  */
-export function createErrorSummaryItem(feildId: string, errorMessage: string) {
+export function createErrorSummaryItem(fieldId: string, errorMessage: string) {
   return {
     errorMessage,
-    feildId,
+    fieldId,
   } as const satisfies ErrorSummaryItem;
 }
 
@@ -93,22 +91,19 @@ export function ErrorSummary({ errors, id }: ErrorSummaryProps) {
   const { t } = useTranslation(['gcweb']);
 
   return (
-    <section id={id} className="my-5 flex gap-3 rounded-lg border border-red-300 bg-red-50 p-4 text-red-800" tabIndex={-1} role="alert">
-      <FontAwesomeIcon icon={faCircleExclamation} className="mt-1.5 inline size-4 flex-shrink-0" />
-      <div>
-        <h2 className="font-lato text-lg font-semibold">{t('gcweb:error-summary.header', { count: errors.length })}</h2>
-        {errors.length > 0 && (
-          <ul className="mt-1.5 list-inside list-disc">
-            {errors.map(({ feildId, errorMessage }) => (
-              <li key={feildId}>
-                <AnchorLink className="hover:underline" anchorElementId={feildId}>
-                  {errorMessage}
-                </AnchorLink>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+    <section id={id} className="my-5 border-4 border-red-600 p-4" tabIndex={-1} role="alert">
+      <h2 className="font-lato text-lg font-semibold">{t('gcweb:error-summary.header', { count: errors.length })}</h2>
+      {errors.length > 0 && (
+        <ul className="mt-1.5 list-disc space-y-2 pl-7">
+          {errors.map(({ fieldId, errorMessage }) => (
+            <li key={fieldId}>
+              <AnchorLink className="text-red-700 underline hover:decoration-2 focus:decoration-2" anchorElementId={fieldId}>
+                {errorMessage}
+              </AnchorLink>
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   );
 }
