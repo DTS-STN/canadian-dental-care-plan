@@ -33,11 +33,24 @@
   "footer": {
     "about-site": "À propos de ce site",
     "gc-corporate": "Organisation du gouvernement du Canada",
-    "terms-conditions.text": "Avis",
-    "terms-conditions.href": "https://www.canada.ca/fr/transparence/avis.html",
-    "privacy.text": "Confidentialité",
-    "privacy.href": "https://www.canada.ca/fr/transparence/confidentialite.html",
-    "gc-symbol": "Symbole du gouvernement du Canada"
+    "terms-conditions": {
+      "text": "Avis",
+      "href": "https://www.canada.ca/fr/transparence/avis.html"
+    },
+    "privacy": {
+      "text": "Confidentialité",
+      "href": "https://www.canada.ca/fr/transparence/confidentialite.html"
+    },
+    "gc-symbol": "Symbole du gouvernement du Canada",
+    "main-band": {
+      "header": "Service Canada",
+      "links": {
+        "contact-us": {
+          "content": "Contactez-nous",
+          "href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html"
+        }
+      }
+    }
   },
   "language-switcher": {
     "alt-lang": "English",
