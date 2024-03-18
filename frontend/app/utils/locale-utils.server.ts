@@ -15,8 +15,8 @@ const log = getLogger('locale-utils.server');
  * Returns a t function that defaults to the language resolved through the request.
  * @see https://www.i18next.com/overview/api#getfixedt
  */
-export async function getFixedT<N extends Namespace>(request: Request, namespaces: N) {
-  const locale = await getLocale(request);
+export async function getFixedT<N extends Namespace>(localeOrRequest: 'en' | 'fr' | Request, namespaces: N) {
+  const locale = typeof localeOrRequest === 'string' ? localeOrRequest : await getLocale(localeOrRequest);
   const i18n = await initI18n(locale, namespaces);
   return i18n.getFixedT(locale, namespaces);
 }
