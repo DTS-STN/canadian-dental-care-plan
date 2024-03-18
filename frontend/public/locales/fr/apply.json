@@ -157,34 +157,34 @@
     }
   },
   "dental-insurance": {
-    "title": "(Fr) Access to other dental insurance",
-    "legend": "(Fr) Do you have access to dental insurance or coverage through one of the following four situations?",
+    "title": "Accès à une autre assurance dentaire",
+    "legend": "Avez-vous accès à une assurance dentaire ou à une couverture dans l'une des quatre situations suivantes?",
     "list": {
-      "employment": "(Fr) Your employment benefits or a family member's employment benefits, including health and wellness account",
-      "pension": "(Fr) Your pension benefits or a family member's pension benefits",
-      "purchased": "(Fr) Purchased by you or a family member or through a group plan from an insurance or benefits company",
-      "professional": "(Fr) Through a professional or student organization"
+      "employment": "Vos avantages sociaux ou ceux d'un membre de votre famille, y compris vos comptes de santé et de bien-être",
+      "pension": "Vos prestations de retraite ou celles d'un membre de votre famille",
+      "purchased": "Assurance ou couverture achetée individuellement par vous, par un membre de votre famille ou par l'entremise d'un régime de groupe d'une compagnie d'assurance ou de prestations",
+      "professional": "Assurance ou couverture par une organisation professionnelle ou étudiante"
     },
-    "option-yes": "(Fr) <strong>Yes</strong>, I have access to dental insurance or coverage.",
-    "option-no": "(Fr) <strong>No</strong>, I do not have access to dental insurance or coverage.",
+    "option-yes": "<strong>Oui</strong>, j'ai accès à une assurance dentaire",
+    "option-no": "<strong>Non</strong>, je n'ai pas accès à une assurance dentaire",
     "button": {
-      "back": "(Fr) Back",
-      "continue": "(Fr) Continue"
+      "back": "Retour",
+      "continue": "Continuer"
     },
     "detail": {
       "additional-info": {
-        "title": "(Fr) Additional information",
-        "eligible": "(Fr) Exception: You may still be eligible if you retired and:",
+        "title": "Renseignements supplémentaires",
+        "eligible": "Exception\u00a0: vous êtes admissible si vous avez pris votre retraite et que\u00a0:",
         "list": {
-          "opted": "(Fr) you opted out of pension benefits before December 11, 2023, and",
-          "cannot-opt": "(Fr) you can't opt back in under the pension rules"
+          "opted": "Vous avez choisi de ne pas recevoir de prestations de retraite avant le 11 décembre 2023;",
+          "cannot-opt": "Vous ne pouvez pas vous réinscrire en vertu des règles relatives aux régimes de retraite;"
         },
-        "not-eligible": "(Fr) You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your employer/pension (see exception) benefits or through a professional or student organization. As such, you are not eligible for the CDCP.",
-        "not-eligible-purchased": "(Fr) If you purchased your current dental insurance policy privately on your own (and not as part of any of the coverage described above), you're not eligible for the CDCP while that coverage is in effect."
+        "not-eligible": "Vous êtes toujours considéré comme ayant accès à une assurance ou à une couverture dentaire si vous choisissez de vous retirer des avantages offerts par votre employeur ou votre régime de retraite (voir l'exception) ou par l'entremise d'une organisation professionnelle ou étudiante. Par conséquent, vous n'êtes pas admissible au Régime canadien de soins dentaires.",
+        "not-eligible-purchased": "Si vous avez souscrit votre police d'assurance dentaire actuelle de votre propre chef (et non dans le cadre de l'une des couvertures décrites ci-dessus), vous n'êtes pas admissible au RCSD pendant que cette protection est en vigueur."
       }
     },
     "error-message": {
-      "required": "(Fr) Access to dental insurance must be selected"
+      "required": "L'accès à une assurance dentaire doit être sélectionné"
     }
   },
   "eligibility": {
