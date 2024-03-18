@@ -239,7 +239,7 @@ export default function AccessToDentalInsuranceQuestion() {
                         id="provincial-territorial-social-programs"
                         name="provincialTerritorialSocialProgram"
                         legend={selectedRegion && <span className="font-normal">{t('dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}</span>}
-                        errorMessage={errorMessages.provincialTerritorialSocialProgram}
+                        errorMessage={selectedRegion && errorMessages.provincialTerritorialSocialProgram}
                         options={provincialTerritorialSocialPrograms
                           .filter((program) => program.provinceTerritoryStateId === selectedRegion)
                           .map((option) => ({

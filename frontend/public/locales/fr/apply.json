@@ -128,8 +128,8 @@
     "federal-benefits": {
       "title": "Assurances fédérales",
       "legend": "Bénéficiez-vous d'une assurance dentaire dans le cadre d'un programme social offert par un programme fédéral?",
-      "option-yes": "<strong>Oui</strong>, je bénéficie d'assurances fédérales",
-      "option-no": "<strong>Non</strong>, je ne bénéficie pas d'assurances fédérales",
+      "option-yes": "<strong>Oui</strong>, je bénéficie d'assurances <strong>fédérales</strong>",
+      "option-no": "<strong>Non</strong>, je ne bénéficie pas d'assurances <strong>fédérales</strong>",
       "social-programs": {
         "legend": "Veuillez sélectionner le programme social dont vous bénéficiez. Si vous en avez plusieurs, veuillez sélectionner celui que vous utilisez le plus."
       }
