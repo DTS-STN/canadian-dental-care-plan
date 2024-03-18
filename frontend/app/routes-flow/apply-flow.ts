@@ -65,13 +65,13 @@ const typeOfApplicationSchema = z.object({
  * Schema for intake state.
  */
 const partnerInformationSchema = z.object({
-  socialInsuranceNumber: z.string().refine(isValidSin, { message: 'valid-sin' }),
+  socialInsuranceNumber: z.string().optional(),
   firstName: z.string().optional(),
-  lastName: z.string().min(1, { message: 'last-name' }),
-  month: z.coerce.number({ required_error: 'month' }).int().min(0, { message: 'month' }).max(11, { message: 'month' }),
-  day: z.coerce.number({ required_error: 'day' }).int().min(1, { message: 'day' }).max(31, { message: 'day' }),
-  year: z.coerce.number({ required_error: 'year' }).int().min(1, { message: 'year' }).max(new Date().getFullYear(), { message: 'year' }),
-  confirm: z.string({ required_error: 'confirm' }),
+  lastName: z.string().optional(),
+  month: z.coerce.number().optional(),
+  day: z.coerce.number().optional(),
+  year: z.coerce.number().optional(),
+  confirm: z.string().optional(),
 });
 
 /**

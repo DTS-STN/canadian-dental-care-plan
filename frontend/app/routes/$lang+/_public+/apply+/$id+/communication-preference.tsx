@@ -145,8 +145,8 @@ export default function ApplyFlowCommunicationPreferencePage() {
   const isSubmitting = fetcher.state !== 'idle';
   const [emailMethodChecked, setEmailMethodChecked] = useState(state?.preferredMethod === communicationMethodEmail.id);
   const [nonEmailMethodChecked, setNonEmailMethodChecked] = useState(state && state.preferredMethod !== communicationMethodEmail.id);
-  const errorSummaryId = 'error-summary';
 
+  const errorSummaryId = 'error-summary';
   const emailMethodHandler = () => {
     setEmailMethodChecked(true);
     setNonEmailMethodChecked(false);

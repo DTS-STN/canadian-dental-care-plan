@@ -403,6 +403,7 @@
     "continue-btn": "Continue",
     "error-message": {
       "valid-sin": "Must be a valid SIN",
+      "unique-sins": "SINs must be unique",
       "last-name": "Last name must be provided",
       "month": "Month must be valid",
       "day": "Day must be valid for the given month and year",
@@ -412,12 +413,11 @@
   },
   "personal-information": {
     "page-title": "Personal information",
-    "form-instructions": "Adding a telephone number helps Service Canada reach you if there is an issue with your application and may help reduce delays in processing your application. Otherwise, we will contact you by mail using the mailing address you provide.",
+    "form-instructions": "Adding a phone number helps Service Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
     "telephone-number": "Telephone number (optional)",
-    "telephone-number-alt": "Telephone number (alternate) (optional)",
+    "telephone-number-alt": "Alternate phone number (optional)",
     "mailing-address": {
-      "header": "Mailing address",
-      "note": "We may send you letters by mail related to your CDCP application."
+      "header": "Mailing address"
     },
     "home-address": {
       "header": "Home address",
@@ -425,7 +425,7 @@
     },
     "address-field": {
       "address": "Address",
-      "address-note": "Include street number and name.",
+      "address-note": "Include street number and name",
       "apartment": "Apartment, suite, etc. (optional)",
       "country": "Country",
       "province": "Province, territory, state, or region",
