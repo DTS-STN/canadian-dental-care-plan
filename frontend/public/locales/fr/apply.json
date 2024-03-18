@@ -158,15 +158,15 @@
   },
   "dental-insurance": {
     "title": "Accès à une autre assurance dentaire",
-    "legend": "Avez-vous accès à une assurance dentaire ou à une couverture dans l’une des quatre situations suivantes?",
+    "legend": "Avez-vous accès à une assurance dentaire ou à une couverture dans l'une des quatre situations suivantes?",
     "list": {
-      "employment": "Vos avantages sociaux ou ceux d’un membre de votre famille, y compris vos comptes de santé et de bien-être",
-      "pension": "Vos prestations de retraite ou celles d’un membre de votre famille",
-      "purchased": "Assurance ou couverture achetée individuellement par vous, par un membre de votre famille ou par l’entremise d’un régime de groupe d’une compagnie d’assurance ou de prestations",
+      "employment": "Vos avantages sociaux ou ceux d'un membre de votre famille, y compris vos comptes de santé et de bien-être",
+      "pension": "Vos prestations de retraite ou celles d'un membre de votre famille",
+      "purchased": "Assurance ou couverture achetée individuellement par vous, par un membre de votre famille ou par l'entremise d'un régime de groupe d'une compagnie d'assurance ou de prestations",
       "professional": "Assurance ou couverture par une organisation professionnelle ou étudiante"
     },
-    "option-yes": "<strong>Oui</strong>, j’ai accès à une assurance dentaire",
-    "option-no": "<strong>Non</strong>, je n’ai pas accès à une assurance dentaire",
+    "option-yes": "<strong>Oui</strong>, j'ai accès à une assurance dentaire",
+    "option-no": "<strong>Non</strong>, je n'ai pas accès à une assurance dentaire",
     "button": {
       "back": "Retour",
       "continue": "Continuer"
@@ -174,13 +174,13 @@
     "detail": {
       "additional-info": {
         "title": "Renseignements supplémentaires",
-        "eligible": "Exception : vous êtes admissible si vous avez pris votre retraite et que :",
+        "eligible": "Exception\u00a0: vous êtes admissible si vous avez pris votre retraite et que\u00a0:",
         "list": {
-          "opted": "Vous avez choisi de ne pas recevoir de prestations de retraite avant le 11 décembre 2023;",
+          "opted": "Vous avez choisi de ne pas recevoir de prestations de retraite avant le 11 décembre 2023;",
           "cannot-opt": "Vous ne pouvez pas vous réinscrire en vertu des règles relatives aux régimes de retraite;"
         },
-        "not-eligible": "Vous êtes toujours considéré comme ayant accès à une assurance ou à une couverture dentaire si vous choisissez de vous retirer des avantages offerts par votre employeur ou votre régime de retraite (voir l’exception) ou par l’entremise d’une organisation professionnelle ou étudiante. Par conséquent, vous n’êtes pas admissible au Régime canadien de soins dentaires.",
-        "not-eligible-purchased": "Si vous avez souscrit votre police d’assurance dentaire actuelle de votre propre chef (et non dans le cadre de l’une des couvertures décrites ci-dessus), vous n’êtes pas admissible au RCSD pendant que cette protection est en vigueur."
+        "not-eligible": "Vous êtes toujours considéré comme ayant accès à une assurance ou à une couverture dentaire si vous choisissez de vous retirer des avantages offerts par votre employeur ou votre régime de retraite (voir l'exception) ou par l'entremise d'une organisation professionnelle ou étudiante. Par conséquent, vous n'êtes pas admissible au Régime canadien de soins dentaires.",
+        "not-eligible-purchased": "Si vous avez souscrit votre police d'assurance dentaire actuelle de votre propre chef (et non dans le cadre de l'une des couvertures décrites ci-dessus), vous n'êtes pas admissible au RCSD pendant que cette protection est en vigueur."
       }
     },
     "error-message": {
