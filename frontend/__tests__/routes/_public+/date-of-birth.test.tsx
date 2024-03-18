@@ -1,3 +1,5 @@
+import { redirect } from '@remix-run/node';
+
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
@@ -16,11 +18,16 @@ vi.mock('~/routes-flow/apply-flow', () => ({
   }),
 }));
 
+vi.mock('~/utils/apply-utils', () => ({
+  yearsBetween: vi.fn().mockReturnValueOnce(65).mockReturnValueOnce(1),
+}));
+
 vi.mock('~/utils/locale-utils.server', async (importOriginal) => {
   const actual = await importOriginal<typeof import('~/utils/locale-utils.server')>();
   return {
     ...actual,
     getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+    redirectWithLocale: vi.fn().mockResolvedValueOnce(redirect('/en/apply/123/applicant-information')).mockResolvedValueOnce(redirect('/en/apply/123/dob-eligibility')),
   };
 });
 

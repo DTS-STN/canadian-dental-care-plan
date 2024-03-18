@@ -1,3 +1,5 @@
+import { redirect } from '@remix-run/node';
+
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/tax-filing';
@@ -21,6 +23,7 @@ vi.mock('~/utils/locale-utils.server', async (importOriginal) => {
   return {
     ...actual,
     getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+    redirectWithLocale: vi.fn().mockResolvedValueOnce(redirect('/en/apply/123/date-of-birth')).mockResolvedValueOnce(redirect('/en/apply/123/file-your-taxes')),
   };
 });
 
