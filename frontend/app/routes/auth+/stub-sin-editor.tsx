@@ -9,13 +9,14 @@ import { z } from 'zod';
 import { Button } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
-import { isValidSin } from '~/utils/apply-utils';
+import { getSessionService } from '~/services/session-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { isValidSin } from '~/utils/sin-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('stubSinEditor', 'gcweb'),
@@ -33,6 +34,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const meta = { title: t('gcweb:meta.title.template', { title: t('stubSinEditor:index.page-title') }) };
   const { SHOW_SIN_EDIT_STUB_PAGE } = getEnv();
 
+  //const sessionService = await getSessionService();
+  //const session = await sessionService.getSession(request);
+
   if (!SHOW_SIN_EDIT_STUB_PAGE) {
     throw new Response(null, { status: 404 });
   }
@@ -40,6 +44,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const sessionService = await getSessionService();
+  const session = await sessionService.getSession(request);
   const sinToStubSchema = z.object({
     socialInsuranceNumberToStub: z.string().refine(isValidSin, { message: 'valid-sin' }),
   });
@@ -53,8 +59,24 @@ export async function action({ request }: ActionFunctionArgs) {
       formData: formData as Partial<z.infer<typeof sinToStubSchema>>,
     });
   }
+  const idToken = {
+    iss: 'GC-ECAS',
+    jti: '71b080e9-2524-4572-a085-a53e63a98116',
+    nbf: 1655740836,
+    exp: 1655741166,
+    iat: 1655740866,
+    aud: 'CALSC',
+    sub: '6034f978-7243-426a-9380-4022c06280e1',
+    nonce: 'hqwVxGbvJ5g7NSWoOv1BvrA9avVAY7CL',
+    locale: 'en-CA',
+  };
 
-  return redirectWithLocale(request, `/`);
+  session.set('idToken', idToken);
+  return redirectWithLocale(request, `/`, {
+    headers: {
+      'Set-Cookie': await sessionService.commitSession(session),
+    },
+  });
 }
 
 export default function StubSinEditorPage() {
