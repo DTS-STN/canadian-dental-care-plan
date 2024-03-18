@@ -123,7 +123,7 @@ export default function AccessToDentalInsuranceQuestion() {
     provincialProgramOption: '',
   };
 
-  function resetToDefaultState() {
+  function resetProvincialOptionState() {
     setCheckedProvincialOption(defaultState.checkedProvincialOption);
     setSelectedRegion(defaultState.selectedRegion);
     setProvincialProgramOption(defaultState.provincialProgramOption);
@@ -210,7 +210,7 @@ export default function AccessToDentalInsuranceQuestion() {
                 onChange: (e) => {
                   setCheckedProvincialOption(e.target.value);
                   if (e.target.value !== 'yes') {
-                    resetToDefaultState();
+                    resetProvincialOptionState();
                   }
                 },
                 append: option.code === 'yes' && checkedProvincialOption === 'yes' && regions.length > 0 && (
