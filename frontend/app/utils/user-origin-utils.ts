@@ -17,7 +17,7 @@ export function useUserOrigin(): { to: To; text: string } | undefined {
   switch (data.userOrigin) {
     case 'msca': {
       return {
-        to: t('gcweb:header.menu-msca-home.href', { baseUri: data.env.MSCA_HOME_URI }),
+        to: t('gcweb:header.menu-msca-home.href', { baseUri: data.env.MSCA_BASE_URI }),
         text: t('gcweb:header.menu-dashboard.text'),
       };
     }

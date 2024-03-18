@@ -12,6 +12,7 @@ import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { useUserOrigin } from '~/utils/user-origin-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'data-unavailable:page-title' }],
@@ -40,6 +41,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function DataUnavailable() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { SCCH_BASE_URI } = useLoaderData<typeof loader>();
+  const userOrigin = useUserOrigin();
+
   const doyouqualify = <InlineLink to={t('do-you-qualify.href')} />;
   const howtoapply = <InlineLink to={t('how-to-apply.href')} />;
   const contactus = <InlineLink to={t('contact-us.href', { baseUri: SCCH_BASE_URI })} />;
@@ -56,6 +59,7 @@ export default function DataUnavailable() {
         <Trans ns={handle.i18nNamespaces} i18nKey="other-enquiry" components={{ contactus }} />
       </p>
       <p className="mb-8">{t('service-delay')}</p>
+      {userOrigin && <InlineLink to={userOrigin.to}>{userOrigin.text}</InlineLink>}
     </>
   );
 }
