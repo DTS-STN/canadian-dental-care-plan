@@ -44,13 +44,17 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id } = await applyFlow.loadState({ request, params });
 
+  const formSchema = z.object({
+    applicationDelegate: z.string(),
+  });
+
   const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = applyFlow.typeOfApplicationSchema.safeParse(formData);
+  const parsedDataResult = formSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof applyFlow.typeOfApplicationSchema>>,
+      formData: formData as Partial<z.infer<typeof formSchema>>,
     });
   }
 

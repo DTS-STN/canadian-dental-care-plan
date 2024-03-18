@@ -44,13 +44,17 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id } = await applyFlow.loadState({ request, params });
 
+  const formSchema = z.object({
+    taxFiling2023: z.string(),
+  });
+
   const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = applyFlow.taxFilingSchema.safeParse(formData);
+  const parsedDataResult = formSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof applyFlow.taxFilingSchema>>,
+      formData: formData as Partial<z.infer<typeof formSchema>>,
     });
   }
 
