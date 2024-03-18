@@ -20,7 +20,7 @@ import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { formatSin } from '~/utils/sin-utils';
+import { formatSin, isValidSin } from '~/utils/sin-utils';
 import { cn } from '~/utils/tw-utils';
 
 export const applyIdParamSchema = z.string().uuid();
@@ -52,15 +52,28 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ request, params });
+
+  const partnerInformationSchema = z.object({
+    socialInsuranceNumber: z
+      .string()
+      .refine(isValidSin, { message: 'valid-sin' })
+      .refine((sin) => sin !== state.applicantInformation?.socialInsuranceNumber, { message: 'unique-sins' }),
+    firstName: z.string().optional(),
+    lastName: z.string().min(1, { message: 'last-name' }),
+    month: z.coerce.number({ required_error: 'month' }).int().min(0, { message: 'month' }).max(11, { message: 'month' }),
+    day: z.coerce.number({ required_error: 'day' }).int().min(1, { message: 'day' }).max(31, { message: 'day' }),
+    year: z.coerce.number({ required_error: 'year' }).int().min(1, { message: 'year' }).max(new Date().getFullYear(), { message: 'year' }),
+    confirm: z.string({ required_error: 'confirm' }),
+  });
 
   const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = applyFlow.partnerInformationSchema.safeParse(formData);
+  const parsedDataResult = partnerInformationSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof applyFlow.partnerInformationSchema>>,
+      formData: formData as Partial<z.infer<typeof partnerInformationSchema>>,
     });
   }
 
@@ -137,7 +150,7 @@ export default function ApplyFlowApplicationInformation() {
       <fetcher.Form method="post" aria-describedby="form-instructions-provide-sin form-instructions-required-information" noValidate>
         <div className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
-            <InputField id="firstName" name="firstName" className="w-full" label={t('applicant-information.first-name')} aria-labelledby="name-instructions" defaultValue={defaultValues.firstName} />
+            <InputField id="firstName" name="firstName" className="w-full" label={t('applicant-information.first-name')} required aria-labelledby="name-instructions" defaultValue={defaultValues.firstName} />
             <InputField id="lastName" name="lastName" className="w-full" label={t('applicant-information.last-name')} required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} aria-labelledby="name-instructions" />
           </div>
           <p id="name-instructions">{t('partner-information.name-instructions')}</p>

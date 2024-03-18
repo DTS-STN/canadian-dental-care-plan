@@ -60,7 +60,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     if (val.federalBenefit === 'yes' && (!val.federalSocialProgram || val.federalSocialProgram.trim().length === 0)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'federal-program',
+        message: 'empty-program',
         path: ['federalSocialProgram'],
       });
     }
@@ -75,7 +75,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       if (val.province && !val.provincialTerritorialSocialProgram) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: 'provincial-program',
+          message: 'empty-program',
           path: ['provincialTerritorialSocialProgram'],
         });
       }
@@ -116,6 +116,18 @@ export default function AccessToDentalInsuranceQuestion() {
   });
 
   const [selectedRegion, setSelectedRegion] = useState(state?.province);
+
+  const defaultState = {
+    checkedProvincialOption: '',
+    selectedRegion: '',
+    provincialProgramOption: '',
+  };
+
+  function resetProvincialOptionState() {
+    setCheckedProvincialOption(defaultState.checkedProvincialOption);
+    setSelectedRegion(defaultState.selectedRegion);
+    setProvincialProgramOption(defaultState.provincialProgramOption);
+  }
 
   useEffect(() => {
     if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
@@ -195,7 +207,12 @@ export default function AccessToDentalInsuranceQuestion() {
                 children: <Trans ns={handle.i18nNamespaces}>{`dental-benefits.provincial-territorial-benefits.option-${option.code}`}</Trans>,
                 value: option.code,
                 defaultChecked: state?.provincialTerritorialBenefit === option.code,
-                onChange: (e) => setCheckedProvincialOption(e.target.value),
+                onChange: (e) => {
+                  setCheckedProvincialOption(e.target.value);
+                  if (e.target.value !== 'yes') {
+                    resetProvincialOptionState();
+                  }
+                },
                 append: option.code === 'yes' && checkedProvincialOption === 'yes' && regions.length > 0 && (
                   <Fragment key={option.code}>
                     <div className="space-y-6">
@@ -214,7 +231,7 @@ export default function AccessToDentalInsuranceQuestion() {
                             children: getNameByLanguage(i18n.language, region),
                           })),
                         ]}
-                        defaultValue={state?.province}
+                        defaultValue={selectedRegion}
                         errorMessage={errorMessages.province}
                         required
                       />
@@ -222,7 +239,7 @@ export default function AccessToDentalInsuranceQuestion() {
                         id="provincial-territorial-social-programs"
                         name="provincialTerritorialSocialProgram"
                         legend={selectedRegion && <span className="font-normal">{t('dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}</span>}
-                        errorMessage={errorMessages.provincialTerritorialSocialProgram}
+                        errorMessage={selectedRegion && errorMessages.provincialTerritorialSocialProgram}
                         options={provincialTerritorialSocialPrograms
                           .filter((program) => program.provinceTerritoryStateId === selectedRegion)
                           .map((option) => ({

@@ -10,18 +10,19 @@ import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
-import { InputField } from '~/components/input-field';
-import { InputLegend } from '~/components/input-legend';
-import { InputSelect } from '~/components/input-select';
+import { DatePickerField } from '~/components/date-picker-field';
+import { ErrorSummary, createErrorSummaryItems, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { yearsBetween } from '~/utils/apply-utils';
+import { parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+
+export type DateOfBirthState = string;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -40,79 +41,83 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.date-of-birth.page-title') }) };
 
-  return json({ id, meta, state: state.dob });
+  return json({ id, meta, state: state.dateOfBirth });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id } = await applyFlow.loadState({ request, params });
+  const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formSchema = z.object({
-    month: z.coerce.number({ required_error: 'month' }).int().min(0, { message: 'month' }).max(11, { message: 'month' }),
-    day: z.coerce.number({ required_error: 'day' }).int().min(1, { message: 'day' }).max(31, { message: 'day' }),
-    year: z.coerce.number({ required_error: 'year' }).int().min(1, { message: 'year' }).max(new Date().getFullYear(), { message: 'year' }),
-  });
+  const formData = await request.formData();
+  const dateOfBirth = String(formData.get('dateOfBirth'));
 
-  const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = formSchema.safeParse(formData);
+  // state validation schema
+  const dateOfBirthSchema: z.ZodType<DateOfBirthState> = z
+    .string({
+      invalid_type_error: t('apply:eligibility.date-of-birth.error-message.date-required'),
+      required_error: t('apply:eligibility.date-of-birth.error-message.date-required'),
+    })
+    .min(1, { message: t('apply:eligibility.date-of-birth.error-message.date-required') })
+    .refine(
+      (val) => {
+        const { year, month, day } = parseDateString(val);
+        return year && month && day;
+      },
+      { message: t('apply:eligibility.date-of-birth.error-message.date-required') },
+    );
+
+  const parsedDataResult = dateOfBirthSchema.safeParse(dateOfBirth);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof formSchema>>,
+      formData: dateOfBirth,
     });
   }
 
   const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
-    state: { dob: parsedDataResult.data },
+    state: { dateOfBirth: parsedDataResult.data },
   });
-  const applicantDob = new Date(parsedDataResult.data.year, parsedDataResult.data.month, parsedDataResult.data.day);
-  return yearsBetween(new Date(), applicantDob) >= 65 ? redirectWithLocale(request, `/apply/${id}/applicant-information`, sessionResponseInit) : redirectWithLocale(request, `/apply/${id}/dob-eligibility`, sessionResponseInit);
+
+  const parsedDateString = parseDateString(parsedDataResult.data);
+  const applicantDob = new Date(Number.parseInt(parsedDateString.year ?? ''), Number.parseInt(parsedDateString.month ?? ''), Number.parseInt(parsedDateString.day ?? ''));
+  const age = yearsBetween(new Date(), applicantDob);
+
+  if (age < 65) {
+    return redirectWithLocale(request, `/apply/${id}/dob-eligibility`, sessionResponseInit);
+  }
+
+  return redirectWithLocale(request, `/apply/${id}/applicant-information`, sessionResponseInit);
 }
 
 export default function ApplyFlowDateOfBirth() {
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { id, state } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
 
   useEffect(() => {
-    if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
+    if (fetcher.data?.formData && fetcher.data.errors._errors.length > 0) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
   }, [fetcher.data]);
 
-  function getErrorMessage(errorI18nKey?: string): string | undefined {
-    if (!errorI18nKey) return undefined;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`apply:eligibility.date-of-birth.error-message.${errorI18nKey}` as any);
-  }
-
   const errorMessages = {
-    day: getErrorMessage(fetcher.data?.errors.day?._errors[0]),
-    month: getErrorMessage(fetcher.data?.errors.month?._errors[0]),
-    year: getErrorMessage(fetcher.data?.errors.year?._errors[0]),
+    'date-picker-date-of-birth-month': fetcher.data?.errors._errors[0],
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
-  const monthOptions = Array.from({ length: 12 }, (_, i) => ({ children: new Intl.DateTimeFormat(`${i18n.language}-ca`, { month: 'long' }).format(new Date(2023, i, 1)), value: i, id: `month-${i}` }));
 
   return (
     <div className="max-w-prose">
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <p className="mb-6">{t('apply:eligibility.date-of-birth.description')}</p>
       <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
-        <InputLegend id="dobLegend" required className="mb-2">
-          {t('apply:eligibility.date-of-birth.form-instructions')}
-        </InputLegend>
-        <div className="flex flex-col gap-6 sm:flex-row">
-          <InputSelect id="month" label={t('apply:eligibility.date-of-birth.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} defaultValue={state?.month} />
-          <InputField id="day" label={t('apply:eligibility.date-of-birth.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} defaultValue={state?.day} />
-          <InputField id="year" label={t('apply:eligibility.date-of-birth.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} defaultValue={state?.year} />
-        </div>
+        <DatePickerField id="date-of-birth" name="dateOfBirth" defaultValue={state ?? ''} legend={t('apply:eligibility.date-of-birth.form-instructions')} required errorMessage={errorMessages['date-picker-date-of-birth-month']} />
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <ButtonLink id="back-button" to={`/apply/${id}/tax-filing`} disabled={isSubmitting}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />

@@ -129,7 +129,7 @@ export default function ApplyFlowApplicationInformation() {
       <fetcher.Form method="post" aria-describedby="form-instructions-sin form-instructions-info" noValidate>
         <div className="mb-8 space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
-            <InputField id="firstName" name="firstName" label={t('applicant-information.first-name')} className="w-full" aria-labelledby="name-instructions" defaultValue={defaultValues.firstName} />
+            <InputField id="firstName" name="firstName" label={t('applicant-information.first-name')} className="w-full" required aria-labelledby="name-instructions" defaultValue={defaultValues.firstName} />
             <InputField id="lastName" name="lastName" label={t('applicant-information.last-name')} className="w-full" required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} aria-labelledby="name-instructions" />
           </div>
           <p id="name-instructions">{t('applicant-information.name-instructions')}</p>

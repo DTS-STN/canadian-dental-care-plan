@@ -15,6 +15,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
+import { parseDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -36,7 +37,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   //TODO: Get User/apply form information
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
-  const dob = { year: state.dob?.year ?? 2024, month: state.dob?.month ?? 1, day: state.dob?.day ?? 1 };
+  const parsedDateOfBirthString = parseDateString(state.dateOfBirth ?? '');
+  const dateOfBirth = new Date(Number.parseInt(parsedDateOfBirthString.year ?? ''), Number.parseInt(parsedDateOfBirthString.month ?? ''), Number.parseInt(parsedDateOfBirthString.day ?? ''));
   const partnerDob = { year: state.partnerInformation?.year ?? 2024, month: state.partnerInformation?.month ?? 1, day: state.partnerInformation?.day ?? 1 };
 
   const userInfo = {
@@ -46,7 +48,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     phoneNumber: state.personalInformation?.phoneNumber,
     altPhoneNumber: state.personalInformation?.phoneNumberAlt,
     preferredLanguage: state.communicationPreferences?.preferredLanguage ?? 'en',
-    birthday: new Date(dob.year, dob.month, dob.day).toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' }),
+    birthday: dateOfBirth.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' }),
     sin: state.applicantInformation?.socialInsuranceNumber ?? '',
     martialStatus: state.applicantInformation?.maritalStatus,
     email: state.communicationPreferences?.email,
