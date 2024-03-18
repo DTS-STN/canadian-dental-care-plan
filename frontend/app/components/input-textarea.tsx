@@ -5,7 +5,9 @@ import { InputHelp } from './input-help';
 import { InputLabel } from '~/components/input-label';
 import { cn } from '~/utils/tw-utils';
 
-const disabledClassName = 'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
+const inputBaseClassName = 'block rounded-lg bg-white focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-20';
+const inputDisabledClassName = 'disable:bg-gray-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
+const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
 export interface InputTextareaProps extends Omit<React.ComponentProps<'textarea'>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required'> {
   errorMessage?: string;
@@ -34,6 +36,11 @@ const InputTextarea = forwardRef<HTMLTextAreaElement, InputTextareaProps>((props
       <InputLabel id={inputLabelId} htmlFor={id} required={required} className="mb-2">
         {label}
       </InputLabel>
+      {errorMessage && (
+        <div className="mb-2">
+          <InputError id={inputErrorId}>{errorMessage}</InputError>
+        </div>
+      )}
       <textarea
         ref={ref}
         aria-describedby={getAriaDescribedby()}
@@ -41,18 +48,13 @@ const InputTextarea = forwardRef<HTMLTextAreaElement, InputTextareaProps>((props
         aria-invalid={!!errorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        className={cn('block rounded-lg focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-20', disabledClassName, className)}
+        className={cn(inputBaseClassName, restInputProps.disabled && inputDisabledClassName, errorMessage && inputErrorClassName, className)}
         data-testid="input-textarea"
         id={id}
         required={required}
         rows={rows ?? 3}
         {...restInputProps}
       />
-      {errorMessage && (
-        <InputError id={inputErrorId} className="mt-2">
-          {errorMessage}
-        </InputError>
-      )}
       {helpMessage && (
         <InputHelp id={inputHelpMessageId} className="mt-2" data-testid="input-textarea-help">
           {helpMessage}

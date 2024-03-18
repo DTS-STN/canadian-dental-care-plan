@@ -38,6 +38,11 @@ export function InputCheckboxes({ errorMessage, helpMessagePrimary, helpMessageP
       <InputLegend id={inputLegendId} required={required} className="mb-2">
         {legend}
       </InputLegend>
+      {errorMessage && (
+        <p className="mb-2">
+          <InputError id={inputErrorId}>{errorMessage}</InputError>
+        </p>
+      )}
       {helpMessagePrimary && (
         <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="input-field-help-primary">
           {helpMessagePrimary}
@@ -63,11 +68,6 @@ export function InputCheckboxes({ errorMessage, helpMessagePrimary, helpMessageP
           );
         })}
       </ul>
-      {errorMessage && (
-        <InputError id={inputErrorId} className="mt-2">
-          {errorMessage}
-        </InputError>
-      )}
       {helpMessageSecondary && (
         <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)} data-testid="input-field-help-secondary">
           {helpMessageSecondary}
