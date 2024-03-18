@@ -2,34 +2,29 @@ import type { ReactNode } from 'react';
 
 import { cn } from '~/utils/tw-utils';
 
+const inputBaseClassName = 'h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500';
+const inputDisabledClassName = 'pointer-events-none cursor-not-allowed opacity-70';
+const inputErrorClassName = 'border-red-500 bg-red-50 text-red-900 focus:border-red-500 focus:ring-red-500';
+
 export interface InputRadioProps extends Omit<React.ComponentProps<'input'>, 'aria-labelledby' | 'children' | 'type'> {
   append?: ReactNode;
   appendClassName?: string;
   children: ReactNode;
+  hasError?: boolean;
   id: string;
   inputClassName?: string;
   labelClassName?: string;
   name: string;
 }
 
-const disableClassName = 'pointer-events-none cursor-not-allowed opacity-70';
-
-export function InputRadio(props: InputRadioProps) {
-  const { append, appendClassName, children, className, id, inputClassName, labelClassName, ...restProps } = props;
-  const inputLabelId = `input-radio-${id}-label`;
+export function InputRadio({ append, appendClassName, children, className, hasError, id, inputClassName, labelClassName, ...restProps }: InputRadioProps) {
   const inputRadioId = `input-radio-${id}`;
+  const inputLabelId = `${inputRadioId}-label`;
   return (
     <div className={className}>
       <div className="flex items-center">
-        <input
-          type="radio"
-          id={inputRadioId}
-          aria-labelledby={inputLabelId}
-          className={cn('h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-blue-500', restProps.disabled && disableClassName, inputClassName)}
-          data-testid="input-radio"
-          {...restProps}
-        />
-        <label id={inputLabelId} htmlFor={inputRadioId} className={cn('ml-3 block leading-6', restProps.disabled && disableClassName, labelClassName)}>
+        <input type="radio" id={inputRadioId} aria-labelledby={inputLabelId} className={cn(inputBaseClassName, restProps.disabled && inputDisabledClassName, hasError && inputErrorClassName, inputClassName)} data-testid="input-radio" {...restProps} />
+        <label id={inputLabelId} htmlFor={inputRadioId} className={cn('ml-3 block leading-6', restProps.disabled && inputDisabledClassName, labelClassName)}>
           {children}
         </label>
       </div>

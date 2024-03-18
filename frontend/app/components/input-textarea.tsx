@@ -5,7 +5,7 @@ import { InputHelp } from './input-help';
 import { InputLabel } from '~/components/input-label';
 import { cn } from '~/utils/tw-utils';
 
-const disableClassName = 'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
+const disabledClassName = 'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
 
 export interface InputTextareaProps extends Omit<React.ComponentProps<'textarea'>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required'> {
   errorMessage?: string;
@@ -41,7 +41,7 @@ const InputTextarea = forwardRef<HTMLTextAreaElement, InputTextareaProps>((props
         aria-invalid={!!errorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        className={cn('block rounded-lg focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-20', disableClassName, className)}
+        className={cn('block rounded-lg focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-20', disabledClassName, className)}
         data-testid="input-textarea"
         id={id}
         required={required}

@@ -44,11 +44,21 @@ const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClass
         </InputHelp>
       )}
       <ul className="space-y-2">
-        {options.map((option, index) => {
+        {options.map((optionProps, index) => {
           const inputRadioId = `${id}-option-${index}`;
           return (
             <li key={inputRadioId}>
-              <InputRadio aria-describedby={getAriaDescribedby()} aria-errormessage={errorMessage && inputErrorId} aria-invalid={!!errorMessage} aria-required={required} id={inputRadioId} name={name} required={required} {...option} />
+              <InputRadio
+                aria-describedby={getAriaDescribedby()}
+                aria-errormessage={errorMessage && inputErrorId}
+                aria-invalid={!!errorMessage}
+                aria-required={required}
+                hasError={!!errorMessage}
+                id={inputRadioId}
+                name={name}
+                required={required}
+                {...optionProps}
+              />
             </li>
           );
         })}

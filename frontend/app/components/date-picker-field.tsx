@@ -13,6 +13,7 @@ import { cn } from '~/utils/tw-utils';
 
 const inputBaseClassName = 'block rounded-lg bg-white focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-20';
 const inputDisabledClassName = 'disable:bg-gray-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
+const inputErrorClassName = 'border-red-500 bg-red-50 text-red-900 placeholder-red-700 focus:border-red-500 focus:ring-red-500';
 
 function toDateStringOrEmpty({ year, month, day }: { year?: string; month?: string; day?: string }) {
   if (!year || !month || !day) return '';
@@ -192,7 +193,7 @@ function DatePickerMonth({ ariaDescribedBy, ariaErrorMessage, className, default
         aria-invalid={!!ariaErrorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        className={cn(inputBaseClassName, inputDisabledClassName, className)}
+        className={cn(inputBaseClassName, inputDisabledClassName, ariaErrorMessage && inputErrorClassName, className)}
         data-testid="date-picker-month-select"
         defaultValue={defaultValue}
         id={selectId}
@@ -246,7 +247,7 @@ function DatePickerYear({ ariaDescribedBy, ariaErrorMessage, className, defaultV
         aria-invalid={!!ariaErrorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        className={cn(inputBaseClassName, inputDisabledClassName, className)}
+        className={cn(inputBaseClassName, inputDisabledClassName, ariaErrorMessage && inputErrorClassName, className)}
         data-testid="date-picker-year-input"
         defaultValue={defaultValue}
         id={inputId}
@@ -292,7 +293,7 @@ function DatePickerDay({ ariaDescribedBy, ariaErrorMessage, className, defaultVa
         aria-invalid={!!ariaErrorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        className={cn(inputBaseClassName, inputDisabledClassName, className)}
+        className={cn(inputBaseClassName, inputDisabledClassName, ariaErrorMessage && inputErrorClassName, className)}
         data-testid="date-picker-day-input"
         defaultValue={defaultValue}
         id={inputId}
