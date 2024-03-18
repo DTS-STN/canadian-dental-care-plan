@@ -54,7 +54,7 @@ const serverEnv = z.object({
   INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
   CCT_API_BASE_URI: z.string().url().default('https://api.example.com'),
   SCCH_BASE_URI: z.string().url().default('https://www.example.com'),
-  MSCA_HOME_URI: z.string().url().default('http://srv136.services.gc.ca'),
+  MSCA_BASE_URI: z.string().url().default('http://srv136.services.gc.ca'),
 
   // auth/oidc settings
   AUTH_JWT_PRIVATE_KEY: z.string().refine(isValidPrivateKey),
@@ -143,7 +143,7 @@ const publicEnv = serverEnv.pick({
   I18NEXT_DEBUG: true,
   LANG_QUERY_PARAM: true,
   SCCH_BASE_URI: true,
-  MSCA_HOME_URI: true,
+  MSCA_BASE_URI: true,
   SESSION_TIMEOUT_SECONDS: true,
   SESSION_TIMEOUT_PROMPT_SECONDS: true,
 });
