@@ -1,0 +1,78 @@
+{
+  "@odata.context": "https://canadadental-uat.crm3.dynamics.com/api/data/v9.2/$metadata#esdc_countries(esdc_countryid,esdc_nameenglish,esdc_namefrench,esdc_countrycodealpha3)",
+  "value": [
+    {
+      "Client": {
+        "ClientIdentification": [
+          {
+            "IdentificationID": "4f35f70b-2f83-ee11-8179-000d3a09d000",
+            "IdentificationCategoryText": "Applicant ID"
+          },
+          {
+            "IdentificationID": "81657965177",
+            "IdentificationCategoryText": "Client Number"
+          }
+        ],
+        "PersonName": [
+          {
+            "PersonSurName": ["MyLastName50"],
+            "PersonGivenName": ["MyFirstName50"]
+          }
+        ],
+        "PersonContactInformation": {
+          "EmailAddress": {
+            "EmailAddressID": "myEmail50@domain.ca"
+          },
+          "TelephoneNumber": {
+            "FullTelephoneNumber": "555-555-5555"
+          },
+          "Address": [
+            {
+              "AddressCategoryCode": {
+                "ReferenceDataName": "Mailing"
+              },
+              "AddressStreet": {
+                "StreetName": "50 My Street"
+              },
+              "AddressSecondaryUnitText": "Apt. No. 50",
+              "AddressCityName": "Hamilton-50",
+              "AddressProvince": {
+                "ProvinceName": "ON"
+              },
+              "AddressCountry": {
+                "CountryName": "CAN"
+              },
+              "AddressPostalCode": "L9B 1A2"
+            },
+            {
+              "AddressCategoryCode": {
+                "ReferenceDataName": "Home"
+              },
+              "AddressStreet": {
+                "StreetName": "50 My Street"
+              },
+              "AddressSecondaryUnitText": "Apt. No. 50",
+              "AddressCityName": "Hamilton-50",
+              "AddressProvince": {
+                "ProvinceName": "ON"
+              },
+              "AddressCountry": {
+                "CountryName": "CAN"
+              },
+              "AddressPostalCode": "L9B 1A2"
+            }
+          ]
+        },
+        "PersonLanguage": {
+          "LanguageCode": {
+            "ReferenceDataName": "E"
+          },
+          "PreferredIndicator": true
+        },
+        "PersonSINIdentification": {
+          "IdentificationID": "999999999"
+        }
+      }
+    }
+  ]
+}

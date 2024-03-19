@@ -9,6 +9,27 @@ import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('power-platform-api.server');
 
+const clientIdSchema = z.object({
+  Client: z.object({
+    PersonSINIdentification: z.object({
+      IdentificationID: z.string(),
+    }),
+  }),
+});
+
+export type ClientId = z.infer<typeof clientIdSchema>;
+
+const letterTypeCodeSchema = z.object({
+  code: z.string(),
+  nameFr: z.string(),
+  nameEn: z.string(),
+  id: z.string().optional(),
+});
+
+const listOfLetterTypeCodeSchema = z.array(letterTypeCodeSchema);
+
+export type LetterTypeCodeList = z.infer<typeof listOfLetterTypeCodeSchema>;
+
 /**
  * Server-side MSW mocks for the Power Platform API.
  */
@@ -44,6 +65,60 @@ export function getPowerPlatformApiMockHandlers() {
       const patchResult = jsonpatch.applyPatch(document, patch, true);
       db.user.update({ where: { id: { equals: userEntity.id } }, data: patchResult.newDocument });
       return HttpResponse.text(null, { status: 204 });
+    }),
+
+    //
+    // Retrieve personal details information (using POST instead of GET due the sin params logging with GET)
+    //
+    http.post('https://api.example.com/personal-information/', async ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const getPeronalInformationEntity = getPersonalInformation(clientIdSchema.parse(await request.json()));
+      const listOfClientId = [{ IdentificationID: getPeronalInformationEntity?.clientIdentificationID, IdentificationCategoryText: getPeronalInformationEntity?.clientIdentificationCategory }];
+      const nameInfoList = [{ PersonSurName: [getPeronalInformationEntity ? getPeronalInformationEntity.lastName : ''], PersonGivenName: [getPeronalInformationEntity ? getPeronalInformationEntity.firstName : ''] }];
+      const addressList = [
+        {
+          AddressCategoryCode: {
+            ReferenceDataName: getPeronalInformationEntity?.addressCategoryCode,
+          },
+          AddressStreet: {
+            StreetName: getPeronalInformationEntity?.addressStreet,
+          },
+          AddressSecondaryUnitText: getPeronalInformationEntity?.addressSecondaryUnitText,
+          AddressCityName: getPeronalInformationEntity?.addressCityName,
+          AddressProvince: {
+            ProvinceName: getPeronalInformationEntity?.addressProvince,
+          },
+          AddressCountry: {
+            CountryName: getPeronalInformationEntity?.addressCountryName,
+          },
+          AddressPostalCode: getPeronalInformationEntity?.addressPostalCode,
+        },
+      ];
+
+      return HttpResponse.json({
+        Client: {
+          ClientIdentification: listOfClientId,
+          PersonName: nameInfoList,
+          PersonContactInformation: {
+            EmailAddress: {
+              EmailAddressID: getPeronalInformationEntity?.emailAddressId,
+            },
+            TelephoneNumber: {
+              FullTelephoneNumber: getPeronalInformationEntity?.fullTelephoneNumber,
+            },
+            Address: addressList,
+          },
+          PersonLanguage: {
+            LanguageCode: {
+              ReferenceDataName: getPeronalInformationEntity?.languageCode,
+            },
+            PreferredIndicator: getPeronalInformationEntity?.languagePreferredIndicator,
+          },
+          PersonSINIdentification: {
+            IdentificationID: getPeronalInformationEntity?.sinIdentification,
+          },
+        },
+      });
     }),
 
     //
@@ -149,4 +224,21 @@ function toAddressPatchDocument({ addressApartmentUnitNumber, addressStreet, add
  */
 function toUserPatchDocument({ homeAddress, mailingAddress, phoneNumber, preferredLanguage }: ReturnType<typeof getUserEntity>) {
   return { homeAddress, mailingAddress, phoneNumber, preferredLanguage };
+}
+
+/**
+ * Retrieves a user entity based on the provided user ID.
+ *
+ * @param id - The user ID to look up in the database.
+ * @returns The user entity if found, otherwise throws a 404 error.
+ */
+function getPersonalInformation(clientId: { Client: { PersonSINIdentification: { IdentificationID: string } } }) {
+  const parsedClientId = z.string().uuid().safeParse(clientId.Client.PersonSINIdentification.IdentificationID);
+  const personalInformationEntity = !parsedClientId.success
+    ? undefined
+    : db.personalInformation.findFirst({
+        where: { clientIdentificationID: { equals: parsedClientId.data } },
+      });
+
+  return personalInformationEntity;
 }
