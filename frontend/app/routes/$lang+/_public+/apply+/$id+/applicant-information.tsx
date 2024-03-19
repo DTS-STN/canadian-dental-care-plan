@@ -21,10 +21,15 @@ import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { formatSin } from '~/utils/sin-utils';
+import { formatSin, isValidSin } from '~/utils/sin-utils';
 import { cn } from '~/utils/tw-utils';
 
-export const applyIdParamSchema = z.string().uuid();
+export type ApplicantInformationState = {
+  socialInsuranceNumber: string;
+  firstName: string;
+  lastName: string;
+  maritalStatus: string;
+};
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -50,14 +55,43 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id } = await applyFlow.loadState({ request, params });
+  const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = applyFlow.applicantInformationSchema.safeParse(formData);
+  /**
+   * Schema applicant information.
+   */
+  const applicantInformationSchema: z.ZodType<ApplicantInformationState> = z.object({
+    socialInsuranceNumber: z
+      .string()
+      .trim()
+      .refine(isValidSin, { message: t('apply:applicant-information.error-message.valid-sin') }),
+    firstName: z
+      .string()
+      .trim()
+      .min(1, { message: t('apply:applicant-information.error-message.first-name') }),
+    lastName: z
+      .string()
+      .trim()
+      .min(1, { message: t('apply:applicant-information.error-message.last-name') }),
+    maritalStatus: z
+      .string({ errorMap: () => ({ message: t('apply:applicant-information.error-message.marital-status') }) })
+      .trim()
+      .min(1, t('apply:applicant-information.error-message.marital-status')),
+  });
+
+  const formData = await request.formData();
+  const data = {
+    socialInsuranceNumber: String(formData.get('socialInsuranceNumber') ?? ''),
+    firstName: String(formData.get('firstName') ?? ''),
+    lastName: String(formData.get('lastName') ?? ''),
+    maritalStatus: String(formData.get('maritalStatus') ?? ''),
+  };
+  const parsedDataResult = applicantInformationSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof applyFlow.applicantInformationSchema>>,
+      formData: data as Partial<z.infer<typeof applicantInformationSchema>>,
     });
   }
 
@@ -80,23 +114,6 @@ export default function ApplyFlowApplicationInformation() {
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
 
-  /**
-   * Gets an error message based on the provided internationalization (i18n) key.
-   *
-   * @param errorI18nKey - The i18n key for the error message.
-   * @returns The corresponding error message, or undefined if no key is provided.
-   */
-  function getErrorMessage(errorI18nKey?: string): string | undefined {
-    if (!errorI18nKey) return undefined;
-
-    /**
-     * The 'as any' is employed to circumvent typechecking, as the type of
-     * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
-     */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`apply:applicant-information.error-message.${errorI18nKey}` as any);
-  }
-
   const defaultValues = {
     socialInsuranceNumber: fetcher.data?.formData.socialInsuranceNumber ?? state?.socialInsuranceNumber ?? '',
     firstName: fetcher.data?.formData.firstName ?? state?.firstName ?? '',
@@ -105,9 +122,10 @@ export default function ApplyFlowApplicationInformation() {
   };
 
   const errorMessages = {
-    socialInsuranceNumber: getErrorMessage(fetcher.data?.errors.socialInsuranceNumber?._errors[0]),
-    lastName: getErrorMessage(fetcher.data?.errors.lastName?._errors[0]),
-    'input-radios-marital-status': getErrorMessage(fetcher.data?.errors.maritalStatus?._errors[0]),
+    socialInsuranceNumber: fetcher.data?.errors.socialInsuranceNumber?._errors[0],
+    firstName: fetcher.data?.errors.firstName?._errors[0],
+    lastName: fetcher.data?.errors.lastName?._errors[0],
+    'input-radios-marital-status': fetcher.data?.errors.maritalStatus?._errors[0],
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -137,7 +155,7 @@ export default function ApplyFlowApplicationInformation() {
         <fetcher.Form method="post" aria-describedby="form-instructions-sin form-instructions-info" noValidate>
           <div className="mb-8 space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
-              <InputField id="firstName" name="firstName" label={t('applicant-information.first-name')} className="w-full" required aria-labelledby="name-instructions" defaultValue={defaultValues.firstName} />
+              <InputField id="firstName" name="firstName" label={t('applicant-information.first-name')} className="w-full" required aria-labelledby="name-instructions" errorMessage={errorMessages.firstName} defaultValue={defaultValues.firstName} />
               <InputField id="lastName" name="lastName" label={t('applicant-information.last-name')} className="w-full" required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} aria-labelledby="name-instructions" />
             </div>
             <p id="name-instructions">{t('applicant-information.name-instructions')}</p>
