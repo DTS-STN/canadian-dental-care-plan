@@ -135,8 +135,6 @@ export default function AccessToDentalInsuranceQuestion() {
   const [provincialProgramOption, setProvincialProgramOption] = useState(state?.provincialTerritorialSocialProgram);
   const errorSummaryId = 'error-summary';
 
-  console.log('state: ', state);
-
   const sortedRegions = regions.sort((a, b) => {
     const nameA = i18n.language === 'en' ? a.nameEn : a.nameFr;
     const nameB = i18n.language === 'en' ? b.nameEn : b.nameFr;
