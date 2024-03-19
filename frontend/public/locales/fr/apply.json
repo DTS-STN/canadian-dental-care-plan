@@ -23,7 +23,7 @@
     "preferred-language": "Quelle langue officielle de communication préférez-vous?",
     "email": "Adresse courriel",
     "confirm-email": "Confirmer l'adresse courriel",
-    "future-email-note": "(FR) Add your email to receive future communication from Service Canada and Health Canada for the purpose of the Canadian Dental Care Plan.",
+    "future-email-note": "Ajoutez votre courriel pour recevoir de futures communications de Service Canada et de Santé Canada aux fins du Régime canadien de soins dentaires.",
     "future-email": "Adresse courriel (facultatif)",
     "future-confirm-email": "Confirmer l'adresse courriel (facultatif)",
     "back": "Retour",
@@ -421,16 +421,16 @@
     },
     "home-address": {
       "header": "Adresse du domicile",
-      "use-mailing-address": "L'adresse postale est identique à l'adresse à la maison"
+      "use-mailing-address": "Mon adresse postale est la même que celle de mon domicile"
     },
     "address-field": {
       "address": "Adresse",
-      "address-note": "Indiquez le numéro et le nom de la rue",
-      "apartment": "Appartement, bureau, etc. (facultatif)",
+      "address-note": "Inclure le numéro de rue et le nom",
+      "apartment": "Appartement, suite, etc. (facultatif)",
       "country": "Pays",
       "province": "Province, territoire, État ou région",
       "city": "Ville ou municipalité",
-      "postal-code": "Code postal ou code ZIP",
+      "postal-code": "Code postal/code ZIP",
       "select-one": "Choisissez une option"
     },
     "back": "Retour",
