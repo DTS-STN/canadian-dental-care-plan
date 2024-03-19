@@ -13,6 +13,7 @@ import pageIds from '../../../page-ids.json';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
+import { Progress } from '~/components/progress';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { parseDateString } from '~/utils/date-utils';
@@ -129,200 +130,208 @@ export default function ReviewInformation() {
   const isSubmitting = fetcher.state !== 'idle';
 
   return (
-    <div className="max-w-prose">
-      <p className="my-4 text-lg">{t('apply:review-information.read-carefully')}</p>
-      <h2 className="text-2xl font-semibold">{t('apply:review-information.page-sub-title')}</h2>
-      <dl>
-        <DescriptionListItem term={t('apply:review-information.full-name-title')}>
-          {`${userInfo.firstName} ${userInfo.lastName}`}
-          <p className="mt-4">
-            <InlineLink id="change-full-name" to="/">
-              {t('apply:review-information.full-name-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('apply:review-information.dob-title')}>
-          {userInfo.birthday}
-          <p className="mt-4">
-            <InlineLink id="change-date-of-birth" to="/">
-              {t('apply:review-information.dob-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('apply:review-information.sin-title')}>
-          {formatSin(userInfo.sin)}
-          <p className="mt-4">
-            <InlineLink id="change-sin" to="/">
-              {t('apply:review-information.sin-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('apply:review-information.martial-title')}>
-          {userInfo.martialStatus}
-          <p className="mt-4">
-            <InlineLink id="change-martial-status" to="/">
-              {t('apply:review-information.martial-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
-      </dl>
-      <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.spouse-title')}</h2>
-      <dl>
-        <DescriptionListItem term={t('apply:review-information.full-name-title')}>
-          {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
-          <p className="mt-4">
-            <InlineLink id="change-spouse-full-name" to="/">
-              {t('apply:review-information.full-name-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('apply:review-information.dob-title')}>
-          {spouseInfo.birthday}
-          <p className="mt-4">
-            <InlineLink id="change-spouse-date-of-birth" to="/">
-              {t('apply:review-information.dob-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('apply:review-information.sin-title')}>
-          {formatSin(spouseInfo.sin)}
-          <p className="mt-4">
-            <InlineLink id="change-spouse-sin" to="/">
-              {t('apply:review-information.sin-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
-        <DescriptionListItem term="Consent">
-          {spouseInfo.consent ? 'My spouse or common-law partner is aware and has consented to sharing of their personal information.' : 'My spouse or common-law partner is aware and has not consented to sharing of their personal information.'}
-        </DescriptionListItem>
-      </dl>
-      <h2 className="mt-2 text-2xl font-semibold ">{t('apply:review-information.personal-info-title')}</h2>
-      <dl className="sm: grid grid-cols-1 sm:grid-cols-2">
-        <DescriptionListItem term={t('apply:review-information.phone-title')}>
-          {userInfo.phoneNumber}
-          <p className="mt-4">
-            <InlineLink id="change-phone-number" to="/">
-              {t('apply:review-information.phone-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('apply:review-information.alt-phone-title')}>
-          {userInfo.altPhoneNumber}
-          <p className="mt-4">
-            <InlineLink id="change-alternate-phone-number" to="/">
-              {t('apply:review-information.alt-phone-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('apply:review-information.mailing-title')}>
-          <Address
-            address={mailingAddressInfo.address}
-            city={mailingAddressInfo.city}
-            provinceState={i18n.language === 'en' ? mailingAddressInfo.province?.nameEn : mailingAddressInfo.province?.nameFr}
-            postalZipCode={mailingAddressInfo.postalCode}
-            country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
-          />
-          <p className="mt-4">
-            <InlineLink id="change-mailing-address" to="/">
-              {t('apply:review-information.mailing-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('apply:review-information.home-title')}>
-          <Address
-            address={homeAddressInfo.address}
-            city={homeAddressInfo.city}
-            provinceState={i18n.language === 'en' ? homeAddressInfo.province?.nameEn : homeAddressInfo.province?.nameFr}
-            postalZipCode={homeAddressInfo.postalCode}
-            country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
-          />
-          <p className="mt-4">
-            <InlineLink id="change-home-address" to="/">
-              {t('apply:review-information.home-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
-      </dl>
-      <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.comm-title')}</h2>
-      <dl>
-        <DescriptionListItem term={t('apply:review-information.comm-pref-title')}>
-          {userInfo.communicationPreference === 'email' ? (
-            <div className="grid grid-cols-1">
-              <p className="mt-4">{t('apply:review-information.comm-electronic')}</p> <span>{userInfo.email}</span>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1">
-              <p className="mt-4">{t('apply:review-information.comm-mail')}</p> <span>{t('apply:review-information.home-title')}</span>
-            </div>
-          )}
-          <p className="mt-4">
-            <InlineLink id="change-communication-preference" to="/">
-              {t('apply:review-information.comm-pref-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('apply:review-information.lang-pref-title')}>
-          {getNameByLanguage(i18n.language, preferredLanguage)}
-          <p className="mt-4">
-            <InlineLink id="change-language-preference" to="/">
-              {t('apply:review-information.lang-pref-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
-      </dl>
-      <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.dental-title')}</h2>
-      <dl>
-        <DescriptionListItem term={t('apply:review-information.dental-private-title')}>
-          {t('apply:review-information.dental-insurance-has-access')}
-          {dentalInsurance === 'yes' ? t('apply:review-information.yes') : t('apply:review-information.no')}
-          <p className="mt-4">
-            <InlineLink id="change-access-dental" to="/">
-              {t('apply:review-information.dental-private-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
-        <DescriptionListItem term={t('apply:review-information.dental-public-title')}>
-          {dentalBenefit.federalBenefit.access === 'yes' ? (
-            <div>
-              <span>{t('apply:review-information.dental-has-access')}</span>
-              <ul className="ml-6 list-disc">
-                <li>{dentalBenefit.federalBenefit.benefit}</li>
-              </ul>
-            </div>
-          ) : (
-            t('apply:review-information.dental-federal-no-access')
-          )}
-          {dentalBenefit.provTerrBenefit.access === 'yes' ? (
-            <div>
-              <span>{t('apply:review-information.dental-has-access')}</span>
-              <ul className="ml-6 list-disc">
-                <li>{dentalBenefit.provTerrBenefit.benefit}</li>
-              </ul>
-            </div>
-          ) : (
-            t('apply:review-information.dental-provincial-no-access')
-          )}
-          <p className="mt-4">
-            <InlineLink id="change-dental-benefits" to="/">
-              {t('apply:review-information.dental-public-change')}
-            </InlineLink>
-          </p>
-        </DescriptionListItem>
-      </dl>
-      <h2 className="mb-5 mt-8 text-2xl font-semibold">{t('apply:review-information.submit-app-title')}</h2>
-      <p className="mb-4">{t('apply:review-information.submit-p-proceed')}</p>
-      <p className="mb-4">{t('apply:review-information.submit-p-false-info')}</p>
-      <fetcher.Form method="post" className="flex flex-wrap items-center gap-3">
-        <ButtonLink to={`/apply/${id}/exit-application`} variant="alternative" disabled={isSubmitting}>
-          {t('apply:review-information.exit-button')}
-          <FontAwesomeIcon icon={faX} className="ms-3 block size-4" />
-        </ButtonLink>
-        <Button id="confirm-button" variant="green" disabled={isSubmitting}>
-          {t('apply:review-information.submit-button')}
-          {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
-        </Button>
-      </fetcher.Form>
-    </div>
+    <>
+      <div className="my-6 sm:my-8">
+        <p id="progress-label" className="sr-only mb-2">
+          {t('apply:progress.label')}
+        </p>
+        <Progress aria-labelledby="progress-label" value={100} size="lg" />
+      </div>
+      <div className="max-w-prose">
+        <p className="my-4 text-lg">{t('apply:review-information.read-carefully')}</p>
+        <h2 className="text-2xl font-semibold">{t('apply:review-information.page-sub-title')}</h2>
+        <dl>
+          <DescriptionListItem term={t('apply:review-information.full-name-title')}>
+            {`${userInfo.firstName} ${userInfo.lastName}`}
+            <p className="mt-4">
+              <InlineLink id="change-full-name" to="/">
+                {t('apply:review-information.full-name-change')}
+              </InlineLink>
+            </p>
+          </DescriptionListItem>
+          <DescriptionListItem term={t('apply:review-information.dob-title')}>
+            {userInfo.birthday}
+            <p className="mt-4">
+              <InlineLink id="change-date-of-birth" to="/">
+                {t('apply:review-information.dob-change')}
+              </InlineLink>
+            </p>
+          </DescriptionListItem>
+          <DescriptionListItem term={t('apply:review-information.sin-title')}>
+            {formatSin(userInfo.sin)}
+            <p className="mt-4">
+              <InlineLink id="change-sin" to="/">
+                {t('apply:review-information.sin-change')}
+              </InlineLink>
+            </p>
+          </DescriptionListItem>
+          <DescriptionListItem term={t('apply:review-information.martial-title')}>
+            {userInfo.martialStatus}
+            <p className="mt-4">
+              <InlineLink id="change-martial-status" to="/">
+                {t('apply:review-information.martial-change')}
+              </InlineLink>
+            </p>
+          </DescriptionListItem>
+        </dl>
+        <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.spouse-title')}</h2>
+        <dl>
+          <DescriptionListItem term={t('apply:review-information.full-name-title')}>
+            {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
+            <p className="mt-4">
+              <InlineLink id="change-spouse-full-name" to="/">
+                {t('apply:review-information.full-name-change')}
+              </InlineLink>
+            </p>
+          </DescriptionListItem>
+          <DescriptionListItem term={t('apply:review-information.dob-title')}>
+            {spouseInfo.birthday}
+            <p className="mt-4">
+              <InlineLink id="change-spouse-date-of-birth" to="/">
+                {t('apply:review-information.dob-change')}
+              </InlineLink>
+            </p>
+          </DescriptionListItem>
+          <DescriptionListItem term={t('apply:review-information.sin-title')}>
+            {formatSin(spouseInfo.sin)}
+            <p className="mt-4">
+              <InlineLink id="change-spouse-sin" to="/">
+                {t('apply:review-information.sin-change')}
+              </InlineLink>
+            </p>
+          </DescriptionListItem>
+          <DescriptionListItem term="Consent">
+            {spouseInfo.consent ? 'My spouse or common-law partner is aware and has consented to sharing of their personal information.' : 'My spouse or common-law partner is aware and has not consented to sharing of their personal information.'}
+          </DescriptionListItem>
+        </dl>
+        <h2 className="mt-2 text-2xl font-semibold ">{t('apply:review-information.personal-info-title')}</h2>
+        <dl className="sm: grid grid-cols-1 sm:grid-cols-2">
+          <DescriptionListItem term={t('apply:review-information.phone-title')}>
+            {userInfo.phoneNumber}
+            <p className="mt-4">
+              <InlineLink id="change-phone-number" to="/">
+                {t('apply:review-information.phone-change')}
+              </InlineLink>
+            </p>
+          </DescriptionListItem>
+          <DescriptionListItem term={t('apply:review-information.alt-phone-title')}>
+            {userInfo.altPhoneNumber}
+            <p className="mt-4">
+              <InlineLink id="change-alternate-phone-number" to="/">
+                {t('apply:review-information.alt-phone-change')}
+              </InlineLink>
+            </p>
+          </DescriptionListItem>
+          <DescriptionListItem term={t('apply:review-information.mailing-title')}>
+            <Address
+              address={mailingAddressInfo.address}
+              city={mailingAddressInfo.city}
+              provinceState={i18n.language === 'en' ? mailingAddressInfo.province?.nameEn : mailingAddressInfo.province?.nameFr}
+              postalZipCode={mailingAddressInfo.postalCode}
+              country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
+            />
+            <p className="mt-4">
+              <InlineLink id="change-mailing-address" to="/">
+                {t('apply:review-information.mailing-change')}
+              </InlineLink>
+            </p>
+          </DescriptionListItem>
+          <DescriptionListItem term={t('apply:review-information.home-title')}>
+            <Address
+              address={homeAddressInfo.address}
+              city={homeAddressInfo.city}
+              provinceState={i18n.language === 'en' ? homeAddressInfo.province?.nameEn : homeAddressInfo.province?.nameFr}
+              postalZipCode={homeAddressInfo.postalCode}
+              country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
+            />
+            <p className="mt-4">
+              <InlineLink id="change-home-address" to="/">
+                {t('apply:review-information.home-change')}
+              </InlineLink>
+            </p>
+          </DescriptionListItem>
+        </dl>
+        <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.comm-title')}</h2>
+        <dl>
+          <DescriptionListItem term={t('apply:review-information.comm-pref-title')}>
+            {userInfo.communicationPreference === 'email' ? (
+              <div className="grid grid-cols-1">
+                <p className="mt-4">{t('apply:review-information.comm-electronic')}</p> <span>{userInfo.email}</span>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1">
+                <p className="mt-4">{t('apply:review-information.comm-mail')}</p> <span>{t('apply:review-information.home-title')}</span>
+              </div>
+            )}
+            <p className="mt-4">
+              <InlineLink id="change-communication-preference" to="/">
+                {t('apply:review-information.comm-pref-change')}
+              </InlineLink>
+            </p>
+          </DescriptionListItem>
+          <DescriptionListItem term={t('apply:review-information.lang-pref-title')}>
+            {getNameByLanguage(i18n.language, preferredLanguage)}
+            <p className="mt-4">
+              <InlineLink id="change-language-preference" to="/">
+                {t('apply:review-information.lang-pref-change')}
+              </InlineLink>
+            </p>
+          </DescriptionListItem>
+        </dl>
+        <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.dental-title')}</h2>
+        <dl>
+          <DescriptionListItem term={t('apply:review-information.dental-private-title')}>
+            {t('apply:review-information.dental-insurance-has-access')}
+            {dentalInsurance === 'yes' ? t('apply:review-information.yes') : t('apply:review-information.no')}
+            <p className="mt-4">
+              <InlineLink id="change-access-dental" to="/">
+                {t('apply:review-information.dental-private-change')}
+              </InlineLink>
+            </p>
+          </DescriptionListItem>
+          <DescriptionListItem term={t('apply:review-information.dental-public-title')}>
+            {dentalBenefit.federalBenefit.access === 'yes' ? (
+              <div>
+                <span>{t('apply:review-information.dental-has-access')}</span>
+                <ul className="ml-6 list-disc">
+                  <li>{dentalBenefit.federalBenefit.benefit}</li>
+                </ul>
+              </div>
+            ) : (
+              t('apply:review-information.dental-federal-no-access')
+            )}
+            {dentalBenefit.provTerrBenefit.access === 'yes' ? (
+              <div>
+                <span>{t('apply:review-information.dental-has-access')}</span>
+                <ul className="ml-6 list-disc">
+                  <li>{dentalBenefit.provTerrBenefit.benefit}</li>
+                </ul>
+              </div>
+            ) : (
+              t('apply:review-information.dental-provincial-no-access')
+            )}
+            <p className="mt-4">
+              <InlineLink id="change-dental-benefits" to="/">
+                {t('apply:review-information.dental-public-change')}
+              </InlineLink>
+            </p>
+          </DescriptionListItem>
+        </dl>
+        <h2 className="mb-5 mt-8 text-2xl font-semibold">{t('apply:review-information.submit-app-title')}</h2>
+        <p className="mb-4">{t('apply:review-information.submit-p-proceed')}</p>
+        <p className="mb-4">{t('apply:review-information.submit-p-false-info')}</p>
+        <fetcher.Form method="post" className="flex flex-wrap items-center gap-3">
+          <ButtonLink to={`/apply/${id}/exit-application`} variant="alternative" disabled={isSubmitting}>
+            {t('apply:review-information.exit-button')}
+            <FontAwesomeIcon icon={faX} className="ms-3 block size-4" />
+          </ButtonLink>
+          <Button id="confirm-button" variant="green" disabled={isSubmitting}>
+            {t('apply:review-information.submit-button')}
+            {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
+          </Button>
+        </fetcher.Form>
+      </div>
+    </>
   );
 }
 

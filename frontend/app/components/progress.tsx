@@ -14,8 +14,8 @@ const sizes = {
 
 const variants = {
   blue: 'bg-blue-600',
-  dark: 'bg-gray-600',
-  default: 'bg-green-600',
+  default: 'bg-gray-600',
+  green: 'bg-green-600',
   red: 'bg-red-500',
   yellow: 'bg-yellow-400',
 };

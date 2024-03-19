@@ -14,6 +14,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
+import { Progress } from '~/components/progress';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
@@ -235,38 +236,46 @@ export default function ApplyFlowCommunicationPreferencePage() {
   ];
 
   return (
-    <div className="max-w-prose">
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <p className="mb-6">{t('apply:communication-preference.note')}</p>
-      <fetcher.Form method="post" noValidate>
-        <div className="mb-8 space-y-6">
-          {preferredLanguages.length > 0 && (
-            <InputRadios
-              id="preferred-language"
-              name="preferredLanguage"
-              legend={t('apply:communication-preference.preferred-language')}
-              options={preferredLanguages.map((language) => ({
-                defaultChecked: state?.preferredLanguage === language.id,
-                children: getNameByLanguage(i18n.language, language),
-                value: language.id,
-              }))}
-              errorMessage={errorMessages.preferredLanguage}
-              required
-            />
-          )}
-          {preferredCommunicationMethods.length > 0 && <InputRadios id="preferred-methods" legend={t('apply:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages.preferredMethod} required />}
-        </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/personal-information`} disabled={isSubmitting}>
-            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-            {t('apply:communication-preference.back')}
-          </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-            {t('apply:communication-preference.continue')}
-            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-          </Button>
-        </div>
-      </fetcher.Form>
-    </div>
+    <>
+      <div className="my-6 sm:my-8">
+        <p id="progress-label" className="sr-only mb-2">
+          {t('apply:progress.label')}
+        </p>
+        <Progress aria-labelledby="progress-label" value={70} size="lg" />
+      </div>
+      <div className="max-w-prose">
+        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <p className="mb-6">{t('apply:communication-preference.note')}</p>
+        <fetcher.Form method="post" noValidate>
+          <div className="mb-8 space-y-6">
+            {preferredLanguages.length > 0 && (
+              <InputRadios
+                id="preferred-language"
+                name="preferredLanguage"
+                legend={t('apply:communication-preference.preferred-language')}
+                options={preferredLanguages.map((language) => ({
+                  defaultChecked: state?.preferredLanguage === language.id,
+                  children: getNameByLanguage(i18n.language, language),
+                  value: language.id,
+                }))}
+                errorMessage={errorMessages.preferredLanguage}
+                required
+              />
+            )}
+            {preferredCommunicationMethods.length > 0 && <InputRadios id="preferred-methods" legend={t('apply:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages.preferredMethod} required />}
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <ButtonLink id="back-button" to={`/apply/${id}/personal-information`} disabled={isSubmitting}>
+              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+              {t('apply:communication-preference.back')}
+            </ButtonLink>
+            <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+              {t('apply:communication-preference.continue')}
+              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+            </Button>
+          </div>
+        </fetcher.Form>
+      </div>
+    </>
   );
 }
