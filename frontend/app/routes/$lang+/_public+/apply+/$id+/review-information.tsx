@@ -35,29 +35,34 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  //TODO: Get User/apply form information
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
+  const maritalStatuses = await getLookupService().getAllMaritalStatuses();
+  const provincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
+
   const parsedDateOfBirthString = parseDateString(state.dateOfBirth ?? '');
   const dateOfBirth = new Date(Number.parseInt(parsedDateOfBirthString.year ?? ''), Number.parseInt(parsedDateOfBirthString.month ?? ''), Number.parseInt(parsedDateOfBirthString.day ?? ''));
-  const partnerDob = { year: state.partnerInformation?.year ?? 2024, month: state.partnerInformation?.month ?? 1, day: state.partnerInformation?.day ?? 1 };
+  const partnerDob = new Date(state.partnerInformation?.year ?? 0, state.partnerInformation?.month ?? 0, state.partnerInformation?.day ?? 0);
+
   // Getting province by Id
   const allRegions = await getLookupService().getAllRegions();
   const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
   const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
+
   // Getting Country by Id
   const allCountries = await getLookupService().getAllCountries();
   const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation?.mailingCountry);
   const countryHome = allCountries.find((country) => country.countryId === state.personalInformation?.homeCountry);
+
   if (!countryMailing) {
     throw new Error(`Unexpected mailing address country: ${state.personalInformation?.mailingCountry}`);
   }
   if (!countryHome) {
     throw new Error(`Unexpected home address country: ${state.personalInformation?.homeCountry}`);
   }
+
   const userInfo = {
-    firstName: 'John',
-    id: '00000000-0000-0000-0000-000000000000',
+    firstName: state.applicantInformation?.firstName,
     lastName: state.applicantInformation?.lastName,
     phoneNumber: state.personalInformation?.phoneNumber,
     altPhoneNumber: state.personalInformation?.phoneNumberAlt,
@@ -69,13 +74,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     communicationPreference: state.communicationPreferences?.preferredMethod,
   };
   const spouseInfo = {
-    firstName: 'Phil',
-    id: '00000000-0000-0000-0000-000000000001',
+    firstName: state.partnerInformation?.firstName,
     lastName: state.partnerInformation?.lastName,
-    phoneNumber: '(754) 628-4776',
-    birthday: new Date(partnerDob.year, partnerDob.month, partnerDob.day).toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' }),
-    sin: '123456789',
-    consent: state.partnerInformation?.confirm === 'on' ? true : false,
+    birthday: partnerDob.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' }),
+    sin: state.partnerInformation?.socialInsuranceNumber,
+    consent: state.partnerInformation?.confirm === 'on',
   };
   const preferredLanguage = (await getLookupService().getPreferredLanguage(userInfo.preferredLanguage)) ?? { id: 'en', nameEn: 'English', nameFr: 'Anglais' };
   const mailingAddressInfo = {
@@ -103,6 +106,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     },
     provTerrBenefit: {
       access: state.dentalBenefit?.provincialTerritorialBenefit,
+      province: state.dentalBenefit?.province,
       benefit: state.dentalBenefit?.provincialTerritorialSocialProgram,
     },
   };
@@ -110,7 +114,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:review-information.page-title') }) };
 
-  return json({ id, userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, meta });
+  return json({ id, userInfo, spouseInfo, maritalStatuses, preferredLanguage, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, meta });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -125,7 +129,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function ReviewInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { id, userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit } = useLoaderData<typeof loader>();
+  const { id, userInfo, spouseInfo, maritalStatuses, preferredLanguage, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -166,7 +170,7 @@ export default function ReviewInformation() {
             </p>
           </DescriptionListItem>
           <DescriptionListItem term={t('apply:review-information.martial-title')}>
-            {userInfo.martialStatus}
+            {i18n.language === 'fr' ? maritalStatuses.find((x) => x.code === userInfo.martialStatus)?.nameFr : maritalStatuses.find((x) => x.code === userInfo.martialStatus)?.nameEn}
             <p className="mt-4">
               <InlineLink id="change-martial-status" to="/">
                 {t('apply:review-information.martial-change')}
@@ -174,36 +178,38 @@ export default function ReviewInformation() {
             </p>
           </DescriptionListItem>
         </dl>
-        <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.spouse-title')}</h2>
-        <dl>
-          <DescriptionListItem term={t('apply:review-information.full-name-title')}>
-            {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
-            <p className="mt-4">
-              <InlineLink id="change-spouse-full-name" to="/">
-                {t('apply:review-information.full-name-change')}
-              </InlineLink>
-            </p>
-          </DescriptionListItem>
-          <DescriptionListItem term={t('apply:review-information.dob-title')}>
-            {spouseInfo.birthday}
-            <p className="mt-4">
-              <InlineLink id="change-spouse-date-of-birth" to="/">
-                {t('apply:review-information.dob-change')}
-              </InlineLink>
-            </p>
-          </DescriptionListItem>
-          <DescriptionListItem term={t('apply:review-information.sin-title')}>
-            {formatSin(spouseInfo.sin)}
-            <p className="mt-4">
-              <InlineLink id="change-spouse-sin" to="/">
-                {t('apply:review-information.sin-change')}
-              </InlineLink>
-            </p>
-          </DescriptionListItem>
-          <DescriptionListItem term="Consent">
-            {spouseInfo.consent ? 'My spouse or common-law partner is aware and has consented to sharing of their personal information.' : 'My spouse or common-law partner is aware and has not consented to sharing of their personal information.'}
-          </DescriptionListItem>
-        </dl>
+        {['MARRIED', 'COMMONLAW'].includes(userInfo.martialStatus ?? '') && (
+          <>
+            <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.spouse-title')}</h2>
+            <dl>
+              <DescriptionListItem term={t('apply:review-information.full-name-title')}>
+                {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
+                <p className="mt-4">
+                  <InlineLink id="change-spouse-full-name" to="/">
+                    {t('apply:review-information.full-name-change')}
+                  </InlineLink>
+                </p>
+              </DescriptionListItem>
+              <DescriptionListItem term={t('apply:review-information.dob-title')}>
+                {spouseInfo.birthday}
+                <p className="mt-4">
+                  <InlineLink id="change-spouse-date-of-birth" to="/">
+                    {t('apply:review-information.dob-change')}
+                  </InlineLink>
+                </p>
+              </DescriptionListItem>
+              <DescriptionListItem term={t('apply:review-information.sin-title')}>
+                {formatSin(spouseInfo.sin ?? '')}
+                <p className="mt-4">
+                  <InlineLink id="change-spouse-sin" to="/">
+                    {t('apply:review-information.sin-change')}
+                  </InlineLink>
+                </p>
+              </DescriptionListItem>
+              <DescriptionListItem term={t('apply:review-information.spouse-consent.label')}>{spouseInfo.consent ? t('apply:review-information.spouse-consent.yes') : t('apply:review-information.spouse-consent.no')}</DescriptionListItem>
+            </dl>
+          </>
+        )}
         <h2 className="mt-2 text-2xl font-semibold ">{t('apply:review-information.personal-info-title')}</h2>
         <dl className="sm: grid grid-cols-1 sm:grid-cols-2">
           <DescriptionListItem term={t('apply:review-information.phone-title')}>
@@ -229,6 +235,7 @@ export default function ReviewInformation() {
               provinceState={i18n.language === 'en' ? mailingAddressInfo.province?.nameEn : mailingAddressInfo.province?.nameFr}
               postalZipCode={mailingAddressInfo.postalCode}
               country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
+              altFormat={true}
             />
             <p className="mt-4">
               <InlineLink id="change-mailing-address" to="/">
@@ -243,6 +250,7 @@ export default function ReviewInformation() {
               provinceState={i18n.language === 'en' ? homeAddressInfo.province?.nameEn : homeAddressInfo.province?.nameFr}
               postalZipCode={homeAddressInfo.postalCode}
               country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
+              altFormat={true}
             />
             <p className="mt-4">
               <InlineLink id="change-home-address" to="/">
@@ -280,39 +288,43 @@ export default function ReviewInformation() {
         </dl>
         <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.dental-title')}</h2>
         <dl>
-          <DescriptionListItem term={t('apply:review-information.dental-private-title')}>
+          <DescriptionListItem term={t('apply:review-information.dental-insurance-title')}>
             {t('apply:review-information.dental-insurance-has-access')}
             {dentalInsurance === 'yes' ? t('apply:review-information.yes') : t('apply:review-information.no')}
             <p className="mt-4">
               <InlineLink id="change-access-dental" to="/">
-                {t('apply:review-information.dental-private-change')}
+                {t('apply:review-information.dental-insurance-change')}
               </InlineLink>
             </p>
           </DescriptionListItem>
-          <DescriptionListItem term={t('apply:review-information.dental-public-title')}>
+          <DescriptionListItem term={t('apply:review-information.dental-benefit-title')}>
             {dentalBenefit.federalBenefit.access === 'yes' ? (
               <div>
-                <span>{t('apply:review-information.dental-has-access')}</span>
+                <span>{t('apply:review-information.dental-benefit-has-access')}</span>
                 <ul className="ml-6 list-disc">
                   <li>{dentalBenefit.federalBenefit.benefit}</li>
                 </ul>
               </div>
             ) : (
-              t('apply:review-information.dental-federal-no-access')
+              t('apply:review-information.dental-benefit-federal-no-access')
             )}
             {dentalBenefit.provTerrBenefit.access === 'yes' ? (
               <div>
-                <span>{t('apply:review-information.dental-has-access')}</span>
+                <span>{t('apply:review-information.dental-benefit-has-access')}</span>
                 <ul className="ml-6 list-disc">
-                  <li>{dentalBenefit.provTerrBenefit.benefit}</li>
+                  <li>
+                    {i18n.language === 'fr'
+                      ? provincialTerritorialSocialPrograms.filter((program) => program.provinceTerritoryStateId === dentalBenefit.provTerrBenefit.province).find((x) => x.id === dentalBenefit.provTerrBenefit.benefit)?.nameFr
+                      : provincialTerritorialSocialPrograms.filter((program) => program.provinceTerritoryStateId === dentalBenefit.provTerrBenefit.province).find((x) => x.id === dentalBenefit.provTerrBenefit.benefit)?.nameEn}
+                  </li>
                 </ul>
               </div>
             ) : (
-              t('apply:review-information.dental-provincial-no-access')
+              t('apply:review-information.dental-benefit-provincial-no-access')
             )}
             <p className="mt-4">
               <InlineLink id="change-dental-benefits" to="/">
-                {t('apply:review-information.dental-public-change')}
+                {t('apply:review-information.dental-benefit-change')}
               </InlineLink>
             </p>
           </DescriptionListItem>
