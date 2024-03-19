@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { Form, useActionData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -14,6 +14,7 @@ import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { UserinfoToken } from '~/utils/raoidc-utils.server';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { isValidSin } from '~/utils/sin-utils';
@@ -34,9 +35,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const meta = { title: t('gcweb:meta.title.template', { title: t('stubSinEditor:index.page-title') }) };
   const { SHOW_SIN_EDIT_STUB_PAGE } = getEnv();
 
-  //const sessionService = await getSessionService();
-  //const session = await sessionService.getSession(request);
-
   if (!SHOW_SIN_EDIT_STUB_PAGE) {
     throw new Response(null, { status: 404 });
   }
@@ -49,7 +47,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const sinToStubSchema = z.object({
     socialInsuranceNumberToStub: z.string().refine(isValidSin, { message: 'valid-sin' }),
   });
-
+  //046454286
   const formData = Object.fromEntries(await request.formData());
   const parsedDataResult = sinToStubSchema.safeParse(formData);
 
@@ -59,6 +57,9 @@ export async function action({ request }: ActionFunctionArgs) {
       formData: formData as Partial<z.infer<typeof sinToStubSchema>>,
     });
   }
+
+  const sinToMock = parsedDataResult.data.socialInsuranceNumberToStub;
+
   const idToken = {
     iss: 'GC-ECAS',
     jti: '71b080e9-2524-4572-a085-a53e63a98116',
@@ -71,7 +72,26 @@ export async function action({ request }: ActionFunctionArgs) {
     locale: 'en-CA',
   };
 
+  const userinfoTokenPayload = {
+    aud: 'CDCP',
+    birthdate: '2000-01-01',
+    iss: 'GC-ECAS-MOCK',
+    locale: 'en-CA',
+    sid: '00000000-0000-0000-0000-000000000000',
+    sin: sinToMock,
+    sub: '00000000-0000-0000-0000-000000000000',
+  };
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  if (!session.has('userInfoToken')) {
+    console.debug('NO USERINFO');
+    session.set('userInfoToken', userinfoTokenPayload);
+  } else {
+    userInfoToken.sin = sinToMock;
+
+    session.set('userInfoToken', userInfoToken);
+  }
   session.set('idToken', idToken);
+
   return redirectWithLocale(request, `/`, {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),
@@ -117,7 +137,7 @@ export default function StubSinEditorPage() {
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post" noValidate className="space-y-6">
-        <InputField id="socialInsuranceNumberToStub" name="socialInsuranceNumberToStub" label={t('stubSinEditor:index.edit-id-field')} required inputMode="numeric" pattern="\d{9}" placeholder="000-000-000" minLength={9} maxLength={9} />
+        <InputField id="socialInsuranceNumberToStub" name="socialInsuranceNumberToStub" label={t('stubSinEditor:index.edit-id-field')} required inputMode="numeric" pattern="\d{9}" placeholder="000000000" minLength={9} maxLength={9} />
         <Button variant="primary" id="continue-button">
           {t('stubSinEditor:index.edit-id-button')}
         </Button>
