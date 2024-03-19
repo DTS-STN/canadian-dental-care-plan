@@ -18,7 +18,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
-import { toSentenceCase } from '~/utils/string-utils';
 
 export const applyIdParamSchema = z.string().uuid();
 
@@ -37,12 +36,23 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { state } = await applyFlow.loadState({ request, params });
   const locale = await getLocale(request);
 
-  const allBenefitsAndPrograms = [...(await getLookupService().getAllFederalSocialPrograms()), ...(await getLookupService().getAllProvincialTerritorialSocialPrograms())];
-  const selectedBenefits = allBenefitsAndPrograms.filter((obj) => obj.id === state.dentalBenefit?.provincialTerritorialSocialProgram).map((obj) => obj[locale === 'en' ? 'nameEn' : 'nameFr']);
+  const allProvincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
+  const selectedBenefits = allProvincialTerritorialSocialPrograms
+    .filter((obj) => obj.id === state.dentalBenefit?.provincialTerritorialSocialProgram)
+    .map((obj) => getNameByLanguage(locale, obj))
+    .join(', ');
 
   const preferredLanguages = await getLookupService().getAllPreferredLanguages();
   const preferredLanguageDict = preferredLanguages.find((obj) => obj.id === state.communicationPreferences?.preferredLanguage.toLocaleLowerCase());
   const preferredLanguage = getNameByLanguage(locale, preferredLanguageDict!);
+
+  const maritalStatuses = await getLookupService().getAllMaritalStatuses();
+  const maritalStatusDict = maritalStatuses.find((obj) => obj.code === state.applicantInformation?.maritalStatus)!;
+  const maritalStatus = getNameByLanguage(locale, maritalStatusDict!);
+
+  const communicationPreferences = await getLookupService().getAllPreferredCommunicationMethods();
+  const communicationPreferenceDict = communicationPreferences.find((obj) => obj.id === state.communicationPreferences?.preferredMethod);
+  const communicationPreference = getNameByLanguage(locale, communicationPreferenceDict!);
 
   const userInfo = {
     firstName: state.applicantInformation?.firstName,
@@ -52,9 +62,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     preferredLanguage: preferredLanguage,
     birthday: new Date(state.dateOfBirth ?? '').toLocaleDateString(`${locale}-ca`, { year: 'numeric', month: 'long', day: 'numeric' }),
     sin: state.applicantInformation?.socialInsuranceNumber,
-    martialStatus: state.applicantInformation?.maritalStatus,
+    martialStatus: maritalStatus,
     email: state.communicationPreferences?.email,
-    communicationPreference: state.communicationPreferences?.preferredMethod ?? 'email',
+    communicationPreference: communicationPreference,
   };
 
   // TODO spouse date of birth will use DatePicker component
@@ -82,7 +92,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   };
 
   const dentalInsurance = {
-    acessToDentalInsurance: state.dentalInsurance?.dentalInsurance === 'yes',
+    acessToDentalInsurance: state.dentalInsurance === 'yes',
     selectedBenefits,
   };
 
@@ -153,7 +163,7 @@ export default function ApplyFlowConfirm() {
         <li className="my-1 capitalize">{t('confirm.full-name', { name: `${userInfo.firstName} ${userInfo.lastName}` })}</li>
         <li className="my-1">{t('confirm.dob', { dob: userInfo.birthday })}</li>
         <li className="my-1">{t('confirm.sin', { sin: formatSin(userInfo.sin ?? '') })}</li>
-        <li className="my-1">{t('confirm.marital-status', { status: toSentenceCase(userInfo.martialStatus ?? '') })}</li>
+        <li className="my-1">{t('confirm.marital-status', { status: userInfo.martialStatus })}</li>
       </UnorderedList>
       <UnorderedList term={t('confirm.spouse-info')}>
         <li className="my-1 capitalize">{t('confirm.full-name', { name: `${spouseInfo.firstName} ${spouseInfo.lastName}` })}</li>
@@ -173,7 +183,7 @@ export default function ApplyFlowConfirm() {
       </UnorderedList>
       <UnorderedList term={t('confirm.dental-insurance')}>
         <li className="my-1">{t('confirm.dental-private', { access: dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no') })}</li>
-        <li className="my-1">{t('confirm.dental-public', { access: dentalInsurance.selectedBenefits.join(' ') })}</li>
+        <li className="my-1">{t('confirm.dental-public', { access: dentalInsurance.selectedBenefits })}</li>
       </UnorderedList>
 
       <button
