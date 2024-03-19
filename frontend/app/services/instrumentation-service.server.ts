@@ -32,6 +32,7 @@ import { SpanExporter } from '@opentelemetry/sdk-trace-base';
 import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-node';
 import { SEMRESATTRS_DEPLOYMENT_ENVIRONMENT, SEMRESATTRS_SERVICE_NAME, SEMRESATTRS_SERVICE_VERSION } from '@opentelemetry/semantic-conventions';
 import moize from 'moize';
+import invariant from 'tiny-invariant';
 
 import { getBuildInfoService } from '~/services/build-info-service.server';
 import { getEnv } from '~/utils/env.server';
@@ -157,7 +158,19 @@ function createInstrumentationService() {
     return trace.getTracer(env.OTEL_SERVICE_NAME, buildInfo.buildVersion).startActiveSpan(name, fn);
   }
 
+  /**
+   * A helper function that will count the number of successful or
+   * failed requests by examining the http status.
+   */
+  function countHttpStatus(prefix: string, httpStatus: number, options?: MetricOptions) {
+    invariant(httpStatus > 0, 'httpStatus must be a positive integer');
+
+    createCounter(`${prefix}.requests.status.${httpStatus}`, options).add(1);
+    createCounter(`${prefix}.requests.status.${httpStatus >= 400 ? 'failed' : 'success'}`, options).add(1);
+  }
+
   return {
+    countHttpStatus,
     createCounter,
     createHistogram,
     startActiveSpan,
