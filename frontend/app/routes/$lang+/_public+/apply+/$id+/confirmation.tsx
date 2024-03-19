@@ -10,12 +10,15 @@ import { z } from 'zod';
 import pageIds from '../../../page-ids.json';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
+import { getApplyFlow } from '~/routes-flow/apply-flow';
+import { getLookupService } from '~/services/lookup-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
+import { toSentenceCase } from '~/utils/string-utils';
 
 export const applyIdParamSchema = z.string().uuid();
 
@@ -30,69 +33,75 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  //TODO: Get User/apply form information
+  const applyFlow = getApplyFlow();
+  const { state } = await applyFlow.loadState({ request, params });
+  const locale = await getLocale(request);
+
+  const allBenefitsAndPrograms = [...(await getLookupService().getAllFederalSocialPrograms()), ...(await getLookupService().getAllProvincialTerritorialSocialPrograms())];
+  const selectedBenefits = allBenefitsAndPrograms.filter((obj) => obj.id === state.dentalBenefit?.provincialTerritorialSocialProgram).map((obj) => obj[locale === 'en' ? 'nameEn' : 'nameFr']);
+
+  const preferredLanguages = await getLookupService().getAllPreferredLanguages();
+  const preferredLanguageDict = preferredLanguages.find((obj) => obj.id === state.communicationPreferences?.preferredLanguage.toLocaleLowerCase());
+  const preferredLanguage = getNameByLanguage(locale, preferredLanguageDict!);
 
   const userInfo = {
-    firstName: 'John',
-    id: '00000000-0000-0000-0000-000000000000',
-    lastName: 'Maverick',
-    phoneNumber: '(754) 628-4776',
-    altPhoneNumber: '(819) 777-1234',
-    preferredLanguage: 'fr',
-    birthday: new Date().toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' }),
-    sin: '123456789',
-    martialStatus: 'Married',
-    email: 'myemail@example.com',
-    communicationPreference: 'email',
+    firstName: state.applicantInformation?.firstName,
+    lastName: state.applicantInformation?.lastName,
+    phoneNumber: state.personalInformation?.phoneNumber,
+    altPhoneNumber: state.personalInformation?.phoneNumberAlt,
+    preferredLanguage: preferredLanguage,
+    birthday: new Date(state.dateOfBirth ?? '').toLocaleDateString(`${locale}-ca`, { year: 'numeric', month: 'long', day: 'numeric' }),
+    sin: state.applicantInformation?.socialInsuranceNumber,
+    martialStatus: state.applicantInformation?.maritalStatus,
+    email: state.communicationPreferences?.email,
+    communicationPreference: state.communicationPreferences?.preferredMethod ?? 'email',
   };
+
+  // TODO spouse date of birth will use DatePicker component
   const spouseInfo = {
-    firstName: 'Phil',
-    id: '00000000-0000-0000-0000-000000000001',
-    lastName: 'Doe',
-    phoneNumber: '(754) 628-4776',
-    birthday: new Date().toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' }),
-    sin: '123456789',
-    consent: true,
+    firstName: state.partnerInformation?.firstName,
+    lastName: state.partnerInformation?.lastName,
+    birthday: new Date(state.partnerInformation?.year ?? 1900, state.partnerInformation?.month ?? 0, state.partnerInformation?.day ?? 1).toLocaleDateString(`${locale}-ca`, { year: 'numeric', month: 'long', day: 'numeric' }),
+    sin: state.partnerInformation?.socialInsuranceNumber,
   };
-  const preferredLanguage = {
-    id: 'fr',
-    nameEn: 'French',
-    nameFr: 'Français',
-  };
+
   const mailingAddressInfo = {
-    address: '44367 Ibrahim Field',
-    city: 'Lake Granvillestead',
-    province: 'PE',
-    postalCode: 'P1L 1C5',
-    country: 'CAN',
+    address: state.personalInformation?.mailingAddress,
+    city: state.personalInformation?.mailingCity,
+    province: state.personalInformation?.mailingProvince,
+    postalCode: state.personalInformation?.mailingPostalCode,
+    country: state.personalInformation?.mailingCountry,
   };
+
   const homeAddressInfo = {
-    address: '724 Mason Mission',
-    city: 'Reichelmouth',
-    province: 'NS',
-    postalCode: 'T9K 6P4',
-    country: 'CAN',
+    address: state.personalInformation?.homeAddress,
+    city: state.personalInformation?.homeCity,
+    province: state.personalInformation?.homeProvince,
+    postalCode: state.personalInformation?.homePostalCode,
+    country: state.personalInformation?.homeCountry,
   };
+
   const dentalInsurance = {
-    private: [],
-    public: [{ id: 'benefit-id', benefitEn: 'Dental and Optcial Assistance for Senioirs (65+)', benefitFR: '(FR) Dental and Optcial Assistance for Senioirs (65+)' }],
+    acessToDentalInsurance: state.dentalInsurance?.dentalInsurance === 'yes',
+    selectedBenefits,
   };
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:confirm.page-title') }) };
 
-  return json({ dentalInsurance, homeAddressInfo, mailingAddressInfo, meta, preferredLanguage, spouseInfo, userInfo });
+  return json({ dentalInsurance, homeAddressInfo, mailingAddressInfo, meta, spouseInfo, userInfo });
 }
 
 export default function ApplyFlowConfirm() {
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance } = useLoaderData<typeof loader>();
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance } = useLoaderData<typeof loader>();
 
   const mscaLink = <InlineLink to={t('confirm.msca-link')} />;
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} />;
   const cdcpLink = <InlineLink to={t('confirm.cdcp-checker-link')} />;
   const moreInfoLink = <InlineLink to={t('confirm.more-info-link')} />;
 
+  // TODO application code (XXX-XXX-XXX) needs to be pulled from somewhere
   return (
     <div className="max-w-prose">
       <ContextualAlert type="success">
@@ -132,39 +141,50 @@ export default function ApplyFlowConfirm() {
       <p className="mt-4">
         <Trans ns={handle.i18nNamespaces} i18nKey="confirm.more-info-cdcp" components={{ moreInfoLink }} />
       </p>
-
-      <p className="mt-4">{t('confirm.ineligible-text')}</p>
       <p className="mt-4">
         <Trans ns={handle.i18nNamespaces} i18nKey="confirm.more-info-service" components={{ dentalContactUsLink }} />
       </p>
 
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.application-summ')}</h2>
+      <UnorderedList term={t('confirm.application-code')}>
+        <li className="my-1">XXX-XXX-XXX</li>
+      </UnorderedList>
       <UnorderedList term={t('confirm.applicant-title')}>
+        <li className="my-1 capitalize">{t('confirm.full-name', { name: `${userInfo.firstName} ${userInfo.lastName}` })}</li>
         <li className="my-1">{t('confirm.dob', { dob: userInfo.birthday })}</li>
-        <li className="my-1">{t('confirm.sin', { sin: formatSin(userInfo.sin) })}</li>
-        <li className="my-1">{t('confirm.full-name', { name: `${userInfo.firstName} ${userInfo.lastName}` })}</li>
-        <li className="my-1">{t('confirm.marital-status', { status: userInfo.martialStatus })}</li>
+        <li className="my-1">{t('confirm.sin', { sin: formatSin(userInfo.sin ?? '') })}</li>
+        <li className="my-1">{t('confirm.marital-status', { status: toSentenceCase(userInfo.martialStatus ?? '') })}</li>
       </UnorderedList>
       <UnorderedList term={t('confirm.spouse-info')}>
+        <li className="my-1 capitalize">{t('confirm.full-name', { name: `${spouseInfo.firstName} ${spouseInfo.lastName}` })}</li>
         <li className="my-1">{t('confirm.dob', { dob: spouseInfo.birthday })}</li>
-        <li className="my-1">{t('confirm.sin', { sin: formatSin(spouseInfo.sin) })}</li>
-        <li className="my-1">{t('confirm.full-name', { name: `${spouseInfo.firstName} ${spouseInfo.lastName}` })}</li>
-        {spouseInfo.consent ? <li className="my-1">{t('confirm.consent')}</li> : <li className="my-1">{t('confirm.no-consent')}</li>}
+        <li className="my-1">{t('confirm.sin', { sin: formatSin(spouseInfo.sin ?? '') })}</li>
+        <li className="my-1">{t('confirm.consent')}</li>
       </UnorderedList>
       <UnorderedList term={t('confirm.contact-info')}>
         <li className="my-1">{t('confirm.phone-number', { phone: userInfo.phoneNumber })}</li>
         <li className="my-1">{t('confirm.alt-phone-number', { altPhone: userInfo.altPhoneNumber })}</li>
-        <li className="my-1">{t('confirm.mailing', { address: mailingAddressInfo.address })}</li>
-        <li className="my-1">{t('confirm.home', { address: homeAddressInfo.address })}</li>
+        <li className="my-1 capitalize">{t('confirm.mailing', { address: mailingAddressInfo.address })}</li>
+        <li className="my-1 capitalize">{t('confirm.home', { address: homeAddressInfo.address })}</li>
       </UnorderedList>
       <UnorderedList term={t('confirm.comm-prefs')}>
-        <li className="my-1">{t('confirm.comm-pref', { pref: userInfo.communicationPreference })}</li>
-        <li className="my-1">{t('confirm.lang-pref', { pref: getNameByLanguage(i18n.language, preferredLanguage) })}</li>
+        <li className="my-1 capitalize">{t('confirm.comm-pref', { pref: userInfo.communicationPreference })}</li>
+        <li className="my-1 capitalize">{t('confirm.lang-pref', { pref: userInfo.preferredLanguage })}</li>
       </UnorderedList>
       <UnorderedList term={t('confirm.dental-insurance')}>
-        <li className="my-1">{t('confirm.dental-private', { access: dentalInsurance.private.length === 0 ? 'No' : 'Yes' })}</li>
-        <li className="my-1">{t('confirm.dental-public', { access: dentalInsurance.public.length === 0 ? 'No' : 'Yes' })}</li>
+        <li className="my-1">{t('confirm.dental-private', { access: dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no') })}</li>
+        <li className="my-1">{t('confirm.dental-public', { access: dentalInsurance.selectedBenefits.join(' ') })}</li>
       </UnorderedList>
+
+      <button
+        className="mt-8 inline-flex w-44 items-center justify-center rounded bg-gray-800 px-5 py-2.5 align-middle font-lato text-xl font-semibold text-white outline-offset-2 hover:bg-gray-900 print:hidden"
+        onClick={(event) => {
+          event.preventDefault();
+          window.print();
+        }}
+      >
+        {t('confirm.print-btn')}
+      </button>
     </div>
   );
 }

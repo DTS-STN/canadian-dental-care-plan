@@ -35,3 +35,12 @@ export const padWithZero = (value: number, maxLength: number) => {
   if (value.toString().length >= maxLength) return value.toString();
   return value.toString().padStart(maxLength, '0');
 };
+
+/**
+ *
+ * @param s - the string to be converted to sentence case
+ * @returns - the string with the first letter capitalized and the rest in lowercase
+ */
+export function toSentenceCase(s: string): string {
+  return s[0].toLocaleUpperCase() + s.slice(1).toLocaleLowerCase();
+}
