@@ -91,7 +91,7 @@ export default function AccessToDentalInsuranceQuestion() {
   }, [fetcher.data]);
 
   const errorMessages = {
-    'dental-insurance-required': fetcher.data?.errors._errors[0],
+    'input-radio-dental-insurance': fetcher.data?.errors._errors[0],
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -136,6 +136,8 @@ export default function AccessToDentalInsuranceQuestion() {
                 name="dentalInsurance"
                 legend={t('dental-insurance.legend')}
                 options={options.map((option) => ({
+                  id: 'dental-insurance',
+                  key: 'dental-insurance' + option.id,
                   children: <Trans ns={handle.i18nNamespaces}>{`dental-insurance.option-${option.id}`}</Trans>,
                   value: option.id,
                   defaultChecked: state === option.id,
@@ -143,7 +145,7 @@ export default function AccessToDentalInsuranceQuestion() {
                 helpMessagePrimary={helpMessage}
                 helpMessagePrimaryClassName="text-black"
                 required
-                errorMessage={errorMessages['dental-insurance-required']}
+                errorMessage={errorMessages['input-radio-dental-insurance']}
               />
             </div>
           )}
