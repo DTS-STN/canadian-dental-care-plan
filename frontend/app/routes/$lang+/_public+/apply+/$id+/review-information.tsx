@@ -94,7 +94,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     postalCode: state.personalInformation?.homePostalCode ?? 'Unknown',
     country: countryHome,
   };
-  const dentalInsurance = state.dentalInsurance?.dentalInsurance;
+  const dentalInsurance = state.dentalInsurance;
 
   const dentalBenefit = {
     federalBenefit: {
