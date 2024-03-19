@@ -85,7 +85,7 @@ export function getCCTApiMockHandlers() {
           LetterRecordId: letter.id,
           LetterDate: letter.issuedOn,
           LetterId: letter.referenceId,
-          LetterName: letter.letterType?.code,
+          LetterName: letter.letterType,
         })),
       );
     }),

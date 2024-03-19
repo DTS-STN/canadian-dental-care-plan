@@ -3,21 +3,11 @@ import type { Operation } from 'fast-json-patch';
 import { HttpResponse, http } from 'msw';
 import { z } from 'zod';
 
+import letterTypesJson from './power-platform-data/letter-types.json';
 import { db } from '~/mocks/db';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('power-platform-api.server');
-
-const letterTypeCodeSchema = z.object({
-  code: z.string(),
-  nameFr: z.string(),
-  nameEn: z.string(),
-  id: z.string().optional(),
-});
-
-const listOfLetterTypeCodeSchema = z.array(letterTypeCodeSchema);
-
-export type LetterTypeCodeList = z.infer<typeof listOfLetterTypeCodeSchema>;
 
 /**
  * Server-side MSW mocks for the Power Platform API.
@@ -87,30 +77,12 @@ export function getPowerPlatformApiMockHandlers() {
     }),
 
     /**
-     * Handler for GET requests to retrieve letters details.
+     * Handler for GET requests to retrieve letters types.
      */
     http.get('https://api.example.com/letter-types', () => {
-      return HttpResponse.json(
-        getAllLetterTypes().map((letterType) => {
-          return {
-            nameEn: letterType.nameEn,
-            nameFr: letterType.nameFr,
-            code: letterType.code,
-            id: letterType.id,
-          };
-        }),
-      );
+      return HttpResponse.json(letterTypesJson);
     }),
   ];
-}
-
-/**
- * Retrieves list of letter types.
- *
- * @returns All the letter types found.
- */
-export function getAllLetterTypes() {
-  return db.letterType.getAll();
 }
 
 /**

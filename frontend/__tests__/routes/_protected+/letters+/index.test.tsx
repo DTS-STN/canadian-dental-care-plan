@@ -23,8 +23,8 @@ vi.mock('~/services/interop-service.server', () => ({
       { id: '3', referenceId: '003', issuedOn: undefined, name: 'DEN' },
     ]),
     getAllLetterTypes: vi.fn().mockResolvedValue([
-      { code: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
-      { code: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' },
+      { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
+      { id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' },
     ]),
   }),
 }));
@@ -103,7 +103,7 @@ describe('Letters Page', () => {
 
     const data = await response.json();
 
-    expect(data.letterTypes.includes({ code: 'DEN', nameEn: 'DENIED', nameFr: '(FR) DENIED' }));
-    expect(data.letterTypes.includes({ code: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' }));
+    expect(data.letterTypes.includes({ id: 'DEN', nameEn: 'DENIED', nameFr: '(FR) DENIED' }));
+    expect(data.letterTypes.includes({ id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' }));
   });
 });

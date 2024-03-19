@@ -55,7 +55,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const sortOrder = orderEnumSchema.catch('desc').parse(sortParam);
   const userId = await userService.getUserId();
   const letters = await interopService.getLetterInfoByClientId(userId, 'clientId', sortOrder); // TODO where and what is clientId?
-  const letterTypes = (await interopService.getAllLetterTypes()).filter(({ code }) => letters.some(({ name }) => name === code));
+  const letterTypes = (await interopService.getAllLetterTypes()).filter(({ id }) => letters.some(({ name }) => name === id));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('letters:index.page-title') }) };
@@ -98,8 +98,10 @@ export default function LettersIndex() {
       </div>
       <ul className="divide-y border-y">
         {letters.map((letter) => {
-          const letterType = letterTypes.find(({ code }) => code === letter.name);
-          const letterName = letterType ? getNameByLanguage(i18n.language, letterType) : letter.name;
+          const letterType = letterTypes.find(({ id }) => id === letter.name);
+          const translatedLetterName = letterType ? getNameByLanguage(i18n.language, letterType) : letter.name;
+          const letterName = translatedLetterName ?? letter.name;
+
           return (
             <li key={letter.id} className="py-4 sm:py-6">
               <InlineLink reloadDocument to={`/letters/${letter.referenceId}/download`} className="font-lato font-semibold">
