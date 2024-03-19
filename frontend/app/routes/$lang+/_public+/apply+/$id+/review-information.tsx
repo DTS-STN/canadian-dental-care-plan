@@ -115,12 +115,20 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id } = await applyFlow.loadState({ request, params });
-  //TODO: Add apply form logic
-  const sessionResponseInit = await applyFlow.clearState({ request, params });
+  const { id, state } = await applyFlow.loadState({ request, params });
+
+  // TODO if the state is cleared here, the confirmation page can't access the state to display information
+  // const sessionResponseInit = await applyFlow.clearState({ request, params });
+
   const locale = await getLocale(request);
 
-  return redirectWithSuccess(`/${locale}/apply/${id}/confirm`, 'Form Submitted!', sessionResponseInit);
+  const sessionResponseInit = await applyFlow.saveState({
+    request,
+    params,
+    state,
+  });
+
+  return redirectWithSuccess(`/${locale}/apply/${id}/confirmation`, 'Form Submitted!', sessionResponseInit);
 }
 
 export default function ReviewInformation() {
