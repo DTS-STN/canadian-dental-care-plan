@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
 import { getAuditService } from '~/services/audit-service.server';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getInteropService } from '~/services/interop-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
@@ -41,29 +42,28 @@ export async function loader({ request }: LoaderFunctionArgs) {
     throw new Response('Not Found', { status: 404 });
   }
 
+  const auditService = getAuditService();
+  const instrumentationService = getInstrumentationService();
+  const interopService = getInteropService();
   const raoidcService = await getRaoidcService();
+  const sessionService = await getSessionService();
+  const userService = getUserService();
+
   await raoidcService.handleSessionValidation(request);
 
-  const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
-  const idToken: IdToken = session.get('idToken');
-  getAuditService().audit('page-view.letters', { userId: idToken.sub });
-
-  /**
-   * @url Create a new URL object from request URL
-   * @sort This accesses the URL's search parameter and retrieves the value associated with the 'sort' parameter, allows the client to specify how the data should be sorted via the URL
-   */
-  const url = new URL(request.url);
-  const sortOrder = orderEnumSchema.catch('desc').parse(url.searchParams.get('sort'));
-
-  const userService = getUserService();
-  const interopService = getInteropService();
+  const sortParam = new URL(request.url).searchParams.get('sort');
+  const sortOrder = orderEnumSchema.catch('desc').parse(sortParam);
   const userId = await userService.getUserId();
   const letters = await interopService.getLetterInfoByClientId(userId, 'clientId', sortOrder); // TODO where and what is clientId?
   const letterTypes = (await interopService.getAllLetterTypes()).filter(({ code }) => letters.some(({ name }) => name === code));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('letters:index.page-title') }) };
+
+  const session = await sessionService.getSession(request);
+  const idToken: IdToken = session.get('idToken');
+  auditService.audit('page-view.letters', { userId: idToken.sub });
+  instrumentationService.countHttpStatus('letters.view', 200);
 
   return json({ letters, letterTypes, meta, sortOrder });
 }
