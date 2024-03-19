@@ -3,6 +3,7 @@ import { Params } from '@remix-run/react';
 import { z } from 'zod';
 
 import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
+import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/dental-insurance';
 import { getSessionService } from '~/services/session-service.server';
 import { redirectWithLocale } from '~/utils/locale-utils.server';
 import { isValidSin } from '~/utils/sin-utils';
@@ -16,10 +17,6 @@ const idSchema = z.string().uuid();
  * Schema for terms and conditions
  */
 const termsAndConditionSchema = z.object({});
-
-const dentalInsuranceStateSchema = z.object({
-  dentalInsurance: z.string({ required_error: 'required' }).trim().min(1),
-});
 
 const dentalBenefitsStateSchema = z.object({
   federalBenefit: z.string({ required_error: 'federal-benefit' }).trim().min(1),
@@ -134,12 +131,12 @@ const applyStateSchema = z.object({
   partnerInformation: partnerInformationSchema.optional(),
   termsAndConditions: termsAndConditionSchema.optional(),
   taxFiling2023: taxFilingSchema.optional(),
-  dentalInsurance: dentalInsuranceStateSchema.optional(),
   dentalBenefit: dentalBenefitsStateSchema.optional(),
 });
 
 interface ApplyState extends z.infer<typeof applyStateSchema> {
   dateOfBirth?: DateOfBirthState;
+  dentalInsurance?: DentalInsuranceState;
 }
 
 /**
@@ -275,7 +272,6 @@ export function getApplyFlow() {
     idSchema,
     applyStateSchema,
     loadState,
-    dentalInsuranceStateSchema,
     dentalBenefitsStateSchema,
     saveState,
     start,

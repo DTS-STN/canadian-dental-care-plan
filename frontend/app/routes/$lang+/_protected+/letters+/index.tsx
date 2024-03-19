@@ -7,6 +7,7 @@ import { useLoaderData, useSearchParams } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
 import { getAuditService } from '~/services/audit-service.server';
@@ -112,6 +113,12 @@ export default function LettersIndex() {
           );
         })}
       </ul>
+
+      <div className="my-6 flex flex-wrap items-center gap-3">
+        <ButtonLink id="back-button" to="/home">
+          {t('letters:index.button.back')}
+        </ButtonLink>
+      </div>
     </>
   );
 }

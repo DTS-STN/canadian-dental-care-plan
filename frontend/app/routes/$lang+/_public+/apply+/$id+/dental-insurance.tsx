@@ -12,7 +12,7 @@ import { z } from 'zod';
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { ErrorSummary, createErrorSummaryItems, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
@@ -22,6 +22,8 @@ import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+
+export type DentalInsuranceState = string;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -41,20 +43,28 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:dental-insurance.title') }) };
 
-  return json({ id, meta, options, state });
+  return json({ id, meta, options, state: state.dentalInsurance });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id } = await applyFlow.loadState({ request, params });
+  const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = applyFlow.dentalInsuranceStateSchema.safeParse(formData);
+  const formData = await request.formData();
+  const dentalInsurance = String(formData.get('dentalInsurance') ?? '');
+
+  const dentalInsuranceSchema: z.ZodType<DentalInsuranceState> = z
+    .string({ required_error: t('apply:dental-insurance.error-message.required') })
+    .trim()
+    .min(1, { message: t('apply:dental-insurance.error-message.required') });
+
+  const parsedDataResult = dentalInsuranceSchema.safeParse(dentalInsurance);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof applyFlow.dentalInsuranceStateSchema>>,
+      formData: dentalInsurance,
     });
   }
 
@@ -75,19 +85,13 @@ export default function AccessToDentalInsuranceQuestion() {
   const errorSummaryId = 'error-summary';
 
   useEffect(() => {
-    if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
+    if (fetcher.data?.formData && fetcher.data.errors._errors.length > 0) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
   }, [fetcher.data]);
 
-  function getErrorMessage(errorI18nKey?: string): string | undefined {
-    if (!errorI18nKey) return undefined;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`dental-insurance.error-message.${errorI18nKey}` as any);
-  }
-
   const errorMessages = {
-    dentalInsurance: getErrorMessage(fetcher.data?.errors.dentalInsurance?._errors[0]),
+    'input-radios-dental-insurance': fetcher.data?.errors._errors[0],
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -134,12 +138,12 @@ export default function AccessToDentalInsuranceQuestion() {
                 options={options.map((option) => ({
                   children: <Trans ns={handle.i18nNamespaces}>{`dental-insurance.option-${option.id}`}</Trans>,
                   value: option.id,
-                  defaultChecked: state.dentalInsurance?.dentalInsurance === option.id,
+                  defaultChecked: state === option.id,
                 }))}
                 helpMessagePrimary={helpMessage}
                 helpMessagePrimaryClassName="text-black"
                 required
-                errorMessage={errorMessages.dentalInsurance}
+                errorMessage={errorMessages['input-radios-dental-insurance']}
               />
             </div>
           )}

@@ -1,13 +1,15 @@
 {
-  "page-title": "(FR) Unable to Continue",
+  "page-title": "Vous n'avez pas fait de demande pour le RCSD",
   "breadcrumbs": {
-    "unable-to-continue": "(FR) Unable to continue"
+    "unable-to-continue": "Vous n'avez pas fait de demande pour le RCSD"
   },
-  "service-eligible": "(FR) You are currently not a participant in the Canadian Dental Care Plan, to find out if you are eligible please visit <doyouqualify>Do you qualify - Canada.ca</doyouqualify>.",
+  "service-eligible": "<strong>Vous n'êtes pas un participant du Régime canadien de soins dentaires actuellement.</strong> Pour savoir si vous êtes admissible, consultez le site <doyouqualify>Êtes-vous admissible</doyouqualify>, sur Canada.ca. ",
   "do-you-qualify.href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/admissibilite.html",
-  "more-information": "(FR) For more information on how to apply, please visit <howtoapply>How to apply - Canada.ca</howtoapply>.",
+  "more-information": "our obtenir de plus amples renseignements sur le processus de demande, veuillez visiter <howtoapply>Présentation d'une demande</howtoapply>.",
   "how-to-apply.href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html",
-  "other-enquiry": "(FR) For other enquiries, please visit the <contactus>Contact us</contactus> page to find out how to reach us.",
-  "contact-us.href": "{{baseUri}}/fr/contact-us",
-  "service-delay": "(FR) If you have recently applied, please note that there could be a delay in your application appearing within the My Service Canada Account.  For any enquiries on the status of your application please visit \"link to online status checker\"."
+  "other-enquiry": "Pour d'autres demandes de renseignements, visitez la page <contactus>Contactez-nous</contactus> pour savoir comment nous joindre.",
+  "contact-us.href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
+  "service-delay": "Si vous avez récemment présenté votre demande, veuillez noter qu'un délai peut s'écouler avant que votre demande n'apparaisse dans votre compte Mon dossier Service Canada (MDSC). Pour toute question sur l'état d'avancement de votre demande, visiter <statuschecker>Vérifier l'état de ma demand</statuschecker>.",
+  "status-checker.href": "https://canadadental-uat.powerappsportals.com/fr/status-etat/",
+  "back-button": "Retour"
 }
