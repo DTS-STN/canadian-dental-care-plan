@@ -29,6 +29,24 @@ const db = factory({
     addressPostalZipCode: faker.location.zipCode,
     addressCountry: String,
   },
+  personalInformation: {
+    addressCategoryCode: () => faker.helpers.arrayElement(['Home', 'Mailing']),
+    addressStreet: String,
+    addressSecondaryUnitText: String,
+    addressCityName: faker.location.city,
+    addressProvince: () => faker.location.state({ abbreviated: true }),
+    addressCountryName: () => 'CAN',
+    addressPostalCode: faker.location.zipCode,
+    clientIdentificationID: primaryKey(faker.string.uuid),
+    clientIdentificationCategory: String,
+    lastName: faker.person.lastName,
+    firstName: faker.person.firstName,
+    emailAddressId: faker.internet.email,
+    fullTelephoneNumber: String,
+    languageCode: () => faker.helpers.arrayElement(['E', 'F']),
+    languagePreferredIndicator: Boolean,
+    sinIdentification: String,
+  },
   preferredLanguage: {
     id: primaryKey(String),
     nameEn: String,
@@ -113,6 +131,25 @@ const db = factory({
     nameEn: String,
     nameFr: String,
   },
+});
+
+db.personalInformation.create({
+  addressCategoryCode: 'Mailing',
+  addressStreet: '50 My Street',
+  addressSecondaryUnitText: 'Apt. No. 50',
+  addressCityName: 'Hamilton-50',
+  addressProvince: 'ON',
+  addressCountryName: 'CAN',
+  addressPostalCode: 'L9B 1A2',
+  clientIdentificationID: '4f35f70b-2f83-ee11-8179-000d3a09d000',
+  clientIdentificationCategory: 'Applicant ID',
+  lastName: 'Smith',
+  firstName: 'John',
+  emailAddressId: 'myEmail50@domain.ca',
+  fullTelephoneNumber: '555-555-5555',
+  languageCode: 'E',
+  languagePreferredIndicator: true,
+  sinIdentification: '999999999',
 });
 
 // seed avaliable languages (before user)
