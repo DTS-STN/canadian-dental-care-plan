@@ -11,7 +11,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { ErrorSummary, createErrorSummaryItems, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputOptionProps } from '~/components/input-option';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
@@ -25,7 +25,13 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
-export type DentalBenefitsState = object;
+export type DentalBenefitsState = {
+  federalBenefit: string;
+  federalSocialProgram?: string;
+  provincialTerritorialBenefit: string;
+  provincialTerritorialSocialProgram?: string;
+  province?: string;
+};
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -51,20 +57,27 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:dental-benefits.title') }) };
 
-  return json({ federalDentalBenefits, federalSocialPrograms, id, meta, provincialTerritorialDentalBenefits, provincialTerritorialSocialPrograms, regions, state: state.dentalBenefit });
+  return json({ federalDentalBenefits, federalSocialPrograms, id, meta, provincialTerritorialDentalBenefits, provincialTerritorialSocialPrograms, regions, state: state.dentalBenefits });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id } = await applyFlow.loadState({ request, params });
+  const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formData = Object.fromEntries(await request.formData());
 
   const dentalBenefitsSchema: z.ZodType<DentalBenefitsState> = z
     .object({
-      federalBenefit: z.string({ required_error: 'federal-benefit' }).trim().min(1),
+      federalBenefit: z
+        .string({ required_error: t('apply:dental-benefits.error-message.federal-benefit') })
+        .trim()
+        .min(1),
       federalSocialProgram: z.string().trim().min(1).optional(),
-      provincialTerritorialBenefit: z.string({ required_error: 'provincial-benefit' }).trim().min(1),
+      provincialTerritorialBenefit: z
+        .string({ required_error: t('apply:dental-benefits.error-message.provincial-benefit') })
+        .trim()
+        .min(1),
       provincialTerritorialSocialProgram: z.string().trim().min(1).optional(),
       province: z.string().trim().optional(),
     })
@@ -72,7 +85,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       if (val.federalBenefit === 'yes' && (!val.federalSocialProgram || val.federalSocialProgram.trim().length === 0)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: 'empty-program',
+          message: t('apply:dental-benefits.error-message.empty-program'),
           path: ['federalSocialProgram'],
         });
       }
@@ -80,44 +93,20 @@ export async function action({ request, params }: ActionFunctionArgs) {
         if (!val.province) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: 'empty-province',
+            message: t('apply:dental-benefits.error-message.empty-province'),
             path: ['province'],
           });
         }
         if (val.province && !val.provincialTerritorialSocialProgram) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: 'empty-program',
+            message: t('apply:dental-benefits.error-message.empty-province'),
             path: ['provincialTerritorialSocialProgram'],
           });
         }
       }
     });
-  // const dentalBenefitSchema = applyFlow.dentalBenefitsStateSchema.superRefine((val, ctx) => {
-  //   if (val.federalBenefit === 'yes' && (!val.federalSocialProgram || val.federalSocialProgram.trim().length === 0)) {
-  //     ctx.addIssue({
-  //       code: z.ZodIssueCode.custom,
-  //       message: 'empty-program',
-  //       path: ['federalSocialProgram'],
-  //     });
-  //   }
-  //   if (val.provincialTerritorialBenefit === 'yes') {
-  //     if (!val.province) {
-  //       ctx.addIssue({
-  //         code: z.ZodIssueCode.custom,
-  //         message: 'empty-province',
-  //         path: ['province'],
-  //       });
-  //     }
-  //     if (val.province && !val.provincialTerritorialSocialProgram) {
-  //       ctx.addIssue({
-  //         code: z.ZodIssueCode.custom,
-  //         message: 'empty-program',
-  //         path: ['provincialTerritorialSocialProgram'],
-  //       });
-  //     }
-  //   }
-  // });
+
   const parsedDataResult = dentalBenefitsSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
@@ -146,6 +135,8 @@ export default function AccessToDentalInsuranceQuestion() {
   const [provincialProgramOption, setProvincialProgramOption] = useState(state?.provincialTerritorialSocialProgram);
   const errorSummaryId = 'error-summary';
 
+  console.log('state: ', state);
+
   const sortedRegions = regions.sort((a, b) => {
     const nameA = i18n.language === 'en' ? a.nameEn : a.nameFr;
     const nameB = i18n.language === 'en' ? b.nameEn : b.nameFr;
@@ -167,23 +158,17 @@ export default function AccessToDentalInsuranceQuestion() {
   }
 
   useEffect(() => {
-    if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
+    if (fetcher.data?.formData && fetcher.data.errors._errors.length > 0) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
   }, [fetcher.data]);
 
-  function getErrorMessage(errorI18nKey?: string): string | undefined {
-    if (!errorI18nKey) return undefined;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`dental-benefits.error-message.${errorI18nKey}` as any);
-  }
-
   const errorMessages = {
-    federalBenefit: getErrorMessage(fetcher.data?.errors.federalBenefit?._errors[0]),
-    federalSocialProgram: getErrorMessage(fetcher.data?.errors.federalSocialProgram?._errors[0]),
-    provincialTerritorialBenefit: getErrorMessage(fetcher.data?.errors.provincialTerritorialBenefit?._errors[0]),
-    provincialTerritorialSocialProgram: getErrorMessage(fetcher.data?.errors.provincialTerritorialSocialProgram?._errors[0]),
-    province: getErrorMessage(fetcher.data?.errors.province?._errors[0]),
+    'input-radios-federal-benefit': fetcher.data?.errors.federalBenefit?._errors[0],
+    'input-radios-federal-social-programs': fetcher.data?.errors.federalSocialProgram?._errors[0],
+    'input-radios-provincial-territorial-benefit': fetcher.data?.errors.provincialTerritorialBenefit?._errors[0],
+    'input-radios-provincial-territorial-social-programs': fetcher.data?.errors.provincialTerritorialSocialProgram?._errors[0],
+    province: fetcher.data?.errors.province?._errors[0],
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -230,12 +215,12 @@ export default function AccessToDentalInsuranceQuestion() {
                         value: getNameByLanguage(i18n.language, option),
                         defaultChecked: state?.federalSocialProgram === getNameByLanguage(i18n.language, option),
                       }))}
-                      errorMessage={errorMessages.federalSocialProgram}
+                      errorMessage={errorMessages['input-radios-federal-social-programs']}
                       required
                     />
                   ),
                 }))}
-                errorMessage={errorMessages.federalBenefit}
+                errorMessage={errorMessages['input-radios-federal-benefit']}
                 required
               />
             )}
@@ -276,14 +261,14 @@ export default function AccessToDentalInsuranceQuestion() {
                             })),
                           ]}
                           defaultValue={selectedRegion}
-                          errorMessage={errorMessages.province}
+                          errorMessage={errorMessages['province']}
                           required
                         />
                         <InputRadios
                           id="provincial-territorial-social-programs"
                           name="provincialTerritorialSocialProgram"
                           legend={selectedRegion && <span className="font-normal">{t('dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}</span>}
-                          errorMessage={selectedRegion && errorMessages.provincialTerritorialSocialProgram}
+                          errorMessage={selectedRegion && errorMessages['input-radios-provincial-territorial-social-programs']}
                           options={provincialTerritorialSocialPrograms
                             .filter((program) => program.provinceTerritoryStateId === selectedRegion)
                             .map((option) => ({
@@ -297,7 +282,7 @@ export default function AccessToDentalInsuranceQuestion() {
                     </Fragment>
                   ),
                 }))}
-                errorMessage={errorMessages.provincialTerritorialBenefit}
+                errorMessage={errorMessages['input-radios-provincial-territorial-benefit']}
                 required
               />
             )}
