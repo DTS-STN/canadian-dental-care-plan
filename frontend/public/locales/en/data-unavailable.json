@@ -1,13 +1,15 @@
 {
-  "page-title": "Unable to Continue",
+  "page-title": "You have not applied for CDCP",
   "breadcrumbs": {
-    "unable-to-continue": "Unable to continue"
+    "unable-to-continue": "You have not applied for CDCP"
   },
-  "service-eligible": "You are currently not a participant in the Canadian Dental Care Plan, to find out if you are eligible please visit <doyouqualify>Do you qualify - Canada.ca</doyouqualify>.",
+  "service-eligible": "<strong>You are currently not a participant in the Canadian Dental Care Plan.</strong> To find out if you are eligible please visit <doyouqualify>Do you qualify</doyouqualify> on Canda.ca. ",
   "do-you-qualify.href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/qualify.html",
-  "more-information": "For more information on how to apply, please visit <howtoapply>How to apply - Canada.ca</howtoapply>.",
+  "more-information": "For more information on how to apply, please visit <howtoapply>How to apply.",
   "how-to-apply.href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
   "other-enquiry": "For other enquiries, please visit the <contactus>Contact us</contactus> page to find out how to reach us",
-  "contact-us.href": "{{baseUri}}/en/contact-us",
-  "service-delay": "If you have recently applied, please note that there could be a delay in your application appearing within the My Service Canada Account.  For any enquiries on the status of your application please visit \"link to online status checker\"."
+  "contact-us.href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html",
+  "service-delay": "If you have recently applied, please note that there could be a delay in your application appearing within the My Service Canada Account.  For any enquiries on the status of your application please visit <statuschecker>Verify the Status of your application</statuschecker>.",
+  "status-checker.href": "https://canadadental-uat.powerappsportals.com/en/status-etat/",
+  "back-button": "Back"
 }
