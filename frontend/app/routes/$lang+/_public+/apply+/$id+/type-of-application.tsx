@@ -12,6 +12,7 @@ import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
+import { Progress } from '~/components/progress';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
@@ -93,31 +94,39 @@ export default function ApplyFlowTypeOfApplication() {
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 
   return (
-    <div className="max-w-prose">
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
-        <InputRadios
-          id="application-delegate"
-          name="applicationDelegate"
-          legend={t('apply:eligibility.type-of-application.form-instructions')}
-          options={[
-            { value: 'FALSE', children: t('apply:eligibility.type-of-application.radio-options.personal'), defaultChecked: state?.applicationDelegate === 'FALSE' },
-            { value: 'TRUE', children: t('apply:eligibility.type-of-application.radio-options.delegate'), defaultChecked: state?.applicationDelegate === 'TRUE' },
-          ]}
-          required
-          errorMessage={errorMessages['input-radios-application-delegate']}
-        />
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/terms-and-conditions`} disabled={isSubmitting}>
-            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-            {t('apply:eligibility.type-of-application.back-btn')}
-          </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-            {t('apply:eligibility.type-of-application.continue-btn')}
-            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-          </Button>
-        </div>
-      </fetcher.Form>
-    </div>
+    <>
+      <div className="my-6 sm:my-8">
+        <p id="progress-label" className="sr-only mb-2">
+          {t('apply:progress.label')}
+        </p>
+        <Progress aria-labelledby="progress-label" value={10} size="lg" />
+      </div>
+      <div className="max-w-prose">
+        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
+          <InputRadios
+            id="application-delegate"
+            name="applicationDelegate"
+            legend={t('apply:eligibility.type-of-application.form-instructions')}
+            options={[
+              { value: 'FALSE', children: t('apply:eligibility.type-of-application.radio-options.personal'), defaultChecked: state?.applicationDelegate === 'FALSE' },
+              { value: 'TRUE', children: t('apply:eligibility.type-of-application.radio-options.delegate'), defaultChecked: state?.applicationDelegate === 'TRUE' },
+            ]}
+            required
+            errorMessage={errorMessages['input-radios-application-delegate']}
+          />
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <ButtonLink id="back-button" to={`/apply/${id}/terms-and-conditions`} disabled={isSubmitting}>
+              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+              {t('apply:eligibility.type-of-application.back-btn')}
+            </ButtonLink>
+            <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+              {t('apply:eligibility.type-of-application.continue-btn')}
+              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+            </Button>
+          </div>
+        </fetcher.Form>
+      </div>
+    </>
   );
 }

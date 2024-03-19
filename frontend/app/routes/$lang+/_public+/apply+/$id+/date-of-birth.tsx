@@ -13,6 +13,7 @@ import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, createErrorSummaryItems, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { Progress } from '~/components/progress';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
@@ -105,22 +106,30 @@ export default function ApplyFlowDateOfBirth() {
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 
   return (
-    <div className="max-w-prose">
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <p className="mb-6">{t('apply:eligibility.date-of-birth.description')}</p>
-      <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
-        <DatePickerField id="date-of-birth" name="dateOfBirth" defaultValue={state ?? ''} legend={t('apply:eligibility.date-of-birth.form-instructions')} required errorMessage={errorMessages['date-picker-date-of-birth-month']} />
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/tax-filing`} disabled={isSubmitting}>
-            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-            {t('apply:eligibility.date-of-birth.back-btn')}
-          </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-            {t('apply:eligibility.date-of-birth.continue-btn')}
-            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-          </Button>
-        </div>
-      </fetcher.Form>
-    </div>
+    <>
+      <div className="my-6 sm:my-8">
+        <p id="progress-label" className="sr-only mb-2">
+          {t('apply:progress.label')}
+        </p>
+        <Progress aria-labelledby="progress-label" value={30} size="lg" />
+      </div>
+      <div className="max-w-prose">
+        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <p className="mb-6">{t('apply:eligibility.date-of-birth.description')}</p>
+        <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
+          <DatePickerField id="date-of-birth" name="dateOfBirth" defaultValue={state ?? ''} legend={t('apply:eligibility.date-of-birth.form-instructions')} required errorMessage={errorMessages['date-picker-date-of-birth-month']} />
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <ButtonLink id="back-button" to={`/apply/${id}/tax-filing`} disabled={isSubmitting}>
+              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+              {t('apply:eligibility.date-of-birth.back-btn')}
+            </ButtonLink>
+            <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+              {t('apply:eligibility.date-of-birth.continue-btn')}
+              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+            </Button>
+          </div>
+        </fetcher.Form>
+      </div>
+    </>
   );
 }

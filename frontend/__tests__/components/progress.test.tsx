@@ -16,7 +16,7 @@ describe('Progress component', () => {
     expect(rootElement).toBeInTheDocument();
     expect(indicatorElement).toBeInTheDocument();
     expect(rootElement).toHaveClass('h-2.5'); // Default size
-    expect(indicatorElement).toHaveClass('bg-green-600'); // Default variant
+    expect(indicatorElement).toHaveClass('bg-gray-600'); // Default variant
   });
 
   it('renders with custom size and variant', () => {

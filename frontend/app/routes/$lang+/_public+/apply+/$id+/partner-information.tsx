@@ -14,6 +14,7 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import { InputSelect } from '~/components/input-select';
+import { Progress } from '~/components/progress';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
@@ -139,67 +140,75 @@ export default function ApplyFlowApplicationInformation() {
   }, [fetcher.data]);
 
   return (
-    <div className="max-w-prose">
-      <p id="form-instructions-provide-sin" className="mb-4">
-        {t('partner-information.provide-sin')}
-      </p>
-      <p id="form-instructions-required-information" className="mb-6">
-        {t('partner-information.required-information')}
-      </p>
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <fetcher.Form method="post" aria-describedby="form-instructions-provide-sin form-instructions-required-information" noValidate>
-        <div className="space-y-6">
-          <div className="grid gap-6 md:grid-cols-2">
-            <InputField id="firstName" name="firstName" className="w-full" label={t('applicant-information.first-name')} required aria-labelledby="name-instructions" defaultValue={defaultValues.firstName} />
-            <InputField id="lastName" name="lastName" className="w-full" label={t('applicant-information.last-name')} required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} aria-labelledby="name-instructions" />
-          </div>
-          <p id="name-instructions">{t('partner-information.name-instructions')}</p>
-          <fieldset>
-            <legend className="mb-2 font-semibold">{t('partner-information.dob')}</legend>
-            <div className="flex flex-col gap-6 sm:flex-row">
-              {i18n.language === 'en' && (
-                <>
-                  <InputSelect id="month" label={t('partner-information.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} defaultValue={defaultValues.month} />
-                  <InputField id="day" label={t('partner-information.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} defaultValue={defaultValues.day} />
-                </>
-              )}
-              {i18n.language === 'fr' && (
-                <>
-                  <InputField id="day" label={t('partner-information.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} defaultValue={defaultValues.day} />
-                  <InputSelect id="month" label={t('partner-information.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} defaultValue={defaultValues.month} />
-                </>
-              )}
-              <InputField id="year" label={t('partner-information.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} defaultValue={defaultValues.year} />
+    <>
+      <div className="my-6 sm:my-8">
+        <p id="progress-label" className="sr-only mb-2">
+          {t('apply:progress.label')}
+        </p>
+        <Progress aria-labelledby="progress-label" value={50} size="lg" />
+      </div>
+      <div className="max-w-prose">
+        <p id="form-instructions-provide-sin" className="mb-4">
+          {t('partner-information.provide-sin')}
+        </p>
+        <p id="form-instructions-required-information" className="mb-6">
+          {t('partner-information.required-information')}
+        </p>
+        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <fetcher.Form method="post" aria-describedby="form-instructions-provide-sin form-instructions-required-information" noValidate>
+          <div className="space-y-6">
+            <div className="grid gap-6 md:grid-cols-2">
+              <InputField id="firstName" name="firstName" className="w-full" label={t('applicant-information.first-name')} required aria-labelledby="name-instructions" defaultValue={defaultValues.firstName} />
+              <InputField id="lastName" name="lastName" className="w-full" label={t('applicant-information.last-name')} required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} aria-labelledby="name-instructions" />
             </div>
-          </fieldset>
-          <InputField
-            id="socialInsuranceNumber"
-            name="socialInsuranceNumber"
-            label={t('applicant-information.sin')}
-            required
-            inputMode="numeric"
-            pattern="\d{9}"
-            placeholder={formatSin('000000000', '-')}
-            minLength={9}
-            maxLength={9}
-            defaultValue={defaultValues.socialInsuranceNumber}
-            errorMessage={errorMessages.socialInsuranceNumber}
-          />
-          <InputCheckbox id="confirm" name="confirm" required errorMessage={errorMessages['input-confirm-error']} defaultChecked={!!defaultValues.confirm}>
-            {t('partner-information.confirm-checkbox')}
-          </InputCheckbox>
-        </div>
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/applicant-information`} disabled={isSubmitting}>
-            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-            {t('applicant-information.back-btn')}
-          </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-            {t('applicant-information.continue-btn')}
-            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-          </Button>
-        </div>
-      </fetcher.Form>
-    </div>
+            <p id="name-instructions">{t('partner-information.name-instructions')}</p>
+            <fieldset>
+              <legend className="mb-2 font-semibold">{t('partner-information.dob')}</legend>
+              <div className="flex flex-col gap-6 sm:flex-row">
+                {i18n.language === 'en' && (
+                  <>
+                    <InputSelect id="month" label={t('partner-information.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} defaultValue={defaultValues.month} />
+                    <InputField id="day" label={t('partner-information.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} defaultValue={defaultValues.day} />
+                  </>
+                )}
+                {i18n.language === 'fr' && (
+                  <>
+                    <InputField id="day" label={t('partner-information.day')} name="day" type="number" min={1} max={31} errorMessage={errorMessages.day} defaultValue={defaultValues.day} />
+                    <InputSelect id="month" label={t('partner-information.month')} options={monthOptions} name="month" errorMessage={errorMessages.month} defaultValue={defaultValues.month} />
+                  </>
+                )}
+                <InputField id="year" label={t('partner-information.year')} name="year" type="number" min={1900} errorMessage={errorMessages.year} defaultValue={defaultValues.year} />
+              </div>
+            </fieldset>
+            <InputField
+              id="socialInsuranceNumber"
+              name="socialInsuranceNumber"
+              label={t('applicant-information.sin')}
+              required
+              inputMode="numeric"
+              pattern="\d{9}"
+              placeholder={formatSin('000000000', '-')}
+              minLength={9}
+              maxLength={9}
+              defaultValue={defaultValues.socialInsuranceNumber}
+              errorMessage={errorMessages.socialInsuranceNumber}
+            />
+            <InputCheckbox id="confirm" name="confirm" required errorMessage={errorMessages['input-confirm-error']} defaultChecked={!!defaultValues.confirm}>
+              {t('partner-information.confirm-checkbox')}
+            </InputCheckbox>
+          </div>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <ButtonLink id="back-button" to={`/apply/${id}/applicant-information`} disabled={isSubmitting}>
+              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+              {t('applicant-information.back-btn')}
+            </ButtonLink>
+            <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+              {t('applicant-information.continue-btn')}
+              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+            </Button>
+          </div>
+        </fetcher.Form>
+      </div>
+    </>
   );
 }

@@ -15,6 +15,7 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputOptionProps } from '~/components/input-option';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
+import { Progress } from '~/components/progress';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { featureEnabled, getEnv } from '~/utils/env.server';
@@ -159,116 +160,124 @@ export default function AccessToDentalInsuranceQuestion() {
   }
 
   return (
-    <div className="max-w-prose">
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <fetcher.Form method="post" noValidate>
-        <section>
-          <p className="mb-4">{t('dental-benefits.access-to-dental')}</p>
-          <p className="mb-4">{t('dental-benefits.eligibility-criteria')}</p>
-          <h2 className="my-6 font-lato text-2xl font-bold">{t('dental-benefits.federal-benefits.title')}</h2>
-          {federalDentalBenefits.length > 0 && (
-            <InputRadios
-              id="federal-benefit"
-              name="federalBenefit"
-              legend={t('dental-benefits.federal-benefits.legend')}
-              options={federalDentalBenefits.map((option) => ({
-                children: <Trans ns={handle.i18nNamespaces}>{`dental-benefits.federal-benefits.option-${option.code}`}</Trans>,
-                value: option.code,
-                defaultChecked: state?.federalBenefit === option.code,
-                onChange: (e) => setCheckedFederalOption(e.target.value),
-                append: option.code === 'yes' && checkedFederalOption === 'yes' && (
-                  <InputRadios
-                    id="federal-social-programs"
-                    name="federalSocialProgram"
-                    legend={<span className="font-normal">{t('dental-benefits.federal-benefits.social-programs.legend')}</span>}
-                    options={federalSocialPrograms.map((option) => ({
-                      children: <span className="font-bold">{getNameByLanguage(i18n.language, option)}</span>,
-                      value: getNameByLanguage(i18n.language, option),
-                      defaultChecked: state?.federalSocialProgram === getNameByLanguage(i18n.language, option),
-                    }))}
-                    errorMessage={errorMessages.federalSocialProgram}
-                    required
-                  />
-                ),
-              }))}
-              errorMessage={errorMessages.federalBenefit}
-              required
-            />
-          )}
-        </section>
-        <section>
-          <h2 className="my-6 font-lato text-2xl font-bold">{t('dental-benefits.provincial-territorial-benefits.title')}</h2>
-          {provincialTerritorialDentalBenefits.length > 0 && (
-            <InputRadios
-              id="provincial-territorial-benefit"
-              name="provincialTerritorialBenefit"
-              legend={t('dental-benefits.provincial-territorial-benefits.legend')}
-              options={provincialTerritorialDentalBenefits.map((option) => ({
-                children: <Trans ns={handle.i18nNamespaces}>{`dental-benefits.provincial-territorial-benefits.option-${option.code}`}</Trans>,
-                value: option.code,
-                defaultChecked: state?.provincialTerritorialBenefit === option.code,
-                onChange: (e) => {
-                  setCheckedProvincialOption(e.target.value);
-                  if (e.target.value !== 'yes') {
-                    resetProvincialOptionState();
-                  }
-                },
-                append: option.code === 'yes' && checkedProvincialOption === 'yes' && regions.length > 0 && (
-                  <Fragment key={option.code}>
-                    <div className="space-y-6">
-                      <InputSelect
-                        id="province"
-                        name="province"
-                        className="w-full sm:w-1/2"
-                        label={t('dental-benefits.provincial-territorial-benefits.social-programs.input-legend')}
-                        onChange={handleSelectRegion}
-                        options={[
-                          dummyOption,
-                          ...sortedRegions.map((region) => ({
-                            key: region.provinceTerritoryStateId,
-                            id: region.provinceTerritoryStateId,
-                            value: region.provinceTerritoryStateId,
-                            children: getNameByLanguage(i18n.language, region),
-                          })),
-                        ]}
-                        defaultValue={selectedRegion}
-                        errorMessage={errorMessages.province}
-                        required
-                      />
-                      <InputRadios
-                        id="provincial-territorial-social-programs"
-                        name="provincialTerritorialSocialProgram"
-                        legend={selectedRegion && <span className="font-normal">{t('dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}</span>}
-                        errorMessage={selectedRegion && errorMessages.provincialTerritorialSocialProgram}
-                        options={provincialTerritorialSocialPrograms
-                          .filter((program) => program.provinceTerritoryStateId === selectedRegion)
-                          .map((option) => ({
-                            children: <span className="font-bold">{getNameByLanguage(i18n.language, option)}</span>,
-                            value: option.id,
-                            checked: provincialProgramOption === option.id,
-                            onChange: (e) => setProvincialProgramOption(e.target.value),
-                          }))}
-                      />
-                    </div>
-                  </Fragment>
-                ),
-              }))}
-              errorMessage={errorMessages.provincialTerritorialBenefit}
-              required
-            />
-          )}
-        </section>
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          <ButtonLink to={`/apply/${id}/dental-insurance`} disabled={isSubmitting}>
-            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-            {t('dental-benefits.button.back')}
-          </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-            {t('dental-benefits.button.continue')}
-            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-          </Button>
-        </div>
-      </fetcher.Form>
-    </div>
+    <>
+      <div className="my-6 sm:my-8">
+        <p id="progress-label" className="sr-only mb-2">
+          {t('apply:progress.label')}
+        </p>
+        <Progress aria-labelledby="progress-label" value={90} size="lg" />
+      </div>
+      <div className="max-w-prose">
+        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <fetcher.Form method="post" noValidate>
+          <section>
+            <p className="mb-4">{t('dental-benefits.access-to-dental')}</p>
+            <p className="mb-4">{t('dental-benefits.eligibility-criteria')}</p>
+            <h2 className="my-6 font-lato text-2xl font-bold">{t('dental-benefits.federal-benefits.title')}</h2>
+            {federalDentalBenefits.length > 0 && (
+              <InputRadios
+                id="federal-benefit"
+                name="federalBenefit"
+                legend={t('dental-benefits.federal-benefits.legend')}
+                options={federalDentalBenefits.map((option) => ({
+                  children: <Trans ns={handle.i18nNamespaces}>{`dental-benefits.federal-benefits.option-${option.code}`}</Trans>,
+                  value: option.code,
+                  defaultChecked: state?.federalBenefit === option.code,
+                  onChange: (e) => setCheckedFederalOption(e.target.value),
+                  append: option.code === 'yes' && checkedFederalOption === 'yes' && (
+                    <InputRadios
+                      id="federal-social-programs"
+                      name="federalSocialProgram"
+                      legend={<span className="font-normal">{t('dental-benefits.federal-benefits.social-programs.legend')}</span>}
+                      options={federalSocialPrograms.map((option) => ({
+                        children: <span className="font-bold">{getNameByLanguage(i18n.language, option)}</span>,
+                        value: getNameByLanguage(i18n.language, option),
+                        defaultChecked: state?.federalSocialProgram === getNameByLanguage(i18n.language, option),
+                      }))}
+                      errorMessage={errorMessages.federalSocialProgram}
+                      required
+                    />
+                  ),
+                }))}
+                errorMessage={errorMessages.federalBenefit}
+                required
+              />
+            )}
+          </section>
+          <section>
+            <h2 className="my-6 font-lato text-2xl font-bold">{t('dental-benefits.provincial-territorial-benefits.title')}</h2>
+            {provincialTerritorialDentalBenefits.length > 0 && (
+              <InputRadios
+                id="provincial-territorial-benefit"
+                name="provincialTerritorialBenefit"
+                legend={t('dental-benefits.provincial-territorial-benefits.legend')}
+                options={provincialTerritorialDentalBenefits.map((option) => ({
+                  children: <Trans ns={handle.i18nNamespaces}>{`dental-benefits.provincial-territorial-benefits.option-${option.code}`}</Trans>,
+                  value: option.code,
+                  defaultChecked: state?.provincialTerritorialBenefit === option.code,
+                  onChange: (e) => {
+                    setCheckedProvincialOption(e.target.value);
+                    if (e.target.value !== 'yes') {
+                      resetProvincialOptionState();
+                    }
+                  },
+                  append: option.code === 'yes' && checkedProvincialOption === 'yes' && regions.length > 0 && (
+                    <Fragment key={option.code}>
+                      <div className="space-y-6">
+                        <InputSelect
+                          id="province"
+                          name="province"
+                          className="w-full sm:w-1/2"
+                          label={t('dental-benefits.provincial-territorial-benefits.social-programs.input-legend')}
+                          onChange={handleSelectRegion}
+                          options={[
+                            dummyOption,
+                            ...sortedRegions.map((region) => ({
+                              key: region.provinceTerritoryStateId,
+                              id: region.provinceTerritoryStateId,
+                              value: region.provinceTerritoryStateId,
+                              children: getNameByLanguage(i18n.language, region),
+                            })),
+                          ]}
+                          defaultValue={selectedRegion}
+                          errorMessage={errorMessages.province}
+                          required
+                        />
+                        <InputRadios
+                          id="provincial-territorial-social-programs"
+                          name="provincialTerritorialSocialProgram"
+                          legend={selectedRegion && <span className="font-normal">{t('dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}</span>}
+                          errorMessage={selectedRegion && errorMessages.provincialTerritorialSocialProgram}
+                          options={provincialTerritorialSocialPrograms
+                            .filter((program) => program.provinceTerritoryStateId === selectedRegion)
+                            .map((option) => ({
+                              children: <span className="font-bold">{getNameByLanguage(i18n.language, option)}</span>,
+                              value: option.id,
+                              checked: provincialProgramOption === option.id,
+                              onChange: (e) => setProvincialProgramOption(e.target.value),
+                            }))}
+                        />
+                      </div>
+                    </Fragment>
+                  ),
+                }))}
+                errorMessage={errorMessages.provincialTerritorialBenefit}
+                required
+              />
+            )}
+          </section>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <ButtonLink to={`/apply/${id}/dental-insurance`} disabled={isSubmitting}>
+              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+              {t('dental-benefits.button.back')}
+            </ButtonLink>
+            <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+              {t('dental-benefits.button.continue')}
+              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+            </Button>
+          </div>
+        </fetcher.Form>
+      </div>
+    </>
   );
 }

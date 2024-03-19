@@ -14,6 +14,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
+import { Progress } from '~/components/progress';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -114,38 +115,46 @@ export default function AccessToDentalInsuranceQuestion() {
   );
 
   return (
-    <div className="max-w-prose">
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <fetcher.Form method="post" noValidate>
-        {options.length > 0 && (
-          <div className="my-6">
-            <InputRadios
-              id="dental-insurance"
-              name="dentalInsurance"
-              legend={t('dental-insurance.legend')}
-              options={options.map((option) => ({
-                children: <Trans ns={handle.i18nNamespaces}>{`dental-insurance.option-${option.id}`}</Trans>,
-                value: option.id,
-                defaultChecked: state.dentalInsurance?.dentalInsurance === option.id,
-              }))}
-              helpMessagePrimary={helpMessage}
-              helpMessagePrimaryClassName="text-black"
-              required
-              errorMessage={errorMessages.dentalInsurance}
-            />
+    <>
+      <div className="my-6 sm:my-8">
+        <p id="progress-label" className="sr-only mb-2">
+          {t('apply:progress.label')}
+        </p>
+        <Progress aria-labelledby="progress-label" value={80} size="lg" />
+      </div>
+      <div className="max-w-prose">
+        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <fetcher.Form method="post" noValidate>
+          {options.length > 0 && (
+            <div className="my-6">
+              <InputRadios
+                id="dental-insurance"
+                name="dentalInsurance"
+                legend={t('dental-insurance.legend')}
+                options={options.map((option) => ({
+                  children: <Trans ns={handle.i18nNamespaces}>{`dental-insurance.option-${option.id}`}</Trans>,
+                  value: option.id,
+                  defaultChecked: state.dentalInsurance?.dentalInsurance === option.id,
+                }))}
+                helpMessagePrimary={helpMessage}
+                helpMessagePrimaryClassName="text-black"
+                required
+                errorMessage={errorMessages.dentalInsurance}
+              />
+            </div>
+          )}
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <ButtonLink to={`/apply/${id}/communication-preference`} disabled={isSubmitting}>
+              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+              {t('dental-insurance.button.back')}
+            </ButtonLink>
+            <Button variant="primary">
+              {t('dental-insurance.button.continue')}
+              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+            </Button>
           </div>
-        )}
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          <ButtonLink to={`/apply/${id}/communication-preference`} disabled={isSubmitting}>
-            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-            {t('dental-insurance.button.back')}
-          </ButtonLink>
-          <Button variant="primary">
-            {t('dental-insurance.button.continue')}
-            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-          </Button>
-        </div>
-      </fetcher.Form>
-    </div>
+        </fetcher.Form>
+      </div>
+    </>
   );
 }

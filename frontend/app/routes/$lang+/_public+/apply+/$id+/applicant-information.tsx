@@ -13,6 +13,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
+import { Progress } from '~/components/progress';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -118,54 +119,62 @@ export default function ApplyFlowApplicationInformation() {
   }, [fetcher.data]);
 
   return (
-    <div className="max-w-prose">
-      <p id="form-instructions-sin" className="mb-4">
-        {t('applicant-information.form-instructions-sin')}
-      </p>
-      <p id="form-instructions-info" className="mb-6">
-        {t('applicant-information.form-instructions-info')}
-      </p>
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <fetcher.Form method="post" aria-describedby="form-instructions-sin form-instructions-info" noValidate>
-        <div className="mb-8 space-y-6">
-          <div className="grid gap-6 md:grid-cols-2">
-            <InputField id="firstName" name="firstName" label={t('applicant-information.first-name')} className="w-full" required aria-labelledby="name-instructions" defaultValue={defaultValues.firstName} />
-            <InputField id="lastName" name="lastName" label={t('applicant-information.last-name')} className="w-full" required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} aria-labelledby="name-instructions" />
+    <>
+      <div className="my-6 sm:my-8">
+        <p id="progress-label" className="sr-only mb-2">
+          {t('apply:progress.label')}
+        </p>
+        <Progress aria-labelledby="progress-label" value={40} size="lg" />
+      </div>
+      <div className="max-w-prose">
+        <p id="form-instructions-sin" className="mb-4">
+          {t('applicant-information.form-instructions-sin')}
+        </p>
+        <p id="form-instructions-info" className="mb-6">
+          {t('applicant-information.form-instructions-info')}
+        </p>
+        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <fetcher.Form method="post" aria-describedby="form-instructions-sin form-instructions-info" noValidate>
+          <div className="mb-8 space-y-6">
+            <div className="grid gap-6 md:grid-cols-2">
+              <InputField id="firstName" name="firstName" label={t('applicant-information.first-name')} className="w-full" required aria-labelledby="name-instructions" defaultValue={defaultValues.firstName} />
+              <InputField id="lastName" name="lastName" label={t('applicant-information.last-name')} className="w-full" required defaultValue={defaultValues.lastName} errorMessage={errorMessages.lastName} aria-labelledby="name-instructions" />
+            </div>
+            <p id="name-instructions">{t('applicant-information.name-instructions')}</p>
+            <InputField
+              id="socialInsuranceNumber"
+              name="socialInsuranceNumber"
+              label={t('applicant-information.sin')}
+              required
+              inputMode="numeric"
+              pattern="\d{9}"
+              placeholder={formatSin('000000000', '-')}
+              minLength={9}
+              maxLength={9}
+              defaultValue={defaultValues.socialInsuranceNumber}
+              errorMessage={errorMessages.socialInsuranceNumber}
+            />
+            <InputRadios
+              id="marital-status"
+              name="maritalStatus"
+              legend={t('applicant-information.marital-status')}
+              options={maritalStatuses.map((status) => ({ defaultChecked: status.code === state?.maritalStatus, children: getNameByLanguage(i18n.language, status), value: status.code }))}
+              required
+              errorMessage={errorMessages['input-radios-marital-status']}
+            />
           </div>
-          <p id="name-instructions">{t('applicant-information.name-instructions')}</p>
-          <InputField
-            id="socialInsuranceNumber"
-            name="socialInsuranceNumber"
-            label={t('applicant-information.sin')}
-            required
-            inputMode="numeric"
-            pattern="\d{9}"
-            placeholder={formatSin('000000000', '-')}
-            minLength={9}
-            maxLength={9}
-            defaultValue={defaultValues.socialInsuranceNumber}
-            errorMessage={errorMessages.socialInsuranceNumber}
-          />
-          <InputRadios
-            id="marital-status"
-            name="maritalStatus"
-            legend={t('applicant-information.marital-status')}
-            options={maritalStatuses.map((status) => ({ defaultChecked: status.code === state?.maritalStatus, children: getNameByLanguage(i18n.language, status), value: status.code }))}
-            required
-            errorMessage={errorMessages['input-radios-marital-status']}
-          />
-        </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={`/apply/${id}/date-of-birth`} disabled={isSubmitting}>
-            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-            {t('applicant-information.back-btn')}
-          </ButtonLink>
-          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-            {t('applicant-information.continue-btn')}
-            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-          </Button>
-        </div>
-      </fetcher.Form>
-    </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <ButtonLink id="back-button" to={`/apply/${id}/date-of-birth`} disabled={isSubmitting}>
+              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+              {t('applicant-information.back-btn')}
+            </ButtonLink>
+            <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+              {t('applicant-information.continue-btn')}
+              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+            </Button>
+          </div>
+        </fetcher.Form>
+      </div>
+    </>
   );
 }
