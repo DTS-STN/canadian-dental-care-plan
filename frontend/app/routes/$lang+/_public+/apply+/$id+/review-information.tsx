@@ -40,7 +40,20 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const parsedDateOfBirthString = parseDateString(state.dateOfBirth ?? '');
   const dateOfBirth = new Date(Number.parseInt(parsedDateOfBirthString.year ?? ''), Number.parseInt(parsedDateOfBirthString.month ?? ''), Number.parseInt(parsedDateOfBirthString.day ?? ''));
   const partnerDob = { year: state.partnerInformation?.year ?? 2024, month: state.partnerInformation?.month ?? 1, day: state.partnerInformation?.day ?? 1 };
-
+  // Getting province by Id
+  const allRegions = await getLookupService().getAllRegions();
+  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
+  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
+  // Getting Country by Id
+  const allCountries = await getLookupService().getAllCountries();
+  const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation?.mailingCountry);
+  const countryHome = allCountries.find((country) => country.countryId === state.personalInformation?.homeCountry);
+  if (!countryMailing) {
+    throw new Error(`Unexpected mailing address country: ${state.personalInformation?.mailingCountry}`);
+  }
+  if (!countryHome) {
+    throw new Error(`Unexpected home address country: ${state.personalInformation?.homeCountry}`);
+  }
   const userInfo = {
     firstName: 'John',
     id: '00000000-0000-0000-0000-000000000000',
@@ -68,17 +81,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     address: state.personalInformation?.mailingAddress ?? 'Unknown',
     appartment: state.personalInformation?.mailingApartment ?? 'Unknown',
     city: state.personalInformation?.mailingCity ?? 'Unknown',
-    province: state.personalInformation?.mailingProvince ?? 'Unknown',
+    province: provinceMailing,
     postalCode: state.personalInformation?.mailingPostalCode ?? 'Unknown',
-    country: state.personalInformation?.mailingCountry ?? 'Unknown',
+    country: countryMailing,
   };
   const homeAddressInfo = {
     address: state.personalInformation?.homeAddress ?? 'Unknown',
     appartment: state.personalInformation?.homeApartment ?? 'Unknown',
     city: state.personalInformation?.homeCity ?? 'Unknown',
-    province: state.personalInformation?.homeProvince ?? 'Unknown',
+    province: provinceHome,
     postalCode: state.personalInformation?.homePostalCode ?? 'Unknown',
-    country: state.personalInformation?.homeCountry ?? 'Unknown',
+    country: countryHome,
   };
   const dentalInsurance = state.dentalInsurance?.dentalInsurance;
 
@@ -202,7 +215,13 @@ export default function ReviewInformation() {
           </p>
         </DescriptionListItem>
         <DescriptionListItem term={t('apply:review-information.mailing-title')}>
-          <Address address={mailingAddressInfo.address} city={mailingAddressInfo.city} provinceState={mailingAddressInfo.province} postalZipCode={mailingAddressInfo.postalCode} country={mailingAddressInfo.country} />
+          <Address
+            address={mailingAddressInfo.address}
+            city={mailingAddressInfo.city}
+            provinceState={i18n.language === 'en' ? mailingAddressInfo.province?.nameEn : mailingAddressInfo.province?.nameFr}
+            postalZipCode={mailingAddressInfo.postalCode}
+            country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
+          />
           <p className="mt-4">
             <InlineLink id="change-mailing-address" to="/">
               {t('apply:review-information.mailing-change')}
@@ -210,7 +229,13 @@ export default function ReviewInformation() {
           </p>
         </DescriptionListItem>
         <DescriptionListItem term={t('apply:review-information.home-title')}>
-          <Address address={homeAddressInfo.address} city={homeAddressInfo.city} provinceState={homeAddressInfo.province} postalZipCode={homeAddressInfo.postalCode} country={homeAddressInfo.country} />
+          <Address
+            address={homeAddressInfo.address}
+            city={homeAddressInfo.city}
+            provinceState={i18n.language === 'en' ? homeAddressInfo.province?.nameEn : homeAddressInfo.province?.nameFr}
+            postalZipCode={homeAddressInfo.postalCode}
+            country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
+          />
           <p className="mt-4">
             <InlineLink id="change-home-address" to="/">
               {t('apply:review-information.home-change')}
