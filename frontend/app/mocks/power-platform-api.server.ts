@@ -226,11 +226,9 @@ function toUserPatchDocument({ homeAddress, mailingAddress, phoneNumber, preferr
  * @returns The user entity if found, otherwise throws a 404 error.
  */
 function getPersonalInformation(clientId: string) {
-  const parsedClientId = z.string().uuid().safeParse(clientId);
-
-  return !parsedClientId.success
+  return !clientId
     ? undefined
     : db.personalInformation.findFirst({
-        where: { clientIdentificationID: { equals: parsedClientId.data } },
+        where: { clientIdentificationID: { equals: clientId } },
       });
 }
