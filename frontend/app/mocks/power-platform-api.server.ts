@@ -60,27 +60,31 @@ export function getPowerPlatformApiMockHandlers() {
     http.post('https://api.example.com/personal-information/', async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       const parsedClientId = clientIdSchema.parse(await request.json()).Client.PersonSINIdentification.IdentificationID;
-      const getPeronalInformationEntity = getPersonalInformation(parsedClientId);
+      const peronalInformationEntity = getPersonalInformation(parsedClientId);
 
-      const listOfClientId = [{ IdentificationID: getPeronalInformationEntity.clientIdentificationID, IdentificationCategoryText: getPeronalInformationEntity.clientIdentificationCategory }];
-      const nameInfoList = [{ PersonSurName: [getPeronalInformationEntity.lastName], PersonGivenName: [getPeronalInformationEntity.firstName] }];
+      if (!peronalInformationEntity) {
+        throw new HttpResponse('Client Not found', { status: 204, headers: { 'Content-Type': 'text/plain' } });
+      }
+
+      const listOfClientId = [{ IdentificationID: peronalInformationEntity.clientIdentificationID, IdentificationCategoryText: peronalInformationEntity.clientIdentificationCategory }];
+      const nameInfoList = [{ PersonSurName: [peronalInformationEntity.lastName], PersonGivenName: [peronalInformationEntity.firstName] }];
       const addressList = [
         {
           AddressCategoryCode: {
-            ReferenceDataName: getPeronalInformationEntity.addressCategoryCode,
+            ReferenceDataName: peronalInformationEntity.addressCategoryCode,
           },
           AddressStreet: {
-            StreetName: getPeronalInformationEntity.addressStreet,
+            StreetName: peronalInformationEntity.addressStreet,
           },
-          AddressSecondaryUnitText: getPeronalInformationEntity.addressSecondaryUnitText,
-          AddressCityName: getPeronalInformationEntity.addressCityName,
+          AddressSecondaryUnitText: peronalInformationEntity.addressSecondaryUnitText,
+          AddressCityName: peronalInformationEntity.addressCityName,
           AddressProvince: {
-            ProvinceName: getPeronalInformationEntity.addressProvince,
+            ProvinceName: peronalInformationEntity.addressProvince,
           },
           AddressCountry: {
-            CountryName: getPeronalInformationEntity.addressCountryName,
+            CountryName: peronalInformationEntity.addressCountryName,
           },
-          AddressPostalCode: getPeronalInformationEntity.addressPostalCode,
+          AddressPostalCode: peronalInformationEntity.addressPostalCode,
         },
       ];
 
@@ -90,21 +94,21 @@ export function getPowerPlatformApiMockHandlers() {
           PersonName: nameInfoList,
           PersonContactInformation: {
             EmailAddress: {
-              EmailAddressID: getPeronalInformationEntity.emailAddressId,
+              EmailAddressID: peronalInformationEntity.emailAddressId,
             },
             TelephoneNumber: {
-              FullTelephoneNumber: getPeronalInformationEntity.fullTelephoneNumber,
+              FullTelephoneNumber: peronalInformationEntity.fullTelephoneNumber,
             },
             Address: addressList,
           },
           PersonLanguage: {
             LanguageCode: {
-              ReferenceDataName: getPeronalInformationEntity.languageCode,
+              ReferenceDataName: peronalInformationEntity.languageCode,
             },
-            PreferredIndicator: getPeronalInformationEntity.languagePreferredIndicator,
+            PreferredIndicator: peronalInformationEntity.languagePreferredIndicator,
           },
           PersonSINIdentification: {
-            IdentificationID: getPeronalInformationEntity.sinIdentification,
+            IdentificationID: peronalInformationEntity.sinIdentification,
           },
         },
       });
@@ -223,15 +227,10 @@ function toUserPatchDocument({ homeAddress, mailingAddress, phoneNumber, preferr
  */
 function getPersonalInformation(clientId: string) {
   const parsedClientId = z.string().uuid().safeParse(clientId);
-  const personalInformationEntity = !parsedClientId.success
+
+  return !parsedClientId.success
     ? undefined
     : db.personalInformation.findFirst({
         where: { clientIdentificationID: { equals: parsedClientId.data } },
       });
-
-  if (!personalInformationEntity) {
-    throw new HttpResponse('User Not found', { status: 204, headers: { 'Content-Type': 'text/plain' } });
-  }
-
-  return personalInformationEntity;
 }
