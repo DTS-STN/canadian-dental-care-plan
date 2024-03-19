@@ -41,7 +41,7 @@ const db = factory({
     clientIdentificationCategory: String,
     lastName: faker.person.lastName,
     firstName: faker.person.firstName,
-    emailAddressId: String,
+    emailAddressId: faker.internet.email,
     fullTelephoneNumber: String,
     languageCode: () => faker.helpers.arrayElement(['E', 'F']),
     languagePreferredIndicator: Boolean,

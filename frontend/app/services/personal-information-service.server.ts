@@ -6,7 +6,7 @@ import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('personal-information-service.server');
 
-const personalInformationDtoSchema = z.object({
+const personalInformationApiResponseSchema = z.object({
   Client: z.object({
     ClientIdentification: z
       .object({
@@ -66,7 +66,7 @@ const personalInformationDtoSchema = z.object({
   }),
 });
 
-type PersonalInformationDto = z.infer<typeof personalInformationDtoSchema>;
+type PersonalInformationApiResponse = z.infer<typeof personalInformationApiResponseSchema>;
 
 const personalInfoSchema = z.object({
   clientInfoList: z
@@ -91,7 +91,6 @@ const personalInfoSchema = z.object({
         .object({
           categoryCode: z.string(),
           streetName: z.string(),
-          secondaryUnitText: z.string(),
           cityName: z.string(),
           provinceName: z.string(),
           countryName: z.string(),
@@ -106,7 +105,6 @@ const personalInfoSchema = z.object({
       preferredIndicator: z.boolean(),
     })
     .optional(),
-  sinIdentification: z.string(),
 });
 
 export type PersonalInfo = z.infer<typeof personalInfoSchema>;
@@ -119,7 +117,7 @@ export const getPersonalInformationService = moize(createPersonalInformationServ
 function createPersonalInformationService() {
   const { INTEROP_API_BASE_URI } = getEnv();
 
-  function toPersonalInformation(personalnformationDto: PersonalInformationDto): PersonalInfo {
+  function toPersonalInformation(personalnformationDto: PersonalInformationApiResponse): PersonalInfo {
     return {
       clientInfoList: personalnformationDto.Client.ClientIdentification
         ? personalnformationDto.Client.ClientIdentification.map((clientInfoDto) => ({
@@ -140,7 +138,6 @@ function createPersonalInformationService() {
           ? personalnformationDto.Client.PersonContactInformation.Address.map((address) => ({
               categoryCode: address.AddressCategoryCode.ReferenceDataName,
               streetName: address.AddressStreet.StreetName,
-              secondaryUnitText: address.AddressSecondaryUnitText,
               cityName: address.AddressCityName,
               provinceName: address.AddressProvince.ProvinceName,
               countryName: address.AddressCountry.CountryName,
@@ -152,7 +149,6 @@ function createPersonalInformationService() {
         languageCode: personalnformationDto.Client.PersonLanguage ? personalnformationDto.Client.PersonLanguage.LanguageCode.ReferenceDataName : '',
         preferredIndicator: personalnformationDto.Client.PersonLanguage ? personalnformationDto.Client.PersonLanguage.PreferredIndicator : false,
       },
-      sinIdentification: personalnformationDto.Client.PersonSINIdentification.IdentificationID,
     };
   }
 
@@ -172,7 +168,7 @@ function createPersonalInformationService() {
 
     if (response.ok) {
       const responseBody = await response.json();
-      return toPersonalInformation(personalInformationDtoSchema.parse(responseBody));
+      return toPersonalInformation(personalInformationApiResponseSchema.parse(responseBody));
     }
     if (response.status == 204) {
       return null;

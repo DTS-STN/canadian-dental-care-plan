@@ -17,19 +17,6 @@ const clientIdSchema = z.object({
   }),
 });
 
-export type ClientId = z.infer<typeof clientIdSchema>;
-
-const letterTypeCodeSchema = z.object({
-  code: z.string(),
-  nameFr: z.string(),
-  nameEn: z.string(),
-  id: z.string().optional(),
-});
-
-const listOfLetterTypeCodeSchema = z.array(letterTypeCodeSchema);
-
-export type LetterTypeCodeList = z.infer<typeof listOfLetterTypeCodeSchema>;
-
 /**
  * Server-side MSW mocks for the Power Platform API.
  */
@@ -72,26 +59,28 @@ export function getPowerPlatformApiMockHandlers() {
     //
     http.post('https://api.example.com/personal-information/', async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
-      const getPeronalInformationEntity = getPersonalInformation(clientIdSchema.parse(await request.json()));
-      const listOfClientId = [{ IdentificationID: getPeronalInformationEntity?.clientIdentificationID, IdentificationCategoryText: getPeronalInformationEntity?.clientIdentificationCategory }];
-      const nameInfoList = [{ PersonSurName: [getPeronalInformationEntity ? getPeronalInformationEntity.lastName : ''], PersonGivenName: [getPeronalInformationEntity ? getPeronalInformationEntity.firstName : ''] }];
+      const parsedClientId = clientIdSchema.parse(await request.json()).Client.PersonSINIdentification.IdentificationID;
+      const getPeronalInformationEntity = getPersonalInformation(parsedClientId);
+
+      const listOfClientId = [{ IdentificationID: getPeronalInformationEntity.clientIdentificationID, IdentificationCategoryText: getPeronalInformationEntity.clientIdentificationCategory }];
+      const nameInfoList = [{ PersonSurName: [getPeronalInformationEntity.lastName], PersonGivenName: [getPeronalInformationEntity.firstName] }];
       const addressList = [
         {
           AddressCategoryCode: {
-            ReferenceDataName: getPeronalInformationEntity?.addressCategoryCode,
+            ReferenceDataName: getPeronalInformationEntity.addressCategoryCode,
           },
           AddressStreet: {
-            StreetName: getPeronalInformationEntity?.addressStreet,
+            StreetName: getPeronalInformationEntity.addressStreet,
           },
-          AddressSecondaryUnitText: getPeronalInformationEntity?.addressSecondaryUnitText,
-          AddressCityName: getPeronalInformationEntity?.addressCityName,
+          AddressSecondaryUnitText: getPeronalInformationEntity.addressSecondaryUnitText,
+          AddressCityName: getPeronalInformationEntity.addressCityName,
           AddressProvince: {
-            ProvinceName: getPeronalInformationEntity?.addressProvince,
+            ProvinceName: getPeronalInformationEntity.addressProvince,
           },
           AddressCountry: {
-            CountryName: getPeronalInformationEntity?.addressCountryName,
+            CountryName: getPeronalInformationEntity.addressCountryName,
           },
-          AddressPostalCode: getPeronalInformationEntity?.addressPostalCode,
+          AddressPostalCode: getPeronalInformationEntity.addressPostalCode,
         },
       ];
 
@@ -101,21 +90,21 @@ export function getPowerPlatformApiMockHandlers() {
           PersonName: nameInfoList,
           PersonContactInformation: {
             EmailAddress: {
-              EmailAddressID: getPeronalInformationEntity?.emailAddressId,
+              EmailAddressID: getPeronalInformationEntity.emailAddressId,
             },
             TelephoneNumber: {
-              FullTelephoneNumber: getPeronalInformationEntity?.fullTelephoneNumber,
+              FullTelephoneNumber: getPeronalInformationEntity.fullTelephoneNumber,
             },
             Address: addressList,
           },
           PersonLanguage: {
             LanguageCode: {
-              ReferenceDataName: getPeronalInformationEntity?.languageCode,
+              ReferenceDataName: getPeronalInformationEntity.languageCode,
             },
-            PreferredIndicator: getPeronalInformationEntity?.languagePreferredIndicator,
+            PreferredIndicator: getPeronalInformationEntity.languagePreferredIndicator,
           },
           PersonSINIdentification: {
-            IdentificationID: getPeronalInformationEntity?.sinIdentification,
+            IdentificationID: getPeronalInformationEntity.sinIdentification,
           },
         },
       });
@@ -232,13 +221,17 @@ function toUserPatchDocument({ homeAddress, mailingAddress, phoneNumber, preferr
  * @param id - The user ID to look up in the database.
  * @returns The user entity if found, otherwise throws a 404 error.
  */
-function getPersonalInformation(clientId: { Client: { PersonSINIdentification: { IdentificationID: string } } }) {
-  const parsedClientId = z.string().uuid().safeParse(clientId.Client.PersonSINIdentification.IdentificationID);
+function getPersonalInformation(clientId: string) {
+  const parsedClientId = z.string().uuid().safeParse(clientId);
   const personalInformationEntity = !parsedClientId.success
     ? undefined
     : db.personalInformation.findFirst({
         where: { clientIdentificationID: { equals: parsedClientId.data } },
       });
+
+  if (!personalInformationEntity) {
+    throw new HttpResponse('User Not found', { status: 204, headers: { 'Content-Type': 'text/plain' } });
+  }
 
   return personalInformationEntity;
 }
