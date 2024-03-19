@@ -10,7 +10,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { ErrorSummary, createErrorSummaryItems, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
@@ -20,6 +20,13 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+
+enum ApplicantType {
+  Delegate = 'delegate',
+  Personal = 'personal',
+}
+
+export type TypeOfApplicationState = `${ApplicantType}`;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -38,34 +45,44 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.type-of-application.page-title') }) };
 
-  return json({ id, meta, state: state.applicationDelegate });
+  return json({ id, meta, state: state.typeOfApplication });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id } = await applyFlow.loadState({ request, params });
+  const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formSchema = z.object({
-    applicationDelegate: z.string(),
+  /**
+   * Schema for application delegate.
+   */
+  const typeOfApplicationSchema: z.ZodType<TypeOfApplicationState> = z.nativeEnum(ApplicantType, {
+    errorMap: () => ({ message: t('apply:eligibility.type-of-application.error-message.type-of-application-required') }),
   });
 
-  const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = formSchema.safeParse(formData);
+  const formData = await request.formData();
+  const data = String(formData.get('typeOfApplication') ?? '');
+
+  const parsedDataResult = typeOfApplicationSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof formSchema>>,
+      formData: data,
     });
   }
 
   const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
-    state: { applicationDelegate: parsedDataResult.data },
+    state: { typeOfApplication: parsedDataResult.data },
   });
 
-  return parsedDataResult.data.applicationDelegate === 'TRUE' ? redirectWithLocale(request, `/apply/${id}/application-delegate`, sessionResponseInit) : redirectWithLocale(request, `/apply/${id}/tax-filing`, sessionResponseInit);
+  if (parsedDataResult.data === ApplicantType.Delegate) {
+    return redirectWithLocale(request, `/apply/${id}/application-delegate`, sessionResponseInit);
+  }
+
+  return redirectWithLocale(request, `/apply/${id}/tax-filing`, sessionResponseInit);
 }
 
 export default function ApplyFlowTypeOfApplication() {
@@ -75,20 +92,17 @@ export default function ApplyFlowTypeOfApplication() {
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
 
+  const defaultValue = fetcher.data?.formData ?? state;
+
   useEffect(() => {
-    if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
+    if (fetcher.data && fetcher.data.errors._errors.length > 0) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
   }, [fetcher.data]);
 
-  function getErrorMessage(errorI18nKey?: string): string | undefined {
-    if (!errorI18nKey) return undefined;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`apply:eligibility.type-of-application.error-message.${errorI18nKey}` as any);
-  }
-
+  // Keys order should match the input IDs order.
   const errorMessages = {
-    'input-radios-application-delegate': getErrorMessage(fetcher.data?.errors.applicationDelegate?._errors[0]),
+    'input-radio-type-of-application-option-0': fetcher.data?.errors._errors[0],
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -105,15 +119,23 @@ export default function ApplyFlowTypeOfApplication() {
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
           <InputRadios
-            id="application-delegate"
-            name="applicationDelegate"
+            id="type-of-application"
+            name="typeOfApplication"
             legend={t('apply:eligibility.type-of-application.form-instructions')}
             options={[
-              { value: 'FALSE', children: t('apply:eligibility.type-of-application.radio-options.personal'), defaultChecked: state?.applicationDelegate === 'FALSE' },
-              { value: 'TRUE', children: t('apply:eligibility.type-of-application.radio-options.delegate'), defaultChecked: state?.applicationDelegate === 'TRUE' },
+              {
+                value: ApplicantType.Personal,
+                children: t('apply:eligibility.type-of-application.radio-options.personal'),
+                defaultChecked: defaultValue === ApplicantType.Personal,
+              },
+              {
+                value: ApplicantType.Delegate,
+                children: t('apply:eligibility.type-of-application.radio-options.delegate'),
+                defaultChecked: defaultValue === ApplicantType.Delegate,
+              },
             ]}
             required
-            errorMessage={errorMessages['input-radios-application-delegate']}
+            errorMessage={errorMessages['input-radio-type-of-application-option-0']}
           />
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <ButtonLink id="back-button" to={`/apply/${id}/terms-and-conditions`} disabled={isSubmitting}>

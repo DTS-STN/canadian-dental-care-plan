@@ -196,7 +196,7 @@
         "delegate": "I am applying on behalf of someone else"
       },
       "error-message": {
-        "Required": "Applicant type must be provided"
+        "type-of-application-required": "The applicant type is required."
       },
       "back-btn": "Back",
       "continue-btn": "Continue"
