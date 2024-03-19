@@ -6,6 +6,7 @@ import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faSpinner, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { parse } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
 
@@ -16,7 +17,7 @@ import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
-import { parseDateString } from '~/utils/date-utils';
+import { toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -38,76 +39,96 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   //TODO: Get User/apply form information
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
-  const parsedDateOfBirthString = parseDateString(state.dateOfBirth ?? '');
-  const dateOfBirth = new Date(Number.parseInt(parsedDateOfBirthString.year ?? ''), Number.parseInt(parsedDateOfBirthString.month ?? ''), Number.parseInt(parsedDateOfBirthString.day ?? ''));
-  const partnerDob = { year: state.partnerInformation?.year ?? 2024, month: state.partnerInformation?.month ?? 1, day: state.partnerInformation?.day ?? 1 };
+
+  // prettier-ignore
+  if (!state.applicantInformation ||
+    !state.applicationDelegate ||
+    !state.communicationPreferences ||
+    !state.dateOfBirth ||
+    !state.dentalBenefit ||
+    !state.dentalInsurance ||
+    !state.personalInformation ||
+    !state.taxFiling2023) {
+    throw new Error(`Incomplete application "${id}" state!`);
+  }
+
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = await getLocale(request);
+
   // Getting province by Id
   const allRegions = await getLookupService().getAllRegions();
   const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
   const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
+
   // Getting Country by Id
   const allCountries = await getLookupService().getAllCountries();
   const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation?.mailingCountry);
   const countryHome = allCountries.find((country) => country.countryId === state.personalInformation?.homeCountry);
+
   if (!countryMailing) {
-    throw new Error(`Unexpected mailing address country: ${state.personalInformation?.mailingCountry}`);
+    throw new Error(`Unexpected mailing address country: ${state.personalInformation.mailingCountry}`);
   }
+
   if (!countryHome) {
-    throw new Error(`Unexpected home address country: ${state.personalInformation?.homeCountry}`);
+    throw new Error(`Unexpected home address country: ${state.personalInformation.homeCountry}`);
   }
+
   const userInfo = {
     firstName: 'John',
     id: '00000000-0000-0000-0000-000000000000',
-    lastName: state.applicantInformation?.lastName,
-    phoneNumber: state.personalInformation?.phoneNumber,
-    altPhoneNumber: state.personalInformation?.phoneNumberAlt,
-    preferredLanguage: state.communicationPreferences?.preferredLanguage ?? 'en',
-    birthday: dateOfBirth.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' }),
-    sin: state.applicantInformation?.socialInsuranceNumber ?? '',
-    martialStatus: state.applicantInformation?.maritalStatus,
-    email: state.communicationPreferences?.email,
-    communicationPreference: state.communicationPreferences?.preferredMethod,
+    lastName: state.applicantInformation.lastName,
+    phoneNumber: state.personalInformation.phoneNumber,
+    altPhoneNumber: state.personalInformation.phoneNumberAlt,
+    preferredLanguage: state.communicationPreferences.preferredLanguage,
+    birthday: toLocaleDateString(parse(state.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+    sin: state.applicantInformation.socialInsuranceNumber,
+    martialStatus: state.applicantInformation.maritalStatus,
+    email: state.communicationPreferences.email,
+    communicationPreference: state.communicationPreferences.preferredMethod,
   };
-  const spouseInfo = {
-    firstName: 'Phil',
-    id: '00000000-0000-0000-0000-000000000001',
-    lastName: state.partnerInformation?.lastName,
-    phoneNumber: '(754) 628-4776',
-    birthday: new Date(partnerDob.year, partnerDob.month, partnerDob.day).toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' }),
-    sin: '123456789',
-    consent: state.partnerInformation?.confirm === 'on' ? true : false,
-  };
-  const preferredLanguage = (await getLookupService().getPreferredLanguage(userInfo.preferredLanguage)) ?? { id: 'en', nameEn: 'English', nameFr: 'Anglais' };
+
+  const spouseInfo = state.partnerInformation
+    ? {
+        firstName: state.partnerInformation.firstName,
+        lastName: state.partnerInformation.lastName,
+        birthday: toLocaleDateString(parse(state.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+        sin: state.partnerInformation.socialInsuranceNumber,
+        consent: state.partnerInformation.confirm,
+      }
+    : undefined;
+
+  const preferredLanguage = await getLookupService().getPreferredLanguage(userInfo.preferredLanguage);
+
   const mailingAddressInfo = {
-    address: state.personalInformation?.mailingAddress ?? 'Unknown',
-    appartment: state.personalInformation?.mailingApartment ?? 'Unknown',
-    city: state.personalInformation?.mailingCity ?? 'Unknown',
+    address: state.personalInformation.mailingAddress,
+    appartment: state.personalInformation.mailingApartment,
+    city: state.personalInformation.mailingCity,
     province: provinceMailing,
-    postalCode: state.personalInformation?.mailingPostalCode ?? 'Unknown',
+    postalCode: state.personalInformation.mailingPostalCode,
     country: countryMailing,
   };
+
   const homeAddressInfo = {
-    address: state.personalInformation?.homeAddress ?? 'Unknown',
-    appartment: state.personalInformation?.homeApartment ?? 'Unknown',
-    city: state.personalInformation?.homeCity ?? 'Unknown',
+    address: state.personalInformation.homeAddress,
+    appartment: state.personalInformation.homeApartment,
+    city: state.personalInformation.homeCity,
     province: provinceHome,
-    postalCode: state.personalInformation?.homePostalCode ?? 'Unknown',
+    postalCode: state.personalInformation.homePostalCode,
     country: countryHome,
   };
   const dentalInsurance = state.dentalInsurance;
 
   const dentalBenefit = {
     federalBenefit: {
-      access: state.dentalBenefit?.federalBenefit,
-      benefit: state.dentalBenefit?.federalSocialProgram,
+      access: state.dentalBenefit.federalBenefit,
+      benefit: state.dentalBenefit.federalSocialProgram,
     },
     provTerrBenefit: {
-      access: state.dentalBenefit?.provincialTerritorialBenefit,
-      benefit: state.dentalBenefit?.provincialTerritorialSocialProgram,
+      access: state.dentalBenefit.provincialTerritorialBenefit,
+      benefit: state.dentalBenefit.provincialTerritorialSocialProgram,
     },
   };
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:review-information.page-title') }) };
 
   return json({ id, userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, meta });
@@ -182,37 +203,43 @@ export default function ReviewInformation() {
             </p>
           </DescriptionListItem>
         </dl>
-        <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.spouse-title')}</h2>
-        <dl>
-          <DescriptionListItem term={t('apply:review-information.full-name-title')}>
-            {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
-            <p className="mt-4">
-              <InlineLink id="change-spouse-full-name" to="/">
-                {t('apply:review-information.full-name-change')}
-              </InlineLink>
-            </p>
-          </DescriptionListItem>
-          <DescriptionListItem term={t('apply:review-information.dob-title')}>
-            {spouseInfo.birthday}
-            <p className="mt-4">
-              <InlineLink id="change-spouse-date-of-birth" to="/">
-                {t('apply:review-information.dob-change')}
-              </InlineLink>
-            </p>
-          </DescriptionListItem>
-          <DescriptionListItem term={t('apply:review-information.sin-title')}>
-            {formatSin(spouseInfo.sin)}
-            <p className="mt-4">
-              <InlineLink id="change-spouse-sin" to="/">
-                {t('apply:review-information.sin-change')}
-              </InlineLink>
-            </p>
-          </DescriptionListItem>
-          <DescriptionListItem term="Consent">
-            {spouseInfo.consent ? 'My spouse or common-law partner is aware and has consented to sharing of their personal information.' : 'My spouse or common-law partner is aware and has not consented to sharing of their personal information.'}
-          </DescriptionListItem>
-        </dl>
-        <h2 className="mt-2 text-2xl font-semibold ">{t('apply:review-information.personal-info-title')}</h2>
+
+        {spouseInfo && (
+          <>
+            <h2 className="mt-8 text-2xl font-semibold">{t('apply:review-information.spouse-title')}</h2>
+            <dl>
+              <DescriptionListItem term={t('apply:review-information.full-name-title')}>
+                {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
+                <p className="mt-4">
+                  <InlineLink id="change-spouse-full-name" to="/">
+                    {t('apply:review-information.full-name-change')}
+                  </InlineLink>
+                </p>
+              </DescriptionListItem>
+              <DescriptionListItem term={t('apply:review-information.dob-title')}>
+                {spouseInfo.birthday}
+                <p className="mt-4">
+                  <InlineLink id="change-spouse-date-of-birth" to="/">
+                    {t('apply:review-information.dob-change')}
+                  </InlineLink>
+                </p>
+              </DescriptionListItem>
+              <DescriptionListItem term={t('apply:review-information.sin-title')}>
+                {formatSin(spouseInfo.sin)}
+                <p className="mt-4">
+                  <InlineLink id="change-spouse-sin" to="/">
+                    {t('apply:review-information.sin-change')}
+                  </InlineLink>
+                </p>
+              </DescriptionListItem>
+              <DescriptionListItem term="Consent">
+                {spouseInfo.consent ? 'My spouse or common-law partner is aware and has consented to sharing of their personal information.' : 'My spouse or common-law partner is aware and has not consented to sharing of their personal information.'}
+              </DescriptionListItem>
+            </dl>
+          </>
+        )}
+
+        <h2 className="mt-2 text-2xl font-semibold">{t('apply:review-information.personal-info-title')}</h2>
         <dl className="sm: grid grid-cols-1 sm:grid-cols-2">
           <DescriptionListItem term={t('apply:review-information.phone-title')}>
             {userInfo.phoneNumber}
@@ -246,8 +273,8 @@ export default function ReviewInformation() {
           </DescriptionListItem>
           <DescriptionListItem term={t('apply:review-information.home-title')}>
             <Address
-              address={homeAddressInfo.address}
-              city={homeAddressInfo.city}
+              address={homeAddressInfo.address ?? ''}
+              city={homeAddressInfo.city ?? ''}
               provinceState={i18n.language === 'en' ? homeAddressInfo.province?.nameEn : homeAddressInfo.province?.nameFr}
               postalZipCode={homeAddressInfo.postalCode}
               country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
@@ -259,7 +286,7 @@ export default function ReviewInformation() {
             </p>
           </DescriptionListItem>
         </dl>
-        <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.comm-title')}</h2>
+        <h2 className="mt-8 text-2xl font-semibold">{t('apply:review-information.comm-title')}</h2>
         <dl>
           <DescriptionListItem term={t('apply:review-information.comm-pref-title')}>
             {userInfo.communicationPreference === 'email' ? (
@@ -277,16 +304,20 @@ export default function ReviewInformation() {
               </InlineLink>
             </p>
           </DescriptionListItem>
-          <DescriptionListItem term={t('apply:review-information.lang-pref-title')}>
-            {getNameByLanguage(i18n.language, preferredLanguage)}
-            <p className="mt-4">
-              <InlineLink id="change-language-preference" to="/">
-                {t('apply:review-information.lang-pref-change')}
-              </InlineLink>
-            </p>
-          </DescriptionListItem>
+          {preferredLanguage && (
+            <>
+              <DescriptionListItem term={t('apply:review-information.lang-pref-title')}>
+                {getNameByLanguage(i18n.language, preferredLanguage)}
+                <p className="mt-4">
+                  <InlineLink id="change-language-preference" to="/">
+                    {t('apply:review-information.lang-pref-change')}
+                  </InlineLink>
+                </p>
+              </DescriptionListItem>
+            </>
+          )}
         </dl>
-        <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.dental-title')}</h2>
+        <h2 className="mt-8 text-2xl font-semibold">{t('apply:review-information.dental-title')}</h2>
         <dl>
           <DescriptionListItem term={t('apply:review-information.dental-private-title')}>
             {t('apply:review-information.dental-insurance-has-access')}

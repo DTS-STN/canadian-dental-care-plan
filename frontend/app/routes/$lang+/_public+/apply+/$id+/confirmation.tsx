@@ -4,6 +4,7 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 
+import { parse } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -12,6 +13,7 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
+import { toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -33,8 +35,21 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { state } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ request, params });
+  const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = await getLocale(request);
+
+  // prettier-ignore
+  if (!state.applicantInformation ||
+    !state.applicationDelegate ||
+    !state.communicationPreferences ||
+    !state.dateOfBirth ||
+    !state.dentalBenefit ||
+    !state.dentalInsurance ||
+    !state.personalInformation ||
+    !state.taxFiling2023) {
+    throw new Error(`Incomplete application "${id}" state!`);
+  }
 
   const allProvincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
   const selectedBenefits = allProvincialTerritorialSocialPrograms
@@ -48,47 +63,48 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const maritalStatuses = await getLookupService().getAllMaritalStatuses();
   const maritalStatusDict = maritalStatuses.find((obj) => obj.code === state.applicantInformation?.maritalStatus)!;
-  const maritalStatus = getNameByLanguage(locale, maritalStatusDict!);
+  const maritalStatus = getNameByLanguage(locale, maritalStatusDict);
 
   const communicationPreferences = await getLookupService().getAllPreferredCommunicationMethods();
   const communicationPreferenceDict = communicationPreferences.find((obj) => obj.id === state.communicationPreferences?.preferredMethod);
   const communicationPreference = getNameByLanguage(locale, communicationPreferenceDict!);
 
   const userInfo = {
-    firstName: state.applicantInformation?.firstName,
-    lastName: state.applicantInformation?.lastName,
-    phoneNumber: state.personalInformation?.phoneNumber,
-    altPhoneNumber: state.personalInformation?.phoneNumberAlt,
+    firstName: state.applicantInformation.firstName,
+    lastName: state.applicantInformation.lastName,
+    phoneNumber: state.personalInformation.phoneNumber,
+    altPhoneNumber: state.personalInformation.phoneNumberAlt,
     preferredLanguage: preferredLanguage,
-    birthday: new Date(state.dateOfBirth ?? '').toLocaleDateString(`${locale}-ca`, { year: 'numeric', month: 'long', day: 'numeric' }),
-    sin: state.applicantInformation?.socialInsuranceNumber,
+    birthday: toLocaleDateString(parse(state.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+    sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: maritalStatus,
-    email: state.communicationPreferences?.email,
+    email: state.communicationPreferences.email,
     communicationPreference: communicationPreference,
   };
 
-  // TODO spouse date of birth will use DatePicker component
-  const spouseInfo = {
-    firstName: state.partnerInformation?.firstName,
-    lastName: state.partnerInformation?.lastName,
-    birthday: new Date(state.partnerInformation?.year ?? 1900, state.partnerInformation?.month ?? 0, state.partnerInformation?.day ?? 1).toLocaleDateString(`${locale}-ca`, { year: 'numeric', month: 'long', day: 'numeric' }),
-    sin: state.partnerInformation?.socialInsuranceNumber,
-  };
+  const spouseInfo = state.partnerInformation
+    ? {
+        firstName: state.partnerInformation.firstName,
+        lastName: state.partnerInformation.lastName,
+        birthday: toLocaleDateString(parse(state.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+        sin: state.partnerInformation.socialInsuranceNumber,
+      }
+    : undefined;
 
   const mailingAddressInfo = {
-    address: state.personalInformation?.mailingAddress,
-    city: state.personalInformation?.mailingCity,
-    province: state.personalInformation?.mailingProvince,
-    postalCode: state.personalInformation?.mailingPostalCode,
-    country: state.personalInformation?.mailingCountry,
+    address: state.personalInformation.mailingAddress,
+    city: state.personalInformation.mailingCity,
+    province: state.personalInformation.mailingProvince,
+    postalCode: state.personalInformation.mailingPostalCode,
+    country: state.personalInformation.mailingCountry,
   };
 
   const homeAddressInfo = {
-    address: state.personalInformation?.homeAddress,
-    city: state.personalInformation?.homeCity,
-    province: state.personalInformation?.homeProvince,
-    postalCode: state.personalInformation?.homePostalCode,
-    country: state.personalInformation?.homeCountry,
+    address: state.personalInformation.homeAddress,
+    city: state.personalInformation.homeCity,
+    province: state.personalInformation.homeProvince,
+    postalCode: state.personalInformation.homePostalCode,
+    country: state.personalInformation.homeCountry,
   };
 
   const dentalInsurance = {
@@ -96,7 +112,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     selectedBenefits,
   };
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:confirm.page-title') }) };
 
   return json({ dentalInsurance, homeAddressInfo, mailingAddressInfo, meta, spouseInfo, userInfo });
@@ -162,15 +177,17 @@ export default function ApplyFlowConfirm() {
       <UnorderedList term={t('confirm.applicant-title')}>
         <li className="my-1 capitalize">{t('confirm.full-name', { name: `${userInfo.firstName} ${userInfo.lastName}` })}</li>
         <li className="my-1">{t('confirm.dob', { dob: userInfo.birthday })}</li>
-        <li className="my-1">{t('confirm.sin', { sin: formatSin(userInfo.sin ?? '') })}</li>
+        <li className="my-1">{t('confirm.sin', { sin: formatSin(userInfo.sin) })}</li>
         <li className="my-1">{t('confirm.marital-status', { status: userInfo.martialStatus })}</li>
       </UnorderedList>
-      <UnorderedList term={t('confirm.spouse-info')}>
-        <li className="my-1 capitalize">{t('confirm.full-name', { name: `${spouseInfo.firstName} ${spouseInfo.lastName}` })}</li>
-        <li className="my-1">{t('confirm.dob', { dob: spouseInfo.birthday })}</li>
-        <li className="my-1">{t('confirm.sin', { sin: formatSin(spouseInfo.sin ?? '') })}</li>
-        <li className="my-1">{t('confirm.consent')}</li>
-      </UnorderedList>
+      {spouseInfo && (
+        <UnorderedList term={t('confirm.spouse-info')}>
+          <li className="my-1 capitalize">{t('confirm.full-name', { name: `${spouseInfo.firstName} ${spouseInfo.lastName}` })}</li>
+          <li className="my-1">{t('confirm.dob', { dob: spouseInfo.birthday })}</li>
+          <li className="my-1">{t('confirm.sin', { sin: formatSin(spouseInfo.sin) })}</li>
+          <li className="my-1">{t('confirm.consent')}</li>
+        </UnorderedList>
+      )}
       <UnorderedList term={t('confirm.contact-info')}>
         <li className="my-1">{t('confirm.phone-number', { phone: userInfo.phoneNumber })}</li>
         <li className="my-1">{t('confirm.alt-phone-number', { altPhone: userInfo.altPhoneNumber })}</li>

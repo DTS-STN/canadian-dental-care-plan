@@ -391,11 +391,8 @@
     "page-title": "Spouse / Common-law partner information",
     "provide-sin": "Provide information on your current spouse or common-law partner as indicated on their SIN card/letter.",
     "required-information": "This information is required to calculate the adjusted family net income. Please note that the spouse or common-law partner will need to submit their own application to the plan.",
-    "sin": "Social Insurance Number",
-    "dob": "Date of birth",
-    "year": "Year",
-    "month": "Month",
-    "day": "Day",
+    "sin": "Social Insurance Number (SIN)",
+    "date-of-birth": "Date of birth",
     "last-name": "Last name",
     "first-name": "First name",
     "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
@@ -403,13 +400,14 @@
     "back-btn": "Back",
     "continue-btn": "Continue",
     "error-message": {
-      "valid-sin": "Must be a valid SIN",
-      "unique-sins": "SINs must be unique",
-      "last-name": "Last name must be provided",
-      "month": "Month must be valid",
-      "day": "Day must be valid for the given month and year",
-      "year": "Year must be valid",
-      "confirm": "Checkbox must be selected"
+      "confirm-required": "Checkbox must be selected",
+      "date-of-birth-required": "The date of birth is required.",
+      "date-of-birth-valid": "The date of birth must be a valid date.",
+      "first-name-required": "The first name is required.",
+      "last-name-required": "The last name is required.",
+      "sin-required": "The Social Insurance Number (SIN) is required.",
+      "sin-unique": "The Social Insurance Number (SIN) must be unique.",
+      "sin-valid": "The Social Insurance Number (SIN) must be valid."
     }
   },
   "personal-information": {
