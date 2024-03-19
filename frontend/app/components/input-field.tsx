@@ -9,7 +9,7 @@ const inputBaseClassName = 'block rounded-lg bg-white focus:border-blue-300 focu
 const inputDisabledClassName = 'disable:bg-gray-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
 const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
-export interface InputFieldProps extends Omit<React.ComponentProps<'input'>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children'> {
+export interface InputFieldProps extends Omit<React.ComponentProps<'input'>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children'> {
   errorMessage?: string;
   helpMessagePrimary?: React.ReactNode;
   helpMessagePrimaryClassName?: string;
@@ -22,7 +22,7 @@ export interface InputFieldProps extends Omit<React.ComponentProps<'input'>, 'ar
 }
 
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) => {
-  const { errorMessage, className, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, required, type = 'text', ...restInputProps } = props;
+  const { 'aria-describedby': ariaDescribedby, errorMessage, className, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, required, type = 'text', ...restInputProps } = props;
 
   const inputErrorId = `input-${id}-error`;
   const inputHelpMessagePrimaryId = `input-${id}-help-primary`;
@@ -31,10 +31,12 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) =>
   const inputWrapperId = `input-${id}`;
 
   function getAriaDescribedby() {
-    const ariaDescribedby = [];
-    if (helpMessagePrimary) ariaDescribedby.push(inputHelpMessagePrimaryId);
-    if (helpMessageSecondary) ariaDescribedby.push(inputHelpMessageSecondaryId);
-    return ariaDescribedby.length > 0 ? ariaDescribedby.join(' ') : undefined;
+    const describedby = [];
+    if (ariaDescribedby) describedby.push(ariaDescribedby);
+    if (helpMessagePrimary) describedby.push(inputHelpMessagePrimaryId);
+    if (helpMessagePrimary) describedby.push(inputHelpMessagePrimaryId);
+    if (helpMessageSecondary) describedby.push(inputHelpMessageSecondaryId);
+    return describedby.length > 0 ? describedby.join(' ') : undefined;
   }
 
   return (

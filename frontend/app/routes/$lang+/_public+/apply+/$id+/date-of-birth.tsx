@@ -50,7 +50,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formData = await request.formData();
-  const dateOfBirth = String(formData.get('dateOfBirth'));
+  const dateOfBirth = String(formData.get('dateOfBirth') ?? '');
 
   // state validation schema
   const dateOfBirthSchema: z.ZodType<DateOfBirthState> = z
