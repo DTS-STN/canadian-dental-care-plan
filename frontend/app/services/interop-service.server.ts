@@ -7,38 +7,6 @@ import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('lookup-service.server');
 
-const letterSchema = z.array(
-  z.object({
-    LetterRecordId: z.string().optional(),
-    LetterDate: z.string().optional(),
-    LetterId: z.string().optional(),
-    LetterName: z.string().optional(),
-  }),
-);
-
-export type LettersInfo = z.infer<typeof letterSchema>;
-
-const parsedLetterSchema = z.array(
-  z.object({
-    id: z.string().optional(),
-    issuedOn: z.string().optional(),
-    name: z.string().optional(),
-    referenceId: z.string().optional(),
-  }),
-);
-
-export type ParsedLetterInfo = z.infer<typeof parsedLetterSchema>;
-
-const letterTypeCodeSchema = z.object({
-  id: z.string().optional(),
-  code: z.string().optional(),
-  nameFr: z.string().optional(),
-  nameEn: z.string().optional(),
-});
-
-const listOfLetterTypeCodeSchema = z.array(letterTypeCodeSchema);
-export type LetterTypeCode = z.infer<typeof letterTypeCodeSchema>;
-
 /**
  * Return a singleton instance (by means of memomization) of the interop service.
  */
@@ -71,7 +39,16 @@ function createInteropService() {
       throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const letters = letterSchema.parse(await response.json()).map((letter) => ({
+    const lettersSchema = z.array(
+      z.object({
+        LetterRecordId: z.string().optional(),
+        LetterDate: z.string().optional(),
+        LetterId: z.string().optional(),
+        LetterName: z.string().optional(),
+      }),
+    );
+
+    const letters = lettersSchema.parse(await response.json()).map((letter) => ({
       id: letter.LetterRecordId,
       issuedOn: letter.LetterDate,
       name: letter.LetterName,
@@ -85,7 +62,7 @@ function createInteropService() {
   }
 
   /**
-   * @returns returns all the lettersTypeCodes
+   * @returns returns all the letter types
    */
   async function getAllLetterTypes() {
     const url = `${INTEROP_API_BASE_URI}/letter-types`;
@@ -103,7 +80,43 @@ function createInteropService() {
       throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    return listOfLetterTypeCodeSchema.parse(await response.json());
+    const letterTypesSchema = z.object({
+      value: z.array(
+        z.object({
+          OptionSet: z.object({
+            Options: z.array(
+              z.object({
+                Value: z.number(),
+                Label: z.object({
+                  LocalizedLabels: z.array(
+                    z.object({
+                      Label: z.string(),
+                      LanguageCode: z.number(),
+                    }),
+                  ),
+                }),
+              }),
+            ),
+          }),
+        }),
+      ),
+    });
+
+    const letterTypes = letterTypesSchema.parse(await response.json());
+    const { ENGLISH_LETTER_LANGUAGE_CODE, FRENCH_LETTER_LANGUAGE_CODE } = getEnv();
+
+    // only one 'OptionSet' will be returned
+    return letterTypes.value[0].OptionSet.Options.map((option) => {
+      const { LocalizedLabels } = option.Label;
+      const nameEn = LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LETTER_LANGUAGE_CODE)?.Label;
+      const nameFr = LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LETTER_LANGUAGE_CODE)?.Label;
+
+      return {
+        id: option.Value.toString(),
+        nameEn,
+        nameFr,
+      };
+    });
   }
 
   return {

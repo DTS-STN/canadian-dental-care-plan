@@ -49,6 +49,10 @@ const serverEnv = z.object({
   OTHER_EQUITY_TYPE_ID: z.string().trim().min(1).default('equity-other'),
   OTHER_GENDER_TYPE_ID: z.string().trim().min(1).default('gender-other'),
   USA_COUNTRY_ID: z.string().trim().min(1),
+
+  // language codes for letter types
+  ENGLISH_LETTER_LANGUAGE_CODE: z.coerce.number().default(1033),
+  FRENCH_LETTER_LANGUAGE_CODE: z.coerce.number().default(1036),
   
   // TODO :: GjB :: these base URIs should not have defaults
   INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
