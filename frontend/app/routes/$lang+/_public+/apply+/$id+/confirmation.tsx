@@ -53,7 +53,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const allProvincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
   const selectedBenefits = allProvincialTerritorialSocialPrograms
-    .filter((obj) => obj.id === state.dentalBenefit?.provincialTerritorialSocialProgram)
+    .filter((obj) => obj.id === state.dentalBenefits?.provincialTerritorialSocialProgram)
     .map((obj) => getNameByLanguage(locale, obj))
     .join(', ');
 
