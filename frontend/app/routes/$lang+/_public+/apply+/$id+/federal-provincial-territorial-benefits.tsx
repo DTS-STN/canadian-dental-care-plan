@@ -25,6 +25,8 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
+export type DentalBenefitsState = object;
+
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.federalProvincialTerritorialBenefits,
@@ -57,44 +59,78 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { id } = await applyFlow.loadState({ request, params });
 
   const formData = Object.fromEntries(await request.formData());
-  const dentalBenefitSchema = applyFlow.dentalBenefitsStateSchema.superRefine((val, ctx) => {
-    if (val.federalBenefit === 'yes' && (!val.federalSocialProgram || val.federalSocialProgram.trim().length === 0)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'empty-program',
-        path: ['federalSocialProgram'],
-      });
-    }
-    if (val.provincialTerritorialBenefit === 'yes') {
-      if (!val.province) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'empty-province',
-          path: ['province'],
-        });
-      }
-      if (val.province && !val.provincialTerritorialSocialProgram) {
+
+  const dentalBenefitsSchema: z.ZodType<DentalBenefitsState> = z
+    .object({
+      federalBenefit: z.string({ required_error: 'federal-benefit' }).trim().min(1),
+      federalSocialProgram: z.string().trim().min(1).optional(),
+      provincialTerritorialBenefit: z.string({ required_error: 'provincial-benefit' }).trim().min(1),
+      provincialTerritorialSocialProgram: z.string().trim().min(1).optional(),
+      province: z.string().trim().optional(),
+    })
+    .superRefine((val, ctx) => {
+      if (val.federalBenefit === 'yes' && (!val.federalSocialProgram || val.federalSocialProgram.trim().length === 0)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'empty-program',
-          path: ['provincialTerritorialSocialProgram'],
+          path: ['federalSocialProgram'],
         });
       }
-    }
-  });
-  const parsedDataResult = dentalBenefitSchema.safeParse(formData);
+      if (val.provincialTerritorialBenefit === 'yes') {
+        if (!val.province) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'empty-province',
+            path: ['province'],
+          });
+        }
+        if (val.province && !val.provincialTerritorialSocialProgram) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'empty-program',
+            path: ['provincialTerritorialSocialProgram'],
+          });
+        }
+      }
+    });
+  // const dentalBenefitSchema = applyFlow.dentalBenefitsStateSchema.superRefine((val, ctx) => {
+  //   if (val.federalBenefit === 'yes' && (!val.federalSocialProgram || val.federalSocialProgram.trim().length === 0)) {
+  //     ctx.addIssue({
+  //       code: z.ZodIssueCode.custom,
+  //       message: 'empty-program',
+  //       path: ['federalSocialProgram'],
+  //     });
+  //   }
+  //   if (val.provincialTerritorialBenefit === 'yes') {
+  //     if (!val.province) {
+  //       ctx.addIssue({
+  //         code: z.ZodIssueCode.custom,
+  //         message: 'empty-province',
+  //         path: ['province'],
+  //       });
+  //     }
+  //     if (val.province && !val.provincialTerritorialSocialProgram) {
+  //       ctx.addIssue({
+  //         code: z.ZodIssueCode.custom,
+  //         message: 'empty-program',
+  //         path: ['provincialTerritorialSocialProgram'],
+  //       });
+  //     }
+  //   }
+  // });
+  const parsedDataResult = dentalBenefitsSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof dentalBenefitSchema>>,
+      formData: formData,
     });
   }
 
   const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
-    state: { dentalBenefit: parsedDataResult.data },
+    state: { dentalBenefits: parsedDataResult.data },
   });
 
   return featureEnabled('demographic-questions') ? redirectWithLocale(request, `/apply/${id}/demographics`, sessionResponseInit) : redirectWithLocale(request, `/apply/${id}/confirm`, sessionResponseInit);

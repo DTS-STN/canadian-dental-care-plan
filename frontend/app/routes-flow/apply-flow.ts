@@ -4,6 +4,7 @@ import { z } from 'zod';
 
 import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
 import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/dental-insurance';
+import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits';
 import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/partner-information';
 import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-of-application';
 import { getSessionService } from '~/services/session-service.server';
@@ -20,13 +21,13 @@ const idSchema = z.string().uuid();
  */
 const termsAndConditionSchema = z.object({});
 
-const dentalBenefitsStateSchema = z.object({
-  federalBenefit: z.string({ required_error: 'federal-benefit' }).trim().min(1),
-  federalSocialProgram: z.string().trim().min(1).optional(),
-  provincialTerritorialBenefit: z.string({ required_error: 'provincial-benefit' }).trim().min(1),
-  provincialTerritorialSocialProgram: z.string().trim().min(1).optional(),
-  province: z.string().trim().optional(),
-});
+// const dentalBenefitsStateSchema = z.object({
+//   federalBenefit: z.string({ required_error: 'federal-benefit' }).trim().min(1),
+//   federalSocialProgram: z.string().trim().min(1).optional(),
+//   provincialTerritorialBenefit: z.string({ required_error: 'provincial-benefit' }).trim().min(1),
+//   provincialTerritorialSocialProgram: z.string().trim().min(1).optional(),
+//   province: z.string().trim().optional(),
+// });
 
 /**
  * Schema applicant information.
@@ -111,7 +112,6 @@ const applyStateSchema = z.object({
   demographicsPart2: demographicsPart2StateSchema.optional(),
   termsAndConditions: termsAndConditionSchema.optional(),
   taxFiling2023: taxFilingSchema.optional(),
-  dentalBenefit: dentalBenefitsStateSchema.optional(),
 });
 
 interface ApplyState extends z.infer<typeof applyStateSchema> {
@@ -119,6 +119,7 @@ interface ApplyState extends z.infer<typeof applyStateSchema> {
   dentalInsurance?: DentalInsuranceState;
   partnerInformation?: PartnerInformationState;
   typeOfApplication?: TypeOfApplicationState;
+  dentalBenefits?: DentalBenefitsState;
 }
 
 /**
@@ -252,7 +253,6 @@ export function getApplyFlow() {
     applicantInformationSchema,
     applyStateSchema,
     loadState,
-    dentalBenefitsStateSchema,
     saveState,
     start,
     taxFilingSchema,
