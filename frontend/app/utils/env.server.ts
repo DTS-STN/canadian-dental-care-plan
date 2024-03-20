@@ -16,7 +16,7 @@ function tryOrElseFalse(fn: () => unknown) {
   catch { return false; }
 }
 
-const validMockNames = ['cct', 'lookup', 'power-platform', 'raoidc', 'wsaddress'] as const;
+const validMockNames = ['cct', 'lookup', 'power-platform', 'raoidc', 'status-check', 'wsaddress'] as const;
 export type MockName = (typeof validMockNames)[number];
 
 const validFeatureNames = ['demographic-questions', 'doc-upload', 'email-alerts', 'update-personal-info', 'view-applications', 'view-letters', 'view-messages'] as const;
@@ -53,9 +53,12 @@ const serverEnv = z.object({
   // language codes for letter types
   ENGLISH_LETTER_LANGUAGE_CODE: z.coerce.number().default(1033),
   FRENCH_LETTER_LANGUAGE_CODE: z.coerce.number().default(1036),
-  
+
+  // interop api settings
+  INTEROP_API_BASE_URI: z.string().url(),
+  INTEROP_API_SUBSCRIPTION_KEY: z.string().trim().min(1),
+
   // TODO :: GjB :: these base URIs should not have defaults
-  INTEROP_API_BASE_URI: z.string().url().default('https://api.example.com'),
   CCT_API_BASE_URI: z.string().url().default('https://api.example.com'),
   SCCH_BASE_URI: z.string().url().default('https://www.example.com'),
   MSCA_BASE_URI: z.string().url().default('http://srv136.services.gc.ca'),
