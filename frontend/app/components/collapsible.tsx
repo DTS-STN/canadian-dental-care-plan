@@ -7,8 +7,8 @@ export interface CollapsibleSummaryProps extends ComponentProps<'summary'> {}
 
 export function CollapsibleSummary({ children, className, ...props }: CollapsibleSummaryProps) {
   return (
-    <summary className={cn('cursor-pointer text-blue-900 underline', className)} {...props}>
-      <span className="ml-4">{children}</span>
+    <summary className={cn('cursor-pointer marker:text-blue-900', className)} {...props}>
+      <div className="ml-4 inline-block text-blue-900 underline">{children}</div>
     </summary>
   );
 }
