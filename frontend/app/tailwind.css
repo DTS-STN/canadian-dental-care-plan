@@ -19,6 +19,11 @@
     padding: 0;
   }
 
+  button,
+  select {
+    text-transform: none;
+  }
+
   [type='search'] {
     -webkit-appearance: textfield;
     outline-offset: -2px;
@@ -39,6 +44,11 @@
   [type='week'],
   select,
   textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    border-radius: 0;
     border-width: 1px;
     font-size: 1rem;
     line-height: 1.5rem;
@@ -112,6 +122,26 @@
 
   [type='radio'] {
     @apply rounded-full;
+  }
+
+  select:not([size]) {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='m20 9l-8 8l-8-8l1.414-1.414L12 14.172l6.586-6.586z'/%3E%3C/svg%3E");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1em 1em;
+    padding-right: 2.5rem;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  select:invalid {
+    @apply text-gray-400;
+  }
+  option[value=''][disabled] {
+    display: none;
+  }
+  option {
+    @apply text-black;
   }
 }
 
