@@ -196,7 +196,7 @@
         "delegate": "Je présente une demande pour quelqu'un d'autre"
       },
       "error-message": {
-        "Required": "Le type de demandeur doit être fourni"
+        "type-of-application-required": "Le type de demandeur est obligatoire."
       },
       "back-btn": "Retour",
       "continue-btn": "Continuer"
@@ -237,7 +237,8 @@
       "contact-service-canada-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
       "preparing-to-apply-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#aide",
       "back-btn": "Retour",
-      "return-btn": "Revenir à la page principale"
+      "return-btn": "Revenir à la page principale",
+      "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     },
     "file-your-taxes": {
       "page-title": "Produire votre déclaration de revenus",
@@ -248,7 +249,8 @@
       "apply-after": "Veuillez présenter une demande de participation au régime après avoir produit votre déclaration de revenus et reçu votre avis de cotisation.",
       "tax-info-href": "https://www.canada.ca/fr/services/impots/impot-sur-le-revenu/impot-sur-le-revenu-des-particuliers/preparez-vous-impots.html",
       "back-btn": "Retour",
-      "return-btn": "Revenir à la page principale"
+      "return-btn": "Revenir à la page principale",
+      "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     },
     "dob-eligibility": {
       "page-title": "Découvrez quand vous pouvez présenter une demande",
@@ -256,7 +258,8 @@
       "eligibility-info": "<eligibilityInfo>Découvrez quand vous pouvez faire une demande au Régime canadien de soins dentaires.</eligibilityInfo>",
       "eligibility-info-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#quand",
       "back-btn": "Retour",
-      "return-btn": "Revenir à la page principale"
+      "return-btn": "Revenir à la page principale",
+      "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     }
   },
   "index": {
@@ -391,11 +394,8 @@
     "page-title": "Renseignements sur l'époux/épouse ou le conjoint/conjointe de fait",
     "provide-sin": "Fournissez les renseignements sur votre époux/épouse ou conjoint/conjointe de fait actuel tels qu'ils figurent sur sa carte ou lettre d'assurance sociale.",
     "required-information": "Ces renseignements sont nécessaires pour calculer le revenu familial net rajusté. Veuillez noter que l'époux/épouse ou le conjoint/conjointe de fait doit présenter sa propre demande.",
-    "sin": "Numéro d'assurance sociale",
-    "dob": "Date de naissance",
-    "year": "Année",
-    "month": "Mois",
-    "day": "Jour",
+    "sin": "numéro d'assurance sociale (NAS)",
+    "date-of-birth": "Date de naissance",
     "last-name": "Nom de famille",
     "first-name": "Prénom",
     "name-instructions": "(FR) If using a single legal name, please enter that name in BOTH the first name and last name fields.",
@@ -403,13 +403,14 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "error-message": {
-      "valid-sin": "(FR) Must be a valid SIN",
-      "unique-sins": "(FR) SINs must be unique",
-      "last-name": "(FR) Last name must be provided",
-      "month": "(FR) Month must be valid",
-      "day": "(FR) Day must be valid for the given month and year",
-      "year": "(FR) Year must be valid",
-      "confirm": "(FR) Checkbox must be selected"
+      "confirm-required": "(FR) Checkbox must be selected",
+      "date-of-birth-required": "La date de naissance est obligatoire.",
+      "date-of-birth-valid": "La date de naissance doit être une date valide.",
+      "first-name-required": "Le prénom est obligatoire.",
+      "last-name-required": "Le nom de famille est obligatoire.",
+      "sin-required": "Le numéro d'assurance sociale (NAS) est requis.",
+      "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique.",
+      "sin-valid": "Le numéro d'assurance sociale (NAS) doit être valide."
     }
   },
   "personal-information": {

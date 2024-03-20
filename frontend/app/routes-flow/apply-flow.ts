@@ -4,6 +4,8 @@ import { z } from 'zod';
 
 import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
 import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/dental-insurance';
+import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/partner-information';
+import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-of-application';
 import { getSessionService } from '~/services/session-service.server';
 import { redirectWithLocale } from '~/utils/locale-utils.server';
 import { isValidSin } from '~/utils/sin-utils';
@@ -41,26 +43,6 @@ const applicantInformationSchema = z.object({
  */
 const taxFilingSchema = z.object({
   taxFiling2023: z.string(),
-});
-
-/**
- * Schema for application delegate.
- */
-const typeOfApplicationSchema = z.object({
-  applicationDelegate: z.string(),
-});
-
-/**
- * Schema for intake state.
- */
-const partnerInformationSchema = z.object({
-  socialInsuranceNumber: z.string().optional(),
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  month: z.coerce.number().optional(),
-  day: z.coerce.number().optional(),
-  year: z.coerce.number().optional(),
-  confirm: z.string().optional(),
 });
 
 /**
@@ -122,13 +104,11 @@ const personalInformationStateSchema = z.object({
  * Schema for apply state.
  */
 const applyStateSchema = z.object({
-  applicationDelegate: typeOfApplicationSchema.optional(),
   applicantInformation: applicantInformationSchema.optional(),
   personalInformation: personalInformationStateSchema.optional(),
   communicationPreferences: communicationPreferencesStateSchema.optional(),
   demographicsPart1: demographicsPart1StateSchema.optional(),
   demographicsPart2: demographicsPart2StateSchema.optional(),
-  partnerInformation: partnerInformationSchema.optional(),
   termsAndConditions: termsAndConditionSchema.optional(),
   taxFiling2023: taxFilingSchema.optional(),
   dentalBenefit: dentalBenefitsStateSchema.optional(),
@@ -137,6 +117,8 @@ const applyStateSchema = z.object({
 interface ApplyState extends z.infer<typeof applyStateSchema> {
   dateOfBirth?: DateOfBirthState;
   dentalInsurance?: DentalInsuranceState;
+  partnerInformation?: PartnerInformationState;
+  typeOfApplication?: TypeOfApplicationState;
 }
 
 /**
@@ -268,15 +250,12 @@ export function getApplyFlow() {
   return {
     clearState,
     applicantInformationSchema,
-    partnerInformationSchema,
-    idSchema,
     applyStateSchema,
     loadState,
     dentalBenefitsStateSchema,
     saveState,
     start,
     taxFilingSchema,
-    typeOfApplicationSchema,
     termsAndConditionSchema,
     demographicsPart2StateSchema,
     demographicsPart1StateSchema,

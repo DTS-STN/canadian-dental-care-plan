@@ -3,6 +3,12 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { action, loader } from '~/routes/$lang+/_protected+/personal-information+/phone-number+/edit';
 import { getUserService } from '~/services/user-service.server';
 
+vi.mock('~/services/instrumentation-service.server', () => ({
+  getInstrumentationService: () => ({
+    countHttpStatus: vi.fn(),
+  }),
+}));
+
 vi.mock('~/services/raoidc-service.server', () => ({
   getRaoidcService: vi.fn().mockResolvedValue({
     handleSessionValidation: vi.fn().mockResolvedValue(true),

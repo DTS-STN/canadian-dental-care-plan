@@ -11,6 +11,7 @@ import { z } from 'zod';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
@@ -32,30 +33,36 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  if (!data) return [];
-  return getTitleMetaTags(data.meta.title);
+  return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
+  const userService = getUserService();
+
   await raoidcService.handleSessionValidation(request);
 
-  const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
 
   if (!userInfo) {
+    instrumentationService.countHttpStatus('phone-number.edit', 404);
     throw new Response(null, { status: 404 });
   }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:phone-number.edit.page-title') }) };
 
+  instrumentationService.countHttpStatus('phone-number.edit', 200);
   return json({ meta, userInfo });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
+  const sessionService = await getSessionService();
+
   await raoidcService.handleSessionValidation(request);
 
   const formDataSchema = z.object({
@@ -69,16 +76,17 @@ export async function action({ request }: ActionFunctionArgs) {
   const parsedDataResult = formDataSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('phone-number.confirm', 400);
     return json({
       errors: parsedDataResult.error.format(),
       formData: formData as Partial<z.infer<typeof formDataSchema>>,
     });
   }
 
-  const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
   session.set('newPhoneNumber', parsedDataResult.data.phoneNumber);
 
+  instrumentationService.countHttpStatus('phone-number.confirm', 302);
   return redirectWithLocale(request, '/personal-information/phone-number/confirm', {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),

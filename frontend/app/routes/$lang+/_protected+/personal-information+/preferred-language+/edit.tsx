@@ -7,6 +7,7 @@ import { z } from 'zod';
 
 import { Button, ButtonLink } from '~/components/buttons';
 import { InputRadios } from '~/components/input-radios';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
@@ -29,40 +30,49 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  if (!data) return [];
-  return getTitleMetaTags(data.meta.title);
+  return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const instrumentationService = getInstrumentationService();
+  const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
+  const userService = getUserService();
+
   await raoidcService.handleSessionValidation(request);
 
-  const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
 
   if (!userInfo) {
+    instrumentationService.countHttpStatus('preferred-language.edit', 404);
     throw new Response(null, { status: 404 });
   }
 
-  const preferredLanguages = await getLookupService().getAllPreferredLanguages();
+  const preferredLanguages = await lookupService.getAllPreferredLanguages();
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:preferred-language.edit.page-title') }) };
 
+  instrumentationService.countHttpStatus('preferred-language.edit', 200);
   return json({ meta, preferredLanguages, userInfo });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
+
   await raoidcService.handleSessionValidation(request);
 
   const formDataSchema = z.object({
     preferredLanguage: z.enum(['en', 'fr']),
   });
+
   const formData = Object.fromEntries(await request.formData());
   const parsedDataResult = formDataSchema.safeParse(formData);
+
   if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('preferred-language.edit', 400);
     return json({
       errors: parsedDataResult.error.format(),
       formData: formData as Partial<z.infer<typeof formDataSchema>>,
@@ -73,6 +83,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const session = await sessionService.getSession(request);
   session.set('newPreferredLanguage', parsedDataResult.data.preferredLanguage);
 
+  instrumentationService.countHttpStatus('preferred-language.edit', 302);
   return redirectWithLocale(request, '/personal-information/preferred-language/confirm', {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),

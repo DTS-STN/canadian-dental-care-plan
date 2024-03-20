@@ -6,6 +6,12 @@ import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getEnv } from '~/utils/env.server';
 
+vi.mock('~/services/instrumentation-service.server', () => ({
+  getInstrumentationService: () => ({
+    countHttpStatus: vi.fn(),
+  }),
+}));
+
 vi.mock('~/services/lookup-service.server', () => ({
   getLookupService: vi.fn().mockReturnValue({
     getPreferredLanguage: vi.fn().mockReturnValue({

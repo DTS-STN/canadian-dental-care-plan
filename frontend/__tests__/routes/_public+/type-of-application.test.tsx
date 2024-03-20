@@ -8,7 +8,7 @@ vi.mock('~/routes-flow/apply-flow', () => ({
   getApplyFlow: vi.fn().mockReturnValue({
     loadState: vi.fn().mockReturnValue({
       id: '123',
-      state: { applicationDelegate: 'TRUE' },
+      state: { typeOfApplication: 'delegate' },
     }),
     saveState: vi.fn().mockReturnValue({
       headers: {
@@ -20,9 +20,10 @@ vi.mock('~/routes-flow/apply-flow', () => ({
 
 vi.mock('~/utils/locale-utils.server', async (importOriginal) => {
   const actual = await importOriginal<typeof import('~/utils/locale-utils.server')>();
+  const tMockFn = vi.fn((key) => key);
   return {
     ...actual,
-    getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+    getFixedT: vi.fn().mockResolvedValue(tMockFn),
     redirectWithLocale: vi.fn().mockResolvedValueOnce(redirect('/en/apply/123/application-delegate')).mockResolvedValueOnce(redirect('/en/apply/123/tax-filing')),
   };
 });
@@ -34,7 +35,7 @@ describe('_public.apply.id.type-of-application', () => {
   });
 
   describe('loader()', () => {
-    it('should load id, and applicationDelegate', async () => {
+    it('should load id, and typeOfApplication', async () => {
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/type-of-application'),
         context: {},
@@ -45,8 +46,8 @@ describe('_public.apply.id.type-of-application', () => {
 
       expect(data).toEqual({
         id: '123',
-        meta: {},
-        state: 'TRUE',
+        meta: { title: 'gcweb:meta.title.template' },
+        state: 'delegate',
       });
     });
   });
@@ -61,12 +62,12 @@ describe('_public.apply.id.type-of-application', () => {
 
       const data = await response.json();
       expect(response.status).toBe(200);
-      expect(data.errors).toHaveProperty('applicationDelegate');
+      expect(data.errors._errors).toContain('apply:eligibility.type-of-application.error-message.type-of-application-required');
     });
 
     it('should redirect to error page if delegate is selected', async () => {
       const formData = new FormData();
-      formData.append('applicationDelegate', 'TRUE');
+      formData.append('typeOfApplication', 'delegate');
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/type-of-application', { method: 'POST', body: formData }),
@@ -80,7 +81,7 @@ describe('_public.apply.id.type-of-application', () => {
 
     it('should redirect to tax filing page if personal is selected', async () => {
       const formData = new FormData();
-      formData.append('applicationDelegate', 'FALSE');
+      formData.append('typeOfApplication', 'personal');
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/type-of-application', { method: 'POST', body: formData }),

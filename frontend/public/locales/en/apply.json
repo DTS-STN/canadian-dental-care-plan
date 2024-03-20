@@ -196,7 +196,7 @@
         "delegate": "I am applying on behalf of someone else"
       },
       "error-message": {
-        "Required": "Applicant type must be provided"
+        "type-of-application-required": "The applicant type is required."
       },
       "back-btn": "Back",
       "continue-btn": "Continue"
@@ -237,7 +237,8 @@
       "contact-service-canada-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html",
       "preparing-to-apply-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#helping",
       "back-btn": "Back",
-      "return-btn": "Return main page"
+      "return-btn": "Return to main page",
+      "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
     },
     "file-your-taxes": {
       "page-title": "File your taxes",
@@ -248,7 +249,8 @@
       "apply-after": "Please apply for the plan after you have filed your taxes and received your Notice of Assessment.",
       "tax-info-href": "https://www.canada.ca/en/services/taxes/income-tax/personal-income-tax/get-ready-taxes.html",
       "back-btn": "Back",
-      "return-btn": "Return main page"
+      "return-btn": "Return to main page",
+      "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
     },
     "dob-eligibility": {
       "page-title": "Find out when you can apply",
@@ -256,7 +258,8 @@
       "eligibility-info": "<eligibilityInfo>Find out when you can apply for the Canada Dental Care Plan</eligibilityInfo>",
       "eligibility-info-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#when",
       "back-btn": "Back",
-      "return-btn": "Return main page"
+      "return-btn": "Return to main page",
+      "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
     }
   },
   "index": {
@@ -391,11 +394,8 @@
     "page-title": "Spouse / Common-law partner information",
     "provide-sin": "Provide information on your current spouse or common-law partner as indicated on their SIN card/letter.",
     "required-information": "This information is required to calculate the adjusted family net income. Please note that the spouse or common-law partner will need to submit their own application to the plan.",
-    "sin": "Social Insurance Number",
-    "dob": "Date of birth",
-    "year": "Year",
-    "month": "Month",
-    "day": "Day",
+    "sin": "Social Insurance Number (SIN)",
+    "date-of-birth": "Date of birth",
     "last-name": "Last name",
     "first-name": "First name",
     "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
@@ -403,13 +403,14 @@
     "back-btn": "Back",
     "continue-btn": "Continue",
     "error-message": {
-      "valid-sin": "Must be a valid SIN",
-      "unique-sins": "SINs must be unique",
-      "last-name": "Last name must be provided",
-      "month": "Month must be valid",
-      "day": "Day must be valid for the given month and year",
-      "year": "Year must be valid",
-      "confirm": "Checkbox must be selected"
+      "confirm-required": "Checkbox must be selected",
+      "date-of-birth-required": "The date of birth is required.",
+      "date-of-birth-valid": "The date of birth must be a valid date.",
+      "first-name-required": "The first name is required.",
+      "last-name-required": "The last name is required.",
+      "sin-required": "The Social Insurance Number (SIN) is required.",
+      "sin-unique": "The Social Insurance Number (SIN) must be unique.",
+      "sin-valid": "The Social Insurance Number (SIN) must be valid."
     }
   },
   "personal-information": {
