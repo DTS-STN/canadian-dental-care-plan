@@ -227,7 +227,7 @@ export default function ReviewInformation() {
                 </p>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply:review-information.sin-title')}>
-                {formatSin(spouseInfo.sin ?? '')}
+                {formatSin(spouseInfo.sin)}
                 <p className="mt-4">
                   <InlineLink id="change-spouse-sin" to="/">
                     {t('apply:review-information.sin-change')}
