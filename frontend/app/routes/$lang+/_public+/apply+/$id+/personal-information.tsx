@@ -192,21 +192,21 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const formData = await request.formData();
   const personalInformation = {
-    phoneNumber: String(formData.get('phoneNumber') ?? ''),
-    phoneNumberAlt: String(formData.get('phoneNumberAlt') ?? ''),
+    phoneNumber: formData.get('phoneNumber') ? String(formData.get('phoneNumber')) : undefined,
+    phoneNumberAlt: formData.get('phoneNumberAlt') ? String(formData.get('phoneNumberAlt')) : undefined,
     mailingAddress: String(formData.get('mailingAddress') ?? ''),
-    mailingApartment: String(formData.get('mailingApartment') ?? ''),
+    mailingApartment: formData.get('mailingApartment') ? String(formData.get('mailingApartment')) : undefined,
     mailingCountry: String(formData.get('mailingCountry') ?? ''),
-    mailingProvince: String(formData.get('mailingProvince') ?? ''),
+    mailingProvince: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : undefined,
     mailingCity: String(formData.get('mailingCity') ?? ''),
-    mailingPostalCode: String(formData.get('mailingPostalCode') ?? ''),
-    copyMailingAddress: String(formData.get('copyMailingAddress') ?? ''),
-    homeAddress: String(formData.get('homeAddress') ?? ''),
-    homeApartment: String(formData.get('homeApartment') ?? ''),
-    homeCountry: String(formData.get('homeCountry') ?? ''),
-    homeProvince: String(formData.get('homeProvince') ?? ''),
-    homeCity: String(formData.get('homeCity') ?? ''),
-    homePostalCode: String(formData.get('homePostalCode') ?? ''),
+    mailingPostalCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : undefined,
+    copyMailingAddress: formData.get('copyMailingAddress') ? String(formData.get('copyMailingAddress')) : undefined,
+    homeAddress: formData.get('homeAddress') ? String(formData.get('homeAddress')) : undefined,
+    homeApartment: formData.get('homeApartment') ? String(formData.get('homeApartment')) : undefined,
+    homeCountry: formData.get('homeCountry') ? String(formData.get('homeCountry')) : undefined,
+    homeProvince: formData.get('homeProvince') ? String(formData.get('homeProvince')) : undefined,
+    homeCity: formData.get('homeCity') ? String(formData.get('homeCity')) : undefined,
+    homePostalCode: formData.get('homePostalCode') ? String(formData.get('homePostalCode')) : undefined,
   };
 
   const parsedDataResult = personalInformationFormSchema.safeParse(personalInformation);
