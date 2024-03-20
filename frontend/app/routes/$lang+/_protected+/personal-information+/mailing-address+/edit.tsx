@@ -72,20 +72,11 @@ export async function action({ request }: ActionFunctionArgs) {
     copyHomeAddress: z.string().transform((value) => value === 'on'),
   });
   const addressFormSchema = z.object({
-    address: z
-      .string()
-      .min(1, { message: 'empty-field' })
-      .transform((val) => val.trim()),
-    city: z
-      .string()
-      .min(1, { message: 'empty-field' })
-      .transform((val) => val.trim()),
+    address: z.string().trim().min(1, { message: 'empty-field' }),
+    city: z.string().trim().min(1, { message: 'empty-field' }),
     province: z.string().trim().optional(),
     postalCode: z.string().trim().optional(),
-    country: z
-      .string()
-      .min(1, { message: 'empty-field' })
-      .transform((val) => val.trim()),
+    country: z.string().trim().min(1, { message: 'empty-field' }),
   });
   const formDataSchema = z.union([copyHomeAddressSchema, addressFormSchema]);
 

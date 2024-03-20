@@ -77,20 +77,11 @@ export async function action({ request }: ActionFunctionArgs) {
   await raoidcService.handleSessionValidation(request);
 
   const formDataSchema = z.object({
-    address: z
-      .string()
-      .min(1, { message: 'empty-field' })
-      .transform((val) => val.trim()),
-    city: z
-      .string()
-      .min(1, { message: 'empty-field' })
-      .transform((val) => val.trim()),
+    address: z.string().trim().min(1, { message: 'empty-field' }),
+    city: z.string().trim().min(1, { message: 'empty-field' }),
     province: z.string().trim().optional(),
     postalCode: z.string().trim().optional(),
-    country: z
-      .string()
-      .min(1, { message: 'empty-field' })
-      .transform((val) => val.trim()),
+    country: z.string().trim().min(1, { message: 'empty-field' }),
   });
 
   const formData = Object.fromEntries(await request.formData());
