@@ -10,6 +10,12 @@ vi.mock('~/services/audit-service.server', () => ({
   }),
 }));
 
+vi.mock('~/services/instrumentation-service.server', () => ({
+  getInstrumentationService: () => ({
+    countHttpStatus: vi.fn(),
+  }),
+}));
+
 vi.mock('~/services/raoidc-service.server', () => ({
   getRaoidcService: vi.fn().mockResolvedValue({
     handleSessionValidation: vi.fn().mockResolvedValue(true),
