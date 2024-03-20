@@ -4,7 +4,7 @@ import type gcweb from '../public/locales/en/gcweb.json';
 import type index from '../public/locales/en/index.json';
 import type letters from '../public/locales/en/letters.json';
 import type personalInformation from '../public/locales/en/personal-information.json';
-import type stubSinEditor from '../public/locales/en/stubSinEditor.json';
+import type stubSinEditor from '../public/locales/en/stub-sin-editor.json';
 import type { PublicEnv } from '~/utils/env.server';
 
 /**
@@ -32,7 +32,7 @@ declare module 'i18next' {
       index: typeof index;
       letters: typeof letters;
       'personal-information': typeof personalInformation;
-      stubSinEditor: typeof stubSinEditor;
+      'stub-sin-editor': typeof stubSinEditor;
     };
   }
 }

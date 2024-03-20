@@ -32,7 +32,7 @@ import { generateJwkId, privateKeyPemToCryptoKey } from '~/utils/crypto-utils.se
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState, validateSession } from '~/utils/raoidc-utils.server';
-import type { ClientMetadata, FetchFunctionInit, IdToken } from '~/utils/raoidc-utils.server';
+import type { ClientMetadata, FetchFunctionInit, IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import { expandTemplate } from '~/utils/string-utils';
 
 const log = getLogger('raoidc-service.server');
@@ -115,7 +115,6 @@ async function createRaoidcService() {
    */
   async function handleSessionValidation(request: Request) {
     log.debug('Performing RAOIDC session validation check');
-    const { SHOW_SIN_EDIT_STUB_PAGE } = getEnv();
     const { pathname, searchParams } = new URL(request.url);
     const returnTo = encodeURIComponent(`${pathname}?${searchParams}`);
 
@@ -129,10 +128,17 @@ async function createRaoidcService() {
 
     const idToken: IdToken = session.get('idToken');
 
+    if (session.has('userInfoToken')) {
+      const userInfoToken: UserinfoToken = session.get('userInfoToken');
+      if (userInfoToken.mocked) {
+        return true;
+      }
+    }
+
     // idToken.sid is the RAOIDC session id
     const sessionValid = await validateSession(AUTH_RAOIDC_BASE_URL, AUTH_RAOIDC_CLIENT_ID, idToken.sid, fetchFn);
 
-    if (!sessionValid || !SHOW_SIN_EDIT_STUB_PAGE) {
+    if (!sessionValid) {
       log.debug(`RAOIDC session has expired; redirecting to /auth/login?returnto=${returnTo}`);
       throw redirect(`/auth/login?returnto=${returnTo}`);
     }
