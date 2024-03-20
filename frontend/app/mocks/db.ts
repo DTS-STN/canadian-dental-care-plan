@@ -96,12 +96,7 @@ const db = factory({
     nameEn: String,
     nameFr: String,
   },
-  applicationTypes: {
-    id: primaryKey(faker.string.uuid),
-    code: String,
-    nameEn: String,
-    nameFr: String,
-  },
+
   letter: {
     id: primaryKey(faker.string.uuid),
     issuedOn: () => faker.date.past({ years: 1 }).toISOString().split('T')[0],
@@ -226,18 +221,6 @@ db.taxFilingIndications.create({
   nameFr: '(Fr) No',
 });
 
-db.applicationTypes.create({
-  code: 'self',
-  nameEn: 'I am applying for myself',
-  nameFr: '(FR) I am applying for myself',
-});
-
-db.applicationTypes.create({
-  code: 'other',
-  nameEn: 'I am applying on behalf of someone else',
-  nameFr: '(FR) I am applying on behalf of someone else',
-});
-
 // seed avaliable addresses (before user)
 db.address.create({
   id: 'home-address-id',
@@ -273,11 +256,6 @@ for (let i = 0; i < numberOfLetters; i++) {
 }
 
 // seed marirtal statuses
-db.maritalStatus.create({
-  code: 'MARRIED',
-  nameEn: 'Married',
-  nameFr: '(FR) Married',
-});
 db.maritalStatus.create({
   code: 'COMMONLAW',
   nameEn: 'Common Law',
