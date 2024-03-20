@@ -36,9 +36,10 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  //TODO: Get User/apply form information
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
+  const maritalStatuses = await getLookupService().getAllMaritalStatuses();
+  const provincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
 
   // prettier-ignore
   if (!state.applicantInformation ||
@@ -74,8 +75,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const userInfo = {
-    firstName: 'John',
-    id: '00000000-0000-0000-0000-000000000000',
+    firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
     phoneNumber: state.personalInformation.phoneNumber,
     altPhoneNumber: state.personalInformation.phoneNumberAlt,
@@ -86,7 +86,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     email: state.communicationPreferences.email,
     communicationPreference: state.communicationPreferences.preferredMethod,
   };
-
   const spouseInfo = state.partnerInformation
     ? {
         firstName: state.partnerInformation.firstName,
@@ -125,13 +124,14 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     },
     provTerrBenefit: {
       access: state.dentalBenefits.provincialTerritorialBenefit,
+      province: state.dentalBenefits.province,
       benefit: state.dentalBenefits.provincialTerritorialSocialProgram,
     },
   };
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:review-information.page-title') }) };
 
-  return json({ id, userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, meta });
+  return json({ id, userInfo, spouseInfo, maritalStatuses, preferredLanguage, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, meta });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -154,9 +154,15 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function ReviewInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { id, userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit } = useLoaderData<typeof loader>();
+  const { id, userInfo, spouseInfo, maritalStatuses, preferredLanguage, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
+
+  const maritalStatusEntity = maritalStatuses.find((ms) => ms.code === userInfo.martialStatus);
+  const maritalStatus = maritalStatusEntity ? getNameByLanguage(i18n.language, maritalStatusEntity) : userInfo.martialStatus;
+
+  const provincialTerritorialSocialProgramEntity = provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === dentalBenefit.provTerrBenefit.province).find((p) => p.id === dentalBenefit.provTerrBenefit.benefit);
+  const provincialTerritorialSocialProgram = provincialTerritorialSocialProgramEntity ? getNameByLanguage(i18n.language, provincialTerritorialSocialProgramEntity) : provincialTerritorialSocialProgramEntity;
 
   return (
     <>
@@ -194,19 +200,18 @@ export default function ReviewInformation() {
               </InlineLink>
             </p>
           </DescriptionListItem>
-          <DescriptionListItem term={t('apply:review-information.martial-title')}>
-            {userInfo.martialStatus}
+          <DescriptionListItem term={t('apply:review-information.marital-title')}>
+            {maritalStatus}
             <p className="mt-4">
               <InlineLink id="change-martial-status" to="/">
-                {t('apply:review-information.martial-change')}
+                {t('apply:review-information.marital-change')}
               </InlineLink>
             </p>
           </DescriptionListItem>
         </dl>
-
         {spouseInfo && (
           <>
-            <h2 className="mt-8 text-2xl font-semibold">{t('apply:review-information.spouse-title')}</h2>
+            <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.spouse-title')}</h2>
             <dl>
               <DescriptionListItem term={t('apply:review-information.full-name-title')}>
                 {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
@@ -232,14 +237,11 @@ export default function ReviewInformation() {
                   </InlineLink>
                 </p>
               </DescriptionListItem>
-              <DescriptionListItem term="Consent">
-                {spouseInfo.consent ? 'My spouse or common-law partner is aware and has consented to sharing of their personal information.' : 'My spouse or common-law partner is aware and has not consented to sharing of their personal information.'}
-              </DescriptionListItem>
+              <DescriptionListItem term={t('apply:review-information.spouse-consent.label')}>{spouseInfo.consent ? t('apply:review-information.spouse-consent.yes') : t('apply:review-information.spouse-consent.no')}</DescriptionListItem>
             </dl>
           </>
         )}
-
-        <h2 className="mt-2 text-2xl font-semibold">{t('apply:review-information.personal-info-title')}</h2>
+        <h2 className="mt-2 text-2xl font-semibold ">{t('apply:review-information.personal-info-title')}</h2>
         <dl className="sm: grid grid-cols-1 sm:grid-cols-2">
           <DescriptionListItem term={t('apply:review-information.phone-title')}>
             {userInfo.phoneNumber}
@@ -264,6 +266,7 @@ export default function ReviewInformation() {
               provinceState={i18n.language === 'en' ? mailingAddressInfo.province?.nameEn : mailingAddressInfo.province?.nameFr}
               postalZipCode={mailingAddressInfo.postalCode}
               country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
+              altFormat={true}
             />
             <p className="mt-4">
               <InlineLink id="change-mailing-address" to="/">
@@ -278,6 +281,7 @@ export default function ReviewInformation() {
               provinceState={i18n.language === 'en' ? homeAddressInfo.province?.nameEn : homeAddressInfo.province?.nameFr}
               postalZipCode={homeAddressInfo.postalCode}
               country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
+              altFormat={true}
             />
             <p className="mt-4">
               <InlineLink id="change-home-address" to="/">
@@ -305,53 +309,51 @@ export default function ReviewInformation() {
             </p>
           </DescriptionListItem>
           {preferredLanguage && (
-            <>
-              <DescriptionListItem term={t('apply:review-information.lang-pref-title')}>
-                {getNameByLanguage(i18n.language, preferredLanguage)}
-                <p className="mt-4">
-                  <InlineLink id="change-language-preference" to="/">
-                    {t('apply:review-information.lang-pref-change')}
-                  </InlineLink>
-                </p>
-              </DescriptionListItem>
-            </>
+            <DescriptionListItem term={t('apply:review-information.lang-pref-title')}>
+              {getNameByLanguage(i18n.language, preferredLanguage)}
+              <p className="mt-4">
+                <InlineLink id="change-language-preference" to="/">
+                  {t('apply:review-information.lang-pref-change')}
+                </InlineLink>
+              </p>
+            </DescriptionListItem>
           )}
         </dl>
         <h2 className="mt-8 text-2xl font-semibold">{t('apply:review-information.dental-title')}</h2>
         <dl>
-          <DescriptionListItem term={t('apply:review-information.dental-private-title')}>
+          <DescriptionListItem term={t('apply:review-information.dental-insurance-title')}>
             {t('apply:review-information.dental-insurance-has-access')}
             {dentalInsurance === 'yes' ? t('apply:review-information.yes') : t('apply:review-information.no')}
             <p className="mt-4">
               <InlineLink id="change-access-dental" to="/">
-                {t('apply:review-information.dental-private-change')}
+                {t('apply:review-information.dental-insurance-change')}
               </InlineLink>
             </p>
           </DescriptionListItem>
-          <DescriptionListItem term={t('apply:review-information.dental-public-title')}>
+          <DescriptionListItem term={t('apply:review-information.dental-benefit-title')}>
             {dentalBenefit.federalBenefit.access === 'yes' ? (
               <div>
-                <span>{t('apply:review-information.dental-has-access')}</span>
+                <span>{t('apply:review-information.dental-benefit-has-access')}</span>
                 <ul className="ml-6 list-disc">
                   <li>{dentalBenefit.federalBenefit.benefit}</li>
                 </ul>
               </div>
             ) : (
-              t('apply:review-information.dental-federal-no-access')
+              t('apply:review-information.dental-benefit-federal-no-access')
             )}
             {dentalBenefit.provTerrBenefit.access === 'yes' ? (
               <div>
-                <span>{t('apply:review-information.dental-has-access')}</span>
+                <span>{t('apply:review-information.dental-benefit-has-access')}</span>
                 <ul className="ml-6 list-disc">
-                  <li>{dentalBenefit.provTerrBenefit.benefit}</li>
+                  <li>{provincialTerritorialSocialProgram}</li>
                 </ul>
               </div>
             ) : (
-              t('apply:review-information.dental-provincial-no-access')
+              t('apply:review-information.dental-benefit-provincial-no-access')
             )}
             <p className="mt-4">
               <InlineLink id="change-dental-benefits" to="/">
-                {t('apply:review-information.dental-public-change')}
+                {t('apply:review-information.dental-benefit-change')}
               </InlineLink>
             </p>
           </DescriptionListItem>

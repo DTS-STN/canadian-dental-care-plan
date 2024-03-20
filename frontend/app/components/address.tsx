@@ -8,9 +8,10 @@ export interface AddressProps extends ComponentProps<'address'> {
   provinceState?: string;
   postalZipCode?: string;
   country: string;
+  altFormat?: boolean;
 }
 
-function formatAddress(address: string, city: string, country: string, provinceState?: string, postalZipCode?: string) {
+function formatAddress(address: string, city: string, country: string, provinceState?: string, postalZipCode?: string, altFormat?: boolean) {
   // TODO 'canada' shouldn't be hardcoded as we may deal with different values of the country field such as abbreviations
   const isNotCanadianAddress = 'canada' !== country.toLowerCase();
 
@@ -19,15 +20,21 @@ function formatAddress(address: string, city: string, country: string, provinceS
     `${city}${provinceState ? ` ${provinceState}` : ''}${postalZipCode ? `  ${postalZipCode}` : ''}`,
     `${isNotCanadianAddress ? country : ''}`];
 
-  return lines
+  // prettier-ignore
+  const linesAlt = [`${address}`,
+  `${city}${provinceState ? ` ${provinceState}` : ''}`,
+  `${postalZipCode ? `${postalZipCode}` : ''}`,
+  `${isNotCanadianAddress ? country : ''}`];
+
+  return (altFormat ? linesAlt : lines)
     .map((line) => line.trim())
     .filter(Boolean)
     .join('\n');
 }
 
 export function Address(props: AddressProps) {
-  const { address, city, provinceState, postalZipCode, country, className, ...restProps } = props;
-  const formattedAddress = formatAddress(address, city, country, provinceState, postalZipCode);
+  const { address, city, provinceState, postalZipCode, country, className, altFormat, ...restProps } = props;
+  const formattedAddress = formatAddress(address, city, country, provinceState, postalZipCode, altFormat);
 
   return (
     <address className={cn('whitespace-pre-wrap not-italic', className)} data-testid="address-id" {...restProps}>
