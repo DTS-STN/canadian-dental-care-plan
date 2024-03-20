@@ -47,7 +47,7 @@ describe('_public.apply.id.type-of-application', () => {
       expect(data).toEqual({
         id: '123',
         meta: { title: 'gcweb:meta.title.template' },
-        state: 'delegate',
+        defaultState: 'delegate',
       });
     });
   });
@@ -62,7 +62,7 @@ describe('_public.apply.id.type-of-application', () => {
 
       const data = await response.json();
       expect(response.status).toBe(200);
-      expect(data.errors._errors).toContain('apply:eligibility.type-of-application.error-message.type-of-application-required');
+      expect(data.errors).toContain('apply:eligibility.type-of-application.error-message.type-of-application-required');
     });
 
     it('should redirect to error page if delegate is selected', async () => {
