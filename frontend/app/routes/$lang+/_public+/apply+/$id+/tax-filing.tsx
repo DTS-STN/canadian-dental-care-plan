@@ -72,7 +72,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (parsedDataResult.data === 'FALSE') {
-    redirectWithLocale(request, `/apply/${id}/file-your-taxes`, sessionResponseInit);
+    return redirectWithLocale(request, `/apply/${id}/file-your-taxes`, sessionResponseInit);
   }
 
   return redirectWithLocale(request, `/apply/${id}/date-of-birth`, sessionResponseInit);
