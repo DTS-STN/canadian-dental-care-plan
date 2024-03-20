@@ -23,7 +23,7 @@ function formatAddress(address: string, city: string, country: string, provinceS
   // prettier-ignore
   const linesAlt = [`${address}`,
   `${city}${provinceState ? ` ${provinceState}` : ''}`,
-  `${postalZipCode ? ` ${postalZipCode}` : ''}`,
+  `${postalZipCode ? `${postalZipCode}` : ''}`,
   `${isNotCanadianAddress ? country : ''}`];
 
   return (altFormat ? linesAlt : lines)
