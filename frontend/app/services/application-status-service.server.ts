@@ -1,6 +1,8 @@
 import moize from 'moize';
 import { z } from 'zod';
 
+import { getAuditService } from '~/services/audit-service.server';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
@@ -18,8 +20,11 @@ function createApplicationStatusService() {
    * @returns the status id of a dental application given the sin and application code
    */
   async function getStatusId(sin: string, applicationCode: string) {
-    const url = new URL(`${INTEROP_API_BASE_URI}/dental-care/status-check/v1/status`);
+    const instrumentationService = getInstrumentationService();
 
+    getAuditService().audit('application-status.post', { userId: 'anonymous' });
+
+    const url = new URL(`${INTEROP_API_BASE_URI}/dental-care/status-check/v1/status`);
     const statusRequest = {
       BenefitApplication: {
         Applicant: {
@@ -46,6 +51,7 @@ function createApplicationStatusService() {
     });
 
     if (!response.ok) {
+      instrumentationService.countHttpStatus('application-status.post', response.status);
       log.error('%j', {
         message: "Failed to 'POST' for application status",
         status: response.status,
@@ -57,6 +63,7 @@ function createApplicationStatusService() {
       throw new Error(`Failed to 'POST' for application status. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
+    instrumentationService.countHttpStatus('application-status.post', 200);
     const statusResponseSchema = z.object({
       BenefitApplication: z.object({
         BenefitApplicationStatus: z.array(
