@@ -9,6 +9,7 @@ import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { getAddressService } from '~/services/address-service.server';
 import { getAuditService } from '~/services/audit-service.server';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
@@ -31,53 +32,60 @@ export const handle = {
 };
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  if (!data) return [];
-  return getTitleMetaTags(data.meta.title);
+  return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const addressService = getAddressService();
+  const instrumentationService = getInstrumentationService();
+  const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
+  const sessionService = await getSessionService();
+  const userService = getUserService();
+
   await raoidcService.handleSessionValidation(request);
 
-  const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
-  const homeAddressInfo = await getAddressService().getAddressInfo(userId, userInfo?.homeAddress ?? '');
+  const homeAddressInfo = await addressService.getAddressInfo(userId, userInfo?.homeAddress ?? '');
 
-  const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
   const newHomeAddress = session.get('newHomeAddress');
   const useSuggestedAddress = session.get('useSuggestedAddress');
   const suggestedAddress = session.get('suggestedAddress');
 
-  const countryList = await getLookupService().getAllCountries();
-  const regionList = await getLookupService().getAllRegions();
+  const countryList = await lookupService.getAllCountries();
+  const regionList = await lookupService.getAllRegions();
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:home-address.confirm.page-title') }) };
 
+  instrumentationService.countHttpStatus('home-address.confirm', 200);
   return json({ countryList, homeAddressInfo, meta, newHomeAddress, regionList, suggestedAddress, useSuggestedAddress });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const addressService = getAddressService();
+  const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
+  const sessionService = await getSessionService();
+  const userService = getUserService();
+
   await raoidcService.handleSessionValidation(request);
 
-  const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
 
-  const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
   const newHomeAddress = session.get('useSuggestedAddress') ? session.get('suggestedAddress') : session.get('newHomeAddress');
-
-  await getAddressService().updateAddressInfo(userId, userInfo?.homeAddress ?? '', newHomeAddress);
+  await addressService.updateAddressInfo(userId, userInfo?.homeAddress ?? '', newHomeAddress);
 
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('update-data.home-address', { userId: idToken.sub });
 
   const locale = await getLocale(request);
 
+  instrumentationService.countHttpStatus('home-address.confirm', 302);
   // TODO remove new home address from session and handle case when it is missing
   return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:home-address.confirm.updated-notification');
 }

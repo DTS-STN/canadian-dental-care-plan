@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
@@ -26,34 +27,40 @@ export const handle = {
 };
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  if (!data) return [];
-  return getTitleMetaTags(data.meta.title);
+  return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const instrumentationService = getInstrumentationService();
+  const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request);
-
   const sessionService = await getSessionService();
+
+  await raoidcService.handleSessionValidation(request);
   const session = await sessionService.getSession(request);
 
   if (!session.has('newHomeAddress')) {
+    instrumentationService.countHttpStatus('home-address.validate.no-session', 302);
     return redirectWithLocale(request, '/');
   }
 
   const newHomeAddress = session.get('newHomeAddress');
-  const countryList = await getLookupService().getAllCountries();
-  const regionList = await getLookupService().getAllRegions();
+  const countryList = await lookupService.getAllCountries();
+  const regionList = await lookupService.getAllRegions();
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:home-address.address-accuracy.page-title') }) };
 
+  instrumentationService.countHttpStatus('home-address.validate', 200);
   return json({ countryList, meta, newHomeAddress, regionList });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
+
   await raoidcService.handleSessionValidation(request);
+  instrumentationService.countHttpStatus('home-address.validate', 302);
   return redirectWithLocale(request, '/personal-information/home-address/confirm');
 }
 
