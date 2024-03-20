@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
 import pageIds from '../../../page-ids.json';
-import { Button, ButtonLink } from '~/components/buttons';
+import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -74,10 +74,10 @@ export default function ApplyFlowFileYourTaxes() {
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:eligibility.file-your-taxes.back-btn')}
         </ButtonLink>
-        <Button variant="primary">
+        <ButtonLink type="submit" variant="primary" onClick={() => sessionStorage.removeItem('flow.state')} to={t('apply:eligibility.file-your-taxes.return-btn-link')}>
           {t('apply:eligibility.file-your-taxes.return-btn')}
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
-        </Button>
+        </ButtonLink>
       </fetcher.Form>
     </>
   );

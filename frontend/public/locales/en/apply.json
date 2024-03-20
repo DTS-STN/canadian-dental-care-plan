@@ -237,7 +237,8 @@
       "contact-service-canada-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html",
       "preparing-to-apply-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#helping",
       "back-btn": "Back",
-      "return-btn": "Return main page"
+      "return-btn": "Return to main page",
+      "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
     },
     "file-your-taxes": {
       "page-title": "File your taxes",
@@ -248,7 +249,8 @@
       "apply-after": "Please apply for the plan after you have filed your taxes and received your Notice of Assessment.",
       "tax-info-href": "https://www.canada.ca/en/services/taxes/income-tax/personal-income-tax/get-ready-taxes.html",
       "back-btn": "Back",
-      "return-btn": "Return main page"
+      "return-btn": "Return to main page",
+      "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
     },
     "dob-eligibility": {
       "page-title": "Find out when you can apply",
@@ -256,7 +258,8 @@
       "eligibility-info": "<eligibilityInfo>Find out when you can apply for the Canada Dental Care Plan</eligibilityInfo>",
       "eligibility-info-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#when",
       "back-btn": "Back",
-      "return-btn": "Return main page"
+      "return-btn": "Return to main page",
+      "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
     }
   },
   "index": {
