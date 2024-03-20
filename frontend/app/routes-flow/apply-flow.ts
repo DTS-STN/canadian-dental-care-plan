@@ -17,11 +17,6 @@ import { isValidSin } from '~/utils/sin-utils';
 const idSchema = z.string().uuid();
 
 /**
- * Schema for terms and conditions
- */
-const termsAndConditionSchema = z.object({});
-
-/**
  * Schema applicant information.
  */
 const applicantInformationSchema = z.object({
@@ -102,7 +97,6 @@ const applyStateSchema = z.object({
   communicationPreferences: communicationPreferencesStateSchema.optional(),
   demographicsPart1: demographicsPart1StateSchema.optional(),
   demographicsPart2: demographicsPart2StateSchema.optional(),
-  termsAndConditions: termsAndConditionSchema.optional(),
   taxFiling2023: taxFilingSchema.optional(),
 });
 
@@ -248,7 +242,6 @@ export function getApplyFlow() {
     saveState,
     start,
     taxFilingSchema,
-    termsAndConditionSchema,
     demographicsPart2StateSchema,
     demographicsPart1StateSchema,
   };
