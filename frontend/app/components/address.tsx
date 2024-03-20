@@ -17,22 +17,16 @@ function formatAddress(address: string, city: string, country: string, provinceS
 
   // prettier-ignore
   const lines = [`${address}`,
-    `${city}${provinceState ? ` ${provinceState}` : ''}${postalZipCode ? `  ${postalZipCode}` : ''}`,
+    `${city}${provinceState ? ` ${provinceState}` : ''}${postalZipCode ? ` ${postalZipCode}` : ''}`,
     `${isNotCanadianAddress ? country : ''}`];
 
   // prettier-ignore
   const linesAlt = [`${address}`,
   `${city}${provinceState ? ` ${provinceState}` : ''}`,
-  `${postalZipCode ? `  ${postalZipCode}` : ''}`,
+  `${postalZipCode ? ` ${postalZipCode}` : ''}`,
   `${isNotCanadianAddress ? country : ''}`];
 
-  if (altFormat)
-    return linesAlt
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .join('\n');
-
-  return lines
+  return (altFormat ? linesAlt : lines)
     .map((line) => line.trim())
     .filter(Boolean)
     .join('\n');

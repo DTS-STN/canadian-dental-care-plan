@@ -178,7 +178,10 @@ export default function ReviewInformation() {
             </p>
           </DescriptionListItem>
           <DescriptionListItem term={t('apply:review-information.martial-title')}>
-            {i18n.language === 'fr' ? maritalStatuses.find((x) => x.code === userInfo.martialStatus)?.nameFr : maritalStatuses.find((x) => x.code === userInfo.martialStatus)?.nameEn}
+            {getNameByLanguage(
+              i18n.language,
+              maritalStatuses.find((ms) => ms.code === userInfo.martialStatus),
+            )}
             <p className="mt-4">
               <InlineLink id="change-martial-status" to="/">
                 {t('apply:review-information.martial-change')}
@@ -321,9 +324,10 @@ export default function ReviewInformation() {
                 <span>{t('apply:review-information.dental-benefit-has-access')}</span>
                 <ul className="ml-6 list-disc">
                   <li>
-                    {i18n.language === 'fr'
-                      ? provincialTerritorialSocialPrograms.filter((program) => program.provinceTerritoryStateId === dentalBenefit.provTerrBenefit.province).find((x) => x.id === dentalBenefit.provTerrBenefit.benefit)?.nameFr
-                      : provincialTerritorialSocialPrograms.filter((program) => program.provinceTerritoryStateId === dentalBenefit.provTerrBenefit.province).find((x) => x.id === dentalBenefit.provTerrBenefit.benefit)?.nameEn}
+                    {getNameByLanguage(
+                      i18n.language,
+                      provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === dentalBenefit.provTerrBenefit.province).find((p) => p.id === dentalBenefit.provTerrBenefit.benefit),
+                    )}
                   </li>
                 </ul>
               </div>
