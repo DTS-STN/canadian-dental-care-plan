@@ -237,7 +237,8 @@
       "contact-service-canada-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
       "preparing-to-apply-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#aide",
       "back-btn": "Retour",
-      "return-btn": "Revenir à la page principale"
+      "return-btn": "Revenir à la page principale",
+      "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     },
     "file-your-taxes": {
       "page-title": "Produire votre déclaration de revenus",
@@ -248,7 +249,8 @@
       "apply-after": "Veuillez présenter une demande de participation au régime après avoir produit votre déclaration de revenus et reçu votre avis de cotisation.",
       "tax-info-href": "https://www.canada.ca/fr/services/impots/impot-sur-le-revenu/impot-sur-le-revenu-des-particuliers/preparez-vous-impots.html",
       "back-btn": "Retour",
-      "return-btn": "Revenir à la page principale"
+      "return-btn": "Revenir à la page principale",
+      "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     },
     "dob-eligibility": {
       "page-title": "Découvrez quand vous pouvez présenter une demande",
@@ -256,7 +258,8 @@
       "eligibility-info": "<eligibilityInfo>Découvrez quand vous pouvez faire une demande au Régime canadien de soins dentaires.</eligibilityInfo>",
       "eligibility-info-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#quand",
       "back-btn": "Retour",
-      "return-btn": "Revenir à la page principale"
+      "return-btn": "Revenir à la page principale",
+      "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     }
   },
   "index": {
