@@ -71,7 +71,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
     state: { taxFiling2023: parsedDataResult.data },
   });
 
-  return parsedDataResult.data === 'FALSE' ? redirectWithLocale(request, `/apply/${id}/file-your-taxes`, sessionResponseInit) : redirectWithLocale(request, `/apply/${id}/date-of-birth`, sessionResponseInit);
+  if (parsedDataResult.data === 'FALSE') {
+    redirectWithLocale(request, `/apply/${id}/file-your-taxes`, sessionResponseInit);
+  }
+
+  return redirectWithLocale(request, `/apply/${id}/date-of-birth`, sessionResponseInit);
 }
 
 export default function ApplyFlowTaxFiling() {
