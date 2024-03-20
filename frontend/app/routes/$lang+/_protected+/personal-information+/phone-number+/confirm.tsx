@@ -7,6 +7,7 @@ import { redirectWithSuccess } from 'remix-toast';
 
 import { Button, ButtonLink } from '~/components/buttons';
 import { getAuditService } from '~/services/audit-service.server';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
@@ -29,46 +30,69 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  if (!data) return [];
-  return getTitleMetaTags(data.meta.title);
+  return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
+  const sessionService = await getSessionService();
+  const userService = getUserService();
+
   await raoidcService.handleSessionValidation(request);
 
-  const userService = getUserService();
-  const sessionService = await getSessionService();
-
   const userId = await userService.getUserId();
-  if (!userId) return redirectWithLocale(request, '/');
+
+  if (!userId) {
+    instrumentationService.countHttpStatus('phone-number.confirm', 302);
+    return redirectWithLocale(request, '/');
+  }
 
   const userInfo = await userService.getUserInfo(userId);
-  if (!userInfo) return redirectWithLocale(request, '/');
+  if (!userInfo) {
+    instrumentationService.countHttpStatus('phone-number.confirm', 302);
+    return redirectWithLocale(request, '/');
+  }
 
   const session = await sessionService.getSession(request);
-  if (!session.has('newPhoneNumber')) return redirectWithLocale(request, '/');
+  if (!session.has('newPhoneNumber')) {
+    instrumentationService.countHttpStatus('phone-number.confirm', 302);
+    return redirectWithLocale(request, '/');
+  }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:phone-number.confirm.page-title') }) };
 
+  instrumentationService.countHttpStatus('phone-number.confirm', 200);
   return json({ meta, newPhoneNumber: session.get('newPhoneNumber'), userInfo });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
+  const sessionService = await getSessionService();
+  const userService = getUserService();
+
   await raoidcService.handleSessionValidation(request);
 
-  const userService = getUserService();
-  const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
 
   const userId = await userService.getUserId();
-  if (!userId) return redirectWithLocale(request, '/');
+  if (!userId) {
+    instrumentationService.countHttpStatus('phone-number.confirm', 302);
+    return redirectWithLocale(request, '/');
+  }
 
   const userInfo = await userService.getUserInfo(userId);
-  if (!userInfo) return redirectWithLocale(request, '/');
-  if (!session.has('newPhoneNumber')) return redirectWithLocale(request, '/');
+  if (!userInfo) {
+    instrumentationService.countHttpStatus('phone-number.confirm', 302);
+    return redirectWithLocale(request, '/');
+  }
+
+  if (!session.has('newPhoneNumber')) {
+    instrumentationService.countHttpStatus('phone-number.confirm', 302);
+    return redirectWithLocale(request, '/');
+  }
 
   await userService.updateUserInfo(userId, { phoneNumber: session.get('newPhoneNumber') });
 
@@ -78,6 +102,7 @@ export async function action({ request }: ActionFunctionArgs) {
   session.unset('newPhoneNumber');
   const locale = await getLocale(request);
 
+  instrumentationService.countHttpStatus('phone-number.confirm', 302);
   return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:phone-number.confirm.updated-notification', {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),
