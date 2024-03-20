@@ -90,13 +90,6 @@ const db = factory({
     nameFr: String,
   },
 
-  taxFilingIndications: {
-    id: primaryKey(faker.string.uuid),
-    code: String,
-    nameEn: String,
-    nameFr: String,
-  },
-
   letter: {
     id: primaryKey(faker.string.uuid),
     issuedOn: () => faker.date.past({ years: 1 }).toISOString().split('T')[0],
@@ -207,18 +200,6 @@ db.provincialTerritorialDentalBenefit.create({
   code: 'yes',
   nameEn: 'Yes',
   nameFr: '(Fr) Yes',
-});
-
-db.taxFilingIndications.create({
-  code: 'yes',
-  nameEn: 'Yes',
-  nameFr: '(Fr) Yes',
-});
-
-db.taxFilingIndications.create({
-  code: 'no',
-  nameEn: 'No',
-  nameFr: '(Fr) No',
 });
 
 // seed avaliable addresses (before user)
