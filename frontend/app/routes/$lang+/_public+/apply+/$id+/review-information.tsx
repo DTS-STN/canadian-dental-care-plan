@@ -158,6 +158,12 @@ export default function ReviewInformation() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
+  const maritalStatusEntity = maritalStatuses.find((ms) => ms.code === userInfo.martialStatus);
+  const maritalStatus = maritalStatusEntity ? getNameByLanguage(i18n.language, maritalStatusEntity) : userInfo.martialStatus;
+
+  const provincialTerritorialSocialProgramEntity = provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === dentalBenefit.provTerrBenefit.province).find((p) => p.id === dentalBenefit.provTerrBenefit.benefit);
+  const provincialTerritorialSocialProgram = provincialTerritorialSocialProgramEntity ? getNameByLanguage(i18n.language, provincialTerritorialSocialProgramEntity) : provincialTerritorialSocialProgramEntity;
+
   return (
     <>
       <div className="my-6 sm:my-8">
@@ -195,10 +201,7 @@ export default function ReviewInformation() {
             </p>
           </DescriptionListItem>
           <DescriptionListItem term={t('apply:review-information.martial-title')}>
-            {getNameByLanguage(
-              i18n.language,
-              maritalStatuses.find((ms) => ms.code === userInfo.martialStatus),
-            )}
+            {maritalStatus}
             <p className="mt-4">
               <InlineLink id="change-martial-status" to="/">
                 {t('apply:review-information.martial-change')}
@@ -342,12 +345,7 @@ export default function ReviewInformation() {
               <div>
                 <span>{t('apply:review-information.dental-benefit-has-access')}</span>
                 <ul className="ml-6 list-disc">
-                  <li>
-                    {getNameByLanguage(
-                      i18n.language,
-                      provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === dentalBenefit.provTerrBenefit.province).find((p) => p.id === dentalBenefit.provTerrBenefit.benefit),
-                    )}
-                  </li>
+                  <li>{provincialTerritorialSocialProgram}</li>
                 </ul>
               </div>
             ) : (

@@ -97,8 +97,7 @@ export function getTypedI18nNamespaces<const T extends Readonly<FlatNamespace>, 
  * @param { english translation, french translation}
  * @returns either the english translation or the french translation.
  */
-export function getNameByLanguage(language: string, obj: { nameEn?: string; nameFr?: string } | undefined) {
-  if (!obj) throw new Response(null, { status: 400 });
+export function getNameByLanguage(language: string, obj: { nameEn?: string; nameFr?: string }) {
   return language == 'fr' ? obj.nameFr : obj.nameEn;
 }
 
