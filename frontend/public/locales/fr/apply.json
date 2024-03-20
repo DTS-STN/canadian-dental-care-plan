@@ -196,7 +196,7 @@
         "delegate": "Je présente une demande pour quelqu'un d'autre"
       },
       "error-message": {
-        "Required": "Le type de demandeur doit être fourni"
+        "type-of-application-required": "Le type de demandeur est obligatoire."
       },
       "back-btn": "Retour",
       "continue-btn": "Continuer"

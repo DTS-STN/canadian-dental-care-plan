@@ -123,7 +123,7 @@ export default function ApplyFlowApplicationInformation() {
     socialInsuranceNumber: fetcher.data?.formData.socialInsuranceNumber ?? state?.socialInsuranceNumber ?? '',
   };
 
-  // Order of the keys should be match input IDs order.
+  // Keys order should match the input IDs order.
   const errorMessages = {
     'first-name': fetcher.data?.errors.firstName?._errors[0],
     'last-name': fetcher.data?.errors.lastName?._errors[0],

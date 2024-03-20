@@ -41,13 +41,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   // prettier-ignore
   if (!state.applicantInformation ||
-    !state.applicationDelegate ||
     !state.communicationPreferences ||
     !state.dateOfBirth ||
     !state.dentalBenefit ||
     !state.dentalInsurance ||
     !state.personalInformation ||
-    !state.taxFiling2023) {
+    !state.taxFiling2023 ||
+    !state.typeOfApplication) {
     throw new Error(`Incomplete application "${id}" state!`);
   }
 

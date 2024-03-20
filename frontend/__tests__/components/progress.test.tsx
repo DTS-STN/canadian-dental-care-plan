@@ -71,7 +71,6 @@ describe('Progress component accessiblity', () => {
   it('renders with custom className', async () => {
     const { container } = render(<Progress aria-label="File upload" className="custom-class" />);
     const results = await axe(container);
-    console.log({ results });
     expect(results).toHaveNoViolations();
   });
 });
