@@ -65,20 +65,27 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { id } = await applyFlow.loadState({ request, params });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formData = Object.fromEntries(await request.formData());
+  const formData = await request.formData();
+  const dentalBenefits = {
+    federalBenefit: String(formData.get('federalBenefit') ?? ''),
+    federalSocialProgram: String(formData.get('federalSocialProgram') ?? ''),
+    provincialTerritorialBenefit: String(formData.get('provincialTerritorialBenefit') ?? ''),
+    provincialTerritorialSocialProgram: String(formData.get('provincialTerritorialSocialProgram') ?? ''),
+    province: String(formData.get('province') ?? ''),
+  };
 
   const dentalBenefitsSchema: z.ZodType<DentalBenefitsState> = z
     .object({
       federalBenefit: z
         .string({ required_error: t('apply:dental-benefits.error-message.federal-benefit') })
         .trim()
-        .min(1),
-      federalSocialProgram: z.string().trim().min(1).optional(),
+        .min(1, { message: t('apply:dental-benefits.error-message.federal-benefit') }),
+      federalSocialProgram: z.string().trim().optional(),
       provincialTerritorialBenefit: z
         .string({ required_error: t('apply:dental-benefits.error-message.provincial-benefit') })
         .trim()
-        .min(1),
-      provincialTerritorialSocialProgram: z.string().trim().min(1).optional(),
+        .min(1, { message: t('apply:dental-benefits.error-message.provincial-benefit') }),
+      provincialTerritorialSocialProgram: z.string().trim().optional(),
       province: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
@@ -100,19 +107,19 @@ export async function action({ request, params }: ActionFunctionArgs) {
         if (val.province && !val.provincialTerritorialSocialProgram) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: t('apply:dental-benefits.error-message.empty-province'),
+            message: t('apply:dental-benefits.error-message.empty-program'),
             path: ['provincialTerritorialSocialProgram'],
           });
         }
       }
     });
 
-  const parsedDataResult = dentalBenefitsSchema.safeParse(formData);
+  const parsedDataResult = dentalBenefitsSchema.safeParse(dentalBenefits);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData,
+      formData: dentalBenefits,
     });
   }
 
