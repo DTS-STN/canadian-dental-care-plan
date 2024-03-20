@@ -257,6 +257,11 @@ for (let i = 0; i < numberOfLetters; i++) {
 
 // seed marirtal statuses
 db.maritalStatus.create({
+  code: 'MARRIED',
+  nameEn: 'Married',
+  nameFr: '(FR) Married',
+});
+db.maritalStatus.create({
   code: 'COMMONLAW',
   nameEn: 'Common Law',
   nameFr: '(FR) Common Law',
