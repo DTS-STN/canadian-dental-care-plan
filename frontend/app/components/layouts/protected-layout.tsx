@@ -117,11 +117,13 @@ function PageHeader() {
 function PageBreadcrumbs() {
   const { t } = useTranslation([...i18nNamespaces, ...useI18nNamespaces()]);
   const breadcrumbs = useBreadcrumbs();
+  const userOrigin = useUserOrigin();
+
   return (
     <Breadcrumbs
       className="my-4"
       items={[
-        { content: t('gcweb:breadcrumbs.home'), to: breadcrumbs.length !== 0 ? '/home' : undefined },
+        { content: t('gcweb:breadcrumbs.home'), to: userOrigin?.to },
         ...breadcrumbs.map((item) => ({
           content: t(item.labelI18nKey),
           to: item.to,
