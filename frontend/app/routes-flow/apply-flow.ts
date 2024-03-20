@@ -9,6 +9,7 @@ import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/denta
 import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits';
 import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/partner-information';
 import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/personal-information';
+import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/tax-filing';
 import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-of-application';
 import { getSessionService } from '~/services/session-service.server';
 import { redirectWithLocale } from '~/utils/locale-utils.server';
@@ -19,17 +20,22 @@ import { redirectWithLocale } from '~/utils/locale-utils.server';
 const idSchema = z.string().uuid();
 
 /**
- * Schema for tax filing.
+ * Schema for communication reference.
  */
-const taxFilingSchema = z.object({
-  taxFiling2023: z.string(),
+const communicationPreferencesStateSchema = z.object({
+  preferredLanguage: z.string().min(1),
+  preferredMethod: z.string().min(1),
+  email: z.string().min(1).optional(),
+  confirmEmail: z.string().min(1).optional(),
+  emailForFuture: z.string().optional(),
+  confirmEmailForFuture: z.string().optional(),
 });
 
 /**
  * Schema for apply state.
  */
 const applyStateSchema = z.object({
-  taxFiling2023: taxFilingSchema.optional(),
+  communicationPreferences: communicationPreferencesStateSchema.optional(),
 });
 
 interface ApplyState extends z.infer<typeof applyStateSchema> {
@@ -41,6 +47,7 @@ interface ApplyState extends z.infer<typeof applyStateSchema> {
   dentalBenefits?: DentalBenefitsState;
   applicantInformation?: ApplicantInformationState;
   communicationPreferences?: CommunicationPreferencesState;
+  taxFiling2023?: TaxFilingState;
 }
 
 /**
@@ -175,6 +182,5 @@ export function getApplyFlow() {
     loadState,
     saveState,
     start,
-    taxFilingSchema,
   };
 }
