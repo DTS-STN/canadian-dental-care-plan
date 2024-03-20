@@ -4,6 +4,12 @@ import { loader } from '~/routes/$lang+/_protected+/personal-information+/prefer
 import { getLookupService } from '~/services/lookup-service.server';
 import { getUserService } from '~/services/user-service.server';
 
+vi.mock('~/services/instrumentation-service.server', () => ({
+  getInstrumentationService: () => ({
+    countHttpStatus: vi.fn(),
+  }),
+}));
+
 vi.mock('~/services/lookup-service.server', () => ({
   getLookupService: vi.fn().mockReturnValue({
     getAllPreferredLanguages: vi.fn().mockReturnValue([

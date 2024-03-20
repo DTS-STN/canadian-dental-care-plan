@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
 
 import { Button, ButtonLink } from '~/components/buttons';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
@@ -28,54 +29,76 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  if (!data) return [];
-  return getTitleMetaTags(data.meta.title);
+  return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const instrumentationService = getInstrumentationService();
+  const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
+  const sessionService = await getSessionService();
+  const userService = getUserService();
+
   await raoidcService.handleSessionValidation(request);
 
-  const userService = getUserService();
-  const sessionService = await getSessionService();
-
   const userId = await userService.getUserId();
-  if (!userId) return redirectWithLocale(request, '/');
+  if (!userId) {
+    instrumentationService.countHttpStatus('preferred-language.confirm', 302);
+    return redirectWithLocale(request, '/');
+  }
 
   const userInfo = await userService.getUserInfo(userId);
-  if (!userInfo) return redirectWithLocale(request, '/');
+  if (!userInfo) {
+    instrumentationService.countHttpStatus('preferred-language.confirm', 302);
+    return redirectWithLocale(request, '/');
+  }
 
   const session = await sessionService.getSession(request);
-  if (!session.has('newPreferredLanguage')) return redirectWithLocale(request, '/');
+  if (!session.has('newPreferredLanguage')) {
+    instrumentationService.countHttpStatus('preferred-language.confirm', 302);
+    return redirectWithLocale(request, '/');
+  }
 
-  const preferredLanguage = await getLookupService().getPreferredLanguage(session.get('newPreferredLanguage'));
+  const preferredLanguage = await lookupService.getPreferredLanguage(session.get('newPreferredLanguage'));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:preferred-language.confirm.page-title') }) };
 
+  instrumentationService.countHttpStatus('preferred-language.confirm', 200);
   return json({ meta, preferredLanguage, userInfo });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
+  const sessionService = await getSessionService();
+  const userService = getUserService();
+
   await raoidcService.handleSessionValidation(request);
 
-  const userService = getUserService();
-  const sessionService = await getSessionService();
-
   const userId = await userService.getUserId();
-  if (!userId) return redirectWithLocale(request, '/');
+  if (!userId) {
+    instrumentationService.countHttpStatus('preferred-language.confirm', 302);
+    return redirectWithLocale(request, '/');
+  }
 
   const userInfo = await userService.getUserInfo(userId);
-  if (!userInfo) return redirectWithLocale(request, '/');
+  if (!userInfo) {
+    instrumentationService.countHttpStatus('preferred-language.confirm', 302);
+    return redirectWithLocale(request, '/');
+  }
 
   const session = await sessionService.getSession(request);
-  if (!session.has('newPreferredLanguage')) return redirectWithLocale(request, '/');
+  if (!session.has('newPreferredLanguage')) {
+    instrumentationService.countHttpStatus('preferred-language.confirm', 302);
+    return redirectWithLocale(request, '/');
+  }
 
   await userService.updateUserInfo(userId, { preferredLanguage: session.get('newPreferredLanguage') });
   session.unset('newPreferredLanguage');
   const locale = await getLocale(request);
 
+  instrumentationService.countHttpStatus('preferred-language.confirm', 302);
   return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:preferred-language.confirm.updated-notification', {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),
