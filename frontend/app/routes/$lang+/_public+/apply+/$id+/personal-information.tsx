@@ -11,7 +11,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { ErrorSummary, createErrorSummaryItems, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import { InputOptionProps } from '~/components/input-option';
@@ -26,6 +26,24 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+
+export type PersonalInformationState = {
+  phoneNumber?: string;
+  phoneNumberAlt?: string;
+  mailingAddress: string;
+  mailingApartment?: string;
+  mailingCountry: string;
+  mailingProvince?: string;
+  mailingCity: string;
+  mailingPostalCode?: string;
+  copyMailingAddress?: string;
+  homeAddress?: string;
+  homeApartment?: string;
+  homeCountry?: string;
+  homeProvince?: string;
+  homeCity?: string;
+  homePostalCode?: string;
+};
 
 const validPostalCode = /^[ABCEGHJKLMNPRSTVXY]\d[A-Z]\d[A-Z]\d$/i;
 const validZipCode = /^\d{5}$/;
@@ -57,6 +75,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export async function action({ request, params }: ActionFunctionArgs) {
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
   const applyFlow = getApplyFlow();
+  const t = await getFixedT(request, handle.i18nNamespaces);
   const { id } = await applyFlow.loadState({ request, params });
 
   const isEmpty = (value: string | undefined) => {
@@ -82,29 +101,32 @@ export async function action({ request, params }: ActionFunctionArgs) {
     }
   };
 
-  const personalInformationFormSchema = z
+  const personalInformationFormSchema: z.ZodType<PersonalInformationState> = z
     .object({
       phoneNumber: z
         .string()
-        .refine((val) => !val || (val && isValidPhoneNumber(val, 'CA')), { message: 'invalid-phone' })
+        .refine((val) => !val || (val && isValidPhoneNumber(val, 'CA')), { message: t('apply:personal-information.error-message.invalid-phone') })
         .optional(),
       phoneNumberAlt: z
         .string()
-        .refine((val) => !val || (val && isValidPhoneNumber(val, 'CA')), { message: 'invalid-phone' })
+        .refine((val) => !val || (val && isValidPhoneNumber(val, 'CA')), { message: t('apply:personal-information.error-message.invalid-phone') })
         .optional(),
       mailingAddress: z
         .string()
-        .min(1, { message: 'empty-address' })
+        .min(1, { message: t('apply:personal-information.error-message.empty-address') })
         .transform((val) => val.trim()),
       mailingApartment: z.string().trim().optional(),
       mailingCountry: z
         .string()
-        .min(1, { message: 'empty-country' })
+        .min(1, { message: t('apply:personal-information.error-message.empty-country') })
         .transform((val) => val.trim()),
-      mailingProvince: z.string().min(1, { message: 'empty-province' }).optional(),
+      mailingProvince: z
+        .string()
+        .min(1, { message: t('apply:personal-information.error-message.empty-province') })
+        .optional(),
       mailingCity: z
         .string()
-        .min(1, { message: 'empty-city' })
+        .min(1, { message: t('apply:personal-information.error-message.empty-city') })
         .transform((val) => val.trim()),
       mailingPostalCode: z
         .string()
@@ -125,13 +147,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
     .superRefine((val, ctx) => {
       if (!isEmpty(val.mailingCountry)) {
         if ((val.mailingCountry === CANADA_COUNTRY_ID || val.mailingCountry === USA_COUNTRY_ID) && isEmpty(val.mailingPostalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-postal-code', path: ['mailingPostalCode'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.empty-postal-code'), path: ['mailingPostalCode'] });
         }
 
         if (!isValidPostalCode(val.mailingCountry, val.mailingPostalCode)) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: val.mailingCountry === CANADA_COUNTRY_ID ? 'invalid-postal-code' : 'invalid-zip-code',
+            message: val.mailingCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.invalid-postal-code') : t('apply:personal-information.error-message.invalid-zip-code'),
             path: ['mailingPostalCode'],
           });
         }
@@ -139,9 +161,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
       if (val.copyMailingAddress !== 'on') {
         const homeAddessFields: { fieldName: keyof typeof val; errorMessage: string }[] = [
-          { fieldName: 'homeAddress', errorMessage: 'empty-address' },
-          { fieldName: 'homeCountry', errorMessage: 'empty-country' },
-          { fieldName: 'homeCity', errorMessage: 'empty-city' },
+          { fieldName: 'homeAddress', errorMessage: t('apply:personal-information.error-message.empty-address') },
+          { fieldName: 'homeCountry', errorMessage: t('apply:personal-information.error-message.empty-country') },
+          { fieldName: 'homeCity', errorMessage: t('apply:personal-information.error-message.empty-city') },
         ];
         homeAddessFields.forEach(({ fieldName, errorMessage }) => {
           if (isEmpty(val[fieldName])) {
@@ -151,26 +173,47 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
         if (!isEmpty(val.homeCountry)) {
           if ((val.homeCountry === CANADA_COUNTRY_ID || val.homeCountry === USA_COUNTRY_ID) && isEmpty(val.homeProvince)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-province', path: ['homeProvince'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.empty-province'), path: ['homeProvince'] });
           }
           if ((val.homeCountry === CANADA_COUNTRY_ID || val.homeCountry === USA_COUNTRY_ID) && isEmpty(val.homePostalCode)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-postal-code', path: ['homePostalCode'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.empty-postal-code'), path: ['homePostalCode'] });
           }
         }
 
         if (!isValidPostalCode(val.homeCountry, val.homePostalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: val.homeCountry === CANADA_COUNTRY_ID ? 'invalid-postal-code' : 'invalid-zip-code', path: ['homePostalCode'] });
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: val.homeCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.invalid-postal-code') : t('apply:personal-information.error-message.invalid-zip-code'),
+            path: ['homePostalCode'],
+          });
         }
       }
     });
 
-  const formData = Object.fromEntries(await request.formData());
+  const formData = await request.formData();
+  const personalInformation = {
+    phoneNumber: formData.get('phoneNumber') ? String(formData.get('phoneNumber')) : undefined,
+    phoneNumberAlt: formData.get('phoneNumberAlt') ? String(formData.get('phoneNumberAlt')) : undefined,
+    mailingAddress: String(formData.get('mailingAddress') ?? ''),
+    mailingApartment: formData.get('mailingApartment') ? String(formData.get('mailingApartment')) : undefined,
+    mailingCountry: String(formData.get('mailingCountry') ?? ''),
+    mailingProvince: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : undefined,
+    mailingCity: String(formData.get('mailingCity') ?? ''),
+    mailingPostalCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : undefined,
+    copyMailingAddress: formData.get('copyMailingAddress') ? String(formData.get('copyMailingAddress')) : undefined,
+    homeAddress: formData.get('homeAddress') ? String(formData.get('homeAddress')) : undefined,
+    homeApartment: formData.get('homeApartment') ? String(formData.get('homeApartment')) : undefined,
+    homeCountry: formData.get('homeCountry') ? String(formData.get('homeCountry')) : undefined,
+    homeProvince: formData.get('homeProvince') ? String(formData.get('homeProvince')) : undefined,
+    homeCity: formData.get('homeCity') ? String(formData.get('homeCity')) : undefined,
+    homePostalCode: formData.get('homePostalCode') ? String(formData.get('homePostalCode')) : undefined,
+  };
 
-  const parsedDataResult = personalInformationFormSchema.safeParse(formData);
+  const parsedDataResult = personalInformationFormSchema.safeParse(personalInformation);
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof personalInformationFormSchema>>,
+      formData: personalInformation,
     });
   }
 
@@ -207,45 +250,29 @@ export default function ApplyFlowPersonalInformation() {
   const [selectedHomeCountry, setSelectedHomeCountry] = useState(state?.homeCountry);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
   const errorSummaryId = 'error-summary';
-  /**
-   * Gets an error message based on the provided internationalization (i18n) key.
-   *
-   * @param errorI18nKey - The i18n key for the error message.
-   * @returns The corresponding error message, or undefined if no key is provided.
-   */
-  function getErrorMessage(errorI18nKey?: string): string | undefined {
-    if (!errorI18nKey) return undefined;
-
-    /**
-     * The 'as any' is employed to circumvent typechecking, as the type of
-     * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
-     */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`apply:personal-information.error-message.${errorI18nKey}` as any);
-  }
 
   const errorMessages = {
-    phoneNumber: getErrorMessage(fetcher.data?.errors.phoneNumber?._errors[0]),
-    phoneNumberAlt: getErrorMessage(fetcher.data?.errors.phoneNumberAlt?._errors[0]),
-    mailingAddress: getErrorMessage(fetcher.data?.errors.mailingAddress?._errors[0]),
-    mailingApartment: getErrorMessage(fetcher.data?.errors.mailingApartment?._errors[0]),
-    mailingProvince: getErrorMessage(fetcher.data?.errors.mailingProvince?._errors[0]),
-    mailingCountry: getErrorMessage(fetcher.data?.errors.mailingCountry?._errors[0]),
-    mailingCity: getErrorMessage(fetcher.data?.errors.mailingCity?._errors[0]),
-    mailingPostalCode: getErrorMessage(fetcher.data?.errors.mailingPostalCode?._errors[0]),
-    copyMailingAddress: getErrorMessage(fetcher.data?.errors.copyMailingAddress?._errors[0]),
-    homeAddress: getErrorMessage(fetcher.data?.errors.homeAddress?._errors[0]),
-    homeApartment: getErrorMessage(fetcher.data?.errors.homeApartment?._errors[0]),
-    homeProvince: getErrorMessage(fetcher.data?.errors.homeProvince?._errors[0]),
-    homeCountry: getErrorMessage(fetcher.data?.errors.homeCountry?._errors[0]),
-    homeCity: getErrorMessage(fetcher.data?.errors.homeCity?._errors[0]),
-    homePostalCode: getErrorMessage(fetcher.data?.errors.homePostalCode?._errors[0]),
+    phoneNumber: fetcher.data?.errors.phoneNumber?._errors[0],
+    phoneNumberAlt: fetcher.data?.errors.phoneNumberAlt?._errors[0],
+    mailingAddress: fetcher.data?.errors.mailingAddress?._errors[0],
+    mailingApartment: fetcher.data?.errors.mailingApartment?._errors[0],
+    mailingProvince: fetcher.data?.errors.mailingProvince?._errors[0],
+    mailingCountry: fetcher.data?.errors.mailingCountry?._errors[0],
+    mailingCity: fetcher.data?.errors.mailingCity?._errors[0],
+    mailingPostalCode: fetcher.data?.errors.mailingPostalCode?._errors[0],
+    copyMailingAddress: fetcher.data?.errors.copyMailingAddress?._errors[0],
+    homeAddress: fetcher.data?.errors.homeAddress?._errors[0],
+    homeApartment: fetcher.data?.errors.homeApartment?._errors[0],
+    homeProvince: fetcher.data?.errors.homeProvince?._errors[0],
+    homeCountry: fetcher.data?.errors.homeCountry?._errors[0],
+    homeCity: fetcher.data?.errors.homeCity?._errors[0],
+    homePostalCode: fetcher.data?.errors.homePostalCode?._errors[0],
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 
   useEffect(() => {
-    if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
+    if (fetcher.data?.formData && fetcher.data.errors._errors.length > 0) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
   }, [fetcher.data]);

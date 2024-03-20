@@ -6,6 +6,7 @@ import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/date-of-b
 import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/dental-insurance';
 import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits';
 import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/partner-information';
+import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/personal-information';
 import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-of-application';
 import { getSessionService } from '~/services/session-service.server';
 import { redirectWithLocale } from '~/utils/locale-utils.server';
@@ -68,32 +69,10 @@ const demographicsPart2StateSchema = z.object({
 });
 
 /**
- * Schema for personal information.
- */
-const personalInformationStateSchema = z.object({
-  phoneNumber: z.string().optional(),
-  phoneNumberAlt: z.string().optional(),
-  mailingAddress: z.string().min(1),
-  mailingApartment: z.string().optional(),
-  mailingCountry: z.string().min(1),
-  mailingProvince: z.string().min(1).optional(),
-  mailingCity: z.string().min(1),
-  mailingPostalCode: z.string().optional(),
-  copyMailingAddress: z.string().optional(),
-  homeAddress: z.string().optional(),
-  homeApartment: z.string().optional(),
-  homeCountry: z.string().optional(),
-  homeProvince: z.string().optional(),
-  homeCity: z.string().optional(),
-  homePostalCode: z.string().optional(),
-});
-
-/**
  * Schema for apply state.
  */
 const applyStateSchema = z.object({
   applicantInformation: applicantInformationSchema.optional(),
-  personalInformation: personalInformationStateSchema.optional(),
   communicationPreferences: communicationPreferencesStateSchema.optional(),
   demographicsPart1: demographicsPart1StateSchema.optional(),
   demographicsPart2: demographicsPart2StateSchema.optional(),
@@ -106,6 +85,7 @@ interface ApplyState extends z.infer<typeof applyStateSchema> {
   partnerInformation?: PartnerInformationState;
   typeOfApplication?: TypeOfApplicationState;
   dentalBenefits?: DentalBenefitsState;
+  personalInformation?: PersonalInformationState;
 }
 
 /**
