@@ -414,8 +414,8 @@
     "sin-change": "Modifier le NAS",
     "full-name-title": "Nom complet",
     "full-name-change": "Modifier le nom complet",
-    "martial-title": "État civil",
-    "martial-change": "Modifier l'état civil",
+    "marital-title": "État civil",
+    "marital-change": "Modifier l'état civil",
     "spouse-title": "Renseignements sur votre époux/épouse ou votre conjoint/conjointe de fait",
     "spouse-consent": {
       "label": "Consentement",

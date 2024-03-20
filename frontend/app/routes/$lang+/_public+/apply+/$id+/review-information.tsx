@@ -200,11 +200,11 @@ export default function ReviewInformation() {
               </InlineLink>
             </p>
           </DescriptionListItem>
-          <DescriptionListItem term={t('apply:review-information.martial-title')}>
+          <DescriptionListItem term={t('apply:review-information.marital-title')}>
             {maritalStatus}
             <p className="mt-4">
               <InlineLink id="change-martial-status" to="/">
-                {t('apply:review-information.martial-change')}
+                {t('apply:review-information.marital-change')}
               </InlineLink>
             </p>
           </DescriptionListItem>
