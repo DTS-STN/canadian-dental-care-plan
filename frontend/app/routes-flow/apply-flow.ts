@@ -3,6 +3,7 @@ import { Params } from '@remix-run/react';
 import { z } from 'zod';
 
 import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/applicant-information';
+import { CommunicationPreferencesState } from '~/routes/$lang+/_public+/apply+/$id+/communication-preference';
 import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
 import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/dental-insurance';
 import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits';
@@ -25,22 +26,9 @@ const taxFilingSchema = z.object({
 });
 
 /**
- * Schema for communication reference.
- */
-const communicationPreferencesStateSchema = z.object({
-  preferredLanguage: z.string().min(1),
-  preferredMethod: z.string().min(1),
-  email: z.string().min(1).optional(),
-  confirmEmail: z.string().min(1).optional(),
-  emailForFuture: z.string().optional(),
-  confirmEmailForFuture: z.string().optional(),
-});
-
-/**
  * Schema for apply state.
  */
 const applyStateSchema = z.object({
-  communicationPreferences: communicationPreferencesStateSchema.optional(),
   taxFiling2023: taxFilingSchema.optional(),
 });
 
@@ -52,6 +40,7 @@ interface ApplyState extends z.infer<typeof applyStateSchema> {
   personalInformation?: PersonalInformationState;
   dentalBenefits?: DentalBenefitsState;
   applicantInformation?: ApplicantInformationState;
+  communicationPreferences?: CommunicationPreferencesState;
 }
 
 /**
