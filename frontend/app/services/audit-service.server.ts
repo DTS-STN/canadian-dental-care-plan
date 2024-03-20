@@ -11,9 +11,9 @@ export interface AuditDetails extends Record<string, unknown> {
 /**
  * Return a singleton instance (by means of memomization) of the audit service.
  */
-export const getAuditService = moize(createAudiService, { onCacheAdd: () => log.info('Creating new audit service') });
+export const getAuditService = moize(createAuditService, { onCacheAdd: () => log.info('Creating new audit service') });
 
-function createAudiService() {
+function createAuditService() {
   return {
     audit: function (eventId: string, auditDetails?: AuditDetails) {
       const { userId, ...otherDetails } = auditDetails ?? {};
