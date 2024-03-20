@@ -27,12 +27,11 @@ import { cn } from '~/utils/tw-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.index,
-  pageTitleI18nKey: 'apply:index.page-title',
+  pageTitleI18nKey: 'apply:index.page-heading',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  const titleMetaTags = data ? getTitleMetaTags(data.meta.title) : [];
-  return [...titleMetaTags, { name: 'robots', content: 'index' }];
+  return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -71,7 +70,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const id = randomUUID().toString();
   const sessionResponseInit = await applyFlow.start({ id, request });
 
-  return redirectWithLocale(request, `/apply/${id}/terms-and-conditions`, sessionResponseInit);
+  return redirectWithLocale(request, `/apply/${id}/type-of-application`, sessionResponseInit);
 }
 
 export default function ApplyIndex() {
@@ -95,160 +94,94 @@ export default function ApplyIndex() {
     sessionStorage.setItem('flow.state', 'active');
   }
 
-  const contactCDCPLink = <InlineLink to={t('apply:index.links.contact-cdcp')} />;
-  const filedTaxReturnLink = <InlineLink to={t('apply:index.links.filed-tax-return')} />;
-  const serviceCanadaOfficeLink = <InlineLink to={t('apply:index.links.service-canada-office')} />;
-  const whenApplyCDCPLink = <InlineLink to={t('apply:index.links.when-apply-cdcp')} />;
+  const canadaTermsConditions = <InlineLink to={t('apply:index.links.canada-ca-terms-and-conditions')} />;
+  const fileacomplaint = <InlineLink to={t('apply:index.links.file-complaint')} />;
+  const hcaptchaTermsOfService = <InlineLink to={t('apply:index.links.hcaptcha')} />;
+  const infosource = <InlineLink to={t('apply:index.links.info-source')} />;
+  const microsoftDataPrivacyPolicy = <InlineLink to={t('apply:index.links.microsoft-data-privacy-policy')} />;
 
   return (
     <div className="max-w-prose">
-      <div className="space-y-4">
-        <p>{t('apply:index.intro-text')}</p>
-        <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.application-phases" components={{ whenApplyCDCPLink }} />
-        </p>
-        <p>{t('apply:index.to-qualify.heading')}</p>
-        <ul className="list-disc space-y-1 pl-7">
-          <li>
-            <p>{t('apply:index.to-qualify.conditions.insurance-access.heading')}</p>
-            <Collapsible summary={t('apply:index.to-qualify.conditions.insurance-access.details.summary')} className="my-4">
-              <div className="space-y-4">
-                <p>{t('apply:index.to-qualify.conditions.insurance-access.details.access-to-dental-insurance-definition')}</p>
-                <ul className="list-disc space-y-1 pl-7">
-                  <li>{t('apply:index.to-qualify.conditions.insurance-access.details.access-methods.through-employer-benefits')}</li>
-                  <li>{t('apply:index.to-qualify.conditions.insurance-access.details.access-methods.through-pension-benefits')}</li>
-                  <li>{t('apply:index.to-qualify.conditions.insurance-access.details.access-methods.through-professional-or-student-organization')}</li>
-                  <li>{t('apply:index.to-qualify.conditions.insurance-access.details.access-methods.purchased-insurance')}</li>
-                </ul>
-                <p>{t('apply:index.to-qualify.conditions.insurance-access.details.opt-out-consideration')}</p>
-              </div>
-            </Collapsible>
-          </li>
-          <li>
-            <p>{t('apply:index.to-qualify.conditions.income.heading')}</p>
-            <Collapsible summary={t('apply:index.to-qualify.conditions.income.details.summary')} className="my-4">
-              <div className="space-y-4">
-                <p>{t('apply:index.to-qualify.conditions.income.details.family-net-income-definition')}</p>
-                <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.to-qualify.conditions.income.details.uccb-and-rdsp-income-received" />
-                </p>
-                <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.to-qualify.conditions.income.details.uccb-and-rdsp-amounts-repaid" />
-                </p>
-                <hr className="my-8 h-px border-0 bg-black" />
-                <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.to-qualify.conditions.income.details.adjusted-family-net-income" />
-                </p>
-              </div>
-            </Collapsible>
-          </li>
-          <li>{t('apply:index.to-qualify.conditions.resident-status')}</li>
-          <li>
-            <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.to-qualify.conditions.tax-return" components={{ filedTaxReturnLink }} />
-          </li>
-        </ul>
-      </div>
-      <h2 className="my-8 font-lato text-2xl font-bold">{t('apply:index.what-you-need.heading')}</h2>
-      <div className="space-y-4">
-        <p>{t('apply:index.what-you-need.preparation-instructions')}</p>
-        <ul className="list-disc space-y-1 pl-7">
-          <li>{t('apply:index.what-you-need.requirements.social-insurance-number')}</li>
-          <li>{t('apply:index.what-you-need.requirements.date-of-birth')}</li>
-          <li>{t('apply:index.what-you-need.requirements.full-name')}</li>
-          <li>{t('apply:index.what-you-need.requirements.home-and-mailing-address')}</li>
-          <li>{t('apply:index.what-you-need.requirements.dental-coverage')}</li>
-        </ul>
-      </div>
-      <h2 className="my-8 font-lato text-2xl font-bold">{t('apply:index.apply-behalf.heading')}</h2>
       <div className="space-y-6">
-        <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.apply-behalf.delegate-assisted-cdcp-application" components={{ contactCDCPLink, serviceCanadaOfficeLink }} />
-        </p>
-        <Collapsible summary={t('apply:index.apply-behalf.trusted-person.summary')}>
+        <p>{t('apply:index.intro-text')}</p>
+        <Collapsible summary={t('apply:index.terms-and-conditions-of-use.summary')}>
           <div className="space-y-4">
+            <h2 className="font-bold">{t('apply:index.terms-and-conditions-of-use.heading')}</h2>
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.apply-behalf.trusted-person.details.application-assistance" components={{ serviceCanadaOfficeLink }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.terms-and-conditions-of-use.online-application-legal-terms" components={{ canadaTermsConditions }} />
             </p>
+            <p>{t('apply:index.terms-and-conditions-of-use.online-application-access-terms')}</p>
+            <p>{t('apply:index.terms-and-conditions-of-use.online-application-usage-terms')}</p>
+            <p>{t('apply:index.terms-and-conditions-of-use.terms-rejection-policy')}</p>
+            <p>{t('apply:index.terms-and-conditions-of-use.esdc-definition-clarification')}</p>
+
+            <h2 className="font-bold"> {t('apply:index.terms-and-conditions-of-use.online-application.heading')}</h2>
             <ul className="list-disc space-y-1 pl-7">
-              <li>{t('apply:index.apply-behalf.trusted-person.details.types-of-assistants.friend')}</li>
-              <li>{t('apply:index.apply-behalf.trusted-person.details.types-of-assistants.relative')}</li>
-              <li>{t('apply:index.apply-behalf.trusted-person.details.types-of-assistants.caregiver')}</li>
-              <li>{t('apply:index.apply-behalf.trusted-person.details.types-of-assistants.translator')}</li>
-              <li>{t('apply:index.apply-behalf.trusted-person.details.types-of-assistants.interpreter')}</li>
+              <li>{t('apply:index.terms-and-conditions-of-use.online-application.self-agreement')}</li>
+              <li>{t('apply:index.terms-and-conditions-of-use.online-application.on-behalf-of-someone-else')}</li>
+              <li>{t('apply:index.terms-and-conditions-of-use.online-application.at-your-own-risk')}</li>
+              <li>{t('apply:index.terms-and-conditions-of-use.online-application.only-use')}</li>
+              <li>{t('apply:index.terms-and-conditions-of-use.online-application.maintenance')}</li>
+              <li>{t('apply:index.terms-and-conditions-of-use.online-application.inactive')}</li>
+              <li>{t('apply:index.terms-and-conditions-of-use.online-application.msdc')}</li>
+              <li>
+                <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.terms-and-conditions-of-use.online-application.antibot" components={{ hcaptchaTermsOfService }} />
+              </li>
             </ul>
+
+            <h2 className="font-bold"> {t('apply:index.terms-and-conditions-of-use.disclaimers.heading')}</h2>
+            <p>{t('apply:index.terms-and-conditions-of-use.disclaimers.online-application-disclaimer')}</p>
+            <ul className="list-disc space-y-1 pl-7">
+              <li>{t('apply:index.terms-and-conditions-of-use.disclaimers.external-factors-disclaimer')}</li>
+              <li>{t('apply:index.terms-and-conditions-of-use.disclaimers.online-application-information-non-acceptance')}</li>
+              <li>{t('apply:index.terms-and-conditions-of-use.disclaimers.non-compliance')}</li>
+            </ul>
+            <p>{t('apply:index.terms-and-conditions-of-use.disclaimers.esdc-liability-indemnification')}</p>
+
+            <h2 className="font-bold">{t('apply:index.terms-and-conditions-of-use.changes-to-these-terms-of-use.heading')}</h2>
+            <p>{t('apply:index.terms-and-conditions-of-use.changes-to-these-terms-of-use.esdc-terms-amendment-policy')}</p>
           </div>
         </Collapsible>
-        <Collapsible summary={t('apply:index.apply-behalf.delegate.summary')}>
+
+        <Collapsible summary={t('apply:index.privacy-notice-statement.summary')}>
           <div className="space-y-4">
-            <p>{t('apply:index.apply-behalf.delegate.delegate-definition')}</p>
-            <p>{t('apply:index.apply-behalf.delegate.delegates-on-document')}</p>
-            <ul className="list-disc space-y-1 pl-7">
-              <li>{t('apply:index.apply-behalf.delegate.valid-delegates.powers-of-attorney-mandates')}</li>
-              <li>{t('apply:index.apply-behalf.delegate.valid-delegates.trusteeships')}</li>
-            </ul>
-            <p>{t('apply:index.apply-behalf.delegate.delegate-requirements')}</p>
-            <p>{t('apply:index.apply-behalf.delegate.document-processing')}</p>
-            <h3 className="font-lato text-xl font-bold">{t('apply:index.apply-behalf.delegate.submit-delegate-proof.heading')}</h3>
-            <h4 className="font-lato font-bold">{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.heading')}</h4>
-            <p>{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.document-submission-by-mail')}</p>
-            <ul className="list-disc space-y-1 pl-7">
-              <li>{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.cover-letter-details.applicant-full-name')}</li>
-              <li>{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.cover-letter-details.applicant-sin')}</li>
-              <li>{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.cover-letter-details.submission-statement')}</li>
-              <li>{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.cover-letter-details.delegate-phone')}</li>
-              <li>{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.cover-letter-details.return-address')}</li>
-            </ul>
-            <table className="w-full">
-              <caption className="pb-6 pt-2 text-left font-lato text-xl font-semibold">{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.mailing-addresses.caption')}</caption>
-              <thead>
-                <tr>
-                  <th className="p-2 text-left">{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.mailing-addresses.headers.province-region')}</th>
-                  <th className="p-2 text-left">{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.mailing-addresses.headers.mailing-address')}</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y border-b border-t">
-                <tr className="bg-gray-50">
-                  <td className="p-2 font-bold">{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.mailing-addresses.atlantic-canada.name')}</td>
-                  <td className="p-2">
-                    <address className="whitespace-pre-wrap not-italic">{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.mailing-addresses.atlantic-canada.address')}</address>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="p-2 font-bold">{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.mailing-addresses.quebec.name')}</td>
-                  <td className="p-2">
-                    <address className="whitespace-pre-wrap not-italic">{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.mailing-addresses.quebec.address')}</address>
-                  </td>
-                </tr>
-                <tr className="bg-gray-50">
-                  <td className="p-2 font-bold">{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.mailing-addresses.ontario.name')}</td>
-                  <td className="p-2">
-                    <address className="whitespace-pre-wrap not-italic">{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.mailing-addresses.ontario.address')}</address>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="p-2 font-bold">{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.mailing-addresses.western-canada-and-territories.name')}</td>
-                  <td className="p-2">
-                    <address className="whitespace-pre-wrap not-italic">{t('apply:index.apply-behalf.delegate.submit-delegate-proof.by-mail.mailing-addresses.western-canada-and-territories.address')}</address>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <h4 className="font-lato font-bold">{t('apply:index.apply-behalf.delegate.submit-delegate-proof.in-person.heading')}</h4>
+            <h2 className="font-bold"> {t('apply:index.privacy-notice-statement.personal-information.heading')}</h2>
+            <p>{t('apply:index.privacy-notice-statement.personal-information.service-canada-application-administration')}</p>
+
+            <h2 className="font-bold"> {t('apply:index.privacy-notice-statement.how-we-protect-your-privacy.heading')}</h2>
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.apply-behalf.delegate.submit-delegate-proof.in-person.document-submission-at-service-canada" components={{ serviceCanadaOfficeLink }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.privacy-notice-statement.how-we-protect-your-privacy.personal-information-collection-and-use-authorization" />
             </p>
+            <p>{t('apply:index.privacy-notice-statement.how-we-protect-your-privacy.personal-information-rights-and-access')}</p>
             <ul className="list-disc space-y-1 pl-7">
-              <li>{t('apply:index.apply-behalf.delegate.submit-delegate-proof.in-person.submission-requirements.applicant-full-name')}</li>
-              <li>{t('apply:index.apply-behalf.delegate.submit-delegate-proof.in-person.submission-requirements.applicant-sin')}</li>
+              <li>{t('apply:index.privacy-notice-statement.how-we-protect-your-privacy.personal-information-banks.hc-ppu-440')}</li>
+              <li>{t('apply:index.privacy-notice-statement.how-we-protect-your-privacy.personal-information-banks.esdc-ppu-712')}</li>
             </ul>
-            <p>{t('apply:index.apply-behalf.delegate.submit-delegate-proof.in-person.document-processing-note')}</p>
+            <p>
+              <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.privacy-notice-statement.how-we-protect-your-privacy.info-source-access" components={{ infosource }} />
+            </p>
+            <p>
+              <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.privacy-notice-statement.how-we-protect-your-privacy.esdc-application-third-party-provider" components={{ microsoftDataPrivacyPolicy }} />
+            </p>
+            <p>
+              <Trans ns={handle.i18nNamespaces} i18nKey="apply:index.privacy-notice-statement.how-we-protect-your-privacy.personal-information-handling-complaint-process" components={{ fileacomplaint }} />
+            </p>
+
+            <h2 className="font-bold"> {t('apply:index.privacy-notice-statement.who-we-can-share-your-information-with.heading')}</h2>
+            <p>{t('apply:index.privacy-notice-statement.who-we-can-share-your-information-with.esdc-personal-information-sharing')}</p>
+            <p>{t('apply:index.privacy-notice-statement.who-we-can-share-your-information-with.benefits-administration-data-disclosure')}</p>
+            <p>{t('apply:index.privacy-notice-statement.who-we-can-share-your-information-with.esdc-information-usage-policy')}</p>
+
+            <h2 className="font-bold">{t('apply:index.privacy-notice-statement.what-happens-if-you-dont-give-us-your-information.heading')} </h2>
+            <p>{t('apply:index.privacy-notice-statement.what-happens-if-you-dont-give-us-your-information.text')}</p>
           </div>
         </Collapsible>
       </div>
-      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="mt-8">
+      <p className="my-8">{t('apply:index.apply.application-start-consent')}</p>
+      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
         <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />
         <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-          {t('apply:index.submit')}
+          {t('apply:index.apply.start-button')}
           <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
         </Button>
       </fetcher.Form>

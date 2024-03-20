@@ -87,7 +87,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function ApplyFlowTypeOfApplication() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { id, state } = useLoaderData<typeof loader>();
+  const { state } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
@@ -138,7 +138,7 @@ export default function ApplyFlowTypeOfApplication() {
             errorMessage={errorMessages['input-radio-type-of-application-option-0']}
           />
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" to={`/apply/${id}/terms-and-conditions`} disabled={isSubmitting}>
+            <ButtonLink id="back-button" to="/apply" disabled={isSubmitting}>
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('apply:eligibility.type-of-application.back-btn')}
             </ButtonLink>
