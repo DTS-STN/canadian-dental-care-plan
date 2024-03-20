@@ -45,7 +45,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   if (!state.applicantInformation ||
     !state.communicationPreferences ||
     !state.dateOfBirth ||
-    !state.dentalBenefit ||
+    !state.dentalBenefits ||
     !state.dentalInsurance ||
     !state.personalInformation ||
     !state.taxFiling2023 ||
@@ -119,13 +119,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const dentalBenefit = {
     federalBenefit: {
-      access: state.dentalBenefit.federalBenefit,
-      benefit: state.dentalBenefit.federalSocialProgram,
+      access: state.dentalBenefits.federalBenefit,
+      benefit: state.dentalBenefits.federalSocialProgram,
     },
     provTerrBenefit: {
-      access: state.dentalBenefit.provincialTerritorialBenefit,
-      province: state.dentalBenefit.province,
-      benefit: state.dentalBenefit.provincialTerritorialSocialProgram,
+      access: state.dentalBenefits.provincialTerritorialBenefit,
+      province: state.dentalBenefits.province,
+      benefit: state.dentalBenefits.provincialTerritorialSocialProgram,
     },
   };
 
