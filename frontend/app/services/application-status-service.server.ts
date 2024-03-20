@@ -51,7 +51,7 @@ function createApplicationStatusService() {
     });
 
     if (!response.ok) {
-      instrumentationService.countHttpStatus('application-status.post', response.status);
+      instrumentationService.countHttpStatus('http.client.interop-api.status.posts', response.status);
       log.error('%j', {
         message: "Failed to 'POST' for application status",
         status: response.status,
@@ -63,7 +63,7 @@ function createApplicationStatusService() {
       throw new Error(`Failed to 'POST' for application status. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    instrumentationService.countHttpStatus('application-status.post', 200);
+    instrumentationService.countHttpStatus('http.client.interop-api.status.posts', 200);
     const statusResponseSchema = z.object({
       BenefitApplication: z.object({
         BenefitApplicationStatus: z.array(
