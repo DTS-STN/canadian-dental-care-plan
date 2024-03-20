@@ -99,7 +99,7 @@ export function getTypedI18nNamespaces<const T extends Readonly<FlatNamespace>, 
  */
 export function getNameByLanguage(language: string, obj: { nameEn?: string; nameFr?: string } | undefined) {
   if (obj) return language == 'fr' ? obj.nameFr : obj.nameEn;
-  return '';
+  return new Response(null, { status: 400 });
 }
 
 /**
