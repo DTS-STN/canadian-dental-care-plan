@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InputRadios } from '~/components/input-radios';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
@@ -27,39 +28,45 @@ export const handle = {
 };
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  if (!data) return [];
-  return getTitleMetaTags(data.meta.title);
+  return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const instrumentationService = getInstrumentationService();
+  const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
+  const sessionService = await getSessionService();
+
   await raoidcService.handleSessionValidation(request);
 
-  const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
   const homeAddressInfo = session.get('newHomeAddress');
   const suggestedAddressInfo = session.get('suggestedAddress');
 
-  const countryList = await getLookupService().getAllCountries();
-  const regionList = await getLookupService().getAllRegions();
+  const countryList = await lookupService.getAllCountries();
+  const regionList = await lookupService.getAllRegions();
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:home-address.suggested.page-title') }) };
 
+  instrumentationService.countHttpStatus('home-address.suggest', 200);
   return json({ countryList, homeAddressInfo, meta, regionList, suggestedAddressInfo });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
+  const sessionService = await getSessionService();
+
   await raoidcService.handleSessionValidation(request);
 
-  const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
 
   const formDataRadio = Object.fromEntries(await request.formData());
   const useSuggestedAddress = formDataRadio.selectedAddress === 'suggested';
   session.set('useSuggestedAddress', useSuggestedAddress);
 
+  instrumentationService.countHttpStatus('home-address.suggest', 302);
   return redirectWithLocale(request, '/personal-information/home-address/confirm', {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),

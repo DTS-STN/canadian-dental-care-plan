@@ -19,6 +19,12 @@ vi.mock('~/services/audit-service.server', () => ({
   }),
 }));
 
+vi.mock('~/services/instrumentation-service.server', () => ({
+  getInstrumentationService: () => ({
+    countHttpStatus: vi.fn(),
+  }),
+}));
+
 vi.mock('~/services/lookup-service.server', () => ({
   getLookupService: vi.fn().mockReturnValue({
     getAllCountries: vi.fn().mockReturnValue([

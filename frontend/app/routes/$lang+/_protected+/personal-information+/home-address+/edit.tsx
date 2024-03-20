@@ -13,6 +13,7 @@ import { InputField } from '~/components/input-field';
 import type { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { getAddressService } from '~/services/address-service.server';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
@@ -41,28 +42,38 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const addressService = getAddressService();
+  const instrumentationService = getInstrumentationService();
+  const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
+  const userService = getUserService();
+
   await raoidcService.handleSessionValidation(request);
 
-  const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
-  const addressInfo = await getAddressService().getAddressInfo(userId, userInfo?.homeAddress ?? '');
-  const countryList = await getLookupService().getAllCountries();
-  const regionList = await getLookupService().getAllRegions();
+  const addressInfo = await addressService.getAddressInfo(userId, userInfo?.homeAddress ?? '');
+  const countryList = await lookupService.getAllCountries();
+  const regionList = await lookupService.getAllRegions();
 
   if (!userInfo) {
+    instrumentationService.countHttpStatus('home-address.edit', 404);
     throw new Response(null, { status: 404 });
   }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:home-address.edit.page-title') }) };
 
+  instrumentationService.countHttpStatus('home-address.edit', 302);
   return json({ addressInfo, countryList, meta, regionList });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
+  const sessionService = await getSessionService();
+  const wsAddressService = await getWSAddressService();
+
   await raoidcService.handleSessionValidation(request);
 
   const formDataSchema = z.object({
@@ -86,17 +97,16 @@ export async function action({ request }: ActionFunctionArgs) {
   const parsedDataResult = await formDataSchema.safeParseAsync(formData);
 
   if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('home-address.edit', 400);
     return json({
       errors: parsedDataResult.error.flatten(),
       formData: formData as Partial<z.infer<typeof formDataSchema>>,
     });
   }
 
-  const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
   session.set('newHomeAddress', parsedDataResult.data);
 
-  const wsAddressService = await getWSAddressService();
   const { address, city, country, postalCode, province } = parsedDataResult.data;
   const correctedAddress = await wsAddressService.correctAddress({ address, city, country, postalCode, province });
 
@@ -105,6 +115,7 @@ export async function action({ request }: ActionFunctionArgs) {
     session.set('suggestedAddress', { address, city, province, postalCode, country });
   }
 
+  instrumentationService.countHttpStatus('home-address.edit', 302);
   return redirectWithLocale(request, getRedirectUrl(correctedAddress.status), {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),
