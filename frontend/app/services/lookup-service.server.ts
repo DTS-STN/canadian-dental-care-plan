@@ -92,13 +92,6 @@ const taxFilingIndicationSchema = z.object({
   nameFr: z.string(),
 });
 
-const applicationTypesSchema = z.object({
-  id: z.string(),
-  code: z.string(),
-  nameEn: z.string(),
-  nameFr: z.string(),
-});
-
 const equityTypeSchema = z.object({
   id: z.string(),
   nameEn: z.string().optional(),
@@ -138,7 +131,6 @@ function createLookupService() {
     LOOKUP_SVC_AVOIDEDDENTALCOSTTYPES_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_GENDERTYPES_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_TAXFILINGINDICATIONS_CACHE_TTL_MILLISECONDS,
-    LOOKUP_SVC_APPLICATIONTYPES_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_ALLFEDERALBENEFITS_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_ALLFEDERALSOCIALPROGRAMS_CACHE_TTL_MILLISECONDS,
     LOOKUP_SVC_ALLEQUITYTYPES_CACHE_TTL_MILLISECONDS,
@@ -644,27 +636,6 @@ function createLookupService() {
     throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
-  async function getAllApplicationTypes() {
-    const url = `${INTEROP_API_BASE_URI}/lookups/application-types`;
-    const response = await fetch(url);
-
-    const applicationTypesSchemaList = z.array(applicationTypesSchema);
-
-    if (response.ok) {
-      return applicationTypesSchemaList.parse(await response.json());
-    }
-
-    log.error('%j', {
-      message: 'Failed to fetch data',
-      status: response.status,
-      statusText: response.statusText,
-      url: url,
-      responseBody: await response.text(),
-    });
-
-    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
-  }
-
   async function getAllEquityTypes() {
     const url = `${INTEROP_API_BASE_URI}/lookups/equity-types/`;
     const response = await fetch(url);
@@ -702,7 +673,6 @@ function createLookupService() {
     getAllLastTimeDentistVisitTypes: moize(getAllLastTimeDentistVisitTypes, { maxAge: LOOKUP_SVC_LASTTIMEDENTISTVISITTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllLastTimeDentistVisitTypes memo') }),
     getAllTaxFilingIndications: moize(getAllTaxFilingIndications, { maxAge: LOOKUP_SVC_TAXFILINGINDICATIONS_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllTaxFilingIndications memo') }),
     getAllGenderTypes: moize(getAllGenderTypes, { maxAge: LOOKUP_SVC_GENDERTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllGenderTypes memo') }),
-    getAllApplicationTypes: moize(getAllApplicationTypes, { maxAge: LOOKUP_SVC_APPLICATIONTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllApplicationTypes memo') }),
     getAllEquityTypes: moize(getAllEquityTypes, { maxAge: LOOKUP_SVC_ALLEQUITYTYPES_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllEquityTypes memo') }),
     getAllProvincialTerritorialDentalBenefits: moize(getAllProvincialTerritorialDentalBenefits, { maxAge: LOOKUP_SVC_PROVINCIAL_TERRITORIAL_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllApplicationTypes memo') }),
     getAllProvincialTerritorialSocialPrograms: moize(getAllProvincialTerritorialSocialPrograms, { maxAge: LOOKUP_SVC_PROVINCIAL_TERRITORIAL_SOCIALPROGRAMS_CACHE_TTL_MILLISECONDS, onCacheAdd: () => log.info('Creating new AllApplicationTypes memo') }),
