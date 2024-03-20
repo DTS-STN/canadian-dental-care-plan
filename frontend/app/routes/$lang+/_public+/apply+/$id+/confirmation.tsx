@@ -43,7 +43,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   if (!state.applicantInformation ||
     !state.communicationPreferences ||
     !state.dateOfBirth ||
-    !state.dentalBenefit ||
+    !state.dentalBenefits ||
     !state.dentalInsurance ||
     !state.personalInformation ||
     !state.taxFiling2023 ||
