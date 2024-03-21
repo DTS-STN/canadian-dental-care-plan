@@ -21,7 +21,12 @@ import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
-export type TaxFilingState = string;
+enum TaxFiling {
+  True = 'TRUE',
+  FALSE = 'FALSE',
+}
+
+export type TaxFilingState = `${TaxFiling}`;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -51,10 +56,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
   const taxFiling = String(formData.get('taxFiling2023') ?? '');
 
-  const taxFilingSchema: z.ZodType<TaxFilingState> = z
-    .string({ required_error: t('apply:eligibility.tax-filing.error-message.Required') })
-    .trim()
-    .min(1, { message: t('apply:eligibility.tax-filing.error-message.Required') });
+  const taxFilingSchema: z.ZodType<TaxFilingState> = z.nativeEnum(TaxFiling, {
+    errorMap: () => ({ message: t('apply:eligibility.tax-filing.error-message.Required') }),
+  });
 
   const parsedDataResult = taxFilingSchema.safeParse(taxFiling);
 
