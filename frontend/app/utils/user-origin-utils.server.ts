@@ -1,15 +1,13 @@
-import { createCookie } from '@remix-run/node';
-
 import { z } from 'zod';
 
-export const userOriginCookie = createCookie('__CDCP//origin', {
-  path: '/',
-  secure: true,
-});
+import { getSessionService } from '~/services/session-service.server';
 
 export const originEnumSchema = z.enum(['msca', 'msca-d']);
 
 export async function getUserOrigin(request: Request) {
+  const sessionService = await getSessionService();
+  const session = await sessionService.getSession(request);
+
   // try to get it from search params
   const { searchParams } = new URL(request.url);
   const originParam = searchParams.get('origin');
@@ -17,9 +15,8 @@ export async function getUserOrigin(request: Request) {
   if (parsedOrigin.success) return parsedOrigin.data;
 
   // try to get it from session
-  const cookieHeader = request.headers.get('Cookie');
-  const cookieValue = (await userOriginCookie.parse(cookieHeader)) || {};
+  const savedUserOrigin = session.get('userOrigin');
 
   // default to 'msca-d' if parse throw an error
-  return originEnumSchema.catch(originEnumSchema.Enum['msca-d']).parse(cookieValue);
+  return originEnumSchema.catch(originEnumSchema.Enum['msca-d']).parse(savedUserOrigin);
 }
