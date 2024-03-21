@@ -1,5 +1,6 @@
 import { setupServer } from 'msw/node';
 
+import { getDentalApplicationApiMockHandlers } from './dental-application-api.server';
 import { getCCTApiMockHandlers } from '~/mocks/cct-api.server';
 import { getLookupApiMockHandlers } from '~/mocks/lookup-api.server';
 import { getPowerPlatformApiMockHandlers } from '~/mocks/power-platform-api.server';
@@ -10,6 +11,7 @@ import { mockEnabled } from '~/utils/env.server';
 
 export const server = setupServer(
   ...(mockEnabled('cct') ? getCCTApiMockHandlers() : []),
+  ...(mockEnabled('dental-application') ? getDentalApplicationApiMockHandlers() : []),
   ...(mockEnabled('lookup') ? getLookupApiMockHandlers() : []),
   ...(mockEnabled('power-platform') ? getPowerPlatformApiMockHandlers() : []),
   ...(mockEnabled('raoidc') ? getRaoidcMockHandlers() : []),
