@@ -54,9 +54,14 @@ const serverEnv = z.object({
   ENGLISH_LETTER_LANGUAGE_CODE: z.coerce.number().default(1033),
   FRENCH_LETTER_LANGUAGE_CODE: z.coerce.number().default(1036),
 
+
   // interop api settings
   INTEROP_API_BASE_URI: z.string().url(),
   INTEROP_API_SUBSCRIPTION_KEY: z.string().trim().min(1),
+
+  SHOW_SIN_EDIT_STUB_PAGE : z.string().transform(toBoolean).default('false'),
+
+
 
   // TODO :: GjB :: these base URIs should not have defaults
   CCT_API_BASE_URI: z.string().url().default('https://api.example.com'),

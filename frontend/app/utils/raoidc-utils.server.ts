@@ -44,6 +44,7 @@ export interface UserinfoToken extends Record<string, unknown> {
   birthdate?: string;
   locale?: string;
   sin?: string;
+  mocked?: boolean;
 }
 
 /**
