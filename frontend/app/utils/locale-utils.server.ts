@@ -24,7 +24,7 @@ export async function getFixedT<N extends Namespace>(localeOrRequest: 'en' | 'fr
 /**
  * Retrieves the locale using a deterministic lookup algorithm (URL → cookies → 🤷).
  */
-export async function getLocale(request: Request) {
+export function getLocale(request: Request) {
   const url = new URL(request.url);
 
   if (url.pathname.startsWith('/en')) {
@@ -72,7 +72,7 @@ export async function initI18n<N extends Namespace>(locale: string | undefined, 
   return i18n;
 }
 
-export async function redirectWithLocale(request: Request, url: string, init?: number | ResponseInit) {
-  const locale = await getLocale(request);
+export function redirectWithLocale(request: Request, url: string, init?: number | ResponseInit) {
+  const locale = getLocale(request);
   return redirect(`/${locale}${url}`, init);
 }
