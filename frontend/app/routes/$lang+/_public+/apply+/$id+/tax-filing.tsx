@@ -23,7 +23,7 @@ import { cn } from '~/utils/tw-utils';
 
 enum TaxFiling {
   True = 'TRUE',
-  FALSE = 'FALSE',
+  False = 'FALSE',
 }
 
 export type TaxFilingState = `${TaxFiling}`;
@@ -75,7 +75,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     state: { taxFiling2023: parsedDataResult.data },
   });
 
-  if (parsedDataResult.data === TaxFiling.FALSE) {
+  if (parsedDataResult.data === TaxFiling.False) {
     return redirectWithLocale(request, `/apply/${id}/file-your-taxes`, sessionResponseInit);
   }
 
@@ -117,8 +117,8 @@ export default function ApplyFlowTaxFiling() {
             name="taxFiling2023"
             legend={t('apply:eligibility.tax-filing.form-instructions')}
             options={[
-              { value: 'TRUE', children: t('apply:eligibility.tax-filing.radio-options.yes'), defaultChecked: state === 'TRUE' },
-              { value: 'FALSE', children: t('apply:eligibility.tax-filing.radio-options.no'), defaultChecked: state === 'FALSE' },
+              { value: TaxFiling.True, children: t('apply:eligibility.tax-filing.radio-options.yes'), defaultChecked: state === TaxFiling.True },
+              { value: TaxFiling.False, children: t('apply:eligibility.tax-filing.radio-options.no'), defaultChecked: state === TaxFiling.False },
             ]}
             required
             errorMessage={errorMessages['input-radios-tax-filing-2023']}
