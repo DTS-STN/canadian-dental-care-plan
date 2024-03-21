@@ -84,44 +84,6 @@
     "yes": "Oui",
     "no": "Non"
   },
-  "demographics-oral-health-questions": {
-    "part1": {
-      "page-title": "(FR) Voluntary demographic and oral health questions part 1 of 2",
-      "paragraph1": "(FR) Answering the following questions will not impact your application in the CDCP. Providing a response to the questions below is voluntary. Your input, will help Health Canada evaluate and improve the Canadian Dental Care Plan, including understanding if there are potential access or inequity issues.\u00a0",
-      "paragraph2": "(FR) All responses have an option of \"prefer not to answer\". All responses are kept confidential and are only used for program monitoring, evaluation and reporting purposes.",
-      "question1": "1.(FR) Where were you born?",
-      "question3": "3. (FR) Which of the following best describes your racial or ethnic group? Check all that apply:",
-      "question3-other-specify": "(FR) Please specify",
-      "first-nations": "Êtes-vous membre des Premières Nations, Inuit(e) ou Métis(se)? Les Premières Nations (Indiens de l'Amérique du Nord) comprennent les Indiens inscrits et non inscrits. Si «\u00a0Oui\u00a0», sélectionnez les réponses qui vous décrivent le mieux.",
-      "first-nations-specify": "(FR) Please specify",
-      "question4": "4.(FR) Do you identify as a person with a disability?",
-      "question4-note": "(FR) A person with a disability is a person who has a long-term difficulty or  condition, such as vision, hearing, mobility, flexibility, dexterity, pain, learning, developmental, memory or mental health-related impairments, that limit their daily activities inside or outside the home such as at school, work, or in the community in general.",
-      "button-back": "(FR) Back",
-      "button-continue": "(FR) Continue"
-    },
-    "part2": {
-      "page-title": "(FR) Voluntary demographic and oral health questions part 2 of 2",
-      "question-gender": "5. (FR) What is your gender? Gender refers to current gender which may be different from sex assigned at birth and may be different from what is indicated on legal documents.",
-      "question-gender-other-specify": "(FR) Specify",
-      "question-mouth-pain": "6.(FR) In the past 12 months, how often have you had any persistent or on-going mouth pain? Mouth pain includes pain in teeth, gums, tongue, jaw, jaw joints.",
-      "question-last-dental-visit": "8. (FR) When was the last time you saw a dentist, denturist, dental hygienist or any other dental specialist? Services may have been provided in any setting where the oral health professional is licensed to practice",
-      "question-avoided-dental-cost": "8. (FR) In the past 12 months, have you avoided going to a dental professional for dental care due to the cost of care?",
-      "button-back": "(FR) Back",
-      "button-continue": "(FR) Continue",
-      "error-message": {
-        "empty-radio": "(FR) Please select a value",
-        "empty-field": "(FR) Please enter a value"
-      }
-    },
-    "optional-demographic-oral-health-questions": {
-      "page-title": "(FR) Voluntary demographic and oral health questions",
-      "responses-will-be-confidential": "(FR) The following questions will help Health Canada understand how the program could be improved over time. All responses will be kept confidential.",
-      "questions-are-voluntary": "(FR) Answering these questions is optional.",
-      "anwsers-will-not-affect-eligibility": "(FR) Your answers will not affect your eligibility for the Canadian Dental Care Plan.",
-      "answer-button": "(FR) Continue",
-      "back-button": "(FR) Back"
-    }
-  },
   "dental-benefits": {
     "title": "Accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
     "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",
