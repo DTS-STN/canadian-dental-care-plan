@@ -7,9 +7,6 @@ import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderD
 import { useTranslation } from 'react-i18next';
 import { getToast } from 'remix-toast';
 
-import { getSessionService } from './services/session-service.server';
-import { getFixedT, getLocale } from './utils/locale-utils.server';
-import { getUserOrigin } from './utils/user-origin-utils.server';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import SessionTimeout from '~/components/session-timeout';
@@ -17,11 +14,14 @@ import { Toaster } from '~/components/toaster';
 import fontLatoStyleSheet from '~/fonts/lato.css';
 import fontNotoSansStyleSheet from '~/fonts/noto-sans.css';
 import { getBuildInfoService } from '~/services/build-info-service.server';
+import { getSessionService } from '~/services/session-service.server';
 import tailwindStyleSheet from '~/tailwind.css';
 import { getPublicEnv } from '~/utils/env.server';
 import type { FeatureName } from '~/utils/env.server';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { useI18nNamespaces } from '~/utils/route-utils';
 import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
+import { getUserOrigin } from '~/utils/user-origin-utils.server';
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: fontLatoStyleSheet },
