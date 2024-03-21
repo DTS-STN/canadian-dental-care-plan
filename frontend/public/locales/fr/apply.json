@@ -331,8 +331,8 @@
   "personal-information": {
     "page-title": "Renseignements personnels",
     "form-instructions": "L'ajout d'un numéro de téléphone permet à Service Canada de vous joindre en cas de problème avec votre demande. Si vous ne fournissez pas de numéro de téléphone, nous communiquerons avec vous par la poste.",
-    "telephone-number": "Numéro de téléphone (facultatif)",
-    "telephone-number-alt": "Autre numéro de téléphone (facultatif)",
+    "phone-number": "Numéro de téléphone",
+    "phone-number-alt": "Autre numéro de téléphone",
     "mailing-address": {
       "header": "Adresse postale"
     },
@@ -343,7 +343,7 @@
     "address-field": {
       "address": "Adresse",
       "address-note": "Inclure le numéro de rue et le nom",
-      "apartment": "Appartement, suite, etc. (facultatif)",
+      "apartment": "Appartement, suite, etc.",
       "country": "Pays",
       "province": "Province, territoire, État ou région",
       "city": "Ville ou municipalité",
@@ -353,14 +353,22 @@
     "back": "Retour",
     "continue": "Continuer",
     "error-message": {
-      "invalid-phone": "Numéro de téléphone invalide",
-      "empty-address": "Une adresse doit être fournie",
-      "empty-country": "Un pays doit être sélectionné",
-      "empty-province": "Une province doit être sélectionnée",
-      "empty-city": "Une ville doit être fournie",
-      "empty-postal-code": "Le code postal ou le code zip doit être fourni",
-      "invalid-postal-code": "Code postal invalide (A1A 1A1)",
-      "invalid-zip-code": "Code zip invalide (12345)"
+      "home-address-required": "L'adresse du domicile est obligatoire.",
+      "home-city-required": "La ville ou municipalité du domicile est obligatoire.",
+      "home-country-required": "Le pays du domicile est obligatoire.",
+      "home-postal-code-required": "Le code postal/code ZIP du domicile est obligatoire.",
+      "home-postal-code-valid": "Le code postal du domicile doit être valide.",
+      "home-province-required": "La province, territoire, État ou région du domicile est obligatoire.",
+      "home-zip-code-valid": "Le code ZIP du domicile doit être valide.",
+      "mailing-address-required": "L'adresse de l'adresse postale est obligatoire.",
+      "mailing-city-required": "La ville ou municipalité de l'adresse postale est obligatoire.",
+      "mailing-country-required": "Le pays de l'adresse postale est obligatoire.",
+      "mailing-postal-code-required": "Le code postal/code ZIP de l'adresse postale est obligatoire.",
+      "mailing-postal-code-valid": "Le code postal de l'adresse postale doit être valide.",
+      "mailing-province-required": "La province, territoire, État ou région de l'adresse postale est obligatoire.",
+      "mailing-zip-code-valid": "Le code ZIP de l'adresse postale doit être valide.",
+      "phone-number-valid": "Le numéro de téléphone doit être valide.",
+      "phone-number-alt-valid": "L'autre numéro de téléphone doit être valide."
     }
   },
   "review-information": {

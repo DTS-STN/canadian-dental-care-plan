@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
@@ -7,11 +7,12 @@ import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-soli
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
+import validator from 'validator';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import { InputOptionProps } from '~/components/input-option';
@@ -26,27 +27,25 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+import { isValidPostalCode } from '~/utils/validation-utils.server';
 
 export type PersonalInformationState = {
-  phoneNumber?: string;
-  phoneNumberAlt?: string;
-  mailingAddress: string;
-  mailingApartment?: string;
-  mailingCountry: string;
-  mailingProvince?: string;
-  mailingCity: string;
-  mailingPostalCode?: string;
-  copyMailingAddress?: string;
+  copyMailingAddress: boolean;
   homeAddress?: string;
   homeApartment?: string;
-  homeCountry?: string;
-  homeProvince?: string;
   homeCity?: string;
+  homeCountry?: string;
   homePostalCode?: string;
+  homeProvince?: string;
+  mailingAddress: string;
+  mailingApartment?: string;
+  mailingCity: string;
+  mailingCountry: string;
+  mailingPostalCode?: string;
+  mailingProvince?: string;
+  phoneNumber?: string;
+  phoneNumberAlt?: string;
 };
-
-const validPostalCode = /^[ABCEGHJKLMNPRSTVXY]\d[A-Z]\d[A-Z]\d$/i;
-const validZipCode = /^\d{5}$/;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -60,138 +59,102 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
+  const lookupService = getLookupService();
   const { id, state } = await applyFlow.loadState({ request, params });
+  const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
-  const countryList = await getLookupService().getAllCountries();
-  const regionList = await getLookupService().getAllRegions();
-
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const countryList = await lookupService.getAllCountries();
+  const regionList = await lookupService.getAllRegions();
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:personal-information.page-title') }) };
 
-  return json({ id, meta, state: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID });
+  return json({ id, meta, defaultState: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
   const applyFlow = getApplyFlow();
-  const t = await getFixedT(request, handle.i18nNamespaces);
   const { id } = await applyFlow.loadState({ request, params });
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
-  const isEmpty = (value: string | undefined) => {
-    if (!value) {
-      return true;
-    }
-    return !value.trim();
-  };
-
-  const isValidPostalCode = (countryCode: string | undefined, postalCode: string | undefined) => {
-    if (!countryCode || !postalCode) {
-      // if either field is omitted, skip the check
-      // check and render empty field error
-      return true;
-    }
-    switch (countryCode) {
-      case CANADA_COUNTRY_ID:
-        return validPostalCode.test(postalCode);
-      case USA_COUNTRY_ID:
-        return validZipCode.test(postalCode);
-      default:
-        return true;
-    }
-  };
-
-  const personalInformationFormSchema: z.ZodType<PersonalInformationState> = z
+  const personalInformationSchema: z.ZodType<PersonalInformationState> = z
     .object({
       phoneNumber: z
         .string()
-        .refine((val) => !val || (val && isValidPhoneNumber(val, 'CA')), { message: t('apply:personal-information.error-message.invalid-phone') })
+        .trim()
+        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply:personal-information.error-message.phone-number-valid'))
         .optional(),
       phoneNumberAlt: z
         .string()
-        .refine((val) => !val || (val && isValidPhoneNumber(val, 'CA')), { message: t('apply:personal-information.error-message.invalid-phone') })
+        .trim()
+        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply:personal-information.error-message.phone-number-alt-valid'))
         .optional(),
-      mailingAddress: z
-        .string()
-        .min(1, { message: t('apply:personal-information.error-message.empty-address') })
-        .transform((val) => val.trim()),
+      mailingAddress: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-address-required')),
       mailingApartment: z.string().trim().optional(),
-      mailingCountry: z
-        .string()
-        .min(1, { message: t('apply:personal-information.error-message.empty-country') })
-        .transform((val) => val.trim()),
-      mailingProvince: z
-        .string()
-        .min(1, { message: t('apply:personal-information.error-message.empty-province') })
-        .optional(),
-      mailingCity: z
-        .string()
-        .min(1, { message: t('apply:personal-information.error-message.empty-city') })
-        .transform((val) => val.trim()),
+      mailingCountry: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-country-required')),
+      mailingProvince: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-province-required')).optional(),
+      mailingCity: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-city-required')),
       mailingPostalCode: z
         .string()
         .trim()
         .optional()
-        .transform((val) => val?.replace(/\s/g, '')),
-      copyMailingAddress: z.string().optional(),
-      homeAddress: z.string().optional(),
-      homeApartment: z.string().optional(),
-      homeCountry: z.string().optional(),
-      homeProvince: z.string().optional(),
-      homeCity: z.string().optional(),
+        .transform((val) => val?.toUpperCase()),
+      copyMailingAddress: z.boolean(),
+      homeAddress: z.string().trim().optional(),
+      homeApartment: z.string().trim().optional(),
+      homeCountry: z.string().trim().optional(),
+      homeProvince: z.string().trim().optional(),
+      homeCity: z.string().trim().optional(),
       homePostalCode: z
         .string()
+        .trim()
         .optional()
-        .transform((val) => val?.replace(/\s/g, '')),
+        .transform((val) => val?.toUpperCase()),
     })
     .superRefine((val, ctx) => {
-      if (!isEmpty(val.mailingCountry)) {
-        if ((val.mailingCountry === CANADA_COUNTRY_ID || val.mailingCountry === USA_COUNTRY_ID) && isEmpty(val.mailingPostalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.empty-postal-code'), path: ['mailingPostalCode'] });
+      if (val.mailingCountry === CANADA_COUNTRY_ID || val.mailingCountry === USA_COUNTRY_ID) {
+        if (!val.mailingProvince || validator.isEmpty(val.mailingProvince)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.mailing-province-required'), path: ['mailingProvince'] });
         }
 
-        if (!isValidPostalCode(val.mailingCountry, val.mailingPostalCode)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: val.mailingCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.invalid-postal-code') : t('apply:personal-information.error-message.invalid-zip-code'),
-            path: ['mailingPostalCode'],
-          });
+        if (!val.mailingPostalCode || validator.isEmpty(val.mailingPostalCode)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.mailing-postal-code-required'), path: ['mailingPostalCode'] });
+        } else if (!isValidPostalCode(val.mailingCountry, val.mailingPostalCode)) {
+          const message = val.mailingCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.mailing-postal-code-valid') : t('apply:personal-information.error-message.mailing-zip-code-valid');
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['mailingPostalCode'] });
         }
       }
 
-      if (val.copyMailingAddress !== 'on') {
-        const homeAddessFields: { fieldName: keyof typeof val; errorMessage: string }[] = [
-          { fieldName: 'homeAddress', errorMessage: t('apply:personal-information.error-message.empty-address') },
-          { fieldName: 'homeCountry', errorMessage: t('apply:personal-information.error-message.empty-country') },
-          { fieldName: 'homeCity', errorMessage: t('apply:personal-information.error-message.empty-city') },
-        ];
-        homeAddessFields.forEach(({ fieldName, errorMessage }) => {
-          if (isEmpty(val[fieldName])) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: errorMessage, path: [fieldName] });
-          }
-        });
-
-        if (!isEmpty(val.homeCountry)) {
-          if ((val.homeCountry === CANADA_COUNTRY_ID || val.homeCountry === USA_COUNTRY_ID) && isEmpty(val.homeProvince)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.empty-province'), path: ['homeProvince'] });
-          }
-          if ((val.homeCountry === CANADA_COUNTRY_ID || val.homeCountry === USA_COUNTRY_ID) && isEmpty(val.homePostalCode)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.empty-postal-code'), path: ['homePostalCode'] });
-          }
+      if (val.copyMailingAddress === false) {
+        if (!val.homeAddress || validator.isEmpty(val.homeAddress)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.home-address-required'), path: ['homeAddress'] });
         }
 
-        if (!isValidPostalCode(val.homeCountry, val.homePostalCode)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: val.homeCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.invalid-postal-code') : t('apply:personal-information.error-message.invalid-zip-code'),
-            path: ['homePostalCode'],
-          });
+        if (!val.homeCountry || validator.isEmpty(val.homeCountry)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.home-country-required'), path: ['homeCountry'] });
+        }
+
+        if (!val.homeCity || validator.isEmpty(val.homeCity)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.home-city-required'), path: ['homeCity'] });
+        }
+
+        if (val.homeCountry === CANADA_COUNTRY_ID || val.homeCountry === USA_COUNTRY_ID) {
+          if (!val.homeProvince || validator.isEmpty(val.homeProvince)) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.home-province-required'), path: ['homeProvince'] });
+          }
+
+          if (!val.homePostalCode || validator.isEmpty(val.homePostalCode)) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.home-postal-code-required'), path: ['homePostalCode'] });
+          } else if (!isValidPostalCode(val.homeCountry, val.homePostalCode)) {
+            const message = val.mailingCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.home-postal-code-valid') : t('apply:personal-information.error-message.home-zip-code-valid');
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['homePostalCode'] });
+          }
         }
       }
     });
 
   const formData = await request.formData();
-  const personalInformation = {
+  const data = {
     phoneNumber: formData.get('phoneNumber') ? String(formData.get('phoneNumber')) : undefined,
     phoneNumberAlt: formData.get('phoneNumberAlt') ? String(formData.get('phoneNumberAlt')) : undefined,
     mailingAddress: String(formData.get('mailingAddress') ?? ''),
@@ -200,7 +163,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     mailingProvince: formData.get('mailingProvince') ? String(formData.get('mailingProvince')) : undefined,
     mailingCity: String(formData.get('mailingCity') ?? ''),
     mailingPostalCode: formData.get('mailingPostalCode') ? String(formData.get('mailingPostalCode')) : undefined,
-    copyMailingAddress: formData.get('copyMailingAddress') ? String(formData.get('copyMailingAddress')) : undefined,
+    copyMailingAddress: formData.get('copyMailingAddress') === 'copy',
     homeAddress: formData.get('homeAddress') ? String(formData.get('homeAddress')) : undefined,
     homeApartment: formData.get('homeApartment') ? String(formData.get('homeApartment')) : undefined,
     homeCountry: formData.get('homeCountry') ? String(formData.get('homeCountry')) : undefined,
@@ -208,74 +171,85 @@ export async function action({ request, params }: ActionFunctionArgs) {
     homeCity: formData.get('homeCity') ? String(formData.get('homeCity')) : undefined,
     homePostalCode: formData.get('homePostalCode') ? String(formData.get('homePostalCode')) : undefined,
   };
+  const parsedDataResult = personalInformationSchema.safeParse(data);
 
-  const parsedDataResult = personalInformationFormSchema.safeParse(personalInformation);
   if (!parsedDataResult.success) {
-    return json({
-      errors: parsedDataResult.error.format(),
-      formData: personalInformation,
-    });
+    return json({ errors: parsedDataResult.error.format() });
   }
 
-  const updatedData =
-    parsedDataResult.data.copyMailingAddress === 'on'
-      ? {
-          ...parsedDataResult.data,
-          homeAddress: parsedDataResult.data.mailingAddress,
-          homeApartment: parsedDataResult.data.mailingApartment,
-          homeCountry: parsedDataResult.data.mailingCountry,
-          homeProvince: parsedDataResult.data.mailingProvince,
-          homeCity: parsedDataResult.data.mailingCity,
-          homePostalCode: parsedDataResult.data.mailingPostalCode,
-        }
-      : parsedDataResult.data;
+  const updatedData = parsedDataResult.data.copyMailingAddress
+    ? {
+        ...parsedDataResult.data,
+        homeAddress: parsedDataResult.data.mailingAddress,
+        homeApartment: parsedDataResult.data.mailingApartment,
+        homeCountry: parsedDataResult.data.mailingCountry,
+        homeProvince: parsedDataResult.data.mailingProvince,
+        homeCity: parsedDataResult.data.mailingCity,
+        homePostalCode: parsedDataResult.data.mailingPostalCode,
+      }
+    : parsedDataResult.data;
 
-  const sessionResponseInit = await applyFlow.saveState({
-    request,
-    params,
-    state: { personalInformation: updatedData },
-  });
-
+  const sessionResponseInit = await applyFlow.saveState({ request, params, state: { personalInformation: updatedData } });
   return redirectWithLocale(request, `/apply/${id}/communication-preference`, sessionResponseInit);
 }
 
 export default function ApplyFlowPersonalInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { id, state, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
+  const { id, defaultState, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [selectedMailingCountry, setSelectedMailingCountry] = useState(state?.mailingCountry);
+  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState?.mailingCountry);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
-  const [copyAddressChecked, setCopyAddressChecked] = useState(state?.copyMailingAddress === 'on');
-  const [selectedHomeCountry, setSelectedHomeCountry] = useState(state?.homeCountry);
+  const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState?.copyMailingAddress === true);
+  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState?.homeCountry);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
   const errorSummaryId = 'error-summary';
 
-  const errorMessages = {
-    phoneNumber: fetcher.data?.errors.phoneNumber?._errors[0],
-    phoneNumberAlt: fetcher.data?.errors.phoneNumberAlt?._errors[0],
-    mailingAddress: fetcher.data?.errors.mailingAddress?._errors[0],
-    mailingApartment: fetcher.data?.errors.mailingApartment?._errors[0],
-    mailingProvince: fetcher.data?.errors.mailingProvince?._errors[0],
-    mailingCountry: fetcher.data?.errors.mailingCountry?._errors[0],
-    mailingCity: fetcher.data?.errors.mailingCity?._errors[0],
-    mailingPostalCode: fetcher.data?.errors.mailingPostalCode?._errors[0],
-    copyMailingAddress: fetcher.data?.errors.copyMailingAddress?._errors[0],
-    homeAddress: fetcher.data?.errors.homeAddress?._errors[0],
-    homeApartment: fetcher.data?.errors.homeApartment?._errors[0],
-    homeProvince: fetcher.data?.errors.homeProvince?._errors[0],
-    homeCountry: fetcher.data?.errors.homeCountry?._errors[0],
-    homeCity: fetcher.data?.errors.homeCity?._errors[0],
-    homePostalCode: fetcher.data?.errors.homePostalCode?._errors[0],
-  };
+  // Keys order should match the input IDs order.
+  const errorMessages = useMemo(
+    () => ({
+      'phone-number': fetcher.data?.errors.phoneNumber?._errors[0],
+      'phone-number-alt': fetcher.data?.errors.phoneNumberAlt?._errors[0],
+      'mailing-address': fetcher.data?.errors.mailingAddress?._errors[0],
+      'mailing-apartment': fetcher.data?.errors.mailingApartment?._errors[0],
+      'mailing-province': fetcher.data?.errors.mailingProvince?._errors[0],
+      'mailing-country': fetcher.data?.errors.mailingCountry?._errors[0],
+      'mailing-city': fetcher.data?.errors.mailingCity?._errors[0],
+      'mailing-postal-code': fetcher.data?.errors.mailingPostalCode?._errors[0],
+      'copy-mailing-address': fetcher.data?.errors.copyMailingAddress?._errors[0],
+      'home-address': fetcher.data?.errors.homeAddress?._errors[0],
+      'home-apartment': fetcher.data?.errors.homeApartment?._errors[0],
+      'home-province': fetcher.data?.errors.homeProvince?._errors[0],
+      'home-country': fetcher.data?.errors.homeCountry?._errors[0],
+      'home-city': fetcher.data?.errors.homeCity?._errors[0],
+      'home-postal-code': fetcher.data?.errors.homePostalCode?._errors[0],
+    }),
+    [
+      fetcher.data?.errors.copyMailingAddress?._errors,
+      fetcher.data?.errors.homeAddress?._errors,
+      fetcher.data?.errors.homeApartment?._errors,
+      fetcher.data?.errors.homeCity?._errors,
+      fetcher.data?.errors.homeCountry?._errors,
+      fetcher.data?.errors.homePostalCode?._errors,
+      fetcher.data?.errors.homeProvince?._errors,
+      fetcher.data?.errors.mailingAddress?._errors,
+      fetcher.data?.errors.mailingApartment?._errors,
+      fetcher.data?.errors.mailingCity?._errors,
+      fetcher.data?.errors.mailingCountry?._errors,
+      fetcher.data?.errors.mailingPostalCode?._errors,
+      fetcher.data?.errors.mailingProvince?._errors,
+      fetcher.data?.errors.phoneNumber?._errors,
+      fetcher.data?.errors.phoneNumberAlt?._errors,
+    ],
+  );
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 
   useEffect(() => {
-    if (fetcher.data?.formData && fetcher.data.errors._errors.length > 0) {
+    if (hasErrors(errorMessages)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
-  }, [fetcher.data]);
+  }, [errorMessages]);
 
   const checkHandler = () => {
     setCopyAddressChecked((curState) => !curState);
@@ -291,20 +265,20 @@ export default function ApplyFlowPersonalInformation() {
   };
 
   const countries: InputOptionProps[] = countryList
-    .map((country) => {
+    .map(({ countryId, nameEn, nameFr }) => {
       return {
-        children: i18n.language === 'fr' ? country.nameFr : country.nameEn,
-        value: country.countryId,
+        children: i18n.language === 'fr' ? nameFr : nameEn,
+        value: countryId,
       };
     })
     .sort((country1, country2) => country1.children.localeCompare(country2.children));
 
   // populate mailing region/province/state list with selected country or current address country
   const mailingRegions: InputOptionProps[] = mailingCountryRegions
-    .map((region) => {
+    .map(({ provinceTerritoryStateId, nameEn, nameFr }) => {
       return {
-        children: i18n.language === 'fr' ? region.nameFr : region.nameEn,
-        value: region.provinceTerritoryStateId,
+        children: i18n.language === 'fr' ? nameFr : nameEn,
+        value: provinceTerritoryStateId,
       };
     })
     .sort((region1, region2) => region1.children.localeCompare(region2.children));
@@ -320,10 +294,10 @@ export default function ApplyFlowPersonalInformation() {
 
   // populate home region/province/state list with selected country or current address country
   const homeRegions: InputOptionProps[] = homeCountryRegions
-    .map((region) => {
+    .map(({ provinceTerritoryStateId, nameEn, nameFr }) => {
       return {
-        children: i18n.language === 'fr' ? region.nameFr : region.nameEn,
-        value: region.provinceTerritoryStateId,
+        children: i18n.language === 'fr' ? nameFr : nameEn,
+        value: provinceTerritoryStateId,
       };
     })
     .sort((region1, region2) => region1.children.localeCompare(region2.children));
@@ -345,55 +319,62 @@ export default function ApplyFlowPersonalInformation() {
         </p>
         <fetcher.Form method="post" noValidate>
           <div className="mb-6 grid gap-6 md:grid-cols-2">
-            <InputField id="phone-number" name="phoneNumber" className="w-full" label={t('apply:personal-information.telephone-number')} defaultValue={state?.phoneNumber} errorMessage={errorMessages.phoneNumber} />
-            <InputField id="phone-number-alt" name="phoneNumberAlt" className="w-full" label={t('apply:personal-information.telephone-number-alt')} defaultValue={state?.phoneNumberAlt} errorMessage={errorMessages.phoneNumberAlt} />
+            <InputField id="phone-number" name="phoneNumber" className="w-full" label={t('apply:personal-information.phone-number')} defaultValue={defaultState?.phoneNumber ?? ''} errorMessage={errorMessages['phone-number']} />
+            <InputField id="phone-number-alt" name="phoneNumberAlt" className="w-full" label={t('apply:personal-information.phone-number-alt')} defaultValue={defaultState?.phoneNumberAlt ?? ''} errorMessage={errorMessages['phone-number-alt']} />
           </div>
           <h2 className="mb-4 font-lato text-2xl font-bold">{t('apply:personal-information.mailing-address.header')}</h2>
           <div className="my-6 space-y-6">
             <InputField
-              id="mailingAddress"
+              id="mailing-address"
               name="mailingAddress"
               className="w-full"
               label={t('apply:personal-information.address-field.address')}
               helpMessagePrimary={t('apply:personal-information.address-field.address-note')}
               helpMessagePrimaryClassName="text-black"
-              defaultValue={state?.mailingAddress}
-              errorMessage={errorMessages.mailingAddress}
+              defaultValue={defaultState?.mailingAddress ?? ''}
+              errorMessage={errorMessages['mailing-address']}
               required
             />
-            <InputField id="mailingApartment" name="mailingApartment" className="w-full" label={t('apply:personal-information.address-field.apartment')} defaultValue={state?.mailingApartment} errorMessage={errorMessages.mailingApartment} />
+            <InputField
+              id="mailing-apartment"
+              name="mailingApartment"
+              className="w-full"
+              label={t('apply:personal-information.address-field.apartment')}
+              defaultValue={defaultState?.mailingApartment ?? ''}
+              errorMessage={errorMessages['mailing-apartment']}
+            />
             <InputSelect
-              id="mailingCountry"
+              id="mailing-country"
               name="mailingCountry"
               className="w-full sm:w-1/2"
               label={t('apply:personal-information.address-field.country')}
-              defaultValue={state?.mailingCountry}
-              errorMessage={errorMessages.mailingCountry}
+              defaultValue={defaultState?.mailingCountry ?? ''}
+              errorMessage={errorMessages['mailing-country']}
               required
               options={[dummyOption, ...countries]}
               onChange={mailingCountryChangeHandler}
             />
             {mailingRegions.length > 0 && (
               <InputSelect
-                id="mailingProvince"
+                id="mailing-province"
                 name="mailingProvince"
                 className="w-full sm:w-1/2"
                 label={t('apply:personal-information.address-field.province')}
-                defaultValue={state?.mailingProvince}
-                errorMessage={errorMessages.mailingProvince}
+                defaultValue={defaultState?.mailingProvince ?? ''}
+                errorMessage={errorMessages['mailing-province']}
                 required
                 options={[dummyOption, ...mailingRegions]}
               />
             )}
             <div className="grid gap-6 md:grid-cols-2">
-              <InputField id="mailingCity" name="mailingCity" className="w-full" label={t('apply:personal-information.address-field.city')} defaultValue={state?.mailingCity} errorMessage={errorMessages.mailingCity} required />
+              <InputField id="mailing-city" name="mailingCity" className="w-full" label={t('apply:personal-information.address-field.city')} defaultValue={defaultState?.mailingCity ?? ''} errorMessage={errorMessages['mailing-city']} required />
               <InputField
-                id="mailingPostalCode"
+                id="mailing-postal-code"
                 name="mailingPostalCode"
                 className="w-full"
                 label={t('apply:personal-information.address-field.postal-code')}
-                defaultValue={state?.mailingPostalCode}
-                errorMessage={errorMessages.mailingPostalCode}
+                defaultValue={defaultState?.mailingPostalCode}
+                errorMessage={errorMessages['mailing-postal-code']}
                 required={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID}
               />
             </div>
@@ -401,55 +382,55 @@ export default function ApplyFlowPersonalInformation() {
 
           <h2 className="mb-6 font-lato text-2xl font-bold">{t('apply:personal-information.home-address.header')}</h2>
           <div className="mb-8 space-y-6">
-            <InputCheckbox id="copyMailingAddress" name="copyMailingAddress" checked={copyAddressChecked} onChange={checkHandler}>
+            <InputCheckbox id="copyMailingAddress" name="copyMailingAddress" value="copy" checked={copyAddressChecked} onChange={checkHandler}>
               {t('apply:personal-information.home-address.use-mailing-address')}
             </InputCheckbox>
             {!copyAddressChecked && (
               <>
                 <InputField
-                  id="homeAddress"
+                  id="home-address"
                   name="homeAddress"
                   className="w-full"
                   label={t('apply:personal-information.address-field.address')}
                   helpMessagePrimary={t('apply:personal-information.address-field.address-note')}
                   helpMessagePrimaryClassName="text-black"
-                  defaultValue={state?.homeAddress}
-                  errorMessage={errorMessages.homeAddress}
+                  defaultValue={defaultState?.homeAddress ?? ''}
+                  errorMessage={errorMessages['home-address']}
                   required
                 />
-                <InputField id="homeApartment" name="homeApartment" className="w-full" label={t('apply:personal-information.address-field.apartment')} defaultValue={state?.homeApartment} errorMessage={errorMessages.homeApartment} />
+                <InputField id="home-apartment" name="homeApartment" className="w-full" label={t('apply:personal-information.address-field.apartment')} defaultValue={defaultState?.homeApartment ?? ''} errorMessage={errorMessages['home-apartment']} />
                 <InputSelect
-                  id="homeCountry"
+                  id="home-country"
                   name="homeCountry"
                   className="w-full sm:w-1/2"
                   label={t('apply:personal-information.address-field.country')}
-                  defaultValue={state?.homeCountry}
-                  errorMessage={errorMessages.homeCountry}
+                  defaultValue={defaultState?.homeCountry ?? ''}
+                  errorMessage={errorMessages['home-country']}
                   required
                   options={[dummyOption, ...countries]}
                   onChange={homeCountryChangeHandler}
                 />
                 {homeRegions.length > 0 && (
                   <InputSelect
-                    id="homeProvince"
+                    id="home-province"
                     name="homeProvince"
                     className="w-full sm:w-1/2"
                     label={t('apply:personal-information.address-field.province')}
-                    defaultValue={state?.homeProvince}
-                    errorMessage={errorMessages.homeProvince}
+                    defaultValue={defaultState?.homeProvince ?? ''}
+                    errorMessage={errorMessages['home-province']}
                     required
                     options={[dummyOption, ...homeRegions]}
                   />
                 )}
                 <div className="mb-6 grid gap-6 md:grid-cols-2">
-                  <InputField id="homeCity" name="homeCity" className="w-full" label={t('apply:personal-information.address-field.city')} defaultValue={state?.homeCity} errorMessage={errorMessages.homeCity} required />
+                  <InputField id="home-city" name="homeCity" className="w-full" label={t('apply:personal-information.address-field.city')} defaultValue={defaultState?.homeCity ?? ''} errorMessage={errorMessages['home-city']} required />
                   <InputField
-                    id="homePostalCode"
+                    id="home-postal-code"
                     name="homePostalCode"
                     className="w-full"
                     label={t('apply:personal-information.address-field.postal-code')}
-                    defaultValue={state?.homePostalCode}
-                    errorMessage={errorMessages.homePostalCode}
+                    defaultValue={defaultState?.homePostalCode ?? ''}
+                    errorMessage={errorMessages['home-postal-code']}
                     required={selectedHomeCountry === CANADA_COUNTRY_ID || selectedHomeCountry === USA_COUNTRY_ID}
                   />
                 </div>

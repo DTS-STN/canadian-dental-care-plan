@@ -329,8 +329,8 @@
   "personal-information": {
     "page-title": "Personal information",
     "form-instructions": "Adding a phone number helps Service Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
-    "telephone-number": "Telephone number (optional)",
-    "telephone-number-alt": "Alternate phone number (optional)",
+    "phone-number": "Telephone number",
+    "phone-number-alt": "Alternate telephone number",
     "mailing-address": {
       "header": "Mailing address"
     },
@@ -341,7 +341,7 @@
     "address-field": {
       "address": "Address",
       "address-note": "Include street number and name",
-      "apartment": "Apartment, suite, etc. (optional)",
+      "apartment": "Apartment, suite, etc.",
       "country": "Country",
       "province": "Province, territory, state, or region",
       "city": "City or town",
@@ -351,14 +351,22 @@
     "back": "Back",
     "continue": "Continue",
     "error-message": {
-      "invalid-phone": "Invalid phone number",
-      "empty-address": "Address must be provided",
-      "empty-country": "Country must be selected",
-      "empty-province": "Province must be selected",
-      "empty-city": "City must be provided",
-      "empty-postal-code": "Postal code or Zip code must be provided",
-      "invalid-postal-code": "Invalid postal code (A1A 1A1)",
-      "invalid-zip-code": "Invalid zip code (12345)"
+      "home-address-required": "The home address is required.",
+      "home-city-required": "The home city or town is required.",
+      "home-country-required": "The home country is required.",
+      "home-postal-code-required": "The home postal code or ZIP code is required.",
+      "home-postal-code-valid": "The home postal code must be valid.",
+      "home-province-required": "The home province, territory, state, or region is required.",
+      "home-zip-code-valid": "The home ZIP code must be valid.",
+      "mailing-address-required": "The mailing address is required.",
+      "mailing-city-required": "The mailing city or town is required.",
+      "mailing-country-required": "The mailing country is required.",
+      "mailing-postal-code-required": "The mailing postal code or ZIP code is required.",
+      "mailing-postal-code-valid": "The mailing postal code must be valid.",
+      "mailing-province-required": "The mailing province, territory, state, or region is required.",
+      "mailing-zip-code-valid": "The mailing ZIP code must be valid.",
+      "phone-number-valid": "The telephone number must be valid.",
+      "phone-number-alt-valid": "The alternate telephone number number must be valid."
     }
   },
   "progress": {
