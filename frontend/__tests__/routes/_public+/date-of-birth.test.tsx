@@ -49,7 +49,7 @@ describe('_public.apply.id.date-of-birth', () => {
       expect(data).toEqual({
         id: '123',
         meta: {},
-        state: '2000-01-01',
+        defaultState: '2000-01-01',
       });
     });
   });

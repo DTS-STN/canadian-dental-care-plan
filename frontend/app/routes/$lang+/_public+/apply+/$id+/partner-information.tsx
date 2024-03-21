@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
@@ -46,16 +46,16 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
+  const t = await getFixedT(request, handle.i18nNamespaces);
 
   // TODO: the flow for where to redirect to will need to be determined depending on the state of the form
   if (!['MARRIED', 'COMMONLAW'].includes(state.applicantInformation?.maritalStatus ?? '')) {
     return redirectWithLocale(request, `/apply/${id}/contact-information`);
   }
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:partner-information.page-title') }) };
 
-  return json({ id, meta, state: state.partnerInformation });
+  return json({ id, meta, defaultState: state.partnerInformation });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -63,23 +63,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { id, state } = await applyFlow.loadState({ request, params });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formData = await request.formData();
-  const data = {
-    confirm: formData.get('confirm') === 'yes',
-    dateOfBirth: String(formData.get('dateOfBirth') ?? ''),
-    firstName: String(formData.get('firstName') ?? ''),
-    lastName: String(formData.get('lastName') ?? ''),
-    socialInsuranceNumber: String(formData.get('socialInsuranceNumber') ?? ''),
-  };
-
   // state validation schema
   const partnerInformationSchema: z.ZodType<PartnerInformationState> = z.object({
     confirm: z.boolean().refine((val) => val === true, t('apply:partner-information.error-message.confirm-required')),
     dateOfBirth: z
       .string()
       .trim()
-      .min(1, t('apply:partner-information.error-message.date-of-birth-required'))
-      .refine((val) => isValid(parse(val, 'yyyy-MM-dd', new Date())), t('apply:partner-information.error-message.date-of-birth-valid')),
+      .min(1, t('apply:partner-information.error-message.date-of-birth-required-and-valid'))
+      .refine((val) => isValid(parse(val, 'yyyy-MM-dd', new Date())), t('apply:partner-information.error-message.date-of-birth-required-and-valid')),
     firstName: z.string().trim().min(1, t('apply:partner-information.error-message.first-name-required')),
     lastName: z.string().trim().min(1, t('apply:partner-information.error-message.last-name-required')),
     socialInsuranceNumber: z
@@ -90,55 +81,50 @@ export async function action({ request, params }: ActionFunctionArgs) {
       .refine((sin) => sin !== state.applicantInformation?.socialInsuranceNumber, t('apply:partner-information.error-message.sin-unique')),
   });
 
+  const formData = await request.formData();
+  const data = {
+    confirm: formData.get('confirm') === 'yes',
+    dateOfBirth: String(formData.get('dateOfBirth') ?? ''),
+    firstName: String(formData.get('firstName') ?? ''),
+    lastName: String(formData.get('lastName') ?? ''),
+    socialInsuranceNumber: String(formData.get('socialInsuranceNumber') ?? ''),
+  };
   const parsedDataResult = partnerInformationSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    return json({
-      errors: parsedDataResult.error.format(),
-      formData: data,
-    });
+    return json({ errors: parsedDataResult.error.format() });
   }
 
-  const sessionResponseInit = await applyFlow.saveState({
-    request,
-    params,
-    state: { partnerInformation: parsedDataResult.data },
-  });
-
+  const sessionResponseInit = await applyFlow.saveState({ request, params, state: { partnerInformation: parsedDataResult.data } });
   return redirectWithLocale(request, `/apply/${id}/personal-information`, sessionResponseInit);
 }
 
 export default function ApplyFlowApplicationInformation() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { id, state } = useLoaderData<typeof loader>();
+  const { id, defaultState } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
 
-  const defaultValues: PartnerInformationState = {
-    confirm: fetcher.data?.formData.confirm ?? state?.confirm ?? false,
-    dateOfBirth: fetcher.data?.formData.dateOfBirth ?? state?.dateOfBirth ?? '',
-    firstName: fetcher.data?.formData.firstName ?? state?.firstName ?? '',
-    lastName: fetcher.data?.formData.lastName ?? state?.lastName ?? '',
-    socialInsuranceNumber: fetcher.data?.formData.socialInsuranceNumber ?? state?.socialInsuranceNumber ?? '',
-  };
-
   // Keys order should match the input IDs order.
-  const errorMessages = {
-    'first-name': fetcher.data?.errors.firstName?._errors[0],
-    'last-name': fetcher.data?.errors.lastName?._errors[0],
-    'date-picker-date-of-birth-month': fetcher.data?.errors.dateOfBirth?._errors[0],
-    'social-insurance-number': fetcher.data?.errors.socialInsuranceNumber?._errors[0],
-    'input-checkbox-confirm': fetcher.data?.errors.confirm?._errors[0],
-  };
+  const errorMessages = useMemo(
+    () => ({
+      'first-name': fetcher.data?.errors.firstName?._errors[0],
+      'last-name': fetcher.data?.errors.lastName?._errors[0],
+      'date-picker-date-of-birth-month': fetcher.data?.errors.dateOfBirth?._errors[0],
+      'social-insurance-number': fetcher.data?.errors.socialInsuranceNumber?._errors[0],
+      'input-checkbox-confirm': fetcher.data?.errors.confirm?._errors[0],
+    }),
+    [fetcher.data?.errors.confirm?._errors, fetcher.data?.errors.dateOfBirth?._errors, fetcher.data?.errors.firstName?._errors, fetcher.data?.errors.lastName?._errors, fetcher.data?.errors.socialInsuranceNumber?._errors],
+  );
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 
   useEffect(() => {
-    if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
+    if (hasErrors(errorMessages)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
-  }, [fetcher.data]);
+  }, [errorMessages]);
 
   return (
     <>
@@ -165,14 +151,23 @@ export default function ApplyFlowApplicationInformation() {
                 className="w-full"
                 label={t('apply:partner-information.first-name')}
                 required
-                defaultValue={defaultValues.firstName}
+                defaultValue={defaultState?.firstName ?? ''}
                 errorMessage={errorMessages['first-name']}
                 aria-describedby="name-instructions"
               />
-              <InputField id="last-name" name="lastName" className="w-full" label={t('apply:partner-information.last-name')} required defaultValue={defaultValues.lastName} errorMessage={errorMessages['last-name']} aria-describedby="name-instructions" />
+              <InputField
+                id="last-name"
+                name="lastName"
+                className="w-full"
+                label={t('apply:partner-information.last-name')}
+                required
+                defaultValue={defaultState?.lastName ?? ''}
+                errorMessage={errorMessages['last-name']}
+                aria-describedby="name-instructions"
+              />
             </div>
             <p id="name-instructions">{t('partner-information.name-instructions')}</p>
-            <DatePickerField id="date-of-birth" name="dateOfBirth" defaultValue={defaultValues.dateOfBirth} legend={t('apply:partner-information.date-of-birth')} required errorMessage={errorMessages['date-picker-date-of-birth-month']} />
+            <DatePickerField id="date-of-birth" name="dateOfBirth" defaultValue={defaultState?.dateOfBirth ?? ''} legend={t('apply:partner-information.date-of-birth')} required errorMessage={errorMessages['date-picker-date-of-birth-month']} />
             <InputField
               id="social-insurance-number"
               name="socialInsuranceNumber"
@@ -183,10 +178,10 @@ export default function ApplyFlowApplicationInformation() {
               placeholder={formatSin('000000000', '-')}
               minLength={9}
               maxLength={9}
-              defaultValue={defaultValues.socialInsuranceNumber}
+              defaultValue={defaultState?.socialInsuranceNumber ?? ''}
               errorMessage={errorMessages['social-insurance-number']}
             />
-            <InputCheckbox id="confirm" name="confirm" value="yes" required errorMessage={errorMessages['input-checkbox-confirm']} defaultChecked={defaultValues.confirm === true}>
+            <InputCheckbox id="confirm" name="confirm" value="yes" required errorMessage={errorMessages['input-checkbox-confirm']} defaultChecked={defaultState?.confirm === true}>
               {t('partner-information.confirm-checkbox')}
             </InputCheckbox>
           </div>
