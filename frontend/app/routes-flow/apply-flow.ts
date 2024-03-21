@@ -19,26 +19,7 @@ import { redirectWithLocale } from '~/utils/locale-utils.server';
  */
 const idSchema = z.string().uuid();
 
-/**
- * Schema for communication reference.
- */
-const communicationPreferencesStateSchema = z.object({
-  preferredLanguage: z.string().min(1),
-  preferredMethod: z.string().min(1),
-  email: z.string().min(1).optional(),
-  confirmEmail: z.string().min(1).optional(),
-  emailForFuture: z.string().optional(),
-  confirmEmailForFuture: z.string().optional(),
-});
-
-/**
- * Schema for apply state.
- */
-const applyStateSchema = z.object({
-  communicationPreferences: communicationPreferencesStateSchema.optional(),
-});
-
-interface ApplyState extends z.infer<typeof applyStateSchema> {
+interface ApplyState {
   dateOfBirth?: DateOfBirthState;
   dentalInsurance?: DentalInsuranceState;
   partnerInformation?: PartnerInformationState;
@@ -178,7 +159,6 @@ async function start({ id, request }: StartArgs) {
 export function getApplyFlow() {
   return {
     clearState,
-    applyStateSchema,
     loadState,
     saveState,
     start,
