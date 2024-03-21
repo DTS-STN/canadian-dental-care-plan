@@ -17,12 +17,9 @@
       "communicationPreference": "CDCP-APPL-0011",
       "dentalInsurance": "CDCP-APPL-0012",
       "federalProvincialTerritorialBenefits": "CDCP-APPL-0013",
-      "demographics": "CDCP-APPL-0014",
-      "demographicsPart1": "CDCP-APPL-0015",
-      "demographicsPart2": "CDCP-APPL-0016",
-      "reviewInformation": "CDCP-APPL-0017",
-      "exitApplication": "CDCP-APPL-0018",
-      "confirmation": "CDCP-APPL-0019"
+      "reviewInformation": "CDCP-APPL-0014",
+      "exitApplication": "CDCP-APPL-0015",
+      "confirmation": "CDCP-APPL-0016"
     },
     "notFound": "CDCP-ERR-0404"
   }

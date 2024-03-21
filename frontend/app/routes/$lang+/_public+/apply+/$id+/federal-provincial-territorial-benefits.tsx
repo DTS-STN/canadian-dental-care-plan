@@ -18,7 +18,7 @@ import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
-import { featureEnabled, getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -129,7 +129,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     state: { dentalBenefits: parsedDataResult.data },
   });
 
-  return featureEnabled('demographic-questions') ? redirectWithLocale(request, `/apply/${id}/demographics`, sessionResponseInit) : redirectWithLocale(request, `/apply/${id}/confirm`, sessionResponseInit);
+  return redirectWithLocale(request, `/apply/${id}/review-information`, sessionResponseInit);
 }
 
 export default function AccessToDentalInsuranceQuestion() {

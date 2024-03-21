@@ -19,7 +19,7 @@ function tryOrElseFalse(fn: () => unknown) {
 const validMockNames = ['cct', 'lookup', 'power-platform', 'raoidc', 'status-check', 'wsaddress'] as const;
 export type MockName = (typeof validMockNames)[number];
 
-const validFeatureNames = ['demographic-questions', 'doc-upload', 'email-alerts', 'update-personal-info', 'view-applications', 'view-letters', 'view-messages'] as const;
+const validFeatureNames = ['doc-upload', 'email-alerts', 'update-personal-info', 'view-applications', 'view-letters', 'view-messages'] as const;
 export type FeatureName = (typeof validFeatureNames)[number];
 
 // refiners
@@ -41,7 +41,7 @@ const serverEnv = z.object({
   NODE_ENV: z.enum(['production', 'development', 'test']),
   ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default(validFeatureNames.join(',')),
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
-  
+
   // lookup identifiers
   CANADA_COUNTRY_ID: z.string().trim().min(1),
   COMMUNICATION_METHOD_EMAIL_ID: z.string().trim().min(1).default('email'),
