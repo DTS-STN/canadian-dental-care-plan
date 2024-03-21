@@ -5,6 +5,7 @@ import { Form, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
 
+import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
@@ -25,7 +26,7 @@ export const handle = {
     { labelI18nKey: 'personal-information:phone-number.confirm.breadcrumbs.confirm-phone-number' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
-  pageIdentifier: 'CDCP-0009',
+  pageIdentifier: pageIds.protected.personalInformation.telephoneNumberConfirm,
   pageTitleI18nKey: 'personal-information:phone-number.confirm.page-title',
 } as const satisfies RouteHandleData;
 

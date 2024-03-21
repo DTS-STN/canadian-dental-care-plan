@@ -6,6 +6,7 @@ import { Link, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
+import pageIds from '../page-ids.json';
 import { AppLink } from '~/components/app-link';
 import { useFeature } from '~/root';
 import { getAuditService } from '~/services/audit-service.server';
@@ -22,7 +23,7 @@ import { getUserOrigin } from '~/utils/user-origin-utils.server';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('index', 'gcweb'),
-  pageIdentifier: 'CDCP-0001',
+  pageIdentifier: pageIds.protected.home,
   pageTitleI18nKey: 'index:page-title',
 } as const satisfies RouteHandleData;
 

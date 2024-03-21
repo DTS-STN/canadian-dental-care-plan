@@ -3,6 +3,7 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 
 import { Trans, useTranslation } from 'react-i18next';
 
+import pageIds from '../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -16,7 +17,7 @@ import { useUserOrigin } from '~/utils/user-origin-utils';
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'data-unavailable:page-title' }],
   i18nNamespaces: getTypedI18nNamespaces('data-unavailable', 'gcweb'),
-  pageIdentifier: 'CDCP-0099',
+  pageIdentifier: pageIds.protected.dataUnavailable,
   pageTitleI18nKey: 'data-unavailable:page-title',
 } as const satisfies RouteHandleData;
 

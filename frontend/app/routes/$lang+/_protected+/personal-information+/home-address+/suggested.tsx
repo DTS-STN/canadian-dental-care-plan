@@ -4,6 +4,7 @@ import { Form, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
+import pageIds from '../../../page-ids.json';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InputRadios } from '~/components/input-radios';
@@ -23,7 +24,7 @@ export const handle = {
     { labelI18nKey: 'personal-information:home-address.suggested.breadcrumbs.suggested-address' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
-  pageIdentifier: 'CDCP-0008',
+  pageIdentifier: pageIds.protected.personalInformation.homeAddressSuggested,
   pageTitleI18nKey: 'personal-information:home-address.suggested.page-title',
 };
 

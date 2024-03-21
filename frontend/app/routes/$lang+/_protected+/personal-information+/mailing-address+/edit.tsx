@@ -7,6 +7,7 @@ import { Form, useActionData, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import pageIds from '../../../page-ids.json';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
@@ -32,7 +33,7 @@ export const handle = {
     { labelI18nKey: 'personal-information:mailing-address.edit.breadcrumbs.mailing-address-change' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
-  pageIdentifier: 'CDCP-0004',
+  pageIdentifier: pageIds.protected.personalInformation.mailingAddressEdit,
   pageTitleI18nKey: 'personal-information:mailing-address.edit.page-title',
 } as const satisfies RouteHandleData;
 

@@ -5,6 +5,7 @@ import { Form, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
 
+import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -24,7 +25,7 @@ export const handle = {
     { labelI18nKey: 'personal-information:preferred-language.confirm.breadcrumbs.preferred-language-confirm' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
-  pageIdentifier: 'CDCP-00010',
+  pageIdentifier: pageIds.protected.personalInformation.preferredLanguageConfirm,
   pageTitleI18nKey: 'personal-information:preferred-language.confirm.page-title',
 } as const satisfies RouteHandleData;
 

@@ -1,6 +1,25 @@
 {
   "protected": {
-    "TODO :: GjB :: Add protected page IDs": "🤪"
+    "home": "CDCP-PROT-0001",
+    "personalInformation": {
+      "index": "CDCP-PROT-0002",
+      "homeAddressEdit": "CDCP-PROT-0003",
+      "homeAddressConfirm": "CDCP-PROT-0004",
+      "homeAddressSuggested": "CDCP-PROT-0005",
+      "homeAddressAccuracy": "CDCP-PROT-0006",
+      "mailingAddressEdit": "CDCP-PROT-0007",
+      "mailingAddressConfirm": "CDCP-PROT-0008",
+      "mailingAddressSuggested": "CDCP-PROT-0009",
+      "mailingAddressAccuracy": "CDCP-PROT-0010",
+      "preferredLanguageEdit": "CDCP-PROT-00011",
+      "preferredLanguageConfirm": "CDCP-PROT-0012",
+      "telephoneNumberEdit": "CDCP-PROT-0013",
+      "telephoneNumberConfirm": "CDCP-PROT-0014"
+    },
+    "letters": {
+      "index": "CDCP-PROT-0015"
+    },
+    "dataUnavailable": "CDCP-PROT-0099"
   },
   "public": {
     "apply": {

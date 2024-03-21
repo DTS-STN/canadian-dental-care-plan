@@ -4,6 +4,7 @@ import { Form, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
+import pageIds from '../../../page-ids.json';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
@@ -22,7 +23,7 @@ export const handle = {
     { labelI18nKey: 'personal-information:home-address.address-accuracy.page-title' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
-  pageIdentifier: 'CDCP-0013',
+  pageIdentifier: pageIds.protected.personalInformation.homeAddressAccuracy,
   pageTitleI18nKey: 'personal-information:home-address.address-accuracy.page-title',
 };
 
