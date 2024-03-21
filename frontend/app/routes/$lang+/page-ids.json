@@ -1,7 +1,7 @@
 {
   "protected": {
+    "home": "CDCP-PROT-0001",
     "personalInformation": {
-      "home": "CDCP-PROT-0001",
       "index": "CDCP-PROT-0002",
       "homeAddressEdit": "CDCP-PROT-0003",
       "homeAddressConfirm": "CDCP-PROT-0004",

@@ -23,7 +23,7 @@ import { getUserOrigin } from '~/utils/user-origin-utils.server';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('index', 'gcweb'),
-  pageIdentifier: pageIds.protected.personalInformation.home,
+  pageIdentifier: pageIds.protected.home,
   pageTitleI18nKey: 'index:page-title',
 } as const satisfies RouteHandleData;
 
