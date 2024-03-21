@@ -88,7 +88,7 @@ async function handleLogoutRequest({ request }: LoaderFunctionArgs) {
   }
 
   const idToken: IdToken = session.get('idToken');
-  const locale = await getLocale(request);
+  const locale = getLocale(request);
 
   const raoidcService = await getRaoidcService();
   const signoutUrl = raoidcService.generateSignoutRequest(idToken.sid, locale);

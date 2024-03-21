@@ -72,7 +72,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('update-data.mailing-address', { userId: idToken.sub });
 
-  const locale = await getLocale(request);
+  const locale = getLocale(request);
 
   // TODO remove new mailing address from session and handle case when it is missing
   return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:mailing-address.confirm.updated-notification');

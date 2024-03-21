@@ -16,7 +16,7 @@ const log = getLogger('locale-utils.server');
  * @see https://www.i18next.com/overview/api#getfixedt
  */
 export async function getFixedT<N extends Namespace>(localeOrRequest: 'en' | 'fr' | Request, namespaces: N) {
-  const locale = typeof localeOrRequest === 'string' ? localeOrRequest : await getLocale(localeOrRequest);
+  const locale = typeof localeOrRequest === 'string' ? localeOrRequest : getLocale(localeOrRequest);
   const i18n = await initI18n(locale, namespaces);
   return i18n.getFixedT(locale, namespaces);
 }

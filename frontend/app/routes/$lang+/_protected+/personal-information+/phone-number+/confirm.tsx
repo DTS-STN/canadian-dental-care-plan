@@ -100,7 +100,7 @@ export async function action({ request }: ActionFunctionArgs) {
   getAuditService().audit('update-data.phone-number', { userId: idToken.sub });
 
   session.unset('newPhoneNumber');
-  const locale = await getLocale(request);
+  const locale = getLocale(request);
 
   instrumentationService.countHttpStatus('phone-number.confirm', 302);
   return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:phone-number.confirm.updated-notification', {

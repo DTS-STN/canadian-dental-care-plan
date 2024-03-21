@@ -13,7 +13,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const locale = await getLocale(request);
+  const locale = getLocale(request);
   return json({ locale });
 }
 

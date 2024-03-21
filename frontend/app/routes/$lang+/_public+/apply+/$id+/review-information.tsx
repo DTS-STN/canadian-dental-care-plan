@@ -54,7 +54,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = await getLocale(request);
+  const locale = getLocale(request);
 
   // Getting province by Id
   const allRegions = await getLookupService().getAllRegions();
@@ -141,7 +141,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   // TODO if the state is cleared here, the confirmation page can't access the state to display information
   // const sessionResponseInit = await applyFlow.clearState({ request, params });
 
-  const locale = await getLocale(request);
+  const locale = getLocale(request);
 
   const sessionResponseInit = await applyFlow.saveState({
     request,

@@ -43,7 +43,7 @@ vi.mock('~/services/user-service.server', () => ({
 
 vi.mock('~/utils/locale-utils.server', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
-  getLocale: vi.fn().mockResolvedValue('en'),
+  getLocale: vi.fn().mockReturnValue('en'),
   redirectWithLocale: vi.fn().mockResolvedValue(new Response('/', { status: 302 })),
 }));
 
