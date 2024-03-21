@@ -12,6 +12,7 @@
     "continue-btn": "Continue",
     "error-message": {
       "valid-sin": "Must be a valid SIN",
+      "first-name": "First name must be provided",
       "last-name": "Last name must be provided",
       "marital-status": "Marital status must be provided"
     }

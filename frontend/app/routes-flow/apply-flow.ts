@@ -2,6 +2,7 @@ import { Params } from '@remix-run/react';
 
 import { z } from 'zod';
 
+import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/applicant-information';
 import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
 import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/dental-insurance';
 import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits';
@@ -10,22 +11,11 @@ import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/p
 import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-of-application';
 import { getSessionService } from '~/services/session-service.server';
 import { redirectWithLocale } from '~/utils/locale-utils.server';
-import { isValidSin } from '~/utils/sin-utils';
 
 /**
  * Schema for validating UUID.
  */
 const idSchema = z.string().uuid();
-
-/**
- * Schema applicant information.
- */
-const applicantInformationSchema = z.object({
-  socialInsuranceNumber: z.string().refine(isValidSin, { message: 'valid-sin' }),
-  firstName: z.string().optional(),
-  lastName: z.string().min(1, { message: 'last-name' }),
-  maritalStatus: z.string({ required_error: 'marital-status' }),
-});
 
 /**
  * Schema for tax filing.
@@ -72,7 +62,6 @@ const demographicsPart2StateSchema = z.object({
  * Schema for apply state.
  */
 const applyStateSchema = z.object({
-  applicantInformation: applicantInformationSchema.optional(),
   communicationPreferences: communicationPreferencesStateSchema.optional(),
   demographicsPart1: demographicsPart1StateSchema.optional(),
   demographicsPart2: demographicsPart2StateSchema.optional(),
@@ -84,8 +73,9 @@ interface ApplyState extends z.infer<typeof applyStateSchema> {
   dentalInsurance?: DentalInsuranceState;
   partnerInformation?: PartnerInformationState;
   typeOfApplication?: TypeOfApplicationState;
-  dentalBenefits?: DentalBenefitsState;
   personalInformation?: PersonalInformationState;
+  dentalBenefits?: DentalBenefitsState;
+  applicantInformation?: ApplicantInformationState;
 }
 
 /**
@@ -216,7 +206,6 @@ async function start({ id, request }: StartArgs) {
 export function getApplyFlow() {
   return {
     clearState,
-    applicantInformationSchema,
     applyStateSchema,
     loadState,
     saveState,
