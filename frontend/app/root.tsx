@@ -7,8 +7,9 @@ import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderD
 import { useTranslation } from 'react-i18next';
 import { getToast } from 'remix-toast';
 
+import { getSessionService } from './services/session-service.server';
 import { getFixedT, getLocale } from './utils/locale-utils.server';
-import { getUserOrigin, userOriginCookie } from './utils/user-origin-utils.server';
+import { getUserOrigin } from './utils/user-origin-utils.server';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import SessionTimeout from '~/components/session-timeout';
@@ -68,8 +69,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const origin = requestUrl.origin;
 
   const userOrigin = await getUserOrigin(request);
+  const sessionService = await getSessionService();
+  const session = await sessionService.getSession(request);
+  session.set('userOrigin', userOrigin);
 
-  return json({ buildInfo, env, meta, origin, toast, userOrigin }, { headers: { ...toastHeaders, 'Set-Cookie': await userOriginCookie.serialize(userOrigin) } });
+  return json({ buildInfo, env, meta, origin, toast, userOrigin }, { headers: { ...toastHeaders, 'Set-Cookie': await sessionService.commitSession(session) } });
 }
 
 export default function App() {

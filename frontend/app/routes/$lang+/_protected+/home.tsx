@@ -18,7 +18,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { getUserOrigin, userOriginCookie } from '~/utils/user-origin-utils.server';
+import { getUserOrigin } from '~/utils/user-origin-utils.server';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('index', 'gcweb'),
@@ -45,9 +45,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userInfo = await userService.getUserInfo(userId);
 
   const userOrigin = await getUserOrigin(request);
+  session.set('userOrigin', userOrigin);
 
   if (!userInfo) {
-    return redirectWithLocale(request, '/data-unavailable', { headers: { 'Set-Cookie': await userOriginCookie.serialize(userOrigin) } });
+    return redirectWithLocale(request, '/data-unavailable', { headers: { 'Set-Cookie': await sessionService.commitSession(session) } });
   }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
