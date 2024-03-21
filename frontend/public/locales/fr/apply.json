@@ -3,18 +3,20 @@
     "page-title": "Renseignements sur le demandeur",
     "form-instructions-sin": "Veuillez indiquer votre nom légal tel qu'indiqué sur votre carte ou votre lettre de numéro d'assurance sociale (NAS).",
     "form-instructions-info": "Nous utiliserons les renseignements que vous avez fournis pour vérifier votre identité. Tout renseignement qui ne correspond pas à ceux associés à votre numéro d'assurance sociale pourrait retarder le traitement de votre demande.",
-    "sin": "Numéro d'assurance sociale",
+    "sin": "Numéro d'assurance sociale (NAS)",
     "last-name": "Nom de famille",
     "first-name": "Prénom",
-    "name-instructions": "(FR) If using a single legal name, please enter that name in BOTH the first name and last name fields.",
-    "marital-status": "État matrimonial",
+    "name-instructions": "Si vous utilisez un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
+    "marital-status": "État civil",
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "error-message": {
-      "valid-sin": "(FR) Must be a valid SIN",
-      "first-name": "(FR) First name must be provided",
-      "last-name": "(FR) Last name must be provided",
-      "marital-status": "(FR) Marital status must be provided"
+      "first-name-required": "Le prénom est obligatoire.",
+      "last-name-required": "Le nom de famille est obligatoire.",
+      "marital-status-required": "L'état civil est obligatoire.",
+      "sin-required": "Le numéro d'assurance sociale (NAS) est requis.",
+      "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique.",
+      "sin-valid": "Le numéro d'assurance sociale (NAS) doit être valide."
     }
   },
   "communication-preference": {
