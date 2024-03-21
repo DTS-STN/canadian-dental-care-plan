@@ -218,14 +218,8 @@
       "page-title": "Date de naissance",
       "description": "Les demandes au titre du Régime canadien de soins dentaires (RCSD) seront traitées par étapes. Votre date de naissance détermine le moment où vous pouvez présenter une demande.",
       "form-instructions": "Veuillez entrer votre date de naissance",
-      "month": "(FR) Month",
-      "day": "(FR) Day",
-      "year": "(FR) Year",
       "error-message": {
-        "date-required": "La date de naissance est obligatoire et doit être une date valide.",
-        "day": "Jour",
-        "month": "Mois",
-        "year": "Année"
+        "date-of-birth-required-and-valid": "La date de naissance est requise et doit être une date valide."
       },
       "back-btn": "Retour",
       "continue-btn": "Continuer"
@@ -360,7 +354,7 @@
     "continue-btn": "Continuer",
     "error-message": {
       "confirm-required": "(FR) Checkbox must be selected",
-      "date-of-birth-required": "La date de naissance est obligatoire.",
+      "date-of-birth-required-and-valid": "La date de naissance est requise et doit être une date valide.",
       "date-of-birth-valid": "La date de naissance doit être une date valide.",
       "first-name-required": "Le prénom est obligatoire.",
       "last-name-required": "Le nom de famille est obligatoire.",
@@ -528,12 +522,5 @@
       "info-source": "https://www.canada.ca/fr/emploi-developpement-social/ministere/transparence/aai/rapports/infosource.html",
       "microsoft-data-privacy-policy": "https://www.microsoft.com/fr-ca/trust-center/privacy"
     }
-  },
-  "exit-application": {
-    "page-title": "Exit Application",
-    "are-you-sure": "Are you sure you want to exit this application? If you click \"Exit\", the form will reset and your information will be lost.",
-    "click-back": "Click \"Back\" to return to the form.",
-    "back-btn": "Back",
-    "exit-btn": "Exit"
   }
 }

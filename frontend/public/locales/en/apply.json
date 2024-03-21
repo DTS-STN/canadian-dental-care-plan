@@ -218,14 +218,8 @@
       "page-title": "Date of birth",
       "description": "Applications for the Canadian Dental Care Plan (CDCP) will open in phases. Your date of birth determines when you can apply.",
       "form-instructions": "Please enter your date of birth",
-      "month": "Month",
-      "day": "Day",
-      "year": "Year",
       "error-message": {
-        "date-required": "The date of birth is required and must be a valid date.",
-        "day": "Day must be provided",
-        "month": "Month must be provided",
-        "year": "Year must be provided"
+        "date-of-birth-required-and-valid": "The date of birth is required and must be a valid date."
       },
       "back-btn": "Back",
       "continue-btn": "Continue"
@@ -360,8 +354,7 @@
     "continue-btn": "Continue",
     "error-message": {
       "confirm-required": "Checkbox must be selected",
-      "date-of-birth-required": "The date of birth is required.",
-      "date-of-birth-valid": "The date of birth must be a valid date.",
+      "date-of-birth-required-and-valid": "The date of birth is required and must be a valid date.",
       "first-name-required": "The first name is required.",
       "last-name-required": "The last name is required.",
       "sin-required": "The Social Insurance Number (SIN) is required.",
