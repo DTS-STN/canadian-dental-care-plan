@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
@@ -10,7 +10,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
@@ -41,11 +41,11 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
-
   const t = await getFixedT(request, handle.i18nNamespaces);
+
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.type-of-application.page-title') }) };
 
-  return json({ id, meta, state: state.typeOfApplication });
+  return json({ id, meta, defaultState: state.typeOfApplication });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -62,21 +62,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const formData = await request.formData();
   const data = String(formData.get('typeOfApplication') ?? '');
-
   const parsedDataResult = typeOfApplicationSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    return json({
-      errors: parsedDataResult.error.format(),
-      formData: data,
-    });
+    return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  const sessionResponseInit = await applyFlow.saveState({
-    request,
-    params,
-    state: { typeOfApplication: parsedDataResult.data },
-  });
+  const sessionResponseInit = await applyFlow.saveState({ request, params, state: { typeOfApplication: parsedDataResult.data } });
 
   if (parsedDataResult.data === ApplicantType.Delegate) {
     return redirectWithLocale(request, `/apply/${id}/application-delegate`, sessionResponseInit);
@@ -87,25 +79,26 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function ApplyFlowTypeOfApplication() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { state } = useLoaderData<typeof loader>();
+  const { defaultState } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
 
-  const defaultValue = fetcher.data?.formData ?? state;
-
-  useEffect(() => {
-    if (fetcher.data && fetcher.data.errors._errors.length > 0) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-    }
-  }, [fetcher.data]);
-
   // Keys order should match the input IDs order.
-  const errorMessages = {
-    'input-radio-type-of-application-option-0': fetcher.data?.errors._errors[0],
-  };
+  const errorMessages = useMemo(
+    () => ({
+      'input-radio-type-of-application-option-0': fetcher.data?.errors[0],
+    }),
+    [fetcher.data?.errors],
+  );
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
+
+  useEffect(() => {
+    if (hasErrors(errorMessages)) {
+      scrollAndFocusToErrorSummary(errorSummaryId);
+    }
+  }, [errorMessages]);
 
   return (
     <>
@@ -126,12 +119,12 @@ export default function ApplyFlowTypeOfApplication() {
               {
                 value: ApplicantType.Personal,
                 children: t('apply:eligibility.type-of-application.radio-options.personal'),
-                defaultChecked: defaultValue === ApplicantType.Personal,
+                defaultChecked: defaultState === ApplicantType.Personal,
               },
               {
                 value: ApplicantType.Delegate,
                 children: t('apply:eligibility.type-of-application.radio-options.delegate'),
-                defaultChecked: defaultValue === ApplicantType.Delegate,
+                defaultChecked: defaultState === ApplicantType.Delegate,
               },
             ]}
             required
