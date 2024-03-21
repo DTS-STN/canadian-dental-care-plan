@@ -206,15 +206,6 @@ export function getLookupApiMockHandlers() {
       const maritalStatusList = db.maritalStatus.getAll();
       return HttpResponse.json(maritalStatusList);
     }),
-
-    //
-    // Handler for GET request to retrieve all tax filing indication codes
-    //
-    http.get('https://api.example.com/lookups/tax-filing-indications', ({ request }) => {
-      log.debug('Handling request for [%s]', request.url);
-      const taxFilingIndicationsList = db.taxFilingIndications.getAll();
-      return HttpResponse.json(taxFilingIndicationsList);
-    }),
   ];
 }
 
