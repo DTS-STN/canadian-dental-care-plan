@@ -144,7 +144,7 @@ export function NotFoundError({ error }: NotFoundErrorProps) {
     <>
       <PageHeader />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
-        <PageTitle>
+        <PageTitle className="my-8">
           <span>{t('gcweb:not-found.page-title')}</span>
           <small className="block text-2xl font-normal text-neutral-500">{t('gcweb:not-found.page-subtitle')}</small>
         </PageTitle>
@@ -172,7 +172,7 @@ export function ServerError({ error }: ServerErrorProps) {
     <>
       <PageHeader />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
-        <PageTitle>
+        <PageTitle className="my-8">
           <span>{t('gcweb:server-error.page-title')}</span>
           <small className="block text-2xl font-normal text-neutral-500">{t('gcweb:server-error.page-subtitle')}</small>
         </PageTitle>
