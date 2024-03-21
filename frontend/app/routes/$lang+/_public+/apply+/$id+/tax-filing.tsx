@@ -75,7 +75,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     state: { taxFiling2023: parsedDataResult.data },
   });
 
-  if (parsedDataResult.data === 'FALSE') {
+  if (parsedDataResult.data === TaxFiling.FALSE) {
     return redirectWithLocale(request, `/apply/${id}/file-your-taxes`, sessionResponseInit);
   }
 
