@@ -7,6 +7,7 @@ import { useLoaderData, useSearchParams } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import pageIds from '../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
@@ -27,7 +28,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'letters:index.page-title' }],
   i18nNamespaces: getTypedI18nNamespaces('letters', 'gcweb'),
-  pageIdentifier: 'CDCP-0002',
+  pageIdentifier: pageIds.protected.letters.index,
   pageTitleI18nKey: 'letters:index.page-title',
 } as const satisfies RouteHandleData;
 

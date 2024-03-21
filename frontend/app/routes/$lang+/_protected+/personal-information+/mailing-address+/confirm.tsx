@@ -5,6 +5,7 @@ import { Form, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
 
+import pageIds from '../../../page-ids.json';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { getAddressService } from '~/services/address-service.server';
@@ -26,7 +27,7 @@ export const handle = {
     { labelI18nKey: 'personal-information:mailing-address.confirm.breadcrumbs.address-change-confirm' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
-  pageIdentifier: 'CDCP-0005',
+  pageIdentifier: pageIds.protected.personalInformation.mailingAddressConfirm,
   pageTitleI18nKey: 'personal-information:mailing-address.confirm.page-title',
 };
 

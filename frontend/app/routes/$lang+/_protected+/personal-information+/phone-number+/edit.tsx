@@ -8,6 +8,7 @@ import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
@@ -28,7 +29,7 @@ export const handle = {
     { labelI18nKey: 'personal-information:phone-number.edit.breadcrumbs.change-phone-number' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
-  pageIdentifier: 'CDCP-0008',
+  pageIdentifier: pageIds.protected.personalInformation.telephoneNumberEdit,
   pageTitleI18nKey: 'personal-information:phone-number.edit.page-title',
 } as const satisfies RouteHandleData;
 

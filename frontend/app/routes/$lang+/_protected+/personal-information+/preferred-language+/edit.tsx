@@ -5,6 +5,7 @@ import { Form, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InputRadios } from '~/components/input-radios';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
@@ -25,7 +26,7 @@ export const handle = {
     { labelI18nKey: 'personal-information:preferred-language.edit.page-title' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
-  pageIdentifier: 'CDCP-0012',
+  pageIdentifier: pageIds.protected.personalInformation.preferredLanguageEdit,
   pageTitleI18nKey: 'personal-information:preferred-language.edit.page-title',
 } as const satisfies RouteHandleData;
 
