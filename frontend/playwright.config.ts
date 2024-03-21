@@ -28,7 +28,7 @@ export default defineConfig({
       AUTH_RAOIDC_CLIENT_ID: 'CDCP',
       AUTH_RASCL_LOGOUT_URL: 'http://localhost:3000/',
       CANADA_COUNTRY_ID: '0cf5389e-97ae-eb11-8236-000d3af4bfc3',
-      ENABLED_MOCKS: 'cct,lookup,power-platform,raoidc,status-check,wsaddress',
+      ENABLED_MOCKS: 'cct,dental-application,lookup,power-platform,raoidc,status-check,wsaddress',
       HCAPTCHA_SECRET_KEY: '0x0000000000000000000000000000000000000000',
       HCAPTCHA_SITE_KEY: '10000000-ffff-ffff-ffff-000000000001',
       HCAPTCHA_VERIFY_URL: 'https://api.hcaptcha.com/siteverify',
