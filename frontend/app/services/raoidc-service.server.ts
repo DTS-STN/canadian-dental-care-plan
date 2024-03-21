@@ -121,20 +121,18 @@ async function createRaoidcService() {
     const sessionService = await getSessionService();
     const session = await sessionService.getSession(request);
 
-    if (!session.has('idToken')) {
+    if (!session.has('idToken') || !session.has('userInfoToken')) {
       log.debug(`User has not authenticated; redirecting to /auth/login?returnto=${returnTo}`);
       throw redirect(`/auth/login?returnto=${returnTo}`);
     }
 
     const idToken: IdToken = session.get('idToken');
+    const userInfoToken: UserinfoToken = session.get('userInfoToken');
 
-    if (session.has('userInfoToken')) {
-      const userInfoToken: UserinfoToken = session.get('userInfoToken');
-      if (userInfoToken.mocked) {
-        return true;
-      }
+    if (userInfoToken.mocked) {
+      log.debug('Mocked user; skipping RAOIDC session validation');
+      return true;
     }
-
     // idToken.sid is the RAOIDC session id
     const sessionValid = await validateSession(AUTH_RAOIDC_BASE_URL, AUTH_RAOIDC_CLIENT_ID, idToken.sid, fetchFn);
 

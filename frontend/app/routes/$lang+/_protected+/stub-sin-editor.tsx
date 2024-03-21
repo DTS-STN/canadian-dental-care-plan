@@ -95,7 +95,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
   session.set('idToken', idToken);
 
-  return redirectWithLocale(request, `/`, {
+  return redirectWithLocale(request, `/home`, {
     headers: {
       'Set-Cookie': await sessionService.commitSession(session),
     },

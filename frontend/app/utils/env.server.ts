@@ -59,7 +59,7 @@ const serverEnv = z.object({
   INTEROP_API_BASE_URI: z.string().url(),
   INTEROP_API_SUBSCRIPTION_KEY: z.string().trim().min(1),
 
-  SHOW_SIN_EDIT_STUB_PAGE : z.string().transform(toBoolean).default('true'),
+  SHOW_SIN_EDIT_STUB_PAGE : z.string().transform(toBoolean).default('false'),
 
 
 
