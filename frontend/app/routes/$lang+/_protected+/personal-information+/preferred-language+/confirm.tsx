@@ -96,7 +96,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   await userService.updateUserInfo(userId, { preferredLanguage: session.get('newPreferredLanguage') });
   session.unset('newPreferredLanguage');
-  const locale = await getLocale(request);
+  const locale = getLocale(request);
 
   instrumentationService.countHttpStatus('preferred-language.confirm', 302);
   return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:preferred-language.confirm.updated-notification', {

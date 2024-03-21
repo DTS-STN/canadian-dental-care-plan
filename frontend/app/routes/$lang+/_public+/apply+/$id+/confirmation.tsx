@@ -37,7 +37,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = await getLocale(request);
+  const locale = getLocale(request);
 
   // prettier-ignore
   if (!state.applicantInformation ||

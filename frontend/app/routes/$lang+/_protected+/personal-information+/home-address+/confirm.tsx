@@ -83,7 +83,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('update-data.home-address', { userId: idToken.sub });
 
-  const locale = await getLocale(request);
+  const locale = getLocale(request);
 
   instrumentationService.countHttpStatus('home-address.confirm', 302);
   // TODO remove new home address from session and handle case when it is missing

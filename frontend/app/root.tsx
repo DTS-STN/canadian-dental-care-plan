@@ -52,7 +52,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const buildInfoService = getBuildInfoService();
   const { toast, headers: toastHeaders } = await getToast(request);
   const requestUrl = new URL(request.url);
-  const locale = await getLocale(request);
+  const locale = getLocale(request);
   const t = await getFixedT(request, ['gcweb']);
 
   const buildInfo = buildInfoService.getBuildInfo();

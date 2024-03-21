@@ -73,7 +73,7 @@ export default async function handleRequest(request: Request, responseStatusCode
   log.debug(`Handling [${request.method}] request to [${request.url}] with handler function [${handlerFnName}]`);
   instrumentationService.createCounter('http.server.requests').add(1);
 
-  const locale = await getLocale(request);
+  const locale = getLocale(request);
   const routes = Object.values(remixContext.routeModules);
   const i18n = await initI18n(locale, getNamespaces(routes));
   const nonce = randomHexString(32);
