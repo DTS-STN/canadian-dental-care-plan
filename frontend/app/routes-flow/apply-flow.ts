@@ -68,6 +68,17 @@ async function loadState({ params, request, fallbackRedirectUrl = '/apply' }: Lo
   }
 
   const state = session.get(sessionName) as ApplyState;
+
+  if (Date.now() - session.get('timeUpdated') > 15 * 60 * 1000) {
+    session.unset(sessionName);
+    session.unset('timeUpdated');
+    throw redirectWithLocale(request, fallbackRedirectUrl, {
+      headers: {
+        'Set-Cookie': await sessionService.commitSession(session),
+      },
+    });
+  }
+
   return { id: id.data, state };
 }
 
@@ -96,6 +107,7 @@ async function saveState({ params, request, state, remove = undefined }: SaveSta
 
   const sessionName = getSessionName(id);
   session.set(sessionName, newState);
+  session.set('timeUpdated', Date.now());
 
   return {
     headers: {
@@ -122,6 +134,7 @@ async function clearState({ params, request }: ClearStateArgs) {
 
   const sessionName = getSessionName(id);
   session.unset(sessionName);
+  session.unset('timeUpdated');
 
   return {
     headers: {
@@ -149,6 +162,7 @@ async function start({ id, request }: StartArgs) {
 
   const sessionName = getSessionName(parsedId);
   session.set(sessionName, initialState);
+  session.set('timeUpdated', Date.now());
 
   return {
     headers: {
