@@ -1,12 +1,14 @@
-import winston, { createLogger, format, transports } from 'winston';
+import { LeveledLogMethod, Logger, createLogger, format, transports } from 'winston';
 import { z } from 'zod';
 
-// ['error', 'warn', 'info', 'verbose', 'debug', 'silly']
-const logLevels = Object.keys(winston.config.npm.levels);
+// see https://github.com/winstonjs/winston?tab=readme-ov-file#using-custom-logging-levels
+const logLevels = { audit: 0, error: 1, warn: 2, info: 3, debug: 4, trace: 5 };
+
+const isValidLogLevel = (val: string) => Object.keys(logLevels).includes(val);
 
 const logLevel = z
   .string()
-  .refine((val) => logLevels.includes(val), { message: 'Invalid log level', path: ['process.env.LOG_LEVEL'] })
+  .refine(isValidLogLevel, { message: 'Invalid log level', path: ['process.env.LOG_LEVEL'] })
   .default('info')
   .parse(process.env.LOG_LEVEL);
 
@@ -24,13 +26,17 @@ function formatCategory(category: string, size: number) {
  * Returns a logger for the specified logging category.
  */
 export const getLogger = (category: string) => {
+  // required so typescript knows about log.audit(..), log.trace(..), etc
+  type CustomLogger = Logger & { [level in keyof typeof logLevels]: LeveledLogMethod };
+
   return createLogger({
     level: logLevel,
+    levels: logLevels,
     format: format.combine(
       format.timestamp(),
       format.splat(),
       format.printf((info) => `${info.timestamp} ${info.level.toUpperCase().padStart(7)} --- [${formatCategory(category, 25)}]: ${info.stack ?? info.message}`),
     ),
     transports: [new transports.Console()],
-  });
+  }) as CustomLogger;
 };

@@ -10,7 +10,7 @@ vi.mock('~/utils/logging.server', () => ({
   getLogger: () => ({
     debug: vi.fn(),
     info: vi.fn(),
-    silly: vi.fn(),
+    trace: vi.fn(),
   }),
 }));
 

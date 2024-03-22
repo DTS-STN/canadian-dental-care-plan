@@ -167,7 +167,7 @@ export async function fetchServerMetadata(authServerUrl: string, fetchFn?: Fetch
 
   const serverMetadata = (await discoveryResponse.json()) as ServerMetadata;
   validateServerMetadata(serverMetadata);
-  log.silly('Server metadata response: [%j]', serverMetadata);
+  log.trace('Server metadata response: [%j]', serverMetadata);
 
   const jwksUrl = serverMetadata.jwks_uri;
   log.info('Fetching OIDC server public keys from [%s]', jwksUrl);
@@ -183,7 +183,7 @@ export async function fetchServerMetadata(authServerUrl: string, fetchFn?: Fetch
 
   const jwkSet = (await jwksResponse.json()) as JWKSet;
   validateJwkSet(jwkSet);
-  log.silly('Server JWKS response: [%j]', jwkSet);
+  log.trace('Server JWKS response: [%j]', jwkSet);
 
   return { jwkSet, serverMetadata };
 }
