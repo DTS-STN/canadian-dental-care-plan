@@ -18,7 +18,7 @@ function createAuditService() {
     audit: function (eventId: string, auditDetails?: AuditDetails) {
       const { userId, ...otherDetails } = auditDetails ?? {};
       const details = Object.keys(otherDetails).length === 0 ? undefined : otherDetails;
-      log.info('%j', { eventId, userId, details, timestamp: new Date().toISOString() });
+      log.audit('%j', { eventId, userId, details, timestamp: new Date().toISOString() });
     },
   };
 }
