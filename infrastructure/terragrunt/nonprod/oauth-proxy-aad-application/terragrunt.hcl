@@ -34,6 +34,7 @@ inputs = {
   ]
   application_web_redirect_uris = [
     "https://cdcp-dev.dev-dp.dts-stn.com/oauth/callback",
-    "https://cdcp-olivier.dev-dp.dts-stn.com/oauth/callback",
+    "https://cdcp-int.dev-dp.dts-stn.com/oauth/callback",
+    "https://cdcp-staging.dev-dp.dts-stn.com/oauth/callback",
   ]
 }
