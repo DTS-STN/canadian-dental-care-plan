@@ -10,7 +10,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { ErrorSummary, createErrorSummaryItems, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
@@ -20,6 +20,13 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+
+enum TaxFiling {
+  True = 'TRUE',
+  False = 'FALSE',
+}
+
+export type TaxFilingState = `${TaxFiling}`;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -44,18 +51,21 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id } = await applyFlow.loadState({ request, params });
+  const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formSchema = z.object({
-    taxFiling2023: z.string(),
+  const formData = await request.formData();
+  const taxFiling = String(formData.get('taxFiling2023') ?? '');
+
+  const taxFilingSchema: z.ZodType<TaxFilingState> = z.nativeEnum(TaxFiling, {
+    errorMap: () => ({ message: t('apply:eligibility.tax-filing.error-message.Required') }),
   });
 
-  const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = formSchema.safeParse(formData);
+  const parsedDataResult = taxFilingSchema.safeParse(taxFiling);
 
   if (!parsedDataResult.success) {
     return json({
       errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof formSchema>>,
+      formData: taxFiling,
     });
   }
 
@@ -65,7 +75,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
     state: { taxFiling2023: parsedDataResult.data },
   });
 
-  return parsedDataResult.data.taxFiling2023 === 'FALSE' ? redirectWithLocale(request, `/apply/${id}/file-your-taxes`, sessionResponseInit) : redirectWithLocale(request, `/apply/${id}/date-of-birth`, sessionResponseInit);
+  if (parsedDataResult.data === TaxFiling.False) {
+    return redirectWithLocale(request, `/apply/${id}/file-your-taxes`, sessionResponseInit);
+  }
+
+  return redirectWithLocale(request, `/apply/${id}/date-of-birth`, sessionResponseInit);
 }
 
 export default function ApplyFlowTaxFiling() {
@@ -76,19 +90,13 @@ export default function ApplyFlowTaxFiling() {
   const errorSummaryId = 'error-summary';
 
   useEffect(() => {
-    if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
+    if (fetcher.data?.formData && fetcher.data.formData.length > 0) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
   }, [fetcher.data]);
 
-  function getErrorMessage(errorI18nKey?: string): string | undefined {
-    if (!errorI18nKey) return undefined;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`apply:eligibility.tax-filing.error-message.${errorI18nKey}` as any);
-  }
-
   const errorMessages = {
-    'input-radios-tax-filing-2023': getErrorMessage(fetcher.data?.errors.taxFiling2023?._errors[0]),
+    'input-radios-tax-filing-2023': fetcher.data?.errors._errors[0],
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -109,8 +117,8 @@ export default function ApplyFlowTaxFiling() {
             name="taxFiling2023"
             legend={t('apply:eligibility.tax-filing.form-instructions')}
             options={[
-              { value: 'TRUE', children: t('apply:eligibility.tax-filing.radio-options.yes'), defaultChecked: state?.taxFiling2023 === 'TRUE' },
-              { value: 'FALSE', children: t('apply:eligibility.tax-filing.radio-options.no'), defaultChecked: state?.taxFiling2023 === 'FALSE' },
+              { value: TaxFiling.True, children: t('apply:eligibility.tax-filing.radio-options.yes'), defaultChecked: state === TaxFiling.True },
+              { value: TaxFiling.False, children: t('apply:eligibility.tax-filing.radio-options.no'), defaultChecked: state === TaxFiling.False },
             ]}
             required
             errorMessage={errorMessages['input-radios-tax-filing-2023']}
