@@ -106,7 +106,7 @@ export default function LettersIndex() {
 
           return (
             <li key={letter.id} className="py-4 sm:py-6">
-              <InlineLink reloadDocument to={`/letters/${letter.referenceId}/download`} className="font-lato font-semibold">
+              <InlineLink reloadDocument to={`/letters/${letter.referenceId}/download`} className="font-lato font-semibold" target="_blank">
                 {letterName}
               </InlineLink>
               <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: letter.issuedOn })}</p>
