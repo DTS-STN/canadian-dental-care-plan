@@ -20,8 +20,6 @@ import { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
-const log = getLogger('locale-utils.server');
-
 export const handle = {
   breadcrumbs: [
     // prettier-ignore
@@ -38,6 +36,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const log = getLogger('phone-number/confirm');
+
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
   const sessionService = await getSessionService();
