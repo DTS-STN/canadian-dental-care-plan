@@ -54,16 +54,15 @@ const serverEnv = z.object({
   ENGLISH_LETTER_LANGUAGE_CODE: z.coerce.number().default(1033),
   FRENCH_LETTER_LANGUAGE_CODE: z.coerce.number().default(1036),
 
-
   // interop api settings
   INTEROP_API_BASE_URI: z.string().url(),
   INTEROP_API_SUBSCRIPTION_KEY: z.string().trim().min(1),
 
   SHOW_SIN_EDIT_STUB_PAGE : z.string().transform(toBoolean).default('false'),
 
-  // TODO :: GjB :: these base URIs should not have defaults
-  SCCH_BASE_URI: z.string().url().default('https://www.example.com'),
-  MSCA_BASE_URI: z.string().url().default('http://srv136.services.gc.ca'),
+  // base URIs for My Service Canada Account variations
+  SCCH_BASE_URI: z.string().url().default('https://service.canada.ca'),
+  MSCA_BASE_URI: z.string().url().default('https://srv136.services.gc.ca'),
 
   // auth/oidc settings
   AUTH_JWT_PRIVATE_KEY: z.string().refine(isValidPrivateKey),

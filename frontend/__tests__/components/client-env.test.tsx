@@ -12,8 +12,8 @@ describe('<ClientEnv>', () => {
     const env: PublicEnv = {
       ENABLED_FEATURES: ['feature1', 'feature2'],
       I18NEXT_DEBUG: true,
-      SCCH_BASE_URI: 'http://www.example.com',
-      MSCA_BASE_URI: 'http://srv136.services.gc.ca',
+      SCCH_BASE_URI: 'https://service.canada.ca',
+      MSCA_BASE_URI: 'https://srv136.services.gc.ca',
       SESSION_TIMEOUT_SECONDS: 120,
       SESSION_TIMEOUT_PROMPT_SECONDS: 30,
     };
