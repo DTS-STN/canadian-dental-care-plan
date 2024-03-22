@@ -82,7 +82,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const sessionResponseInit = await applyFlow.saveState({ request, params, state: { applicantInformation: parsedDataResult.data } });
+  const sessionResponseInit = await applyFlow.saveState({ request, params, state: { applicantInformation: parsedDataResult.data }, remove: !['MARRIED', 'COMMONLAW'].includes(parsedDataResult.data.maritalStatus) ? 'partnerInformation' : undefined });
 
   if (['MARRIED', 'COMMONLAW'].includes(parsedDataResult.data.maritalStatus)) {
     return redirectWithLocale(request, `/apply/${id}/partner-information`, sessionResponseInit);

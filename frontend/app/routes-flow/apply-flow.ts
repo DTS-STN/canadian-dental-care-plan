@@ -75,6 +75,7 @@ interface SaveStateArgs {
   params: Params;
   request: Request;
   state: ApplyState;
+  remove?: keyof ApplyState;
 }
 
 /**
@@ -82,9 +83,13 @@ interface SaveStateArgs {
  * @param args - The arguments.
  * @returns The Set-Cookie header to be used in the HTTP response.
  */
-async function saveState({ params, request, state }: SaveStateArgs) {
+async function saveState({ params, request, state, remove = undefined }: SaveStateArgs) {
   const { id, state: currentState } = await loadState({ params, request });
   const newState = { ...currentState, ...state };
+
+  if (remove && remove in newState) {
+    delete newState[remove];
+  }
 
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
