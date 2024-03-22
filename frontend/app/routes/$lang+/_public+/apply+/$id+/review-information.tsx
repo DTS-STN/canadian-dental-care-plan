@@ -8,7 +8,6 @@ import { faSpinner, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { parse } from 'date-fns';
 import { useTranslation } from 'react-i18next';
-import { redirectWithSuccess } from 'remix-toast';
 
 import pageIds from '../../../page-ids.json';
 import { Address } from '~/components/address';
@@ -19,7 +18,7 @@ import { getApplyFlow } from '~/routes-flow/apply-flow';
 import { getLookupService } from '~/services/lookup-service.server';
 import { toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, getLocale } from '~/utils/locale-utils.server';
+import { getFixedT, getLocale, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -141,15 +140,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
   // TODO if the state is cleared here, the confirmation page can't access the state to display information
   // const sessionResponseInit = await applyFlow.clearState({ request, params });
 
-  const locale = getLocale(request);
-
   const sessionResponseInit = await applyFlow.saveState({
     request,
     params,
     state,
   });
 
-  return redirectWithSuccess(`/${locale}/apply/${id}/confirmation`, 'Form Submitted!', sessionResponseInit);
+  return redirectWithLocale(request, `/apply/${id}/confirmation`, sessionResponseInit);
 }
 
 export default function ReviewInformation() {
