@@ -13,7 +13,7 @@ const log = getLogger('letters-service.server');
 export const getLettersService = moize(createLettersService, { onCacheAdd: () => log.info('Creating new letters service') });
 
 function createLettersService() {
-  const { CCT_API_BASE_URI, CCT_VAULT_COMMUNITY, GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS, INTEROP_API_BASE_URI } = getEnv();
+  const { CCT_VAULT_COMMUNITY, GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS, INTEROP_API_BASE_URI } = getEnv();
 
   /**
    * @returns returns all the letter types
@@ -77,7 +77,7 @@ function createLettersService() {
    * @returns array of letters given the userId and clientId with optional sort parameter
    */
   async function getLetters(userId: string, clientId: string, sortOrder: 'asc' | 'desc' = 'desc') {
-    const url = new URL(`${CCT_API_BASE_URI}/cctws/OnDemand/api/GetDocInfoByClientId`);
+    const url = new URL(`${INTEROP_API_BASE_URI}/cctws/OnDemand/api/GetDocInfoByClientId`);
     url.searchParams.set('userid', userId);
     url.searchParams.set('clientid', clientId);
     url.searchParams.set('community', CCT_VAULT_COMMUNITY);
@@ -123,7 +123,7 @@ function createLettersService() {
    * @returns the response containing the PDF file given the userId and referenceId
    */
   async function getPdf(userId: string, referenceId: string) {
-    const url = new URL(`${CCT_API_BASE_URI}/cctws/OnDemand/api/GetPdfByLetterId`);
+    const url = new URL(`${INTEROP_API_BASE_URI}/cctws/OnDemand/api/GetPdfByLetterId`);
     url.searchParams.set('community', CCT_VAULT_COMMUNITY);
     url.searchParams.set('id', referenceId);
     url.searchParams.set('userid', userId);
