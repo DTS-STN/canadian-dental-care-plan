@@ -1,6 +1,6 @@
 import { FormEvent, useRef } from 'react';
 
-import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { randomUUID } from 'crypto';
 import { Trans, useTranslation } from 'react-i18next';
-import { z } from 'zod';
 
 import pageIds from '../../page-ids.json';
 import { Button } from '~/components/buttons';
@@ -19,6 +18,7 @@ import { getHCaptchaService } from '~/services/hcaptcha-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -44,27 +44,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const formDataSchema = z.object({
-    // TODO :: GjB : translate this? (do we even still need it)
-    'h-captcha-response': z.string().min(1, { message: 'Please indicate that you are human.' }),
-  });
+  const log = getLogger('apply/index');
 
-  const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = formDataSchema.safeParse(formData);
+  const formData = await request.formData();
+  const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
 
-  if (!parsedDataResult.success) {
-    return json({
-      errors: parsedDataResult.error.flatten(),
-      formData: formData as Partial<z.infer<typeof formDataSchema>>,
-    });
+  try {
+    const hCaptchaService = getHCaptchaService();
+    await hCaptchaService.verifyHCaptchaResponse(hCaptchaResponse);
+  } catch (error) {
+    log.warn(`hCaptcha verification failed: [${error}]; Proceeding with normal application flow`);
   }
-
-  const hCaptchaService = getHCaptchaService();
-  const hCaptchaResponse = parsedDataResult.data['h-captcha-response'];
-  const hCaptchaResult = await hCaptchaService.verifyHCaptchaResponse(hCaptchaResponse);
-
-  // TODO handle the hCaptchaResult (eg. log the result or redirect to another page)
-  console.log(hCaptchaResult);
 
   const applyFlow = getApplyFlow();
   const id = randomUUID().toString();
