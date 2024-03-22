@@ -322,8 +322,7 @@ export default function ReviewInformation() {
         <h2 className="mt-8 text-2xl font-semibold">{t('apply:review-information.dental-title')}</h2>
         <dl>
           <DescriptionListItem term={t('apply:review-information.dental-insurance-title')}>
-            {t('apply:review-information.dental-insurance-has-access')}
-            {dentalInsurance === 'yes' ? t('apply:review-information.yes') : t('apply:review-information.no')}
+            {dentalInsurance === 'yes' ? t('apply:review-information.dental-insurance-has-access') : t('apply:review-information.dental-insurance-has-no-access')}
             <p className="mt-4">
               <InlineLink id="change-access-dental" to="/">
                 {t('apply:review-information.dental-insurance-change')}
@@ -331,25 +330,18 @@ export default function ReviewInformation() {
             </p>
           </DescriptionListItem>
           <DescriptionListItem term={t('apply:review-information.dental-benefit-title')}>
-            {dentalBenefit.federalBenefit.access === 'yes' ? (
-              <div>
-                <span>{t('apply:review-information.dental-benefit-has-access')}</span>
-                <ul className="ml-6 list-disc">
-                  <li>{dentalBenefit.federalBenefit.benefit}</li>
-                </ul>
-              </div>
+            {dentalBenefit.federalBenefit.access === 'yes' || dentalBenefit.provTerrBenefit.access === 'yes' ? (
+              <>
+                {t('apply:review-information.dental-benefit-has-access')}
+                <div>
+                  <ul className="ml-6 list-disc">
+                    {dentalBenefit.federalBenefit.access === 'yes' && <li>{dentalBenefit.federalBenefit.benefit}</li>}
+                    {dentalBenefit.provTerrBenefit.access === 'yes' && <li>{provincialTerritorialSocialProgram}</li>}
+                  </ul>
+                </div>
+              </>
             ) : (
-              t('apply:review-information.dental-benefit-federal-no-access')
-            )}
-            {dentalBenefit.provTerrBenefit.access === 'yes' ? (
-              <div>
-                <span>{t('apply:review-information.dental-benefit-has-access')}</span>
-                <ul className="ml-6 list-disc">
-                  <li>{provincialTerritorialSocialProgram}</li>
-                </ul>
-              </div>
-            ) : (
-              t('apply:review-information.dental-benefit-provincial-no-access')
+              <>{t('apply:review-information.dental-benefit-has-no-access')}</>
             )}
             <p className="mt-4">
               <InlineLink id="change-dental-benefits" to="/">
@@ -361,6 +353,7 @@ export default function ReviewInformation() {
         <h2 className="mb-5 mt-8 text-2xl font-semibold">{t('apply:review-information.submit-app-title')}</h2>
         <p className="mb-4">{t('apply:review-information.submit-p-proceed')}</p>
         <p className="mb-4">{t('apply:review-information.submit-p-false-info')}</p>
+        <p className="mb-4">{t('apply:review-information.submit-p-repayment')}</p>
         <fetcher.Form method="post" className="flex flex-wrap items-center gap-3">
           <ButtonLink to={`/apply/${id}/exit-application`} variant="alternative" disabled={isSubmitting}>
             {t('apply:review-information.exit-button')}
