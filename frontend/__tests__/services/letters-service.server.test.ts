@@ -15,7 +15,6 @@ vi.mock('~/utils/logging.server', () => ({
 vi.mock('~/utils/env.server', () => ({
   getEnv: vi.fn().mockReturnValue({
     INTEROP_API_BASE_URI: 'https://api.example.com',
-    CCT_API_BASE_URI: 'https://api.example.com',
     CCT_VAULT_COMMUNITY: 'SecurityReview',
     ENGLISH_LETTER_LANGUAGE_CODE: 1033,
     FRENCH_LETTER_LANGUAGE_CODE: 1036,
