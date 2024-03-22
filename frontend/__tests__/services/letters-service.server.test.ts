@@ -1,7 +1,7 @@
 import { HttpResponse } from 'msw';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { getInteropService } from '~/services/interop-service.server';
+import { getLettersService } from '~/services/letters-service.server';
 
 global.fetch = vi.fn();
 
@@ -22,13 +22,13 @@ vi.mock('~/utils/env.server', () => ({
   }),
 }));
 
-describe('interop-service.server tests', () => {
+describe('letters-service.server tests', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.resetModules();
   });
 
-  describe('getLetterInfoByClientId()', () => {
+  describe('getLetters()', () => {
     it('should return all letters found for a user', async () => {
       vi.mocked(fetch).mockResolvedValue(
         HttpResponse.json([
@@ -41,8 +41,8 @@ describe('interop-service.server tests', () => {
         ]),
       );
 
-      const interopService = getInteropService();
-      const letters = await interopService.getLetterInfoByClientId('userId', 'clientId');
+      const lettersService = getLettersService();
+      const letters = await lettersService.getLetters('userId', 'clientId');
       expect(letters).toEqual([
         {
           id: 'some-record-id',
@@ -56,8 +56,8 @@ describe('interop-service.server tests', () => {
     it('should throw error if response is not ok', async () => {
       vi.mocked(fetch).mockResolvedValue(new HttpResponse(null, { status: 500 }));
 
-      const interopService = getInteropService();
-      await expect(() => interopService.getLetterInfoByClientId('userId', 'clientId')).rejects.toThrowError();
+      const lettersService = getLettersService();
+      await expect(() => lettersService.getLetters('userId', 'clientId')).rejects.toThrowError();
     });
   });
 
@@ -91,8 +91,8 @@ describe('interop-service.server tests', () => {
         }),
       );
 
-      const interopService = getInteropService();
-      const letterTypes = await interopService.getAllLetterTypes();
+      const lettersService = getLettersService();
+      const letterTypes = await lettersService.getAllLetterTypes();
       expect(letterTypes).toEqual([
         {
           id: '775170000',

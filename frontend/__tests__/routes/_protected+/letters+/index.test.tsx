@@ -15,9 +15,9 @@ vi.mock('~/services/instrumentation-service.server', () => ({
   }),
 }));
 
-vi.mock('~/services/interop-service.server', () => ({
-  getInteropService: vi.fn().mockReturnValue({
-    getLetterInfoByClientId: vi.fn().mockResolvedValue([
+vi.mock('~/services/letters-service.server', () => ({
+  getLettersService: vi.fn().mockReturnValue({
+    getLetters: vi.fn().mockResolvedValue([
       { id: '1', referenceId: '001', issuedOn: '2024-12-25', name: 'ACC' },
       { id: '2', referenceId: '002', issuedOn: '2004-02-29', name: 'DEN' },
       { id: '3', referenceId: '003', issuedOn: undefined, name: 'DEN' },

@@ -13,7 +13,7 @@ import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
-import { getInteropService } from '~/services/interop-service.server';
+import { getLettersService } from '~/services/letters-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
@@ -46,7 +46,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const auditService = getAuditService();
   const instrumentationService = getInstrumentationService();
-  const interopService = getInteropService();
+  const lettersService = getLettersService();
   const raoidcService = await getRaoidcService();
   const sessionService = await getSessionService();
   const userService = getUserService();
@@ -56,8 +56,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const sortParam = new URL(request.url).searchParams.get('sort');
   const sortOrder = orderEnumSchema.catch('desc').parse(sortParam);
   const userId = await userService.getUserId();
-  const letters = await interopService.getLetterInfoByClientId(userId, 'clientId', sortOrder); // TODO where and what is clientId?
-  const letterTypes = (await interopService.getAllLetterTypes()).filter(({ id }) => letters.some(({ name }) => name === id));
+  const letters = await lettersService.getLetters(userId, 'clientId', sortOrder); // TODO where and what is clientId?
+  const letterTypes = (await lettersService.getAllLetterTypes()).filter(({ id }) => letters.some(({ name }) => name === id));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('letters:index.page-title') }) };
