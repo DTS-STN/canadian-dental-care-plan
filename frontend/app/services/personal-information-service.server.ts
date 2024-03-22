@@ -68,46 +68,40 @@ const personalInformationApiResponseSchema = z.object({
 
 type PersonalInformationApiResponse = z.infer<typeof personalInformationApiResponseSchema>;
 
-const personalInfoSchema = z.object({
-  clientInfoList: z
+const personalInfoDtoSchema = z.object({
+  applictantId: z.string().optional(),
+  clientId: z.string().optional(),
+  lastName: z.string().optional(),
+  firstName: z.string().optional(),
+  homeAddress: z
     .object({
-      id: z.string().optional(),
-      category: z.string().optional(),
-    })
-    .array()
-    .optional(),
-  personsNameList: z
-    .object({
-      lastName: z.string().optional(),
-      firstName: z.string().optional(),
-    })
-    .array()
-    .optional(),
-  contactInfo: z
-    .object({
-      emailAddress: z.string(),
-      phoneNumber: z.string(),
-      addressList: z
-        .object({
-          categoryCode: z.string(),
-          streetName: z.string(),
-          cityName: z.string(),
-          provinceName: z.string(),
-          countryName: z.string(),
-          postalCode: z.string(),
-        })
-        .array(),
+      streetName: z.string(),
+      cityName: z.string(),
+      provinceName: z.string().optional(),
+      countryName: z.string(),
+      postalCode: z.string().optional(),
     })
     .optional(),
+  mailingAddress: z
+    .object({
+      streetName: z.string(),
+      cityName: z.string(),
+      provinceName: z.string().optional(),
+      countryName: z.string(),
+      postalCode: z.string().optional(),
+    })
+    .optional(),
+  emailAddress: z.string().optional(),
+  phoneNumber: z.string().optional(),
   language: z
     .object({
-      languageCode: z.string(),
-      preferredIndicator: z.boolean(),
+      languageCode: z.string().optional(),
+      preferredIndicator: z.boolean().optional(),
     })
     .optional(),
 });
 
-export type PersonalInfo = z.infer<typeof personalInfoSchema>;
+export type PersonalInfo = z.infer<typeof personalInfoDtoSchema>;
 
 /**
  * Return a singleton instance (by means of memomization) of the personal-information service.
@@ -117,47 +111,12 @@ export const getPersonalInformationService = moize(createPersonalInformationServ
 function createPersonalInformationService() {
   const { INTEROP_API_BASE_URI } = getEnv();
 
-  function toPersonalInformation(personalnformationDto: PersonalInformationApiResponse): PersonalInfo {
-    return {
-      clientInfoList: personalnformationDto.Client.ClientIdentification
-        ? personalnformationDto.Client.ClientIdentification.map((clientInfoDto) => ({
-            id: clientInfoDto.IdentificationID,
-            category: clientInfoDto.IdentificationCategoryText,
-          }))
-        : [],
-      personsNameList: personalnformationDto.Client.PersonName
-        ? personalnformationDto.Client.PersonName.map((personName) => ({
-            lastName: personName.PersonSurName?.at(0) ? personName.PersonSurName.at(0) : '',
-            firstName: personName.PersonGivenName?.at(0) ? personName.PersonGivenName.at(0) : '',
-          }))
-        : [],
-      contactInfo: {
-        emailAddress: personalnformationDto.Client.PersonContactInformation ? personalnformationDto.Client.PersonContactInformation.EmailAddress.EmailAddressID : '',
-        phoneNumber: personalnformationDto.Client.PersonContactInformation ? personalnformationDto.Client.PersonContactInformation.TelephoneNumber.FullTelephoneNumber : '',
-        addressList: personalnformationDto.Client.PersonContactInformation
-          ? personalnformationDto.Client.PersonContactInformation.Address.map((address) => ({
-              categoryCode: address.AddressCategoryCode.ReferenceDataName,
-              streetName: address.AddressStreet.StreetName,
-              cityName: address.AddressCityName,
-              provinceName: address.AddressProvince.ProvinceName,
-              countryName: address.AddressCountry.CountryName,
-              postalCode: address.AddressPostalCode,
-            }))
-          : [],
-      },
-      language: {
-        languageCode: personalnformationDto.Client.PersonLanguage ? personalnformationDto.Client.PersonLanguage.LanguageCode.ReferenceDataName : '',
-        preferredIndicator: personalnformationDto.Client.PersonLanguage ? personalnformationDto.Client.PersonLanguage.PreferredIndicator : false,
-      },
-    };
+  function createClientInfo(personalSinId: string) {
+    return { Client: { PersonSINIdentification: { IdentificationID: personalSinId } } };
   }
 
-  function createClientInfo(userId: string) {
-    return { Client: { PersonSINIdentification: { IdentificationID: userId } } };
-  }
-
-  async function getPersonalInformation(clientId: string) {
-    const curentPersonalInformation = createClientInfo(clientId);
+  async function getPersonalInformation(personalSinId: string) {
+    const curentPersonalInformation = createClientInfo(personalSinId);
 
     const url = `${INTEROP_API_BASE_URI}/personal-information/`;
     const response = await fetch(url, {
@@ -166,7 +125,7 @@ function createPersonalInformationService() {
       body: JSON.stringify(curentPersonalInformation),
     });
 
-    if (response.ok) {
+    if (response.status == 200) {
       const responseBody = await response.json();
       return toPersonalInformation(personalInformationApiResponseSchema.parse(responseBody));
     }
@@ -183,6 +142,43 @@ function createPersonalInformationService() {
     });
 
     throw new Error(`Failed to fetch data. address: ${response.status}, Status Text: ${response.statusText}`);
+  }
+
+  function toPersonalInformation(personalInformationApiResponse: PersonalInformationApiResponse): PersonalInfo {
+    const addressList = personalInformationApiResponse.Client.PersonContactInformation?.Address;
+    const homeAddressList = addressList?.filter((address) => address.AddressCategoryCode.ReferenceDataName == 'Home');
+    const mailingAddressList = addressList?.filter((address) => address.AddressCategoryCode.ReferenceDataName == 'Mailing');
+
+    return {
+      applictantId: personalInformationApiResponse.Client.ClientIdentification ? personalInformationApiResponse.Client.ClientIdentification.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Applicant ID').at(0)?.IdentificationID : '',
+      clientId: personalInformationApiResponse.Client.ClientIdentification ? personalInformationApiResponse.Client.ClientIdentification.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Client Number').at(0)?.IdentificationID : '',
+      firstName: personalInformationApiResponse.Client.PersonName ? personalInformationApiResponse.Client.PersonName.at(0)?.PersonGivenName?.at(0) : '',
+      lastName: personalInformationApiResponse.Client.PersonName ? personalInformationApiResponse.Client.PersonName.at(0)?.PersonSurName?.at(0) : '',
+      emailAddress: personalInformationApiResponse.Client.PersonContactInformation ? personalInformationApiResponse.Client.PersonContactInformation.EmailAddress.EmailAddressID : '',
+      phoneNumber: personalInformationApiResponse.Client.PersonContactInformation ? personalInformationApiResponse.Client.PersonContactInformation.TelephoneNumber.FullTelephoneNumber : '',
+      homeAddress: homeAddressList
+        ?.map((aHomeAddress) => ({
+          streetName: aHomeAddress.AddressStreet.StreetName,
+          cityName: aHomeAddress.AddressCityName,
+          provinceName: aHomeAddress.AddressProvince.ProvinceName,
+          countryName: aHomeAddress.AddressCountry.CountryName,
+          postalCode: aHomeAddress.AddressPostalCode,
+        }))
+        .at(0),
+      mailingAddress: mailingAddressList
+        ?.map((aMailingAddress) => ({
+          streetName: aMailingAddress.AddressStreet.StreetName,
+          cityName: aMailingAddress.AddressCityName,
+          provinceName: aMailingAddress.AddressProvince.ProvinceName,
+          countryName: aMailingAddress.AddressCountry.CountryName,
+          postalCode: aMailingAddress.AddressPostalCode,
+        }))
+        .at(0),
+      language: {
+        languageCode: personalInformationApiResponse.Client.PersonLanguage?.LanguageCode.ReferenceDataName,
+        preferredIndicator: personalInformationApiResponse.Client.PersonLanguage?.PreferredIndicator,
+      },
+    };
   }
 
   return { getPersonalInformation };

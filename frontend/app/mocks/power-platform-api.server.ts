@@ -9,7 +9,7 @@ import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('power-platform-api.server');
 
-const clientIdSchema = z.object({
+const sinIdSchema = z.object({
   Client: z.object({
     PersonSINIdentification: z.object({
       IdentificationID: z.string(),
@@ -59,8 +59,8 @@ export function getPowerPlatformApiMockHandlers() {
     //
     http.post('https://api.example.com/personal-information/', async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
-      const parsedClientId = clientIdSchema.parse(await request.json()).Client.PersonSINIdentification.IdentificationID;
-      const peronalInformationEntity = getPersonalInformation(parsedClientId);
+      const parsedSinId = sinIdSchema.parse(await request.json()).Client.PersonSINIdentification.IdentificationID;
+      const peronalInformationEntity = getPersonalInformation(parsedSinId);
 
       if (!peronalInformationEntity) {
         throw new HttpResponse('Client Not found', { status: 204, headers: { 'Content-Type': 'text/plain' } });
@@ -222,13 +222,13 @@ function toUserPatchDocument({ homeAddress, mailingAddress, phoneNumber, preferr
 /**
  * Retrieves a user entity based on the provided user ID.
  *
- * @param id - The user ID to look up in the database.
+ * @param personalSinId - Sin to look up in the database.
  * @returns The user entity if found, otherwise throws a 404 error.
  */
-function getPersonalInformation(clientId: string) {
-  return !clientId
+function getPersonalInformation(personalSinId: string) {
+  return !personalSinId
     ? undefined
     : db.personalInformation.findFirst({
-        where: { clientIdentificationID: { equals: clientId } },
+        where: { sinIdentification: { equals: personalSinId } },
       });
 }
