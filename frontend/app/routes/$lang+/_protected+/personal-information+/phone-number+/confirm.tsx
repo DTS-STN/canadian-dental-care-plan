@@ -14,10 +14,13 @@ import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+
+const log = getLogger('locale-utils.server');
 
 export const handle = {
   breadcrumbs: [
@@ -43,24 +46,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   await raoidcService.handleSessionValidation(request);
 
   const userId = await userService.getUserId();
-
-  if (!userId) {
-    instrumentationService.countHttpStatus('phone-number.confirm', 302);
-    return redirectWithLocale(request, '/');
-  }
-
   const userInfo = await userService.getUserInfo(userId);
   if (!userInfo) {
-    instrumentationService.countHttpStatus('phone-number.confirm', 302);
-    return redirectWithLocale(request, '/');
+    instrumentationService.countHttpStatus('phone-number.confirm', 404);
+    throw new Response(null, { status: 404 });
   }
 
   const session = await sessionService.getSession(request);
   if (!session.has('newPhoneNumber')) {
     instrumentationService.countHttpStatus('phone-number.confirm', 302);
-    return redirectWithLocale(request, '/');
+    log.debug('No newPhoneNumber session found; redirecting to phone-number/edit');
+    return redirectWithLocale(request, '/personal-information/phone-number/edit');
   }
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:phone-number.confirm.page-title') }) };
 
@@ -79,20 +76,10 @@ export async function action({ request }: ActionFunctionArgs) {
   const session = await sessionService.getSession(request);
 
   const userId = await userService.getUserId();
-  if (!userId) {
-    instrumentationService.countHttpStatus('phone-number.confirm', 302);
-    return redirectWithLocale(request, '/');
-  }
-
   const userInfo = await userService.getUserInfo(userId);
   if (!userInfo) {
-    instrumentationService.countHttpStatus('phone-number.confirm', 302);
-    return redirectWithLocale(request, '/');
-  }
-
-  if (!session.has('newPhoneNumber')) {
-    instrumentationService.countHttpStatus('phone-number.confirm', 302);
-    return redirectWithLocale(request, '/');
+    instrumentationService.countHttpStatus('phone-number.confirm', 404);
+    throw new Response(null, { status: 404 });
   }
 
   await userService.updateUserInfo(userId, { phoneNumber: session.get('newPhoneNumber') });
