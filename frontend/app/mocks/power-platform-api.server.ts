@@ -65,28 +65,57 @@ export function getPowerPlatformApiMockHandlers() {
       if (!peronalInformationEntity) {
         throw new HttpResponse('Client Not found', { status: 204, headers: { 'Content-Type': 'text/plain' } });
       }
+      const listOfClientId = [];
+      if (peronalInformationEntity.applicantId) {
+        listOfClientId.push({ IdentificationID: peronalInformationEntity.applicantId, IdentificationCategoryText: 'Applicant ID' });
+      }
+      if (peronalInformationEntity.clientNumber) {
+        listOfClientId.push({ IdentificationID: peronalInformationEntity.clientNumber, IdentificationCategoryText: 'Client Number' });
+      }
 
-      const listOfClientId = [{ IdentificationID: peronalInformationEntity.clientIdentificationID, IdentificationCategoryText: peronalInformationEntity.clientIdentificationCategory }];
-      const nameInfoList = [{ PersonSurName: [peronalInformationEntity.lastName], PersonGivenName: [peronalInformationEntity.firstName] }];
-      const addressList = [
-        {
+      const addressList = [];
+      if (peronalInformationEntity.homeAddressStreet) {
+        addressList.push({
           AddressCategoryCode: {
-            ReferenceDataName: peronalInformationEntity.addressCategoryCode,
+            ReferenceDataName: 'Home',
           },
           AddressStreet: {
-            StreetName: peronalInformationEntity.addressStreet,
+            StreetName: peronalInformationEntity.homeAddressStreet,
           },
-          AddressSecondaryUnitText: peronalInformationEntity.addressSecondaryUnitText,
-          AddressCityName: peronalInformationEntity.addressCityName,
+          AddressSecondaryUnitText: peronalInformationEntity.homeAddressSecondaryUnitText,
+          AddressCityName: peronalInformationEntity.homeAddressCityName,
           AddressProvince: {
-            ProvinceName: peronalInformationEntity.addressProvince,
+            ProvinceName: peronalInformationEntity.homeAddressProvince,
           },
           AddressCountry: {
-            CountryName: peronalInformationEntity.addressCountryName,
+            CountryName: peronalInformationEntity.homeAddressCountryName,
+            CountryCode: peronalInformationEntity.homeAddressCountryCode,
           },
-          AddressPostalCode: peronalInformationEntity.addressPostalCode,
-        },
-      ];
+          AddressPostalCode: peronalInformationEntity.homeAddressPostalCode,
+        });
+      }
+      if (peronalInformationEntity.mailingAddressStreet) {
+        addressList.push({
+          AddressCategoryCode: {
+            ReferenceDataName: 'Mailing',
+          },
+          AddressStreet: {
+            StreetName: peronalInformationEntity.mailingAddressStreet,
+          },
+          AddressSecondaryUnitText: peronalInformationEntity.mailingAddressSecondaryUnitText,
+          AddressCityName: peronalInformationEntity.mailingAddressCityName,
+          AddressProvince: {
+            ProvinceName: peronalInformationEntity.mailingAddressProvince,
+          },
+          AddressCountry: {
+            CountryName: peronalInformationEntity.mailingAddressCountryName,
+            CountryCode: peronalInformationEntity.mailingAddressCountryCode,
+          },
+          AddressPostalCode: peronalInformationEntity.mailingAddressPostalCode,
+        });
+      }
+
+      const nameInfoList = [{ PersonSurName: [peronalInformationEntity.lastName], PersonGivenName: [peronalInformationEntity.firstName] }];
 
       return HttpResponse.json({
         Client: {

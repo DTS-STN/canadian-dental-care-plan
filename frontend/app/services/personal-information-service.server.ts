@@ -79,6 +79,7 @@ const personalInfoDtoSchema = z.object({
       cityName: z.string(),
       provinceName: z.string().optional(),
       countryName: z.string(),
+      countryCode: z.string().optional(),
       postalCode: z.string().optional(),
     })
     .optional(),
@@ -88,6 +89,7 @@ const personalInfoDtoSchema = z.object({
       cityName: z.string(),
       provinceName: z.string().optional(),
       countryName: z.string(),
+      countryCode: z.string().optional(),
       postalCode: z.string().optional(),
     })
     .optional(),
@@ -106,6 +108,7 @@ export type PersonalInfo = z.infer<typeof personalInfoDtoSchema>;
 /**
  * Return a singleton instance (by means of memomization) of the personal-information service.
  */
+
 export const getPersonalInformationService = moize(createPersonalInformationService, { onCacheAdd: () => log.info('Creating new user service') });
 
 function createPersonalInformationService() {
@@ -151,17 +154,18 @@ function createPersonalInformationService() {
 
     return {
       applictantId: personalInformationApiResponse.Client.ClientIdentification ? personalInformationApiResponse.Client.ClientIdentification.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Applicant ID').at(0)?.IdentificationID : '',
-      clientId: personalInformationApiResponse.Client.ClientIdentification ? personalInformationApiResponse.Client.ClientIdentification.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Client Number').at(0)?.IdentificationID : '',
-      firstName: personalInformationApiResponse.Client.PersonName ? personalInformationApiResponse.Client.PersonName.at(0)?.PersonGivenName?.at(0) : '',
-      lastName: personalInformationApiResponse.Client.PersonName ? personalInformationApiResponse.Client.PersonName.at(0)?.PersonSurName?.at(0) : '',
-      emailAddress: personalInformationApiResponse.Client.PersonContactInformation ? personalInformationApiResponse.Client.PersonContactInformation.EmailAddress.EmailAddressID : '',
-      phoneNumber: personalInformationApiResponse.Client.PersonContactInformation ? personalInformationApiResponse.Client.PersonContactInformation.TelephoneNumber.FullTelephoneNumber : '',
+      clientId: personalInformationApiResponse.Client.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Client Number').at(0)?.IdentificationID,
+      firstName: personalInformationApiResponse.Client.PersonName?.at(0)?.PersonGivenName?.at(0),
+      lastName: personalInformationApiResponse.Client.PersonName?.at(0)?.PersonSurName?.at(0),
+      emailAddress: personalInformationApiResponse.Client.PersonContactInformation?.EmailAddress.EmailAddressID,
+      phoneNumber: personalInformationApiResponse.Client.PersonContactInformation?.TelephoneNumber.FullTelephoneNumber,
       homeAddress: homeAddressList
         ?.map((aHomeAddress) => ({
           streetName: aHomeAddress.AddressStreet.StreetName,
           cityName: aHomeAddress.AddressCityName,
           provinceName: aHomeAddress.AddressProvince.ProvinceName,
           countryName: aHomeAddress.AddressCountry.CountryName,
+          countryCode: aHomeAddress.AddressCountry.CountryCode,
           postalCode: aHomeAddress.AddressPostalCode,
         }))
         .at(0),
@@ -171,6 +175,7 @@ function createPersonalInformationService() {
           cityName: aMailingAddress.AddressCityName,
           provinceName: aMailingAddress.AddressProvince.ProvinceName,
           countryName: aMailingAddress.AddressCountry.CountryName,
+          countryCode: aMailingAddress.AddressCountry.CountryCode,
           postalCode: aMailingAddress.AddressPostalCode,
         }))
         .at(0),
