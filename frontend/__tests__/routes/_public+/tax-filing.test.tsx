@@ -8,7 +8,7 @@ vi.mock('~/routes-flow/apply-flow', () => ({
   getApplyFlow: vi.fn().mockReturnValue({
     loadState: vi.fn().mockReturnValue({
       id: '123',
-      state: { taxFiling2023: 'TRUE' },
+      state: { taxFiling2023: 'yes' },
     }),
     saveState: vi.fn().mockReturnValue({
       headers: {
@@ -46,7 +46,7 @@ describe('_public.apply.id.tax-filing', () => {
       expect(data).toEqual({
         id: '123',
         meta: {},
-        state: 'TRUE',
+        defaultState: 'yes',
       });
     });
   });
@@ -61,12 +61,12 @@ describe('_public.apply.id.tax-filing', () => {
 
       const data = await response.json();
       expect(response.status).toBe(200);
-      expect(data.errors._errors.length).toBeGreaterThan(0);
+      expect(data.errors.length).toBeGreaterThan(0);
     });
 
     it('should redirect to date of birth page if tax filing is completed', async () => {
       const formData = new FormData();
-      formData.append('taxFiling2023', 'TRUE');
+      formData.append('taxFiling2023', 'yes');
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }),
@@ -80,7 +80,7 @@ describe('_public.apply.id.tax-filing', () => {
 
     it('should redirect to error page if tax filing is incompleted', async () => {
       const formData = new FormData();
-      formData.append('taxFiling2023', 'FALSE');
+      formData.append('taxFiling2023', 'no');
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }),

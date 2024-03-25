@@ -180,7 +180,7 @@
         "no": "No"
       },
       "error-message": {
-        "Required": "Tax filing must be provided"
+        "tax-filing-required": "The question that you have filed your tax return for 2023 and have received your Notice of Assessment is required."
       },
       "back-btn": "Back",
       "continue-btn": "Continue"

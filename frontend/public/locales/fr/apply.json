@@ -181,7 +181,7 @@
         "no": "Non"
       },
       "error-message": {
-        "Required": "La déclaration de revenus doit être fournie"
+        "tax-filing-required": "La question selon laquelle vous avez produit votre déclaration de revenus pour 2023 et avez reçu votre avis de cotisation est obligatoire."
       },
       "back-btn": "Retour",
       "continue-btn": "Continuer"
