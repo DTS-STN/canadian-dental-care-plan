@@ -83,8 +83,6 @@ export default function ApplyFlowDateOfBirth() {
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
 
-  console.log(editMode);
-
   // Keys order should match the input IDs order.
   const errorMessages = useMemo(
     () => ({
