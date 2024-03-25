@@ -46,6 +46,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     !state.dentalBenefits ||
     !state.dentalInsurance ||
     !state.personalInformation ||
+    !state.submissionInfo ||
     !state.taxFiling2023 ||
     !state.typeOfApplication) {
     throw new Error(`Incomplete application "${id}" state!`);
@@ -114,26 +115,36 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:confirm.page-title') }) };
 
-  return json({ dentalInsurance, homeAddressInfo, mailingAddressInfo, meta, spouseInfo, userInfo });
+  return json({
+    dentalInsurance,
+    homeAddressInfo,
+    mailingAddressInfo,
+    meta,
+    spouseInfo,
+    submissionInfo: state.submissionInfo,
+    userInfo,
+  });
 }
 
 export default function ApplyFlowConfirm() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo } = useLoaderData<typeof loader>();
 
   const mscaLink = <InlineLink to={t('confirm.msca-link')} />;
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} />;
   const cdcpLink = <InlineLink to={t('confirm.cdcp-checker-link')} />;
   const moreInfoLink = <InlineLink to={t('confirm.more-info-link')} />;
 
-  // TODO application code (XXX-XXX-XXX) needs to be pulled from somewhere
   return (
     <div className="max-w-prose">
       <ContextualAlert type="success">
-        <h2 className="mb-1 text-xl font-semibold">{t('confirm.alert-heading')}</h2>
-        <div className="ml-0.5 text-lg">
-          <p>{t('confirm.app-code-is')}</p>
-          <span className="font-semibold">XXX-XXX-XXX</span>
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold">{t('confirm.alert-heading')}</h2>
+          <p>
+            {t('confirm.app-code-is')}
+            <br />
+            <strong>{submissionInfo.confirmationCode}</strong>
+          </p>
           <p>{t('confirm.make-note')}</p>
         </div>
       </ContextualAlert>
@@ -172,35 +183,37 @@ export default function ApplyFlowConfirm() {
 
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.application-summ')}</h2>
       <UnorderedList term={t('confirm.application-code')}>
-        <li className="my-1">XXX-XXX-XXX</li>
+        <li>
+          <strong>{submissionInfo.confirmationCode}</strong>
+        </li>
       </UnorderedList>
       <UnorderedList term={t('confirm.applicant-title')}>
-        <li className="my-1 capitalize">{t('confirm.full-name', { name: `${userInfo.firstName} ${userInfo.lastName}` })}</li>
-        <li className="my-1">{t('confirm.dob', { dob: userInfo.birthday })}</li>
-        <li className="my-1">{t('confirm.sin', { sin: formatSin(userInfo.sin) })}</li>
-        <li className="my-1">{t('confirm.marital-status', { status: userInfo.martialStatus })}</li>
+        <li className="capitalize">{t('confirm.full-name', { name: `${userInfo.firstName} ${userInfo.lastName}` })}</li>
+        <li>{t('confirm.dob', { dob: userInfo.birthday })}</li>
+        <li>{t('confirm.sin', { sin: formatSin(userInfo.sin) })}</li>
+        <li>{t('confirm.marital-status', { status: userInfo.martialStatus })}</li>
       </UnorderedList>
       {spouseInfo && (
         <UnorderedList term={t('confirm.spouse-info')}>
-          <li className="my-1 capitalize">{t('confirm.full-name', { name: `${spouseInfo.firstName} ${spouseInfo.lastName}` })}</li>
-          <li className="my-1">{t('confirm.dob', { dob: spouseInfo.birthday })}</li>
-          <li className="my-1">{t('confirm.sin', { sin: formatSin(spouseInfo.sin) })}</li>
-          <li className="my-1">{t('confirm.consent')}</li>
+          <li className="capitalize">{t('confirm.full-name', { name: `${spouseInfo.firstName} ${spouseInfo.lastName}` })}</li>
+          <li>{t('confirm.dob', { dob: spouseInfo.birthday })}</li>
+          <li>{t('confirm.sin', { sin: formatSin(spouseInfo.sin) })}</li>
+          <li>{t('confirm.consent')}</li>
         </UnorderedList>
       )}
       <UnorderedList term={t('confirm.contact-info')}>
-        <li className="my-1">{t('confirm.phone-number', { phone: userInfo.phoneNumber })}</li>
-        <li className="my-1">{t('confirm.alt-phone-number', { altPhone: userInfo.altPhoneNumber })}</li>
-        <li className="my-1 capitalize">{t('confirm.mailing', { address: mailingAddressInfo.address })}</li>
-        <li className="my-1 capitalize">{t('confirm.home', { address: homeAddressInfo.address })}</li>
+        <li>{t('confirm.phone-number', { phone: userInfo.phoneNumber })}</li>
+        <li>{t('confirm.alt-phone-number', { altPhone: userInfo.altPhoneNumber })}</li>
+        <li className="capitalize">{t('confirm.mailing', { address: mailingAddressInfo.address })}</li>
+        <li className="capitalize">{t('confirm.home', { address: homeAddressInfo.address })}</li>
       </UnorderedList>
       <UnorderedList term={t('confirm.comm-prefs')}>
-        <li className="my-1 capitalize">{t('confirm.comm-pref', { pref: userInfo.communicationPreference })}</li>
-        <li className="my-1 capitalize">{t('confirm.lang-pref', { pref: userInfo.preferredLanguage })}</li>
+        <li className="capitalize">{t('confirm.comm-pref', { pref: userInfo.communicationPreference })}</li>
+        <li className="capitalize">{t('confirm.lang-pref', { pref: userInfo.preferredLanguage })}</li>
       </UnorderedList>
       <UnorderedList term={t('confirm.dental-insurance')}>
-        <li className="my-1">{t('confirm.dental-private', { access: dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no') })}</li>
-        <li className="my-1">{t('confirm.dental-public', { access: dentalInsurance.selectedBenefits })}</li>
+        <li>{t('confirm.dental-private', { access: dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no') })}</li>
+        <li>{t('confirm.dental-public', { access: dentalInsurance.selectedBenefits })}</li>
       </UnorderedList>
 
       <button
@@ -219,8 +232,8 @@ export default function ApplyFlowConfirm() {
 function UnorderedList({ children, term }: { children: ReactNode; term: string }) {
   return (
     <>
-      <h3 className="mt-4 text-lg font-semibold">{term}</h3>
-      <ul className="ml-6 list-disc">{children}</ul>
+      <h3 className="my-4 text-lg font-semibold">{term}</h3>
+      <ul className="list-disc space-y-1 pl-7">{children}</ul>
     </>
   );
 }

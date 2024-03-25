@@ -7,6 +7,7 @@ import { useFetcher, useLoaderData } from '@remix-run/react';
 import { faSpinner, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { parse } from 'date-fns';
+import { randomBytes } from 'node:crypto';
 import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../../page-ids.json';
@@ -23,6 +24,22 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
+
+/**
+ * Represents the state of an application submission, holding data such as confirmation code and submission timestamp.
+ */
+export interface SubmissionInfoState {
+  /**
+   * The confirmation code associated with the application submission.
+   */
+  confirmationCode: string;
+
+  /**
+   * The UTC date and time when the application was submitted.
+   * Format: ISO 8601 string (e.g., "YYYY-MM-DDTHH:mm:ss.sssZ")
+   */
+  submittedOn: string;
+}
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -137,14 +154,25 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
 
-  // TODO if the state is cleared here, the confirmation page can't access the state to display information
-  // const sessionResponseInit = await applyFlow.clearState({ request, params });
+  // prettier-ignore
+  if (!state.applicantInformation ||
+    !state.communicationPreferences ||
+    !state.dateOfBirth ||
+    !state.dentalBenefits ||
+    !state.dentalInsurance ||
+    !state.personalInformation ||
+    !state.taxFiling2023 ||
+    !state.typeOfApplication) {
+    throw new Error(`Incomplete application "${id}" state!`);
+  }
 
-  const sessionResponseInit = await applyFlow.saveState({
-    request,
-    params,
-    state,
-  });
+  // TODO submit to the API and grab the confirmation code from the response
+  const submissionInfo: SubmissionInfoState = {
+    confirmationCode: `${randomBytes(4).toString('hex')}-${randomBytes(4).toString('hex')}-${randomBytes(4).toString('hex')}`.toUpperCase(),
+    submittedOn: new Date().toISOString(),
+  };
+
+  const sessionResponseInit = await applyFlow.saveState({ request, params, state: { submissionInfo } });
 
   return redirectWithLocale(request, `/apply/${id}/confirmation`, sessionResponseInit);
 }
