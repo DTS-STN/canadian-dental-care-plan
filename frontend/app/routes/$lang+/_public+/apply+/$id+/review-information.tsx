@@ -24,9 +24,7 @@ import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
-export interface ReviewInformationState {
-  editMode: boolean;
-}
+export type ReviewInformationState = boolean;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -188,7 +186,7 @@ export default function ReviewInformation() {
           <DescriptionListItem term={t('apply:review-information.dob-title')}>
             {userInfo.birthday}
             <p className="mt-4">
-              <InlineLink id="change-date-of-birth" to={`/apply/${id}/date-of-birth`} state={{ editMode: true }}>
+              <InlineLink id="change-date-of-birth" to={{ pathname: `/apply/${id}/date-of-birth` }} state={{ editMode: true }}>
                 {t('apply:review-information.dob-change')}
               </InlineLink>
             </p>
@@ -325,7 +323,7 @@ export default function ReviewInformation() {
           <DescriptionListItem term={t('apply:review-information.dental-insurance-title')}>
             {dentalInsurance === 'yes' ? t('apply:review-information.dental-insurance-has-access') : t('apply:review-information.dental-insurance-has-no-access')}
             <p className="mt-4">
-              <InlineLink id="change-access-dental" to={`/apply/${id}/federal-provincial-territorial-benefits`} state={{ editMode: true }}>
+              <InlineLink id="change-access-dental" to={`/apply/${id}/dental-insurance`} state={{ editMode: true }}>
                 {t('apply:review-information.dental-insurance-change')}
               </InlineLink>
             </p>

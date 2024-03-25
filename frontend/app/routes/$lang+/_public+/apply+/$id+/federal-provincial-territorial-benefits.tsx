@@ -62,7 +62,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id, state } = await applyFlow.loadState({ request, params });
+  const { id } = await applyFlow.loadState({ request, params });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formData = await request.formData();
@@ -129,7 +129,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     state: { dentalBenefits: parsedDataResult.data },
   });
 
-  return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/review-information`, sessionResponseInit);
+  return redirectWithLocale(request, `/apply/${id}/review-information`, sessionResponseInit);
 }
 
 export default function AccessToDentalInsuranceQuestion() {

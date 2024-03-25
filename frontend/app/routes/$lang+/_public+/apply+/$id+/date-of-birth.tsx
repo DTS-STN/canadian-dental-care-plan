@@ -70,10 +70,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const age = differenceInYears(new Date(), parseDateOfBirth);
 
   if (age < 65) {
-    return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/dob-eligibility`, sessionResponseInit);
+    return redirectWithLocale(request, `/apply/${id}/dob-eligibility`, sessionResponseInit);
   }
 
-  return redirectWithLocale(request, `/apply/${id}/applicant-information`, sessionResponseInit);
+  return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/applicant-information`, sessionResponseInit);
 }
 
 export default function ApplyFlowDateOfBirth() {
@@ -82,6 +82,8 @@ export default function ApplyFlowDateOfBirth() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
+
+  console.log(editMode);
 
   // Keys order should match the input IDs order.
   const errorMessages = useMemo(
