@@ -251,7 +251,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
       defaultChecked: state && state.preferredMethod !== communicationMethodEmail.id,
       append: nonEmailMethodChecked && (
         <div className="mb-6 grid gap-6 md:grid-cols-2">
-          <p className="col-span-2" id="future-email-note">
+          <p className="md:col-span-2" id="future-email-note">
             {t('apply:communication-preference.future-email-note')}
           </p>
           <InputField id="emailForFuture" type="email" className="w-full" label={t('apply:communication-preference.future-email')} name="emailForFuture" errorMessage={errorMessages.emailForFuture} defaultValue={state?.emailForFuture} />
