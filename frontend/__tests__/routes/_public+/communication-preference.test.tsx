@@ -38,8 +38,8 @@ vi.mock('~/services/lookup-service.server', () => ({
       },
       {
         id: 'mail',
-        nameEn: 'Postal mail',
-        nameFr: 'Courrier postal',
+        nameEn: 'Mail',
+        nameFr: 'Par la poste',
       },
     ]),
   }),
@@ -86,8 +86,8 @@ describe('_public.apply.id.communication-preference', () => {
           },
           {
             id: 'mail',
-            nameEn: 'Postal mail',
-            nameFr: 'Courrier postal',
+            nameEn: 'Mail',
+            nameFr: 'Par la poste',
           },
         ],
         preferredLanguages: [

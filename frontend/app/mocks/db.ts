@@ -174,8 +174,8 @@ db.preferredCommunicationMethod.create({
 
 db.preferredCommunicationMethod.create({
   id: 'mail',
-  nameEn: 'Postal mail',
-  nameFr: 'Courrier postal',
+  nameEn: 'Mail',
+  nameFr: 'Par la poste',
 });
 
 db.accessToDentalInsurance.create({
