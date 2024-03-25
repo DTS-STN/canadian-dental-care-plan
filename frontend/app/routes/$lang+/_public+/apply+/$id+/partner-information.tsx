@@ -55,7 +55,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:partner-information.page-title') }) };
 
-  return json({ id, meta, defaultState: state.partnerInformation });
+  return json({ id, meta, defaultState: state.partnerInformation, editMode: state.editMode });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -96,12 +96,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   const sessionResponseInit = await applyFlow.saveState({ request, params, state: { partnerInformation: parsedDataResult.data } });
-  return redirectWithLocale(request, `/apply/${id}/personal-information`, sessionResponseInit);
+  return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/personal-information`, sessionResponseInit);
 }
 
 export default function ApplyFlowApplicationInformation() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { id, defaultState } = useLoaderData<typeof loader>();
+  const { id, defaultState, editMode } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
@@ -186,7 +186,7 @@ export default function ApplyFlowApplicationInformation() {
             </InputCheckbox>
           </div>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" to={`/apply/${id}/applicant-information`} disabled={isSubmitting}>
+            <ButtonLink id="back-button" to={editMode ? `/apply/${id}/review-information` : `/apply/${id}/applicant-information`} disabled={isSubmitting}>
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('apply:partner-information.back-btn')}
             </ButtonLink>

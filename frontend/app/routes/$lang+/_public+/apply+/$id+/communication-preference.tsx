@@ -71,13 +71,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:communication-preference.page-title') }) };
 
-  return json({ communicationMethodEmail, id, meta, preferredCommunicationMethods, preferredLanguages, defaultState: state.communicationPreferences });
+  return json({ communicationMethodEmail, id, meta, preferredCommunicationMethods, preferredLanguages, defaultState: state.communicationPreferences, editMode: state.editMode });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
   const applyFlow = getApplyFlow();
-  const { id } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ request, params });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formSchema: z.ZodType<CommunicationPreferencesState> = z
@@ -142,12 +142,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   const sessionResponseInit = await applyFlow.saveState({ request, params, state: { communicationPreferences: parsedDataResult.data } });
-  return redirectWithLocale(request, `/apply/${id}/dental-insurance`, sessionResponseInit);
+  return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/dental-insurance`, sessionResponseInit);
 }
 
 export default function ApplyFlowCommunicationPreferencePage() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { id, communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState } = useLoaderData<typeof loader>();
+  const { id, communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState, editMode } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [preferredMethodValue, setPreferredMethodValue] = useState(defaultState?.preferredMethod ?? '');
@@ -262,7 +262,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             )}
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" to={`/apply/${id}/personal-information`} disabled={isSubmitting}>
+            <ButtonLink id="back-button" to={editMode ? `/apply/${id}/review-information` : `/apply/${id}/personal-information`} disabled={isSubmitting}>
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('apply:communication-preference.back')}
             </ButtonLink>

@@ -50,12 +50,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:applicant-information.page-title') }) };
 
-  return json({ id, maritalStatuses, meta, defaultState: state.applicantInformation });
+  return json({ id, maritalStatuses, meta, defaultState: state.applicantInformation, editMode: state.editMode });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ request, params });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -85,15 +85,15 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const sessionResponseInit = await applyFlow.saveState({ request, params, state: { applicantInformation: parsedDataResult.data }, remove: !['MARRIED', 'COMMONLAW'].includes(parsedDataResult.data.maritalStatus) ? 'partnerInformation' : undefined });
 
   if (['MARRIED', 'COMMONLAW'].includes(parsedDataResult.data.maritalStatus)) {
-    return redirectWithLocale(request, `/apply/${id}/partner-information`, sessionResponseInit);
+    return redirectWithLocale(request, state.editMode && state.partnerInformation ? `/apply/${id}/review-information` : `/apply/${id}/partner-information`, sessionResponseInit);
   }
 
-  return redirectWithLocale(request, `/apply/${id}/personal-information`, sessionResponseInit);
+  return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/personal-information`, sessionResponseInit);
 }
 
 export default function ApplyFlowApplicationInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { id, defaultState, maritalStatuses } = useLoaderData<typeof loader>();
+  const { id, defaultState, maritalStatuses, editMode } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
@@ -172,7 +172,7 @@ export default function ApplyFlowApplicationInformation() {
             />
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" to={`/apply/${id}/date-of-birth`} disabled={isSubmitting}>
+            <ButtonLink id="back-button" to={editMode ? `/apply/${id}/review-information` : `/apply/${id}/date-of-birth`} disabled={isSubmitting}>
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('applicant-information.back-btn')}
             </ButtonLink>

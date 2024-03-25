@@ -57,12 +57,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:dental-benefits.title') }) };
 
-  return json({ federalDentalBenefits, federalSocialPrograms, id, meta, provincialTerritorialDentalBenefits, provincialTerritorialSocialPrograms, regions, state: state.dentalBenefits });
+  return json({ federalDentalBenefits, federalSocialPrograms, id, meta, provincialTerritorialDentalBenefits, provincialTerritorialSocialPrograms, regions, state: state.dentalBenefits, editMode: state.editMode });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ request, params });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formData = await request.formData();
@@ -129,12 +129,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
     state: { dentalBenefits: parsedDataResult.data },
   });
 
-  return redirectWithLocale(request, `/apply/${id}/review-information`, sessionResponseInit);
+  return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/review-information`, sessionResponseInit);
 }
 
 export default function AccessToDentalInsuranceQuestion() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, state, id } = useLoaderData<typeof loader>();
+  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, state, id, editMode } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [checkedFederalOption, setCheckedFederalOption] = useState(state?.federalBenefit);
@@ -293,7 +293,7 @@ export default function AccessToDentalInsuranceQuestion() {
             )}
           </section>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <ButtonLink to={`/apply/${id}/dental-insurance`} disabled={isSubmitting}>
+            <ButtonLink to={editMode ? `/apply/${id}/review-information` : `/apply/${id}/dental-insurance`} disabled={isSubmitting}>
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('dental-benefits.button.back')}
             </ButtonLink>
