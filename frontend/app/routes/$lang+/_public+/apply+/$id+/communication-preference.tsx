@@ -225,6 +225,9 @@ export default function ApplyFlowCommunicationPreferencePage() {
       defaultChecked: defaultState?.preferredMethod === communicationMethodEmail.id,
       append: emailMethodChecked && (
         <div className="mb-6 grid gap-6 md:grid-cols-2">
+          <p className="md:col-span-2" id="email-note">
+            {t('apply:communication-preference.email-note')}
+          </p>
           <InputField id="email" type="email" className="w-full" label={t('apply:communication-preference.email')} name="email" errorMessage={errorMessages.email} defaultValue={defaultState?.email ?? ''} required />
           <InputField id="confirm-email" type="email" className="w-full" label={t('apply:communication-preference.confirm-email')} name="confirmEmail" errorMessage={errorMessages['confirm-email']} defaultValue={defaultState?.confirmEmail ?? ''} required />
         </div>
