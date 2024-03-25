@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { ChangeEventHandler, useEffect, useMemo, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
@@ -150,18 +150,11 @@ export default function ApplyFlowCommunicationPreferencePage() {
   const { id, communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [emailMethodChecked, setEmailMethodChecked] = useState(defaultState?.preferredMethod === communicationMethodEmail.id);
-  const [nonEmailMethodChecked, setNonEmailMethodChecked] = useState(defaultState?.preferredMethod !== communicationMethodEmail.id);
+  const [preferredMethodValue, setPreferredMethodValue] = useState(defaultState?.preferredMethod ?? '');
   const errorSummaryId = 'error-summary';
 
-  const emailMethodHandler = () => {
-    setEmailMethodChecked(true);
-    setNonEmailMethodChecked(false);
-  };
-
-  const nonEmailMethodHandler = () => {
-    setEmailMethodChecked(false);
-    setNonEmailMethodChecked(true);
+  const handleOnPreferredMethodChecked: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setPreferredMethodValue(e.target.value);
   };
 
   // Keys order should match the input IDs order.
@@ -197,8 +190,8 @@ export default function ApplyFlowCommunicationPreferencePage() {
     .map((method) => ({
       children: i18n.language === 'fr' ? method.nameFr : method.nameEn,
       value: method.id,
-      defaultChecked: defaultState?.preferredMethod !== communicationMethodEmail.id,
-      append: nonEmailMethodChecked && (
+      defaultChecked: defaultState?.preferredMethod === method.id,
+      append: preferredMethodValue === method.id && (
         <div className="mb-6 grid gap-6 md:grid-cols-2">
           <p className="md:col-span-2" id="future-email-note">
             {t('apply:communication-preference.future-email-note')}
@@ -215,7 +208,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
           />
         </div>
       ),
-      onClick: nonEmailMethodHandler,
+      onChange: handleOnPreferredMethodChecked,
     }));
 
   const options: InputRadiosProps['options'] = [
@@ -223,7 +216,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
       children: getNameByLanguage(i18n.language, communicationMethodEmail),
       value: communicationMethodEmail.id,
       defaultChecked: defaultState?.preferredMethod === communicationMethodEmail.id,
-      append: emailMethodChecked && (
+      append: preferredMethodValue === communicationMethodEmail.id && (
         <div className="mb-6 grid gap-6 md:grid-cols-2">
           <p className="md:col-span-2" id="email-note">
             {t('apply:communication-preference.email-note')}
@@ -232,7 +225,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
           <InputField id="confirm-email" type="email" className="w-full" label={t('apply:communication-preference.confirm-email')} name="confirmEmail" errorMessage={errorMessages['confirm-email']} defaultValue={defaultState?.confirmEmail ?? ''} required />
         </div>
       ),
-      onClick: emailMethodHandler,
+      onChange: handleOnPreferredMethodChecked,
     },
     ...nonEmailOptions,
   ];
