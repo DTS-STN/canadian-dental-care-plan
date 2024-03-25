@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
@@ -10,7 +10,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
@@ -21,12 +21,12 @@ import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
-enum TaxFiling {
-  True = 'TRUE',
-  False = 'FALSE',
+enum TaxFilingOption {
+  No = 'no',
+  Yes = 'yes',
 }
 
-export type TaxFilingState = `${TaxFiling}`;
+export type TaxFilingState = `${TaxFilingOption}`;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -41,11 +41,11 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
   const { id, state } = await applyFlow.loadState({ request, params });
-
   const t = await getFixedT(request, handle.i18nNamespaces);
+
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.tax-filing.page-title') }) };
 
-  return json({ id, meta, state: state.taxFiling2023 });
+  return json({ id, meta, defaultState: state.taxFiling2023 });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -53,29 +53,21 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { id } = await applyFlow.loadState({ request, params });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formData = await request.formData();
-  const taxFiling = String(formData.get('taxFiling2023') ?? '');
-
-  const taxFilingSchema: z.ZodType<TaxFilingState> = z.nativeEnum(TaxFiling, {
-    errorMap: () => ({ message: t('apply:eligibility.tax-filing.error-message.Required') }),
+  const taxFilingSchema: z.ZodType<TaxFilingState> = z.nativeEnum(TaxFilingOption, {
+    errorMap: () => ({ message: t('apply:eligibility.tax-filing.error-message.tax-filing-required') }),
   });
 
-  const parsedDataResult = taxFilingSchema.safeParse(taxFiling);
+  const formData = await request.formData();
+  const data = formData.get('taxFiling2023');
+  const parsedDataResult = taxFilingSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    return json({
-      errors: parsedDataResult.error.format(),
-      formData: taxFiling,
-    });
+    return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  const sessionResponseInit = await applyFlow.saveState({
-    request,
-    params,
-    state: { taxFiling2023: parsedDataResult.data },
-  });
+  const sessionResponseInit = await applyFlow.saveState({ request, params, state: { taxFiling2023: parsedDataResult.data } });
 
-  if (parsedDataResult.data === TaxFiling.False) {
+  if (parsedDataResult.data === TaxFilingOption.No) {
     return redirectWithLocale(request, `/apply/${id}/file-your-taxes`, sessionResponseInit);
   }
 
@@ -84,22 +76,26 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function ApplyFlowTaxFiling() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { id, state } = useLoaderData<typeof loader>();
+  const { id, defaultState } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
 
-  useEffect(() => {
-    if (fetcher.data?.formData && fetcher.data.formData.length > 0) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-    }
-  }, [fetcher.data]);
-
-  const errorMessages = {
-    'input-radios-tax-filing-2023': fetcher.data?.errors._errors[0],
-  };
+  // Keys order should match the input IDs order.
+  const errorMessages = useMemo(
+    () => ({
+      'input-radio-tax-filing-2023-option-0': fetcher.data?.errors[0],
+    }),
+    [fetcher.data?.errors],
+  );
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
+
+  useEffect(() => {
+    if (hasErrors(errorMessages)) {
+      scrollAndFocusToErrorSummary(errorSummaryId);
+    }
+  }, [errorMessages]);
 
   return (
     <>
@@ -117,11 +113,11 @@ export default function ApplyFlowTaxFiling() {
             name="taxFiling2023"
             legend={t('apply:eligibility.tax-filing.form-instructions')}
             options={[
-              { value: TaxFiling.True, children: t('apply:eligibility.tax-filing.radio-options.yes'), defaultChecked: state === TaxFiling.True },
-              { value: TaxFiling.False, children: t('apply:eligibility.tax-filing.radio-options.no'), defaultChecked: state === TaxFiling.False },
+              { value: TaxFilingOption.Yes, children: t('apply:eligibility.tax-filing.radio-options.yes'), defaultChecked: defaultState === TaxFilingOption.Yes },
+              { value: TaxFilingOption.No, children: t('apply:eligibility.tax-filing.radio-options.no'), defaultChecked: defaultState === TaxFilingOption.No },
             ]}
             required
-            errorMessage={errorMessages['input-radios-tax-filing-2023']}
+            errorMessage={errorMessages['input-radio-tax-filing-2023-option-0']}
           />
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <ButtonLink id="back-button" to={`/apply/${id}/type-of-application`} disabled={isSubmitting}>
