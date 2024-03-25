@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
@@ -12,7 +12,7 @@ import { z } from 'zod';
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
-import { ErrorSummary, createErrorSummaryItems, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
@@ -37,13 +37,14 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
+  const lookupService = getLookupService();
   const { id, state } = await applyFlow.loadState({ request, params });
-  const options = await getLookupService().getAllAccessToDentalInsuranceOptions();
-
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const options = await lookupService.getAllAccessToDentalInsuranceOptions();
+
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:dental-insurance.title') }) };
 
-  return json({ id, meta, options, state: state.dentalInsurance });
+  return json({ id, meta, options, defaultState: state.dentalInsurance });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -51,50 +52,46 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { id } = await applyFlow.loadState({ request, params });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
+  // state validation schema
+  const dentalInsuranceSchema: z.ZodType<DentalInsuranceState> = z
+    .string({ errorMap: () => ({ message: t('apply:dental-insurance.error-message.dental-insurance-required') }) })
+    .trim()
+    .min(1, t('apply:dental-insurance.error-message.dental-insurance-required'));
+
   const formData = await request.formData();
   const dentalInsurance = String(formData.get('dentalInsurance') ?? '');
-
-  const dentalInsuranceSchema: z.ZodType<DentalInsuranceState> = z
-    .string({ required_error: t('apply:dental-insurance.error-message.required') })
-    .trim()
-    .min(1, { message: t('apply:dental-insurance.error-message.required') });
-
   const parsedDataResult = dentalInsuranceSchema.safeParse(dentalInsurance);
 
   if (!parsedDataResult.success) {
-    return json({
-      errors: parsedDataResult.error.format(),
-      formData: dentalInsurance,
-    });
+    return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  const sessionResponseInit = await applyFlow.saveState({
-    request,
-    params,
-    state: { dentalInsurance: parsedDataResult.data },
-  });
-
+  const sessionResponseInit = await applyFlow.saveState({ request, params, state: { dentalInsurance: parsedDataResult.data } });
   return redirectWithLocale(request, `/apply/${id}/federal-provincial-territorial-benefits`, sessionResponseInit);
 }
 
 export default function AccessToDentalInsuranceQuestion() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { options, state, id } = useLoaderData<typeof loader>();
+  const { options, defaultState, id } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
 
-  useEffect(() => {
-    if (fetcher.data?.formData && fetcher.data.errors._errors.length > 0) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-    }
-  }, [fetcher.data]);
-
-  const errorMessages = {
-    'input-radios-dental-insurance': fetcher.data?.errors._errors[0],
-  };
+  // Keys order should match the input IDs order.
+  const errorMessages = useMemo(
+    () => ({
+      'input-radio-dental-insurance-option-0': fetcher.data?.errors[0],
+    }),
+    [fetcher.data?.errors],
+  );
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
+
+  useEffect(() => {
+    if (hasErrors(errorMessages)) {
+      scrollAndFocusToErrorSummary(errorSummaryId);
+    }
+  }, [errorMessages]);
 
   const helpMessage = (
     <ul className="mb-6 list-disc space-y-1 pl-7">
@@ -138,12 +135,12 @@ export default function AccessToDentalInsuranceQuestion() {
                 options={options.map((option) => ({
                   children: <Trans ns={handle.i18nNamespaces}>{`dental-insurance.option-${option.id}`}</Trans>,
                   value: option.id,
-                  defaultChecked: state === option.id,
+                  defaultChecked: defaultState === option.id,
                 }))}
                 helpMessagePrimary={helpMessage}
                 helpMessagePrimaryClassName="text-black"
                 required
-                errorMessage={errorMessages['input-radios-dental-insurance']}
+                errorMessage={errorMessages['input-radio-dental-insurance-option-0']}
               />
             </div>
           )}

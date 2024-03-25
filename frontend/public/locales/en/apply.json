@@ -155,7 +155,7 @@
       }
     },
     "error-message": {
-      "required": "Access to dental insurance must be selected"
+      "dental-insurance-required": "The access to dental insurance or coverage question is required."
     }
   },
   "eligibility": {
