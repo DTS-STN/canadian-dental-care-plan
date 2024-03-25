@@ -47,8 +47,8 @@ function createHCaptchaService() {
 
     const verifyResultSchema = z.object({
       success: z.boolean(),
-      challenge_ts: z.string().datetime(),
-      hostname: z.string(),
+      challenge_ts: z.string().datetime().optional(),
+      hostname: z.string().optional(),
       'error-codes': z.array(z.string()).optional(),
       score: z.number().optional(),
     });
