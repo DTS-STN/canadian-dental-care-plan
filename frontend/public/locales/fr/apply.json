@@ -122,10 +122,10 @@
       "continue": "Continuer"
     },
     "error-message": {
-      "federal-benefit": "Un bénéfice dentaire fédéral doit être fourni",
-      "provincial-benefit": "Un bénéfice dentaire provincial doit être fourni",
-      "empty-program": "Un programme social doit être fourni",
-      "empty-province": "Une province doit être sélectionnée"
+      "federal-benefit-required": "Les assurances dentaires fédérales est obligatoire.",
+      "program-required": "Le programme social est obligatoire.",
+      "province-required": "La province ou territoire est obligatoire.",
+      "provincial-benefit-required": "Les assurances dentaires provinciales ou territoriales est obligatoire."
     }
   },
   "dental-insurance": {
