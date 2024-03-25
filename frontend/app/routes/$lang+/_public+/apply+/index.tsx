@@ -1,4 +1,4 @@
-import { FormEvent, useRef } from 'react';
+import { FormEvent, useEffect, useRef } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
@@ -70,9 +70,21 @@ export default function ApplyIndex() {
   const isSubmitting = fetcher.state !== 'idle';
   const captchaRef = useRef<HCaptcha>(null);
 
-  function handleHCaptchaLoad() {
-    captchaRef.current?.execute();
-  }
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
+    if (captchaRef.current?.isReady()) {
+      captchaRef.current.execute();
+    } else {
+      timeoutId = setTimeout(() => {
+        captchaRef.current?.execute();
+      }, 500);
+    }
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, []);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -173,7 +185,7 @@ export default function ApplyIndex() {
       </div>
       <p className="my-8">{t('apply:index.apply.application-start-consent')}</p>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
-        <HCaptcha size="invisible" onLoad={handleHCaptchaLoad} sitekey={siteKey} ref={captchaRef} />
+        <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />
         <Button variant="primary" id="continue-button" disabled={isSubmitting}>
           {t('apply:index.apply.start-button')}
           <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
