@@ -27,17 +27,23 @@
     "email": "Adresse courriel",
     "confirm-email": "Confirmer l'adresse courriel",
     "future-email-note": "Ajoutez votre courriel pour recevoir de futures communications de Service Canada et de Santé Canada aux fins du Régime canadien de soins dentaires.",
-    "future-email": "Adresse courriel (facultatif)",
-    "future-confirm-email": "Confirmer l'adresse courriel (facultatif)",
+    "future-email": "Adresse courriel",
+    "future-confirm-email": "Confirmer l'adresse courriel",
     "back": "Retour",
     "continue": "Continuer",
     "error-message": {
-      "empty-method": "Le mode de communication doit être sélectionné",
-      "empty-language": "Le language doit être sélectionné",
-      "empty-email": "L'adresse courriel doit être fournie",
-      "empty-confirm-email": "La confirmation de l'adresse courriel doit être fournie",
-      "invalid-email": "Adresse courriel invalide",
-      "not-the-same": "Les adresses courriel sont différentes"
+      "confirm-email-for-future-match": "L'adresse courriel de confirmation doit correspondre à l'adresse courriel.",
+      "confirm-email-for-future-required": "L'adresse courriel de confirmation est obligatoire.",
+      "confirm-email-for-future-valid": "L'adresse courriel de confirmation doit être un format d'adresse courriel valide.",
+      "confirm-email-match": "L'adresse courriel de confirmation doit correspondre à l'adresse courriel.",
+      "confirm-email-required": "L'adresse courriel de confirmation est obligatoire.",
+      "confirm-email-valid": "L'adresse courriel de confirmation doit être un format d'adresse courriel valide.",
+      "email-for-future-required": "L'adresse courriel est obligatoire.",
+      "email-for-future-valid": "L'adresse courriel doit être un format d'adresse courriel valide.",
+      "email-required": "L'adresse courriel est obligatoire.",
+      "email-valid": "L'adresse courriel doit être un format d'adresse courriel valide.",
+      "preferred-language-required": "La langue officielle de communication préférée est obligatoire.",
+      "preferred-method-required": "Le mode de communication préféré pour la Sun Life et le gouvernement du Canada est obligatoire."
     }
   },
   "confirm": {

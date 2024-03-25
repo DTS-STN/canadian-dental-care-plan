@@ -26,17 +26,23 @@
     "email": "Email address",
     "confirm-email": "Confirm email address",
     "future-email-note": "Add your email to receive future communication from Service Canada and Health Canada for the purpose of the Canadian Dental Care Plan.",
-    "future-email": "Email address (optional)",
-    "future-confirm-email": "Confirm email address (optional)",
+    "future-email": "Email address",
+    "future-confirm-email": "Confirm email address",
     "back": "Back",
     "continue": "Continue",
     "error-message": {
-      "empty-method": "Preferred method of communication must be selected",
-      "empty-language": "Preferred offical language must be selected",
-      "empty-email": "Email must be provided",
-      "empty-confirm-email": "Confirm email must be provided",
-      "invalid-email": "Invalid email address",
-      "not-the-same": "Confirm email is not the same as the entered email"
+      "confirm-email-for-future-match": "The confirm email address must match the email address.",
+      "confirm-email-for-future-required": "The confirm email address is required.",
+      "confirm-email-for-future-valid": "The confirm email address must be a valid email address format.",
+      "confirm-email-match": "The confirm email address must match the email address.",
+      "confirm-email-required": "The confirm email address is required.",
+      "confirm-email-valid": "The confirm email address must be a valid email address format.",
+      "email-for-future-required": "The email address is required.",
+      "email-for-future-valid": "The email address must be a valid email address format.",
+      "email-required": "The email address is required.",
+      "email-valid": "The email address must be a valid email address format.",
+      "preferred-language-required": "The preferred official language of communication is required.",
+      "preferred-method-required": "The preferred method of communication for both Sun Life and the Government of Canada is required."
     }
   },
   "confirm": {
