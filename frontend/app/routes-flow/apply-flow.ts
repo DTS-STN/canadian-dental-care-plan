@@ -9,6 +9,7 @@ import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/denta
 import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits';
 import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/partner-information';
 import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/personal-information';
+import { ReviewInformationState } from '~/routes/$lang+/_public+/apply+/$id+/review-information';
 import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/tax-filing';
 import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-of-application';
 import { getSessionService } from '~/services/session-service.server';
@@ -22,6 +23,7 @@ const idSchema = z.string().uuid();
 interface ApplyState {
   dateOfBirth?: DateOfBirthState;
   dentalInsurance?: DentalInsuranceState;
+  editMode?: ReviewInformationState;
   partnerInformation?: PartnerInformationState;
   typeOfApplication?: TypeOfApplicationState;
   personalInformation?: PersonalInformationState;
