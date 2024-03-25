@@ -121,10 +121,10 @@
       "continue": "Continue"
     },
     "error-message": {
-      "federal-benefit": "Federal dental benefit must be provided",
-      "provincial-benefit": "Provincial dental benefit must be provided",
-      "empty-program": "A social program must be provided",
-      "empty-province": "Province must be selected"
+      "federal-benefit-required": "The federal dental benefits is required.",
+      "program-required": "The social program is required.",
+      "province-required": "The province or territory is required.",
+      "provincial-benefit-required": "The provincial or territorial benefits is required."
     }
   },
   "dental-insurance": {
