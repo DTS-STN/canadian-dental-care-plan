@@ -1,0 +1,41 @@
+{
+  "@odata.context": "https://canadadental-uat.crm3.dynamics.com/api/data/v9.2/$metadata#esdc_clientfriendlystatuses(esdc_clientfriendlystatusid,esdc_descriptionenglish,esdc_descriptionfrench)",
+  "value": [
+    {
+      "@odata.etag": "W/\"1596240150\"",
+      "esdc_clientfriendlystatusid": "873ac4c6-77c0-ee11-9079-000d3a09d132",
+      "esdc_descriptionenglish": "You have qualified for the Canadian Dental Care Plan. Sun Life will mail your welcome package within 3 months from the date you applied. You must wait to receive this package to confirm when your dental costs will be covered.",
+      "esdc_descriptionfrench": "Vous êtes admissible au Régime canadien de soins dentaires. Sun Life vous enverra une trousse de bienvenue dans les trois mois suivant la date de votre demande. Veuillez attendre de recevoir la trousse pour confirmer à quel moment vos frais dentaires seront couverts."
+    },
+    {
+      "@odata.etag": "W/\"1596240151\"",
+      "esdc_clientfriendlystatusid": "504fba6e-604e-ee11-be6f-000d3a09d640",
+      "esdc_descriptionenglish": "You have not completed your application for the Canadian Dental Care Plan for the current year. Please refer to the letter you have received for instructions on how to apply by phone.",
+      "esdc_descriptionfrench": "Vous n'avez pas encore complété votre demande au Régime canadien de soins dentaires pour l'année courante. Veuillez consulter la lettre que vous avez reçue pour savoir comment soumettre une demande par téléphone."
+    },
+    {
+      "@odata.etag": "W/\"1596240152\"",
+      "esdc_clientfriendlystatusid": "1e158ec8-604e-ee11-be6f-000d3a09d640",
+      "esdc_descriptionenglish": "Your application for the Canadian Dental Care Plan is currently being processed. No additional actions are required at this time. Once your application is processed you will receive a letter explaining a decision.",
+      "esdc_descriptionfrench": "Votre demande au Régime canadien de soins dentaires est en cours de traitement. Aucune action supplémentaire n'est requise. Lorsque votre demande aura été traitée, vous recevrez une lettre expliquant la décision."
+    },
+    {
+      "@odata.etag": "W/\"1596240153\"",
+      "esdc_clientfriendlystatusid": "c23252fe-604e-ee11-be6f-000d3a09d640",
+      "esdc_descriptionenglish": "Your application for the Canadian Dental Care Plan has been processed and you do not qualify at this time based on existing access to dental care. You will receive a letter that explains this decision within 15 business days of the date you applied.",
+      "esdc_descriptionfrench": "Votre demande au Régime canadien de soins dentaires a été traitée et vous n'êtes pas admissible pour le moment en raison de votre accès actuel aux soins dentaires. Vous recevrez une lettre expliquant cette décision dans les 15 jours ouvrables suivant la date de votre demande."
+    },
+    {
+      "@odata.etag": "W/\"1596240154\"",
+      "esdc_clientfriendlystatusid": "9687572e-614e-ee11-be6f-000d3a09d640",
+      "esdc_descriptionenglish": "You have qualified for the Canadian Dental Care Plan. Sun Life will mail your welcome package within 3 months from the date you applied. You must wait to receive this package to confirm when your dental costs will be covered.",
+      "esdc_descriptionfrench": "Vous êtes admissible au Régime canadien de soins dentaires. Sun Life vous enverra une trousse de bienvenue dans les trois mois suivant la date de votre demande. Veuillez attendre de recevoir la trousse pour confirmer à quel moment vos frais dentaires seront couverts."
+    },
+    {
+      "@odata.etag": "W/\"1596240155\"",
+      "esdc_clientfriendlystatusid": "51af5170-614e-ee11-be6f-000d3a09d640",
+      "esdc_descriptionenglish": "You have qualified for the Canadian Dental Care Plan. Within 20 business days, Sun Life will mail you a welcome package with your member card, coverage details and coverage start date. For enquiries, please visit sunlife.ca/cdcp or contact Sun Life at 1-888-888-8110.",
+      "esdc_descriptionfrench": "Vous êtes admissible au Régime canadien de soins dentaires. Dans les prochains 20 jours ouvrables, la Sun Life vous enverra par la poste une trousse de bienvenue contenant votre carte de membre, les détails de la couverture et la date de début de la couverture. Pour toute demande de renseignements, veuillez visiter sunlife.ca/cdcp ou contacter Sun Life au 1-888-888-8110. "
+    }
+  ]
+}
