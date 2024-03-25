@@ -1,6 +1,7 @@
 import { HttpResponse, http } from 'msw';
 import { z } from 'zod';
 
+import clientFriendlyStatusesJson from './power-platform-data/client-friendly-statuses.json';
 import countriesJson from './power-platform-data/countries.json';
 import federalProgramsJson from './power-platform-data/federal-programs.json';
 import provincialProgramsJson from './power-platform-data/provincial-programs.json';
@@ -205,6 +206,14 @@ export function getLookupApiMockHandlers() {
       log.debug('Handling request for [%s]', request.url);
       const maritalStatusList = db.maritalStatus.getAll();
       return HttpResponse.json(maritalStatusList);
+    }),
+
+    //
+    // Handler for GET request to retrieve all client friendly statuses
+    //
+    http.get('https://api.example.com/lookups/client-friendly-statuses', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      return HttpResponse.json(clientFriendlyStatusesJson);
     }),
   ];
 }
