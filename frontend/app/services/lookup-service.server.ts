@@ -114,6 +114,7 @@ function createLookupService() {
     LOOKUP_SVC_ALL_ACCESS_TO_DENTAL_INSURANCE_OPTIONS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_AVOIDED_DENTAL_COST_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS,
+    LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_DISABILITY_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_EQUITY_TYPES_CACHE_TTL_SECONDS,
@@ -628,6 +629,40 @@ function createLookupService() {
     return equityTypeSchemaList.parse(await response.json());
   }
 
+  async function getAllClientFriendlyStatuses() {
+    const url = `${INTEROP_API_BASE_URI}/lookups/client-friendly-statuses`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed to fetch data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
+
+    const clientFriendlyStatusesSchema = z.object({
+      value: z.array(
+        z.object({
+          esdc_clientfriendlystatusid: z.string(),
+          esdc_descriptionenglish: z.string(),
+          esdc_descriptionfrench: z.string(),
+        }),
+      ),
+    });
+
+    const parsedClientFriendlyStatuses = clientFriendlyStatusesSchema.parse(await response.json());
+    return parsedClientFriendlyStatuses.value.map((clientFriendlyStatus) => ({
+      id: clientFriendlyStatus.esdc_clientfriendlystatusid,
+      nameEn: clientFriendlyStatus.esdc_descriptionenglish,
+      nameFr: clientFriendlyStatus.esdc_descriptionfrench,
+    }));
+  }
+
   return {
     getAllAccessToDentalInsuranceOptions: moize(getAllAccessToDentalInsuranceOptions, {
       maxAge: 1000 * LOOKUP_SVC_ALL_ACCESS_TO_DENTAL_INSURANCE_OPTIONS_CACHE_TTL_SECONDS,
@@ -635,6 +670,7 @@ function createLookupService() {
     }),
     getAllAvoidedDentalCostTypes: moize(getAllAvoidedDentalCostTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_AVOIDED_DENTAL_COST_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllAvoidedDentalCostTypes memo') }),
     getAllBornTypes: moize(getAllBornTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllBornTypes memo') }),
+    getAllClientFriendlyStatuses: moize(getAllClientFriendlyStatuses, { maxAge: 1000 * LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllClientFriendlyStatuses memo') }),
     getAllCountries: moize(getAllCountries, { maxAge: 1000 * LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllCountries memo') }),
     getAllDisabilityTypes: moize(getAllDisabilityTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_DISABILITY_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllDisabilityTypes memo') }),
     getAllEquityTypes: moize(getAllEquityTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_EQUITY_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllEquityTypes memo') }),
