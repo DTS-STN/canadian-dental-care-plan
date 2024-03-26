@@ -69,7 +69,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:dental-benefits.title') }) };
 
-  return json({ federalDentalBenefits, federalSocialPrograms, id, meta, provincialTerritorialDentalBenefits, provincialTerritorialSocialPrograms, regions, defaultState: state.dentalBenefits });
+  return json({ federalDentalBenefits, federalSocialPrograms, id, meta, provincialTerritorialDentalBenefits, provincialTerritorialSocialPrograms, regions, defaultState: state.dentalBenefits, editMode: state.editMode });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -122,7 +122,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function AccessToDentalInsuranceQuestion() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, defaultState, id } = useLoaderData<typeof loader>();
+  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, defaultState, id, editMode } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [federalBenefitValue, setFederalBenefitValue] = useState(defaultState?.federalBenefit);
@@ -295,7 +295,7 @@ export default function AccessToDentalInsuranceQuestion() {
             )}
           </section>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <ButtonLink to={`/apply/${id}/dental-insurance`} disabled={isSubmitting}>
+            <ButtonLink to={editMode ? `/apply/${id}/review-information` : `/apply/${id}/dental-insurance`} disabled={isSubmitting}>
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('dental-benefits.button.back')}
             </ButtonLink>

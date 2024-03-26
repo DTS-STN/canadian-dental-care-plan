@@ -41,12 +41,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.date-of-birth.page-title') }) };
 
-  return json({ id, meta, defaultState: state.dateOfBirth });
+  return json({ id, meta, defaultState: state.dateOfBirth, editMode: state.editMode });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ request, params });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -73,12 +73,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return redirectWithLocale(request, `/apply/${id}/dob-eligibility`, sessionResponseInit);
   }
 
-  return redirectWithLocale(request, `/apply/${id}/applicant-information`, sessionResponseInit);
+  return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/applicant-information`, sessionResponseInit);
 }
 
 export default function ApplyFlowDateOfBirth() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { id, defaultState } = useLoaderData<typeof loader>();
+  const { id, defaultState, editMode } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
@@ -113,7 +113,7 @@ export default function ApplyFlowDateOfBirth() {
         <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
           <DatePickerField id="date-of-birth" name="dateOfBirth" defaultValue={defaultState ?? ''} legend={t('apply:eligibility.date-of-birth.form-instructions')} required errorMessage={errorMessages['date-picker-date-of-birth-month']} />
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" to={`/apply/${id}/tax-filing`} disabled={isSubmitting}>
+            <ButtonLink id="back-button" to={editMode ? `/apply/${id}/review-information` : `/apply/${id}/tax-filing`} disabled={isSubmitting}>
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('apply:eligibility.date-of-birth.back-btn')}
             </ButtonLink>

@@ -44,12 +44,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:dental-insurance.title') }) };
 
-  return json({ id, meta, options, defaultState: state.dentalInsurance });
+  return json({ id, meta, options, defaultState: state.dentalInsurance, editMode: state.editMode });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ request, params });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -67,12 +67,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   const sessionResponseInit = await applyFlow.saveState({ request, params, state: { dentalInsurance: parsedDataResult.data } });
-  return redirectWithLocale(request, `/apply/${id}/federal-provincial-territorial-benefits`, sessionResponseInit);
+  return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/federal-provincial-territorial-benefits`, sessionResponseInit);
 }
 
 export default function AccessToDentalInsuranceQuestion() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { options, defaultState, id } = useLoaderData<typeof loader>();
+  const { options, defaultState, id, editMode } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
@@ -145,7 +145,7 @@ export default function AccessToDentalInsuranceQuestion() {
             </div>
           )}
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <ButtonLink to={`/apply/${id}/communication-preference`} disabled={isSubmitting}>
+            <ButtonLink to={editMode ? `/apply/${id}/review-information` : `/apply/${id}/communication-preference`} disabled={isSubmitting}>
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('dental-insurance.button.back')}
             </ButtonLink>

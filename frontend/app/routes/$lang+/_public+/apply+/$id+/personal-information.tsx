@@ -68,12 +68,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const regionList = await lookupService.getAllRegions();
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:personal-information.page-title') }) };
 
-  return json({ id, meta, defaultState: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID });
+  return json({ id, meta, defaultState: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, editMode: state.editMode });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ request, params });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
@@ -190,12 +190,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
     : parsedDataResult.data;
 
   const sessionResponseInit = await applyFlow.saveState({ request, params, state: { personalInformation: updatedData } });
-  return redirectWithLocale(request, `/apply/${id}/communication-preference`, sessionResponseInit);
+  return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/communication-preference`, sessionResponseInit);
 }
 
 export default function ApplyFlowPersonalInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { id, defaultState, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
+  const { id, defaultState, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, editMode } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState?.mailingCountry);
@@ -438,7 +438,7 @@ export default function ApplyFlowPersonalInformation() {
             )}
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" to={['MARRIED', 'COMMONLAW'].includes(maritalStatus ?? '') ? `/apply/${id}/partner-information` : `/apply/${id}/applicant-information`} disabled={isSubmitting}>
+            <ButtonLink id="back-button" to={editMode ? `/apply/${id}/review-information` : ['MARRIED', 'COMMONLAW'].includes(maritalStatus ?? '') ? `/apply/${id}/partner-information` : `/apply/${id}/applicant-information`} disabled={isSubmitting}>
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('apply:personal-information.back')}
             </ButtonLink>
