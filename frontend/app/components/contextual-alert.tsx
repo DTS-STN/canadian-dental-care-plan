@@ -3,6 +3,8 @@ import type { ReactNode } from 'react';
 import { faCheckCircle, faCircleInfo, faExclamationCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { cn } from '~/utils/tw-utils';
+
 export interface ContextualAlertProps {
   children: ReactNode;
   type: 'warning' | 'success' | 'danger' | 'info';
@@ -14,11 +16,11 @@ export function ContextualAlert(props: ContextualAlertProps) {
   const alertColor = type === 'warning' ? 'border-l-amber-700' : type === 'danger' ? 'border-l-red-700' : type === 'info' ? 'border-l-cyan-700' : 'border-l-green-700';
 
   return (
-    <div className={`relative min-w-72 pl-4 sm:pl-6`}>
+    <div className={`relative pl-4 sm:pl-6`}>
       <div className="absolute left-1.5 top-3 bg-white pt-1 sm:left-3.5">
         <Icon type={type} />
       </div>
-      <div className={`overflow-auto border-l-4 ${alertColor} py-2.5 pl-6 leading-8`}>{children}</div>
+      <div className={cn('overflow-auto border-l-4 py-2.5 pl-6', alertColor)}>{children}</div>
     </div>
   );
 }

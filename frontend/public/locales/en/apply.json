@@ -19,7 +19,7 @@
     }
   },
   "communication-preference": {
-    "page-title": "Communication preferences",
+    "page-title": "Communication",
     "note": "If you're eligible, we will share your information with Sun Life Assurance Company of Canada (Sun Life). Sun Life will be responsible for handling member enrolment and administering claims processing and benefits for the Canadian Dental Care Plan.",
     "preferred-method": "What is your preferred method of communication for Sun Life?",
     "preferred-language": "What is your preferred official language of communication?",
@@ -50,9 +50,9 @@
     "page-title": "Application submitted",
     "alert-heading": "You have successfully applied for the Canadian Dental Care Plan!",
     "app-code-is": "Your application code is:",
-    "make-note": "Make note of this code, as you will need it to check the status of your application.",
+    "make-note": "Save this code, you'll need it to check the status of your application.",
     "keep-copy": "Keep a copy of your application",
-    "print-copy-text": "You will <strong>not</strong> be receiving a <strong>confirmation email</strong>. It is important to keep a copy of your application. You can use this button to print.",
+    "print-copy-text": "You will <strong>not</strong> be receiving a <strong>confirmation email</strong>. It is important to keep a copy of your application. <noPrint>You can use this button to print.<noPrint>",
     "print-btn": "Print",
     "whats-next": "What happens next",
     "begin-process": "We will begin processing your application immediately.",
@@ -61,10 +61,10 @@
     "use-code": "You can use your application code to begin tracking the progress within 48 hours of applying.",
     "register-msca-title": "Register for a My Service Canada Account",
     "register-msca-text": "Once your application is processed, you will be able to sign into <mscaLink>My Service Canada Account (MSCA)</mscaLink> to view or update your personal information. You will also be able to view any letters sent to you from the Government of Canada regarding the Canadian Dental Care Plan.",
-    "msca-notify": "You will be notified of your acceptance into the Canadian Dental Care Plan in MSCA.",
+    "msca-notify": "You will be notified whether your application has been accepted or rejected in your My Service Canada Account.",
     "msca-link": "https://www.canada.ca/en/employment-social-development/services/my-account.html",
-    "how-insurance": "How do I use my insurance?",
-    "eligible-text": "If you are deemed eligible, Sun Life will send you a welcome package by mail. Your welcome package will include your member card and details about the Canadian Dental Care Plan, including your coverage start date. The Canadian Dental Care Plan will not reimburse you for dental services received before that date.",
+    "how-insurance": "How do I use my Canadian Dental Care Plan",
+    "eligible-text": "If you are deemed eligible, Sun Life will send you a welcome package by mail. Your welcome package will include your member card and details about the Canadian Dental Care Plan, including your coverage start date. The Canadian Dental Care Plan will not cover you for dental services received before that date.",
     "more-info-cdcp": "For more information on what services and how much will be covered, visit <moreInfoLink>Canadian Dental Care Plan - What is covered</moreInfoLink>.",
     "more-info-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/coverage.html",
     "more-info-service": "For more information, please contact <dentalContactUsLink>Service Canada</dentalContactUsLink>.",
@@ -145,13 +145,13 @@
     "detail": {
       "additional-info": {
         "title": "Additional information",
-        "eligible": "Exception: You may still be eligible if you retired and:",
+        "eligible": "Exception: You may still be eligible if you are retired and:",
         "list": {
           "opted": "you opted out of pension benefits before December 11, 2023, and",
           "cannot-opt": "you can't opt back in under the pension rules"
         },
-        "not-eligible": "You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your employer/pension (see exception) benefits or through a professional or student organization. As such, you are not eligible for the CDCP.",
-        "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own (and not as part of any of the coverage described above), you're not eligible for the CDCP while that coverage is in effect."
+        "not-eligible": "You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your employer/pension (see exception) benefits or through a professional or student organization. As such, you are not eligible for the Canadian Dental Care Plan.",
+        "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own (and not part of any of the coverage described above), you are not eligible for the CDCP while that coverage is in effect."
       }
     },
     "error-message": {
@@ -312,7 +312,7 @@
     }
   },
   "partner-information": {
-    "page-title": "Spouse / Common-law partner information",
+    "page-title": "Spouse or Common-law partner information",
     "provide-sin": "Provide information on your current spouse or common-law partner as indicated on their SIN card/letter.",
     "required-information": "This information is required to calculate the adjusted family net income. Please note that the spouse or common-law partner will need to submit their own application to the plan.",
     "sin": "Social Insurance Number (SIN)",
@@ -320,7 +320,7 @@
     "last-name": "Last name",
     "first-name": "First name",
     "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
-    "confirm-checkbox": "I confirm that my spouse or common-law partner is aware and has consented to the sharing of their personal information.",
+    "confirm-checkbox": "I confirm that my spouse or common-law partner is aware and has agreed to share their personal information.",
     "back-btn": "Back",
     "continue-btn": "Continue",
     "error-message": {

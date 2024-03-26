@@ -9,11 +9,13 @@ import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
+import { getPersonalInformationService } from '~/services/personal-information-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import type { UserinfoToken } from '~/utils/raoidc-utils.server';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
@@ -36,9 +38,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
   const sessionService = await getSessionService();
-
+  const personalInformationService = await getPersonalInformationService();
   await raoidcService.handleSessionValidation(request);
   const session = await sessionService.getSession(request);
+
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  await personalInformationService.getPersonalInformationIntoSession(session, request, '/data-unavailable', userInfoToken.sin);
 
   if (!session.has('newHomeAddress')) {
     instrumentationService.countHttpStatus('home-address.validate.no-session', 302);

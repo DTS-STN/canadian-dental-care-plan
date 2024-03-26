@@ -1,5 +1,6 @@
 import { Params } from '@remix-run/react';
 
+import { differenceInMinutes } from 'date-fns';
 import { z } from 'zod';
 
 import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/applicant-information';
@@ -9,7 +10,7 @@ import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/denta
 import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits';
 import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/partner-information';
 import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/personal-information';
-import { ReviewInformationState } from '~/routes/$lang+/_public+/apply+/$id+/review-information';
+import { ReviewInformationState, SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/review-information';
 import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/tax-filing';
 import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-of-application';
 import { getSessionService } from '~/services/session-service.server';
@@ -21,16 +22,17 @@ import { redirectWithLocale } from '~/utils/locale-utils.server';
 const idSchema = z.string().uuid();
 
 interface ApplyState {
+  applicantInformation?: ApplicantInformationState;
+  communicationPreferences?: CommunicationPreferencesState;
   dateOfBirth?: DateOfBirthState;
+  dentalBenefits?: DentalBenefitsState;
   dentalInsurance?: DentalInsuranceState;
   editMode?: ReviewInformationState;
   partnerInformation?: PartnerInformationState;
-  typeOfApplication?: TypeOfApplicationState;
   personalInformation?: PersonalInformationState;
-  dentalBenefits?: DentalBenefitsState;
-  applicantInformation?: ApplicantInformationState;
-  communicationPreferences?: CommunicationPreferencesState;
+  submissionInfo?: SubmissionInfoState;
   taxFiling2023?: TaxFilingState;
+  typeOfApplication?: TypeOfApplicationState;
 }
 
 /**
@@ -39,13 +41,21 @@ interface ApplyState {
  * @returns The session name.
  */
 function getSessionName(id: string) {
-  return `apply-flow-` + idSchema.parse(id);
+  return `apply-flow-${idSchema.parse(id)}`;
+}
+
+/**
+ * Generates a session name based on the provided ID for time updates in the application flow.
+ * @param id - The ID used to generate the session name.
+ * @returns The generated session name.
+ */
+function getTimeUpdatedSessionName(id: string) {
+  return `apply-flow-${idSchema.parse(id)}-time-updated`;
 }
 
 interface LoadStateArgs {
   params: Params;
   request: Request;
-  fallbackRedirectUrl?: string;
 }
 
 /**
@@ -53,35 +63,58 @@ interface LoadStateArgs {
  * @param args - The arguments.
  * @returns The loaded state.
  */
-async function loadState({ params, request, fallbackRedirectUrl = '/apply' }: LoadStateArgs) {
-  const id = idSchema.safeParse(params.id);
+async function loadState({ params, request }: LoadStateArgs) {
+  const applyRouteUrl = '/apply';
+  const { pathname } = new URL(request.url);
+  const parsedId = idSchema.safeParse(params.id);
 
-  if (!id.success) {
-    throw redirectWithLocale(request, fallbackRedirectUrl, 302);
+  if (!parsedId.success) {
+    throw redirectWithLocale(request, applyRouteUrl);
   }
+
+  const id = parsedId.data;
 
   const sessionService = await getSessionService();
   const session = await sessionService.getSession(request);
-
-  const sessionName = getSessionName(id.data);
+  const sessionName = getSessionName(id);
 
   if (!session.has(sessionName)) {
-    throw redirectWithLocale(request, fallbackRedirectUrl, 302);
+    throw redirectWithLocale(request, applyRouteUrl);
   }
 
-  const state = session.get(sessionName) as ApplyState;
+  const state: ApplyState = session.get(sessionName);
 
-  if (Date.now() - session.get('timeUpdated') > 15 * 60 * 1000) {
+  // Checks if the elapsed time since the last update exceeds 15 minutes,
+  // and performs necessary actions if it does.
+  const timeUpdatedSessionName = getTimeUpdatedSessionName(id);
+  const timeUpdatedSession: string = session.get(timeUpdatedSessionName);
+  const timeUpdated = new Date(timeUpdatedSession);
+  const now = new Date();
+
+  if (differenceInMinutes(now, timeUpdated) >= 15) {
     session.unset(sessionName);
-    session.unset('timeUpdated');
-    throw redirectWithLocale(request, fallbackRedirectUrl, {
+    session.unset(timeUpdatedSessionName);
+    throw redirectWithLocale(request, applyRouteUrl, {
       headers: {
         'Set-Cookie': await sessionService.commitSession(session),
       },
     });
   }
 
-  return { id: id.data, state };
+  // Redirect to the confirmation page if the application has been submitted and
+  // the current route is not the confirmation page.
+  const confirmationRouteUrl = `/apply/${id}/confirmation`;
+  if (state.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
+    throw redirectWithLocale(request, confirmationRouteUrl);
+  }
+
+  // Redirect to the first flow page if the application has not been submitted and
+  // the current route is the confirmation page.
+  if (!state.submissionInfo && pathname.endsWith(confirmationRouteUrl)) {
+    throw redirectWithLocale(request, `/apply/${id}/type-of-application`);
+  }
+
+  return { id: id, state };
 }
 
 interface SaveStateArgs {
@@ -109,7 +142,9 @@ async function saveState({ params, request, state, remove = undefined }: SaveSta
 
   const sessionName = getSessionName(id);
   session.set(sessionName, newState);
-  session.set('timeUpdated', Date.now());
+
+  const timeUpdatedSessionName = getTimeUpdatedSessionName(id);
+  session.set(timeUpdatedSessionName, new Date().toISOString());
 
   return {
     headers: {
@@ -136,7 +171,9 @@ async function clearState({ params, request }: ClearStateArgs) {
 
   const sessionName = getSessionName(id);
   session.unset(sessionName);
-  session.unset('timeUpdated');
+
+  const timeUpdatedSessionName = getTimeUpdatedSessionName(id);
+  session.unset(timeUpdatedSessionName);
 
   return {
     headers: {
@@ -164,7 +201,9 @@ async function start({ id, request }: StartArgs) {
 
   const sessionName = getSessionName(parsedId);
   session.set(sessionName, initialState);
-  session.set('timeUpdated', Date.now());
+
+  const timeUpdatedSessionName = getTimeUpdatedSessionName(id);
+  session.set(timeUpdatedSessionName, new Date().toISOString());
 
   return {
     headers: {
