@@ -1,7 +1,7 @@
-import { createRequestHandler } from '@remix-run/express';
 import type { RequestHandler } from '@remix-run/express';
-import { broadcastDevReady, installGlobals } from '@remix-run/node';
+import { createRequestHandler } from '@remix-run/express';
 import type { ServerBuild } from '@remix-run/node';
+import { broadcastDevReady, installGlobals } from '@remix-run/node';
 
 import chokidar from 'chokidar';
 import compression from 'compression';
@@ -12,34 +12,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
 import sourceMapSupport from 'source-map-support';
-import { createLogger, format, transports } from 'winston';
+
+import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('express.server');
 
 installSourceMapSupport();
 installGlobals();
 runServer();
-
-/**
- * Function copied from ./app/utils/logging.server.ts to work around typescript
- * path alias issues with ESM and ESBuild. 🤷
- */
-function getLogger(category: string) {
-  function formatCategory(category: string, size: number) {
-    const str = category.padStart(size);
-    return str.length <= size ? str : `...${str.slice(-size + 3)}`;
-  }
-
-  return createLogger({
-    level: process.env['LOG_LEVEL'] ?? 'info',
-    format: format.combine(
-      format.timestamp(),
-      format.splat(),
-      format.printf((info) => `${info.timestamp} ${info.level.toUpperCase().padStart(7)} --- [${formatCategory(category, 25)}]: ${info.message}`),
-    ),
-    transports: [new transports.Console()],
-  });
-}
 
 function installSourceMapSupport() {
   sourceMapSupport.install({
