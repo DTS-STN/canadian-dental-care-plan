@@ -121,7 +121,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function AccessToDentalInsuranceQuestion() {
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);\
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, defaultState, id, editMode } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
