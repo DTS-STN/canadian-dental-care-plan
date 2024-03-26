@@ -71,7 +71,7 @@ export default function ApplyIndex() {
   const captchaRef = useRef<HCaptcha>(null);
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+    let timeoutId: ReturnType<typeof setTimeout>;
 
     if (captchaRef.current?.isReady()) {
       captchaRef.current.execute();
@@ -99,6 +99,9 @@ export default function ApplyIndex() {
       } finally {
         captchaRef.current.resetCaptcha();
       }
+
+      fetcher.submit(formData, { method: 'POST' });
+      sessionStorage.setItem('flow.state', 'active');
     }
   }
 
