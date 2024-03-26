@@ -40,6 +40,7 @@
       "exitApplication": "CDCP-APPL-0015",
       "confirmation": "CDCP-APPL-0016"
     },
+    "status": "CDCP-STAT-0001",
     "notFound": "CDCP-ERR-0404"
   }
 }

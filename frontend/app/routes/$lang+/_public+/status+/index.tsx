@@ -4,10 +4,19 @@ import { Form, useActionData } from '@remix-run/react';
 
 import { z } from 'zod';
 
+import pageIds from '../../page-ids.json';
 import { Button } from '~/components/buttons';
 import { InputField } from '~/components/input-field';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { RouteHandleData } from '~/utils/route-utils';
+
+export const handle = {
+  i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
+  pageIdentifier: pageIds.public.status,
+  pageTitleI18nKey: 'status:page-title',
+} as const satisfies RouteHandleData;
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const formDataSchema = z.object({
