@@ -43,7 +43,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const session = await sessionService.getSession(request);
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  await personalInformationService.getPersonalInformationIntoSession(session, request, userInfoToken.sin);
+  await personalInformationService.getPersonalInformationIntoSession(session, request, '/data-unavailable', userInfoToken.sin);
 
   if (!session.has('newHomeAddress')) {
     instrumentationService.countHttpStatus('home-address.validate.no-session', 302);

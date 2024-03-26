@@ -188,7 +188,7 @@ function createPersonalInformationService() {
       },
     };
   }
-  async function getPersonalInformationIntoSession(session: Session, request: Request, sin?: string) {
+  async function getPersonalInformationIntoSession(session: Session, request: Request, redirectURL: string, sin?: string) {
     if (session.has('personalInformation')) {
       log.debug(`User has personal information object;`);
       return session.get('personalInformation');
@@ -200,7 +200,7 @@ function createPersonalInformationService() {
     const personalInformation = await getPersonalInformation(sin);
     if (!personalInformation) {
       log.debug(`No personal information found for SIN`);
-      throw redirectWithLocale(request, '/data-unavailable');
+      throw redirectWithLocale(request, redirectURL);
     }
     session.set('personalInformation', personalInformation);
     return personalInformation;
