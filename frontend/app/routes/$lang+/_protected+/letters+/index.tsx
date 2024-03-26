@@ -38,10 +38,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 const orderEnumSchema = z.enum(['asc', 'desc']);
 
-export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
-  if (!featureEnabled('view-letters')) {
-    throw new Response('Not Found', { status: 404 });
-  }
+export async function loader({ request }: LoaderFunctionArgs) {
+  featureEnabled('view-letters');
 
   const auditService = getAuditService();
   const instrumentationService = getInstrumentationService();

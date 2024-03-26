@@ -184,7 +184,9 @@ export function getPublicEnv() {
  */
 export function featureEnabled(feature: FeatureName) {
   const { ENABLED_FEATURES } = getEnv();
-  return ENABLED_FEATURES.includes(feature);
+  if (!ENABLED_FEATURES.includes(feature)) {
+    throw new Response('Not Found', { status: 404 });
+  }
 }
 
 /**
