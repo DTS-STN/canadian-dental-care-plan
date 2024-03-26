@@ -9,7 +9,6 @@ import { getToast } from 'remix-toast';
 
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
-import SessionTimeout from '~/components/session-timeout';
 import { Toaster } from '~/components/toaster';
 import fontLatoStyleSheet from '~/fonts/lato.css';
 import fontNotoSansStyleSheet from '~/fonts/noto-sans.css';
@@ -100,7 +99,6 @@ export default function App() {
         <Suspense>
           <Outlet />
           <Toaster toast={toast} />
-          <SessionTimeout promptBeforeIdle={env.SESSION_TIMEOUT_PROMPT_SECONDS * 1000} timeout={env.SESSION_TIMEOUT_SECONDS * 1000} />
         </Suspense>
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />

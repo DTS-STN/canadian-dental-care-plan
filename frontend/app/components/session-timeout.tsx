@@ -11,9 +11,11 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 
 const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
-export interface SessionTimeoutProps extends Required<Pick<IIdleTimerProps, 'promptBeforeIdle' | 'timeout'>> {}
+export interface SessionTimeoutProps extends Required<Pick<IIdleTimerProps, 'promptBeforeIdle' | 'timeout'>> {
+  navigateTo: string;
+}
 
-const SessionTimeout = ({ promptBeforeIdle, timeout }: SessionTimeoutProps) => {
+const SessionTimeout = ({ promptBeforeIdle, timeout, navigateTo }: SessionTimeoutProps) => {
   const { t } = useTranslation(i18nNamespaces);
   const [modalOpen, setModalOpen] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState('');
@@ -21,7 +23,7 @@ const SessionTimeout = ({ promptBeforeIdle, timeout }: SessionTimeoutProps) => {
 
   const handleOnIdle = () => {
     setModalOpen(false);
-    navigate('/auth/logout');
+    navigate(navigateTo);
   };
 
   const { reset, getRemainingTime } = useIdleTimer({

@@ -1,12 +1,20 @@
-import { Outlet, isRouteErrorResponse, useRouteError } from '@remix-run/react';
+import { LoaderFunctionArgs } from '@remix-run/node';
+import { Outlet, isRouteErrorResponse, useLoaderData, useRouteError } from '@remix-run/react';
 
 import { NotFoundError, PublicLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
+import SessionTimeout from '~/components/session-timeout';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getLocale } from '~/utils/locale-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces(...layoutI18nNamespaces),
 } as const satisfies RouteHandleData;
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const lang = getLocale(request);
+  return { lang };
+}
 
 export function ErrorBoundary() {
   const error = useRouteError();
@@ -23,8 +31,10 @@ export function ErrorBoundary() {
 }
 
 export default function Layout() {
+  const { lang } = useLoaderData<typeof loader>();
   return (
     <PublicLayout>
+      <SessionTimeout navigateTo={`/${lang}/apply`} promptBeforeIdle={5 * 60 * 1000} timeout={15 * 60 * 1000} />
       <Outlet />
     </PublicLayout>
   );
