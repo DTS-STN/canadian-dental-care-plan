@@ -1,7 +1,11 @@
+import { Session } from '@remix-run/server-runtime/dist/sessions';
+
 import moize from 'moize';
+import { HttpResponse } from 'msw';
 import { z } from 'zod';
 
 import { getEnv } from '~/utils/env.server';
+import { redirectWithLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('personal-information-service.server');
@@ -185,6 +189,22 @@ function createPersonalInformationService() {
       },
     };
   }
+  async function getPersonalInformationIntoSession(session: Session, request: Request, sin?: string) {
+    if (session.has('personalInformation')) {
+      log.debug(`User has personal information object;`);
+      return session.get('personalInformation');
+    }
+    if (!sin) {
+      throw new HttpResponse('SIN must be present', { status: 401 });
+    }
 
-  return { getPersonalInformation };
+    const personalInformation = await getPersonalInformation(sin);
+    if (!personalInformation) {
+      log.debug(`No personal information found for SIN`);
+      throw redirectWithLocale(request, '/data-unavailable');
+    }
+    session.set('personalInformation', personalInformation);
+    return personalInformation;
+  }
+  return { getPersonalInformation, getPersonalInformationIntoSession };
 }
