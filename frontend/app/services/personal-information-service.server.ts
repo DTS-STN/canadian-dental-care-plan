@@ -1,7 +1,6 @@
 import { Session } from '@remix-run/server-runtime/dist/sessions';
 
 import moize from 'moize';
-import { HttpResponse } from 'msw';
 import { z } from 'zod';
 
 import { getEnv } from '~/utils/env.server';
@@ -195,7 +194,7 @@ function createPersonalInformationService() {
       return session.get('personalInformation');
     }
     if (!sin) {
-      throw new HttpResponse('SIN must be present', { status: 401 });
+      throw new Response(null, { status: 401 });
     }
 
     const personalInformation = await getPersonalInformation(sin);
