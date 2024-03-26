@@ -71,7 +71,7 @@ export default function ApplyIndex() {
   const captchaRef = useRef<HCaptcha>(null);
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+    let timeoutId: ReturnType<typeof setTimeout>;
 
     if (captchaRef.current?.isReady()) {
       captchaRef.current.execute();
@@ -88,16 +88,21 @@ export default function ApplyIndex() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
     if (captchaRef.current) {
-      const formData = new FormData(event.currentTarget);
-      const response = captchaRef.current.getResponse();
-      formData.set('h-captcha-response', response);
+      try {
+        const response = captchaRef.current.getResponse();
+        formData.set('h-captcha-response', response);
+      } catch (error) {
+        /* intentionally ignore and proceed with submission */
+      } finally {
+        captchaRef.current.resetCaptcha();
+      }
+
       fetcher.submit(formData, { method: 'POST' });
-
-      captchaRef.current.resetCaptcha();
+      sessionStorage.setItem('flow.state', 'active');
     }
-
-    sessionStorage.setItem('flow.state', 'active');
   }
 
   const canadaTermsConditions = <InlineLink to={t('apply:index.links.canada-ca-terms-and-conditions')} />;
