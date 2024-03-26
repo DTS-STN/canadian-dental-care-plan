@@ -142,11 +142,11 @@ export default function ApplyFlowApplicationInformation() {
                 label={t('applicant-information.first-name')}
                 className="w-full"
                 required
-                aria-labelledby="name-instructions"
+                aria-describedby="name-instructions"
                 errorMessage={errorMessages['first-name']}
                 defaultValue={defaultState?.firstName ?? ''}
               />
-              <InputField id="last-name" name="lastName" label={t('applicant-information.last-name')} className="w-full" required defaultValue={defaultState?.lastName ?? ''} errorMessage={errorMessages['last-name']} aria-labelledby="name-instructions" />
+              <InputField id="last-name" name="lastName" label={t('applicant-information.last-name')} className="w-full" required defaultValue={defaultState?.lastName ?? ''} errorMessage={errorMessages['last-name']} aria-describedby="name-instructions" />
             </div>
             <p id="name-instructions">{t('applicant-information.name-instructions')}</p>
             <InputField
