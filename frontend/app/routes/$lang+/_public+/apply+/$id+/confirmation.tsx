@@ -190,20 +190,28 @@ export default function ApplyFlowConfirm() {
       <UnorderedList term={t('confirm.applicant-title')}>
         <li className="capitalize">{t('confirm.full-name', { name: `${userInfo.firstName} ${userInfo.lastName}` })}</li>
         <li>{t('confirm.dob', { dob: userInfo.birthday })}</li>
-        <li>{t('confirm.sin', { sin: formatSin(userInfo.sin) })}</li>
+        <li>
+          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.sin" values={{ sin: formatSin(userInfo.sin) }} components={{ noWrap: <span className="text-nowrap" /> }} />
+        </li>
         <li>{t('confirm.marital-status', { status: userInfo.martialStatus })}</li>
       </UnorderedList>
       {spouseInfo && (
         <UnorderedList term={t('confirm.spouse-info')}>
           <li className="capitalize">{t('confirm.full-name', { name: `${spouseInfo.firstName} ${spouseInfo.lastName}` })}</li>
           <li>{t('confirm.dob', { dob: spouseInfo.birthday })}</li>
-          <li>{t('confirm.sin', { sin: formatSin(spouseInfo.sin) })}</li>
+          <li>
+            <Trans ns={handle.i18nNamespaces} i18nKey="confirm.sin" values={{ sin: formatSin(spouseInfo.sin) }} components={{ noWrap: <span className="text-nowrap" /> }} />
+          </li>
           <li>{t('confirm.consent')}</li>
         </UnorderedList>
       )}
       <UnorderedList term={t('confirm.contact-info')}>
-        <li>{t('confirm.phone-number', { phone: userInfo.phoneNumber })}</li>
-        <li>{t('confirm.alt-phone-number', { altPhone: userInfo.altPhoneNumber })}</li>
+        <li>
+          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.phone-number" values={{ phone: userInfo.phoneNumber }} components={{ noWrap: <span className="text-nowrap" /> }} />
+        </li>
+        <li>
+          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.alt-phone-number" values={{ altPhone: userInfo.altPhoneNumber }} components={{ noWrap: <span className="text-nowrap" /> }} />
+        </li>
         <li className="capitalize">{t('confirm.mailing', { address: mailingAddressInfo.address })}</li>
         <li className="capitalize">{t('confirm.home', { address: homeAddressInfo.address })}</li>
       </UnorderedList>
