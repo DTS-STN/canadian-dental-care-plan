@@ -88,20 +88,18 @@ export default function ApplyIndex() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     const formData = new FormData(event.currentTarget);
-    try {
-      if (captchaRef.current) {
+
+    if (captchaRef.current) {
+      try {
         const response = captchaRef.current.getResponse();
         formData.set('h-captcha-response', response);
+      } catch (error) {
+        /* intentionally ignore and proceed with submission */
+      } finally {
         captchaRef.current.resetCaptcha();
       }
-    } catch (error) {
-      /* intentionally ignore and proceed with submission */
     }
-
-    fetcher.submit(formData, { method: 'POST' });
-    sessionStorage.setItem('flow.state', 'active');
   }
 
   const canadaTermsConditions = <InlineLink to={t('apply:index.links.canada-ca-terms-and-conditions')} />;
