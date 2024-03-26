@@ -88,15 +88,19 @@ export default function ApplyIndex() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (captchaRef.current) {
-      const formData = new FormData(event.currentTarget);
-      const response = captchaRef.current.getResponse();
-      formData.set('h-captcha-response', response);
-      fetcher.submit(formData, { method: 'POST' });
 
-      captchaRef.current.resetCaptcha();
+    const formData = new FormData(event.currentTarget);
+    try {
+      if (captchaRef.current) {
+        const response = captchaRef.current.getResponse();
+        formData.set('h-captcha-response', response);
+        captchaRef.current.resetCaptcha();
+      }
+    } catch (error) {
+      /* intentionally ignore and proceed with submission */
     }
 
+    fetcher.submit(formData, { method: 'POST' });
     sessionStorage.setItem('flow.state', 'active');
   }
 
