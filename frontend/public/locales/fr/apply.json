@@ -53,7 +53,7 @@
     "app-code-is": "Votre code de demande est\u00a0:",
     "make-note": "Enregistrez ce code, car vous en aurez besoin pour vérifier l'état de votre demande.",
     "keep-copy": "Conservez une copie de votre demande",
-    "print-copy-text": "Vous <strong>ne recevrez pas</strong> de <strong>courriel de confirmation</strong>. Il est important de conserver une copie de votre demande. Vous pouvez utiliser ce bouton pour imprimer une copie de votre demande.",
+    "print-copy-text": "Vous <strong>ne recevrez pas</strong> de <strong>courriel de confirmation</strong>. Il est important de conserver une copie de votre demande. <noPrint>Vous pouvez utiliser ce bouton pour imprimer une copie de votre demande.<noPrint>",
     "print-btn": "Imprimer",
     "whats-next": "Prochaines étapes",
     "begin-process": "Nous commencerons à traiter votre demande immédiatement.",
@@ -148,11 +148,11 @@
         "title": "Renseignements supplémentaires",
         "eligible": "Exception\u00a0: vous êtes admissible si vous avez pris votre retraite et que\u00a0:",
         "list": {
-          "opted": "Vous avez choisi de ne pas recevoir de prestations de retraite avant le 11 décembre 2023;",
+          "opted": "Vous avez choisi de ne pas recevoir de prestations de retraite avant le 11\ua00décembre\ua0002023;",
           "cannot-opt": "Vous ne pouvez pas vous réinscrire en vertu des règles relatives aux régimes de retraite;"
         },
         "not-eligible": "Vous êtes toujours considéré comme ayant accès à une assurance ou à une couverture dentaire si vous choisissez de vous retirer des avantages offerts par votre employeur ou votre régime de retraite (voir l'exception) ou par l'entremise d'une organisation professionnelle ou étudiante. Par conséquent, vous n'êtes pas admissible au Régime canadien de soins dentaires.",
-        "not-eligible-purchased": "Si vous avez souscrit votre police d'assurance dentaire actuelle de votre propre chef (et non dans le cadre de l'une des couvertures décrites ci-dessus), vous n'êtes pas admissible au RCSD pendant que cette protection est en vigueur."
+        "not-eligible-purchased": "Si vous avez souscrit votre police d'assurance dentaire actuelle de votre propre chef (et non dans le cadre de l'une des couvertures décrites ci-dessus), vous n'êtes pas admissible au Régime canadien de soins dentaires pendant que cette protection est en vigueur."
       }
     },
     "error-message": {
@@ -313,15 +313,15 @@
     }
   },
   "partner-information": {
-    "page-title": "Renseignements sur l'époux/épouse ou le conjoint/conjointe de fait",
+    "page-title": "Renseignements sur votre époux/épouse ou conjoint/conjointe de fait",
     "provide-sin": "Fournissez les renseignements sur votre époux/épouse ou conjoint/conjointe de fait actuel tels qu'ils figurent sur sa carte ou lettre d'assurance sociale.",
-    "required-information": "Ces renseignements sont nécessaires pour calculer le revenu familial net rajusté. Veuillez noter que l'époux/épouse ou le conjoint/conjointe de fait doit présenter sa propre demande.",
+    "required-information": "Ces renseignements sont nécessaires pour calculer le nouveau revenu familial net rajusté. Votre époux ou conjoint de fait doit soumettre sa propre demande au Régime canadien de soins dentaires.",
     "sin": "numéro d'assurance sociale (NAS)",
     "date-of-birth": "Date de naissance",
     "last-name": "Nom de famille",
     "first-name": "Prénom",
-    "name-instructions": "(FR) If using a single legal name, please enter that name in BOTH the first name and last name fields.",
-    "confirm-checkbox": "Je confirme que mon époux/épouse ou mon conjoint/conjointe de fait est au courant et a consenti à la communication de ses renseignements personnels.",
+    "name-instructions": "Si vous utilisez un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
+    "confirm-checkbox": "Je confirme que mon époux/épouse ou mon conjoint/conjointe de fait est au courant et d'accord que ses renseignements personnels soient communiqués.",
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "error-message": {

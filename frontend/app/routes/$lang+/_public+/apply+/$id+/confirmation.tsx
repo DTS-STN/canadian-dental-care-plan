@@ -150,7 +150,7 @@ export default function ApplyFlowConfirm() {
       </ContextualAlert>
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.keep-copy')}</h2>
       <p className="mt-4">
-        <Trans ns={handle.i18nNamespaces} i18nKey="confirm.print-copy-text" />
+        <Trans ns={handle.i18nNamespaces} i18nKey="confirm.print-copy-text" components={{ noPrint: <span className="print:hidden" /> }} />
       </p>
       <button
         className="mt-8 inline-flex w-44 items-center justify-center rounded bg-gray-800 px-5 py-2.5 align-middle font-lato text-xl font-semibold text-white outline-offset-2 hover:bg-gray-900 print:hidden"
