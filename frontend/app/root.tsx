@@ -13,10 +13,9 @@ import { Toaster } from '~/components/toaster';
 import fontLatoStyleSheet from '~/fonts/lato.css';
 import fontNotoSansStyleSheet from '~/fonts/noto-sans.css';
 import { getBuildInfoService } from '~/services/build-info-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import tailwindStyleSheet from '~/tailwind.css';
-import { getPublicEnv } from '~/utils/env.server';
 import type { FeatureName } from '~/utils/env.server';
+import { getPublicEnv } from '~/utils/env.server';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { useI18nNamespaces } from '~/utils/route-utils';
 import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
@@ -47,7 +46,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ];
 };
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const buildInfoService = getBuildInfoService();
   const { toast, headers: toastHeaders } = await getToast(request);
   const requestUrl = new URL(request.url);
@@ -67,12 +66,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   };
   const origin = requestUrl.origin;
 
-  const userOrigin = await getUserOrigin(request);
-  const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
+  const userOrigin = await getUserOrigin(request, session);
   session.set('userOrigin', userOrigin);
 
-  return json({ buildInfo, env, meta, origin, toast, userOrigin }, { headers: { ...toastHeaders, 'Set-Cookie': await sessionService.commitSession(session) } });
+  return json({ buildInfo, env, meta, origin, toast, userOrigin }, { headers: { ...toastHeaders } });
 }
 
 export default function App() {

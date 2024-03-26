@@ -9,7 +9,7 @@ import { InputField } from '~/components/input-field';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const formDataSchema = z.object({
     sin: z.string().trim().min(1, { message: 'Please enter your SIN' }),
     code: z.string().trim().min(1, { message: 'Please enter your application code' }),

@@ -1,3 +1,5 @@
+import { Session } from '@remix-run/node';
+
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { loader } from '~/routes/$lang+/_protected+/personal-information+/home-address+/edit';
@@ -89,7 +91,7 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/personal-information/home-address/edit'),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 
@@ -130,7 +132,7 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
       try {
         await loader({
           request: new Request('http://localhost:3000/en/personal-information/home-address/edit'),
-          context: {},
+          context: { session: {} as Session },
           params: {},
         });
       } catch (error) {

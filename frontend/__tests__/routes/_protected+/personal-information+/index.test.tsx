@@ -1,7 +1,8 @@
+import { createMemorySessionStorage } from '@remix-run/node';
+
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { loader } from '~/routes/$lang+/_protected+/personal-information+/index';
-import { getSessionService } from '~/services/session-service.server';
 
 vi.mock('~/services/audit-service.server', () => ({
   getAuditService: vi.fn().mockReturnValue({
@@ -77,52 +78,40 @@ describe('_gcweb-app.personal-information._index', () => {
 
   describe('loader()', () => {
     it('should return a Response object', async () => {
-      const request = new Request('http://localhost:3000/personal-information');
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
 
-      const sessionService = await getSessionService();
-      const session = await sessionService.getSession(request);
-
-      vi.mocked(session.get).mockImplementation((key) => {
-        return {
-          idToken: { sub: '00000000-0000-0000-0000-000000000000' },
-        }[key];
+      const response = await loader({
+        request: new Request('http://localhost:3000/personal-information'),
+        context: { session },
+        params: {},
       });
-
-      const response = await loader({ request: request, context: {}, params: {} });
 
       expect(response).toBeInstanceOf(Response);
     });
 
     it('should return reponse status of 200', async () => {
-      const request = new Request('http://localhost:3000/personal-information');
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
 
-      const sessionService = await getSessionService();
-      const session = await sessionService.getSession(request);
-
-      vi.mocked(session.get).mockImplementation((key) => {
-        return {
-          idToken: { sub: '00000000-0000-0000-0000-000000000000' },
-        }[key];
+      const response = await loader({
+        request: new Request('http://localhost:3000/personal-information'),
+        context: { session },
+        params: {},
       });
-
-      const response = await loader({ request: request, context: {}, params: {} });
 
       expect(response.status).toBe(200);
     });
 
     it('should return correct mocked data', async () => {
-      const request = new Request('http://localhost:3000/personal-information');
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
 
-      const sessionService = await getSessionService();
-      const session = await sessionService.getSession(request);
-
-      vi.mocked(session.get).mockImplementation((key) => {
-        return {
-          idToken: { sub: '00000000-0000-0000-0000-000000000000' },
-        }[key];
+      const response = await loader({
+        request: new Request('http://localhost:3000/personal-information'),
+        context: { session },
+        params: {},
       });
-
-      const response = await loader({ request: request, context: {}, params: {} });
 
       const data = await response.json();
 

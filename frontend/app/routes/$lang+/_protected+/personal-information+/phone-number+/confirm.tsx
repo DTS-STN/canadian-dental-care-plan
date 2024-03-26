@@ -10,7 +10,6 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale, redirectWithLocale } from '~/utils/locale-utils.server';
@@ -35,15 +34,14 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const log = getLogger('phone-number/confirm');
 
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
-  const sessionService = await getSessionService();
   const userService = getUserService();
 
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
 
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
@@ -52,7 +50,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     throw new Response(null, { status: 404 });
   }
 
-  const session = await sessionService.getSession(request);
   if (!session.has('newPhoneNumber')) {
     instrumentationService.countHttpStatus('phone-number.confirm', 302);
     log.debug('No newPhoneNumber session found; redirecting to phone-number/edit');
@@ -65,15 +62,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ meta, newPhoneNumber: session.get('newPhoneNumber'), userInfo });
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ context: { session }, request }: ActionFunctionArgs) {
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
-  const sessionService = await getSessionService();
   const userService = getUserService();
 
-  await raoidcService.handleSessionValidation(request);
-
-  const session = await sessionService.getSession(request);
+  await raoidcService.handleSessionValidation(request, session);
 
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
@@ -91,11 +85,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const locale = getLocale(request);
 
   instrumentationService.countHttpStatus('phone-number.confirm', 302);
-  return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:phone-number.confirm.updated-notification', {
-    headers: {
-      'Set-Cookie': await sessionService.commitSession(session),
-    },
-  });
+  return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:phone-number.confirm.updated-notification');
 }
 
 export default function PhoneNumberConfirm() {

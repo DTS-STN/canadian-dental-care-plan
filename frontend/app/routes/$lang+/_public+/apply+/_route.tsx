@@ -11,7 +11,7 @@ export const handle = {
   i18nNamespaces: getTypedI18nNamespaces(...layoutI18nNamespaces),
 } as const satisfies RouteHandleData;
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const lang = getLocale(request);
   return { lang };
 }

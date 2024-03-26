@@ -1,3 +1,5 @@
+import { Session } from '@remix-run/node';
+
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/$lang+/_protected+/personal-information+/phone-number+/edit';
@@ -53,7 +55,7 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/personal-information/phone-number/edit'),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 
@@ -70,12 +72,15 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
     it('should return validation errors', async () => {
       const formData = new FormData();
       formData.append('phoneNumber', '819 426-55');
-      const request = new Request('http://localhost:3000/en/personal-information/phone-number/edit', {
-        method: 'POST',
-        body: formData,
-      });
 
-      const response = await action({ request, context: {}, params: {} });
+      const response = await action({
+        request: new Request('http://localhost:3000/en/personal-information/phone-number/edit', {
+          method: 'POST',
+          body: formData,
+        }),
+        context: { session: {} as Session },
+        params: {},
+      });
       const data = await response.json();
 
       expect(response.status).toBe(200);

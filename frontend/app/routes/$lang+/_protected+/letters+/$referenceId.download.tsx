@@ -3,11 +3,10 @@ import type { LoaderFunctionArgs } from '@remix-run/node';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLettersService } from '~/services/letters-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { UserinfoToken } from '~/utils/raoidc-utils.server';
 
-export async function loader({ params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   if (!featureEnabled('view-letters')) {
     throw new Response('Not Found', { status: 404 });
   }
@@ -21,11 +20,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   const lettersService = getLettersService();
   const raoidcService = await getRaoidcService();
-  const sessionService = await getSessionService();
+  await raoidcService.handleSessionValidation(request, session);
 
-  await raoidcService.handleSessionValidation(request);
-
-  const session = await sessionService.getSession(request);
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const response = await lettersService.getPdf(userInfoToken.sub, params.referenceId);
 

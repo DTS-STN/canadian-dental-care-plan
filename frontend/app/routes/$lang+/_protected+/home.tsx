@@ -11,7 +11,6 @@ import { AppLink } from '~/components/app-link';
 import { useFeature } from '~/root';
 import { getAuditService } from '~/services/audit-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
@@ -32,12 +31,10 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
 
-  const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('page-view.home', { userId: idToken.sub });
 
@@ -45,11 +42,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
 
-  const userOrigin = await getUserOrigin(request);
+  const userOrigin = await getUserOrigin(request, session);
   session.set('userOrigin', userOrigin);
 
   if (!userInfo) {
-    return redirectWithLocale(request, '/data-unavailable', { headers: { 'Set-Cookie': await sessionService.commitSession(session) } });
+    return redirectWithLocale(request, '/data-unavailable');
   }
 
   const t = await getFixedT(request, handle.i18nNamespaces);

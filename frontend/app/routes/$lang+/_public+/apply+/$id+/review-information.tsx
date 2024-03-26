@@ -52,9 +52,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id, state } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ params, request, session });
   const maritalStatuses = await getLookupService().getAllMaritalStatuses();
   const provincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
 
@@ -151,9 +151,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return json({ id, userInfo, spouseInfo, maritalStatuses, preferredLanguage, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, meta });
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id, state } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ params, request, session });
 
   // prettier-ignore
   if (!state.applicantInformation ||
@@ -173,7 +173,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     submittedOn: new Date().toISOString(),
   };
 
-  const sessionResponseInit = await applyFlow.saveState({ request, params, state: { submissionInfo } });
+  const sessionResponseInit = await applyFlow.saveState({ params, request, session, state: { submissionInfo } });
 
   return redirectWithLocale(request, `/apply/${id}/confirmation`, sessionResponseInit);
 }

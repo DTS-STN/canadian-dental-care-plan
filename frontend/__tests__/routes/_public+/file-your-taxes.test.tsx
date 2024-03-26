@@ -1,3 +1,5 @@
+import { Session } from '@remix-run/node';
+
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { loader } from '~/routes/$lang+/_public+/apply+/$id+/file-your-taxes';
@@ -25,7 +27,7 @@ describe('_public.apply.id.file-your-taxes', () => {
     it('should load id', async () => {
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/file-your-taxes'),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 

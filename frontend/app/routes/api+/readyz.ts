@@ -6,6 +6,6 @@ import { json } from '@remix-run/node';
  *
  * @see https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes
  */
-export function loader({ request }: LoaderFunctionArgs) {
+export function loader({ context: { session }, request }: LoaderFunctionArgs) {
   return json({ ready: true });
 }

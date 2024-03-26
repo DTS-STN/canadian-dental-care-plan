@@ -12,7 +12,7 @@ export const handle = {
   i18nNamespaces: [...layoutHandle.i18nNamespaces],
 } as const satisfies RouteHandleData;
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const locale = getLocale(request);
   return json({ locale });
 }

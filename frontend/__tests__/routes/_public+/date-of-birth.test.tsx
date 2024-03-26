@@ -1,4 +1,4 @@
-import { redirect } from '@remix-run/node';
+import { Session, redirect } from '@remix-run/node';
 
 import { differenceInYears, isValid, parse } from 'date-fns';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -40,7 +40,7 @@ describe('_public.apply.id.date-of-birth', () => {
     it('should load id, and dob', async () => {
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/date-of-birth'),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 
@@ -58,7 +58,7 @@ describe('_public.apply.id.date-of-birth', () => {
     it('should validate missing day, month, and year selections', async () => {
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/date-of-birth', { method: 'POST', body: new FormData() }),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 
@@ -77,7 +77,7 @@ describe('_public.apply.id.date-of-birth', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/date-of-birth', { method: 'POST', body: formData }),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 
@@ -95,7 +95,7 @@ describe('_public.apply.id.date-of-birth', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/date-of-birth', { method: 'POST', body: formData }),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 

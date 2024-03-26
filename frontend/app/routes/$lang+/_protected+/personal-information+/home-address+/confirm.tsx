@@ -1,5 +1,5 @@
-import { json } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { Form, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
@@ -13,7 +13,6 @@ import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -36,21 +35,19 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const addressService = getAddressService();
   const instrumentationService = getInstrumentationService();
   const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
-  const sessionService = await getSessionService();
   const userService = getUserService();
 
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
 
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
   const homeAddressInfo = await addressService.getAddressInfo(userId, userInfo?.homeAddress ?? '');
 
-  const session = await sessionService.getSession(request);
   const newHomeAddress = session.get('newHomeAddress');
   const useSuggestedAddress = session.get('useSuggestedAddress');
   const suggestedAddress = session.get('suggestedAddress');
@@ -65,19 +62,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ countryList, homeAddressInfo, meta, newHomeAddress, regionList, suggestedAddress, useSuggestedAddress });
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ context: { session }, request }: ActionFunctionArgs) {
   const addressService = getAddressService();
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
-  const sessionService = await getSessionService();
   const userService = getUserService();
 
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
 
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
 
-  const session = await sessionService.getSession(request);
   const newHomeAddress = session.get('useSuggestedAddress') ? session.get('suggestedAddress') : session.get('newHomeAddress');
   await addressService.updateAddressInfo(userId, userInfo?.homeAddress ?? '', newHomeAddress);
 

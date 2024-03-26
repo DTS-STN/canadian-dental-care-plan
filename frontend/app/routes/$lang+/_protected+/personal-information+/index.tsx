@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
-import { json } from '@remix-run/node';
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
@@ -13,7 +13,6 @@ import { getAddressService } from '~/services/address-service.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -35,16 +34,14 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   if (!featureEnabled('update-personal-info')) {
     throw new Response(null, { status: 404 });
   }
 
   const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
 
-  const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('page-view.personal-information', { userId: idToken.sub });
 

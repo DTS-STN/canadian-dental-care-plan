@@ -1,5 +1,5 @@
-import { json } from '@remix-run/node';
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { Form, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
@@ -12,7 +12,6 @@ import { getAddressService } from '~/services/address-service.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -36,9 +35,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
 
   const userService = getUserService();
   const userId = await userService.getUserId();
@@ -47,8 +46,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const countryList = await getLookupService().getAllCountries();
   const regionList = await getLookupService().getAllRegions();
 
-  const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
   const newMailingAddress = session.get('newMailingAddress');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -57,16 +54,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ countryList, mailingAddressInfo, meta, newMailingAddress, regionList });
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ context: { session }, request }: ActionFunctionArgs) {
   const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
 
   const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
-
-  const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
 
   await getAddressService().updateAddressInfo(userId, userInfo?.mailingAddress ?? '', session.get('newMailingAddress'));
 

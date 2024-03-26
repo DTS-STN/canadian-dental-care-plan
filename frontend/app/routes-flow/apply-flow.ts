@@ -1,3 +1,4 @@
+import { Session } from '@remix-run/node';
 import { Params } from '@remix-run/react';
 
 import { differenceInMinutes } from 'date-fns';
@@ -13,7 +14,6 @@ import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/p
 import { ReviewInformationState, SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/review-information';
 import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/tax-filing';
 import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-of-application';
-import { getSessionService } from '~/services/session-service.server';
 import { redirectWithLocale } from '~/utils/locale-utils.server';
 
 /**
@@ -56,6 +56,7 @@ function getTimeUpdatedSessionName(id: string) {
 interface LoadStateArgs {
   params: Params;
   request: Request;
+  session: Session;
 }
 
 /**
@@ -63,7 +64,7 @@ interface LoadStateArgs {
  * @param args - The arguments.
  * @returns The loaded state.
  */
-async function loadState({ params, request }: LoadStateArgs) {
+async function loadState({ params, request, session }: LoadStateArgs) {
   const applyRouteUrl = '/apply';
   const { pathname } = new URL(request.url);
   const parsedId = idSchema.safeParse(params.id);
@@ -73,9 +74,6 @@ async function loadState({ params, request }: LoadStateArgs) {
   }
 
   const id = parsedId.data;
-
-  const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
   const sessionName = getSessionName(id);
 
   if (!session.has(sessionName)) {
@@ -94,11 +92,7 @@ async function loadState({ params, request }: LoadStateArgs) {
   if (differenceInMinutes(now, timeUpdated) >= 15) {
     session.unset(sessionName);
     session.unset(timeUpdatedSessionName);
-    throw redirectWithLocale(request, applyRouteUrl, {
-      headers: {
-        'Set-Cookie': await sessionService.commitSession(session),
-      },
-    });
+    throw redirectWithLocale(request, applyRouteUrl);
   }
 
   // Redirect to the confirmation page if the application has been submitted and
@@ -120,6 +114,7 @@ async function loadState({ params, request }: LoadStateArgs) {
 interface SaveStateArgs {
   params: Params;
   request: Request;
+  session: Session;
   state: ApplyState;
   remove?: keyof ApplyState;
 }
@@ -129,16 +124,13 @@ interface SaveStateArgs {
  * @param args - The arguments.
  * @returns The Set-Cookie header to be used in the HTTP response.
  */
-async function saveState({ params, request, state, remove = undefined }: SaveStateArgs) {
-  const { id, state: currentState } = await loadState({ params, request });
+async function saveState({ params, request, session, state, remove = undefined }: SaveStateArgs) {
+  const { id, state: currentState } = await loadState({ params, request, session });
   const newState = { ...currentState, ...state };
 
   if (remove && remove in newState) {
     delete newState[remove];
   }
-
-  const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
 
   const sessionName = getSessionName(id);
   session.set(sessionName, newState);
@@ -146,16 +138,13 @@ async function saveState({ params, request, state, remove = undefined }: SaveSta
   const timeUpdatedSessionName = getTimeUpdatedSessionName(id);
   session.set(timeUpdatedSessionName, new Date().toISOString());
 
-  return {
-    headers: {
-      'Set-Cookie': await sessionService.commitSession(session),
-    },
-  };
+  return {};
 }
 
 interface ClearStateArgs {
   params: Params;
   request: Request;
+  session: Session;
 }
 
 /**
@@ -163,11 +152,8 @@ interface ClearStateArgs {
  * @param args - The arguments.
  * @returns The Set-Cookie header to be used in the HTTP response.
  */
-async function clearState({ params, request }: ClearStateArgs) {
-  const { id } = await loadState({ params, request });
-
-  const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
+async function clearState({ params, request, session }: ClearStateArgs) {
+  const { id } = await loadState({ params, request, session });
 
   const sessionName = getSessionName(id);
   session.unset(sessionName);
@@ -175,16 +161,13 @@ async function clearState({ params, request }: ClearStateArgs) {
   const timeUpdatedSessionName = getTimeUpdatedSessionName(id);
   session.unset(timeUpdatedSessionName);
 
-  return {
-    headers: {
-      'Set-Cookie': await sessionService.commitSession(session),
-    },
-  };
+  return {};
 }
 
 interface StartArgs {
   id: string;
   request: Request;
+  session: Session;
 }
 
 /**
@@ -192,12 +175,9 @@ interface StartArgs {
  * @param args - The arguments.
  * @returns The Set-Cookie header to be used in the HTTP response.
  */
-async function start({ id, request }: StartArgs) {
+async function start({ id, request, session }: StartArgs) {
   const parsedId = idSchema.parse(id);
   const initialState = {};
-
-  const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
 
   const sessionName = getSessionName(parsedId);
   session.set(sessionName, initialState);
@@ -205,11 +185,7 @@ async function start({ id, request }: StartArgs) {
   const timeUpdatedSessionName = getTimeUpdatedSessionName(id);
   session.set(timeUpdatedSessionName, new Date().toISOString());
 
-  return {
-    headers: {
-      'Set-Cookie': await sessionService.commitSession(session),
-    },
-  };
+  return {};
 }
 
 /**

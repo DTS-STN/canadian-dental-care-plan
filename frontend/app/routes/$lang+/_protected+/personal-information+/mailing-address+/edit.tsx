@@ -18,7 +18,6 @@ import { InputSelect } from '~/components/input-select';
 import { getAddressService } from '~/services/address-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
@@ -42,9 +41,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
 
   const userService = getUserService();
   const userId = await userService.getUserId();
@@ -65,9 +64,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ addressInfo, countryList, homeAddressInfo, meta, regionList });
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ context: { session }, request }: ActionFunctionArgs) {
   const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
 
   const copyHomeAddressSchema = z.object({
     copyHomeAddress: z.string().transform((value) => value === 'on'),
@@ -91,9 +90,6 @@ export async function action({ request }: ActionFunctionArgs) {
     });
   }
 
-  const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
-
   const { copyHomeAddress } = formData as Partial<z.infer<typeof copyHomeAddressSchema>>;
   if (copyHomeAddress) {
     const userService = getUserService();
@@ -109,11 +105,7 @@ export async function action({ request }: ActionFunctionArgs) {
     session.set('newMailingAddress', parsedDataResult.data);
   }
 
-  return redirectWithLocale(request, '/personal-information/mailing-address/confirm', {
-    headers: {
-      'Set-Cookie': await sessionService.commitSession(session),
-    },
-  });
+  return redirectWithLocale(request, '/personal-information/mailing-address/confirm');
 }
 
 export default function PersonalInformationMailingAddressEdit() {

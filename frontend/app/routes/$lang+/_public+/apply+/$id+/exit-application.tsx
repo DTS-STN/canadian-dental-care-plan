@@ -24,9 +24,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id } = await applyFlow.loadState({ request, params });
+  const { id } = await applyFlow.loadState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:exit-application.page-title') }) };
@@ -34,11 +34,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return json({ id, meta });
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
-  await applyFlow.loadState({ request, params });
+  await applyFlow.loadState({ params, request, session });
   //TODO: Add apply form logic
-  const sessionResponseInit = await applyFlow.clearState({ request, params });
+  const sessionResponseInit = await applyFlow.clearState({ params, request, session });
   return redirectWithLocale(request, `/apply`, sessionResponseInit);
 }
 

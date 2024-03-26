@@ -1,3 +1,5 @@
+import { Session } from '@remix-run/node';
+
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/communication-preference';
@@ -64,7 +66,7 @@ describe('_public.apply.id.communication-preference', () => {
     it('should id, state, country list and region list', async () => {
       const response = await loader({
         request: new Request('http://localhost:3000/apply/123/communication-preference'),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 
@@ -117,7 +119,7 @@ describe('_public.apply.id.communication-preference', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 
@@ -138,7 +140,7 @@ describe('_public.apply.id.communication-preference', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 
@@ -160,7 +162,7 @@ describe('_public.apply.id.communication-preference', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 

@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react';
 
-import { json } from '@remix-run/node';
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { useLoaderData, useSearchParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
@@ -15,7 +15,6 @@ import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLettersService } from '~/services/letters-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -39,7 +38,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 const orderEnumSchema = z.enum(['asc', 'desc']);
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   if (!featureEnabled('view-letters')) {
     throw new Response('Not Found', { status: 404 });
   }
@@ -48,10 +47,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const instrumentationService = getInstrumentationService();
   const lettersService = getLettersService();
   const raoidcService = await getRaoidcService();
-  const sessionService = await getSessionService();
   const userService = getUserService();
 
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
 
   const sortParam = new URL(request.url).searchParams.get('sort');
   const sortOrder = orderEnumSchema.catch('desc').parse(sortParam);
@@ -62,7 +60,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('letters:index.page-title') }) };
 
-  const session = await sessionService.getSession(request);
   const idToken: IdToken = session.get('idToken');
   auditService.audit('page-view.letters', { userId: idToken.sub });
   instrumentationService.countHttpStatus('letters.view', 200);

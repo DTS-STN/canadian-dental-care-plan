@@ -1,4 +1,4 @@
-import { redirect } from '@remix-run/node';
+import { Session, redirect } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -37,7 +37,7 @@ describe('_public.apply.id.tax-filing', () => {
     it('should load id, and taxFiling2023', async () => {
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/tax-filing'),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 
@@ -55,7 +55,7 @@ describe('_public.apply.id.tax-filing', () => {
     it('should validate missing tax filing selection', async () => {
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: new FormData() }),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 
@@ -70,7 +70,7 @@ describe('_public.apply.id.tax-filing', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 
@@ -84,7 +84,7 @@ describe('_public.apply.id.tax-filing', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 

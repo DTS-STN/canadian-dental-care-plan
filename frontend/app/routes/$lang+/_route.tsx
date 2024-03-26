@@ -4,7 +4,7 @@ import { Outlet, isRouteErrorResponse, useParams, useRouteError } from '@remix-r
 import { BilingualNotFoundError, NotFoundError, ServerError } from '~/components/layouts/public-layout';
 import { getLogger } from '~/utils/logging.server';
 
-export function loader({ request, params }: LoaderFunctionArgs) {
+export function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const log = getLogger('$lang+/_route');
 
   if (!['en', 'fr'].includes(String(params.lang))) {

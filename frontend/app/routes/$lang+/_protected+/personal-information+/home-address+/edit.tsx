@@ -17,7 +17,6 @@ import { getAddressService } from '~/services/address-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getWSAddressService } from '~/services/wsaddress-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -42,14 +41,14 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const addressService = getAddressService();
   const instrumentationService = getInstrumentationService();
   const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
   const userService = getUserService();
 
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
 
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
@@ -69,13 +68,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ addressInfo, countryList, meta, regionList });
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ context: { session }, request }: ActionFunctionArgs) {
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
-  const sessionService = await getSessionService();
   const wsAddressService = await getWSAddressService();
 
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
 
   const formDataSchema = z.object({
     address: z.string().trim().min(1, { message: 'empty-field' }),
@@ -96,7 +94,6 @@ export async function action({ request }: ActionFunctionArgs) {
     });
   }
 
-  const session = await sessionService.getSession(request);
   session.set('newHomeAddress', parsedDataResult.data);
 
   const { address, city, country, postalCode, province } = parsedDataResult.data;
@@ -108,11 +105,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   instrumentationService.countHttpStatus('home-address.edit', 302);
-  return redirectWithLocale(request, getRedirectUrl(correctedAddress.status), {
-    headers: {
-      'Set-Cookie': await sessionService.commitSession(session),
-    },
-  });
+  return redirectWithLocale(request, getRedirectUrl(correctedAddress.status));
 }
 
 function getRedirectUrl(correctedAddressStatus: string) {

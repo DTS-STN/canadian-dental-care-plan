@@ -11,7 +11,6 @@ import { InputRadios } from '~/components/input-radios';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -32,15 +31,13 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const instrumentationService = getInstrumentationService();
   const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
-  const sessionService = await getSessionService();
 
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
 
-  const session = await sessionService.getSession(request);
   const homeAddressInfo = session.get('newHomeAddress');
   const suggestedAddressInfo = session.get('suggestedAddress');
 
@@ -54,25 +51,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ countryList, homeAddressInfo, meta, regionList, suggestedAddressInfo });
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ context: { session }, request }: ActionFunctionArgs) {
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
-  const sessionService = await getSessionService();
 
-  await raoidcService.handleSessionValidation(request);
-
-  const session = await sessionService.getSession(request);
+  await raoidcService.handleSessionValidation(request, session);
 
   const formDataRadio = Object.fromEntries(await request.formData());
   const useSuggestedAddress = formDataRadio.selectedAddress === 'suggested';
   session.set('useSuggestedAddress', useSuggestedAddress);
 
   instrumentationService.countHttpStatus('home-address.suggest', 302);
-  return redirectWithLocale(request, '/personal-information/home-address/confirm', {
-    headers: {
-      'Set-Cookie': await sessionService.commitSession(session),
-    },
-  });
+  return redirectWithLocale(request, '/personal-information/home-address/confirm');
 }
 
 export default function HomeAddressSuggested() {

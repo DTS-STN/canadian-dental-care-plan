@@ -1,8 +1,9 @@
+import { Session, createMemorySessionStorage } from '@remix-run/node';
+
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/$lang+/_protected+/personal-information+/mailing-address+/edit';
 import { getAddressService } from '~/services/address-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 
 vi.mock('~/services/address-service.server', () => ({
@@ -79,7 +80,7 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information/mailing-address/edit'),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 
@@ -125,7 +126,7 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
       try {
         await loader({
           request: new Request('http://localhost:3000/personal-information/mailing-address/edit'),
-          context: {},
+          context: { session: {} as Session },
           params: {},
         });
       } catch (error) {
@@ -136,9 +137,7 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
 
   describe('action()', () => {
     it('should redirect to confirm page', async () => {
-      const sessionService = await getSessionService();
-
-      vi.mocked(sessionService.commitSession).mockResolvedValue('some-set-cookie-header');
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
       const formData = new FormData();
       formData.append('address', '111 Fake Home St');
@@ -149,7 +148,7 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
 
       const response = await action({
         request: new Request('http://localhost:300/en/personal-information/mailing-address/edit', { method: 'POST', body: formData }),
-        context: {},
+        context: { session },
         params: {},
       });
 
@@ -164,7 +163,7 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
       try {
         await loader({
           request: new Request('http://localhost:3000/personal-information/mailing-address/edit'),
-          context: {},
+          context: { session: {} as Session },
           params: {},
         });
       } catch (error) {

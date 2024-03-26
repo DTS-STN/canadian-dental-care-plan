@@ -1,3 +1,5 @@
+import { Session } from '@remix-run/node';
+
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { loader } from '~/routes/$lang+/_public+/apply+/$id+/dob-eligibility';
@@ -25,7 +27,7 @@ describe('_public.apply.id.dob-eligibility', () => {
     it('should load id', async () => {
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/dob-eligibility'),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 

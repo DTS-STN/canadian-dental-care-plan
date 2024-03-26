@@ -1,7 +1,6 @@
-import type { RequestHandler } from '@remix-run/express';
-import { createRequestHandler } from '@remix-run/express';
+import { createRemixRequest, sendRemixResponse } from '@remix-run/express/dist/server';
 import type { ServerBuild } from '@remix-run/node';
-import { broadcastDevReady, installGlobals } from '@remix-run/node';
+import { broadcastDevReady, installGlobals, createRequestHandler as remixCreateRequestHandler } from '@remix-run/node';
 
 import chokidar from 'chokidar';
 import compression from 'compression';
@@ -13,6 +12,7 @@ import path from 'node:path';
 import url from 'node:url';
 import sourceMapSupport from 'source-map-support';
 
+import { getSessionService } from '~/services/session-service.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('express.server');
@@ -82,8 +82,8 @@ async function runServer() {
 
   // prettier-ignore
   const remixRequestHandler = process.env.NODE_ENV === 'development'
-    ? createDevRequestHandler(build, buildPath, versionPath)
-    : createRequestHandler({ build, mode: process.env.NODE_ENV });
+    ? await createDevRequestHandler(build, buildPath, versionPath)
+    : await createRequestHandler(build, process.env.NODE_ENV);
 
   const app = express();
   // disable the X-Powered-By header to make it harder to fingerprint the server
@@ -116,7 +116,7 @@ async function runServer() {
   }
 }
 
-function createDevRequestHandler(initialBuild: ServerBuild, buildPath: string, versionPath: string) {
+async function createDevRequestHandler(initialBuild: ServerBuild, buildPath: string, versionPath: string) {
   let build = initialBuild;
 
   const handleServerUpdate = async () => {
@@ -131,15 +131,38 @@ function createDevRequestHandler(initialBuild: ServerBuild, buildPath: string, v
 
   // wrap request handler to make sure its recreated
   // with the latest build for every request
-  const requestHandler: RequestHandler = async (req, res, next) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      return createRequestHandler({ build, mode: 'development' })(req, res, next);
+      const requestHandler = await createRequestHandler(build, 'development');
+      return requestHandler(req, res, next);
     } catch (error) {
       next(error);
     }
   };
+}
 
-  return requestHandler;
+/**
+ * Modified createRequestHandler(..) from Remix's express adapter that adds session support.
+ * @see https://github.com/remix-run/remix/blob/main/packages/remix-express/server.ts
+ */
+async function createRequestHandler(build: ServerBuild, mode: string) {
+  const sessionService = await getSessionService();
+  const handleRequest = remixCreateRequestHandler(build, mode);
+
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const session = await sessionService.getSession(req.headers.cookie);
+
+    try {
+      const remixResponse = await handleRequest(createRemixRequest(req, res), { session });
+      remixResponse.headers.append('Set-Cookie', await sessionService.commitSession(session));
+
+      await sendRemixResponse(res, remixResponse);
+    } catch (error: unknown) {
+      // Express doesn't support async functions, so we have to pass along the
+      // error manually using next().
+      next(error);
+    }
+  };
 }
 
 function parseNumber(raw?: string) {

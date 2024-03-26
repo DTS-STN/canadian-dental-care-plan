@@ -53,11 +53,11 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const { CANADA_COUNTRY_ID } = getEnv();
   const applyFlow = getApplyFlow();
   const lookupService = getLookupService();
-  const { id, state } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const federalDentalBenefits = await lookupService.getAllFederalDentalBenefit();
@@ -72,9 +72,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return json({ federalDentalBenefits, federalSocialPrograms, id, meta, provincialTerritorialDentalBenefits, provincialTerritorialSocialPrograms, regions, defaultState: state.dentalBenefits, editMode: state.editMode });
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id } = await applyFlow.loadState({ request, params });
+  const { id } = await applyFlow.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -116,7 +116,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const sessionResponseInit = await applyFlow.saveState({ request, params, state: { dentalBenefits: parsedDataResult.data } });
+  const sessionResponseInit = await applyFlow.saveState({ params, request, session, state: { dentalBenefits: parsedDataResult.data } });
   return redirectWithLocale(request, `/apply/${id}/review-information`, sessionResponseInit);
 }
 

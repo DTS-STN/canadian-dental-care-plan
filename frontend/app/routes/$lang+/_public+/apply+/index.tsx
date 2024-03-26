@@ -34,7 +34,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const { HCAPTCHA_SITE_KEY } = getEnv();
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -43,7 +43,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return { meta, siteKey: HCAPTCHA_SITE_KEY };
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ context: { session }, request }: ActionFunctionArgs) {
   const log = getLogger('apply/index');
 
   const formData = await request.formData();
@@ -58,7 +58,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const applyFlow = getApplyFlow();
   const id = randomUUID().toString();
-  const sessionResponseInit = await applyFlow.start({ id, request });
+  const sessionResponseInit = await applyFlow.start({ id, request, session });
 
   return redirectWithLocale(request, `/apply/${id}/type-of-application`, sessionResponseInit);
 }

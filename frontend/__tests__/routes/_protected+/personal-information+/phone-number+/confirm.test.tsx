@@ -1,7 +1,8 @@
+import { createMemorySessionStorage } from '@remix-run/node';
+
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/$lang+/_protected+/personal-information+/phone-number+/confirm';
-import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 
 vi.mock('~/services/audit-service.server', () => ({
@@ -19,17 +20,6 @@ vi.mock('~/services/instrumentation-service.server', () => ({
 vi.mock('~/services/raoidc-service.server', () => ({
   getRaoidcService: vi.fn().mockResolvedValue({
     handleSessionValidation: vi.fn().mockResolvedValue(true),
-  }),
-}));
-
-vi.mock('~/services/session-service.server', () => ({
-  getSessionService: vi.fn().mockResolvedValue({
-    commitSession: vi.fn(),
-    getSession: vi.fn().mockResolvedValue({
-      has: vi.fn(),
-      get: vi.fn(),
-      unset: vi.fn(),
-    }),
   }),
 }));
 
@@ -55,17 +45,15 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
 
   describe('loader()', () => {
     it('should return userInfo and newPhoneNumber', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
       const userService = getUserService();
-      const sessionService = await getSessionService();
-      const session = await sessionService.getSession(new Request('https://example.com/'));
 
+      session.set('newPhoneNumber', '(444) 555-6666');
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', phoneNumber: '(111) 222-3333' });
-      vi.mocked(session.get).mockReturnValueOnce('(444) 555-6666');
-      vi.mocked(session.has).mockReturnValueOnce(true);
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/personal-information/phone-number/confirm'),
-        context: {},
+        context: { session },
         params: {},
       });
 
@@ -81,21 +69,18 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
 
   describe('action()', () => {
     it('should redirect to the personal information on success', async () => {
-      const sessionService = await getSessionService();
-      const session = await sessionService.getSession(new Request('https://example.com/'));
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
-      vi.mocked(session.has).mockReturnValueOnce(true);
-      vi.mocked(session.get).mockImplementation((key) => {
-        return {
-          idToken: { sub: '00000000-0000-0000-0000-000000000000' },
-        }[key];
+      session.set('newPhoneNumber', '(444) 555-6666');
+      session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
+
+      const response = await action({
+        request: new Request('http://localhost:3000/en/personal-information/phone-number/confirm', {
+          method: 'POST',
+        }),
+        context: { session },
+        params: {},
       });
-
-      const request = new Request('http://localhost:3000/en/personal-information/phone-number/confirm', {
-        method: 'POST',
-      });
-
-      const response = await action({ request, context: {}, params: {} });
 
       expect(response.status).toBe(302);
       expect(response.headers.get('location')).toBe('/en/personal-information');

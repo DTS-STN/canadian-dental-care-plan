@@ -21,7 +21,7 @@
  *
  * @see https://remix.run/docs/en/main/utils/sessions
  */
-import { createCookie, createFileSessionStorage, createSessionStorage } from '@remix-run/node';
+import { CookieParseOptions, createCookie, createFileSessionStorage, createSessionStorage } from '@remix-run/node';
 
 import moize from 'moize';
 import { randomUUID } from 'node:crypto';
@@ -56,7 +56,7 @@ async function createSessionService() {
 
       return {
         ...sessionStorage,
-        getSession: async (request: Request) => {
+        getSession: async (cookieHeader?: string | null, options?: CookieParseOptions) => {
           // BUG :: GjB :: **POTENTIALLY INCONSISTENT SESSION FILE READS**
           //
           // Under certain circumstances, reading the session store file using
@@ -70,10 +70,10 @@ async function createSessionService() {
           //
           // @see node_modules/@remix-run/node/dist/sessions/fileStorage.js · async readData(id) { .. }
           try {
-            return await sessionStorage.getSession(request.headers.get('Cookie'));
+            return await sessionStorage.getSession(cookieHeader, options);
           } catch (error) {
             log.warn(`Session file read failed: [${error}]; retrying one time`);
-            return await sessionStorage.getSession(request.headers.get('Cookie'));
+            return await sessionStorage.getSession(cookieHeader, options);
           }
         },
       };
@@ -81,14 +81,7 @@ async function createSessionService() {
 
     case 'redis': {
       log.info('Using Redis-backed sessions.');
-      const sessionStorage = await createRedisSessionStorage();
-
-      return {
-        ...sessionStorage,
-        getSession: async (request: Request) => {
-          return await sessionStorage.getSession(request.headers.get('Cookie'));
-        },
-      };
+      return await createRedisSessionStorage();
     }
 
     default: {
