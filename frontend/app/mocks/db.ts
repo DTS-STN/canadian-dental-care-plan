@@ -33,21 +33,36 @@ const db = factory({
     homeAddressCityName: faker.location.city,
     homeAddressProvince: () => faker.location.state({ abbreviated: true }),
     homeAddressCountryName: () => 'CAN',
-    homeAddressCountryCode: String, // TODO Remove if unneeded when Interop gets back
+    homeAddressCountryReferenceId: String,
     homeAddressPostalCode: faker.location.zipCode,
+
     mailingAddressStreet: String,
     mailingAddressSecondaryUnitText: String,
     mailingAddressCityName: faker.location.city,
     mailingAddressProvince: () => faker.location.state({ abbreviated: true }),
     mailingAddressCountryName: () => 'CAN',
-    mailingAddressCountryCode: String, // TODO Remove if unneeded when Interop gets back
+    mailingAddressCountryReferenceId: String,
     mailingAddressPostalCode: faker.location.zipCode,
-    clientNumber: String,
+    sameHomeAndMailingAddress: Boolean,
+
+    applicantCategoryCode: String, // id for Primary, Secondary, Spouse, etc
+
     applicantId: String,
+    clientId: String,
+    clientNumber: String,
+
+    birthdate: () => faker.date.past({ years: 20 }),
     lastName: faker.person.lastName,
     firstName: faker.person.firstName,
     emailAddressId: faker.internet.email,
-    fullTelephoneNumber: String,
+
+    primaryTelephoneNumber: String,
+    alternateTelephoneNumber: String,
+
+    maritialStatus: String,
+
+    dentalApplicationID: String,
+
     languageCode: () => faker.helpers.arrayElement(['E', 'F']),
     languagePreferredIndicator: Boolean,
     sinIdentification: primaryKey(String),
@@ -121,18 +136,23 @@ db.personalInformation.create({
   mailingAddressProvince: 'NS',
   mailingAddressCountryName: 'CAN',
   mailingAddressPostalCode: 'B0C 0A1',
-  homeAddressStreet: '50 My Street',
+  homeAddressStreet: '50 My HOME Street',
   homeAddressSecondaryUnitText: 'Apt. No. 50',
   homeAddressCityName: 'OTTAWA',
   homeAddressProvince: 'ON',
   homeAddressCountryName: 'CAN',
   homeAddressPostalCode: 'L9B 1A2',
-  clientNumber: '81657965177',
+  sameHomeAndMailingAddress: true,
+  clientNumber: '11375350677',
+  clientId: '8161e97fe42-0263-ee11-8df0-000d3a09df0857965177',
   applicantId: '4f35f70b-2f83-ee11-8179-000d3a09d000',
+  applicantCategoryCode: '775170000',
+  birthdate: new Date('1997-09-01'),
   lastName: 'Smith',
   firstName: 'John',
   emailAddressId: 'myEmail50@domain.ca',
-  fullTelephoneNumber: '555-555-5555',
+  primaryTelephoneNumber: '555-555-5555',
+  alternateTelephoneNumber: '416-555-6666',
   languageCode: 'E',
   languagePreferredIndicator: true,
   sinIdentification: '800011819',
