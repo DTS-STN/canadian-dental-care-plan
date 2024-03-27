@@ -116,7 +116,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const sessionResponseInit = await applyFlow.saveState({ params, request, session, state: { dentalBenefits: parsedDataResult.data } });
+  const sessionResponseInit = await applyFlow.saveState({ params, request, session, state: { dentalBenefits: parsedDataResult.data, editMode: true } });
   return redirectWithLocale(request, `/apply/${id}/review-information`, sessionResponseInit);
 }
 
@@ -295,14 +295,27 @@ export default function AccessToDentalInsuranceQuestion() {
             )}
           </section>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <ButtonLink to={editMode ? `/apply/${id}/review-information` : `/apply/${id}/dental-insurance`} disabled={isSubmitting}>
-              {!editMode && <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />}
-              {editMode ? t('dental-benefits.button.cancel-btn') : t('dental-benefits.button.back')}
-            </ButtonLink>
-            <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-              {editMode ? t('dental-benefits.button.save-btn') : t('dental-benefits.button.continue')}
-              {!editMode && <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />}
-            </Button>
+            {editMode ? (
+              <>
+                <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
+                  {t('dental-benefits.button.cancel-btn')}
+                </ButtonLink>
+                <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+                  {t('dental-benefits.button.save-btn')}
+                </Button>
+              </>
+            ) : (
+              <>
+                <ButtonLink id="back-button" to={`/apply/${id}/dental-insurance`} disabled={isSubmitting}>
+                  <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+                  {t('dental-benefits.button.back')}
+                </ButtonLink>
+                <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+                  {t('dental-benefits.button.continue')}
+                  <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+                </Button>
+              </>
+            )}
           </div>
         </fetcher.Form>
       </div>
