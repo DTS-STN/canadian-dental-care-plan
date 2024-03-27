@@ -57,6 +57,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const { id, state } = await applyFlow.loadState({ params, request, session });
   const maritalStatuses = await getLookupService().getAllMaritalStatuses();
   const provincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
+  const federalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
 
   // prettier-ignore
   if (!state.applicantInformation ||
@@ -148,7 +149,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:review-information.page-title') }) };
 
-  return json({ id, userInfo, spouseInfo, maritalStatuses, preferredLanguage, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, meta });
+  return json({ id, userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, meta });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -180,12 +181,15 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ReviewInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { id, userInfo, spouseInfo, maritalStatuses, preferredLanguage, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit } = useLoaderData<typeof loader>();
+  const { id, userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
   const maritalStatusEntity = maritalStatuses.find((ms) => ms.code === userInfo.martialStatus);
   const maritalStatus = maritalStatusEntity ? getNameByLanguage(i18n.language, maritalStatusEntity) : userInfo.martialStatus;
+
+  const federalSocialProgramEntity = federalSocialPrograms.find((p) => p.id === dentalBenefit.federalBenefit.benefit);
+  const federalSocialProgram = federalSocialProgramEntity ? getNameByLanguage(i18n.language, federalSocialProgramEntity) : federalSocialProgramEntity;
 
   const provincialTerritorialSocialProgramEntity = provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === dentalBenefit.provTerrBenefit.province).find((p) => p.id === dentalBenefit.provTerrBenefit.benefit);
   const provincialTerritorialSocialProgram = provincialTerritorialSocialProgramEntity ? getNameByLanguage(i18n.language, provincialTerritorialSocialProgramEntity) : provincialTerritorialSocialProgramEntity;
@@ -361,7 +365,7 @@ export default function ReviewInformation() {
                 {t('apply:review-information.dental-benefit-has-access')}
                 <div>
                   <ul className="ml-6 list-disc">
-                    {dentalBenefit.federalBenefit.access === 'yes' && <li>{dentalBenefit.federalBenefit.benefit}</li>}
+                    {dentalBenefit.federalBenefit.access === 'yes' && <li>{federalSocialProgram}</li>}
                     {dentalBenefit.provTerrBenefit.access === 'yes' && <li>{provincialTerritorialSocialProgram}</li>}
                   </ul>
                 </div>
