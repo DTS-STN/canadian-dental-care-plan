@@ -14,13 +14,13 @@ import { InputSelect } from '~/components/input-select';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLettersService } from '~/services/letters-service.server';
+import { getPersonalInformationService } from '~/services/personal-information-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getUserService } from '~/services/user-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { IdToken } from '~/utils/raoidc-utils.server';
+import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -45,14 +45,15 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const instrumentationService = getInstrumentationService();
   const lettersService = getLettersService();
   const raoidcService = await getRaoidcService();
-  const userService = getUserService();
+  const personalInformationService = getPersonalInformationService();
 
   await raoidcService.handleSessionValidation(request, session);
 
   const sortParam = new URL(request.url).searchParams.get('sort');
   const sortOrder = orderEnumSchema.catch('desc').parse(sortParam);
-  const userId = await userService.getUserId();
-  const letters = await lettersService.getLetters(userId, sortOrder);
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const personalInformation = await personalInformationService.getPersonalInformationIntoSession(session, request, '/data-unavailable', userInfoToken.sin);
+  const letters = await lettersService.getLetters(personalInformation.clientId, sortOrder);
   const letterTypes = (await lettersService.getAllLetterTypes()).filter(({ id }) => letters.some(({ name }) => name === id));
 
   const t = await getFixedT(request, handle.i18nNamespaces);

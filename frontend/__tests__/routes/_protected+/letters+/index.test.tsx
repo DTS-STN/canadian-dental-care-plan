@@ -44,9 +44,11 @@ vi.mock('~/services/session-service.server', () => ({
   }),
 }));
 
-vi.mock('~/services/user-service.server', () => ({
-  getUserService: vi.fn().mockReturnValue({
-    getUserId: vi.fn().mockResolvedValue('userId1'),
+vi.mock('~/services/personal-information-service.server', () => ({
+  getPersonalInformationService: vi.fn().mockReturnValue({
+    getPersonalInformationIntoSession: vi.fn().mockResolvedValue({
+      clientId: '999999999',
+    }),
   }),
 }));
 
@@ -67,6 +69,7 @@ describe('Letters Page', () => {
     it('should return sorted letters', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
+      session.set('userInfoToken', { sin: '999999999' });
 
       const response = await loader({
         request: new Request('http://localhost/letters?sort=desc'),
@@ -87,6 +90,7 @@ describe('Letters Page', () => {
   it('retrieves letter types', async () => {
     const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
     session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
+    session.set('userInfoToken', { sin: '999999999' });
 
     const response = await loader({
       request: new Request('http://localhost/letters'),
