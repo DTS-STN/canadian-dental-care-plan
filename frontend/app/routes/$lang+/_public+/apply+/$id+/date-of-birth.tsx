@@ -34,9 +34,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id, state } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.date-of-birth.page-title') }) };
@@ -44,9 +44,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return json({ id, meta, defaultState: state.dateOfBirth, editMode: state.editMode });
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id, state } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -64,7 +64,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const sessionResponseInit = await applyFlow.saveState({ request, params, state: { dateOfBirth: parsedDataResult.data } });
+  const sessionResponseInit = await applyFlow.saveState({ params, request, session, state: { dateOfBirth: parsedDataResult.data } });
 
   const parseDateOfBirth = parse(parsedDataResult.data, 'yyyy-MM-dd', new Date());
   const age = differenceInYears(new Date(), parseDateOfBirth);

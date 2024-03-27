@@ -20,19 +20,18 @@
  * initialized. This ensures that only a single instance of the service is
  * created for the application.
  */
-import { redirect } from '@remix-run/node';
+import { Session, redirect } from '@remix-run/node';
 
 import moize from 'moize';
 import { subtle } from 'node:crypto';
 import { ProxyAgent, fetch as undiciFetch } from 'undici';
 import { toNodeReadable } from 'web-streams-node';
 
-import { getSessionService } from '~/services/session-service.server';
 import { generateJwkId, privateKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
-import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState, validateSession } from '~/utils/raoidc-utils.server';
 import type { ClientMetadata, FetchFunctionInit, IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
+import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState, validateSession } from '~/utils/raoidc-utils.server';
 import { expandTemplate } from '~/utils/string-utils';
 
 const log = getLogger('raoidc-service.server');
@@ -113,13 +112,10 @@ async function createRaoidcService() {
   /**
    * Handle a RAOIDC session validation call.
    */
-  async function handleSessionValidation(request: Request) {
+  async function handleSessionValidation(request: Request, session: Session) {
     log.debug('Performing RAOIDC session validation check');
     const { pathname, searchParams } = new URL(request.url);
     const returnTo = encodeURIComponent(`${pathname}?${searchParams}`);
-
-    const sessionService = await getSessionService();
-    const session = await sessionService.getSession(request);
 
     if (!session.has('idToken') || !session.has('userInfoToken')) {
       log.debug(`User has not authenticated; redirecting to /auth/login?returnto=${returnTo}`);

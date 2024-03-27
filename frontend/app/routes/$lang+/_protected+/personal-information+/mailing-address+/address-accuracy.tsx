@@ -9,7 +9,6 @@ import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -31,12 +30,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request);
-
-  const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
+  await raoidcService.handleSessionValidation(request, session);
 
   if (!session.has('newMailingAddress')) {
     return redirectWithLocale(request, '/');
@@ -52,9 +48,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ countryList, meta, newMailingAddress, regionList });
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ context: { session }, request }: ActionFunctionArgs) {
   const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
+
   return redirectWithLocale(request, '/personal-information/mailing-address/confirm');
 }
 

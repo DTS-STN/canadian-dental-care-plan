@@ -10,7 +10,6 @@ import { I18nextProvider } from 'react-i18next';
 import { NonceProvider } from '~/components/nonce-context';
 import { server } from '~/mocks/node';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { generateContentSecurityPolicy } from '~/utils/csp-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getNamespaces } from '~/utils/locale-utils';
@@ -47,9 +46,12 @@ export async function handleDataRequest(response: Response, { request }: LoaderF
   log.debug('Touching session to extend its lifetime');
   instrumentationService.createCounter('http.server.requests').add(1);
 
-  const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
-  response.headers.append('Set-Cookie', await sessionService.commitSession(session));
+  //
+  // TODO :: GjB :: Remove this?
+  //
+  // const sessionService = await getSessionService();
+  // const session = await sessionService.getSession(request);
+  // response.headers.append('Set-Cookie', await sessionService.commitSession(session));
 
   return response;
 }

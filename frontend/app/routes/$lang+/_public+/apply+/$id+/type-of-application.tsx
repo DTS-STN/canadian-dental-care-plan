@@ -38,9 +38,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id, state } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.type-of-application.page-title') }) };
@@ -48,9 +48,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return json({ id, meta, defaultState: state.typeOfApplication });
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id } = await applyFlow.loadState({ request, params });
+  const { id } = await applyFlow.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   /**
@@ -68,7 +68,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  const sessionResponseInit = await applyFlow.saveState({ request, params, state: { typeOfApplication: parsedDataResult.data } });
+  const sessionResponseInit = await applyFlow.saveState({ params, request, session, state: { typeOfApplication: parsedDataResult.data } });
 
   if (parsedDataResult.data === ApplicantType.Delegate) {
     return redirectWithLocale(request, `/apply/${id}/application-delegate`, sessionResponseInit);

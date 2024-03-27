@@ -1,7 +1,8 @@
+import { createMemorySessionStorage } from '@remix-run/node';
+
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { loader } from '~/routes/$lang+/_protected+/letters+/index';
-import { getSessionService } from '~/services/session-service.server';
 
 vi.mock('~/services/audit-service.server', () => ({
   getAuditService: vi.fn().mockReturnValue({
@@ -64,18 +65,14 @@ describe('Letters Page', () => {
 
   describe('loader()', () => {
     it('should return sorted letters', async () => {
-      const request = new Request('http://localhost/letters?sort=desc');
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
 
-      const sessionService = await getSessionService();
-      const session = await sessionService.getSession(request);
-
-      vi.mocked(session.get).mockImplementation((key) => {
-        return {
-          idToken: { sub: '00000000-0000-0000-0000-000000000000' },
-        }[key];
+      const response = await loader({
+        request: new Request('http://localhost/letters?sort=desc'),
+        context: { session },
+        params: {},
       });
-
-      const response = await loader({ request, params: {}, context: {} });
 
       const data = await response.json();
 
@@ -88,18 +85,14 @@ describe('Letters Page', () => {
   });
 
   it('retrieves letter types', async () => {
-    const request = new Request('http://localhost/letters');
+    const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+    session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
 
-    const sessionService = await getSessionService();
-    const session = await sessionService.getSession(request);
-
-    vi.mocked(session.get).mockImplementation((key) => {
-      return {
-        idToken: { sub: '00000000-0000-0000-0000-000000000000' },
-      }[key];
+    const response = await loader({
+      request: new Request('http://localhost/letters'),
+      context: { session },
+      params: {},
     });
-
-    const response = await loader({ request, params: {}, context: {} });
 
     const data = await response.json();
 

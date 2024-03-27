@@ -10,7 +10,7 @@ export const handle = {
   i18nNamespaces: [...layoutI18nNamespaces],
 } as const satisfies RouteHandleData;
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const env = getPublicEnv();
   return json({ env });
 }

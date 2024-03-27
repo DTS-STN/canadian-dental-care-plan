@@ -57,10 +57,10 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
   const lookupService = getLookupService();
-  const { id, state } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
@@ -71,9 +71,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return json({ id, meta, defaultState: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, editMode: state.editMode });
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id, state } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
@@ -189,7 +189,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       }
     : parsedDataResult.data;
 
-  const sessionResponseInit = await applyFlow.saveState({ request, params, state: { personalInformation: updatedData } });
+  const sessionResponseInit = await applyFlow.saveState({ params, request, session, state: { personalInformation: updatedData } });
   return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/communication-preference`, sessionResponseInit);
 }
 

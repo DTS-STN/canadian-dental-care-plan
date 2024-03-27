@@ -10,7 +10,6 @@ import { z } from 'zod';
 import { Button } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
-import { getSessionService } from '~/services/session-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
@@ -31,7 +30,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const { SHOW_SIN_EDIT_STUB_PAGE } = getEnv();
   if (!SHOW_SIN_EDIT_STUB_PAGE) {
     throw new Response(null, { status: 404 });
@@ -42,9 +41,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return { meta };
 }
 
-export async function action({ request }: ActionFunctionArgs) {
-  const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
+export async function action({ context: { session }, request }: ActionFunctionArgs) {
   const sinToStubSchema = z.object({
     socialInsuranceNumberToStub: z.string().refine(isValidSin, { message: 'valid-sin' }),
   });
@@ -95,11 +92,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
   session.set('idToken', idToken);
 
-  return redirectWithLocale(request, `/home`, {
-    headers: {
-      'Set-Cookie': await sessionService.commitSession(session),
-    },
-  });
+  return redirectWithLocale(request, `/home`);
 }
 
 export default function StubSinEditorPage() {

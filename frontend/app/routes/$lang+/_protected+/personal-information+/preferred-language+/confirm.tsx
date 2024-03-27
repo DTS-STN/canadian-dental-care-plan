@@ -10,7 +10,6 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale, redirectWithLocale } from '~/utils/locale-utils.server';
@@ -33,14 +32,13 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const instrumentationService = getInstrumentationService();
   const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
-  const sessionService = await getSessionService();
   const userService = getUserService();
 
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
 
   const userId = await userService.getUserId();
   if (!userId) {
@@ -54,7 +52,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return redirectWithLocale(request, '/');
   }
 
-  const session = await sessionService.getSession(request);
   if (!session.has('newPreferredLanguage')) {
     instrumentationService.countHttpStatus('preferred-language.confirm', 302);
     return redirectWithLocale(request, '/');
@@ -69,13 +66,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ meta, preferredLanguage, userInfo });
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ context: { session }, request }: ActionFunctionArgs) {
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
-  const sessionService = await getSessionService();
   const userService = getUserService();
 
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
 
   const userId = await userService.getUserId();
   if (!userId) {
@@ -89,7 +85,6 @@ export async function action({ request }: ActionFunctionArgs) {
     return redirectWithLocale(request, '/');
   }
 
-  const session = await sessionService.getSession(request);
   if (!session.has('newPreferredLanguage')) {
     instrumentationService.countHttpStatus('preferred-language.confirm', 302);
     return redirectWithLocale(request, '/');
@@ -100,11 +95,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const locale = getLocale(request);
 
   instrumentationService.countHttpStatus('preferred-language.confirm', 302);
-  return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:preferred-language.confirm.updated-notification', {
-    headers: {
-      'Set-Cookie': await sessionService.commitSession(session),
-    },
-  });
+  return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:preferred-language.confirm.updated-notification');
 }
 
 export default function PreferredLanguageConfirm() {

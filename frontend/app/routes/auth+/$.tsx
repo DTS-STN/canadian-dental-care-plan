@@ -1,5 +1,5 @@
-import { redirect } from '@remix-run/node';
 import type { LoaderFunctionArgs } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 
 import { z } from 'zod';
 
@@ -10,8 +10,8 @@ import { getSessionService } from '~/services/session-service.server';
 import { getEnv, mockEnabled } from '~/utils/env.server';
 import { getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { generateCallbackUri, generateRandomString } from '~/utils/raoidc-utils.server';
 import type { IdToken } from '~/utils/raoidc-utils.server';
+import { generateCallbackUri, generateRandomString } from '~/utils/raoidc-utils.server';
 
 const log = getLogger('auth.$');
 const defaultProviderId = 'raoidc';
@@ -19,21 +19,21 @@ const defaultProviderId = 'raoidc';
 /**
  * A do-all authentication handler for the application
  */
-export async function loader({ context, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const { '*': slug } = params;
 
   switch (slug) {
     case 'login': {
-      return handleLoginRequest({ context, params, request });
+      return handleLoginRequest({ context: { session }, params, request });
     }
     case 'logout': {
-      return handleLogoutRequest({ context, params, request });
+      return handleLogoutRequest({ context: { session }, params, request });
     }
     case 'login/raoidc': {
-      return handleRaoidcLoginRequest({ context, params, request });
+      return handleRaoidcLoginRequest({ context: { session }, params, request });
     }
     case 'callback/raoidc': {
-      return handleRaoidcCallbackRequest({ context, params, request });
+      return handleRaoidcCallbackRequest({ context: { session }, params, request });
     }
     //
     // A mock authorize route for testing purposes
@@ -44,7 +44,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
         return new Response(null, { status: 404 });
       }
 
-      return handleMockAuthorizeRequest({ context, params, request });
+      return handleMockAuthorizeRequest({ context: { session }, params, request });
     }
   }
 
@@ -71,19 +71,17 @@ async function handleLoginRequest({ request }: LoaderFunctionArgs) {
 /**
  * Handler for /auth/logout requests
  */
-async function handleLogoutRequest({ request }: LoaderFunctionArgs) {
+async function handleLogoutRequest({ context: { session }, request }: LoaderFunctionArgs) {
   log.debug('Handling RAOIDC logout request');
   getInstrumentationService().createCounter('auth.logout.requests').add(1);
 
   const { AUTH_RASCL_LOGOUT_URL } = getEnv();
 
   const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
 
   if (!session.has('idToken')) {
     log.debug(`User has not authenticated; bypassing RAOIDC logout and redirecting to RASCL logout`);
     getInstrumentationService().createCounter('auth.logout.requests.unauthenticated').add(1);
-
     throw redirect(AUTH_RASCL_LOGOUT_URL);
   }
 
@@ -104,7 +102,7 @@ async function handleLogoutRequest({ request }: LoaderFunctionArgs) {
 /**
  * Handler for /auth/login/raoidc requests
  */
-async function handleRaoidcLoginRequest({ request }: LoaderFunctionArgs) {
+async function handleRaoidcLoginRequest({ context: { session }, request }: LoaderFunctionArgs) {
   log.debug('Handling RAOIDC login request');
   getInstrumentationService().createCounter('auth.login.raoidc.requests').add(1);
 
@@ -124,28 +122,22 @@ async function handleRaoidcLoginRequest({ request }: LoaderFunctionArgs) {
   const { authUrl, codeVerifier, state } = raoidcService.generateSigninRequest(redirectUri);
 
   log.debug('Storing [codeVerifier] and [state] in session for future validation');
-  const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
   session.set('codeVerifier', codeVerifier);
   session.set('returnUrl', returnUrl ?? '/');
   session.set('state', state);
 
   log.debug('Redirecting to RAOIDC signin URL [%s]', authUrl.href);
-  return redirect(authUrl.href, {
-    headers: { 'Set-Cookie': await sessionService.commitSession(session) },
-  });
+  return redirect(authUrl.href);
 }
 
 /**
  * Handler for /auth/callback/raoidc requests
  */
-async function handleRaoidcCallbackRequest({ request }: LoaderFunctionArgs) {
+async function handleRaoidcCallbackRequest({ context: { session }, request }: LoaderFunctionArgs) {
   log.debug('Handling RAOIDC callback request');
   getInstrumentationService().createCounter('auth.callback.raoidc.requests').add(1);
 
   const raoidcService = await getRaoidcService();
-  const sessionService = await getSessionService();
-  const session = await sessionService.getSession(request);
   const codeVerifier = session.get('codeVerifier');
   const returnUrl = session.get('returnUrl') ?? '/';
   const state = session.get('state');
@@ -160,9 +152,7 @@ async function handleRaoidcCallbackRequest({ request }: LoaderFunctionArgs) {
   log.debug('RAOIDC login successful; redirecting to [%s]', returnUrl);
   getAuditService().audit('auth.session-created', { userId: idToken.sub });
 
-  return redirect(returnUrl, {
-    headers: { 'Set-Cookie': await sessionService.commitSession(session) },
-  });
+  return redirect(returnUrl);
 }
 
 /**

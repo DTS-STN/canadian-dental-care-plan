@@ -1,4 +1,4 @@
-import { redirect } from '@remix-run/node';
+import { Session, redirect } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -38,7 +38,7 @@ describe('_public.apply.id.type-of-application', () => {
     it('should load id, and typeOfApplication', async () => {
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/type-of-application'),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 
@@ -56,7 +56,7 @@ describe('_public.apply.id.type-of-application', () => {
     it('should validate missing applcation type selection', async () => {
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/type-of-application', { method: 'POST', body: new FormData() }),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 
@@ -71,7 +71,7 @@ describe('_public.apply.id.type-of-application', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/type-of-application', { method: 'POST', body: formData }),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 
@@ -85,7 +85,7 @@ describe('_public.apply.id.type-of-application', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/type-of-application', { method: 'POST', body: formData }),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 

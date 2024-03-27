@@ -1,3 +1,6 @@
+import { AppLoadContext, Session } from '@remix-run/node';
+import type { ActionFunctionArgs as RRActionFunctionArgs, LoaderFunctionArgs as RRLoaderFunctionArgs } from '@remix-run/router';
+
 import type apply from '../public/locales/en/apply.json';
 import type dataUnavailable from '../public/locales/en/data-unavailable.json';
 import type gcweb from '../public/locales/en/gcweb.json';
@@ -34,5 +37,21 @@ declare module 'i18next' {
       'personal-information': typeof personalInformation;
       'stub-sin-editor': typeof stubSinEditor;
     };
+  }
+}
+
+declare module '@remix-run/node' {
+  /**
+   * Augment the action function context to include the server session.
+   */
+  export interface ActionFunctionArgs extends RRActionFunctionArgs<AppLoadContext> {
+    context: AppLoadContext & { session: Session };
+  }
+
+  /**
+   * Augment the loader function context to include the server session.
+   */
+  export interface LoaderFunctionArgs extends RRLoaderFunctionArgs<AppLoadContext> {
+    context: AppLoadContext & { session: Session };
   }
 }

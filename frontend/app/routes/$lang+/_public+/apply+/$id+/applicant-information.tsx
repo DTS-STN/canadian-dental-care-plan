@@ -41,10 +41,10 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyFlow = getApplyFlow();
   const lookupService = getLookupService();
-  const { id, state } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const maritalStatuses = await lookupService.getAllMaritalStatuses();
 
@@ -53,9 +53,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return json({ id, maritalStatuses, meta, defaultState: state.applicantInformation, editMode: state.editMode });
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const applyFlow = getApplyFlow();
-  const { id, state } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -82,7 +82,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const sessionResponseInit = await applyFlow.saveState({ request, params, state: { applicantInformation: parsedDataResult.data }, remove: !['MARRIED', 'COMMONLAW'].includes(parsedDataResult.data.maritalStatus) ? 'partnerInformation' : undefined });
+  const remove = !['MARRIED', 'COMMONLAW'].includes(parsedDataResult.data.maritalStatus) ? 'partnerInformation' : undefined;
+  const sessionResponseInit = await applyFlow.saveState({ params, remove, request, session, state: { applicantInformation: parsedDataResult.data } });
 
   if (['MARRIED', 'COMMONLAW'].includes(parsedDataResult.data.maritalStatus)) {
     return redirectWithLocale(request, state.editMode && state.partnerInformation ? `/apply/${id}/review-information` : `/apply/${id}/partner-information`, sessionResponseInit);

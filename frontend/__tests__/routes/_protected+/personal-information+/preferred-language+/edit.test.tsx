@@ -1,3 +1,5 @@
+import { Session } from '@remix-run/node';
+
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { loader } from '~/routes/$lang+/_protected+/personal-information+/preferred-language+/edit';
@@ -79,7 +81,7 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information/preferred/edit'),
-        context: {},
+        context: { session: {} as Session },
         params: {},
       });
 
@@ -103,7 +105,7 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
       try {
         await loader({
           request: new Request('http://localhost:3000/personal-information/preferred-language/edit'),
-          context: {},
+          context: { session: {} as Session },
           params: {},
         });
       } catch (error) {

@@ -55,11 +55,11 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
   const applyFlow = getApplyFlow();
   const lookupService = getLookupService();
-  const { id, state } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const preferredLanguages = await lookupService.getAllPreferredLanguages();
   const preferredCommunicationMethods = await lookupService.getAllPreferredCommunicationMethods();
@@ -74,10 +74,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return json({ communicationMethodEmail, id, meta, preferredCommunicationMethods, preferredLanguages, defaultState: state.communicationPreferences, editMode: state.editMode });
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
   const applyFlow = getApplyFlow();
-  const { id, state } = await applyFlow.loadState({ request, params });
+  const { id, state } = await applyFlow.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formSchema: z.ZodType<CommunicationPreferencesState> = z
@@ -141,7 +141,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const sessionResponseInit = await applyFlow.saveState({ request, params, state: { communicationPreferences: parsedDataResult.data } });
+  const sessionResponseInit = await applyFlow.saveState({ params, request, session, state: { communicationPreferences: parsedDataResult.data } });
   return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/dental-insurance`, sessionResponseInit);
 }
 

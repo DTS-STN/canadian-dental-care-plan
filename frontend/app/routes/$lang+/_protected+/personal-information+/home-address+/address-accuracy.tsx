@@ -11,7 +11,6 @@ import { getInstrumentationService } from '~/services/instrumentation-service.se
 import { getLookupService } from '~/services/lookup-service.server';
 import { getPersonalInformationService } from '~/services/personal-information-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getSessionService } from '~/services/session-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -33,14 +32,13 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const instrumentationService = getInstrumentationService();
   const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
-  const sessionService = await getSessionService();
   const personalInformationService = await getPersonalInformationService();
-  await raoidcService.handleSessionValidation(request);
-  const session = await sessionService.getSession(request);
+
+  await raoidcService.handleSessionValidation(request, session);
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   await personalInformationService.getPersonalInformationIntoSession(session, request, '/data-unavailable', userInfoToken.sin);
@@ -61,11 +59,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ countryList, meta, newHomeAddress, regionList });
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ context: { session }, request }: ActionFunctionArgs) {
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
 
-  await raoidcService.handleSessionValidation(request);
+  await raoidcService.handleSessionValidation(request, session);
+
   instrumentationService.countHttpStatus('home-address.validate', 302);
   return redirectWithLocale(request, '/personal-information/home-address/confirm');
 }
