@@ -94,7 +94,8 @@
     "dental-public": "Accès aux soins dentaires gouvernementaux\u00a0: {{access}}",
     "application-code": "Code de demande",
     "yes": "Oui",
-    "no": "Non"
+    "no": "Non",
+    "exit": "Sortie"
   },
   "dental-benefits": {
     "title": "Accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",

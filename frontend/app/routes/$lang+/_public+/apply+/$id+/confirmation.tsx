@@ -9,6 +9,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
+import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyFlow } from '~/routes-flow/apply-flow';
@@ -233,6 +234,12 @@ export default function ApplyFlowConfirm() {
       >
         {t('confirm.print-btn')}
       </button>
+
+      <div className="mt-10 flex flex-wrap items-center gap-3">
+        <ButtonLink variant="primary" onClick={() => sessionStorage.removeItem('flow.state')} to="/apply">
+          {t('apply:confirm.exit')}
+        </ButtonLink>
+      </div>
     </div>
   );
 }
