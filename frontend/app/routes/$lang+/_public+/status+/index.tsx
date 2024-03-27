@@ -67,7 +67,7 @@ export default function StatusChecker() {
       <h2 className="mt-4 font-bold">{t('status:online-status-heading')}</h2>
       <p>{t('status:online-status-content')}</p>
       <Collapsible summary={t('status:terms-of-use.summary')} className="mt-8">
-        <h2 className="font-bold">{t('status:terms-of-use.heading')}</h2>
+        <h2 className="mb-4 font-bold">{t('status:terms-of-use.heading')}</h2>
         <Trans ns={handle.i18nNamespaces} i18nKey="status:terms-of-use.legal-terms" />
         <p className="my-4">{t('status:terms-of-use.access-terms')}</p>
         <p>{t('status:terms-of-use.usage-terms')}</p>
@@ -95,7 +95,6 @@ export default function StatusChecker() {
           <li>{t('status:terms-of-use.disclaimers.non-acceptance')}</li>
           <li>{t('status:terms-of-use.disclaimers.non-compliance')}</li>
         </ol>
-        <p>{t('status:terms-of-use.disclaimers.esdc-liability-indemnification')}</p>
         <h2 className="mt-4 font-bold">{t('status:terms-of-use.changes-to-these-terms-of-use.heading')}</h2>
         <p>{t('status:terms-of-use.changes-to-these-terms-of-use.esdc-terms-amendment-policy')}</p>
       </Collapsible>

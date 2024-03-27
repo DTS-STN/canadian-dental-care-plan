@@ -1,53 +1,52 @@
 {
-  "page-title": "(Fr) Status Checker",
-  "status-checker-heading": "(Fr) What is the Status Checker?",
-  "status-checker-content": "(Fr) The Status Checker is a tool that lets you check the status of your Canadian Dental Care Plan application.",
-  "online-status-heading": "(Fr) Who can check their application status online?",
-  "online-status-content": "(Fr) If you applied for the Canadian Dental Care Plan, you can check your status online.",
+  "page-title": "Vérificateur de l'état d'une demande",
+  "status-checker-heading": "Qu'est-ce que le vérificateur de l'état d'une demande?",
+  "status-checker-content": "Il s'agit d'un outil qui vous permet de savoir où en est votre demande de participation au Régime canadien de soins dentaires",
+  "online-status-heading": "Qui peut vérifier l'état de sa demande en ligne?",
+  "online-status-content": "Si vous avez présenté une demande au titre du Régime canadien de soins dentaires, vous pouvez vérifier l'état de votre demande en ligne.",
   "terms-of-use": {
-    "summary": "(Fr) Terms and Conditions of Use",
-    "heading": "(Fr) Terms of Use for the Canadian Dental Care Plan Status Checker",
-    "legal-terms": "(Fr) <strong>PLEASE READ CAREFULLY.</strong> We are glad you are using the Canadian Dental Care Plan Status Checker. We have put together some important terms and conditions for using this service (“Terms of Use” or “Terms”). Please read them carefully. They are important because they govern your use of the Status Checker. We encourage you to read these Terms carefully because they affect and may affect your legal rights and obligations. If there is a conflict between these terms and those of the www.Canada.ca, these Terms will take priority.",
-    "access-terms": "(Fr) Your access to and use of the Status Checker, including any and all content, is subject to (1) your acceptance of, and (2) your compliance with these Terms of Use.",
-    "usage-terms": "(Fr) Each time you use the Status Checker, these Terms of Use continue to apply. By using the Status Checker, you agree to comply with these Terms. It is your responsibility to understand and adhere to these Terms.",
-    "terms-rejection-policy": "(Fr) You may always decide not to accept the Terms, in which case you will not be permitted to access and use the Status Checker.",
-    "esdc-definition-clarification": "(Fr) In these Terms, “ESDC” refers to the Minister of Employment and Social Development, representing His Majesty the King in Right of Canada.",
+    "summary": "Conditions générales d'utilisation",
+    "heading": "Conditions d'utilisation du vérificateur de l'état d'une demande du Régime canadien de soins dentaires",
+    "legal-terms": "<strong>VEUILLEZ LIRE ATTENTIVEMENT</strong> Nous sommes heureux que vous utilisiez le vérificateur de l'état d'une demande du Régime canadien de soins dentaires. Certaines conditions générales d'utilisation importantes s'appliquent à l'utilisation de ce service (« conditions d'utilisation » ou « conditions »). Veuillez les lire attentivement. Elles sont importantes parce qu'elles régissent votre utilisation du vérificateur de l'état d'une demande. Nous vous invitons à lire attentivement les présentes conditions, car elles ont une incidence ou peuvent avoir une incidence sur vos droits et vos obligations juridiques. En cas de divergence, les présentes conditions d'utilisation ont préséance sur celles du site Canada.ca.",
+    "access-terms": "Votre accès au vérificateur de l'état d'une demande et votre utilisation de celuici, y compris tout renseignement qu'il contient, sont assujettis à (1) votre acceptation des présentes conditions d'utilisation et à (2) votre conformité à cellesci.",
+    "usage-terms": "Chaque fois que vous utilisez le vérificateur de l'état d'une demande, ces conditions d'utilisation continuent de s'appliquer. En l'utilisant, vous acceptez de respecter ces conditions. Il vous incombe de comprendre et de retenir ces conditions générales d'utilisation.",
+    "terms-rejection-policy": "Vous pouvez toujours décider de ne pas accepter ces conditions. Le cas échéant, vous ne serez pas autorisé à accéder au vérificateur de l'état d'une demande et à l'utiliser.",
+    "esdc-definition-clarification": "Aux fins des présentes conditions d'utilisation, « EDSC » s'entend de Sa Majesté le Roi du chef du Canada, représenté par le ministre de l'Emploi et du Développement social du Canada.",
     "status-checker": {
-      "heading": "(Fr) Terms of Use of the Status Checker:",
-      "self-agreement": "(Fr) Using the Online Status Checker means that you have read and agree to these Terms of Use and the Privacy Notice Statement.",
-      "on-behalf-of-someone-else": "(Fr) If you are using the Status Checker on behalf of another individual, by using the Status Checker, you certify that you have all the necessary authority and permission to agree to the Terms of Use on behalf of that individual.",
-      "at-your-own-risk": "(Fr) You are using this service at your own risk and you need to keep any personal information safe. If you are using a public computer, make sure to close the browser or log out when you are done.",
-      "only-use": "(Fr) Only use the Status Checker to check the status of your application to the Canadian Dental Care Plan.",
-      "maintenance": "(Fr) There will be times when the system might be down for maintenance.",
-      "inactive": "(Fr) If you are inactive for 15 minutes on the Status Checker, your session will end and you will lose any information you entered.",
-      "msdc": "(Fr) ESDC uses services from Microsoft Corporation to run the Status Checker. The Microsoft data centers used by ESDC are in Canada in accordance with Microsoft Corporation's Terms of <microsoftServiceAgreement>Service Agreement</microsoftServiceAgreement>.",
-      "antibot": "(Fr) We use the hCaptcha anti-bot service on our website in accordance with hCaptcha's <hcaptchaTermsOfService>Terms of Service</hcaptchaTermsOfService>."
+      "heading": "Conditions d'utilisation du vérificateur de l'état d'une demande",
+      "self-agreement": "Votre utilisation du vérificateur de l'état d'une demande en ligne signifie que vous avez lu et accepté les présentes conditions d'utilisation ainsi que l'énoncé de confidentialité.",
+      "on-behalf-of-someone-else": "Si vous utilisez le vérificateur de l'état d'une demande au nom d'une autre personne, en l'utilisant, vous attestez que vous avez toute autorité, et la permission requises pour accepter les conditions d'utilisation au nom de cette personne.",
+      "at-your-own-risk": "Vous utilisez cet outil à vos propres risques et vous devez veiller à la sécurité de vos renseignements personnels. Si vous utilisez un ordinateur public, veillez à fermer le navigateur ou à mettre fin à la connexion lorsque vous avez terminé.",
+      "only-use": "N'utilisez cet outil que dans le but pour lequel il a été conçu.",
+      "maintenance": "Il peut arriver que le système soit indisponible pour des raisons de maintenance.",
+      "inactive": "Si vous restez inactif pendant 15 minutes alors que vous utilisez le vérificateur de la demande, votre séance prendra fin et vous perdrez tous les renseignements que vous avez saisis.",
+      "msdc": "EDSC a recours aux services de Microsoft Corporation pour exécuter le vérificateur de l'état d'une demande. Les centres de données Microsoft utilisés par EDSC se trouvent au Canada, conformément à <microsoftServiceAgreement>l'Entente des services de Microsoft</microsoftServiceAgreement>.",
+      "antibot": "Nous utilisons le service antirobots hCaptcha sur notre site Web conformément aux <hcaptchaTermsOfService>conditions de services de hCaptcha</hcaptchaTermsOfService>."
     },
     "disclaimers": {
-      "heading": "(Fr) Disclaimers",
-      "disclaimers": "(Fr) You understand and agree that ESDC provides the Canadian Dental Care Plan Status Checker \"as is\" with no representation, warranty or guarantee, implied or express, of any kind whatsoever and that ESDC disclaims any and all liability in relation to the use of the Status Checker, including any loss, damage or injury arising from or related to:",
-      "external-factors-disclaimer": "(Fr) any matters or factors outside of its control, including the availability or unavailability of the internet, or telecommunications or other infrastructure systems; or",
-      "non-acceptance": "(Fr) the non-acceptance of information provided through the Status Checker tool; or",
-      "non-compliance": "(Fr) not following any of these Terms.",
-      "esdc-liability-indemnification": "(Fr) You hereby agree to indemnify and hold ESDC harmless from any such liability."
+      "heading": "Avis de non-responsabilité",
+      "disclaimers": "Vous comprenez et convenez qu'EDSC fournit le service de vérification de l'état d'une demande du Régime canadien de soins dentaires « en l'état », ne fait aucune assertion et n'offre aucune garantie d'aucune sorte, explicite ou implicite, et décline toute responsabilité à l'égard de tout dommage, perte ou blessure causé par ce qui suit ou associé à ce qui suit\u00a0:",
+      "external-factors-disclaimer": "tout facteur ou question échappant à son contrôle, y compris la disponibilité ou la nondisponibilité d'Internet, des systèmes de télécommunication ou d'autres infrastructures; ou",
+      "non-acceptance": "la non-acceptation des renseignements fournis dans le vérificateur de l'état d'une demande; ou",
+      "non-compliance": "le nonrespect des présentes conditions."
     },
     "changes-to-these-terms-of-use": {
-      "heading": "(Fr) Changes to these Terms of Use",
-      "esdc-terms-amendment-policy": "(Fr) ESDC may amend these Terms of Use at any time and without notice. Such changes shall be effective immediately on the date they are published. By using the Status Checker, you agree to abide by the amended Terms. You are responsible to ensure you understand and retain the amended Terms."
+      "heading": "Vous exonèrez, par les présentes, EDSC de toute responsabilité de cet ordre.",
+      "esdc-terms-amendment-policy": "Modifications apportées aux présentes conditions d'utilisation EDSC peut modifier les présentes conditions d'utilisation en tout temps et sans préavis. De telles modifications entreront en vigueur immédiatement à la date de leur publication. Lorsque vous utilisez le vérificateur de l'état d'une demande, vous acceptez de respecter les conditions d'utilisation modifiées. Il vous incombe de vous assurer de comprendre et de retenir ces conditions."
     }
   },
   "privacy-notice-statement": {
-    "summary": "(Fr) Privacy Notice Statement",
-    "collection-of-use": "(Fr) The collection and use of your personal information is authorized under the Department of Health Act, the Dental Care Measures Act, the Department of Employment and Social Development Act, and other applicable laws.",
-    "provided-information": "(Fr) The provided information will never result in administrative decisions being made about you.",
-    "third-party-provider": "(Fr) ESDC carries out this application using services from third-party provider Microsoft Corporation, which may be subject to foreign laws. For more information, see <microsoftDataPrivacyPolicy>Microsoft Data Privacy Policy & Privacy Principles<microsoftDataPrivacyPolicy>.",
-    "personal-information": "(Fr) Your personal information is administered in accordance with the Department of Employment and Social Development Act, Privacy Act and other applicable laws. Under the Privacy Act, you have the right to the protection of, access to, and where applicable, the correction of your personal information when you believe there is an error or omission.",
-    "report-a-concern": "(Fr) If you are not satisfied with our response to your privacy, you have the right to file a complaint with the Privacy Commissioner of Canada regarding Service Canada's handling of your personal information at: <fileacomplaint>Report a concern<fileacomplaint>."
+    "summary": "Énoncé de confidentialité",
+    "collection-of-use": "La collecte et l'utilisation de vos renseignements personnels sont autorisées en vertu de la Loi sur le ministère de la Santé, de la Loi sur les mesures de soins dentaires, de la Loi sur la protection des renseignements personnels, de la Loi sur le ministère de l'Emploi et du Développement social et d'autres lois applicables.",
+    "provided-information": "Les renseignements fournis ne donneront jamais lieu à des décisions administratives vous concernant.",
+    "third-party-provider": "EDSC exécute cette application en utilisant les services du fournisseur tiers Microsoft Corporation, qui peut être soumis à des lois étrangères. Pour obtenir de plus amples renseignements, veuillez consulter la <microsoftDataPrivacyPolicy>politique de confidentialité des données et les principes de confidentialité de Microsoft<microsoftDataPrivacyPolicy>.",
+    "personal-information": "Vos renseignements personnels sont administrés conformément à ce que prévoient la Loi sur le ministère de l'Emploi et du Développement social, la Loi sur la protection des renseignements personnels ainsi que d'autres lois applicables. En vertu de la Loi sur la protection des renseignements personnels, vous avez le droit à la protection de vos renseignements personnels, à l'accès à ceux-ci et, le cas échéant, à la correction de vos renseignements personnels lorsque vous estimez qu'il y a une erreur ou une omission.",
+    "report-a-concern": "Si vous n'êtes pas satisfait de nos réponses à vos préoccupations en matière de protection de la vie privée, vous avez le droit de déposer une plainte auprès du Commissaire à la protection de la vie privée du Canada concernant le traitement de vos renseignements personnels à la page suivante\u00a0: <fileacomplaint>Signaler un problème<fileacomplaint>."
   },
   "links": {
-    "file-complaint": "https://www.priv.gc.ca/en/report-a-concern/",
+    "file-complaint": "https://www.priv.gc.ca/fr/signaler-un-probleme/",
     "hcaptcha": "https://www.hcaptcha.com/terms",
-    "microsoft-data-privacy-policy": "https://www.microsoft.com/en-ca/trust-center/privacy",
+    "microsoft-data-privacy-policy": "https://www.microsoft.com/fr-ca/trust-center/privacy",
     "microsoft-service-agreement": "https://www.microsoft.com/en-ca/servicesagreement"
   }
 }
