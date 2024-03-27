@@ -60,6 +60,9 @@ const serverEnv = z.object({
   // interop api settings
   INTEROP_API_BASE_URI: z.string().url(),
   INTEROP_API_SUBSCRIPTION_KEY: z.string().trim().min(1),
+  INTEROP_CCT_API_BASE_URI: z.string().url(),
+  INTEROP_CCT_API_SUBSCRIPTION_KEY: z.string().trim().min(1),
+  INTEROP_CCT_API_COMMUNITY: z.string().default('CDCP'),
 
   SHOW_SIN_EDIT_STUB_PAGE : z.string().transform(toBoolean).default('false'),
 
@@ -103,9 +106,6 @@ const serverEnv = z.object({
   // mocks settings
   ENABLED_MOCKS: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidMockNames).default(''),
   MOCK_AUTH_ALLOWED_REDIRECTS: z.string().transform(emptyToUndefined).transform(csvToArray).default('http://localhost:3000/auth/callback/raoidc'),
-
-  // CCT get PDF settings
-  CCT_VAULT_COMMUNITY: z.string().default('community_default'),
 
   // cache duration settings
   LOOKUP_SVC_ALL_ACCESS_TO_DENTAL_INSURANCE_OPTIONS_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),

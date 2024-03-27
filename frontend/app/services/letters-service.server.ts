@@ -13,7 +13,14 @@ const log = getLogger('letters-service.server');
 export const getLettersService = moize(createLettersService, { onCacheAdd: () => log.info('Creating new letters service') });
 
 function createLettersService() {
-  const { CCT_VAULT_COMMUNITY, GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS, INTEROP_API_BASE_URI } = getEnv();
+  // prettier-ignore
+  const { 
+    GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS, 
+    INTEROP_API_BASE_URI, 
+    INTEROP_CCT_API_BASE_URI, 
+    INTEROP_CCT_API_SUBSCRIPTION_KEY, 
+    INTEROP_CCT_API_COMMUNITY 
+  } = getEnv();
 
   /**
    * @returns returns all the letter types
@@ -77,11 +84,16 @@ function createLettersService() {
    * @returns array of letters given the clientId with optional sort parameter
    */
   async function getLetters(clientId: string, sortOrder: 'asc' | 'desc' = 'desc') {
-    const url = new URL(`${INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetDocInfoByClientId`);
+    const url = new URL(`${INTEROP_CCT_API_BASE_URI}/dental-care/client-letters/cct/v1/GetDocInfoByClientId`);
     url.searchParams.set('clientid', clientId);
-    url.searchParams.set('cct-community', CCT_VAULT_COMMUNITY);
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': INTEROP_CCT_API_SUBSCRIPTION_KEY,
+        'cct-community': INTEROP_CCT_API_COMMUNITY,
+      },
+    });
 
     if (!response.ok) {
       log.error('%j', {
@@ -120,11 +132,16 @@ function createLettersService() {
    * @returns a promise that resolves to a base64 encoded string representing the PDF document
    */
   async function getPdf(letterId: string) {
-    const url = new URL(`${INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetPdfByLetterId`);
-    url.searchParams.set('cct-community', CCT_VAULT_COMMUNITY);
+    const url = new URL(`${INTEROP_CCT_API_BASE_URI}/dental-care/client-letters/cct/v1/GetPdfByLetterId`);
     url.searchParams.set('id', letterId);
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': INTEROP_CCT_API_SUBSCRIPTION_KEY,
+        'cct-community': INTEROP_CCT_API_COMMUNITY,
+      },
+    });
 
     if (!response.ok) {
       log.error('%j', {

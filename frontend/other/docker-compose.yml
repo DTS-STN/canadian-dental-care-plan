@@ -24,6 +24,8 @@ services:
       - HCAPTCHA_VERIFY_URL=https://api.hcaptcha.com/siteverify
       - INTEROP_API_BASE_URI=https://api.example.com
       - INTEROP_API_SUBSCRIPTION_KEY=00000000000000000000000000000000
+      - INTEROP_CCT_API_BASE_URI=https://api.example.com
+      - INTEROP_CCT_API_SUBSCRIPTION_KEY=00000000000000000000000000000000
       - MOCK_AUTH_ALLOWED_REDIRECTS=http://localhost:3000/auth/callback/raoidc
       - MSCA_BASE_URI=http://srv136.services.gc.ca
       - SCCH_BASE_URI=http://www.example.com

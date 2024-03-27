@@ -34,6 +34,8 @@ export default defineConfig({
       HCAPTCHA_VERIFY_URL: 'https://api.hcaptcha.com/siteverify',
       INTEROP_API_BASE_URI: 'https://api.example.com',
       INTEROP_API_SUBSCRIPTION_KEY: '00000000000000000000000000000000',
+      INTEROP_CCT_API_BASE_URI: 'https://api.example.com',
+      INTEROP_CCT_API_SUBSCRIPTION_KEY: '00000000000000000000000000000000',
       MOCK_AUTH_ALLOWED_REDIRECTS: 'http://localhost:3000/auth/callback/raoidc',
       USA_COUNTRY_ID: 'fcf7389e-97ae-eb11-8236-000d3af4bfc3',
       PORT: port,
