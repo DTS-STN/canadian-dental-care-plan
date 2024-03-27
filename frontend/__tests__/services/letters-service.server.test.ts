@@ -32,7 +32,6 @@ describe('letters-service.server tests', () => {
       vi.mocked(fetch).mockResolvedValue(
         HttpResponse.json([
           {
-            LetterRecordId: 'some-record-id',
             LetterDate: 'some-date',
             LetterId: 'some-id',
             LetterName: 'some-name',
@@ -41,13 +40,12 @@ describe('letters-service.server tests', () => {
       );
 
       const lettersService = getLettersService();
-      const letters = await lettersService.getLetters('userId', 'clientId');
+      const letters = await lettersService.getLetters('userId');
       expect(letters).toEqual([
         {
-          id: 'some-record-id',
+          id: 'some-id',
           issuedOn: 'some-date',
           name: 'some-name',
-          referenceId: 'some-id',
         },
       ]);
     });
@@ -56,7 +54,7 @@ describe('letters-service.server tests', () => {
       vi.mocked(fetch).mockResolvedValue(new HttpResponse(null, { status: 500 }));
 
       const lettersService = getLettersService();
-      await expect(() => lettersService.getLetters('userId', 'clientId')).rejects.toThrowError();
+      await expect(() => lettersService.getLetters('userId')).rejects.toThrowError();
     });
   });
 

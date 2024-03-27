@@ -1,13 +1,7 @@
-import fs from 'fs';
 import { HttpResponse, http } from 'msw';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { z } from 'zod';
 
-import { db } from '~/mocks/db';
+import getPdfByLetterIdJson from './cct-data/get-pdf-by-letter-id.json';
 import { getLogger } from '~/utils/logging.server';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const log = getLogger('cct-api.server');
 
@@ -21,113 +15,70 @@ export function getCCTApiMockHandlers() {
     //
     // Handler for GET requests to retrieve pdf
     //
-    http.get('https://api.example.com/cctws/OnDemand/api/GetPdfByLetterId', async ({ request }) => {
+    http.get('https://api.example.com/dental-care/client-letters/cct/v1/GetPdfByLetterId', async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
 
       const url = new URL(request.url);
-      const community = url.searchParams.get('community');
-      const userId = url.searchParams.get('userid');
-      const referenceId = url.searchParams.get('id');
+      const community = url.searchParams.get('cct-community');
+      const id = url.searchParams.get('id');
 
-      if (community === null || userId === null || referenceId === null) {
+      if (community === null || id === null) {
         return new HttpResponse(null, { status: 404 });
       }
 
-      const pdfEntity = getPdfEntity(referenceId);
-      const filePath = path.join(__dirname, '..', 'public', 'test.pdf');
-
-      try {
-        const stats = await fs.promises.stat(filePath);
-        const nodeStream = fs.createReadStream(filePath);
-        const stream = new ReadableStream({
-          start(controller) {
-            nodeStream.on('data', (chunk) => {
-              controller.enqueue(chunk);
-            });
-            nodeStream.on('end', () => {
-              controller.close();
-            });
-            nodeStream.on('error', (err) => {
-              controller.error(err);
-            });
-          },
-        });
-
-        return new Response(stream, {
-          headers: {
-            'Content-Type': 'application/pdf',
-            'Content-Length': stats.size.toString(),
-            'Content-Disposition': `inline; filename="${pdfEntity.id}.pdf"`,
-          },
-        });
-      } catch (error) {
-        console.error('Failed to fetch PDF:', error);
-        return new Response('Failed to fetch PDF', { status: 500 });
-      }
+      return HttpResponse.json(getPdfByLetterIdJson);
     }),
 
     /**
      * Handler for GET requests to retrieve letter details.
      */
-    http.get('https://api.example.com/cctws/OnDemand/api/GetDocInfoByClientId', ({ request }) => {
+    http.get('https://api.example.com/dental-care/client-letters/cct/v1/GetDocInfoByClientId', ({ request }) => {
       const url = new URL(request.url);
-      const userId = url.searchParams.get('userid');
       const clientId = url.searchParams.get('clientid');
-      const community = url.searchParams.get('community');
-      const exact = url.searchParams.get('Exact');
+      const community = url.searchParams.get('cct-community');
 
-      if (userId === null || clientId === null || community === null || exact !== 'true') {
+      if (clientId === null || community === null) {
         throw new HttpResponse(null, { status: 404 });
       }
 
-      return HttpResponse.json(
-        getLetterEntities(userId).map((letter) => ({
-          LetterRecordId: letter.id,
-          LetterDate: letter.issuedOn,
-          LetterId: letter.referenceId,
-          LetterName: letter.letterType,
-        })),
-      );
+      return HttpResponse.json([
+        {
+          LetterName: '775170000',
+          LetterId: '111222333-6ed0-4113-8520-3c46fc53fd15',
+          LetterRecordId: '12345678901',
+          LetterDate: '2024/03/26',
+        },
+        {
+          LetterName: '775170000',
+          LetterId: '111222333-6ed0-4113-8520-3c46fc53fd15',
+          LetterRecordId: '12345678901',
+          LetterDate: '2024/03/26',
+        },
+        {
+          LetterName: '775170000',
+          LetterId: '111222333-6ed0-4113-8520-3c46fc53f321',
+          LetterRecordId: '12345678901',
+          LetterDate: '2024/02/15',
+        },
+        {
+          LetterName: '775170000',
+          LetterId: '111222333-6ed0-4113-8520-3c46fc53fd123',
+          LetterRecordId: '12345678901',
+          LetterDate: '2024/02/15',
+        },
+        {
+          LetterName: '775170001',
+          LetterId: '038d9d0f-fb35-4d98-8f31-a4b2171e521a',
+          LetterRecordId: '81400774242',
+          LetterDate: '2024/03/21',
+        },
+        {
+          LetterName: '775170001',
+          LetterId: 'f8a161b0-3b89-449f-a10a-e9c958ffb32f',
+          LetterRecordId: '81400774242',
+          LetterDate: '2024/03/21',
+        },
+      ]);
     }),
   ];
-}
-
-/**
- * Retrieves a PDF entity based on the provided referenceId ID.
- *
- * @param id - The reference Id to look up in the database.
- * @returns The PDF entity if found, otherwise throws a 404 error.
- */
-export function getPdfEntity(referenceId: string | readonly string[]) {
-  const parsedReferenceId = z.string().safeParse(referenceId);
-
-  if (!parsedReferenceId.success) {
-    throw new HttpResponse('Invalid referenceId: ' + referenceId, { status: 400, headers: { 'Content-Type': 'text/plain' } });
-  }
-
-  const parsedPdfEntity = db.pdf.findFirst({
-    where: { referenceId: { equals: parsedReferenceId.data } },
-  });
-
-  if (!parsedPdfEntity) {
-    throw new HttpResponse('No PDF found with the provided referenceId: ' + referenceId, { status: 404, headers: { 'Content-Type': 'text/plain' } });
-  }
-
-  return parsedPdfEntity;
-}
-
-/**
- * Retrieves list of letter entities based on the provided user ID.
- *
- * @param userId - The user ID to look up in the database.
- * @returns The letter entity if found, otherwise throws a 404 error.
- */
-export function getLetterEntities(userId: string | readonly string[]) {
-  const parsedUserId = z.string().uuid().safeParse(userId);
-
-  if (!parsedUserId.success) {
-    throw new HttpResponse('Invalid userId: ' + userId, { status: 400, headers: { 'Content-Type': 'text/plain' } });
-  }
-
-  return db.letter.findMany({ where: { userId: { equals: parsedUserId.data } } });
 }
