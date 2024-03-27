@@ -51,10 +51,10 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     !state.typeOfApplication) {
     throw new Error(`Incomplete application "${id}" state!`);
   }
-
+  const allFederalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
   const allProvincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
-  const selectedBenefits = allProvincialTerritorialSocialPrograms
-    .filter((obj) => obj.id === state.dentalBenefits?.provincialTerritorialSocialProgram)
+  const selectedBenefits = [...allFederalSocialPrograms, ...allProvincialTerritorialSocialPrograms]
+    .filter((obj) => obj.id === state.dentalBenefits?.federalSocialProgram || obj.id === state.dentalBenefits?.provincialTerritorialSocialProgram)
     .map((obj) => getNameByLanguage(locale, obj))
     .join(', ');
 

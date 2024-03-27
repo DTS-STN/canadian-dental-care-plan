@@ -1,0 +1,52 @@
+{
+  "page-title": "Vérificateur de l'état d'une demande",
+  "status-checker-heading": "Qu'est-ce que le vérificateur de l'état d'une demande?",
+  "status-checker-content": "Il s'agit d'un outil qui vous permet de savoir où en est votre demande de participation au Régime canadien de soins dentaires",
+  "online-status-heading": "Qui peut vérifier l'état de sa demande en ligne?",
+  "online-status-content": "Si vous avez présenté une demande au titre du Régime canadien de soins dentaires, vous pouvez vérifier l'état de votre demande en ligne.",
+  "terms-of-use": {
+    "summary": "Conditions générales d'utilisation",
+    "heading": "Conditions d'utilisation du vérificateur de l'état d'une demande du Régime canadien de soins dentaires",
+    "legal-terms": "<strong>VEUILLEZ LIRE ATTENTIVEMENT</strong> Nous sommes heureux que vous utilisiez le vérificateur de l'état d'une demande du Régime canadien de soins dentaires. Certaines conditions générales d'utilisation importantes s'appliquent à l'utilisation de ce service («\u00a0conditions d'utilisation\u00a0» ou «\u00a0conditions\u00a0»). Veuillez les lire attentivement. Elles sont importantes parce qu'elles régissent votre utilisation du vérificateur de l'état d'une demande. Nous vous invitons à lire attentivement les présentes conditions, car elles ont une incidence ou peuvent avoir une incidence sur vos droits et vos obligations juridiques. En cas de divergence, les présentes conditions d'utilisation ont préséance sur celles du site Canada.ca.",
+    "access-terms": "Votre accès au vérificateur de l'état d'une demande et votre utilisation de celuici, y compris tout renseignement qu'il contient, sont assujettis à (1) votre acceptation des présentes conditions d'utilisation et à (2) votre conformité à cellesci.",
+    "usage-terms": "Chaque fois que vous utilisez le vérificateur de l'état d'une demande, ces conditions d'utilisation continuent de s'appliquer. En l'utilisant, vous acceptez de respecter ces conditions. Il vous incombe de comprendre et de retenir ces conditions générales d'utilisation.",
+    "terms-rejection-policy": "Vous pouvez toujours décider de ne pas accepter ces conditions. Le cas échéant, vous ne serez pas autorisé à accéder au vérificateur de l'état d'une demande et à l'utiliser.",
+    "esdc-definition-clarification": "Aux fins des présentes conditions d'utilisation, «\u00a0EDSC\u00a0» s'entend de Sa Majesté le Roi du chef du Canada, représenté par le ministre de l'Emploi et du Développement social du Canada.",
+    "status-checker": {
+      "heading": "Conditions d'utilisation du vérificateur de l'état d'une demande",
+      "self-agreement": "Votre utilisation du vérificateur de l'état d'une demande en ligne signifie que vous avez lu et accepté les présentes conditions d'utilisation ainsi que l'énoncé de confidentialité.",
+      "on-behalf-of-someone-else": "Si vous utilisez le vérificateur de l'état d'une demande au nom d'une autre personne, en l'utilisant, vous attestez que vous avez toute autorité, et la permission requises pour accepter les conditions d'utilisation au nom de cette personne.",
+      "at-your-own-risk": "Vous utilisez cet outil à vos propres risques et vous devez veiller à la sécurité de vos renseignements personnels. Si vous utilisez un ordinateur public, veillez à fermer le navigateur ou à mettre fin à la connexion lorsque vous avez terminé.",
+      "only-use": "N'utilisez cet outil que dans le but pour lequel il a été conçu.",
+      "maintenance": "Il peut arriver que le système soit indisponible pour des raisons de maintenance.",
+      "inactive": "Si vous restez inactif pendant 15 minutes alors que vous utilisez le vérificateur de la demande, votre séance prendra fin et vous perdrez tous les renseignements que vous avez saisis.",
+      "msdc": "EDSC a recours aux services de Microsoft Corporation pour exécuter le vérificateur de l'état d'une demande. Les centres de données Microsoft utilisés par EDSC se trouvent au Canada, conformément à <microsoftServiceAgreement>l'Entente des services de Microsoft</microsoftServiceAgreement>.",
+      "antibot": "Nous utilisons le service antirobots hCaptcha sur notre site Web conformément aux <hcaptchaTermsOfService>conditions de services de hCaptcha</hcaptchaTermsOfService>."
+    },
+    "disclaimers": {
+      "heading": "Avis de non-responsabilité",
+      "disclaimers": "Vous comprenez et convenez qu'EDSC fournit le service de vérification de l'état d'une demande du Régime canadien de soins dentaires «\u00a0en l'état\u00a0», ne fait aucune assertion et n'offre aucune garantie d'aucune sorte, explicite ou implicite, et décline toute responsabilité à l'égard de tout dommage, perte ou blessure causé par ce qui suit ou associé à ce qui suit\u00a0:",
+      "external-factors-disclaimer": "tout facteur ou question échappant à son contrôle, y compris la disponibilité ou la nondisponibilité d'Internet, des systèmes de télécommunication ou d'autres infrastructures; ou",
+      "non-acceptance": "la non-acceptation des renseignements fournis dans le vérificateur de l'état d'une demande; ou",
+      "non-compliance": "le nonrespect des présentes conditions."
+    },
+    "changes-to-these-terms-of-use": {
+      "heading": "Vous exonèrez, par les présentes, EDSC de toute responsabilité de cet ordre.",
+      "esdc-terms-amendment-policy": "Modifications apportées aux présentes conditions d'utilisation EDSC peut modifier les présentes conditions d'utilisation en tout temps et sans préavis. De telles modifications entreront en vigueur immédiatement à la date de leur publication. Lorsque vous utilisez le vérificateur de l'état d'une demande, vous acceptez de respecter les conditions d'utilisation modifiées. Il vous incombe de vous assurer de comprendre et de retenir ces conditions."
+    }
+  },
+  "privacy-notice-statement": {
+    "summary": "Énoncé de confidentialité",
+    "collection-of-use": "La collecte et l'utilisation de vos renseignements personnels sont autorisées en vertu de la Loi sur le ministère de la Santé, de la Loi sur les mesures de soins dentaires, de la Loi sur la protection des renseignements personnels, de la Loi sur le ministère de l'Emploi et du Développement social et d'autres lois applicables.",
+    "provided-information": "Les renseignements fournis ne donneront jamais lieu à des décisions administratives vous concernant.",
+    "third-party-provider": "EDSC exécute cette application en utilisant les services du fournisseur tiers Microsoft Corporation, qui peut être soumis à des lois étrangères. Pour obtenir de plus amples renseignements, veuillez consulter la <microsoftDataPrivacyPolicy>politique de confidentialité des données et les principes de confidentialité de Microsoft<microsoftDataPrivacyPolicy>.",
+    "personal-information": "Vos renseignements personnels sont administrés conformément à ce que prévoient la Loi sur le ministère de l'Emploi et du Développement social, la Loi sur la protection des renseignements personnels ainsi que d'autres lois applicables. En vertu de la Loi sur la protection des renseignements personnels, vous avez le droit à la protection de vos renseignements personnels, à l'accès à ceux-ci et, le cas échéant, à la correction de vos renseignements personnels lorsque vous estimez qu'il y a une erreur ou une omission.",
+    "report-a-concern": "Si vous n'êtes pas satisfait de nos réponses à vos préoccupations en matière de protection de la vie privée, vous avez le droit de déposer une plainte auprès du Commissaire à la protection de la vie privée du Canada concernant le traitement de vos renseignements personnels à la page suivante\u00a0: <fileacomplaint>Signaler un problème<fileacomplaint>."
+  },
+  "links": {
+    "file-complaint": "https://www.priv.gc.ca/fr/signaler-un-probleme/",
+    "hcaptcha": "https://www.hcaptcha.com/terms",
+    "microsoft-data-privacy-policy": "https://www.microsoft.com/fr-ca/trust-center/privacy",
+    "microsoft-service-agreement": "https://www.microsoft.com/en-ca/servicesagreement"
+  }
+}
