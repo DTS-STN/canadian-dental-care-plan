@@ -3,6 +3,9 @@ import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
 import { privateKeyPemToCryptoKey, publicKeyPemToCryptoKey } from './crypto-utils.server';
+import { getLogger } from '~/utils/logging.server';
+
+const log = getLogger('env.server');
 
 // none, error, warn, info, debug, verbose, all
 const otelLogLevels = Object.keys(DiagLogLevel).map((key) => key.toLowerCase());
@@ -180,11 +183,15 @@ export function getPublicEnv() {
 }
 
 /**
- * Return true if the given feature flag is enabled
+ * A helper function to be used in actions and loaders that checks if a feature
+ * is enabled. If the feature is not enabled, a 404 response will be thrown.
  */
 export function featureEnabled(feature: FeatureName) {
   const { ENABLED_FEATURES } = getEnv();
-  return ENABLED_FEATURES.includes(feature);
+  if (!ENABLED_FEATURES.includes(feature)) {
+    log.warn('Feature [%s] is not enabled; returning 404 response', feature);
+    throw new Response(null, { status: 404 });
+  }
 }
 
 /**

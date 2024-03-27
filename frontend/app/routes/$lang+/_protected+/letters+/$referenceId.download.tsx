@@ -7,9 +7,7 @@ import { featureEnabled } from '~/utils/env.server';
 import { UserinfoToken } from '~/utils/raoidc-utils.server';
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  if (!featureEnabled('view-letters')) {
-    throw new Response('Not Found', { status: 404 });
-  }
+  featureEnabled('view-letters');
 
   const instrumentationService = getInstrumentationService();
 

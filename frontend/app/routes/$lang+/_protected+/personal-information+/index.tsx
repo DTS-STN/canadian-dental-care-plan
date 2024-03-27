@@ -35,9 +35,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
-  if (!featureEnabled('update-personal-info')) {
-    throw new Response(null, { status: 404 });
-  }
+  featureEnabled('update-personal-info');
 
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
