@@ -6,7 +6,7 @@ import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { UserinfoToken } from '~/utils/raoidc-utils.server';
 
-export async function loader({ params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-letters');
 
   const instrumentationService = getInstrumentationService();
