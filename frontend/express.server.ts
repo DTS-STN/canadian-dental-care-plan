@@ -12,8 +12,12 @@ import path from 'node:path';
 import url from 'node:url';
 import sourceMapSupport from 'source-map-support';
 
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getLogger } from '~/utils/logging.server';
+
+// instrumentation needs to be started as early as possible to ensure proper initialization
+getInstrumentationService().startInstrumentation();
 
 const log = getLogger('express.server');
 
@@ -48,18 +52,19 @@ async function runServer() {
   const buildPathArg = process.argv[2];
 
   if (!buildPathArg) {
-    log.error('Usage: express.server.js <application-build-path> -- e.g. ./build/express.server.js ./build/index.js');
+    log.error('Usage: express.server.ts <application-build-path> -- e.g. ./express.server.ts ./build/index.js');
     process.exit(1);
   }
 
   const buildPath = path.resolve(buildPathArg);
   const versionPath = path.resolve(buildPathArg, '..', 'version.txt');
   const build = await reimportServer(buildPath);
+  const logFormat = process.env.NODE_ENV === 'development' ? 'dev' : 'tiny';
 
-  const loggingRequestHandler = morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'tiny', {
-    skip: (request, response) => {
+  const loggingRequestHandler = morgan(logFormat, {
+    skip: (req, res) => {
       const ignoredUrls = ['/api/readyz'];
-      return request.url ? ignoredUrls.includes(request.url) : false;
+      return req.url ? ignoredUrls.includes(req.url) : false;
     },
     stream: {
       write: (str: string) => log.info(str.trim()),
@@ -134,7 +139,7 @@ async function createDevRequestHandler(initialBuild: ServerBuild, buildPath: str
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const requestHandler = await createRequestHandler(build, 'development');
-      return requestHandler(req, res, next);
+      return await requestHandler(req, res, next);
     } catch (error) {
       next(error);
     }
