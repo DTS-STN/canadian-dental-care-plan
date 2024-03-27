@@ -94,7 +94,8 @@
     "dental-public": "Access to dental government insurance: {{access}}",
     "application-code": "Application code",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "exit": "Exit"
   },
   "dental-benefits": {
     "title": "Access to other federal, provincial or territorial dental benefits",
