@@ -135,7 +135,7 @@ db.personalInformation.create({
   fullTelephoneNumber: '555-555-5555',
   languageCode: 'E',
   languagePreferredIndicator: true,
-  sinIdentification: '999999999',
+  sinIdentification: '800011819',
 });
 
 // seed avaliable languages (before user)
