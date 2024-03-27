@@ -101,8 +101,8 @@ export default function App() {
         <Links />
         {env.ADOBE_ANALYTICS_SRC && env.ADOBE_ANALYTICS_JQUERY_SRC && (
           <>
-            <script src={env.ADOBE_ANALYTICS_JQUERY_SRC} />
-            <script src={env.ADOBE_ANALYTICS_SRC} />
+            <script src={env.ADOBE_ANALYTICS_JQUERY_SRC} nonce={nonce} />
+            <script src={env.ADOBE_ANALYTICS_SRC} nonce={nonce} />
           </>
         )}
       </head>
