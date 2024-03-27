@@ -1,8 +1,6 @@
 import { fakerEN_CA as faker } from '@faker-js/faker';
 import { factory, primaryKey } from '@mswjs/data';
 
-import letterTypesJson from './power-platform-data/letter-types.json';
-
 // (Optional) Seed `faker` to ensure reproducible
 // random values of model properties.
 faker.seed(123);
@@ -95,18 +93,6 @@ const db = factory({
     code: String,
     nameEn: String,
     nameFr: String,
-  },
-
-  letter: {
-    id: primaryKey(faker.string.uuid),
-    issuedOn: () => faker.date.past({ years: 1 }).toISOString().split('T')[0],
-    letterType: String,
-    referenceId: String,
-    userId: String,
-  },
-  pdf: {
-    id: primaryKey(faker.string.uuid),
-    referenceId: () => faker.string.alphanumeric(10),
   },
   country: {
     countryId: primaryKey(faker.string.uuid),
@@ -228,25 +214,12 @@ db.address.create({
 });
 
 // seed users
-const defaultUser = db.user.create({
+db.user.create({
   id: '00000000-0000-0000-0000-000000000000',
   firstName: 'John',
   lastName: 'Maverick',
   preferredLanguage: frenchLanguage.id,
 });
-
-// seed available letters
-const numberOfLetters = faker.number.int({ min: 10, max: 20 }); // Adjust min and max as needed
-for (let i = 0; i < numberOfLetters; i++) {
-  // seed avaliable pdf
-  const seededPDF = db.pdf.create();
-
-  db.letter.create({
-    userId: defaultUser.id,
-    letterType: faker.helpers.arrayElement(letterTypesJson.value[0].OptionSet.Options).Value.toString(),
-    referenceId: seededPDF.referenceId,
-  });
-}
 
 // seed marirtal statuses
 db.maritalStatus.create({

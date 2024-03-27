@@ -52,7 +52,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const sortParam = new URL(request.url).searchParams.get('sort');
   const sortOrder = orderEnumSchema.catch('desc').parse(sortParam);
   const userId = await userService.getUserId();
-  const letters = await lettersService.getLetters(userId, 'clientId', sortOrder); // TODO where and what is clientId?
+  const letters = await lettersService.getLetters(userId, sortOrder);
   const letterTypes = (await lettersService.getAllLetterTypes()).filter(({ id }) => letters.some(({ name }) => name === id));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -101,7 +101,7 @@ export default function LettersIndex() {
 
           return (
             <li key={letter.id} className="py-4 sm:py-6">
-              <InlineLink reloadDocument to={`/letters/${letter.referenceId}/download`} className="external-link font-lato font-semibold" target="_blank">
+              <InlineLink reloadDocument to={`/letters/${letter.id}/download`} className="external-link font-lato font-semibold" target="_blank">
                 {letterName}
               </InlineLink>
               <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: letter.issuedOn })}</p>
