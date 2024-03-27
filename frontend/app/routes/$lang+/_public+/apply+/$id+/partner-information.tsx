@@ -186,14 +186,27 @@ export default function ApplyFlowApplicationInformation() {
             </InputCheckbox>
           </div>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" to={editMode ? `/apply/${id}/review-information` : `/apply/${id}/applicant-information`} disabled={isSubmitting || defaultState === undefined}>
-              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('apply:partner-information.back-btn')}
-            </ButtonLink>
-            <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-              {t('apply:partner-information.continue-btn')}
-              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-            </Button>
+            {editMode ? (
+              <>
+                <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
+                  {t('apply:partner-information.cancel-btn')}
+                </ButtonLink>
+                <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+                  {t('apply:partner-information.save-btn')}
+                </Button>
+              </>
+            ) : (
+              <>
+                <ButtonLink id="back-button" to={`/apply/${id}/applicant-information`} disabled={isSubmitting}>
+                  <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+                  {t('apply:partner-information.back-btn')}
+                </ButtonLink>
+                <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+                  {t('apply:partner-information.continue-btn')}
+                  <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+                </Button>
+              </>
+            )}
           </div>
         </fetcher.Form>
       </div>

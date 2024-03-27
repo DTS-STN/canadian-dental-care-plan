@@ -113,14 +113,27 @@ export default function ApplyFlowDateOfBirth() {
         <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
           <DatePickerField id="date-of-birth" name="dateOfBirth" defaultValue={defaultState ?? ''} legend={t('apply:eligibility.date-of-birth.form-instructions')} required errorMessage={errorMessages['date-picker-date-of-birth-month']} />
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" to={editMode ? `/apply/${id}/review-information` : `/apply/${id}/tax-filing`} disabled={isSubmitting}>
-              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('apply:eligibility.date-of-birth.back-btn')}
-            </ButtonLink>
-            <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-              {t('apply:eligibility.date-of-birth.continue-btn')}
-              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-            </Button>
+            {editMode ? (
+              <>
+                <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
+                  {t('apply:eligibility.date-of-birth.cancel-btn')}
+                </ButtonLink>
+                <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+                  {t('apply:eligibility.date-of-birth.save-btn')}
+                </Button>
+              </>
+            ) : (
+              <>
+                <ButtonLink id="back-button" to={`/apply/${id}/tax-filing`} disabled={isSubmitting}>
+                  <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+                  {t('apply:eligibility.date-of-birth.back-btn')}
+                </ButtonLink>
+                <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+                  {t('apply:eligibility.date-of-birth.continue-btn')}
+                  <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+                </Button>
+              </>
+            )}
           </div>
         </fetcher.Form>
       </div>

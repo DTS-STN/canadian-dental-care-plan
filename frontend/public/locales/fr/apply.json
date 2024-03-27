@@ -10,6 +10,8 @@
     "marital-status": "État civil",
     "back-btn": "Retour",
     "continue-btn": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Enregistrer",
     "error-message": {
       "first-name-required": "Le prénom est obligatoire.",
       "last-name-required": "Le nom de famille est obligatoire.",
@@ -31,6 +33,8 @@
     "future-confirm-email": "Confirmer l'adresse courriel",
     "back": "Retour",
     "continue": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Enregistrer",
     "error-message": {
       "confirm-email-for-future-match": "L'adresse courriel de confirmation doit correspondre à l'adresse courriel.",
       "confirm-email-for-future-required": "L'adresse courriel de confirmation est obligatoire.",
@@ -118,7 +122,9 @@
     },
     "button": {
       "back": "Retour",
-      "continue": "Continuer"
+      "continue": "Continuer",
+      "cancel-btn": "Annuler",
+      "save-btn": "Enregistrer"
     },
     "error-message": {
       "federal-benefit-required": "Les assurances dentaires fédérales est obligatoire.",
@@ -140,7 +146,9 @@
     "option-no": "<strong>Non</strong>, je n'ai pas accès à une assurance dentaire",
     "button": {
       "back": "Retour",
-      "continue": "Continuer"
+      "continue": "Continuer",
+      "cancel-btn": "Annuler",
+      "save-btn": "Enregistrer"
     },
     "detail": {
       "additional-info": {
@@ -193,7 +201,9 @@
         "date-of-birth-required-and-valid": "La date de naissance est requise et doit être une date valide."
       },
       "back-btn": "Retour",
-      "continue-btn": "Continuer"
+      "continue-btn": "Continuer",
+      "cancel-btn": "Annuler",
+      "save-btn": "Enregistrer"
     },
     "application-delegate": {
       "page-title": "La demande au nom d'une autre personne ne peut pas être effectuée en ligne pour le moment.",
@@ -323,6 +333,8 @@
     "confirm-checkbox": "Je confirme que mon époux/épouse ou mon conjoint/conjointe de fait est au courant et d'accord que ses renseignements personnels soient communiqués.",
     "back-btn": "Retour",
     "continue-btn": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Enregistrer",
     "error-message": {
       "confirm-required": "(FR) Checkbox must be selected",
       "date-of-birth-required-and-valid": "La date de naissance est requise et doit être une date valide.",
@@ -357,6 +369,8 @@
     },
     "back": "Retour",
     "continue": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Enregistrer",
     "error-message": {
       "home-address-required": "L'adresse du domicile est obligatoire.",
       "home-city-required": "La ville ou municipalité du domicile est obligatoire.",

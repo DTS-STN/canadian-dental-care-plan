@@ -209,7 +209,7 @@ export default function ReviewInformation() {
           <DescriptionListItem term={t('apply:review-information.full-name-title')}>
             {`${userInfo.firstName} ${userInfo.lastName}`}
             <p className="mt-4">
-              <InlineLink id="change-full-name" to={`/apply/${id}/applicant-information`} state={{ editMode: true }}>
+              <InlineLink id="change-full-name" to={`/apply/${id}/applicant-information`}>
                 {t('apply:review-information.full-name-change')}
               </InlineLink>
             </p>
@@ -217,7 +217,7 @@ export default function ReviewInformation() {
           <DescriptionListItem term={t('apply:review-information.dob-title')}>
             {userInfo.birthday}
             <p className="mt-4">
-              <InlineLink id="change-date-of-birth" to={{ pathname: `/apply/${id}/date-of-birth` }} state={{ editMode: true }}>
+              <InlineLink id="change-date-of-birth" to={{ pathname: `/apply/${id}/date-of-birth` }}>
                 {t('apply:review-information.dob-change')}
               </InlineLink>
             </p>
@@ -225,7 +225,7 @@ export default function ReviewInformation() {
           <DescriptionListItem term={t('apply:review-information.sin-title')}>
             {formatSin(userInfo.sin)}
             <p className="mt-4">
-              <InlineLink id="change-sin" to={`/apply/${id}/applicant-information`} state={{ editMode: true }}>
+              <InlineLink id="change-sin" to={`/apply/${id}/applicant-information`}>
                 {t('apply:review-information.sin-change')}
               </InlineLink>
             </p>
@@ -233,7 +233,7 @@ export default function ReviewInformation() {
           <DescriptionListItem term={t('apply:review-information.marital-title')}>
             {maritalStatus}
             <p className="mt-4">
-              <InlineLink id="change-martial-status" to={`/apply/${id}/applicant-information`} state={{ editMode: true }}>
+              <InlineLink id="change-martial-status" to={`/apply/${id}/applicant-information`}>
                 {t('apply:review-information.marital-change')}
               </InlineLink>
             </p>
@@ -246,7 +246,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply:review-information.full-name-title')}>
                 {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
                 <p className="mt-4">
-                  <InlineLink id="change-spouse-full-name" to={`/apply/${id}/partner-information`} state={{ editMode: true }}>
+                  <InlineLink id="change-spouse-full-name" to={`/apply/${id}/partner-information`}>
                     {t('apply:review-information.full-name-change')}
                   </InlineLink>
                 </p>
@@ -254,7 +254,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply:review-information.dob-title')}>
                 {spouseInfo.birthday}
                 <p className="mt-4">
-                  <InlineLink id="change-spouse-date-of-birth" to={`/apply/${id}/partner-information`} state={{ editMode: true }}>
+                  <InlineLink id="change-spouse-date-of-birth" to={`/apply/${id}/partner-information`}>
                     {t('apply:review-information.dob-change')}
                   </InlineLink>
                 </p>
@@ -262,7 +262,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply:review-information.sin-title')}>
                 {formatSin(spouseInfo.sin)}
                 <p className="mt-4">
-                  <InlineLink id="change-spouse-sin" to={`/apply/${id}/partner-information`} state={{ editMode: true }}>
+                  <InlineLink id="change-spouse-sin" to={`/apply/${id}/partner-information`}>
                     {t('apply:review-information.sin-change')}
                   </InlineLink>
                 </p>
@@ -276,7 +276,7 @@ export default function ReviewInformation() {
           <DescriptionListItem term={t('apply:review-information.phone-title')}>
             {userInfo.phoneNumber}
             <p className="mt-4">
-              <InlineLink id="change-phone-number" to={`/apply/${id}/personal-information`} state={{ editMode: true }}>
+              <InlineLink id="change-phone-number" to={`/apply/${id}/personal-information`}>
                 {t('apply:review-information.phone-change')}
               </InlineLink>
             </p>
@@ -284,7 +284,7 @@ export default function ReviewInformation() {
           <DescriptionListItem term={t('apply:review-information.alt-phone-title')}>
             {userInfo.altPhoneNumber}
             <p className="mt-4">
-              <InlineLink id="change-alternate-phone-number" to={`/apply/${id}/personal-information`} state={{ editMode: true }}>
+              <InlineLink id="change-alternate-phone-number" to={`/apply/${id}/personal-information`}>
                 {t('apply:review-information.alt-phone-change')}
               </InlineLink>
             </p>
@@ -299,7 +299,7 @@ export default function ReviewInformation() {
               altFormat={true}
             />
             <p className="mt-4">
-              <InlineLink id="change-mailing-address" to={`/apply/${id}/personal-information`} state={{ editMode: true }}>
+              <InlineLink id="change-mailing-address" to={`/apply/${id}/personal-information`}>
                 {t('apply:review-information.mailing-change')}
               </InlineLink>
             </p>
@@ -314,7 +314,7 @@ export default function ReviewInformation() {
               altFormat={true}
             />
             <p className="mt-4">
-              <InlineLink id="change-home-address" to={`/apply/${id}/personal-information`} state={{ editMode: true }}>
+              <InlineLink id="change-home-address" to={`/apply/${id}/personal-information`}>
                 {t('apply:review-information.home-change')}
               </InlineLink>
             </p>
@@ -333,7 +333,7 @@ export default function ReviewInformation() {
               </div>
             )}
             <p className="mt-4">
-              <InlineLink id="change-communication-preference" to={`/apply/${id}/communication-preference`} state={{ editMode: true }}>
+              <InlineLink id="change-communication-preference" to={`/apply/${id}/communication-preference`}>
                 {t('apply:review-information.comm-pref-change')}
               </InlineLink>
             </p>
@@ -342,7 +342,7 @@ export default function ReviewInformation() {
             <DescriptionListItem term={t('apply:review-information.lang-pref-title')}>
               {getNameByLanguage(i18n.language, preferredLanguage)}
               <p className="mt-4">
-                <InlineLink id="change-language-preference" to={`/apply/${id}/communication-preference`} state={{ editMode: true }}>
+                <InlineLink id="change-language-preference" to={`/apply/${id}/communication-preference`}>
                   {t('apply:review-information.lang-pref-change')}
                 </InlineLink>
               </p>
@@ -354,7 +354,7 @@ export default function ReviewInformation() {
           <DescriptionListItem term={t('apply:review-information.dental-insurance-title')}>
             {dentalInsurance === 'yes' ? t('apply:review-information.dental-insurance-has-access') : t('apply:review-information.dental-insurance-has-no-access')}
             <p className="mt-4">
-              <InlineLink id="change-access-dental" to={`/apply/${id}/dental-insurance`} state={{ editMode: true }}>
+              <InlineLink id="change-access-dental" to={`/apply/${id}/dental-insurance`}>
                 {t('apply:review-information.dental-insurance-change')}
               </InlineLink>
             </p>
@@ -374,7 +374,7 @@ export default function ReviewInformation() {
               <>{t('apply:review-information.dental-benefit-has-no-access')}</>
             )}
             <p className="mt-4">
-              <InlineLink id="change-dental-benefits" to={`/apply/${id}/federal-provincial-territorial-benefits`} state={{ editMode: true }}>
+              <InlineLink id="change-dental-benefits" to={`/apply/${id}/federal-provincial-territorial-benefits`}>
                 {t('apply:review-information.dental-benefit-change')}
               </InlineLink>
             </p>

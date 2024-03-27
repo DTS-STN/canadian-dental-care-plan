@@ -10,6 +10,8 @@
     "marital-status": "Marital status",
     "back-btn": "Back",
     "continue-btn": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
     "error-message": {
       "first-name-required": "The first name is required.",
       "last-name-required": "The last name is required.",
@@ -31,6 +33,8 @@
     "future-confirm-email": "Confirm email address",
     "back": "Back",
     "continue": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
     "error-message": {
       "confirm-email-for-future-match": "The confirm email address must match the email address.",
       "confirm-email-for-future-required": "The confirm email address is required.",
@@ -118,7 +122,9 @@
     },
     "button": {
       "back": "Back",
-      "continue": "Continue"
+      "continue": "Continue",
+      "cancel-btn": "Cancel",
+      "save-btn": "Save"
     },
     "error-message": {
       "federal-benefit-required": "The federal dental benefits is required.",
@@ -140,7 +146,9 @@
     "option-no": "<strong>No</strong>, I do not have access to dental insurance or coverage.",
     "button": {
       "back": "Back",
-      "continue": "Continue"
+      "continue": "Continue",
+      "cancel-btn": "Cancel",
+      "save-btn": "Save"
     },
     "detail": {
       "additional-info": {
@@ -193,7 +201,9 @@
         "date-of-birth-required-and-valid": "The date of birth is required and must be a valid date."
       },
       "back-btn": "Back",
-      "continue-btn": "Continue"
+      "continue-btn": "Continue",
+      "cancel-btn": "Cancel",
+      "save-btn": "Save"
     },
     "application-delegate": {
       "page-title": "Applying on behalf of someone cannot be completed online at this time",
@@ -323,6 +333,8 @@
     "confirm-checkbox": "I confirm that my spouse or common-law partner is aware and has agreed to share their personal information.",
     "back-btn": "Back",
     "continue-btn": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
     "error-message": {
       "confirm-required": "Checkbox must be selected",
       "date-of-birth-required-and-valid": "The date of birth is required and must be a valid date.",
@@ -357,6 +369,8 @@
     },
     "back": "Back",
     "continue": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
     "error-message": {
       "home-address-required": "The home address is required.",
       "home-city-required": "The home city or town is required.",
