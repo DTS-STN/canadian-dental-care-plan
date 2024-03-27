@@ -5,6 +5,8 @@ import { z } from 'zod';
 import { privateKeyPemToCryptoKey, publicKeyPemToCryptoKey } from './crypto-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
+const log = getLogger('env.server');
+
 // none, error, warn, info, debug, verbose, all
 const otelLogLevels = Object.keys(DiagLogLevel).map((key) => key.toLowerCase());
 
@@ -179,7 +181,6 @@ export function getPublicEnv() {
 
   return result.data;
 }
-const log = getLogger('env.server');
 
 /**
  * A helper function to be used in actions and loaders that checks if a feature
