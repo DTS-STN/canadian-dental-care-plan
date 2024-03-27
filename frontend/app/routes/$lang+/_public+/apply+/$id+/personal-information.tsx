@@ -439,12 +439,12 @@ export default function ApplyFlowPersonalInformation() {
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <ButtonLink id="back-button" to={editMode ? `/apply/${id}/review-information` : ['MARRIED', 'COMMONLAW'].includes(maritalStatus ?? '') ? `/apply/${id}/partner-information` : `/apply/${id}/applicant-information`} disabled={isSubmitting}>
-              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('apply:personal-information.back')}
+              {!editMode && <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />}
+              {editMode ? t('apply:personal-information.cancel-btn') : t('apply:personal-information.back')}
             </ButtonLink>
             <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-              {t('apply:personal-information.continue')}
-              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+              {editMode ? t('apply:personal-information.save-btn') : t('apply:personal-information.continue')}
+              {!editMode && <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />}
             </Button>
           </div>
         </fetcher.Form>

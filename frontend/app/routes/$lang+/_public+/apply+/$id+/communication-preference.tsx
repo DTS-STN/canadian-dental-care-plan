@@ -263,12 +263,12 @@ export default function ApplyFlowCommunicationPreferencePage() {
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <ButtonLink id="back-button" to={editMode ? `/apply/${id}/review-information` : `/apply/${id}/personal-information`} disabled={isSubmitting}>
-              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('apply:communication-preference.back')}
+              {!editMode && <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />}
+              {editMode ? t('apply:communication-preference.cancel-btn') : t('apply:communication-preference.back')}
             </ButtonLink>
             <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-              {t('apply:communication-preference.continue')}
-              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+              {editMode ? t('apply:communication-preference.save-btn') : t('apply:communication-preference.continue')}
+              {!editMode && <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />}
             </Button>
           </div>
         </fetcher.Form>

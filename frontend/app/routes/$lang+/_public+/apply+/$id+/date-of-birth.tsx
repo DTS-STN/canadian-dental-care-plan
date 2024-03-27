@@ -114,12 +114,12 @@ export default function ApplyFlowDateOfBirth() {
           <DatePickerField id="date-of-birth" name="dateOfBirth" defaultValue={defaultState ?? ''} legend={t('apply:eligibility.date-of-birth.form-instructions')} required errorMessage={errorMessages['date-picker-date-of-birth-month']} />
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <ButtonLink id="back-button" to={editMode ? `/apply/${id}/review-information` : `/apply/${id}/tax-filing`} disabled={isSubmitting}>
-              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('apply:eligibility.date-of-birth.back-btn')}
+              {!editMode && <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />}
+              {editMode ? t('apply:eligibility.date-of-birth.cancel-btn') : t('apply:eligibility.date-of-birth.back-btn')}
             </ButtonLink>
             <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-              {t('apply:eligibility.date-of-birth.continue-btn')}
-              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+              {editMode ? t('apply:eligibility.date-of-birth.save-btn') : t('apply:eligibility.date-of-birth.continue-btn')}
+              {!editMode && <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />}
             </Button>
           </div>
         </fetcher.Form>

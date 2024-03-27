@@ -174,12 +174,12 @@ export default function ApplyFlowApplicationInformation() {
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <ButtonLink id="back-button" to={editMode ? `/apply/${id}/review-information` : `/apply/${id}/date-of-birth`} disabled={isSubmitting}>
-              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('applicant-information.back-btn')}
+              {!editMode && <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />}
+              {editMode ? t('applicant-information.cancel-btn') : t('applicant-information.back-btn')}
             </ButtonLink>
             <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-              {t('applicant-information.continue-btn')}
-              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+              {editMode ? t('applicant-information.save-btn') : t('applicant-information.continue-btn')}
+              {!editMode && <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />}
             </Button>
           </div>
         </fetcher.Form>

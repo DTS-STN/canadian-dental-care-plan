@@ -146,12 +146,12 @@ export default function AccessToDentalInsuranceQuestion() {
           )}
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <ButtonLink to={editMode ? `/apply/${id}/review-information` : `/apply/${id}/communication-preference`} disabled={isSubmitting}>
-              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('dental-insurance.button.back')}
+              {!editMode && <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />}
+              {editMode ? t('dental-insurance.button.cancel-btn') : t('dental-insurance.button.back')}
             </ButtonLink>
             <Button variant="primary">
-              {t('dental-insurance.button.continue')}
-              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+              {editMode ? t('dental-insurance.button.save-btn') : t('dental-insurance.button.continue')}
+              {!editMode && <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />}
             </Button>
           </div>
         </fetcher.Form>
