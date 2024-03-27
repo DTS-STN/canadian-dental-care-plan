@@ -1,0 +1,53 @@
+{
+  "page-title": "(Fr) Status Checker",
+  "status-checker-heading": "(Fr) What is the Status Checker?",
+  "status-checker-content": "(Fr) The Status Checker is a tool that lets you check the status of your Canadian Dental Care Plan application.",
+  "online-status-heading": "(Fr) Who can check their application status online?",
+  "online-status-content": "(Fr) If you applied for the Canadian Dental Care Plan, you can check your status online.",
+  "terms-of-use": {
+    "summary": "(Fr) Terms and Conditions of Use",
+    "heading": "(Fr) Terms of Use for the Canadian Dental Care Plan Status Checker",
+    "legal-terms": "(Fr) <strong>PLEASE READ CAREFULLY.</strong> We are glad you are using the Canadian Dental Care Plan Status Checker. We have put together some important terms and conditions for using this service (“Terms of Use” or “Terms”). Please read them carefully. They are important because they govern your use of the Status Checker. We encourage you to read these Terms carefully because they affect and may affect your legal rights and obligations. If there is a conflict between these terms and those of the www.Canada.ca, these Terms will take priority.",
+    "access-terms": "(Fr) Your access to and use of the Status Checker, including any and all content, is subject to (1) your acceptance of, and (2) your compliance with these Terms of Use.",
+    "usage-terms": "(Fr) Each time you use the Status Checker, these Terms of Use continue to apply. By using the Status Checker, you agree to comply with these Terms. It is your responsibility to understand and adhere to these Terms.",
+    "terms-rejection-policy": "(Fr) You may always decide not to accept the Terms, in which case you will not be permitted to access and use the Status Checker.",
+    "esdc-definition-clarification": "(Fr) In these Terms, “ESDC” refers to the Minister of Employment and Social Development, representing His Majesty the King in Right of Canada.",
+    "status-checker": {
+      "heading": "(Fr) Terms of Use of the Status Checker:",
+      "self-agreement": "(Fr) Using the Online Status Checker means that you have read and agree to these Terms of Use and the Privacy Notice Statement.",
+      "on-behalf-of-someone-else": "(Fr) If you are using the Status Checker on behalf of another individual, by using the Status Checker, you certify that you have all the necessary authority and permission to agree to the Terms of Use on behalf of that individual.",
+      "at-your-own-risk": "(Fr) You are using this service at your own risk and you need to keep any personal information safe. If you are using a public computer, make sure to close the browser or log out when you are done.",
+      "only-use": "(Fr) Only use the Status Checker to check the status of your application to the Canadian Dental Care Plan.",
+      "maintenance": "(Fr) There will be times when the system might be down for maintenance.",
+      "inactive": "(Fr) If you are inactive for 15 minutes on the Status Checker, your session will end and you will lose any information you entered.",
+      "msdc": "(Fr) ESDC uses services from Microsoft Corporation to run the Status Checker. The Microsoft data centers used by ESDC are in Canada in accordance with Microsoft Corporation's Terms of <microsoftServiceAgreement>Service Agreement</microsoftServiceAgreement>.",
+      "antibot": "(Fr) We use the hCaptcha anti-bot service on our website in accordance with hCaptcha's <hcaptchaTermsOfService>Terms of Service</hcaptchaTermsOfService>."
+    },
+    "disclaimers": {
+      "heading": "(Fr) Disclaimers",
+      "disclaimers": "(Fr) You understand and agree that ESDC provides the Canadian Dental Care Plan Status Checker \"as is\" with no representation, warranty or guarantee, implied or express, of any kind whatsoever and that ESDC disclaims any and all liability in relation to the use of the Status Checker, including any loss, damage or injury arising from or related to:",
+      "external-factors-disclaimer": "(Fr) any matters or factors outside of its control, including the availability or unavailability of the internet, or telecommunications or other infrastructure systems; or",
+      "non-acceptance": "(Fr) the non-acceptance of information provided through the Status Checker tool; or",
+      "non-compliance": "(Fr) not following any of these Terms.",
+      "esdc-liability-indemnification": "(Fr) You hereby agree to indemnify and hold ESDC harmless from any such liability."
+    },
+    "changes-to-these-terms-of-use": {
+      "heading": "(Fr) Changes to these Terms of Use",
+      "esdc-terms-amendment-policy": "(Fr) ESDC may amend these Terms of Use at any time and without notice. Such changes shall be effective immediately on the date they are published. By using the Status Checker, you agree to abide by the amended Terms. You are responsible to ensure you understand and retain the amended Terms."
+    }
+  },
+  "privacy-notice-statement": {
+    "summary": "(Fr) Privacy Notice Statement",
+    "collection-of-use": "(Fr) The collection and use of your personal information is authorized under the Department of Health Act, the Dental Care Measures Act, the Department of Employment and Social Development Act, and other applicable laws.",
+    "provided-information": "(Fr) The provided information will never result in administrative decisions being made about you.",
+    "third-party-provider": "(Fr) ESDC carries out this application using services from third-party provider Microsoft Corporation, which may be subject to foreign laws. For more information, see <microsoftServiceAgreement>Microsoft Data Privacy Policy & Privacy Principles<microsoftServiceAgreement>.",
+    "personal-information": "(Fr) Your personal information is administered in accordance with the Department of Employment and Social Development Act, Privacy Act and other applicable laws. Under the Privacy Act, you have the right to the protection of, access to, and where applicable, the correction of your personal information when you believe there is an error or omission.",
+    "report-a-concern": "(Fr) If you are not satisfied with our response to your privacy, you have the right to file a complaint with the Privacy Commissioner of Canada regarding Service Canada's handling of your personal information at: <fileacomplaint>Report a concern<fileacomplaint>."
+  },
+  "links": {
+    "file-complaint": "https://www.priv.gc.ca/en/report-a-concern/",
+    "hcaptcha": "https://www.hcaptcha.com/terms",
+    "microsoft-data-privacy-policy": "https://www.microsoft.com/en-ca/trust-center/privacy",
+    "microsoft-service-agreement": "https://www.microsoft.com/en-ca/servicesagreement"
+  }
+}
