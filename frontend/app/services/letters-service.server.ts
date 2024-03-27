@@ -74,14 +74,12 @@ function createLettersService() {
   }
 
   /**
-   * @returns array of letters given the userId and clientId with optional sort parameter
+   * @returns array of letters given the clientId with optional sort parameter
    */
-  async function getLetters(userId: string, clientId: string, sortOrder: 'asc' | 'desc' = 'desc') {
-    const url = new URL(`${INTEROP_API_BASE_URI}/cctws/OnDemand/api/GetDocInfoByClientId`);
-    url.searchParams.set('userid', userId);
+  async function getLetters(clientId: string, sortOrder: 'asc' | 'desc' = 'desc') {
+    const url = new URL(`${INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetDocInfoByClientId`);
     url.searchParams.set('clientid', clientId);
-    url.searchParams.set('community', CCT_VAULT_COMMUNITY);
-    url.searchParams.set('Exact', 'true');
+    url.searchParams.set('cct-community', CCT_VAULT_COMMUNITY);
 
     const response = await fetch(url);
 
@@ -107,10 +105,9 @@ function createLettersService() {
     );
 
     const letters = lettersSchema.parse(await response.json()).map((letter) => ({
-      id: letter.LetterRecordId,
+      id: letter.LetterId,
       issuedOn: letter.LetterDate,
       name: letter.LetterName,
-      referenceId: letter.LetterId,
     }));
 
     return sort(letters, {
@@ -120,17 +117,16 @@ function createLettersService() {
   }
 
   /**
-   * @returns the response containing the PDF file given the userId and referenceId
+   * @returns a promise that resolves to a base64 encoded string representing the PDF document
    */
-  async function getPdf(userId: string, referenceId: string) {
-    const url = new URL(`${INTEROP_API_BASE_URI}/cctws/OnDemand/api/GetPdfByLetterId`);
-    url.searchParams.set('community', CCT_VAULT_COMMUNITY);
-    url.searchParams.set('id', referenceId);
-    url.searchParams.set('userid', userId);
+  async function getPdf(letterId: string) {
+    const url = new URL(`${INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetPdfByLetterId`);
+    url.searchParams.set('cct-community', CCT_VAULT_COMMUNITY);
+    url.searchParams.set('id', letterId);
 
     const response = await fetch(url);
 
-    if (!response.ok && response.status !== 404) {
+    if (!response.ok) {
       log.error('%j', {
         message: 'Failed to fetch data',
         status: response.status,
@@ -142,7 +138,8 @@ function createLettersService() {
       throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    return response;
+    const pdfSchema = z.object({ documentBytes: z.string() });
+    return pdfSchema.parse(await response.json()).documentBytes;
   }
 
   return {
