@@ -19,11 +19,16 @@ export function getCCTApiMockHandlers() {
       log.debug('Handling request for [%s]', request.url);
 
       const url = new URL(request.url);
-      const community = url.searchParams.get('cct-community');
+      const community = request.headers.get('cct-community');
       const id = url.searchParams.get('id');
 
       if (community === null || id === null) {
-        return new HttpResponse(null, { status: 404 });
+        return new HttpResponse(null, { status: 400 });
+      }
+
+      const subscriptionKey = request.headers.get('Ocp-Apim-Subscription-Key');
+      if (!subscriptionKey) {
+        return new HttpResponse(null, { status: 401 });
       }
 
       return HttpResponse.json(getPdfByLetterIdJson);
@@ -35,10 +40,15 @@ export function getCCTApiMockHandlers() {
     http.get('https://api.example.com/dental-care/client-letters/cct/v1/GetDocInfoByClientId', ({ request }) => {
       const url = new URL(request.url);
       const clientId = url.searchParams.get('clientid');
-      const community = url.searchParams.get('cct-community');
+      const community = request.headers.get('cct-community');
 
       if (clientId === null || community === null) {
-        throw new HttpResponse(null, { status: 404 });
+        throw new HttpResponse(null, { status: 400 });
+      }
+
+      const subscriptionKey = request.headers.get('Ocp-Apim-Subscription-Key');
+      if (!subscriptionKey) {
+        return new HttpResponse(null, { status: 401 });
       }
 
       return HttpResponse.json([
