@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { generateContentSecurityPolicy } from '~/utils/csp-utils.server';
+import { adobeAnalyticsCSP, generateContentSecurityPolicy, hcaptchaCSP } from '~/utils/csp-utils.server';
 import { getEnv } from '~/utils/env.server';
 
 vi.mock('~/utils/env.server', () => ({
@@ -27,12 +27,12 @@ describe('csp.server', () => {
 
       expect(csp).toContain(`base-uri 'none';`);
       expect(csp).toContain(`default-src 'none';`);
-      expect(csp).toContain(`connect-src 'self' https://hcaptcha.com https://*.hcaptcha.com;`);
+      expect(csp).toContain(`connect-src 'self' ${hcaptchaCSP.connectSrc} ${adobeAnalyticsCSP.connectSrc};`);
       expect(csp).toContain(`font-src 'self' fonts.gstatic.com;`);
-      expect(csp).toContain(`frame-src 'self' https://hcaptcha.com https://*.hcaptcha.com;`);
-      expect(csp).toContain(`img-src 'self' data:;`);
-      expect(csp).toContain(`script-src 'strict-dynamic' 'nonce-${nonce}' https://hcaptcha.com https://*.hcaptcha.com;`);
-      expect(csp).toContain(`style-src 'self' 'unsafe-inline' https://hcaptcha.com https://*.hcaptcha.com`);
+      expect(csp).toContain(`frame-src 'self' ${hcaptchaCSP.frameSrc} ${adobeAnalyticsCSP.frameSrc};`);
+      expect(csp).toContain(`img-src 'self' data: ${adobeAnalyticsCSP.imgSrc};`);
+      expect(csp).toContain(`script-src 'strict-dynamic' 'nonce-${nonce}' ${hcaptchaCSP.scriptSrc} ${adobeAnalyticsCSP.scriptSrc}`);
+      expect(csp).toContain(`style-src 'self' 'unsafe-inline' ${hcaptchaCSP.styleSrc}`);
     });
 
     it('should allow HMR websocket connections when NODE_ENV=development', () => {
@@ -41,7 +41,7 @@ describe('csp.server', () => {
       const nonce = '1234567890ABCDEF';
       const csp = generateContentSecurityPolicy(nonce);
 
-      expect(csp).toContain(`connect-src 'self' https://hcaptcha.com https://*.hcaptcha.com ws://localhost:3001;`);
+      expect(csp).toContain(`connect-src 'self' ${hcaptchaCSP.connectSrc} ${adobeAnalyticsCSP.connectSrc} ws://localhost:3001;`);
     });
   });
 });

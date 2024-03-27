@@ -3,6 +3,20 @@ import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('csp-utils.server');
 
+export const adobeAnalyticsCSP = {
+  connectSrc: 'https://*.demdex.net https://cm.everesttech.net https://assets.adobedtm.com https://*.omtrdc.net',
+  frameSrc: 'https://*.demdex.net',
+  imgSrc: 'https://*.demdex.net https://cm.everesttech.net https://assets.adobedtm.com https://*.omtrdc.net',
+  scriptSrc: 'https://code.jquery.com https://*.demdex.net https://cm.everesttech.net https://assets.adobedtm.com https://www.youtube.com',
+} as const;
+
+export const hcaptchaCSP = {
+  connectSrc: 'https://hcaptcha.com https://*.hcaptcha.com',
+  frameSrc: 'https://hcaptcha.com https://*.hcaptcha.com',
+  scriptSrc: 'https://hcaptcha.com https://*.hcaptcha.com',
+  styleSrc: 'https://hcaptcha.com https://*.hcaptcha.com',
+} as const;
+
 /**
  * Generate a strict content security policy.
  * @see https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html
@@ -10,20 +24,6 @@ const log = getLogger('csp-utils.server');
 export function generateContentSecurityPolicy(nonce: string) {
   const { NODE_ENV } = getEnv();
   const isDevelopment = NODE_ENV === 'development';
-
-  const adobeAnalyticsCSP = {
-    connectSrc: 'https://*.demdex.net https://cm.everesttech.net https://assets.adobedtm.com https://*.omtrdc.net',
-    frameSrc: 'https://*.demdex.net',
-    imgSrc: 'https://*.demdex.net https://cm.everesttech.net https://assets.adobedtm.com https://*.omtrdc.net',
-    scriptSrc: 'https://code.jquery.com https://*.demdex.net https://cm.everesttech.net https://assets.adobedtm.com https://www.youtube.com',
-  };
-
-  const hcaptchaCSP = {
-    connectSrc: 'https://hcaptcha.com https://*.hcaptcha.com',
-    frameSrc: 'https://hcaptcha.com https://*.hcaptcha.com',
-    scriptSrc: 'https://hcaptcha.com https://*.hcaptcha.com',
-    styleSrc: 'https://hcaptcha.com https://*.hcaptcha.com',
-  };
 
   const contentSecurityPolicy = [
     // prettier-ignore
