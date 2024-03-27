@@ -329,7 +329,7 @@ export default function ReviewInformation() {
               </div>
             ) : (
               <div className="grid grid-cols-1">
-                <p className="mt-4">{t('apply:review-information.comm-mail')}</p> <span>{t('apply:review-information.home-title')}</span>
+                <p className="mt-4">{t('apply:review-information.comm-mail')}</p>
               </div>
             )}
             <p className="mt-4">
