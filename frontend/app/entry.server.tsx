@@ -17,14 +17,11 @@ import { getLocale, initI18n } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { randomHexString } from '~/utils/string-utils';
 
-// instrumentation should be started as early as possible to ensure proper initialization
-const instrumentationService = getInstrumentationService();
-instrumentationService.startInstrumentation();
-
 const abortDelay = 5_000;
 const log = getLogger('entry.server');
 
 const { ENABLED_MOCKS } = getEnv();
+const instrumentationService = getInstrumentationService();
 
 if (ENABLED_MOCKS.length > 0) {
   server.listen({ onUnhandledRequest: 'bypass' });
