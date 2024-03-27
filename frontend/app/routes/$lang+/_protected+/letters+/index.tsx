@@ -97,13 +97,14 @@ export default function LettersIndex() {
       <ul className="divide-y border-y">
         {letters.map((letter) => {
           const letterType = letterTypes.find(({ id }) => id === letter.name);
-          const translatedLetterName = letterType ? getNameByLanguage(i18n.language, letterType) : letter.name;
-          const letterName = translatedLetterName ?? letter.name;
+          if (!letterType) {
+            return;
+          }
 
           return (
             <li key={letter.id} className="py-4 sm:py-6">
               <InlineLink reloadDocument to={`/letters/${letter.id}/download`} className="external-link font-lato font-semibold" target="_blank">
-                {letterName}
+                {getNameByLanguage(i18n.language, letterType)}
               </InlineLink>
               <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: letter.issuedOn })}</p>
             </li>
