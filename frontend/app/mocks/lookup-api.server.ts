@@ -4,6 +4,7 @@ import { z } from 'zod';
 import clientFriendlyStatusesJson from './power-platform-data/client-friendly-statuses.json';
 import countriesJson from './power-platform-data/countries.json';
 import federalProgramsJson from './power-platform-data/federal-programs.json';
+import maritalStatusesJson from './power-platform-data/marital-statuses.json';
 import provincialProgramsJson from './power-platform-data/provincial-programs.json';
 import regionsJson from './power-platform-data/regions.json';
 import { db } from '~/mocks/db';
@@ -204,8 +205,7 @@ export function getLookupApiMockHandlers() {
     //
     http.get('https://api.example.com/lookups/marital-statuses', ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
-      const maritalStatusList = db.maritalStatus.getAll();
-      return HttpResponse.json(maritalStatusList);
+      return HttpResponse.json(maritalStatusesJson);
     }),
 
     //

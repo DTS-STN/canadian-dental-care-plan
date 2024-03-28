@@ -64,7 +64,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const preferredLanguage = getNameByLanguage(locale, preferredLanguageDict!);
 
   const maritalStatuses = await getLookupService().getAllMaritalStatuses();
-  const maritalStatusDict = maritalStatuses.find((obj) => obj.code === state.applicantInformation?.maritalStatus)!;
+  const maritalStatusDict = maritalStatuses.find((obj) => obj.code === Number(state.applicantInformation?.maritalStatus))!;
   const maritalStatus = getNameByLanguage(locale, maritalStatusDict);
 
   const communicationPreferences = await getLookupService().getAllPreferredCommunicationMethods();

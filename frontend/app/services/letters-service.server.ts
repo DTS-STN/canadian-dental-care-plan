@@ -64,13 +64,13 @@ function createLettersService() {
     });
 
     const letterTypes = letterTypesSchema.parse(await response.json());
-    const { ENGLISH_LETTER_LANGUAGE_CODE, FRENCH_LETTER_LANGUAGE_CODE } = getEnv();
+    const { ENGLISH_LANGUAGE_CODE, FRENCH_LANGUAGE_CODE } = getEnv();
 
     // only one 'OptionSet' will be returned
     return letterTypes.value[0].OptionSet.Options.map((option) => {
       const { LocalizedLabels } = option.Label;
-      const nameEn = LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LETTER_LANGUAGE_CODE)?.Label;
-      const nameFr = LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LETTER_LANGUAGE_CODE)?.Label;
+      const nameEn = LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label;
+      const nameFr = LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label;
 
       return {
         id: option.Value.toString(),

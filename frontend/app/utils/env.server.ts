@@ -53,9 +53,13 @@ const serverEnv = z.object({
   OTHER_GENDER_TYPE_ID: z.string().trim().min(1).default('gender-other'),
   USA_COUNTRY_ID: z.string().trim().min(1),
 
-  // language codes for letter types
-  ENGLISH_LETTER_LANGUAGE_CODE: z.coerce.number().default(1033),
-  FRENCH_LETTER_LANGUAGE_CODE: z.coerce.number().default(1036),
+  // language codes
+  ENGLISH_LANGUAGE_CODE: z.coerce.number().default(1033),
+  FRENCH_LANGUAGE_CODE: z.coerce.number().default(1036),
+
+  // marital status codes 
+  MARITAL_STATUS_CODE_MARRIED: z.coerce.number().default(775170001),
+  MARITAL_STATUS_CODE_COMMONLAW:z.coerce.number().default(775170002),
 
   // interop api settings
   INTEROP_API_BASE_URI: z.string().url(),
