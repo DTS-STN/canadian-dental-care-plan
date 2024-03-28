@@ -5,7 +5,7 @@ import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isValidPhoneNumber } from 'libphonenumber-js';
+import { parsePhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
@@ -87,12 +87,14 @@ export async function action({ context: { session }, params, request }: ActionFu
       phoneNumber: z
         .string()
         .trim()
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply:personal-information.error-message.phone-number-valid'))
+        .refine((val) => !val || parsePhoneNumber(val, 'CA').isValid(), t('apply:personal-information.error-message.phone-number-valid'))
+        .transform((val) => parsePhoneNumber(val, 'CA').formatNational())
         .optional(),
       phoneNumberAlt: z
         .string()
         .trim()
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply:personal-information.error-message.phone-number-alt-valid'))
+        .refine((val) => !val || parsePhoneNumber(val, 'CA').isValid(), t('apply:personal-information.error-message.phone-number-alt-valid'))
+        .transform((val) => parsePhoneNumber(val, 'CA').formatInternational())
         .optional(),
       mailingAddress: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-address-required')),
       mailingApartment: z.string().trim().optional(),
