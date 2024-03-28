@@ -32,8 +32,10 @@ export function ProtectedLayout({ children }: PropsWithChildren) {
       <PageHeader />
       <PageBreadcrumbs />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
-        <AppPageTitle />
-        {children}
+        <div className="my-8 border-b border-red-800">
+          <AppPageTitle />
+        </div>
+        <div>{children}</div>
         <PageDetails />
       </main>
       <PageFooter />

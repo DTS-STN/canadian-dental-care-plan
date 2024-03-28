@@ -1,15 +1,15 @@
 {
   "index": {
-    "page-title": "(FR) Letters",
-    "subtitle": "(FR) List of issued letters for you on file.",
+    "page-title": "Mes lettres",
     "breadcrumbs": {
-      "letters": "(FR) Letters"
+      "letters": "Mes lettres"
     },
-    "subject": "(FR) Subject",
-    "date": "(FR) Date: {{date}}",
-    "reference-id": "(FR) Reference ID",
-    "filter": "(FR) Filter by:",
-    "newest": "(FR) Newest first",
-    "oldest": "(FR) Oldest first"
+    "date": "Date\u00a0: {{date}}",
+    "filter": "Filtrer\u00a0:",
+    "newest": "Plus récent en premier",
+    "oldest": "Plus ancien en premier",
+    "button": {
+      "back": "Retour"
+    }
   }
 }

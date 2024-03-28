@@ -2,7 +2,7 @@ import type { ComponentProps, ReactNode } from 'react';
 
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import { Link } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -11,9 +11,8 @@ import { AppLink } from '~/components/app-link';
 import { useFeature } from '~/root';
 import { getAuditService } from '~/services/audit-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -38,30 +37,20 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('page-view.home', { userId: idToken.sub });
 
-  const userService = getUserService();
-  const userId = await userService.getUserId();
-  const userInfo = await userService.getUserInfo(userId);
-
   const userOrigin = await getUserOrigin(request, session);
   session.set('userOrigin', userOrigin);
-
-  if (!userInfo) {
-    return redirectWithLocale(request, '/data-unavailable');
-  }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('index:page-title') }) };
 
-  return json({ meta, userInfo });
+  return json({ meta });
 }
 
 export default function Index() {
-  const { userInfo } = useLoaderData<typeof loader>();
   const { t } = useTranslation(handle.i18nNamespaces);
 
   return (
     <>
-      <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('index:welcome', { firstName: userInfo.firstName, lastName: userInfo.lastName })}</p>
       <div className="grid gap-4">
         {useFeature('update-personal-info') && (
           <CardLink title={t('index:personal-info')} to="/personal-information">

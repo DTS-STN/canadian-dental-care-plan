@@ -55,6 +55,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformation = await personalInformationService.getPersonalInformationIntoSession(session, request, '/data-unavailable', userInfoToken.sin);
   const letters = await lettersService.getLetters(personalInformation.clientNumber, sortOrder);
+  session.set('letters', letters);
   const letterTypes = (await lettersService.getAllLetterTypes()).filter(({ id }) => letters.some(({ name }) => name === id));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -63,9 +64,6 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const idToken: IdToken = session.get('idToken');
   auditService.audit('page-view.letters', { userId: idToken.sub });
   instrumentationService.countHttpStatus('letters.view', 200);
-  if (letters.length > 0) {
-    session.set('letters', letters);
-  }
 
   return json({ letters, letterTypes, meta, sortOrder });
 }
@@ -84,7 +82,6 @@ export default function LettersIndex() {
 
   return (
     <>
-      <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('letters:index.subtitle')}</p>
       <div className="my-6">
         <InputSelect
           id="sort-order"

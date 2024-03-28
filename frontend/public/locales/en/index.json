@@ -1,6 +1,5 @@
 {
-  "page-title": "Home",
-  "welcome": "Welcome {{firstName}} {{lastName}}",
+  "page-title": "Canadian Detal Care Plan (CDCP)",
   "personal-info": "Personal information",
   "apply": "Apply",
   "personal-info-desc": "In this section, you can see and update your personal information.",
@@ -8,8 +7,8 @@
   "upload-desc": "In this section, you can your upload documents.",
   "intake": "Intake",
   "intake-desc": "In this section, you can apply for your CDCP application.",
-  "view-letters": "View my letters",
-  "view-letters-desc": "In this section, you can see any letters that were sent for you.",
+  "view-letters": "My letters",
+  "view-letters-desc": "View letters about your CDCP application.",
   "view-cdcp": "View my CDCP messages",
   "view-cdcp-desc": "In this section, you can see any messages that were sent to you.",
   "view-my-application": "View my application(s)",

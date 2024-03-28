@@ -1,13 +1,10 @@
 {
   "index": {
     "page-title": "Letters",
-    "subtitle": "List of issued letters for you on file.",
     "breadcrumbs": {
       "letters": "Letters"
     },
-    "subject": "Subject",
     "date": "Date: {{date}}",
-    "reference-id": "Reference ID",
     "filter": "Filter by:",
     "newest": "Newest first",
     "oldest": "Oldest first",
