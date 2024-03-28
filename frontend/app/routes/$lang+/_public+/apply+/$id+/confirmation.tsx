@@ -222,7 +222,7 @@ export default function ApplyFlowConfirm() {
       </UnorderedList>
       <UnorderedList term={t('confirm.dental-insurance')}>
         <li>{t('confirm.dental-private', { access: dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no') })}</li>
-        <li>{t('confirm.dental-public', { access: dentalInsurance.selectedBenefits })}</li>
+        <li>{t('confirm.dental-public', { access: dentalInsurance.selectedBenefits ? dentalInsurance.selectedBenefits : t('confirm.no') })}</li>
       </UnorderedList>
 
       <button
