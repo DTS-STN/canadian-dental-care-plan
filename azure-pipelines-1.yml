@@ -1,0 +1,62 @@
+trigger:
+  tags:
+    include:
+    - v*
+
+pr: none
+
+variables:
+  azureContainerRegistry.repository: 'canadian-dental-care-plan/frontend'
+  azureContainerRegistry.name: ''
+  azureContainerRegistry.domain: 'dtsshared.azurecr.io'
+  vmImageName: "ubuntu-latest"
+  image.tag: '$(Build.SourceVersion)'
+
+stages:
+  - stage: Build
+    displayName: Build and Push to ACR
+    jobs:
+      - job: Build
+        displayName: Build and Push Container
+        pool:
+          vmImage: $(vmImageName)
+        steps:
+          - bash: |
+              short_hash=`git rev-parse --short=7 HEAD`
+              echo ""
+              echo "Full git hash:  $(Build.SourceVersion)"
+              echo "Short git hash: $short_hash"
+              echo "##vso[task.setvariable variable=image.tag]$short_hash"
+            workingDirectory: $(Build.SourcesDirectory)
+            displayName: Get short git hash
+          - task: Docker@2
+            inputs:
+              containerRegistry: "$(azureContainerRegistry.name)"
+              repository: "$(azureContainerRegistry.repository)"
+              command: "login"
+          - script: "docker pull $(azureContainerRegistry.domain)/$(azureContainerRegistry.repository):latest"
+            displayName: Pull latest for layer caching
+            continueOnError: true
+          - task: Docker@2
+            inputs:
+              containerRegistry: '$(azureContainerRegistry.name)'
+              repository: '$(azureContainerRegistry.repository)'
+              command: 'build'
+              Dockerfile: './frontend/Dockerfile'
+              tags: |
+                $(image.tag)
+                production-release
+                latest
+              arguments: | 
+                --pull
+                # --build-arg X=$(Y)
+
+          - task: Docker@2
+            inputs:
+              containerRegistry: "$(azureContainerRegistry.name)"
+              repository: "$(azureContainerRegistry.repository)"
+              command: "push"
+              tags: |
+                $(image.tag)
+                production-release
+                latest
