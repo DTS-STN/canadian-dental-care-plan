@@ -5,6 +5,7 @@ import { json } from '@remix-run/node';
 import { Form, useActionData, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
+import { redirectWithSuccess } from 'remix-toast';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
@@ -14,15 +15,17 @@ import { InputField } from '~/components/input-field';
 import type { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { getAddressService } from '~/services/address-service.server';
+import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getWSAddressService } from '~/services/wsaddress-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT, getLocale, redirectWithLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -106,29 +109,34 @@ export async function action({ context: { session }, request }: ActionFunctionAr
       formData: formData as Partial<z.infer<typeof formDataSchema>>,
     });
   }
-
-  session.set('newHomeAddress', parsedDataResult.data);
+  const newHomeAddress = parsedDataResult.data;
+  session.set('newHomeAddress', newHomeAddress);
 
   const { address, city, country, postalCode, province } = parsedDataResult.data;
   const correctedAddress = await wsAddressService.correctAddress({ address, city, country, postalCode, province });
 
+  instrumentationService.countHttpStatus('home-address.edit', 302);
   if (correctedAddress.status === 'Corrected') {
     const { address, city, province, postalCode, country } = correctedAddress;
     session.set('suggestedAddress', { address, city, province, postalCode, country });
+    return redirectWithLocale(request, '/personal-information/home-address/suggested');
   }
+  if (correctedAddress.status === 'NotCorrect') {
+    return redirectWithLocale(request, '/personal-information/home-address/address-accuracy');
+  }
+  const addressService = getAddressService();
+  const userService = getUserService();
 
-  instrumentationService.countHttpStatus('home-address.edit', 302);
-  return redirectWithLocale(request, getRedirectUrl(correctedAddress.status));
-}
+  const userId = await userService.getUserId();
+  const userInfo = await userService.getUserInfo(userId);
 
-function getRedirectUrl(correctedAddressStatus: string) {
-  if (correctedAddressStatus === 'Corrected') {
-    return '/personal-information/home-address/suggested';
-  }
-  if (correctedAddressStatus === 'NotCorrect') {
-    return '/personal-information/home-address/address-accuracy';
-  }
-  return '/personal-information/home-address/confirm';
+  await addressService.updateAddressInfo(userId, userInfo?.homeAddress ?? '', newHomeAddress);
+
+  const idToken: IdToken = session.get('idToken');
+  getAuditService().audit('update-data.home-address', { userId: idToken.sub });
+
+  const locale = getLocale(request);
+  return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:home-address.edit.updated-notification');
 }
 
 export default function PersonalInformationHomeAddressEdit() {

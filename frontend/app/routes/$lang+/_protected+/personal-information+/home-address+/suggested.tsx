@@ -3,18 +3,23 @@ import { json } from '@remix-run/node';
 import { Form, useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
+import { redirectWithSuccess } from 'remix-toast';
 
 import pageIds from '../../../page-ids.json';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InputRadios } from '~/components/input-radios';
+import { getAddressService } from '~/services/address-service.server';
+import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
+import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { IdToken } from '~/utils/raoidc-utils.server';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
@@ -56,8 +61,10 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
 export async function action({ context: { session }, request }: ActionFunctionArgs) {
   const log = getLogger('home-address/suggested');
 
+  const addressService = getAddressService();
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
+  const userService = getUserService();
 
   await raoidcService.handleSessionValidation(request, session);
 
@@ -73,8 +80,20 @@ export async function action({ context: { session }, request }: ActionFunctionAr
   const useSuggestedAddress = formData.selectedAddress === 'suggested';
   session.set('useSuggestedAddress', useSuggestedAddress);
 
+  const userId = await userService.getUserId();
+  const userInfo = await userService.getUserInfo(userId);
+
+  const newHomeAddress = session.get('useSuggestedAddress') ? session.get('suggestedAddress') : session.get('newHomeAddress');
+  await addressService.updateAddressInfo(userId, userInfo?.homeAddress ?? '', newHomeAddress);
+
+  const idToken: IdToken = session.get('idToken');
+  getAuditService().audit('update-data.home-address', { userId: idToken.sub });
+
+  const locale = getLocale(request);
+
   instrumentationService.countHttpStatus('home-address.suggest', 302);
-  return redirectWithLocale(request, '/personal-information/home-address/confirm');
+  // TODO remove new home address from session and handle case when it is missing
+  return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:home-address.suggested.updated-notification');
 }
 
 export default function HomeAddressSuggested() {
