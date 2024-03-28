@@ -88,21 +88,22 @@
   },
   "phone-number": {
     "edit": {
-      "page-title": "Update phone number",
-      "subtitle": "Please update your phone number below.",
+      "page-title": "Phone number",
+
       "breadcrumbs": {
         "personal-information": "Personal information",
         "change-phone-number": "Change phone number"
       },
-      "update-message": "Please update your phone number below.",
+
       "button": {
-        "save": "Change",
-        "cancel": "Cancel"
+        "save": "Save",
+        "cancel": "Back"
       },
       "component": {
         "previous": "Previous phone number",
         "newPhone": "New phone number",
-        "phone": "Phone number",
+        "phone": "Telephone number",
+        "alternate-phone": "Alternate telephone number",
         "error": "Error"
       },
       "error-message": {

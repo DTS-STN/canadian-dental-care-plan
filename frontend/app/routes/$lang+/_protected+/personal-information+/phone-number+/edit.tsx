@@ -6,13 +6,17 @@ import { Form, useActionData, useLoaderData, useParams } from '@remix-run/react'
 
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
+import { redirectWithSuccess } from 'remix-toast';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
+import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
+import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
+import { getPersonalInformationService } from '~/services/personal-information-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { featureEnabled } from '~/utils/env.server';
@@ -20,6 +24,8 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import type { UserinfoToken } from '~/utils/raoidc-utils.server';
+import { IdToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -39,12 +45,13 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, request, params }: LoaderFunctionArgs) {
   featureEnabled('edit-personal-info');
+
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
   const userService = getUserService();
-
+  const personalInformationService = await getPersonalInformationService();
   await raoidcService.handleSessionValidation(request, session);
 
   const userId = await userService.getUserId();
@@ -56,27 +63,50 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   }
 
   const csrfToken = String(session.get('csrfToken'));
+  const personalInformationRouteHelper = getPersonalInformationRouteHelpers();
 
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const personailInformation = await personalInformationRouteHelper.getPersonalInformation(userInfoToken, params, request, session);
+  session.set('personailInformation', personailInformation);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:phone-number.edit.page-title') }) };
 
   instrumentationService.countHttpStatus('phone-number.edit', 200);
-  return json({ csrfToken, meta, userInfo });
+  return json({ csrfToken, meta, userInfo, personailInformation });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('phone-number/edit');
-
+  const userService = getUserService();
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
 
   await raoidcService.handleSessionValidation(request, session);
-
+  const userId = await userService.getUserId();
+  const userInfo = await userService.getUserInfo(userId);
+  if (!userInfo) {
+    instrumentationService.countHttpStatus('phone-number.confirm', 404);
+    throw new Response(null, { status: 404 });
+  }
   const formDataSchema = z.object({
     phoneNumber: z
       .string()
       .min(1, { message: 'empty-phone-number' })
       .refine((val) => isValidPhoneNumber(val, 'CA'), { message: 'invalid-phone-format' }),
+
+    alternatePhoneNumber: z
+      .string()
+      .refine(
+        (val) => {
+          if (val.length === 0) {
+            return true;
+          } else {
+            return isValidPhoneNumber(val, 'CA');
+          }
+        },
+        { message: 'invalid-phone-format' },
+      )
+      .optional(),
   });
 
   const formData = Object.fromEntries(await request.formData());
@@ -98,10 +128,13 @@ export async function action({ context: { session }, params, request }: ActionFu
     });
   }
 
-  session.set('newPhoneNumber', parsedDataResult.data.phoneNumber);
+  await userService.updateUserInfo(userId, { phoneNumber: parsedDataResult.data.phoneNumber, alternatePhoneNumber: parsedDataResult.data.alternatePhoneNumber });
+
+  const idToken: IdToken = session.get('idToken');
+  getAuditService().audit('update-data.phone-number', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('phone-number.confirm', 302);
-  return redirect(getPathById('$lang+/_protected+/personal-information+/phone-number+/confirm', params));
+  return redirectWithSuccess(getPathById('$lang+/_protected+/personal-information+/index', params), 'personal-information:phone-number.confirm.updated-notification');
 }
 
 export default function PhoneNumberEdit() {
@@ -114,7 +147,9 @@ export default function PhoneNumberEdit() {
 
   const defaultValues = {
     phoneNumber: actionData?.formData.phoneNumber ?? userInfo.phoneNumber ?? '',
+    alternatePhoneNumber: actionData?.formData.alternatePhoneNumber ?? userInfo.alternatePhoneNumber ?? '',
   };
+  t;
 
   /**
    * Gets an error message based on the provided internationalization (i18n) key.
@@ -135,6 +170,7 @@ export default function PhoneNumberEdit() {
 
   const errorMessages = {
     phoneNumber: getErrorMessage(actionData?.errors.phoneNumber?._errors[0]),
+    alternatePhoneNumber: getErrorMessage(actionData?.errors.alternatePhoneNumber?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -147,21 +183,25 @@ export default function PhoneNumberEdit() {
 
   return (
     <>
-      <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:phone-number.edit.subtitle')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="my-6">
-          <p className="mb-4 text-red-600">{t('gcweb:asterisk-indicates-required-field')}</p>
-          <InputField id="phoneNumber" name="phoneNumber" type="tel" label={t('personal-information:phone-number.edit.component.phone')} required defaultValue={defaultValues.phoneNumber} errorMessage={errorMessages.phoneNumber} />
+          <InputField id="phoneNumber" name="phoneNumber" type="tel" label={t('personal-information:phone-number.edit.component.phone')} defaultValue={defaultValues.phoneNumber} errorMessage={errorMessages.phoneNumber} />
+          <InputField
+            id="alternatePhoneNumber"
+            name="alternatePhoneNumber"
+            type="tel"
+            label={t('personal-information:phone-number.edit.component.alternate-phone')}
+            defaultValue={defaultValues.alternatePhoneNumber}
+            errorMessage={errorMessages.alternatePhoneNumber}
+          />
         </div>
         <div className="flex flex-wrap items-center gap-3">
+          <ButtonLink id="cancel" routeId="$lang+/_protected+/personal-information+/index" params={params}></ButtonLink>
           <Button id="submit" variant="primary">
             {t('personal-information:phone-number.edit.button.save')}
           </Button>
-          <ButtonLink id="cancel" routeId="$lang+/_protected+/personal-information+/index" params={params}>
-            {t('personal-information:phone-number.edit.button.cancel')}
-          </ButtonLink>
         </div>
       </Form>
     </>

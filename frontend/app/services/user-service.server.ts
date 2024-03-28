@@ -12,6 +12,7 @@ const userInfoSchema = z.object({
   firstName: z.string().optional(),
   lastName: z.string().optional(),
   phoneNumber: z.string().optional(),
+  alternatePhoneNumber: z.string().optional(),
   homeAddress: z.string().optional(),
   mailingAddress: z.string().optional(),
   preferredLanguage: z.string().optional(),
