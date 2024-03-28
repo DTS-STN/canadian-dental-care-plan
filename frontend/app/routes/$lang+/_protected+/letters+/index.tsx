@@ -54,7 +54,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const sortOrder = orderEnumSchema.catch('desc').parse(sortParam);
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformation = await personalInformationService.getPersonalInformationIntoSession(session, request, '/data-unavailable', userInfoToken.sin);
-  const letters = await lettersService.getLetters(personalInformation.clientId, sortOrder);
+  const letters = await lettersService.getLetters(personalInformation.clientNumber, sortOrder);
   const letterTypes = (await lettersService.getAllLetterTypes()).filter(({ id }) => letters.some(({ name }) => name === id));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
