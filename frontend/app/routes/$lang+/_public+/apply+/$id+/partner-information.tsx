@@ -5,7 +5,7 @@ import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isValid, parse } from 'date-fns';
+import { isPast, isValid, parse } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -74,7 +74,8 @@ export async function action({ context: { session }, params, request }: ActionFu
       .string()
       .trim()
       .min(1, t('apply:partner-information.error-message.date-of-birth-required-and-valid'))
-      .refine((val) => isValid(parse(val, 'yyyy-MM-dd', new Date())), t('apply:partner-information.error-message.date-of-birth-required-and-valid')),
+      .refine((val) => isValid(parse(val, 'yyyy-MM-dd', new Date())), t('apply:partner-information.error-message.date-of-birth-required-and-valid'))
+      .refine((val) => isPast(parse(val, 'yyyy-MM-dd', new Date())), t('apply:partner-information.error-message.date-of-birth-is-past')),
     firstName: z.string().trim().min(1, t('apply:partner-information.error-message.first-name-required')),
     lastName: z.string().trim().min(1, t('apply:partner-information.error-message.last-name-required')),
     socialInsuranceNumber: z
