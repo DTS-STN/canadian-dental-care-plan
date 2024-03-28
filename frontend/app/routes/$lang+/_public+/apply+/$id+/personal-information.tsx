@@ -23,6 +23,7 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -66,12 +67,16 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const countryList = await lookupService.getAllCountries();
   const regionList = await lookupService.getAllRegions();
+
+  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:personal-information.page-title') }) };
 
-  return json({ id, meta, defaultState: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, editMode: state.editMode });
+  return json({ id, csrfToken, meta, defaultState: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  const log = getLogger('apply/personal-information');
+
   const applyRouteHelpers = getApplyRouteHelpers();
   const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -154,6 +159,15 @@ export async function action({ context: { session }, params, request }: ActionFu
     });
 
   const formData = await request.formData();
+
+  const expectedCsrfToken = String(session.get('csrfToken'));
+  const submittedCsrfToken = String(formData.get('_csrf'));
+
+  if (expectedCsrfToken !== submittedCsrfToken) {
+    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
+    throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
   const data = {
     phoneNumber: formData.get('phoneNumber') ? String(formData.get('phoneNumber')) : undefined,
     phoneNumberAlt: formData.get('phoneNumberAlt') ? String(formData.get('phoneNumberAlt')) : undefined,
@@ -195,7 +209,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowPersonalInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { id, defaultState, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, editMode } = useLoaderData<typeof loader>();
+  const { id, csrfToken, defaultState, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, editMode } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState?.mailingCountry);
@@ -318,6 +332,7 @@ export default function ApplyFlowPersonalInformation() {
           {t('apply:personal-information.form-instructions')}
         </p>
         <fetcher.Form method="post" noValidate>
+          <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-6 grid gap-6 md:grid-cols-2">
             <InputField id="phone-number" name="phoneNumber" className="w-full" label={t('apply:personal-information.phone-number')} defaultValue={defaultState?.phoneNumber ?? ''} errorMessage={errorMessages['phone-number']} />
             <InputField id="phone-number-alt" name="phoneNumberAlt" className="w-full" label={t('apply:personal-information.phone-number-alt')} defaultValue={defaultState?.phoneNumberAlt ?? ''} errorMessage={errorMessages['phone-number-alt']} />

@@ -21,6 +21,7 @@ import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -48,9 +49,12 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const userService = getUserService();
   const userId = await userService.getUserId();
   const userInfo = await userService.getUserInfo(userId);
+
   if (!userInfo) {
     throw new Response(null, { status: 404 });
   }
+
+  const csrfToken = String(session.get('csrfToken'));
 
   const addressInfo = await getAddressService().getAddressInfo(userId, userInfo.mailingAddress ?? '');
   const homeAddressInfo = await getAddressService().getAddressInfo(userId, userInfo.homeAddress ?? '');
@@ -61,10 +65,12 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:mailing-address.edit.page-title') }) };
 
-  return json({ addressInfo, countryList, homeAddressInfo, meta, regionList });
+  return json({ addressInfo, countryList, csrfToken, homeAddressInfo, meta, regionList });
 }
 
 export async function action({ context: { session }, request }: ActionFunctionArgs) {
+  const log = getLogger('mailing-address/edit');
+
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
 
@@ -81,6 +87,14 @@ export async function action({ context: { session }, request }: ActionFunctionAr
   const formDataSchema = z.union([copyHomeAddressSchema, addressFormSchema]);
 
   const formData = Object.fromEntries(await request.formData());
+  const expectedCsrfToken = String(session.get('csrfToken'));
+  const submittedCsrfToken = String(formData['_csrf']);
+
+  if (expectedCsrfToken !== submittedCsrfToken) {
+    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
+    throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
   const parsedDataResult = await formDataSchema.safeParseAsync(formData);
 
   if (!parsedDataResult.success) {
@@ -110,7 +124,7 @@ export async function action({ context: { session }, request }: ActionFunctionAr
 
 export default function PersonalInformationMailingAddressEdit() {
   const actionData = useActionData<typeof action>();
-  const { addressInfo, homeAddressInfo, countryList, regionList } = useLoaderData<typeof loader>();
+  const { addressInfo, homeAddressInfo, countryList, regionList, csrfToken } = useLoaderData<typeof loader>();
   const [selectedCountry, setSelectedCountry] = useState('');
   const [countryRegions, setCountryRegions] = useState<typeof regionList>([]);
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
@@ -197,6 +211,7 @@ export default function PersonalInformationMailingAddressEdit() {
       <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:mailing-address.edit.subtitle')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post" noValidate>
+        <input type="hidden" name="_csrf" value={csrfToken} />
         {homeAddressInfo && (
           <InputCheckbox id="copy-home-address" name="copyHomeAddress" checked={copyAddressChecked} onChange={checkHandler} className="my-6">
             {t('personal-information:mailing-address.edit.copy-home-address')}
