@@ -93,6 +93,7 @@ function NavigationMenu() {
 
 function PageHeader() {
   const { t } = useTranslation(i18nNamespaces);
+  const userOrigin = useUserOrigin();
 
   return (
     <header>
@@ -102,8 +103,8 @@ function PageHeader() {
         <div className="sm:container">
           <div className="flex flex-col items-stretch justify-between sm:flex-row sm:items-center">
             <h2 className="p-4 font-lato text-xl font-semibold sm:p-0 sm:py-3 sm:text-2xl">
-              <AppLink to="/" className="hover:underline">
-                {t('gcweb:header.application-title')}
+              <AppLink to={userOrigin ? userOrigin.to : '/home'} className="hover:underline">
+                {t('gcweb:header.application-title-msca')}
               </AppLink>
             </h2>
             <NavigationMenu />
