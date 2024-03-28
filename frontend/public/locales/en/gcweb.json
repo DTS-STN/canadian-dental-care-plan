@@ -122,5 +122,8 @@
       "label": "Year",
       "placeholder": "YYYY"
     }
+  },
+  "screen-reader": {
+    "newtab": "Opens in a new tab"
   }
 }
