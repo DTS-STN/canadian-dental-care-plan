@@ -60,12 +60,6 @@ export function getCCTApiMockHandlers() {
         },
         {
           LetterName: '775170000',
-          LetterId: '111222333-6ed0-4113-8520-3c46fc53fd15',
-          LetterRecordId: '12345678901',
-          LetterDate: '2024/03/26',
-        },
-        {
-          LetterName: '775170000',
           LetterId: '111222333-6ed0-4113-8520-3c46fc53f321',
           LetterRecordId: '12345678901',
           LetterDate: '2024/02/15',
