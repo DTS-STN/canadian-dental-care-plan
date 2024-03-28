@@ -62,6 +62,9 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const idToken: IdToken = session.get('idToken');
   auditService.audit('page-view.letters', { userId: idToken.sub });
   instrumentationService.countHttpStatus('letters.view', 200);
+  if (letters.length > 0) {
+    session.set('letters', letters);
+  }
 
   return json({ letters, letterTypes, meta, sortOrder });
 }
