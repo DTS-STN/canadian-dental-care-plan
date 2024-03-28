@@ -29,9 +29,11 @@ const personalInformationApiResponseSchema = z.object({
         }),
         PersonContactInformation: z
           .object({
-            EmailAddress: z.object({
-              EmailAddressID: z.string().optional(),
-            }),
+            EmailAddress: z
+              .object({
+                EmailAddressID: z.string().optional(),
+              })
+              .array(),
             TelephoneNumber: z
               .object({
                 FullTelephoneNumber: z.object({
@@ -72,7 +74,8 @@ const personalInformationApiResponseSchema = z.object({
               })
               .array(),
           })
-          .optional(),
+          .optional()
+          .array(),
         PersonMaritalStatus: z.object({
           StatusCode: z.object({
             ReferenceDataID: z.string().optional(),
@@ -125,7 +128,7 @@ const personalInformationApiResponseSchema = z.object({
         MailingSameAsHomeIndicator: z.boolean().optional(),
         PreferredMethodCommunicationCode: z
           .object({
-            ReferenceDataID: z.boolean().optional(),
+            ReferenceDataID: z.string().optional(),
           })
           .optional(),
       })
@@ -200,7 +203,7 @@ const personalInfoDtoSchema = z.object({
   maritalStatusId: z.string().optional(),
   primaryTelephoneNumber: z.string().optional(),
   alternateTelephoneNumber: z.string().optional(),
-  preferredLanguageId: z.boolean().optional(),
+  preferredLanguageId: z.string().optional(),
 });
 
 export type PersonalInfo = z.infer<typeof personalInfoDtoSchema>;
@@ -212,7 +215,7 @@ export type PersonalInfo = z.infer<typeof personalInfoDtoSchema>;
 export const getPersonalInformationService = moize(createPersonalInformationService, { onCacheAdd: () => log.info('Creating new user service') });
 
 function createPersonalInformationService() {
-  const { INTEROP_API_BASE_URI } = getEnv();
+  const { INTEROP_POWERPLATFORM_API_BASE_URI, INTEROP_POWERPLATFORM_API_SUBSCRIPTION_KEY } = getEnv();
 
   function createClientInfo(personalSinId: string) {
     return { Applicant: { PersonSINIdentification: { IdentificationID: personalSinId } } };
@@ -220,11 +223,16 @@ function createPersonalInformationService() {
 
   async function getPersonalInformation(personalSinId: string) {
     const curentPersonalInformation = createClientInfo(personalSinId);
-    const url = `${INTEROP_API_BASE_URI}/applicant/`;
+    const url = `${INTEROP_POWERPLATFORM_API_BASE_URI}/applicant/`;
+
     const response = await fetch(url, {
       // Using POST instead of GET due to how sin params gets logged with SIN
       method: 'POST',
       body: JSON.stringify(curentPersonalInformation),
+      headers: {
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': INTEROP_POWERPLATFORM_API_SUBSCRIPTION_KEY,
+      },
     });
 
     if (response.status === 200) {
@@ -246,7 +254,7 @@ function createPersonalInformationService() {
   }
 
   function toPersonalInformation(personalInformationApiResponse: PersonalInformationApiResponse): PersonalInfo {
-    const addressList = personalInformationApiResponse.BenefitApplication.Applicant?.PersonContactInformation?.Address;
+    const addressList = personalInformationApiResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.Address;
     const homeAddressList = addressList?.filter((address) => address.AddressCategoryCode.ReferenceDataName === 'Home');
     const mailingAddressList = addressList?.filter((address) => address.AddressCategoryCode.ReferenceDataName === 'Mailing');
 
@@ -258,7 +266,7 @@ function createPersonalInformationService() {
       birthDate: personalInformationApiResponse.BenefitApplication.Applicant?.PersonBirthDate.dateTime,
       firstName: personalInformationApiResponse.BenefitApplication.Applicant?.PersonName?.at(0)?.PersonGivenName?.at(0),
       lastName: personalInformationApiResponse.BenefitApplication.Applicant?.PersonName?.at(0)?.PersonSurName,
-      emailAddress: personalInformationApiResponse.BenefitApplication.Applicant?.PersonContactInformation?.EmailAddress.EmailAddressID,
+      emailAddress: personalInformationApiResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.EmailAddress.at(0)?.EmailAddressID,
       maritalStatusId: personalInformationApiResponse.BenefitApplication.Applicant?.PersonMaritalStatus.StatusCode.ReferenceDataID,
       homeAddress: homeAddressList
         ?.map((aHomeAddress) => ({
@@ -281,10 +289,10 @@ function createPersonalInformationService() {
         }))
         .at(0),
 
-      primaryTelephoneNumber: personalInformationApiResponse.BenefitApplication.Applicant?.PersonContactInformation?.TelephoneNumber.find((phoneNumber) => phoneNumber.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary')?.FullTelephoneNumber
+      primaryTelephoneNumber: personalInformationApiResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.TelephoneNumber.find((phoneNumber) => phoneNumber.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary')?.FullTelephoneNumber
         .TelephoneNumberFullID,
-      alternateTelephoneNumber: personalInformationApiResponse.BenefitApplication.Applicant?.PersonContactInformation?.TelephoneNumber.find((phoneNumber) => phoneNumber.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate')?.FullTelephoneNumber
-        .TelephoneNumberFullID,
+      alternateTelephoneNumber: personalInformationApiResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.TelephoneNumber.find((phoneNumber) => phoneNumber.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate')
+        ?.FullTelephoneNumber.TelephoneNumberFullID,
       preferredLanguageId: personalInformationApiResponse.BenefitApplication.Applicant?.PreferredMethodCommunicationCode?.ReferenceDataID,
     };
   }
