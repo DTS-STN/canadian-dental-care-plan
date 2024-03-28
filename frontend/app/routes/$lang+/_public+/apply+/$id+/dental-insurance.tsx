@@ -15,7 +15,7 @@ import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { getApplyFlow } from '~/routes-flow/apply-flow';
+import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
@@ -36,9 +36,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const applyFlow = getApplyFlow();
+  const applyRouteHelpers = getApplyRouteHelpers();
   const lookupService = getLookupService();
-  const { id, state } = await applyFlow.loadState({ params, request, session });
+  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const options = await lookupService.getAllAccessToDentalInsuranceOptions();
 
@@ -48,8 +48,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const applyFlow = getApplyFlow();
-  const { id, state } = await applyFlow.loadState({ params, request, session });
+  const applyRouteHelpers = getApplyRouteHelpers();
+  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -66,7 +66,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  const sessionResponseInit = await applyFlow.saveState({ params, request, session, state: { dentalInsurance: parsedDataResult.data } });
+  const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { dentalInsurance: parsedDataResult.data } });
   return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/federal-provincial-territorial-benefits`, sessionResponseInit);
 }
 

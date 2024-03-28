@@ -189,10 +189,10 @@ async function start({ id, request, session }: StartArgs) {
 }
 
 /**
- * Returns functions related to the apply flow.
- * @returns Functions related to the apply flow.
+ * Returns functions related to the apply routes.
+ * @returns Functions related to the apply routes.
  */
-export function getApplyFlow() {
+export function getApplyRouteHelpers() {
   return {
     clearState,
     loadState,

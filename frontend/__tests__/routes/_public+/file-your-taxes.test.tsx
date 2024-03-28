@@ -4,8 +4,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { loader } from '~/routes/$lang+/_public+/apply+/$id+/file-your-taxes';
 
-vi.mock('~/routes-flow/apply-flow', () => ({
-  getApplyFlow: vi.fn().mockReturnValue({
+vi.mock('~/route-helpers/apply-route-helpers', () => ({
+  getApplyRouteHelpers: vi.fn().mockReturnValue({
     loadState: vi.fn().mockReturnValue({
       id: '123',
       state: {},

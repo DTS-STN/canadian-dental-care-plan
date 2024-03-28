@@ -16,7 +16,7 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { getApplyFlow } from '~/routes-flow/apply-flow';
+import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -57,9 +57,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
-  const applyFlow = getApplyFlow();
+  const applyRouteHelpers = getApplyRouteHelpers();
   const lookupService = getLookupService();
-  const { id, state } = await applyFlow.loadState({ params, request, session });
+  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const preferredLanguages = await lookupService.getAllPreferredLanguages();
   const preferredCommunicationMethods = await lookupService.getAllPreferredCommunicationMethods();
@@ -76,8 +76,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
-  const applyFlow = getApplyFlow();
-  const { id, state } = await applyFlow.loadState({ params, request, session });
+  const applyRouteHelpers = getApplyRouteHelpers();
+  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formSchema: z.ZodType<CommunicationPreferencesState> = z
@@ -141,7 +141,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const sessionResponseInit = await applyFlow.saveState({ params, request, session, state: { communicationPreferences: parsedDataResult.data } });
+  const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { communicationPreferences: parsedDataResult.data } });
   return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/dental-insurance`, sessionResponseInit);
 }
 

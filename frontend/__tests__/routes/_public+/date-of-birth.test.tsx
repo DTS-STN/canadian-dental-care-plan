@@ -7,8 +7,8 @@ import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/date-of-bir
 
 vi.mock('date-fns');
 
-vi.mock('~/routes-flow/apply-flow', () => ({
-  getApplyFlow: vi.fn().mockReturnValue({
+vi.mock('~/route-helpers/apply-route-helpers', () => ({
+  getApplyRouteHelpers: vi.fn().mockReturnValue({
     loadState: vi.fn().mockReturnValue({
       id: '123',
       state: { dateOfBirth: '2000-01-01' },

@@ -1,12 +1,12 @@
 import { LoaderFunctionArgs } from '@remix-run/node';
 
-import { getApplyFlow } from '~/routes-flow/apply-flow';
+import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers';
 import { redirectWithLocale } from '~/utils/locale-utils.server';
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const applyFlow = getApplyFlow();
-  const { id, state } = await applyFlow.loadState({ params, request, session });
+  const applyRouteHelpers = getApplyRouteHelpers();
+  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
 
-  const sessionResponseInit = await applyFlow.saveState({ params, request, session, state });
+  const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state });
   return redirectWithLocale(request, `/apply/${id}/type-of-application`, sessionResponseInit);
 }

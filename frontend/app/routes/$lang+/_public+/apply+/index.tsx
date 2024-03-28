@@ -13,7 +13,7 @@ import pageIds from '../../page-ids.json';
 import { Button } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { InlineLink } from '~/components/inline-link';
-import { getApplyFlow } from '~/routes-flow/apply-flow';
+import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers';
 import { getHCaptchaService } from '~/services/hcaptcha-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -56,9 +56,9 @@ export async function action({ context: { session }, request }: ActionFunctionAr
     log.warn(`hCaptcha verification failed: [${error}]; Proceeding with normal application flow`);
   }
 
-  const applyFlow = getApplyFlow();
+  const applyRouteHelpers = getApplyRouteHelpers();
   const id = randomUUID().toString();
-  const sessionResponseInit = await applyFlow.start({ id, request, session });
+  const sessionResponseInit = await applyRouteHelpers.start({ id, request, session });
 
   return redirectWithLocale(request, `/apply/${id}/type-of-application`, sessionResponseInit);
 }
