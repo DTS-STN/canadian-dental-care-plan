@@ -10,100 +10,191 @@ import { getLogger } from '~/utils/logging.server';
 const log = getLogger('personal-information-service.server');
 
 const personalInformationApiResponseSchema = z.object({
-  Client: z.object({
-    ClientIdentification: z
+  BenefitApplication: z.object({
+    Applicant: z
       .object({
-        IdentificationID: z.string().optional(),
+        ApplicantCategoryCode: z.object({
+          ReferenceDataID: z.string().optional(),
+          ReferenceDataName: z.string().optional(),
+        }),
+        ClientIdentification: z
+          .object({
+            IdentificationID: z.string().optional(),
+            IdentificationCategoryText: z.string().optional(),
+          })
+          .array()
+          .optional(),
+        PersonBirthDate: z.object({
+          dateTime: z.coerce.date().optional(),
+        }),
+        PersonContactInformation: z
+          .object({
+            EmailAddress: z
+              .object({
+                EmailAddressID: z.string().optional(),
+              })
+              .array(),
+            TelephoneNumber: z
+              .object({
+                FullTelephoneNumber: z.object({
+                  TelephoneNumberFullID: z.string().optional(),
+                }),
+                TelephoneNumberCategoryCode: z.object({
+                  ReferenceDataName: z.string().optional(),
+                  ReferenceDataID: z.string().optional(),
+                }),
+              })
+              .array(),
+
+            Address: z
+              .object({
+                AddressCategoryCode: z.object({
+                  ReferenceDataID: z.string().optional(),
+                  ReferenceDataName: z.string().optional(),
+                }),
+                AddressStreet: z.object({
+                  StreetName: z.string().optional(),
+                }),
+                AddressSecondaryUnitText: z.string().optional(),
+                AddressCityName: z.string().optional(),
+                AddressProvince: z.object({
+                  ProvinceName: z.string().optional(),
+                  ProvinceCode: z.object({
+                    ReferenceDataID: z.string().optional(),
+                    ReferenceDataName: z.string().optional(),
+                  }),
+                }),
+                AddressCountry: z.object({
+                  CountryCode: z.object({
+                    ReferenceDataID: z.string().optional(),
+                    ReferenceDataName: z.string().optional(),
+                  }),
+                }),
+                AddressPostalCode: z.string().optional(),
+              })
+              .array(),
+          })
+          .optional()
+          .array(),
+        PersonMaritalStatus: z.object({
+          StatusCode: z.object({
+            ReferenceDataID: z.string().optional(),
+            ReferenceDataName: z.string().optional(),
+          }),
+        }),
+        PersonName: z
+          .object({
+            PersonSurName: z.string().optional(),
+            PersonGivenName: z.string().array().optional(),
+          })
+          .array()
+          .optional(),
+        RelatedPerson: z
+          .object({
+            PersonBirthDate: z.string().optional(),
+            PersonName: z
+              .object({
+                PersonSurName: z.string().optional(),
+                PersonGivenName: z.string().array().optional(),
+              })
+              .optional(),
+            PersonRelationshipCode: z
+              .object({
+                ReferenceDataID: z.string().optional(),
+                ReferenceDataName: z.string().optional(),
+              })
+              .optional(),
+            PersonSINIdentification: z
+              .object({
+                IdentificationID: z.string(),
+                IdentificationCategoryText: z.string().optional(),
+              })
+              .optional(),
+          })
+          .optional(),
+        PersonSINIdentification: z.object({
+          IdentificationID: z.string(),
+          IdentificationCategoryText: z.string().optional(),
+        }),
+        MailingSameAsHomeIndicator: z.boolean().optional(),
+        PreferredMethodCommunicationCode: z
+          .object({
+            ReferenceDataID: z.string().optional(),
+          })
+          .optional(),
+      })
+      .optional(),
+    BenefitApplicationIdentification: z
+      .object({
+        IdentificationID: z.string(),
         IdentificationCategoryText: z.string().optional(),
       })
       .array()
       .optional(),
-    PersonName: z
+    BenefitApplicationChannelCode: z
       .object({
-        PersonSurName: z.string().array().optional(),
-        PersonGivenName: z.string().array().optional(),
-      })
-      .array()
-      .optional(),
-    PersonContactInformation: z
-      .object({
-        EmailAddress: z.object({
-          EmailAddressID: z.string(),
-        }),
-        TelephoneNumber: z.object({
-          FullTelephoneNumber: z.string(),
-        }),
-        Address: z
-          .object({
-            AddressCategoryCode: z.object({
-              ReferenceDataName: z.string(),
-            }),
-            AddressStreet: z.object({
-              StreetName: z.string(),
-            }),
-            AddressSecondaryUnitText: z.string(),
-            AddressCityName: z.string(),
-            AddressProvince: z.object({
-              ProvinceName: z.string(),
-            }),
-            AddressCountry: z.object({
-              CountryName: z.string(),
-              CountryCode: z.string().optional(), //TODO ask if this field is a typo
-            }),
-            AddressPostalCode: z.string(),
-          })
-          .array(),
+        ReferenceDataID: z.string().optional(),
+        ReferenceDataName: z.string().optional(),
       })
       .optional(),
-    PersonLanguage: z
+    BenefitApplicationYear: z
       .object({
-        LanguageCode: z.object({
-          ReferenceDataName: z.string(),
+        BenefitApplicationYearIdentification: z.object({
+          IdentificationID: z.string(),
+          IdentificationCategoryText: z.string().optional(),
         }),
-        PreferredIndicator: z.boolean(),
       })
       .optional(),
-    PersonSINIdentification: z.object({
-      IdentificationID: z.string(),
-    }),
+    InsurancePlan: z
+      .object({
+        InsurancePlanIdentification: z.object({
+          IdentificationID: z.string(),
+          IdentificationCategoryText: z.string().optional(),
+        }),
+      })
+      .optional(),
+    PrivateDentalInsuranceIndicator: z.boolean().optional(),
+    FederalDentalCoverageIndicator: z.boolean().optional(),
+    ProvicialDentalCoverageIndicator: z.boolean().optional(),
   }),
 });
 
 type PersonalInformationApiResponse = z.infer<typeof personalInformationApiResponseSchema>;
 
 const personalInfoDtoSchema = z.object({
+  applicantCategoryCode: z.string().optional(),
   applictantId: z.string().optional(),
   clientId: z.string().optional(),
+  clientNumber: z.string().optional(),
+  birthDate: z.coerce.date().optional(),
   lastName: z.string().optional(),
   firstName: z.string().optional(),
   homeAddress: z
     .object({
-      streetName: z.string(),
-      cityName: z.string(),
-      provinceName: z.string().optional(),
-      countryName: z.string(),
-      countryCode: z.string().optional(),
+      streetName: z.string().optional(),
+      secondAddressLine: z.string().optional(),
+      cityName: z.string().optional(),
+      provinceTerritoryStateId: z.string().optional(),
+      countryId: z.string().optional(),
       postalCode: z.string().optional(),
     })
     .optional(),
   mailingAddress: z
     .object({
-      streetName: z.string(),
-      cityName: z.string(),
-      provinceName: z.string().optional(),
-      countryName: z.string(),
-      countryCode: z.string().optional(),
+      streetName: z.string().optional(),
+      secondAddressLine: z.string().optional(),
+      cityName: z.string().optional(),
+      provinceTerritoryStateId: z.string().optional(),
+      countryId: z.string().optional(),
       postalCode: z.string().optional(),
     })
     .optional(),
+  homeAndMailingAddressTheSame: z.boolean().optional(),
   emailAddress: z.string().optional(),
-  phoneNumber: z.string().optional(),
-  language: z
-    .object({
-      languageCode: z.string().optional(),
-      preferredIndicator: z.boolean().optional(),
-    })
-    .optional(),
+  maritalStatusId: z.string().optional(),
+  primaryTelephoneNumber: z.string().optional(),
+  alternateTelephoneNumber: z.string().optional(),
+  preferredLanguageId: z.string().optional(),
 });
 
 export type PersonalInfo = z.infer<typeof personalInfoDtoSchema>;
@@ -115,27 +206,30 @@ export type PersonalInfo = z.infer<typeof personalInfoDtoSchema>;
 export const getPersonalInformationService = moize(createPersonalInformationService, { onCacheAdd: () => log.info('Creating new user service') });
 
 function createPersonalInformationService() {
-  const { INTEROP_API_BASE_URI } = getEnv();
+  const { INTEROP_POWERPLATFORM_API_BASE_URI, INTEROP_POWERPLATFORM_API_SUBSCRIPTION_KEY } = getEnv();
 
   function createClientInfo(personalSinId: string) {
-    return { Client: { PersonSINIdentification: { IdentificationID: personalSinId } } };
+    return { Applicant: { PersonSINIdentification: { IdentificationID: personalSinId } } };
   }
 
   async function getPersonalInformation(personalSinId: string) {
     const curentPersonalInformation = createClientInfo(personalSinId);
+    const url = `${INTEROP_POWERPLATFORM_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant/`;
 
-    const url = `${INTEROP_API_BASE_URI}/personal-information/`;
     const response = await fetch(url, {
       // Using POST instead of GET due to how sin params gets logged with SIN
       method: 'POST',
       body: JSON.stringify(curentPersonalInformation),
+      headers: {
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': INTEROP_POWERPLATFORM_API_SUBSCRIPTION_KEY,
+      },
     });
 
-    if (response.status == 200) {
-      const responseBody = await response.json();
-      return toPersonalInformation(personalInformationApiResponseSchema.parse(responseBody));
+    if (response.status === 200) {
+      return toPersonalInformation(personalInformationApiResponseSchema.parse(await response.json()));
     }
-    if (response.status == 204) {
+    if (response.status === 204) {
       return null;
     }
 
@@ -151,41 +245,46 @@ function createPersonalInformationService() {
   }
 
   function toPersonalInformation(personalInformationApiResponse: PersonalInformationApiResponse): PersonalInfo {
-    const addressList = personalInformationApiResponse.Client.PersonContactInformation?.Address;
-    const homeAddressList = addressList?.filter((address) => address.AddressCategoryCode.ReferenceDataName == 'Home');
-    const mailingAddressList = addressList?.filter((address) => address.AddressCategoryCode.ReferenceDataName == 'Mailing');
+    const addressList = personalInformationApiResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.Address;
+    const homeAddressList = addressList?.filter((address) => address.AddressCategoryCode.ReferenceDataName === 'Home');
+    const mailingAddressList = addressList?.filter((address) => address.AddressCategoryCode.ReferenceDataName === 'Mailing');
 
     return {
-      applictantId: personalInformationApiResponse.Client.ClientIdentification ? personalInformationApiResponse.Client.ClientIdentification.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Applicant ID').at(0)?.IdentificationID : '',
-      clientId: personalInformationApiResponse.Client.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Client Number').at(0)?.IdentificationID,
-      firstName: personalInformationApiResponse.Client.PersonName?.at(0)?.PersonGivenName?.at(0),
-      lastName: personalInformationApiResponse.Client.PersonName?.at(0)?.PersonSurName?.at(0),
-      emailAddress: personalInformationApiResponse.Client.PersonContactInformation?.EmailAddress.EmailAddressID,
-      phoneNumber: personalInformationApiResponse.Client.PersonContactInformation?.TelephoneNumber.FullTelephoneNumber,
+      applicantCategoryCode: personalInformationApiResponse.BenefitApplication.Applicant?.ApplicantCategoryCode.ReferenceDataID,
+      applictantId: personalInformationApiResponse.BenefitApplication.Applicant?.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Applicant ID').at(0)?.IdentificationID,
+      clientId: personalInformationApiResponse.BenefitApplication.Applicant?.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Client ID').at(0)?.IdentificationID,
+      clientNumber: personalInformationApiResponse.BenefitApplication.Applicant?.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Client Number').at(0)?.IdentificationID,
+      birthDate: personalInformationApiResponse.BenefitApplication.Applicant?.PersonBirthDate.dateTime,
+      firstName: personalInformationApiResponse.BenefitApplication.Applicant?.PersonName?.at(0)?.PersonGivenName?.at(0),
+      lastName: personalInformationApiResponse.BenefitApplication.Applicant?.PersonName?.at(0)?.PersonSurName,
+      emailAddress: personalInformationApiResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.EmailAddress.at(0)?.EmailAddressID,
+      maritalStatusId: personalInformationApiResponse.BenefitApplication.Applicant?.PersonMaritalStatus.StatusCode.ReferenceDataID,
       homeAddress: homeAddressList
         ?.map((aHomeAddress) => ({
           streetName: aHomeAddress.AddressStreet.StreetName,
+          secondAddressLine: aHomeAddress.AddressSecondaryUnitText,
           cityName: aHomeAddress.AddressCityName,
-          provinceName: aHomeAddress.AddressProvince.ProvinceName,
-          countryName: aHomeAddress.AddressCountry.CountryName,
-          countryCode: aHomeAddress.AddressCountry.CountryCode,
+          provinceTerritoryStateId: aHomeAddress.AddressProvince.ProvinceCode.ReferenceDataID,
+          countryId: aHomeAddress.AddressCountry.CountryCode.ReferenceDataID,
           postalCode: aHomeAddress.AddressPostalCode,
         }))
         .at(0),
       mailingAddress: mailingAddressList
         ?.map((aMailingAddress) => ({
           streetName: aMailingAddress.AddressStreet.StreetName,
+          secondAddressLine: aMailingAddress.AddressSecondaryUnitText,
           cityName: aMailingAddress.AddressCityName,
-          provinceName: aMailingAddress.AddressProvince.ProvinceName,
-          countryName: aMailingAddress.AddressCountry.CountryName,
-          countryCode: aMailingAddress.AddressCountry.CountryCode,
+          provinceTerritoryStateId: aMailingAddress.AddressProvince.ProvinceCode.ReferenceDataID,
+          countryId: aMailingAddress.AddressCountry.CountryCode.ReferenceDataID,
           postalCode: aMailingAddress.AddressPostalCode,
         }))
         .at(0),
-      language: {
-        languageCode: personalInformationApiResponse.Client.PersonLanguage?.LanguageCode.ReferenceDataName,
-        preferredIndicator: personalInformationApiResponse.Client.PersonLanguage?.PreferredIndicator,
-      },
+
+      primaryTelephoneNumber: personalInformationApiResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.TelephoneNumber.find((phoneNumber) => phoneNumber.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary')?.FullTelephoneNumber
+        .TelephoneNumberFullID,
+      alternateTelephoneNumber: personalInformationApiResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.TelephoneNumber.find((phoneNumber) => phoneNumber.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate')
+        ?.FullTelephoneNumber.TelephoneNumberFullID,
+      preferredLanguageId: personalInformationApiResponse.BenefitApplication.Applicant?.PreferredMethodCommunicationCode?.ReferenceDataID,
     };
   }
   async function getPersonalInformationIntoSession(session: Session, request: Request, redirectURL: string, sin?: string) {

@@ -10,7 +10,7 @@ import { getLogger } from '~/utils/logging.server';
 const log = getLogger('power-platform-api.server');
 
 const sinIdSchema = z.object({
-  Client: z.object({
+  Applicant: z.object({
     PersonSINIdentification: z.object({
       IdentificationID: z.string(),
     }),
@@ -57,9 +57,14 @@ export function getPowerPlatformApiMockHandlers() {
     //
     // Retrieve personal details information (using POST instead of GET due the sin params logging with GET)
     //
-    http.post('https://api.example.com/personal-information/', async ({ request }) => {
+    http.post('https://api.example.com/dental-care/applicant-information/dts/v1/applicant/', async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
-      const parsedSinId = sinIdSchema.parse(await request.json()).Client.PersonSINIdentification.IdentificationID;
+      const subscriptionKey = request.headers.get('Ocp-Apim-Subscription-Key');
+      if (!subscriptionKey) {
+        return new HttpResponse('Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.', { status: 401 });
+      }
+
+      const parsedSinId = sinIdSchema.parse(await request.json()).Applicant.PersonSINIdentification.IdentificationID;
       const peronalInformationEntity = getPersonalInformation(parsedSinId);
 
       if (!peronalInformationEntity) {
@@ -72,6 +77,9 @@ export function getPowerPlatformApiMockHandlers() {
       if (peronalInformationEntity.clientNumber) {
         listOfClientId.push({ IdentificationID: peronalInformationEntity.clientNumber, IdentificationCategoryText: 'Client Number' });
       }
+      if (peronalInformationEntity.clientId) {
+        listOfClientId.push({ IdentificationID: peronalInformationEntity.clientId, IdentificationCategoryText: 'Client ID' });
+      }
 
       const addressList = [];
       if (peronalInformationEntity.homeAddressStreet) {
@@ -79,19 +87,22 @@ export function getPowerPlatformApiMockHandlers() {
           AddressCategoryCode: {
             ReferenceDataName: 'Home',
           },
+          AddressCityName: peronalInformationEntity.homeAddressCityName,
+          AddressCountry: {
+            CountryCode: {
+              ReferenceDataID: peronalInformationEntity.homeAddressCountryReferenceId,
+            },
+          },
+          AddressPostalCode: peronalInformationEntity.homeAddressPostalCode,
           AddressStreet: {
             StreetName: peronalInformationEntity.homeAddressStreet,
           },
           AddressSecondaryUnitText: peronalInformationEntity.homeAddressSecondaryUnitText,
-          AddressCityName: peronalInformationEntity.homeAddressCityName,
           AddressProvince: {
-            ProvinceName: peronalInformationEntity.homeAddressProvince,
+            ProvinceCode: {
+              ReferenceDataID: peronalInformationEntity.homeAddressProvince,
+            },
           },
-          AddressCountry: {
-            CountryName: peronalInformationEntity.homeAddressCountryName,
-            CountryCode: peronalInformationEntity.homeAddressCountryCode,
-          },
-          AddressPostalCode: peronalInformationEntity.homeAddressPostalCode,
         });
       }
       if (peronalInformationEntity.mailingAddressStreet) {
@@ -99,46 +110,90 @@ export function getPowerPlatformApiMockHandlers() {
           AddressCategoryCode: {
             ReferenceDataName: 'Mailing',
           },
+          AddressCityName: peronalInformationEntity.mailingAddressCityName,
+          AddressCountry: {
+            CountryCode: {
+              ReferenceDataID: peronalInformationEntity.mailingAddressCountryReferenceId,
+            },
+          },
+          AddressPostalCode: peronalInformationEntity.mailingAddressPostalCode,
           AddressStreet: {
             StreetName: peronalInformationEntity.mailingAddressStreet,
           },
           AddressSecondaryUnitText: peronalInformationEntity.mailingAddressSecondaryUnitText,
-          AddressCityName: peronalInformationEntity.mailingAddressCityName,
           AddressProvince: {
-            ProvinceName: peronalInformationEntity.mailingAddressProvince,
+            ProvinceCode: {
+              ReferenceDataID: peronalInformationEntity.mailingAddressProvince,
+            },
           },
-          AddressCountry: {
-            CountryName: peronalInformationEntity.mailingAddressCountryName,
-            CountryCode: peronalInformationEntity.mailingAddressCountryCode,
-          },
-          AddressPostalCode: peronalInformationEntity.mailingAddressPostalCode,
         });
       }
 
-      const nameInfoList = [{ PersonSurName: [peronalInformationEntity.lastName], PersonGivenName: [peronalInformationEntity.firstName] }];
+      const telephoneNumberList = [];
+      if (peronalInformationEntity.primaryTelephoneNumber) {
+        telephoneNumberList.push({
+          FullTelephoneNumber: {
+            TelephoneNumberFullID: peronalInformationEntity.primaryTelephoneNumber,
+          },
+          TelephoneNumberCategoryCode: {
+            ReferenceDataName: 'Primary',
+          },
+        });
+      }
+      if (peronalInformationEntity.alternateTelephoneNumber) {
+        telephoneNumberList.push({
+          FullTelephoneNumber: {
+            TelephoneNumberFullID: peronalInformationEntity.alternateTelephoneNumber,
+          },
+          TelephoneNumberCategoryCode: {
+            ReferenceDataName: 'Alternate',
+          },
+        });
+      }
+
+      const nameInfoList = [{ PersonSurName: peronalInformationEntity.lastName, PersonGivenName: [peronalInformationEntity.firstName] }];
 
       return HttpResponse.json({
-        Client: {
-          ClientIdentification: listOfClientId,
-          PersonName: nameInfoList,
-          PersonContactInformation: {
-            EmailAddress: {
-              EmailAddressID: peronalInformationEntity.emailAddressId,
+        BenefitApplication: {
+          Applicant: {
+            ApplicantCategoryCode: {
+              ReferenceDataID: peronalInformationEntity.applicantCategoryCode,
             },
-            TelephoneNumber: {
-              FullTelephoneNumber: peronalInformationEntity.fullTelephoneNumber,
+            ClientIdentification: listOfClientId,
+            PersonName: nameInfoList,
+            PersonBirthDate: {
+              dateTime: peronalInformationEntity.birthdate,
             },
-            Address: addressList,
-          },
-          PersonLanguage: {
-            LanguageCode: {
-              ReferenceDataName: peronalInformationEntity.languageCode,
+            PersonContactInformation: [
+              {
+                EmailAddress: [
+                  {
+                    EmailAddressID: peronalInformationEntity.emailAddressId,
+                  },
+                ],
+                TelephoneNumber: telephoneNumberList,
+                Address: addressList,
+              },
+            ],
+            PersonMaritalStatus: {
+              StatusCode: {
+                ReferenceDataID: peronalInformationEntity.maritialStatus,
+              },
             },
-            PreferredIndicator: peronalInformationEntity.languagePreferredIndicator,
+            MailingSameAsHomeIndicator: peronalInformationEntity.sameHomeAndMailingAddress,
+            PreferredMethodCommunicationCode: {
+              ReferenceDataID: peronalInformationEntity.preferredMethodCommunicationCode,
+            },
+            PersonSINIdentification: {
+              IdentificationID: peronalInformationEntity.sinIdentification,
+            },
           },
-          PersonSINIdentification: {
-            IdentificationID: peronalInformationEntity.sinIdentification,
-          },
+          BenefitApplicationIdentification: [
+            {
+              IdentificationID: peronalInformationEntity.dentalApplicationID,
+              IdentificationCategoryText: 'Dental Application ID',
+            },
+          ],
         },
       });
     }),

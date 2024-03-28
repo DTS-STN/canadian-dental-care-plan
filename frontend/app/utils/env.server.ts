@@ -63,6 +63,8 @@ const serverEnv = z.object({
   INTEROP_CCT_API_BASE_URI: z.string().url(),
   INTEROP_CCT_API_SUBSCRIPTION_KEY: z.string().trim().min(1),
   INTEROP_CCT_API_COMMUNITY: z.string().default('CDCP'),
+  INTEROP_POWERPLATFORM_API_BASE_URI: z.string().url(),
+  INTEROP_POWERPLATFORM_API_SUBSCRIPTION_KEY: z.string().trim().min(1),
 
   SHOW_SIN_EDIT_STUB_PAGE : z.string().transform(toBoolean).default('false'),
 
