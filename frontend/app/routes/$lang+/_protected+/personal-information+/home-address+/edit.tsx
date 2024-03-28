@@ -21,6 +21,7 @@ import { getUserService } from '~/services/user-service.server';
 import { getWSAddressService } from '~/services/wsaddress-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -61,14 +62,18 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
     throw new Response(null, { status: 404 });
   }
 
+  const csrfToken = String(session.get('csrfToken'));
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:home-address.edit.page-title') }) };
 
   instrumentationService.countHttpStatus('home-address.edit', 302);
-  return json({ addressInfo, countryList, meta, regionList });
+  return json({ addressInfo, countryList, csrfToken, meta, regionList });
 }
 
 export async function action({ context: { session }, request }: ActionFunctionArgs) {
+  const log = getLogger('home-address/edit');
+
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
   const wsAddressService = await getWSAddressService();
@@ -84,6 +89,14 @@ export async function action({ context: { session }, request }: ActionFunctionAr
   });
 
   const formData = Object.fromEntries(await request.formData());
+  const expectedCsrfToken = String(session.get('csrfToken'));
+  const submittedCsrfToken = String(formData['_csrf']);
+
+  if (expectedCsrfToken !== submittedCsrfToken) {
+    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
+    throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
   const parsedDataResult = await formDataSchema.safeParseAsync(formData);
 
   if (!parsedDataResult.success) {
@@ -120,7 +133,7 @@ function getRedirectUrl(correctedAddressStatus: string) {
 
 export default function PersonalInformationHomeAddressEdit() {
   const actionData = useActionData<typeof action>();
-  const { addressInfo, countryList, regionList } = useLoaderData<typeof loader>();
+  const { addressInfo, countryList, csrfToken, regionList } = useLoaderData<typeof loader>();
   const [selectedCountry, setSelectedCountry] = useState('');
   const [countryRegions, setCountryRegions] = useState<typeof regionList>([]);
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
@@ -202,6 +215,7 @@ export default function PersonalInformationHomeAddressEdit() {
       <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:home-address.edit.subtitle')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form className="max-w-prose" method="post" noValidate>
+        <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="my-6">
           <p className="mb-4 text-red-600">{t('gcweb:asterisk-indicates-required-field')}</p>
           <div className="space-y-6">

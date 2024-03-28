@@ -17,6 +17,7 @@ import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -51,14 +52,18 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
     throw new Response(null, { status: 404 });
   }
 
+  const csrfToken = String(session.get('csrfToken'));
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:phone-number.edit.page-title') }) };
 
   instrumentationService.countHttpStatus('phone-number.edit', 200);
-  return json({ meta, userInfo });
+  return json({ csrfToken, meta, userInfo });
 }
 
 export async function action({ context: { session }, request }: ActionFunctionArgs) {
+  const log = getLogger('phone-number/edit');
+
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
 
@@ -72,6 +77,14 @@ export async function action({ context: { session }, request }: ActionFunctionAr
   });
 
   const formData = Object.fromEntries(await request.formData());
+  const expectedCsrfToken = String(session.get('csrfToken'));
+  const submittedCsrfToken = String(formData['_csrf']);
+
+  if (expectedCsrfToken !== submittedCsrfToken) {
+    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
+    throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
   const parsedDataResult = formDataSchema.safeParse(formData);
 
   if (!parsedDataResult.success) {
@@ -89,7 +102,7 @@ export async function action({ context: { session }, request }: ActionFunctionAr
 }
 
 export default function PhoneNumberEdit() {
-  const { userInfo } = useLoaderData<typeof loader>();
+  const { csrfToken, userInfo } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const errorSummaryId = 'error-summary';
 
@@ -133,6 +146,7 @@ export default function PhoneNumberEdit() {
       <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:phone-number.edit.subtitle')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post" noValidate>
+        <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="my-6">
           <p className="mb-4 text-red-600">{t('gcweb:asterisk-indicates-required-field')}</p>
           <InputField id="phoneNumber" name="phoneNumber" type="tel" label={t('personal-information:phone-number.edit.component.phone')} required defaultValue={defaultValues.phoneNumber} errorMessage={errorMessages.phoneNumber} />

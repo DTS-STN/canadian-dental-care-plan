@@ -21,6 +21,7 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -69,12 +70,15 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     throw new Response('Expected communication method email not found!', { status: 500 });
   }
 
+  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:communication-preference.page-title') }) };
 
-  return json({ communicationMethodEmail, id, meta, preferredCommunicationMethods, preferredLanguages, defaultState: state.communicationPreferences, editMode: state.editMode });
+  return json({ communicationMethodEmail, id, csrfToken, meta, preferredCommunicationMethods, preferredLanguages, defaultState: state.communicationPreferences, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  const log = getLogger('apply/communication-preference');
+
   const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
   const applyRouteHelpers = getApplyRouteHelpers();
   const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
@@ -127,6 +131,14 @@ export async function action({ context: { session }, params, request }: ActionFu
     });
 
   const formData = await request.formData();
+  const expectedCsrfToken = String(session.get('csrfToken'));
+  const submittedCsrfToken = String(formData.get('_csrf'));
+
+  if (expectedCsrfToken !== submittedCsrfToken) {
+    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
+    throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
   const data = {
     confirmEmail: formData.get('confirmEmail') ? String(formData.get('confirmEmail') ?? '') : undefined,
     confirmEmailForFuture: formData.get('confirmEmailForFuture') ? String(formData.get('confirmEmailForFuture') ?? '') : undefined,
@@ -147,7 +159,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowCommunicationPreferencePage() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { id, communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, id, communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState, editMode } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [preferredMethodValue, setPreferredMethodValue] = useState(defaultState?.preferredMethod ?? '');
@@ -242,6 +254,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <p className="mb-6">{t('apply:communication-preference.note')}</p>
         <fetcher.Form method="post" noValidate>
+          <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-8 space-y-6">
             {preferredLanguages.length > 0 && (
               <InputRadios

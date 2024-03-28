@@ -1,4 +1,4 @@
-import { Session } from '@remix-run/node';
+import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -50,18 +50,20 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
 
   describe('loader()', () => {
     it('should return userInfo object if userInfo is found', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+
       const userService = getUserService();
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', phoneNumber: '(111) 222-3333' });
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/personal-information/phone-number/edit'),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 
       const data = await response.json();
 
-      expect(data).toEqual({
+      expect(data).toMatchObject({
         meta: {},
         userInfo: { id: 'some-id', phoneNumber: '(111) 222-3333' },
       });
@@ -70,7 +72,11 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
 
   describe('action()', () => {
     it('should return validation errors', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('csrfToken', 'csrfToken');
+
       const formData = new FormData();
+      formData.append('_csrf', 'csrfToken');
       formData.append('phoneNumber', '819 426-55');
 
       const response = await action({
@@ -78,7 +84,7 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
           method: 'POST',
           body: formData,
         }),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
       const data = await response.json();

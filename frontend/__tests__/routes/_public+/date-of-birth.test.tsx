@@ -1,4 +1,4 @@
-import { Session, redirect } from '@remix-run/node';
+import { createMemorySessionStorage, redirect } from '@remix-run/node';
 
 import { differenceInYears, isValid, parse } from 'date-fns';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -38,15 +38,17 @@ describe('_public.apply.id.date-of-birth', () => {
 
   describe('loader()', () => {
     it('should load id, and dob', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/date-of-birth'),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 
       const data = await response.json();
 
-      expect(data).toEqual({
+      expect(data).toMatchObject({
         id: '123',
         meta: {},
         defaultState: '2000-01-01',
@@ -56,9 +58,15 @@ describe('_public.apply.id.date-of-birth', () => {
 
   describe('action()', () => {
     it('should validate missing day, month, and year selections', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('csrfToken', 'csrfToken');
+
+      const formData = new FormData();
+      formData.append('_csrf', 'csrfToken');
+
       const response = await action({
-        request: new Request('http://localhost:3000/en/apply/123/date-of-birth', { method: 'POST', body: new FormData() }),
-        context: { session: {} as Session },
+        request: new Request('http://localhost:3000/en/apply/123/date-of-birth', { method: 'POST', body: formData }),
+        context: { session },
         params: {},
       });
 
@@ -68,7 +76,11 @@ describe('_public.apply.id.date-of-birth', () => {
     });
 
     it('should redirect to applicant information page if dob is 65 years or over', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('csrfToken', 'csrfToken');
+
       const formData = new FormData();
+      formData.append('_csrf', 'csrfToken');
       formData.append('dateOfBirth', '1959-01-01');
 
       vi.mocked(isValid).mockReturnValueOnce(true);
@@ -77,7 +89,7 @@ describe('_public.apply.id.date-of-birth', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/date-of-birth', { method: 'POST', body: formData }),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 
@@ -86,7 +98,11 @@ describe('_public.apply.id.date-of-birth', () => {
     });
 
     it('should redirect to error page if dob is under 65 years', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('csrfToken', 'csrfToken');
+
       const formData = new FormData();
+      formData.append('_csrf', 'csrfToken');
       formData.append('dateOfBirth', '2000-01-01');
 
       vi.mocked(isValid).mockReturnValueOnce(true);
@@ -95,7 +111,7 @@ describe('_public.apply.id.date-of-birth', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/date-of-birth', { method: 'POST', body: formData }),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 

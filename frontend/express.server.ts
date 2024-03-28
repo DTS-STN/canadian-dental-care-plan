@@ -15,6 +15,7 @@ import sourceMapSupport from 'source-map-support';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getLogger } from '~/utils/logging.server';
+import { randomString } from '~/utils/string-utils';
 
 // instrumentation needs to be started as early as possible to ensure proper initialization
 getInstrumentationService().startInstrumentation();
@@ -112,7 +113,7 @@ async function runServer() {
   const server = app.listen(port, () => {
     log.info(`Server listening at http://localhost:${port}/`);
     if (process.env.NODE_ENV === 'development') {
-      void broadcastDevReady(build);
+      broadcastDevReady(build);
     }
   });
 
@@ -156,11 +157,20 @@ async function createRequestHandler(build: ServerBuild, mode: string) {
 
   return async (req: Request, res: Response, next: NextFunction) => {
     const session = await sessionService.getSession(req.headers.cookie);
+    session.set('lastAccessTime', new Date().toISOString());
+
+    // We use session-scoped CSRF tokens to ensure back button and multi-tab navigation still works.
+    // @see: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern
+    if (!session.has('csrfToken')) {
+      const csrfToken = randomString(32);
+      log.debug('Adding CSRF token [%s] to session', csrfToken);
+      session.set('csrfToken', csrfToken);
+    }
 
     try {
       const remixResponse = await handleRequest(createRemixRequest(req, res), { session });
-      remixResponse.headers.append('Set-Cookie', await sessionService.commitSession(session));
-
+      const sessionCookie = await sessionService.commitSession(session);
+      remixResponse.headers.append('Set-Cookie', sessionCookie);
       await sendRemixResponse(res, remixResponse);
     } catch (error: unknown) {
       // Express doesn't support async functions, so we have to pass along the
