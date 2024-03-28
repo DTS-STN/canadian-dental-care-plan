@@ -47,7 +47,7 @@ stages:
                 latest
               arguments: | 
                 --pull
-                # --build-arg 
+                # --build-arg X=$([name of vault variable])
 
           - task: Docker@2
             inputs:
