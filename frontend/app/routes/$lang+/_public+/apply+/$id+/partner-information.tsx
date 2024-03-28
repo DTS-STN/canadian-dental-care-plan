@@ -19,6 +19,7 @@ import { Progress } from '~/components/progress';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -53,12 +54,15 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     return redirectWithLocale(request, `/apply/${id}/contact-information`);
   }
 
+  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:partner-information.page-title') }) };
 
-  return json({ id, meta, defaultState: state.partnerInformation, editMode: state.editMode });
+  return json({ id, csrfToken, meta, defaultState: state.partnerInformation, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  const log = getLogger('apply/partner-information');
+
   const applyRouteHelpers = getApplyRouteHelpers();
   const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -82,6 +86,14 @@ export async function action({ context: { session }, params, request }: ActionFu
   });
 
   const formData = await request.formData();
+  const expectedCsrfToken = String(session.get('csrfToken'));
+  const submittedCsrfToken = String(formData.get('_csrf'));
+
+  if (expectedCsrfToken !== submittedCsrfToken) {
+    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
+    throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
   const data = {
     confirm: formData.get('confirm') === 'yes',
     dateOfBirth: String(formData.get('dateOfBirth') ?? ''),
@@ -101,7 +113,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowApplicationInformation() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { id, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { id, defaultState, editMode, csrfToken } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
@@ -143,6 +155,7 @@ export default function ApplyFlowApplicationInformation() {
         </p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" aria-describedby="form-instructions-provide-sin form-instructions-required-information" noValidate>
+          <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
               <InputField

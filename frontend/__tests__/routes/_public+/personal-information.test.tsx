@@ -1,4 +1,4 @@
-import { Session } from '@remix-run/node';
+import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -56,9 +56,11 @@ describe('_public.apply.id.personal-information', () => {
 
   describe('loader()', () => {
     it('should id, state, country list and region list', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+
       const response = await loader({
         request: new Request('http://localhost:3000/apply/123/personal-information'),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 

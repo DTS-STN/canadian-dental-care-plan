@@ -36,17 +36,26 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const { HCAPTCHA_SITE_KEY } = getEnv();
+  const csrfToken = String(session.get('csrfToken'));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:index.page-title') }) };
 
-  return { meta, siteKey: HCAPTCHA_SITE_KEY };
+  return { csrfToken, meta, siteKey: HCAPTCHA_SITE_KEY };
 }
 
 export async function action({ context: { session }, request }: ActionFunctionArgs) {
   const log = getLogger('apply/index');
 
   const formData = await request.formData();
+  const expectedCsrfToken = String(session.get('csrfToken'));
+  const submittedCsrfToken = String(formData.get('_csrf'));
+
+  if (expectedCsrfToken !== submittedCsrfToken) {
+    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
+    throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
   const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
 
   try {
@@ -65,7 +74,7 @@ export async function action({ context: { session }, request }: ActionFunctionAr
 
 export default function ApplyIndex() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { siteKey } = useLoaderData<typeof loader>();
+  const { csrfToken, siteKey } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const captchaRef = useRef<HCaptcha>(null);
@@ -190,6 +199,7 @@ export default function ApplyIndex() {
       </div>
       <p className="my-8">{t('apply:index.apply.application-start-consent')}</p>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+        <input type="hidden" name="_csrf" value={csrfToken} />
         <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />
         <Button variant="primary" id="continue-button" disabled={isSubmitting}>
           {t('apply:index.apply.start-button')}

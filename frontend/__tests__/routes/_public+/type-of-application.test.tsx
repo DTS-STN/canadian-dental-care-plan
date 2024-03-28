@@ -1,4 +1,4 @@
-import { Session, redirect } from '@remix-run/node';
+import { createMemorySessionStorage, redirect } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -36,15 +36,17 @@ describe('_public.apply.id.type-of-application', () => {
 
   describe('loader()', () => {
     it('should load id, and typeOfApplication', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/type-of-application'),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 
       const data = await response.json();
 
-      expect(data).toEqual({
+      expect(data).toMatchObject({
         id: '123',
         meta: { title: 'gcweb:meta.title.template' },
         defaultState: 'delegate',
@@ -54,9 +56,15 @@ describe('_public.apply.id.type-of-application', () => {
 
   describe('action()', () => {
     it('should validate missing applcation type selection', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('csrfToken', 'csrfToken');
+
+      const formData = new FormData();
+      formData.append('_csrf', 'csrfToken');
+
       const response = await action({
-        request: new Request('http://localhost:3000/en/apply/123/type-of-application', { method: 'POST', body: new FormData() }),
-        context: { session: {} as Session },
+        request: new Request('http://localhost:3000/en/apply/123/type-of-application', { method: 'POST', body: formData }),
+        context: { session },
         params: {},
       });
 
@@ -66,12 +74,16 @@ describe('_public.apply.id.type-of-application', () => {
     });
 
     it('should redirect to error page if delegate is selected', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('csrfToken', 'csrfToken');
+
       const formData = new FormData();
+      formData.append('_csrf', 'csrfToken');
       formData.append('typeOfApplication', 'delegate');
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/type-of-application', { method: 'POST', body: formData }),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 
@@ -80,12 +92,16 @@ describe('_public.apply.id.type-of-application', () => {
     });
 
     it('should redirect to tax filing page if personal is selected', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('csrfToken', 'csrfToken');
+
       const formData = new FormData();
+      formData.append('_csrf', 'csrfToken');
       formData.append('typeOfApplication', 'personal');
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/type-of-application', { method: 'POST', body: formData }),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 

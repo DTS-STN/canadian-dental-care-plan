@@ -13,6 +13,7 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -38,6 +39,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
 
   await raoidcService.handleSessionValidation(request, session);
 
+  const csrfToken = String(session.get('csrfToken'));
   const homeAddressInfo = session.get('newHomeAddress');
   const suggestedAddressInfo = session.get('suggestedAddress');
 
@@ -48,17 +50,27 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:home-address.suggested.page-title') }) };
 
   instrumentationService.countHttpStatus('home-address.suggest', 200);
-  return json({ countryList, homeAddressInfo, meta, regionList, suggestedAddressInfo });
+  return json({ countryList, csrfToken, homeAddressInfo, meta, regionList, suggestedAddressInfo });
 }
 
 export async function action({ context: { session }, request }: ActionFunctionArgs) {
+  const log = getLogger('home-address/suggested');
+
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
 
   await raoidcService.handleSessionValidation(request, session);
 
-  const formDataRadio = Object.fromEntries(await request.formData());
-  const useSuggestedAddress = formDataRadio.selectedAddress === 'suggested';
+  const formData = Object.fromEntries(await request.formData());
+  const expectedCsrfToken = String(session.get('csrfToken'));
+  const submittedCsrfToken = String(formData['_csrf']);
+
+  if (expectedCsrfToken !== submittedCsrfToken) {
+    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
+    throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
+  const useSuggestedAddress = formData.selectedAddress === 'suggested';
   session.set('useSuggestedAddress', useSuggestedAddress);
 
   instrumentationService.countHttpStatus('home-address.suggest', 302);
@@ -66,13 +78,14 @@ export async function action({ context: { session }, request }: ActionFunctionAr
 }
 
 export default function HomeAddressSuggested() {
-  const { homeAddressInfo, suggestedAddressInfo, countryList, regionList } = useLoaderData<typeof loader>();
+  const { homeAddressInfo, suggestedAddressInfo, countryList, regionList, csrfToken } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
 
   return (
     <>
       <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:home-address.suggested.subtitle')}</p>
       <Form method="post" noValidate>
+        <input type="hidden" name="_csrf" value={csrfToken} />
         <p className="mb-4">{t('personal-information:home-address.suggested.note')}</p>
         <dl className="my-6 divide-y border-y">
           <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">

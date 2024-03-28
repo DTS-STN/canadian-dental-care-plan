@@ -1,4 +1,4 @@
-import { Session } from '@remix-run/node';
+import { Session, createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -62,6 +62,7 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
 
   describe('loader()', () => {
     it('should return userInfo object if userInfo is found', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
       const userService = getUserService();
 
       vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', preferredLanguage: 'fr' });
@@ -81,13 +82,13 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information/preferred/edit'),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 
       const data = await response.json();
 
-      expect(data).toEqual({
+      expect(data).toMatchObject({
         meta: {},
         userInfo: { id: 'some-id', preferredLanguage: 'fr' },
         preferredLanguages: [

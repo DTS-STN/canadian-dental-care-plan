@@ -1,4 +1,4 @@
-import { Session } from '@remix-run/node';
+import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -83,6 +83,8 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
 
   describe('loader()', () => {
     it('should return addressInfo', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+
       const userService = getUserService();
       const addressService = getAddressService();
 
@@ -91,13 +93,13 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/personal-information/home-address/edit'),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 
       const data = await response.json();
 
-      expect(data).toEqual({
+      expect(data).toMatchObject({
         addressInfo: {
           address: '111 Fake Home St',
           city: 'city',
@@ -127,12 +129,14 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
     });
 
     it('should throw 404 response if addressInfo is not found', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+
       vi.mocked(getAddressService().getAddressInfo).mockResolvedValue(null);
 
       try {
         await loader({
           request: new Request('http://localhost:3000/en/personal-information/home-address/edit'),
-          context: { session: {} as Session },
+          context: { session },
           params: {},
         });
       } catch (error) {

@@ -1,4 +1,4 @@
-import { Session, redirect } from '@remix-run/node';
+import { createMemorySessionStorage, redirect } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -35,15 +35,17 @@ describe('_public.apply.id.tax-filing', () => {
 
   describe('loader()', () => {
     it('should load id, and taxFiling2023', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/tax-filing'),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 
       const data = await response.json();
 
-      expect(data).toEqual({
+      expect(data).toMatchObject({
         id: '123',
         meta: {},
         defaultState: 'yes',
@@ -53,9 +55,15 @@ describe('_public.apply.id.tax-filing', () => {
 
   describe('action()', () => {
     it('should validate missing tax filing selection', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('csrfToken', 'csrfToken');
+
+      const formData = new FormData();
+      formData.append('_csrf', 'csrfToken');
+
       const response = await action({
-        request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: new FormData() }),
-        context: { session: {} as Session },
+        request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }),
+        context: { session },
         params: {},
       });
 
@@ -65,12 +73,16 @@ describe('_public.apply.id.tax-filing', () => {
     });
 
     it('should redirect to date of birth page if tax filing is completed', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('csrfToken', 'csrfToken');
+
       const formData = new FormData();
+      formData.append('_csrf', 'csrfToken');
       formData.append('taxFiling2023', 'yes');
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 
@@ -79,12 +91,16 @@ describe('_public.apply.id.tax-filing', () => {
     });
 
     it('should redirect to error page if tax filing is incompleted', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('csrfToken', 'csrfToken');
+
       const formData = new FormData();
+      formData.append('_csrf', 'csrfToken');
       formData.append('taxFiling2023', 'no');
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 
