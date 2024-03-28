@@ -19,7 +19,7 @@ const personalInformationApiResponseSchema = z.object({
         }),
         ClientIdentification: z
           .object({
-            IdentificationID: z.string(),
+            IdentificationID: z.string().optional(),
             IdentificationCategoryText: z.string().optional(),
           })
           .array()
@@ -110,15 +110,6 @@ const personalInformationApiResponseSchema = z.object({
                 IdentificationCategoryText: z.string().optional(),
               })
               .optional(),
-          })
-          .optional(),
-        PersonLanguage: z
-          .object({
-            LanguageCode: z.object({
-              ReferenceDataName: z.string().optional(),
-              ReferenceDataID: z.string().optional(),
-            }),
-            PreferredIndicator: z.boolean().optional(),
           })
           .optional(),
         PersonSINIdentification: z.object({
@@ -223,7 +214,7 @@ function createPersonalInformationService() {
 
   async function getPersonalInformation(personalSinId: string) {
     const curentPersonalInformation = createClientInfo(personalSinId);
-    const url = `${INTEROP_POWERPLATFORM_API_BASE_URI}/applicant/`;
+    const url = `${INTEROP_POWERPLATFORM_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant/`;
 
     const response = await fetch(url, {
       // Using POST instead of GET due to how sin params gets logged with SIN

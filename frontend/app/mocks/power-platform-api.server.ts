@@ -57,11 +57,11 @@ export function getPowerPlatformApiMockHandlers() {
     //
     // Retrieve personal details information (using POST instead of GET due the sin params logging with GET)
     //
-    http.post('https://api.example.com/applicant/', async ({ request }) => {
+    http.post('https://api.example.com/dental-care/applicant-information/dts/v1/applicant/', async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       const subscriptionKey = request.headers.get('Ocp-Apim-Subscription-Key');
       if (!subscriptionKey) {
-        return new HttpResponse(null, { status: 401 });
+        return new HttpResponse('Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.', { status: 401 });
       }
 
       const parsedSinId = sinIdSchema.parse(await request.json()).Applicant.PersonSINIdentification.IdentificationID;
@@ -90,7 +90,7 @@ export function getPowerPlatformApiMockHandlers() {
           AddressCityName: peronalInformationEntity.homeAddressCityName,
           AddressCountry: {
             CountryCode: {
-              ReferenceDataID: peronalInformationEntity.homeAddressPostalCode,
+              ReferenceDataID: peronalInformationEntity.homeAddressCountryReferenceId,
             },
           },
           AddressPostalCode: peronalInformationEntity.homeAddressPostalCode,
@@ -113,7 +113,7 @@ export function getPowerPlatformApiMockHandlers() {
           AddressCityName: peronalInformationEntity.mailingAddressCityName,
           AddressCountry: {
             CountryCode: {
-              ReferenceDataID: peronalInformationEntity.mailingAddressPostalCode,
+              ReferenceDataID: peronalInformationEntity.mailingAddressCountryReferenceId,
             },
           },
           AddressPostalCode: peronalInformationEntity.mailingAddressPostalCode,
@@ -164,19 +164,17 @@ export function getPowerPlatformApiMockHandlers() {
             PersonBirthDate: {
               dateTime: peronalInformationEntity.birthdate,
             },
-            PersonContactInformation: {
-              EmailAddress: {
-                EmailAddressID: peronalInformationEntity.emailAddressId,
+            PersonContactInformation: [
+              {
+                EmailAddress: [
+                  {
+                    EmailAddressID: peronalInformationEntity.emailAddressId,
+                  },
+                ],
+                TelephoneNumber: telephoneNumberList,
+                Address: addressList,
               },
-              TelephoneNumber: telephoneNumberList,
-              Address: addressList,
-            },
-            PersonLanguage: {
-              LanguageCode: {
-                ReferenceDataName: peronalInformationEntity.languageCode,
-              },
-              PreferredIndicator: peronalInformationEntity.languagePreferredIndicator,
-            },
+            ],
             PersonMaritalStatus: {
               StatusCode: {
                 ReferenceDataID: peronalInformationEntity.maritialStatus,
@@ -184,7 +182,7 @@ export function getPowerPlatformApiMockHandlers() {
             },
             MailingSameAsHomeIndicator: peronalInformationEntity.sameHomeAndMailingAddress,
             PreferredMethodCommunicationCode: {
-              ReferenceDataID: peronalInformationEntity.languagePreferredIndicator,
+              ReferenceDataID: peronalInformationEntity.preferredMethodCommunicationCode,
             },
             PersonSINIdentification: {
               IdentificationID: peronalInformationEntity.sinIdentification,
