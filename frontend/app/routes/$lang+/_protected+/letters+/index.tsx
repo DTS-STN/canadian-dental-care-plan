@@ -11,6 +11,7 @@ import pageIds from '../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
+import { NewTabIndicator } from '~/components/new-tab-indicator';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLettersService } from '~/services/letters-service.server';
@@ -108,6 +109,7 @@ export default function LettersIndex() {
             <li key={letter.id} className="py-4 sm:py-6">
               <InlineLink reloadDocument to={`/letters/${letter.id}/download`} className="external-link font-lato font-semibold" target="_blank">
                 {getNameByLanguage(i18n.language, letterType)}
+                <NewTabIndicator />
               </InlineLink>
               <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: letter.issuedOn })}</p>
             </li>
