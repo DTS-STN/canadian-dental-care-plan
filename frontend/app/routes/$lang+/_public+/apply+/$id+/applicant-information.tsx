@@ -149,6 +149,7 @@ export default function ApplyFlowApplicationInformation() {
         <fetcher.Form method="post" aria-describedby="form-instructions-sin form-instructions-info" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-8 space-y-6">
+            <em id="name-instructions">{t('applicant-information.name-instructions')}</em>
             <div className="grid gap-6 md:grid-cols-2">
               <InputField
                 id="first-name"
@@ -162,7 +163,6 @@ export default function ApplyFlowApplicationInformation() {
               />
               <InputField id="last-name" name="lastName" label={t('applicant-information.last-name')} className="w-full" required defaultValue={defaultState?.lastName ?? ''} errorMessage={errorMessages['last-name']} aria-describedby="name-instructions" />
             </div>
-            <p id="name-instructions">{t('applicant-information.name-instructions')}</p>
             <InputField
               id="social-insurance-number"
               name="socialInsuranceNumber"

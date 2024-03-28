@@ -157,6 +157,7 @@ export default function ApplyFlowApplicationInformation() {
         <fetcher.Form method="post" aria-describedby="form-instructions-provide-sin form-instructions-required-information" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="space-y-6">
+            <em id="name-instructions">{t('partner-information.name-instructions')}</em>
             <div className="grid gap-6 md:grid-cols-2">
               <InputField
                 id="first-name"
@@ -179,7 +180,6 @@ export default function ApplyFlowApplicationInformation() {
                 aria-describedby="name-instructions"
               />
             </div>
-            <p id="name-instructions">{t('partner-information.name-instructions')}</p>
             <DatePickerField id="date-of-birth" name="dateOfBirth" defaultValue={defaultState?.dateOfBirth ?? ''} legend={t('apply:partner-information.date-of-birth')} required errorMessage={errorMessages['date-picker-date-of-birth-month']} />
             <InputField
               id="social-insurance-number"
