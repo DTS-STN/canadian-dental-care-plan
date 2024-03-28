@@ -8,7 +8,7 @@ export function NewTabIndicator({ className, ...props }: Omit<ComponentProps<'sp
   const { t } = useTranslation('gcweb');
   return (
     <span className={cn('sr-only', className)} {...props}>
-      &#32;({t('screen-reader.new-tab')})
+      {/*Following whitespace is important to ensure the content's text is seperated for the screen-reader text*/} ({t('screen-reader.new-tab')})
     </span>
   );
 }
