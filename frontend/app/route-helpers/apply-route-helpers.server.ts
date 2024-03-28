@@ -15,6 +15,9 @@ import { ReviewInformationState, SubmissionInfoState } from '~/routes/$lang+/_pu
 import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/tax-filing';
 import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-of-application';
 import { redirectWithLocale } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
+
+const log = getLogger('apply-route-helpers.server');
 
 /**
  * Schema for validating UUID.
@@ -70,6 +73,7 @@ async function loadState({ params, request, session }: LoadStateArgs) {
   const parsedId = idSchema.safeParse(params.id);
 
   if (!parsedId.success) {
+    log.warn('Invalid "id" param format; id: [%s]', params.id);
     throw redirectWithLocale(request, applyRouteUrl);
   }
 
@@ -77,6 +81,7 @@ async function loadState({ params, request, session }: LoadStateArgs) {
   const sessionName = getSessionName(id);
 
   if (!session.has(sessionName)) {
+    log.warn('Apply session has not been found; sessionName: [%s]', sessionName);
     throw redirectWithLocale(request, applyRouteUrl);
   }
 
@@ -92,6 +97,7 @@ async function loadState({ params, request, session }: LoadStateArgs) {
   if (differenceInMinutes(now, timeUpdated) >= 15) {
     session.unset(sessionName);
     session.unset(timeUpdatedSessionName);
+    log.warn('Apply session has expired; sessionName: [%s]', sessionName);
     throw redirectWithLocale(request, applyRouteUrl);
   }
 
@@ -99,13 +105,16 @@ async function loadState({ params, request, session }: LoadStateArgs) {
   // the current route is not the confirmation page.
   const confirmationRouteUrl = `/apply/${id}/confirmation`;
   if (state.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
+    log.warn('Redirecting user to "%s" since the application has been submitted; sessionName: [%s], ', sessionName, confirmationRouteUrl);
     throw redirectWithLocale(request, confirmationRouteUrl);
   }
 
   // Redirect to the first flow page if the application has not been submitted and
   // the current route is the confirmation page.
+  const termsAndConditionsRouteUrl = `/apply/${id}/terms-and-condition`;
   if (!state.submissionInfo && pathname.endsWith(confirmationRouteUrl)) {
-    throw redirectWithLocale(request, `/apply/${id}/type-of-application`);
+    log.warn('Redirecting user to "%s" since the application has not been submitted; sessionName: [%s], ', sessionName, termsAndConditionsRouteUrl);
+    throw redirectWithLocale(request, termsAndConditionsRouteUrl);
   }
 
   return { id: id, state };

@@ -7,7 +7,7 @@ import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/date-of-bir
 
 vi.mock('date-fns');
 
-vi.mock('~/route-helpers/apply-route-helpers', () => ({
+vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
   getApplyRouteHelpers: vi.fn().mockReturnValue({
     loadState: vi.fn().mockReturnValue({
       id: '123',

@@ -13,7 +13,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers';
+import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -91,7 +91,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowTypeOfApplication() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, id } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
@@ -144,7 +144,7 @@ export default function ApplyFlowTypeOfApplication() {
             errorMessage={errorMessages['input-radio-type-of-application-option-0']}
           />
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" to="/apply" disabled={isSubmitting}>
+            <ButtonLink id="back-button" to={`/apply/${id}/terms-and-conditions`} disabled={isSubmitting}>
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('apply:eligibility.type-of-application.back-btn')}
             </ButtonLink>
