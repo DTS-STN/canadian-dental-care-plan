@@ -1,6 +1,6 @@
 import { createMemorySessionStorage, redirect } from '@remix-run/node';
 
-import { differenceInYears, isValid, parse } from 'date-fns';
+import { differenceInYears, isPast, isValid, parse } from 'date-fns';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
@@ -84,6 +84,7 @@ describe('_public.apply.id.date-of-birth', () => {
       formData.append('dateOfBirth', '1959-01-01');
 
       vi.mocked(isValid).mockReturnValueOnce(true);
+      vi.mocked(isPast).mockReturnValueOnce(true);
       vi.mocked(parse).mockReturnValueOnce(new Date(1959, 0, 1));
       vi.mocked(differenceInYears).mockReturnValueOnce(65);
 
@@ -106,6 +107,7 @@ describe('_public.apply.id.date-of-birth', () => {
       formData.append('dateOfBirth', '2000-01-01');
 
       vi.mocked(isValid).mockReturnValueOnce(true);
+      vi.mocked(isPast).mockReturnValueOnce(true);
       vi.mocked(parse).mockReturnValueOnce(new Date(2000, 0, 1));
       vi.mocked(differenceInYears).mockReturnValueOnce(64);
 

@@ -5,7 +5,7 @@ import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { differenceInYears, isValid, parse } from 'date-fns';
+import { differenceInYears, isPast, isValid, parse } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -58,7 +58,8 @@ export async function action({ context: { session }, params, request }: ActionFu
     .string()
     .trim()
     .min(1, { message: t('apply:eligibility.date-of-birth.error-message.date-of-birth-required-and-valid') })
-    .refine((val) => isValid(parse(val, 'yyyy-MM-dd', new Date())), { message: t('apply:eligibility.date-of-birth.error-message.date-of-birth-required-and-valid') });
+    .refine((val) => isValid(parse(val, 'yyyy-MM-dd', new Date())), { message: t('apply:eligibility.date-of-birth.error-message.date-of-birth-required-and-valid') })
+    .refine((val) => isPast(parse(val, 'yyyy-MM-dd', new Date())), { message: t('apply:eligibility.date-of-birth.error-message.date-of-birth-is-past') });
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
