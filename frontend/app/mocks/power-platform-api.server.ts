@@ -59,6 +59,10 @@ export function getPowerPlatformApiMockHandlers() {
     //
     http.post('https://api.example.com/applicant/', async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
+      const subscriptionKey = request.headers.get('Ocp-Apim-Subscription-Key');
+      if (!subscriptionKey) {
+        return new HttpResponse(null, { status: 401 });
+      }
 
       const parsedSinId = sinIdSchema.parse(await request.json()).Applicant.PersonSINIdentification.IdentificationID;
       const peronalInformationEntity = getPersonalInformation(parsedSinId);
