@@ -1,22 +1,22 @@
 import type { ReactNode } from 'react';
 
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { parse } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
-import { ButtonLink } from '~/components/buttons';
+import { Button } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers';
 import { getLookupService } from '~/services/lookup-service.server';
 import { toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, getLocale } from '~/utils/locale-utils.server';
+import { getFixedT, getLocale, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -127,8 +127,16 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   });
 }
 
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  const applyRouteHelpers = getApplyRouteHelpers();
+  await applyRouteHelpers.loadState({ params, request, session });
+  const sessionResponseInit = await applyRouteHelpers.clearState({ params, request, session });
+  return redirectWithLocale(request, '/apply', sessionResponseInit);
+}
+
 export default function ApplyFlowConfirm() {
   const { t } = useTranslation(handle.i18nNamespaces);
+  const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo } = useLoaderData<typeof loader>();
 
   const mscaLink = <InlineLink to={t('confirm.msca-link')} />;
@@ -153,15 +161,17 @@ export default function ApplyFlowConfirm() {
       <p className="mt-4">
         <Trans ns={handle.i18nNamespaces} i18nKey="confirm.print-copy-text" components={{ noPrint: <span className="print:hidden" /> }} />
       </p>
-      <button
-        className="mt-8 inline-flex w-44 items-center justify-center rounded bg-gray-800 px-5 py-2.5 align-middle font-lato text-xl font-semibold text-white outline-offset-2 hover:bg-gray-900 print:hidden"
+      <Button
+        variant="primary"
+        size="lg"
+        className="mt-8 print:hidden"
         onClick={(event) => {
           event.preventDefault();
           window.print();
         }}
       >
         {t('confirm.print-btn')}
-      </button>
+      </Button>
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.whats-next')}</h2>
       <p className="mt-4">{t('confirm.begin-process')}</p>
       <p className="mt-4">
@@ -225,21 +235,23 @@ export default function ApplyFlowConfirm() {
         <li>{t('confirm.dental-public', { access: dentalInsurance.selectedBenefits ? dentalInsurance.selectedBenefits : t('confirm.no') })}</li>
       </UnorderedList>
 
-      <button
-        className="mt-8 inline-flex w-44 items-center justify-center rounded bg-gray-800 px-5 py-2.5 align-middle font-lato text-xl font-semibold text-white outline-offset-2 hover:bg-gray-900 print:hidden"
+      <Button
+        className="mt-5 print:hidden"
+        size="lg"
+        variant="primary"
         onClick={(event) => {
           event.preventDefault();
           window.print();
         }}
       >
         {t('confirm.print-btn')}
-      </button>
+      </Button>
 
-      <div className="mt-10 flex flex-wrap items-center gap-3">
-        <ButtonLink variant="primary" onClick={() => sessionStorage.removeItem('flow.state')} to="/apply">
+      <fetcher.Form method="post" noValidate className="mt-5 flex flex-wrap items-center gap-3">
+        <Button variant="primary" onClick={() => sessionStorage.removeItem('flow.state')} size="lg" className="print:hidden">
           {t('apply:confirm.exit')}
-        </ButtonLink>
-      </div>
+        </Button>
+      </fetcher.Form>
     </div>
   );
 }
