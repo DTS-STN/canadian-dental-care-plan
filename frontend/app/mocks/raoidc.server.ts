@@ -150,7 +150,7 @@ async function generateUserInfoToken(clientPublicKeyPem: string, serverPrivateKe
     iss: 'GC-ECAS-MOCK',
     locale: 'en-CA',
     sid: '00000000-0000-0000-0000-000000000000',
-    sin: '000000000',
+    sin: '800011819',
     sub: '00000000-0000-0000-0000-000000000000',
   };
 
