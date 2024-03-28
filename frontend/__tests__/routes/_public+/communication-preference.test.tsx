@@ -1,4 +1,4 @@
-import { Session } from '@remix-run/node';
+import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -64,15 +64,17 @@ describe('_public.apply.id.communication-preference', () => {
 
   describe('loader()', () => {
     it('should id, state, country list and region list', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+
       const response = await loader({
         request: new Request('http://localhost:3000/apply/123/communication-preference'),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 
       const data = await response.json();
 
-      expect(data).toEqual({
+      expect(data).toMatchObject({
         communicationMethodEmail: {
           id: 'email',
           nameEn: 'Email',
@@ -109,17 +111,21 @@ describe('_public.apply.id.communication-preference', () => {
   });
 
   describe('action()', () => {
+    afterEach(() => {
+      vi.clearAllMocks();
+    });
+
     it('should validate required preferred method', async () => {
-      afterEach(() => {
-        vi.clearAllMocks();
-      });
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('csrfToken', 'csrfToken');
 
       const formData = new FormData();
+      formData.append('_csrf', 'csrfToken');
       formData.append('preferredLanguage', 'fr');
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 
@@ -129,18 +135,18 @@ describe('_public.apply.id.communication-preference', () => {
     });
 
     it('should validate required email field', async () => {
-      afterEach(() => {
-        vi.clearAllMocks();
-      });
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('csrfToken', 'csrfToken');
 
       const formData = new FormData();
+      formData.append('_csrf', 'csrfToken');
       formData.append('preferredMethod', 'email');
       formData.append('email', '');
       formData.append('preferredLanguage', 'fr');
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 
@@ -150,11 +156,11 @@ describe('_public.apply.id.communication-preference', () => {
     });
 
     it('should validate required mismatched email addresses', async () => {
-      afterEach(() => {
-        vi.clearAllMocks();
-      });
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('csrfToken', 'csrfToken');
 
       const formData = new FormData();
+      formData.append('_csrf', 'csrfToken');
       formData.append('preferredMethod', 'email');
       formData.append('email', 'john@gmail.com');
       formData.append('confirmEmail', 'johndoe@gmail.com');
@@ -162,7 +168,7 @@ describe('_public.apply.id.communication-preference', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 

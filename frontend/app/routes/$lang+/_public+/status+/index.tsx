@@ -1,6 +1,6 @@
-import type { ActionFunctionArgs } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useActionData } from '@remix-run/react';
+import { Form, useActionData, useLoaderData } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -13,6 +13,7 @@ import { InputField } from '~/components/input-field';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getLogger } from '~/utils/logging.server';
 import { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
@@ -21,13 +22,28 @@ export const handle = {
   pageTitleI18nKey: 'status:page-title',
 } as const satisfies RouteHandleData;
 
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+  const csrfToken = String(session.get('csrfToken'));
+  return json({ csrfToken });
+}
+
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  const log = getLogger('status/index');
+
   const formDataSchema = z.object({
     sin: z.string().trim().min(1, { message: 'Please enter your SIN' }),
     code: z.string().trim().min(1, { message: 'Please enter your application code' }),
   });
 
   const formData = Object.fromEntries(await request.formData());
+  const expectedCsrfToken = String(session.get('csrfToken'));
+  const submittedCsrfToken = String(formData['_csrf']);
+
+  if (expectedCsrfToken !== submittedCsrfToken) {
+    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
+    throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
   const parsedDataResult = formDataSchema.safeParse(formData);
 
   const response: {
@@ -51,6 +67,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function StatusChecker() {
+  const { csrfToken } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const { t } = useTranslation(handle.i18nNamespaces);
 
@@ -106,6 +123,7 @@ export default function StatusChecker() {
         <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.report-a-concern" components={{ fileacomplaint }} />
       </Collapsible>
       <Form method="post" noValidate>
+        <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="space-y-6">
           <InputField id="sin" name="sin" label="Please enter your SIN" required />
           <InputField id="code" name="code" label="Please enter your application code" required />

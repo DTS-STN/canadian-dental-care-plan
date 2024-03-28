@@ -21,6 +21,7 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
@@ -67,12 +68,15 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const allRegions = await lookupService.getAllRegions();
   const regions = allRegions.filter((region) => region.countryId === CANADA_COUNTRY_ID);
 
+  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:dental-benefits.title') }) };
 
-  return json({ federalDentalBenefits, federalSocialPrograms, id, meta, provincialTerritorialDentalBenefits, provincialTerritorialSocialPrograms, regions, defaultState: state.dentalBenefits, editMode: state.editMode });
+  return json({ federalDentalBenefits, federalSocialPrograms, id, csrfToken, meta, provincialTerritorialDentalBenefits, provincialTerritorialSocialPrograms, regions, defaultState: state.dentalBenefits, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  const log = getLogger('apply/federal-provincial-territorial');
+
   const applyRouteHelpers = getApplyRouteHelpers();
   const { id } = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -103,6 +107,14 @@ export async function action({ context: { session }, params, request }: ActionFu
     });
 
   const formData = await request.formData();
+  const expectedCsrfToken = String(session.get('csrfToken'));
+  const submittedCsrfToken = String(formData.get('_csrf'));
+
+  if (expectedCsrfToken !== submittedCsrfToken) {
+    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
+    throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
   const dentalBenefits = {
     federalBenefit: String(formData.get('federalBenefit') ?? ''),
     federalSocialProgram: formData.get('federalSocialProgram') ? String(formData.get('federalSocialProgram')) : undefined,
@@ -122,7 +134,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function AccessToDentalInsuranceQuestion() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, defaultState, id, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, provincialTerritorialDentalBenefits, federalDentalBenefits, regions, defaultState, id, editMode } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [federalBenefitValue, setFederalBenefitValue] = useState(defaultState?.federalBenefit);
@@ -200,6 +212,7 @@ export default function AccessToDentalInsuranceQuestion() {
       <div className="max-w-prose">
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" noValidate>
+          <input type="hidden" name="_csrf" value={csrfToken} />
           <section>
             <p className="mb-4">{t('dental-benefits.access-to-dental')}</p>
             <p className="mb-4">{t('dental-benefits.eligibility-criteria')}</p>

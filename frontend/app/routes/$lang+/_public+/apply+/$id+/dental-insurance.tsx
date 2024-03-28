@@ -19,6 +19,7 @@ import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
@@ -42,12 +43,15 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
   const options = await lookupService.getAllAccessToDentalInsuranceOptions();
 
+  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:dental-insurance.title') }) };
 
-  return json({ id, meta, options, defaultState: state.dentalInsurance, editMode: state.editMode });
+  return json({ id, csrfToken, meta, options, defaultState: state.dentalInsurance, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  const log = getLogger('apply/dental-insurance');
+
   const applyRouteHelpers = getApplyRouteHelpers();
   const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -59,6 +63,14 @@ export async function action({ context: { session }, params, request }: ActionFu
     .min(1, t('apply:dental-insurance.error-message.dental-insurance-required'));
 
   const formData = await request.formData();
+  const expectedCsrfToken = String(session.get('csrfToken'));
+  const submittedCsrfToken = String(formData.get('_csrf'));
+
+  if (expectedCsrfToken !== submittedCsrfToken) {
+    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
+    throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
   const dentalInsurance = String(formData.get('dentalInsurance') ?? '');
   const parsedDataResult = dentalInsuranceSchema.safeParse(dentalInsurance);
 
@@ -72,7 +84,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function AccessToDentalInsuranceQuestion() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { options, defaultState, id, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, options, defaultState, id, editMode } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
@@ -126,6 +138,7 @@ export default function AccessToDentalInsuranceQuestion() {
       <div className="max-w-prose">
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" noValidate>
+          <input type="hidden" name="_csrf" value={csrfToken} />
           {options.length > 0 && (
             <div className="my-6">
               <InputRadios
