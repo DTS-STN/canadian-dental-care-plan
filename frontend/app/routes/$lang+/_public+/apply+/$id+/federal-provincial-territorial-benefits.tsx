@@ -16,7 +16,7 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
-import { getApplyFlow } from '~/routes-flow/apply-flow';
+import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -55,9 +55,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const { CANADA_COUNTRY_ID } = getEnv();
-  const applyFlow = getApplyFlow();
+  const applyRouteHelpers = getApplyRouteHelpers();
   const lookupService = getLookupService();
-  const { id, state } = await applyFlow.loadState({ params, request, session });
+  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const federalDentalBenefits = await lookupService.getAllFederalDentalBenefit();
@@ -73,8 +73,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const applyFlow = getApplyFlow();
-  const { id } = await applyFlow.loadState({ params, request, session });
+  const applyRouteHelpers = getApplyRouteHelpers();
+  const { id } = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -116,7 +116,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const sessionResponseInit = await applyFlow.saveState({ params, request, session, state: { dentalBenefits: parsedDataResult.data, editMode: true } });
+  const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { dentalBenefits: parsedDataResult.data, editMode: true } });
   return redirectWithLocale(request, `/apply/${id}/review-information`, sessionResponseInit);
 }
 

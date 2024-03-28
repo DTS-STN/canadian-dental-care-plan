@@ -10,7 +10,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import pageIds from '../../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
-import { getApplyFlow } from '~/routes-flow/apply-flow';
+import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -28,8 +28,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const applyFlow = getApplyFlow();
-  const { id } = await applyFlow.loadState({ params, request, session });
+  const applyRouteHelpers = getApplyRouteHelpers();
+  const { id } = await applyRouteHelpers.loadState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.dob-eligibility.page-title') }) };
@@ -38,9 +38,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const applyFlow = getApplyFlow();
-  await applyFlow.loadState({ params, request, session });
-  const sessionResponseInit = await applyFlow.clearState({ params, request, session });
+  const applyRouteHelpers = getApplyRouteHelpers();
+  await applyRouteHelpers.loadState({ params, request, session });
+  const sessionResponseInit = await applyRouteHelpers.clearState({ params, request, session });
   return redirectWithLocale(request, '/', sessionResponseInit);
 }
 

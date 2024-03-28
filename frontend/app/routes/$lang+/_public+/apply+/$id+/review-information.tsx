@@ -15,7 +15,7 @@ import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
-import { getApplyFlow } from '~/routes-flow/apply-flow';
+import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers';
 import { getLookupService } from '~/services/lookup-service.server';
 import { toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -53,8 +53,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const applyFlow = getApplyFlow();
-  const { id, state } = await applyFlow.loadState({ params, request, session });
+  const applyRouteHelpers = getApplyRouteHelpers();
+  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
   const maritalStatuses = await getLookupService().getAllMaritalStatuses();
   const provincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
   const federalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
@@ -153,8 +153,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const applyFlow = getApplyFlow();
-  const { id, state } = await applyFlow.loadState({ params, request, session });
+  const applyRouteHelpers = getApplyRouteHelpers();
+  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
 
   // prettier-ignore
   if (!state.applicantInformation ||
@@ -174,7 +174,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     submittedOn: new Date().toISOString(),
   };
 
-  const sessionResponseInit = await applyFlow.saveState({ params, request, session, state: { submissionInfo } });
+  const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { submissionInfo } });
 
   return redirectWithLocale(request, `/apply/${id}/confirmation`, sessionResponseInit);
 }
