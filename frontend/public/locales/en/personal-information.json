@@ -39,7 +39,8 @@
       "button": {
         "change": "Change",
         "cancel": "Cancel"
-      }
+      },
+      "updated-notification": "Home address updated"
     },
     "address-accuracy": {
       "page-title": "Home Address Accuracy",
@@ -52,7 +53,8 @@
       "invalid-address-info": "Your address is compared against Canada Post information for accuracy. However, in some cases, the system may not be able to verify the address's accuracy. Use this address if you are certain it is correct.",
       "note": "Please note: Choose \"Continue\" if the home address is correct or choose \"Re-enter address\" if changes are required",
       "requested-change": "Requested change:",
-      "re-enter-address": "Re-enter your address"
+      "re-enter-address": "Re-enter your address",
+      "updated-notification": "Home address updated"
     },
     "suggested": {
       "page-title": "Suggested address",
@@ -70,21 +72,7 @@
       "note": "Please note: Your address is compared against Canada Post information for accuracy. However, in some cases, the system may not be able to verify the address's accuracy. Use this address if you are certain it is correct.",
       "continue": "Continue",
       "cancel": "Cancel",
-      "edit": "Return to edit page"
-    },
-    "confirm": {
-      "page-title": "Confirm",
-      "subtitle": "Please confirm the home address change below.",
-      "breadcrumbs": {
-        "personal-information": "Personal information",
-        "address-change-confirm": "Confirm"
-      },
-      "previous-home-address": "Previous home address",
-      "new-home-address": "New home address",
-      "button": {
-        "confirm": "Confirm",
-        "cancel": "Cancel"
-      },
+      "edit": "Return to edit page",
       "updated-notification": "Home address updated"
     }
   },
