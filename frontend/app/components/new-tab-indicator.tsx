@@ -1,10 +1,14 @@
-import type { ComponentProps, ReactNode } from 'react';
+import type { ComponentProps } from 'react';
 
-export interface NewTabIndicatorProps extends ComponentProps<'span'> {
-  children: ReactNode;
-}
+import { useTranslation } from 'react-i18next';
 
-export function NewTabIndicator(props: NewTabIndicatorProps) {
-  const { children } = props;
-  return <span className="sr-only">{children}</span>;
+import { cn } from '~/utils/tw-utils';
+
+export function NewTabIndicator({ className, ...props }: Omit<ComponentProps<'span'>, 'children'>) {
+  const { t } = useTranslation('gcweb');
+  return (
+    <span className={cn('sr-only', className)} {...props}>
+      &#32;({t('screen-reader.new-tab')})
+    </span>
+  );
 }

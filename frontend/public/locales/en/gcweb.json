@@ -124,6 +124,6 @@
     }
   },
   "screen-reader": {
-    "newtab": "Opens in a new tab"
+    "new-tab": "opens in a new tab"
   }
 }
