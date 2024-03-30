@@ -7,7 +7,6 @@ import { useFetcher, useLoaderData } from '@remix-run/react';
 import { faSpinner, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { parse } from 'date-fns';
-import { randomBytes } from 'node:crypto';
 import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../../page-ids.json';
@@ -15,7 +14,9 @@ import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
+import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -154,6 +155,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
+  const benefitApplicationService = getBenefitApplicationService();
   const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
 
   // prettier-ignore
@@ -169,8 +171,19 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   // TODO submit to the API and grab the confirmation code from the response
+  const benefitApplicationRequest = toBenefitApplicationRequest({
+    applicantInformation: state.applicantInformation,
+    communicationPreferences: state.communicationPreferences,
+    dateOfBirth: state.dateOfBirth,
+    dentalBenefits: state.dentalBenefits,
+    dentalInsurance: state.dentalInsurance,
+    personalInformation: state.personalInformation,
+  });
+
+  const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
+
   const submissionInfo: SubmissionInfoState = {
-    confirmationCode: `${randomBytes(4).toString('hex')}-${randomBytes(4).toString('hex')}-${randomBytes(4).toString('hex')}`.toUpperCase(),
+    confirmationCode: confirmationCode,
     submittedOn: new Date().toISOString(),
   };
 

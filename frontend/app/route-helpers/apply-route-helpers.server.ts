@@ -24,7 +24,7 @@ const log = getLogger('apply-route-helpers.server');
  */
 const idSchema = z.string().uuid();
 
-interface ApplyState {
+export interface ApplyState {
   applicantInformation?: ApplicantInformationState;
   communicationPreferences?: CommunicationPreferencesState;
   dateOfBirth?: DateOfBirthState;
