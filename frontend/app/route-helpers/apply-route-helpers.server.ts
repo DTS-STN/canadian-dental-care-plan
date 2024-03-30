@@ -13,7 +13,7 @@ import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/pa
 import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/personal-information';
 import { ReviewInformationState, SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/review-information';
 import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/tax-filing';
-import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-of-application';
+import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-application';
 import { redirectWithLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 

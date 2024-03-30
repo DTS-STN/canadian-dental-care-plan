@@ -71,7 +71,7 @@ export default function ApplyFlowApplicationDelegate() {
         </p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
-        <ButtonLink type="button" to={`/apply/${id}/type-of-application`} disabled={isSubmitting}>
+        <ButtonLink type="button" to={`/apply/${id}/type-application`} disabled={isSubmitting}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:eligibility.application-delegate.back-btn')}
         </ButtonLink>
