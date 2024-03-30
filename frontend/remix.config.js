@@ -60,40 +60,40 @@ export default {
           // public application form; accessible via requests to /en/public/apply/** or /fr/public/apply/**
           biRoute(['apply', 'appliquer'], 'routes/$lang+/_public+/apply+/_route.tsx', () => {
             biRoute([''], 'routes/$lang+/_public+/apply+/index.tsx', { index: true });
-            biRoute([':id', 'appliquer/:id'], 'routes/$lang+/_public+/apply+/$id+/_route.tsx', () => {
-              biRoute(['applicant-information', 'renseignements-sur-le-demandeur'], 'routes/$lang+/_public+/apply+/$id+/applicant-information.tsx');
-              biRoute(['application-delegate', 'delegue-aux-candidatures'], 'routes/$lang+/_public+/apply+/$id+/application-delegate.tsx');
-              biRoute(['communication-preference', 'preference-de-communication'], 'routes/$lang+/_public+/apply+/$id+/communication-preference.tsx');
+            biRoute([':id'], 'routes/$lang+/_public+/apply+/$id+/_route.tsx', () => {
+              biRoute(['applicant-information', 'renseignements-demandeur'], 'routes/$lang+/_public+/apply+/$id+/applicant-information.tsx');
+              biRoute(['application-delegate', 'delegue-demande'], 'routes/$lang+/_public+/apply+/$id+/application-delegate.tsx');
+              biRoute(['communication-preference', 'preference-communication'], 'routes/$lang+/_public+/apply+/$id+/communication-preference.tsx');
               biRoute(['confirmation', 'confirmation'], 'routes/$lang+/_public+/apply+/$id+/confirmation.tsx');
               biRoute(['date-of-birth', 'date-de-naissance'], 'routes/$lang+/_public+/apply+/$id+/date-of-birth.tsx');
               biRoute(['dental-insurance', 'assurance-dentaire'], 'routes/$lang+/_public+/apply+/$id+/dental-insurance.tsx');
               biRoute(['dob-eligibility', 'ddn-admissibilite'], 'routes/$lang+/_public+/apply+/$id+/dob-eligibility.tsx');
-              biRoute(['exit-application', 'quitter-la-demande'], 'routes/$lang+/_public+/apply+/$id+/exit-application.tsx');
-              biRoute(['federal-provincial-territorial-benefits', 'prestations-dentaires-federales-provinciales-ou-territoriales'], 'routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits.tsx');
-              biRoute(['file-your-taxes', 'produire-votre-declaration-de-revenus'], 'routes/$lang+/_public+/apply+/$id+/file-your-taxes.tsx');
-              biRoute(['partner-information', 'renseignements-sur-les-partenaires'], 'routes/$lang+/_public+/apply+/$id+/partner-information.tsx');
+              biRoute(['exit-application', 'quitter-demande'], 'routes/$lang+/_public+/apply+/$id+/exit-application.tsx');
+              biRoute(['federal-provincial-territorial-benefits', 'prestations-dentaires-federales-provinciales-territoriales'], 'routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits.tsx');
+              biRoute(['file-taxes', 'produire-declaration-revenus'], 'routes/$lang+/_public+/apply+/$id+/file-taxes.tsx');
+              biRoute(['partner-information', 'renseignements-partenaire'], 'routes/$lang+/_public+/apply+/$id+/partner-information.tsx');
               biRoute(['personal-information', 'renseignements-personnels'], 'routes/$lang+/_public+/apply+/$id+/personal-information.tsx');
-              biRoute(['review-information', 'revue-vos-renseignements'], 'routes/$lang+/_public+/apply+/$id+/review-information.tsx');
-              biRoute(['tax-filing', 'declaration-de-revenus'], 'routes/$lang+/_public+/apply+/$id+/tax-filing.tsx');
-              biRoute(['terms-and-conditions', 'conditions-d-utilisation'], 'routes/$lang+/_public+/apply+/$id+/terms-and-conditions.tsx');
-              biRoute(['type-of-application', 'type-de-demande'], 'routes/$lang+/_public+/apply+/$id+/type-of-application.tsx');
+              biRoute(['review-information', 'revue-renseignements'], 'routes/$lang+/_public+/apply+/$id+/review-information.tsx');
+              biRoute(['tax-filing', 'produire-declaration-revenus'], 'routes/$lang+/_public+/apply+/$id+/tax-filing.tsx');
+              biRoute(['terms-and-conditions', 'conditions-utilisation'], 'routes/$lang+/_public+/apply+/$id+/terms-and-conditions.tsx');
+              biRoute(['type-application', 'type-demande'], 'routes/$lang+/_public+/apply+/$id+/type-application.tsx');
             });
           });
           // public status checker; accessible via requests to /en/public/status/** or /fr/public/status/**
-          biRoute(['status', 'verificateur-demande'], 'routes/$lang+/_public+/status+/index.tsx', { index: true });
+          biRoute(['status', 'statut'], 'routes/$lang+/_public+/status+/index.tsx', { index: true });
         });
 
         // protected routes
         route('', 'routes/$lang+/_protected+/_route.tsx', () => {
           biRoute(['data-unavailable', 'donnees-indisponibles'], 'routes/$lang+/_protected+/data-unavailable.tsx');
-          biRoute(['home', 'accuiel'], 'routes/$lang+/_protected+/home.tsx');
+          biRoute(['home', 'accueil'], 'routes/$lang+/_protected+/home.tsx');
           biRoute(['letters', 'lettres'], 'routes/$lang+/_protected+/letters+/_route.tsx', () => {
             biRoute([''], 'routes/$lang+/_protected+/letters+/index.tsx', { index: true });
             biRoute([':id/download', ':id/telecharger'], 'routes/$lang+/_protected+/letters+/$id.download.tsx');
           });
           biRoute(['personal-information', 'informations-personnelles'], 'routes/$lang+/_protected+/personal-information+/_route.tsx', () => {
             biRoute([''], 'routes/$lang+/_protected+/personal-information+/index.tsx', { index: true });
-            biRoute(['home-address', 'adresse-du-domicile'], 'routes/$lang+/_protected+/personal-information+/home-address+/_route.tsx', () => {
+            biRoute(['home-address', 'adresse-domicile'], 'routes/$lang+/_protected+/personal-information+/home-address+/_route.tsx', () => {
               biRoute(['address-accuracy', 'precision-adresse'], 'routes/$lang+/_protected+/personal-information+/home-address+/address-accuracy.tsx');
               biRoute(['edit', 'modifier'], 'routes/$lang+/_protected+/personal-information+/home-address+/edit.tsx');
               biRoute(['suggested', 'suggere'], 'routes/$lang+/_protected+/personal-information+/home-address+/suggested.tsx');
@@ -103,7 +103,7 @@ export default {
               biRoute(['confirm', 'confirmer'], 'routes/$lang+/_protected+/personal-information+/mailing-address+/confirm.tsx');
               biRoute(['edit', 'modifier'], 'routes/$lang+/_protected+/personal-information+/mailing-address+/edit.tsx');
             });
-            biRoute(['phone-number', 'numéro-de-telephone'], 'routes/$lang+/_protected+/personal-information+/phone-number+/_route.tsx', () => {
+            biRoute(['phone-number', 'numero-telephone'], 'routes/$lang+/_protected+/personal-information+/phone-number+/_route.tsx', () => {
               biRoute(['confirm', 'confirmer'], 'routes/$lang+/_protected+/personal-information+/phone-number+/confirm.tsx');
               biRoute(['edit', 'modifier'], 'routes/$lang+/_protected+/personal-information+/phone-number+/edit.tsx');
             });

@@ -80,7 +80,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { taxFiling2023: parsedDataResult.data } });
 
   if (parsedDataResult.data === TaxFilingOption.No) {
-    return redirectWithLocale(request, `/apply/${id}/file-your-taxes`, sessionResponseInit);
+    return redirectWithLocale(request, `/apply/${id}/file-taxes`, sessionResponseInit);
   }
 
   return redirectWithLocale(request, `/apply/${id}/date-of-birth`, sessionResponseInit);
@@ -133,7 +133,7 @@ export default function ApplyFlowTaxFiling() {
             errorMessage={errorMessages['input-radio-tax-filing-2023-option-0']}
           />
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" to={`/apply/${id}/type-of-application`} disabled={isSubmitting}>
+            <ButtonLink id="back-button" to={`/apply/${id}/type-application`} disabled={isSubmitting}>
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('apply:eligibility.tax-filing.back-btn')}
             </ButtonLink>

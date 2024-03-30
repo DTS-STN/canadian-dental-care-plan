@@ -2,7 +2,7 @@ import { createMemorySessionStorage, redirect } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/type-of-application';
+import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/type-application';
 
 vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
   getApplyRouteHelpers: vi.fn().mockReturnValue({

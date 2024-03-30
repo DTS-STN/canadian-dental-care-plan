@@ -70,7 +70,7 @@ export async function action({ context: { session }, request, params }: ActionFu
 
   const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: {} });
 
-  return redirectWithLocale(request, `/apply/${id}/type-of-application`, sessionResponseInit);
+  return redirectWithLocale(request, `/apply/${id}/type-application`, sessionResponseInit);
 }
 
 export default function ApplyIndex() {
