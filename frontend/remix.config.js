@@ -23,7 +23,7 @@ function multiRoute(routeFn) {
   return (paths, file, optionsOrChildren = {}, childrenFn = () => {}) => {
     const children = typeof optionsOrChildren === 'function' ? optionsOrChildren : childrenFn;
     const options = typeof optionsOrChildren !== 'function' ? optionsOrChildren : {};
-    paths.forEach((path) => routeFn(path, file, { id: `${path}-${randomString(4)}`, ...options }, children));
+    paths.forEach((path) => routeFn(path, file, { id: createRouteId(`${path}-${randomString(4)}`), ...options }, children));
   };
 }
 
@@ -118,3 +118,12 @@ export default {
     });
   },
 };
+
+/**
+ * Replace all instances of :param with $param.
+ *
+ * @param {string} path
+ */
+function createRouteId(path) {
+  return path.replace(/:(.+)/g, '$$$1');
+}
