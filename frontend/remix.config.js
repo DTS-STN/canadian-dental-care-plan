@@ -74,7 +74,7 @@ export default {
               biRoute(['partner-information', 'renseignements-partenaire'], 'routes/$lang+/_public+/apply+/$id+/partner-information.tsx');
               biRoute(['personal-information', 'renseignements-personnels'], 'routes/$lang+/_public+/apply+/$id+/personal-information.tsx');
               biRoute(['review-information', 'revue-renseignements'], 'routes/$lang+/_public+/apply+/$id+/review-information.tsx');
-              biRoute(['tax-filing', 'produire-declaration-revenus'], 'routes/$lang+/_public+/apply+/$id+/tax-filing.tsx');
+              biRoute(['tax-filing', 'declaration-impot'], 'routes/$lang+/_public+/apply+/$id+/tax-filing.tsx');
               biRoute(['terms-and-conditions', 'conditions-utilisation'], 'routes/$lang+/_public+/apply+/$id+/terms-and-conditions.tsx');
               biRoute(['type-application', 'type-demande'], 'routes/$lang+/_public+/apply+/$id+/type-application.tsx');
             });
