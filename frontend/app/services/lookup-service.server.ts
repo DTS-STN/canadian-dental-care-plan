@@ -78,13 +78,6 @@ const avoidedDentalCostTypeSchema = z.object({
   nameFr: z.string().optional(),
 });
 
-const maritalStatusSchema = z.object({
-  id: z.string(),
-  code: z.string(),
-  nameEn: z.string(),
-  nameFr: z.string(),
-});
-
 const equityTypeSchema = z.object({
   id: z.string(),
   nameEn: z.string().optional(),
@@ -133,6 +126,8 @@ function createLookupService() {
     LOOKUP_SVC_ALL_REGIONS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_SEX_AT_BIRTH_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS,
+    ENGLISH_LANGUAGE_CODE,
+    FRENCH_LANGUAGE_CODE,
   } = getEnv();
 
   async function getAllPreferredLanguages() {
@@ -593,21 +588,47 @@ function createLookupService() {
     const url = `${INTEROP_API_BASE_URI}/lookups/marital-statuses`;
     const response = await fetch(url);
 
-    const maritalStatusSchemaList = z.array(maritalStatusSchema);
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed to fetch data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
 
-    if (response.ok) {
-      return maritalStatusSchemaList.parse(await response.json());
+      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    log.error('%j', {
-      message: 'Failed to fetch data',
-      status: response.status,
-      statusText: response.statusText,
-      url: url,
-      responseBody: await response.text(),
+    const maritalStatusSchema = z.object({
+      value: z.array(
+        z.object({
+          OptionSet: z.object({
+            Options: z.array(
+              z.object({
+                Value: z.number(),
+                Label: z.object({
+                  LocalizedLabels: z.array(
+                    z.object({
+                      Label: z.string(),
+                      LanguageCode: z.number(),
+                    }),
+                  ),
+                }),
+              }),
+            ),
+          }),
+        }),
+      ),
     });
 
-    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    const parsedMaritalStatusData = maritalStatusSchema.parse(await response.json());
+    return parsedMaritalStatusData.value[0].OptionSet.Options.map((o) => ({
+      id: o.Value,
+      code: o.Value,
+      nameEn: o.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label,
+      nameFr: o.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label,
+    }));
   }
 
   async function getAllEquityTypes() {

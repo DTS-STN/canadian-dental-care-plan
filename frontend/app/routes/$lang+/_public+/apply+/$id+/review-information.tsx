@@ -198,7 +198,7 @@ export default function ReviewInformation() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const maritalStatusEntity = maritalStatuses.find((ms) => ms.code === userInfo.martialStatus);
+  const maritalStatusEntity = maritalStatuses.find((ms) => ms.code === Number(userInfo.martialStatus));
   const maritalStatus = maritalStatusEntity ? getNameByLanguage(i18n.language, maritalStatusEntity) : userInfo.martialStatus;
 
   const federalSocialProgramEntity = federalSocialPrograms.find((p) => p.id === dentalBenefit.federalBenefit.benefit);
