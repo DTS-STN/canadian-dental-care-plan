@@ -14,6 +14,7 @@ import { InputField } from '~/components/input-field';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
+import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -26,14 +27,16 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+  const { CLIENT_STATUS_ID } = getEnv();
   const csrfToken = String(session.get('csrfToken'));
   const lookupService = getLookupService();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
+  const clientStatus = clientStatusList.find((status) => status.id === CLIENT_STATUS_ID);
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('status:page-title') }) };
 
-  return json({ meta, clientStatusList, csrfToken });
+  return json({ meta, clientStatus, csrfToken });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -78,7 +81,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function StatusChecker() {
   const { csrfToken } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
-  const { clientStatusList } = useLoaderData<typeof loader>();
+  const { clientStatus } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
 
   const hcaptchaTermsOfService = <InlineLink to={t('status:links.hcaptcha')} />;
@@ -143,17 +146,13 @@ export default function StatusChecker() {
         </Button>
       </Form>
 
-      {actionData && (
-        <>
-          {clientStatusList.map((status) => (
-            <ContextualAlert type="info" key={status.id}>
-              <div>
-                <h3 className="mb-2 font-bold">Status</h3>
-                {getNameByLanguage(i18n.language, status)}
-              </div>
-            </ContextualAlert>
-          ))}
-        </>
+      {actionData && clientStatus && (
+        <ContextualAlert type="info" key={clientStatus.id}>
+          <div>
+            <h2 className="mb-2 font-bold">Status</h2>
+            {getNameByLanguage(i18n.language, clientStatus)}
+          </div>
+        </ContextualAlert>
       )}
     </PublicLayout>
   );
