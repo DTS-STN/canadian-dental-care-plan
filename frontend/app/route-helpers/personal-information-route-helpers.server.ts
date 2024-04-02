@@ -1,0 +1,48 @@
+import { Session } from '@remix-run/node';
+
+import { PersonalInfo, getPersonalInformationService } from '~/services/personal-information-service.server';
+import { redirectWithLocale } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
+import { UserinfoToken } from '~/utils/raoidc-utils.server';
+
+const log = getLogger('personal-information-route-helpers.server');
+
+/**
+ * This function first checks the session for cached personal information.
+ * If not found, it retrieves the information from the personal information service using the user's SIN provided in the user info token.
+ *
+ * @param userInfoToken - The user info token containing the user's SIN.
+ * @param request - The incoming HTTP request object.
+ * @param session - The user's session object.
+ * @throws A 401 Unauthorized response if the user info token is missing the SIN.
+ * @throws A redirect to the '/data-unavailable' route if the personal information is not found in the session or service
+ * @returns The user's personal information
+ */
+async function getPersonalInformation(userInfoToken: UserinfoToken, request: Request, session: Session) {
+  if (!userInfoToken.sin) {
+    log.warn('No SIN found in userInfoToken for userId [%s]', userInfoToken.sub);
+    throw new Response(null, { status: 401 });
+  }
+
+  const personalInformationFromSession: PersonalInfo | undefined = session.get('personalInformation');
+  if (personalInformationFromSession) {
+    log.debug('Returning personal information that already exists in session for userId [%s]', userInfoToken.sub);
+    return personalInformationFromSession;
+  }
+
+  const personalInformationService = getPersonalInformationService();
+  const personalInformationFromService = await personalInformationService.getPersonalInformation(userInfoToken.sin);
+  if (personalInformationFromService) {
+    log.debug('Returning personal information from service for userId [%s]', userInfoToken.sub);
+    return personalInformationFromService;
+  }
+
+  log.debug('No personal information found in session or from service for userId [%s]; Redirecting to "/data-unavailable"', userInfoToken.sub);
+  throw redirectWithLocale(request, '/data-unavailable');
+}
+
+export function getPersonalInformationRouteHelpers() {
+  return {
+    getPersonalInformation,
+  };
+}

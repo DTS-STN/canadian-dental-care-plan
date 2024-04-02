@@ -12,14 +12,12 @@ import { getAddressService } from '~/services/address-service.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
-import { getPersonalInformationService } from '~/services/personal-information-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale, redirectWithLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { IdToken } from '~/utils/raoidc-utils.server';
-import type { UserinfoToken } from '~/utils/raoidc-utils.server';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
@@ -41,12 +39,8 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const instrumentationService = getInstrumentationService();
   const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
-  const personalInformationService = await getPersonalInformationService();
 
   await raoidcService.handleSessionValidation(request, session);
-
-  const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  await personalInformationService.getPersonalInformationIntoSession(session, request, '/data-unavailable', userInfoToken.sin);
 
   if (!session.has('newHomeAddress')) {
     instrumentationService.countHttpStatus('home-address.validate.no-session', 302);

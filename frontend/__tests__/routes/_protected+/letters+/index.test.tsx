@@ -46,8 +46,8 @@ vi.mock('~/services/session-service.server', () => ({
 
 vi.mock('~/services/personal-information-service.server', () => ({
   getPersonalInformationService: vi.fn().mockReturnValue({
-    getPersonalInformationIntoSession: vi.fn().mockResolvedValue({
-      clientId: '999999999',
+    getPersonalInformation: vi.fn().mockResolvedValue({
+      clientNumber: '999999999',
     }),
   }),
 }));
