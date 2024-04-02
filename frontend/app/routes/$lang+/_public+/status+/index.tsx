@@ -145,14 +145,16 @@ export default function StatusChecker() {
 
       {actionData && (
         <>
-          {clientStatusList.map((status) => (
-            <ContextualAlert type="info" key={status.id}>
-              <div>
-                <h2 className="mb-2 font-bold">Status</h2>
-                {getNameByLanguage(i18n.language, status)}
-              </div>
-            </ContextualAlert>
-          ))}
+          {clientStatusList
+            .filter((status) => status.id === actionData.status)
+            .map((status) => (
+              <ContextualAlert type="info" key={status.id}>
+                <div>
+                  <h2 className="mb-2 font-bold">Status</h2>
+                  {getNameByLanguage(i18n.language, status)}
+                </div>
+              </ContextualAlert>
+            ))}
         </>
       )}
     </PublicLayout>
