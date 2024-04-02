@@ -1,9 +1,7 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useActionData, useFetcher, useLoaderData } from '@remix-run/react';
+import { Form, useActionData, useLoaderData } from '@remix-run/react';
 
-import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -20,7 +18,6 @@ import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils'
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { RouteHandleData } from '~/utils/route-utils';
-import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
@@ -83,8 +80,6 @@ export default function StatusChecker() {
   const actionData = useActionData<typeof action>();
   const { clientStatusList } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const fetcher = useFetcher<typeof action>();
-  const isSubmitting = fetcher.state !== 'idle';
 
   const hcaptchaTermsOfService = <InlineLink to={t('status:links.hcaptcha')} />;
   const microsoftDataPrivacyPolicy = <InlineLink to={t('status:links.microsoft-data-privacy-policy')} />;
@@ -137,17 +132,16 @@ export default function StatusChecker() {
         <p className="my-4">{t('status:privacy-notice-statement.personal-information')}</p>
         <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.report-a-concern" components={{ fileacomplaint }} />
       </Collapsible>
-      <fetcher.Form method="post" noValidate>
+      <Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="space-y-6">
           <InputField id="code" name="code" label={t('status:form.application-code-label')} helpMessagePrimary={t('status:form.application-code-description')} required />
           <InputField id="sin" name="sin" label={t('status:form.sin-label')} required />
         </div>
-        <Button variant="primary" className="mt-8">
+        <Button className="mt-8" id="submit" variant="primary">
           {t('status:form.submit')}
-          <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
         </Button>
-      </fetcher.Form>
+      </Form>
 
       {actionData && (
         <>
