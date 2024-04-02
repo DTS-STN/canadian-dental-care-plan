@@ -27,13 +27,11 @@ export const handle = {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const csrfToken = String(session.get('csrfToken'));
-  const lookupService = getLookupService();
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('status:page-title') }) };
 
-  return json({ meta, clientStatusList, csrfToken });
+  return json({ meta, csrfToken });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -59,6 +57,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     errors?: z.ZodFormattedError<{ sin: string; code: string }, string>;
     formData?: Partial<z.infer<typeof formDataSchema>>;
     status?: string;
+    clientFriendlyStatus?: { id: string; nameEn: string; nameFr: string };
   } = {};
 
   if (!parsedDataResult.success) {
@@ -68,23 +67,29 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   const applicationStatusService = getApplicationStatusService();
+  const lookupService = getLookupService();
   const { sin, code } = parsedDataResult.data;
-  const status = await applicationStatusService.getStatusId(sin, code);
+  const statusId = await applicationStatusService.getStatusId(sin, code);
 
-  response.status = status ?? undefined;
+  const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
+  const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
+
+  response.status = clientFriendlyStatus?.id ?? undefined;
+  response.clientFriendlyStatus = clientFriendlyStatus ?? undefined;
   return json(response);
 }
 
 export default function StatusChecker() {
   const { csrfToken } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
-  const { clientStatusList } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
 
   const hcaptchaTermsOfService = <InlineLink to={t('status:links.hcaptcha')} />;
   const microsoftDataPrivacyPolicy = <InlineLink to={t('status:links.microsoft-data-privacy-policy')} />;
   const microsoftServiceAgreement = <InlineLink to={t('status:links.microsoft-service-agreement')} />;
   const fileacomplaint = <InlineLink to={t('status:links.file-complaint')} />;
+
+  console.log('status: ', actionData?.status);
 
   // TODO use <PublicLayout> for now
   return (
@@ -143,19 +148,13 @@ export default function StatusChecker() {
         </Button>
       </Form>
 
-      {actionData && (
-        <>
-          {clientStatusList
-            .filter((status) => status.id === actionData.status)
-            .map((status) => (
-              <ContextualAlert type="info" key={status.id}>
-                <div>
-                  <h2 className="mb-2 font-bold">Status</h2>
-                  {getNameByLanguage(i18n.language, status)}
-                </div>
-              </ContextualAlert>
-            ))}
-        </>
+      {actionData && actionData.clientFriendlyStatus && (
+        <ContextualAlert type="info">
+          <div>
+            <h2 className="mb-2 font-bold">Status</h2>
+            {getNameByLanguage(i18n.language, actionData.clientFriendlyStatus)}
+          </div>
+        </ContextualAlert>
       )}
     </PublicLayout>
   );
