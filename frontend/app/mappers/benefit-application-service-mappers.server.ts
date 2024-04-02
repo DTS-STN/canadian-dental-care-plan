@@ -1,15 +1,26 @@
 import { lightFormat, parse } from 'date-fns';
 import validator from 'validator';
 
-import { ApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/applicant-information';
+import { CommunicationPreferencesState } from '~/routes/$lang+/_public+/apply+/$id+/communication-preference';
+import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
+import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/dental-insurance';
+import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits';
+import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/partner-information';
+import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/personal-information';
 import { BenefitApplicationRequest } from '~/schemas/benefit-application-service-schemas.server';
 
-type ApplyStateRequired = Required<Pick<ApplyState, 'applicantInformation' | 'communicationPreferences' | 'dateOfBirth' | 'dentalBenefits' | 'dentalInsurance' | 'personalInformation'>>;
-type ApplyStatePartial = Pick<ApplyState, 'partnerInformation'>;
+interface ToBenefitApplicationRequestArgs {
+  applicantInformation: ApplicantInformationState;
+  communicationPreferences: CommunicationPreferencesState;
+  dateOfBirth: DateOfBirthState;
+  dentalBenefits: DentalBenefitsState;
+  dentalInsurance: DentalInsuranceState;
+  partnerInformation?: PartnerInformationState;
+  personalInformation: PersonalInformationState;
+}
 
-export function toBenefitApplicationRequest(applyState: ApplyStateRequired & ApplyStatePartial): BenefitApplicationRequest {
-  const { partnerInformation, applicantInformation, communicationPreferences, dateOfBirth, dentalBenefits, dentalInsurance, personalInformation } = applyState;
-
+export function toBenefitApplicationRequest({ partnerInformation, applicantInformation, communicationPreferences, dateOfBirth, dentalBenefits, dentalInsurance, personalInformation }: ToBenefitApplicationRequestArgs): BenefitApplicationRequest {
   return {
     BenefitApplication: {
       Applicant: {
@@ -31,33 +42,8 @@ export function toBenefitApplicationRequest(applyState: ApplyStateRequired & App
               ReferenceDataID: communicationPreferences.preferredMethod,
               ReferenceDataName: 'string', // TODO :: SC :: What to put here!?
             },
-            EmailAddress: [
-              {
-                EmailAddressID: communicationPreferences.email ?? communicationPreferences.emailForFuture ?? '',
-              },
-            ],
-            TelephoneNumber: [
-              // Primary Telephone Number
-              {
-                FullTelephoneNumber: {
-                  TelephoneNumberFullID: personalInformation.phoneNumber ?? '',
-                },
-                TelephoneNumberCategoryCode: {
-                  ReferenceDataID: 'string', // TODO :: SC :: What to put here!?
-                  ReferenceDataName: 'Primary',
-                },
-              },
-              // Alternate Telephone Number
-              {
-                FullTelephoneNumber: {
-                  TelephoneNumberFullID: personalInformation.phoneNumberAlt ?? '',
-                },
-                TelephoneNumberCategoryCode: {
-                  ReferenceDataID: 'string', // TODO :: SC :: What to put here!?
-                  ReferenceDataName: 'Alternate',
-                },
-              },
-            ],
+            EmailAddress: toEmailAddress(communicationPreferences),
+            TelephoneNumber: toTelephoneNumber(personalInformation),
           },
         ],
         PersonLanguage: [
@@ -89,25 +75,7 @@ export function toBenefitApplicationRequest(applyState: ApplyStateRequired & App
           IdentificationID: applicantInformation.socialInsuranceNumber,
           IdentificationCategoryText: 'string', // TODO :: SC :: What to put here!?
         },
-        RelatedPerson: [
-          {
-            PersonBirthDate: toDate(partnerInformation?.dateOfBirth),
-            PersonName: [
-              {
-                PersonGivenName: [partnerInformation?.firstName ?? ''],
-                PersonSurName: partnerInformation?.lastName ?? '',
-              },
-            ],
-            PersonRelationshipCode: {
-              ReferenceDataID: applicantInformation.maritalStatus,
-              ReferenceDataName: 'string', // TODO :: SC :: What to put here!?
-            },
-            PersonSINIdentification: {
-              IdentificationID: partnerInformation?.socialInsuranceNumber ?? '',
-              IdentificationCategoryText: 'string', // TODO :: SC :: What to put here!?
-            },
-          },
-        ],
+        RelatedPerson: partnerInformation ? [toRelatedPerson({ ...partnerInformation, maritalStatus: applicantInformation.maritalStatus })] : [],
         MailingSameAsHomeIndicator: personalInformation.copyMailingAddress,
         PreferredMethodCommunicationCode: {
           ReferenceDataID: communicationPreferences.preferredMethod,
@@ -156,83 +124,210 @@ function toDate(date?: string) {
   };
 }
 
-function toAddress(category: 'Mailing' | 'Home', address: { apartment?: string; city?: string; country?: string; postalCode?: string; province?: string; street?: string }) {
+interface ToAddressArgs {
+  apartment?: string;
+  category: 'Mailing' | 'Home';
+  city?: string;
+  country?: string;
+  postalCode?: string;
+  province?: string;
+  street?: string;
+}
+
+function toAddress({ apartment, category, city, country, postalCode, province, street }: ToAddressArgs) {
   return {
     AddressCategoryCode: {
       ReferenceDataID: 'string', // TODO :: SC :: What to put here!?
       ReferenceDataName: category,
     },
-    AddressCityName: address.city ?? '',
+    AddressCityName: city ?? '',
     AddressCountry: {
       CountryCode: {
-        ReferenceDataID: address.country ?? '',
+        ReferenceDataID: country ?? '',
         ReferenceDataName: 'string', // TODO :: SC :: What to put here!?
       },
     },
-    AddressPostalCode: address.postalCode ?? '',
+    AddressPostalCode: postalCode ?? '',
     AddressProvince: {
       ProvinceCode: {
-        ReferenceDataID: address.province ?? '',
+        ReferenceDataID: province ?? '',
         ReferenceDataName: 'string', // TODO :: SC :: What to put here!?
       },
       ProvinceName: 'string', // TODO :: SC :: What to put here!?
     },
-    AddressSecondaryUnitText: address.apartment ?? '',
+    AddressSecondaryUnitText: apartment ?? '',
     AddressStreet: {
-      StreetName: address.street ?? '',
+      StreetName: street ?? '',
     },
   };
 }
 
-function toMailingAddress(personalInformation: ApplyStateRequired['personalInformation']) {
-  return toAddress('Mailing', {
-    apartment: personalInformation.mailingApartment,
-    city: personalInformation.mailingCity,
-    country: personalInformation.mailingCountry,
-    postalCode: personalInformation.mailingCountry,
-    province: personalInformation.mailingProvince,
-    street: personalInformation.mailingAddress,
+interface ToMailingAddressArgs {
+  mailingAddress: string;
+  mailingApartment?: string;
+  mailingCity: string;
+  mailingCountry: string;
+  mailingPostalCode?: string;
+  mailingProvince?: string;
+}
+
+function toMailingAddress({ mailingAddress, mailingApartment, mailingCity, mailingCountry, mailingPostalCode, mailingProvince }: ToMailingAddressArgs) {
+  return toAddress({
+    apartment: mailingApartment,
+    category: 'Mailing',
+    city: mailingCity,
+    country: mailingCountry,
+    postalCode: mailingPostalCode,
+    province: mailingProvince,
+    street: mailingAddress,
   });
 }
 
-function toHomeAddress(personalInformation: ApplyStateRequired['personalInformation']) {
-  if (personalInformation.copyMailingAddress) {
-    return toAddress('Home', {
-      apartment: personalInformation.mailingApartment,
-      city: personalInformation.mailingCity,
-      country: personalInformation.mailingCountry,
-      postalCode: personalInformation.mailingCountry,
-      province: personalInformation.mailingProvince,
-      street: personalInformation.mailingAddress,
+interface ToHomeAddressArgs {
+  copyMailingAddress: boolean;
+  homeAddress?: string;
+  homeApartment?: string;
+  homeCity?: string;
+  homeCountry?: string;
+  homePostalCode?: string;
+  homeProvince?: string;
+  mailingAddress: string;
+  mailingApartment?: string;
+  mailingCity: string;
+  mailingCountry: string;
+  mailingPostalCode?: string;
+  mailingProvince?: string;
+}
+
+function toHomeAddress({ copyMailingAddress, homeAddress, homeApartment, homeCity, homeCountry, homePostalCode, homeProvince, mailingAddress, mailingApartment, mailingCity, mailingCountry, mailingPostalCode, mailingProvince }: ToHomeAddressArgs) {
+  if (copyMailingAddress) {
+    return toAddress({
+      apartment: mailingApartment,
+      category: 'Home',
+      city: mailingCity,
+      country: mailingCountry,
+      postalCode: mailingPostalCode,
+      province: mailingProvince,
+      street: mailingAddress,
     });
   }
 
-  return toAddress('Home', {
-    apartment: personalInformation.homeApartment,
-    city: personalInformation.homeCity,
-    country: personalInformation.homeCountry,
-    postalCode: personalInformation.homeCountry,
-    province: personalInformation.homeProvince,
-    street: personalInformation.homeAddress,
+  return toAddress({
+    apartment: homeApartment,
+    category: 'Home',
+    city: homeCity,
+    country: homeCountry,
+    postalCode: homePostalCode,
+    province: homeProvince,
+    street: homeAddress,
   });
 }
 
-function toInsurancePlan(dentalBenefits: ApplyStateRequired['dentalBenefits']) {
+interface ToInsurancePlanArgs {
+  federalBenefit: 'no' | 'yes';
+  federalSocialProgram?: string;
+  provincialTerritorialBenefit: 'no' | 'yes';
+  provincialTerritorialSocialProgram?: string;
+}
+
+function toInsurancePlan({ federalBenefit, federalSocialProgram, provincialTerritorialBenefit, provincialTerritorialSocialProgram }: ToInsurancePlanArgs) {
   const insurancePlanIdentification = [];
 
-  if (dentalBenefits.federalBenefit == 'yes' && dentalBenefits.federalSocialProgram) {
+  if (federalBenefit === 'yes' && federalSocialProgram && !validator.isEmpty(federalSocialProgram)) {
     insurancePlanIdentification.push({
-      IdentificationID: dentalBenefits.federalSocialProgram,
+      IdentificationID: federalSocialProgram,
       IdentificationCategoryText: 'Federal',
     });
   }
 
-  if (dentalBenefits.provincialTerritorialBenefit == 'yes' && dentalBenefits.provincialTerritorialSocialProgram) {
+  if (provincialTerritorialBenefit === 'yes' && provincialTerritorialSocialProgram && !validator.isEmpty(provincialTerritorialSocialProgram)) {
     insurancePlanIdentification.push({
-      IdentificationID: dentalBenefits.provincialTerritorialSocialProgram,
+      IdentificationID: provincialTerritorialSocialProgram,
       IdentificationCategoryText: 'Provincial',
     });
   }
 
   return [{ InsurancePlanIdentification: insurancePlanIdentification }];
+}
+
+interface ToRelatedPersonArgs {
+  dateOfBirth: string;
+  firstName: string;
+  lastName: string;
+  socialInsuranceNumber: string;
+  maritalStatus: string;
+}
+
+function toRelatedPerson({ dateOfBirth, firstName, lastName, maritalStatus, socialInsuranceNumber }: ToRelatedPersonArgs) {
+  return {
+    PersonBirthDate: toDate(dateOfBirth),
+    PersonName: [
+      {
+        PersonGivenName: [firstName],
+        PersonSurName: lastName,
+      },
+    ],
+    PersonRelationshipCode: {
+      ReferenceDataID: maritalStatus,
+      ReferenceDataName: 'string', // TODO :: SC :: What to put here!?
+    },
+    PersonSINIdentification: {
+      IdentificationID: socialInsuranceNumber,
+      IdentificationCategoryText: 'string', // TODO :: SC :: What to put here!?
+    },
+  };
+}
+
+interface ToEmailAddressArgs {
+  email?: string;
+  emailForFuture?: string;
+}
+
+function toEmailAddress({ email, emailForFuture }: ToEmailAddressArgs) {
+  const emailAddress = [];
+
+  if (email && !validator.isEmpty(email)) {
+    emailAddress.push({ EmailAddressID: email });
+  }
+
+  if (emailForFuture && !validator.isEmpty(emailForFuture)) {
+    emailAddress.push({ EmailAddressID: emailForFuture });
+  }
+
+  return emailAddress;
+}
+
+interface ToTelephoneNumberArgs {
+  phoneNumber?: string;
+  phoneNumberAlt?: string;
+}
+
+function toTelephoneNumber({ phoneNumber, phoneNumberAlt }: ToTelephoneNumberArgs) {
+  const telephoneNumber = [];
+
+  if (phoneNumber && !validator.isEmpty(phoneNumber)) {
+    telephoneNumber.push({
+      FullTelephoneNumber: {
+        TelephoneNumberFullID: phoneNumber,
+      },
+      TelephoneNumberCategoryCode: {
+        ReferenceDataID: 'string', // TODO :: SC :: What to put here!?
+        ReferenceDataName: 'Primary',
+      },
+    });
+  }
+
+  if (phoneNumberAlt && !validator.isEmpty(phoneNumberAlt)) {
+    telephoneNumber.push({
+      FullTelephoneNumber: {
+        TelephoneNumberFullID: phoneNumberAlt,
+      },
+      TelephoneNumberCategoryCode: {
+        ReferenceDataID: 'string', // TODO :: SC :: What to put here!?
+        ReferenceDataName: 'Alternate',
+      },
+    });
+  }
+
+  return telephoneNumber;
 }
