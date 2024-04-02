@@ -94,7 +94,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         .string()
         .trim()
         .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply:personal-information.error-message.phone-number-alt-valid'))
-        .transform((val) => parsePhoneNumber(val, 'CA').formatInternational())
+        .transform((val) => parsePhoneNumber(val, 'CA').formatNational())
         .optional(),
       mailingAddress: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-address-required')),
       mailingApartment: z.string().trim().optional(),
