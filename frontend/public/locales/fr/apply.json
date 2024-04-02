@@ -363,14 +363,16 @@
     "dental-insurance-change": "Modifier les réponses à «\u00a0accès à une autre assurance dentaire\u00a0»",
     "dental-benefit-title": "Accès aux soins dentaires gouvernementaux",
     "dental-benefit-change": "Modifier la réponse à «\u00a0soins dentaires gouvernementaux\u00a0»",
-    "dental-benefit-has-access": "Accès aux soins dentaires gouvernementaux\u00a0: Oui",
-    "dental-benefit-has-no-access": "Accès aux soins dentaires gouvernementaux\u00a0: Non",
+    "dental-benefit-has-access": "Accès aux soins dentaires gouvernementaux\u00a0:",
+    "dental-benefit-has-no-access": "Accès aux soins dentaires gouvernementaux\u00a0:",
     "submit-app-title": "Soumettre votre demande",
     "submit-p-proceed": "En transmettant votre demande, vous consentez à attester de la véracité des informations fournies.",
     "submit-p-false-info": "Si vous fournissez de fausses informations dans votre demande, vous et les autres personnes pour lesquelles vous avez fait une demande pouvez être exclus du régime.",
     "submit-p-repayment": "Si vous ou les membres de votre famille n'étiez pas admissibles, vous ou les membres de votre famille pourriez devoir rembourser le coût total des soins reçus par l'entremise du régime canadien de soins dentaires.",
     "submit-button": "Soumettre la demande",
-    "exit-button": "Quitter la demande"
+    "exit-button": "Quitter la demande",
+    "yes": "Oui",
+    "no": "Non"
   },
   "terms-and-conditions": {
     "page-title": "Présentation d'une demande d'adhésion au Régime canadien de soins dentaires",
