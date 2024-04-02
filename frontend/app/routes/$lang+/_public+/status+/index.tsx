@@ -89,8 +89,6 @@ export default function StatusChecker() {
   const microsoftServiceAgreement = <InlineLink to={t('status:links.microsoft-service-agreement')} />;
   const fileacomplaint = <InlineLink to={t('status:links.file-complaint')} />;
 
-  console.log('status: ', actionData?.status);
-
   // TODO use <PublicLayout> for now
   return (
     <PublicLayout>
