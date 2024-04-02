@@ -14,6 +14,7 @@ import { InputField } from '~/components/input-field';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
+import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -36,6 +37,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('status/index');
+  const { CLIENT_STATUS_SUCCESS_ID } = getEnv();
 
   const formDataSchema = z.object({
     sin: z.string().trim().min(1, { message: 'Please enter your SIN' }),
@@ -58,6 +60,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     formData?: Partial<z.infer<typeof formDataSchema>>;
     status?: string;
     clientFriendlyStatus?: { id: string; nameEn: string; nameFr: string };
+    alertType?: 'warning' | 'success' | 'danger' | 'info';
   } = {};
 
   if (!parsedDataResult.success) {
@@ -76,6 +79,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   response.status = clientFriendlyStatus?.id ?? undefined;
   response.clientFriendlyStatus = clientFriendlyStatus ?? undefined;
+  response.alertType = clientFriendlyStatus?.id === CLIENT_STATUS_SUCCESS_ID ? 'success' : 'info';
   return json(response);
 }
 
@@ -88,7 +92,6 @@ export default function StatusChecker() {
   const microsoftDataPrivacyPolicy = <InlineLink to={t('status:links.microsoft-data-privacy-policy')} />;
   const microsoftServiceAgreement = <InlineLink to={t('status:links.microsoft-service-agreement')} />;
   const fileacomplaint = <InlineLink to={t('status:links.file-complaint')} />;
-
   // TODO use <PublicLayout> for now
   return (
     <PublicLayout>
@@ -147,7 +150,7 @@ export default function StatusChecker() {
       </Form>
 
       {actionData && actionData.clientFriendlyStatus && (
-        <ContextualAlert type="info">
+        <ContextualAlert type={actionData.alertType ?? 'info'}>
           <div>
             <h2 className="mb-2 font-bold">Status</h2>
             {getNameByLanguage(i18n.language, actionData.clientFriendlyStatus)}
