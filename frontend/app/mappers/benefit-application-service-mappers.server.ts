@@ -24,24 +24,10 @@ export function toBenefitApplicationRequest({ partnerInformation, applicantInfor
   return {
     BenefitApplication: {
       Applicant: {
-        ApplicantCategoryCode: {
-          ReferenceDataID: 'string', // TODO :: SC :: What to put here!?
-          ReferenceDataName: 'Primary',
-        },
-        ClientIdentification: [
-          {
-            IdentificationID: 'string', // TODO :: SC :: What to put here!?
-            IdentificationCategoryText: 'Client Number',
-          },
-        ],
         PersonBirthDate: toDate(dateOfBirth),
         PersonContactInformation: [
           {
             Address: [toMailingAddress(personalInformation), toHomeAddress(personalInformation)],
-            ContactInformationCategoryCode: {
-              ReferenceDataID: communicationPreferences.preferredMethod,
-              ReferenceDataName: 'string', // TODO :: SC :: What to put here!?
-            },
             EmailAddress: toEmailAddress(communicationPreferences),
             TelephoneNumber: toTelephoneNumber(personalInformation),
           },
@@ -49,20 +35,14 @@ export function toBenefitApplicationRequest({ partnerInformation, applicantInfor
         PersonLanguage: [
           {
             CommunicationCategoryCode: {
-              ReferenceDataID: 'string', // TODO :: SC :: What to put here!?
-              ReferenceDataName: 'string', // TODO :: SC :: What to put here!?
-            },
-            LanguageCode: {
               ReferenceDataID: communicationPreferences.preferredLanguage,
-              ReferenceDataName: 'string', // TODO :: SC :: What to put here!?
             },
-            PreferredIndicator: true, // TODO :: SC :: What to put here!?
+            PreferredIndicator: true, // Static value
           },
         ],
         PersonMaritalStatus: {
           StatusCode: {
             ReferenceDataID: applicantInformation.maritalStatus,
-            ReferenceDataName: 'string', // TODO :: SC :: What to put here!?
           },
         },
         PersonName: [
@@ -73,37 +53,18 @@ export function toBenefitApplicationRequest({ partnerInformation, applicantInfor
         ],
         PersonSINIdentification: {
           IdentificationID: applicantInformation.socialInsuranceNumber,
-          IdentificationCategoryText: 'string', // TODO :: SC :: What to put here!?
         },
         RelatedPerson: partnerInformation ? [toRelatedPerson({ ...partnerInformation, maritalStatus: applicantInformation.maritalStatus })] : [],
         MailingSameAsHomeIndicator: personalInformation.copyMailingAddress,
         PreferredMethodCommunicationCode: {
           ReferenceDataID: communicationPreferences.preferredMethod,
-          ReferenceDataName: 'string', // TODO :: SC :: What to put here!?
         },
       },
       BenefitApplicationChannelCode: {
-        ReferenceDataID: 'string', // TODO :: SC :: What to put here!?
-        ReferenceDataName: 'string', // TODO :: SC :: What to put here!?
-      },
-      BenefitApplicationIdentification: [
-        {
-          IdentificationID: 'string', // TODO :: SC :: What to put here!?
-          IdentificationCategoryText: 'Dental Application ID',
-        },
-      ],
-      BenefitApplicationYear: {
-        BenefitApplicationYearIdentification: [
-          {
-            IdentificationID: 'string', // TODO :: SC :: What to put here!?
-            IdentificationCategoryText: 'string', // TODO :: SC :: What to put here!?
-          },
-        ],
+        ReferenceDataID: '775170001', // PP's static value for "Online"
       },
       InsurancePlan: toInsurancePlan(dentalBenefits),
       PrivateDentalInsuranceIndicator: dentalInsurance === 'yes',
-      FederalDentalCoverageIndicator: dentalBenefits.federalBenefit === 'yes',
-      ProvicialDentalCoverageIndicator: dentalBenefits.provincialTerritorialBenefit === 'yes',
     },
   };
 }
@@ -137,23 +98,19 @@ interface ToAddressArgs {
 function toAddress({ apartment, category, city, country, postalCode, province, street }: ToAddressArgs) {
   return {
     AddressCategoryCode: {
-      ReferenceDataID: 'string', // TODO :: SC :: What to put here!?
       ReferenceDataName: category,
     },
     AddressCityName: city ?? '',
     AddressCountry: {
       CountryCode: {
-        ReferenceDataID: country ?? '',
-        ReferenceDataName: 'string', // TODO :: SC :: What to put here!?
+        ReferenceDataID: `esdc_countries(${country})`,
       },
     },
     AddressPostalCode: postalCode ?? '',
     AddressProvince: {
       ProvinceCode: {
-        ReferenceDataID: province ?? '',
-        ReferenceDataName: 'string', // TODO :: SC :: What to put here!?
+        ReferenceDataID: `esdc_provinceterritorystates(${province})`,
       },
-      ProvinceName: 'string', // TODO :: SC :: What to put here!?
     },
     AddressSecondaryUnitText: apartment ?? '',
     AddressStreet: {
@@ -236,14 +193,12 @@ function toInsurancePlan({ federalBenefit, federalSocialProgram, provincialTerri
   if (federalBenefit === 'yes' && federalSocialProgram && !validator.isEmpty(federalSocialProgram)) {
     insurancePlanIdentification.push({
       IdentificationID: federalSocialProgram,
-      IdentificationCategoryText: 'Federal',
     });
   }
 
   if (provincialTerritorialBenefit === 'yes' && provincialTerritorialSocialProgram && !validator.isEmpty(provincialTerritorialSocialProgram)) {
     insurancePlanIdentification.push({
       IdentificationID: provincialTerritorialSocialProgram,
-      IdentificationCategoryText: 'Provincial',
     });
   }
 
@@ -269,11 +224,9 @@ function toRelatedPerson({ dateOfBirth, firstName, lastName, maritalStatus, soci
     ],
     PersonRelationshipCode: {
       ReferenceDataID: maritalStatus,
-      ReferenceDataName: 'string', // TODO :: SC :: What to put here!?
     },
     PersonSINIdentification: {
       IdentificationID: socialInsuranceNumber,
-      IdentificationCategoryText: 'string', // TODO :: SC :: What to put here!?
     },
   };
 }
@@ -287,11 +240,13 @@ function toEmailAddress({ email, emailForFuture }: ToEmailAddressArgs) {
   const emailAddress = [];
 
   if (email && !validator.isEmpty(email)) {
-    emailAddress.push({ EmailAddressID: email });
-  }
-
-  if (emailForFuture && !validator.isEmpty(emailForFuture)) {
-    emailAddress.push({ EmailAddressID: emailForFuture });
+    emailAddress.push({
+      EmailAddressID: email,
+    });
+  } else if (emailForFuture && !validator.isEmpty(emailForFuture)) {
+    emailAddress.push({
+      EmailAddressID: emailForFuture,
+    });
   }
 
   return emailAddress;
@@ -307,11 +262,8 @@ function toTelephoneNumber({ phoneNumber, phoneNumberAlt }: ToTelephoneNumberArg
 
   if (phoneNumber && !validator.isEmpty(phoneNumber)) {
     telephoneNumber.push({
-      FullTelephoneNumber: {
-        TelephoneNumberFullID: phoneNumber,
-      },
       TelephoneNumberCategoryCode: {
-        ReferenceDataID: 'string', // TODO :: SC :: What to put here!?
+        ReferenceDataID: phoneNumber,
         ReferenceDataName: 'Primary',
       },
     });
@@ -319,11 +271,8 @@ function toTelephoneNumber({ phoneNumber, phoneNumberAlt }: ToTelephoneNumberArg
 
   if (phoneNumberAlt && !validator.isEmpty(phoneNumberAlt)) {
     telephoneNumber.push({
-      FullTelephoneNumber: {
-        TelephoneNumberFullID: phoneNumberAlt,
-      },
       TelephoneNumberCategoryCode: {
-        ReferenceDataID: 'string', // TODO :: SC :: What to put here!?
+        ReferenceDataID: phoneNumberAlt,
         ReferenceDataName: 'Alternate',
       },
     });
