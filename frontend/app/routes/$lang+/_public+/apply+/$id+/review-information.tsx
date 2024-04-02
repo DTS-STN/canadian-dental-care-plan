@@ -373,7 +373,7 @@ export default function ReviewInformation() {
             <h2 className="mt-8 text-2xl font-semibold">{t('apply:review-information.dental-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply:review-information.dental-insurance-title')}>
-                {dentalInsurance === 'yes' ? t('apply:review-information.dental-insurance-has-access') : t('apply:review-information.dental-insurance-has-no-access')}
+                {dentalInsurance === 'yes' ? t('apply:review-information.yes') : t('apply:review-information.no')}
                 <p className="mt-4">
                   <InlineLink id="change-access-dental" to={`/apply/${id}/dental-insurance`}>
                     {t('apply:review-information.dental-insurance-change')}
