@@ -16,7 +16,7 @@ export function ContextualAlert(props: ContextualAlertProps) {
   const alertColor = type === 'warning' ? 'border-l-amber-700' : type === 'danger' ? 'border-l-red-700' : type === 'info' ? 'border-l-cyan-700' : 'border-l-green-700';
 
   return (
-    <div className="relative my-4 pl-4 sm:pl-6">
+    <div className="relative pl-4 sm:pl-6">
       <div className="absolute left-1.5 top-3 bg-white pt-1 sm:left-3.5">
         <Icon type={type} />
       </div>
