@@ -47,7 +47,7 @@
       "email-required": "The email address is required.",
       "email-valid": "The email address must be a valid email address format.",
       "preferred-language-required": "The preferred official language of communication is required.",
-      "preferred-method-required": "The preferred method of communication for both Sun Life and the Government of Canada is required."
+      "preferred-method-required": "The preferred method of communication for Sun Life is required."
     }
   },
   "confirm": {

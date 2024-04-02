@@ -47,7 +47,7 @@
       "email-required": "L'adresse courriel est obligatoire.",
       "email-valid": "L'adresse courriel doit être un format d'adresse courriel valide.",
       "preferred-language-required": "La langue officielle de communication préférée est obligatoire.",
-      "preferred-method-required": "Le mode de communication préféré pour la Sun Life et le gouvernement du Canada est obligatoire."
+      "preferred-method-required": "Le mode de communication préféré pour la Sun Life est obligatoire."
     }
   },
   "confirm": {
@@ -264,7 +264,7 @@
     "cancel-btn": "Annuler",
     "save-btn": "Enregistrer",
     "error-message": {
-      "confirm-required": "(FR) Checkbox must be selected",
+      "confirm-required": "Le champ doit être sélectionné",
       "date-of-birth-is-past": "La date de naissance doit être dans le passé.",
       "date-of-birth-required-and-valid": "La date de naissance est requise et doit être une date valide.",
       "first-name-required": "Le prénom est obligatoire.",
