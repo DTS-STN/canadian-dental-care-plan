@@ -16,6 +16,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.index,
+  pageTitleI18nKey: 'apply:terms-and-conditions.page-heading',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -44,5 +45,22 @@ export default function ApplyIndex() {
     navigate(`/${locale}/apply/${id}/terms-and-conditions`, { replace: true });
   }, [id, locale, navigate]);
 
-  return <></>;
+  return (
+    <div className="max-w-prose animate-pulse">
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <div className="h-5 w-full rounded bg-gray-200"></div>
+          <div className="h-5 w-full rounded bg-gray-200"></div>
+          <div className="h-5 w-2/3 rounded bg-gray-200"></div>
+        </div>
+        <div className="h-5 w-1/2 rounded bg-gray-200"></div>
+        <div className="h-5 w-1/2 rounded bg-gray-200"></div>
+      </div>
+      <div className="my-8 space-y-2">
+        <div className="h-5 w-full rounded bg-gray-200"></div>
+        <div className="h-5 w-2/3 rounded bg-gray-200"></div>
+      </div>
+      <div className="h-10 w-2/5 rounded bg-gray-200"></div>
+    </div>
+  );
 }
