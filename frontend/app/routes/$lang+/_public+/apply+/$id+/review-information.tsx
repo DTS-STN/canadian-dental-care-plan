@@ -383,7 +383,8 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply:review-information.dental-benefit-title')}>
                 {dentalBenefit.federalBenefit.access === 'yes' || dentalBenefit.provTerrBenefit.access === 'yes' ? (
                   <>
-                    {t('apply:review-information.dental-benefit-has-access')}
+                    <p>{t('apply:review-information.yes')}</p>
+                    <p>{t('apply:review-information.dental-benefit-has-access')}</p>
                     <div>
                       <ul className="ml-6 list-disc">
                         {dentalBenefit.federalBenefit.access === 'yes' && <li>{federalSocialProgram}</li>}
@@ -392,7 +393,7 @@ export default function ReviewInformation() {
                     </div>
                   </>
                 ) : (
-                  <>{t('apply:review-information.dental-benefit-has-no-access')}</>
+                  <>{t('apply:review-information.no')}</>
                 )}
                 <p className="mt-4">
                   <InlineLink id="change-dental-benefits" to={`/apply/${id}/federal-provincial-territorial-benefits`}>
