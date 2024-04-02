@@ -77,7 +77,6 @@ export async function action({ context: { session }, params, request }: ActionFu
   const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
   const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
 
-  response.status = clientFriendlyStatus?.id ?? undefined;
   response.clientFriendlyStatus = clientFriendlyStatus ?? undefined;
   response.alertType = clientFriendlyStatus?.id === CLIENT_STATUS_SUCCESS_ID ? 'success' : 'info';
   return json(response);

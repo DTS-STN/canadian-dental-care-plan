@@ -52,7 +52,7 @@ const serverEnv = z.object({
   OTHER_EQUITY_TYPE_ID: z.string().trim().min(1).default('equity-other'),
   OTHER_GENDER_TYPE_ID: z.string().trim().min(1).default('gender-other'),
   USA_COUNTRY_ID: z.string().trim().min(1),
-  CLIENT_STATUS_SUCCESS_ID: z.string().trim().min(1),
+  CLIENT_STATUS_SUCCESS_ID: z.string().trim().min(1).default('51af5170-614e-ee11-be6f-000d3a09d640'),
 
   // language codes
   ENGLISH_LANGUAGE_CODE: z.coerce.number().default(1033),
