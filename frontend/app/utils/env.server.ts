@@ -115,7 +115,6 @@ const serverEnv = z.object({
   MOCK_AUTH_ALLOWED_REDIRECTS: z.string().transform(emptyToUndefined).transform(csvToArray).default('http://localhost:3000/auth/callback/raoidc'),
 
   // cache duration settings
-  LOOKUP_SVC_ALL_ACCESS_TO_DENTAL_INSURANCE_OPTIONS_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_AVOIDED_DENTAL_COST_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
