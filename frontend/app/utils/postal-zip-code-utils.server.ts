@@ -14,3 +14,13 @@ export const isValidPostalCode = (countryCode: string, postalCode: string) => {
       return true;
   }
 };
+
+export function formatPostalCode(postalCode: string) {
+  if (!postalCodeRegex.test(postalCode) || zipCodeRegex.test(postalCode)) throw new Error('Invalid postal or zip code');
+  // Canadian postal code
+  if (postalCodeRegex.test(postalCode)) {
+    postalCode = postalCode.replace(/\s/g, '');
+    return `${postalCode.slice(0, 3)} ${postalCode.slice(3)}`.toUpperCase();
+  }
+  return postalCode;
+}
