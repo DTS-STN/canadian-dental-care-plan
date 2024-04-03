@@ -61,7 +61,6 @@
     "whats-next": "Prochaines étapes",
     "begin-process": "Nous commencerons à traiter votre demande immédiatement.",
     "cdcp-checker": "Vous pouvez vérifier <cdcpLink>l'état de votre demande au Régime canadien de soins dentaires en ligne</cdcpLink> ou en appelant au 1-833-537-4342.",
-    "cdcp-checker-link": "https://canadadental-uat.powerappsportals.com/fr/status-etat/",
     "use-code": "Vous pouvez utiliser votre code de demande pour suivre l'avancement de votre demande dans les 48 heures suivant sa transmission.",
     "register-msca-title": "Inscription à Mon dossier Service Canada",
     "register-msca-text": "Une fois votre demande traitée, vous pourrez vous connecter à <mscaLink>Mon dossier Service Canada (MDSC)</mscaLink>. Vous pourrez y consulter les lettres envoyées par le gouvernement du Canada au sujet du Régime canadien de soins dentaires.",

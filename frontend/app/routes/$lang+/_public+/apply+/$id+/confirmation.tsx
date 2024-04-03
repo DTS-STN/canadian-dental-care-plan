@@ -140,7 +140,7 @@ export default function ApplyFlowConfirm() {
 
   const mscaLink = <InlineLink to={t('confirm.msca-link')} />;
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} />;
-  const cdcpLink = <InlineLink to={t('confirm.cdcp-checker-link')} />;
+  const cdcpLink = <InlineLink to={'/view-application'} />;
   const moreInfoLink = <InlineLink to={t('confirm.more-info-link')} />;
 
   return (
