@@ -69,7 +69,7 @@ export async function action({ context: { session }, request }: ActionFunctionAr
   await raoidcService.handleSessionValidation(request, session);
 
   const formDataSchema = z.object({
-    preferredLanguage: z.enum(['en', 'fr']),
+    preferredLanguage: z.string().trim().min(1),
   });
 
   const formData = Object.fromEntries(await request.formData());
