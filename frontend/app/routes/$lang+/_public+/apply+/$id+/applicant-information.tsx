@@ -189,12 +189,12 @@ export default function ApplyFlowApplicationInformation() {
           <div className="flex flex-wrap items-center gap-3">
             {editMode ? (
               <>
-                <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
-                  {t('apply:applicant-information.cancel-btn')}
-                </ButtonLink>
                 <Button variant="primary" id="continue-button" disabled={isSubmitting}>
                   {t('apply:applicant-information.save-btn')}
                 </Button>
+                <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
+                  {t('apply:applicant-information.cancel-btn')}
+                </ButtonLink>
               </>
             ) : (
               <>

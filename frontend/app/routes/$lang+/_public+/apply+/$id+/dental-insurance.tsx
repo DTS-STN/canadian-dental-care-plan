@@ -160,10 +160,10 @@ export default function AccessToDentalInsuranceQuestion() {
           <div className="mt-8 flex flex-wrap items-center gap-3">
             {editMode ? (
               <>
+                <Button variant="primary">{t('dental-insurance.button.save-btn')}</Button>
                 <ButtonLink to={`/apply/${id}/review-information`} disabled={isSubmitting}>
                   {t('dental-insurance.button.cancel-btn')}
                 </ButtonLink>
-                <Button variant="primary">{t('dental-insurance.button.save-btn')}</Button>
               </>
             ) : (
               <>
