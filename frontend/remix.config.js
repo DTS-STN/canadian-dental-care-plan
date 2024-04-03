@@ -32,7 +32,7 @@ function multiRoute(routeFn) {
  */
 export default {
   cacheDirectory: './node_modules/.cache/remix',
-  ignoredRouteFiles: ['**/.*'], // we will manually configure routes (see below)
+  ignoredRouteFiles: ['**/*'], // we will manually configure routes (see below)
   serverDependenciesToBundle: ['react-idle-timer'],
 
   routes: function (defineRoutes) {
