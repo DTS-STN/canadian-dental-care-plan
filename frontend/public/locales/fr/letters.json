@@ -4,6 +4,7 @@
     "breadcrumbs": {
       "letters": "Mes lettres"
     },
+    "no-letter": "Il n'y a aucune lettre au dossier.",
     "date": "Date\u00a0: {{date}}",
     "filter": "Filtrer\u00a0:",
     "newest": "Plus récent en premier",

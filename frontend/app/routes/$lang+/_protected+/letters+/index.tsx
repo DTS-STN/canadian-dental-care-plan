@@ -80,6 +80,10 @@ export default function LettersIndex() {
     });
   }
 
+  if (letters.length === 0) {
+    return <p>{t('letters:index.no-letter')}</p>;
+  }
+
   return (
     <>
       <div className="my-6">
@@ -95,6 +99,7 @@ export default function LettersIndex() {
           ]}
         />
       </div>
+
       <ul className="divide-y border-y">
         {letters.map((letter) => {
           const letterType = letterTypes.find(({ id }) => id === letter.name);
