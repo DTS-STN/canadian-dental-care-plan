@@ -31,7 +31,7 @@ describe('csp.server', () => {
       expect(csp).toContain(`font-src 'self' fonts.gstatic.com;`);
       expect(csp).toContain(`frame-src 'self' ${hcaptchaCSP.frameSrc} ${adobeAnalyticsCSP.frameSrc};`);
       expect(csp).toContain(`img-src 'self' data: ${adobeAnalyticsCSP.imgSrc};`);
-      expect(csp).toContain(`script-src 'strict-dynamic' 'nonce-${nonce}' ${hcaptchaCSP.scriptSrc} ${adobeAnalyticsCSP.scriptSrc}`);
+      expect(csp).toContain(`script-src 'self' 'unsafe-inline' ${hcaptchaCSP.scriptSrc} ${adobeAnalyticsCSP.scriptSrc}`);
       expect(csp).toContain(`style-src 'self' 'unsafe-inline' ${hcaptchaCSP.styleSrc}`);
     });
 

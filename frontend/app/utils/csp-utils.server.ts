@@ -7,7 +7,7 @@ export const adobeAnalyticsCSP = {
   connectSrc: 'https://*.demdex.net https://cm.everesttech.net https://assets.adobedtm.com https://*.omtrdc.net',
   frameSrc: 'https://*.demdex.net',
   imgSrc: 'https://*.demdex.net https://cm.everesttech.net https://assets.adobedtm.com https://*.omtrdc.net',
-  scriptSrc: 'https://code.jquery.com https://*.demdex.net https://cm.everesttech.net https://assets.adobedtm.com https://www.youtube.com',
+  scriptSrc: 'https://code.jquery.com https://*.demdex.net https://cm.everesttech.net https://assets.adobedtm.com',
 } as const;
 
 export const hcaptchaCSP = {
@@ -35,7 +35,8 @@ export function generateContentSecurityPolicy(nonce: string) {
     `frame-ancestors 'self'`,
     `frame-src 'self' ${hcaptchaCSP.frameSrc} ${adobeAnalyticsCSP.frameSrc}`,
     `img-src 'self' data: ${adobeAnalyticsCSP.imgSrc}`,
-    `script-src 'strict-dynamic' 'nonce-${nonce}' ${hcaptchaCSP.scriptSrc} ${adobeAnalyticsCSP.scriptSrc}`,
+    // unsafe-inline is required by Adobe Analytics 💩
+    `script-src 'self' 'unsafe-inline' ${hcaptchaCSP.scriptSrc} ${adobeAnalyticsCSP.scriptSrc}`,
     // unsafe-inline is required by remix-toast 💩
     `style-src 'self' 'unsafe-inline' ${hcaptchaCSP.styleSrc}`,
   ].join('; ');
