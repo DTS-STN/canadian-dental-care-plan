@@ -55,31 +55,24 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const parsedDataResult = formDataSchema.safeParse(formData);
 
-  const response: {
-    errors?: z.ZodFormattedError<{ sin: string; code: string }, string>;
-    formData?: Partial<z.infer<typeof formDataSchema>>;
-    status?: string;
-    clientFriendlyStatus?: { id: string; nameEn: string; nameFr: string };
-    alertType?: 'warning' | 'success' | 'danger' | 'info';
-  } = {};
-
   if (!parsedDataResult.success) {
-    response.errors = parsedDataResult.error.format();
-    response.formData = formData as Partial<z.infer<typeof formDataSchema>>;
-    return json(response);
+    return json({ errors: parsedDataResult.error.format() });
   }
 
   const applicationStatusService = getApplicationStatusService();
   const lookupService = getLookupService();
   const { sin, code } = parsedDataResult.data;
   const statusId = await applicationStatusService.getStatusId(sin, code);
-  //const statusId = CLIENT_STATUS_SUCCESS_ID;
+
   const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
   const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
 
-  response.clientFriendlyStatus = clientFriendlyStatus ?? undefined;
-  response.alertType = clientFriendlyStatus?.id === CLIENT_STATUS_SUCCESS_ID ? 'success' : 'info';
-  return json(response);
+  return json({
+    status: {
+      ...(clientFriendlyStatus ?? {}),
+      alertType: clientFriendlyStatus?.id === CLIENT_STATUS_SUCCESS_ID ? 'success' : 'info',
+    },
+  } as const);
 }
 
 export default function StatusChecker() {
@@ -148,13 +141,13 @@ export default function StatusChecker() {
         </Button>
       </Form>
 
-      {actionData && actionData.clientFriendlyStatus && (
-        <ContextualAlert type={actionData.alertType ?? 'info'}>
+      {actionData && 'status' in actionData && (
+        <ContextualAlert type={actionData.status.alertType}>
           <div>
             <h2 className="mb-2 font-bold" tabIndex={-1}>
               Status
             </h2>
-            {getNameByLanguage(i18n.language, actionData.clientFriendlyStatus)}
+            {getNameByLanguage(i18n.language, actionData.status)}
           </div>
         </ContextualAlert>
       )}
