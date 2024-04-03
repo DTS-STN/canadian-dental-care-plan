@@ -2,6 +2,7 @@ import { sort } from 'moderndash';
 import moize from 'moize';
 import { z } from 'zod';
 
+import letterTypesJson from '~/resources/power-platform/letter-types.json';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
@@ -16,7 +17,8 @@ function createLettersService() {
   // prettier-ignore
   const { 
     GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS, 
-    INTEROP_API_BASE_URI, 
+    ENGLISH_LANGUAGE_CODE,
+    FRENCH_LANGUAGE_CODE,
     INTEROP_CCT_API_BASE_URI, 
     INTEROP_CCT_API_SUBSCRIPTION_KEY, 
     INTEROP_CCT_API_COMMUNITY 
@@ -26,48 +28,7 @@ function createLettersService() {
    * @returns returns all the letter types
    */
   async function getAllLetterTypes() {
-    const url = `${INTEROP_API_BASE_URI}/letter-types`;
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      log.error('%j', {
-        message: 'Failed to fetch data',
-        status: response.status,
-        statusText: response.statusText,
-        url: url,
-        responseBody: await response.text(),
-      });
-
-      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
-    }
-
-    const letterTypesSchema = z.object({
-      value: z.array(
-        z.object({
-          OptionSet: z.object({
-            Options: z.array(
-              z.object({
-                Value: z.number(),
-                Label: z.object({
-                  LocalizedLabels: z.array(
-                    z.object({
-                      Label: z.string(),
-                      LanguageCode: z.number(),
-                    }),
-                  ),
-                }),
-              }),
-            ),
-          }),
-        }),
-      ),
-    });
-
-    const letterTypes = letterTypesSchema.parse(await response.json());
-    const { ENGLISH_LANGUAGE_CODE, FRENCH_LANGUAGE_CODE } = getEnv();
-
-    // only one 'OptionSet' will be returned
-    return letterTypes.value[0].OptionSet.Options.map((option) => {
+    return letterTypesJson.value[0].OptionSet.Options.map((option) => {
       const { LocalizedLabels } = option.Label;
       const nameEn = LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label;
       const nameFr = LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label;

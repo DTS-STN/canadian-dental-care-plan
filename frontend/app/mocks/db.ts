@@ -222,36 +222,4 @@ db.user.create({
   preferredLanguage: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
 });
 
-// seed marirtal statuses
-db.maritalStatus.create({
-  code: 'MARRIED',
-  nameEn: 'Married',
-  nameFr: '(FR) Married',
-});
-db.maritalStatus.create({
-  code: 'COMMONLAW',
-  nameEn: 'Common Law',
-  nameFr: '(FR) Common Law',
-});
-db.maritalStatus.create({
-  code: 'SINGLE',
-  nameEn: 'Single',
-  nameFr: '(FR) Single',
-});
-db.maritalStatus.create({
-  code: 'WIDOWED',
-  nameEn: 'Widowed',
-  nameFr: '(FR) Widowed',
-});
-db.maritalStatus.create({
-  code: 'DIVORCED',
-  nameEn: 'Divorced',
-  nameFr: '(FR) Divorced',
-});
-db.maritalStatus.create({
-  code: 'SEPARATED',
-  nameEn: 'Separated',
-  nameFr: '(FR) Separated',
-});
-
 export { db };

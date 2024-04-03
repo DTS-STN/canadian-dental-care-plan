@@ -1,11 +1,5 @@
 import { HttpResponse, http } from 'msw';
 
-import clientFriendlyStatusesJson from './power-platform-data/client-friendly-statuses.json';
-import countriesJson from './power-platform-data/countries.json';
-import federalProgramsJson from './power-platform-data/federal-programs.json';
-import maritalStatusesJson from './power-platform-data/marital-statuses.json';
-import provincialProgramsJson from './power-platform-data/provincial-programs.json';
-import regionsJson from './power-platform-data/regions.json';
 import { db } from '~/mocks/db';
 import { demographicDB } from '~/mocks/demographics-db';
 import { getLogger } from '~/utils/logging.server';
@@ -119,22 +113,6 @@ export function getLookupApiMockHandlers() {
     }),
 
     //
-    // Handler for GET request to retrieve federal social programs
-    //
-    http.get('https://api.example.com/lookups/federal-social-programs', ({ request }) => {
-      log.debug('Handling request for [%s]', request.url);
-      return HttpResponse.json(federalProgramsJson);
-    }),
-
-    //
-    // Handler for GET request to retrieve provincial or territorial social programs
-    //
-    http.get('https://api.example.com/lookups/provincial-territorial-social-programs', ({ request }) => {
-      log.debug('Handling request for [%s]', request.url);
-      return HttpResponse.json(provincialProgramsJson);
-    }),
-
-    //
     // Handler for GET request to retrieve provincial territorial dental benefit
     //
     http.get('https://api.example.com/lookups/federal-dental-benefit', ({ request }) => {
@@ -150,38 +128,6 @@ export function getLookupApiMockHandlers() {
       log.debug('Handling request for [%s]', request.url);
       const provincialTerritorialDentalBenefit = db.provincialTerritorialDentalBenefit.getAll();
       return HttpResponse.json(provincialTerritorialDentalBenefit);
-    }),
-
-    //
-    // Handler for GET request to retrieve all countries
-    //
-    http.get('https://api.example.com/lookups/countries', ({ request }) => {
-      log.debug('Handling request for [%s]', request.url);
-      return HttpResponse.json(countriesJson);
-    }),
-
-    //
-    // Handler for GET request to retrieve all countries
-    //
-    http.get('https://api.example.com/lookups/regions', ({ request }) => {
-      log.debug('Handling request for [%s]', request.url);
-      return HttpResponse.json(regionsJson);
-    }),
-
-    //
-    // Handler for GET request to retrieve all marital statuses
-    //
-    http.get('https://api.example.com/lookups/marital-statuses', ({ request }) => {
-      log.debug('Handling request for [%s]', request.url);
-      return HttpResponse.json(maritalStatusesJson);
-    }),
-
-    //
-    // Handler for GET request to retrieve all client friendly statuses
-    //
-    http.get('https://api.example.com/lookups/client-friendly-statuses', ({ request }) => {
-      log.debug('Handling request for [%s]', request.url);
-      return HttpResponse.json(clientFriendlyStatusesJson);
     }),
   ];
 }

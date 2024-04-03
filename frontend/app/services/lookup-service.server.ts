@@ -1,8 +1,14 @@
 import moize from 'moize';
 import { z } from 'zod';
 
+import clientFriendlyStatusesJson from '~/resources/power-platform/client-friendly-statuses.json';
+import countriesJson from '~/resources/power-platform/countries.json';
+import federalProgramsJson from '~/resources/power-platform/federal-programs.json';
+import maritalStatusesJson from '~/resources/power-platform/marital-statuses.json';
 import preferredLanguageJson from '~/resources/power-platform/preferred-language.json';
 import preferredMethodOfCommunicationJson from '~/resources/power-platform/preferred-method-of-communication.json';
+import provincialProgramsJson from '~/resources/power-platform/provincial-programs.json';
+import regionsJson from '~/resources/power-platform/regions.json';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
@@ -399,32 +405,7 @@ function createLookupService() {
   }
 
   async function getAllFederalSocialPrograms() {
-    const url = `${INTEROP_API_BASE_URI}/lookups/federal-social-programs/`;
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      log.error('%j', {
-        message: 'Failed to fetch data',
-        status: response.status,
-        statusText: response.statusText,
-        url: url,
-        responseBody: await response.text(),
-      });
-      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
-    }
-
-    const federalSocialProgramsSchema = z.object({
-      value: z.array(
-        z.object({
-          esdc_governmentinsuranceplanid: z.string(),
-          esdc_nameenglish: z.string(),
-          esdc_namefrench: z.string(),
-        }),
-      ),
-    });
-
-    const federalSocialPrograms = federalSocialProgramsSchema.parse(await response.json());
-    return federalSocialPrograms.value.map((federalSocialProgram) => ({
+    return federalProgramsJson.value.map((federalSocialProgram) => ({
       id: federalSocialProgram.esdc_governmentinsuranceplanid,
       nameEn: federalSocialProgram.esdc_nameenglish,
       nameFr: federalSocialProgram.esdc_namefrench,
@@ -432,34 +413,7 @@ function createLookupService() {
   }
 
   async function getAllProvincialTerritorialSocialPrograms() {
-    const url = `${INTEROP_API_BASE_URI}/lookups/provincial-territorial-social-programs/`;
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      log.error('%j', {
-        message: 'Failed to fetch data',
-        status: response.status,
-        statusText: response.statusText,
-        url: url,
-        responseBody: await response.text(),
-      });
-
-      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
-    }
-
-    const provincialSocialProgramsSchema = z.object({
-      value: z.array(
-        z.object({
-          esdc_governmentinsuranceplanid: z.string(),
-          esdc_nameenglish: z.string(),
-          esdc_namefrench: z.string(),
-          _esdc_provinceterritorystateid_value: z.string(),
-        }),
-      ),
-    });
-
-    const provincialSocialPrograms = provincialSocialProgramsSchema.parse(await response.json());
-    return provincialSocialPrograms.value.map((provincialSocialProgram) => ({
+    return provincialProgramsJson.value.map((provincialSocialProgram) => ({
       id: provincialSocialProgram.esdc_governmentinsuranceplanid,
       nameEn: provincialSocialProgram.esdc_nameenglish,
       nameFr: provincialSocialProgram.esdc_namefrench,
@@ -468,33 +422,7 @@ function createLookupService() {
   }
 
   async function getAllCountries() {
-    const url = `${INTEROP_API_BASE_URI}/lookups/countries/`;
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      log.error('%j', {
-        message: 'Failed to fetch data',
-        status: response.status,
-        statusText: response.statusText,
-        url: url,
-        responseBody: await response.text(),
-      });
-
-      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
-    }
-
-    const countriesSchema = z.object({
-      value: z.array(
-        z.object({
-          esdc_countryid: z.string(),
-          esdc_nameenglish: z.string(),
-          esdc_namefrench: z.string(),
-        }),
-      ),
-    });
-
-    const parsedCountries = countriesSchema.parse(await response.json());
-    return parsedCountries.value.map((country) => ({
+    return countriesJson.value.map((country) => ({
       countryId: country.esdc_countryid,
       nameEn: country.esdc_nameenglish,
       nameFr: country.esdc_namefrench,
@@ -502,35 +430,7 @@ function createLookupService() {
   }
 
   async function getAllRegions() {
-    const url = `${INTEROP_API_BASE_URI}/lookups/regions`;
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      log.error('%j', {
-        message: 'Failed to fetch data',
-        status: response.status,
-        statusText: response.statusText,
-        url: url,
-        responseBody: await response.text(),
-      });
-
-      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
-    }
-
-    const regionsSchema = z.object({
-      value: z.array(
-        z.object({
-          esdc_provinceterritorystateid: z.string(),
-          _esdc_countryid_value: z.string(),
-          esdc_nameenglish: z.string(),
-          esdc_namefrench: z.string(),
-          esdc_internationalalphacode: z.string(),
-        }),
-      ),
-    });
-
-    const parsedRegions = regionsSchema.parse(await response.json());
-    return parsedRegions.value.map((region) => ({
+    return regionsJson.value.map((region) => ({
       provinceTerritoryStateId: region.esdc_provinceterritorystateid,
       countryId: region._esdc_countryid_value,
       nameEn: region.esdc_nameenglish,
@@ -540,45 +440,7 @@ function createLookupService() {
   }
 
   async function getAllMaritalStatuses() {
-    const url = `${INTEROP_API_BASE_URI}/lookups/marital-statuses`;
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      log.error('%j', {
-        message: 'Failed to fetch data',
-        status: response.status,
-        statusText: response.statusText,
-        url: url,
-        responseBody: await response.text(),
-      });
-
-      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
-    }
-
-    const maritalStatusSchema = z.object({
-      value: z.array(
-        z.object({
-          OptionSet: z.object({
-            Options: z.array(
-              z.object({
-                Value: z.number(),
-                Label: z.object({
-                  LocalizedLabels: z.array(
-                    z.object({
-                      Label: z.string(),
-                      LanguageCode: z.number(),
-                    }),
-                  ),
-                }),
-              }),
-            ),
-          }),
-        }),
-      ),
-    });
-
-    const parsedMaritalStatusData = maritalStatusSchema.parse(await response.json());
-    return parsedMaritalStatusData.value[0].OptionSet.Options.map((o) => ({
+    return maritalStatusesJson.value[0].OptionSet.Options.map((o) => ({
       id: o.Value.toString(),
       nameEn: o.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label,
       nameFr: o.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label,
@@ -605,33 +467,7 @@ function createLookupService() {
   }
 
   async function getAllClientFriendlyStatuses() {
-    const url = `${INTEROP_API_BASE_URI}/lookups/client-friendly-statuses`;
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      log.error('%j', {
-        message: 'Failed to fetch data',
-        status: response.status,
-        statusText: response.statusText,
-        url: url,
-        responseBody: await response.text(),
-      });
-
-      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
-    }
-
-    const clientFriendlyStatusesSchema = z.object({
-      value: z.array(
-        z.object({
-          esdc_clientfriendlystatusid: z.string(),
-          esdc_descriptionenglish: z.string(),
-          esdc_descriptionfrench: z.string(),
-        }),
-      ),
-    });
-
-    const parsedClientFriendlyStatuses = clientFriendlyStatusesSchema.parse(await response.json());
-    return parsedClientFriendlyStatuses.value.map((clientFriendlyStatus) => ({
+    return clientFriendlyStatusesJson.value.map((clientFriendlyStatus) => ({
       id: clientFriendlyStatus.esdc_clientfriendlystatusid,
       nameEn: clientFriendlyStatus.esdc_descriptionenglish,
       nameFr: clientFriendlyStatus.esdc_descriptionfrench,
