@@ -16,6 +16,7 @@ describe('<ClientEnv>', () => {
       MSCA_BASE_URI: 'https://srv136.services.gc.ca',
       SESSION_TIMEOUT_SECONDS: 120,
       SESSION_TIMEOUT_PROMPT_SECONDS: 30,
+      ADOBE_ANALYTICS_JQUERY_SRC: 'https://example.com/jquery.min.js',
     };
 
     const { container } = render(<ClientEnv env={env} nonce={nonce} />);
