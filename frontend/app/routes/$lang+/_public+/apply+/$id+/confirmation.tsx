@@ -41,15 +41,15 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const locale = getLocale(request);
 
   // prettier-ignore
-  if (!state.applicantInformation ||
-    !state.communicationPreferences ||
-    !state.dateOfBirth ||
-    !state.dentalBenefits ||
-    !state.dentalInsurance ||
-    !state.personalInformation ||
-    !state.submissionInfo ||
-    !state.taxFiling2023 ||
-    !state.typeOfApplication) {
+  if (state.applicantInformation === undefined ||
+    state.communicationPreferences === undefined ||
+    state.dateOfBirth === undefined ||
+    state.dentalBenefits === undefined ||
+    state.dentalInsurance === undefined ||
+    state.personalInformation === undefined ||
+    state.submissionInfo === undefined ||
+    state.taxFiling2023 === undefined ||
+    state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${id}" state!`);
   }
   const allFederalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
@@ -109,7 +109,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   };
 
   const dentalInsurance = {
-    acessToDentalInsurance: state.dentalInsurance === 'yes',
+    acessToDentalInsurance: state.dentalInsurance,
     selectedBenefits,
   };
 

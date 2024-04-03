@@ -64,7 +64,7 @@ export function toBenefitApplicationRequest({ partnerInformation, applicantInfor
         ReferenceDataID: '775170001', // PP's static value for "Online"
       },
       InsurancePlan: toInsurancePlan(dentalBenefits),
-      PrivateDentalInsuranceIndicator: dentalInsurance === 'yes',
+      PrivateDentalInsuranceIndicator: dentalInsurance,
     },
   };
 }
