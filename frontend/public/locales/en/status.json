@@ -48,5 +48,11 @@
     "hcaptcha": "https://www.hcaptcha.com/terms",
     "microsoft-data-privacy-policy": "https://www.microsoft.com/en-ca/trust-center/privacy",
     "microsoft-service-agreement": "https://www.microsoft.com/en-ca/servicesagreement"
+  },
+  "form": {
+    "application-code-label": "Application Code or Client Number",
+    "application-code-description": "This code or number is found in the upper right-hand corner of the letter you received from Service Canada",
+    "sin-label": "Social Insurance Number (SIN)",
+    "submit": "Check status"
   }
 }

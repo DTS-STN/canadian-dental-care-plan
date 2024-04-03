@@ -8,11 +8,15 @@ import { z } from 'zod';
 import pageIds from '../../page-ids.json';
 import { Button } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { InputField } from '~/components/input-field';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getLookupService } from '~/services/lookup-service.server';
+import { getEnv } from '~/utils/env.server';
+import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { RouteHandleData } from '~/utils/route-utils';
 
@@ -24,11 +28,16 @@ export const handle = {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const csrfToken = String(session.get('csrfToken'));
-  return json({ csrfToken });
+  const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const meta = { title: t('gcweb:meta.title.template', { title: t('status:page-title') }) };
+
+  return json({ meta, csrfToken });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('status/index');
+  const { CLIENT_STATUS_SUCCESS_ID } = getEnv();
 
   const formDataSchema = z.object({
     sin: z.string().trim().min(1, { message: 'Please enter your SIN' }),
@@ -46,36 +55,35 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const parsedDataResult = formDataSchema.safeParse(formData);
 
-  const response: {
-    errors?: z.ZodFormattedError<{ sin: string; code: string }, string>;
-    formData?: Partial<z.infer<typeof formDataSchema>>;
-    status?: string;
-  } = {};
-
   if (!parsedDataResult.success) {
-    response.errors = parsedDataResult.error.format();
-    response.formData = formData as Partial<z.infer<typeof formDataSchema>>;
-    return json(response);
+    return json({ errors: parsedDataResult.error.format() });
   }
 
   const applicationStatusService = getApplicationStatusService();
+  const lookupService = getLookupService();
   const { sin, code } = parsedDataResult.data;
-  const status = await applicationStatusService.getStatusId(sin, code);
+  const statusId = await applicationStatusService.getStatusId(sin, code);
 
-  response.status = status ?? undefined;
-  return json(response);
+  const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
+  const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
+
+  return json({
+    status: {
+      ...(clientFriendlyStatus ?? {}),
+      alertType: clientFriendlyStatus?.id === CLIENT_STATUS_SUCCESS_ID ? 'success' : 'info',
+    },
+  } as const);
 }
 
 export default function StatusChecker() {
   const { csrfToken } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
 
   const hcaptchaTermsOfService = <InlineLink to={t('status:links.hcaptcha')} />;
   const microsoftDataPrivacyPolicy = <InlineLink to={t('status:links.microsoft-data-privacy-policy')} />;
   const microsoftServiceAgreement = <InlineLink to={t('status:links.microsoft-service-agreement')} />;
   const fileacomplaint = <InlineLink to={t('status:links.file-complaint')} />;
-
   // TODO use <PublicLayout> for now
   return (
     <PublicLayout>
@@ -125,19 +133,23 @@ export default function StatusChecker() {
       <Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="space-y-6">
-          <InputField id="sin" name="sin" label="Please enter your SIN" required />
-          <InputField id="code" name="code" label="Please enter your application code" required />
+          <InputField id="code" name="code" label={t('status:form.application-code-label')} helpMessagePrimary={t('status:form.application-code-description')} required />
+          <InputField id="sin" name="sin" label={t('status:form.sin-label')} required />
         </div>
-        <Button className="mt-8" id="submit" variant="primary">
-          Check status
+        <Button className="my-8" id="submit" variant="primary">
+          {t('status:form.submit')}
         </Button>
       </Form>
 
-      {actionData && (
-        <dd className="mt-8">
-          <dt className="font-semibold">Status:</dt>
-          <dd>{actionData.status ?? 'No application'}</dd>
-        </dd>
+      {actionData && 'status' in actionData && (
+        <ContextualAlert type={actionData.status.alertType}>
+          <div>
+            <h2 className="mb-2 font-bold" tabIndex={-1}>
+              Status
+            </h2>
+            {getNameByLanguage(i18n.language, actionData.status)}
+          </div>
+        </ContextualAlert>
       )}
     </PublicLayout>
   );
