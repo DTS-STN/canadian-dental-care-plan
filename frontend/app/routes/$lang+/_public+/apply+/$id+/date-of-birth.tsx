@@ -126,29 +126,28 @@ export default function ApplyFlowDateOfBirth() {
         <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <DatePickerField id="date-of-birth" name="dateOfBirth" defaultValue={defaultState ?? ''} legend={t('apply:eligibility.date-of-birth.form-instructions')} required errorMessage={errorMessages['date-picker-date-of-birth-month']} />
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            {editMode ? (
-              <>
-                <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-                  {t('apply:eligibility.date-of-birth.save-btn')}
-                </Button>
-                <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
-                  {t('apply:eligibility.date-of-birth.cancel-btn')}
-                </ButtonLink>
-              </>
-            ) : (
-              <>
-                <ButtonLink id="back-button" to={`/apply/${id}/tax-filing`} disabled={isSubmitting}>
-                  <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-                  {t('apply:eligibility.date-of-birth.back-btn')}
-                </ButtonLink>
-                <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-                  {t('apply:eligibility.date-of-birth.continue-btn')}
-                  <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-                </Button>
-              </>
-            )}
-          </div>
+
+          {editMode ? (
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+                {t('apply:eligibility.date-of-birth.save-btn')}
+              </Button>
+              <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
+                {t('apply:eligibility.date-of-birth.cancel-btn')}
+              </ButtonLink>
+            </div>
+          ) : (
+            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+                {t('apply:eligibility.date-of-birth.continue-btn')}
+                <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+              </Button>
+              <ButtonLink id="back-button" to={`/apply/${id}/tax-filing`} disabled={isSubmitting}>
+                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+                {t('apply:eligibility.date-of-birth.back-btn')}
+              </ButtonLink>
+            </div>
+          )}
         </fetcher.Form>
       </div>
     </>

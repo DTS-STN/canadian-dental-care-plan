@@ -132,15 +132,15 @@ export default function ApplyFlowTaxFiling() {
             required
             errorMessage={errorMessages['input-radio-tax-filing-2023-option-0']}
           />
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" to={`/apply/${id}/type-application`} disabled={isSubmitting}>
-              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('apply:eligibility.tax-filing.back-btn')}
-            </ButtonLink>
+          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <Button variant="primary" id="continue-button" disabled={isSubmitting}>
               {t('apply:eligibility.tax-filing.continue-btn')}
               <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
             </Button>
+            <ButtonLink id="back-button" to={`/apply/${id}/type-application`} disabled={isSubmitting}>
+              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+              {t('apply:eligibility.tax-filing.back-btn')}
+            </ButtonLink>
           </div>
         </fetcher.Form>
       </div>

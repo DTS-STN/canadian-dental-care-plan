@@ -264,29 +264,27 @@ export default function ApplyFlowCommunicationPreferencePage() {
               <InputRadios id="preferred-methods" legend={t('apply:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages['input-radio-preferred-methods-option-0']} required />
             )}
           </div>
-          <div className="flex flex-wrap items-center gap-3">
-            {editMode ? (
-              <>
-                <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-                  {t('apply:communication-preference.save-btn')}
-                </Button>
-                <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
-                  {t('apply:communication-preference.cancel-btn')}
-                </ButtonLink>
-              </>
-            ) : (
-              <>
-                <ButtonLink id="back-button" to={`/apply/${id}/personal-information`} disabled={isSubmitting}>
-                  <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-                  {t('apply:communication-preference.back')}
-                </ButtonLink>
-                <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-                  {t('apply:communication-preference.continue')}
-                  <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-                </Button>
-              </>
-            )}
-          </div>
+          {editMode ? (
+            <div className="flex flex-wrap items-center gap-3">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+                {t('apply:communication-preference.save-btn')}
+              </Button>
+              <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
+                {t('apply:communication-preference.cancel-btn')}
+              </ButtonLink>
+            </div>
+          ) : (
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+                {t('apply:communication-preference.continue')}
+                <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+              </Button>
+              <ButtonLink id="back-button" to={`/apply/${id}/personal-information`} disabled={isSubmitting}>
+                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+                {t('apply:communication-preference.back')}
+              </ButtonLink>
+            </div>
+          )}
         </fetcher.Form>
       </div>
     </>
