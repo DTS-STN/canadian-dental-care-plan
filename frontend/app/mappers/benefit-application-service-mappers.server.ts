@@ -103,13 +103,13 @@ function toAddress({ apartment, category, city, country, postalCode, province, s
     AddressCityName: city ?? '',
     AddressCountry: {
       CountryCode: {
-        ReferenceDataID: `esdc_countries(${country})`,
+        ReferenceDataID: country ?? '',
       },
     },
     AddressPostalCode: postalCode ?? '',
     AddressProvince: {
       ProvinceCode: {
-        ReferenceDataID: `esdc_provinceterritorystates(${province})`,
+        ReferenceDataID: province ?? '',
       },
     },
     AddressSecondaryUnitText: apartment ?? '',
