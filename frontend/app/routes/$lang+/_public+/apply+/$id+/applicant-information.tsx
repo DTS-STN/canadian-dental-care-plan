@@ -181,7 +181,7 @@ export default function ApplyFlowApplicationInformation() {
               id="marital-status"
               name="maritalStatus"
               legend={t('applicant-information.marital-status')}
-              options={maritalStatuses.map((status) => ({ defaultChecked: status.code.toString() === defaultState?.maritalStatus, children: getNameByLanguage(i18n.language, status), value: status.code }))}
+              options={maritalStatuses.map((status) => ({ defaultChecked: status.id === defaultState?.maritalStatus, children: getNameByLanguage(i18n.language, status), value: status.id }))}
               required
               errorMessage={errorMessages['input-radio-marital-status-option-0']}
             />

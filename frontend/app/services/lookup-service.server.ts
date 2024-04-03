@@ -1,22 +1,12 @@
 import moize from 'moize';
 import { z } from 'zod';
 
+import preferredLanguageJson from '~/resources/power-platform/preferred-language.json';
+import preferredMethodOfCommunicationJson from '~/resources/power-platform/preferred-method-of-communication.json';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('lookup-service.server');
-
-const preferredLanguageSchema = z.object({
-  id: z.string(),
-  nameEn: z.string().optional(),
-  nameFr: z.string().optional(),
-});
-
-const preferredCommunicationMethodSchema = z.object({
-  id: z.string(),
-  nameEn: z.string().optional(),
-  nameFr: z.string().optional(),
-});
 
 const accessToDentalInsurance = z.object({
   id: z.string(),
@@ -131,24 +121,11 @@ function createLookupService() {
   } = getEnv();
 
   async function getAllPreferredLanguages() {
-    const url = `${INTEROP_API_BASE_URI}/lookups/preferred-languages/`;
-    const response = await fetch(url);
-
-    const preferredLanguageSchemaList = z.array(preferredLanguageSchema);
-
-    if (response.ok) {
-      return preferredLanguageSchemaList.parse(await response.json());
-    }
-
-    log.error('%j', {
-      message: 'Failed to fetch data',
-      status: response.status,
-      statusText: response.statusText,
-      url: url,
-      responseBody: await response.text(),
-    });
-
-    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    return preferredLanguageJson.value[0].OptionSet.Options.map((o) => ({
+      id: o.Value.toString(),
+      nameEn: o.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label,
+      nameFr: o.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label,
+    }));
   }
 
   async function getAllIndigenousTypes() {
@@ -339,47 +316,25 @@ function createLookupService() {
   }
 
   async function getPreferredLanguage(preferredLanguageId: string) {
-    const url = `${INTEROP_API_BASE_URI}/lookups/preferred-languages/${preferredLanguageId}`;
-    const response = await fetch(url);
+    const preferredLanguage = preferredLanguageJson.value[0].OptionSet.Options.find(({ Value }) => Value.toString() === preferredLanguageId);
 
-    if (response.ok) {
-      return preferredLanguageSchema.parse(await response.json());
-    }
-
-    if (response.status === 404) {
+    if (!preferredLanguage) {
       return null;
     }
 
-    log.error('%j', {
-      message: 'Failed to fetch data',
-      status: response.status,
-      statusText: response.statusText,
-      url: url,
-      responseBody: await response.text(),
-    });
-
-    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    return {
+      id: preferredLanguage.Value.toString(),
+      nameEn: preferredLanguage.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label,
+      nameFr: preferredLanguage.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label,
+    };
   }
 
   async function getAllPreferredCommunicationMethods() {
-    const url = `${INTEROP_API_BASE_URI}/lookups/preferred-communication-methods/`;
-    const response = await fetch(url);
-
-    const preferredCommunicationMethodSchemaList = z.array(preferredCommunicationMethodSchema);
-
-    if (response.ok) {
-      return preferredCommunicationMethodSchemaList.parse(await response.json());
-    }
-
-    log.error('%j', {
-      message: 'Failed to fetch data',
-      status: response.status,
-      statusText: response.statusText,
-      url: url,
-      responseBody: await response.text(),
-    });
-
-    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    return preferredMethodOfCommunicationJson.value[0].OptionSet.Options.map((o) => ({
+      id: o.Value.toString(),
+      nameEn: o.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label,
+      nameFr: o.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label,
+    }));
   }
 
   async function getAllAccessToDentalInsuranceOptions() {
@@ -624,8 +579,7 @@ function createLookupService() {
 
     const parsedMaritalStatusData = maritalStatusSchema.parse(await response.json());
     return parsedMaritalStatusData.value[0].OptionSet.Options.map((o) => ({
-      id: o.Value,
-      code: o.Value,
+      id: o.Value.toString(),
       nameEn: o.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label,
       nameFr: o.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label,
     }));

@@ -1,0 +1,122 @@
+{
+  "@odata.context": "https://canadadental-uat.crm3.dynamics.com/api/data/v9.2/$metadata#EntityDefinitions('esdc_dentalapplicant')/Attributes/Microsoft.Dynamics.CRM.PicklistAttributeMetadata(LogicalName,OptionSet(Options))",
+  "value": [
+    {
+      "LogicalName": "esdc_preferredlanguage",
+      "MetadataId": "9b268066-eaff-ed11-8f6d-000d3a09d7c4",
+      "OptionSet": {
+        "MetadataId": "d27aef54-eaff-ed11-8f6d-000d3a09d640",
+        "Options": [
+          {
+            "Value": 1033,
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": "",
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "English",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "68cf8375-4f74-4442-946f-7edf38fdb10d",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Anglais",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "83078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "English",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "68cf8375-4f74-4442-946f-7edf38fdb10d",
+                "HasChanged": null
+              }
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "cc0d256e-84db-4cd6-baf0-3823c4901818",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "cc0d256e-84db-4cd6-baf0-3823c4901818",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": 1036,
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": "",
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "French",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2359b23c-0681-4c88-8c13-61a490176b9e",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Français",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "85078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "French",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "2359b23c-0681-4c88-8c13-61a490176b9e",
+                "HasChanged": null
+              }
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "b8d8abf9-6b88-465c-9997-201401064890",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "b8d8abf9-6b88-465c-9997-201401064890",
+                "HasChanged": null
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

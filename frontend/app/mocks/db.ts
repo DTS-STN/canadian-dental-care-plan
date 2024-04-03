@@ -56,16 +56,6 @@ const db = factory({
     preferredMethodCommunicationCode: String,
     sinIdentification: primaryKey(String),
   },
-  preferredLanguage: {
-    id: primaryKey(String),
-    nameEn: String,
-    nameFr: String,
-  },
-  preferredCommunicationMethod: {
-    id: primaryKey(String),
-    nameEn: String,
-    nameFr: String,
-  },
   accessToDentalInsurance: {
     id: primaryKey(String),
     nameEn: String,
@@ -175,31 +165,6 @@ db.personalInformation.create({
 });
 
 // seed avaliable languages (before user)
-db.preferredLanguage.create({
-  id: 'en',
-  nameEn: 'English',
-  nameFr: 'Anglais',
-});
-
-const frenchLanguage = db.preferredLanguage.create({
-  id: 'fr',
-  nameEn: 'French',
-  nameFr: 'Français',
-});
-
-// seed avaliable communication methods
-db.preferredCommunicationMethod.create({
-  id: 'email',
-  nameEn: 'Email',
-  nameFr: 'Adresse courriel',
-});
-
-db.preferredCommunicationMethod.create({
-  id: 'mail',
-  nameEn: 'Mail',
-  nameFr: 'Par la poste',
-});
-
 db.accessToDentalInsurance.create({
   id: 'yes',
   nameEn: 'Yes',
@@ -254,7 +219,7 @@ db.user.create({
   id: '00000000-0000-0000-0000-000000000000',
   firstName: 'John',
   lastName: 'Maverick',
-  preferredLanguage: frenchLanguage.id,
+  preferredLanguage: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
 });
 
 // seed marirtal statuses

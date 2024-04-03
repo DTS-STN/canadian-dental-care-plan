@@ -47,7 +47,7 @@ const serverEnv = z.object({
 
   // lookup identifiers
   CANADA_COUNTRY_ID: z.string().trim().min(1),
-  COMMUNICATION_METHOD_EMAIL_ID: z.string().trim().min(1).default('email'),
+  COMMUNICATION_METHOD_EMAIL_ID: z.string().trim().min(1).default('775170000'),
   FIRST_NATIONS_YES_TYPE_ID: z.string().trim().min(1).default('first-nations-yes'),
   OTHER_EQUITY_TYPE_ID: z.string().trim().min(1).default('equity-other'),
   OTHER_GENDER_TYPE_ID: z.string().trim().min(1).default('gender-other'),
@@ -57,7 +57,7 @@ const serverEnv = z.object({
   ENGLISH_LANGUAGE_CODE: z.coerce.number().default(1033),
   FRENCH_LANGUAGE_CODE: z.coerce.number().default(1036),
 
-  // marital status codes 
+  // marital status codes
   MARITAL_STATUS_CODE_MARRIED: z.coerce.number().default(775170001),
   MARITAL_STATUS_CODE_COMMONLAW:z.coerce.number().default(775170002),
 

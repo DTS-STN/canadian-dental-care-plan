@@ -59,12 +59,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     .map((obj) => getNameByLanguage(locale, obj))
     .join(', ');
 
-  const preferredLanguages = await getLookupService().getAllPreferredLanguages();
-  const preferredLanguageDict = preferredLanguages.find((obj) => obj.id === state.communicationPreferences?.preferredLanguage.toLocaleLowerCase());
-  const preferredLanguage = getNameByLanguage(locale, preferredLanguageDict!);
+  const preferredLang = await getLookupService().getPreferredLanguage(state.communicationPreferences.preferredLanguage);
+  const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : state.communicationPreferences.preferredLanguage;
 
   const maritalStatuses = await getLookupService().getAllMaritalStatuses();
-  const maritalStatusDict = maritalStatuses.find((obj) => obj.code === Number(state.applicantInformation?.maritalStatus))!;
+  const maritalStatusDict = maritalStatuses.find((obj) => obj.id === state.applicantInformation?.maritalStatus)!;
   const maritalStatus = getNameByLanguage(locale, maritalStatusDict);
 
   const communicationPreferences = await getLookupService().getAllPreferredCommunicationMethods();

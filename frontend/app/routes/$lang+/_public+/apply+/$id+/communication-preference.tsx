@@ -27,23 +27,13 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
-enum PreferredLanguage {
-  English = 'en',
-  French = 'fr',
-}
-
-enum PreferredMethod {
-  Email = 'email',
-  PostalMail = 'mail',
-}
-
 export interface CommunicationPreferencesState {
   confirmEmail?: string;
   confirmEmailForFuture?: string;
   email?: string;
   emailForFuture?: string;
-  preferredLanguage: `${PreferredLanguage}`;
-  preferredMethod: `${PreferredMethod}`;
+  preferredLanguage: string;
+  preferredMethod: string;
 }
 
 export const handle = {
@@ -86,8 +76,8 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const formSchema: z.ZodType<CommunicationPreferencesState> = z
     .object({
-      preferredLanguage: z.nativeEnum(PreferredLanguage, { errorMap: () => ({ message: t('apply:communication-preference.error-message.preferred-language-required') }) }),
-      preferredMethod: z.nativeEnum(PreferredMethod, { errorMap: () => ({ message: t('apply:communication-preference.error-message.preferred-method-required') }) }),
+      preferredLanguage: z.string().trim().min(1, t('apply:communication-preference.error-message.preferred-language-required')),
+      preferredMethod: z.string().trim().min(1, t('apply:communication-preference.error-message.preferred-method-required')),
       email: z.string().trim().optional(),
       confirmEmail: z.string().trim().optional(),
       emailForFuture: z.string().trim().optional(),
