@@ -14,7 +14,6 @@ vi.mock('~/utils/logging.server', () => ({
 
 vi.mock('~/utils/env.server', () => ({
   getEnv: vi.fn().mockReturnValue({
-    INTEROP_API_BASE_URI: 'https://api.example.com',
     INTEROP_CCT_API_BASE_URI: 'https://api.example.com',
     INTEROP_CCT_API_SUBSCRIPTION_KEY: '00000000000000000000000000000000',
     INTEROP_CCT_API_COMMUNITY: 'CDCP',
@@ -62,34 +61,6 @@ describe('letters-service.server tests', () => {
 
   describe('getAllLetterTypes()', () => {
     it('should return all the letter types', async () => {
-      vi.mocked(fetch).mockResolvedValue(
-        HttpResponse.json({
-          value: [
-            {
-              OptionSet: {
-                Options: [
-                  {
-                    Value: 775170000,
-                    Label: {
-                      LocalizedLabels: [
-                        {
-                          Label: 'Invitation to Apply Letter',
-                          LanguageCode: 1033,
-                        },
-                        {
-                          Label: "Lettre d'invitation",
-                          LanguageCode: 1036,
-                        },
-                      ],
-                    },
-                  },
-                ],
-              },
-            },
-          ],
-        }),
-      );
-
       const lettersService = getLettersService();
       const letterTypes = await lettersService.getAllLetterTypes();
       expect(letterTypes).toEqual([
@@ -97,6 +68,19 @@ describe('letters-service.server tests', () => {
           id: '775170000',
           nameEn: 'Invitation to Apply Letter',
           nameFr: "Lettre d'invitation",
+        },
+        {
+          id: '775170001',
+          nameEn: 'Determination Letter',
+          nameFr: 'Lettre de détermination',
+        },
+        {
+          id: '775170002',
+          nameEn: 'Digital Determination Letter',
+        },
+        {
+          id: '775170003',
+          nameEn: 'Already Enrolled Letter',
         },
       ]);
     });

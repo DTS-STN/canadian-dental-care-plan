@@ -4,7 +4,6 @@ import { HttpResponse, http } from 'msw';
 import { randomBytes } from 'node:crypto';
 import { z } from 'zod';
 
-import letterTypesJson from './power-platform-data/letter-types.json';
 import { db } from '~/mocks/db';
 import { BenefitApplicationResponse, benefitApplicationRequestSchema } from '~/schemas/benefit-application-service-schemas.server';
 import { getLogger } from '~/utils/logging.server';
@@ -261,13 +260,6 @@ export function getPowerPlatformApiMockHandlers() {
       const patchResult = jsonpatch.applyPatch(document, patch, true);
       db.address.update({ where: { id: { equals: String(params.addressId) } }, data: patchResult.newDocument });
       return HttpResponse.text(null, { status: 204 });
-    }),
-
-    /**
-     * Handler for GET requests to retrieve letters types.
-     */
-    http.get('https://api.example.com/letter-types', () => {
-      return HttpResponse.json(letterTypesJson);
     }),
   ];
 }
