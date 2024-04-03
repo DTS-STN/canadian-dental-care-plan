@@ -1,0 +1,362 @@
+[
+  {
+    "file": "routes/index.tsx",
+    "index": true
+  },
+  {
+    "file": "routes/[.]well-known.jwks[.]json.tsx",
+    "paths": {
+      "en": "/.well-known/jwks.json",
+      "fr": "/.well-known/jwks.json"
+    }
+  },
+  {
+    "file": "routes/api+/readyz.ts",
+    "paths": {
+      "en": "/api/readyz",
+      "fr": "/api/readyz"
+    }
+  },
+  {
+    "file": "routes/api+/refresh-session.ts",
+    "paths": {
+      "en": "/api/refresh-session",
+      "fr": "/api/refresh-session"
+    }
+  },
+  {
+    "file": "routes/auth+/$.tsx",
+    "paths": {
+      "en": "/auth/*",
+      "fr": "/auth/*"
+    }
+  },
+  {
+    "file": "routes/$lang+/_route.tsx",
+    "paths": {
+      "en": "/:lang",
+      "fr": "/:lang"
+    },
+    "children": [
+      {
+        "file": "routes/$lang+/$.tsx",
+        "paths": {
+          "en": "/:lang/*",
+          "fr": "/:lang/*"
+        }
+      },
+      {
+        "file": "routes/$lang+/_public+/_route.tsx",
+        "children": [
+          {
+            "file": "routes/$lang+/_public+/apply+/_route.tsx",
+            "paths": {
+              "en": "/:lang/apply",
+              "fr": "/:lang/appliquer"
+            },
+            "children": [
+              {
+                "file": "routes/$lang+/_public+/apply+/index.tsx",
+                "index": true
+              },
+              {
+                "file": "routes/$lang+/_public+/apply+/$id+/_route.tsx",
+                "paths": {
+                  "en": "/:lang/apply/:id",
+                  "fr": "/:lang/appliquer/:id"
+                },
+                "children": [
+                  {
+                    "file": "routes/$lang+/_public+/apply+/$id+/applicant-information.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/applicant-information",
+                      "fr": "/:lang/appliquer/:id/renseignements-demandeur"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_public+/apply+/$id+/application-delegate.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/application-delegate",
+                      "fr": "/:lang/appliquer/:id/delegue-demande"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_public+/apply+/$id+/communication-preference.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/communication-preference",
+                      "fr": "/:lang/appliquer/:id/preference-communication"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_public+/apply+/$id+/confirmation.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/confirmation",
+                      "fr": "/:lang/appliquer/:id/confirmation"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_public+/apply+/$id+/date-of-birth.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/date-of-birth",
+                      "fr": "/:lang/appliquer/:id/date-de-naissance"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_public+/apply+/$id+/dental-insurance.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/dental-insurance",
+                      "fr": "/:lang/appliquer/:id/assurance-dentaire"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_public+/apply+/$id+/dob-eligibility.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/dob-eligibility",
+                      "fr": "/:lang/appliquer/:id/ddn-admissibilite"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_public+/apply+/$id+/exit-application.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/exit-application",
+                      "fr": "/:lang/appliquer/:id/quitter-demande"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/federal-provincial-territorial-benefits",
+                      "fr": "/:lang/appliquer/:id/prestations-dentaires-federales-provinciales-territoriales"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_public+/apply+/$id+/file-taxes.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/file-taxes",
+                      "fr": "/:lang/appliquer/:id/produire-declaration-revenus"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_public+/apply+/$id+/partner-information.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/partner-information",
+                      "fr": "/:lang/appliquer/:id/renseignements-partenaire"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_public+/apply+/$id+/personal-information.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/personal-information",
+                      "fr": "/:lang/appliquer/:id/renseignements-personnels"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_public+/apply+/$id+/review-information.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/review-information",
+                      "fr": "/:lang/appliquer/:id/revue-renseignements"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_public+/apply+/$id+/tax-filing.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/tax-filing",
+                      "fr": "/:lang/appliquer/:id/declaration-impot"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_public+/apply+/$id+/terms-and-conditions.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/terms-and-conditions",
+                      "fr": "/:lang/appliquer/:id/conditions-utilisation"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_public+/apply+/$id+/type-application.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/type-application",
+                      "fr": "/:lang/appliquer/:id/type-demande"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "file": "routes/$lang+/_public+/status+/index.tsx",
+            "index": true,
+            "paths": {
+              "en": "/:lang/status",
+              "fr": "/:lang/statut"
+            }
+          }
+        ]
+      },
+      {
+        "file": "routes/$lang+/_protected+/_route.tsx",
+        "children": [
+          {
+            "file": "routes/$lang+/_protected+/data-unavailable.tsx",
+            "paths": {
+              "en": "/:lang/data-unavailable",
+              "fr": "/:lang/donnees-indisponibles"
+            }
+          },
+          {
+            "file": "routes/$lang+/_protected+/home.tsx",
+            "paths": {
+              "en": "/:lang/home",
+              "fr": "/:lang/accueil"
+            }
+          },
+          {
+            "file": "routes/$lang+/_protected+/letters+/_route.tsx",
+            "paths": {
+              "en": "/:lang/letters",
+              "fr": "/:lang/lettres"
+            },
+            "children": [
+              {
+                "file": "routes/$lang+/_protected+/letters+/index.tsx",
+                "index": true
+              },
+              {
+                "file": "routes/$lang+/_protected+/letters+/$id.download.tsx",
+                "paths": {
+                  "en": "/:lang/letters/:id/download",
+                  "fr": "/:lang/lettres/:id/telecharger"
+                }
+              }
+            ]
+          },
+          {
+            "file": "routes/$lang+/_protected+/personal-information+/_route.tsx",
+            "paths": {
+              "en": "/:lang/personal-information",
+              "fr": "/:lang/informations-personnelles"
+            },
+            "children": [
+              {
+                "file": "routes/$lang+/_protected+/personal-information+/index.tsx",
+                "index": true
+              },
+              {
+                "file": "routes/$lang+/_protected+/personal-information+/home-address+/_route.tsx",
+                "paths": {
+                  "en": "/:lang/personal-information/home-address",
+                  "fr": "/:lang/informations-personnelles/adresse-domicile"
+                },
+                "children": [
+                  {
+                    "file": "routes/$lang+/_protected+/personal-information+/home-address+/address-accuracy.tsx",
+                    "paths": {
+                      "en": "/:lang/personal-information/home-address/address-accuracy",
+                      "fr": "/:lang/informations-personnelles/adresse-domicile/precision-adresse"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_protected+/personal-information+/home-address+/edit.tsx",
+                    "paths": {
+                      "en": "/:lang/personal-information/home-address/edit",
+                      "fr": "/:lang/informations-personnelles/adresse-domicile/modifier"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_protected+/personal-information+/home-address+/suggested.tsx",
+                    "paths": {
+                      "en": "/:lang/personal-information/home-address/suggested",
+                      "fr": "/:lang/informations-personnelles/adresse-domicile/suggere"
+                    }
+                  }
+                ]
+              },
+              {
+                "file": "routes/$lang+/_protected+/personal-information+/mailing-address+/_route.tsx",
+                "paths": {
+                  "en": "/:lang/personal-information/mailing-address",
+                  "fr": "/:lang/informations-personnelles/adresse-postale"
+                },
+                "children": [
+                  {
+                    "file": "routes/$lang+/_protected+/personal-information+/mailing-address+/address-accuracy.tsx",
+                    "paths": {
+                      "en": "/:lang/personal-information/mailing-address/address-accuracy",
+                      "fr": "/:lang/informations-personnelles/adresse-postale/precision-adresse"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_protected+/personal-information+/mailing-address+/confirm.tsx",
+                    "paths": {
+                      "en": "/:lang/personal-information/mailing-address/confirm",
+                      "fr": "/:lang/informations-personnelles/adresse-postale/confirmer"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_protected+/personal-information+/mailing-address+/edit.tsx",
+                    "paths": {
+                      "en": "/:lang/personal-information/mailing-address/edit",
+                      "fr": "/:lang/informations-personnelles/adresse-postale/modifier"
+                    }
+                  }
+                ]
+              },
+              {
+                "file": "routes/$lang+/_protected+/personal-information+/phone-number+/_route.tsx",
+                "paths": {
+                  "en": "/:lang/personal-information/phone-number",
+                  "fr": "/:lang/informations-personnelles/numero-telephone"
+                },
+                "children": [
+                  {
+                    "file": "routes/$lang+/_protected+/personal-information+/phone-number+/confirm.tsx",
+                    "paths": {
+                      "en": "/:lang/personal-information/phone-number/confirm",
+                      "fr": "/:lang/informations-personnelles/numero-telephone/confirmer"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_protected+/personal-information+/phone-number+/edit.tsx",
+                    "paths": {
+                      "en": "/:lang/personal-information/phone-number/edit",
+                      "fr": "/:lang/informations-personnelles/numero-telephone/modifier"
+                    }
+                  }
+                ]
+              },
+              {
+                "file": "routes/$lang+/_protected+/personal-information+/preferred-language+/_route.tsx",
+                "paths": {
+                  "en": "/:lang/personal-information/preferred-language",
+                  "fr": "/:lang/informations-personnelles/langue-preferee"
+                },
+                "children": [
+                  {
+                    "file": "routes/$lang+/_protected+/personal-information+/preferred-language+/confirm.tsx",
+                    "paths": {
+                      "en": "/:lang/personal-information/preferred-language/confirm",
+                      "fr": "/:lang/informations-personnelles/langue-preferee/confirmer"
+                    }
+                  },
+                  {
+                    "file": "routes/$lang+/_protected+/personal-information+/preferred-language+/edit.tsx",
+                    "paths": {
+                      "en": "/:lang/personal-information/preferred-language/edit",
+                      "fr": "/:lang/informations-personnelles/langue-preferee/modifier"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "file": "routes/$lang+/_protected+/stub-sin-editor.tsx",
+            "paths": {
+              "en": "/:lang/stub-sin-editor",
+              "fr": "/:lang/stub-sin-editor"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
