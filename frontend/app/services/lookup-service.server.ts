@@ -14,12 +14,6 @@ import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('lookup-service.server');
 
-const accessToDentalInsurance = z.object({
-  id: z.string(),
-  nameEn: z.string().optional(),
-  nameFr: z.string().optional(),
-});
-
 const federalDentalBenefit = z.object({
   code: z.string(),
   nameEn: z.string().optional(),
@@ -100,7 +94,6 @@ export const getLookupService = moize(createLookupService, { onCacheAdd: () => l
 function createLookupService() {
   const {
     INTEROP_API_BASE_URI,
-    LOOKUP_SVC_ALL_ACCESS_TO_DENTAL_INSURANCE_OPTIONS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_AVOIDED_DENTAL_COST_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS,
@@ -343,27 +336,6 @@ function createLookupService() {
     }));
   }
 
-  async function getAllAccessToDentalInsuranceOptions() {
-    const url = `${INTEROP_API_BASE_URI}/lookups/access-to-dental-insurance/`;
-    const response = await fetch(url);
-
-    const accessToDentalInsuranceOptions = z.array(accessToDentalInsurance);
-
-    if (response.ok) {
-      return accessToDentalInsuranceOptions.parse(await response.json());
-    }
-
-    log.error('%j', {
-      message: 'Failed to fetch data',
-      status: response.status,
-      statusText: response.statusText,
-      url: url,
-      responseBody: await response.text(),
-    });
-
-    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
-  }
-
   async function getAllFederalDentalBenefit() {
     const url = `${INTEROP_API_BASE_URI}/lookups/federal-dental-benefit/`;
     const response = await fetch(url);
@@ -475,10 +447,6 @@ function createLookupService() {
   }
 
   return {
-    getAllAccessToDentalInsuranceOptions: moize(getAllAccessToDentalInsuranceOptions, {
-      maxAge: 1000 * LOOKUP_SVC_ALL_ACCESS_TO_DENTAL_INSURANCE_OPTIONS_CACHE_TTL_SECONDS,
-      onCacheAdd: () => log.info('Creating new AllAccessToDentalInsuranceOptions memo'),
-    }),
     getAllAvoidedDentalCostTypes: moize(getAllAvoidedDentalCostTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_AVOIDED_DENTAL_COST_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllAvoidedDentalCostTypes memo') }),
     getAllBornTypes: moize(getAllBornTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllBornTypes memo') }),
     getAllClientFriendlyStatuses: moize(getAllClientFriendlyStatuses, { maxAge: 1000 * LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllClientFriendlyStatuses memo') }),
