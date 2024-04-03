@@ -73,7 +73,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const lookupService = getLookupService();
   const { sin, code } = parsedDataResult.data;
   const statusId = await applicationStatusService.getStatusId(sin, code);
-
+  //const statusId = CLIENT_STATUS_SUCCESS_ID;
   const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
   const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
 
@@ -143,7 +143,7 @@ export default function StatusChecker() {
           <InputField id="code" name="code" label={t('status:form.application-code-label')} helpMessagePrimary={t('status:form.application-code-description')} required />
           <InputField id="sin" name="sin" label={t('status:form.sin-label')} required />
         </div>
-        <Button className="mt-8" id="submit" variant="primary">
+        <Button className="my-8" id="submit" variant="primary">
           {t('status:form.submit')}
         </Button>
       </Form>
@@ -151,7 +151,9 @@ export default function StatusChecker() {
       {actionData && actionData.clientFriendlyStatus && (
         <ContextualAlert type={actionData.alertType ?? 'info'}>
           <div>
-            <h2 className="mb-2 font-bold">Status</h2>
+            <h2 className="mb-2 font-bold" tabIndex={-1}>
+              Status
+            </h2>
             {getNameByLanguage(i18n.language, actionData.clientFriendlyStatus)}
           </div>
         </ContextualAlert>
