@@ -87,70 +87,72 @@ export default function StatusChecker() {
   // TODO use <PublicLayout> for now
   return (
     <PublicLayout>
-      <h2 className="font-bold">{t('status:status-checker-heading')}</h2>
-      <p>{t('status:status-checker-content')}</p>
-      <h2 className="mt-4 font-bold">{t('status:online-status-heading')}</h2>
-      <p>{t('status:online-status-content')}</p>
-      <Collapsible summary={t('status:terms-of-use.summary')} className="mt-8">
-        <h2 className="mb-4 font-bold">{t('status:terms-of-use.heading')}</h2>
-        <Trans ns={handle.i18nNamespaces} i18nKey="status:terms-of-use.legal-terms" />
-        <p className="my-4">{t('status:terms-of-use.access-terms')}</p>
-        <p>{t('status:terms-of-use.usage-terms')}</p>
-        <p className="my-4">{t('status:terms-of-use.terms-rejection-policy')}</p>
-        <p>{t('status:terms-of-use.esdc-definition-clarification')}</p>
-        <p className="mt-4 font-bold">{t('status:terms-of-use.status-checker.heading')}</p>
-        <ul className="list-disc pl-8">
-          <li>{t('status:terms-of-use.status-checker.self-agreement')}</li>
-          <li>{t('status:terms-of-use.status-checker.on-behalf-of-someone-else')}</li>
-          <li>{t('status:terms-of-use.status-checker.at-your-own-risk')}</li>
-          <li>{t('status:terms-of-use.status-checker.only-use')}</li>
-          <li>{t('status:terms-of-use.status-checker.maintenance')}</li>
-          <li>{t('status:terms-of-use.status-checker.inactive')}</li>
-          <li>
-            <Trans ns={handle.i18nNamespaces} i18nKey="status:terms-of-use.status-checker.msdc" components={{ microsoftServiceAgreement }} />
-          </li>
-          <li>
-            <Trans ns={handle.i18nNamespaces} i18nKey="status:terms-of-use.status-checker.antibot" components={{ hcaptchaTermsOfService }} />
-          </li>
-        </ul>
-        <h2 className="mt-4 font-bold">{t('status:terms-of-use.disclaimers.heading')}</h2>
-        <p>{t('status:terms-of-use.disclaimers.disclaimers')}</p>
-        <ol className="list-decimal pl-8">
-          <li>{t('status:terms-of-use.disclaimers.external-factors-disclaimer')}</li>
-          <li>{t('status:terms-of-use.disclaimers.non-acceptance')}</li>
-          <li>{t('status:terms-of-use.disclaimers.non-compliance')}</li>
-        </ol>
-        <h2 className="mt-4 font-bold">{t('status:terms-of-use.changes-to-these-terms-of-use.heading')}</h2>
-        <p>{t('status:terms-of-use.changes-to-these-terms-of-use.esdc-terms-amendment-policy')}</p>
-      </Collapsible>
-      <Collapsible summary={t('status:privacy-notice-statement.summary')} className="my-8">
-        <p>{t('status:privacy-notice-statement.collection-of-use')}</p>
-        <p className="my-4">{t('status:privacy-notice-statement.provided-information')}</p>
-        <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.third-party-provider" components={{ microsoftDataPrivacyPolicy }} />
-        <p className="my-4">{t('status:privacy-notice-statement.personal-information')}</p>
-        <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.report-a-concern" components={{ fileacomplaint }} />
-      </Collapsible>
-      <Form method="post" noValidate>
-        <input type="hidden" name="_csrf" value={csrfToken} />
-        <div className="space-y-6">
-          <InputField id="code" name="code" label={t('status:form.application-code-label')} helpMessagePrimary={t('status:form.application-code-description')} required />
-          <InputField id="sin" name="sin" label={t('status:form.sin-label')} required />
-        </div>
-        <Button className="my-8" id="submit" variant="primary">
-          {t('status:form.submit')}
-        </Button>
-      </Form>
-
-      {actionData && 'status' in actionData && (
-        <ContextualAlert type={actionData.status.alertType}>
-          <div>
-            <h2 className="mb-2 font-bold" tabIndex={-1}>
-              Status
-            </h2>
-            {getNameByLanguage(i18n.language, actionData.status)}
+      <div className="max-w-prose">
+        <h2 className="font-bold">{t('status:status-checker-heading')}</h2>
+        <p>{t('status:status-checker-content')}</p>
+        <h2 className="mt-4 font-bold">{t('status:online-status-heading')}</h2>
+        <p>{t('status:online-status-content')}</p>
+        <Collapsible summary={t('status:terms-of-use.summary')} className="mt-8">
+          <h2 className="mb-4 font-bold">{t('status:terms-of-use.heading')}</h2>
+          <Trans ns={handle.i18nNamespaces} i18nKey="status:terms-of-use.legal-terms" />
+          <p className="my-4">{t('status:terms-of-use.access-terms')}</p>
+          <p>{t('status:terms-of-use.usage-terms')}</p>
+          <p className="my-4">{t('status:terms-of-use.terms-rejection-policy')}</p>
+          <p>{t('status:terms-of-use.esdc-definition-clarification')}</p>
+          <p className="mt-4 font-bold">{t('status:terms-of-use.status-checker.heading')}</p>
+          <ul className="list-disc pl-8">
+            <li>{t('status:terms-of-use.status-checker.self-agreement')}</li>
+            <li>{t('status:terms-of-use.status-checker.on-behalf-of-someone-else')}</li>
+            <li>{t('status:terms-of-use.status-checker.at-your-own-risk')}</li>
+            <li>{t('status:terms-of-use.status-checker.only-use')}</li>
+            <li>{t('status:terms-of-use.status-checker.maintenance')}</li>
+            <li>{t('status:terms-of-use.status-checker.inactive')}</li>
+            <li>
+              <Trans ns={handle.i18nNamespaces} i18nKey="status:terms-of-use.status-checker.msdc" components={{ microsoftServiceAgreement }} />
+            </li>
+            <li>
+              <Trans ns={handle.i18nNamespaces} i18nKey="status:terms-of-use.status-checker.antibot" components={{ hcaptchaTermsOfService }} />
+            </li>
+          </ul>
+          <h2 className="mt-4 font-bold">{t('status:terms-of-use.disclaimers.heading')}</h2>
+          <p>{t('status:terms-of-use.disclaimers.disclaimers')}</p>
+          <ol className="list-decimal pl-8">
+            <li>{t('status:terms-of-use.disclaimers.external-factors-disclaimer')}</li>
+            <li>{t('status:terms-of-use.disclaimers.non-acceptance')}</li>
+            <li>{t('status:terms-of-use.disclaimers.non-compliance')}</li>
+          </ol>
+          <h2 className="mt-4 font-bold">{t('status:terms-of-use.changes-to-these-terms-of-use.heading')}</h2>
+          <p>{t('status:terms-of-use.changes-to-these-terms-of-use.esdc-terms-amendment-policy')}</p>
+        </Collapsible>
+        <Collapsible summary={t('status:privacy-notice-statement.summary')} className="my-8">
+          <p>{t('status:privacy-notice-statement.collection-of-use')}</p>
+          <p className="my-4">{t('status:privacy-notice-statement.provided-information')}</p>
+          <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.third-party-provider" components={{ microsoftDataPrivacyPolicy }} />
+          <p className="my-4">{t('status:privacy-notice-statement.personal-information')}</p>
+          <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.report-a-concern" components={{ fileacomplaint }} />
+        </Collapsible>
+        <Form method="post" noValidate>
+          <input type="hidden" name="_csrf" value={csrfToken} />
+          <div className="space-y-6">
+            <InputField id="code" name="code" label={t('status:form.application-code-label')} helpMessagePrimary={t('status:form.application-code-description')} required />
+            <InputField id="sin" name="sin" label={t('status:form.sin-label')} required />
           </div>
-        </ContextualAlert>
-      )}
+          <Button className="my-8" id="submit" variant="primary">
+            {t('status:form.submit')}
+          </Button>
+        </Form>
+
+        {actionData && 'status' in actionData && (
+          <ContextualAlert type={actionData.status.alertType}>
+            <div>
+              <h2 className="mb-2 font-bold" tabIndex={-1}>
+                Status
+              </h2>
+              {getNameByLanguage(i18n.language, actionData.status)}
+            </div>
+          </ContextualAlert>
+        )}
+      </div>
     </PublicLayout>
   );
 }

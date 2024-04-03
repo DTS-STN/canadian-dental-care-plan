@@ -47,7 +47,7 @@
     "file-complaint": "https://www.priv.gc.ca/fr/signaler-un-probleme/",
     "hcaptcha": "https://www.hcaptcha.com/terms",
     "microsoft-data-privacy-policy": "https://www.microsoft.com/fr-ca/trust-center/privacy",
-    "microsoft-service-agreement": "https://www.microsoft.com/en-ca/servicesagreement"
+    "microsoft-service-agreement": "https://www.microsoft.com/fr-ca/servicesagreement"
   },
   "form": {
     "application-code-label": "Votre code de demande ou votre numéro du client",
