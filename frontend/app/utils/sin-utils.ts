@@ -1,3 +1,5 @@
+const sinRegex = /^\d{3}[ -]?\d{3}[ -]?\d{3}$/;
+
 /**
  *
  * @param sin - the Social Insurance Number (SIN)
@@ -15,8 +17,8 @@
  *
  */
 export function isValidSin(sin: string): boolean {
-  if (!/^\d{9}$/.test(sin)) return false;
-  const multDigitString = [...sin].map((digit, index) => Number(digit) * (index % 2 === 0 ? 1 : 2)).join('');
+  if (!sinRegex.test(sin)) return false;
+  const multDigitString = [...sin.replace(/\D/g, '')].map((digit, index) => Number(digit) * (index % 2 === 0 ? 1 : 2)).join('');
   const digitSum = [...multDigitString].reduce((acc, cur) => acc + Number(cur), 0);
   return digitSum % 10 === 0;
 }
@@ -27,5 +29,6 @@ export function isValidSin(sin: string): boolean {
  * @returns a formatted SIN using a supplied separator
  */
 export function formatSin(sin: string, separator = ' '): string {
-  return (sin.match(/.../g) ?? []).join(separator);
+  if (!isValidSin(sin)) throw new Error('Invalid SIN format');
+  return (sin.replace(/\D/g, '').match(/.../g) ?? []).join(separator);
 }
