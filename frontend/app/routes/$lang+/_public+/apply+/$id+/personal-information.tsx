@@ -25,10 +25,10 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
-import { isValidPostalCode } from '~/utils/validation-utils.server';
 
 export type PersonalInformationState = {
   copyMailingAddress: boolean;
@@ -105,7 +105,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         .string()
         .trim()
         .optional()
-        .transform((val) => val?.toUpperCase()),
+        .transform((val) => (val ? formatPostalCode(val) : val)),
       copyMailingAddress: z.boolean(),
       homeAddress: z.string().trim().optional(),
       homeApartment: z.string().trim().optional(),
@@ -116,7 +116,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         .string()
         .trim()
         .optional()
-        .transform((val) => val?.toUpperCase()),
+        .transform((val) => (val ? formatPostalCode(val) : val)),
     })
     .superRefine((val, ctx) => {
       if (val.mailingCountry === CANADA_COUNTRY_ID || val.mailingCountry === USA_COUNTRY_ID) {
