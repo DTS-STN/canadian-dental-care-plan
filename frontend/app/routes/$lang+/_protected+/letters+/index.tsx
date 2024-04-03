@@ -12,10 +12,10 @@ import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
 import { NewTabIndicator } from '~/components/new-tab-indicator';
+import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLettersService } from '~/services/letters-service.server';
-import { getPersonalInformationService } from '~/services/personal-information-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -46,16 +46,18 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const instrumentationService = getInstrumentationService();
   const lettersService = getLettersService();
   const raoidcService = await getRaoidcService();
-  const personalInformationService = getPersonalInformationService();
 
   await raoidcService.handleSessionValidation(request, session);
 
   const sortParam = new URL(request.url).searchParams.get('sort');
   const sortOrder = orderEnumSchema.catch('desc').parse(sortParam);
+
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const personalInformation = await personalInformationService.getPersonalInformationIntoSession(session, request, '/data-unavailable', userInfoToken.sin);
-  const letters = await lettersService.getLetters(personalInformation.clientNumber, sortOrder);
+  const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
+  const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, request, session);
+  const letters = personalInformation.clientNumber ? await lettersService.getLetters(personalInformation.clientNumber, sortOrder) : [];
   session.set('letters', letters);
+
   const letterTypes = (await lettersService.getAllLetterTypes()).filter(({ id }) => letters.some(({ name }) => name === id));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
