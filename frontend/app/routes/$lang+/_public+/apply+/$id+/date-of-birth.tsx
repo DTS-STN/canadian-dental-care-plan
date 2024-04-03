@@ -129,12 +129,12 @@ export default function ApplyFlowDateOfBirth() {
           <div className="mt-8 flex flex-wrap items-center gap-3">
             {editMode ? (
               <>
-                <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
-                  {t('apply:eligibility.date-of-birth.cancel-btn')}
-                </ButtonLink>
                 <Button variant="primary" id="continue-button" disabled={isSubmitting}>
                   {t('apply:eligibility.date-of-birth.save-btn')}
                 </Button>
+                <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
+                  {t('apply:eligibility.date-of-birth.cancel-btn')}
+                </ButtonLink>
               </>
             ) : (
               <>
