@@ -61,14 +61,14 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const federalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
 
   // prettier-ignore
-  if (!state.applicantInformation ||
-    !state.communicationPreferences ||
-    !state.dateOfBirth ||
-    !state.dentalBenefits ||
-    !state.dentalInsurance ||
-    !state.personalInformation ||
-    !state.taxFiling2023 ||
-    !state.typeOfApplication) {
+  if (state.applicantInformation === undefined ||
+    state.communicationPreferences === undefined ||
+    state.dateOfBirth === undefined ||
+    state.dentalBenefits === undefined ||
+    state.dentalInsurance === undefined ||
+    state.personalInformation === undefined ||
+    state.taxFiling2023 === undefined ||
+    state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${id}" state!`);
   }
 
@@ -159,14 +159,14 @@ export async function action({ context: { session }, params, request }: ActionFu
   const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
 
   // prettier-ignore
-  if (!state.applicantInformation ||
-    !state.communicationPreferences ||
-    !state.dateOfBirth ||
-    !state.dentalBenefits ||
-    !state.dentalInsurance ||
-    !state.personalInformation ||
-    !state.taxFiling2023 ||
-    !state.typeOfApplication) {
+  if (state.applicantInformation === undefined ||
+    state.communicationPreferences === undefined ||
+    state.dateOfBirth === undefined ||
+    state.dentalBenefits === undefined ||
+    state.dentalInsurance === undefined ||
+    state.personalInformation === undefined ||
+    state.taxFiling2023 === undefined ||
+    state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${id}" state!`);
   }
 
@@ -373,7 +373,7 @@ export default function ReviewInformation() {
             <h2 className="mt-8 text-2xl font-semibold">{t('apply:review-information.dental-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply:review-information.dental-insurance-title')}>
-                {dentalInsurance === 'yes' ? t('apply:review-information.yes') : t('apply:review-information.no')}
+                {dentalInsurance ? t('apply:review-information.yes') : t('apply:review-information.no')}
                 <p className="mt-4">
                   <InlineLink id="change-access-dental" to={`/apply/${id}/dental-insurance`}>
                     {t('apply:review-information.dental-insurance-change')}
