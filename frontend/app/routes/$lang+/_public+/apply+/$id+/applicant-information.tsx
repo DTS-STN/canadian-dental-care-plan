@@ -186,29 +186,27 @@ export default function ApplyFlowApplicationInformation() {
               errorMessage={errorMessages['input-radio-marital-status-option-0']}
             />
           </div>
-          <div className="flex flex-wrap items-center gap-3">
-            {editMode ? (
-              <>
-                <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-                  {t('apply:applicant-information.save-btn')}
-                </Button>
-                <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
-                  {t('apply:applicant-information.cancel-btn')}
-                </ButtonLink>
-              </>
-            ) : (
-              <>
-                <ButtonLink id="back-button" to={`/apply/${id}/date-of-birth`} disabled={isSubmitting}>
-                  <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-                  {t('apply:applicant-information.back-btn')}
-                </ButtonLink>
-                <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-                  {t('apply:applicant-information.continue-btn')}
-                  <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-                </Button>
-              </>
-            )}
-          </div>
+          {editMode ? (
+            <div className="flex flex-wrap items-center gap-3">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+                {t('apply:applicant-information.save-btn')}
+              </Button>
+              <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
+                {t('apply:applicant-information.cancel-btn')}
+              </ButtonLink>
+            </div>
+          ) : (
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+                {t('apply:applicant-information.continue-btn')}
+                <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+              </Button>
+              <ButtonLink id="back-button" to={`/apply/${id}/date-of-birth`} disabled={isSubmitting}>
+                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+                {t('apply:applicant-information.back-btn')}
+              </ButtonLink>
+            </div>
+          )}
         </fetcher.Form>
       </div>
     </>

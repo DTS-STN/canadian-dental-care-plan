@@ -408,15 +408,15 @@ export default function ReviewInformation() {
         <p className="mb-4">{t('apply:review-information.submit-p-proceed')}</p>
         <p className="mb-4">{t('apply:review-information.submit-p-false-info')}</p>
         <p className="mb-4">{t('apply:review-information.submit-p-repayment')}</p>
-        <fetcher.Form method="post" className="flex flex-wrap items-center gap-3">
-          <ButtonLink to={`/apply/${id}/exit-application`} variant="alternative" disabled={isSubmitting}>
-            {t('apply:review-information.exit-button')}
-            <FontAwesomeIcon icon={faX} className="ms-3 block size-4" />
-          </ButtonLink>
+        <fetcher.Form method="post" className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <Button id="confirm-button" variant="green" disabled={isSubmitting}>
             {t('apply:review-information.submit-button')}
             {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
           </Button>
+          <ButtonLink to={`/apply/${id}/exit-application`} variant="alternative" disabled={isSubmitting}>
+            {t('apply:review-information.exit-button')}
+            <FontAwesomeIcon icon={faX} className="ms-3 block size-4" />
+          </ButtonLink>
         </fetcher.Form>
       </div>
     </>
