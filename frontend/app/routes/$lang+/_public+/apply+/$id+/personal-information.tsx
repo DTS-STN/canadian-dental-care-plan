@@ -61,7 +61,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
   const lookupService = getLookupService();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
@@ -71,14 +71,14 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:personal-information.page-title') }) };
 
-  return json({ id, csrfToken, meta, defaultState: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, editMode: state.editMode });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/personal-information');
 
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
@@ -98,11 +98,11 @@ export async function action({ context: { session }, params, request }: ActionFu
         .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply:personal-information.error-message.phone-number-alt-valid'))
         .transform((val) => parsePhoneNumber(val, 'CA').formatNational())
         .optional(),
-      mailingAddress: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-address-required')).max(30),
+      mailingAddress: z.string().trim().min(1, t('apply:personal-information.error-message.address-required')).max(30),
       mailingApartment: z.string().trim().max(30).optional(),
-      mailingCountry: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-country-required')),
-      mailingProvince: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-province-required')).optional(),
-      mailingCity: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-city-required')).max(100),
+      mailingCountry: z.string().trim().min(1, t('apply:personal-information.error-message.country-required')),
+      mailingProvince: z.string().trim().min(1, t('apply:personal-information.error-message.province-required')).optional(),
+      mailingCity: z.string().trim().min(1, t('apply:personal-information.error-message.city-required')).max(100),
       mailingPostalCode: z.string().trim().max(100).optional(),
       copyMailingAddress: z.boolean(),
       homeAddress: z.string().trim().max(30).optional(),
@@ -115,39 +115,39 @@ export async function action({ context: { session }, params, request }: ActionFu
     .superRefine((val, ctx) => {
       if (val.mailingCountry === CANADA_COUNTRY_ID || val.mailingCountry === USA_COUNTRY_ID) {
         if (!val.mailingProvince || validator.isEmpty(val.mailingProvince)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.mailing-province-required'), path: ['mailingProvince'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.province-required'), path: ['mailingProvince'] });
         }
 
         if (!val.mailingPostalCode || validator.isEmpty(val.mailingPostalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.mailing-postal-code-required'), path: ['mailingPostalCode'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.postal-code-required'), path: ['mailingPostalCode'] });
         } else if (!isValidPostalCode(val.mailingCountry, val.mailingPostalCode)) {
-          const message = val.mailingCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.mailing-postal-code-valid') : t('apply:personal-information.error-message.mailing-zip-code-valid');
+          const message = val.mailingCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.postal-code-valid') : t('apply:personal-information.error-message.zip-code-valid');
           ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['mailingPostalCode'] });
         }
       }
 
       if (val.copyMailingAddress === false) {
         if (!val.homeAddress || validator.isEmpty(val.homeAddress)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.home-address-required'), path: ['homeAddress'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.address-required'), path: ['homeAddress'] });
         }
 
         if (!val.homeCountry || validator.isEmpty(val.homeCountry)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.home-country-required'), path: ['homeCountry'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.country-required'), path: ['homeCountry'] });
         }
 
         if (!val.homeCity || validator.isEmpty(val.homeCity)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.home-city-required'), path: ['homeCity'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.city-required'), path: ['homeCity'] });
         }
 
         if (val.homeCountry === CANADA_COUNTRY_ID || val.homeCountry === USA_COUNTRY_ID) {
           if (!val.homeProvince || validator.isEmpty(val.homeProvince)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.home-province-required'), path: ['homeProvince'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.province-required'), path: ['homeProvince'] });
           }
 
           if (!val.homePostalCode || validator.isEmpty(val.homePostalCode)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.home-postal-code-required'), path: ['homePostalCode'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.postal-code-required'), path: ['homePostalCode'] });
           } else if (!isValidPostalCode(val.homeCountry, val.homePostalCode)) {
-            const message = val.mailingCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.home-postal-code-valid') : t('apply:personal-information.error-message.home-zip-code-valid');
+            const message = val.mailingCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.postal-code-valid') : t('apply:personal-information.error-message.zip-code-valid');
             ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['homePostalCode'] });
           }
         }
@@ -206,8 +206,13 @@ export async function action({ context: { session }, params, request }: ActionFu
       }
     : parsedDataResult.data;
 
-  const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { personalInformation: updatedData } });
-  return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/communication-preference`, sessionResponseInit);
+  await applyRouteHelpers.saveState({ params, request, session, state: { personalInformation: updatedData } });
+
+  if (state.editMode) {
+    return redirectWithLocale(request, `/apply/${state.id}/review-information`);
+  }
+
+  return redirectWithLocale(request, `/apply/${state.id}/communication-preference`);
 }
 
 export default function ApplyFlowPersonalInformation() {

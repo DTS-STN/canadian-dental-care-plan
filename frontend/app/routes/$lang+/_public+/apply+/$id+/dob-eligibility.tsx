@@ -40,8 +40,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
   await applyRouteHelpers.loadState({ params, request, session });
-  const sessionResponseInit = await applyRouteHelpers.clearState({ params, request, session });
-  return redirectWithLocale(request, '/', sessionResponseInit);
+  await applyRouteHelpers.clearState({ params, request, session });
+  return redirectWithLocale(request, '/');
 }
 
 export default function ApplyFlowFileYourTaxes() {

@@ -11,7 +11,7 @@ vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
   getApplyRouteHelpers: vi.fn().mockReturnValue({
     loadState: vi.fn().mockReturnValue({
       id: '123',
-      state: { dateOfBirth: '2000-01-01' },
+      dateOfBirth: '2000-01-01',
     }),
     saveState: vi.fn().mockReturnValue({
       headers: {

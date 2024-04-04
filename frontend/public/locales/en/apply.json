@@ -13,11 +13,10 @@
     "cancel-btn": "Cancel",
     "save-btn": "Save",
     "error-message": {
-      "first-name-required": "The first name is required.",
-      "last-name-required": "The last name is required.",
-      "marital-status-required": "The marital status is required.",
-      "sin-required": "The Social Insurance Number (SIN) is required.",
-      "sin-valid": "The Social Insurance Number (SIN) must be valid."
+      "first-name-required": "Enter first name",
+      "last-name-required": "Enter last name",
+      "marital-status-required": "Select marital status",
+      "sin-required": "Enter 9-digit SIN"
     }
   },
   "communication-preference": {
@@ -36,18 +35,14 @@
     "cancel-btn": "Cancel",
     "save-btn": "Save",
     "error-message": {
-      "confirm-email-for-future-match": "The confirm email address must match the email address.",
+      "email-match": "The email addresses entered do not match",
       "confirm-email-for-future-required": "The confirm email address is required.",
-      "confirm-email-for-future-valid": "The confirm email address must be a valid email address format.",
-      "confirm-email-match": "The confirm email address must match the email address.",
-      "confirm-email-required": "The confirm email address is required.",
-      "confirm-email-valid": "The confirm email address must be a valid email address format.",
+      "confirm-email-required": "Confirm email address",
       "email-for-future-required": "The email address is required.",
-      "email-for-future-valid": "The email address must be a valid email address format.",
-      "email-required": "The email address is required.",
-      "email-valid": "The email address must be a valid email address format.",
-      "preferred-language-required": "The preferred official language of communication is required.",
-      "preferred-method-required": "The preferred method of communication for Sun Life is required."
+      "email-required": "Enter email address",
+      "email-valid": "Enter an email address in the correct format, such as name@example.com",
+      "preferred-language-required": "Select preferred language of communication",
+      "preferred-method-required": "Select preferred method of communication"
     }
   },
   "confirm": {
@@ -128,10 +123,9 @@
       "save-btn": "Save"
     },
     "error-message": {
-      "federal-benefit-required": "The federal dental benefits is required.",
-      "program-required": "The social program is required.",
-      "province-required": "The province or territory is required.",
-      "provincial-benefit-required": "The provincial or territorial benefits is required."
+      "federal-benefit-required": "Select whether you have federal dental benefits",
+      "program-required": "Select a program",
+      "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits"
     }
   },
   "dental-insurance": {
@@ -164,7 +158,7 @@
       }
     },
     "error-message": {
-      "dental-insurance-required": "The access to dental insurance or coverage question is required."
+      "dental-insurance-required": "Select whether you have access to dental insurance"
     }
   },
   "eligibility": {
@@ -176,7 +170,7 @@
         "delegate": "I am applying on behalf of someone else"
       },
       "error-message": {
-        "type-of-application-required": "The applicant type is required."
+        "type-of-application-required": "Select who this application is for"
       },
       "back-btn": "Back",
       "continue-btn": "Continue"
@@ -189,7 +183,7 @@
         "no": "No"
       },
       "error-message": {
-        "tax-filing-required": "The question that you have filed your tax return for 2023 and have received your Notice of Assessment is required."
+        "tax-filing-required": "Select whether or not you have filed your taxes"
       },
       "back-btn": "Back",
       "continue-btn": "Continue"
@@ -199,8 +193,8 @@
       "description": "Applications for the Canadian Dental Care Plan (CDCP) will open in phases. Your date of birth determines when you can apply.",
       "form-instructions": "Please enter your date of birth",
       "error-message": {
-        "date-of-birth-is-past": "The date of birth must be in the past.",
-        "date-of-birth-required-and-valid": "The date of birth is required and must be a valid date."
+        "date-of-birth-is-past": "The date of birth must be in the past",
+        "date-of-birth-required-and-valid": "The date of birth is required and must be a valid date"
       },
       "back-btn": "Back",
       "continue-btn": "Continue",
@@ -265,13 +259,12 @@
     "save-btn": "Save",
     "error-message": {
       "confirm-required": "Checkbox must be selected",
-      "date-of-birth-is-past": "The date of birth must be in the past.",
-      "date-of-birth-required-and-valid": "The date of birth is required and must be a valid date.",
-      "first-name-required": "The first name is required.",
-      "last-name-required": "The last name is required.",
-      "sin-required": "The Social Insurance Number (SIN) is required.",
-      "sin-unique": "The Social Insurance Number (SIN) must be unique.",
-      "sin-valid": "The Social Insurance Number (SIN) must be valid."
+      "date-of-birth-is-past": "The date of birth must be in the past",
+      "date-of-birth-required-and-valid": "The date of birth is required and must be a valid date",
+      "first-name-required": "Enter first name",
+      "last-name-required": "Enter last name",
+      "sin-required": "Enter 9-digit SIN",
+      "sin-unique": "The Social Insurance Number (SIN) must be unique"
     }
   },
   "personal-information": {
@@ -301,22 +294,15 @@
     "cancel-btn": "Cancel",
     "save-btn": "Save",
     "error-message": {
-      "home-address-required": "The home address is required.",
-      "home-city-required": "The home city or town is required.",
-      "home-country-required": "The home country is required.",
-      "home-postal-code-required": "The home postal code or ZIP code is required.",
-      "home-postal-code-valid": "The home postal code must be valid.",
-      "home-province-required": "The home province, territory, state, or region is required.",
-      "home-zip-code-valid": "The home ZIP code must be valid.",
-      "mailing-address-required": "The mailing address is required.",
-      "mailing-city-required": "The mailing city or town is required.",
-      "mailing-country-required": "The mailing country is required.",
-      "mailing-postal-code-required": "The mailing postal code or ZIP code is required.",
-      "mailing-postal-code-valid": "The mailing postal code must be valid.",
-      "mailing-province-required": "The mailing province, territory, state, or region is required.",
-      "mailing-zip-code-valid": "The mailing ZIP code must be valid.",
-      "phone-number-valid": "The telephone number must be valid.",
-      "phone-number-alt-valid": "The alternate telephone number number must be valid."
+      "address-required": "Enter address, typically number and street",
+      "city-required": "Enter a city",
+      "country-required": "Select a country",
+      "postal-code-required": "Enter postal code or zip code",
+      "postal-code-valid": "Enter postal code in the correct format, such as A1A 1A1",
+      "province-required": "Select a province",
+      "zip-code-valid": "Enter zip code in the correct format, such as 12345",
+      "phone-number-valid": "Phone number must consist of numbers only",
+      "phone-number-alt-valid": "Phone number must consist of numbers only"
     }
   },
   "progress": {

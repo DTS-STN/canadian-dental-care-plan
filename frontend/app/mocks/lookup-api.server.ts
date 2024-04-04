@@ -1,6 +1,5 @@
 import { HttpResponse, http } from 'msw';
 
-import { db } from '~/mocks/db';
 import { demographicDB } from '~/mocks/demographics-db';
 import { getLogger } from '~/utils/logging.server';
 
@@ -101,24 +100,6 @@ export function getLookupApiMockHandlers() {
       log.debug('Handling request for [%s]', request.url);
       const equityTypes = demographicDB.equityType.getAll();
       return HttpResponse.json(equityTypes);
-    }),
-
-    //
-    // Handler for GET request to retrieve provincial territorial dental benefit
-    //
-    http.get('https://api.example.com/lookups/federal-dental-benefit', ({ request }) => {
-      log.debug('Handling request for [%s]', request.url);
-      const federalDentalBenefit = db.federalDentalBenefit.getAll();
-      return HttpResponse.json(federalDentalBenefit);
-    }),
-
-    //
-    // Handler for GET request to retrieve provincial territorial dental benefit
-    //
-    http.get('https://api.example.com/lookups/provincial-territorial-dental-benefit', ({ request }) => {
-      log.debug('Handling request for [%s]', request.url);
-      const provincialTerritorialDentalBenefit = db.provincialTerritorialDentalBenefit.getAll();
-      return HttpResponse.json(provincialTerritorialDentalBenefit);
     }),
   ];
 }

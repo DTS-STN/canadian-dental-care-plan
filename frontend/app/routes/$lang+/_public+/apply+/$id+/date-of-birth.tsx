@@ -37,20 +37,20 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.date-of-birth.page-title') }) };
 
-  return json({ id, csrfToken, meta, defaultState: state.dateOfBirth, editMode: state.editMode });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.dateOfBirth, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/date-of-birth');
 
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -77,16 +77,20 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { dateOfBirth: parsedDataResult.data } });
+  await applyRouteHelpers.saveState({ params, request, session, state: { dateOfBirth: parsedDataResult.data } });
 
   const parseDateOfBirth = parse(parsedDataResult.data, 'yyyy-MM-dd', new Date());
   const age = differenceInYears(new Date(), parseDateOfBirth);
 
   if (age < 65) {
-    return redirectWithLocale(request, `/apply/${id}/dob-eligibility`, sessionResponseInit);
+    return redirectWithLocale(request, `/apply/${state.id}/dob-eligibility`);
   }
 
-  return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/applicant-information`, sessionResponseInit);
+  if (state.editMode) {
+    return redirectWithLocale(request, `/apply/${state.id}/review-information`);
+  }
+
+  return redirectWithLocale(request, `/apply/${state.id}/applicant-information`);
 }
 
 export default function ApplyFlowDateOfBirth() {

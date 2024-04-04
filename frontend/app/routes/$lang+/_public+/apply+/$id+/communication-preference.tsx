@@ -50,7 +50,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
   const applyRouteHelpers = getApplyRouteHelpers();
   const lookupService = getLookupService();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const preferredLanguages = await lookupService.getAllPreferredLanguages();
   const preferredCommunicationMethods = await lookupService.getAllPreferredCommunicationMethods();
@@ -63,7 +63,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:communication-preference.page-title') }) };
 
-  return json({ communicationMethodEmail, id, csrfToken, meta, preferredCommunicationMethods, preferredLanguages, defaultState: state.communicationPreferences, editMode: state.editMode });
+  return json({ communicationMethodEmail, id: state.id, csrfToken, meta, preferredCommunicationMethods, preferredLanguages, defaultState: state.communicationPreferences, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -71,7 +71,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formSchema: z.ZodType<CommunicationPreferencesState> = z
@@ -94,9 +94,9 @@ export async function action({ context: { session }, params, request }: ActionFu
         if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.confirm-email-required'), path: ['confirmEmail'] });
         } else if (!validator.isEmail(val.confirmEmail)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.confirm-email-valid'), path: ['confirmEmail'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.email-valid'), path: ['confirmEmail'] });
         } else if (val.email !== val.confirmEmail) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.confirm-email-match'), path: ['confirmEmail'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.email-match'), path: ['confirmEmail'] });
         }
       } else {
         const emailForFutureNotEmpty = typeof val.emailForFuture === 'string' && !validator.isEmpty(val.emailForFuture);
@@ -106,7 +106,7 @@ export async function action({ context: { session }, params, request }: ActionFu
           if (!val.emailForFuture || (validator.isEmpty(val.emailForFuture) && val.confirmEmailForFuture)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.email-for-future-required'), path: ['emailForFuture'] });
           } else if (!validator.isEmail(val.emailForFuture)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.email-for-future-valid'), path: ['emailForFuture'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.email-valid'), path: ['emailForFuture'] });
           }
 
           if (!val.confirmEmailForFuture || validator.isEmpty(val.confirmEmailForFuture)) {
@@ -114,7 +114,7 @@ export async function action({ context: { session }, params, request }: ActionFu
           } else if (!validator.isEmail(val.confirmEmailForFuture)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.confirm-email-for-future-required'), path: ['confirmEmailForFuture'] });
           } else if (val.emailForFuture !== val.confirmEmailForFuture) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.confirm-email-for-future-match'), path: ['confirmEmailForFuture'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.email-match'), path: ['confirmEmailForFuture'] });
           }
         }
       }
@@ -143,8 +143,13 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { communicationPreferences: parsedDataResult.data } });
-  return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/dental-insurance`, sessionResponseInit);
+  await applyRouteHelpers.saveState({ params, request, session, state: { communicationPreferences: parsedDataResult.data } });
+
+  if (state.editMode) {
+    return redirectWithLocale(request, `/apply/${state.id}/review-information`);
+  }
+
+  return redirectWithLocale(request, `/apply/${state.id}/dental-insurance`);
 }
 
 export default function ApplyFlowCommunicationPreferencePage() {

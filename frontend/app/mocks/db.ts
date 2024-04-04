@@ -56,51 +56,6 @@ const db = factory({
     preferredMethodCommunicationCode: String,
     sinIdentification: primaryKey(String),
   },
-  federalDentalBenefit: {
-    id: primaryKey(faker.string.uuid),
-    code: String,
-    nameEn: String,
-    nameFr: String,
-  },
-  provincialTerritorialDentalBenefit: {
-    id: primaryKey(faker.string.uuid),
-    code: String,
-    nameEn: String,
-    nameFr: String,
-  },
-
-  federalSocialProgram: {
-    id: primaryKey(faker.string.uuid),
-    code: String,
-    nameEn: String,
-    nameFr: String,
-  },
-
-  provincialTerritorialSocialProgram: {
-    id: primaryKey(faker.string.uuid),
-    provinceTerritoryStateId: String,
-    code: String,
-    nameEn: String,
-    nameFr: String,
-  },
-  country: {
-    countryId: primaryKey(faker.string.uuid),
-    countryCode: String,
-    nameEn: String,
-    nameFr: String,
-  },
-  region: {
-    provinceTerritoryStateId: primaryKey(String),
-    countryId: String,
-    nameEn: String,
-    nameFr: String,
-  },
-  maritalStatus: {
-    id: primaryKey(faker.string.uuid),
-    code: String,
-    nameEn: String,
-    nameFr: String,
-  },
 });
 
 db.personalInformation.create({
@@ -157,30 +112,6 @@ db.personalInformation.create({
   alternateTelephoneNumber: '789-555-6666',
   preferredMethodCommunicationCode: '775170002',
   sinIdentification: '800000002',
-});
-
-db.federalDentalBenefit.create({
-  code: 'no',
-  nameEn: 'No',
-  nameFr: '(Fr) No',
-});
-
-db.federalDentalBenefit.create({
-  code: 'yes',
-  nameEn: 'Yes',
-  nameFr: '(Fr) Yes',
-});
-
-db.provincialTerritorialDentalBenefit.create({
-  code: 'no',
-  nameEn: 'No',
-  nameFr: '(Fr) No',
-});
-
-db.provincialTerritorialDentalBenefit.create({
-  code: 'yes',
-  nameEn: 'Yes',
-  nameFr: '(Fr) Yes',
 });
 
 // seed avaliable addresses (before user)

@@ -38,8 +38,8 @@ export async function action({ context: { session }, params, request }: ActionFu
   const applyRouteHelpers = getApplyRouteHelpers();
   await applyRouteHelpers.loadState({ params, request, session });
   //TODO: Add apply form logic
-  const sessionResponseInit = await applyRouteHelpers.clearState({ params, request, session });
-  return redirectWithLocale(request, `/apply`, sessionResponseInit);
+  await applyRouteHelpers.clearState({ params, request, session });
+  return redirectWithLocale(request, `/apply`);
 }
 
 export default function ApplyFlowTaxFiling() {
