@@ -1,13 +1,13 @@
-import type { ComponentProps, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Link } from '@remix-run/react';
+import { useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
 import pageIds from '../page-ids.json';
-import { AppLink } from '~/components/app-link';
+import { AppLink, AppLinkProps } from '~/components/app-link';
 import { useFeature } from '~/root';
 import { getAuditService } from '~/services/audit-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -48,37 +48,38 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
 
 export default function Index() {
   const { t } = useTranslation(handle.i18nNamespaces);
+  const params = useParams();
 
   return (
     <>
       <div className="grid gap-4">
         {useFeature('update-personal-info') && (
-          <CardLink title={t('index:personal-info')} to="/personal-information">
+          <CardLink title={t('index:personal-info')} routeId="$lang+/_protected+/personal-information+/index" params={params}>
             {t('index:personal-info-desc')}
           </CardLink>
         )}
         {useFeature('view-letters') && (
-          <CardLink title={t('index:view-letters')} to="/letters">
+          <CardLink title={t('index:view-letters')} routeId="$lang+/_protected+/letters+/index" params={params}>
             {t('index:view-letters-desc')}
           </CardLink>
         )}
         {useFeature('view-applications') && (
-          <CardLink title={t('index:view-my-application')} to="/view-application" inProgress>
+          <CardLink title={t('index:view-my-application')} routeId="$lang+/_protected+/home" params={params}>
             {t('index:view-my-application-desc')}
           </CardLink>
         )}
         {useFeature('doc-upload') && (
-          <CardLink title={t('index:upload')} to="/upload-document" inProgress>
+          <CardLink title={t('index:upload')} routeId="$lang+/_protected+/home" params={params}>
             {t('index:upload-desc')}
           </CardLink>
         )}
         {useFeature('view-messages') && (
-          <CardLink title={t('index:view-cdcp')} to="/messages" inProgress>
+          <CardLink title={t('index:view-cdcp')} routeId="$lang+/_protected+/home" params={params}>
             {t('index:view-cdcp-desc')}
           </CardLink>
         )}
         {useFeature('email-alerts') && (
-          <CardLink title={t('index:subscribe')} to="/alert-me" inProgress>
+          <CardLink title={t('index:subscribe')} routeId="$lang+/_protected+/home" params={params}>
             {t('index:subscribe-desc')}
           </CardLink>
         )}
@@ -87,9 +88,15 @@ export default function Index() {
   );
 }
 
-function CardLink({ children, inProgress, title, to }: { children: ReactNode; inProgress?: boolean; title: ReactNode; to: ComponentProps<typeof Link>['to'] }) {
+interface CardLinkProps extends Omit<AppLinkProps, 'className' | 'title'> {
+  children: ReactNode;
+  inProgress?: boolean;
+  title: ReactNode;
+}
+
+function CardLink({ children, inProgress, title, ...props }: CardLinkProps) {
   return (
-    <AppLink className="flex flex-col gap-4 rounded-xl border border-slate-300 bg-slate-50 p-6 hover:shadow-md " to={to}>
+    <AppLink className="flex flex-col gap-4 rounded-xl border border-slate-300 bg-slate-50 p-6 hover:shadow-md" {...props}>
       <h2 className="font-lato text-2xl font-semibold leading-8">{title}</h2>
       <p>{children}</p>
       {inProgress && (

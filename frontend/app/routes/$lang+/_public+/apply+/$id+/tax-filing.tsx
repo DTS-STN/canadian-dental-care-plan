@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 
-import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
+import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,10 +15,10 @@ import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { RouteHandleData } from '~/utils/route-utils';
+import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
@@ -54,7 +54,6 @@ export async function action({ context: { session }, params, request }: ActionFu
   const log = getLogger('apply/tax-filing');
 
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id } = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const taxFilingSchema: z.ZodType<TaxFilingState> = z.nativeEnum(TaxFilingOption, {
@@ -80,15 +79,16 @@ export async function action({ context: { session }, params, request }: ActionFu
   await applyRouteHelpers.saveState({ params, request, session, state: { taxFiling2023: parsedDataResult.data } });
 
   if (parsedDataResult.data === TaxFilingOption.No) {
-    return redirectWithLocale(request, `/apply/${id}/file-taxes`);
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/file-taxes', params));
   }
 
-  return redirectWithLocale(request, `/apply/${id}/date-of-birth`);
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/date-of-birth', params));
 }
 
 export default function ApplyFlowTaxFiling() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, id, defaultState } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState } = useLoaderData<typeof loader>();
+  const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
@@ -137,7 +137,7 @@ export default function ApplyFlowTaxFiling() {
               {t('apply:eligibility.tax-filing.continue-btn')}
               <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
             </Button>
-            <ButtonLink id="back-button" to={`/apply/${id}/type-application`} disabled={isSubmitting}>
+            <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/type-application" params={params} disabled={isSubmitting}>
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('apply:eligibility.tax-filing.back-btn')}
             </ButtonLink>

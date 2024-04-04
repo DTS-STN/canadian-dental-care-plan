@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { json, redirect } from '@remix-run/node';
+import { Form, useActionData, useLoaderData, useParams } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -21,17 +21,18 @@ import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { UserinfoToken } from '~/utils/raoidc-utils.server';
+import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   breadcrumbs: [
     // prettier-ignore
-    { labelI18nKey: 'personal-information:mailing-address.edit.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:mailing-address.edit.breadcrumbs.personal-information', routeId: '$lang+/_protected+/personal-information+/index' },
     { labelI18nKey: 'personal-information:mailing-address.edit.breadcrumbs.mailing-address-change' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
@@ -44,13 +45,13 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
-  const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, request, session);
+  const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
   const addressInfo = personalInformation.mailingAddress;
 
   if (!addressInfo) {
@@ -70,7 +71,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   return json({ addressInfo, countryList, csrfToken, meta, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID });
 }
 
-export async function action({ context: { session }, request }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('mailing-address/edit');
 
   const raoidcService = await getRaoidcService();
@@ -122,12 +123,13 @@ export async function action({ context: { session }, request }: ActionFunctionAr
     session.set('newMailingAddress', parsedDataResult.data);
   }
 
-  return redirectWithLocale(request, '/personal-information/mailing-address/confirm');
+  return redirect(getPathById('$lang+/_protected+/personal-information+/mailing-address+/confirm', params));
 }
 
 export default function PersonalInformationMailingAddressEdit() {
   const actionData = useActionData<typeof action>();
   const { addressInfo, countryList, regionList, csrfToken, CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
+  const params = useParams();
   const [selectedCountry, setSelectedCountry] = useState(addressInfo.countryId);
   const [countryRegions, setCountryRegions] = useState<typeof regionList>([]);
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
@@ -272,7 +274,7 @@ export default function PersonalInformationMailingAddressEdit() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to="/personal-information">
+          <ButtonLink id="back-button" routeId="$lang+/_protected+/personal-information+/index" params={params}>
             {t('personal-information:mailing-address.edit.button.back')}
           </ButtonLink>
           <Button id="save-button" variant="primary">

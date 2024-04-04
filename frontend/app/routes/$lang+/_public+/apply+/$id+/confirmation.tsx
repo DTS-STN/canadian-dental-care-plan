@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { parse } from 'date-fns';
@@ -16,9 +16,9 @@ import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server
 import { getLookupService } from '~/services/lookup-service.server';
 import { toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, getLocale, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { RouteHandleData } from '~/utils/route-utils';
+import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
@@ -145,7 +145,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const applyRouteHelpers = getApplyRouteHelpers();
   await applyRouteHelpers.loadState({ params, request, session });
   await applyRouteHelpers.clearState({ params, request, session });
-  return redirectWithLocale(request, '/apply');
+  return redirect(getPathById('$lang+/_public+/apply+/index', params));
 }
 
 export default function ApplyFlowConfirm() {

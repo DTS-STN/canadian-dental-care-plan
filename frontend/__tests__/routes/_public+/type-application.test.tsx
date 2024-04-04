@@ -84,7 +84,7 @@ describe('_public.apply.id.type-of-application', () => {
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/type-of-application', { method: 'POST', body: formData }),
         context: { session },
-        params: {},
+        params: { lang: 'en', id: '123' },
       });
 
       expect(response.status).toBe(302);
@@ -102,7 +102,7 @@ describe('_public.apply.id.type-of-application', () => {
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/type-of-application', { method: 'POST', body: formData }),
         context: { session },
-        params: {},
+        params: { lang: 'en', id: '123' },
       });
 
       expect(response.status).toBe(302);

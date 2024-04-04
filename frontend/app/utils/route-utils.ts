@@ -1,8 +1,11 @@
-import { useMatches } from '@remix-run/react';
+import { Params, useMatches } from '@remix-run/react';
 
 import type { FlatNamespace, KeysByTOptions, Namespace, ParseKeysByNamespaces, TOptions } from 'i18next';
+import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
+
+import routes from '~/routes.json';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type ParsedKeysByNamespaces<TOpt extends TOptions = {}> = ParseKeysByNamespaces<Namespace, KeysByTOptions<TOpt>>;
@@ -17,6 +20,7 @@ const breadcrumbsSchema = z
     z
       .object({
         labelI18nKey: z.custom<ParsedKeysByNamespaces>(),
+        routeId: z.string().optional(),
         to: z.string().optional(),
       })
       .readonly(),
@@ -64,6 +68,17 @@ export interface RouteHandleData extends Record<string, unknown | undefined> {
   pageTitleI18nKey?: PageTitleI18nKey;
 }
 
+export interface Route {
+  id: string;
+  file: string;
+  paths?: {
+    en: string;
+    fr: string;
+  };
+  index?: boolean;
+  children?: Array<Route>;
+}
+
 export function useBreadcrumbs() {
   return (
     useMatches()
@@ -105,4 +120,25 @@ export function usePageTitleI18nKey() {
     .map((handle) => i18nKeySchema.safeParse(handle?.pageTitleI18nKey))
     .map((result) => (result.success ? result.data : undefined))
     .reduce(coalesce);
+}
+
+export function findRouteById(id: string, routes: Array<Route> = []): Route | undefined {
+  for (const route of routes) {
+    const match = route.id === id ? route : findRouteById(id, route.children);
+
+    if (match) {
+      return match;
+    }
+  }
+}
+
+export function getPathById(id: string, params: Params = {}) {
+  const { lang = 'en' } = params as { lang?: 'en' | 'fr' };
+
+  const route = findRouteById(id, routes);
+  const path = route?.paths?.[lang];
+  invariant(path, `path not found for route [${id}] and language [${lang}]`);
+
+  // replace any path params with the provided params
+  return path.replace(/:([a-zA-Z]+)/g, (_, key) => params[key] ?? ':$1');
 }

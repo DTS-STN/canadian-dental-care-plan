@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 
-import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
+import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,10 +16,10 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { Progress } from '~/components/progress';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { RouteHandleData } from '~/utils/route-utils';
+import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
@@ -83,19 +83,20 @@ export async function action({ context: { session }, params, request }: ActionFu
   const age = differenceInYears(new Date(), parseDateOfBirth);
 
   if (age < 65) {
-    return redirectWithLocale(request, `/apply/${state.id}/dob-eligibility`);
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/dob-eligibility', params));
   }
 
   if (state.editMode) {
-    return redirectWithLocale(request, `/apply/${state.id}/review-information`);
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/review-information', params));
   }
 
-  return redirectWithLocale(request, `/apply/${state.id}/applicant-information`);
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/applicant-information', params));
 }
 
 export default function ApplyFlowDateOfBirth() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, id, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, editMode } = useLoaderData<typeof loader>();
+  const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
@@ -136,7 +137,7 @@ export default function ApplyFlowDateOfBirth() {
               <Button variant="primary" id="continue-button" disabled={isSubmitting}>
                 {t('apply:eligibility.date-of-birth.save-btn')}
               </Button>
-              <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/review-information" params={params} disabled={isSubmitting}>
                 {t('apply:eligibility.date-of-birth.cancel-btn')}
               </ButtonLink>
             </div>
@@ -146,7 +147,7 @@ export default function ApplyFlowDateOfBirth() {
                 {t('apply:eligibility.date-of-birth.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" to={`/apply/${id}/tax-filing`} disabled={isSubmitting}>
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/tax-filing" params={params} disabled={isSubmitting}>
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply:eligibility.date-of-birth.back-btn')}
               </ButtonLink>

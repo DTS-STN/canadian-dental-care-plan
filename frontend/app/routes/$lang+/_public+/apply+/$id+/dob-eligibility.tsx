@@ -1,7 +1,7 @@
 import { FormEvent } from 'react';
 
-import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
+import { useFetcher, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,9 +12,9 @@ import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { RouteHandleData } from '~/utils/route-utils';
+import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
@@ -41,12 +41,12 @@ export async function action({ context: { session }, params, request }: ActionFu
   const applyRouteHelpers = getApplyRouteHelpers();
   await applyRouteHelpers.loadState({ params, request, session });
   await applyRouteHelpers.clearState({ params, request, session });
-  return redirectWithLocale(request, '/');
+  return redirect(getPathById('index', params));
 }
 
 export default function ApplyFlowFileYourTaxes() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { id } = useLoaderData<typeof loader>();
+  const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -67,7 +67,7 @@ export default function ApplyFlowFileYourTaxes() {
         </p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
-        <ButtonLink type="button" to={`/apply/${id}/date-of-birth`} disabled={isSubmitting}>
+        <ButtonLink type="button" routeId="$lang+/_public+/apply+/$id+/date-of-birth" params={params} disabled={isSubmitting}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:eligibility.dob-eligibility.back-btn')}
         </ButtonLink>

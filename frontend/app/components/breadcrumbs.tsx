@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
 
+import { useParams } from '@remix-run/react';
+
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
@@ -9,11 +11,12 @@ import { InlineLink } from './inline-link';
 
 export interface BreadcrumbsProps {
   className?: string;
-  items: Array<{ content: string; to?: To }>;
+  items: Array<{ content: string; routeId?: string; to?: To }>;
 }
 
 export function Breadcrumbs({ className, items }: BreadcrumbsProps) {
   const { t } = useTranslation(['gcweb']);
+
   return (
     <nav id="wb-bc" className={className} property="breadcrumb" aria-labelledby="breadcrumbs">
       <h2 id="breadcrumbs" className="sr-only">
@@ -21,11 +24,13 @@ export function Breadcrumbs({ className, items }: BreadcrumbsProps) {
       </h2>
       <div className="container">
         <ol className="flex flex-wrap items-center gap-x-3 gap-y-1" typeof="BreadcrumbList">
-          {items.map(({ content, to }, idx) => {
+          {items.map(({ content, routeId, to }, idx) => {
             return (
               <li key={content} property="itemListElement" typeof="ListItem" className="flex items-center">
                 {idx !== 0 && <FontAwesomeIcon icon={faChevronRight} className="mr-2 size-3 text-slate-700" />}
-                <Breadcrumb to={to}>{content}</Breadcrumb>
+                <Breadcrumb routeId={routeId} to={to}>
+                  {content}
+                </Breadcrumb>
               </li>
             );
           })}
@@ -35,9 +40,11 @@ export function Breadcrumbs({ className, items }: BreadcrumbsProps) {
   );
 }
 
-function Breadcrumb({ children, to }: { children: ReactNode; to?: To }) {
+function Breadcrumb({ children, routeId, to }: { children: ReactNode; routeId?: string; to?: To }) {
+  const params = useParams();
+
   // prettier-ignore
-  return to === undefined
+  return routeId === undefined && to === undefined
     ? <span property="name">{children}</span>
-    : <InlineLink to={to} property="item" typeof="WebPage"><span property="name">{children}</span></InlineLink>;
+    : <InlineLink routeId={routeId} params={params} to={to} property="item" typeof="WebPage"><span property="name">{children}</span></InlineLink>;
 }

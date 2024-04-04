@@ -10,6 +10,7 @@ import { readFileSync } from 'node:fs';
  * @typedef {{
  *   children?: JsonRoute;
  *   file: string;
+ *   id: string;
  *   index?: boolean;
  *   paths?: {
  *     en: string;
@@ -44,7 +45,7 @@ function defineRoute(language, routeFn, jsonRoute) {
   const defineRouteChildren = jsonRoute.children ? () => jsonRoute.children.forEach((child) => defineRoute(language, routeFn, child)) : () => {};
 
   /** @type {DefineRouteOptions} */
-  const options = { ...jsonRoute, id: `${jsonRoute.file}-${language}` };
+  const options = { ...jsonRoute, id: `${jsonRoute.id}-${language}` };
 
   routeFn(path, file, options, defineRouteChildren);
 }

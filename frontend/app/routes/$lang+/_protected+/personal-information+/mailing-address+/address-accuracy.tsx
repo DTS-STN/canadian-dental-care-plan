@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { json, redirect } from '@remix-run/node';
+import { Form, useLoaderData, useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -10,14 +10,15 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   breadcrumbs: [
     // prettier-ignore
-    { labelI18nKey: 'personal-information:mailing-address.address-accuracy.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:mailing-address.address-accuracy.breadcrumbs.personal-information',routeId: '$lang+/_protected+/personal-information+/index' },
     { labelI18nKey: 'personal-information:mailing-address.address-accuracy.page-title' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
@@ -30,12 +31,12 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
 
   if (!session.has('newMailingAddress')) {
-    return redirectWithLocale(request, '/');
+    return redirect(getPathById('$lang+/_protected+/home', params));
   }
 
   const newMailingAddress = session.get('newMailingAddress');
@@ -48,15 +49,16 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   return json({ countryList, meta, newMailingAddress, regionList });
 }
 
-export async function action({ context: { session }, request }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
 
-  return redirectWithLocale(request, '/personal-information/mailing-address/confirm');
+  return redirect(getPathById('$lang+/_protected+/personal-information+/mailing-address+/confirm', params));
 }
 
 export default function PersonalInformationMailingAddressAccuracy() {
   const { newMailingAddress, countryList, regionList } = useLoaderData<typeof loader>();
+  const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
 
   return (
@@ -87,10 +89,10 @@ export default function PersonalInformationMailingAddressAccuracy() {
           <Button id="confirm-button" variant="primary">
             {t('personal-information:mailing-address.address-accuracy.continue')}
           </Button>
-          <ButtonLink id="cancel-button" to="/personal-information/">
+          <ButtonLink id="cancel-button" routeId="$lang+/_protected+/personal-information+/index" params={params}>
             {t('personal-information:mailing-address.address-accuracy.cancel')}
           </ButtonLink>
-          <ButtonLink id="edit-button" to="/personal-information/mailing-address/edit">
+          <ButtonLink id="edit-button" routeId="$lang+/_protected+/personal-information+/mailing-address+/edit" params={params}>
             {t('personal-information:mailing-address.address-accuracy.re-enter-address')}
           </ButtonLink>
         </div>

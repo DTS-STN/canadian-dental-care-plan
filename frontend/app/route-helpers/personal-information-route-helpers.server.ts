@@ -1,9 +1,10 @@
-import { Session } from '@remix-run/node';
+import { Session, redirect } from '@remix-run/node';
+import { Params } from '@remix-run/react';
 
 import { PersonalInfo, getPersonalInformationService } from '~/services/personal-information-service.server';
-import { redirectWithLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { UserinfoToken } from '~/utils/raoidc-utils.server';
+import { getPathById } from '~/utils/route-utils';
 
 const log = getLogger('personal-information-route-helpers.server');
 
@@ -18,7 +19,7 @@ const log = getLogger('personal-information-route-helpers.server');
  * @throws A redirect to the '/data-unavailable' route if the personal information is not found in the session or service
  * @returns The user's personal information
  */
-async function getPersonalInformation(userInfoToken: UserinfoToken, request: Request, session: Session) {
+async function getPersonalInformation(userInfoToken: UserinfoToken, params: Params, request: Request, session: Session) {
   if (!userInfoToken.sin) {
     log.warn('No SIN found in userInfoToken for userId [%s]', userInfoToken.sub);
     throw new Response(null, { status: 401 });
@@ -38,7 +39,7 @@ async function getPersonalInformation(userInfoToken: UserinfoToken, request: Req
   }
 
   log.debug('No personal information found in session or from service for userId [%s]; Redirecting to "/data-unavailable"', userInfoToken.sub);
-  throw redirectWithLocale(request, '/data-unavailable');
+  throw redirect(getPathById('$lang+/_protected+/data-unavailable', params));
 }
 
 export function getPersonalInformationRouteHelpers() {

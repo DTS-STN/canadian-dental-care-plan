@@ -91,7 +91,7 @@ describe('_public.apply.id.date-of-birth', () => {
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/date-of-birth', { method: 'POST', body: formData }),
         context: { session },
-        params: {},
+        params: { lang: 'en', id: '123' },
       });
 
       expect(response.status).toBe(302);
@@ -114,7 +114,7 @@ describe('_public.apply.id.date-of-birth', () => {
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/date-of-birth', { method: 'POST', body: formData }),
         context: { session },
-        params: {},
+        params: { lang: 'en', id: '123' },
       });
 
       expect(response.status).toBe(302);

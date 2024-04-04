@@ -1,4 +1,4 @@
-import { Session } from '@remix-run/node';
+import { Session, redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
 
 import { differenceInMinutes } from 'date-fns';
@@ -14,8 +14,8 @@ import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/p
 import { SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/review-information';
 import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/tax-filing';
 import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-application';
-import { redirectWithLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { getPathById } from '~/utils/route-utils';
 
 const log = getLogger('apply-route-helpers.server');
 
@@ -61,20 +61,19 @@ interface LoadStateArgs {
  * @returns The loaded state.
  */
 async function loadState({ params, request, session }: LoadStateArgs) {
-  const applyRouteUrl = '/apply';
   const { pathname } = new URL(request.url);
   const parsedId = idSchema.safeParse(params.id);
 
   if (!parsedId.success) {
     log.warn('Invalid "id" param format; id: [%s]', params.id);
-    throw redirectWithLocale(request, applyRouteUrl);
+    throw redirect(getPathById('$lang+/_public+/apply+/index', params));
   }
 
   const sessionName = getSessionName(parsedId.data);
 
   if (!session.has(sessionName)) {
     log.warn('Apply session has not been found; sessionName: [%s]', sessionName);
-    throw redirectWithLocale(request, applyRouteUrl);
+    throw redirect(getPathById('$lang+/_public+/apply+/index', params));
   }
 
   const state: ApplyState = session.get(sessionName);
@@ -87,23 +86,23 @@ async function loadState({ params, request, session }: LoadStateArgs) {
   if (differenceInMinutes(now, lastUpdatedOn) >= 15) {
     session.unset(sessionName);
     log.warn('Apply session has expired; sessionName: [%s]', sessionName);
-    throw redirectWithLocale(request, applyRouteUrl);
+    throw redirect(getPathById('$lang+/_public+/apply+/index', params));
   }
 
   // Redirect to the confirmation page if the application has been submitted and
   // the current route is not the confirmation page.
-  const confirmationRouteUrl = `/apply/${state.id}/confirmation`;
+  const confirmationRouteUrl = getPathById('$lang+/_public+/apply+/$id+/confirmation', params);
   if (state.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has been submitted; sessionName: [%s], ', sessionName, confirmationRouteUrl);
-    throw redirectWithLocale(request, confirmationRouteUrl);
+    throw redirect(confirmationRouteUrl);
   }
 
   // Redirect to the first flow page if the application has not been submitted and
   // the current route is the confirmation page.
-  const termsAndConditionsRouteUrl = `/apply/${state.id}/terms-and-condition`;
+  const termsAndConditionsRouteUrl = getPathById('$lang+/_public+/apply+/$id+/terms-and-conditions', params);
   if (!state.submissionInfo && pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has not been submitted; sessionName: [%s], ', sessionName, termsAndConditionsRouteUrl);
-    throw redirectWithLocale(request, termsAndConditionsRouteUrl);
+    throw redirect(termsAndConditionsRouteUrl);
   }
 
   return state;

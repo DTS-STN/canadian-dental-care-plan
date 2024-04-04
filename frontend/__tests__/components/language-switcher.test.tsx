@@ -1,18 +1,16 @@
 import { render, screen, waitFor } from '@testing-library/react';
 
-import { useLocation, useParams } from '@remix-run/react';
+import { useMatches, useParams } from '@remix-run/react';
 import { createRemixStub } from '@remix-run/testing';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { LanguageSwitcher } from '~/components/language-switcher';
-import { getAltLanguage, removeLanguageFromPath } from '~/utils/locale-utils';
+import { getAltLanguage } from '~/utils/locale-utils';
 
 vi.mock('react-i18next', () => ({
   useTranslation: vi.fn().mockReturnValue({
-    i18n: {
-      changeLanguage: vi.fn(),
-    },
+    i18n: { changeLanguage: vi.fn() },
   }),
 }));
 
@@ -25,6 +23,7 @@ vi.mock('@remix-run/react', async (actual) => {
     Link,
     useHref,
     useLocation: vi.fn(),
+    useMatches: vi.fn(),
     useParams: vi.fn(),
   };
 });
@@ -44,18 +43,12 @@ describe('Language Switcher', () => {
   });
 
   it('Should render with correct search params, and not have a11y issues', async () => {
-    const basePath = '/home';
-
     const requestedLang = 'en';
     const responseLang = 'fr';
 
-    const requestedPath = `/${requestedLang}${basePath}`;
-    const requestedSearch = 'id=00000000-0000-0000-0000-000000000000';
-
-    vi.mocked(useLocation, { partial: true }).mockReturnValue({ pathname: requestedPath, search: requestedSearch });
     vi.mocked(useParams).mockReturnValue({ lang: requestedLang });
     vi.mocked(getAltLanguage).mockReturnValue(responseLang);
-    vi.mocked(removeLanguageFromPath).mockReturnValue(basePath);
+    vi.mocked(useMatches).mockReturnValue([{ id: '$lang+/_public+/apply+/index', data: {}, handle: {}, params: {}, pathname: '' }]);
 
     const RemixStub = createRemixStub([{ Component: () => <LanguageSwitcher>Français</LanguageSwitcher>, path: '/' }]);
     render(<RemixStub />);
@@ -63,6 +56,6 @@ describe('Language Switcher', () => {
     const element = await waitFor(() => screen.findByTestId('language-switcher'));
 
     expect(element.textContent).toBe('Français');
-    expect(element.getAttribute('href')).toBe(`/${responseLang}${basePath}?${requestedSearch}`);
+    expect(element.getAttribute('href')).toBe('/fr/appliquer');
   });
 });

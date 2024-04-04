@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { json, redirect } from '@remix-run/node';
+import { Form, useActionData, useLoaderData, useParams } from '@remix-run/react';
 
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
@@ -16,16 +16,17 @@ import { getInstrumentationService } from '~/services/instrumentation-service.se
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   breadcrumbs: [
     // prettier-ignore
-    { labelI18nKey: 'personal-information:phone-number.edit.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:phone-number.edit.breadcrumbs.personal-information', routeId: '$lang+/_protected+/personal-information+/index' },
     { labelI18nKey: 'personal-information:phone-number.edit.breadcrumbs.change-phone-number' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
@@ -61,7 +62,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   return json({ csrfToken, meta, userInfo });
 }
 
-export async function action({ context: { session }, request }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('phone-number/edit');
 
   const instrumentationService = getInstrumentationService();
@@ -98,12 +99,13 @@ export async function action({ context: { session }, request }: ActionFunctionAr
   session.set('newPhoneNumber', parsedDataResult.data.phoneNumber);
 
   instrumentationService.countHttpStatus('phone-number.confirm', 302);
-  return redirectWithLocale(request, '/personal-information/phone-number/confirm');
+  return redirect(getPathById('$lang+/_protected+/personal-information+/phone-number+/confirm', params));
 }
 
 export default function PhoneNumberEdit() {
   const { csrfToken, userInfo } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
+  const params = useParams();
   const errorSummaryId = 'error-summary';
 
   const { t } = useTranslation(handle.i18nNamespaces);
@@ -155,7 +157,7 @@ export default function PhoneNumberEdit() {
           <Button id="submit" variant="primary">
             {t('personal-information:phone-number.edit.button.save')}
           </Button>
-          <ButtonLink id="cancel" to="/personal-information">
+          <ButtonLink id="cancel" routeId="$lang+/_protected+/personal-information+/index" params={params}>
             {t('personal-information:phone-number.edit.button.cancel')}
           </ButtonLink>
         </div>

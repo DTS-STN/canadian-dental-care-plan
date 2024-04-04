@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { json, redirect } from '@remix-run/node';
+import { Form, useLoaderData, useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
@@ -15,15 +15,16 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, getLocale, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { IdToken } from '~/utils/raoidc-utils.server';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   breadcrumbs: [
     // prettier-ignore
-    { labelI18nKey: 'personal-information:home-address.address-accuracy.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:home-address.address-accuracy.breadcrumbs.personal-information', routeId: '$lang+/_protected+/personal-information+/index' },
     { labelI18nKey: 'personal-information:home-address.address-accuracy.page-title' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
@@ -35,7 +36,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const instrumentationService = getInstrumentationService();
   const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
@@ -44,7 +45,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
 
   if (!session.has('newHomeAddress')) {
     instrumentationService.countHttpStatus('home-address.validate.no-session', 302);
-    return redirectWithLocale(request, '/');
+    return redirect(getPathById('$lang+/_protected+/home', params));
   }
 
   const newHomeAddress = session.get('newHomeAddress');
@@ -58,7 +59,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   return json({ countryList, meta, newHomeAddress, regionList });
 }
 
-export async function action({ context: { session }, request }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const addressService = getAddressService();
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
@@ -75,15 +76,14 @@ export async function action({ context: { session }, request }: ActionFunctionAr
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('update-data.home-address', { userId: idToken.sub });
 
-  const locale = getLocale(request);
-
   instrumentationService.countHttpStatus('home-address.validate', 302);
   // TODO remove new home address from session and handle case when it is missing
-  return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:home-address.address-accuracy.updated-notification');
+  return redirectWithSuccess(getPathById('$lang+/_protected+/personal-information+/index', params), 'personal-information:home-address.address-accuracy.updated-notification');
 }
 
 export default function PersonalInformationHomeAddressAccuracy() {
   const { newHomeAddress, countryList, regionList } = useLoaderData<typeof loader>();
+  const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
 
   return (
@@ -114,10 +114,10 @@ export default function PersonalInformationHomeAddressAccuracy() {
           <Button id="confirm-button" variant="primary">
             {t('personal-information:home-address.address-accuracy.continue')}
           </Button>
-          <ButtonLink id="cancel-button" to="/personal-information/">
+          <ButtonLink id="cancel-button" routeId="$lang+/_protected+/personal-information+/index" params={params}>
             {t('personal-information:home-address.address-accuracy.cancel')}
           </ButtonLink>
-          <ButtonLink id="edit-button" to="/personal-information/home-address/edit">
+          <ButtonLink id="edit-button" routeId="$lang+/_protected+/personal-information+/home-address+/edit" params={params}>
             {t('personal-information:home-address.address-accuracy.re-enter-address')}
           </ButtonLink>
         </div>

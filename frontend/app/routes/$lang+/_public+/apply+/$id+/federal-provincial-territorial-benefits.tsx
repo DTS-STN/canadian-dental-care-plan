@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { json, redirect } from '@remix-run/node';
+import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,9 +20,10 @@ import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
@@ -90,7 +91,6 @@ export async function action({ context: { session }, params, request }: ActionFu
   const log = getLogger('apply/federal-provincial-territorial');
 
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id } = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
@@ -179,12 +179,13 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
-  return redirectWithLocale(request, `/apply/${id}/review-information`);
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/review-information', params));
 }
 
 export default function AccessToDentalInsuranceQuestion() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, regions, defaultState, id, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, regions, defaultState, editMode } = useLoaderData<typeof loader>();
+  const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [hasFederalBenefitValue, setHasFederalBenefitValue] = useState(defaultState?.hasFederalBenefits);
@@ -372,7 +373,7 @@ export default function AccessToDentalInsuranceQuestion() {
               <Button variant="primary" id="continue-button" disabled={isSubmitting}>
                 {t('apply:dental-benefits.button.save-btn')}
               </Button>
-              <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/review-information" params={params} disabled={isSubmitting}>
                 {t('apply:dental-benefits.button.cancel-btn')}
               </ButtonLink>
             </div>
@@ -382,7 +383,7 @@ export default function AccessToDentalInsuranceQuestion() {
                 {t('apply:dental-benefits.button.continue')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" to={`/apply/${id}/dental-insurance`} disabled={isSubmitting}>
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/dental-insurance" params={params} disabled={isSubmitting}>
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply:dental-benefits.button.back')}
               </ButtonLink>

@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, useLoaderData, useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
@@ -16,16 +16,17 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, getLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { IdToken } from '~/utils/raoidc-utils.server';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   breadcrumbs: [
     // prettier-ignore
-    { labelI18nKey: 'personal-information:home-address.suggested.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:home-address.suggested.breadcrumbs.personal-information', routeId: '$lang+/_protected+/personal-information+/index' },
     { labelI18nKey: 'personal-information:home-address.suggested.breadcrumbs.suggested-address' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
@@ -58,7 +59,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   return json({ countryList, csrfToken, homeAddressInfo, meta, regionList, suggestedAddressInfo });
 }
 
-export async function action({ context: { session }, request }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('home-address/suggested');
 
   const addressService = getAddressService();
@@ -89,15 +90,14 @@ export async function action({ context: { session }, request }: ActionFunctionAr
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('update-data.home-address', { userId: idToken.sub });
 
-  const locale = getLocale(request);
-
   instrumentationService.countHttpStatus('home-address.suggest', 302);
   // TODO remove new home address from session and handle case when it is missing
-  return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:home-address.suggested.updated-notification');
+  return redirectWithSuccess(getPathById('$lang+/_protected+/personal-information+/index', params), 'personal-information:home-address.suggested.updated-notification');
 }
 
 export default function HomeAddressSuggested() {
   const { homeAddressInfo, suggestedAddressInfo, countryList, regionList, csrfToken } = useLoaderData<typeof loader>();
+  const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
 
   return (
@@ -157,10 +157,10 @@ export default function HomeAddressSuggested() {
           <Button id="confirm-button" variant="primary">
             {t('personal-information:home-address.suggested.continue')}
           </Button>
-          <ButtonLink id="cancel-button" to="/personal-information/">
+          <ButtonLink id="cancel-button" routeId="$lang+/_protected+/personal-information+/index" params={params}>
             {t('personal-information:home-address.suggested.cancel')}
           </ButtonLink>
-          <ButtonLink id="edit-button" to="/personal-information/home-address/edit">
+          <ButtonLink id="edit-button" routeId="$lang+/_protected+/personal-information+/home-address+/edit" params={params}>
             {t('personal-information:home-address.suggested.edit')}
           </ButtonLink>
         </div>
