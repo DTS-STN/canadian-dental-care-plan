@@ -76,6 +76,13 @@ vi.mock('~/utils/locale-utils.server', () => ({
   redirectWithLocale: vi.fn().mockResolvedValue('/en/personal-information/home-address/address-accuracy'),
 }));
 
+vi.mock('~/utils/env.server', () => ({
+  getEnv: vi.fn().mockReturnValue({
+    CANADA_COUNTRY_ID: 'CAN',
+    USA_COUNTRY_ID: 'USA',
+  }),
+}));
+
 describe('_gcweb-app.personal-information.home-address.edit', () => {
   afterEach(() => {
     vi.clearAllMocks();

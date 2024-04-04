@@ -65,6 +65,13 @@ vi.mock('~/utils/locale-utils.server', () => ({
   redirectWithLocale: vi.fn().mockReturnValue('/en/personal-information/mailing-address/confirm'),
 }));
 
+vi.mock('~/utils/env.server', () => ({
+  getEnv: vi.fn().mockReturnValue({
+    CANADA_COUNTRY_ID: 'CAN',
+    USA_COUNTRY_ID: 'USA',
+  }),
+}));
+
 describe('_gcweb-app.personal-information.mailing-address.edit', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -73,6 +80,7 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
   describe('loader()', () => {
     it('should return addressInfo', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('csrfToken', 'csrfToken');
 
       const userService = getUserService();
       const addressService = getAddressService();
@@ -101,12 +109,8 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
             nameFr: '(FR) super country',
           },
         ],
-        homeAddressInfo: {
-          address: '111 Fake Home St',
-          city: 'city',
-          country: 'country',
-        },
         meta: {},
+        csrfToken: 'csrfToken',
         regionList: [
           {
             code: 'SP',
@@ -119,6 +123,8 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
             nameFr: '(FR) sample',
           },
         ],
+        CANADA_COUNTRY_ID: 'CAN',
+        USA_COUNTRY_ID: 'USA',
       });
     });
 

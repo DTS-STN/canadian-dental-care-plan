@@ -56,11 +56,6 @@ const db = factory({
     preferredMethodCommunicationCode: String,
     sinIdentification: primaryKey(String),
   },
-  accessToDentalInsurance: {
-    id: primaryKey(String),
-    nameEn: String,
-    nameFr: String,
-  },
   federalDentalBenefit: {
     id: primaryKey(faker.string.uuid),
     code: String,
@@ -162,19 +157,6 @@ db.personalInformation.create({
   alternateTelephoneNumber: '789-555-6666',
   preferredMethodCommunicationCode: '775170002',
   sinIdentification: '800000002',
-});
-
-// seed avaliable languages (before user)
-db.accessToDentalInsurance.create({
-  id: 'yes',
-  nameEn: 'Yes',
-  nameFr: '(Fr) Yes',
-});
-
-db.accessToDentalInsurance.create({
-  id: 'no',
-  nameEn: 'No',
-  nameFr: '(Fr) No',
 });
 
 db.federalDentalBenefit.create({

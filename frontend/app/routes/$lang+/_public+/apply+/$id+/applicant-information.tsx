@@ -66,7 +66,12 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   // state validation schema
   const applicantInformationSchema: z.ZodType<ApplicantInformationState> = z.object({
-    socialInsuranceNumber: z.string().trim().min(1, t('apply:applicant-information.error-message.sin-required')).refine(isValidSin, t('apply:applicant-information.error-message.sin-valid')),
+    socialInsuranceNumber: z
+      .string()
+      .trim()
+      .min(1, t('apply:applicant-information.error-message.sin-required'))
+      .refine(isValidSin, t('apply:applicant-information.error-message.sin-valid'))
+      .transform((sin) => formatSin(sin, '')),
     firstName: z.string().trim().min(1, t('apply:applicant-information.error-message.first-name-required')).max(100),
     lastName: z.string().trim().min(1, t('apply:applicant-information.error-message.last-name-required')).max(100),
     maritalStatus: z
@@ -175,19 +180,7 @@ export default function ApplyFlowApplicationInformation() {
                 aria-describedby="name-instructions"
               />
             </div>
-            <InputField
-              id="social-insurance-number"
-              name="socialInsuranceNumber"
-              label={t('applicant-information.sin')}
-              required
-              inputMode="numeric"
-              pattern="\d{9}"
-              placeholder={formatSin('000000000', '-')}
-              minLength={9}
-              maxLength={9}
-              defaultValue={defaultState?.socialInsuranceNumber ?? ''}
-              errorMessage={errorMessages['social-insurance-number']}
-            />
+            <InputField id="social-insurance-number" name="socialInsuranceNumber" label={t('applicant-information.sin')} required defaultValue={defaultState?.socialInsuranceNumber ?? ''} errorMessage={errorMessages['social-insurance-number']} />
             <InputRadios
               id="marital-status"
               name="maritalStatus"

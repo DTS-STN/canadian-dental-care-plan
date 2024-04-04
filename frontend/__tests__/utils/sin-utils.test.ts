@@ -26,10 +26,14 @@ describe('isValidSin', () => {
 
 describe('formatSin', () => {
   it('should format a SIN using the default separator', () => {
-    expect(formatSin('123456789')).toEqual('123 456 789');
+    expect(formatSin('800000002')).toEqual('800 000 002');
   });
 
   it('should format a SIN using the a supplied separator', () => {
-    expect(formatSin('123456789', '-')).toEqual('123-456-789');
+    expect(formatSin('800000002', '-')).toEqual('800-000-002');
+  });
+
+  it('should throw an error for invalid SIN', () => {
+    expect(() => formatSin('123456789')).toThrowError();
   });
 });

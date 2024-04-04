@@ -1,8 +1,8 @@
-import { Suspense, useContext } from 'react';
+import { Suspense, useContext, useEffect } from 'react';
 
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRouteLoaderData } from '@remix-run/react';
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useLocation, useRouteLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { getToast } from 'remix-toast';
@@ -14,6 +14,7 @@ import fontLatoStyleSheet from '~/fonts/lato.css';
 import fontNotoSansStyleSheet from '~/fonts/noto-sans.css';
 import { getBuildInfoService } from '~/services/build-info-service.server';
 import tailwindStyleSheet from '~/tailwind.css';
+import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import type { FeatureName } from '~/utils/env.server';
 import { getPublicEnv } from '~/utils/env.server';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -75,10 +76,17 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
 export default function App() {
   const { nonce } = useContext(NonceContext);
   const { env, origin, toast } = useLoaderData<typeof loader>();
+  const location = useLocation();
   const ns = useI18nNamespaces();
   const { i18n } = useTranslation(ns);
   const canonicalURL = useCanonicalURL(origin);
   const alternateLanguages = useAlternateLanguages(origin);
+
+  useEffect(() => {
+    if (env.ADOBE_ANALYTICS_SRC && env.ADOBE_ANALYTICS_JQUERY_SRC) {
+      adobeAnalytics.pageview(location.pathname);
+    }
+  }, [env.ADOBE_ANALYTICS_JQUERY_SRC, env.ADOBE_ANALYTICS_SRC, location.pathname]);
 
   return (
     <html lang={i18n.language}>
@@ -91,6 +99,12 @@ export default function App() {
           <link key={hrefLang} rel="alternate" hrefLang={hrefLang} href={href} />
         ))}
         <Links />
+        {env.ADOBE_ANALYTICS_SRC && env.ADOBE_ANALYTICS_JQUERY_SRC && (
+          <>
+            <script src={env.ADOBE_ANALYTICS_JQUERY_SRC} nonce={nonce} suppressHydrationWarning />
+            <script src={env.ADOBE_ANALYTICS_SRC} nonce={nonce} suppressHydrationWarning />
+          </>
+        )}
       </head>
       <body vocab="http://schema.org/" typeof="WebPage">
         <Suspense>

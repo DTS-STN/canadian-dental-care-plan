@@ -115,7 +115,6 @@ const serverEnv = z.object({
   MOCK_AUTH_ALLOWED_REDIRECTS: z.string().transform(emptyToUndefined).transform(csvToArray).default('http://localhost:3000/auth/callback/raoidc'),
 
   // cache duration settings
-  LOOKUP_SVC_ALL_ACCESS_TO_DENTAL_INSURANCE_OPTIONS_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_AVOIDED_DENTAL_COST_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
@@ -148,7 +147,11 @@ const serverEnv = z.object({
   OTEL_METRICS_EXPORT_TIMEOUT_MILLIS: z.coerce.number().default(30 * 1000),
   OTEL_SERVICE_NAME: z.string().trim().min(1).default('canadian-dental-care-plan'),
   OTEL_TRACES_ENDPOINT: z.string().trim().transform(emptyToUndefined).optional(),
-  OTEL_USE_CONSOLE_EXPORTERS: z.string().transform(toBoolean).default('false')
+  OTEL_USE_CONSOLE_EXPORTERS: z.string().transform(toBoolean).default('false'),
+
+  // Adobe Analytics scripts
+  ADOBE_ANALYTICS_SRC: z.string().url().optional(),
+  ADOBE_ANALYTICS_JQUERY_SRC: z.string().url().default('https://code.jquery.com/jquery-3.7.1.min.js')
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;
@@ -165,6 +168,8 @@ const publicEnv = serverEnv.pick({
   MSCA_BASE_URI: true,
   SESSION_TIMEOUT_SECONDS: true,
   SESSION_TIMEOUT_PROMPT_SECONDS: true,
+  ADOBE_ANALYTICS_SRC: true,
+  ADOBE_ANALYTICS_JQUERY_SRC: true,
 });
 
 export type PublicEnv = z.infer<typeof publicEnv>;

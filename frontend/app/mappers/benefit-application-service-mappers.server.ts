@@ -16,7 +16,7 @@ interface ToBenefitApplicationRequestArgs {
   dateOfBirth: DateOfBirthState;
   dentalBenefits: DentalBenefitsState;
   dentalInsurance: DentalInsuranceState;
-  partnerInformation?: PartnerInformationState;
+  partnerInformation: PartnerInformationState | undefined;
   personalInformation: PersonalInformationState;
 }
 
@@ -54,7 +54,7 @@ export function toBenefitApplicationRequest({ partnerInformation, applicantInfor
         PersonSINIdentification: {
           IdentificationID: applicantInformation.socialInsuranceNumber,
         },
-        RelatedPerson: partnerInformation ? [toRelatedPerson({ ...partnerInformation, maritalStatus: applicantInformation.maritalStatus })] : [],
+        RelatedPerson: partnerInformation ? [toRelatedPerson({ ...partnerInformation, personRelationshipCode: 'Spouse' })] : [],
         MailingSameAsHomeIndicator: personalInformation.copyMailingAddress,
         PreferredMethodCommunicationCode: {
           ReferenceDataID: communicationPreferences.preferredMethod,
@@ -181,22 +181,22 @@ function toHomeAddress({ copyMailingAddress, homeAddress, homeApartment, homeCit
 }
 
 interface ToInsurancePlanArgs {
-  federalBenefit: 'no' | 'yes';
+  hasFederalBenefits: boolean;
   federalSocialProgram?: string;
-  provincialTerritorialBenefit: 'no' | 'yes';
+  hasProvincialTerritorialBenefits: boolean;
   provincialTerritorialSocialProgram?: string;
 }
 
-function toInsurancePlan({ federalBenefit, federalSocialProgram, provincialTerritorialBenefit, provincialTerritorialSocialProgram }: ToInsurancePlanArgs) {
+function toInsurancePlan({ hasFederalBenefits, federalSocialProgram, hasProvincialTerritorialBenefits, provincialTerritorialSocialProgram }: ToInsurancePlanArgs) {
   const insurancePlanIdentification = [];
 
-  if (federalBenefit === 'yes' && federalSocialProgram && !validator.isEmpty(federalSocialProgram)) {
+  if (hasFederalBenefits && federalSocialProgram && !validator.isEmpty(federalSocialProgram)) {
     insurancePlanIdentification.push({
       IdentificationID: federalSocialProgram,
     });
   }
 
-  if (provincialTerritorialBenefit === 'yes' && provincialTerritorialSocialProgram && !validator.isEmpty(provincialTerritorialSocialProgram)) {
+  if (hasProvincialTerritorialBenefits && provincialTerritorialSocialProgram && !validator.isEmpty(provincialTerritorialSocialProgram)) {
     insurancePlanIdentification.push({
       IdentificationID: provincialTerritorialSocialProgram,
     });
@@ -210,10 +210,10 @@ interface ToRelatedPersonArgs {
   firstName: string;
   lastName: string;
   socialInsuranceNumber: string;
-  maritalStatus: string;
+  personRelationshipCode: 'Dependent' | 'Spouse';
 }
 
-function toRelatedPerson({ dateOfBirth, firstName, lastName, maritalStatus, socialInsuranceNumber }: ToRelatedPersonArgs) {
+function toRelatedPerson({ dateOfBirth, firstName, lastName, personRelationshipCode, socialInsuranceNumber }: ToRelatedPersonArgs) {
   return {
     PersonBirthDate: toDate(dateOfBirth),
     PersonName: [
@@ -223,7 +223,7 @@ function toRelatedPerson({ dateOfBirth, firstName, lastName, maritalStatus, soci
       },
     ],
     PersonRelationshipCode: {
-      ReferenceDataID: maritalStatus,
+      ReferenceDataName: personRelationshipCode,
     },
     PersonSINIdentification: {
       IdentificationID: socialInsuranceNumber,

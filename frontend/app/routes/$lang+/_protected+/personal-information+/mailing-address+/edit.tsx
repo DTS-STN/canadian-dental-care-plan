@@ -4,11 +4,10 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json } from '@remix-run/node';
 import { Form, useActionData, useLoaderData } from '@remix-run/react';
 
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
-import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
@@ -19,6 +18,7 @@ import { getAddressService } from '~/services/address-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
+import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -57,15 +57,16 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const csrfToken = String(session.get('csrfToken'));
 
   const addressInfo = await getAddressService().getAddressInfo(userId, userInfo.mailingAddress ?? '');
-  const homeAddressInfo = await getAddressService().getAddressInfo(userId, userInfo.homeAddress ?? '');
 
   const countryList = await getLookupService().getAllCountries();
   const regionList = await getLookupService().getAllRegions();
 
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:mailing-address.edit.page-title') }) };
 
-  return json({ addressInfo, countryList, csrfToken, homeAddressInfo, meta, regionList });
+  return json({ addressInfo, countryList, csrfToken, meta, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID });
 }
 
 export async function action({ context: { session }, request }: ActionFunctionArgs) {
@@ -124,8 +125,8 @@ export async function action({ context: { session }, request }: ActionFunctionAr
 
 export default function PersonalInformationMailingAddressEdit() {
   const actionData = useActionData<typeof action>();
-  const { addressInfo, homeAddressInfo, countryList, regionList, csrfToken } = useLoaderData<typeof loader>();
-  const [selectedCountry, setSelectedCountry] = useState('');
+  const { addressInfo, countryList, regionList, csrfToken, CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
+  const [selectedCountry, setSelectedCountry] = useState(addressInfo?.country);
   const [countryRegions, setCountryRegions] = useState<typeof regionList>([]);
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const errorSummaryId = 'error-summary';
@@ -208,64 +209,64 @@ export default function PersonalInformationMailingAddressEdit() {
 
   return (
     <>
-      <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:mailing-address.edit.subtitle')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post" noValidate>
+      <Form className="max-w-prose" method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
-        {homeAddressInfo && (
-          <InputCheckbox id="copy-home-address" name="copyHomeAddress" checked={copyAddressChecked} onChange={checkHandler} className="my-6">
-            {t('personal-information:mailing-address.edit.copy-home-address')}
-          </InputCheckbox>
-        )}
         <div className="my-6">
-          {copyAddressChecked && homeAddressInfo && (
-            <dl className="border-y py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
-              <dt>
-                <strong className="font-semibold">{t('personal-information:mailing-address.edit.copy-home-address-note')}</strong>
-              </dt>
-              <dd className="mt-3 sm:col-span-2 sm:mt-0">
-                <Address
-                  address={homeAddressInfo.address}
-                  city={homeAddressInfo.city}
-                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === homeAddressInfo.province)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn']}
-                  postalZipCode={homeAddressInfo.postalCode}
-                  country={countryList.find((country) => country.countryId === homeAddressInfo.country)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
-                />
-              </dd>
-            </dl>
-          )}
-          {!copyAddressChecked && (
-            <div className="max-w-prose">
-              <p className="mb-4 text-red-600">{t('gcweb:asterisk-indicates-required-field')}</p>
-              <div className="space-y-6">
-                <InputField id="address" className="w-full" label={t('personal-information:mailing-address.edit.field.address')} name="address" required defaultValue={defaultValues.address} errorMessage={errorMessages.address} />
-                <InputField id="city" className="w-full" label={t('personal-information:mailing-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
-                {regions.length > 0 && (
-                  <InputSelect id="province" className="w-full sm:w-1/2" label={t('personal-information:mailing-address.edit.field.province')} name="province" options={regions} defaultValue={defaultValues.province} errorMessage={errorMessages.province} />
-                )}
-                <InputField id="postalCode" label={t('personal-information:mailing-address.edit.field.postal-code')} name="postalCode" defaultValue={defaultValues.postalCode} errorMessage={errorMessages.postalCode} />
-                <InputSelect
-                  id="country"
-                  className="w-full sm:w-1/2"
-                  label={t('personal-information:mailing-address.edit.field.country')}
-                  name="country"
-                  required
-                  options={countries}
-                  onChange={countryChangeHandler}
-                  defaultValue={defaultValues.country}
-                  errorMessage={errorMessages.country}
-                />
-              </div>
+          <div className="space-y-6">
+            <InputField
+              id="address"
+              className="w-full"
+              label={t('personal-information:mailing-address.edit.field.address')}
+              helpMessagePrimary={t('personal-information:mailing-address.edit.field.address-note')}
+              name="address"
+              required
+              defaultValue={defaultValues.address}
+              errorMessage={errorMessages.address}
+            />
+            <InputField id="apartment" name="apartment" className="w-full" label={t('personal-information:home-address.edit.field.apartment')} />
+            <InputSelect
+              id="country"
+              className="w-full sm:w-1/2"
+              label={t('personal-information:mailing-address.edit.field.country')}
+              name="country"
+              required
+              options={countries}
+              onChange={countryChangeHandler}
+              defaultValue={defaultValues.country}
+              errorMessage={errorMessages.country}
+            />
+            {regions.length > 0 && (
+              <InputSelect id="province" className="w-full sm:w-1/2" label={t('personal-information:mailing-address.edit.field.province')} name="province" options={regions} defaultValue={defaultValues.province} errorMessage={errorMessages.province} />
+            )}
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <InputField id="city" className="w-full" label={t('personal-information:mailing-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
+              <InputField
+                id="postalCode"
+                className="w-full"
+                label={t('personal-information:mailing-address.edit.field.postal-code')}
+                name="postalCode"
+                defaultValue={defaultValues.postalCode}
+                errorMessage={errorMessages.postalCode}
+                required={selectedCountry === CANADA_COUNTRY_ID || selectedCountry === USA_COUNTRY_ID}
+              />
             </div>
-          )}
+          </div>
+
+          <InputCheckbox id="copyAddressChecked" name="copyAddressChecked" value="copy" checked={copyAddressChecked} onChange={checkHandler} className="my-8">
+            <Trans ns={handle.i18nNamespaces} i18nKey="personal-information:mailing-address.edit.update-home-address" />
+            <p>{t('personal-information:mailing-address.edit.update-home-address-note')}</p>
+          </InputCheckbox>
         </div>
+
         <div className="flex flex-wrap items-center gap-3">
-          <Button id="change-button" variant="primary">
-            {t('personal-information:mailing-address.edit.button.change')}
-          </Button>
-          <ButtonLink id="cancel-button" to="/personal-information">
-            {t('personal-information:mailing-address.edit.button.cancel')}
+          <ButtonLink id="back-button" to="/personal-information">
+            {t('personal-information:mailing-address.edit.button.back')}
           </ButtonLink>
+          <Button id="save-button" variant="primary">
+            {t('personal-information:mailing-address.edit.button.save')}
+          </Button>
         </div>
       </Form>
     </>

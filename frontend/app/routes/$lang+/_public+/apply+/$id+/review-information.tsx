@@ -138,11 +138,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const dentalBenefit = {
     federalBenefit: {
-      access: state.dentalBenefits.federalBenefit,
+      access: state.dentalBenefits.hasFederalBenefits,
       benefit: state.dentalBenefits.federalSocialProgram,
     },
     provTerrBenefit: {
-      access: state.dentalBenefits.provincialTerritorialBenefit,
+      access: state.dentalBenefits.hasProvincialTerritorialBenefits,
       province: state.dentalBenefits.province,
       benefit: state.dentalBenefits.provincialTerritorialSocialProgram,
     },
@@ -178,6 +178,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     dentalBenefits: state.dentalBenefits,
     dentalInsurance: state.dentalInsurance,
     personalInformation: state.personalInformation,
+    partnerInformation: state.partnerInformation,
   });
 
   const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
@@ -188,7 +189,6 @@ export async function action({ context: { session }, params, request }: ActionFu
   };
 
   const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { submissionInfo } });
-
   return redirectWithLocale(request, `/apply/${id}/confirmation`, sessionResponseInit);
 }
 
@@ -258,7 +258,7 @@ export default function ReviewInformation() {
           {spouseInfo && (
             <div>
               <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.spouse-title')}</h2>
-              <dl>
+              <dl className="mt-6 divide-y border-y">
                 <DescriptionListItem term={t('apply:review-information.full-name-title')}>
                   {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
                   <p className="mt-4">
@@ -381,14 +381,14 @@ export default function ReviewInformation() {
                 </p>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply:review-information.dental-benefit-title')}>
-                {dentalBenefit.federalBenefit.access === 'yes' || dentalBenefit.provTerrBenefit.access === 'yes' ? (
+                {dentalBenefit.federalBenefit.access || dentalBenefit.provTerrBenefit.access ? (
                   <>
                     <p>{t('apply:review-information.yes')}</p>
                     <p>{t('apply:review-information.dental-benefit-has-access')}</p>
                     <div>
                       <ul className="ml-6 list-disc">
-                        {dentalBenefit.federalBenefit.access === 'yes' && <li>{federalSocialProgram}</li>}
-                        {dentalBenefit.provTerrBenefit.access === 'yes' && <li>{provincialTerritorialSocialProgram}</li>}
+                        {dentalBenefit.federalBenefit.access && <li>{federalSocialProgram}</li>}
+                        {dentalBenefit.provTerrBenefit.access && <li>{provincialTerritorialSocialProgram}</li>}
                       </ul>
                     </div>
                   </>
