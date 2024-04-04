@@ -28,7 +28,7 @@
       "field": {
         "address": "Address",
         "address-note": "Include street number and name.",
-        "apartment": "Apartment, suite, etc. (optional)",
+        "apartment": "Apartment, suite, etc.",
         "city": "City or town",
         "province": "Province, territory, state, or region",
         "postal-code": "Postal code or ZIP code",
@@ -89,7 +89,7 @@
       "field": {
         "address": "Address",
         "address-note": "Include street number and name.",
-        "apartment": "Apartment, suite, etc. (optional)",
+        "apartment": "Apartment, suite, etc.",
         "city": "City or town",
         "province": "Province, territory, state, or region",
         "postal-code": "Postal code or ZIP code",
