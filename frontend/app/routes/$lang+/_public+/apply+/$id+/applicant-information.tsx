@@ -67,8 +67,8 @@ export async function action({ context: { session }, params, request }: ActionFu
   // state validation schema
   const applicantInformationSchema: z.ZodType<ApplicantInformationState> = z.object({
     socialInsuranceNumber: z.string().trim().min(1, t('apply:applicant-information.error-message.sin-required')).refine(isValidSin, t('apply:applicant-information.error-message.sin-valid')),
-    firstName: z.string().trim().min(1, t('apply:applicant-information.error-message.first-name-required')),
-    lastName: z.string().trim().min(1, t('apply:applicant-information.error-message.last-name-required')),
+    firstName: z.string().trim().min(1, t('apply:applicant-information.error-message.first-name-required')).max(100),
+    lastName: z.string().trim().min(1, t('apply:applicant-information.error-message.last-name-required')).max(100),
     maritalStatus: z
       .string({ errorMap: () => ({ message: t('apply:applicant-information.error-message.marital-status-required') }) })
       .trim()
@@ -157,12 +157,23 @@ export default function ApplyFlowApplicationInformation() {
                 name="firstName"
                 label={t('applicant-information.first-name')}
                 className="w-full"
+                maxLength={100}
                 required
                 aria-describedby="name-instructions"
                 errorMessage={errorMessages['first-name']}
                 defaultValue={defaultState?.firstName ?? ''}
               />
-              <InputField id="last-name" name="lastName" label={t('applicant-information.last-name')} className="w-full" required defaultValue={defaultState?.lastName ?? ''} errorMessage={errorMessages['last-name']} aria-describedby="name-instructions" />
+              <InputField
+                id="last-name"
+                name="lastName"
+                label={t('applicant-information.last-name')}
+                className="w-full"
+                maxLength={100}
+                required
+                defaultValue={defaultState?.lastName ?? ''}
+                errorMessage={errorMessages['last-name']}
+                aria-describedby="name-instructions"
+              />
             </div>
             <InputField
               id="social-insurance-number"
