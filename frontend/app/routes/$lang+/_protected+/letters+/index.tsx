@@ -24,6 +24,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { useUserOrigin } from '~/utils/user-origin-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'letters:index.page-title' }],
@@ -74,6 +75,7 @@ export default function LettersIndex() {
   const [, setSearchParams] = useSearchParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const { letters, letterTypes, sortOrder } = useLoaderData<typeof loader>();
+  const userOrigin = useUserOrigin();
 
   function handleOnSortOrderChange(e: ChangeEvent<HTMLSelectElement>) {
     setSearchParams((prev) => {
@@ -121,11 +123,13 @@ export default function LettersIndex() {
         })}
       </ul>
 
-      <div className="my-6 flex flex-wrap items-center gap-3">
-        <ButtonLink id="back-button" to="/home">
-          {t('letters:index.button.back')}
-        </ButtonLink>
-      </div>
+      {userOrigin && (
+        <div className="my-6 flex flex-wrap items-center gap-3">
+          <ButtonLink id="back-button" to={userOrigin.to}>
+            {t('letters:index.button.back')}
+          </ButtonLink>
+        </div>
+      )}
     </>
   );
 }
