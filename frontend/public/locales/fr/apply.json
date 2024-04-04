@@ -13,11 +13,10 @@
     "cancel-btn": "Annuler",
     "save-btn": "Enregistrer",
     "error-message": {
-      "first-name-required": "Le prénom est obligatoire.",
-      "last-name-required": "Le nom de famille est obligatoire.",
-      "marital-status-required": "L'état civil est obligatoire.",
-      "sin-required": "Le numéro d'assurance sociale (NAS) est requis.",
-      "sin-valid": "Le numéro d'assurance sociale (NAS) doit être valide."
+      "first-name-required": "Entrez le prénom",
+      "last-name-required": "Entrez le nom de famille",
+      "marital-status-required": "Sélectionnez l'état civil",
+      "sin-required": "Entrez un NAS de 9 chiffres"
     }
   },
   "communication-preference": {
@@ -36,18 +35,14 @@
     "cancel-btn": "Annuler",
     "save-btn": "Enregistrer",
     "error-message": {
-      "confirm-email-for-future-match": "L'adresse courriel de confirmation doit correspondre à l'adresse courriel.",
+      "email-match": "Les adresses courriel entrées ne concordent pas",
       "confirm-email-for-future-required": "L'adresse courriel de confirmation est obligatoire.",
-      "confirm-email-for-future-valid": "L'adresse courriel de confirmation doit être un format d'adresse courriel valide.",
-      "confirm-email-match": "L'adresse courriel de confirmation doit correspondre à l'adresse courriel.",
-      "confirm-email-required": "L'adresse courriel de confirmation est obligatoire.",
-      "confirm-email-valid": "L'adresse courriel de confirmation doit être un format d'adresse courriel valide.",
+      "confirm-email-required": "Confirmez l'adresse courriel",
       "email-for-future-required": "L'adresse courriel est obligatoire.",
-      "email-for-future-valid": "L'adresse courriel doit être un format d'adresse courriel valide.",
-      "email-required": "L'adresse courriel est obligatoire.",
-      "email-valid": "L'adresse courriel doit être un format d'adresse courriel valide.",
-      "preferred-language-required": "La langue officielle de communication préférée est obligatoire.",
-      "preferred-method-required": "Le mode de communication préféré pour la Sun Life est obligatoire."
+      "email-required": "Entrez l'adresse courriel",
+      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
+      "preferred-language-required": "Sélectionnez la langue de communication préférée",
+      "preferred-method-required": "Sélectionnez le moyen de communication préféré"
     }
   },
   "confirm": {
@@ -127,10 +122,9 @@
       "save-btn": "Enregistrer"
     },
     "error-message": {
-      "federal-benefit-required": "Les assurances dentaires fédérales est obligatoire.",
-      "program-required": "Le programme social est obligatoire.",
-      "province-required": "La province ou territoire est obligatoire.",
-      "provincial-benefit-required": "Les assurances dentaires provinciales ou territoriales est obligatoire."
+      "federal-benefit-required": "Sélectionnez si vous avez la prestation dentaire fédérale",
+      "program-required": "Sélectionnez un programme",
+      "provincial-benefit-required": "Sélectionnez si vous avez la prestation dentaire provinciale ou territoriale"
     }
   },
   "dental-insurance": {
@@ -163,7 +157,7 @@
       }
     },
     "error-message": {
-      "dental-insurance-required": "La question l'accès à une assurance dentaire ou à une couverture est obligatoire."
+      "dental-insurance-required": "Sélectionnez si vous avez une assurance dentaire"
     }
   },
   "eligibility": {
@@ -175,7 +169,7 @@
         "delegate": "Je présente une demande pour quelqu'un d'autre"
       },
       "error-message": {
-        "type-of-application-required": "Le type de demandeur est obligatoire."
+        "type-of-application-required": "Sélectionnez à qui s'adresse cette demande"
       },
       "back-btn": "Retour",
       "continue-btn": "Continuer"
@@ -188,7 +182,7 @@
         "no": "Non"
       },
       "error-message": {
-        "tax-filing-required": "La question selon laquelle vous avez produit votre déclaration de revenus pour 2023 et avez reçu votre avis de cotisation est obligatoire."
+        "tax-filing-required": "Sélectionnez si vous avez fait votre déclaration de revenus ou non"
       },
       "back-btn": "Retour",
       "continue-btn": "Continuer"
@@ -198,8 +192,8 @@
       "description": "Les demandes au titre du Régime canadien de soins dentaires (RCSD) seront traitées par étapes. Votre date de naissance détermine le moment où vous pouvez présenter une demande.",
       "form-instructions": "Veuillez entrer votre date de naissance",
       "error-message": {
-        "date-of-birth-is-past": "La date de naissance doit être dans le passé.",
-        "date-of-birth-required-and-valid": "La date de naissance est requise et doit être une date valide."
+        "date-of-birth-is-past": "La date de naissance doit être dans le passé",
+        "date-of-birth-required-and-valid": "La date de naissance est requise et doit être une date valide"
       },
       "back-btn": "Retour",
       "continue-btn": "Continuer",
@@ -263,14 +257,13 @@
     "cancel-btn": "Annuler",
     "save-btn": "Enregistrer",
     "error-message": {
-      "confirm-required": "Le champ doit être sélectionné",
-      "date-of-birth-is-past": "La date de naissance doit être dans le passé.",
-      "date-of-birth-required-and-valid": "La date de naissance est requise et doit être une date valide.",
-      "first-name-required": "Le prénom est obligatoire.",
-      "last-name-required": "Le nom de famille est obligatoire.",
-      "sin-required": "Le numéro d'assurance sociale (NAS) est requis.",
-      "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique.",
-      "sin-valid": "Le numéro d'assurance sociale (NAS) doit être valide."
+      "confirm-required": "La case à cocher doit être sélectionnée",
+      "date-of-birth-is-past": "La date de naissance doit être dans le passé",
+      "date-of-birth-required-and-valid": "La date de naissance est requise et doit être une date valide",
+      "first-name-required": "Entrez le prénom",
+      "last-name-required": "Entrez le nom de famille",
+      "sin-required": "Entrez un NAS de 9 chiffres",
+      "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
     }
   },
   "personal-information": {
@@ -300,22 +293,15 @@
     "cancel-btn": "Annuler",
     "save-btn": "Enregistrer",
     "error-message": {
-      "home-address-required": "L'adresse du domicile est obligatoire.",
-      "home-city-required": "La ville ou municipalité du domicile est obligatoire.",
-      "home-country-required": "Le pays du domicile est obligatoire.",
-      "home-postal-code-required": "Le code postal/code ZIP du domicile est obligatoire.",
-      "home-postal-code-valid": "Le code postal du domicile doit être valide.",
-      "home-province-required": "La province, territoire, État ou région du domicile est obligatoire.",
-      "home-zip-code-valid": "Le code ZIP du domicile doit être valide.",
-      "mailing-address-required": "L'adresse de l'adresse postale est obligatoire.",
-      "mailing-city-required": "La ville ou municipalité de l'adresse postale est obligatoire.",
-      "mailing-country-required": "Le pays de l'adresse postale est obligatoire.",
-      "mailing-postal-code-required": "Le code postal/code ZIP de l'adresse postale est obligatoire.",
-      "mailing-postal-code-valid": "Le code postal de l'adresse postale doit être valide.",
-      "mailing-province-required": "La province, territoire, État ou région de l'adresse postale est obligatoire.",
-      "mailing-zip-code-valid": "Le code ZIP de l'adresse postale doit être valide.",
-      "phone-number-valid": "Le numéro de téléphone doit être valide.",
-      "phone-number-alt-valid": "L'autre numéro de téléphone doit être valide."
+      "address-required": "Entrez l'adresse, normalement le numéro et le nom de la rue",
+      "city-required": "Entrez une ville",
+      "country-required": "Sélectionnez un pays",
+      "postal-code-required": "Entrez un code postal ou un code postal américain",
+      "postal-code-valid": "Entrez un code postal dans le bon format, par exemple A1A 1A1",
+      "province-required": "Sélectionnez une province",
+      "zip-code-valid": "Entrez un code postal américain dans le bon format, par exemple 12345",
+      "phone-number-valid": "Le numéro de téléphone doit être composé uniquement de chiffres",
+      "phone-number-alt-valid": "Le numéro de téléphone doit être composé uniquement de chiffres"
     }
   },
   "progress": {
