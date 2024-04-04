@@ -20,7 +20,9 @@ export function PageHeaderBrand() {
         <section id="wb-lng">
           <h2 className="sr-only">{t('gcweb:header.language-selection')}</h2>
           <LanguageSwitcher>
-            <span className="hidden md:block">{t('gcweb:language-switcher.alt-lang')}</span>
+            <span className="hidden md:block" lang={t('gcweb:language-switcher.alt-lang-abbr')}>
+              {t('gcweb:language-switcher.alt-lang')}
+            </span>
             <abbr title={t('gcweb:language-switcher.alt-lang')} className="cursor-help uppercase md:hidden">
               {t('gcweb:language-switcher.alt-lang-abbr')}
             </abbr>
