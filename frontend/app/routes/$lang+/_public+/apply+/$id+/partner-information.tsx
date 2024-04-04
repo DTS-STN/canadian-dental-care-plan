@@ -78,8 +78,8 @@ export async function action({ context: { session }, params, request }: ActionFu
       .min(1, t('apply:partner-information.error-message.date-of-birth-required-and-valid'))
       .refine((val) => isValid(parse(val, 'yyyy-MM-dd', new Date())), t('apply:partner-information.error-message.date-of-birth-required-and-valid'))
       .refine((val) => isPast(parse(val, 'yyyy-MM-dd', new Date())), t('apply:partner-information.error-message.date-of-birth-is-past')),
-    firstName: z.string().trim().min(1, t('apply:partner-information.error-message.first-name-required')),
-    lastName: z.string().trim().min(1, t('apply:partner-information.error-message.last-name-required')),
+    firstName: z.string().trim().min(1, t('apply:partner-information.error-message.first-name-required')).max(100),
+    lastName: z.string().trim().min(1, t('apply:partner-information.error-message.last-name-required')).max(100),
     socialInsuranceNumber: z
       .string()
       .trim()
@@ -168,6 +168,7 @@ export default function ApplyFlowApplicationInformation() {
                 name="firstName"
                 className="w-full"
                 label={t('apply:partner-information.first-name')}
+                maxLength={100}
                 required
                 defaultValue={defaultState?.firstName ?? ''}
                 errorMessage={errorMessages['first-name']}
@@ -178,6 +179,7 @@ export default function ApplyFlowApplicationInformation() {
                 name="lastName"
                 className="w-full"
                 label={t('apply:partner-information.last-name')}
+                maxLength={100}
                 required
                 defaultValue={defaultState?.lastName ?? ''}
                 errorMessage={errorMessages['last-name']}

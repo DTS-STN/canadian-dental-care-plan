@@ -78,10 +78,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     .object({
       preferredLanguage: z.string().trim().min(1, t('apply:communication-preference.error-message.preferred-language-required')),
       preferredMethod: z.string().trim().min(1, t('apply:communication-preference.error-message.preferred-method-required')),
-      email: z.string().trim().optional(),
-      confirmEmail: z.string().trim().optional(),
-      emailForFuture: z.string().trim().optional(),
-      confirmEmailForFuture: z.string().trim().optional(),
+      email: z.string().trim().max(100).optional(),
+      confirmEmail: z.string().trim().max(100).optional(),
+      emailForFuture: z.string().trim().max(100).optional(),
+      confirmEmailForFuture: z.string().trim().max(100).optional(),
     })
     .superRefine((val, ctx) => {
       if (val.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID) {
@@ -198,12 +198,22 @@ export default function ApplyFlowCommunicationPreferencePage() {
           <p className="md:col-span-2" id="future-email-note">
             {t('apply:communication-preference.future-email-note')}
           </p>
-          <InputField id="email-for-future" type="email" className="w-full" label={t('apply:communication-preference.future-email')} name="emailForFuture" errorMessage={errorMessages['email-for-future']} defaultValue={defaultState?.emailForFuture ?? ''} />
+          <InputField
+            id="email-for-future"
+            type="email"
+            className="w-full"
+            label={t('apply:communication-preference.future-email')}
+            maxLength={100}
+            name="emailForFuture"
+            errorMessage={errorMessages['email-for-future']}
+            defaultValue={defaultState?.emailForFuture ?? ''}
+          />
           <InputField
             id="confirm-email-for-future"
             type="email"
             className="w-full"
             label={t('apply:communication-preference.future-confirm-email')}
+            maxLength={100}
             name="confirmEmailForFuture"
             errorMessage={errorMessages['confirm-email-for-future']}
             defaultValue={defaultState?.confirmEmailForFuture ?? ''}
@@ -223,8 +233,18 @@ export default function ApplyFlowCommunicationPreferencePage() {
           <p className="md:col-span-2" id="email-note">
             {t('apply:communication-preference.email-note')}
           </p>
-          <InputField id="email" type="email" className="w-full" label={t('apply:communication-preference.email')} name="email" errorMessage={errorMessages.email} defaultValue={defaultState?.email ?? ''} required />
-          <InputField id="confirm-email" type="email" className="w-full" label={t('apply:communication-preference.confirm-email')} name="confirmEmail" errorMessage={errorMessages['confirm-email']} defaultValue={defaultState?.confirmEmail ?? ''} required />
+          <InputField id="email" type="email" className="w-full" label={t('apply:communication-preference.email')} maxLength={100} name="email" errorMessage={errorMessages.email} defaultValue={defaultState?.email ?? ''} required />
+          <InputField
+            id="confirm-email"
+            type="email"
+            className="w-full"
+            label={t('apply:communication-preference.confirm-email')}
+            maxLength={100}
+            name="confirmEmail"
+            errorMessage={errorMessages['confirm-email']}
+            defaultValue={defaultState?.confirmEmail ?? ''}
+            required
+          />
         </div>
       ),
       onChange: handleOnPreferredMethodChecked,
