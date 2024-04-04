@@ -26,7 +26,6 @@ import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
-export type ReviewInformationState = boolean;
 /**
  * Represents the state of an application submission, holding data such as confirmation code and submission timestamp.
  */
@@ -55,7 +54,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const maritalStatuses = await getLookupService().getAllMaritalStatuses();
   const provincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
   const federalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
@@ -69,7 +68,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     state.personalInformation === undefined ||
     state.taxFiling2023 === undefined ||
     state.typeOfApplication === undefined) {
-    throw new Error(`Incomplete application "${id}" state!`);
+    throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -150,13 +149,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:review-information.page-title') }) };
 
-  return json({ id, userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, meta });
+  return json({ id: state.id, userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, meta });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
   const benefitApplicationService = getBenefitApplicationService();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
 
   // prettier-ignore
   if (state.applicantInformation === undefined ||
@@ -167,7 +166,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     state.personalInformation === undefined ||
     state.taxFiling2023 === undefined ||
     state.typeOfApplication === undefined) {
-    throw new Error(`Incomplete application "${id}" state!`);
+    throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
   // TODO submit to the API and grab the confirmation code from the response
@@ -188,8 +187,8 @@ export async function action({ context: { session }, params, request }: ActionFu
     submittedOn: new Date().toISOString(),
   };
 
-  const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { submissionInfo } });
-  return redirectWithLocale(request, `/apply/${id}/confirmation`, sessionResponseInit);
+  await applyRouteHelpers.saveState({ params, request, session, state: { submissionInfo } });
+  return redirectWithLocale(request, `/apply/${state.id}/confirmation`);
 }
 
 export default function ReviewInformation() {

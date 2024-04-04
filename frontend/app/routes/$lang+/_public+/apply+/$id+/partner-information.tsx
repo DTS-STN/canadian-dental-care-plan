@@ -47,26 +47,26 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // TODO: the flow for where to redirect to will need to be determined depending on the state of the form
   if (![MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(state.applicantInformation?.maritalStatus ?? ''))) {
-    return redirectWithLocale(request, `/apply/${id}/applicant-information`);
+    return redirectWithLocale(request, `/apply/${state.id}/applicant-information`);
   }
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:partner-information.page-title') }) };
 
-  return json({ id, csrfToken, meta, defaultState: state.partnerInformation, editMode: state.editMode });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.partnerInformation, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/partner-information');
 
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -111,8 +111,13 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { partnerInformation: parsedDataResult.data } });
-  return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/personal-information`, sessionResponseInit);
+  await applyRouteHelpers.saveState({ params, request, session, state: { partnerInformation: parsedDataResult.data } });
+
+  if (state.editMode) {
+    return redirectWithLocale(request, `/apply/${state.id}/review-information`);
+  }
+
+  return redirectWithLocale(request, `/apply/${state.id}/personal-information`);
 }
 
 export default function ApplyFlowApplicationInformation() {

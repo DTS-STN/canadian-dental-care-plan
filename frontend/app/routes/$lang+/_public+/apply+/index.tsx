@@ -29,11 +29,11 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const locale = getLocale(request);
 
   const id = randomUUID().toString();
-  const sessionResponseInit = await applyRouteHelpers.start({ id, request, session });
+  const state = await applyRouteHelpers.start({ id, session });
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:index.page-title') }) };
 
-  return json({ id, locale, meta }, sessionResponseInit);
+  return json({ id: state.id, locale, meta });
 }
 
 export default function ApplyIndex() {

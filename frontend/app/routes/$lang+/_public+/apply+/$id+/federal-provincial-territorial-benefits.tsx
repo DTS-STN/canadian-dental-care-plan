@@ -63,7 +63,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const { CANADA_COUNTRY_ID } = getEnv();
   const applyRouteHelpers = getApplyRouteHelpers();
   const lookupService = getLookupService();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
@@ -79,7 +79,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     defaultState: state.dentalBenefits,
     editMode: state.editMode,
     federalSocialPrograms,
-    id,
+    id: state.id,
     meta,
     provincialTerritorialSocialPrograms,
     regions,

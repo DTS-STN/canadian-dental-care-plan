@@ -41,13 +41,13 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.type-of-application.page-title') }) };
 
-  return json({ id, csrfToken, meta, defaultState: state.typeOfApplication });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.typeOfApplication });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -80,13 +80,13 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { typeOfApplication: parsedDataResult.data } });
+  await applyRouteHelpers.saveState({ params, request, session, state: { typeOfApplication: parsedDataResult.data } });
 
   if (parsedDataResult.data === ApplicantType.Delegate) {
-    return redirectWithLocale(request, `/apply/${id}/application-delegate`, sessionResponseInit);
+    return redirectWithLocale(request, `/apply/${id}/application-delegate`);
   }
 
-  return redirectWithLocale(request, `/apply/${id}/tax-filing`, sessionResponseInit);
+  return redirectWithLocale(request, `/apply/${id}/tax-filing`);
 }
 
 export default function ApplyFlowTypeOfApplication() {

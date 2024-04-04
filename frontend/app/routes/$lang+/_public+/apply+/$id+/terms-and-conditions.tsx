@@ -68,9 +68,9 @@ export async function action({ context: { session }, request, params }: ActionFu
     log.warn(`hCaptcha verification failed: [${error}]; Proceeding with normal application flow`);
   }
 
-  const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: {} });
+  await applyRouteHelpers.saveState({ params, request, session, state: {} });
 
-  return redirectWithLocale(request, `/apply/${id}/type-application`, sessionResponseInit);
+  return redirectWithLocale(request, `/apply/${id}/type-application`);
 }
 
 export default function ApplyIndex() {

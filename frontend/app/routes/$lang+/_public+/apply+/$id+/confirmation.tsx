@@ -36,7 +36,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
@@ -50,7 +50,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     state.submissionInfo === undefined ||
     state.taxFiling2023 === undefined ||
     state.typeOfApplication === undefined) {
-    throw new Error(`Incomplete application "${id}" state!`);
+    throw new Error(`Incomplete application "${state.id}" state!`);
   }
   const allFederalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
   const allProvincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
@@ -129,8 +129,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
   await applyRouteHelpers.loadState({ params, request, session });
-  const sessionResponseInit = await applyRouteHelpers.clearState({ params, request, session });
-  return redirectWithLocale(request, '/apply', sessionResponseInit);
+  await applyRouteHelpers.clearState({ params, request, session });
+  return redirectWithLocale(request, '/apply');
 }
 
 export default function ApplyFlowConfirm() {
