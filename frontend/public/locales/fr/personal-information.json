@@ -20,25 +20,28 @@
   },
   "home-address": {
     "edit": {
-      "page-title": "(FR) Change home address",
-      "subtitle": "(FR) Please update your home address below.",
+      "page-title": "(FR) ome address",
       "breadcrumbs": {
         "personal-information": "(FR) Personal information",
-        "home-address-change": "(FR) Change home address"
+        "home-address-change": "(FR) Home address"
       },
       "field": {
-        "address": "(FR) Address",
-        "city": "(FR) City",
-        "province": "(FR) Province/State",
-        "postal-code": "(FR) Postal code",
-        "country": "(FR) Country"
+        "address": "Adresse",
+        "address-note": "Inclure le numéro de rue et le nom.",
+        "apartment": "Appartement, suite, etc.",
+        "city": "Ville ou municipalité",
+        "province": "Province, territoire, État ou région",
+        "postal-code": "(FR) Postal code or ZIP code",
+        "country": "(FR) Country or region"
       },
+      "update-mailing-address": "<strong>(FR) Use this address to also update my mailing address</strong>",
+      "update-mailing-address-note": "(FR) Check this box if your home address is the same as your mailing address.",
       "error-message": {
         "empty-field": "(FR) Enter a value"
       },
       "button": {
-        "change": "(FR) Change",
-        "cancel": "(FR) Cancel"
+        "back": "Retour",
+        "save": "Enregistrer"
       },
       "updated-notification": "(FR) Home address updated"
     },
@@ -78,27 +81,30 @@
   },
   "mailing-address": {
     "edit": {
-      "page-title": "(FR) Change mailing address",
-      "subtitle": "(FR) Please update your mailing address below.",
+      "page-title": "(FR) Mailing address",
       "breadcrumbs": {
         "personal-information": "(FR) Personal information",
-        "mailing-address-change": "(FR) Change mailing address"
+        "mailing-address-change": "(FR) Mailing address"
       },
       "copy-home-address": "(FR) Copy home address",
       "copy-home-address-note": "(FR) We have the following home address on file, which will be used as your mailing address:",
       "field": {
-        "address": "(FR) Address",
-        "city": "(FR) City",
-        "province": "(FR) Province/State",
-        "postal-code": "(FR) Postal code",
-        "country": "(FR) Country"
+        "address": "Adresse",
+        "address-note": "Inclure le numéro de rue et le nom.",
+        "apartment": "Appartement, suite, etc.",
+        "city": "Ville ou municipalité",
+        "province": "Province, territoire, État ou région",
+        "postal-code": "(FR) Postal code or ZIP code",
+        "country": "(FR) Country or region"
       },
+      "update-home-address": "<strong>(FR) Use this address to also update my mailing address</strong>",
+      "update-home-address-note": "(FR) Check this box if your home address is the same as your mailing address.",
       "error-message": {
         "empty-field": "(FR) Enter a value"
       },
       "button": {
-        "change": "(FR) Change",
-        "cancel": "(FR) Cancel"
+        "back": "Retour",
+        "save": "Enregistrer"
       }
     },
     "address-accuracy": {

@@ -20,25 +20,28 @@
   },
   "home-address": {
     "edit": {
-      "page-title": "Change home address",
-      "subtitle": "Please update your home address below.",
+      "page-title": "Home address",
       "breadcrumbs": {
         "personal-information": "Personal information",
-        "home-address-change": "Change home address"
+        "home-address-change": "Home address"
       },
       "field": {
         "address": "Address",
-        "city": "City",
-        "province": "Province/State",
-        "postal-code": "Postal code",
-        "country": "Country"
+        "address-note": "Include street number and name.",
+        "apartment": "Apartment, suite, etc.",
+        "city": "City or town",
+        "province": "Province, territory, state, or region",
+        "postal-code": "Postal code or ZIP code",
+        "country": "Country or region"
       },
+      "update-mailing-address": "<strong>Use this address to also update my mailing address</strong>",
+      "update-mailing-address-note": "Check this box if your home address is the same as your mailing address.",
       "error-message": {
         "empty-field": "Enter a value"
       },
       "button": {
-        "change": "Change",
-        "cancel": "Cancel"
+        "back": "Back",
+        "save": "Save"
       },
       "updated-notification": "Home address updated"
     },
@@ -78,27 +81,28 @@
   },
   "mailing-address": {
     "edit": {
-      "page-title": "Change mailing address",
-      "subtitle": "Please update your mailing address below.",
+      "page-title": "Mailing address",
       "breadcrumbs": {
         "personal-information": "Personal information",
-        "mailing-address-change": "Change mailing address"
+        "mailing-address-change": "Mailing address"
       },
-      "copy-home-address": "Copy home address",
-      "copy-home-address-note": "We have the following home address on file, which will be used as your mailing address:",
       "field": {
         "address": "Address",
-        "city": "City",
-        "province": "Province/State",
-        "postal-code": "Postal code",
-        "country": "Country"
+        "address-note": "Include street number and name.",
+        "apartment": "Apartment, suite, etc.",
+        "city": "City or town",
+        "province": "Province, territory, state, or region",
+        "postal-code": "Postal code or ZIP code",
+        "country": "Country or region"
       },
+      "update-home-address": "<strong>Use this address to also update my home address</strong>",
+      "update-home-address-note": "Check this box if your home address is the same as your mailing address.",
       "error-message": {
         "empty-field": "Enter a value"
       },
       "button": {
-        "change": "Change",
-        "cancel": "Cancel"
+        "back": "Back",
+        "save": "Save"
       }
     },
     "address-accuracy": {
