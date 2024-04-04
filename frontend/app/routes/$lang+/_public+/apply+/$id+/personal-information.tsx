@@ -61,7 +61,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
   const lookupService = getLookupService();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
@@ -71,14 +71,14 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:personal-information.page-title') }) };
 
-  return json({ id, csrfToken, meta, defaultState: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, editMode: state.editMode });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/personal-information');
 
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
@@ -206,8 +206,13 @@ export async function action({ context: { session }, params, request }: ActionFu
       }
     : parsedDataResult.data;
 
-  const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { personalInformation: updatedData } });
-  return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/communication-preference`, sessionResponseInit);
+  await applyRouteHelpers.saveState({ params, request, session, state: { personalInformation: updatedData } });
+
+  if (state.editMode) {
+    return redirectWithLocale(request, `/apply/${state.id}/review-information`);
+  }
+
+  return redirectWithLocale(request, `/apply/${state.id}/communication-preference`);
 }
 
 export default function ApplyFlowPersonalInformation() {

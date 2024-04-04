@@ -37,20 +37,20 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:dental-insurance.title') }) };
 
-  return json({ id, csrfToken, meta, defaultState: state.dentalInsurance, editMode: state.editMode });
+  return json({ id: state, csrfToken, meta, defaultState: state.dentalInsurance, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/dental-insurance');
 
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -72,8 +72,13 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { dentalInsurance: parsedDataResult.data } });
-  return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/federal-provincial-territorial-benefits`, sessionResponseInit);
+  await applyRouteHelpers.saveState({ params, request, session, state: { dentalInsurance: parsedDataResult.data } });
+
+  if (state.editMode) {
+    return redirectWithLocale(request, `/apply/${state.id}/review-information`);
+  }
+
+  return redirectWithLocale(request, `/apply/${state.id}/federal-provincial-territorial-benefits`);
 }
 
 export default function AccessToDentalInsuranceQuestion() {

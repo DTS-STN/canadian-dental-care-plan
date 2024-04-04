@@ -41,13 +41,13 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.tax-filing.page-title') }) };
 
-  return json({ id, csrfToken, meta, defaultState: state.taxFiling2023 });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.taxFiling2023 });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -77,13 +77,13 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { taxFiling2023: parsedDataResult.data } });
+  await applyRouteHelpers.saveState({ params, request, session, state: { taxFiling2023: parsedDataResult.data } });
 
   if (parsedDataResult.data === TaxFilingOption.No) {
-    return redirectWithLocale(request, `/apply/${id}/file-taxes`, sessionResponseInit);
+    return redirectWithLocale(request, `/apply/${id}/file-taxes`);
   }
 
-  return redirectWithLocale(request, `/apply/${id}/date-of-birth`, sessionResponseInit);
+  return redirectWithLocale(request, `/apply/${id}/date-of-birth`);
 }
 
 export default function ApplyFlowTaxFiling() {

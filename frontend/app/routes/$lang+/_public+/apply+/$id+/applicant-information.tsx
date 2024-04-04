@@ -46,21 +46,21 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
   const lookupService = getLookupService();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const maritalStatuses = await lookupService.getAllMaritalStatuses();
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:applicant-information.page-title') }) };
 
-  return json({ id, maritalStatuses, csrfToken, meta, defaultState: state.applicantInformation, editMode: state.editMode });
+  return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.applicantInformation, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/applicant-information');
 
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id, state } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
   const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -101,13 +101,17 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   const remove = ![MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(parsedDataResult.data.maritalStatus)) ? 'partnerInformation' : undefined;
-  const sessionResponseInit = await applyRouteHelpers.saveState({ params, remove, request, session, state: { applicantInformation: parsedDataResult.data } });
+  await applyRouteHelpers.saveState({ params, remove, request, session, state: { applicantInformation: parsedDataResult.data } });
 
-  if ([MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(parsedDataResult.data.maritalStatus))) {
-    return redirectWithLocale(request, state.editMode && state.partnerInformation ? `/apply/${id}/review-information` : `/apply/${id}/partner-information`, sessionResponseInit);
+  if (state.editMode) {
+    return redirectWithLocale(request, `/apply/${state.id}/review-information`);
   }
 
-  return redirectWithLocale(request, state.editMode ? `/apply/${id}/review-information` : `/apply/${id}/personal-information`, sessionResponseInit);
+  if ([MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(parsedDataResult.data.maritalStatus))) {
+    return redirectWithLocale(request, `/apply/${state.id}/partner-information`);
+  }
+
+  return redirectWithLocale(request, `/apply/${state.id}/personal-information`);
 }
 
 export default function ApplyFlowApplicationInformation() {

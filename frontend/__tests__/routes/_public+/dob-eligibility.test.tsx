@@ -8,7 +8,6 @@ vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
   getApplyRouteHelpers: vi.fn().mockReturnValue({
     loadState: vi.fn().mockReturnValue({
       id: '123',
-      state: {},
     }),
   }),
 }));
