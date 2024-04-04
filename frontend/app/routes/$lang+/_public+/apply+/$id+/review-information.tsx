@@ -258,7 +258,7 @@ export default function ReviewInformation() {
           {spouseInfo && (
             <div>
               <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.spouse-title')}</h2>
-              <dl>
+              <dl className="mt-6 divide-y border-y">
                 <DescriptionListItem term={t('apply:review-information.full-name-title')}>
                   {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
                   <p className="mt-4">
