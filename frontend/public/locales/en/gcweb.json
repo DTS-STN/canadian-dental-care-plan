@@ -55,7 +55,8 @@
   },
   "language-switcher": {
     "alt-lang": "Français",
-    "alt-lang-abbr": "FR"
+    "alt-lang-abbr": "FR",
+    "alt-lang-abbr-prop": "fr"
   },
   "breadcrumbs": {
     "you-are-here": "You are here:",
