@@ -1,6 +1,8 @@
 import moize from 'moize';
 import { z } from 'zod';
 
+import { getAuditService } from '~/services/audit-service.server';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
@@ -215,9 +217,12 @@ function createPersonalInformationService() {
     return { Applicant: { PersonSINIdentification: { IdentificationID: personalSinId } } };
   }
 
-  async function getPersonalInformation(personalSinId: string) {
+  async function getPersonalInformation(personalSinId: string, userId: string) {
     const curentPersonalInformation = createClientInfo(personalSinId);
     const url = `${INTEROP_APPLICANT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant/`;
+    const auditService = getAuditService();
+    const instrumentationService = getInstrumentationService();
+    auditService.audit('personal-information.get', { userId });
 
     const response = await fetch(url, {
       // Using POST instead of GET due to how sin params gets logged with SIN
@@ -228,6 +233,8 @@ function createPersonalInformationService() {
         'Ocp-Apim-Subscription-Key': INTEROP_APPLICANT_API_SUBSCRIPTION_KEY ?? INTEROP_API_SUBSCRIPTION_KEY,
       },
     });
+
+    instrumentationService.countHttpStatus('http.client.interop-api.applicant.posts', response.status);
 
     if (response.status === 200) {
       return toPersonalInformation(personalInformationApiResponseSchema.parse(await response.json()));

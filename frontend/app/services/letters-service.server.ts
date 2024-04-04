@@ -3,6 +3,8 @@ import moize from 'moize';
 import { z } from 'zod';
 
 import letterTypesJson from '~/resources/power-platform/letter-types.json';
+import { getAuditService } from '~/services/audit-service.server';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
@@ -46,7 +48,11 @@ function createLettersService() {
   /**
    * @returns array of letters given the clientId with optional sort parameter
    */
-  async function getLetters(clientId: string, sortOrder: 'asc' | 'desc' = 'desc') {
+  async function getLetters(clientId: string, userId: string, sortOrder: 'asc' | 'desc' = 'desc') {
+    const auditService = getAuditService();
+    const instrumentationService = getInstrumentationService();
+    auditService.audit('letters.get', { userId });
+
     const url = new URL(`${INTEROP_CCT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetDocInfoByClientId`);
     url.searchParams.set('clientid', clientId);
 
@@ -58,6 +64,7 @@ function createLettersService() {
       },
     });
 
+    instrumentationService.countHttpStatus('http.client.interop-api.get-doc-info-by-client-id.gets', response.status);
     if (!response.ok) {
       log.error('%j', {
         message: 'Failed to fetch data',
@@ -94,9 +101,13 @@ function createLettersService() {
   /**
    * @returns a promise that resolves to a base64 encoded string representing the PDF document
    */
-  async function getPdf(letterId: string) {
+  async function getPdf(letterId: string, userId: string) {
     const url = new URL(`${INTEROP_CCT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetPdfByLetterId`);
     url.searchParams.set('id', letterId);
+    const auditService = getAuditService();
+    const instrumentationService = getInstrumentationService();
+
+    auditService.audit('pdf.get', { letterId, userId });
 
     const response = await fetch(url, {
       headers: {
@@ -106,6 +117,7 @@ function createLettersService() {
       },
     });
 
+    instrumentationService.countHttpStatus('http.client.interop-api.get-pdf-by-client-id.gets', response.status);
     if (!response.ok) {
       log.error('%j', {
         message: 'Failed to fetch data',

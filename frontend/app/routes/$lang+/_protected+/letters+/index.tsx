@@ -56,7 +56,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
-  const letters = personalInformation.clientNumber ? await lettersService.getLetters(personalInformation.clientNumber, sortOrder) : [];
+  const letters = personalInformation.clientNumber ? await lettersService.getLetters(personalInformation.clientNumber, userInfoToken.sub, sortOrder) : [];
   session.set('letters', letters);
 
   const letterTypes = (await lettersService.getAllLetterTypes()).filter(({ id }) => letters.some(({ name }) => name === id));

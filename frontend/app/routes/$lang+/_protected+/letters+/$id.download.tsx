@@ -9,6 +9,7 @@ import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage } from '~/utils/locale-utils';
 import { getLocale } from '~/utils/locale-utils.server';
+import { UserinfoToken } from '~/utils/raoidc-utils.server';
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-letters');
@@ -38,8 +39,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   }
   const locale = getLocale(request);
   const documentName = sanitize(getNameByLanguage(locale, letterType) ?? '');
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
 
-  const pdfBytes = await lettersService.getPdf(params.id);
+  const pdfBytes = await lettersService.getPdf(params.id, userInfoToken.sub);
   instrumentationService.countHttpStatus('letters.download', 200);
 
   const decodedPdfBytes = Buffer.from(pdfBytes, 'base64');
