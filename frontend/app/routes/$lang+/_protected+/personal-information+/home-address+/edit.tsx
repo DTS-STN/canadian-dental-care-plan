@@ -268,7 +268,7 @@ export default function PersonalInformationHomeAddressEdit() {
             </div>
           </div>
 
-          <InputCheckbox id="updateMailingAddress" name="updaetMailingAddress" value="copy" className="my-8">
+          <InputCheckbox id="copyAddressChecked" name="copyAddressChecked" value="copy" className="my-8">
             <Trans ns={handle.i18nNamespaces} i18nKey="personal-information:home-address.edit.update-mailing-address" />
             <p>{t('personal-information:home-address.edit.update-mailing-address-note')}</p>
           </InputCheckbox>
