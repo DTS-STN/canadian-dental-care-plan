@@ -14,18 +14,6 @@ import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('lookup-service.server');
 
-const federalDentalBenefit = z.object({
-  code: z.string(),
-  nameEn: z.string().optional(),
-  nameFr: z.string().optional(),
-});
-
-const provincialTerritorialDentalBenefit = z.object({
-  code: z.string(),
-  nameEn: z.string().optional(),
-  nameFr: z.string().optional(),
-});
-
 const bornTypeSchema = z.object({
   id: z.string(),
   nameEn: z.string().optional(),
@@ -100,7 +88,6 @@ function createLookupService() {
     LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_DISABILITY_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_EQUITY_TYPES_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_ALL_FEDERAL_DENTAL_BENEFITS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_FEDERAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_GENDER_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_INDIGENOUS_GROUP_TYPES_CACHE_TTL_SECONDS,
@@ -110,7 +97,6 @@ function createLookupService() {
     LOOKUP_SVC_ALL_MOUTH_PAIN_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_PREFERRED_LANGUAGES_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_ALL_PROVINCIAL_TERRITORIAL_DENTAL_BENEFITS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_PROVINCIAL_TERRITORIAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_REGIONS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_SEX_AT_BIRTH_TYPES_CACHE_TTL_SECONDS,
@@ -336,46 +322,6 @@ function createLookupService() {
     }));
   }
 
-  async function getAllFederalDentalBenefit() {
-    const url = `${INTEROP_API_BASE_URI}/lookups/federal-dental-benefit/`;
-    const response = await fetch(url);
-
-    const federalDentalBenefits = z.array(federalDentalBenefit);
-
-    if (response.ok) {
-      return federalDentalBenefits.parse(await response.json());
-    }
-
-    log.error('%j', {
-      message: 'Failed to fetch data',
-      status: response.status,
-      statusText: response.statusText,
-      url: url,
-      responseBody: await response.text(),
-    });
-
-    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
-  }
-
-  async function getAllProvincialTerritorialDentalBenefits() {
-    const url = `${INTEROP_API_BASE_URI}/lookups/provincial-territorial-dental-benefit/`;
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      log.error('%j', {
-        message: 'Failed to fetch data',
-        status: response.status,
-        statusText: response.statusText,
-        url: url,
-        responseBody: await response.text(),
-      });
-      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
-    }
-
-    const provincialTerritorialDentalBenefits = z.array(provincialTerritorialDentalBenefit);
-    return provincialTerritorialDentalBenefits.parse(await response.json());
-  }
-
   async function getAllFederalSocialPrograms() {
     return federalProgramsJson.value.map((federalSocialProgram) => ({
       id: federalSocialProgram.esdc_governmentinsuranceplanid,
@@ -453,7 +399,6 @@ function createLookupService() {
     getAllCountries: moize(getAllCountries, { maxAge: 1000 * LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllCountries memo') }),
     getAllDisabilityTypes: moize(getAllDisabilityTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_DISABILITY_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllDisabilityTypes memo') }),
     getAllEquityTypes: moize(getAllEquityTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_EQUITY_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllEquityTypes memo') }),
-    getAllFederalDentalBenefit: moize(getAllFederalDentalBenefit, { maxAge: 1000 * LOOKUP_SVC_ALL_FEDERAL_DENTAL_BENEFITS_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllFederalDentalBenefit memo') }),
     getAllFederalSocialPrograms: moize(getAllFederalSocialPrograms, { maxAge: 1000 * LOOKUP_SVC_ALL_FEDERAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllFederalSocialPrograms memo') }),
     getAllGenderTypes: moize(getAllGenderTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_GENDER_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllGenderTypes memo') }),
     getAllIndigenousGroupTypes: moize(getAllIndigenousGroupTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_INDIGENOUS_GROUP_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllIndigenousGroupTypes memo') }),
@@ -463,10 +408,6 @@ function createLookupService() {
     getAllMouthPainTypes: moize(getAllMouthPainTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_MOUTH_PAIN_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllMouthPainTypes memo') }),
     getAllPreferredCommunicationMethods: moize(getAllPreferredCommunicationMethods, { maxAge: 1000 * LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllPreferredCommunicationMethods memo') }),
     getAllPreferredLanguages: moize(getAllPreferredLanguages, { maxAge: 1000 * LOOKUP_SVC_ALL_PREFERRED_LANGUAGES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllPreferredLanguages memo') }),
-    getAllProvincialTerritorialDentalBenefits: moize(getAllProvincialTerritorialDentalBenefits, {
-      maxAge: 1000 * LOOKUP_SVC_ALL_PROVINCIAL_TERRITORIAL_DENTAL_BENEFITS_CACHE_TTL_SECONDS,
-      onCacheAdd: () => log.info('Creating new AllProvincialTerritorialDentalBenefits memo'),
-    }),
     getAllProvincialTerritorialSocialPrograms: moize(getAllProvincialTerritorialSocialPrograms, {
       maxAge: 1000 * LOOKUP_SVC_ALL_PROVINCIAL_TERRITORIAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllProvincialTerritorialSocialPrograms memo'),
