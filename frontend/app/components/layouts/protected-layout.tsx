@@ -54,8 +54,6 @@ function NavigationMenu() {
   const { SCCH_BASE_URI } = getClientEnv();
   const userOrigin = useUserOrigin();
 
-  console.log(userOrigin);
-
   return (
     <div className="sm:w-[260px]">
       <DropdownMenu>
