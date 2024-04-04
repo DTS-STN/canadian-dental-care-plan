@@ -178,6 +178,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     dentalBenefits: state.dentalBenefits,
     dentalInsurance: state.dentalInsurance,
     personalInformation: state.personalInformation,
+    partnerInformation: state.partnerInformation,
   });
 
   const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
@@ -188,7 +189,6 @@ export async function action({ context: { session }, params, request }: ActionFu
   };
 
   const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { submissionInfo } });
-
   return redirectWithLocale(request, `/apply/${id}/confirmation`, sessionResponseInit);
 }
 
@@ -258,7 +258,7 @@ export default function ReviewInformation() {
           {spouseInfo && (
             <div>
               <h2 className="mt-8 text-2xl font-semibold ">{t('apply:review-information.spouse-title')}</h2>
-              <dl>
+              <dl className="mt-6 divide-y border-y">
                 <DescriptionListItem term={t('apply:review-information.full-name-title')}>
                   {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
                   <p className="mt-4">

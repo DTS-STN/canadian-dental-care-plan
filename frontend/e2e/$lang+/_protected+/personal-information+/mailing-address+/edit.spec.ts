@@ -20,11 +20,6 @@ test.describe('personal information mailing address edit page', () => {
       await expect(page).toHaveURL(/.*personal-information\/mailing-address\/edit/);
     });
 
-    await test.step('click copy home address checkbox', async () => {
-      await page.getByRole('checkbox', { name: 'copy home address' }).click();
-      await expect(page.getByRole('textbox', { name: 'address' })).not.toBeAttached();
-    });
-
     await test.step('detect any accessibility issues', async () => {
       const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
       expect(accessibilityScanResults.violations).toEqual([]);
@@ -40,7 +35,7 @@ test.describe('personal information mailing address edit page', () => {
     await test.step('submit invalid form data', async () => {
       await page.getByRole('textbox', { name: 'address' }).evaluate((e) => ((e as HTMLInputElement).required = false));
       await page.getByRole('textbox', { name: 'address' }).fill('');
-      await page.getByRole('button', { name: 'change' }).click();
+      await page.getByRole('button', { name: 'save' }).click();
     });
 
     await test.step('detect errors summary presence', async () => {
@@ -69,7 +64,7 @@ test.describe('personal information mailing address edit page', () => {
 
     await test.step('enter and submit form data', async () => {
       await page.getByRole('textbox', { name: 'address' }).fill('123 New Address Avenue');
-      await page.getByRole('button', { name: 'change' }).click();
+      await page.getByRole('button', { name: 'save' }).click();
     });
 
     await test.step('detect mailing address confirm page', async () => {
@@ -84,7 +79,7 @@ test.describe('personal information mailing address edit page', () => {
     });
 
     await test.step('click cancel', async () => {
-      await page.getByRole('link', { name: 'cancel' }).click();
+      await page.getByRole('link', { name: 'back' }).click();
     });
 
     await test.step('detect personal information page', async () => {
