@@ -88,48 +88,60 @@ export default function StatusChecker() {
   return (
     <PublicLayout>
       <div className="max-w-prose">
-        <h2 className="font-bold">{t('status:status-checker-heading')}</h2>
-        <p>{t('status:status-checker-content')}</p>
-        <h2 className="mt-4 font-bold">{t('status:online-status-heading')}</h2>
-        <p>{t('status:online-status-content')}</p>
+        <div className="space-y-4">
+          <h2 className="font-bold">{t('status:status-checker-heading')}</h2>
+          <p>{t('status:status-checker-content')}</p>
+          <h2 className="font-bold">{t('status:online-status-heading')}</h2>
+          <p>{t('status:online-status-content')}</p>
+        </div>
         <Collapsible summary={t('status:terms-of-use.summary')} className="mt-8">
-          <h2 className="mb-4 font-bold">{t('status:terms-of-use.heading')}</h2>
-          <Trans ns={handle.i18nNamespaces} i18nKey="status:terms-of-use.legal-terms" />
-          <p className="my-4">{t('status:terms-of-use.access-terms')}</p>
-          <p>{t('status:terms-of-use.usage-terms')}</p>
-          <p className="my-4">{t('status:terms-of-use.terms-rejection-policy')}</p>
-          <p>{t('status:terms-of-use.esdc-definition-clarification')}</p>
-          <p className="mt-4 font-bold">{t('status:terms-of-use.status-checker.heading')}</p>
-          <ul className="list-disc pl-8">
-            <li>{t('status:terms-of-use.status-checker.self-agreement')}</li>
-            <li>{t('status:terms-of-use.status-checker.on-behalf-of-someone-else')}</li>
-            <li>{t('status:terms-of-use.status-checker.at-your-own-risk')}</li>
-            <li>{t('status:terms-of-use.status-checker.only-use')}</li>
-            <li>{t('status:terms-of-use.status-checker.maintenance')}</li>
-            <li>{t('status:terms-of-use.status-checker.inactive')}</li>
-            <li>
-              <Trans ns={handle.i18nNamespaces} i18nKey="status:terms-of-use.status-checker.msdc" components={{ microsoftServiceAgreement }} />
-            </li>
-            <li>
-              <Trans ns={handle.i18nNamespaces} i18nKey="status:terms-of-use.status-checker.antibot" components={{ hcaptchaTermsOfService }} />
-            </li>
-          </ul>
-          <h2 className="mt-4 font-bold">{t('status:terms-of-use.disclaimers.heading')}</h2>
-          <p>{t('status:terms-of-use.disclaimers.disclaimers')}</p>
-          <ol className="list-decimal pl-8">
-            <li>{t('status:terms-of-use.disclaimers.external-factors-disclaimer')}</li>
-            <li>{t('status:terms-of-use.disclaimers.non-acceptance')}</li>
-            <li>{t('status:terms-of-use.disclaimers.non-compliance')}</li>
-          </ol>
-          <h2 className="mt-4 font-bold">{t('status:terms-of-use.changes-to-these-terms-of-use.heading')}</h2>
-          <p>{t('status:terms-of-use.changes-to-these-terms-of-use.esdc-terms-amendment-policy')}</p>
+          <div className="space-y-4">
+            <h2 className="mb-4 font-bold">{t('status:terms-of-use.heading')}</h2>
+            <p>
+              <Trans ns={handle.i18nNamespaces} i18nKey="status:terms-of-use.legal-terms" />
+            </p>
+            <p>{t('status:terms-of-use.access-terms')}</p>
+            <p>{t('status:terms-of-use.usage-terms')}</p>
+            <p>{t('status:terms-of-use.terms-rejection-policy')}</p>
+            <p>{t('status:terms-of-use.esdc-definition-clarification')}</p>
+            <p className="font-bold">{t('status:terms-of-use.status-checker.heading')}</p>
+            <ul className="list-disc space-y-1 pl-7">
+              <li>{t('status:terms-of-use.status-checker.self-agreement')}</li>
+              <li>{t('status:terms-of-use.status-checker.on-behalf-of-someone-else')}</li>
+              <li>{t('status:terms-of-use.status-checker.at-your-own-risk')}</li>
+              <li>{t('status:terms-of-use.status-checker.only-use')}</li>
+              <li>{t('status:terms-of-use.status-checker.maintenance')}</li>
+              <li>{t('status:terms-of-use.status-checker.inactive')}</li>
+              <li>
+                <Trans ns={handle.i18nNamespaces} i18nKey="status:terms-of-use.status-checker.msdc" components={{ microsoftServiceAgreement }} />
+              </li>
+              <li>
+                <Trans ns={handle.i18nNamespaces} i18nKey="status:terms-of-use.status-checker.antibot" components={{ hcaptchaTermsOfService }} />
+              </li>
+            </ul>
+            <h2 className="font-bold">{t('status:terms-of-use.disclaimers.heading')}</h2>
+            <p>{t('status:terms-of-use.disclaimers.disclaimers')}</p>
+            <ol className="list-decimal space-y-1 pl-7">
+              <li>{t('status:terms-of-use.disclaimers.external-factors-disclaimer')}</li>
+              <li>{t('status:terms-of-use.disclaimers.non-acceptance')}</li>
+              <li>{t('status:terms-of-use.disclaimers.non-compliance')}</li>
+            </ol>
+            <h2 className="font-bold">{t('status:terms-of-use.changes-to-these-terms-of-use.heading')}</h2>
+            <p>{t('status:terms-of-use.changes-to-these-terms-of-use.esdc-terms-amendment-policy')}</p>
+          </div>
         </Collapsible>
         <Collapsible summary={t('status:privacy-notice-statement.summary')} className="my-8">
-          <p>{t('status:privacy-notice-statement.collection-of-use')}</p>
-          <p className="my-4">{t('status:privacy-notice-statement.provided-information')}</p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.third-party-provider" components={{ microsoftDataPrivacyPolicy }} />
-          <p className="my-4">{t('status:privacy-notice-statement.personal-information')}</p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.report-a-concern" components={{ fileacomplaint }} />
+          <div className="space-y-4">
+            <p>{t('status:privacy-notice-statement.collection-of-use')}</p>
+            <p>{t('status:privacy-notice-statement.provided-information')}</p>
+            <p>
+              <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.third-party-provider" components={{ microsoftDataPrivacyPolicy }} />
+            </p>
+            <p>{t('status:privacy-notice-statement.personal-information')}</p>
+            <p>
+              <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.report-a-concern" components={{ fileacomplaint }} />
+            </p>
+          </div>
         </Collapsible>
         <Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
