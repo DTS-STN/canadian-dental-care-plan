@@ -181,22 +181,22 @@ function toHomeAddress({ copyMailingAddress, homeAddress, homeApartment, homeCit
 }
 
 interface ToInsurancePlanArgs {
-  federalBenefit: 'no' | 'yes';
+  hasFederalBenefits: boolean;
   federalSocialProgram?: string;
-  provincialTerritorialBenefit: 'no' | 'yes';
+  hasProvincialTerritorialBenefits: boolean;
   provincialTerritorialSocialProgram?: string;
 }
 
-function toInsurancePlan({ federalBenefit, federalSocialProgram, provincialTerritorialBenefit, provincialTerritorialSocialProgram }: ToInsurancePlanArgs) {
+function toInsurancePlan({ hasFederalBenefits, federalSocialProgram, hasProvincialTerritorialBenefits, provincialTerritorialSocialProgram }: ToInsurancePlanArgs) {
   const insurancePlanIdentification = [];
 
-  if (federalBenefit === 'yes' && federalSocialProgram && !validator.isEmpty(federalSocialProgram)) {
+  if (hasFederalBenefits && federalSocialProgram && !validator.isEmpty(federalSocialProgram)) {
     insurancePlanIdentification.push({
       IdentificationID: federalSocialProgram,
     });
   }
 
-  if (provincialTerritorialBenefit === 'yes' && provincialTerritorialSocialProgram && !validator.isEmpty(provincialTerritorialSocialProgram)) {
+  if (hasProvincialTerritorialBenefits && provincialTerritorialSocialProgram && !validator.isEmpty(provincialTerritorialSocialProgram)) {
     insurancePlanIdentification.push({
       IdentificationID: provincialTerritorialSocialProgram,
     });
