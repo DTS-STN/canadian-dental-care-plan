@@ -5,10 +5,30 @@ pr: none
 
 variables:
   azureContainerRegistry.repository: 'canadian-dental-care-plan/frontend'
-  azureContainerRegistry.name: ''
+  azureContainerRegistry.name: 'dtsshared-04/29/24'
   azureContainerRegistry.domain: 'dtsshared.azurecr.io'
   vmImageName: "ubuntu-latest"
   image.tag: '$(Build.SourceVersion)'
+  LOG_LEVEL: debug
+  ENABLED_FEATURES: 'view-letters'
+  SCCH_BASE_URI: 'https://secure-client-hub-dev.bdm.dshp-phdn.net'
+  OTEL_ENVIRONMENT: dev
+  OTEL_METRICS_ENDPOINT: 'https://dynatrace.dev-dp.admin.dts-stn.com/e/21a07aef-852b-4d9b-aa87-ee5f8b79f8c9/api/v2/otlp/v1/metrics'
+  OTEL_TRACES_ENDPOINT: 'https://dynatrace.dev-dp.admin.dts-stn.com/e/21a07aef-852b-4d9b-aa87-ee5f8b79f8c9/api/v2/otlp/v1/traces'
+  ENABLED_MOCKS: 'cct,lookup,power-platform,raoidc,status-check,wsaddress'
+  SESSION_STORAGE_TYPE: redis
+  REDIS_URL: 'redis://redis-dev'
+  AUTH_LOGOUT_REDIRECT_URL: 'https://app-dentalcare-dev.azurewebsites.net/'
+  AUTH_RAOIDC_CLIENT_ID: CDCP
+  AUTH_RASCL_LOGOUT_URL: 'https://app-dentalcare-dev.azurewebsites.net/' 
+  AUTH_RAOIDC_BASE_URL: 'https://app-dentalcare-dev.azurewebsites.net/auth' 
+  MOCK_AUTH_ALLOWED_REDIRECTS: 'https://app-dentalcare-dev.azurewebsites.net/auth/callback/raoidc' 
+  HCAPTCHA_SITE_KEY: '269265df-c45d-4deb-bd74-a229344e5cdb'
+  HCAPTCHA_VERIFY_URL: 'https://api.hcaptcha.com/siteverify'
+  CANADA_COUNTRY_ID: '0cf5389e-97ae-eb11-8236-000d3af4bfc3'
+  USA_COUNTRY_ID: 'fcf7389e-97ae-eb11-8236-000d3af4bfc3'
+  SHOW_SIN_EDIT_STUB_PAGE: false
+
 
 stages:
   - stage: Build
@@ -27,6 +47,14 @@ stages:
               echo "##vso[task.setvariable variable=image.tag]$short_hash"
             workingDirectory: $(Build.SourcesDirectory)
             displayName: Get short git hash
+          
+          - task: AzureKeyVault@2
+            inputs:
+              azureSubscription: 'sedd-dentalcare-dev'
+              KeyVaultName: 'kv-dental-care-dev'
+              SecretsFilter: 'AUTH-JWT-PRIVATE-KEY, AUTH-JWT-PUBLIC-KEY, HCAPTCHA-SECRET-KEY, INTEROP-API-SUBSCRIPTION-KEY, INTEROP-CCT-API-SUBSCRIPTION-KEY, INTEROP-POWERPLATFORM-API-SUBSCRIPTION-KEY, REDIS-PASSWORD, SESSION-COOKIE-SECRET'
+              RunAsPreJob: true
+
           - task: Docker@2
             inputs:
               containerRegistry: "$(azureContainerRegistry.name)"
@@ -40,14 +68,40 @@ stages:
               containerRegistry: '$(azureContainerRegistry.name)'
               repository: '$(azureContainerRegistry.repository)'
               command: 'build'
-              Dockerfile: './frontend/Dockerfile'
+              Dockerfile: './frontend/dockerfile'
               tags: |
                 $(image.tag)
                 release-candidate
                 latest
               arguments: | 
-                --pull
-                # --build-arg X=$([name of vault variable])
+                --pull                 
+                --build-arg AUTH_JWT_PRIVATE_KEY=$(AUTH-JWT-PRIVATE-KEY) 
+                --build-arg AUTH_JWT_PUBLIC_KEY=$(AUTH-JWT-PUBLIC-KEY) 
+                --build-arg HCAPTCHA_SECRET_KEY=$(HCAPTCHA-SECRET-KEY) 
+                --build-arg INTEROP_API_SUBSCRIPTION_KEY=$(INTEROP-API-SUBSCRIPTION-KEY) 
+                --build-arg INTEROP_CCT_API_SUBSCRIPTION_KEY=$(INTEROP-CCT-API-SUBSCRIPTION-KEY) 
+                --build-arg INTEROP_POWERPLATFORM_API_SUBSCRIPTION_KEY=$(INTEROP-POWERPLATFORM-API-SUBSCRIPTION-KEY) 
+                --build-arg REDIS_PASSWORD=$(REDIS-PASSWORD) 
+                --build-arg SESSION_COOKIE_SECRET=$(SESSION-COOKIE-SECRET)                 
+                --build-arg LOG_LEVEL=$(LOG_LEVEL) 
+                --build-arg ENABLED_FEATURES=$(ENABLED_FEATURES)
+                --build-arg SCCH_BASE_URI=$(SCCH_BASE_URI) 
+                --build-arg OTEL_ENVIRONMENT=$(OTEL_ENVIRONMENT) 
+                --build-arg OTEL_METRICS_ENDPOINT=$(OTEL_METRICS_ENDPOINT) 
+                --build-arg OTEL_TRACES_ENDPOINT=$(OTEL_TRACES_ENDPOINT) 
+                --build-arg ENABLED_MOCKS=$(ENABLED_MOCKS) 
+                --build-arg SESSION_STORAGE_TYPE=$(SESSION_STORAGE_TYPE) 
+                --build-arg REDIS_URL=$(REDIS_URL) 
+                --build-arg AUTH_LOGOUT_REDIRECT_URL=$(AUTH_LOGOUT_REDIRECT_URL) 
+                --build-arg AUTH_RAOIDC_CLIENT_ID=$(AUTH_RAOIDC_CLIENT_ID) 
+                --build-arg AUTH_RASCL_LOGOUT_URL=$(AUTH_RASCL_LOGOUT_URL) 
+                --build-arg MOCK_AUTH_ALLOWED_REDIRECTS=$(MOCK_AUTH_ALLOWED_REDIRECTS) 
+                --build-arg HCAPTCHA_SITE_KEY=$(HCAPTCHA_SITE_KEY) 
+                --build-arg HCAPTCHA_VERIFY_URL=$(HCAPTCHA_VERIFY_URL) 
+                --build-arg CANADA_COUNTRY_ID=$(CANADA_COUNTRY_ID) 
+                --build-arg USA_COUNTRY_ID=$(USA_COUNTRY_ID) 
+                --build-arg SHOW_SIN_EDIT_STUB_PAGE=$(SHOW_SIN_EDIT_STUB_PAGE)              
+
 
           - task: Docker@2
             inputs:
