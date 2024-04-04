@@ -40,7 +40,10 @@ export default function RootIndex() {
     <main role="main" className="flex h-svh bg-splash-page bg-cover bg-center" property="mainContentOfPage">
       <div className="m-auto w-[300px] bg-white md:w-[400px] lg:w-[500px]">
         <div className="p-8">
-          <h1 className="sr-only"><span lang="en">Canadian Dental Care Plan</span><span lang="fr">Régime canadien de soins dentaires</span></h1>
+          <h1 className="sr-only">
+            <span lang="en">Canadian Dental Care Plan</span>
+            <span lang="fr">Régime canadien de soins dentaires</span>
+          </h1>
           <div className="w-11/12 lg:w-8/12">
             <Link to="https://www.canada.ca/en.html" property="url">
               <img className="h-8 w-auto" src="/assets/sig-blk-en.svg" alt="Government of Canada" property="logo" width="300" height="28" decoding="async" />
