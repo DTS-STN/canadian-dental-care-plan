@@ -101,22 +101,14 @@ export async function action({ context: { session }, params, request }: ActionFu
       mailingCountry: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-country-required')),
       mailingProvince: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-province-required')).optional(),
       mailingCity: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-city-required')),
-      mailingPostalCode: z
-        .string()
-        .trim()
-        .optional()
-        .transform((val) => (val ? formatPostalCode(val) : val)),
+      mailingPostalCode: z.string().trim().optional(),
       copyMailingAddress: z.boolean(),
       homeAddress: z.string().trim().optional(),
       homeApartment: z.string().trim().optional(),
       homeCountry: z.string().trim().optional(),
       homeProvince: z.string().trim().optional(),
       homeCity: z.string().trim().optional(),
-      homePostalCode: z
-        .string()
-        .trim()
-        .optional()
-        .transform((val) => (val ? formatPostalCode(val) : val)),
+      homePostalCode: z.string().trim().optional(),
     })
     .superRefine((val, ctx) => {
       if (val.mailingCountry === CANADA_COUNTRY_ID || val.mailingCountry === USA_COUNTRY_ID) {
@@ -158,6 +150,13 @@ export async function action({ context: { session }, params, request }: ActionFu
           }
         }
       }
+    })
+    .transform((val) => {
+      return {
+        ...val,
+        mailingPostalCode: val.mailingCountry && val.mailingPostalCode ? formatPostalCode(val.mailingCountry, val.mailingPostalCode) : val.mailingPostalCode,
+        homePostalCode: val.homeCountry && val.homePostalCode ? formatPostalCode(val.homeCountry, val.homePostalCode) : val.homePostalCode,
+      };
     });
 
   const formData = await request.formData();
