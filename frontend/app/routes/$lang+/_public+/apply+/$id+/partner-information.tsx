@@ -85,7 +85,8 @@ export async function action({ context: { session }, params, request }: ActionFu
       .trim()
       .min(1, t('apply:partner-information.error-message.sin-required'))
       .refine(isValidSin, t('apply:partner-information.error-message.sin-valid'))
-      .refine((sin) => sin !== state.applicantInformation?.socialInsuranceNumber, t('apply:partner-information.error-message.sin-unique')),
+      .refine((sin) => sin !== state.applicantInformation?.socialInsuranceNumber, t('apply:partner-information.error-message.sin-unique'))
+      .transform((sin) => formatSin(sin, '')),
   });
 
   const formData = await request.formData();
@@ -184,19 +185,7 @@ export default function ApplyFlowApplicationInformation() {
               />
             </div>
             <DatePickerField id="date-of-birth" name="dateOfBirth" defaultValue={defaultState?.dateOfBirth ?? ''} legend={t('apply:partner-information.date-of-birth')} required errorMessage={errorMessages['date-picker-date-of-birth-month']} />
-            <InputField
-              id="social-insurance-number"
-              name="socialInsuranceNumber"
-              label={t('apply:partner-information.sin')}
-              required
-              inputMode="numeric"
-              pattern="\d{9}"
-              placeholder={formatSin('000000000', '-')}
-              minLength={9}
-              maxLength={9}
-              defaultValue={defaultState?.socialInsuranceNumber ?? ''}
-              errorMessage={errorMessages['social-insurance-number']}
-            />
+            <InputField id="social-insurance-number" name="socialInsuranceNumber" label={t('apply:partner-information.sin')} required defaultValue={defaultState?.socialInsuranceNumber ?? ''} errorMessage={errorMessages['social-insurance-number']} />
             <InputCheckbox id="confirm" name="confirm" value="yes" required errorMessage={errorMessages['input-checkbox-confirm']} defaultChecked={defaultState?.confirm === true}>
               {t('partner-information.confirm-checkbox')}
             </InputCheckbox>
