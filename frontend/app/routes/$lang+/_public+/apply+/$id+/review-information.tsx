@@ -1,5 +1,3 @@
-import type { ReactNode } from 'react';
-
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
@@ -12,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import pageIds from '../../../page-ids.json';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
+import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
@@ -420,14 +419,5 @@ export default function ReviewInformation() {
         </fetcher.Form>
       </div>
     </>
-  );
-}
-
-function DescriptionListItem({ children, term }: { children: ReactNode; term: ReactNode }) {
-  return (
-    <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
-      <dt className="font-semibold">{term}</dt>
-      <dd className="mt-3 space-y-3 sm:col-span-2 sm:mt-0">{children}</dd>
-    </div>
   );
 }

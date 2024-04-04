@@ -1,5 +1,3 @@
-import type { ReactNode } from 'react';
-
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
@@ -11,6 +9,7 @@ import { z } from 'zod';
 import pageIds from '../../../page-ids.json';
 import { Button } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
+import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -54,8 +53,12 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   }
   const allFederalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
   const allProvincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
-  const selectedBenefits = [...allFederalSocialPrograms, ...allProvincialTerritorialSocialPrograms]
-    .filter((obj) => obj.id === state.dentalBenefits?.federalSocialProgram || obj.id === state.dentalBenefits?.provincialTerritorialSocialProgram)
+  const selectedFederalBenefits = [...allFederalSocialPrograms]
+    .filter((obj) => obj.id === state.dentalBenefits?.federalSocialProgram)
+    .map((obj) => getNameByLanguage(locale, obj))
+    .join(', ');
+  const selectedProvincialBenefits = [...allProvincialTerritorialSocialPrograms]
+    .filter((obj) => obj.id === state.dentalBenefits?.provincialTerritorialSocialProgram)
     .map((obj) => getNameByLanguage(locale, obj))
     .join(', ');
 
@@ -110,7 +113,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const dentalInsurance = {
     acessToDentalInsurance: state.dentalInsurance,
-    selectedBenefits,
+    selectedFederalBenefits,
+    selectedProvincialBenefits,
   };
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:confirm.page-title') }) };
@@ -190,49 +194,84 @@ export default function ApplyFlowConfirm() {
       <p className="mt-4">
         <Trans ns={handle.i18nNamespaces} i18nKey="confirm.more-info-service" components={{ dentalContactUsLink }} />
       </p>
-
-      <h2 className="mt-8 text-3xl font-semibold">{t('confirm.application-summ')}</h2>
-      <UnorderedList term={t('confirm.application-code')}>
-        <li>
-          <strong>{submissionInfo.confirmationCode}</strong>
-        </li>
-      </UnorderedList>
-      <UnorderedList term={t('confirm.applicant-title')}>
-        <li className="capitalize">{t('confirm.full-name', { name: `${userInfo.firstName} ${userInfo.lastName}` })}</li>
-        <li>{t('confirm.dob', { dob: userInfo.birthday })}</li>
-        <li>
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.sin" values={{ sin: formatSin(userInfo.sin) }} components={{ noWrap: <span className="text-nowrap" /> }} />
-        </li>
-        <li>{t('confirm.marital-status', { status: userInfo.martialStatus })}</li>
-      </UnorderedList>
-      {spouseInfo && (
-        <UnorderedList term={t('confirm.spouse-info')}>
-          <li className="capitalize">{t('confirm.full-name', { name: `${spouseInfo.firstName} ${spouseInfo.lastName}` })}</li>
-          <li>{t('confirm.dob', { dob: spouseInfo.birthday })}</li>
-          <li>
-            <Trans ns={handle.i18nNamespaces} i18nKey="confirm.sin" values={{ sin: formatSin(spouseInfo.sin) }} components={{ noWrap: <span className="text-nowrap" /> }} />
-          </li>
-          <li>{t('confirm.consent')}</li>
-        </UnorderedList>
-      )}
-      <UnorderedList term={t('confirm.contact-info')}>
-        <li>
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.phone-number" values={{ phone: userInfo.phoneNumber }} components={{ noWrap: <span className="text-nowrap" /> }} />
-        </li>
-        <li>
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.alt-phone-number" values={{ altPhone: userInfo.altPhoneNumber }} components={{ noWrap: <span className="text-nowrap" /> }} />
-        </li>
-        <li className="capitalize">{t('confirm.mailing', { address: mailingAddressInfo.address })}</li>
-        <li className="capitalize">{t('confirm.home', { address: homeAddressInfo.address })}</li>
-      </UnorderedList>
-      <UnorderedList term={t('confirm.comm-prefs')}>
-        <li className="capitalize">{t('confirm.comm-pref', { pref: userInfo.communicationPreference })}</li>
-        <li className="capitalize">{t('confirm.lang-pref', { pref: userInfo.preferredLanguage })}</li>
-      </UnorderedList>
-      <UnorderedList term={t('confirm.dental-insurance')}>
-        <li>{t('confirm.dental-private', { access: dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no') })}</li>
-        <li>{t('confirm.dental-public', { access: dentalInsurance.selectedBenefits ? dentalInsurance.selectedBenefits : t('confirm.no') })}</li>
-      </UnorderedList>
+      <div className="space-y-10">
+        <h2 className="mt-8 text-3xl font-semibold">{t('confirm.application-summ')}</h2>
+        <div>
+          <dl className="mt-6 divide-y border-y">
+            <DescriptionListItem term={t('confirm.application-code')}>
+              <strong>{submissionInfo.confirmationCode}</strong>
+            </DescriptionListItem>
+          </dl>
+        </div>
+        <h2 className="text-2xl font-semibold">{t('confirm.applicant-title')}</h2>
+        <div>
+          <dl className="mt-6 divide-y border-y">
+            <DescriptionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.dob')}>{userInfo.birthday}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.sin')}>
+              <span className="text-nowrap">{formatSin(userInfo.sin)}</span>
+            </DescriptionListItem>
+            <DescriptionListItem term={t('confirm.marital-status')}>{userInfo.martialStatus}</DescriptionListItem>
+          </dl>
+        </div>
+        {spouseInfo && (
+          <>
+            <h2 className="text-2xl font-semibold">{t('confirm.spouse-info')}</h2>
+            <div>
+              <dl className="mt-6 divide-y border-y">
+                <DescriptionListItem term={t('confirm.full-name')}>{`${spouseInfo.firstName} ${spouseInfo.lastName}`}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.dob')}>{spouseInfo.birthday}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.sin')}>
+                  <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
+                </DescriptionListItem>
+                <DescriptionListItem term={t('confirm.consent')}>{t('confirm.consent-answer')}</DescriptionListItem>
+              </dl>
+            </div>
+          </>
+        )}
+        <h2 className="text-2xl font-semibold">{t('confirm.contact-info')}</h2>
+        <div>
+          <dl className="mt-6 divide-y border-y">
+            <DescriptionListItem term={t('confirm.phone-number')}>
+              <span className="text-nowrap">{userInfo.phoneNumber}</span>
+            </DescriptionListItem>
+            <DescriptionListItem term={t('confirm.alt-phone-number')}>
+              <span className="text-nowrap">{userInfo.altPhoneNumber} </span>
+            </DescriptionListItem>
+            <DescriptionListItem term={t('confirm.mailing')}> {mailingAddressInfo.address}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.home')}> {homeAddressInfo.address}</DescriptionListItem>
+          </dl>
+        </div>
+        <h2 className="text-2xl font-semibold">{t('confirm.comm-prefs')}</h2>
+        <div>
+          <dl className="mt-6 divide-y border-y">
+            <DescriptionListItem term={t('confirm.comm-pref')}> {userInfo.communicationPreference}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.lang-pref')}> {userInfo.preferredLanguage}</DescriptionListItem>
+          </dl>
+        </div>
+        <h2 className="text-2xl font-semibold">{t('confirm.dental-insurance')}</h2>
+        <div>
+          <dl className="mt-6 divide-y border-y">
+            <DescriptionListItem term={t('confirm.dental-private')}> {dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.dental-public')}>
+              {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
+                <>
+                  <p>{t('apply:review-information.yes')}</p>
+                  <p>{t('apply:review-information.dental-benefit-has-access')}</p>
+                  <div>
+                    <ul className="ml-6 list-disc">
+                      {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
+                      {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
+                    </ul>
+                  </div>
+                </>
+              ) : (
+                t('confirm.no')
+              )}
+            </DescriptionListItem>
+          </dl>
+        </div>
+      </div>
 
       <Button
         className="mt-5 print:hidden"
@@ -252,14 +291,5 @@ export default function ApplyFlowConfirm() {
         </Button>
       </fetcher.Form>
     </div>
-  );
-}
-
-function UnorderedList({ children, term }: { children: ReactNode; term: string }) {
-  return (
-    <>
-      <h3 className="my-4 text-lg font-semibold">{term}</h3>
-      <ul className="list-disc space-y-1 pl-7">{children}</ul>
-    </>
   );
 }
