@@ -87,10 +87,9 @@ export const benefitApplicationRequestSchema = z.object({
               PersonSurName: z.string(),
             }),
           ),
-          // TODO: planned for next release
-          // PersonRelationshipCode: z.object({
-          //   ReferenceDataID: z.string(),
-          // }),
+          PersonRelationshipCode: z.object({
+            ReferenceDataName: z.string(),
+          }),
           PersonSINIdentification: z.object({
             IdentificationID: z.string(),
           }),

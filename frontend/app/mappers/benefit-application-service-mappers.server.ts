@@ -16,7 +16,7 @@ interface ToBenefitApplicationRequestArgs {
   dateOfBirth: DateOfBirthState;
   dentalBenefits: DentalBenefitsState;
   dentalInsurance: DentalInsuranceState;
-  partnerInformation?: PartnerInformationState;
+  partnerInformation: PartnerInformationState | undefined;
   personalInformation: PersonalInformationState;
 }
 
@@ -54,7 +54,7 @@ export function toBenefitApplicationRequest({ partnerInformation, applicantInfor
         PersonSINIdentification: {
           IdentificationID: applicantInformation.socialInsuranceNumber,
         },
-        RelatedPerson: partnerInformation ? [toRelatedPerson({ ...partnerInformation, maritalStatus: applicantInformation.maritalStatus })] : [],
+        RelatedPerson: partnerInformation ? [toRelatedPerson({ ...partnerInformation, personRelationshipCode: 'Spouse' })] : [],
         MailingSameAsHomeIndicator: personalInformation.copyMailingAddress,
         PreferredMethodCommunicationCode: {
           ReferenceDataID: communicationPreferences.preferredMethod,
@@ -210,10 +210,10 @@ interface ToRelatedPersonArgs {
   firstName: string;
   lastName: string;
   socialInsuranceNumber: string;
-  maritalStatus: string;
+  personRelationshipCode: 'Dependent' | 'Spouse';
 }
 
-function toRelatedPerson({ dateOfBirth, firstName, lastName, maritalStatus, socialInsuranceNumber }: ToRelatedPersonArgs) {
+function toRelatedPerson({ dateOfBirth, firstName, lastName, personRelationshipCode, socialInsuranceNumber }: ToRelatedPersonArgs) {
   return {
     PersonBirthDate: toDate(dateOfBirth),
     PersonName: [
@@ -223,7 +223,7 @@ function toRelatedPerson({ dateOfBirth, firstName, lastName, maritalStatus, soci
       },
     ],
     PersonRelationshipCode: {
-      ReferenceDataID: maritalStatus,
+      ReferenceDataName: personRelationshipCode,
     },
     PersonSINIdentification: {
       IdentificationID: socialInsuranceNumber,

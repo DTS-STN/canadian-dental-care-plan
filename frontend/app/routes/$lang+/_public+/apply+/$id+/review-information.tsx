@@ -178,6 +178,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     dentalBenefits: state.dentalBenefits,
     dentalInsurance: state.dentalInsurance,
     personalInformation: state.personalInformation,
+    partnerInformation: state.partnerInformation,
   });
 
   const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
@@ -188,7 +189,6 @@ export async function action({ context: { session }, params, request }: ActionFu
   };
 
   const sessionResponseInit = await applyRouteHelpers.saveState({ params, request, session, state: { submissionInfo } });
-
   return redirectWithLocale(request, `/apply/${id}/confirmation`, sessionResponseInit);
 }
 
