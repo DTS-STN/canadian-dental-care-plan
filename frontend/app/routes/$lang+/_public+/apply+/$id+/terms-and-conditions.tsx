@@ -15,6 +15,7 @@ import { InlineLink } from '~/components/inline-link';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaService } from '~/services/hcaptcha-service.server';
 import { getEnv } from '~/utils/env.server';
+import { getClientIpAddress } from '~/utils/ip-address-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -60,10 +61,11 @@ export async function action({ context: { session }, request, params }: ActionFu
   }
 
   const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
+  const clientIpAddress = getClientIpAddress(request);
 
   try {
     const hCaptchaService = getHCaptchaService();
-    await hCaptchaService.verifyHCaptchaResponse(hCaptchaResponse);
+    await hCaptchaService.verifyHCaptchaResponse(hCaptchaResponse, clientIpAddress);
   } catch (error) {
     log.warn(`hCaptcha verification failed: [${error}]; Proceeding with normal application flow`);
   }
