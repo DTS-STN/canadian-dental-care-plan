@@ -53,34 +53,10 @@ export function getCCTApiMockHandlers() {
 
       return HttpResponse.json([
         {
-          LetterName: '775170000',
-          LetterId: '111222333-6ed0-4113-8520-3c46fc53fd15',
-          LetterRecordId: '12345678901',
-          LetterDate: '2024/03/26',
-        },
-        {
-          LetterName: '775170000',
-          LetterId: '111222333-6ed0-4113-8520-3c46fc53f321',
-          LetterRecordId: '12345678901',
-          LetterDate: '2024/02/15',
-        },
-        {
-          LetterName: '775170000',
-          LetterId: '111222333-6ed0-4113-8520-3c46fc53fd123',
-          LetterRecordId: '12345678901',
-          LetterDate: '2024/02/15',
-        },
-        {
           LetterName: '775170001',
           LetterId: '038d9d0f-fb35-4d98-8f31-a4b2171e521a',
           LetterRecordId: '81400774242',
-          LetterDate: '2024/03/21',
-        },
-        {
-          LetterName: '775170001',
-          LetterId: 'f8a161b0-3b89-449f-a10a-e9c958ffb32f',
-          LetterRecordId: '81400774242',
-          LetterDate: '2024/03/21',
+          LetterDate: '2024/04/05',
         },
       ]);
     }),
