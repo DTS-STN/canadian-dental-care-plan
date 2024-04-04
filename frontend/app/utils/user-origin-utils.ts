@@ -8,7 +8,7 @@ import { loader as rootLoader } from '~/root';
 
 export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
-export function useUserOrigin(): { to: To; text: string } | undefined {
+export function useUserOrigin(): { to: To; text: string; isFromMSCAD: boolean } | undefined {
   const data = useRouteLoaderData<typeof rootLoader>('root');
   const { t } = useTranslation(i18nNamespaces);
 
@@ -19,12 +19,14 @@ export function useUserOrigin(): { to: To; text: string } | undefined {
       return {
         to: t('gcweb:header.menu-msca-home.href', { baseUri: data.env.MSCA_BASE_URI }),
         text: t('gcweb:header.menu-dashboard.text'),
+        isFromMSCAD: false,
       };
     }
     case 'msca-d': {
       return {
         to: t('gcweb:header.menu-dashboard.href', { baseUri: data.env.SCCH_BASE_URI }),
         text: t('gcweb:header.menu-dashboard.text'),
+        isFromMSCAD: true,
       };
     }
     default: {
