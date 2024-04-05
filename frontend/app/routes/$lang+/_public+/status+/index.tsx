@@ -54,7 +54,11 @@ export async function action({ context: { session }, params, request }: ActionFu
       .min(1, t('status:form.error-message.sin-required'))
       .refine(isValidSin, t('status:form.error-message.sin-valid'))
       .transform((sin) => formatSin(sin, '')),
-    code: z.string().trim().min(1, { message: 'status:form.error-message.application-code-required' }),
+    code: z
+      .string()
+      .trim()
+      .min(1, { message: 'status:form.error-message.application-code-required' })
+      .refine((code) => /^(?:\d{13}|\d{11})$/.test(code), t('status:form.error-message.application-code-valid')),
   });
 
   const formData = Object.fromEntries(await request.formData());

@@ -57,7 +57,8 @@
     "error-message": {
       "sin-required": "The Social Insurance Number (SIN) is required.",
       "sin-valid": "The Social Insurance Number (SIN) must be valid.",
-      "application-code-required": "The application code or client number is required"
+      "application-code-required": "The application code or client number is required",
+      "application-code-valid": "The application code or client number must be valid"
     }
   }
 }
