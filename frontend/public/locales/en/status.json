@@ -56,7 +56,8 @@
     "submit": "Check status",
     "error-message": {
       "sin-required": "The Social Insurance Number (SIN) is required.",
-      "sin-valid": "The Social Insurance Number (SIN) must be valid."
+      "sin-valid": "The Social Insurance Number (SIN) must be valid.",
+      "application-code-required": "The application code or client number is required"
     }
   }
 }
