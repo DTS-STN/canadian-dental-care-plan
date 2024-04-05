@@ -63,7 +63,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const lookupService = getLookupService();
   const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = getEnv();
 
   const countryList = await lookupService.getAllCountries();
   const regionList = await lookupService.getAllRegions();
@@ -71,7 +71,20 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:personal-information.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.personalInformation, maritalStatus: state.applicantInformation?.maritalStatus, countryList, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, editMode: state.editMode });
+  return json({
+    id: state.id,
+    csrfToken,
+    meta,
+    defaultState: state.personalInformation,
+    maritalStatus: state.applicantInformation?.maritalStatus,
+    countryList,
+    regionList,
+    CANADA_COUNTRY_ID,
+    USA_COUNTRY_ID,
+    MARITAL_STATUS_CODE_COMMONLAW,
+    MARITAL_STATUS_CODE_MARRIED,
+    editMode: state.editMode,
+  });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -217,7 +230,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowPersonalInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { id, csrfToken, defaultState, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, editMode } = useLoaderData<typeof loader>();
+  const { id, csrfToken, defaultState, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED, editMode } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState?.mailingCountry);
@@ -505,7 +518,7 @@ export default function ApplyFlowPersonalInformation() {
                 {t('apply:personal-information.continue')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" to={['MARRIED', 'COMMONLAW'].includes(maritalStatus ?? '') ? `/apply/${id}/partner-information` : `/apply/${id}/applicant-information`} disabled={isSubmitting}>
+              <ButtonLink id="back-button" to={[MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED].includes(Number(maritalStatus)) ? `/apply/${id}/partner-information` : `/apply/${id}/applicant-information`} disabled={isSubmitting}>
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply:personal-information.back')}
               </ButtonLink>
