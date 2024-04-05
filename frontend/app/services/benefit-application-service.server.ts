@@ -9,7 +9,13 @@ import { getLogger } from '~/utils/logging.server';
 const log = getLogger('benefit-application-service.server');
 
 function createBenefitApplicationService() {
-  const { INTEROP_POWERPLATFORM_API_BASE_URI, INTEROP_POWERPLATFORM_API_SUBSCRIPTION_KEY } = getEnv();
+  // prettier-ignore
+  const { 
+    INTEROP_API_BASE_URI,
+    INTEROP_API_SUBSCRIPTION_KEY,
+    INTEROP_BENEFIT_APPLICATION_API_BASE_URI,
+    INTEROP_BENEFIT_APPLICATION_API_SUBSCRIPTION_KEY,
+  } = getEnv();
 
   /**
    * Application submission to Power Platform
@@ -27,13 +33,13 @@ function createBenefitApplicationService() {
 
     auditService.audit('application-status.post', { userId: 'anonymous' });
 
-    const url = new URL(`${INTEROP_POWERPLATFORM_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application`);
+    const url = new URL(`${INTEROP_BENEFIT_APPLICATION_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application`);
 
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': INTEROP_POWERPLATFORM_API_SUBSCRIPTION_KEY,
+        'Ocp-Apim-Subscription-Key': INTEROP_BENEFIT_APPLICATION_API_SUBSCRIPTION_KEY ?? INTEROP_API_SUBSCRIPTION_KEY,
       },
       body: JSON.stringify(parsedBenefitApplicationRequest.data),
     });

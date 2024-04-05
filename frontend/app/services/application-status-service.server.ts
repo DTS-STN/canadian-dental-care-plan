@@ -14,7 +14,13 @@ const log = getLogger('application-status-service.server');
 export const getApplicationStatusService = moize(createApplicationStatusService, { onCacheAdd: () => log.info('Creating new application status service') });
 
 function createApplicationStatusService() {
-  const { INTEROP_POWERPLATFORM_API_BASE_URI, INTEROP_POWERPLATFORM_API_SUBSCRIPTION_KEY } = getEnv();
+  // prettier-ignore
+  const { 
+    INTEROP_API_BASE_URI,
+    INTEROP_API_SUBSCRIPTION_KEY,
+    INTEROP_STATUS_CHECK_API_BASE_URI,
+    INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY,
+  } = getEnv();
 
   /**
    * @returns the status id of a dental application given the sin and application code
@@ -24,7 +30,7 @@ function createApplicationStatusService() {
 
     getAuditService().audit('application-status.post', { userId: 'anonymous' });
 
-    const url = new URL(`${INTEROP_POWERPLATFORM_API_BASE_URI}/dental-care/status-check/v1/status`);
+    const url = new URL(`${INTEROP_STATUS_CHECK_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/status-check/v1/status`);
     const statusRequest = {
       BenefitApplication: {
         Applicant: {
@@ -40,12 +46,11 @@ function createApplicationStatusService() {
       },
     };
 
-    // TODO extract this into util function so we don't need to keep specifying subscription key
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': INTEROP_POWERPLATFORM_API_SUBSCRIPTION_KEY,
+        'Ocp-Apim-Subscription-Key': INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY ?? INTEROP_API_SUBSCRIPTION_KEY,
       },
       body: JSON.stringify(statusRequest),
     });
