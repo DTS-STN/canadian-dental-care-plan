@@ -53,6 +53,10 @@
     "application-code-label": "Votre code de demande ou votre numéro du client",
     "application-code-description": "This code or number is found in the upper right-hand corner of the letter you received from Service Canada",
     "sin-label": "Numéro d'assurance sociale (NAS)",
-    "submit": "Vérifier l'état de votre demande"
+    "submit": "Vérifier l'état de votre demande",
+    "error-message": {
+      "sin-required": "Le numéro d'assurance sociale (NAS) est requis.",
+      "sin-valid": "Le numéro d'assurance sociale (NAS) doit être valide."
+    }
   }
 }
