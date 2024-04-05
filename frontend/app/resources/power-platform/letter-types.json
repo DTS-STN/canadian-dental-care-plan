@@ -8,7 +8,7 @@
         "MetadataId": "629218d3-c80a-ee11-8f6e-000d3a09d1b8",
         "Options": [
           {
-            "Value": 775170000,
+            "Value": "775170000",
             "Color": null,
             "IsManaged": false,
             "ExternalValue": "",
@@ -62,7 +62,7 @@
             }
           },
           {
-            "Value": 775170001,
+            "Value": "775170001",
             "Color": null,
             "IsManaged": false,
             "ExternalValue": null,
@@ -116,7 +116,7 @@
             }
           },
           {
-            "Value": 775170002,
+            "Value": "775170001-775170000",
             "Color": null,
             "IsManaged": false,
             "ExternalValue": null,
@@ -128,16 +128,131 @@
             "Label": {
               "LocalizedLabels": [
                 {
-                  "Label": "Digital Determination Letter",
+                  "Label": "Determination Letter - Eligible",
                   "LanguageCode": 1033,
                   "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "MetadataId": "d8b96bb4-ecb4-477b-ba83-747120543925",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de détermination - Éligible",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
                   "HasChanged": null
                 }
               ],
               "UserLocalizedLabel": {
-                "Label": "Digital Determination Letter",
+                "Label": "Determination Letter - Eligible",
                 "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "de3afd94-5b3c-48ce-bae1-4e6eb8775629",
+                "HasChanged": null
+              }
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "495e3278-d494-496a-8ce4-f4a370138d14",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "495e3278-d494-496a-8ce4-f4a370138d14",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "775170001-775170001",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Determination Letter - Ineligible",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "d8b96bb4-ecb4-477b-ba83-747120543925",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de détermination - Non-éligible",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "Ineligible",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "13ecbc16-1863-4672-baed-63b5cea170f2",
+                "HasChanged": null
+              }
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "775170002-775170002",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Validation Letter - Duplicate",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de validation - Duplicata",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "Validation Letter - Duplicate",
+                "LanguageCode": 1036,
                 "IsManaged": false,
                 "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
                 "HasChanged": null
@@ -163,7 +278,7 @@
             }
           },
           {
-            "Value": 775170003,
+            "Value": "775170002-775170004",
             "Color": null,
             "IsManaged": false,
             "ExternalValue": null,
@@ -175,18 +290,73 @@
             "Label": {
               "LocalizedLabels": [
                 {
-                  "Label": "Already Enrolled Letter",
+                  "Label": "Validation Letter - CRA",
                   "LanguageCode": 1033,
                   "IsManaged": false,
-                  "MetadataId": "d5dcf321-479d-4307-b4f7-f54dc2bac561",
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de validation - ARC",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
                   "HasChanged": null
                 }
               ],
+              "Description": {
+                "LocalizedLabels": [
+                  {
+                    "Label": "",
+                    "LanguageCode": 1033,
+                    "IsManaged": false,
+                    "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                    "HasChanged": null
+                  }
+                ],
+                "UserLocalizedLabel": {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                  "HasChanged": null
+                }
+              }
+            }
+          },
+          {
+            "Value": "775170002-775170005",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Validation Letter - No Tax",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de validation - Aucune taxe",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+
               "UserLocalizedLabel": {
-                "Label": "Already Enrolled Letter",
+                "Label": "CRA",
                 "LanguageCode": 1033,
                 "IsManaged": false,
-                "MetadataId": "d5dcf321-479d-4307-b4f7-f54dc2bac561",
+                "MetadataId": "235bb920-57ec-45b6-a613-4e2043f7f2de",
                 "HasChanged": null
               }
             },
@@ -196,7 +366,7 @@
                   "Label": "",
                   "LanguageCode": 1033,
                   "IsManaged": false,
-                  "MetadataId": "ef298544-299c-4fbe-8ae0-c29bb83bb55c",
+                  "MetadataId": "d0466980-bf54-4f69-a510-d82a668549ce",
                   "HasChanged": null
                 }
               ],
@@ -204,7 +374,7 @@
                 "Label": "",
                 "LanguageCode": 1033,
                 "IsManaged": false,
-                "MetadataId": "ef298544-299c-4fbe-8ae0-c29bb83bb55c",
+                "MetadataId": "d0466980-bf54-4f69-a510-d82a668549ce",
                 "HasChanged": null
               }
             }
