@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
@@ -13,6 +13,7 @@ import pageIds from '../../page-ids.json';
 import { Button } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { ContextualAlert } from '~/components/contextual-alert';
+import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputField } from '~/components/input-field';
 import { PublicLayout } from '~/components/layouts/public-layout';
@@ -53,7 +54,7 @@ export async function action({ context: { session }, params, request }: ActionFu
       .min(1, t('status:form.error-message.sin-required'))
       .refine(isValidSin, t('status:form.error-message.sin-valid'))
       .transform((sin) => formatSin(sin, '')),
-    code: z.string().trim().min(1, { message: 'Please enter your application code' }),
+    code: z.string().trim().min(1, { message: 'status:form.error-message.application-code-required' }),
   });
 
   const formData = Object.fromEntries(await request.formData());
@@ -98,7 +99,24 @@ export default function StatusChecker() {
   const microsoftServiceAgreement = <InlineLink to={t('status:links.microsoft-service-agreement')} />;
   const fileacomplaint = <InlineLink to={t('status:links.file-complaint')} />;
 
+  const errorSummaryId = 'error-summary';
+
+  const errorMessages = useMemo(() => {
+    if (fetcher.data && 'errors' in fetcher.data) {
+      return {
+        sin: fetcher.data.errors.sin?._errors[0],
+        code: fetcher.data.errors.code?._errors[0],
+      };
+    }
+    return {};
+  }, [fetcher.data]);
+
+  const errorSummaryItems = createErrorSummaryItems(errorMessages);
+
   useEffect(() => {
+    if (hasErrors(errorMessages)) {
+      scrollAndFocusToErrorSummary(errorSummaryId);
+    }
     if (fetcher.data && 'status' in fetcher.data) {
       const targetElement = document.getElementById('status');
       if (targetElement) {
@@ -106,7 +124,7 @@ export default function StatusChecker() {
         targetElement.focus();
       }
     }
-  }, [fetcher.data]);
+  }, [fetcher.data, errorMessages]);
 
   return (
     <PublicLayout>
@@ -166,11 +184,12 @@ export default function StatusChecker() {
             </p>
           </div>
         </Collapsible>
+        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="space-y-6">
-            <InputField id="code" name="code" label={t('status:form.application-code-label')} helpMessagePrimary={t('status:form.application-code-description')} required />
-            <InputField id="sin" name="sin" label={t('status:form.sin-label')} required />
+            <InputField id="code" name="code" label={t('status:form.application-code-label')} helpMessagePrimary={t('status:form.application-code-description')} required errorMessage={errorMessages.code} />
+            <InputField id="sin" name="sin" label={t('status:form.sin-label')} required errorMessage={errorMessages.sin} />
           </div>
           <Button variant="primary" id="submit" disabled={isSubmitting} className="my-8">
             {t('status:form.submit')}
