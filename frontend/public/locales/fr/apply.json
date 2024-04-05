@@ -360,7 +360,7 @@
   "terms-and-conditions": {
     "page-title": "Présentation d'une demande d'adhésion au Régime canadien de soins dentaires",
     "page-heading": "Conditions d'utilisation de la demande en ligne du Régime canadien de soins dentaires",
-    "intro-text": "Nous vous remercions d'avoir utilisé la demande en ligne du Régime canadien de soins dentaires (RCSD) («\u00a0la demande en ligne\u00a0»). Nous avons élaboré des conditions d'utilisation de ce service (\"Conditions\"). Veuillez les lire attentivement.",
+    "intro-text": "Merci d'utiliser la demande en ligne du Régime canadien de soins dentaires (RCSD) («\u0a00la demande en ligne\u0a00»). Nous avons élaboré des conditions d'utilisation de ce service («\u0a00Conditions\u0a00»). Veuillez les lire attentivement.",
     "terms-and-conditions-of-use": {
       "summary": "Conditions générales d'utilisation",
       "heading": "Conditions d'utilisation de la demande en ligne du Régime canadien de soins dentaires",
@@ -373,8 +373,8 @@
         "heading": "Conditions générales d'utilisation",
         "self-agreement": "Votre utilisation de la demande en ligne signifie que vous avez lu et accepté les présentes conditions générales d'utilisation et l'énoncé de confidentialité. Si, à tout moment, vous cessez d'accepter l'une ou l'autre des conditions générales d'utilisation, vous devez renoncer à utiliser la demande en ligne.",
         "on-behalf-of-someone-else": "Si vous utilisez la demande au nom d'une autre personne, en utilisant la demande, vous certifiez que vous avez toutes les permissions et les autorisations nécessaires pour accepter les conditions générales d'utilisation au nom de cette personne, et que vous acceptez les conditions générales en votre nom personnel et au nom de la personne que vous représentez.",
-        "at-your-own-risk": "Vous utilisez ce service à vos propres risques et vous devez protéger vos renseignements personnels. Veillez à fermer le navigateur ou à vous déconnecter lorsque vous avez terminé.",
-        "only-use": "Utilisez uniquement la demande en ligne pour faire une demande au Régime canadien de soins dentaires.",
+        "at-your-own-risk": "Vous utilisez ce service à vos propres risques et vous devez protéger vos renseignements personnels. Si vous utilisez un ordinateur public, veillez à fermer le navigateur ou à vous déconnecter lorsque vous avez terminé.",
+        "only-use": "Utilisez uniquement la demande en ligne pour faire une demande au RCSD.",
         "maintenance": "Il peut arriver que le système soit indisponible pour des raisons de maintenance.",
         "inactive": "Si vous êtes inactif pendant 15\u00a0minutes dans la demande en ligne, votre séance prendra fin et vous perdrez tous les renseignements que vous avez saisis.",
         "msdc": "EDSC a recours aux services de Microsoft Corporation pour exécuter la demande en ligne. Les centres de données Microsoft utilisés par EDSC se trouvent au Canada conformément à l'entente sur les conditions de service de Microsoft Corporation.",
@@ -400,7 +400,7 @@
         "service-canada-application-administration": "Service Canada, qui fait partie d'Emploi et Développement social Canada (EDSC), administre les demandes au titre du Régime canadien de soins dentaires (RCSD) au nom de Santé Canada (SC). Service Canada recueillera les renseignements personnels que vous inclurez dans votre demande au RCSD afin de valider l'admissibilité en fonction des critères du RCSD."
       },
       "how-we-protect-your-privacy": {
-        "heading": "Comment protégeons-nous vos renseignements personnels?",
+        "heading": "Comment protégeons-nous vos renseignements personnels",
         "personal-information-collection-and-use-authorization": "La collecte et l'utilisation de vos renseignements personnels sont autorisées en vertu de la Loi sur la protection des renseignements personnels, de la Loi sur le ministère de la Santé, de la Loi sur les mesures de soins dentaires, de la Loi sur le ministère de l'Emploi et du Développement social et d'autres lois applicables.",
         "personal-information-rights-and-access": "Vous avez droit à la protection de vos renseignements personnels, à l'accès à ceux-ci et, le cas échéant, à leur correction. Ils sont conservés dans les fichiers de renseignements personnels suivants\u00a0:",
         "personal-information-banks": {
@@ -418,7 +418,7 @@
         "esdc-information-usage-policy": "EDSC peut utiliser ou partager les renseignements que vous fournissez pour les activités d'analyse des politiques, de recherche, de surveillance et d'évaluation au sein d'EDSC et de SC. Ces utilisations ou activités n'auront aucune incidence sur les décisions administratives prises à votre sujet."
       },
       "what-happens-if-you-dont-give-us-your-information": {
-        "heading": "Que se passe-t-il si vous ne nous fournissez pas vos renseignements?",
+        "heading": "Que se passe-t-il si vous ne nous fournissez pas vos renseignements",
         "text": "La participation au RCSD est volontaire. Toutefois, si vous ne fournissez pas vos renseignements personnels dans la demande, vous ne pouvez pas vous inscrire au RCSD."
       }
     },
