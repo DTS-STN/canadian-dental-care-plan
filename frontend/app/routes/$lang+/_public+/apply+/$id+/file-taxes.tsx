@@ -1,6 +1,6 @@
 import { FormEvent } from 'react';
 
-import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -8,11 +8,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
 import pageIds from '../../../page-ids.json';
-import { ButtonLink } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -39,9 +39,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
-  await applyRouteHelpers.loadState({ params, request, session });
+  const t = await getFixedT(request, handle.i18nNamespaces);
   await applyRouteHelpers.clearState({ params, request, session });
-  return redirectWithLocale(request, '/');
+  return redirect(t('apply:eligibility.file-your-taxes.return-btn-link'));
 }
 
 export default function ApplyFlowFileYourTaxes() {
@@ -74,10 +74,10 @@ export default function ApplyFlowFileYourTaxes() {
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:eligibility.file-your-taxes.back-btn')}
         </ButtonLink>
-        <ButtonLink type="submit" variant="primary" onClick={() => sessionStorage.removeItem('flow.state')} to={t('apply:eligibility.file-your-taxes.return-btn-link')}>
+        <Button type="submit" variant="primary">
           {t('apply:eligibility.file-your-taxes.return-btn')}
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
-        </ButtonLink>
+        </Button>
       </fetcher.Form>
     </>
   );
