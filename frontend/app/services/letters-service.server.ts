@@ -16,12 +16,14 @@ export const getLettersService = moize(createLettersService, { onCacheAdd: () =>
 function createLettersService() {
   // prettier-ignore
   const { 
-    GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS, 
+    GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS,
     ENGLISH_LANGUAGE_CODE,
     FRENCH_LANGUAGE_CODE,
-    INTEROP_CCT_API_BASE_URI, 
-    INTEROP_CCT_API_SUBSCRIPTION_KEY, 
-    INTEROP_CCT_API_COMMUNITY 
+    INTEROP_API_BASE_URI,
+    INTEROP_API_SUBSCRIPTION_KEY,
+    INTEROP_CCT_API_BASE_URI,
+    INTEROP_CCT_API_SUBSCRIPTION_KEY,
+    INTEROP_CCT_API_COMMUNITY,
   } = getEnv();
 
   /**
@@ -45,13 +47,13 @@ function createLettersService() {
    * @returns array of letters given the clientId with optional sort parameter
    */
   async function getLetters(clientId: string, sortOrder: 'asc' | 'desc' = 'desc') {
-    const url = new URL(`${INTEROP_CCT_API_BASE_URI}/dental-care/client-letters/cct/v1/GetDocInfoByClientId`);
+    const url = new URL(`${INTEROP_CCT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetDocInfoByClientId`);
     url.searchParams.set('clientid', clientId);
 
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': INTEROP_CCT_API_SUBSCRIPTION_KEY,
+        'Ocp-Apim-Subscription-Key': INTEROP_CCT_API_SUBSCRIPTION_KEY ?? INTEROP_API_SUBSCRIPTION_KEY,
         'cct-community': INTEROP_CCT_API_COMMUNITY,
       },
     });
@@ -93,13 +95,13 @@ function createLettersService() {
    * @returns a promise that resolves to a base64 encoded string representing the PDF document
    */
   async function getPdf(letterId: string) {
-    const url = new URL(`${INTEROP_CCT_API_BASE_URI}/dental-care/client-letters/cct/v1/GetPdfByLetterId`);
+    const url = new URL(`${INTEROP_CCT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetPdfByLetterId`);
     url.searchParams.set('id', letterId);
 
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': INTEROP_CCT_API_SUBSCRIPTION_KEY,
+        'Ocp-Apim-Subscription-Key': INTEROP_CCT_API_SUBSCRIPTION_KEY ?? INTEROP_API_SUBSCRIPTION_KEY,
         'cct-community': INTEROP_CCT_API_COMMUNITY,
       },
     });

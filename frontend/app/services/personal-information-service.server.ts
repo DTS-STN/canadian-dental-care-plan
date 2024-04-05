@@ -203,7 +203,13 @@ export type PersonalInfo = z.infer<typeof personalInfoDtoSchema>;
 export const getPersonalInformationService = moize(createPersonalInformationService, { onCacheAdd: () => log.info('Creating new user service') });
 
 function createPersonalInformationService() {
-  const { INTEROP_POWERPLATFORM_API_BASE_URI, INTEROP_POWERPLATFORM_API_SUBSCRIPTION_KEY } = getEnv();
+  // prettier-ignore
+  const { 
+    INTEROP_API_BASE_URI,
+    INTEROP_API_SUBSCRIPTION_KEY,
+    INTEROP_APPLICANT_API_BASE_URI,
+    INTEROP_APPLICANT_API_SUBSCRIPTION_KEY,
+  } = getEnv();
 
   function createClientInfo(personalSinId: string) {
     return { Applicant: { PersonSINIdentification: { IdentificationID: personalSinId } } };
@@ -211,7 +217,7 @@ function createPersonalInformationService() {
 
   async function getPersonalInformation(personalSinId: string) {
     const curentPersonalInformation = createClientInfo(personalSinId);
-    const url = `${INTEROP_POWERPLATFORM_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant/`;
+    const url = `${INTEROP_APPLICANT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant/`;
 
     const response = await fetch(url, {
       // Using POST instead of GET due to how sin params gets logged with SIN
@@ -219,7 +225,7 @@ function createPersonalInformationService() {
       body: JSON.stringify(curentPersonalInformation),
       headers: {
         'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': INTEROP_POWERPLATFORM_API_SUBSCRIPTION_KEY,
+        'Ocp-Apim-Subscription-Key': INTEROP_APPLICANT_API_SUBSCRIPTION_KEY ?? INTEROP_API_SUBSCRIPTION_KEY,
       },
     });
 
