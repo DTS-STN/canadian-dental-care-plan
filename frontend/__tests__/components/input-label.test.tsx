@@ -4,9 +4,6 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { InputLabel } from '~/components/input-label';
 
-//import { axe, toHaveNoViolations } from 'jest-axe';
-//expect.extend(toHaveNoViolations);
-
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,

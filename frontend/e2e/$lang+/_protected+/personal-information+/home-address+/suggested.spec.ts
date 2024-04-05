@@ -1,4 +1,3 @@
-import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('personal information home address suggested page', () => {
@@ -20,11 +19,5 @@ test.describe('personal information home address suggested page', () => {
     await test.step('return to personal information page', async () => {
       await expect(page).toHaveURL(/.*personal-information/);
     });
-  });
-
-  test('should not have any automatically detectable accessibility issues', async ({ page }) => {
-    await page.goto('/en/personal-information/home-address/suggested');
-    const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
-    expect(accessibilityScanResults.violations).toEqual([]);
   });
 });

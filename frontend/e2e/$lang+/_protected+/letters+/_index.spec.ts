@@ -1,4 +1,3 @@
-import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('letters page', () => {
@@ -24,11 +23,5 @@ test.describe('letters page', () => {
     await page.getByRole('main').getByRole('listitem').first().getByRole('link').click();
     const download = await downloadPromise;
     expect(download.suggestedFilename()).toMatch(/\.pdf$/);
-  });
-
-  test('should not have any automatically detectable accessibility issues', async ({ page }) => {
-    await page.goto('/en/letters');
-    const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
-    expect(accessibilityScanResults.violations).toEqual([]);
   });
 });

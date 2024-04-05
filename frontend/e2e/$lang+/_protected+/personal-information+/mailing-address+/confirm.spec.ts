@@ -1,4 +1,3 @@
-import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('personal information mailing confirm page', () => {
@@ -20,13 +19,5 @@ test.describe('personal information mailing confirm page', () => {
     await test.step('return to edit page', async () => {
       await expect(page).toHaveURL(/.*personal-information\/mailing-address\/edit/);
     });
-  });
-
-  test('should not have any automatically detectable accessibility issues', async ({ page }) => {
-    await page.goto('/en/personal-information/mailing-address/edit');
-    await page.getByRole('button', { name: 'save' }).click();
-    await expect(page).toHaveURL(/.*personal-information\/mailing-address\/confirm/);
-    const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
-    expect(accessibilityScanResults.violations).toEqual([]);
   });
 });

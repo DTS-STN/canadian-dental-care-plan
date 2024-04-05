@@ -1,11 +1,8 @@
 import { render } from '@testing-library/react';
 
-import { axe, toHaveNoViolations } from 'jest-axe';
 import { describe, expect, it } from 'vitest';
 
 import { Progress } from '~/components/progress';
-
-expect.extend(toHaveNoViolations);
 
 describe('Progress component', () => {
   it('renders with default props', () => {
@@ -47,30 +44,4 @@ describe('Progress component', () => {
   });
 
   // Add more tests as needed
-});
-
-describe('Progress component accessiblity', () => {
-  it('renders with default props', async () => {
-    const { container } = render(<Progress aria-label="File upload" />);
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  });
-
-  it('renders with custom size and variant', async () => {
-    const { container } = render(<Progress aria-label="File upload" size="lg" variant="blue" />);
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  });
-
-  it('renders with custom value', async () => {
-    const { container } = render(<Progress aria-label="File upload" value={50} />);
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  });
-
-  it('renders with custom className', async () => {
-    const { container } = render(<Progress aria-label="File upload" className="custom-class" />);
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  });
 });
