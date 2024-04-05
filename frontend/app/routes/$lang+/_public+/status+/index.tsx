@@ -1,7 +1,11 @@
+import { useEffect } from 'react';
+
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
+import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -19,6 +23,8 @@ import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils'
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { RouteHandleData } from '~/utils/route-utils';
+import { formatSin, isValidSin } from '~/utils/sin-utils';
+import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
@@ -38,9 +44,15 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('status/index');
   const { CLIENT_STATUS_SUCCESS_ID } = getEnv();
+  const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formDataSchema = z.object({
-    sin: z.string().trim().min(1, { message: 'Please enter your SIN' }),
+    sin: z
+      .string()
+      .trim()
+      .min(1, t('status:form.error-message.sin-required'))
+      .refine(isValidSin, t('status:form.error-message.sin-valid'))
+      .transform((sin) => formatSin(sin, '')),
     code: z.string().trim().min(1, { message: 'Please enter your application code' }),
   });
 
@@ -77,14 +89,25 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function StatusChecker() {
   const { csrfToken } = useLoaderData<typeof loader>();
-  const actionData = useActionData<typeof action>();
+  const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
 
   const hcaptchaTermsOfService = <InlineLink to={t('status:links.hcaptcha')} />;
   const microsoftDataPrivacyPolicy = <InlineLink to={t('status:links.microsoft-data-privacy-policy')} />;
   const microsoftServiceAgreement = <InlineLink to={t('status:links.microsoft-service-agreement')} />;
   const fileacomplaint = <InlineLink to={t('status:links.file-complaint')} />;
-  // TODO use <PublicLayout> for now
+
+  useEffect(() => {
+    if (fetcher.data && 'status' in fetcher.data) {
+      const targetElement = document.getElementById('status');
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+        targetElement.focus();
+      }
+    }
+  }, [fetcher.data]);
+
   return (
     <PublicLayout>
       <div className="max-w-prose">
@@ -143,24 +166,25 @@ export default function StatusChecker() {
             </p>
           </div>
         </Collapsible>
-        <Form method="post" noValidate>
+        <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="space-y-6">
             <InputField id="code" name="code" label={t('status:form.application-code-label')} helpMessagePrimary={t('status:form.application-code-description')} required />
             <InputField id="sin" name="sin" label={t('status:form.sin-label')} required />
           </div>
-          <Button className="my-8" id="submit" variant="primary">
+          <Button variant="primary" id="submit" disabled={isSubmitting} className="my-8">
             {t('status:form.submit')}
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
-        </Form>
+        </fetcher.Form>
 
-        {actionData && 'status' in actionData && (
-          <ContextualAlert type={actionData.status.alertType}>
+        {fetcher.data && 'status' in fetcher.data && (
+          <ContextualAlert type={fetcher.data.status.alertType}>
             <div>
-              <h2 className="mb-2 font-bold" tabIndex={-1}>
+              <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
                 Status
               </h2>
-              {getNameByLanguage(i18n.language, actionData.status)}
+              {getNameByLanguage(i18n.language, fetcher.data.status)}
             </div>
           </ContextualAlert>
         )}

@@ -53,6 +53,10 @@
     "application-code-label": "Application Code or Client Number",
     "application-code-description": "This code or number is found in the upper right-hand corner of the letter you received from Service Canada",
     "sin-label": "Social Insurance Number (SIN)",
-    "submit": "Check status"
+    "submit": "Check status",
+    "error-message": {
+      "sin-required": "The Social Insurance Number (SIN) is required.",
+      "sin-valid": "The Social Insurance Number (SIN) must be valid."
+    }
   }
 }
