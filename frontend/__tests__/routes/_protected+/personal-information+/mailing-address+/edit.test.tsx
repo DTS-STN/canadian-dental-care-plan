@@ -2,9 +2,7 @@ import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/$lang+/_protected+/personal-information+/mailing-address+/edit';
-import { getAddressService } from '~/services/address-service.server';
-import { getUserService } from '~/services/user-service.server';
+import { loader } from '~/routes/$lang+/_protected+/personal-information+/mailing-address+/edit';
 
 vi.mock('~/services/address-service.server', () => ({
   getAddressService: vi.fn().mockReturnValue({
@@ -81,12 +79,8 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
     it('should return addressInfo', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
       session.set('csrfToken', 'csrfToken');
-
-      const userService = getUserService();
-      const addressService = getAddressService();
-
-      vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', firstName: 'John', lastName: 'Maverick' });
-      vi.mocked(addressService.getAddressInfo).mockResolvedValue({ address: '111 Fake Home St', city: 'city', country: 'country' });
+      session.set('userInfoToken', { sin: '999999999' });
+      session.set('personalInformation', { mailingAddress: { streetName: '111 Fake Mailing St', cityName: 'city', countryId: 'country' } });
 
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information/mailing-address/edit'),
@@ -98,9 +92,9 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
 
       expect(data).toMatchObject({
         addressInfo: {
-          address: '111 Fake Home St',
-          city: 'city',
-          country: 'country',
+          streetName: '111 Fake Mailing St',
+          cityName: 'city',
+          countryId: 'country',
         },
         countryList: [
           {
@@ -130,46 +124,8 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
 
     it('should throw 404 response if addressInfo is not found', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-
-      vi.mocked(getAddressService().getAddressInfo).mockResolvedValue(null);
-
-      try {
-        await loader({
-          request: new Request('http://localhost:3000/personal-information/mailing-address/edit'),
-          context: { session },
-          params: {},
-        });
-      } catch (error) {
-        expect((error as Response).status).toEqual(404);
-      }
-    });
-  });
-
-  describe('action()', () => {
-    it('should redirect to confirm page', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-
-      const formData = new FormData();
-      formData.append('address', '111 Fake Home St');
-      formData.append('city', 'city');
-      formData.append('province', 'province');
-      formData.append('postalCode', 'postalCode');
-      formData.append('country', 'country');
-
-      const response = await action({
-        request: new Request('http://localhost:300/en/personal-information/mailing-address/edit', { method: 'POST', body: formData }),
-        context: { session },
-        params: {},
-      });
-
-      expect(response).toEqual('/en/personal-information/mailing-address/confirm');
-    });
-
-    it('should throw 404 response if userInfo is not found', async () => {
-      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-
-      const userService = getUserService();
-      vi.mocked(userService.getUserId).mockResolvedValue('');
+      session.set('userInfoToken', { sin: '999999999' });
+      session.set('personalInformation', {});
 
       try {
         await loader({

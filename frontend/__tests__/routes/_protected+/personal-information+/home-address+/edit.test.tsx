@@ -3,8 +3,6 @@ import { createMemorySessionStorage } from '@remix-run/node';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { loader } from '~/routes/$lang+/_protected+/personal-information+/home-address+/edit';
-import { getAddressService } from '~/services/address-service.server';
-import { getUserService } from '~/services/user-service.server';
 
 vi.mock('~/services/address-service.server', () => ({
   getAddressService: vi.fn().mockReturnValue({
@@ -58,13 +56,6 @@ vi.mock('~/services/session-service.server', () => ({
   }),
 }));
 
-vi.mock('~/services/user-service.server', () => ({
-  getUserService: vi.fn().mockReturnValue({
-    getUserId: vi.fn().mockReturnValue('some-id'),
-    getUserInfo: vi.fn(),
-  }),
-}));
-
 vi.mock('~/services/wsaddress-service.server', () => ({
   getWSAddressService: vi.fn().mockReturnValue({
     correctAddress: vi.fn(),
@@ -91,12 +82,8 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
   describe('loader()', () => {
     it('should return addressInfo', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-
-      const userService = getUserService();
-      const addressService = getAddressService();
-
-      vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', firstName: 'John', lastName: 'Maverick' });
-      vi.mocked(addressService.getAddressInfo).mockResolvedValue({ address: '111 Fake Home St', city: 'city', country: 'country' });
+      session.set('userInfoToken', { sin: '999999999' });
+      session.set('personalInformation', { homeAddress: { streetName: '111 Fake Home St', cityName: 'city', countryId: 'country' } });
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/personal-information/home-address/edit'),
@@ -108,9 +95,9 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
 
       expect(data).toMatchObject({
         addressInfo: {
-          address: '111 Fake Home St',
-          city: 'city',
-          country: 'country',
+          streetName: '111 Fake Home St',
+          cityName: 'city',
+          countryId: 'country',
         },
         countryList: [
           {
@@ -137,8 +124,8 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
 
     it('should throw 404 response if addressInfo is not found', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-
-      vi.mocked(getAddressService().getAddressInfo).mockResolvedValue(null);
+      session.set('userInfoToken', { sin: '999999999' });
+      session.set('personalInformation', {});
 
       try {
         await loader({
