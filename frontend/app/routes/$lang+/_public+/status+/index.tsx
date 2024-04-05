@@ -58,7 +58,7 @@ export async function action({ context: { session }, params, request }: ActionFu
       .string()
       .trim()
       .min(1, { message: 'status:form.error-message.application-code-required' })
-      .refine((code) => /^(?:\d{13}|\d{11})$/.test(code), t('status:form.error-message.application-code-valid')),
+      .refine((code) => /^(?:\d{13}|\d{11}|\d{6})$/.test(code), t('status:form.error-message.application-code-valid')),
   });
 
   const formData = Object.fromEntries(await request.formData());
@@ -89,6 +89,7 @@ export async function action({ context: { session }, params, request }: ActionFu
       ...(clientFriendlyStatus ?? {}),
       alertType: clientFriendlyStatus?.id === CLIENT_STATUS_SUCCESS_ID ? 'success' : 'info',
     },
+    statusId,
   } as const);
 }
 
