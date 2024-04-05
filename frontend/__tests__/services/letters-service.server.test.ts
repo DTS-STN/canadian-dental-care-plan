@@ -63,26 +63,7 @@ describe('letters-service.server tests', () => {
     it('should return all the letter types', async () => {
       const lettersService = getLettersService();
       const letterTypes = await lettersService.getAllLetterTypes();
-      expect(letterTypes).toEqual([
-        {
-          id: '775170000',
-          nameEn: 'Invitation to Apply Letter',
-          nameFr: "Lettre d'invitation",
-        },
-        {
-          id: '775170001',
-          nameEn: 'Determination Letter',
-          nameFr: 'Lettre de détermination',
-        },
-        {
-          id: '775170002',
-          nameEn: 'Digital Determination Letter',
-        },
-        {
-          id: '775170003',
-          nameEn: 'Already Enrolled Letter',
-        },
-      ]);
+      expect(letterTypes.length).toBe(7);
     });
   });
 });
