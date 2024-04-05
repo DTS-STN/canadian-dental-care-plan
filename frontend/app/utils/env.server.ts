@@ -46,12 +46,12 @@ const serverEnv = z.object({
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
 
   // lookup identifiers
-  CANADA_COUNTRY_ID: z.string().trim().min(1),
+  CANADA_COUNTRY_ID: z.string().trim().min(1).default('0cf5389e-97ae-eb11-8236-000d3af4bfc3'),
   COMMUNICATION_METHOD_EMAIL_ID: z.string().trim().min(1).default('775170000'),
   FIRST_NATIONS_YES_TYPE_ID: z.string().trim().min(1).default('first-nations-yes'),
   OTHER_EQUITY_TYPE_ID: z.string().trim().min(1).default('equity-other'),
   OTHER_GENDER_TYPE_ID: z.string().trim().min(1).default('gender-other'),
-  USA_COUNTRY_ID: z.string().trim().min(1),
+  USA_COUNTRY_ID: z.string().trim().min(1).default('fcf7389e-97ae-eb11-8236-000d3af4bfc3'),
   CLIENT_STATUS_SUCCESS_ID: z.string().trim().min(1).default('51af5170-614e-ee11-be6f-000d3a09d640'),
 
   // language codes
@@ -89,7 +89,7 @@ const serverEnv = z.object({
   // hCaptcha settings
   HCAPTCHA_SECRET_KEY: z.string().trim().min(1),
   HCAPTCHA_SITE_KEY: z.string().trim().min(1),
-  HCAPTCHA_VERIFY_URL: z.string().url(),
+  HCAPTCHA_VERIFY_URL: z.string().url().default('https://api.hcaptcha.com/siteverify'),
 
   // session configuration
   SESSION_STORAGE_TYPE: z.enum(['file', 'redis']).default('file'),
