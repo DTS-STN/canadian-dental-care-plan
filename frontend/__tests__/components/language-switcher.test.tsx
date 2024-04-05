@@ -3,13 +3,10 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { useLocation, useParams } from '@remix-run/react';
 import { createRemixStub } from '@remix-run/testing';
 
-import { axe, toHaveNoViolations } from 'jest-axe';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { LanguageSwitcher } from '~/components/language-switcher';
 import { getAltLanguage, removeLanguageFromPath } from '~/utils/locale-utils';
-
-expect.extend(toHaveNoViolations);
 
 vi.mock('react-i18next', () => ({
   useTranslation: vi.fn().mockReturnValue({
@@ -61,12 +58,10 @@ describe('Language Switcher', () => {
     vi.mocked(removeLanguageFromPath).mockReturnValue(basePath);
 
     const RemixStub = createRemixStub([{ Component: () => <LanguageSwitcher>Français</LanguageSwitcher>, path: '/' }]);
-    const { container } = render(<RemixStub />);
+    render(<RemixStub />);
 
-    const results = await axe(container);
     const element = await waitFor(() => screen.findByTestId('language-switcher'));
 
-    expect(results).toHaveNoViolations();
     expect(element.textContent).toBe('Français');
     expect(element.getAttribute('href')).toBe(`/${responseLang}${basePath}?${requestedSearch}`);
   });

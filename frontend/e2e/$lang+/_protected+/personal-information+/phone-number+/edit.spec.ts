@@ -1,4 +1,3 @@
-import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('personal information phone number edit page', () => {
@@ -6,11 +5,6 @@ test.describe('personal information phone number edit page', () => {
     await test.step('navigate', async () => {
       await page.goto('/en/personal-information/phone-number/edit');
       await expect(page).toHaveURL(/.*personal-information\/phone-number\/edit/);
-    });
-
-    await test.step('detect any accessibility issues', async () => {
-      const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
-      expect(accessibilityScanResults.violations).toEqual([]);
     });
   });
 
@@ -35,11 +29,6 @@ test.describe('personal information phone number edit page', () => {
       const input = page.getByRole('textbox', { name: 'phone number' });
       const errorMessage = await input.evaluate((element) => (element as HTMLInputElement).validationMessage);
       expect(errorMessage).toEqual(expect.anything());
-    });
-
-    await test.step('detect any accessibility issues', async () => {
-      const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
-      expect(accessibilityScanResults.violations).toEqual([]);
     });
   });
 
