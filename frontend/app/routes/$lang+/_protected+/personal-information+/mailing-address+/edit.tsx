@@ -14,6 +14,7 @@ import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import type { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
+import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { getAddressService } from '~/services/address-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -23,6 +24,7 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -46,17 +48,16 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
 
-  const userService = getUserService();
-  const userId = await userService.getUserId();
-  const userInfo = await userService.getUserInfo(userId);
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
+  const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, request, session);
+  const addressInfo = personalInformation.mailingAddress;
 
-  if (!userInfo) {
+  if (!addressInfo) {
     throw new Response(null, { status: 404 });
   }
 
   const csrfToken = String(session.get('csrfToken'));
-
-  const addressInfo = await getAddressService().getAddressInfo(userId, userInfo.mailingAddress ?? '');
 
   const countryList = await getLookupService().getAllCountries();
   const regionList = await getLookupService().getAllRegions();
@@ -79,11 +80,12 @@ export async function action({ context: { session }, request }: ActionFunctionAr
     copyHomeAddress: z.string().transform((value) => value === 'on'),
   });
   const addressFormSchema = z.object({
-    address: z.string().trim().min(1, { message: 'empty-field' }),
-    city: z.string().trim().min(1, { message: 'empty-field' }),
-    province: z.string().trim().optional(),
+    streetName: z.string().trim().min(1, { message: 'empty-field' }),
+    secondAddressLine: z.string().trim().optional(),
+    cityName: z.string().trim().min(1, { message: 'empty-field' }),
+    provinceTerritoryStateId: z.string().trim().optional(),
     postalCode: z.string().trim().optional(),
-    country: z.string().trim().min(1, { message: 'empty-field' }),
+    countryId: z.string().trim().min(1, { message: 'empty-field' }),
   });
   const formDataSchema = z.union([copyHomeAddressSchema, addressFormSchema]);
 
@@ -126,7 +128,7 @@ export async function action({ context: { session }, request }: ActionFunctionAr
 export default function PersonalInformationMailingAddressEdit() {
   const actionData = useActionData<typeof action>();
   const { addressInfo, countryList, regionList, csrfToken, CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
-  const [selectedCountry, setSelectedCountry] = useState(addressInfo?.country);
+  const [selectedCountry, setSelectedCountry] = useState(addressInfo.countryId);
   const [countryRegions, setCountryRegions] = useState<typeof regionList>([]);
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const errorSummaryId = 'error-summary';
@@ -146,11 +148,12 @@ export default function PersonalInformationMailingAddressEdit() {
   };
 
   const defaultValues = {
-    address: actionData?.formData.address ?? addressInfo?.address,
-    city: actionData?.formData.city ?? addressInfo?.city,
-    province: actionData?.formData.province ?? addressInfo?.province,
-    country: actionData?.formData.country ?? addressInfo?.country,
-    postalCode: actionData?.formData.postalCode ?? addressInfo?.postalCode,
+    streetName: actionData?.formData.streetName ?? addressInfo.streetName,
+    secondAddressLine: actionData?.formData.secondAddressLine ?? addressInfo.secondAddressLine,
+    cityName: actionData?.formData.cityName ?? addressInfo.cityName,
+    provinceTerritoryStateId: actionData?.formData.provinceTerritoryStateId ?? addressInfo.provinceTerritoryStateId,
+    countryId: actionData?.formData.countryId ?? addressInfo.countryId,
+    postalCode: actionData?.formData.postalCode ?? addressInfo.postalCode,
   };
 
   const countries: InputOptionProps[] = countryList
@@ -164,7 +167,7 @@ export default function PersonalInformationMailingAddressEdit() {
     .sort((country1, country2) => country1.children.localeCompare(country2.children));
 
   // populate region/province/state list with selected country or current address country
-  const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter((region) => region.countryId === defaultValues.country))
+  const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter((region) => region.countryId === defaultValues.countryId))
     .map((region) => {
       return {
         children: i18n.language === 'fr' ? region.nameFr : region.nameEn,
@@ -192,11 +195,11 @@ export default function PersonalInformationMailingAddressEdit() {
   }
 
   const errorMessages = {
-    address: getErrorMessage(actionData?.errors.fieldErrors.address?.[0]),
-    city: getErrorMessage(actionData?.errors.fieldErrors.city?.[0]),
-    province: getErrorMessage(actionData?.errors.fieldErrors.province?.[0]),
+    streetName: getErrorMessage(actionData?.errors.fieldErrors.streetName?.[0]),
+    cityName: getErrorMessage(actionData?.errors.fieldErrors.cityName?.[0]),
+    provinceTerritoryStateId: getErrorMessage(actionData?.errors.fieldErrors.provinceTerritoryStateId?.[0]),
     postalCode: getErrorMessage(actionData?.errors.fieldErrors.postalCode?.[0]),
-    country: getErrorMessage(actionData?.errors.fieldErrors.country?.[0]),
+    countryId: getErrorMessage(actionData?.errors.fieldErrors.countryId?.[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -215,33 +218,41 @@ export default function PersonalInformationMailingAddressEdit() {
         <div className="my-6">
           <div className="space-y-6">
             <InputField
-              id="address"
+              id="streetName"
               className="w-full"
               label={t('personal-information:mailing-address.edit.field.address')}
               helpMessagePrimary={t('personal-information:mailing-address.edit.field.address-note')}
-              name="address"
+              name="streetName"
               required
-              defaultValue={defaultValues.address}
-              errorMessage={errorMessages.address}
+              defaultValue={defaultValues.streetName}
+              errorMessage={errorMessages.streetName}
             />
-            <InputField id="apartment" name="apartment" className="w-full" label={t('personal-information:home-address.edit.field.apartment')} />
+            <InputField id="secondAddressLine" name="secondAddressLine" className="w-full" label={t('personal-information:home-address.edit.field.apartment')} defaultValue={defaultValues.secondAddressLine} />
             <InputSelect
-              id="country"
+              id="countryId"
               className="w-full sm:w-1/2"
               label={t('personal-information:mailing-address.edit.field.country')}
-              name="country"
+              name="countryId"
               required
               options={countries}
               onChange={countryChangeHandler}
-              defaultValue={defaultValues.country}
-              errorMessage={errorMessages.country}
+              defaultValue={defaultValues.countryId}
+              errorMessage={errorMessages.countryId}
             />
             {regions.length > 0 && (
-              <InputSelect id="province" className="w-full sm:w-1/2" label={t('personal-information:mailing-address.edit.field.province')} name="province" options={regions} defaultValue={defaultValues.province} errorMessage={errorMessages.province} />
+              <InputSelect
+                id="provinceTerritoryStateId"
+                className="w-full sm:w-1/2"
+                label={t('personal-information:mailing-address.edit.field.province')}
+                name="provinceTerritoryStateId"
+                options={regions}
+                defaultValue={defaultValues.provinceTerritoryStateId}
+                errorMessage={errorMessages.provinceTerritoryStateId}
+              />
             )}
 
             <div className="grid gap-6 md:grid-cols-2">
-              <InputField id="city" className="w-full" label={t('personal-information:mailing-address.edit.field.city')} name="city" required defaultValue={defaultValues.city} errorMessage={errorMessages.city} />
+              <InputField id="cityName" className="w-full" label={t('personal-information:mailing-address.edit.field.city')} name="cityName" required defaultValue={defaultValues.cityName} errorMessage={errorMessages.cityName} />
               <InputField
                 id="postalCode"
                 className="w-full"

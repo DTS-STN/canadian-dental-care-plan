@@ -1,7 +1,6 @@
 import jsonpatch from 'fast-json-patch';
 import type { Operation } from 'fast-json-patch';
 import { HttpResponse, http } from 'msw';
-import { randomBytes } from 'node:crypto';
 import { z } from 'zod';
 
 import { db } from '~/mocks/db';
@@ -222,7 +221,7 @@ export function getPowerPlatformApiMockHandlers() {
         BenefitApplication: {
           BenefitApplicationIdentification: [
             {
-              IdentificationID: `${randomBytes(4).toString('hex')}-${randomBytes(4).toString('hex')}-${randomBytes(4).toString('hex')}`.toUpperCase(),
+              IdentificationID: '2476124092174',
               IdentificationCategoryText: 'Confirmation Number',
             },
           ],

@@ -21,7 +21,7 @@ function createHCaptchaService() {
    *
    * @see https://docs.hcaptcha.com/#verify-the-user-response-server-side
    */
-  async function verifyHCaptchaResponse(hCaptchaResponse: string) {
+  async function verifyHCaptchaResponse(hCaptchaResponse: string, ipAddress: string | null) {
     const instrumentationService = getInstrumentationService();
 
     getAuditService().audit('hcaptcha.verify', { userId: 'anonymous' });
@@ -29,6 +29,9 @@ function createHCaptchaService() {
     const url = new URL(HCAPTCHA_VERIFY_URL);
     url.searchParams.set('response', hCaptchaResponse);
     url.searchParams.set('secret', HCAPTCHA_SECRET_KEY);
+    if (ipAddress) {
+      url.searchParams.set('remoteip', ipAddress);
+    }
 
     const response = await fetch(url, { method: 'POST' });
 
