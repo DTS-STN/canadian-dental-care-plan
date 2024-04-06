@@ -7,6 +7,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
+import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { DescriptionListItem } from '~/components/description-list-item';
@@ -62,6 +63,16 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     .map((obj) => getNameByLanguage(locale, obj))
     .join(', ');
 
+  // Getting province by Id
+  const allRegions = await getLookupService().getAllRegions();
+  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
+  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
+
+  // Getting Country by Id
+  const allCountries = await getLookupService().getAllCountries();
+  const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation?.mailingCountry);
+  const countryHome = allCountries.find((country) => country.countryId === state.personalInformation?.homeCountry);
+
   const preferredLang = await getLookupService().getPreferredLanguage(state.communicationPreferences.preferredLanguage);
   const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : state.communicationPreferences.preferredLanguage;
 
@@ -98,17 +109,17 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const mailingAddressInfo = {
     address: state.personalInformation.mailingAddress,
     city: state.personalInformation.mailingCity,
-    province: state.personalInformation.mailingProvince,
+    province: provinceMailing,
     postalCode: state.personalInformation.mailingPostalCode,
-    country: state.personalInformation.mailingCountry,
+    country: countryMailing,
   };
 
   const homeAddressInfo = {
     address: state.personalInformation.homeAddress,
     city: state.personalInformation.homeCity,
-    province: state.personalInformation.homeProvince,
+    province: provinceHome,
     postalCode: state.personalInformation.homePostalCode,
-    country: state.personalInformation.homeCountry,
+    country: countryHome,
   };
 
   const dentalInsurance = {
@@ -138,7 +149,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function ApplyFlowConfirm() {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo } = useLoaderData<typeof loader>();
 
@@ -238,8 +249,26 @@ export default function ApplyFlowConfirm() {
             <DescriptionListItem term={t('confirm.alt-phone-number')}>
               <span className="text-nowrap">{userInfo.altPhoneNumber} </span>
             </DescriptionListItem>
-            <DescriptionListItem term={t('confirm.mailing')}> {mailingAddressInfo.address}</DescriptionListItem>
-            <DescriptionListItem term={t('confirm.home')}> {homeAddressInfo.address}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.mailing')}>
+              <Address
+                address={mailingAddressInfo.address}
+                city={mailingAddressInfo.city}
+                provinceState={i18n.language === 'en' ? mailingAddressInfo.province?.nameEn : mailingAddressInfo.province?.nameFr}
+                postalZipCode={mailingAddressInfo.postalCode}
+                country={i18n.language === 'en' ? mailingAddressInfo.country?.nameEn ?? '' : mailingAddressInfo.country?.nameFr ?? ''}
+                altFormat={true}
+              />
+            </DescriptionListItem>
+            <DescriptionListItem term={t('confirm.home')}>
+              <Address
+                address={homeAddressInfo.address ?? ''}
+                city={homeAddressInfo.city ?? ''}
+                provinceState={i18n.language === 'en' ? homeAddressInfo.province?.nameEn : homeAddressInfo.province?.nameFr}
+                postalZipCode={homeAddressInfo.postalCode ?? ''}
+                country={i18n.language === 'en' ? homeAddressInfo.country?.nameEn ?? '' : homeAddressInfo.country?.nameFr ?? ''}
+                altFormat={true}
+              />
+            </DescriptionListItem>
           </dl>
         </div>
         <h2 className="text-2xl font-semibold">{t('confirm.comm-prefs')}</h2>
