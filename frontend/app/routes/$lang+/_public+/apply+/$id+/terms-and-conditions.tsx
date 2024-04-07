@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useRef } from 'react';
 
-import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -17,10 +17,10 @@ import { getHCaptchaService } from '~/services/hcaptcha-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getClientIpAddress } from '~/utils/ip-address-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { RouteHandleData } from '~/utils/route-utils';
+import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
@@ -49,7 +49,6 @@ export async function loader({ context: { session }, request, params }: LoaderFu
 export async function action({ context: { session }, request, params }: ActionFunctionArgs) {
   const log = getLogger('apply/index');
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id } = await applyRouteHelpers.loadState({ params, request, session });
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -71,8 +70,7 @@ export async function action({ context: { session }, request, params }: ActionFu
   }
 
   await applyRouteHelpers.saveState({ params, request, session, state: {} });
-
-  return redirectWithLocale(request, `/apply/${id}/type-application`);
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/type-application', params));
 }
 
 export default function ApplyIndex() {

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -66,6 +66,8 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
 export default function PersonalInformationIndex() {
   const { user, preferredLanguage, homeAddressInfo, mailingAddressInfo, countryList, regionList } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const params = useParams();
+
   return (
     <>
       <p className="mb-8 text-lg text-gray-500">{t('personal-information:index.on-file')}</p>
@@ -74,7 +76,7 @@ export default function PersonalInformationIndex() {
         <DescriptionListItem term={t('personal-information:index.preferred-language')}>
           <p>{preferredLanguage ? getNameByLanguage(i18n.language, preferredLanguage) : t('personal-information:index.no-preferred-language-on-file')}</p>
           <p>
-            <InlineLink id="change-preferred-language-button" to="/personal-information/preferred-language/edit">
+            <InlineLink id="change-preferred-language-button" routeId="$lang+/_protected+/personal-information+/preferred-language+/edit" params={params}>
               {t('personal-information:index.change-preferred-language')}
             </InlineLink>
           </p>
@@ -92,7 +94,7 @@ export default function PersonalInformationIndex() {
             <p>{t('personal-information:index.no-address-on-file')}</p>
           )}
           <p>
-            <InlineLink id="change-home-address-button" to="/personal-information/home-address/edit">
+            <InlineLink id="change-home-address-button" routeId="$lang+/_protected+/personal-information+/home-address+/edit" params={params}>
               {t('personal-information:index.change-home-address')}
             </InlineLink>
           </p>
@@ -110,7 +112,7 @@ export default function PersonalInformationIndex() {
             <p>{t('personal-information:index.no-address-on-file')}</p>
           )}
           <p>
-            <InlineLink id="change-mailing-address-button" to="/personal-information/mailing-address/edit">
+            <InlineLink id="change-mailing-address-button" routeId="$lang+/_protected+/personal-information+/mailing-address+/edit" params={params}>
               {t('personal-information:index.change-mailing-address')}
             </InlineLink>
           </p>
@@ -118,7 +120,7 @@ export default function PersonalInformationIndex() {
         <DescriptionListItem term={t('personal-information:index.phone-number')}>
           <p>{user.phoneNumber}</p>
           <p>
-            <InlineLink id="change-phone-number-button" to="/personal-information/phone-number/edit">
+            <InlineLink id="change-phone-number-button" routeId="$lang+/_protected+/personal-information+/phone-number+/edit" params={params}>
               {t('personal-information:index.change-phone-number')}
             </InlineLink>
           </p>

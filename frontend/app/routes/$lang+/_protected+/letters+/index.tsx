@@ -2,7 +2,7 @@ import type { ChangeEvent } from 'react';
 
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData, useSearchParams } from '@remix-run/react';
+import { useLoaderData, useParams, useSearchParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -40,7 +40,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 const orderEnumSchema = z.enum(['asc', 'desc']);
 
-export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-letters');
 
   const auditService = getAuditService();
@@ -55,7 +55,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
-  const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, request, session);
+  const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
   const letters = personalInformation.clientNumber ? await lettersService.getLetters(personalInformation.clientNumber, sortOrder) : [];
   session.set('letters', letters);
 
@@ -75,6 +75,7 @@ export default function LettersIndex() {
   const [, setSearchParams] = useSearchParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const { letters, letterTypes, sortOrder } = useLoaderData<typeof loader>();
+  const params = useParams();
   const userOrigin = useUserOrigin();
 
   function handleOnSortOrderChange(e: ChangeEvent<HTMLSelectElement>) {
@@ -113,7 +114,7 @@ export default function LettersIndex() {
 
           return (
             <li key={letter.id} className="py-4 sm:py-6">
-              <InlineLink reloadDocument to={`/letters/${letter.id}/download`} className="external-link font-lato font-semibold" target="_blank">
+              <InlineLink reloadDocument routeId="$lang+/_protected+/letters+/$id.download" params={{ ...params, id: letter.id }} className="external-link font-lato font-semibold" target="_blank">
                 {getNameByLanguage(i18n.language, letterType)}
                 <NewTabIndicator />
               </InlineLink>

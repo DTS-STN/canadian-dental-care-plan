@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { useLoaderData, useNavigate } from '@remix-run/react';
+import { useLoaderData, useNavigate, useParams } from '@remix-run/react';
 
 import { randomUUID } from 'crypto';
 
@@ -10,7 +10,7 @@ import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { RouteHandleData } from '~/utils/route-utils';
+import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
@@ -37,13 +37,16 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
 }
 
 export default function ApplyIndex() {
-  const { id, locale } = useLoaderData<typeof loader>();
+  const { id } = useLoaderData<typeof loader>();
+  const params = useParams();
   const navigate = useNavigate();
+
+  const path = getPathById('$lang+/_public+/apply+/$id+/terms-and-conditions', { ...params, id });
 
   useEffect(() => {
     sessionStorage.setItem('flow.state', 'active');
-    navigate(`/${locale}/apply/${id}/terms-and-conditions`, { replace: true });
-  }, [id, locale, navigate]);
+    navigate(path, { replace: true });
+  }, [navigate, path]);
 
   return (
     <div className="max-w-prose animate-pulse">

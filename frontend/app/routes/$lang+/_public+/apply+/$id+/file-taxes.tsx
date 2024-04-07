@@ -1,7 +1,7 @@
 import { FormEvent } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -46,7 +46,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowFileYourTaxes() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { id } = useLoaderData<typeof loader>();
+  const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -70,7 +70,7 @@ export default function ApplyFlowFileYourTaxes() {
         <p>{t('apply:eligibility.file-your-taxes.apply-after')}</p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
-        <ButtonLink type="button" to={`/apply/${id}/tax-filing`} disabled={isSubmitting}>
+        <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/tax-filing" params={params} disabled={isSubmitting}>
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:eligibility.file-your-taxes.back-btn')}
         </ButtonLink>

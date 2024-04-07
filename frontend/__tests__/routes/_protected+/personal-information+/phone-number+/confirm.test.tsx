@@ -79,7 +79,7 @@ describe('_gcweb-app.personal-information.phone-number.confirm', () => {
           method: 'POST',
         }),
         context: { session },
-        params: {},
+        params: { lang: 'en' },
       });
 
       expect(response.status).toBe(302);

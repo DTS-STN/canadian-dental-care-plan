@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { json, redirect } from '@remix-run/node';
+import { Form, useLoaderData, useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -13,16 +13,17 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   breadcrumbs: [
     // prettier-ignore
-    { labelI18nKey: 'personal-information:preferred-language.edit.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:preferred-language.edit.breadcrumbs.personal-information', routeId: '$lang+/_protected+/personal-information+/index' },
     { labelI18nKey: 'personal-information:preferred-language.edit.page-title' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
@@ -60,7 +61,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   return json({ csrfToken, meta, preferredLanguages, userInfo });
 }
 
-export async function action({ context: { session }, request }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('preferred-language/edit');
 
   const instrumentationService = getInstrumentationService();
@@ -94,12 +95,13 @@ export async function action({ context: { session }, request }: ActionFunctionAr
   session.set('newPreferredLanguage', parsedDataResult.data.preferredLanguage);
 
   instrumentationService.countHttpStatus('preferred-language.edit', 302);
-  return redirectWithLocale(request, '/personal-information/preferred-language/confirm');
+  return redirect(getPathById('$lang+/_protected+/personal-information+/preferred-language+/confirm', params));
 }
 
 export default function PreferredLanguageEdit() {
   const { csrfToken, userInfo, preferredLanguages } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const params = useParams();
 
   return (
     <>
@@ -126,7 +128,7 @@ export default function PreferredLanguageEdit() {
           <Button id="change-button" variant="primary">
             {t('personal-information:preferred-language.edit.change')}
           </Button>
-          <ButtonLink id="cancel-button" to="/personal-information">
+          <ButtonLink id="cancel-button" routeId="$lang+/_protected+/personal-information+/index" params={params}>
             {t('personal-information:preferred-language.edit.cancel')}
           </ButtonLink>
         </div>

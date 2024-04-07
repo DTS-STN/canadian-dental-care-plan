@@ -83,7 +83,7 @@ describe('_public.apply.id.tax-filing', () => {
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }),
         context: { session },
-        params: {},
+        params: { lang: 'en', id: '123' },
       });
 
       expect(response.status).toBe(302);
@@ -101,11 +101,11 @@ describe('_public.apply.id.tax-filing', () => {
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/tax-filing', { method: 'POST', body: formData }),
         context: { session },
-        params: {},
+        params: { lang: 'en', id: '123' },
       });
 
       expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe('/en/apply/123/file-your-taxes');
+      expect(response.headers.get('location')).toBe('/en/apply/123/file-taxes');
     });
   });
 });

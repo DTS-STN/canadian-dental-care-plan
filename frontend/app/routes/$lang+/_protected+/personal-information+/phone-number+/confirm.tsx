@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { json, redirect } from '@remix-run/node';
+import { Form, useLoaderData, useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
@@ -12,17 +12,18 @@ import { getInstrumentationService } from '~/services/instrumentation-service.se
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, getLocale, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   breadcrumbs: [
     // prettier-ignore
-    { labelI18nKey: 'personal-information:phone-number.confirm.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:phone-number.confirm.breadcrumbs.personal-information', routeId: '$lang+/_protected+/personal-information+/index' },
     { labelI18nKey: 'personal-information:phone-number.confirm.breadcrumbs.confirm-phone-number' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
@@ -34,7 +35,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const log = getLogger('phone-number/confirm');
 
   const instrumentationService = getInstrumentationService();
@@ -53,8 +54,9 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   if (!session.has('newPhoneNumber')) {
     instrumentationService.countHttpStatus('phone-number.confirm', 302);
     log.debug('No newPhoneNumber session found; redirecting to phone-number/edit');
-    return redirectWithLocale(request, '/personal-information/phone-number/edit');
+    return redirect(getPathById('$lang+/_protected+/personal-information+/phone-number+/edit', params));
   }
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:phone-number.confirm.page-title') }) };
 
@@ -62,7 +64,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   return json({ meta, newPhoneNumber: session.get('newPhoneNumber'), userInfo });
 }
 
-export async function action({ context: { session }, request }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
   const userService = getUserService();
@@ -82,15 +84,16 @@ export async function action({ context: { session }, request }: ActionFunctionAr
   getAuditService().audit('update-data.phone-number', { userId: idToken.sub });
 
   session.unset('newPhoneNumber');
-  const locale = getLocale(request);
 
   instrumentationService.countHttpStatus('phone-number.confirm', 302);
-  return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:phone-number.confirm.updated-notification');
+  return redirectWithSuccess(getPathById('$lang+/_protected+/personal-information+/index', params), 'personal-information:phone-number.confirm.updated-notification');
 }
 
 export default function PhoneNumberConfirm() {
   const loaderData = useLoaderData<typeof loader>();
+  const params = useParams();
   const { t } = useTranslation(handle.i18nNamespaces);
+
   return (
     <>
       <p className="mb-8 text-lg text-gray-500">{t('personal-information:phone-number.confirm.subtitle')}</p>
@@ -107,7 +110,7 @@ export default function PhoneNumberConfirm() {
         </dl>
         <div className="flex flex-wrap items-center gap-3">
           <Button variant="primary">{t('personal-information:phone-number.confirm.button.confirm')}</Button>
-          <ButtonLink id="cancelButton" to="/personal-information/phone-number/edit">
+          <ButtonLink id="cancelButton" routeId="$lang+/_protected+/personal-information+/phone-number+/edit" params={params}>
             {t('personal-information:phone-number.confirm.button.cancel')}
           </ButtonLink>
         </div>

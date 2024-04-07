@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { json, redirect } from '@remix-run/node';
+import { Form, useLoaderData, useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
@@ -12,15 +12,16 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, getLocale, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   breadcrumbs: [
-    { labelI18nKey: 'personal-information:preferred-language.confirm.breadcrumbs.personal-information', to: '/personal-information' },
-    { labelI18nKey: 'personal-information:preferred-language.confirm.breadcrumbs.preferred-language-edit', to: '/personal-information/preferred-language/edit' },
+    { labelI18nKey: 'personal-information:preferred-language.confirm.breadcrumbs.personal-information', routeId: '$lang+/_protected+/personal-information+/index' },
+    { labelI18nKey: 'personal-information:preferred-language.confirm.breadcrumbs.preferred-language-edit', routeId: '$lang+/_protected+/personal-information+/preferred-language+/edit' },
     { labelI18nKey: 'personal-information:preferred-language.confirm.breadcrumbs.preferred-language-confirm' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
@@ -32,7 +33,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const instrumentationService = getInstrumentationService();
   const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
@@ -43,18 +44,18 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const userId = await userService.getUserId();
   if (!userId) {
     instrumentationService.countHttpStatus('preferred-language.confirm', 302);
-    return redirectWithLocale(request, '/');
+    return redirect(getPathById('$lang+/_protected+/home', params));
   }
 
   const userInfo = await userService.getUserInfo(userId);
   if (!userInfo) {
     instrumentationService.countHttpStatus('preferred-language.confirm', 302);
-    return redirectWithLocale(request, '/');
+    return redirect(getPathById('$lang+/_protected+/home', params));
   }
 
   if (!session.has('newPreferredLanguage')) {
     instrumentationService.countHttpStatus('preferred-language.confirm', 302);
-    return redirectWithLocale(request, '/');
+    return redirect(getPathById('$lang+/_protected+/home', params));
   }
 
   const preferredLanguage = await lookupService.getPreferredLanguage(session.get('newPreferredLanguage'));
@@ -66,7 +67,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   return json({ meta, preferredLanguage, userInfo });
 }
 
-export async function action({ context: { session }, request }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
   const userService = getUserService();
@@ -76,31 +77,32 @@ export async function action({ context: { session }, request }: ActionFunctionAr
   const userId = await userService.getUserId();
   if (!userId) {
     instrumentationService.countHttpStatus('preferred-language.confirm', 302);
-    return redirectWithLocale(request, '/');
+    return redirect(getPathById('$lang+/_protected+/home', params));
   }
 
   const userInfo = await userService.getUserInfo(userId);
   if (!userInfo) {
     instrumentationService.countHttpStatus('preferred-language.confirm', 302);
-    return redirectWithLocale(request, '/');
+    return redirect(getPathById('$lang+/_protected+/home', params));
   }
 
   if (!session.has('newPreferredLanguage')) {
     instrumentationService.countHttpStatus('preferred-language.confirm', 302);
-    return redirectWithLocale(request, '/');
+    return redirect(getPathById('$lang+/_protected+/home', params));
   }
 
   await userService.updateUserInfo(userId, { preferredLanguage: session.get('newPreferredLanguage') });
   session.unset('newPreferredLanguage');
-  const locale = getLocale(request);
 
   instrumentationService.countHttpStatus('preferred-language.confirm', 302);
-  return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:preferred-language.confirm.updated-notification');
+  return redirectWithSuccess(getPathById('$lang+/_protected+/personal-information+/index', params), 'personal-information:preferred-language.confirm.updated-notification');
 }
 
 export default function PreferredLanguageConfirm() {
   const { preferredLanguage } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const params = useParams();
+
   return (
     <>
       <p className="mb-8 text-lg text-gray-500">{t('personal-information:preferred-language.confirm.subtitle')}</p>
@@ -113,7 +115,7 @@ export default function PreferredLanguageConfirm() {
         </dl>
         <div className="flex flex-wrap items-center gap-3">
           <Button variant="primary">{t('personal-information:preferred-language.confirm.button.confirm')}</Button>
-          <ButtonLink id="cancelButton" to="/personal-information/preferred-language/edit">
+          <ButtonLink id="cancelButton" routeId="$lang+/_protected+/personal-information+/preferred-language+/edit" params={params}>
             {t('personal-information:preferred-language.confirm.button.cancel')}
           </ButtonLink>
         </div>

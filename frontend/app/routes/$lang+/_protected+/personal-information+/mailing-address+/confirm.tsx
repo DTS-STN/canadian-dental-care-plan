@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, useLoaderData, useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
@@ -14,15 +14,16 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, getLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { IdToken } from '~/utils/raoidc-utils.server';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   breadcrumbs: [
     // prettier-ignore
-    { labelI18nKey: 'personal-information:mailing-address.confirm.breadcrumbs.personal-information', to: '/personal-information' },
+    { labelI18nKey: 'personal-information:mailing-address.confirm.breadcrumbs.personal-information', routeId: '$lang+/_protected+/personal-information+/index' },
     { labelI18nKey: 'personal-information:mailing-address.confirm.breadcrumbs.address-change-confirm' },
   ],
   i18nNamespaces: getTypedI18nNamespaces('personal-information', 'gcweb'),
@@ -54,7 +55,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   return json({ countryList, mailingAddressInfo, meta, newMailingAddress, regionList });
 }
 
-export async function action({ context: { session }, request }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
 
@@ -67,15 +68,15 @@ export async function action({ context: { session }, request }: ActionFunctionAr
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('update-data.mailing-address', { userId: idToken.sub });
 
-  const locale = getLocale(request);
-
   // TODO remove new mailing address from session and handle case when it is missing
-  return redirectWithSuccess(`/${locale}/personal-information`, 'personal-information:mailing-address.confirm.updated-notification');
+  return redirectWithSuccess(getPathById('$lang+/_protected+/personal-information+/index', params), 'personal-information:mailing-address.confirm.updated-notification');
 }
 
 export default function PersonalInformationMailingAddressConfirm() {
   const { mailingAddressInfo, newMailingAddress, countryList, regionList } = useLoaderData<typeof loader>();
+  const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
+
   return (
     <>
       <p className="mb-8 text-lg text-gray-500">{t('personal-information:mailing-address.confirm.subtitle')}</p>
@@ -112,7 +113,7 @@ export default function PersonalInformationMailingAddressConfirm() {
           <Button id="confirm-button" variant="primary">
             {t('personal-information:mailing-address.confirm.button.confirm')}
           </Button>
-          <ButtonLink id="cancel-button" to="/personal-information/mailing-address/edit">
+          <ButtonLink id="cancel-button" routeId="$lang+/_protected+/personal-information+/mailing-address+/edit" params={params}>
             {t('personal-information:mailing-address.confirm.button.cancel')}
           </ButtonLink>
         </div>

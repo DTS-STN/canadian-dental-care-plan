@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { json, redirect } from '@remix-run/node';
+import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faSpinner, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,9 +19,9 @@ import { getBenefitApplicationService } from '~/services/benefit-application-ser
 import { getLookupService } from '~/services/lookup-service.server';
 import { toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, getLocale, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { RouteHandleData } from '~/utils/route-utils';
+import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
@@ -187,12 +187,13 @@ export async function action({ context: { session }, params, request }: ActionFu
   };
 
   await applyRouteHelpers.saveState({ params, request, session, state: { submissionInfo } });
-  return redirectWithLocale(request, `/apply/${state.id}/confirmation`);
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/confirmation', params));
 }
 
 export default function ReviewInformation() {
+  const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { id, userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -222,7 +223,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply:review-information.full-name-title')}>
                 {`${userInfo.firstName} ${userInfo.lastName}`}
                 <p className="mt-4">
-                  <InlineLink id="change-full-name" to={`/apply/${id}/applicant-information`}>
+                  <InlineLink id="change-full-name" routeId="$lang+/_public+/apply+/$id+/applicant-information" params={params}>
                     {t('apply:review-information.full-name-change')}
                   </InlineLink>
                 </p>
@@ -230,7 +231,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply:review-information.dob-title')}>
                 {userInfo.birthday}
                 <p className="mt-4">
-                  <InlineLink id="change-date-of-birth" to={{ pathname: `/apply/${id}/date-of-birth` }}>
+                  <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/date-of-birth" params={params}>
                     {t('apply:review-information.dob-change')}
                   </InlineLink>
                 </p>
@@ -238,7 +239,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply:review-information.sin-title')}>
                 {formatSin(userInfo.sin)}
                 <p className="mt-4">
-                  <InlineLink id="change-sin" to={`/apply/${id}/applicant-information`}>
+                  <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/applicant-information" params={params}>
                     {t('apply:review-information.sin-change')}
                   </InlineLink>
                 </p>
@@ -246,7 +247,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply:review-information.marital-title')}>
                 {maritalStatus}
                 <p className="mt-4">
-                  <InlineLink id="change-martial-status" to={`/apply/${id}/applicant-information`}>
+                  <InlineLink id="change-martial-status" routeId="$lang+/_public+/apply+/$id+/applicant-information" params={params}>
                     {t('apply:review-information.marital-change')}
                   </InlineLink>
                 </p>
@@ -260,7 +261,7 @@ export default function ReviewInformation() {
                 <DescriptionListItem term={t('apply:review-information.full-name-title')}>
                   {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
                   <p className="mt-4">
-                    <InlineLink id="change-spouse-full-name" to={`/apply/${id}/partner-information`}>
+                    <InlineLink id="change-spouse-full-name" routeId="$lang+/_public+/apply+/$id+/partner-information" params={params}>
                       {t('apply:review-information.full-name-change')}
                     </InlineLink>
                   </p>
@@ -268,7 +269,7 @@ export default function ReviewInformation() {
                 <DescriptionListItem term={t('apply:review-information.dob-title')}>
                   {spouseInfo.birthday}
                   <p className="mt-4">
-                    <InlineLink id="change-spouse-date-of-birth" to={`/apply/${id}/partner-information`}>
+                    <InlineLink id="change-spouse-date-of-birth" routeId="$lang+/_public+/apply+/$id+/partner-information" params={params}>
                       {t('apply:review-information.dob-change')}
                     </InlineLink>
                   </p>
@@ -276,7 +277,7 @@ export default function ReviewInformation() {
                 <DescriptionListItem term={t('apply:review-information.sin-title')}>
                   {formatSin(spouseInfo.sin)}
                   <p className="mt-4">
-                    <InlineLink id="change-spouse-sin" to={`/apply/${id}/partner-information`}>
+                    <InlineLink id="change-spouse-sin" routeId="$lang+/_public+/apply+/$id+/partner-information" params={params}>
                       {t('apply:review-information.sin-change')}
                     </InlineLink>
                   </p>
@@ -291,7 +292,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply:review-information.phone-title')}>
                 {userInfo.phoneNumber}
                 <p className="mt-4">
-                  <InlineLink id="change-phone-number" to={`/apply/${id}/personal-information`}>
+                  <InlineLink id="change-phone-number" routeId="$lang+/_public+/apply+/$id+/personal-information" params={params}>
                     {t('apply:review-information.phone-change')}
                   </InlineLink>
                 </p>
@@ -299,7 +300,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply:review-information.alt-phone-title')}>
                 {userInfo.altPhoneNumber}
                 <p className="mt-4">
-                  <InlineLink id="change-alternate-phone-number" to={`/apply/${id}/personal-information`}>
+                  <InlineLink id="change-alternate-phone-number" routeId="$lang+/_public+/apply+/$id+/personal-information" params={params}>
                     {t('apply:review-information.alt-phone-change')}
                   </InlineLink>
                 </p>
@@ -314,7 +315,7 @@ export default function ReviewInformation() {
                   altFormat={true}
                 />
                 <p className="mt-4">
-                  <InlineLink id="change-mailing-address" to={`/apply/${id}/personal-information`}>
+                  <InlineLink id="change-mailing-address" routeId="$lang+/_public+/apply+/$id+/personal-information" params={params}>
                     {t('apply:review-information.mailing-change')}
                   </InlineLink>
                 </p>
@@ -329,7 +330,7 @@ export default function ReviewInformation() {
                   altFormat={true}
                 />
                 <p className="mt-4">
-                  <InlineLink id="change-home-address" to={`/apply/${id}/personal-information`}>
+                  <InlineLink id="change-home-address" routeId="$lang+/_public+/apply+/$id+/personal-information" params={params}>
                     {t('apply:review-information.home-change')}
                   </InlineLink>
                 </p>
@@ -350,7 +351,7 @@ export default function ReviewInformation() {
                   </div>
                 )}
                 <p className="mt-4">
-                  <InlineLink id="change-communication-preference" to={`/apply/${id}/communication-preference`}>
+                  <InlineLink id="change-communication-preference" routeId="$lang+/_public+/apply+/$id+/communication-preference" params={params}>
                     {t('apply:review-information.comm-pref-change')}
                   </InlineLink>
                 </p>
@@ -359,7 +360,7 @@ export default function ReviewInformation() {
                 <DescriptionListItem term={t('apply:review-information.lang-pref-title')}>
                   {getNameByLanguage(i18n.language, preferredLanguage)}
                   <p className="mt-4">
-                    <InlineLink id="change-language-preference" to={`/apply/${id}/communication-preference`}>
+                    <InlineLink id="change-language-preference" routeId="$lang+/_public+/apply+/$id+/communication-preference" params={params}>
                       {t('apply:review-information.lang-pref-change')}
                     </InlineLink>
                   </p>
@@ -373,7 +374,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply:review-information.dental-insurance-title')}>
                 {dentalInsurance ? t('apply:review-information.yes') : t('apply:review-information.no')}
                 <p className="mt-4">
-                  <InlineLink id="change-access-dental" to={`/apply/${id}/dental-insurance`}>
+                  <InlineLink id="change-access-dental" routeId="$lang+/_public+/apply+/$id+/dental-insurance" params={params}>
                     {t('apply:review-information.dental-insurance-change')}
                   </InlineLink>
                 </p>
@@ -394,7 +395,7 @@ export default function ReviewInformation() {
                   <>{t('apply:review-information.no')}</>
                 )}
                 <p className="mt-4">
-                  <InlineLink id="change-dental-benefits" to={`/apply/${id}/federal-provincial-territorial-benefits`}>
+                  <InlineLink id="change-dental-benefits" routeId="$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits" params={params}>
                     {t('apply:review-information.dental-benefit-change')}
                   </InlineLink>
                 </p>
@@ -411,7 +412,7 @@ export default function ReviewInformation() {
             {t('apply:review-information.submit-button')}
             {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
           </Button>
-          <ButtonLink to={`/apply/${id}/exit-application`} variant="alternative" disabled={isSubmitting}>
+          <ButtonLink routeId="$lang+/_public+/apply+/$id+/exit-application" params={params} variant="alternative" disabled={isSubmitting}>
             {t('apply:review-information.exit-button')}
             <FontAwesomeIcon icon={faX} className="ms-3 block size-4" />
           </ButtonLink>

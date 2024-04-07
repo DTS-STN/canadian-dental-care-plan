@@ -133,6 +133,7 @@ function PageBreadcrumbs() {
         { content: t('gcweb:breadcrumbs.home'), to: userOrigin?.to },
         ...breadcrumbs.map((item) => ({
           content: t(item.labelI18nKey),
+          routeId: item.routeId,
           to: item.to,
         })),
       ]}

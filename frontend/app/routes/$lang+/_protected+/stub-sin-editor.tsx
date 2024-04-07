@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
 import { Form, useActionData } from '@remix-run/react';
 
 import md5 from 'md5';
@@ -12,10 +12,10 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputField } from '~/components/input-field';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { UserinfoToken } from '~/utils/raoidc-utils.server';
-import { RouteHandleData } from '~/utils/route-utils';
+import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { isValidSin } from '~/utils/sin-utils';
 
@@ -41,7 +41,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   return { meta };
 }
 
-export async function action({ context: { session }, request }: ActionFunctionArgs) {
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const sinToStubSchema = z.object({
     socialInsuranceNumberToStub: z.string().refine(isValidSin, { message: 'valid-sin' }),
   });
@@ -92,7 +92,7 @@ export async function action({ context: { session }, request }: ActionFunctionAr
   }
   session.set('idToken', idToken);
 
-  return redirectWithLocale(request, `/home`);
+  return redirect(getPathById('$lang+/_protected+/home', params));
 }
 
 export default function StubSinEditorPage() {

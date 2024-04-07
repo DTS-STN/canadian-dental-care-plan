@@ -1,8 +1,8 @@
 import { ChangeEventHandler, useEffect, useMemo, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { json, redirect } from '@remix-run/node';
+import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,9 +20,10 @@ import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
@@ -146,15 +147,16 @@ export async function action({ context: { session }, params, request }: ActionFu
   await applyRouteHelpers.saveState({ params, request, session, state: { communicationPreferences: parsedDataResult.data } });
 
   if (state.editMode) {
-    return redirectWithLocale(request, `/apply/${state.id}/review-information`);
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/review-information', params));
   }
 
-  return redirectWithLocale(request, `/apply/${state.id}/dental-insurance`);
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/dental-insurance', params));
 }
 
 export default function ApplyFlowCommunicationPreferencePage() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, id, communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState, editMode } = useLoaderData<typeof loader>();
+  const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [preferredMethodValue, setPreferredMethodValue] = useState(defaultState?.preferredMethod ?? '');
@@ -294,7 +296,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
               <Button variant="primary" id="continue-button" disabled={isSubmitting}>
                 {t('apply:communication-preference.save-btn')}
               </Button>
-              <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/review-information" params={params} disabled={isSubmitting}>
                 {t('apply:communication-preference.cancel-btn')}
               </ButtonLink>
             </div>
@@ -304,7 +306,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
                 {t('apply:communication-preference.continue')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" to={`/apply/${id}/personal-information`} disabled={isSubmitting}>
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/personal-information" params={params} disabled={isSubmitting}>
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply:communication-preference.back')}
               </ButtonLink>

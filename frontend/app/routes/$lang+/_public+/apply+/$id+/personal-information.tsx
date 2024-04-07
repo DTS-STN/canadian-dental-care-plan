@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
+import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,11 +22,11 @@ import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
-import { RouteHandleData } from '~/utils/route-utils';
+import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
@@ -222,15 +222,16 @@ export async function action({ context: { session }, params, request }: ActionFu
   await applyRouteHelpers.saveState({ params, request, session, state: { personalInformation: updatedData } });
 
   if (state.editMode) {
-    return redirectWithLocale(request, `/apply/${state.id}/review-information`);
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/review-information', params));
   }
 
-  return redirectWithLocale(request, `/apply/${state.id}/communication-preference`);
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/communication-preference', params));
 }
 
 export default function ApplyFlowPersonalInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { id, csrfToken, defaultState, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED, editMode } = useLoaderData<typeof loader>();
+  const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState?.mailingCountry);
@@ -508,7 +509,7 @@ export default function ApplyFlowPersonalInformation() {
               <Button variant="primary" id="continue-button" disabled={isSubmitting}>
                 {t('apply:personal-information.save-btn')}
               </Button>
-              <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/review-information" params={params} disabled={isSubmitting}>
                 {t('apply:personal-information.cancel-btn')}
               </ButtonLink>
             </div>
@@ -518,7 +519,12 @@ export default function ApplyFlowPersonalInformation() {
                 {t('apply:personal-information.continue')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" to={[MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED].includes(Number(maritalStatus)) ? `/apply/${id}/partner-information` : `/apply/${id}/applicant-information`} disabled={isSubmitting}>
+              <ButtonLink
+                id="back-button"
+                routeId={[MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED].includes(Number(maritalStatus)) ? '$lang+/_public+/apply+/$id+/partner-information' : '$lang+/_public+/apply+/$id+/applicant-information'}
+                params={params}
+                disabled={isSubmitting}
+              >
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply:personal-information.back')}
               </ButtonLink>

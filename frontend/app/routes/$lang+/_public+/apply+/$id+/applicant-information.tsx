@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 
-import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
+import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,10 +18,10 @@ import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, redirectWithLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { RouteHandleData } from '~/utils/route-utils';
+import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin } from '~/utils/sin-utils';
 import { cn } from '~/utils/tw-utils';
@@ -104,19 +104,20 @@ export async function action({ context: { session }, params, request }: ActionFu
   await applyRouteHelpers.saveState({ params, remove, request, session, state: { applicantInformation: parsedDataResult.data } });
 
   if (state.editMode) {
-    return redirectWithLocale(request, `/apply/${state.id}/review-information`);
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/review-information', params));
   }
 
   if ([MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(parsedDataResult.data.maritalStatus))) {
-    return redirectWithLocale(request, `/apply/${state.id}/partner-information`);
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/partner-information', params));
   }
 
-  return redirectWithLocale(request, `/apply/${state.id}/personal-information`);
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/personal-information', params));
 }
 
 export default function ApplyFlowApplicationInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, id, defaultState, maritalStatuses, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, maritalStatuses, editMode } = useLoaderData<typeof loader>();
+  const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
@@ -199,7 +200,7 @@ export default function ApplyFlowApplicationInformation() {
               <Button variant="primary" id="continue-button" disabled={isSubmitting}>
                 {t('apply:applicant-information.save-btn')}
               </Button>
-              <ButtonLink id="back-button" to={`/apply/${id}/review-information`} disabled={isSubmitting}>
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/review-information" params={params} disabled={isSubmitting}>
                 {t('apply:applicant-information.cancel-btn')}
               </ButtonLink>
             </div>
@@ -209,7 +210,7 @@ export default function ApplyFlowApplicationInformation() {
                 {t('apply:applicant-information.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" to={`/apply/${id}/date-of-birth`} disabled={isSubmitting}>
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/date-of-birth" params={params} disabled={isSubmitting}>
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply:applicant-information.back-btn')}
               </ButtonLink>
