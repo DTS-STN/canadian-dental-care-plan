@@ -55,7 +55,7 @@
     "i18next-fs-backend": "^2.3.1",
     "i18next-http-backend": "^2.5.0",
     "isbot": "^5.1.4",
-    "jose": "^5.2.3",
+    "jose": "^5.2.4",
     "libphonenumber-js": "^1.10.59",
     "moderndash": "^3.11.1",
     "moize": "^6.1.6",
