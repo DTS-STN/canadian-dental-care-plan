@@ -44,39 +44,6 @@
         "save": "Save"
       },
       "updated-notification": "Home address updated"
-    },
-    "address-accuracy": {
-      "page-title": "Home Address Accuracy",
-      "subtitle": "Please verify the home address accuracy.",
-      "breadcrumbs": {
-        "personal-information": "Personal information"
-      },
-      "cancel": "Cancel",
-      "continue": "Continue",
-      "invalid-address-info": "Your address is compared against Canada Post information for accuracy. However, in some cases, the system may not be able to verify the address's accuracy. Use this address if you are certain it is correct.",
-      "note": "Please note: Choose \"Continue\" if the home address is correct or choose \"Re-enter address\" if changes are required",
-      "requested-change": "Requested change:",
-      "re-enter-address": "Re-enter your address",
-      "updated-notification": "Home address updated"
-    },
-    "suggested": {
-      "page-title": "Suggested address",
-      "subtitle": "Please verify the suggested address.",
-      "breadcrumbs": {
-        "personal-information": "Personal information",
-        "suggested-address": "Change home address"
-      },
-      "address-entered": "Address entered",
-      "address-suggested": "Suggested address",
-      "choose-address": "Choose the address you wish to use:",
-      "use-entered": "Use what I entered",
-      "use-suggested": "Use suggested address",
-      "re-enter-address": "If neither of these addresses is correct, you should re-enter your address",
-      "note": "Please note: Your address is compared against Canada Post information for accuracy. However, in some cases, the system may not be able to verify the address's accuracy. Use this address if you are certain it is correct.",
-      "continue": "Continue",
-      "cancel": "Cancel",
-      "edit": "Return to edit page",
-      "updated-notification": "Home address updated"
     }
   },
   "mailing-address": {
@@ -104,19 +71,6 @@
         "back": "Back",
         "save": "Save"
       }
-    },
-    "address-accuracy": {
-      "page-title": "Mailing Address Accuracy",
-      "subtitle": "Please verify the mailing address accuracy.",
-      "breadcrumbs": {
-        "personal-information": "Personal information"
-      },
-      "cancel": "Cancel",
-      "continue": "Continue",
-      "invalid-address-info": "Your address is compared against Canada Post information for accuracy. However, in some cases, the system may not be able to verify the address's accuracy. Use this address if you are certain it is correct.",
-      "note": "Please note: Choose \"Continue\" if the mailing address is correct or choose \"Re-enter address\" if changes are required",
-      "requested-change": "Requested change:",
-      "re-enter-address": "Re-enter your address"
     },
     "confirm": {
       "page-title": "Confirm",

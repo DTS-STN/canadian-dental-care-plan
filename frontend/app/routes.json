@@ -289,27 +289,11 @@
                 },
                 "children": [
                   {
-                    "id": "$lang+/_protected+/personal-information+/home-address+/address-accuracy",
-                    "file": "routes/$lang+/_protected+/personal-information+/home-address+/address-accuracy.tsx",
-                    "paths": {
-                      "en": "/:lang/personal-information/home-address/address-accuracy",
-                      "fr": "/:lang/informations-personnelles/adresse-domicile/precision-adresse"
-                    }
-                  },
-                  {
                     "id": "$lang+/_protected+/personal-information+/home-address+/edit",
                     "file": "routes/$lang+/_protected+/personal-information+/home-address+/edit.tsx",
                     "paths": {
                       "en": "/:lang/personal-information/home-address/edit",
                       "fr": "/:lang/informations-personnelles/adresse-domicile/modifier"
-                    }
-                  },
-                  {
-                    "id": "$lang+/_protected+/personal-information+/home-address+/suggested",
-                    "file": "routes/$lang+/_protected+/personal-information+/home-address+/suggested.tsx",
-                    "paths": {
-                      "en": "/:lang/personal-information/home-address/suggested",
-                      "fr": "/:lang/informations-personnelles/adresse-domicile/suggere"
                     }
                   }
                 ]
@@ -322,14 +306,6 @@
                   "fr": "/:lang/informations-personnelles/adresse-postale"
                 },
                 "children": [
-                  {
-                    "id": "$lang+/_protected+/personal-information+/mailing-address+/address-accuracy",
-                    "file": "routes/$lang+/_protected+/personal-information+/mailing-address+/address-accuracy.tsx",
-                    "paths": {
-                      "en": "/:lang/personal-information/mailing-address/address-accuracy",
-                      "fr": "/:lang/informations-personnelles/adresse-postale/precision-adresse"
-                    }
-                  },
                   {
                     "id": "$lang+/_protected+/personal-information+/mailing-address+/confirm",
                     "file": "routes/$lang+/_protected+/personal-information+/mailing-address+/confirm.tsx",

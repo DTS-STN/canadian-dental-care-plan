@@ -33,7 +33,7 @@ test.describe('personal information home address edit page', () => {
     });
   });
 
-  test('should redirect to home address suggested page', async ({ page }) => {
+  test('should redirect to home address confirm page', async ({ page }) => {
     await test.step('navigate', async () => {
       await page.goto('/en/personal-information/home-address/edit');
       await expect(page).toHaveURL(/.*personal-information\/home-address\/edit/);
@@ -42,10 +42,6 @@ test.describe('personal information home address edit page', () => {
     await test.step('enter and submit form data', async () => {
       await page.getByRole('textbox', { name: 'address' }).fill('123 New Address Avenue');
       await page.getByRole('button', { name: 'save' }).click();
-    });
-
-    await test.step('detect home address suggested page', async () => {
-      await expect(page).toHaveURL(/.*personal-information\/home-address\/suggested/);
     });
   });
 

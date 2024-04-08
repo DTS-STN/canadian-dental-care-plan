@@ -62,11 +62,6 @@ vi.mock('~/services/wsaddress-service.server', () => ({
   }),
 }));
 
-vi.mock('~/utils/locale-utils.server', () => ({
-  getFixedT: vi.fn().mockResolvedValue(vi.fn()),
-  redirectWithLocale: vi.fn().mockResolvedValue('/en/personal-information/home-address/address-accuracy'),
-}));
-
 vi.mock('~/utils/env.server', () => ({
   getEnv: vi.fn().mockReturnValue({
     CANADA_COUNTRY_ID: 'CAN',
