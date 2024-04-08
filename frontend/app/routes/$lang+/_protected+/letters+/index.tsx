@@ -4,7 +4,6 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData, useParams, useSearchParams } from '@remix-run/react';
 
-import { useTextWidth } from '@tag0/use-text-width';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -78,21 +77,7 @@ export default function LettersIndex() {
   const { letters, letterTypes, sortOrder } = useLoaderData<typeof loader>();
   const params = useParams();
   const userOrigin = useUserOrigin();
-  const width = Math.max(useTextWidth({ text: t('letters:index.newest') }), useTextWidth({ text: t('letters:index.oldest') }));
-  let classWidth = 'w-44';
-  if (width > 144) {
-    classWidth = 'w-72';
-  } else if (width > 132 && width <= 144) {
-    classWidth = 'w-64';
-  } else if (width > 119 && width <= 132) {
-    classWidth = 'w-60';
-  } else if (width > 106 && width <= 119) {
-    classWidth = 'w-56';
-  } else if (width > 93 && width <= 106) {
-    classWidth = 'w-52';
-  } else if (width > 80 && width <= 93) {
-    classWidth = 'w-48';
-  }
+
   function handleOnSortOrderChange(e: ChangeEvent<HTMLSelectElement>) {
     setSearchParams((prev) => {
       prev.set('sort', e.target.value);
@@ -108,7 +93,7 @@ export default function LettersIndex() {
     <>
       <div className="my-6">
         <InputSelect
-          className={classWidth}
+          className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
           id="sort-order"
           value={sortOrder}
           onChange={handleOnSortOrderChange}
