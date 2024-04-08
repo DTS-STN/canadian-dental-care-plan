@@ -425,6 +425,8 @@
     },
     "apply": {
       "application-start-consent": "En poursuivant la demande, vous consentez aux conditions générales d'utilisation ci-dessus et à l'énoncé de confidentialité.",
+      "back-button": "Retour",
+      "link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html",
       "start-button": "Accepter et poursuivre"
     },
     "links": {

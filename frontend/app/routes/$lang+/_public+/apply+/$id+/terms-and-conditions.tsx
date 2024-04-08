@@ -3,13 +3,13 @@ import { FormEvent, useEffect, useRef } from 'react';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
-import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Trans, useTranslation } from 'react-i18next';
 
 import pageIds from '../../../page-ids.json';
-import { Button } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
@@ -201,10 +201,16 @@ export default function ApplyIndex() {
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />
-        <Button variant="primary" id="continue-button" disabled={isSubmitting}>
-          {t('apply:terms-and-conditions.apply.start-button')}
-          <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-        </Button>
+        <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+            {t('apply:terms-and-conditions.apply.start-button')}
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+          </Button>
+          <ButtonLink id="back-button" to={t('apply:terms-and-conditions.apply.link')} disabled={isSubmitting}>
+            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+            {t('apply:terms-and-conditions.apply.back-button')}
+          </ButtonLink>
+        </div>
       </fetcher.Form>
     </div>
   );
