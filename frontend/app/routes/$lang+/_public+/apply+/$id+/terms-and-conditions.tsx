@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useRef } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -76,7 +76,6 @@ export async function action({ context: { session }, request, params }: ActionFu
 export default function ApplyIndex() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, siteKey } = useLoaderData<typeof loader>();
-  const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const captchaRef = useRef<HCaptcha>(null);
@@ -207,7 +206,7 @@ export default function ApplyIndex() {
             {t('apply:terms-and-conditions.apply.start-button')}
             <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
-          <ButtonLink id="back-button" to={t('apply:terms-and-conditions.apply.link')} params={params} disabled={isSubmitting}>
+          <ButtonLink id="back-button" to={t('apply:terms-and-conditions.apply.link')} disabled={isSubmitting}>
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:terms-and-conditions.apply.back-button')}
           </ButtonLink>
