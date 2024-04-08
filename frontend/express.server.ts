@@ -151,26 +151,33 @@ async function createDevRequestHandler(initialBuild: ServerBuild, buildPath: str
  * @see https://github.com/remix-run/remix/blob/main/packages/remix-express/server.ts
  */
 async function createRequestHandler(build: ServerBuild, mode: string) {
+  const statelessPaths = ['/api/readyz'];
   const sessionService = await getSessionService();
   const handleRequest = remixCreateRequestHandler(build, mode);
 
   return async (req: Request, res: Response, next: NextFunction) => {
-    const session = await sessionService.getSession(req.headers.cookie);
-    session.set('lastAccessTime', new Date().toISOString());
-
-    // We use session-scoped CSRF tokens to ensure back button and multi-tab navigation still works.
-    // @see: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern
-    if (!session.has('csrfToken')) {
-      const csrfToken = randomString(32);
-      log.debug('Adding CSRF token [%s] to session', csrfToken);
-      session.set('csrfToken', csrfToken);
-    }
-
     try {
+      if (statelessPaths.includes(req.url)) {
+        log.debug('Stateless request to [%s] detected; bypassing session init', req.url);
+        const remixResponse = await handleRequest(createRemixRequest(req, res));
+        return await sendRemixResponse(res, remixResponse);
+      }
+
+      const session = await sessionService.getSession(req.headers.cookie);
+      session.set('lastAccessTime', new Date().toISOString());
+
+      // We use session-scoped CSRF tokens to ensure back button and multi-tab navigation still works.
+      // @see: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern
+      if (!session.has('csrfToken')) {
+        const csrfToken = randomString(32);
+        log.debug('Adding CSRF token [%s] to session', csrfToken);
+        session.set('csrfToken', csrfToken);
+      }
+
       const remixResponse = await handleRequest(createRemixRequest(req, res), { session });
       const sessionCookie = await sessionService.commitSession(session);
       remixResponse.headers.append('Set-Cookie', sessionCookie);
-      await sendRemixResponse(res, remixResponse);
+      return await sendRemixResponse(res, remixResponse);
     } catch (error: unknown) {
       // Express doesn't support async functions, so we have to pass along the
       // error manually using next().
