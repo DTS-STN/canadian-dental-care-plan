@@ -40,9 +40,9 @@
     "summary": "Privacy Notice Statement",
     "collection-of-use": "The collection and use of your personal information is authorized under the Department of Health Act, the Dental Care Measures Act, the Department of Employment and Social Development Act, and other applicable laws.",
     "provided-information": "The provided information will never result in administrative decisions being made about you.",
-    "third-party-provider": "ESDC carries out this application using services from third-party provider Microsoft Corporation, which may be subject to foreign laws. For more information, see <microsoftDataPrivacyPolicy>Microsoft Data Privacy Policy & Privacy Principles<microsoftDataPrivacyPolicy>.",
+    "third-party-provider": "ESDC carries out this application using services from third-party provider Microsoft Corporation, which may be subject to foreign laws. For more information, see <microsoftDataPrivacyPolicy>Microsoft Data Privacy Policy & Privacy Principles</microsoftDataPrivacyPolicy>.",
     "personal-information": "Your personal information is administered in accordance with the Department of Employment and Social Development Act, Privacy Act and other applicable laws. Under the Privacy Act, you have the right to the protection of, access to, and where applicable, the correction of your personal information when you believe there is an error or omission.",
-    "report-a-concern": "If you are not satisfied with our response to your privacy, you have the right to file a complaint with the Privacy Commissioner of Canada regarding Service Canada's handling of your personal information at: <fileacomplaint>Report a concern<fileacomplaint>."
+    "report-a-concern": "If you are not satisfied with our response to your privacy, you have the right to file a complaint with the Privacy Commissioner of Canada regarding Service Canada's handling of your personal information at: <fileacomplaint>Report a concern</fileacomplaint>."
   },
   "links": {
     "file-complaint": "https://www.priv.gc.ca/en/report-a-concern/",
