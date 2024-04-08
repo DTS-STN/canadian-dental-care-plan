@@ -19,6 +19,7 @@ import { InputField } from '~/components/input-field';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
+import { isValidApplicationCode } from '~/utils/application-code-utils';
 import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -54,11 +55,7 @@ export async function action({ context: { session }, params, request }: ActionFu
       .min(1, t('status:form.error-message.sin-required'))
       .refine(isValidSin, t('status:form.error-message.sin-valid'))
       .transform((sin) => formatSin(sin, '')),
-    code: z
-      .string()
-      .trim()
-      .min(1, t('status:form.error-message.application-code-required'))
-      .refine((code) => /^(?:\d{13}|\d{11}|\d{6})$/.test(code), t('status:form.error-message.application-code-valid')),
+    code: z.string().trim().min(1, t('status:form.error-message.application-code-required')).refine(isValidApplicationCode, t('status:form.error-message.application-code-valid')),
   });
 
   const formData = Object.fromEntries(await request.formData());
@@ -107,13 +104,11 @@ export default function StatusChecker() {
   const errorSummaryId = 'error-summary';
 
   const errorMessages = useMemo(() => {
-    if (fetcher.data && 'errors' in fetcher.data) {
-      return {
-        code: fetcher.data.errors.code?._errors[0],
-        sin: fetcher.data.errors.sin?._errors[0],
-      };
-    }
-    return {};
+    const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
+    return {
+      code: errors?.code?._errors[0],
+      sin: errors?.sin?._errors[0],
+    };
   }, [fetcher.data]);
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -122,6 +117,9 @@ export default function StatusChecker() {
     if (hasErrors(errorMessages)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
+  }, [errorMessages]);
+
+  useEffect(() => {
     if (fetcher.data && 'status' in fetcher.data) {
       const targetElement = document.getElementById('status');
       if (targetElement) {
@@ -129,7 +127,7 @@ export default function StatusChecker() {
         targetElement.focus();
       }
     }
-  }, [fetcher.data, errorMessages]);
+  }, [fetcher.data]);
 
   return (
     <PublicLayout>
@@ -190,7 +188,7 @@ export default function StatusChecker() {
           </div>
         </Collapsible>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <fetcher.Form method="post" noValidate>
+        <fetcher.Form method="post" noValidate autoComplete="off">
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="space-y-6">
             <InputField id="code" name="code" label={t('status:form.application-code-label')} helpMessagePrimary={t('status:form.application-code-description')} required errorMessage={errorMessages.code} />
