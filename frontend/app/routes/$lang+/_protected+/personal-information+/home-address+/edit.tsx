@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { Form, useActionData, useLoaderData, useParams } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
@@ -20,7 +20,6 @@ import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getWSAddressService } from '~/services/wsaddress-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -83,7 +82,6 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
-  const wsAddressService = await getWSAddressService();
 
   await raoidcService.handleSessionValidation(request, session);
 
@@ -117,19 +115,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const newHomeAddress = parsedDataResult.data;
   session.set('newHomeAddress', newHomeAddress);
 
-  const { streetName, cityName, countryId, postalCode, provinceTerritoryStateId } = parsedDataResult.data;
-  const correctedAddress = await wsAddressService.correctAddress({ address: streetName, city: cityName, province: provinceTerritoryStateId, postalCode: postalCode, country: countryId });
-
   instrumentationService.countHttpStatus('home-address.edit', 302);
-  if (correctedAddress.status === 'Corrected') {
-    const { address, city, province, postalCode, country } = correctedAddress;
-    session.set('suggestedAddress', { address, city, province, postalCode, country });
-    return redirect(getPathById('$lang+/_protected+/personal-information+/home-address+/suggested', params));
-  }
-
-  if (correctedAddress.status === 'NotCorrect') {
-    return redirect(getPathById('$lang+/_protected+/personal-information+/home-address+/address-accuracy', params));
-  }
 
   //TODO: need updatePersonalInfo to update home address
   //await addressService.updateAddressInfo(userId, userInfo?.homeAddress ?? '', newHomeAddress);

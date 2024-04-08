@@ -44,39 +44,6 @@
         "save": "Enregistrer"
       },
       "updated-notification": "(FR) Home address updated"
-    },
-    "address-accuracy": {
-      "page-title": "(FR) Home Address Accuracy",
-      "subtitle": "(FR) Please verify the home address accuracy.",
-      "breadcrumbs": {
-        "personal-information": "(FR) Personal information"
-      },
-      "cancel": "(FR) Cancel",
-      "continue": "(FR) Continue",
-      "invalid-address-info": "(FR) Your address is compared against Canada Post information for accuracy. However, in some cases, the system may not be able to verify the address's accuracy. Use this address if you are certain it is correct.",
-      "note": "(FR) Please note: Choose \"Continue\" if the home address is correct or choose \"Re-enter address\" if changes are required",
-      "requested-change": "(FR) Requested change:",
-      "re-enter-address": "(FR) Re-enter your address",
-      "updated-notification": "(FR) Home address updated"
-    },
-    "suggested": {
-      "page-title": "(FR) Suggested address",
-      "subtitle": "(FR) Please verify the suggested address.",
-      "breadcrumbs": {
-        "personal-information": "(FR) Personal information",
-        "suggested-address": "(FR) Suggested address"
-      },
-      "choose-address": "(FR) Choose the address you wish to use:",
-      "address-entered": "(FR) Address entered",
-      "address-suggested": "(FR) Suggested address",
-      "use-entered": "(FR) Use what I entered",
-      "use-suggested": "(FR) Use suggested address",
-      "re-enter-address": "(FR) If neither of these addresses is correct, you should re-enter your address",
-      "note": "(FR) Please note: Your address is compared against Canada Post information for accuracy. However, in some cases, the system may not be able to verify the address's accuracy. Use this address if you are certain it is correct.",
-      "continue": "(FR) Continue",
-      "cancel": "(FR) Cancel",
-      "edit": "(FR) Return to edit page",
-      "updated-notification": "(FR) Home address updated"
     }
   },
   "mailing-address": {
@@ -106,19 +73,6 @@
         "back": "Retour",
         "save": "Enregistrer"
       }
-    },
-    "address-accuracy": {
-      "page-title": "(FR) Mailing Address Accuracy",
-      "subtitle": "(FR) Please verify the mailing address accuracy.",
-      "breadcrumbs": {
-        "personal-information": "(FR) Personal information"
-      },
-      "cancel": "(FR) Cancel",
-      "continue": "(FR) Continue",
-      "invalid-address-info": "(FR) Your address is compared against Canada Post information for accuracy. However, in some cases, the system may not be able to verify the address's accuracy. Use this address if you are certain it is correct.",
-      "note": "(FR) Please note: Choose \"Continue\" if the mailing address is correct or choose \"Re-enter address\" if changes are required",
-      "requested-change": "(FR) Requested change:",
-      "re-enter-address": "(FR) Re-enter your address"
     },
     "confirm": {
       "page-title": "(FR) Confirm",
