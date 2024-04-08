@@ -57,7 +57,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     code: z
       .string()
       .trim()
-      .min(1, { message: 'status:form.error-message.application-code-required' })
+      .min(1, t('status:form.error-message.application-code-required'))
       .refine((code) => /^(?:\d{13}|\d{11}|\d{6})$/.test(code), t('status:form.error-message.application-code-valid')),
   });
 
@@ -109,8 +109,8 @@ export default function StatusChecker() {
   const errorMessages = useMemo(() => {
     if (fetcher.data && 'errors' in fetcher.data) {
       return {
-        sin: fetcher.data.errors.sin?._errors[0],
         code: fetcher.data.errors.code?._errors[0],
+        sin: fetcher.data.errors.sin?._errors[0],
       };
     }
     return {};
@@ -206,7 +206,7 @@ export default function StatusChecker() {
           <ContextualAlert type={fetcher.data.status.alertType}>
             <div>
               <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
-                Status
+                {t('status:status-heading')}
               </h2>
               {getNameByLanguage(i18n.language, fetcher.data.status)}
             </div>
