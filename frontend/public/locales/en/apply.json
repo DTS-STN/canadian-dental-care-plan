@@ -213,9 +213,9 @@
     },
     "file-your-taxes": {
       "page-title": "File your taxes",
-      "ineligible-to-apply": "You are not eligible to apply for the Canada Dental Care Plan at this time.",
+      "ineligible-to-apply": "You are not eligible to apply for the Canadian Dental Care Plan at this time.",
       "tax-not-filed": "You and/or your spouse/common-law partner have not filed a tax return for 2023 with the Canada Revenue Agency.",
-      "unable-to-assess": "We use the information from your tax file to verify that you meet the income eligibility for the CDCP. Until you file your 2023 taxes, we won't be able to assess your eligibility.",
+      "unable-to-assess": "We use the information from your tax file to verify that you meet the income eligibility for the CDCP. Until you file your 2023 taxes, we will not be able to assess your eligibility.",
       "tax-info": "For more information on how to file your taxes, visit <taxInfo>Get ready to do your taxes.</taxInfo>",
       "apply-after": "Please apply for the plan after you have filed your taxes and received your Notice of Assessment.",
       "tax-info-href": "https://www.canada.ca/en/services/taxes/income-tax/personal-income-tax/get-ready-taxes.html",
@@ -225,8 +225,8 @@
     },
     "dob-eligibility": {
       "page-title": "Find out when you can apply",
-      "ineligible-to-apply": "You are not currently eligible to apply for the Canada Dental Care Plan. Applications for the Canada Dental Care Plan is opening in phases.",
-      "eligibility-info": "<eligibilityInfo>Find out when you can apply for the Canada Dental Care Plan</eligibilityInfo>",
+      "ineligible-to-apply": "You are not currently eligible to apply for the Canadian Dental Care Plan.",
+      "eligibility-info": "<eligibilityInfo>Find out when you can apply for the Canadian Dental Care Plan</eligibilityInfo>",
       "eligibility-info-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#when",
       "back-btn": "Back",
       "return-btn": "Return to main page",
@@ -245,8 +245,8 @@
   },
   "partner-information": {
     "page-title": "Spouse or Common-law partner information",
-    "provide-sin": "Provide information on your current spouse or common-law partner as indicated on their SIN card/letter.",
-    "required-information": "This information is required to calculate the adjusted family net income. Please note that the spouse or common-law partner will need to submit their own application to the plan.",
+    "provide-sin": "Please provide your legal name as indicated on your Social Insurance Number (SIN) card or letter.",
+    "required-information": "We'll use the information you provide to verify your identity. Any information that does not match the information on your SIN application may cause a delay in the processing of your application.",
     "sin": "Social Insurance Number (SIN)",
     "date-of-birth": "Date of birth",
     "last-name": "Last name",
@@ -270,8 +270,8 @@
   "personal-information": {
     "page-title": "Personal information",
     "form-instructions": "Adding a phone number helps Service Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
-    "phone-number": "Telephone number",
-    "phone-number-alt": "Alternate telephone number",
+    "phone-number": "Phone number",
+    "phone-number-alt": "Alternate phone number",
     "mailing-address": {
       "header": "Mailing address"
     },
@@ -361,7 +361,7 @@
   "terms-and-conditions": {
     "page-title": "Terms and conditions",
     "page-heading": "Terms and conditions of use and privacy statement",
-    "intro-text": "We are glad you are using the Canadian Dental Care Plan (CDCP) Online Application (\"the Online Application\"). We have developed some terms and conditions for using this service (\"Terms of Use\" or \"Terms\"). Please read them carefully.",
+    "intro-text": "Thank you for using the Canadian Dental Care Plan (CDCP) Online Application (\"the Online Application\"). We have developed terms and conditions for using this service (\"Terms\"). Please read them carefully.",
     "terms-and-conditions-of-use": {
       "summary": "Terms and Conditions of Use",
       "heading": "Terms and Conditions of Use for the Canadian Dental Care Plan Online Application",
@@ -369,7 +369,7 @@
       "online-application-access-terms": "Your access to and use of the Online Application, including any and all content, is subject to (1) your acceptance of, and (2) your compliance with these Terms.",
       "online-application-usage-terms": "Every time you use the Online Application, these Terms will apply. By using the Online Application, you agree to abide by the following Terms. It is your responsibility to understand and retain these Terms.",
       "terms-rejection-policy": "At any time you may decide not to accept the Terms, in which case you will not be permitted to access and use the Online Application.",
-      "esdc-definition-clarification": "In these Terms, “ESDC” refers to the Minister of Employment and Social Development, representing His Majesty the King in Right of Canada.",
+      "esdc-definition-clarification": "In these Terms, \"ESDC\" refers to the Minister of Employment and Social Development, representing His Majesty the King in Right of Canada.",
       "online-application": {
         "heading": "Terms of Use of the Online Application:",
         "self-agreement": "Using the Online Application means that you have read and agree to these Terms and the Privacy Notice Statement. If, at any time, you withdraw your agreement to any of the Terms you must stop use of the Online Application.",
@@ -419,7 +419,7 @@
         "esdc-information-usage-policy": "ESDC may use or share the information you provide for policy analysis, research, monitoring and/or evaluation activities within ESDC and HC. These uses or activities will not affect any administrative decisions made about you."
       },
       "what-happens-if-you-dont-give-us-your-information": {
-        "heading": "What happens if you dont give us your information",
+        "heading": "What happens if you don't give us your information",
         "text": "Participation in the CDCP is voluntary; however, if you do not provide your personal information in your application, you cannot be considered for the CDCP."
       }
     },
