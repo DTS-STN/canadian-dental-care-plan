@@ -236,20 +236,29 @@ export default function PersonalInformationHomeAddressEdit() {
           <div className="space-y-6">
             <InputField
               id="street-name"
+              name="streetName"
               className="w-full"
               label={t('personal-information:home-address.edit.field.address')}
+              maxLength={30}
               helpMessagePrimary={t('personal-information:home-address.edit.field.address-note')}
-              name="streetName"
               required
               defaultValue={addressInfo.streetName}
               errorMessage={errorMessages['street-name']}
             />
-            <InputField id="apartment-number" name="secondAddressLine" className="w-full" label={t('personal-information:home-address.edit.field.apartment')} defaultValue={addressInfo.secondAddressLine} errorMessage={errorMessages['apartment-number']} />
+            <InputField
+              id="apartment-number"
+              name="secondAddressLine"
+              className="w-full"
+              label={t('personal-information:home-address.edit.field.apartment')}
+              maxLength={30}
+              defaultValue={addressInfo.secondAddressLine}
+              errorMessage={errorMessages['apartment-number']}
+            />
             <InputSelect
               id="country-id"
+              name="countryId"
               className="w-full sm:w-1/2"
               label={t('personal-information:home-address.edit.field.country')}
-              name="countryId"
               defaultValue={addressInfo.countryId}
               required
               options={countries}
@@ -259,9 +268,9 @@ export default function PersonalInformationHomeAddressEdit() {
             {regions.length > 0 && (
               <InputSelect
                 id="province-id"
+                name="provinceTerritoryStateId"
                 className="w-full sm:w-1/2"
                 label={t('personal-information:home-address.edit.field.province')}
-                name="provinceTerritoryStateId"
                 defaultValue={addressInfo.provinceTerritoryStateId}
                 required
                 options={regions}
@@ -269,12 +278,13 @@ export default function PersonalInformationHomeAddressEdit() {
               />
             )}
             <div className="grid gap-6 md:grid-cols-2">
-              <InputField id="city-name" className="w-full" label={t('personal-information:home-address.edit.field.city')} name="cityName" required defaultValue={addressInfo.cityName} errorMessage={errorMessages['city-name']} />
+              <InputField id="city-name" name="cityName" className="w-full" label={t('personal-information:home-address.edit.field.city')} maxLength={100} required defaultValue={addressInfo.cityName} errorMessage={errorMessages['city-name']} />
               <InputField
                 id="postal-code"
+                name="postalCode"
                 className="w-full"
                 label={t('personal-information:home-address.edit.field.postal-code')}
-                name="postalCode"
+                maxLength={100}
                 defaultValue={addressInfo.postalCode}
                 errorMessage={errorMessages['postal-code']}
                 required={selectedCountry === CANADA_COUNTRY_ID || selectedCountry === USA_COUNTRY_ID}
