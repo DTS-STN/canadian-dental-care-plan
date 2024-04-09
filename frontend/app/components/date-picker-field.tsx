@@ -194,7 +194,7 @@ function DatePickerMonth({ ariaDescribedBy, ariaErrorMessage, className, default
 
   return (
     <div id={wrapperId} data-testid="date-picker-month">
-      <InputLabel id={inputLabelId} htmlFor={id} className="mb-2">
+      <InputLabel id={inputLabelId} htmlFor={selectId} className="mb-2">
         {label}
       </InputLabel>
       <select
@@ -250,7 +250,7 @@ function DatePickerYear({ ariaDescribedBy, ariaErrorMessage, className, defaultV
 
   return (
     <div id={wrapperId} data-testid="date-picker-year">
-      <InputLabel id={inputLabelId} htmlFor={id} className="mb-2">
+      <InputLabel id={inputLabelId} htmlFor={inputId} className="mb-2">
         {label}
       </InputLabel>
       <input
@@ -298,7 +298,7 @@ function DatePickerDay({ ariaDescribedBy, ariaErrorMessage, className, defaultVa
 
   return (
     <div id={wrapperId} data-testid="date-picker-day">
-      <InputLabel id={inputLabelId} htmlFor={id} className="mb-2">
+      <InputLabel id={inputLabelId} htmlFor={inputId} className="mb-2">
         {label}
       </InputLabel>
       <input
