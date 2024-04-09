@@ -37,7 +37,13 @@
       "update-mailing-address": "<strong>Use this address to also update my mailing address</strong>",
       "update-mailing-address-note": "Check this box if your home address is the same as your mailing address.",
       "error-message": {
-        "empty-field": "Enter a value"
+        "address-required": "Enter address, typically number and street",
+        "city-required": "Enter a city",
+        "country-required": "Select a country",
+        "postal-code-required": "Enter postal code or zip code",
+        "postal-code-valid": "Enter postal code in the correct format, such as A1A 1A1",
+        "province-required": "Select a province",
+        "zip-code-valid": "Enter zip code in the correct format, such as 12345"
       },
       "button": {
         "back": "Back",
@@ -65,7 +71,13 @@
       "update-home-address": "<strong>Use this address to also update my home address</strong>",
       "update-home-address-note": "Check this box if your home address is the same as your mailing address.",
       "error-message": {
-        "empty-field": "Enter a value"
+        "address-required": "Enter address, typically number and street",
+        "city-required": "Enter a city",
+        "country-required": "Select a country",
+        "postal-code-required": "Enter postal code or zip code",
+        "postal-code-valid": "Enter postal code in the correct format, such as A1A 1A1",
+        "province-required": "Select a province",
+        "zip-code-valid": "Enter zip code in the correct format, such as 12345"
       },
       "button": {
         "back": "Back",
