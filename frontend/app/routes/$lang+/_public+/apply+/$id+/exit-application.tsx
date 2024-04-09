@@ -11,7 +11,7 @@ import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { RouteHandleData, getPathById } from '~/utils/route-utils';
+import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
@@ -36,11 +36,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
-  await applyRouteHelpers.loadState({ params, request, session });
-
-  //TODO: Add apply form logic
+  const t = await getFixedT(request, handle.i18nNamespaces);
   await applyRouteHelpers.clearState({ params, request, session });
-  return redirect(getPathById('$lang+/_public+/apply+/index', params));
+  return redirect(t('exit-application.exit-link'));
 }
 
 export default function ApplyFlowTaxFiling() {

@@ -18,7 +18,7 @@ import { toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { RouteHandleData, getPathById } from '~/utils/route-utils';
+import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
@@ -143,9 +143,10 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
+  const t = await getFixedT(request, handle.i18nNamespaces);
   await applyRouteHelpers.loadState({ params, request, session });
   await applyRouteHelpers.clearState({ params, request, session });
-  return redirect(getPathById('$lang+/_public+/apply+/index', params));
+  return redirect(t('confirm.exit-link'));
 }
 
 export default function ApplyFlowConfirm() {
