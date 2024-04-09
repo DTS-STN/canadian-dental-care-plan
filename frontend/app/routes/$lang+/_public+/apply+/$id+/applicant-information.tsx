@@ -185,7 +185,15 @@ export default function ApplyFlowApplicationInformation() {
                 aria-describedby="name-instructions"
               />
             </div>
-            <InputField id="social-insurance-number" name="socialInsuranceNumber" label={t('applicant-information.sin')} required defaultValue={defaultState?.socialInsuranceNumber ?? ''} errorMessage={errorMessages['social-insurance-number']} />
+            <InputField
+              id="social-insurance-number"
+              name="socialInsuranceNumber"
+              label={t('applicant-information.sin')}
+              placeholder="000-000-000"
+              required
+              defaultValue={defaultState?.socialInsuranceNumber ?? ''}
+              errorMessage={errorMessages['social-insurance-number']}
+            />
             <InputRadios
               id="marital-status"
               name="maritalStatus"
