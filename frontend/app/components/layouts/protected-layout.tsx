@@ -66,7 +66,7 @@ function NavigationMenu() {
             <FontAwesomeIcon icon={faChevronDown} className="size-3 flex-shrink-0" />
           </button>
         </DropdownMenuTrigger>
-        {/* Use of a workaround for the drowndownmenucontent with the resize issue raised by accessibility : https://github.com/radix-ui/primitives/issues/2754 */}
+        {/* Use of a workaround (onFocusOutside={(e) => e.preventDefault()}) for the drowndownmenucontent with the resize issue raised by accessibility : https://github.com/radix-ui/primitives/issues/2754 */}
         <DropdownMenuContent onFocusOutside={(e) => e.preventDefault()} side="bottom" avoidCollisions={false} className="w-svw rounded-t-none sm:w-[260px]" sideOffset={0} align="center">
           {userOrigin && (
             <DropdownMenuItem asChild className="cursor-pointer">
