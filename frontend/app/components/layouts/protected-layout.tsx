@@ -56,7 +56,7 @@ function NavigationMenu() {
 
   return (
     <div className="sm:w-[260px]">
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <button className="inline-flex w-full items-center justify-between bg-slate-200 px-4 py-3 align-middle font-bold text-slate-700 outline-offset-2 hover:bg-neutral-300 focus:bg-neutral-300" id="dropdownNavbarLink" data-testid="menuButton">
             <span className="inline-flex w-full appearance-none items-center gap-4">
