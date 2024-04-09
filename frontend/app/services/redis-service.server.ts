@@ -16,9 +16,8 @@
  *
  * @see https://redis.io/docs/connect/clients/nodejs/
  */
+import { Redis } from 'ioredis';
 import moize from 'moize';
-import { createClient } from 'redis';
-import type { SetOptions } from 'redis';
 
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
@@ -31,13 +30,40 @@ const log = getLogger('redis-service.server');
 export const getRedisService = moize.promise(createRedisService, { onCacheAdd: () => log.info('Creating new redis service') });
 
 async function createRedisService() {
-  const { REDIS_URL, REDIS_USERNAME, REDIS_PASSWORD } = getEnv();
+  const env = getEnv();
 
-  const redisClient = await createClient({ url: REDIS_URL, username: REDIS_USERNAME, password: REDIS_PASSWORD })
-    .on('connect', () => log.info(`Redis client initiating connection to [${REDIS_URL}]`))
+  // prettier-ignore
+  const redisClient = env.REDIS_SENTINEL_NAME
+    ? new Redis({
+      lazyConnect: true,
+      name: env.REDIS_SENTINEL_NAME,
+      sentinels: [
+        {
+          host: env.REDIS_SENTINEL_HOST,
+          port: env.REDIS_SENTINEL_PORT,
+        },
+      ],
+      username: env.REDIS_USERNAME,
+      password: env.REDIS_PASSWORD,
+    })
+    : new Redis({
+      lazyConnect: true,
+      host: env.REDIS_STANDALONE_HOST,
+      port: env.REDIS_STANDALONE_PORT,
+      username: env.REDIS_USERNAME,
+      password: env.REDIS_PASSWORD,
+    });
+
+  // prettier-ignore
+  const redisUrl = env.REDIS_SENTINEL_NAME
+    ? `sentinel://${env.REDIS_SENTINEL_HOST}:${env.REDIS_SENTINEL_PORT}`
+    : `redis://${env.REDIS_STANDALONE_HOST}:${env.REDIS_STANDALONE_PORT}`;
+
+  await redisClient
+    .on('connect', () => log.info(`Redis client initiating connection to [${redisUrl}]`))
     .on('ready', () => log.info('Redis client is ready to use'))
-    .on('reconnecting', () => log.info(`Redis client is reconnecting to [${REDIS_URL}]`))
-    .on('error', (error: Error) => log.error(`Redis client error connecting to [${REDIS_URL}]: ${error.message}`))
+    .on('reconnecting', () => log.info(`Redis client is reconnecting to [${redisUrl}]`))
+    .on('error', (error: Error) => log.error(`Redis client error connecting to [${redisUrl}]: ${error.message}`))
     .connect();
 
   return {
@@ -51,8 +77,8 @@ async function createRedisService() {
     /**
      * @see https://redis.io/commands/set/
      */
-    set: async (key: string, value: unknown, options?: SetOptions) => {
-      return redisClient.set(key, JSON.stringify(value), options);
+    set: async (key: string, value: unknown, ttlSecs: number | string) => {
+      return redisClient.set(key, JSON.stringify(value), 'EX', ttlSecs);
     },
     /**
      * @see https://redis.io/commands/del/
