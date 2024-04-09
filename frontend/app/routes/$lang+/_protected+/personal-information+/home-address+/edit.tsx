@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData, useParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
+import validator from 'validator';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
@@ -25,6 +26,7 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -85,33 +87,65 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   await raoidcService.handleSessionValidation(request, session);
 
-  const formDataSchema = z.object({
-    streetName: z.string().trim().min(1, { message: 'empty-field' }),
-    secondAddressLine: z.string().trim().optional(),
-    cityName: z.string().trim().min(1, { message: 'empty-field' }),
-    provinceTerritoryStateId: z.string().trim().optional(),
-    postalCode: z.string().trim().optional(),
-    countryId: z.string().trim().min(1, { message: 'empty-field' }),
-  });
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
-  const formData = Object.fromEntries(await request.formData());
+  const formDataSchema = z
+    .object({
+      streetName: z.string().trim().min(1, t('personal-information:home-address.edit.error-message.address-required')).max(30),
+      secondAddressLine: z.string().trim().max(30).optional(),
+      countryId: z.string().trim().min(1, t('personal-information:home-address.edit.error-message.country-required')),
+      provinceTerritoryStateId: z.string().trim().min(1, t('personal-information:home-address.edit.error-message.province-required')).optional(),
+      cityName: z.string().trim().min(1, t('personal-information:home-address.edit.error-message.city-required')).max(100),
+      postalCode: z.string().trim().max(100).optional(),
+      homeAndMailingAddressTheSame: z.boolean(),
+    })
+    .superRefine((val, ctx) => {
+      if (val.countryId === CANADA_COUNTRY_ID || val.countryId === USA_COUNTRY_ID) {
+        if (!val.provinceTerritoryStateId || validator.isEmpty(val.provinceTerritoryStateId)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('personal-information:home-address.edit.error-message.province-required'), path: ['provinceTerritoryStateId'] });
+        }
+
+        if (!val.postalCode || validator.isEmpty(val.postalCode)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('personal-information:home-address.edit.error-message.postal-code-required'), path: ['postalCode'] });
+        } else if (!isValidPostalCode(val.countryId, val.postalCode)) {
+          const message = val.countryId === CANADA_COUNTRY_ID ? t('personal-information:home-address.edit.error-message.postal-code-valid') : t('personal-information:home-address.edit.error-message.zip-code-valid');
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['postalCode'] });
+        }
+      }
+    })
+    .transform((val) => {
+      return {
+        ...val,
+        postalCode: val.countryId && val.postalCode ? formatPostalCode(val.countryId, val.postalCode) : val.postalCode,
+      };
+    });
+
+  const formData = await request.formData();
+
   const expectedCsrfToken = String(session.get('csrfToken'));
-  const submittedCsrfToken = String(formData['_csrf']);
+  const submittedCsrfToken = String(formData.get('_csrf'));
 
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const parsedDataResult = await formDataSchema.safeParseAsync(formData);
+  const data = {
+    streetName: String(formData.get('streetName') ?? ''),
+    secondAddressLine: formData.get('secondAddressLine') ? String(formData.get('secondAddressLine')) : undefined,
+    countryId: String(formData.get('countryId') ?? ''),
+    provinceTerritoryStateId: formData.get('provinceTerritoryStateId') ? String(formData.get('provinceTerritoryStateId')) : undefined,
+    cityName: String(formData.get('cityName') ?? ''),
+    postalCode: formData.get('postalCode') ? String(formData.get('postalCode')) : undefined,
+    homeAndMailingAddressTheSame: formData.get('homeAndMailingAddressTheSame') === 'copy',
+  };
+  const parsedDataResult = formDataSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    instrumentationService.countHttpStatus('home-address.edit', 400);
-    return json({
-      errors: parsedDataResult.error.flatten(),
-      formData: formData as Partial<z.infer<typeof formDataSchema>>,
-    });
+    return json({ errors: parsedDataResult.error.format() });
   }
+
   const newHomeAddress = parsedDataResult.data;
   session.set('newHomeAddress', newHomeAddress);
 
@@ -127,13 +161,41 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function PersonalInformationHomeAddressEdit() {
-  const actionData = useActionData<typeof action>();
+  const fetcher = useFetcher<typeof action>();
   const { addressInfo, countryList, csrfToken, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
   const params = useParams();
   const [selectedCountry, setSelectedCountry] = useState(addressInfo.countryId);
   const [countryRegions, setCountryRegions] = useState<typeof regionList>([]);
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const errorSummaryId = 'error-summary';
+
+  // Keys order should match the input IDs order.
+  const errorMessages = useMemo(
+    () => ({
+      'street-name': fetcher.data?.errors.streetName?._errors[0],
+      'apartment-number': fetcher.data?.errors.secondAddressLine?._errors[0],
+      'country-id': fetcher.data?.errors.countryId?._errors[0],
+      'province-id': fetcher.data?.errors.provinceTerritoryStateId?._errors[0],
+      'city-name': fetcher.data?.errors.cityName?._errors[0],
+      'postal-code': fetcher.data?.errors.postalCode?._errors[0],
+    }),
+    [
+      fetcher.data?.errors.streetName?._errors,
+      fetcher.data?.errors.secondAddressLine?._errors,
+      fetcher.data?.errors.countryId?._errors,
+      fetcher.data?.errors.provinceTerritoryStateId?._errors,
+      fetcher.data?.errors.cityName?._errors,
+      fetcher.data?.errors.postalCode?._errors,
+    ],
+  );
+
+  const errorSummaryItems = createErrorSummaryItems(errorMessages);
+
+  useEffect(() => {
+    if (hasErrors(errorMessages)) {
+      scrollAndFocusToErrorSummary(errorSummaryId);
+    }
+  }, [errorMessages]);
 
   useEffect(() => {
     const filteredRegions = regionList.filter((region) => region.countryId === selectedCountry);
@@ -142,15 +204,6 @@ export default function PersonalInformationHomeAddressEdit() {
 
   const countryChangeHandler = (event: React.SyntheticEvent<HTMLSelectElement>) => {
     setSelectedCountry(event.currentTarget.value);
-  };
-
-  const defaultValues = {
-    streetName: actionData?.formData.streetName ?? addressInfo.streetName,
-    secondAddressLine: actionData?.formData.secondAddressLine ?? addressInfo.secondAddressLine,
-    cityName: actionData?.formData.cityName ?? addressInfo.cityName,
-    provinceTerritoryStateId: actionData?.formData.provinceTerritoryStateId ?? addressInfo.provinceTerritoryStateId,
-    countryId: actionData?.formData.countryId ?? addressInfo.countryId,
-    postalCode: actionData?.formData.postalCode ?? addressInfo.postalCode,
   };
 
   const countries: InputOptionProps[] = countryList
@@ -164,7 +217,7 @@ export default function PersonalInformationHomeAddressEdit() {
     .sort((country1, country2) => country1.children.localeCompare(country2.children));
 
   // populate region/province/state list with selected country or current address country
-  const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter((region) => region.countryId === defaultValues.countryId))
+  const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter((region) => region.countryId === addressInfo.countryId))
     .map((region) => {
       return {
         children: i18n.language === 'fr' ? region.nameFr : region.nameEn,
@@ -174,94 +227,72 @@ export default function PersonalInformationHomeAddressEdit() {
     })
     .sort((region1, region2) => region1.children.localeCompare(region2.children));
 
-  /**
-   * Gets an error message based on the provided internationalization (i18n) key.
-   *
-   * @param errorI18nKey - The i18n key for the error message.
-   * @returns The corresponding error message, or undefined if no key is provided.
-   */
-  function getErrorMessage(errorI18nKey?: string): string | undefined {
-    if (!errorI18nKey) return undefined;
-
-    /**
-     * The 'as any' is employed to circumvent typechecking, as the type of
-     * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
-     */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`personal-information:home-address.edit.error-message.${errorI18nKey}` as any);
-  }
-
-  const errorMessages = {
-    streetName: getErrorMessage(actionData?.errors.fieldErrors.streetName?.[0]),
-    cityName: getErrorMessage(actionData?.errors.fieldErrors.cityName?.[0]),
-    provinceTerritoryStateId: getErrorMessage(actionData?.errors.fieldErrors.provinceTerritoryStateId?.[0]),
-    postalCode: getErrorMessage(actionData?.errors.fieldErrors.postalCode?.[0]),
-    countryId: getErrorMessage(actionData?.errors.fieldErrors.countryId?.[0]),
-  };
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
-  useEffect(() => {
-    if (actionData?.formData && hasErrors(actionData.formData)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-    }
-  }, [actionData]);
-
   return (
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form className="max-w-prose" method="post" noValidate>
+      <fetcher.Form className="max-w-prose" method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="my-6">
           <div className="space-y-6">
             <InputField
-              id="streetName"
+              id="street-name"
+              name="streetName"
               className="w-full"
               label={t('personal-information:home-address.edit.field.address')}
+              maxLength={30}
               helpMessagePrimary={t('personal-information:home-address.edit.field.address-note')}
-              name="streetName"
               required
-              defaultValue={defaultValues.streetName}
-              errorMessage={errorMessages.streetName}
+              defaultValue={addressInfo.streetName}
+              errorMessage={errorMessages['street-name']}
             />
-            <InputField id="secondAddressLine" name="secondAddressLine" className="w-full" label={t('personal-information:home-address.edit.field.apartment')} defaultValue={defaultValues.secondAddressLine} />
+            <InputField
+              id="apartment-number"
+              name="secondAddressLine"
+              className="w-full"
+              label={t('personal-information:home-address.edit.field.apartment')}
+              maxLength={30}
+              defaultValue={addressInfo.secondAddressLine}
+              errorMessage={errorMessages['apartment-number']}
+            />
             <InputSelect
-              id="countryId"
+              id="country-id"
+              name="countryId"
               className="w-full sm:w-1/2"
               label={t('personal-information:home-address.edit.field.country')}
-              name="countryId"
-              defaultValue={defaultValues.countryId}
+              defaultValue={addressInfo.countryId}
               required
               options={countries}
               onChange={countryChangeHandler}
-              errorMessage={errorMessages.countryId}
+              errorMessage={errorMessages['country-id']}
             />
             {regions.length > 0 && (
               <InputSelect
-                id="provinceTerritoryStateId"
+                id="province-id"
+                name="provinceTerritoryStateId"
                 className="w-full sm:w-1/2"
                 label={t('personal-information:home-address.edit.field.province')}
-                name="provinceTerritoryStateId"
-                defaultValue={defaultValues.provinceTerritoryStateId}
+                defaultValue={addressInfo.provinceTerritoryStateId}
+                required
                 options={regions}
-                errorMessage={errorMessages.provinceTerritoryStateId}
+                errorMessage={errorMessages['province-id']}
               />
             )}
             <div className="grid gap-6 md:grid-cols-2">
-              <InputField id="cityName" className="w-full" label={t('personal-information:home-address.edit.field.city')} name="cityName" required defaultValue={defaultValues.cityName} errorMessage={errorMessages.cityName} />
+              <InputField id="city-name" name="cityName" className="w-full" label={t('personal-information:home-address.edit.field.city')} maxLength={100} required defaultValue={addressInfo.cityName} errorMessage={errorMessages['city-name']} />
               <InputField
-                id="postalCode"
+                id="postal-code"
+                name="postalCode"
                 className="w-full"
                 label={t('personal-information:home-address.edit.field.postal-code')}
-                name="postalCode"
-                defaultValue={defaultValues.postalCode}
-                errorMessage={errorMessages.postalCode}
+                maxLength={100}
+                defaultValue={addressInfo.postalCode}
+                errorMessage={errorMessages['postal-code']}
                 required={selectedCountry === CANADA_COUNTRY_ID || selectedCountry === USA_COUNTRY_ID}
               />
             </div>
           </div>
 
-          <InputCheckbox id="copyAddressChecked" name="copyAddressChecked" value="copy" className="my-8">
+          <InputCheckbox id="homeAndMailingAddressTheSame" name="homeAndMailingAddressTheSame" value="copy" className="my-8">
             <Trans ns={handle.i18nNamespaces} i18nKey="personal-information:home-address.edit.update-mailing-address" />
             <p>{t('personal-information:home-address.edit.update-mailing-address-note')}</p>
           </InputCheckbox>
@@ -275,7 +306,7 @@ export default function PersonalInformationHomeAddressEdit() {
             {t('personal-information:home-address.edit.button.save')}
           </Button>
         </div>
-      </Form>
+      </fetcher.Form>
     </>
   );
 }
