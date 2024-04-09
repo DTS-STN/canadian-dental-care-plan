@@ -16,6 +16,7 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import { InputOptionProps } from '~/components/input-option';
+import { InputPhoneField } from '~/components/input-phone-field';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
@@ -101,15 +102,15 @@ export async function action({ context: { session }, params, request }: ActionFu
         .string()
         .trim()
         .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply:personal-information.error-message.phone-number-valid'))
-        .transform((val) => parsePhoneNumber(val, 'CA').formatNational())
+        .refine((val) => !val || isValidPhoneNumber(val), t('apply:personal-information.error-message.phone-number-valid'))
+        .transform((val) => parsePhoneNumber(val).formatInternational())
         .optional(),
       phoneNumberAlt: z
         .string()
         .trim()
         .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply:personal-information.error-message.phone-number-alt-valid'))
-        .transform((val) => parsePhoneNumber(val, 'CA').formatNational())
+        .refine((val) => !val || isValidPhoneNumber(val), t('apply:personal-information.error-message.phone-number-alt-valid'))
+        .transform((val) => parsePhoneNumber(val).formatInternational())
         .optional(),
       mailingAddress: z.string().trim().min(1, t('apply:personal-information.error-message.address-required')).max(30),
       mailingApartment: z.string().trim().max(30).optional(),
@@ -356,15 +357,25 @@ export default function ApplyFlowPersonalInformation() {
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-6 grid gap-6 md:grid-cols-2">
-            <InputField id="phone-number" name="phoneNumber" className="w-full" label={t('apply:personal-information.phone-number')} maxLength={100} defaultValue={defaultState?.phoneNumber ?? ''} errorMessage={errorMessages['phone-number']} />
-            <InputField
+            <InputPhoneField
+              id="phone-number"
+              name="phoneNumber"
+              className="w-full"
+              defaultValue={defaultState?.phoneNumber ?? ''}
+              errorMessage={errorMessages['phone-number']}
+              label={t('apply:personal-information.phone-number')}
+              locale={i18n.language}
+              maxLength={100}
+            />
+            <InputPhoneField
               id="phone-number-alt"
               name="phoneNumberAlt"
               className="w-full"
-              label={t('apply:personal-information.phone-number-alt')}
-              maxLength={100}
               defaultValue={defaultState?.phoneNumberAlt ?? ''}
               errorMessage={errorMessages['phone-number-alt']}
+              label={t('apply:personal-information.phone-number-alt')}
+              locale={i18n.language}
+              maxLength={100}
             />
           </div>
           <h2 className="mb-4 font-lato text-2xl font-bold">{t('apply:personal-information.mailing-address.header')}</h2>
