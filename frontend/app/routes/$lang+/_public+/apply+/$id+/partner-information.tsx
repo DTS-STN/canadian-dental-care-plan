@@ -193,7 +193,15 @@ export default function ApplyFlowApplicationInformation() {
               />
             </div>
             <DatePickerField id="date-of-birth" name="dateOfBirth" defaultValue={defaultState?.dateOfBirth ?? ''} legend={t('apply:partner-information.date-of-birth')} required errorMessage={errorMessages['date-picker-date-of-birth-month']} />
-            <InputField id="social-insurance-number" name="socialInsuranceNumber" label={t('apply:partner-information.sin')} required defaultValue={defaultState?.socialInsuranceNumber ?? ''} errorMessage={errorMessages['social-insurance-number']} />
+            <InputField
+              id="social-insurance-number"
+              name="socialInsuranceNumber"
+              label={t('apply:partner-information.sin')}
+              placeholder="000-000-000"
+              required
+              defaultValue={defaultState?.socialInsuranceNumber ?? ''}
+              errorMessage={errorMessages['social-insurance-number']}
+            />
             <InputCheckbox id="confirm" name="confirm" value="yes" required errorMessage={errorMessages['input-checkbox-confirm']} defaultChecked={defaultState?.confirm === true}>
               {t('partner-information.confirm-checkbox')}
             </InputCheckbox>
