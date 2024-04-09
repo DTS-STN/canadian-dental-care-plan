@@ -244,7 +244,7 @@ export default function PersonalInformationHomeAddressEdit() {
               defaultValue={addressInfo.streetName}
               errorMessage={errorMessages['street-name']}
             />
-            <InputField id="apartment-number" name="secondAddressLine" className="w-full" label={t('personal-information:home-address.edit.field.apartment')} defaultValue={addressInfo.secondAddressLine} />
+            <InputField id="apartment-number" name="secondAddressLine" className="w-full" label={t('personal-information:home-address.edit.field.apartment')} defaultValue={addressInfo.secondAddressLine} errorMessage={errorMessages['apartment-number']} />
             <InputSelect
               id="country-id"
               className="w-full sm:w-1/2"

@@ -17,6 +17,7 @@ import type { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { getAuditService } from '~/services/audit-service.server';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getEnv } from '~/utils/env.server';
@@ -47,6 +48,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+  const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
 
@@ -56,6 +58,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const addressInfo = personalInformation.mailingAddress;
 
   if (!addressInfo) {
+    instrumentationService.countHttpStatus('home-address.edit', 404);
     throw new Response(null, { status: 404 });
   }
 
@@ -69,12 +72,14 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:mailing-address.edit.page-title') }) };
 
+  instrumentationService.countHttpStatus('mailing-address.edit', 302);
   return json({ addressInfo, countryList, csrfToken, meta, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('mailing-address/edit');
 
+  const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
 
@@ -135,6 +140,9 @@ export async function action({ context: { session }, params, request }: ActionFu
   if (!parsedDataResult.success) {
     return json({ errors: parsedDataResult.error.format() });
   }
+
+  instrumentationService.countHttpStatus('mailing-address.edit', 302);
+
   //TODO: need updatePersonalInfo to update home address
   //await addressService.updateAddressInfo(userId, userInfo?.homeAddress ?? '', newHomeAddress);
   session.set('newMailingAddress', parsedDataResult.data);

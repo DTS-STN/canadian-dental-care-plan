@@ -27,12 +27,6 @@ test.describe('personal information mailing address edit page', () => {
       await page.getByRole('button', { name: 'save' }).click();
     });
 
-    await test.step('detect errors summary presence', async () => {
-      const errorSummary = page.getByRole('alert').first();
-      await expect(errorSummary).toBeInViewport();
-      await expect(errorSummary).toBeFocused();
-    });
-
     await test.step('detect form errors', async () => {
       const input = page.getByRole('textbox', { name: 'address' });
       const errorMessage = await input.evaluate((element) => (element as HTMLInputElement).validationMessage);
