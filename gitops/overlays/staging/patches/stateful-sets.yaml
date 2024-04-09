@@ -3,12 +3,21 @@ kind: StatefulSet
 metadata:
   name: redis
 spec:
-  serviceName: redis
+  replicas: 3
+  serviceName: redis-headless
   selector:
     matchLabels:
       app.kubernetes.io/name: redis
   template:
+    #
+    # pin all versions to v7.2
+    #
     spec:
+      initContainers:
+        - name: init
+          image: docker.io/redis:7.2
       containers:
         - name: redis
+          image: docker.io/redis:7.2
+        - name: redis-sentinel
           image: docker.io/redis:7.2
