@@ -34,7 +34,7 @@ export function generateContentSecurityPolicy(nonce: string) {
     `form-action 'self'`,
     `frame-ancestors 'self'`,
     `frame-src 'self' ${hcaptchaCSP.frameSrc} ${adobeAnalyticsCSP.frameSrc}`,
-    `img-src 'self' data: ${adobeAnalyticsCSP.imgSrc}`,
+    `img-src 'self' data: ${adobeAnalyticsCSP.imgSrc} https://purecatamphetamine.github.io`,
     // unsafe-inline is required by Adobe Analytics 💩
     `script-src 'self' 'unsafe-inline' ${hcaptchaCSP.scriptSrc} ${adobeAnalyticsCSP.scriptSrc}`,
     // unsafe-inline is required by remix-toast 💩

@@ -69,6 +69,7 @@
     "react-dom": "^18.2.0",
     "react-i18next": "^14.1.0",
     "react-idle-timer": "^5.7.2",
+    "react-phone-number-input": "^3.3.12",
     "remix-toast": "^1.2.0",
     "sanitize-filename-ts": "^1.0.2",
     "source-map-support": "^0.5.21",
