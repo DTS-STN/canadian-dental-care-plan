@@ -82,20 +82,6 @@
       "button": {
         "back": "Back",
         "save": "Save"
-      }
-    },
-    "confirm": {
-      "page-title": "Confirm",
-      "subtitle": "Please confirm the mailing address change below.",
-      "breadcrumbs": {
-        "personal-information": "Personal information",
-        "address-change-confirm": "Confirm"
-      },
-      "previous-mailing-address": "Previous mailing address",
-      "new-mailing-address": "New mailing address",
-      "button": {
-        "confirm": "Confirm",
-        "cancel": "Cancel"
       },
       "updated-notification": "Mailing address updated"
     }

@@ -34,7 +34,7 @@ test.describe('personal information mailing address edit page', () => {
     });
   });
 
-  test('should redirect to mailing address confirm page', async ({ page }) => {
+  test('should redirect to personal information page after saving', async ({ page }) => {
     await test.step('navigate', async () => {
       await page.goto('/en/personal-information/mailing-address/edit');
       await expect(page).toHaveURL(/.*personal-information\/mailing-address\/edit/);
@@ -46,7 +46,7 @@ test.describe('personal information mailing address edit page', () => {
     });
 
     await test.step('detect mailing address confirm page', async () => {
-      await expect(page).toHaveURL(/.*personal-information\/mailing-address\/confirm/);
+      await expect(page).toHaveURL(/.*personal-information/);
     });
   });
 

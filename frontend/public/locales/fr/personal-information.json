@@ -86,20 +86,6 @@
       "button": {
         "back": "Retour",
         "save": "Enregistrer"
-      }
-    },
-    "confirm": {
-      "page-title": "(FR) Confirm",
-      "subtitle": "(FR) Please confirm the mailing address change below.",
-      "breadcrumbs": {
-        "personal-information": "(FR) Personal information",
-        "address-change-confirm": "(FR) Confirm"
-      },
-      "previous-mailing-address": "(FR) Previous mailing address",
-      "new-mailing-address": "(FR) New mailing address",
-      "button": {
-        "confirm": "(FR) Confirm",
-        "cancel": "(FR) Cancel"
       },
       "updated-notification": "(FR) Mailing address updated"
     }
