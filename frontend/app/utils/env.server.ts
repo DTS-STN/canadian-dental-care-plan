@@ -110,7 +110,11 @@ const serverEnv = z.object({
   SESSION_TIMEOUT_PROMPT_SECONDS: z.coerce.number().min(0).default(5 * 60),
 
   // redis server configuration
-  REDIS_URL: z.string().trim().min(1).default('redis://localhost'),
+  REDIS_SENTINEL_NAME: z.string().trim().transform(emptyToUndefined).optional(),
+  REDIS_SENTINEL_HOST: z.string().trim().transform(emptyToUndefined).optional(),
+  REDIS_SENTINEL_PORT: z.coerce.number().optional(),
+  REDIS_STANDALONE_HOST: z.string().trim().min(1).default('localhost'),
+  REDIS_STANDALONE_PORT: z.coerce.number().default(6379),
   REDIS_USERNAME: z.string().trim().min(1).optional(),
   REDIS_PASSWORD: z.string().trim().min(1).optional(),
 

@@ -92,14 +92,13 @@ async function createSessionService() {
 
   async function createRedisSessionStorage() {
     const redisService = await getRedisService();
-    const setCommandOptions = { EX: env.SESSION_EXPIRES_SECONDS };
 
     return createSessionStorage({
       cookie: sessionCookie,
       createData: async (data) => {
         const sessionId = randomUUID();
         log.debug(`Creating new session storage slot with id=[${sessionId}]`);
-        await redisService.set(sessionId, data, setCommandOptions);
+        await redisService.set(sessionId, data, env.SESSION_EXPIRES_SECONDS);
         return sessionId;
       },
       readData: async (id) => {
@@ -108,7 +107,7 @@ async function createSessionService() {
       },
       updateData: async (id, data) => {
         log.debug(`Updating session data for session id=[${id}]`);
-        await redisService.set(id, data, setCommandOptions);
+        await redisService.set(id, data, env.SESSION_EXPIRES_SECONDS);
       },
       deleteData: async (id) => {
         log.debug(`Deleting all session data for session id=[${id}]`);
