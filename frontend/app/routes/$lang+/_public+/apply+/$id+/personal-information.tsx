@@ -16,7 +16,6 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import { InputOptionProps } from '~/components/input-option';
-import { InputPhoneField } from '~/components/input-phone-field';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
@@ -357,24 +356,14 @@ export default function ApplyFlowPersonalInformation() {
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-6 grid gap-6 md:grid-cols-2">
-            <InputPhoneField
-              id="phone-number"
-              name="phoneNumber"
-              className="w-full"
-              defaultValue={defaultState?.phoneNumber ?? ''}
-              errorMessage={errorMessages['phone-number']}
-              label={t('apply:personal-information.phone-number')}
-              locale={i18n.language}
-              maxLength={100}
-            />
-            <InputPhoneField
+            <InputField id="phone-number" name="phoneNumber" className="w-full" defaultValue={defaultState?.phoneNumber ?? ''} errorMessage={errorMessages['phone-number']} label={t('apply:personal-information.phone-number')} maxLength={100} />
+            <InputField
               id="phone-number-alt"
               name="phoneNumberAlt"
               className="w-full"
               defaultValue={defaultState?.phoneNumberAlt ?? ''}
               errorMessage={errorMessages['phone-number-alt']}
               label={t('apply:personal-information.phone-number-alt')}
-              locale={i18n.language}
               maxLength={100}
             />
           </div>
