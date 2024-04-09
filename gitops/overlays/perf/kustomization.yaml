@@ -16,6 +16,7 @@ labels:
 resources:
   - ../../base/frontend/
   - ../../base/redis/
+  - ./hpas.yaml
   - ./ingresses.yaml
 patches:
   - path: ./patches/deployments.yaml
