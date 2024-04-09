@@ -56,7 +56,7 @@ function NavigationMenu() {
 
   return (
     <div className="sm:w-[260px]">
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <button className="inline-flex w-full items-center justify-between bg-slate-200 px-4 py-3 align-middle font-bold text-slate-700 outline-offset-2 hover:bg-neutral-300 focus:bg-neutral-300" id="dropdownNavbarLink" data-testid="menuButton">
             <span className="inline-flex w-full appearance-none items-center gap-4">
@@ -66,7 +66,8 @@ function NavigationMenu() {
             <FontAwesomeIcon icon={faChevronDown} className="size-3 flex-shrink-0" />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-svw rounded-t-none sm:w-[260px]" sideOffset={0} align="center">
+        {/* Use of a workaround (onFocusOutside={(e) => e.preventDefault()}) for the drowndownmenucontent with the resize issue raised by accessibility : https://github.com/radix-ui/primitives/issues/2754 */}
+        <DropdownMenuContent onFocusOutside={(e) => e.preventDefault()} side="bottom" avoidCollisions={false} className="w-svw rounded-t-none sm:w-[260px]" sideOffset={0} align="center">
           {userOrigin && (
             <DropdownMenuItem asChild className="cursor-pointer">
               <Link to={userOrigin.to}>{userOrigin.text}</Link>
