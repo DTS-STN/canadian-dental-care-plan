@@ -17,6 +17,14 @@
     }
   },
   {
+    "id": "api+/buildinfo",
+    "file": "routes/api+/buildinfo.ts",
+    "paths": {
+      "en": "/api/buildinfo",
+      "fr": "/api/buildinfo"
+    }
+  },
+  {
     "id": "api+/readyz",
     "file": "routes/api+/readyz.ts",
     "paths": {
