@@ -90,7 +90,8 @@
     "application-code": "Code de demande",
     "yes": "Oui",
     "no": "Non",
-    "exit": "Sortie"
+    "exit": "Sortie",
+    "exit-linl": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
   "dental-benefits": {
     "title": "Accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
@@ -238,7 +239,8 @@
     "are-you-sure": "Êtes-vous sûr de vouloir quitter cette demande? Si vous cliquez sur «\u00a0Quitter\u00a0», le formulaire sera réinitialisé et vous perdrez vos informations.",
     "click-back": "Cliquez sur «\u00a0Retour\u00a0» pour revenir au formulaire.",
     "back-btn": "Retour",
-    "exit-btn": "Quitter"
+    "exit-btn": "Quitter",
+    "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
   "index": {
     "page-title": "Présentation d'une demande d'adhésion au Régime canadien de soins dentaires"
