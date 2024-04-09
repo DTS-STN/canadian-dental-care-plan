@@ -18,6 +18,7 @@ import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server
 import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { toLocaleDateString } from '~/utils/date-utils';
+import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -57,6 +58,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const maritalStatuses = await getLookupService().getAllMaritalStatuses();
   const provincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
   const federalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
+  const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
 
   // prettier-ignore
   if (state.applicantInformation === undefined ||
@@ -148,7 +150,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:review-information.page-title') }) };
 
-  return json({ id: state.id, userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, meta });
+  return json({ id: state.id, userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, meta, COMMUNICATION_METHOD_EMAIL_ID });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -193,7 +195,8 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ReviewInformation() {
   const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, COMMUNICATION_METHOD_EMAIL_ID } =
+    useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -341,7 +344,7 @@ export default function ReviewInformation() {
             <h2 className="mt-8 text-2xl font-semibold">{t('apply:review-information.comm-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply:review-information.comm-pref-title')}>
-                {userInfo.communicationPreference === 'email' ? (
+                {userInfo.communicationPreference === COMMUNICATION_METHOD_EMAIL_ID ? (
                   <div className="grid grid-cols-1">
                     <p className="mt-4">{t('apply:review-information.comm-electronic')}</p> <span>{userInfo.email}</span>
                   </div>
