@@ -23,27 +23,28 @@ patches:
   - path: ./patches/stateful-sets.yaml
 configMapGenerator:
   - name: frontend
-    behavior: replace
+    behavior: merge
     envs:
-      - ./configs/frontend-config.conf
+      - ./configs/frontend/config.conf
+  - name: redis
+    behavior: merge
+    files:
+      - ./configs/redis/replica.conf
+      - ./configs/redis/sentinel.conf
   - name: oauth-proxy
     behavior: create
     files:
-      - ./configs/oauth-proxy.conf
-  - name: redis
-    behavior: replace
-    files:
-      - ./configs/redis-config.conf
+      - ./configs/oauth-proxy/config.conf
 secretGenerator:
   - name: frontend
     behavior: replace
     envs:
-      - ./configs/frontend-secrets.conf
+      - ./configs/frontend/secrets.conf
   - name: oauth-proxy
     behavior: create
     envs:
-      - ./configs/oauth-proxy-secrets.conf
+      - ./configs/oauth-proxy/secrets.conf
   - name: redis
     behavior: replace
     envs:
-      - ./configs/redis-secrets.conf
+      - ./configs/redis/secrets.conf

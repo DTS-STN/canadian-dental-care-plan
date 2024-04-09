@@ -53,7 +53,7 @@ spec:
           volumeMounts:
             - name: oauth-proxy-conf
               mountPath: /etc/oauth-proxy.conf
-              subPath: oauth-proxy.conf
+              subPath: config.conf
       volumes:
         - name: oauth-proxy-conf
           configMap:

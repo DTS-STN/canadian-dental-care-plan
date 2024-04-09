@@ -7,7 +7,10 @@ resources:
 configMapGenerator:
   - name: redis
     files:
-      - ./configs/config.conf
+      - ./configs/init.sh
+      - ./configs/primary.conf
+      - ./configs/replica.conf
+      - ./configs/sentinel.conf
 secretGenerator:
   - name: redis
     envs:

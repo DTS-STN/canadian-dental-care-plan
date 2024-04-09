@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/name: redis
 spec:
   replicas: 1
-  serviceName: redis
+  serviceName: redis-headless
   selector:
     matchLabels:
       app.kubernetes.io/name: redis
@@ -15,12 +15,34 @@ spec:
       labels:
         app.kubernetes.io/name: redis
     spec:
+      initContainers:
+        - name: init
+          image: docker.io/redis:7
+          command: [bash, /etc/init.sh]
+          envFrom:
+            - secretRef:
+                name: redis
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: config
+              mountPath: /etc/init.sh
+              subPath: init.sh
+            - name: config
+              mountPath: /etc/primary.conf
+              subPath: primary.conf
+            - name: config
+              mountPath: /etc/replica.conf
+              subPath: replica.conf
+            - name: config
+              mountPath: /etc/sentinel.conf
+              subPath: sentinel.conf
       containers:
         - name: redis
           # Note: image tag should be pinned to a specific version in overlays
           #       ex: 7.2 in nonprod; 7.2.3 in prod
           image: docker.io/redis:7
-          args: [/etc/redis/redis.conf, --requirepass $(REDIS_PASSWORD)]
+          args: [/data/redis.conf, --requirepass $(REDIS_PASSWORD)]
           envFrom:
             - secretRef:
                 name: redis
@@ -46,9 +68,14 @@ spec:
             readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
           volumeMounts:
-            - name: config
-              mountPath: /etc/redis/redis.conf
-              subPath: config.conf
+            - name: data
+              mountPath: /data
+        - name: redis-sentinel
+          # Note: image tag should be pinned to a specific version in overlays
+          #       ex: 7.2 in nonprod; 7.2.3 in prod
+          image: docker.io/redis:7
+          args: [/data/sentinel.conf, --sentinel]
+          volumeMounts:
             - name: data
               mountPath: /data
       volumes:
