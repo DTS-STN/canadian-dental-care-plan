@@ -101,15 +101,15 @@ export async function action({ context: { session }, params, request }: ActionFu
         .string()
         .trim()
         .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val), t('apply:personal-information.error-message.phone-number-valid'))
-        .transform((val) => parsePhoneNumber(val).formatInternational())
+        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply:personal-information.error-message.phone-number-valid'))
+        .transform((val) => parsePhoneNumber(val, 'CA').formatInternational())
         .optional(),
       phoneNumberAlt: z
         .string()
         .trim()
         .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val), t('apply:personal-information.error-message.phone-number-alt-valid'))
-        .transform((val) => parsePhoneNumber(val).formatInternational())
+        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply:personal-information.error-message.phone-number-alt-valid'))
+        .transform((val) => parsePhoneNumber(val, 'CA').formatInternational())
         .optional(),
       mailingAddress: z.string().trim().min(1, t('apply:personal-information.error-message.address-required')).max(30),
       mailingApartment: z.string().trim().max(30).optional(),
