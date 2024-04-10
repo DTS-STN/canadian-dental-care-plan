@@ -35,7 +35,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, request, params }: LoaderFunctionArgs) {
-  const { HCAPTCHA_SITE_KEY } = getEnv();
+  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
+
   const applyRouteHelpers = getApplyRouteHelpers();
   await applyRouteHelpers.loadState({ params, request, session });
   const csrfToken = String(session.get('csrfToken'));
@@ -43,13 +44,16 @@ export async function loader({ context: { session }, request, params }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:terms-and-conditions.page-title') }) };
 
-  return json({ csrfToken, meta, siteKey: HCAPTCHA_SITE_KEY });
+  const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
+
+  return json({ csrfToken, meta, siteKey: HCAPTCHA_SITE_KEY, hCaptchaEnabled });
 }
 
 export async function action({ context: { session }, request, params }: ActionFunctionArgs) {
   const log = getLogger('apply/terms-and-conditions');
   const applyRouteHelpers = getApplyRouteHelpers();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
+  const { ENABLED_FEATURES } = getEnv();
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -60,9 +64,12 @@ export async function action({ context: { session }, request, params }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-  if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse(hCaptchaResponse, request))) {
-    return redirect(getPathById('$lang+/_public+/unable-to-process-request', params));
+  const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
+  if (hCaptchaEnabled) {
+    const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
+    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse(hCaptchaResponse, request))) {
+      return redirect(getPathById('$lang+/_public+/unable-to-process-request', params));
+    }
   }
 
   await applyRouteHelpers.saveState({ params, request, session, state: {} });
@@ -71,7 +78,7 @@ export async function action({ context: { session }, request, params }: ActionFu
 
 export default function ApplyIndex() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, siteKey } = useLoaderData<typeof loader>();
+  const { csrfToken, siteKey, hCaptchaEnabled } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -80,7 +87,7 @@ export default function ApplyIndex() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    if (captchaRef.current) {
+    if (hCaptchaEnabled && captchaRef.current) {
       try {
         const response = captchaRef.current.getResponse();
         formData.set('h-captcha-response', response);
@@ -89,9 +96,9 @@ export default function ApplyIndex() {
       } finally {
         captchaRef.current.resetCaptcha();
       }
-
-      fetcher.submit(formData, { method: 'POST' });
     }
+
+    fetcher.submit(formData, { method: 'POST' });
   }
 
   const canadaTermsConditions = <InlineLink to={t('apply:terms-and-conditions.links.canada-ca-terms-and-conditions')} />;
@@ -180,7 +187,7 @@ export default function ApplyIndex() {
       <p className="my-8">{t('apply:terms-and-conditions.apply.application-start-consent')}</p>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />
+        {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <Button variant="primary" id="continue-button" disabled={isSubmitting}>
             {t('apply:terms-and-conditions.apply.start-button')}
