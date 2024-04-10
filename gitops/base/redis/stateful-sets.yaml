@@ -42,7 +42,7 @@ spec:
           # Note: image tag should be pinned to a specific version in overlays
           #       ex: 7.2 in nonprod; 7.2.3 in prod
           image: docker.io/redis:7
-          args: [/data/redis.conf, --requirepass $(REDIS_PASSWORD)]
+          args: [/data/redis.conf, --requirepass $(REDIS_PASSWORD), --masterauth $(REDIS_PASSWORD)]
           envFrom:
             - secretRef:
                 name: redis
