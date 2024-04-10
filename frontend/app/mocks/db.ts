@@ -82,7 +82,7 @@ db.personalInformation.create({
   emailAddressId: 'rhapsody@domain.ca',
   primaryTelephoneNumber: '222-555-5555',
   alternateTelephoneNumber: '416-555-6666',
-  preferredMethodCommunicationCode: '775170002',
+  preferredMethodCommunicationCode: '1033',
   sinIdentification: '800011819',
 });
 

@@ -10,18 +10,6 @@ vi.mock('~/services/audit-service.server', () => ({
   }),
 }));
 
-vi.mock('~/services/address-service.server', () => ({
-  getAddressService: vi.fn().mockReturnValue({
-    getAddressInfo: vi.fn().mockReturnValue({
-      address: 'address',
-      city: 'mega-city',
-      province: 'mega province',
-      postalCode: 'postal code',
-      country: 'super country',
-    }),
-  }),
-}));
-
 vi.mock('~/services/lookup-service.server', () => ({
   // prettier-ignore
   getLookupService: vi.fn().mockReturnValue({
@@ -49,26 +37,47 @@ vi.mock('~/services/session-service.server', () => ({
   }),
 }));
 
-vi.mock('~/services/user-service.server', () => ({
-  getUserService: vi.fn().mockReturnValue({
-    getUserId: vi.fn().mockReturnValue('00000000-0000-0000-0000-000000000000'),
-    getUserInfo: vi.fn().mockReturnValue({
+vi.mock('~/utils/locale-utils.server', () => ({
+  getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+}));
+
+vi.mock('~/utils/env.server', () => ({
+  featureEnabled: vi.fn().mockReturnValue(true),
+  getEnv: vi.fn().mockReturnValue({
+    INTEROP_CCT_API_BASE_URI: 'https://api.example.com',
+    INTEROP_CCT_API_SUBSCRIPTION_KEY: '00000000000000000000000000000000',
+    INTEROP_CCT_API_COMMUNITY: 'CDCP',
+    ENGLISH_LANGUAGE_CODE: 1033,
+    FRENCH_LANGUAGE_CODE: 1036,
+  }),
+}));
+
+vi.mock('~/services/personal-information-service.server', () => ({
+  getPersonalInformationService: vi.fn().mockReturnValue({
+    getPersonalInformation: vi.fn().mockResolvedValue({
+      clientNumber: '999999999',
+      preferredLanguageId: '1033',
       firstName: 'John',
       homeAddress: '123 Home Street',
       lastName: 'Maverick',
       mailingAddress: '123 Mailing Street',
       phoneNumber: '(555) 555-5555',
-      preferredLanguage: 'fr',
+      getHomeAddress: vi.fn().mockReturnValue({
+        address: 'address',
+        city: 'mega-city',
+        province: 'mega province',
+        postalCode: 'postal code',
+        country: 'super country',
+      }),
+      getMailingAddress: vi.fn().mockReturnValue({
+        address: 'address',
+        city: 'mega-city',
+        province: 'mega province',
+        postalCode: 'postal code',
+        country: 'super country',
+      }),
     }),
   }),
-}));
-
-vi.mock('~/utils/env.server', () => ({
-  featureEnabled: vi.fn().mockReturnValue(true),
-}));
-
-vi.mock('~/utils/locale-utils.server', () => ({
-  getFixedT: vi.fn().mockResolvedValue(vi.fn()),
 }));
 
 describe('_gcweb-app.personal-information._index', () => {
@@ -80,6 +89,7 @@ describe('_gcweb-app.personal-information._index', () => {
     it('should return a Response object', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
+      session.set('userInfoToken', { sin: '999999999' });
 
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information'),
@@ -93,6 +103,7 @@ describe('_gcweb-app.personal-information._index', () => {
     it('should return reponse status of 200', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
+      session.set('userInfoToken', { sin: '999999999' });
 
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information'),
@@ -106,6 +117,7 @@ describe('_gcweb-app.personal-information._index', () => {
     it('should return correct mocked data', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
+      session.set('userInfoToken', { sin: '999999999' });
 
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information'),
@@ -123,20 +135,6 @@ describe('_gcweb-app.personal-information._index', () => {
             nameFr: '(FR) super country',
           },
         ],
-        homeAddressInfo: {
-          address: 'address',
-          city: 'mega-city',
-          country: 'super country',
-          postalCode: 'postal code',
-          province: 'mega province',
-        },
-        mailingAddressInfo: {
-          address: 'address',
-          city: 'mega-city',
-          country: 'super country',
-          postalCode: 'postal code',
-          province: 'mega province',
-        },
         meta: {},
         preferredLanguage: {
           id: 'fr',
@@ -155,13 +153,14 @@ describe('_gcweb-app.personal-information._index', () => {
             nameFr: '(FR) sample',
           },
         ],
-        user: {
+        personalInformation: {
+          clientNumber: '999999999',
           firstName: 'John',
           homeAddress: '123 Home Street',
           lastName: 'Maverick',
           mailingAddress: '123 Mailing Street',
           phoneNumber: '(555) 555-5555',
-          preferredLanguage: 'fr',
+          preferredLanguageId: '1033',
         },
       });
     });
