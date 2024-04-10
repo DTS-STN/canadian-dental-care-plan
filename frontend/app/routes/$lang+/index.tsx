@@ -5,5 +5,7 @@ import { BilingualNotFoundError, NotFoundError } from '~/components/layouts/publ
 export default function LangIndex() {
   const { lang: langParam } = useParams();
 
-  return langParam && ['en', 'fr'].includes(langParam) ? <NotFoundError /> : <BilingualNotFoundError />;
+  return ['en', 'fr'].includes(langParam)
+    ? <NotFoundError />
+    : <BilingualNotFoundError />;
 }
