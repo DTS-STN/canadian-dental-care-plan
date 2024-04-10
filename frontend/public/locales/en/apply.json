@@ -412,10 +412,10 @@
         },
         "info-source-access": "You can learn how to access this information in the government publication called <infosource>Info Source</infosource>. You can also access Info Source online at any Service Canada Centre.",
         "esdc-application-third-party-provider": "ESDC carries out this application using services from third-party provider Microsoft Corporation, which may be subject to foreign laws. For more information, see: <microsoftDataPrivacyPolicy>Microsoft Data Privacy Policy & Privacy Principles</microsoftDataPrivacyPolicy>.",
-        "personal-information-handling-complaint-process": "If you don't agree with the way your personal information was handled by Service Canada, you can contact the Privacy Commissioner of Canada to <fileacomplaint>file a complaint</fileacomplaint>."
+        "personal-information-handling-complaint-process": "If you do not agree with the way your personal information was handled by ESDC, you can contact the Privacy Commissioner of Canada to <fileacomplaint>file a complaint</fileacomplaint>."
       },
       "who-we-can-share-your-information-with": {
-        "heading": "Who we can share your information with",
+        "heading": "Who we will share your information with",
         "esdc-personal-information-sharing": "ESDC will share your personal information with partners in administrating the plan to validate your eligibility and register you for the CDCP.",
         "benefits-administration-data-disclosure": "Your data may also be disclosed to the CDCP benefits administrator, the benefits administrator's agents and service providers for the purpose of underwriting, verification, administration, adjudication and investigation of claims under CDCP.",
         "esdc-information-usage-policy": "ESDC may use or share the information you provide for policy analysis, research, monitoring and/or evaluation activities within ESDC and HC. These uses or activities will not affect any administrative decisions made about you."
