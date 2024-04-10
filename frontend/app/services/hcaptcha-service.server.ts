@@ -50,20 +50,21 @@ function createHCaptchaService() {
 
     const verifyResultSchema = z.object({
       success: z.boolean(),
-      challenge_ts: z.string().datetime().optional(),
-      hostname: z.string().optional(),
-      'error-codes': z.array(z.string()).optional(),
       score: z.number().optional(),
     });
 
-    const verifyResult = verifyResultSchema.parse(await response.json());
+    const json = await response.json();
+    const verifyResult = verifyResultSchema.parse(json);
+
     if (verifyResult.success) {
       instrumentationService.countHttpStatus('http.client.hcaptcha.posts.success', 200);
-      log.info(`hCaptcha verification successful: [${JSON.stringify(verifyResult)}]`);
+      log.info(`hCaptcha verification successful: [${JSON.stringify(json)}]`);
     } else {
       instrumentationService.countHttpStatus('http.client.hcaptcha.posts.failed', 200);
-      log.warn(`hCaptcha verification failed: [${JSON.stringify(verifyResult)}]`);
+      log.warn(`hCaptcha verification failed: [${JSON.stringify(json)}]`);
     }
+
+    return verifyResult;
   }
 
   return { verifyHCaptchaResponse };

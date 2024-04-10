@@ -37,6 +37,7 @@
       "confirmation": "CDCP-APPL-0017"
     },
     "status": "CDCP-STAT-0001",
+    "unableToProcessRequest": "CDCP-UNAB-0001",
     "notFound": "CDCP-ERR-0404"
   }
 }

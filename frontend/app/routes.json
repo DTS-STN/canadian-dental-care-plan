@@ -229,6 +229,14 @@
               "en": "/:lang/status",
               "fr": "/:lang/statut"
             }
+          },
+          {
+            "id": "$lang+/_public+/unable-to-process-request",
+            "file": "routes/$lang+/_public+/unable-to-process-request.tsx",
+            "paths": {
+              "en": "/:lang/unable-to-process-request",
+              "fr": "/:lang/impossible-de-traiter-la-demande"
+            }
           }
         ]
       },
