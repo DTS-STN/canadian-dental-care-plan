@@ -8,10 +8,10 @@ spec:
   ports:
     - name: redis
       port: 6379
-      targetPort: 6379
+      targetPort: redis
     - name: sentinel
       port: 26379
-      targetPort: 26379
+      targetPort: sentinel
   selector:
     app.kubernetes.io/name: redis
 
@@ -31,9 +31,9 @@ spec:
   ports:
     - name: redis
       port: 6379
-      targetPort: 6379
+      targetPort: redis
     - name: sentinel
       port: 26379
-      targetPort: 26379
+      targetPort: sentinel
   selector:
     app.kubernetes.io/name: redis

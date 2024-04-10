@@ -75,6 +75,9 @@ spec:
           #       ex: 7.2 in nonprod; 7.2.3 in prod
           image: docker.io/redis:7
           args: [/data/sentinel.conf, --sentinel]
+          ports:
+            - name: sentinel
+              containerPort: 26379
           volumeMounts:
             - name: data
               mountPath: /data
