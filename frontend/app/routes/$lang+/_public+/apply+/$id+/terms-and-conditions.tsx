@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useRef } from 'react';
+import { FormEvent } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
@@ -13,9 +13,9 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
-import { getHCaptchaService } from '~/services/hcaptcha-service.server';
+import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getEnv } from '~/utils/env.server';
-import { getClientIpAddress } from '~/utils/ip-address-utils.server';
+import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -48,8 +48,8 @@ export async function loader({ context: { session }, request, params }: LoaderFu
 
 export async function action({ context: { session }, request, params }: ActionFunctionArgs) {
   const log = getLogger('apply/terms-and-conditions');
-  const { HCAPTCHA_MAX_SCORE } = getEnv();
   const applyRouteHelpers = getApplyRouteHelpers();
+  const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -61,16 +61,8 @@ export async function action({ context: { session }, request, params }: ActionFu
   }
 
   const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-  const clientIpAddress = getClientIpAddress(request);
-
-  try {
-    const hCaptchaService = getHCaptchaService();
-    const verifyResult = await hCaptchaService.verifyHCaptchaResponse(hCaptchaResponse, clientIpAddress);
-    if (verifyResult.score !== undefined && verifyResult.score > HCAPTCHA_MAX_SCORE) {
-      return redirect(getPathById('$lang+/_public+/unable-to-process-request', params));
-    }
-  } catch (error) {
-    log.warn(`hCaptcha verification failed: [${error}]; Proceeding with normal application flow`);
+  if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse(hCaptchaResponse, request))) {
+    return redirect(getPathById('$lang+/_public+/unable-to-process-request', params));
   }
 
   await applyRouteHelpers.saveState({ params, request, session, state: {} });
@@ -82,23 +74,7 @@ export default function ApplyIndex() {
   const { csrfToken, siteKey } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const captchaRef = useRef<HCaptcha>(null);
-
-  useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
-
-    if (captchaRef.current?.isReady()) {
-      captchaRef.current.execute();
-    } else {
-      timeoutId = setTimeout(() => {
-        captchaRef.current?.execute();
-      }, 500);
-    }
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, []);
+  const { captchaRef } = useHCaptcha();
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
