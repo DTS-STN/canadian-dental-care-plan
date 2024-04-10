@@ -412,10 +412,10 @@
         },
         "info-source-access": "Vous pouvez apprendre comment accéder à cette information dans la publication du gouvernement intitulée <infosource>Info Source</infosource>. Vous pouvez également accéder à Info Source en ligne dans n'importe quel Centre Service Canada.",
         "esdc-application-third-party-provider": "Emploi et Développement social Canada exécute cette demande en utilisant les services du fournisseur tiers Microsoft Corporation, qui peuvent être soumis à des lois étrangères. Pour plus d'information, consultez\u00a0: <microsoftDataPrivacyPolicy>Politique de confidentialité des données et principes de confidentialité de Microsoft</microsoftDataPrivacyPolicy>.",
-        "personal-information-handling-complaint-process": "Si vous n'êtes pas d'accord avec la façon dont vos renseignements personnels ont été traités par Service Canada, vous pouvez communiquer avec le commissaire à la protection de la vie privée du Canada pour <fileacomplaint>déposer une plainte</fileacomplaint>."
+        "personal-information-handling-complaint-process": "Si vous n'êtes pas d'accord avec la façon dont vos renseignements personnels ont été traités par EDSC, vous pouvez communiquer avec le commissaire à la protection de la vie privée du Canada pour <fileacomplaint>déposer une plainte</fileacomplaint>."
       },
       "who-we-can-share-your-information-with": {
-        "heading": "Avec qui nous pouvons partager vos renseignements",
+        "heading": "Avec qui nous partagerons vos informations",
         "esdc-personal-information-sharing": "EDSC communiquera vos renseignements personnels à nos partenaires dans l'administration du régime afin de valider votre admissibilité et de vous inscrire au RCSD.",
         "benefits-administration-data-disclosure": "Vos données peuvent également être divulguées à l'administrateur des prestations du RCSD et aux agents et fournisseurs de services de l'administrateur des prestations aux fins de souscription, de vérification, d'administration, de décision et d'enquête concernant les prestations versées au titre du RCSD.",
         "esdc-information-usage-policy": "EDSC peut utiliser ou partager les renseignements que vous fournissez pour les activités d'analyse des politiques, de recherche, de surveillance et d'évaluation au sein d'EDSC et de SC. Ces utilisations ou activités n'auront aucune incidence sur les décisions administratives prises à votre sujet."
