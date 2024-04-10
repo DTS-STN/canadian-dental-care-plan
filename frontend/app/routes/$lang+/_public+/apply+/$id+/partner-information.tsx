@@ -12,11 +12,12 @@ import { z } from 'zod';
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { DatePickerField } from '~/components/date-picker-field';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import { Progress } from '~/components/progress';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { parseDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -70,24 +71,59 @@ export async function action({ context: { session }, params, request }: ActionFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
-  const partnerInformationSchema: z.ZodType<PartnerInformationState> = z.object({
-    confirm: z.boolean().refine((val) => val === true, t('apply:partner-information.error-message.confirm-required')),
-    dateOfBirth: z
-      .string()
-      .trim()
-      .min(1, t('apply:partner-information.error-message.date-of-birth-required-and-valid'))
-      .refine((val) => isValid(parse(val, 'yyyy-MM-dd', new Date())), t('apply:partner-information.error-message.date-of-birth-required-and-valid'))
-      .refine((val) => isPast(parse(val, 'yyyy-MM-dd', new Date())), t('apply:partner-information.error-message.date-of-birth-is-past')),
-    firstName: z.string().trim().min(1, t('apply:partner-information.error-message.first-name-required')).max(100),
-    lastName: z.string().trim().min(1, t('apply:partner-information.error-message.last-name-required')).max(100),
-    socialInsuranceNumber: z
-      .string()
-      .trim()
-      .min(1, t('apply:partner-information.error-message.sin-required'))
-      .refine(isValidSin, t('apply:partner-information.error-message.sin-required'))
-      .refine((sin) => sin !== state.applicantInformation?.socialInsuranceNumber, t('apply:partner-information.error-message.sin-unique'))
-      .transform((sin) => formatSin(sin, '')),
-  });
+  const partnerInformationSchema = z
+    .object({
+      confirm: z.boolean().refine((val) => val === true, t('apply:partner-information.error-message.confirm-required')),
+      dateOfBirthYear: z
+        .number({
+          required_error: t('apply:partner-information.error-message.date-of-birth-year-required'),
+          invalid_type_error: t('apply:partner-information.error-message.date-of-birth-year-number'),
+        })
+        .int()
+        .positive(),
+      dateOfBirthMonth: z
+        .number({
+          required_error: t('apply:partner-information.error-message.date-of-birth-month-required'),
+        })
+        .int()
+        .positive(),
+      dateOfBirthDay: z
+        .number({
+          required_error: t('apply:partner-information.error-message.date-of-birth-day-required'),
+          invalid_type_error: t('apply:partner-information.error-message.date-of-birth-day-number'),
+        })
+        .int()
+        .positive(),
+      dateOfBirth: z.string(),
+      firstName: z.string().trim().min(1, t('apply:partner-information.error-message.first-name-required')).max(100),
+      lastName: z.string().trim().min(1, t('apply:partner-information.error-message.last-name-required')).max(100),
+      socialInsuranceNumber: z
+        .string()
+        .trim()
+        .min(1, t('apply:partner-information.error-message.sin-required'))
+        .refine(isValidSin, t('apply:partner-information.error-message.sin-required'))
+        .refine((sin) => sin !== state.applicantInformation?.socialInsuranceNumber, t('apply:partner-information.error-message.sin-unique')),
+    })
+    .superRefine((val, ctx) => {
+      // At this point the year, month and day should have been validated as positive integer
+      const parseDateOfBirthString = parseDateString(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
+      const dateOfBirth = `${parseDateOfBirthString.year}-${parseDateOfBirthString.month}-${parseDateOfBirthString.day}`;
+
+      if (!isValid(parse(dateOfBirth, 'yyyy-MM-dd', new Date()))) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:partner-information.error-message.date-of-birth-valid'), path: ['dateOfBirth'] });
+      } else if (!isPast(parse(dateOfBirth, 'yyyy-MM-dd', new Date()))) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:partner-information.error-message.date-of-birth-is-past'), path: ['dateOfBirth'] });
+      }
+    })
+    .transform((val) => {
+      // At this point the year, month and day should have been validated as positive integer
+      const parseDateOfBirthString = parseDateString(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
+      return {
+        ...val,
+        dateOfBirth: `${parseDateOfBirthString.year}-${parseDateOfBirthString.month}-${parseDateOfBirthString.day}`,
+        socialInsuranceNumber: formatSin(val.socialInsuranceNumber, ''),
+      };
+    }) satisfies z.ZodType<PartnerInformationState>;
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -98,9 +134,15 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
+  const dateOfBirthYear = formData.get('dateOfBirthYear') ? Number(formData.get('dateOfBirthYear')) : undefined;
+  const dateOfBirthMonth = formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined;
+  const dateOfBirthDay = formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined;
   const data = {
     confirm: formData.get('confirm') === 'yes',
-    dateOfBirth: String(formData.get('dateOfBirth') ?? ''),
+    dateOfBirthYear,
+    dateOfBirthMonth,
+    dateOfBirthDay,
+    dateOfBirth: `${dateOfBirthYear}-${dateOfBirthMonth}-${dateOfBirthDay}`,
     firstName: String(formData.get('firstName') ?? ''),
     lastName: String(formData.get('lastName') ?? ''),
     socialInsuranceNumber: String(formData.get('socialInsuranceNumber') ?? ''),
@@ -129,24 +171,33 @@ export default function ApplyFlowApplicationInformation() {
   const errorSummaryId = 'error-summary';
 
   // Keys order should match the input IDs order.
-  const errorMessages = useMemo(
-    () => ({
-      'first-name': fetcher.data?.errors.firstName?._errors[0],
-      'last-name': fetcher.data?.errors.lastName?._errors[0],
-      'date-picker-date-of-birth-month': fetcher.data?.errors.dateOfBirth?._errors[0],
-      'social-insurance-number': fetcher.data?.errors.socialInsuranceNumber?._errors[0],
-      'input-checkbox-confirm': fetcher.data?.errors.confirm?._errors[0],
-    }),
-    [fetcher.data?.errors.confirm?._errors, fetcher.data?.errors.dateOfBirth?._errors, fetcher.data?.errors.firstName?._errors, fetcher.data?.errors.lastName?._errors, fetcher.data?.errors.socialInsuranceNumber?._errors],
-  );
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
+  const errorSummaryItems = useMemo(() => {
+    const items: ErrorSummaryItem[] = [];
+    if (fetcher.data?.errors.firstName?._errors[0]) items.push(createErrorSummaryItem('first-name', fetcher.data.errors.firstName._errors[0]));
+    if (fetcher.data?.errors.lastName?._errors[0]) items.push(createErrorSummaryItem('last-name', fetcher.data.errors.lastName._errors[0]));
+    if (fetcher.data?.errors.dateOfBirth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', fetcher.data.errors.dateOfBirth._errors[0]));
+    if (fetcher.data?.errors.dateOfBirthMonth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', fetcher.data.errors.dateOfBirthMonth._errors[0]));
+    if (fetcher.data?.errors.dateOfBirthDay?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', fetcher.data.errors.dateOfBirthDay._errors[0]));
+    if (fetcher.data?.errors.dateOfBirthYear?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-year', fetcher.data.errors.dateOfBirthYear._errors[0]));
+    if (fetcher.data?.errors.socialInsuranceNumber?._errors[0]) items.push(createErrorSummaryItem('social-insurance-number', fetcher.data.errors.socialInsuranceNumber._errors[0]));
+    if (fetcher.data?.errors.confirm?._errors[0]) items.push(createErrorSummaryItem('input-checkbox-confirm', fetcher.data.errors.confirm._errors[0]));
+    return items;
+  }, [
+    fetcher.data?.errors.confirm?._errors,
+    fetcher.data?.errors.dateOfBirth?._errors,
+    fetcher.data?.errors.dateOfBirthDay?._errors,
+    fetcher.data?.errors.dateOfBirthMonth?._errors,
+    fetcher.data?.errors.dateOfBirthYear?._errors,
+    fetcher.data?.errors.firstName?._errors,
+    fetcher.data?.errors.lastName?._errors,
+    fetcher.data?.errors.socialInsuranceNumber?._errors,
+  ]);
 
   useEffect(() => {
-    if (hasErrors(errorMessages)) {
+    if (errorSummaryItems.length > 0) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
-  }, [errorMessages]);
+  }, [errorSummaryItems]);
 
   return (
     <>
@@ -177,7 +228,7 @@ export default function ApplyFlowApplicationInformation() {
                 maxLength={100}
                 required
                 defaultValue={defaultState?.firstName ?? ''}
-                errorMessage={errorMessages['first-name']}
+                errorMessage={fetcher.data?.errors.firstName?._errors[0]}
                 aria-describedby="name-instructions"
               />
               <InputField
@@ -188,11 +239,27 @@ export default function ApplyFlowApplicationInformation() {
                 maxLength={100}
                 required
                 defaultValue={defaultState?.lastName ?? ''}
-                errorMessage={errorMessages['last-name']}
+                errorMessage={fetcher.data?.errors.lastName?._errors[0]}
                 aria-describedby="name-instructions"
               />
             </div>
-            <DatePickerField id="date-of-birth" name="dateOfBirth" defaultValue={defaultState?.dateOfBirth ?? ''} legend={t('apply:partner-information.date-of-birth')} required errorMessage={errorMessages['date-picker-date-of-birth-month']} />
+            <DatePickerField
+              id="date-of-birth"
+              names={{
+                day: 'dateOfBirthDay',
+                month: 'dateOfBirthMonth',
+                year: 'dateOfBirthYear',
+              }}
+              defaultValue={defaultState?.dateOfBirth ?? ''}
+              legend={t('apply:partner-information.date-of-birth')}
+              required
+              errorMessages={{
+                all: fetcher.data?.errors.dateOfBirth?._errors[0],
+                year: fetcher.data?.errors.dateOfBirthYear?._errors[0],
+                month: fetcher.data?.errors.dateOfBirthMonth?._errors[0],
+                day: fetcher.data?.errors.dateOfBirthDay?._errors[0],
+              }}
+            />
             <InputField
               id="social-insurance-number"
               name="socialInsuranceNumber"
@@ -200,9 +267,9 @@ export default function ApplyFlowApplicationInformation() {
               placeholder="000-000-000"
               required
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
-              errorMessage={errorMessages['social-insurance-number']}
+              errorMessage={fetcher.data?.errors.socialInsuranceNumber?._errors[0]}
             />
-            <InputCheckbox id="confirm" name="confirm" value="yes" required errorMessage={errorMessages['input-checkbox-confirm']} defaultChecked={defaultState?.confirm === true}>
+            <InputCheckbox id="confirm" name="confirm" value="yes" required errorMessage={fetcher.data?.errors.confirm?._errors[0]} defaultChecked={defaultState?.confirm === true}>
               {t('partner-information.confirm-checkbox')}
             </InputCheckbox>
           </div>

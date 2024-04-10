@@ -7,9 +7,10 @@ import { padWithZero } from './string-utils';
 /**
  * Parses a date string in the format "YYYY-MM-DD" and returns an object with the parsed components.
  * @param dateString The date string to parse.
+ * @param validate Validate or not if the given date exists. (default: true)
  * @returns An object containing the parsed components (year, month, day). Returns an empty object if parsing fails or if the date does not exist.
  */
-export function parseDateString(dateString: string): { year?: string; month?: string; day?: string } {
+export function parseDateString(dateString: string, validate: boolean = true): { year?: string; month?: string; day?: string } {
   const dateParts = dateString.split('-');
 
   if (dateParts.length !== 3) {
@@ -24,7 +25,7 @@ export function parseDateString(dateString: string): { year?: string; month?: st
     return {};
   }
 
-  if (!isExists(year, month - 1, day)) {
+  if (validate && !isExists(year, month - 1, day)) {
     return {};
   }
 
