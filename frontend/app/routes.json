@@ -57,6 +57,14 @@
     },
     "children": [
       {
+        "id": "$lang+/",
+        "file": "routes/$lang+/index.tsx",
+        "paths": {
+          "en": "/:lang/",
+          "fr": "/:lang/"
+        }
+      },
+      {
         "id": "$lang+/$",
         "file": "routes/$lang+/$.tsx",
         "paths": {
