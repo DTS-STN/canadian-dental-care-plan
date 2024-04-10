@@ -49,9 +49,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const regionList = await getLookupService().getAllRegions();
   const preferredLanguage = personalInformation.preferredLanguageId ? await getLookupService().getPreferredLanguage(personalInformation.preferredLanguageId) : undefined;
 
-  if (!personalInformation.clientNumber) {
-    throw new Response(null, { status: 404 });
-  }
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };
 
