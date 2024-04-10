@@ -47,7 +47,8 @@ export async function loader({ context: { session }, request, params }: LoaderFu
 }
 
 export async function action({ context: { session }, request, params }: ActionFunctionArgs) {
-  const log = getLogger('apply/index');
+  const log = getLogger('apply/terms-and-conditions');
+  const { HCAPTCHA_MAX_SCORE } = getEnv();
   const applyRouteHelpers = getApplyRouteHelpers();
 
   const formData = await request.formData();
@@ -64,7 +65,10 @@ export async function action({ context: { session }, request, params }: ActionFu
 
   try {
     const hCaptchaService = getHCaptchaService();
-    await hCaptchaService.verifyHCaptchaResponse(hCaptchaResponse, clientIpAddress);
+    const verifyResult = await hCaptchaService.verifyHCaptchaResponse(hCaptchaResponse, clientIpAddress);
+    if (verifyResult.score !== undefined && verifyResult.score > HCAPTCHA_MAX_SCORE) {
+      return redirect(getPathById('$lang+/_public+/unable-to-process-request', params));
+    }
   } catch (error) {
     log.warn(`hCaptcha verification failed: [${error}]; Proceeding with normal application flow`);
   }

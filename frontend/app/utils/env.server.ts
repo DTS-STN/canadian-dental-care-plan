@@ -91,6 +91,7 @@ const serverEnv = z.object({
   AUTH_RASCL_LOGOUT_URL: z.string().trim().min(1),
 
   // hCaptcha settings
+  HCAPTCHA_MAX_SCORE: z.coerce.number().default(0.79),
   HCAPTCHA_SECRET_KEY: z.string().trim().min(1),
   HCAPTCHA_SITE_KEY: z.string().trim().min(1),
   HCAPTCHA_VERIFY_URL: z.string().url().default('https://api.hcaptcha.com/siteverify'),
