@@ -1,0 +1,14 @@
+{
+  "page-title": "[FR] Unable to process CDCP request",
+  "unable-to-process": "[FR] We are unable to process your Canadian Dental Care Plan (CDCP) request at this moment. This could be due to an incorrect input, a timeout, or a technical problem.",
+  "try-again": "[FR] To try again, you can:",
+  "disable-vpn": "[FR] disable your virtual private network (VPN), or browser or proxy server, if you use one; or",
+  "another-device": "[FR] try making the request on another device.",
+  "difficulties": "[FR] If you're still experiencing difficulties:",
+  "call-centre": "[FR] call the CDCP Specialized Call Center for assistance at <noWrap>1-833-537-4342</noWrap>;",
+  "visit-centre": "[FR] visit the nearest Service Canada Centre and bring 2 pieces of identification (one with photo); or",
+  "submit-request": "[FR] submit an <eServiceCanadaLink>eServiceCanada request</eServiceCanadaLink> by selecting \"Canadian Dental Care Plan\" and \"Help with the Canadian Dental Care Plan application or attestation\", and we'll call you back within 2 business days.",
+  "e-service-canada-link": "https://eservices.canada.ca/fr/service/",
+  "return-cdcp": "[FR] Return to the <cdcpLink>Canadian Dental Care Plan</cdcpLink> home page.",
+  "cdcp-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+}

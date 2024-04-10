@@ -9,6 +9,7 @@ import type letters from '../public/locales/en/letters.json';
 import type personalInformation from '../public/locales/en/personal-information.json';
 import type status from '../public/locales/en/status.json';
 import type stubSinEditor from '../public/locales/en/stub-sin-editor.json';
+import type unableToProcessRequest from '../public/locales/en/unable-to-process-request.json';
 import type { PublicEnv } from '~/utils/env.server';
 
 /**
@@ -36,8 +37,9 @@ declare module 'i18next' {
       index: typeof index;
       letters: typeof letters;
       'personal-information': typeof personalInformation;
-      'stub-sin-editor': typeof stubSinEditor;
       status: typeof status;
+      'stub-sin-editor': typeof stubSinEditor;
+      'unable-to-process-request': typeof unableToProcessRequest;
     };
   }
 }
