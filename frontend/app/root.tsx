@@ -86,7 +86,7 @@ export default function App() {
 
   useEffect(() => {
     if (env.ADOBE_ANALYTICS_SRC && env.ADOBE_ANALYTICS_JQUERY_SRC) {
-      adobeAnalytics.pageview(location.pathname);
+      adobeAnalytics.pageview(document.location.toString());
     }
   }, [env.ADOBE_ANALYTICS_JQUERY_SRC, env.ADOBE_ANALYTICS_SRC, location.pathname]);
 
