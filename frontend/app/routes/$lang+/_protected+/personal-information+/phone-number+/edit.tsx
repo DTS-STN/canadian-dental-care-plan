@@ -77,17 +77,12 @@ export async function loader({ context: { session }, request, params }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('phone-number/edit');
-  const userService = getUserService();
+
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
 
   await raoidcService.handleSessionValidation(request, session);
-  const userId = await userService.getUserId();
-  const userInfo = await userService.getUserInfo(userId);
-  if (!userInfo) {
-    instrumentationService.countHttpStatus('phone-number.confirm', 404);
-    throw new Response(null, { status: 404 });
-  }
+
   const formDataSchema = z.object({
     phoneNumber: z
       .string()
@@ -128,8 +123,8 @@ export async function action({ context: { session }, params, request }: ActionFu
     });
   }
 
-  await userService.updateUserInfo(userId, { phoneNumber: parsedDataResult.data.phoneNumber, alternatePhoneNumber: parsedDataResult.data.alternatePhoneNumber });
-
+  //await userService.updateUserInfo(userId, { phoneNumber: parsedDataResult.data.phoneNumber, alternatePhoneNumber: parsedDataResult.data.alternatePhoneNumber });
+  //TODO Replace with the personal-information-service method to update/save the information. stop using userService...
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('update-data.phone-number', { userId: idToken.sub });
 
@@ -198,7 +193,9 @@ export default function PhoneNumberEdit() {
           />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="cancel" routeId="$lang+/_protected+/personal-information+/index" params={params}></ButtonLink>
+          <ButtonLink id="cancel" routeId="$lang+/_protected+/personal-information+/index" params={params}>
+            {t('personal-information:phone-number.edit.button.cancel')}
+          </ButtonLink>
           <Button id="submit" variant="primary">
             {t('personal-information:phone-number.edit.button.save')}
           </Button>
