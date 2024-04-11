@@ -55,7 +55,7 @@ describe('~/utils/postal-zip-code-utils.server.ts', () => {
       expect(formatPostalCode('CA', 'H0H 0H0')).toEqual('H0H 0H0');
     });
 
-    it('should return the input if country code is not a Canadian code', () => {
+    it('should return the input if country code is American and the zip code is valid', () => {
       expect(formatPostalCode('US', '12345')).toEqual('12345');
     });
 
