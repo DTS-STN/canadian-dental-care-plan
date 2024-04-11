@@ -9,6 +9,8 @@ vi.mock('~/utils/logging.server', () => ({
   getLogger: vi.fn().mockReturnValue({
     info: vi.fn(),
     error: vi.fn(),
+    debug: vi.fn(),
+    audit: vi.fn(),
   }),
 }));
 
@@ -41,7 +43,7 @@ describe('letters-service.server tests', () => {
       );
 
       const lettersService = getLettersService();
-      const letters = await lettersService.getLetters('userId');
+      const letters = await lettersService.getLetters('clientId', 'userId');
       expect(letters).toEqual([
         {
           id: 'some-id',
@@ -55,7 +57,7 @@ describe('letters-service.server tests', () => {
       vi.mocked(fetch).mockResolvedValue(new HttpResponse(null, { status: 500 }));
 
       const lettersService = getLettersService();
-      await expect(() => lettersService.getLetters('userId')).rejects.toThrowError();
+      await expect(() => lettersService.getLetters('clientId', 'userId')).rejects.toThrowError();
     });
   });
 
