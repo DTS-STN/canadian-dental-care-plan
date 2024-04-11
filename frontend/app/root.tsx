@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import reactPhoneNumberInputStyleSheet from 'react-phone-number-input/style.css';
 import { getToast } from 'remix-toast';
 
+import { isApplyRoutePathname, removeApplyRouteSessionPathSegment } from './routes/$lang+/_public+/apply+/_route';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import { Toaster } from '~/components/toaster';
@@ -86,6 +87,11 @@ export default function App() {
 
   useEffect(() => {
     if (env.ADOBE_ANALYTICS_SRC && env.ADOBE_ANALYTICS_JQUERY_SRC) {
+      if (isApplyRoutePathname(location.pathname)) {
+        adobeAnalytics.pageview(removeApplyRouteSessionPathSegment(document.location.toString()));
+        return;
+      }
+
       adobeAnalytics.pageview(document.location.toString());
     }
   }, [env.ADOBE_ANALYTICS_JQUERY_SRC, env.ADOBE_ANALYTICS_SRC, location.pathname]);

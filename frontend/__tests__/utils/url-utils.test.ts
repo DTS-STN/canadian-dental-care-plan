@@ -1,22 +1,47 @@
 import { describe, expect, it } from 'vitest';
 
-import { removeUUIDSegmentsFromURL } from '~/utils/url-utils';
+import { removePathSegment } from '~/utils/url-utils';
 
-describe('removeUUIDSegmentsFromURL', () => {
-  it('should remove UUID segments from the URL', () => {
-    const url = 'https://example.com/some/pathname/segment/with/uuid/8309ab03-b7a8-4a1c-bcf4-fcaecfdfbdbd/and/another/uuid/03f021b5-90ec-4854-9c02-c338888f3395';
-    const expectedURL = 'https://example.com/some/pathname/segment/with/uuid/and/another/uuid';
-    expect(removeUUIDSegmentsFromURL(url).toString()).toEqual(expectedURL);
+describe('removePathSegment function', () => {
+  it('removes the segment at the specified position from the URL pathname', () => {
+    const url = 'https://example.com/path/segment1/segment2/segment3';
+    const newPosition = 3;
+    const expectedUrl = 'https://example.com/path/segment1/segment2';
+    expect(removePathSegment(url, newPosition)).toBe(expectedUrl);
   });
 
-  it('should handle URLs with only UUID segments', () => {
-    const url = 'https://example.com/4d490c11-9ca4-41e1-85db-5182783742bc/ae1f0aa1-bed5-4fa6-81c0-a994bc4267e2';
-    const expectedURL = 'https://example.com/';
-    expect(removeUUIDSegmentsFromURL(url).toString()).toEqual(expectedURL);
+  it('handles URLs with fewer segments than the specified position', () => {
+    const url = 'https://example.com/path/segment1';
+    const newPosition = 2;
+    const expectedUrl = 'https://example.com/path/segment1';
+    expect(removePathSegment(url, newPosition)).toBe(expectedUrl);
   });
 
-  it('should handle URLs without UUID segments', () => {
-    const url = 'https://example.com/some/pathname/without/uuid';
-    expect(removeUUIDSegmentsFromURL(url).toString()).toEqual(url);
+  it('handles URLs with no pathname', () => {
+    const url = 'https://example.com';
+    const newPosition = 0;
+    const expectedUrl = 'https://example.com/';
+    expect(removePathSegment(url, newPosition)).toBe(expectedUrl);
+  });
+
+  it('handles URLs with only root pathname', () => {
+    const url = 'https://example.com/';
+    const newPosition = 0;
+    const expectedUrl = 'https://example.com/';
+    expect(removePathSegment(url, newPosition)).toBe(expectedUrl);
+  });
+
+  it('handles removing the first segment', () => {
+    const url = 'https://example.com/path/segment1/segment2';
+    const newPosition = 1;
+    const expectedUrl = 'https://example.com/path/segment2';
+    expect(removePathSegment(url, newPosition)).toBe(expectedUrl);
+  });
+
+  it('handles removing the last segment', () => {
+    const url = 'https://example.com/path/segment1/segment2/segment3';
+    const newPosition = 3;
+    const expectedUrl = 'https://example.com/path/segment1/segment2';
+    expect(removePathSegment(url, newPosition)).toBe(expectedUrl);
   });
 });
