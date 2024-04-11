@@ -71,7 +71,6 @@ describe('_public.apply.id.date-of-birth', () => {
       });
 
       const data = await response.json();
-      console.log({ errors: data.errors.dateOfBirthYear?._errors });
       expect(response.status).toBe(200);
       expect(data.errors.dateOfBirth).toEqual(undefined);
       expect(data.errors.dateOfBirthYear?._errors.length).toBeGreaterThan(0);
