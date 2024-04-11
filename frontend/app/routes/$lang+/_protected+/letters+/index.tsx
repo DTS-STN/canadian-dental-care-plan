@@ -93,6 +93,7 @@ export default function LettersIndex() {
     <>
       <div className="my-6">
         <InputSelect
+          className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
           id="sort-order"
           value={sortOrder}
           onChange={handleOnSortOrderChange}
