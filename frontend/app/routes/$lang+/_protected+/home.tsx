@@ -53,7 +53,7 @@ export default function Index() {
   return (
     <>
       <div className="grid gap-4">
-        {useFeature('update-personal-info') && (
+        {useFeature('view-personal-info') && (
           <CardLink title={t('index:personal-info')} routeId="$lang+/_protected+/personal-information+/index" params={params}>
             {t('index:personal-info-desc')}
           </CardLink>

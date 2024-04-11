@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import pageIds from '../../page-ids.json';
 import { Address } from '~/components/address';
 import { InlineLink } from '~/components/inline-link';
+import { useFeature } from '~/root';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -34,7 +35,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  featureEnabled('update-personal-info');
+  featureEnabled('view-personal-info');
 
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
@@ -67,11 +68,13 @@ export default function PersonalInformationIndex() {
         <DescriptionListItem term={t('personal-information:index.full-name')}>{`${personalInformation.firstName} ${personalInformation.lastName}`}</DescriptionListItem>
         <DescriptionListItem term={t('personal-information:index.preferred-language')}>
           <p>{preferredLanguage ? getNameByLanguage(i18n.language, preferredLanguage) : t('personal-information:index.no-preferred-language-on-file')}</p>
-          <p>
-            <InlineLink id="change-preferred-language-button" routeId="$lang+/_protected+/personal-information+/preferred-language+/edit" params={params}>
-              {t('personal-information:index.change-preferred-language')}
-            </InlineLink>
-          </p>
+          {useFeature('edit-personal-info') && (
+            <p>
+              <InlineLink id="change-preferred-language-button" routeId="$lang+/_protected+/personal-information+/preferred-language+/edit" params={params}>
+                {t('personal-information:index.change-preferred-language')}
+              </InlineLink>
+            </p>
+          )}
         </DescriptionListItem>
         <DescriptionListItem term={t('personal-information:index.home-address')}>
           {personalInformation.homeAddress ? (
@@ -85,11 +88,13 @@ export default function PersonalInformationIndex() {
           ) : (
             <p>{t('personal-information:index.no-address-on-file')}</p>
           )}
-          <p>
-            <InlineLink id="change-home-address-button" routeId="$lang+/_protected+/personal-information+/home-address+/edit" params={params}>
-              {t('personal-information:index.change-home-address')}
-            </InlineLink>
-          </p>
+          {useFeature('edit-personal-info') && (
+            <p>
+              <InlineLink id="change-home-address-button" routeId="$lang+/_protected+/personal-information+/home-address+/edit" params={params}>
+                {t('personal-information:index.change-home-address')}
+              </InlineLink>
+            </p>
+          )}
         </DescriptionListItem>
         <DescriptionListItem term={t('personal-information:index.mailing-address')}>
           {personalInformation.mailingAddress ? (
@@ -103,19 +108,23 @@ export default function PersonalInformationIndex() {
           ) : (
             <p>{t('personal-information:index.no-address-on-file')}</p>
           )}
-          <p>
-            <InlineLink id="change-mailing-address-button" routeId="$lang+/_protected+/personal-information+/mailing-address+/edit" params={params}>
-              {t('personal-information:index.change-mailing-address')}
-            </InlineLink>
-          </p>
+          {useFeature('edit-personal-info') && (
+            <p>
+              <InlineLink id="change-mailing-address-button" routeId="$lang+/_protected+/personal-information+/mailing-address+/edit" params={params}>
+                {t('personal-information:index.change-mailing-address')}
+              </InlineLink>
+            </p>
+          )}
         </DescriptionListItem>
         <DescriptionListItem term={t('personal-information:index.phone-number')}>
           <p>{personalInformation.primaryTelephoneNumber}</p>
-          <p>
-            <InlineLink id="change-phone-number-button" routeId="$lang+/_protected+/personal-information+/phone-number+/edit" params={params}>
-              {t('personal-information:index.change-phone-number')}
-            </InlineLink>
-          </p>
+          {useFeature('edit-personal-info') && (
+            <p>
+              <InlineLink id="change-phone-number-button" routeId="$lang+/_protected+/personal-information+/phone-number+/edit" params={params}>
+                {t('personal-information:index.change-phone-number')}
+              </InlineLink>
+            </p>
+          )}
         </DescriptionListItem>
       </dl>
     </>
