@@ -123,7 +123,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     .superRefine((val, ctx) => {
       if (val.hasProvincialTerritorialBenefits) {
         if (!val.province || validator.isEmpty(val.province)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:dental-benefits.error-message.program-required'), path: ['province'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:dental-benefits.error-message.provincial-territorial-required'), path: ['province'] });
         } else if (!val.provincialTerritorialSocialProgram || validator.isEmpty(val.provincialTerritorialSocialProgram)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:dental-benefits.error-message.program-required'), path: ['provincialTerritorialSocialProgram'] });
         }
