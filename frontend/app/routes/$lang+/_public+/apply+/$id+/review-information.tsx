@@ -1,9 +1,12 @@
+import { FormEvent } from 'react';
+
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faSpinner, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { parse } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
@@ -15,10 +18,12 @@ import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { toLocaleDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env.server';
+import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -58,7 +63,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const maritalStatuses = await getLookupService().getAllMaritalStatuses();
   const provincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
   const federalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
-  const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
+  const { COMMUNICATION_METHOD_EMAIL_ID, ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
   // prettier-ignore
   if (state.applicantInformation === undefined ||
@@ -148,14 +153,46 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     },
   };
 
+  const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
+
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:review-information.page-title') }) };
 
-  return json({ id: state.id, userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, meta, COMMUNICATION_METHOD_EMAIL_ID });
+  return json({
+    id: state.id,
+    userInfo,
+    spouseInfo,
+    maritalStatuses,
+    preferredLanguage,
+    federalSocialPrograms,
+    provincialTerritorialSocialPrograms,
+    homeAddressInfo,
+    mailingAddressInfo,
+    dentalInsurance,
+    dentalBenefit,
+    meta,
+    COMMUNICATION_METHOD_EMAIL_ID,
+    siteKey: HCAPTCHA_SITE_KEY,
+    hCaptchaEnabled,
+  });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
   const benefitApplicationService = getBenefitApplicationService();
+  const { ENABLED_FEATURES } = getEnv();
+  const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
+
+  const formData = await request.formData();
+
+  const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
+  if (hCaptchaEnabled) {
+    const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
+    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse(hCaptchaResponse, request))) {
+      await applyRouteHelpers.clearState({ params, request, session });
+      return redirect(getPathById('$lang+/_public+/unable-to-process-request', params));
+    }
+  }
+
   const state = await applyRouteHelpers.loadState({ params, request, session });
 
   // prettier-ignore
@@ -195,10 +232,29 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ReviewInformation() {
   const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, COMMUNICATION_METHOD_EMAIL_ID } =
+  const { userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, COMMUNICATION_METHOD_EMAIL_ID, siteKey, hCaptchaEnabled } =
     useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
+  const { captchaRef } = useHCaptcha();
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    if (hCaptchaEnabled && captchaRef.current) {
+      try {
+        const response = captchaRef.current.getResponse();
+        formData.set('h-captcha-response', response);
+      } catch (error) {
+        /* intentionally ignore and proceed with submission */
+      } finally {
+        captchaRef.current.resetCaptcha();
+      }
+    }
+
+    fetcher.submit(formData, { method: 'POST' });
+  }
 
   const maritalStatusEntity = maritalStatuses.find((ms) => ms.id === userInfo.martialStatus);
   const maritalStatus = maritalStatusEntity ? getNameByLanguage(i18n.language, maritalStatusEntity) : userInfo.martialStatus;
@@ -410,7 +466,8 @@ export default function ReviewInformation() {
         <p className="mb-4">{t('apply:review-information.submit-p-proceed')}</p>
         <p className="mb-4">{t('apply:review-information.submit-p-false-info')}</p>
         <p className="mb-4">{t('apply:review-information.submit-p-repayment')}</p>
-        <fetcher.Form method="post" className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+        <fetcher.Form method="post" onSubmit={handleSubmit} className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+          {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <Button id="confirm-button" variant="green" disabled={isSubmitting}>
             {t('apply:review-information.submit-button')}
             {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
