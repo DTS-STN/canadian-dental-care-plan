@@ -1,11 +1,12 @@
-import { useEffect, useMemo } from 'react';
+import { FormEvent, useEffect, useMemo } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -17,14 +18,16 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InlineLink } from '~/components/inline-link';
 import { InputField } from '~/components/input-field';
 import { PublicLayout } from '~/components/layouts/public-layout';
+import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { isValidApplicationCode } from '~/utils/application-code-utils';
 import { getEnv } from '~/utils/env.server';
+import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { RouteHandleData } from '~/utils/route-utils';
+import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { formatSin, isValidSin } from '~/utils/sin-utils';
 import { cn } from '~/utils/tw-utils';
 
@@ -35,17 +38,22 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
+
   const csrfToken = String(session.get('csrfToken'));
   const t = await getFixedT(request, handle.i18nNamespaces);
 
+  const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
+
   const meta = { title: t('gcweb:meta.title.template', { title: t('status:page-title') }) };
 
-  return json({ meta, csrfToken });
+  return json({ csrfToken, hCaptchaEnabled, meta, siteKey: HCAPTCHA_SITE_KEY });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('status/index');
-  const { CLIENT_STATUS_SUCCESS_ID } = getEnv();
+  const { CLIENT_STATUS_SUCCESS_ID, ENABLED_FEATURES } = getEnv();
+  const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formDataSchema = z.object({
@@ -58,19 +66,31 @@ export async function action({ context: { session }, params, request }: ActionFu
     code: z.string().trim().min(1, t('status:form.error-message.application-code-required')).refine(isValidApplicationCode, t('status:form.error-message.application-code-valid')),
   });
 
-  const formData = Object.fromEntries(await request.formData());
+  const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
-  const submittedCsrfToken = String(formData['_csrf']);
+  const submittedCsrfToken = String(formData.get('_csrf'));
 
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const parsedDataResult = formDataSchema.safeParse(formData);
+  const data = {
+    sin: formData.get('sin') ? String(formData.get('sin')) : undefined,
+    code: formData.get('code') ? String(formData.get('code')) : undefined,
+  };
+  const parsedDataResult = formDataSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
     return json({ errors: parsedDataResult.error.format() });
+  }
+
+  const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
+  if (hCaptchaEnabled) {
+    const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
+    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse(hCaptchaResponse, request))) {
+      return redirect(getPathById('$lang+/_public+/unable-to-process-request', params));
+    }
   }
 
   const applicationStatusService = getApplicationStatusService();
@@ -91,10 +111,29 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function StatusChecker() {
-  const { csrfToken } = useLoaderData<typeof loader>();
+  const { csrfToken, hCaptchaEnabled, siteKey } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { captchaRef } = useHCaptcha();
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    if (hCaptchaEnabled && captchaRef.current) {
+      try {
+        const response = captchaRef.current.getResponse();
+        formData.set('h-captcha-response', response);
+      } catch (error) {
+        /* intentionally ignore and proceed with submission */
+      } finally {
+        captchaRef.current.resetCaptcha();
+      }
+    }
+
+    fetcher.submit(formData, { method: 'POST' });
+  }
 
   const hcaptchaTermsOfService = <InlineLink to={t('status:links.hcaptcha')} />;
   const microsoftDataPrivacyPolicy = <InlineLink to={t('status:links.microsoft-data-privacy-policy')} />;
@@ -188,8 +227,9 @@ export default function StatusChecker() {
           </div>
         </Collapsible>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <fetcher.Form method="post" noValidate autoComplete="off">
+        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off">
           <input type="hidden" name="_csrf" value={csrfToken} />
+          {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <div className="space-y-6">
             <InputField id="code" name="code" label={t('status:form.application-code-label')} helpMessagePrimary={t('status:form.application-code-description')} required errorMessage={errorMessages.code} />
             <InputField id="sin" name="sin" label={t('status:form.sin-label')} required errorMessage={errorMessages.sin} />
