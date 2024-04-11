@@ -5,6 +5,7 @@
   "online-status-heading": "Who can check their application status online?",
   "online-status-content": "If you applied for the Canadian Dental Care Plan, you can check your status online.",
   "status-heading": "Status",
+  "empty-status": "The information you gave us doesn't match the information in our system.",
   "terms-of-use": {
     "summary": "Terms and Conditions of Use",
     "heading": "Terms of Use for the Canadian Dental Care Plan Status Checker",
