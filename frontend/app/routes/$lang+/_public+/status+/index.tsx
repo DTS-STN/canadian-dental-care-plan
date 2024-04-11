@@ -97,14 +97,13 @@ export async function action({ context: { session }, params, request }: ActionFu
   const lookupService = getLookupService();
   const { sin, code } = parsedDataResult.data;
   const statusId = await applicationStatusService.getStatusId(sin, code);
-
   const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
   const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
 
   return json({
     status: {
       ...(clientFriendlyStatus ?? {}),
-      alertType: clientFriendlyStatus?.id === CLIENT_STATUS_SUCCESS_ID ? 'success' : 'info',
+      alertType: statusId ? (clientFriendlyStatus?.id === CLIENT_STATUS_SUCCESS_ID ? 'success' : 'info') : 'danger',
     },
     statusId,
   } as const);
@@ -246,7 +245,7 @@ export default function StatusChecker() {
               <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
                 {t('status:status-heading')}
               </h2>
-              {getNameByLanguage(i18n.language, fetcher.data.status)}
+              {fetcher.data.status.id ? getNameByLanguage(i18n.language, fetcher.data.status) : t('status:empty-status')}
             </div>
           </ContextualAlert>
         )}
