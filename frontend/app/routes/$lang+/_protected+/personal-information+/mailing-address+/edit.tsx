@@ -20,6 +20,7 @@ import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-inf
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
+import { getPersonalInformationService } from '~/services/personal-information-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -144,7 +145,36 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   instrumentationService.countHttpStatus('mailing-address.edit', 302);
 
-  // TODO: Save form data with with future implementation updatePersonalInformation()
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const personalInformationServie = getPersonalInformationService();
+  const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
+  const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
+
+  const { streetName, secondAddressLine, countryId, provinceTerritoryStateId, cityName, postalCode } = parsedDataResult.data;
+
+  const newPersonalInformation = {
+    ...personalInformation,
+    mailingAddress: {
+      streetName,
+      secondAddressLine,
+      countryId,
+      provinceTerritoryStateId,
+      cityName,
+      postalCode,
+    },
+    homeAndMailingAddressTheSame: parsedDataResult.data.homeAndMailingAddressTheSame,
+    homeAddress: parsedDataResult.data.homeAndMailingAddressTheSame
+      ? {
+          streetName,
+          secondAddressLine,
+          countryId,
+          provinceTerritoryStateId,
+          cityName,
+          postalCode,
+        }
+      : personalInformation.homeAddress,
+  };
+  await personalInformationServie.updatePersonalInformation(userInfoToken.sin ?? '', newPersonalInformation);
 
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('update-data.mailing-address', { userId: idToken.sub });

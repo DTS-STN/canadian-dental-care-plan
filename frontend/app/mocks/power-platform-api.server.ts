@@ -3,8 +3,10 @@ import type { Operation } from 'fast-json-patch';
 import { HttpResponse, http } from 'msw';
 import { z } from 'zod';
 
+import { toPersonalInformation } from '~/mappers/personal-information-service-mappers.server';
 import { db } from '~/mocks/db';
 import { BenefitApplicationResponse, benefitApplicationRequestSchema } from '~/schemas/benefit-application-service-schemas.server';
+import { PersonalInfo, personalInformationApiSchema } from '~/schemas/personal-informaton-service-schemas.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('power-platform-api.server');
@@ -231,6 +233,35 @@ export function getPowerPlatformApiMockHandlers() {
       return HttpResponse.json(mockBenefitApplicationResponse);
     }),
 
+    /**
+     * Handler for put request to update personalInformation address to Power Platform
+     */
+    http.put('https://api.example.com/dental-care/applicant-information/dts/v1/applicant/:sin', async ({ params, request }) => {
+      log.debug('Handling request for [%s]', request.url);
+
+      const subscriptionKey = request.headers.get('Ocp-Apim-Subscription-Key');
+      if (!subscriptionKey) {
+        return new HttpResponse('Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.', { status: 401 });
+      }
+
+      const parsedSin = z.string().safeParse(params.sin);
+      if (!parsedSin.success) {
+        throw new HttpResponse('invalid sin', { status: 400, headers: { 'Content-Type': 'text/plain' } });
+      }
+
+      const requestBody = await request.json();
+      const parsedPersonalInformationApiRequest = await personalInformationApiSchema.safeParseAsync(requestBody);
+      if (!parsedPersonalInformationApiRequest.success) {
+        log.debug('Invalid request body [%j]', requestBody);
+        return new HttpResponse('Invalid request body!', { status: 400 });
+      }
+
+      const personalInformationDB = toPersonalInformationDB(toPersonalInformation(parsedPersonalInformationApiRequest.data));
+      db.personalInformation.update({ where: { sinIdentification: { equals: parsedSin.data } }, data: personalInformationDB });
+
+      return HttpResponse.text(null, { status: 204 });
+    }),
+
     //
     // Handler for GET request to retrieve address by id
     //
@@ -341,4 +372,33 @@ function getPersonalInformation(personalSinId: string) {
     : db.personalInformation.findFirst({
         where: { sinIdentification: { equals: personalSinId } },
       });
+}
+
+function toPersonalInformationDB(personalInformation: PersonalInfo) {
+  return {
+    mailingAddressStreet: personalInformation.mailingAddress?.streetName,
+    mailingAddressSecondaryUnitText: personalInformation.mailingAddress?.secondAddressLine,
+    mailingAddressCityName: personalInformation.mailingAddress?.cityName,
+    mailingAddressProvince: personalInformation.mailingAddress?.provinceTerritoryStateId,
+    mailingAddressCountryReferenceId: personalInformation.mailingAddress?.countryId,
+    mailingAddressPostalCode: personalInformation.mailingAddress?.postalCode,
+    homeAddressStreet: personalInformation.homeAddress?.streetName,
+    homeAddressSecondaryUnitText: personalInformation.homeAddress?.secondAddressLine,
+    homeAddressCityName: personalInformation.homeAddress?.cityName,
+    homeAddressProvince: personalInformation.homeAddress?.provinceTerritoryStateId,
+    homeAddressCountryReferenceId: personalInformation.homeAddress?.countryId,
+    homeAddressPostalCode: personalInformation.homeAddress?.postalCode,
+    sameHomeAndMailingAddress: personalInformation.homeAndMailingAddressTheSame,
+    clientNumber: personalInformation.clientNumber,
+    clientId: personalInformation.clientId,
+    applicantId: personalInformation.applictantId,
+    applicantCategoryCode: personalInformation.applicantCategoryCode,
+    birthdate: personalInformation.birthDate,
+    lastName: personalInformation.lastName,
+    firstName: personalInformation.firstName,
+    emailAddressId: personalInformation.emailAddress,
+    primaryTelephoneNumber: personalInformation.primaryTelephoneNumber,
+    alternateTelephoneNumber: personalInformation.alternateTelephoneNumber,
+    preferredMethodCommunicationCode: personalInformation.preferredLanguageId,
+  };
 }
