@@ -54,7 +54,19 @@ spec:
             - name: oauth-proxy-conf
               mountPath: /etc/oauth-proxy.conf
               subPath: config.conf
+        - name: fluentd
+          image: docker.io/fluentd
+          args: [--config, /etc/fluentd.conf]
+          volumeMounts:
+            - name: audit-logs
+              mountPath: /logs
+            - name: fluentd-conf
+              mountPath: /etc/fluentd.conf
+              subPath: fluentd.conf
       volumes:
+        - name: fluentd-conf
+          configMap:
+            name: frontend-fluentd
         - name: oauth-proxy-conf
           configMap:
             name: oauth-proxy
