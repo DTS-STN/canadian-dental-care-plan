@@ -252,8 +252,8 @@
   },
   "partner-information": {
     "page-title": "Spouse or Common-law partner information",
-    "provide-sin": "Please provide your legal name as indicated on your Social Insurance Number (SIN) card or letter.",
-    "required-information": "We'll use the information you provide to verify your identity. Any information that does not match the information on your SIN application may cause a delay in the processing of your application.",
+    "provide-sin": "Provide information on your current spouse or common-law partner as indicated on their Social Insurance Number (SIN) card or letter.",
+    "required-information": "This information is required to calculate the adjusted family net income. Your spouse or common-law partner must submit their own application for the Canadian Dental Care Plan.",
     "sin": "Social Insurance Number (SIN)",
     "date-of-birth": "Date of birth",
     "last-name": "Last name",
