@@ -126,7 +126,8 @@
     "error-message": {
       "federal-benefit-required": "Select whether you have federal dental benefits",
       "program-required": "Select a program",
-      "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits"
+      "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits",
+      "provincial-territorial-required": "Select a province or territory"
     }
   },
   "dental-insurance": {
