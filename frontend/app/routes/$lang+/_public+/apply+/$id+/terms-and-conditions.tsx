@@ -1,11 +1,8 @@
-import { FormEvent } from 'react';
-
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Trans, useTranslation } from 'react-i18next';
 
 import pageIds from '../../../page-ids.json';
@@ -13,9 +10,6 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
-import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
-import { getEnv } from '~/utils/env.server';
-import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -35,8 +29,6 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, request, params }: LoaderFunctionArgs) {
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
-
   const applyRouteHelpers = getApplyRouteHelpers();
   await applyRouteHelpers.loadState({ params, request, session });
   const csrfToken = String(session.get('csrfToken'));
@@ -44,16 +36,12 @@ export async function loader({ context: { session }, request, params }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:terms-and-conditions.page-title') }) };
 
-  const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
-
-  return json({ csrfToken, meta, siteKey: HCAPTCHA_SITE_KEY, hCaptchaEnabled });
+  return json({ csrfToken, meta });
 }
 
 export async function action({ context: { session }, request, params }: ActionFunctionArgs) {
   const log = getLogger('apply/terms-and-conditions');
   const applyRouteHelpers = getApplyRouteHelpers();
-  const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
-  const { ENABLED_FEATURES } = getEnv();
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -64,42 +52,15 @@ export async function action({ context: { session }, request, params }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
-  if (hCaptchaEnabled) {
-    const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
-    if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse(hCaptchaResponse, request))) {
-      return redirect(getPathById('$lang+/_public+/unable-to-process-request', params));
-    }
-  }
-
   await applyRouteHelpers.saveState({ params, request, session, state: {} });
   return redirect(getPathById('$lang+/_public+/apply+/$id+/type-application', params));
 }
 
 export default function ApplyIndex() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, siteKey, hCaptchaEnabled } = useLoaderData<typeof loader>();
+  const { csrfToken } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const { captchaRef } = useHCaptcha();
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-
-    if (hCaptchaEnabled && captchaRef.current) {
-      try {
-        const response = captchaRef.current.getResponse();
-        formData.set('h-captcha-response', response);
-      } catch (error) {
-        /* intentionally ignore and proceed with submission */
-      } finally {
-        captchaRef.current.resetCaptcha();
-      }
-    }
-
-    fetcher.submit(formData, { method: 'POST' });
-  }
 
   const canadaTermsConditions = <InlineLink to={t('apply:terms-and-conditions.links.canada-ca-terms-and-conditions')} />;
   const fileacomplaint = <InlineLink to={t('apply:terms-and-conditions.links.file-complaint')} />;
@@ -185,9 +146,8 @@ export default function ApplyIndex() {
         </Collapsible>
       </div>
       <p className="my-8">{t('apply:terms-and-conditions.apply.application-start-consent')}</p>
-      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+      <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
-        {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <Button variant="primary" id="continue-button" disabled={isSubmitting}>
             {t('apply:terms-and-conditions.apply.start-button')}
