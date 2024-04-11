@@ -70,7 +70,7 @@ export async function action({ context: { session }, params, request }: ActionFu
       .string()
       .trim()
       .min(1, t('apply:applicant-information.error-message.sin-required'))
-      .refine(isValidSin, t('apply:applicant-information.error-message.sin-required'))
+      .refine(isValidSin, t('apply:applicant-information.error-message.sin-valid'))
       .transform((sin) => formatSin(sin, '')),
     firstName: z.string().trim().min(1, t('apply:applicant-information.error-message.first-name-required')).max(100),
     lastName: z.string().trim().min(1, t('apply:applicant-information.error-message.last-name-required')).max(100),

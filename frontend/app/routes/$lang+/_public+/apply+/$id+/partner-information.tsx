@@ -101,7 +101,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         .string()
         .trim()
         .min(1, t('apply:partner-information.error-message.sin-required'))
-        .refine(isValidSin, t('apply:partner-information.error-message.sin-required'))
+        .refine(isValidSin, t('apply:partner-information.error-message.sin-valid'))
         .refine((sin) => sin !== state.applicantInformation?.socialInsuranceNumber, t('apply:partner-information.error-message.sin-unique')),
     })
     .superRefine((val, ctx) => {

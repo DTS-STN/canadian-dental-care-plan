@@ -16,7 +16,8 @@
       "first-name-required": "Entrez le prénom",
       "last-name-required": "Entrez le nom de famille",
       "marital-status-required": "Sélectionnez l'état civil",
-      "sin-required": "Entrez un NAS de 9 chiffres"
+      "sin-required": "Entrez un NAS de 9 chiffres",
+      "sin-valid": "Le NAS doit être valide"
     }
   },
   "communication-preference": {
@@ -277,6 +278,7 @@
       "first-name-required": "Entrez le prénom",
       "last-name-required": "Entrez le nom de famille",
       "sin-required": "Entrez un NAS de 9 chiffres",
+      "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
     }
   },
