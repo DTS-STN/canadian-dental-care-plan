@@ -55,7 +55,7 @@ export interface ButtonLinkProps extends ComponentProps<typeof AppLink> {
  * Disabling a link
  * @see https://www.scottohara.me/blog/2021/05/28/disabled-links.html
  */
-const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(({ children, className, disabled, pill, size = 'base', to, variant = 'default', ...props }, ref) => {
+const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(({ children, className, disabled, pill, size = 'base', routeId, to, variant = 'default', ...props }, ref) => {
   const disabledClassName = 'pointer-events-none cursor-not-allowed opacity-70';
   const buttonLinkClassName = cn(baseClassName, sizes[size], variants[variant], pill && 'rounded-full', className);
 
@@ -68,7 +68,7 @@ const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(({ children, c
   }
 
   return (
-    <AppLink className={buttonLinkClassName} to={to} {...props} ref={ref}>
+    <AppLink className={buttonLinkClassName} routeId={routeId} to={to} {...props} ref={ref}>
       {children}
     </AppLink>
   );
