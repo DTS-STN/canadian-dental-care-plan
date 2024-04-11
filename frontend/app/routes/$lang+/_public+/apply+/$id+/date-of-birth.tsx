@@ -12,9 +12,10 @@ import { z } from 'zod';
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { DatePickerField } from '~/components/date-picker-field';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { Progress } from '~/components/progress';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -53,14 +54,6 @@ export async function action({ context: { session }, params, request }: ActionFu
   const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  // state validation schema
-  const dateOfBirthSchema: z.ZodType<DateOfBirthState> = z
-    .string()
-    .trim()
-    .min(1, { message: t('apply:eligibility.date-of-birth.error-message.date-of-birth-required-and-valid') })
-    .refine((val) => isValid(parse(val, 'yyyy-MM-dd', new Date())), { message: t('apply:eligibility.date-of-birth.error-message.date-of-birth-required-and-valid') })
-    .refine((val) => isPast(parse(val, 'yyyy-MM-dd', new Date())), { message: t('apply:eligibility.date-of-birth.error-message.date-of-birth-is-past') });
-
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
   const submittedCsrfToken = String(formData.get('_csrf'));
@@ -70,16 +63,77 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const data = String(formData.get('dateOfBirth') ?? '');
+  const dateOfBirthSchema = z
+    .object({
+      dateOfBirthYear: z
+        .number({
+          required_error: t('apply:eligibility.date-of-birth.error-message.date-of-birth-year-required'),
+          invalid_type_error: t('apply:eligibility.date-of-birth.error-message.date-of-birth-year-number'),
+        })
+        .int()
+        .positive(),
+      dateOfBirthMonth: z
+        .number({
+          required_error: t('apply:eligibility.date-of-birth.error-message.date-of-birth-month-required'),
+        })
+        .int()
+        .positive(),
+      dateOfBirthDay: z
+        .number({
+          required_error: t('apply:eligibility.date-of-birth.error-message.date-of-birth-day-required'),
+          invalid_type_error: t('apply:eligibility.date-of-birth.error-message.date-of-birth-day-number'),
+        })
+        .int()
+        .positive(),
+      dateOfBirth: z.string(),
+    })
+    .superRefine((val, ctx) => {
+      // At this point the year, month and day should have been validated as positive integer
+      const parseDateOfBirthString = parseDateString(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
+      const dateOfBirth = `${parseDateOfBirthString.year}-${parseDateOfBirthString.month}-${parseDateOfBirthString.day}`;
+
+      if (!isValid(parse(dateOfBirth, 'yyyy-MM-dd', new Date()))) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t('apply:eligibility.date-of-birth.error-message.date-of-birth-valid'),
+          path: ['dateOfBirth'],
+        });
+      } else if (!isPast(parse(dateOfBirth, 'yyyy-MM-dd', new Date()))) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t('apply:eligibility.date-of-birth.error-message.date-of-birth-is-past'),
+          path: ['dateOfBirth'],
+        });
+      }
+    })
+    .transform((val) => {
+      // At this point the year, month and day should have been validated as positive integer
+      const parseDateOfBirthString = parseDateString(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
+      return {
+        ...val,
+        dateOfBirth: `${parseDateOfBirthString.year}-${parseDateOfBirthString.month}-${parseDateOfBirthString.day}`,
+      };
+    });
+
+  const dateOfBirthYear = formData.get('dateOfBirthYear') ? Number(formData.get('dateOfBirthYear')) : undefined;
+  const dateOfBirthMonth = formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined;
+  const dateOfBirthDay = formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined;
+  const data = {
+    dateOfBirthYear,
+    dateOfBirthMonth,
+    dateOfBirthDay,
+    dateOfBirth: `${dateOfBirthYear}-${dateOfBirthMonth}-${dateOfBirthDay}`,
+  };
+
   const parsedDataResult = dateOfBirthSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  await applyRouteHelpers.saveState({ params, request, session, state: { dateOfBirth: parsedDataResult.data } });
+  await applyRouteHelpers.saveState({ params, request, session, state: { dateOfBirth: parsedDataResult.data.dateOfBirth } });
 
-  const parseDateOfBirth = parse(parsedDataResult.data, 'yyyy-MM-dd', new Date());
+  const parseDateOfBirth = parse(parsedDataResult.data.dateOfBirth, 'yyyy-MM-dd', new Date());
   const age = differenceInYears(new Date(), parseDateOfBirth);
 
   if (age < 65) {
@@ -102,20 +156,20 @@ export default function ApplyFlowDateOfBirth() {
   const errorSummaryId = 'error-summary';
 
   // Keys order should match the input IDs order.
-  const errorMessages = useMemo(
-    () => ({
-      'date-picker-date-of-birth-month': fetcher.data?.errors._errors[0],
-    }),
-    [fetcher.data?.errors._errors],
-  );
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
+  const errorSummaryItems = useMemo(() => {
+    const items: ErrorSummaryItem[] = [];
+    if (fetcher.data?.errors.dateOfBirth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', fetcher.data.errors.dateOfBirth._errors[0]));
+    if (fetcher.data?.errors.dateOfBirthMonth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', fetcher.data.errors.dateOfBirthMonth._errors[0]));
+    if (fetcher.data?.errors.dateOfBirthDay?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', fetcher.data.errors.dateOfBirthDay._errors[0]));
+    if (fetcher.data?.errors.dateOfBirthYear?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-year', fetcher.data.errors.dateOfBirthYear._errors[0]));
+    return items;
+  }, [fetcher.data?.errors.dateOfBirth?._errors, fetcher.data?.errors.dateOfBirthDay?._errors, fetcher.data?.errors.dateOfBirthMonth?._errors, fetcher.data?.errors.dateOfBirthYear?._errors]);
 
   useEffect(() => {
-    if (hasErrors(errorMessages)) {
+    if (errorSummaryItems.length > 0) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
-  }, [errorMessages]);
+  }, [errorSummaryItems]);
 
   return (
     <>
@@ -130,7 +184,23 @@ export default function ApplyFlowDateOfBirth() {
         <p className="mb-6">{t('apply:eligibility.date-of-birth.description')}</p>
         <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <DatePickerField id="date-of-birth" name="dateOfBirth" defaultValue={defaultState ?? ''} legend={t('apply:eligibility.date-of-birth.form-instructions')} required errorMessage={errorMessages['date-picker-date-of-birth-month']} />
+          <DatePickerField
+            id="date-of-birth"
+            names={{
+              day: 'dateOfBirthDay',
+              month: 'dateOfBirthMonth',
+              year: 'dateOfBirthYear',
+            }}
+            defaultValue={defaultState ?? ''}
+            legend={t('apply:eligibility.date-of-birth.form-instructions')}
+            required
+            errorMessages={{
+              all: fetcher.data?.errors.dateOfBirth?._errors[0],
+              year: fetcher.data?.errors.dateOfBirthYear?._errors[0],
+              month: fetcher.data?.errors.dateOfBirthMonth?._errors[0],
+              day: fetcher.data?.errors.dateOfBirthDay?._errors[0],
+            }}
+          />
 
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">

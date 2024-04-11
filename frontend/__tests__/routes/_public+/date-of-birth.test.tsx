@@ -71,8 +71,12 @@ describe('_public.apply.id.date-of-birth', () => {
       });
 
       const data = await response.json();
+      console.log({ errors: data.errors.dateOfBirthYear?._errors });
       expect(response.status).toBe(200);
-      expect(data.errors._errors.length).toBeGreaterThan(0);
+      expect(data.errors.dateOfBirth).toEqual(undefined);
+      expect(data.errors.dateOfBirthYear?._errors.length).toBeGreaterThan(0);
+      expect(data.errors.dateOfBirthMonth?._errors.length).toBeGreaterThan(0);
+      expect(data.errors.dateOfBirthDay?._errors.length).toBeGreaterThan(0);
     });
 
     it('should redirect to applicant information page if dob is 65 years or over', async () => {
@@ -81,7 +85,9 @@ describe('_public.apply.id.date-of-birth', () => {
 
       const formData = new FormData();
       formData.append('_csrf', 'csrfToken');
-      formData.append('dateOfBirth', '1959-01-01');
+      formData.append('dateOfBirthYear', '1959');
+      formData.append('dateOfBirthMonth', '01');
+      formData.append('dateOfBirthDay', '01');
 
       vi.mocked(isValid).mockReturnValueOnce(true);
       vi.mocked(isPast).mockReturnValueOnce(true);
@@ -104,7 +110,9 @@ describe('_public.apply.id.date-of-birth', () => {
 
       const formData = new FormData();
       formData.append('_csrf', 'csrfToken');
-      formData.append('dateOfBirth', '2000-01-01');
+      formData.append('dateOfBirthYear', '2000');
+      formData.append('dateOfBirthMonth', '01');
+      formData.append('dateOfBirthDay', '01');
 
       vi.mocked(isValid).mockReturnValueOnce(true);
       vi.mocked(isPast).mockReturnValueOnce(true);

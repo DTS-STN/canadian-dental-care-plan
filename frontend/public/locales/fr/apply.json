@@ -194,8 +194,13 @@
       "description": "Les demandes au titre du Régime canadien de soins dentaires (RCSD) seront traitées par étapes. Votre date de naissance détermine le moment où vous pouvez présenter une demande.",
       "form-instructions": "Veuillez entrer votre date de naissance",
       "error-message": {
+        "date-of-birth-day-number": "Le jour doit être un nombre",
+        "date-of-birth-day-required": "La date de naissance doit inclure un jour",
         "date-of-birth-is-past": "La date de naissance doit être dans le passé",
-        "date-of-birth-required-and-valid": "La date de naissance est requise et doit être une date valide"
+        "date-of-birth-month-required": "La date de naissance doit inclure un mois",
+        "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisi",
+        "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
+        "date-of-birth-year-required": "La date de naissance doit inclure une année"
       },
       "back-btn": "Retour",
       "continue-btn": "Continuer",
@@ -261,8 +266,13 @@
     "save-btn": "Enregistrer",
     "error-message": {
       "confirm-required": "La case à cocher doit être sélectionnée",
+      "date-of-birth-day-number": "Le jour doit être un nombre",
+      "date-of-birth-day-required": "La date de naissance doit inclure un jour",
       "date-of-birth-is-past": "La date de naissance doit être dans le passé",
-      "date-of-birth-required-and-valid": "La date de naissance est requise et doit être une date valide",
+      "date-of-birth-month-required": "La date de naissance doit inclure un mois",
+      "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisi",
+      "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
+      "date-of-birth-year-required": "La date de naissance doit inclure une année",
       "first-name-required": "Entrez le prénom",
       "last-name-required": "Entrez le nom de famille",
       "sin-required": "Entrez un NAS de 9 chiffres",

@@ -1,4 +1,4 @@
-import { ChangeEvent, ReactNode, useCallback, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -15,34 +15,42 @@ const inputBaseClassName = 'block rounded-lg focus:border-blue-300 focus:outline
 const inputDisabledClassName = 'disable:bg-gray-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
 const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
-function toDateStringOrEmpty({ year, month, day }: { year?: string; month?: string; day?: string }) {
-  if (!year || !month || !day) return '';
-  return `${year}-${month}-${day}`;
-}
-
 export interface DatePickerFieldProps {
   defaultValue: string;
   disabled?: boolean;
-  errorMessage?: string;
+  errorMessages?: {
+    all?: string;
+    day?: string;
+    month?: string;
+    year?: string;
+  };
   helpMessagePrimary?: React.ReactNode;
   helpMessagePrimaryClassName?: string;
   helpMessageSecondary?: React.ReactNode;
   helpMessageSecondaryClassName?: string;
   id: string;
   legend: ReactNode;
-  name: string;
+  names: {
+    day: string;
+    month: string;
+    year: string;
+  };
   required?: boolean;
 }
 
-export const DatePickerField = ({ defaultValue, disabled, errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, name, required }: DatePickerFieldProps) => {
+export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, names, required }: DatePickerFieldProps) => {
   const { i18n, t } = useTranslation(['gcweb']);
-  const [value, setValue] = useState(parseDateString(defaultValue));
+  const [value] = useState(parseDateString(defaultValue));
 
-  const inputErrorId = `date-picker-${id}-error`;
-  const inputHelpMessagePrimaryId = `date-picker-${id}-help-primary`;
-  const inputHelpMessageSecondaryId = `date-picker-${id}-help-secondary`;
-  const inputLegendId = `date-picker-${id}-legend`;
   const inputWrapperId = `date-picker-${id}`;
+  const inputErrorId = `${inputWrapperId}-error`;
+  const inputErrorIdAll = `${inputErrorId}-all`;
+  const inputErrorIdMonth = `${inputErrorId}-month`;
+  const inputErrorIdDay = `${inputErrorId}-day`;
+  const inputErrorIdYear = `${inputErrorId}-year`;
+  const inputHelpMessagePrimaryId = `${inputWrapperId}-help-primary`;
+  const inputHelpMessageSecondaryId = `${inputWrapperId}-help-secondary`;
+  const inputLegendId = `${inputWrapperId}-legend`;
 
   const getAriaDescribedBy = useCallback(() => {
     const ariaDescribedby = [inputLegendId];
@@ -51,90 +59,118 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessage, helpMess
     return ariaDescribedby.join(' ');
   }, [helpMessagePrimary, helpMessageSecondary, inputHelpMessagePrimaryId, inputHelpMessageSecondaryId, inputLegendId]);
 
-  const handleOnYearChange = useCallback((val: string) => {
-    setValue((prev) => ({ ...prev, year: val }));
-  }, []);
-
-  const handleOnMonthChange = useCallback((val: string) => {
-    setValue((prev) => ({ ...prev, month: val }));
-  }, []);
-
-  const handleOnDayChange = useCallback((val: string) => {
-    setValue((prev) => ({ ...prev, day: val }));
-  }, []);
+  const getAriaErrorMessageYear = useCallback(() => {
+    const ariaDescribedby = [];
+    if (errorMessages?.all) ariaDescribedby.push(inputErrorIdAll);
+    if (errorMessages?.year) ariaDescribedby.push(inputErrorIdMonth);
+    return ariaDescribedby.length > 0 ? ariaDescribedby.join(' ') : undefined;
+  }, [errorMessages?.all, errorMessages?.year, inputErrorIdAll, inputErrorIdMonth]);
 
   const datePickerYear = useMemo(
     () => (
       <DatePickerYear
         id={id}
         defaultValue={value.year ?? ''}
-        onChange={handleOnYearChange}
+        name={names.year}
         label={t('gcweb:date-picker.year.label')}
         placeholder={t('gcweb:date-picker.year.placeholder')}
         className="w-full sm:w-32"
         ariaDescribedBy={getAriaDescribedBy()}
-        ariaErrorMessage={errorMessage && inputErrorId}
+        ariaErrorMessage={getAriaErrorMessageYear()}
         required={required}
         disabled={disabled}
       />
     ),
-    [disabled, errorMessage, getAriaDescribedBy, handleOnYearChange, id, inputErrorId, required, t, value.year],
+    [disabled, getAriaDescribedBy, getAriaErrorMessageYear, id, names.year, required, t, value.year],
   );
+
+  const getAriaErrorMessageMonth = useCallback(() => {
+    const ariaDescribedby = [];
+    if (errorMessages?.all) ariaDescribedby.push(inputErrorIdAll);
+    if (errorMessages?.month) ariaDescribedby.push(inputErrorIdMonth);
+    return ariaDescribedby.length > 0 ? ariaDescribedby.join(' ') : undefined;
+  }, [errorMessages?.all, errorMessages?.month, inputErrorIdAll, inputErrorIdMonth]);
+
   const datePickerMonth = useMemo(
     () => (
       <DatePickerMonth
         id={id}
         defaultValue={value.month ?? ''}
-        onChange={handleOnMonthChange}
+        name={names.month}
         label={t('gcweb:date-picker.month.label')}
         placeholder={t('gcweb:date-picker.month.placeholder')}
         className="w-full sm:w-auto"
         ariaDescribedBy={getAriaDescribedBy()}
-        ariaErrorMessage={errorMessage && inputErrorId}
+        ariaErrorMessage={getAriaErrorMessageMonth()}
         required={required}
         disabled={disabled}
       />
     ),
-    [disabled, errorMessage, getAriaDescribedBy, handleOnMonthChange, id, inputErrorId, required, t, value.month],
+    [disabled, getAriaDescribedBy, getAriaErrorMessageMonth, id, names.month, required, t, value.month],
   );
+
+  const getAriaErrorMessageDay = useCallback(() => {
+    const ariaDescribedby = [];
+    if (errorMessages?.all) ariaDescribedby.push(inputErrorIdAll);
+    if (errorMessages?.day) ariaDescribedby.push(inputErrorIdDay);
+    return ariaDescribedby.length > 0 ? ariaDescribedby.join(' ') : undefined;
+  }, [errorMessages?.all, errorMessages?.day, inputErrorIdAll, inputErrorIdDay]);
 
   const datePickerDay = useMemo(
     () => (
       <DatePickerDay
         id={id}
         defaultValue={value.day ?? ''}
-        onChange={handleOnDayChange}
+        name={names.day}
         label={t('gcweb:date-picker.day.label')}
         placeholder={t('gcweb:date-picker.day.placeholder')}
         className="w-full sm:w-20"
         ariaDescribedBy={getAriaDescribedBy()}
-        ariaErrorMessage={errorMessage && inputErrorId}
+        ariaErrorMessage={getAriaErrorMessageDay()}
         required={required}
         disabled={disabled}
       />
     ),
-    [disabled, errorMessage, getAriaDescribedBy, handleOnDayChange, id, inputErrorId, required, t, value.day],
+    [disabled, getAriaDescribedBy, getAriaErrorMessageDay, id, names.day, required, t, value.day],
   );
-
-  function getHiddenValue() {
-    const inputsValue = toDateStringOrEmpty(value);
-    const parsedDate = parseDateString(inputsValue);
-    return toDateStringOrEmpty(parsedDate);
-  }
 
   return (
     <div id={inputWrapperId} data-testid="date-picker-field">
       <fieldset>
-        <input type="hidden" id={id} name={name} value={getHiddenValue()} />
         <InputLegend id={inputLegendId} required={required} className="mb-2">
           {legend}
         </InputLegend>
-        {errorMessage && (
-          <p className="mb-2">
-            <InputError id={inputErrorId} data-testid="date-picker-error">
-              {errorMessage}
-            </InputError>
-          </p>
+        {errorMessages && (
+          <div className="mb-2 space-y-2">
+            {errorMessages.all && (
+              <p>
+                <InputError id={inputErrorIdAll} data-testid="date-picker-error-all">
+                  {errorMessages.all}
+                </InputError>
+              </p>
+            )}
+            {errorMessages.month && (
+              <p>
+                <InputError id={inputErrorIdMonth} data-testid="date-picker-error-month">
+                  {errorMessages.month}
+                </InputError>
+              </p>
+            )}
+            {errorMessages.day && (
+              <p>
+                <InputError id={inputErrorIdDay} data-testid="date-picker-error-day">
+                  {errorMessages.day}
+                </InputError>
+              </p>
+            )}
+            {errorMessages.year && (
+              <p>
+                <InputError id={inputErrorIdYear} data-testid="date-picker-error-year">
+                  {errorMessages.year}
+                </InputError>
+              </p>
+            )}
+          </div>
         )}
         {helpMessagePrimary && (
           <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="date-picker-help-primary">
@@ -174,12 +210,12 @@ interface DatePickerMonthProps {
   disabled?: boolean;
   id: string;
   label: string;
-  onChange: (value: string) => void;
+  name: string;
   placeholder: string;
   required?: boolean;
 }
 
-function DatePickerMonth({ ariaDescribedBy, ariaErrorMessage, className, defaultValue, disabled, id, label, onChange, placeholder, required }: DatePickerMonthProps) {
+function DatePickerMonth({ ariaDescribedBy, ariaErrorMessage, className, defaultValue, disabled, id, label, name, placeholder, required }: DatePickerMonthProps) {
   const { i18n } = useTranslation(['gcweb']);
   const months = useMonths(i18n.language);
 
@@ -187,10 +223,6 @@ function DatePickerMonth({ ariaDescribedBy, ariaErrorMessage, className, default
   const wrapperId = `date-picker-${id}-month-wrapper`;
   const inputLabelId = `date-picker-${id}-month-label`;
   const inputOptionUnselectedId = `date-picker-${id}-month-option-unselected`;
-
-  function handleOnChange(event: ChangeEvent<HTMLSelectElement>) {
-    onChange(event.target.value);
-  }
 
   return (
     <div id={wrapperId} data-testid="date-picker-month">
@@ -208,7 +240,7 @@ function DatePickerMonth({ ariaDescribedBy, ariaErrorMessage, className, default
         defaultValue={defaultValue}
         disabled={disabled}
         id={selectId}
-        onChange={handleOnChange}
+        name={name}
         required={required}
       >
         <InputOption id={inputOptionUnselectedId} value="" disabled hidden>
@@ -234,19 +266,15 @@ interface DatePickerYearProps {
   disabled?: boolean;
   id: string;
   label: string;
-  onChange: (value: string) => void;
+  name: string;
   placeholder: string;
   required?: boolean;
 }
 
-function DatePickerYear({ ariaDescribedBy, ariaErrorMessage, className, defaultValue, disabled, id, label, onChange, placeholder, required }: DatePickerYearProps) {
+function DatePickerYear({ ariaDescribedBy, ariaErrorMessage, className, defaultValue, disabled, id, label, name, placeholder, required }: DatePickerYearProps) {
   const inputId = `date-picker-${id}-year`;
   const wrapperId = `date-picker-${id}-year-wrapper`;
   const inputLabelId = `date-picker-${id}-year-label`;
-
-  function handleOnChange(event: ChangeEvent<HTMLInputElement>) {
-    onChange(event.target.value);
-  }
 
   return (
     <div id={wrapperId} data-testid="date-picker-year">
@@ -265,7 +293,7 @@ function DatePickerYear({ ariaDescribedBy, ariaErrorMessage, className, defaultV
         disabled={disabled}
         id={inputId}
         min={1900}
-        onChange={handleOnChange}
+        name={name}
         placeholder={placeholder}
         required={required}
         type="number"
@@ -282,19 +310,15 @@ interface DatePickerDayProps {
   disabled?: boolean;
   id: string;
   label: string;
-  onChange: (value: string) => void;
+  name: string;
   placeholder: string;
   required?: boolean;
 }
 
-function DatePickerDay({ ariaDescribedBy, ariaErrorMessage, className, defaultValue, disabled, id, label, onChange, placeholder, required }: DatePickerDayProps) {
+function DatePickerDay({ ariaDescribedBy, ariaErrorMessage, className, defaultValue, disabled, id, label, name, placeholder, required }: DatePickerDayProps) {
   const inputId = `date-picker-${id}-day`;
   const wrapperId = `date-picker-${id}-day-wrapper`;
   const inputLabelId = `date-picker-${id}-day-label`;
-
-  function handleOnChange(event: ChangeEvent<HTMLInputElement>) {
-    onChange(event.target.value);
-  }
 
   return (
     <div id={wrapperId} data-testid="date-picker-day">
@@ -314,7 +338,7 @@ function DatePickerDay({ ariaDescribedBy, ariaErrorMessage, className, defaultVa
         id={inputId}
         max={31}
         min={1}
-        onChange={handleOnChange}
+        name={name}
         placeholder={placeholder}
         required={required}
         type="number"
