@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fluentd-archiver
+  labels:
+    app.kubernetes.io/name: fluentd-archiver
+spec:
+  ports:
+    - name: fluentd
+      port: 24224
+      targetPort: fluentd
+  selector:
+    app.kubernetes.io/name: fluentd-archiver
