@@ -103,7 +103,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   return json({
     status: {
       ...(clientFriendlyStatus ?? {}),
-      alertType: statusId ? (clientFriendlyStatus?.id === CLIENT_STATUS_SUCCESS_ID ? 'success' : 'info') : 'warning',
+      alertType: statusId ? (clientFriendlyStatus?.id === CLIENT_STATUS_SUCCESS_ID ? 'success' : 'info') : 'danger',
     },
     statusId,
   } as const);
