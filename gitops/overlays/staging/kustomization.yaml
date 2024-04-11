@@ -16,7 +16,10 @@ labels:
 resources:
   - ../../base/frontend/
   - ../../base/redis/
+  - ./deployments.yaml
   - ./ingresses.yaml
+  - ./pvcs.yaml
+  - ./services.yaml
 patches:
   - path: ./patches/deployments.yaml
   - path: ./patches/services.yaml
@@ -26,6 +29,10 @@ configMapGenerator:
     behavior: merge
     envs:
       - ./configs/frontend/config.conf
+  - name: frontend-fluentd
+    behavior: create
+    files:
+      - ./configs/frontend/fluentd.conf
   - name: redis
     behavior: merge
     files:
@@ -35,6 +42,10 @@ configMapGenerator:
     behavior: create
     files:
       - ./configs/oauth-proxy/config.conf
+  - name: fluentd-archiver
+    behavior: create
+    files:
+      - ./configs/fluentd-archiver/fluentd.conf
 secretGenerator:
   - name: frontend
     behavior: replace
