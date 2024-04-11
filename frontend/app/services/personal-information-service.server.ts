@@ -1,202 +1,13 @@
 import moize from 'moize';
-import { z } from 'zod';
 
-import { getAuditService } from '~/services/audit-service.server';
-import { getInstrumentationService } from '~/services/instrumentation-service.server';
+import { getAuditService } from './audit-service.server';
+import { getInstrumentationService } from './instrumentation-service.server';
+import { toPersonalInformation, toPersonalInformationApi } from '~/mappers/personal-information-service-mappers.server';
+import { PersonalInfo, personalInformationApiSchema } from '~/schemas/personal-informaton-service-schemas.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('personal-information-service.server');
-
-const personalInformationApiResponseSchema = z.object({
-  BenefitApplication: z.object({
-    Applicant: z
-      .object({
-        ApplicantCategoryCode: z.object({
-          ReferenceDataID: z.string().optional(),
-          ReferenceDataName: z.string().optional(),
-        }),
-        ClientIdentification: z
-          .object({
-            IdentificationID: z.string().optional(),
-            IdentificationCategoryText: z.string().optional(),
-          })
-          .array()
-          .optional(),
-        PersonBirthDate: z.object({
-          dateTime: z.coerce.date().optional(),
-        }),
-        PersonContactInformation: z
-          .object({
-            EmailAddress: z
-              .object({
-                EmailAddressID: z.string().optional(),
-              })
-              .array(),
-            TelephoneNumber: z
-              .object({
-                FullTelephoneNumber: z.object({
-                  TelephoneNumberFullID: z.string().optional(),
-                }),
-                TelephoneNumberCategoryCode: z.object({
-                  ReferenceDataName: z.string().optional(),
-                  ReferenceDataID: z.string().optional(),
-                }),
-              })
-              .array(),
-
-            Address: z
-              .object({
-                AddressCategoryCode: z.object({
-                  ReferenceDataID: z.string().optional(),
-                  ReferenceDataName: z.string().optional(),
-                }),
-                AddressStreet: z.object({
-                  StreetName: z.string().optional(),
-                }),
-                AddressSecondaryUnitText: z.string().optional(),
-                AddressCityName: z.string().optional(),
-                AddressProvince: z.object({
-                  ProvinceName: z.string().optional(),
-                  ProvinceCode: z.object({
-                    ReferenceDataID: z.string().optional(),
-                    ReferenceDataName: z.string().optional(),
-                  }),
-                }),
-                AddressCountry: z.object({
-                  CountryCode: z.object({
-                    ReferenceDataID: z.string().optional(),
-                    ReferenceDataName: z.string().optional(),
-                  }),
-                }),
-                AddressPostalCode: z.string().optional(),
-              })
-              .array(),
-          })
-          .optional()
-          .array(),
-        PersonMaritalStatus: z.object({
-          StatusCode: z.object({
-            ReferenceDataID: z.string().optional(),
-            ReferenceDataName: z.string().optional(),
-          }),
-        }),
-        PersonName: z
-          .object({
-            PersonSurName: z.string().optional(),
-            PersonGivenName: z.string().array().optional(),
-          })
-          .array()
-          .optional(),
-        RelatedPerson: z
-          .object({
-            PersonBirthDate: z.string().optional(),
-            PersonName: z
-              .object({
-                PersonSurName: z.string().optional(),
-                PersonGivenName: z.string().array().optional(),
-              })
-              .optional(),
-            PersonRelationshipCode: z
-              .object({
-                ReferenceDataID: z.string().optional(),
-                ReferenceDataName: z.string().optional(),
-              })
-              .optional(),
-            PersonSINIdentification: z
-              .object({
-                IdentificationID: z.string(),
-                IdentificationCategoryText: z.string().optional(),
-              })
-              .optional(),
-          })
-          .optional(),
-        PersonSINIdentification: z.object({
-          IdentificationID: z.string(),
-          IdentificationCategoryText: z.string().optional(),
-        }),
-        MailingSameAsHomeIndicator: z.boolean().optional(),
-        PreferredMethodCommunicationCode: z
-          .object({
-            ReferenceDataID: z.string().optional(),
-          })
-          .optional(),
-      })
-      .optional(),
-    BenefitApplicationIdentification: z
-      .object({
-        IdentificationID: z.string(),
-        IdentificationCategoryText: z.string().optional(),
-      })
-      .array()
-      .optional(),
-    BenefitApplicationChannelCode: z
-      .object({
-        ReferenceDataID: z.string().optional(),
-        ReferenceDataName: z.string().optional(),
-      })
-      .optional(),
-    BenefitApplicationYear: z
-      .object({
-        BenefitApplicationYearIdentification: z.object({
-          IdentificationID: z.string(),
-          IdentificationCategoryText: z.string().optional(),
-        }),
-      })
-      .optional(),
-    InsurancePlan: z
-      .object({
-        InsurancePlanIdentification: z.object({
-          IdentificationID: z.string(),
-          IdentificationCategoryText: z.string().optional(),
-        }),
-      })
-      .optional(),
-    PrivateDentalInsuranceIndicator: z.boolean().optional(),
-    FederalDentalCoverageIndicator: z.boolean().optional(),
-    ProvicialDentalCoverageIndicator: z.boolean().optional(),
-  }),
-});
-
-type PersonalInformationApiResponse = z.infer<typeof personalInformationApiResponseSchema>;
-
-const personalInfoDtoSchema = z.object({
-  applicantCategoryCode: z.string().optional(),
-  applictantId: z.string().optional(),
-  clientId: z.string().optional(),
-  clientNumber: z.string().optional(),
-  birthDate: z.coerce.date().optional(),
-  lastName: z.string().optional(),
-  firstName: z.string().optional(),
-  homeAddress: z
-    .object({
-      streetName: z.string().optional(),
-      secondAddressLine: z.string().optional(),
-      cityName: z.string().optional(),
-      provinceTerritoryStateId: z.string().optional(),
-      countryId: z.string().optional(),
-      postalCode: z.string().optional(),
-    })
-    .optional(),
-  mailingAddress: z
-    .object({
-      streetName: z.string().optional(),
-      secondAddressLine: z.string().optional(),
-      cityName: z.string().optional(),
-      provinceTerritoryStateId: z.string().optional(),
-      countryId: z.string().optional(),
-      postalCode: z.string().optional(),
-    })
-    .optional(),
-  homeAndMailingAddressTheSame: z.boolean().optional(),
-  emailAddress: z.string().optional(),
-  maritalStatusId: z.string().optional(),
-  primaryTelephoneNumber: z.string().optional(),
-  alternateTelephoneNumber: z.string().optional(),
-  preferredLanguageId: z.string().optional(),
-});
-
-export type PersonalInfo = z.infer<typeof personalInfoDtoSchema>;
 
 /**
  * Return a singleton instance (by means of memomization) of the personal-information service.
@@ -217,8 +28,8 @@ function createPersonalInformationService() {
     return { Applicant: { PersonSINIdentification: { IdentificationID: personalSinId } } };
   }
 
-  async function getPersonalInformation(personalSinId: string, userId: string) {
-    const curentPersonalInformation = createClientInfo(personalSinId);
+  async function getPersonalInformation(sin: string, userId: string) {
+    const curentPersonalInformation = createClientInfo(sin);
     const url = `${INTEROP_APPLICANT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant/`;
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
@@ -237,7 +48,7 @@ function createPersonalInformationService() {
     instrumentationService.countHttpStatus('http.client.interop-api.applicant.posts', response.status);
 
     if (response.status === 200) {
-      return toPersonalInformation(personalInformationApiResponseSchema.parse(await response.json()));
+      return toPersonalInformation(personalInformationApiSchema.parse(await response.json()));
     }
     if (response.status === 204) {
       return null;
@@ -254,49 +65,38 @@ function createPersonalInformationService() {
     throw new Error(`Failed to fetch data. address: ${response.status}, Status Text: ${response.statusText}`);
   }
 
-  function toPersonalInformation(personalInformationApiResponse: PersonalInformationApiResponse): PersonalInfo {
-    const addressList = personalInformationApiResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.Address;
-    const homeAddressList = addressList?.filter((address) => address.AddressCategoryCode.ReferenceDataName === 'Home');
-    const mailingAddressList = addressList?.filter((address) => address.AddressCategoryCode.ReferenceDataName === 'Mailing');
+  async function updatePersonalInformation(sin: string, newPersonalInformation: PersonalInfo) {
+    const personalInformationApi = toPersonalInformationApi(newPersonalInformation);
 
-    return {
-      applicantCategoryCode: personalInformationApiResponse.BenefitApplication.Applicant?.ApplicantCategoryCode.ReferenceDataID,
-      applictantId: personalInformationApiResponse.BenefitApplication.Applicant?.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Applicant ID').at(0)?.IdentificationID,
-      clientId: personalInformationApiResponse.BenefitApplication.Applicant?.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Client ID').at(0)?.IdentificationID,
-      clientNumber: personalInformationApiResponse.BenefitApplication.Applicant?.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Client Number').at(0)?.IdentificationID,
-      birthDate: personalInformationApiResponse.BenefitApplication.Applicant?.PersonBirthDate.dateTime,
-      firstName: personalInformationApiResponse.BenefitApplication.Applicant?.PersonName?.at(0)?.PersonGivenName?.at(0),
-      lastName: personalInformationApiResponse.BenefitApplication.Applicant?.PersonName?.at(0)?.PersonSurName,
-      emailAddress: personalInformationApiResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.EmailAddress.at(0)?.EmailAddressID,
-      maritalStatusId: personalInformationApiResponse.BenefitApplication.Applicant?.PersonMaritalStatus.StatusCode.ReferenceDataID,
-      homeAddress: homeAddressList
-        ?.map((aHomeAddress) => ({
-          streetName: aHomeAddress.AddressStreet.StreetName,
-          secondAddressLine: aHomeAddress.AddressSecondaryUnitText,
-          cityName: aHomeAddress.AddressCityName,
-          provinceTerritoryStateId: aHomeAddress.AddressProvince.ProvinceCode.ReferenceDataID,
-          countryId: aHomeAddress.AddressCountry.CountryCode.ReferenceDataID,
-          postalCode: aHomeAddress.AddressPostalCode,
-        }))
-        .at(0),
-      mailingAddress: mailingAddressList
-        ?.map((aMailingAddress) => ({
-          streetName: aMailingAddress.AddressStreet.StreetName,
-          secondAddressLine: aMailingAddress.AddressSecondaryUnitText,
-          cityName: aMailingAddress.AddressCityName,
-          provinceTerritoryStateId: aMailingAddress.AddressProvince.ProvinceCode.ReferenceDataID,
-          countryId: aMailingAddress.AddressCountry.CountryCode.ReferenceDataID,
-          postalCode: aMailingAddress.AddressPostalCode,
-        }))
-        .at(0),
+    const personalInformationApiRequest = await personalInformationApiSchema.safeParseAsync(personalInformationApi);
 
-      primaryTelephoneNumber: personalInformationApiResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.TelephoneNumber.find((phoneNumber) => phoneNumber.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary')?.FullTelephoneNumber
-        .TelephoneNumberFullID,
-      alternateTelephoneNumber: personalInformationApiResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.TelephoneNumber.find((phoneNumber) => phoneNumber.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate')
-        ?.FullTelephoneNumber.TelephoneNumberFullID,
-      preferredLanguageId: personalInformationApiResponse.BenefitApplication.Applicant?.PreferredMethodCommunicationCode?.ReferenceDataID,
-    };
+    if (!personalInformationApiRequest.success) {
+      throw new Error(`Invalid persional information update request: ${personalInformationApiRequest.error}`);
+    }
+
+    const url = `${INTEROP_APPLICANT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant/${sin}`;
+
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': INTEROP_APPLICANT_API_SUBSCRIPTION_KEY ?? INTEROP_API_SUBSCRIPTION_KEY,
+      },
+      body: JSON.stringify(personalInformationApiRequest.data),
+    });
+
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed to update data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
   }
 
-  return { getPersonalInformation };
+  return { getPersonalInformation, updatePersonalInformation };
 }

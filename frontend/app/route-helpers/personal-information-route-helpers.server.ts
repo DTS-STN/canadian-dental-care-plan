@@ -1,7 +1,8 @@
 import { Session, redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
 
-import { PersonalInfo, getPersonalInformationService } from '~/services/personal-information-service.server';
+import { PersonalInfo } from '~/schemas/personal-informaton-service-schemas.server';
+import { getPersonalInformationService } from '~/services/personal-information-service.server';
 import { getLogger } from '~/utils/logging.server';
 import { UserinfoToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
