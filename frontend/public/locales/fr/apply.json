@@ -317,7 +317,7 @@
       "postal-code-required": "Entrez un code postal ou un code postal américain",
       "postal-code-valid": "Entrez un code postal dans le bon format, par exemple A1A 1A1",
       "province-required": "Sélectionnez une province",
-      "zip-code-valid": "Entrez un code postal américain dans le bon format, par exemple 12345",
+      "zip-code-valid": "Entrez un code postal américain dans le bon format, par exemple 12345 ou 12345-6789",
       "phone-number-valid": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
       "phone-number-alt-valid": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant"
     }

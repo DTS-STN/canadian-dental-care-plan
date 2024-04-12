@@ -37,6 +37,14 @@ describe('~/utils/postal-zip-code-utils.server.ts', () => {
       expect(isValidPostalCode('US', '12345')).toEqual(true);
     });
 
+    it('should return true for American zip code with 9 digits', () => {
+      expect(isValidPostalCode('US', '123456789')).toEqual(true);
+    });
+
+    it('should return true for American zip code with 9 digits and hyphen', () => {
+      expect(isValidPostalCode('US', '12345-6789')).toEqual(true);
+    });
+
     it('should return false for American zip code of invalid format', () => {
       expect(isValidPostalCode('US', '123')).toEqual(false);
     });
@@ -57,6 +65,14 @@ describe('~/utils/postal-zip-code-utils.server.ts', () => {
 
     it('should return the input if country code is American and the zip code is valid', () => {
       expect(formatPostalCode('US', '12345')).toEqual('12345');
+    });
+
+    it('should return the input if country code is American and the zip code is valid', () => {
+      expect(formatPostalCode('US', '123456789')).toEqual('12345-6789');
+    });
+
+    it('should return the input if country code is American and the zip code is valid', () => {
+      expect(formatPostalCode('US', '12345-6789')).toEqual('12345-6789');
     });
 
     it('should throw an error if the country code is Canadian and the format is invalid', () => {
