@@ -15,6 +15,7 @@ import { InputField } from '~/components/input-field';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getUserService } from '~/services/user-service.server';
+import { featureEnabled } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -39,6 +40,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
+  featureEnabled('edit-personal-info');
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
   const userService = getUserService();
