@@ -41,7 +41,9 @@ vi.mock('~/utils/locale-utils.server', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
   redirectWithLocale: vi.fn().mockResolvedValue('/personal-information/phone-number/confirm'),
 }));
-
+vi.mock('~/utils/env.server', () => ({
+  featureEnabled: vi.fn().mockResolvedValue(true),
+}));
 describe('_gcweb-app.personal-information.phone-number.edit', () => {
   afterEach(() => {
     vi.clearAllMocks();

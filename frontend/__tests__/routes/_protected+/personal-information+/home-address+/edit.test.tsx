@@ -67,6 +67,7 @@ vi.mock('~/utils/env.server', () => ({
     CANADA_COUNTRY_ID: 'CAN',
     USA_COUNTRY_ID: 'USA',
   }),
+  featureEnabled: vi.fn().mockResolvedValue(true),
 }));
 
 describe('_gcweb-app.personal-information.home-address.edit', () => {

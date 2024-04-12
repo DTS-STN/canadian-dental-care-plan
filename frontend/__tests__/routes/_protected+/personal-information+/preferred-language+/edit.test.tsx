@@ -55,6 +55,10 @@ vi.mock('~/utils/locale-utils.server', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
 }));
 
+vi.mock('~/utils/env.server', () => ({
+  featureEnabled: vi.fn().mockResolvedValue(true),
+}));
+
 describe('_gcweb-app.personal-information.preferred-language.edit', () => {
   afterEach(() => {
     vi.clearAllMocks();
