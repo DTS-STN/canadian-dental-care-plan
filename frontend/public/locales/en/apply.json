@@ -318,7 +318,7 @@
       "postal-code-required": "Enter postal code or zip code",
       "postal-code-valid": "Enter postal code in the correct format, such as A1A 1A1",
       "province-required": "Select a province",
-      "zip-code-valid": "Enter zip code in the correct format, such as 12345",
+      "zip-code-valid": "Enter zip code in the correct format, such as 12345 or 12345-6789",
       "phone-number-valid": "Phone number does not exist. If it's an international phone number, add '+' in front",
       "phone-number-alt-valid": "Phone number does not exist. If it's an international phone number, add '+' in front"
     }
