@@ -95,6 +95,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     martialStatus: maritalStatus,
     email: state.communicationPreferences.email,
     communicationPreference: communicationPreference,
+    emailForFuture: state.communicationPreferences.emailForFuture,
   };
 
   const spouseInfo = state.partnerInformation
@@ -276,7 +277,17 @@ export default function ApplyFlowConfirm() {
         <h2 className="text-2xl font-semibold">{t('confirm.comm-prefs')}</h2>
         <div>
           <dl className="mt-6 divide-y border-y">
-            <DescriptionListItem term={t('confirm.comm-pref')}> {userInfo.communicationPreference}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.comm-pref')}>
+              <div className="flex flex-col">
+                <p>{userInfo.communicationPreference}</p>
+                {userInfo.emailForFuture && (
+                  <p>
+                    <Trans ns={handle.i18nNamespaces} i18nKey="confirm.added-email" values={{ email: userInfo.emailForFuture }} />
+                  </p>
+                )}
+              </div>
+            </DescriptionListItem>
+
             <DescriptionListItem term={t('confirm.lang-pref')}> {userInfo.preferredLanguage}</DescriptionListItem>
           </dl>
         </div>
