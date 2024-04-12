@@ -93,7 +93,8 @@
     "yes": "Yes",
     "no": "No",
     "exit": "Exit",
-    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html",
+    "status-checker-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html"
   },
   "dental-benefits": {
     "title": "Access to other federal, provincial or territorial dental benefits",
