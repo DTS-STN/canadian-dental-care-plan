@@ -121,7 +121,7 @@ export async function action({ context: { session }, params, request }: ActionFu
       return {
         ...val,
         dateOfBirth: `${parseDateOfBirthString.year}-${parseDateOfBirthString.month}-${parseDateOfBirthString.day}`,
-        socialInsuranceNumber: formatSin(val.socialInsuranceNumber, ''),
+        socialInsuranceNumber: isValidSin(val.socialInsuranceNumber) ? formatSin(val.socialInsuranceNumber, '') : val.socialInsuranceNumber,
       };
     }) satisfies z.ZodType<PartnerInformationState>;
 
