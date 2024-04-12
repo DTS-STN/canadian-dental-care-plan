@@ -8,7 +8,7 @@ import { faSpinner, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { parse } from 'date-fns';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import pageIds from '../../../page-ids.json';
 import { Address } from '~/components/address';
@@ -108,7 +108,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: state.applicantInformation.maritalStatus,
     email: state.communicationPreferences.email,
-    communicationPreference: state.communicationPreferences.preferredMethod,
+    communicationPreference: state.communicationPreferences,
   };
   const spouseInfo = state.partnerInformation
     ? {
@@ -400,13 +400,14 @@ export default function ReviewInformation() {
             <h2 className="mt-8 text-2xl font-semibold">{t('apply:review-information.comm-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply:review-information.comm-pref-title')}>
-                {userInfo.communicationPreference === COMMUNICATION_METHOD_EMAIL_ID ? (
+                {userInfo.communicationPreference.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID ? (
                   <div className="grid grid-cols-1">
                     <p className="mt-4">{t('apply:review-information.comm-electronic')}</p> <span>{userInfo.email}</span>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1">
                     <p className="mt-4">{t('apply:review-information.comm-mail')}</p>
+                    {userInfo.communicationPreference.emailForFuture && <Trans ns={handle.i18nNamespaces} i18nKey="review-information.added-email" values={{ email: userInfo.communicationPreference.emailForFuture }} />}
                   </div>
                 )}
                 <p className="mt-4">
