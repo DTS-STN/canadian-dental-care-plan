@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { parse } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
@@ -153,13 +153,15 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ApplyFlowConfirm() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const params = useParams();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo } = useLoaderData<typeof loader>();
 
   const mscaLink = <InlineLink to={t('confirm.msca-link')} />;
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} />;
-  const cdcpLink = <InlineLink routeId="$lang+/_public+/status+/index" params={params} />;
   const moreInfoLink = <InlineLink to={t('confirm.more-info-link')} />;
+  const cdcpLink = <InlineLink to={t('apply:confirm.status-checker-link')} />;
+
+  // this link will be used in a future release
+  // const cdcpLink = <InlineLink routeId="$lang+/_public+/status+/index" params={params} />;
 
   return (
     <div className="max-w-prose">

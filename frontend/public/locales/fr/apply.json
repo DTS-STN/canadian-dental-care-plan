@@ -93,7 +93,8 @@
     "yes": "Oui",
     "no": "Non",
     "exit": "Sortie",
-    "exit-linl": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+    "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html",
+    "status-checker-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html"
   },
   "dental-benefits": {
     "title": "Accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
