@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: canada-dental-care-plan
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: canada-dental-care-plan
+      app.kubernetes.io/managed-by: teamcity
+      app.kubernetes.io/cluster: dts-prod-sced-rhp-spoke-aks
+      app.kubernetes.io/environment: prod
+      app.kubernetes.io/tier: prod
+resources:
+  - ../../base/redis/
+patches:
+  - path: ./patches/stateful-sets.yaml
+configMapGenerator:
+  - name: redis
+    behavior: merge
+    files:
+      - ./configs/redis/replica.conf
+      - ./configs/redis/sentinel.conf
+secretGenerator:
+  - name: redis
+    behavior: replace
+    envs:
+      - ./configs/redis/secrets.conf
