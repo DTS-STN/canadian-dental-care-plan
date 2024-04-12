@@ -104,6 +104,12 @@ export async function action({ context: { session }, params, request }: ActionFu
           message: t('apply:eligibility.date-of-birth.error-message.date-of-birth-is-past'),
           path: ['dateOfBirth'],
         });
+      } else if (differenceInYears(new Date(), parse(dateOfBirth, 'yyyy-MM-dd', new Date())) > 150) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t('apply:eligibility.date-of-birth.error-message.date-of-birth-is-past-valid'),
+          path: ['dateOfBirth'],
+        });
       }
     })
     .transform((val) => {
