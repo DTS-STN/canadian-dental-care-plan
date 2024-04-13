@@ -122,6 +122,7 @@ export default function ApplyFlowTypeOfApplication() {
       </div>
       <div className="max-w-prose">
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <p className="mb-6 italic">{t('apply:required-label')}</p>
         <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <InputRadios
@@ -140,7 +141,6 @@ export default function ApplyFlowTypeOfApplication() {
                 defaultChecked: defaultState === ApplicantType.Delegate,
               },
             ]}
-            required
             errorMessage={errorMessages['input-radio-type-of-application-option-0']}
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">

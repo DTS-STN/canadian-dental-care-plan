@@ -29,8 +29,8 @@
     "email-note": "Service Canada et Santé Canada pourraient utiliser cette adresse courriel pour communiquer avec vous à l'avenir au sujet du Régime canadien de soins dentaires.",
     "confirm-email": "Confirmer l'adresse courriel",
     "future-email-note": "Ajouter votre adresse courriel pour recevoir les futures communications de Service Canada et de Santé Canada aux fins du Régime canadien de soins dentaires.",
-    "future-email": "Adresse courriel",
-    "future-confirm-email": "Confirmer l'adresse courriel",
+    "future-email": "Adresse courriel (facultatif)",
+    "future-confirm-email": "Confirmer l'adresse courriel (facultatif)",
     "back": "Retour",
     "continue": "Continuer",
     "cancel-btn": "Annuler",
@@ -287,8 +287,8 @@
   "personal-information": {
     "page-title": "Renseignements personnels",
     "form-instructions": "L'ajout d'un numéro de téléphone permet à Service Canada de vous joindre en cas de problème avec votre demande. Si vous ne fournissez pas de numéro de téléphone, nous communiquerons avec vous par la poste.",
-    "phone-number": "Numéro de téléphone",
-    "phone-number-alt": "Autre numéro de téléphone",
+    "phone-number": "Numéro de téléphone (facultatif)",
+    "phone-number-alt": "Autre numéro de téléphone (facultatif)",
     "mailing-address": {
       "header": "Adresse postale"
     },
@@ -304,6 +304,7 @@
       "province": "Province, territoire, État ou région",
       "city": "Ville ou municipalité",
       "postal-code": "Code postal/code ZIP",
+      "postal-code-optional": "Code postal/code ZIP (facultatif)",
       "select-one": "Choisissez une option"
     },
     "back": "Retour",
@@ -325,6 +326,7 @@
   "progress": {
     "label": "Suivi de la progression de l'application"
   },
+  "required-label": "Remplir tous les champs sauf s'ils sont indiqués facultatifs",
   "review-information": {
     "read-carefully": "Veuillez lire attentivement les renseignements suivants. Les renseignements fournis seront utilisés par la Sun Life pour créer votre compte et figureront sur votre carte de membre.",
     "page-title": "Passez en revue vos renseignements",

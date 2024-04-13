@@ -119,6 +119,7 @@ export default function ApplyFlowTaxFiling() {
       </div>
       <div className="max-w-prose">
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <p className="mb-6 italic">{t('apply:required-label')}</p>
         <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <InputRadios
@@ -129,7 +130,6 @@ export default function ApplyFlowTaxFiling() {
               { value: TaxFilingOption.Yes, children: t('apply:eligibility.tax-filing.radio-options.yes'), defaultChecked: defaultState === TaxFilingOption.Yes },
               { value: TaxFilingOption.No, children: t('apply:eligibility.tax-filing.radio-options.no'), defaultChecked: defaultState === TaxFilingOption.No },
             ]}
-            required
             errorMessage={errorMessages['input-radio-tax-filing-2023-option-0']}
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">

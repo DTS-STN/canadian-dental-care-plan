@@ -219,6 +219,7 @@ export default function ApplyFlowApplicationInformation() {
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="space-y-6">
             <em id="name-instructions">{t('partner-information.name-instructions')}</em>
+            <p className="mb-6 italic">{t('apply:required-label')}</p>
             <div className="grid gap-6 md:grid-cols-2">
               <InputField
                 id="first-name"
@@ -226,7 +227,6 @@ export default function ApplyFlowApplicationInformation() {
                 className="w-full"
                 label={t('apply:partner-information.first-name')}
                 maxLength={100}
-                required
                 defaultValue={defaultState?.firstName ?? ''}
                 errorMessage={fetcher.data?.errors.firstName?._errors[0]}
                 aria-describedby="name-instructions"
@@ -237,7 +237,6 @@ export default function ApplyFlowApplicationInformation() {
                 className="w-full"
                 label={t('apply:partner-information.last-name')}
                 maxLength={100}
-                required
                 defaultValue={defaultState?.lastName ?? ''}
                 errorMessage={fetcher.data?.errors.lastName?._errors[0]}
                 aria-describedby="name-instructions"
@@ -252,7 +251,6 @@ export default function ApplyFlowApplicationInformation() {
               }}
               defaultValue={defaultState?.dateOfBirth ?? ''}
               legend={t('apply:partner-information.date-of-birth')}
-              required
               errorMessages={{
                 all: fetcher.data?.errors.dateOfBirth?._errors[0],
                 year: fetcher.data?.errors.dateOfBirthYear?._errors[0],
@@ -265,11 +263,10 @@ export default function ApplyFlowApplicationInformation() {
               name="socialInsuranceNumber"
               label={t('apply:partner-information.sin')}
               placeholder="000-000-000"
-              required
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
               errorMessage={fetcher.data?.errors.socialInsuranceNumber?._errors[0]}
             />
-            <InputCheckbox id="confirm" name="confirm" value="yes" required errorMessage={fetcher.data?.errors.confirm?._errors[0]} defaultChecked={defaultState?.confirm === true}>
+            <InputCheckbox id="confirm" name="confirm" value="yes" errorMessage={fetcher.data?.errors.confirm?._errors[0]} defaultChecked={defaultState?.confirm === true}>
               {t('partner-information.confirm-checkbox')}
             </InputCheckbox>
           </div>

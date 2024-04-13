@@ -353,6 +353,7 @@ export default function ApplyFlowPersonalInformation() {
         <p id="form-instructions" className="mb-6">
           {t('apply:personal-information.form-instructions')}
         </p>
+        <p className="mb-6 italic">{t('apply:required-label')}</p>
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-6 grid gap-6 md:grid-cols-2">
@@ -379,7 +380,6 @@ export default function ApplyFlowPersonalInformation() {
               helpMessagePrimaryClassName="text-black"
               defaultValue={defaultState?.mailingAddress ?? ''}
               errorMessage={errorMessages['mailing-address']}
-              required
             />
             <InputField
               id="mailing-apartment"
@@ -397,7 +397,6 @@ export default function ApplyFlowPersonalInformation() {
               label={t('apply:personal-information.address-field.country')}
               defaultValue={defaultState?.mailingCountry ?? ''}
               errorMessage={errorMessages['mailing-country']}
-              required
               options={[dummyOption, ...countries]}
               onChange={mailingCountryChangeHandler}
             />
@@ -409,30 +408,19 @@ export default function ApplyFlowPersonalInformation() {
                 label={t('apply:personal-information.address-field.province')}
                 defaultValue={defaultState?.mailingProvince ?? ''}
                 errorMessage={errorMessages['mailing-province']}
-                required
                 options={[dummyOption, ...mailingRegions]}
               />
             )}
             <div className="grid gap-6 md:grid-cols-2">
-              <InputField
-                id="mailing-city"
-                name="mailingCity"
-                className="w-full"
-                label={t('apply:personal-information.address-field.city')}
-                maxLength={100}
-                defaultValue={defaultState?.mailingCity ?? ''}
-                errorMessage={errorMessages['mailing-city']}
-                required
-              />
+              <InputField id="mailing-city" name="mailingCity" className="w-full" label={t('apply:personal-information.address-field.city')} maxLength={100} defaultValue={defaultState?.mailingCity ?? ''} errorMessage={errorMessages['mailing-city']} />
               <InputField
                 id="mailing-postal-code"
                 name="mailingPostalCode"
                 className="w-full"
-                label={t('apply:personal-information.address-field.postal-code')}
+                label={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID ? t('apply:personal-information.address-field.postal-code') : t('apply:personal-information.address-field.postal-code-optional')}
                 maxLength={100}
                 defaultValue={defaultState?.mailingPostalCode}
                 errorMessage={errorMessages['mailing-postal-code']}
-                required={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID}
               />
             </div>
           </div>
@@ -454,7 +442,6 @@ export default function ApplyFlowPersonalInformation() {
                   maxLength={30}
                   defaultValue={defaultState?.homeAddress ?? ''}
                   errorMessage={errorMessages['home-address']}
-                  required
                 />
                 <InputField
                   id="home-apartment"
@@ -472,7 +459,6 @@ export default function ApplyFlowPersonalInformation() {
                   label={t('apply:personal-information.address-field.country')}
                   defaultValue={defaultState?.homeCountry ?? ''}
                   errorMessage={errorMessages['home-country']}
-                  required
                   options={[dummyOption, ...countries]}
                   onChange={homeCountryChangeHandler}
                 />
@@ -484,21 +470,19 @@ export default function ApplyFlowPersonalInformation() {
                     label={t('apply:personal-information.address-field.province')}
                     defaultValue={defaultState?.homeProvince ?? ''}
                     errorMessage={errorMessages['home-province']}
-                    required
                     options={[dummyOption, ...homeRegions]}
                   />
                 )}
                 <div className="mb-6 grid gap-6 md:grid-cols-2">
-                  <InputField id="home-city" name="homeCity" className="w-full" label={t('apply:personal-information.address-field.city')} maxLength={100} defaultValue={defaultState?.homeCity ?? ''} errorMessage={errorMessages['home-city']} required />
+                  <InputField id="home-city" name="homeCity" className="w-full" label={t('apply:personal-information.address-field.city')} maxLength={100} defaultValue={defaultState?.homeCity ?? ''} errorMessage={errorMessages['home-city']} />
                   <InputField
                     id="home-postal-code"
                     name="homePostalCode"
                     className="w-full"
-                    label={t('apply:personal-information.address-field.postal-code')}
+                    label={selectedHomeCountry === CANADA_COUNTRY_ID || selectedHomeCountry === USA_COUNTRY_ID ? t('apply:personal-information.address-field.postal-code') : t('apply:personal-information.address-field.postal-code-optional')}
                     maxLength={100}
                     defaultValue={defaultState?.homePostalCode ?? ''}
                     errorMessage={errorMessages['home-postal-code']}
-                    required={selectedHomeCountry === CANADA_COUNTRY_ID || selectedHomeCountry === USA_COUNTRY_ID}
                   />
                 </div>
               </>
