@@ -308,7 +308,7 @@ export default function ApplyFlowPersonalInformation() {
       };
     })
     .sort((country1, country2) => country1.children.localeCompare(country2.children)) //Sort alphabetically
-    .sort((country1, country2) => (country1.value === '0cf5389e-97ae-eb11-8236-000d3af4bfc3' ? -1 : country2.value === '0cf5389e-97ae-eb11-8236-000d3af4bfc3' ? 1 : 0)); //Sort by Canada first
+    .sort((country1, country2) => (country1.value === CANADA_COUNTRY_ID ? -1 : country2.value === CANADA_COUNTRY_ID ? 1 : 0)); //Sort by Canada first
 
   // populate mailing region/province/state list with selected country or current address country
   const mailingRegions: InputOptionProps[] = mailingCountryRegions
