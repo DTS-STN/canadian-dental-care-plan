@@ -81,7 +81,7 @@
                   "HasChanged": null
                 },
                 {
-                  "Label": "Marié",
+                  "Label": "Marié(e)",
                   "LanguageCode": 1036,
                   "IsManaged": false,
                   "MetadataId": "8b078da9-fb53-ee11-be6f-000d3a09d1b8",
@@ -135,7 +135,7 @@
                   "HasChanged": null
                 },
                 {
-                  "Label": "Conjoint de fait",
+                  "Label": "Conjoint(e) de fait",
                   "LanguageCode": 1036,
                   "IsManaged": false,
                   "MetadataId": "8d078da9-fb53-ee11-be6f-000d3a09d1b8",
@@ -189,7 +189,7 @@
                   "HasChanged": null
                 },
                 {
-                  "Label": "Séparé",
+                  "Label": "Séparé(e)",
                   "LanguageCode": 1036,
                   "IsManaged": false,
                   "MetadataId": "8f078da9-fb53-ee11-be6f-000d3a09d1b8",
@@ -243,7 +243,7 @@
                   "HasChanged": null
                 },
                 {
-                  "Label": "Divorcé",
+                  "Label": "Divorcé(e)",
                   "LanguageCode": 1036,
                   "IsManaged": false,
                   "MetadataId": "91078da9-fb53-ee11-be6f-000d3a09d1b8",
@@ -297,7 +297,7 @@
                   "HasChanged": null
                 },
                 {
-                  "Label": "Veuf",
+                  "Label": "Veuf ou veuve",
                   "LanguageCode": 1036,
                   "IsManaged": false,
                   "MetadataId": "93078da9-fb53-ee11-be6f-000d3a09d1b8",
