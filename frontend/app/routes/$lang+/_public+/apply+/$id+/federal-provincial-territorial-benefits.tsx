@@ -266,6 +266,7 @@ export default function AccessToDentalInsuranceQuestion() {
           <section>
             <p className="mb-4">{t('apply:dental-benefits.access-to-dental')}</p>
             <p className="mb-4">{t('apply:dental-benefits.eligibility-criteria')}</p>
+            <p className="mb-6 italic">{t('apply:required-label')}</p>
             <h2 className="my-6 font-lato text-2xl font-bold">{t('apply:dental-benefits.federal-benefits.title')}</h2>
             <InputRadios
               id="has-federal-benefits"
@@ -294,13 +295,11 @@ export default function AccessToDentalInsuranceQuestion() {
                         value: option.id,
                       }))}
                       errorMessage={errorMessages['input-radio-federal-social-programs-option-0']}
-                      required
                     />
                   ),
                 },
               ]}
               errorMessage={errorMessages['input-radio-has-federal-benefits-option-0']}
-              required
             />
           </section>
           <section>
@@ -341,7 +340,6 @@ export default function AccessToDentalInsuranceQuestion() {
                         ]}
                         defaultValue={provinceValue}
                         errorMessage={errorMessages['province']}
-                        required
                       />
                       {provinceValue && (
                         <InputRadios
@@ -357,7 +355,6 @@ export default function AccessToDentalInsuranceQuestion() {
                               checked: provincialTerritorialSocialProgramValue === option.id,
                               onChange: handleOnProvincialTerritorialSocialProgramChanged,
                             }))}
-                          required
                         />
                       )}
                     </div>
@@ -365,7 +362,6 @@ export default function AccessToDentalInsuranceQuestion() {
                 },
               ]}
               errorMessage={errorMessages['input-radio-has-provincial-territorial-benefits-option-0']}
-              required
             />
           </section>
           {editMode ? (

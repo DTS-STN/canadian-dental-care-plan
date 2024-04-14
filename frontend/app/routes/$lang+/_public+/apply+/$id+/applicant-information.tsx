@@ -158,6 +158,7 @@ export default function ApplyFlowApplicationInformation() {
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-8 space-y-6">
             <em id="name-instructions">{t('applicant-information.name-instructions')}</em>
+            <p className="mb-6 italic">{t('apply:required-label')}</p>
             <div className="grid gap-6 md:grid-cols-2">
               <InputField
                 id="first-name"
@@ -165,7 +166,6 @@ export default function ApplyFlowApplicationInformation() {
                 label={t('applicant-information.first-name')}
                 className="w-full"
                 maxLength={100}
-                required
                 aria-describedby="name-instructions"
                 errorMessage={errorMessages['first-name']}
                 defaultValue={defaultState?.firstName ?? ''}
@@ -176,7 +176,6 @@ export default function ApplyFlowApplicationInformation() {
                 label={t('applicant-information.last-name')}
                 className="w-full"
                 maxLength={100}
-                required
                 defaultValue={defaultState?.lastName ?? ''}
                 errorMessage={errorMessages['last-name']}
                 aria-describedby="name-instructions"
@@ -187,7 +186,6 @@ export default function ApplyFlowApplicationInformation() {
               name="socialInsuranceNumber"
               label={t('applicant-information.sin')}
               placeholder="000-000-000"
-              required
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
               errorMessage={errorMessages['social-insurance-number']}
             />
@@ -196,7 +194,6 @@ export default function ApplyFlowApplicationInformation() {
               name="maritalStatus"
               legend={t('applicant-information.marital-status')}
               options={maritalStatuses.map((status) => ({ defaultChecked: status.id === defaultState?.maritalStatus, children: getNameByLanguage(i18n.language, status), value: status.id }))}
-              required
               errorMessage={errorMessages['input-radio-marital-status-option-0']}
             />
           </div>

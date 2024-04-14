@@ -188,6 +188,7 @@ export default function ApplyFlowDateOfBirth() {
       <div className="max-w-prose">
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <p className="mb-6">{t('apply:eligibility.date-of-birth.description')}</p>
+        <p className="mb-6 italic">{t('apply:required-label')}</p>
         <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <DatePickerField
@@ -199,7 +200,6 @@ export default function ApplyFlowDateOfBirth() {
             }}
             defaultValue={defaultState ?? ''}
             legend={t('apply:eligibility.date-of-birth.form-instructions')}
-            required
             errorMessages={{
               all: fetcher.data?.errors.dateOfBirth?._errors[0],
               year: fetcher.data?.errors.dateOfBirthYear?._errors[0],

@@ -138,6 +138,7 @@ export default function AccessToDentalInsuranceQuestion() {
       </div>
       <div className="max-w-prose">
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <p className="mb-6 italic">{t('apply:required-label')}</p>
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
 
@@ -160,7 +161,6 @@ export default function AccessToDentalInsuranceQuestion() {
               ]}
               helpMessagePrimary={helpMessage}
               helpMessagePrimaryClassName="text-black"
-              required
               errorMessage={errorMessages['input-radio-dental-insurance-option-0']}
             />
           </div>
