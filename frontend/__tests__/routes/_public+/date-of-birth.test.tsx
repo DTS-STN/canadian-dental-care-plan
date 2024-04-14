@@ -116,7 +116,7 @@ describe('_public.apply.id.date-of-birth', () => {
       vi.mocked(isValid).mockReturnValueOnce(true);
       vi.mocked(isPast).mockReturnValueOnce(true);
       vi.mocked(parse).mockReturnValueOnce(new Date(2000, 0, 1));
-      vi.mocked(differenceInYears).mockReturnValueOnce(64);
+      vi.mocked(differenceInYears).mockReturnValueOnce(64).mockReturnValueOnce(64);
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/date-of-birth', { method: 'POST', body: formData }),

@@ -5,7 +5,7 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isPast, isValid, parse } from 'date-fns';
+import { differenceInYears, isPast, isValid, parse } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -113,6 +113,8 @@ export async function action({ context: { session }, params, request }: ActionFu
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:partner-information.error-message.date-of-birth-valid'), path: ['dateOfBirth'] });
       } else if (!isPast(parse(dateOfBirth, 'yyyy-MM-dd', new Date()))) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:partner-information.error-message.date-of-birth-is-past'), path: ['dateOfBirth'] });
+      } else if (differenceInYears(new Date(), parse(dateOfBirth, 'yyyy-MM-dd', new Date())) > 150) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:partner-information.error-message.date-of-birth-is-past-valid'), path: ['dateOfBirth'] });
       }
     })
     .transform((val) => {
