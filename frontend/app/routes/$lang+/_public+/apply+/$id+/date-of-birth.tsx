@@ -206,6 +206,7 @@ export default function ApplyFlowDateOfBirth() {
               month: fetcher.data?.errors.dateOfBirthMonth?._errors[0],
               day: fetcher.data?.errors.dateOfBirthDay?._errors[0],
             }}
+            required
           />
 
           {editMode ? (

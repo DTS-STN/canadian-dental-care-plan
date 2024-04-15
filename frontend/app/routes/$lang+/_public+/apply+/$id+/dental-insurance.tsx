@@ -162,6 +162,7 @@ export default function AccessToDentalInsuranceQuestion() {
               helpMessagePrimary={helpMessage}
               helpMessagePrimaryClassName="text-black"
               errorMessage={errorMessages['input-radio-dental-insurance-option-0']}
+              required
             />
           </div>
           {editMode ? (

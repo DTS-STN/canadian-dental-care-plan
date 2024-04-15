@@ -141,6 +141,7 @@ export default function ApplyFlowTypeOfApplication() {
                 defaultChecked: defaultState === ApplicantType.Delegate,
               },
             ]}
+            required
             errorMessage={errorMessages['input-radio-type-of-application-option-0']}
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
