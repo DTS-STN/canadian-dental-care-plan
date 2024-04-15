@@ -301,9 +301,9 @@
     "address-field": {
       "address": "Adresse",
       "address-note": "Inclure le numéro de rue et le nom",
-      "apartment": "Appartement, suite, etc.",
+      "apartment": "Appartement, suite, etc. (facultatif)",
       "country": "Pays",
-      "province": "Province, territoire, État ou région",
+      "province": "Province, territoire, état ou région",
       "city": "Ville ou municipalité",
       "postal-code": "Code postal/code ZIP",
       "postal-code-optional": "Code postal/code ZIP (facultatif)",
@@ -315,7 +315,7 @@
     "save-btn": "Enregistrer",
     "error-message": {
       "address-required": "Entrez l'adresse, normalement le numéro et le nom de la rue",
-      "city-required": "Entrez une ville ou un village",
+      "city-required": "Entrez une ville ou une municipalité",
       "country-required": "Sélectionnez un pays",
       "postal-code-required": "Entrez un code postal ou un code postal américain",
       "postal-code-valid": "Entrez un code postal dans le bon format, par exemple A1A 1A1",
