@@ -315,7 +315,7 @@
     "save-btn": "Enregistrer",
     "error-message": {
       "address-required": "Entrez l'adresse, normalement le numéro et le nom de la rue",
-      "city-required": "Entrez une ville ou un village",
+      "city-required": "Entrez une ville ou une municipalité",
       "country-required": "Sélectionnez un pays",
       "postal-code-required": "Entrez un code postal ou un code postal américain",
       "postal-code-valid": "Entrez un code postal dans le bon format, par exemple A1A 1A1",
