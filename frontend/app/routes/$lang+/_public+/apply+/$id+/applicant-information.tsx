@@ -75,7 +75,10 @@ export async function action({ context: { session }, params, request }: ActionFu
         .trim()
         .min(1, t('apply:applicant-information.error-message.marital-status-required')),
     })
-    .transform((val) => ({ ...val, socialInsuranceNumber: isValidSin(val.socialInsuranceNumber) ? formatSin(val.socialInsuranceNumber, '') : val.socialInsuranceNumber }));
+    .transform((val) => ({
+      ...val,
+      socialInsuranceNumber: isValidSin(val.socialInsuranceNumber) ? formatSin(val.socialInsuranceNumber, '') : val.socialInsuranceNumber,
+    }));
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -92,23 +95,37 @@ export async function action({ context: { session }, params, request }: ActionFu
     lastName: String(formData.get('lastName') ?? ''),
     maritalStatus: formData.get('maritalStatus') ? String(formData.get('maritalStatus')) : undefined,
   };
-  const parsedDataResult = applicantInformationSchema.safeParse(data);
-  if (!parsedDataResult.success) {
-    return json({ errors: parsedDataResult.error.format() });
+
+  // TODO: TESTING SIN WEIRD ISSUE - REMOVE LATER!!!
+  try {
+    const parsedDataResult = applicantInformationSchema.safeParse(data);
+    if (!parsedDataResult.success) {
+      log.error('&j', {
+        message: 'Validation errors during applicantInformationSchema.safeParse',
+        error: parsedDataResult.error,
+      });
+      return json({ errors: parsedDataResult.error.format() });
+    }
+
+    const remove = ![MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(parsedDataResult.data.maritalStatus)) ? 'partnerInformation' : undefined;
+    await applyRouteHelpers.saveState({ params, remove, request, session, state: { applicantInformation: parsedDataResult.data } });
+
+    if (state.editMode) {
+      return redirect(getPathById('$lang+/_public+/apply+/$id+/review-information', params));
+    }
+
+    if ([MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(parsedDataResult.data.maritalStatus))) {
+      return redirect(getPathById('$lang+/_public+/apply+/$id+/partner-information', params));
+    }
+
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/personal-information', params));
+  } catch (error) {
+    log.error('&j', {
+      message: 'Error!!!!!!',
+      error,
+    });
+    throw error;
   }
-
-  const remove = ![MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(parsedDataResult.data.maritalStatus)) ? 'partnerInformation' : undefined;
-  await applyRouteHelpers.saveState({ params, remove, request, session, state: { applicantInformation: parsedDataResult.data } });
-
-  if (state.editMode) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/review-information', params));
-  }
-
-  if ([MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(parsedDataResult.data.maritalStatus))) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/partner-information', params));
-  }
-
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/personal-information', params));
 }
 
 export default function ApplyFlowApplicationInformation() {
