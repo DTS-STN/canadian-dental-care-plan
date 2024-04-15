@@ -108,12 +108,13 @@ export async function action({ context: { session }, params, request }: ActionFu
       // At this point the year, month and day should have been validated as positive integer
       const parseDateOfBirthString = parseDateString(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
       const dateOfBirth = `${parseDateOfBirthString.year}-${parseDateOfBirthString.month}-${parseDateOfBirthString.day}`;
+      const parsedDateOfBirth = parse(dateOfBirth, 'yyyy-MM-dd', new Date());
 
-      if (!isValid(parse(dateOfBirth, 'yyyy-MM-dd', new Date()))) {
+      if (!isValid(parsedDateOfBirth)) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:partner-information.error-message.date-of-birth-valid'), path: ['dateOfBirth'] });
-      } else if (!isPast(parse(dateOfBirth, 'yyyy-MM-dd', new Date()))) {
+      } else if (!isPast(parsedDateOfBirth)) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:partner-information.error-message.date-of-birth-is-past'), path: ['dateOfBirth'] });
-      } else if (differenceInYears(new Date(), parse(dateOfBirth, 'yyyy-MM-dd', new Date())) > 150) {
+      } else if (differenceInYears(new Date(), parsedDateOfBirth) > 150) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:partner-information.error-message.date-of-birth-is-past-valid'), path: ['dateOfBirth'] });
       }
     })
@@ -136,15 +137,12 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const dateOfBirthYear = formData.get('dateOfBirthYear') ? Number(formData.get('dateOfBirthYear')) : undefined;
-  const dateOfBirthMonth = formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined;
-  const dateOfBirthDay = formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined;
   const data = {
     confirm: formData.get('confirm') === 'yes',
-    dateOfBirthYear,
-    dateOfBirthMonth,
-    dateOfBirthDay,
-    dateOfBirth: `${dateOfBirthYear}-${dateOfBirthMonth}-${dateOfBirthDay}`,
+    dateOfBirthYear: formData.get('dateOfBirthYear') ? Number(formData.get('dateOfBirthYear')) : undefined,
+    dateOfBirthMonth: formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined,
+    dateOfBirthDay: formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined,
+    dateOfBirth: '',
     firstName: String(formData.get('firstName') ?? ''),
     lastName: String(formData.get('lastName') ?? ''),
     socialInsuranceNumber: String(formData.get('socialInsuranceNumber') ?? ''),
