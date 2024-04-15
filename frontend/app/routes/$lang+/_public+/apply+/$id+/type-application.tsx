@@ -122,7 +122,9 @@ export default function ApplyFlowTypeOfApplication() {
       </div>
       <div className="max-w-prose">
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <p className="mb-6 italic">{t('apply:required-label')}</p>
+        <p className="mb-6 italic" id="form-instructions">
+          {t('apply:required-label')}
+        </p>
         <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <InputRadios

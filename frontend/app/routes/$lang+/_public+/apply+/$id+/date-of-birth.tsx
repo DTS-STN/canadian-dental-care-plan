@@ -187,9 +187,13 @@ export default function ApplyFlowDateOfBirth() {
       </div>
       <div className="max-w-prose">
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <p className="mb-6">{t('apply:eligibility.date-of-birth.description')}</p>
-        <p className="mb-6 italic">{t('apply:required-label')}</p>
-        <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
+        <p className="mb-6" id="dob-desc">
+          {t('apply:eligibility.date-of-birth.description')}
+        </p>
+        <p className="mb-6 italic" id="form-instructions">
+          {t('apply:required-label')}
+        </p>
+        <fetcher.Form method="post" aria-describedby="dob-desc form-instructions" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <DatePickerField
             id="date-of-birth"
