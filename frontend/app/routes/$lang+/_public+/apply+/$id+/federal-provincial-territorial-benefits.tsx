@@ -261,12 +261,18 @@ export default function AccessToDentalInsuranceQuestion() {
       </div>
       <div className="max-w-prose">
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <fetcher.Form method="post" noValidate>
+        <fetcher.Form method="post" noValidate aria-describedby="access-to-benefits-note eligibility-note form-instructions">
           <input type="hidden" name="_csrf" value={csrfToken} />
           <section>
-            <p className="mb-4">{t('apply:dental-benefits.access-to-dental')}</p>
-            <p className="mb-4">{t('apply:dental-benefits.eligibility-criteria')}</p>
-            <p className="mb-6 italic">{t('apply:required-label')}</p>
+            <p className="mb-4" id="access-to-benefits-note">
+              {t('apply:dental-benefits.access-to-dental')}
+            </p>
+            <p className="mb-4" id="eligibility-note">
+              {t('apply:dental-benefits.eligibility-criteria')}
+            </p>
+            <p className="mb-6 italic" id="form-instructions">
+              {t('apply:required-label')}
+            </p>
             <h2 className="my-6 font-lato text-2xl font-bold">{t('apply:dental-benefits.federal-benefits.title')}</h2>
             <InputRadios
               id="has-federal-benefits"
