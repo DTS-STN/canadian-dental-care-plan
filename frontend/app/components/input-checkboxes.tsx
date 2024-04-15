@@ -35,7 +35,7 @@ export function InputCheckboxes({ errorMessage, helpMessagePrimary, helpMessageP
 
   return (
     <fieldset id={inputWrapperId} data-testid={inputWrapperId}>
-      <InputLegend id={inputLegendId} required={required} className="mb-2">
+      <InputLegend id={inputLegendId} className="mb-2">
         {legend}
       </InputLegend>
       {errorMessage && (

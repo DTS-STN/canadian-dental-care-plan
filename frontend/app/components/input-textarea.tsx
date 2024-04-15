@@ -33,7 +33,7 @@ const InputTextarea = forwardRef<HTMLTextAreaElement, InputTextareaProps>((props
 
   return (
     <div id={inputWrapperId} data-testid={inputWrapperId} className="form-group">
-      <InputLabel id={inputLabelId} htmlFor={id} required={required} className="mb-2">
+      <InputLabel id={inputLabelId} htmlFor={id} className="mb-2">
         {label}
       </InputLabel>
       {errorMessage && (

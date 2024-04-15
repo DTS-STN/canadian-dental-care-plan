@@ -48,7 +48,6 @@ describe('InputTextarea', () => {
     const actual = screen.getByTestId('input-textarea');
 
     expect(actual).toBeInTheDocument();
-    expect(actual).toHaveAccessibleName('label test (input-label.required)');
     expect(actual).toHaveAttribute('id', 'test-id');
     expect(actual).toHaveValue('default value');
     expect(actual).toBeRequired();
