@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { Form, useActionData, useLoaderData, useParams } from '@remix-run/react';
 
 import { isValidPhoneNumber } from 'libphonenumber-js';
@@ -14,11 +14,11 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
+import { PersonalInfo } from '~/schemas/personal-informaton-service-schemas.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getPersonalInformationService } from '~/services/personal-information-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getUserService } from '~/services/user-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -50,36 +50,29 @@ export async function loader({ context: { session }, request, params }: LoaderFu
 
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
-  const userService = getUserService();
-  const personalInformationService = await getPersonalInformationService();
+
   await raoidcService.handleSessionValidation(request, session);
-
-  const userId = await userService.getUserId();
-  const userInfo = await userService.getUserInfo(userId);
-
-  if (!userInfo) {
-    instrumentationService.countHttpStatus('phone-number.edit', 404);
-    throw new Response(null, { status: 404 });
-  }
 
   const csrfToken = String(session.get('csrfToken'));
   const personalInformationRouteHelper = getPersonalInformationRouteHelpers();
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const personailInformation = await personalInformationRouteHelper.getPersonalInformation(userInfoToken, params, request, session);
-  session.set('personailInformation', personailInformation);
+  const personalInformation = await personalInformationRouteHelper.getPersonalInformation(userInfoToken, params, request, session);
+
+  session.set('personalInformation', personalInformation);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:phone-number.edit.page-title') }) };
 
   instrumentationService.countHttpStatus('phone-number.edit', 200);
-  return json({ csrfToken, meta, userInfo, personailInformation });
+  return json({ csrfToken, meta, personalInformation });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('phone-number/edit');
-
+  const personalInformationService = await getPersonalInformationService();
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
+  const personalInformation: PersonalInfo = session.get('personalInformation');
 
   await raoidcService.handleSessionValidation(request, session);
 
@@ -122,9 +115,11 @@ export async function action({ context: { session }, params, request }: ActionFu
       formData: formData as Partial<z.infer<typeof formDataSchema>>,
     });
   }
+  personalInformation.primaryTelephoneNumber = parsedDataResult.data.phoneNumber;
+  personalInformation.alternateTelephoneNumber = parsedDataResult.data.alternatePhoneNumber;
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  personalInformationService.updatePersonalInformation(userInfoToken.sin!, personalInformation);
 
-  //await userService.updateUserInfo(userId, { phoneNumber: parsedDataResult.data.phoneNumber, alternatePhoneNumber: parsedDataResult.data.alternatePhoneNumber });
-  //TODO Replace with the personal-information-service method to update/save the information. stop using userService...
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('update-data.phone-number', { userId: idToken.sub });
 
@@ -133,7 +128,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function PhoneNumberEdit() {
-  const { csrfToken, userInfo } = useLoaderData<typeof loader>();
+  const { csrfToken, personalInformation } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const params = useParams();
   const errorSummaryId = 'error-summary';
@@ -141,8 +136,8 @@ export default function PhoneNumberEdit() {
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const defaultValues = {
-    phoneNumber: actionData?.formData.phoneNumber ?? userInfo.phoneNumber ?? '',
-    alternatePhoneNumber: actionData?.formData.alternatePhoneNumber ?? userInfo.alternatePhoneNumber ?? '',
+    phoneNumber: personalInformation.primaryTelephoneNumber ?? '',
+    alternatePhoneNumber: personalInformation.alternateTelephoneNumber ?? '',
   };
   t;
 
