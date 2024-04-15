@@ -133,6 +133,7 @@ export default function ApplyFlowTaxFiling() {
               { value: TaxFilingOption.No, children: t('apply:eligibility.tax-filing.radio-options.no'), defaultChecked: defaultState === TaxFilingOption.No },
             ]}
             errorMessage={errorMessages['input-radio-tax-filing-2023-option-0']}
+            required
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <Button variant="primary" id="continue-button" disabled={isSubmitting}>

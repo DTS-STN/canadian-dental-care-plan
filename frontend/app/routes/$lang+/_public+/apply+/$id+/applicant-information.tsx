@@ -175,6 +175,7 @@ export default function ApplyFlowApplicationInformation() {
                 autoComplete="given-name"
                 errorMessage={errorMessages['first-name']}
                 defaultValue={defaultState?.firstName ?? ''}
+                required
               />
               <InputField
                 id="last-name"
@@ -186,6 +187,7 @@ export default function ApplyFlowApplicationInformation() {
                 defaultValue={defaultState?.lastName ?? ''}
                 errorMessage={errorMessages['last-name']}
                 aria-describedby="name-instructions"
+                required
               />
               <em id="name-instructions" className="col-span-full">
                 {t('applicant-information.name-instructions')}
@@ -198,6 +200,7 @@ export default function ApplyFlowApplicationInformation() {
               placeholder="000-000-000"
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
               errorMessage={errorMessages['social-insurance-number']}
+              required
             />
             <InputRadios
               id="marital-status"
@@ -205,6 +208,7 @@ export default function ApplyFlowApplicationInformation() {
               legend={t('applicant-information.marital-status')}
               options={maritalStatuses.map((status) => ({ defaultChecked: status.id === defaultState?.maritalStatus, children: getNameByLanguage(i18n.language, status), value: status.id }))}
               errorMessage={errorMessages['input-radio-marital-status-option-0']}
+              required
             />
           </div>
           {editMode ? (

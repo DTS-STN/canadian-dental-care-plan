@@ -301,11 +301,13 @@ export default function AccessToDentalInsuranceQuestion() {
                         value: option.id,
                       }))}
                       errorMessage={errorMessages['input-radio-federal-social-programs-option-0']}
+                      required
                     />
                   ),
                 },
               ]}
               errorMessage={errorMessages['input-radio-has-federal-benefits-option-0']}
+              required
             />
           </section>
           <section>
@@ -346,6 +348,7 @@ export default function AccessToDentalInsuranceQuestion() {
                         ]}
                         defaultValue={provinceValue}
                         errorMessage={errorMessages['province']}
+                        required
                       />
                       {provinceValue && (
                         <InputRadios
@@ -361,6 +364,7 @@ export default function AccessToDentalInsuranceQuestion() {
                               checked: provincialTerritorialSocialProgramValue === option.id,
                               onChange: handleOnProvincialTerritorialSocialProgramChanged,
                             }))}
+                          required
                         />
                       )}
                     </div>
@@ -368,6 +372,7 @@ export default function AccessToDentalInsuranceQuestion() {
                 },
               ]}
               errorMessage={errorMessages['input-radio-has-provincial-territorial-benefits-option-0']}
+              required
             />
           </section>
           {editMode ? (

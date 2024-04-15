@@ -242,7 +242,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
           <p className="md:col-span-2" id="email-note">
             {t('apply:communication-preference.email-note')}
           </p>
-          <InputField id="email" type="email" className="w-full" label={t('apply:communication-preference.email')} maxLength={100} name="email" errorMessage={errorMessages.email} autoComplete="email" defaultValue={defaultState?.email ?? ''} />
+          <InputField id="email" type="email" className="w-full" label={t('apply:communication-preference.email')} maxLength={100} name="email" errorMessage={errorMessages.email} autoComplete="email" defaultValue={defaultState?.email ?? ''} required />
           <InputField
             id="confirm-email"
             type="email"
@@ -253,6 +253,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             errorMessage={errorMessages['confirm-email']}
             autoComplete="email"
             defaultValue={defaultState?.confirmEmail ?? ''}
+            required
           />
         </div>
       ),
@@ -291,10 +292,11 @@ export default function ApplyFlowCommunicationPreferencePage() {
                   value: language.id,
                 }))}
                 errorMessage={errorMessages['input-radio-preferred-language-option-0']}
+                required
               />
             )}
             {preferredCommunicationMethods.length > 0 && (
-              <InputRadios id="preferred-methods" legend={t('apply:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages['input-radio-preferred-methods-option-0']} />
+              <InputRadios id="preferred-methods" legend={t('apply:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages['input-radio-preferred-methods-option-0']} required />
             )}
           </div>
           {editMode ? (

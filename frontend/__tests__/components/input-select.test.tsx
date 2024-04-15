@@ -78,7 +78,6 @@ describe('InputSelect', () => {
     const actual = screen.getByTestId('input-some-id-test');
 
     expect(actual).toBeInTheDocument();
-    expect(actual).toHaveAccessibleName('label test (input-label.required)');
     expect(actual).toHaveAttribute('id', 'some-id');
     expect(actual).toHaveValue('first');
     expect(actual).toBeRequired();

@@ -234,6 +234,7 @@ export default function ApplyFlowApplicationInformation() {
                 defaultValue={defaultState?.firstName ?? ''}
                 errorMessage={fetcher.data?.errors.firstName?._errors[0]}
                 aria-describedby="name-instructions"
+                required
               />
               <InputField
                 id="last-name"
@@ -245,6 +246,7 @@ export default function ApplyFlowApplicationInformation() {
                 defaultValue={defaultState?.lastName ?? ''}
                 errorMessage={fetcher.data?.errors.lastName?._errors[0]}
                 aria-describedby="name-instructions"
+                required
               />
               <em id="name-instructions" className="col-span-full">
                 {t('partner-information.name-instructions')}
@@ -265,6 +267,7 @@ export default function ApplyFlowApplicationInformation() {
                 month: fetcher.data?.errors.dateOfBirthMonth?._errors[0],
                 day: fetcher.data?.errors.dateOfBirthDay?._errors[0],
               }}
+              required
             />
             <InputField
               id="social-insurance-number"
@@ -273,8 +276,9 @@ export default function ApplyFlowApplicationInformation() {
               placeholder="000-000-000"
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
               errorMessage={fetcher.data?.errors.socialInsuranceNumber?._errors[0]}
+              required
             />
-            <InputCheckbox id="confirm" name="confirm" value="yes" errorMessage={fetcher.data?.errors.confirm?._errors[0]} defaultChecked={defaultState?.confirm === true}>
+            <InputCheckbox id="confirm" name="confirm" value="yes" errorMessage={fetcher.data?.errors.confirm?._errors[0]} defaultChecked={defaultState?.confirm === true} required>
               {t('partner-information.confirm-checkbox')}
             </InputCheckbox>
           </div>
