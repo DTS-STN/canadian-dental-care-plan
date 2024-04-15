@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Form, useActionData, useLoaderData, useParams } from '@remix-run/react';
 
@@ -58,8 +59,10 @@ export async function loader({ context: { session }, request, params }: LoaderFu
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformation = await personalInformationRouteHelper.getPersonalInformation(userInfoToken, params, request, session);
+  if (!personalInformation) {
+    return redirect(getPathById('$lang+/_protected+/personal-information+/index', params));
+  }
 
-  session.set('personalInformation', personalInformation);
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:phone-number.edit.page-title') }) };
 
@@ -97,9 +100,9 @@ export async function action({ context: { session }, params, request }: ActionFu
       .optional(),
   });
 
-  const formData = Object.fromEntries(await request.formData());
+  const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
-  const submittedCsrfToken = String(formData['_csrf']);
+  const submittedCsrfToken = String(formData.get('_csrf'));
 
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
@@ -119,7 +122,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   personalInformation.alternateTelephoneNumber = parsedDataResult.data.alternatePhoneNumber;
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   personalInformationService.updatePersonalInformation(userInfoToken.sin!, personalInformation);
-
+  session.set('personalInformation', personalInformation);
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('update-data.phone-number', { userId: idToken.sub });
 
@@ -139,7 +142,6 @@ export default function PhoneNumberEdit() {
     phoneNumber: personalInformation.primaryTelephoneNumber ?? '',
     alternatePhoneNumber: personalInformation.alternateTelephoneNumber ?? '',
   };
-  t;
 
   /**
    * Gets an error message based on the provided internationalization (i18n) key.
@@ -176,7 +178,7 @@ export default function PhoneNumberEdit() {
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <div className="my-6">
+        <div className="grid gap-6 ">
           <InputField id="phoneNumber" name="phoneNumber" type="tel" label={t('personal-information:phone-number.edit.component.phone')} defaultValue={defaultValues.phoneNumber} errorMessage={errorMessages.phoneNumber} />
           <InputField
             id="alternatePhoneNumber"
@@ -187,7 +189,7 @@ export default function PhoneNumberEdit() {
             errorMessage={errorMessages.alternatePhoneNumber}
           />
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-6 sm:my-4">
           <ButtonLink id="cancel" routeId="$lang+/_protected+/personal-information+/index" params={params}>
             {t('personal-information:phone-number.edit.button.cancel')}
           </ButtonLink>

@@ -28,6 +28,7 @@ vi.mock('~/services/personal-information-service.server', () => ({
   getPersonalInformationService: vi.fn().mockReturnValue({
     getPersonalInformation: vi.fn().mockResolvedValue({
       clientNumber: '999999999',
+      primaryTelephoneNumber: '819-458-2974',
     }),
   }),
 }));
@@ -41,13 +42,7 @@ vi.mock('~/utils/locale-utils.server', () => ({
 }));
 vi.mock('~/utils/env.server', () => ({
   featureEnabled: vi.fn().mockResolvedValue(true),
-  getEnv: vi.fn().mockReturnValue({
-    INTEROP_CCT_API_BASE_URI: 'https://api.example.com',
-    INTEROP_CCT_API_SUBSCRIPTION_KEY: '00000000000000000000000000000000',
-    INTEROP_CCT_API_COMMUNITY: 'CDCP',
-    ENGLISH_LANGUAGE_CODE: 1033,
-    FRENCH_LANGUAGE_CODE: 1036,
-  }),
+  getEnv: vi.fn().mockReturnValue({}),
 }));
 describe('_gcweb-app.personal-information.phone-number.edit', () => {
   afterEach(() => {
@@ -70,6 +65,7 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
 
       expect(data).toMatchObject({
         meta: {},
+        personalInformation: { primaryTelephoneNumber: '819-458-2974' },
       });
     });
   });
