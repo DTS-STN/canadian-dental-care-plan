@@ -360,11 +360,21 @@ export default function ApplyFlowPersonalInformation() {
         <fetcher.Form method="post" noValidate aria-describedby="form-instructions-info form-instructions">
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-6 grid gap-6 md:grid-cols-2">
-            <InputField id="phone-number" name="phoneNumber" className="w-full" defaultValue={defaultState?.phoneNumber ?? ''} errorMessage={errorMessages['phone-number']} label={t('apply:personal-information.phone-number')} maxLength={100} />
+            <InputField
+              id="phone-number"
+              name="phoneNumber"
+              className="w-full"
+              autoComplete="tel"
+              defaultValue={defaultState?.phoneNumber ?? ''}
+              errorMessage={errorMessages['phone-number']}
+              label={t('apply:personal-information.phone-number')}
+              maxLength={100}
+            />
             <InputField
               id="phone-number-alt"
               name="phoneNumberAlt"
               className="w-full"
+              autoComplete="tel"
               defaultValue={defaultState?.phoneNumberAlt ?? ''}
               errorMessage={errorMessages['phone-number-alt']}
               label={t('apply:personal-information.phone-number-alt')}
@@ -381,6 +391,7 @@ export default function ApplyFlowPersonalInformation() {
               maxLength={30}
               helpMessagePrimary={t('apply:personal-information.address-field.address-note')}
               helpMessagePrimaryClassName="text-black"
+              autoComplete="address-line1"
               defaultValue={defaultState?.mailingAddress ?? ''}
               errorMessage={errorMessages['mailing-address']}
             />
@@ -390,6 +401,7 @@ export default function ApplyFlowPersonalInformation() {
               className="w-full"
               label={t('apply:personal-information.address-field.apartment')}
               maxLength={30}
+              autoComplete="address-line2"
               defaultValue={defaultState?.mailingApartment ?? ''}
               errorMessage={errorMessages['mailing-apartment']}
             />
@@ -398,6 +410,7 @@ export default function ApplyFlowPersonalInformation() {
               name="mailingCountry"
               className="w-full sm:w-1/2"
               label={t('apply:personal-information.address-field.country')}
+              autoComplete="country"
               defaultValue={defaultState?.mailingCountry ?? ''}
               errorMessage={errorMessages['mailing-country']}
               options={[dummyOption, ...countries]}
@@ -415,13 +428,23 @@ export default function ApplyFlowPersonalInformation() {
               />
             )}
             <div className="grid gap-6 md:grid-cols-2">
-              <InputField id="mailing-city" name="mailingCity" className="w-full" label={t('apply:personal-information.address-field.city')} maxLength={100} defaultValue={defaultState?.mailingCity ?? ''} errorMessage={errorMessages['mailing-city']} />
+              <InputField
+                id="mailing-city"
+                name="mailingCity"
+                className="w-full"
+                label={t('apply:personal-information.address-field.city')}
+                maxLength={100}
+                autoComplete="address-level2"
+                defaultValue={defaultState?.mailingCity ?? ''}
+                errorMessage={errorMessages['mailing-city']}
+              />
               <InputField
                 id="mailing-postal-code"
                 name="mailingPostalCode"
                 className="w-full"
                 label={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID ? t('apply:personal-information.address-field.postal-code') : t('apply:personal-information.address-field.postal-code-optional')}
                 maxLength={100}
+                autoComplete="postal-code"
                 defaultValue={defaultState?.mailingPostalCode}
                 errorMessage={errorMessages['mailing-postal-code']}
               />
@@ -443,6 +466,7 @@ export default function ApplyFlowPersonalInformation() {
                   helpMessagePrimary={t('apply:personal-information.address-field.address-note')}
                   helpMessagePrimaryClassName="text-black"
                   maxLength={30}
+                  autoComplete="address-line1"
                   defaultValue={defaultState?.homeAddress ?? ''}
                   errorMessage={errorMessages['home-address']}
                 />
@@ -452,6 +476,7 @@ export default function ApplyFlowPersonalInformation() {
                   className="w-full"
                   label={t('apply:personal-information.address-field.apartment')}
                   maxLength={30}
+                  autoComplete="address-line2"
                   defaultValue={defaultState?.homeApartment ?? ''}
                   errorMessage={errorMessages['home-apartment']}
                 />
@@ -460,6 +485,7 @@ export default function ApplyFlowPersonalInformation() {
                   name="homeCountry"
                   className="w-full sm:w-1/2"
                   label={t('apply:personal-information.address-field.country')}
+                  autoComplete="country"
                   defaultValue={defaultState?.homeCountry ?? ''}
                   errorMessage={errorMessages['home-country']}
                   options={[dummyOption, ...countries]}
@@ -477,13 +503,23 @@ export default function ApplyFlowPersonalInformation() {
                   />
                 )}
                 <div className="mb-6 grid gap-6 md:grid-cols-2">
-                  <InputField id="home-city" name="homeCity" className="w-full" label={t('apply:personal-information.address-field.city')} maxLength={100} defaultValue={defaultState?.homeCity ?? ''} errorMessage={errorMessages['home-city']} />
+                  <InputField
+                    id="home-city"
+                    name="homeCity"
+                    className="w-full"
+                    label={t('apply:personal-information.address-field.city')}
+                    maxLength={100}
+                    autoComplete="address-level2"
+                    defaultValue={defaultState?.homeCity ?? ''}
+                    errorMessage={errorMessages['home-city']}
+                  />
                   <InputField
                     id="home-postal-code"
                     name="homePostalCode"
                     className="w-full"
                     label={selectedHomeCountry === CANADA_COUNTRY_ID || selectedHomeCountry === USA_COUNTRY_ID ? t('apply:personal-information.address-field.postal-code') : t('apply:personal-information.address-field.postal-code-optional')}
                     maxLength={100}
+                    autoComplete="postal-code"
                     defaultValue={defaultState?.homePostalCode ?? ''}
                     errorMessage={errorMessages['home-postal-code']}
                   />

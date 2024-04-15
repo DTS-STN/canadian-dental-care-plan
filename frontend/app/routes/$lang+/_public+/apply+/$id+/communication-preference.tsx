@@ -213,6 +213,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             maxLength={100}
             name="emailForFuture"
             errorMessage={errorMessages['email-for-future']}
+            autoComplete="email"
             defaultValue={defaultState?.emailForFuture ?? ''}
           />
           <InputField
@@ -223,6 +224,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             maxLength={100}
             name="confirmEmailForFuture"
             errorMessage={errorMessages['confirm-email-for-future']}
+            autoComplete="email"
             defaultValue={defaultState?.confirmEmailForFuture ?? ''}
           />
         </div>
@@ -240,7 +242,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
           <p className="md:col-span-2" id="email-note">
             {t('apply:communication-preference.email-note')}
           </p>
-          <InputField id="email" type="email" className="w-full" label={t('apply:communication-preference.email')} maxLength={100} name="email" errorMessage={errorMessages.email} defaultValue={defaultState?.email ?? ''} />
+          <InputField id="email" type="email" className="w-full" label={t('apply:communication-preference.email')} maxLength={100} name="email" errorMessage={errorMessages.email} autoComplete="email" defaultValue={defaultState?.email ?? ''} />
           <InputField
             id="confirm-email"
             type="email"
@@ -249,6 +251,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             maxLength={100}
             name="confirmEmail"
             errorMessage={errorMessages['confirm-email']}
+            autoComplete="email"
             defaultValue={defaultState?.confirmEmail ?? ''}
           />
         </div>
