@@ -301,7 +301,7 @@
     "address-field": {
       "address": "Adresse",
       "address-note": "Inclure le numéro de rue et le nom",
-      "apartment": "Appartement, suite, etc.",
+      "apartment": "Appartement, suite, etc. (facultatif)",
       "country": "Pays",
       "province": "Province, territoire, État ou région",
       "city": "Ville ou municipalité",
