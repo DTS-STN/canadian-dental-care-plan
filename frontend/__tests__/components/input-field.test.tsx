@@ -42,6 +42,19 @@ describe('InputField', () => {
     expect(actual).not.toBeRequired();
   });
 
+  it('should render with required', async () => {
+    render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" required />);
+
+    const actual = screen.getByTestId('input-field');
+
+    expect(actual).toBeInTheDocument();
+    expect(actual).toHaveAccessibleName('label test (input-label.required)');
+    expect(actual).toHaveAttribute('id', 'test-id');
+    expect(actual).toHaveValue('default value');
+    expect(actual).toBeRequired();
+    expect(actual).not.toHaveAccessibleDescription();
+  });
+
   it('should render with error message', async () => {
     render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" errorMessage="error message" />);
 
