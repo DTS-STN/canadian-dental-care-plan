@@ -172,6 +172,7 @@ export default function ApplyFlowApplicationInformation() {
                 className="w-full"
                 maxLength={100}
                 aria-describedby="name-instructions"
+                autoComplete="given-name"
                 errorMessage={errorMessages['first-name']}
                 defaultValue={defaultState?.firstName ?? ''}
                 required
@@ -182,6 +183,7 @@ export default function ApplyFlowApplicationInformation() {
                 label={t('applicant-information.last-name')}
                 className="w-full"
                 maxLength={100}
+                autoComplete="family-name"
                 defaultValue={defaultState?.lastName ?? ''}
                 errorMessage={errorMessages['last-name']}
                 aria-describedby="name-instructions"
