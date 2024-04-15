@@ -383,6 +383,7 @@ export default function ApplyFlowPersonalInformation() {
               helpMessagePrimaryClassName="text-black"
               defaultValue={defaultState?.mailingAddress ?? ''}
               errorMessage={errorMessages['mailing-address']}
+              required
             />
             <InputField
               id="mailing-apartment"
@@ -392,6 +393,7 @@ export default function ApplyFlowPersonalInformation() {
               maxLength={30}
               defaultValue={defaultState?.mailingApartment ?? ''}
               errorMessage={errorMessages['mailing-apartment']}
+              required
             />
             <InputSelect
               id="mailing-country"
@@ -402,6 +404,7 @@ export default function ApplyFlowPersonalInformation() {
               errorMessage={errorMessages['mailing-country']}
               options={[dummyOption, ...countries]}
               onChange={mailingCountryChangeHandler}
+              required
             />
             {mailingRegions.length > 0 && (
               <InputSelect
@@ -412,10 +415,20 @@ export default function ApplyFlowPersonalInformation() {
                 defaultValue={defaultState?.mailingProvince ?? ''}
                 errorMessage={errorMessages['mailing-province']}
                 options={[dummyOption, ...mailingRegions]}
+                required
               />
             )}
             <div className="grid gap-6 md:grid-cols-2">
-              <InputField id="mailing-city" name="mailingCity" className="w-full" label={t('apply:personal-information.address-field.city')} maxLength={100} defaultValue={defaultState?.mailingCity ?? ''} errorMessage={errorMessages['mailing-city']} />
+              <InputField
+                id="mailing-city"
+                name="mailingCity"
+                className="w-full"
+                label={t('apply:personal-information.address-field.city')}
+                maxLength={100}
+                defaultValue={defaultState?.mailingCity ?? ''}
+                errorMessage={errorMessages['mailing-city']}
+                required
+              />
               <InputField
                 id="mailing-postal-code"
                 name="mailingPostalCode"
@@ -424,6 +437,7 @@ export default function ApplyFlowPersonalInformation() {
                 maxLength={100}
                 defaultValue={defaultState?.mailingPostalCode}
                 errorMessage={errorMessages['mailing-postal-code']}
+                required={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID}
               />
             </div>
           </div>
@@ -445,6 +459,7 @@ export default function ApplyFlowPersonalInformation() {
                   maxLength={30}
                   defaultValue={defaultState?.homeAddress ?? ''}
                   errorMessage={errorMessages['home-address']}
+                  required
                 />
                 <InputField
                   id="home-apartment"
@@ -454,6 +469,7 @@ export default function ApplyFlowPersonalInformation() {
                   maxLength={30}
                   defaultValue={defaultState?.homeApartment ?? ''}
                   errorMessage={errorMessages['home-apartment']}
+                  required
                 />
                 <InputSelect
                   id="home-country"
@@ -464,6 +480,7 @@ export default function ApplyFlowPersonalInformation() {
                   errorMessage={errorMessages['home-country']}
                   options={[dummyOption, ...countries]}
                   onChange={homeCountryChangeHandler}
+                  required
                 />
                 {homeRegions.length > 0 && (
                   <InputSelect
@@ -474,10 +491,11 @@ export default function ApplyFlowPersonalInformation() {
                     defaultValue={defaultState?.homeProvince ?? ''}
                     errorMessage={errorMessages['home-province']}
                     options={[dummyOption, ...homeRegions]}
+                    required
                   />
                 )}
                 <div className="mb-6 grid gap-6 md:grid-cols-2">
-                  <InputField id="home-city" name="homeCity" className="w-full" label={t('apply:personal-information.address-field.city')} maxLength={100} defaultValue={defaultState?.homeCity ?? ''} errorMessage={errorMessages['home-city']} />
+                  <InputField id="home-city" name="homeCity" className="w-full" label={t('apply:personal-information.address-field.city')} maxLength={100} defaultValue={defaultState?.homeCity ?? ''} errorMessage={errorMessages['home-city']} required />
                   <InputField
                     id="home-postal-code"
                     name="homePostalCode"
@@ -486,6 +504,7 @@ export default function ApplyFlowPersonalInformation() {
                     maxLength={100}
                     defaultValue={defaultState?.homePostalCode ?? ''}
                     errorMessage={errorMessages['home-postal-code']}
+                    required={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID}
                   />
                 </div>
               </>

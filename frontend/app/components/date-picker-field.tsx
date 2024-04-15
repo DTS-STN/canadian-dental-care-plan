@@ -137,7 +137,7 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
   return (
     <div id={inputWrapperId} data-testid="date-picker-field">
       <fieldset>
-        <InputLegend id={inputLegendId} required={required} className="mb-2">
+        <InputLegend id={inputLegendId} className="mb-2">
           {legend}
         </InputLegend>
         {errorMessages && (
