@@ -9,6 +9,7 @@
     "primary-phone-number": "Telephone number",
     "alternate-phone-number": "Alternate telephone number",
     "no-phone-number": "N/A",
+    "email-address": "Email address",
     "addresses": "Addresses",
     "home-address": "Home address",
     "mailing-address": "Mailing address",
@@ -16,6 +17,7 @@
     "change-home-address": "Change home address",
     "change-mailing-address": "Change mailing address",
     "change-phone-number": "Change phone number",
+    "change-email-address": "Change email address",
     "change-preferred-language": "Change preferred language",
     "no-address-on-file": "No address on file",
     "no-preferred-language-on-file": "No preferred language on file",
@@ -111,6 +113,34 @@
         "empty-phone-number": "Enter a phone number",
         "invalid-phone-format": "Invalid phone number"
       }
+    }
+  },
+  "email-address": {
+    "edit": {
+      "page-title": "Update email address",
+      "subtitle": "Please update your email address below.",
+      "breadcrumbs": {
+        "personal-information": "Personal information",
+        "change-email-address": "Change email address"
+      },
+      "update-message": "Please update your email address below.",
+      "button": {
+        "save": "Change",
+        "cancel": "Cancel"
+      },
+      "component": {
+        "previous": "Previous email address",
+        "newEmail": "New email address",
+        "email": "Email address",
+        "confirm-email": "Confirm email address",
+        "error": "Error"
+      },
+      "error-message": {
+        "empty-email-address": "Enter an email address",
+        "invalid-email-format": "Invalid email address",
+        "email-match": "The email addresses entered do not match"
+      },
+      "updated-notification": "Email address updated"
     }
   },
   "preferred-language": {

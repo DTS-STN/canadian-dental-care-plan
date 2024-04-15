@@ -359,6 +359,24 @@
                 ]
               },
               {
+                "id": "$lang+/_protected+/personal-information+/email-address+/_route",
+                "file": "routes/$lang+/_protected+/personal-information+/email-address+/_route.tsx",
+                "paths": {
+                  "en": "/:lang/personal-information/email-address",
+                  "fr": "/:lang/informations-personnelles/adresse-postale"
+                },
+                "children": [
+                  {
+                    "id": "$lang+/_protected+/personal-information+/email-address+/edit",
+                    "file": "routes/$lang+/_protected+/personal-information+/email-address+/edit.tsx",
+                    "paths": {
+                      "en": "/:lang/personal-information/email-address/edit",
+                      "fr": "/:lang/informations-personnelles/adresse-postale/modifier"
+                    }
+                  }
+                ]
+              },
+              {
                 "id": "$lang+/_protected+/personal-information+/preferred-language+/_route",
                 "file": "routes/$lang+/_protected+/personal-information+/preferred-language+/_route.tsx",
                 "paths": {
