@@ -127,7 +127,7 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
           </div>
         </div>
       </main>
-      <footer id="wb-info" className="bg-stone-50 print:hidden">
+      <footer id="wb-info" tabIndex={-1} className="bg-stone-50 print:hidden">
         <div className="container flex items-center justify-end gap-6 py-2.5 sm:py-3.5">
           <div>
             <h2 className="sr-only">
