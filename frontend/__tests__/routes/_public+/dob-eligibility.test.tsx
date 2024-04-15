@@ -1,4 +1,4 @@
-import { Session } from '@remix-run/node';
+import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -24,9 +24,12 @@ describe('_public.apply.id.dob-eligibility', () => {
 
   describe('loader()', () => {
     it('should load id', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('csrfToken', 'csrfToken');
+
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/dob-eligibility'),
-        context: { session: {} as Session },
+        context: { session },
         params: {},
       });
 
@@ -34,6 +37,7 @@ describe('_public.apply.id.dob-eligibility', () => {
 
       expect(data).toEqual({
         id: '123',
+        csrfToken: 'csrfToken',
         meta: {},
       });
     });

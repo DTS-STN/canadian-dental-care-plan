@@ -26,6 +26,7 @@ import { getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -155,6 +156,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
 
+  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:review-information.page-title') }) };
 
   return json({
@@ -169,6 +171,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     mailingAddressInfo,
     dentalInsurance,
     dentalBenefit,
+    csrfToken,
     meta,
     COMMUNICATION_METHOD_EMAIL_ID,
     siteKey: HCAPTCHA_SITE_KEY,
@@ -177,12 +180,20 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  const log = getLogger('apply/review-information');
   const applyRouteHelpers = getApplyRouteHelpers();
   const benefitApplicationService = getBenefitApplicationService();
   const { ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
   const formData = await request.formData();
+  const expectedCsrfToken = String(session.get('csrfToken'));
+  const submittedCsrfToken = String(formData.get('_csrf'));
+
+  if (expectedCsrfToken !== submittedCsrfToken) {
+    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
+    throw new Response('Invalid CSRF token', { status: 400 });
+  }
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   if (hCaptchaEnabled) {
@@ -232,8 +243,22 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ReviewInformation() {
   const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, COMMUNICATION_METHOD_EMAIL_ID, siteKey, hCaptchaEnabled } =
-    useLoaderData<typeof loader>();
+  const {
+    userInfo,
+    spouseInfo,
+    maritalStatuses,
+    preferredLanguage,
+    federalSocialPrograms,
+    provincialTerritorialSocialPrograms,
+    homeAddressInfo,
+    mailingAddressInfo,
+    dentalInsurance,
+    dentalBenefit,
+    csrfToken,
+    COMMUNICATION_METHOD_EMAIL_ID,
+    siteKey,
+    hCaptchaEnabled,
+  } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -468,6 +493,7 @@ export default function ReviewInformation() {
         <p className="mb-4">{t('apply:review-information.submit-p-false-info')}</p>
         <p className="mb-4">{t('apply:review-information.submit-p-repayment')}</p>
         <fetcher.Form method="post" onSubmit={handleSubmit} className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+          <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <Button id="confirm-button" variant="green" disabled={isSubmitting}>
             {t('apply:review-information.submit-button')}
