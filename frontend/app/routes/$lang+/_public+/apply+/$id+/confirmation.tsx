@@ -17,6 +17,7 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -129,12 +130,14 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     selectedProvincialBenefits,
   };
 
+  const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:confirm.page-title') }) };
 
   return json({
     dentalInsurance,
     homeAddressInfo,
     mailingAddressInfo,
+    csrfToken,
     meta,
     spouseInfo,
     submissionInfo: state.submissionInfo,
@@ -143,8 +146,19 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  const log = getLogger('apply/confirmation');
   const applyRouteHelpers = getApplyRouteHelpers();
   const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const formData = await request.formData();
+  const expectedCsrfToken = String(session.get('csrfToken'));
+  const submittedCsrfToken = String(formData.get('_csrf'));
+
+  if (expectedCsrfToken !== submittedCsrfToken) {
+    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
+    throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
   await applyRouteHelpers.loadState({ params, request, session });
   await applyRouteHelpers.clearState({ params, request, session });
   return redirect(t('confirm.exit-link'));
@@ -153,7 +167,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ApplyFlowConfirm() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, csrfToken } = useLoaderData<typeof loader>();
 
   const mscaLink = <InlineLink to={t('confirm.msca-link')} />;
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} />;
@@ -330,6 +344,7 @@ export default function ApplyFlowConfirm() {
       </Button>
 
       <fetcher.Form method="post" noValidate className="mt-5 flex flex-wrap items-center gap-3">
+        <input type="hidden" name="_csrf" value={csrfToken} />
         <Button variant="primary" onClick={() => sessionStorage.removeItem('flow.state')} size="lg" className="print:hidden">
           {t('apply:confirm.exit')}
         </Button>
