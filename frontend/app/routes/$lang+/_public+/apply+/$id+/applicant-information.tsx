@@ -158,10 +158,12 @@ export default function ApplyFlowApplicationInformation() {
           {t('applicant-information.form-instructions-info')}
         </p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <fetcher.Form method="post" aria-describedby="form-instructions-sin form-instructions-info" noValidate>
+        <fetcher.Form method="post" aria-describedby="form-instructions-sin form-instructions-info form-instructions" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-8 space-y-6">
-            <p className="mb-6 italic">{t('apply:required-label')}</p>
+            <p className="mb-6 italic" id="form-instructions">
+              {t('apply:required-label')}
+            </p>
             <div className="grid gap-6 md:grid-cols-2">
               <InputField
                 id="first-name"

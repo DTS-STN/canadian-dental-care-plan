@@ -351,11 +351,13 @@ export default function ApplyFlowPersonalInformation() {
       </div>
       <div className="max-w-prose">
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <p id="form-instructions" className="mb-6">
+        <p id="form-instructions-info" className="mb-6">
           {t('apply:personal-information.form-instructions')}
         </p>
-        <p className="mb-6 italic">{t('apply:required-label')}</p>
-        <fetcher.Form method="post" noValidate>
+        <p className="mb-6 italic" id="form-instructions">
+          {t('apply:required-label')}
+        </p>
+        <fetcher.Form method="post" noValidate aria-describedby="form-instructions-info form-instructions">
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-6 grid gap-6 md:grid-cols-2">
             <InputField id="phone-number" name="phoneNumber" className="w-full" defaultValue={defaultState?.phoneNumber ?? ''} errorMessage={errorMessages['phone-number']} label={t('apply:personal-information.phone-number')} maxLength={100} />
