@@ -22,7 +22,7 @@ import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { isValidApplicationCode } from '~/utils/application-code-utils';
-import { getEnv } from '~/utils/env.server';
+import { featureEnabled, getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -38,6 +38,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+  featureEnabled('status');
   const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
   const csrfToken = String(session.get('csrfToken'));
