@@ -17,6 +17,15 @@
       "request": "launch",
       "type": "node-terminal",
       "cwd": "${workspaceFolder}/frontend/"
+    },
+    {
+      "type": "java",
+      "name": "Launch Canadian Dental Care Plan API",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "ca.gov.dtsstn.cdcp.api.Application",
+      "projectName": "cdcp-api",
+      "args": "--spring.profiles.active=local"
     }
   ]
 }
