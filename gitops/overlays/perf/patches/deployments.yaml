@@ -58,6 +58,13 @@ spec:
         - name: fluentd
           image: docker.io/fluentd
           args: [--config, /etc/fluentd.conf]
+          resources:
+            requests:
+              cpu: 50m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 200Mi
           volumeMounts:
             - name: audit-logs
               mountPath: /logs
