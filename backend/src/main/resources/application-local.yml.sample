@@ -1,0 +1,7 @@
+# Sample configuration file for application-local.yml.
+# Copy this file as application-local.yml and customize the values for your local environment.
+# application-local.yml is excluded from version control (gitignored).
+
+logging:
+  level:
+    "[ca.gov.dtsstn.cdcp.api]": trace
