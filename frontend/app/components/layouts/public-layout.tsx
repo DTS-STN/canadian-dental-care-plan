@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import type { PropsWithChildren } from 'react';
 
 import { Link } from '@remix-run/react';
@@ -11,6 +12,7 @@ import { PageFooter } from '~/components/page-footer';
 import { PageHeaderBrand } from '~/components/page-header-brand';
 import { PageTitle } from '~/components/page-title';
 import { SkipNavigationLinks } from '~/components/skip-navigation-links';
+import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
 
@@ -83,6 +85,12 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
 
   const homeLink = <Link to="/" className="text-slate-700 underline hover:text-blue-700 focus:text-blue-700" />;
 
+  useEffect(() => {
+    if (adobeAnalytics.isConfigured()) {
+      adobeAnalytics.error(404);
+    }
+  }, []);
+
   return (
     <>
       <header className="border-b-[3px] border-slate-700 print:hidden">
@@ -151,6 +159,12 @@ export function NotFoundError({ error }: NotFoundErrorProps) {
   const { t } = useTranslation(i18nNamespaces);
   const home = <InlineLink to="/apply" />;
 
+  useEffect(() => {
+    if (adobeAnalytics.isConfigured()) {
+      adobeAnalytics.error(404);
+    }
+  }, []);
+
   return (
     <>
       <PageHeader />
@@ -179,6 +193,12 @@ export interface ServerErrorProps {
 export function ServerError({ error }: ServerErrorProps) {
   const { t } = useTranslation(i18nNamespaces);
   const home = <InlineLink to="/" />;
+
+  useEffect(() => {
+    if (adobeAnalytics.isConfigured()) {
+      adobeAnalytics.error(500);
+    }
+  }, []);
 
   return (
     <>
