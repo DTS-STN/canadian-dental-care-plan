@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { sleep } from 'moderndash';
 
 test.describe('letters page', () => {
   test('should navigate to letters page', async ({ page }) => {
@@ -8,10 +9,12 @@ test.describe('letters page', () => {
 
   test('it should sort letters oldest to newest', async ({ page }) => {
     await page.goto('/en/letters');
+    await sleep(250); // wait 250ms for page to hydrate and onChange handlers to be bound
+
     const selectLocator = page.getByRole('combobox', { name: 'filter by' });
     await expect(selectLocator).toHaveValue('desc');
     await selectLocator.selectOption('asc');
-    await expect(page).toHaveURL(/\/letters?.*sort=asc/);
+    await expect(page).toHaveURL(/\/letters\?.*sort=asc/);
     await expect(selectLocator).toHaveValue('asc');
   });
 
