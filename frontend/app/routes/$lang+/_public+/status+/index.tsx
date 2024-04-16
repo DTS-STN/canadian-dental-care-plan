@@ -59,12 +59,16 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const formDataSchema = z.object({
     sin: z
-      .string()
+      .string({ required_error: t('status:form.error-message.sin-required') })
       .trim()
-      .min(1, t('status:form.error-message.sin-required'))
+      .min(1)
       .refine(isValidSin, t('status:form.error-message.sin-valid'))
       .transform((sin) => formatSin(sin, '')),
-    code: z.string().trim().min(1, t('status:form.error-message.application-code-required')).refine(isValidApplicationCode, t('status:form.error-message.application-code-valid')),
+    code: z
+      .string({ required_error: t('status:form.error-message.application-code-required') })
+      .trim()
+      .min(1)
+      .refine(isValidApplicationCode, t('status:form.error-message.application-code-valid')),
   });
 
   const formData = await request.formData();
