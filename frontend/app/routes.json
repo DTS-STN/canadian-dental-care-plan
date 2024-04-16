@@ -375,14 +375,6 @@
                 },
                 "children": [
                   {
-                    "id": "$lang+/_protected+/personal-information+/preferred-language+/confirm",
-                    "file": "routes/$lang+/_protected+/personal-information+/preferred-language+/confirm.tsx",
-                    "paths": {
-                      "en": "/:lang/personal-information/preferred-language/confirm",
-                      "fr": "/:lang/informations-personnelles/langue-preferee/confirmer"
-                    }
-                  },
-                  {
                     "id": "$lang+/_protected+/personal-information+/preferred-language+/edit",
                     "file": "routes/$lang+/_protected+/personal-information+/preferred-language+/edit.tsx",
                     "paths": {

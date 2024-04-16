@@ -136,21 +136,6 @@
       "error-message": {
         "preferred-language-required": "Select preferred language of communication"
       }
-    },
-    "confirm": {
-      "page-title": "Confirm preferred language",
-      "subtitle": "Please confirm the preferred language change below.",
-      "breadcrumbs": {
-        "personal-information": "Personal information",
-        "preferred-language": "Preferred language",
-        "preferred-language-edit": "Change preferred language",
-        "preferred-language-confirm": "Confirm"
-      },
-      "button": {
-        "confirm": "Confirm",
-        "cancel": "Cancel"
-      },
-      "updated-notification": "Preferred language updated"
     }
   }
 }
