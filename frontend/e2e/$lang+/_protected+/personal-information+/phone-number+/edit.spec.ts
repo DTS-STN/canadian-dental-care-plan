@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { sleep } from 'moderndash';
 
 test.describe('personal information phone number edit page', () => {
   test('should navigate to phone number edit page', async ({ page }) => {
@@ -12,6 +13,7 @@ test.describe('personal information phone number edit page', () => {
     await test.step('navigate', async () => {
       await page.goto('/en/personal-information/phone-number/edit');
       await expect(page).toHaveURL(/.*personal-information\/phone-number\/edit/);
+      await sleep(250); // wait 250ms for page to hydrate and onChange handlers to be bound
     });
 
     await test.step('submit invalid form data', async () => {
@@ -36,6 +38,7 @@ test.describe('personal information phone number edit page', () => {
     await test.step('navigate', async () => {
       await page.goto('/en/personal-information/phone-number/edit');
       await expect(page).toHaveURL(/.*personal-information\/phone-number\/edit/);
+      await sleep(250); // wait 250ms for page to hydrate and onChange handlers to be bound
     });
 
     await test.step('enter and submit form data', async () => {
