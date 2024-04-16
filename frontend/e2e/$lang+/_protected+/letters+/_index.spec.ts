@@ -8,10 +8,12 @@ test.describe('letters page', () => {
 
   test('it should sort letters oldest to newest', async ({ page }) => {
     await page.goto('/en/letters');
+
     const selectLocator = page.getByRole('combobox', { name: 'filter by' });
     await expect(selectLocator).toHaveValue('desc');
+
     await selectLocator.selectOption('asc');
-    await expect(page).toHaveURL(/\/letters?.*sort=asc/);
+    await page.waitForURL(/\/letters\?.*sort=asc/);
     await expect(selectLocator).toHaveValue('asc');
   });
 
@@ -19,9 +21,13 @@ test.describe('letters page', () => {
     // note: the default behaviour in the browser is to open the pdf in the tab
     // in chromium, however, this isn't the case. Instead, the pdf will fire a download event
     await page.goto('/en/letters');
-    const downloadPromise = page.waitForEvent('download');
-    await page.getByRole('main').getByRole('listitem').first().getByRole('link').click();
-    const download = await downloadPromise;
+
+    // prettier-ignore
+    await page.getByRole('main')
+      .getByRole('listitem').first()
+      .getByRole('link').click();
+
+    const download = await page.waitForEvent('download');
     expect(download.suggestedFilename()).toMatch(/\.pdf$/);
   });
 });
