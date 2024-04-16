@@ -5,6 +5,7 @@ import { json } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { Form, useActionData, useLoaderData, useParams } from '@remix-run/react';
 
+import { Console } from 'console';
 import { isValidPhoneNumber, parsePhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
@@ -106,13 +107,19 @@ export async function action({ context: { session }, params, request }: ActionFu
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
   const submittedCsrfToken = String(formData.get('_csrf'));
-
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const parsedDataResult = formDataSchema.safeParse(formData);
+  console.debug('FORM DATA PHONE NUMBER ::' + (formData.get('phoneNumber') ? String(formData.get('phoneNumber')) : undefined));
+  console.debug('FORM DATA ALTERNATE PHONE NUMBER ::' + (formData.get('alternatePhoneNumber') ? String(formData.get('alternatePhoneNumber')) : undefined));
+  const data = {
+    primaryTelephoneNumber: formData.get('phoneNumber') ? String(formData.get('phoneNumber')) : undefined,
+    alternateTelephoneNumber: formData.get('alternatePhoneNumber') ? String(formData.get('alternatePhoneNumber')) : undefined,
+  };
+
+  const parsedDataResult = formDataSchema.safeParse(data);
   console.debug('PARSE BOOLEAN ' + parsedDataResult.success);
   if (!parsedDataResult.success) {
     instrumentationService.countHttpStatus('phone-number.confirm', 400);
