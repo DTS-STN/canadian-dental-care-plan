@@ -22,7 +22,7 @@ import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { isValidApplicationCode } from '~/utils/application-code-utils';
-import { getEnv } from '~/utils/env.server';
+import { featureEnabled, getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -38,6 +38,7 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+  featureEnabled('status');
   const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
   const csrfToken = String(session.get('csrfToken'));
@@ -58,12 +59,16 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const formDataSchema = z.object({
     sin: z
-      .string()
+      .string({ required_error: t('status:form.error-message.sin-required') })
       .trim()
-      .min(1, t('status:form.error-message.sin-required'))
+      .min(1)
       .refine(isValidSin, t('status:form.error-message.sin-valid'))
       .transform((sin) => formatSin(sin, '')),
-    code: z.string().trim().min(1, t('status:form.error-message.application-code-required')).refine(isValidApplicationCode, t('status:form.error-message.application-code-valid')),
+    code: z
+      .string({ required_error: t('status:form.error-message.application-code-required') })
+      .trim()
+      .min(1)
+      .refine(isValidApplicationCode, t('status:form.error-message.application-code-valid')),
   });
 
   const formData = await request.formData();
