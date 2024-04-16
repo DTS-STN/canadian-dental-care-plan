@@ -86,7 +86,7 @@ export default function App() {
   const alternateLanguages = useAlternateLanguages(origin);
 
   useEffect(() => {
-    if (env.ADOBE_ANALYTICS_SRC && env.ADOBE_ANALYTICS_JQUERY_SRC) {
+    if (adobeAnalytics.isConfigured()) {
       if (isApplyRoutePathname(location.pathname)) {
         adobeAnalytics.pageview(removeApplyRouteSessionPathSegment(document.location.toString()));
         return;
@@ -94,7 +94,7 @@ export default function App() {
 
       adobeAnalytics.pageview(document.location.toString());
     }
-  }, [env.ADOBE_ANALYTICS_JQUERY_SRC, env.ADOBE_ANALYTICS_SRC, location.pathname]);
+  }, [location.pathname]);
 
   return (
     <html lang={i18n.language}>

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import type { PropsWithChildren } from 'react';
 
 import { Link } from '@remix-run/react';
@@ -15,6 +16,7 @@ import { PageFooter } from '~/components/page-footer';
 import { PageHeaderBrand } from '~/components/page-header-brand';
 import { PageTitle } from '~/components/page-title';
 import { SkipNavigationLinks } from '~/components/skip-navigation-links';
+import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useBreadcrumbs, useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
@@ -149,6 +151,13 @@ export interface NotFoundErrorProps {
 export function NotFoundError({ error }: NotFoundErrorProps) {
   const { t } = useTranslation(i18nNamespaces);
   const home = <InlineLink to="/" />;
+
+  useEffect(() => {
+    if (adobeAnalytics.isConfigured()) {
+      adobeAnalytics.error(404);
+    }
+  }, []);
+
   return (
     <>
       <PageHeader />
@@ -177,6 +186,13 @@ export interface ServerErrorProps {
 export function ServerError({ error }: ServerErrorProps) {
   const { t } = useTranslation(i18nNamespaces);
   const home = <InlineLink to="/" />;
+
+  useEffect(() => {
+    if (adobeAnalytics.isConfigured()) {
+      adobeAnalytics.error(500);
+    }
+  }, []);
+
   return (
     <>
       <PageHeader />
