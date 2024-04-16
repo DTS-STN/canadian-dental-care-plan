@@ -126,17 +126,16 @@
   },
   "preferred-language": {
     "edit": {
-      "page-title": "Change preferred language",
-      "subtitle": "Please update your preferred language below.",
+      "page-title": "Preferred language",
       "breadcrumbs": {
-        "personal-information": "Personal information",
-        "preferred-language": "Preferred language",
-        "edit": "Edit"
+        "personal-information": "Personal information"
       },
-      "id": "ID",
-      "language": "Language",
-      "change": "Change",
-      "cancel": "Cancel"
+      "preferred-language-legend": "What is your preferred language of communication?",
+      "save": "Save",
+      "back": "Back",
+      "error-message": {
+        "preferred-language-required": "Select preferred language of communication"
+      }
     },
     "confirm": {
       "page-title": "Confirm preferred language",

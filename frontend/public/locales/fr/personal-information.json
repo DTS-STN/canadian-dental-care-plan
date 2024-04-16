@@ -130,32 +130,31 @@
   },
   "preferred-language": {
     "edit": {
-      "page-title": "(FR) Change preferred language",
-      "subtitle": "(FR) Please update your preferred language below.",
+      "page-title": "(FR) Preferred language",
       "breadcrumbs": {
-        "personal-information": "(FR) Personal information",
-        "preferred-language": "(FR) Preferred language",
-        "edit": "(FR) Edit"
+        "personal-information": "(FR) Personal information"
       },
-      "id": "(FR) ID",
-      "language": "(FR) Language",
-      "change": "(FR) Change",
+      "preferred-language-legend": "(FR) What is your preferred language of communication?",
+      "save": "(FR) Save",
+      "back": "(FR) Back",
+      "error-message": {
+        "preferred-language-required": "Sélectionnez la langue de communication préférée"
+      }
+    }
+  },
+  "confirm": {
+    "page-title": "(FR) Confirm preferred language",
+    "subtitle": "(FR) Please confirm the preferred language change below.",
+    "breadcrumbs": {
+      "personal-information": "(FR) Personal information",
+      "preferred-language": "(FR) Preferred language",
+      "preferred-language-edit": "(FR) Change preferred language",
+      "preferred-language-confirm": "(FR) Confirm"
+    },
+    "button": {
+      "confirm": "(FR) Confirm",
       "cancel": "(FR) Cancel"
     },
-    "confirm": {
-      "page-title": "(FR) Confirm preferred language",
-      "subtitle": "(FR) Please confirm the preferred language change below.",
-      "breadcrumbs": {
-        "personal-information": "(FR) Personal information",
-        "preferred-language": "(FR) Preferred language",
-        "preferred-language-edit": "(FR) Change preferred language",
-        "preferred-language-confirm": "(FR) Confirm"
-      },
-      "button": {
-        "confirm": "(FR) Confirm",
-        "cancel": "(FR) Cancel"
-      },
-      "updated-notification": "(FR) Preferred language updated"
-    }
+    "updated-notification": "(FR) Preferred language updated"
   }
 }
