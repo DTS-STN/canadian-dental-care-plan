@@ -35,7 +35,8 @@ async function getPersonalInformation(userInfoToken: UserinfoToken, params: Para
   const personalInformationService = getPersonalInformationService();
   const personalInformationFromService = await personalInformationService.getPersonalInformation(userInfoToken.sin, userInfoToken.sub);
   if (personalInformationFromService) {
-    log.debug('Returning personal information from service for userId [%s]', userInfoToken.sub);
+    log.debug('Returning personal information from service for userId [%s] and storing it in the session', userInfoToken.sub);
+    session.set('personalInformation', personalInformationFromService);
     return personalInformationFromService;
   }
 

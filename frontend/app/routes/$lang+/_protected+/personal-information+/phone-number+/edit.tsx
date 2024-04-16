@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
 import { json } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { Form, useActionData, useLoaderData, useParams } from '@remix-run/react';
 
-import { isValidPhoneNumber } from 'libphonenumber-js';
+import { isValidPhoneNumber, parsePhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
 import { z } from 'zod';
@@ -14,7 +14,6 @@ import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
-import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { PersonalInfo } from '~/schemas/personal-informaton-service-schemas.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
@@ -55,14 +54,12 @@ export async function loader({ context: { session }, request, params }: LoaderFu
   await raoidcService.handleSessionValidation(request, session);
 
   const csrfToken = String(session.get('csrfToken'));
-  const personalInformationRouteHelper = getPersonalInformationRouteHelpers();
 
-  const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const personalInformation = await personalInformationRouteHelper.getPersonalInformation(userInfoToken, params, request, session);
-  if (!personalInformation) {
+  if (session.get('personalInformation') === undefined) {
     return redirect(getPathById('$lang+/_protected+/personal-information+/index', params));
   }
-
+  const personalInformation: PersonalInfo = session.get('personalInformation');
+  console.debug(JSON.stringify(personalInformation, null, 2));
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:phone-number.edit.page-title') }) };
 
@@ -77,14 +74,20 @@ export async function action({ context: { session }, params, request }: ActionFu
   const raoidcService = await getRaoidcService();
   const personalInformation: PersonalInfo = session.get('personalInformation');
 
+  const t = await getFixedT(request, handle.i18nNamespaces);
   await raoidcService.handleSessionValidation(request, session);
-
+  //.string()
+  // .min(1, { message: 'empty-phone-number' })
+  // .refine((val) => isValidPhoneNumber(val, 'CA'), { message: 'invalid-phone-format' }),
   const formDataSchema = z.object({
     phoneNumber: z
-      .string()
-      .min(1, { message: 'empty-phone-number' })
-      .refine((val) => isValidPhoneNumber(val, 'CA'), { message: 'invalid-phone-format' }),
 
+      .string()
+      .trim()
+      .max(100)
+      .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('personal-information:phone-number.edit.error-message.invalid-phone-format'))
+      .transform((val) => parsePhoneNumber(val, 'CA').formatInternational())
+      .optional(),
     alternatePhoneNumber: z
       .string()
       .refine(
@@ -110,7 +113,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   const parsedDataResult = formDataSchema.safeParse(formData);
-
+  console.debug('PARSE BOOLEAN ' + parsedDataResult.success);
   if (!parsedDataResult.success) {
     instrumentationService.countHttpStatus('phone-number.confirm', 400);
     return json({
@@ -120,7 +123,10 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
   personalInformation.primaryTelephoneNumber = parsedDataResult.data.phoneNumber;
   personalInformation.alternateTelephoneNumber = parsedDataResult.data.alternatePhoneNumber;
+  console.debug('PARSED PRIMAPRY PHONE ::' + parsedDataResult.data.phoneNumber);
+  console.debug('PARSED ALTERNATE PHONE ::' + parsedDataResult.data.alternatePhoneNumber);
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  console.debug('UPDATED PERSONAL INFO :: ' + JSON.stringify(personalInformation, null, 2));
   personalInformationService.updatePersonalInformation(userInfoToken.sin!, personalInformation);
   session.set('personalInformation', personalInformation);
   const idToken: IdToken = session.get('idToken');
