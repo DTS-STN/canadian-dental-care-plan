@@ -5,7 +5,6 @@ import { json } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { Form, useActionData, useLoaderData, useParams } from '@remix-run/react';
 
-import { Console } from 'console';
 import { isValidPhoneNumber, parsePhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
@@ -60,7 +59,6 @@ export async function loader({ context: { session }, request, params }: LoaderFu
     return redirect(getPathById('$lang+/_protected+/personal-information+/index', params));
   }
   const personalInformation: PersonalInfo = session.get('personalInformation');
-  console.debug(JSON.stringify(personalInformation, null, 2));
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:phone-number.edit.page-title') }) };
 
@@ -77,11 +75,9 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   await raoidcService.handleSessionValidation(request, session);
-  //.string()
-  // .min(1, { message: 'empty-phone-number' })
-  // .refine((val) => isValidPhoneNumber(val, 'CA'), { message: 'invalid-phone-format' }),
+
   const formDataSchema = z.object({
-    phoneNumber: z
+    primaryTelephoneNumber: z
 
       .string()
       .trim()
@@ -89,18 +85,12 @@ export async function action({ context: { session }, params, request }: ActionFu
       .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('personal-information:phone-number.edit.error-message.invalid-phone-format'))
       .transform((val) => parsePhoneNumber(val, 'CA').formatInternational())
       .optional(),
-    alternatePhoneNumber: z
+    alternateTelephoneNumber: z
       .string()
-      .refine(
-        (val) => {
-          if (val.length === 0) {
-            return true;
-          } else {
-            return isValidPhoneNumber(val, 'CA');
-          }
-        },
-        { message: 'invalid-phone-format' },
-      )
+      .trim()
+      .max(100)
+      .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('personal-information:phone-number.edit.error-message.invalid-phone-format'))
+      .transform((val) => parsePhoneNumber(val, 'CA').formatInternational())
       .optional(),
   });
 
@@ -111,16 +101,13 @@ export async function action({ context: { session }, params, request }: ActionFu
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
     throw new Response('Invalid CSRF token', { status: 400 });
   }
-
-  console.debug('FORM DATA PHONE NUMBER ::' + (formData.get('phoneNumber') ? String(formData.get('phoneNumber')) : undefined));
-  console.debug('FORM DATA ALTERNATE PHONE NUMBER ::' + (formData.get('alternatePhoneNumber') ? String(formData.get('alternatePhoneNumber')) : undefined));
   const data = {
-    primaryTelephoneNumber: formData.get('phoneNumber') ? String(formData.get('phoneNumber')) : undefined,
-    alternateTelephoneNumber: formData.get('alternatePhoneNumber') ? String(formData.get('alternatePhoneNumber')) : undefined,
+    primaryTelephoneNumber: formData.get('primaryTelephoneNumber') ? String(formData.get('primaryTelephoneNumber')) : undefined,
+    alternateTelephoneNumber: formData.get('alternateTelephoneNumber') ? String(formData.get('alternateTelephoneNumber')) : undefined,
   };
 
   const parsedDataResult = formDataSchema.safeParse(data);
-  console.debug('PARSE BOOLEAN ' + parsedDataResult.success);
+
   if (!parsedDataResult.success) {
     instrumentationService.countHttpStatus('phone-number.confirm', 400);
     return json({
@@ -128,12 +115,11 @@ export async function action({ context: { session }, params, request }: ActionFu
       formData: formData as Partial<z.infer<typeof formDataSchema>>,
     });
   }
-  personalInformation.primaryTelephoneNumber = parsedDataResult.data.phoneNumber;
-  personalInformation.alternateTelephoneNumber = parsedDataResult.data.alternatePhoneNumber;
-  console.debug('PARSED PRIMAPRY PHONE ::' + parsedDataResult.data.phoneNumber);
-  console.debug('PARSED ALTERNATE PHONE ::' + parsedDataResult.data.alternatePhoneNumber);
+  personalInformation.primaryTelephoneNumber = parsedDataResult.data.primaryTelephoneNumber;
+  personalInformation.alternateTelephoneNumber = parsedDataResult.data.alternateTelephoneNumber;
+
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  console.debug('UPDATED PERSONAL INFO :: ' + JSON.stringify(personalInformation, null, 2));
+
   personalInformationService.updatePersonalInformation(userInfoToken.sin!, personalInformation);
   session.set('personalInformation', personalInformation);
   const idToken: IdToken = session.get('idToken');
@@ -152,8 +138,8 @@ export default function PhoneNumberEdit() {
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const defaultValues = {
-    phoneNumber: personalInformation.primaryTelephoneNumber ?? '',
-    alternatePhoneNumber: personalInformation.alternateTelephoneNumber ?? '',
+    primaryTelephoneNumber: personalInformation.primaryTelephoneNumber ?? '',
+    alternateTelephoneNumber: personalInformation.alternateTelephoneNumber ?? '',
   };
 
   /**
@@ -174,8 +160,8 @@ export default function PhoneNumberEdit() {
   }
 
   const errorMessages = {
-    phoneNumber: getErrorMessage(actionData?.errors.phoneNumber?._errors[0]),
-    alternatePhoneNumber: getErrorMessage(actionData?.errors.alternatePhoneNumber?._errors[0]),
+    primaryTelephoneNumber: getErrorMessage(actionData?.errors.primaryTelephoneNumber?._errors[0]),
+    alternateTelephoneNumber: getErrorMessage(actionData?.errors.alternateTelephoneNumber?._errors[0]),
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -192,14 +178,21 @@ export default function PhoneNumberEdit() {
       <Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="grid gap-6 ">
-          <InputField id="phoneNumber" name="phoneNumber" type="tel" label={t('personal-information:phone-number.edit.component.phone')} defaultValue={defaultValues.phoneNumber} errorMessage={errorMessages.phoneNumber} />
           <InputField
-            id="alternatePhoneNumber"
-            name="alternatePhoneNumber"
+            id="primaryTelephoneNumber"
+            name="primaryTelephoneNumber"
+            type="tel"
+            label={t('personal-information:phone-number.edit.component.phone')}
+            defaultValue={defaultValues.primaryTelephoneNumber}
+            errorMessage={errorMessages.primaryTelephoneNumber}
+          />
+          <InputField
+            id="alternateTelephoneNumber"
+            name="alternateTelephoneNumber"
             type="tel"
             label={t('personal-information:phone-number.edit.component.alternate-phone')}
-            defaultValue={defaultValues.alternatePhoneNumber}
-            errorMessage={errorMessages.alternatePhoneNumber}
+            defaultValue={defaultValues.alternateTelephoneNumber}
+            errorMessage={errorMessages.alternateTelephoneNumber}
           />
         </div>
         <div className="flex flex-wrap items-center gap-6 sm:my-4">
