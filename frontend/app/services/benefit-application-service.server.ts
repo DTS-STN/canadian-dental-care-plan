@@ -10,7 +10,7 @@ const log = getLogger('benefit-application-service.server');
 
 function createBenefitApplicationService() {
   // prettier-ignore
-  const { 
+  const {
     INTEROP_API_BASE_URI,
     INTEROP_API_SUBSCRIPTION_KEY,
     INTEROP_BENEFIT_APPLICATION_API_BASE_URI,
@@ -22,9 +22,13 @@ function createBenefitApplicationService() {
    * @returns the status id of a dental application given the sin and application code
    */
   async function submitApplication(benefitApplicationRequest: BenefitApplicationRequest) {
+    log.debug('Submitting CDCP application');
+    log.trace('CDCP application data: [%j]', benefitApplicationRequest);
+
     const parsedBenefitApplicationRequest = await benefitApplicationRequestSchema.safeParseAsync(benefitApplicationRequest);
 
     if (!parsedBenefitApplicationRequest.success) {
+      log.error('Unexpected benefit application request validation error: [%s]', parsedBenefitApplicationRequest.error);
       throw new Error(`Invalid benefit application request: ${parsedBenefitApplicationRequest.error}`);
     }
 
@@ -46,6 +50,7 @@ function createBenefitApplicationService() {
 
     if (!response.ok) {
       instrumentationService.countHttpStatus('http.client.interop-api.benefit-application.posts', response.status);
+
       log.error('%j', {
         message: "Failed to 'POST' for benefit application",
         status: response.status,
@@ -63,9 +68,11 @@ function createBenefitApplicationService() {
     const parsedBenefitApplicationResponse = await benefitApplicationResponseSchema.safeParseAsync(json);
 
     if (!parsedBenefitApplicationResponse.success) {
+      log.error('Unexpected benefit application response error: [%s]', parsedBenefitApplicationResponse.error);
       throw new Error(`Invalid benefit application request: ${parsedBenefitApplicationResponse.error}`);
     }
 
+    log.trace('Returning benefit application ID: [%s]', parsedBenefitApplicationResponse.data.BenefitApplication.BenefitApplicationIdentification[0].IdentificationID);
     return parsedBenefitApplicationResponse.data.BenefitApplication.BenefitApplicationIdentification[0].IdentificationID;
   }
 

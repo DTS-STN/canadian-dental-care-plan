@@ -65,20 +65,29 @@ export async function action({ context: { session }, params, request }: ActionFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
-  const applicantInformationSchema: z.ZodType<ApplicantInformationState> = z
-    .object({
-      socialInsuranceNumber: z.string().trim().min(1, t('apply:applicant-information.error-message.sin-required')).refine(isValidSin, t('apply:applicant-information.error-message.sin-valid')),
-      firstName: z.string().trim().min(1, t('apply:applicant-information.error-message.first-name-required')).max(100),
-      lastName: z.string().trim().min(1, t('apply:applicant-information.error-message.last-name-required')).max(100),
-      maritalStatus: z
-        .string({ errorMap: () => ({ message: t('apply:applicant-information.error-message.marital-status-required') }) })
-        .trim()
-        .min(1, t('apply:applicant-information.error-message.marital-status-required')),
-    })
-    .transform((val) => ({
-      ...val,
-      socialInsuranceNumber: isValidSin(val.socialInsuranceNumber) ? formatSin(val.socialInsuranceNumber, '') : val.socialInsuranceNumber,
-    }));
+  const applicantInformationSchema: z.ZodType<ApplicantInformationState> = z.object({
+    socialInsuranceNumber: z
+      .string()
+      .trim()
+      .min(1, t('apply:applicant-information.error-message.sin-required'))
+      .superRefine((sin, ctx) => {
+        if (!isValidSin(sin)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:applicant-information.error-message.sin-valid'), fatal: true });
+          return z.NEVER;
+        }
+
+        if (state.partnerInformation && formatSin(sin) === formatSin(state.partnerInformation.socialInsuranceNumber)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:applicant-information.error-message.sin-unique'), fatal: true });
+          return z.NEVER;
+        }
+      }),
+    firstName: z.string().trim().min(1, t('apply:applicant-information.error-message.first-name-required')).max(100),
+    lastName: z.string().trim().min(1, t('apply:applicant-information.error-message.last-name-required')).max(100),
+    maritalStatus: z
+      .string({ errorMap: () => ({ message: t('apply:applicant-information.error-message.marital-status-required') }) })
+      .trim()
+      .min(1, t('apply:applicant-information.error-message.marital-status-required')),
+  });
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
