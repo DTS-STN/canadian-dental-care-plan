@@ -1,9 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
-import { Form, useActionData, useLoaderData, useParams } from '@remix-run/react';
+import { Form, useActionData, useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { isValidPhoneNumber, parsePhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +13,7 @@ import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
+import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { PersonalInfo } from '~/schemas/personal-informaton-service-schemas.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
@@ -55,10 +55,11 @@ export async function loader({ context: { session }, request, params }: LoaderFu
 
   const csrfToken = String(session.get('csrfToken'));
 
-  if (session.get('personalInformation') === undefined) {
-    return redirect(getPathById('$lang+/_protected+/personal-information+/index', params));
-  }
-  const personalInformation: PersonalInfo = session.get('personalInformation');
+  const personalInformationRouteHelper = getPersonalInformationRouteHelpers();
+
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const personalInformation: PersonalInfo = await personalInformationRouteHelper.getPersonalInformation(userInfoToken, params, request, session);
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:phone-number.edit.page-title') }) };
 
@@ -71,7 +72,10 @@ export async function action({ context: { session }, params, request }: ActionFu
   const personalInformationService = await getPersonalInformationService();
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
-  const personalInformation: PersonalInfo = session.get('personalInformation');
+  const personalInformationRouteHelper = getPersonalInformationRouteHelpers();
+
+  const userInfoTokenAction: UserinfoToken = session.get('userInfoToken');
+  const personalInformation: PersonalInfo = await personalInformationRouteHelper.getPersonalInformation(userInfoTokenAction, params, request, session);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   await raoidcService.handleSessionValidation(request, session);
@@ -130,6 +134,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function PhoneNumberEdit() {
+  const fetcher = useFetcher<typeof action>();
   const { csrfToken, personalInformation } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const params = useParams();
@@ -141,28 +146,14 @@ export default function PhoneNumberEdit() {
     primaryTelephoneNumber: personalInformation.primaryTelephoneNumber ?? '',
     alternateTelephoneNumber: personalInformation.alternateTelephoneNumber ?? '',
   };
-
-  /**
-   * Gets an error message based on the provided internationalization (i18n) key.
-   *
-   * @param errorI18nKey - The i18n key for the error message.
-   * @returns The corresponding error message, or undefined if no key is provided.
-   */
-  function getErrorMessage(errorI18nKey?: string): string | undefined {
-    if (!errorI18nKey) return undefined;
-
-    /**
-     * The 'as any' is employed to circumvent typechecking, as the type of
-     * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
-     */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`personal-information:phone-number.edit.error-message.${errorI18nKey}` as any);
-  }
-
-  const errorMessages = {
-    primaryTelephoneNumber: getErrorMessage(actionData?.errors.primaryTelephoneNumber?._errors[0]),
-    alternateTelephoneNumber: getErrorMessage(actionData?.errors.alternateTelephoneNumber?._errors[0]),
-  };
+  // Keys order should match the input IDs order.
+  const errorMessages = useMemo(
+    () => ({
+      primaryTelephoneNumber: fetcher.data?.errors.primaryTelephoneNumber?._errors[0],
+      alternateTelephoneNumber: fetcher.data?.errors.alternateTelephoneNumber?._errors[0],
+    }),
+    [fetcher.data?.errors.primaryTelephoneNumber?._errors, fetcher.data?.errors.alternateTelephoneNumber?._errors],
+  );
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 

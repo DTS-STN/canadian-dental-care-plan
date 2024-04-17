@@ -74,10 +74,10 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
     it('should return validation errors', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
       session.set('csrfToken', 'csrfToken');
-
+      session.set('userInfoToken', { sin: '999999999', sub: '1111111' });
       const formData = new FormData();
       formData.append('_csrf', 'csrfToken');
-      formData.append('phoneNumber', '819 426-55');
+      formData.append('primaryTelephoneNumber', '819 426-55');
 
       const response = await action({
         request: new Request('http://localhost:3000/en/personal-information/phone-number/edit', {
@@ -90,7 +90,7 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.errors).toHaveProperty('phoneNumber');
+      expect(data.errors).toHaveProperty('primaryTelephoneNumber');
     });
   });
 });
