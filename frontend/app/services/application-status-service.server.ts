@@ -25,7 +25,7 @@ function createApplicationStatusService() {
   /**
    * @returns the status id of a dental application given the sin and application code
    */
-  async function getStatusId(sin: string, applicationCode: string) {
+  async function getStatusId(sin: string, applicationCode: string, firstName: string, lastName: string, dateOfBirth: string) {
     const instrumentationService = getInstrumentationService();
 
     getAuditService().audit('application-status.post', { userId: 'anonymous' });
@@ -40,6 +40,9 @@ function createApplicationStatusService() {
           ClientIdentification: [
             {
               IdentificationID: applicationCode,
+              firstName: firstName,
+              lastName: lastName,
+              dateOfBirth: dateOfBirth,
             },
           ],
         },
