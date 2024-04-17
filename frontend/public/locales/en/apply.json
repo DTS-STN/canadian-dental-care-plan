@@ -17,7 +17,8 @@
       "last-name-required": "Enter last name",
       "marital-status-required": "Select marital status",
       "sin-required": "Enter 9-digit SIN",
-      "sin-valid": "Must be a valid SIN"
+      "sin-valid": "Must be a valid SIN",
+      "sin-unique": "The Social Insurance Number (SIN) must be unique"
     }
   },
   "communication-preference": {
