@@ -67,6 +67,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
+  const t = await getFixedT(request, handle.i18nNamespaces);
 
   await raoidcService.handleSessionValidation(request, session);
 
@@ -77,17 +78,17 @@ export async function action({ context: { session }, params, request }: ActionFu
     })
     .superRefine((val, ctx) => {
       if (validator.isEmpty(val.emailAddress)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-email-address', path: ['emailAddress'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('email-address.edit.error-message.empty-email-address'), path: ['emailAddress'] });
       } else if (!validator.isEmail(val.emailAddress)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'invalid-email-format', path: ['emailAddress'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('email-address.edit.error-message.invalid-email-format'), path: ['emailAddress'] });
       }
 
       if (validator.isEmpty(val.confirmEmailAddress)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-email-address', path: ['confirmEmailAddress'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('email-address.edit.error-message.empty-email-address'), path: ['confirmEmailAddress'] });
       } else if (!validator.isEmail(val.confirmEmailAddress)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'invalid-email-format', path: ['confirmEmailAddress'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('email-address.edit.error-message.invalid-email-format'), path: ['confirmEmailAddress'] });
       } else if (val.emailAddress !== val.confirmEmailAddress) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'email-match', path: ['confirmEmailAddress'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('email-address.edit.error-message.email-match'), path: ['confirmEmailAddress'] });
       }
     });
 
