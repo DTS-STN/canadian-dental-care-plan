@@ -320,11 +320,16 @@ function createLookupService() {
   }
 
   async function getAllPreferredCommunicationMethods() {
-    return preferredMethodOfCommunicationJson.value[0].OptionSet.Options.map((o) => ({
+    log.debug('Fetching all preferred communication methods');
+
+    const preferredCommunicationMethods = preferredMethodOfCommunicationJson.value[0].OptionSet.Options.map((o) => ({
       id: o.Value.toString(),
       nameEn: o.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label,
       nameFr: o.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label,
     }));
+
+    log.trace('Returning preferred communication methods: [%j]', preferredCommunicationMethods);
+    return preferredCommunicationMethods;
   }
 
   async function getAllFederalSocialPrograms() {
