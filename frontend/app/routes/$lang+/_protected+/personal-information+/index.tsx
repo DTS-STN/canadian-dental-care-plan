@@ -65,9 +65,11 @@ export default function PersonalInformationIndex() {
 
   return (
     <>
-      {updatedInfo && <ContextualAlert type="success">
+      {updatedInfo && (
+        <ContextualAlert type="success">
           <h2 className="text-xl font-semibold">{t('personal-information:index.updated-information-success')}</h2>
-      </ContextualAlert>}
+        </ContextualAlert>
+      )}
       <dl className="mt-6 divide-y border-y">
         <DescriptionListItem term={t('personal-information:index.full-name')}>{`${personalInformation.firstName} ${personalInformation.lastName}`}</DescriptionListItem>
         <DescriptionListItem term={t('personal-information:index.preferred-language')}>
