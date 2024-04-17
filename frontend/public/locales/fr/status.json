@@ -55,12 +55,25 @@
     "application-code-label": "Votre code de demande ou votre numéro du client",
     "application-code-description": "This code or number is found in the upper right-hand corner of the letter you received from Service Canada",
     "sin-label": "Numéro d'assurance sociale (NAS)",
+    "last-name": "Nom de famille",
+    "first-name": "Prénom",
+    "date-of-birth-label": "Veuillez entrer votre date de naissance",
     "submit": "Vérifier l'état de votre demande",
     "error-message": {
       "sin-required": "Le numéro d'assurance sociale (NAS) est requis.",
       "sin-valid": "Le numéro d'assurance sociale (NAS) doit être valide.",
       "application-code-required": "(FR) The application code or client number is required",
-      "application-code-valid": "(FR) The application code or client number must be valid"
+      "application-code-valid": "(FR) The application code or client number must be valid",
+      "first-name-required": "Entrez le prénom",
+      "last-name-required": "Entrez le nom de famille",
+      "date-of-birth-day-number": "Le jour doit être un nombre",
+      "date-of-birth-day-required": "La date de naissance doit inclure un jour",
+      "date-of-birth-is-past": "La date de naissance doit être dans le passé",
+      "date-of-birth-is-past-valid": "Date de naissance trop éloignée dans le passé",
+      "date-of-birth-month-required": "La date de naissance doit inclure un mois",
+      "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisi",
+      "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
+      "date-of-birth-year-required": "La date de naissance doit inclure une année"
     }
   }
 }
