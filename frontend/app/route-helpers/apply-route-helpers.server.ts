@@ -1,7 +1,7 @@
 import { Session, redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
 
-import { differenceInMinutes } from 'date-fns';
+import { differenceInMinutes, differenceInYears, parse } from 'date-fns';
 import { z } from 'zod';
 
 import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/applicant-information';
@@ -14,6 +14,7 @@ import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/p
 import { SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/review-information';
 import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/tax-filing';
 import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-application';
+import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 
@@ -183,6 +184,82 @@ async function start({ id, session }: StartArgs) {
   return initialState;
 }
 
+interface ValidateStateForReviewArgs {
+  params: Params;
+  state: ApplyState;
+}
+
+interface HasPartnerArgs {
+  maritalStatus: string;
+}
+
+function hasPartner({ maritalStatus }: HasPartnerArgs) {
+  const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
+  return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
+}
+
+interface ValidateStateForReviewArgs {
+  params: Params;
+  state: ApplyState;
+}
+
+function validateStateForReview({ params, state }: ValidateStateForReviewArgs) {
+  if (state.typeOfApplication === undefined) {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/type-application', params));
+  }
+
+  if (state.typeOfApplication === 'delegate') {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/application-delegate', params));
+  }
+
+  if (state.taxFiling2023 === undefined) {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/tax-filing', params));
+  }
+
+  if (state.taxFiling2023 === 'no') {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/file-taxes', params));
+  }
+
+  if (state.dateOfBirth === undefined) {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/date-of-birth', params));
+  }
+
+  const parseDateOfBirth = parse(state.dateOfBirth, 'yyyy-MM-dd', new Date());
+  const age = differenceInYears(new Date(), parseDateOfBirth);
+
+  if (age < 65) {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/dob-eligibility', params));
+  }
+
+  if (state.applicantInformation === undefined) {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/applicant-information', params));
+  }
+
+  if (state.partnerInformation === undefined && hasPartner(state.applicantInformation)) {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/partner-information', params));
+  }
+
+  if (state.partnerInformation !== undefined && !hasPartner(state.applicantInformation)) {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/applicant-information', params));
+  }
+
+  if (state.personalInformation === undefined) {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/personal-information', params));
+  }
+
+  if (state.communicationPreferences === undefined) {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/communication-preference', params));
+  }
+
+  if (state.dentalInsurance === undefined) {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/dental-insurance', params));
+  }
+
+  if (state.dentalBenefits === undefined) {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits', params));
+  }
+}
+
 /**
  * Returns functions related to the apply routes.
  * @returns Functions related to the apply routes.
@@ -190,8 +267,10 @@ async function start({ id, session }: StartArgs) {
 export function getApplyRouteHelpers() {
   return {
     clearState,
+    hasPartner,
     loadState,
     saveState,
     start,
+    validateStateForReview,
   };
 }
