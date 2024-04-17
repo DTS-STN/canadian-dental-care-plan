@@ -160,7 +160,7 @@ export async function action({ context: { session }, params, request }: ActionFu
           if (!val.homePostalCode || validator.isEmpty(val.homePostalCode)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.postal-code-required'), path: ['homePostalCode'] });
           } else if (!isValidPostalCode(val.homeCountry, val.homePostalCode)) {
-            const message = val.mailingCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.postal-code-valid') : t('apply:personal-information.error-message.zip-code-valid');
+            const message = val.homeCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.postal-code-valid') : t('apply:personal-information.error-message.zip-code-valid');
             ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['homePostalCode'] });
           }
         }
