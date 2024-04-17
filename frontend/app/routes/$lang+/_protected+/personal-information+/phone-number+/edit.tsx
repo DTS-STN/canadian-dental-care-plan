@@ -130,7 +130,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   getAuditService().audit('update-data.phone-number', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('phone-number.confirm', 302);
-  return redirectWithSuccess(getPathById('$lang+/_protected+/personal-information+/index', params), 'personal-information:phone-number.confirm.updated-notification');
+  return redirectWithSuccess(getPathById('$lang+/_protected+/personal-information+/index', params), 'personal-information:phone-number.edit.updated-notification');
 }
 
 export default function PhoneNumberEdit() {
