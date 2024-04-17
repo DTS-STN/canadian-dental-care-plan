@@ -119,8 +119,7 @@
   },
   "email-address": {
     "edit": {
-      "page-title": "(FR) Update email address",
-      "subtitle": "(FR) Please update your email address below.",
+      "page-title": "Adresse courriel",
       "breadcrumbs": {
         "personal-information": "(FR) Personal information",
         "change-email-address": "(FR) Change email address"
@@ -131,11 +130,8 @@
         "cancel": "Annuler"
       },
       "component": {
-        "previous": "(FR) Previous email address",
-        "newEmail": "(FR) New email address",
         "email": "Adresse courriel",
-        "confirm-email": "Confirmer l'adresse courriel",
-        "error": "(FR) Error"
+        "confirm-email": "Confirmer l'adresse courriel"
       },
       "error-message": {
         "empty-email-address": "(FR) Enter an email address",

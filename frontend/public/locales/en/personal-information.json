@@ -117,8 +117,7 @@
   },
   "email-address": {
     "edit": {
-      "page-title": "Update email address",
-      "subtitle": "Please update your email address below.",
+      "page-title": "Email address",
       "breadcrumbs": {
         "personal-information": "Personal information",
         "change-email-address": "Change email address"
@@ -129,11 +128,8 @@
         "cancel": "Cancel"
       },
       "component": {
-        "previous": "Previous email address",
-        "newEmail": "New email address",
         "email": "Email address",
-        "confirm-email": "Confirm email address",
-        "error": "Error"
+        "confirm-email": "Confirm email address"
       },
       "error-message": {
         "empty-email-address": "Enter an email address",

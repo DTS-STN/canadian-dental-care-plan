@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
@@ -53,10 +53,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
   const emailAddress = personalInformation.emailAddress;
 
-  if (!emailAddress) {
-    instrumentationService.countHttpStatus('email-address.edit', 404);
-    throw new Response(null, { status: 404 });
-  }
   const csrfToken = String(session.get('csrfToken'));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -80,43 +76,45 @@ export async function action({ context: { session }, params, request }: ActionFu
       confirmEmailAddress: z.string(),
     })
     .superRefine((val, ctx) => {
-      if (typeof val.emailAddress !== 'string' || validator.isEmpty(val.emailAddress)) {
+      if (validator.isEmpty(val.emailAddress)) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-email-address', path: ['emailAddress'] });
       } else if (!validator.isEmail(val.emailAddress)) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'invalid-email-format', path: ['emailAddress'] });
       }
 
-      if (typeof val.confirmEmailAddress !== 'string' || validator.isEmpty(val.confirmEmailAddress)) {
+      if (validator.isEmpty(val.confirmEmailAddress)) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'empty-email-address', path: ['confirmEmailAddress'] });
       } else if (!validator.isEmail(val.confirmEmailAddress)) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'invalid-email-format', path: ['confirmEmailAddress'] });
       } else if (val.emailAddress !== val.confirmEmailAddress) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'email-match', path: ['confirmEmail'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'email-match', path: ['confirmEmailAddress'] });
       }
     });
 
-  const formData = Object.fromEntries(await request.formData());
+  const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
-  const submittedCsrfToken = String(formData['_csrf']);
+  const submittedCsrfToken = String(formData.get('_csrf'));
 
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const parsedDataResult = formDataSchema.safeParse(formData);
+  const data = {
+    confirmEmailAddress: formData.get('confirmEmailAddress') ? String(formData.get('confirmEmailAdress') ?? '') : undefined,
+    emailAddress: formData.get('emailAddress') ? String(formData.get('emailAddress') ?? '') : undefined,
+  };
+  const parsedDataResult = formDataSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    instrumentationService.countHttpStatus('email-address.confirm', 400);
+    instrumentationService.countHttpStatus('email-address.edit', 400);
     return json({
       errors: parsedDataResult.error.format(),
       formData: formData as Partial<z.infer<typeof formDataSchema>>,
     });
   }
 
-  session.set('newEmailAddress', parsedDataResult.data.emailAddress);
-
-  instrumentationService.countHttpStatus('email-address.confirm', 302);
+  instrumentationService.countHttpStatus('email-address.edit', 302);
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
@@ -125,16 +123,14 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const newPersonalInformation = {
     ...personalInformation,
-    emailAddress: session.get('newEmailAddress'),
+    emailAddress: parsedDataResult.data.emailAddress,
   };
   await personalInformationService.updatePersonalInformation(userInfoToken.sin ?? '', newPersonalInformation);
 
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('update-data.email-address', { userId: idToken.sub });
 
-  session.unset('newEmailAddress');
-
-  instrumentationService.countHttpStatus('email-address.confirm', 302);
+  instrumentationService.countHttpStatus('email-address.edit', 302);
   return redirectWithSuccess(getPathById('$lang+/_protected+/personal-information+/index', params), 'personal-information:email-address.edit.updated-notification');
 }
 
@@ -151,27 +147,14 @@ export default function EmailAddressEdit() {
     confirmEmailAddress: fetcher.data?.formData.confirmEmailAddress ?? emailAddress,
   };
 
-  /**
-   * Gets an error message based on the provided internationalization (i18n) key.
-   *
-   * @param errorI18nKey - The i18n key for the error message.
-   * @returns The corresponding error message, or undefined if no key is provided.
-   */
-  function getErrorMessage(errorI18nKey?: string): string | undefined {
-    if (!errorI18nKey) return undefined;
-
-    /**
-     * The 'as any' is employed to circumvent typechecking, as the type of
-     * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
-     */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`personal-information:email-address.edit.error-message.${errorI18nKey}` as any);
-  }
-
-  const errorMessages = {
-    emailAddress: getErrorMessage(fetcher.data?.errors.emailAddress?._errors[0]),
-    confirmEmailAddress: getErrorMessage(fetcher.data?.errors.confirmEmailAddress?._errors[0]),
-  };
+  // Keys order should match the input IDs order.
+  const errorMessages = useMemo(
+    () => ({
+      emailAddress: fetcher.data?.errors.emailAddress?._errors[0],
+      confirmEmailAddress: fetcher.data?.errors.confirmEmailAddress?._errors[0],
+    }),
+    [fetcher.data?.errors.confirmEmailAddress?._errors, fetcher.data?.errors.emailAddress?._errors],
+  );
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
   useEffect(() => {
@@ -182,17 +165,22 @@ export default function EmailAddressEdit() {
 
   return (
     <>
-      <p className="mb-8 border-b border-gray-200 pb-8 text-lg text-gray-500">{t('personal-information:email-address.edit.subtitle')}</p>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="my-6">
-          <p className="mb-4 text-red-600">{t('gcweb:asterisk-indicates-required-field')}</p>
           <InputField id="emailAddress" name="emailAddress" type="tel" label={t('personal-information:email-address.edit.component.email')} required defaultValue={defaultValues.emailAddress} errorMessage={errorMessages.emailAddress} />
         </div>
         <div className="my-6">
-          <p className="mb-4 text-red-600">{t('gcweb:asterisk-indicates-required-field')}</p>
-          <InputField id="confirmEmailAddress" name="confirmEmailAddress" type="tel" label={t('personal-information:email-address.edit.component.confirm-email')} required defaultValue={defaultValues.emailAddress} />
+          <InputField
+            id="confirmEmailAddress"
+            name="confirmEmailAddress"
+            type="tel"
+            label={t('personal-information:email-address.edit.component.confirm-email')}
+            required
+            defaultValue={defaultValues.emailAddress}
+            errorMessage={errorMessages.confirmEmailAddress}
+          />
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <Button id="submit" variant="primary">
