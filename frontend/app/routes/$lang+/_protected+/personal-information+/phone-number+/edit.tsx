@@ -158,11 +158,10 @@ export default function PhoneNumberEdit() {
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 
   useEffect(() => {
-    if (actionData?.formData && hasErrors(actionData.formData)) {
+    if (hasErrors(errorMessages)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
-  }, [actionData]);
-
+  }, [errorMessages]);
   return (
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
