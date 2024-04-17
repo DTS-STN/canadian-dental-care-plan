@@ -42,7 +42,7 @@ const toBoolean = (val?: string) => val === 'true';
 // prettier-ignore
 const serverEnv = z.object({
   NODE_ENV: z.enum(['production', 'development', 'test']),
-  ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default(validFeatureNames.join(',')),
+  ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default(""),
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
 
   // lookup identifiers
