@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
-import { redirectWithSuccess } from 'remix-toast';
 import validator from 'validator';
 import { z } from 'zod';
 
@@ -179,8 +178,8 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('update-data.mailing-address', { userId: idToken.sub });
-
-  return redirectWithSuccess(getPathById('$lang+/_protected+/personal-information+/index', params), 'personal-information:mailing-address.edit.updated-notification');
+  session.set('personal-info-updated', true);
+  return redirect(getPathById('$lang+/_protected+/personal-information+/index', params));
 }
 
 export default function PersonalInformationMailingAddressEdit() {

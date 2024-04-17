@@ -6,12 +6,10 @@ import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderD
 
 import { useTranslation } from 'react-i18next';
 import reactPhoneNumberInputStyleSheet from 'react-phone-number-input/style.css';
-import { getToast } from 'remix-toast';
 
 import { isApplyRoutePathname, removeApplyRouteSessionPathSegment } from './routes/$lang+/_public+/apply+/_route';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
-import { Toaster } from '~/components/toaster';
 import fontLatoStyleSheet from '~/fonts/lato.css';
 import fontNotoSansStyleSheet from '~/fonts/noto-sans.css';
 import { getBuildInfoService } from '~/services/build-info-service.server';
@@ -52,7 +50,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const buildInfoService = getBuildInfoService();
-  const { toast, headers: toastHeaders } = await getToast(request);
   const requestUrl = new URL(request.url);
   const locale = getLocale(request);
   const t = await getFixedT(request, ['gcweb']);
@@ -73,12 +70,12 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const userOrigin = await getUserOrigin(request, session);
   session.set('userOrigin', userOrigin);
 
-  return json({ buildInfo, env, meta, origin, toast, userOrigin }, { headers: { ...toastHeaders } });
+  return json({ buildInfo, env, meta, origin, userOrigin });
 }
 
 export default function App() {
   const { nonce } = useContext(NonceContext);
-  const { env, origin, toast } = useLoaderData<typeof loader>();
+  const { env, origin } = useLoaderData<typeof loader>();
   const location = useLocation();
   const ns = useI18nNamespaces();
   const { i18n } = useTranslation(ns);
@@ -117,7 +114,6 @@ export default function App() {
       <body vocab="http://schema.org/" typeof="WebPage">
         <Suspense>
           <Outlet />
-          <Toaster toast={toast} />
         </Suspense>
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />

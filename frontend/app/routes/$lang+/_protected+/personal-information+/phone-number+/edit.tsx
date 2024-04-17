@@ -1,12 +1,11 @@
 import { useEffect, useMemo } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { isValidPhoneNumber, parsePhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
-import { redirectWithSuccess } from 'remix-toast';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
@@ -130,7 +129,8 @@ export async function action({ context: { session }, params, request }: ActionFu
   getAuditService().audit('update-data.phone-number', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('phone-number.confirm', 302);
-  return redirectWithSuccess(getPathById('$lang+/_protected+/personal-information+/index', params), 'personal-information:phone-number.edit.updated-notification');
+  session.set('personal-info-updated', true);
+  return redirect(getPathById('$lang+/_protected+/personal-information+/index', params));
 }
 
 export default function PhoneNumberEdit() {

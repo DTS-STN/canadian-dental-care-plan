@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../page-ids.json';
 import { Address } from '~/components/address';
+import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { useFeature } from '~/root';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
@@ -52,18 +53,21 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };
-
-  return json({ preferredLanguage, countryList, personalInformation, meta, regionList });
+  const updatedInfo = session.get('personal-info-updated');
+  session.unset('personal-info-updated');
+  return json({ preferredLanguage, countryList, personalInformation, meta, regionList, updatedInfo });
 }
 
 export default function PersonalInformationIndex() {
-  const { personalInformation, preferredLanguage, countryList, regionList } = useLoaderData<typeof loader>();
+  const { personalInformation, preferredLanguage, countryList, regionList, updatedInfo } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const params = useParams();
 
   return (
     <>
-      <p className="mb-8 text-lg text-gray-500">{t('personal-information:index.on-file')}</p>
+      {updatedInfo && <ContextualAlert type="success">
+          <h2 className="text-xl font-semibold">{t('personal-information:index.updated-information-success')}</h2>
+      </ContextualAlert>}
       <dl className="mt-6 divide-y border-y">
         <DescriptionListItem term={t('personal-information:index.full-name')}>{`${personalInformation.firstName} ${personalInformation.lastName}`}</DescriptionListItem>
         <DescriptionListItem term={t('personal-information:index.preferred-language')}>
