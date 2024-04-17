@@ -106,11 +106,16 @@ function createLookupService() {
   } = getEnv();
 
   async function getAllPreferredLanguages() {
-    return preferredLanguageJson.value[0].OptionSet.Options.map((o) => ({
+    log.debug('Fetching all preferred languages');
+
+    const preferredLanguages = preferredLanguageJson.value[0].OptionSet.Options.map((o) => ({
       id: o.Value.toString(),
       nameEn: o.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label,
       nameFr: o.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label,
     }));
+
+    log.trace('Returning preferred languages: [%j]', preferredLanguages);
+    return preferredLanguages;
   }
 
   async function getAllIndigenousTypes() {
@@ -323,46 +328,71 @@ function createLookupService() {
   }
 
   async function getAllFederalSocialPrograms() {
-    return federalProgramsJson.value.map((federalSocialProgram) => ({
+    log.debug('Fetching all federal social programs');
+
+    const federalSocialPrograms = federalProgramsJson.value.map((federalSocialProgram) => ({
       id: federalSocialProgram.esdc_governmentinsuranceplanid,
       nameEn: federalSocialProgram.esdc_nameenglish,
       nameFr: federalSocialProgram.esdc_namefrench,
     }));
+
+    log.trace('Returning federal social programs: [%j]', federalSocialPrograms);
+    return federalSocialPrograms;
   }
 
   async function getAllProvincialTerritorialSocialPrograms() {
-    return provincialProgramsJson.value.map((provincialSocialProgram) => ({
+    log.debug('Fetching all provincial/territorial social programs');
+
+    const provincialTerritorialSocialPrograms = provincialProgramsJson.value.map((provincialSocialProgram) => ({
       id: provincialSocialProgram.esdc_governmentinsuranceplanid,
       nameEn: provincialSocialProgram.esdc_nameenglish,
       nameFr: provincialSocialProgram.esdc_namefrench,
       provinceTerritoryStateId: provincialSocialProgram._esdc_provinceterritorystateid_value,
     }));
+
+    log.trace('Returning provincial/territorial social programs: [%j]', provincialTerritorialSocialPrograms);
+    return provincialTerritorialSocialPrograms;
   }
 
   async function getAllCountries() {
-    return countriesJson.value.map((country) => ({
+    log.debug('Fetching all countries');
+
+    const countries = countriesJson.value.map((country) => ({
       countryId: country.esdc_countryid,
       nameEn: country.esdc_nameenglish,
       nameFr: country.esdc_namefrench,
     }));
+
+    log.trace('Returning countries: [%j]', countries);
+    return countries;
   }
 
   async function getAllRegions() {
-    return regionsJson.value.map((region) => ({
+    log.debug('Fetching all regions');
+
+    const regions = regionsJson.value.map((region) => ({
       provinceTerritoryStateId: region.esdc_provinceterritorystateid,
       countryId: region._esdc_countryid_value,
       nameEn: region.esdc_nameenglish,
       nameFr: region.esdc_namefrench,
       abbr: region.esdc_internationalalphacode,
     }));
+
+    log.trace('Returning regions: [%j]', regions);
+    return regions;
   }
 
   async function getAllMaritalStatuses() {
-    return maritalStatusesJson.value[0].OptionSet.Options.map((o) => ({
+    log.debug('Fetching all marital statuses');
+
+    const maritalStatuses = maritalStatusesJson.value[0].OptionSet.Options.map((o) => ({
       id: o.Value.toString(),
       nameEn: o.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label,
       nameFr: o.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label,
     }));
+
+    log.trace('Returning marital statuses: [%j]', maritalStatuses);
+    return maritalStatuses;
   }
 
   async function getAllEquityTypes() {
