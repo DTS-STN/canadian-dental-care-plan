@@ -166,7 +166,7 @@ export default function PhoneNumberEdit() {
   return (
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post" noValidate>
+      <fetcher.Form className="max-w-prose" method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="grid gap-6 ">
           <InputField
@@ -194,7 +194,7 @@ export default function PhoneNumberEdit() {
             {t('personal-information:phone-number.edit.button.save')}
           </Button>
         </div>
-      </Form>
+      </fetcher.Form>
     </>
   );
 }
