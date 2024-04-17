@@ -111,18 +111,6 @@
       "error-message": {
         "empty-phone-number": "(FR) Enter a phone number",
         "invalid-phone-format": "(FR) Invalid phone number"
-      }
-    },
-    "confirm": {
-      "page-title": "(FR) Confirm phone number",
-      "subtitle": "(FR) Please confirm the phone number change below.",
-      "breadcrumbs": {
-        "personal-information": "(FR) Personal information",
-        "confirm-phone-number": "(FR) Confirm phone number"
-      },
-      "button": {
-        "confirm": "(FR) Confirm",
-        "cancel": "(FR) Cancel"
       },
       "updated-notification": "(FR) Phone number updated"
     }

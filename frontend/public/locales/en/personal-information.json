@@ -109,18 +109,6 @@
       "error-message": {
         "empty-phone-number": "Enter a phone number",
         "invalid-phone-format": "Invalid phone number"
-      }
-    },
-    "confirm": {
-      "page-title": "Confirm phone number",
-      "subtitle": "Please confirm the phone number change below.",
-      "breadcrumbs": {
-        "personal-information": "Personal information",
-        "confirm-phone-number": "Confirm phone number"
-      },
-      "button": {
-        "confirm": "Confirm",
-        "cancel": "Cancel"
       },
       "updated-notification": "Phone number updated"
     }
