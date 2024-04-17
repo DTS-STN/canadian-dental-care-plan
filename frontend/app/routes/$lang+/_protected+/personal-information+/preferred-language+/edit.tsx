@@ -70,7 +70,6 @@ export async function action({ context: { session }, params, request }: ActionFu
   const t = await getFixedT(request, handle.i18nNamespaces);
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
-
   await raoidcService.handleSessionValidation(request, session);
 
   const formDataSchema = z.object({

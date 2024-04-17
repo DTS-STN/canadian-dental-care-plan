@@ -141,20 +141,5 @@
         "preferred-language-required": "Sélectionnez la langue de communication préférée"
       }
     }
-  },
-  "confirm": {
-    "page-title": "(FR) Confirm preferred language",
-    "subtitle": "(FR) Please confirm the preferred language change below.",
-    "breadcrumbs": {
-      "personal-information": "(FR) Personal information",
-      "preferred-language": "(FR) Preferred language",
-      "preferred-language-edit": "(FR) Change preferred language",
-      "preferred-language-confirm": "(FR) Confirm"
-    },
-    "button": {
-      "confirm": "(FR) Confirm",
-      "cancel": "(FR) Cancel"
-    },
-    "updated-notification": "(FR) Preferred language updated"
   }
 }
