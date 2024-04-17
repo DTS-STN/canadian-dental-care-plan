@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useActionData, useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import { useActionData, useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { isValidPhoneNumber, parsePhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
@@ -136,7 +136,6 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function PhoneNumberEdit() {
   const fetcher = useFetcher<typeof action>();
   const { csrfToken, personalInformation } = useLoaderData<typeof loader>();
-  const actionData = useActionData<typeof action>();
   const params = useParams();
   const errorSummaryId = 'error-summary';
 
