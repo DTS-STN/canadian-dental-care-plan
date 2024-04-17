@@ -60,10 +60,14 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
+  const lookupService = getLookupService();
+
   const state = await applyRouteHelpers.loadState({ params, request, session });
-  const maritalStatuses = await getLookupService().getAllMaritalStatuses();
-  const provincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
-  const federalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
+  applyRouteHelpers.validateStateForReview({ params, state });
+
+  const maritalStatuses = await lookupService.getAllMaritalStatuses();
+  const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
+  const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
   const { COMMUNICATION_METHOD_EMAIL_ID, ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
   // prettier-ignore
@@ -82,12 +86,12 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const locale = getLocale(request);
 
   // Getting province by Id
-  const allRegions = await getLookupService().getAllRegions();
+  const allRegions = await lookupService.getAllRegions();
   const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
   const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
 
   // Getting Country by Id
-  const allCountries = await getLookupService().getAllCountries();
+  const allCountries = await lookupService.getAllCountries();
   const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation?.mailingCountry);
   const countryHome = allCountries.find((country) => country.countryId === state.personalInformation?.homeCountry);
 
@@ -121,7 +125,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
       }
     : undefined;
 
-  const preferredLanguage = await getLookupService().getPreferredLanguage(userInfo.preferredLanguage);
+  const preferredLanguage = await lookupService.getPreferredLanguage(userInfo.preferredLanguage);
 
   const mailingAddressInfo = {
     address: state.personalInformation.mailingAddress,
@@ -205,6 +209,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   const state = await applyRouteHelpers.loadState({ params, request, session });
+  applyRouteHelpers.validateStateForReview({ params, state });
 
   // prettier-ignore
   if (state.applicantInformation === undefined ||
@@ -495,11 +500,11 @@ export default function ReviewInformation() {
         <fetcher.Form method="post" onSubmit={handleSubmit} className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
-          <Button id="confirm-button" variant="green" disabled={isSubmitting}>
+          <Button id="confirm-button" variant="green" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Submit - Review Information click">
             {t('apply:review-information.submit-button')}
             {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
           </Button>
-          <ButtonLink routeId="$lang+/_public+/apply+/$id+/exit-application" params={params} variant="alternative" disabled={isSubmitting}>
+          <ButtonLink routeId="$lang+/_public+/apply+/$id+/exit-application" params={params} variant="alternative" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Review Information click">
             {t('apply:review-information.exit-button')}
             <FontAwesomeIcon icon={faX} className="ms-3 block size-4" />
           </ButtonLink>

@@ -80,6 +80,8 @@ export default function ApplyIndex() {
             </p>
             <p>{t('apply:terms-and-conditions.terms-and-conditions-of-use.online-application-access-terms')}</p>
             <p>{t('apply:terms-and-conditions.terms-and-conditions-of-use.online-application-usage-terms')}</p>
+            <p>{t('apply:terms-and-conditions.terms-and-conditions-of-use.online-application-outage')}</p>
+            <p>{t('apply:terms-and-conditions.terms-and-conditions-of-use.online-application-timeout')}</p>
             <p>{t('apply:terms-and-conditions.terms-and-conditions-of-use.terms-rejection-policy')}</p>
             <p>{t('apply:terms-and-conditions.terms-and-conditions-of-use.esdc-definition-clarification')}</p>
 
@@ -88,23 +90,11 @@ export default function ApplyIndex() {
               <li>{t('apply:terms-and-conditions.terms-and-conditions-of-use.online-application.self-agreement')}</li>
               <li>{t('apply:terms-and-conditions.terms-and-conditions-of-use.online-application.on-behalf-of-someone-else')}</li>
               <li>{t('apply:terms-and-conditions.terms-and-conditions-of-use.online-application.at-your-own-risk')}</li>
-              <li>{t('apply:terms-and-conditions.terms-and-conditions-of-use.online-application.only-use')}</li>
-              <li>{t('apply:terms-and-conditions.terms-and-conditions-of-use.online-application.maintenance')}</li>
-              <li>{t('apply:terms-and-conditions.terms-and-conditions-of-use.online-application.inactive')}</li>
               <li>{t('apply:terms-and-conditions.terms-and-conditions-of-use.online-application.msdc')}</li>
               <li>
                 <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.terms-and-conditions-of-use.online-application.antibot" components={{ hcaptchaTermsOfService }} />
               </li>
             </ul>
-
-            <h2 className="font-bold"> {t('apply:terms-and-conditions.terms-and-conditions-of-use.disclaimers.heading')}</h2>
-            <p>{t('apply:terms-and-conditions.terms-and-conditions-of-use.disclaimers.online-application-disclaimer')}</p>
-            <ul className="list-disc space-y-1 pl-7">
-              <li>{t('apply:terms-and-conditions.terms-and-conditions-of-use.disclaimers.external-factors-disclaimer')}</li>
-              <li>{t('apply:terms-and-conditions.terms-and-conditions-of-use.disclaimers.online-application-information-non-acceptance')}</li>
-              <li>{t('apply:terms-and-conditions.terms-and-conditions-of-use.disclaimers.non-compliance')}</li>
-            </ul>
-            <p>{t('apply:terms-and-conditions.terms-and-conditions-of-use.disclaimers.esdc-liability-indemnification')}</p>
 
             <h2 className="font-bold">{t('apply:terms-and-conditions.terms-and-conditions-of-use.changes-to-these-terms-of-use.heading')}</h2>
             <p>{t('apply:terms-and-conditions.terms-and-conditions-of-use.changes-to-these-terms-of-use.esdc-terms-amendment-policy')}</p>
@@ -149,11 +139,11 @@ export default function ApplyIndex() {
       <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+          <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Agree and Continue - Terms and Conditions click">
             {t('apply:terms-and-conditions.apply.start-button')}
             <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
-          <ButtonLink id="back-button" to={t('apply:terms-and-conditions.apply.link')} disabled={isSubmitting}>
+          <ButtonLink id="back-button" to={t('apply:terms-and-conditions.apply.link')} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Terms and Conditions click">
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:terms-and-conditions.apply.back-button')}
           </ButtonLink>

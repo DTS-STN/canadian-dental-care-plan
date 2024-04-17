@@ -83,11 +83,17 @@ export default function ApplyFlowFileYourTaxes() {
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <ButtonLink type="button" routeId="$lang+/_public+/apply+/$id+/date-of-birth" params={params} disabled={isSubmitting}>
+        <ButtonLink type="button" routeId="$lang+/_public+/apply+/$id+/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Find out when you can apply click">
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:eligibility.dob-eligibility.back-btn')}
         </ButtonLink>
-        <ButtonLink type="submit" variant="primary" onClick={() => sessionStorage.removeItem('flow.state')} to={t('apply:eligibility.dob-eligibility.return-btn-link')}>
+        <ButtonLink
+          type="submit"
+          variant="primary"
+          onClick={() => sessionStorage.removeItem('flow.state')}
+          to={t('apply:eligibility.dob-eligibility.return-btn-link')}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Find out when you can apply click"
+        >
           {t('apply:eligibility.dob-eligibility.return-btn')}
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </ButtonLink>

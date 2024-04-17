@@ -18,7 +18,6 @@ import { InputField } from '~/components/input-field';
 import { Progress } from '~/components/progress';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
 import { parseDateString } from '~/utils/date-utils';
-import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -49,11 +48,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
   const state = await applyRouteHelpers.loadState({ params, request, session });
-  const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  // TODO: the flow for where to redirect to will need to be determined depending on the state of the form
-  if (![MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(state.applicantInformation?.maritalStatus ?? ''))) {
+  if (state.applicantInformation === undefined || !applyRouteHelpers.hasPartner(state.applicantInformation)) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/applicant-information', params));
   }
 
@@ -292,20 +289,32 @@ export default function ApplyFlowApplicationInformation() {
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Spouse or Common-law partner information click">
                 {t('apply:partner-information.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/review-information" params={params} disabled={isSubmitting}>
+              <ButtonLink
+                id="back-button"
+                routeId="$lang+/_public+/apply+/$id+/review-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Spouse or Common-law partner information click"
+              >
                 {t('apply:partner-information.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Spouse or Common-law partner information click">
                 {t('apply:partner-information.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/applicant-information" params={params} disabled={isSubmitting}>
+              <ButtonLink
+                id="back-button"
+                routeId="$lang+/_public+/apply+/$id+/applicant-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Spouse or Common-law partner information click"
+              >
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply:partner-information.back-btn')}
               </ButtonLink>

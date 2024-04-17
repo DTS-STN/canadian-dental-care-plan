@@ -55,12 +55,25 @@
     "application-code-label": "Application Code or Client Number",
     "application-code-description": "This code or number is found in the upper right-hand corner of the letter you received from Service Canada",
     "sin-label": "Social Insurance Number (SIN)",
+    "last-name": "Last name",
+    "first-name": "First name",
+    "date-of-birth-label": "Please enter your date of birth",
     "submit": "Check status",
     "error-message": {
       "sin-required": "The Social Insurance Number (SIN) is required.",
       "sin-valid": "The Social Insurance Number (SIN) must be valid.",
       "application-code-required": "The application code or client number is required",
-      "application-code-valid": "The application code or client number must be valid"
+      "application-code-valid": "The application code or client number must be valid",
+      "first-name-required": "Enter first name",
+      "last-name-required": "Enter last name",
+      "date-of-birth-day-number": "Day must be a number",
+      "date-of-birth-day-required": "Date of birth must include a day",
+      "date-of-birth-is-past": "Date of birth must be in the past",
+      "date-of-birth-is-past-valid": "Date of birth too far in the past",
+      "date-of-birth-month-required": "Date of birth must include a month",
+      "date-of-birth-valid": "Day must be valid for the given month and year",
+      "date-of-birth-year-number": "Year must be a number, for example 1950",
+      "date-of-birth-year-required": "Date of birth must include a year"
     }
   }
 }

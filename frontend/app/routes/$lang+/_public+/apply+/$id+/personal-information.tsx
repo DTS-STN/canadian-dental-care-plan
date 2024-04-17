@@ -160,7 +160,7 @@ export async function action({ context: { session }, params, request }: ActionFu
           if (!val.homePostalCode || validator.isEmpty(val.homePostalCode)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.postal-code-required'), path: ['homePostalCode'] });
           } else if (!isValidPostalCode(val.homeCountry, val.homePostalCode)) {
-            const message = val.mailingCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.postal-code-valid') : t('apply:personal-information.error-message.zip-code-valid');
+            const message = val.homeCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.postal-code-valid') : t('apply:personal-information.error-message.zip-code-valid');
             ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['homePostalCode'] });
           }
         }
@@ -541,16 +541,16 @@ export default function ApplyFlowPersonalInformation() {
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Personal information click">
                 {t('apply:personal-information.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/review-information" params={params} disabled={isSubmitting}>
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Personal information click">
                 {t('apply:personal-information.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Personal information click">
                 {t('apply:personal-information.continue')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
@@ -559,6 +559,7 @@ export default function ApplyFlowPersonalInformation() {
                 routeId={[MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED].includes(Number(maritalStatus)) ? '$lang+/_public+/apply+/$id+/partner-information' : '$lang+/_public+/apply+/$id+/applicant-information'}
                 params={params}
                 disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Personal information click"
               >
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply:personal-information.back')}

@@ -7,6 +7,7 @@ import { useFetcher, useLoaderData } from '@remix-run/react';
 import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { differenceInYears, isPast, isValid, parse } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -14,6 +15,7 @@ import pageIds from '../../page-ids.json';
 import { Button } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { ContextualAlert } from '~/components/contextual-alert';
+import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputField } from '~/components/input-field';
@@ -22,6 +24,7 @@ import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { isValidApplicationCode } from '~/utils/application-code-utils';
+import { parseDateString } from '~/utils/date-utils';
 import { featureEnabled, getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -57,19 +60,85 @@ export async function action({ context: { session }, params, request }: ActionFu
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formDataSchema = z.object({
-    sin: z
-      .string({ required_error: t('status:form.error-message.sin-required') })
-      .trim()
-      .min(1)
-      .refine(isValidSin, t('status:form.error-message.sin-valid'))
-      .transform((sin) => formatSin(sin, '')),
-    code: z
-      .string({ required_error: t('status:form.error-message.application-code-required') })
-      .trim()
-      .min(1)
-      .refine(isValidApplicationCode, t('status:form.error-message.application-code-valid')),
-  });
+  const formDataSchema = z
+    .object({
+      sin: z
+        .string({ required_error: t('status:form.error-message.sin-required') })
+        .trim()
+        .min(1)
+        .refine(isValidSin, t('status:form.error-message.sin-valid'))
+        .transform((sin) => formatSin(sin, '')),
+      code: z
+        .string({ required_error: t('status:form.error-message.application-code-required') })
+        .trim()
+        .min(1)
+        .refine(isValidApplicationCode, t('status:form.error-message.application-code-valid')),
+      firstName: z
+        .string({ required_error: t('status:form.error-message.first-name-required') })
+        .trim()
+        .min(1)
+        .max(100),
+      lastName: z
+        .string({ required_error: t('status:form.error-message.last-name-required') })
+        .trim()
+        .min(1)
+        .max(100),
+      dateOfBirthYear: z
+        .number({
+          required_error: t('status:form.error-message.date-of-birth-year-required'),
+          invalid_type_error: t('status:form.error-message.date-of-birth-year-number'),
+        })
+        .int()
+        .positive(),
+      dateOfBirthMonth: z
+        .number({
+          required_error: t('status:form.error-message.date-of-birth-month-required'),
+        })
+        .int()
+        .positive(),
+      dateOfBirthDay: z
+        .number({
+          required_error: t('status:form.error-message.date-of-birth-day-required'),
+          invalid_type_error: t('status:form.error-message.date-of-birth-day-number'),
+        })
+        .int()
+        .positive(),
+      dateOfBirth: z.string(),
+    })
+    .superRefine((val, ctx) => {
+      // At this point the year, month and day should have been validated as positive integer
+      const parseDateOfBirthString = parseDateString(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
+      const dateOfBirth = `${parseDateOfBirthString.year}-${parseDateOfBirthString.month}-${parseDateOfBirthString.day}`;
+      const parsedDateOfBirth = parse(dateOfBirth, 'yyyy-MM-dd', new Date());
+
+      if (!isValid(parsedDateOfBirth)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t('status:form.error-message.date-of-birth-valid'),
+          path: ['dateOfBirth'],
+        });
+      } else if (!isPast(parsedDateOfBirth)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t('status:form.error-message.date-of-birth-is-past'),
+          path: ['dateOfBirth'],
+        });
+      } else if (differenceInYears(new Date(), parsedDateOfBirth) > 150) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t('status:form.error-message.date-of-birth-is-past-valid'),
+          path: ['dateOfBirth'],
+        });
+      }
+    })
+    .transform((val) => {
+      // At this point the year, month and day should have been validated as positive integer
+      const parseDateOfBirthString = parseDateString(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
+      return {
+        ...val,
+        dateOfBirth: `${parseDateOfBirthString.year}-${parseDateOfBirthString.month}-${parseDateOfBirthString.day}`,
+      };
+    });
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -83,7 +152,14 @@ export async function action({ context: { session }, params, request }: ActionFu
   const data = {
     sin: formData.get('sin') ? String(formData.get('sin')) : undefined,
     code: formData.get('code') ? String(formData.get('code')) : undefined,
+    firstName: formData.get('firstName') ? String(formData.get('firstName')) : undefined,
+    lastName: formData.get('lastName') ? String(formData.get('lastName')) : undefined,
+    dateOfBirthYear: formData.get('dateOfBirthYear') ? Number(formData.get('dateOfBirthYear')) : undefined,
+    dateOfBirthMonth: formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined,
+    dateOfBirthDay: formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined,
+    dateOfBirth: '',
   };
+
   const parsedDataResult = formDataSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
@@ -100,8 +176,8 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const applicationStatusService = getApplicationStatusService();
   const lookupService = getLookupService();
-  const { sin, code } = parsedDataResult.data;
-  const statusId = await applicationStatusService.getStatusId(sin, code);
+  const { sin, code, firstName, lastName, dateOfBirth } = parsedDataResult.data;
+  const statusId = await applicationStatusService.getStatusId(sin, code, firstName, lastName, dateOfBirth);
   const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
   const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
 
@@ -151,6 +227,11 @@ export default function StatusChecker() {
     return {
       code: errors?.code?._errors[0],
       sin: errors?.sin?._errors[0],
+      'first-name': errors?.firstName?._errors[0],
+      'last-name': errors?.lastName?._errors[0],
+      'date-picker-date-of-birth-year': errors?.dateOfBirthYear?._errors[0],
+      'date-picker-date-of-birth-month': errors?.dateOfBirthMonth?._errors[0],
+      'date-picker-date-of-birth-day': errors?.dateOfBirthDay?._errors[0],
     };
   }, [fetcher.data]);
 
@@ -237,6 +318,26 @@ export default function StatusChecker() {
           <div className="space-y-6">
             <InputField id="code" name="code" label={t('status:form.application-code-label')} helpMessagePrimary={t('status:form.application-code-description')} required errorMessage={errorMessages.code} />
             <InputField id="sin" name="sin" label={t('status:form.sin-label')} required errorMessage={errorMessages.sin} />
+            <div className="grid gap-6 md:grid-cols-2">
+              <InputField id="first-name" name="firstName" label={t('status:form.first-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errorMessages['first-name']} />
+              <InputField id="last-name" name="lastName" label={t('status:form.last-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errorMessages['last-name']} />
+            </div>
+            <DatePickerField
+              id="date-of-birth"
+              names={{
+                day: 'dateOfBirthDay',
+                month: 'dateOfBirthMonth',
+                year: 'dateOfBirthYear',
+              }}
+              defaultValue=""
+              legend={t('status:form.date-of-birth-label')}
+              required
+              errorMessages={{
+                year: errorMessages['date-picker-date-of-birth-year'],
+                month: errorMessages['date-picker-date-of-birth-month'],
+                day: errorMessages['date-picker-date-of-birth-day'],
+              }}
+            />
           </div>
           <Button variant="primary" id="submit" disabled={isSubmitting} className="my-8">
             {t('status:form.submit')}

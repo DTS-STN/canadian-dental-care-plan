@@ -169,18 +169,32 @@ export default function AccessToDentalInsuranceQuestion() {
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary">{t('dental-insurance.button.save-btn')}</Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/review-information" params={params} disabled={isSubmitting}>
+              <Button variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Access to other dental insurance click">
+                {t('dental-insurance.button.save-btn')}
+              </Button>
+              <ButtonLink
+                id="back-button"
+                routeId="$lang+/_public+/apply+/$id+/review-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Access to other dental insurance click"
+              >
                 {t('dental-insurance.button.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Button variant="primary">
+              <Button variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Access to other dental insurance click">
                 {t('dental-insurance.button.continue')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/communication-preference" params={params} disabled={isSubmitting}>
+              <ButtonLink
+                id="back-button"
+                routeId="$lang+/_public+/apply+/$id+/communication-preference"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Access to other dental insurance click"
+              >
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('dental-insurance.button.back')}
               </ButtonLink>
