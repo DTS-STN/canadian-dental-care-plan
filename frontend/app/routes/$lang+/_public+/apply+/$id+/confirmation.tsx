@@ -345,7 +345,7 @@ export default function ApplyFlowConfirm() {
 
       <fetcher.Form method="post" noValidate className="mt-5 flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <Button variant="primary" onClick={() => sessionStorage.removeItem('flow.state')} size="lg" className="print:hidden">
+        <Button variant="primary" onClick={() => sessionStorage.removeItem('flow.state')} size="lg" className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Confirmation click">
           {t('apply:confirm.exit')}
         </Button>
       </fetcher.Form>

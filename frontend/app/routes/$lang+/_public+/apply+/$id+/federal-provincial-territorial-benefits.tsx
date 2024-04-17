@@ -377,20 +377,32 @@ export default function AccessToDentalInsuranceQuestion() {
           </section>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Access to other federal, provincial or territorial dental benefits click">
                 {t('apply:dental-benefits.button.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/review-information" params={params} disabled={isSubmitting}>
+              <ButtonLink
+                id="back-button"
+                routeId="$lang+/_public+/apply+/$id+/review-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Access to other federal, provincial or territorial dental benefits click"
+              >
                 {t('apply:dental-benefits.button.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Access to other federal, provincial or territorial dental benefits click">
                 {t('apply:dental-benefits.button.continue')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/dental-insurance" params={params} disabled={isSubmitting}>
+              <ButtonLink
+                id="back-button"
+                routeId="$lang+/_public+/apply+/$id+/dental-insurance"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Access to other federal, provincial or territorial dental benefits click"
+              >
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply:dental-benefits.button.back')}
               </ButtonLink>

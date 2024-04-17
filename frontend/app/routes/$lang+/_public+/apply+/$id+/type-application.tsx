@@ -147,11 +147,11 @@ export default function ApplyFlowTypeOfApplication() {
             errorMessage={errorMessages['input-radio-type-of-application-option-0']}
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+            <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Type of application click">
               {t('apply:eligibility.type-of-application.continue-btn')}
               <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
             </Button>
-            <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/terms-and-conditions" params={params} disabled={isSubmitting}>
+            <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/terms-and-conditions" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Type of application click">
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('apply:eligibility.type-of-application.back-btn')}
             </ButtonLink>

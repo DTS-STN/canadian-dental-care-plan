@@ -500,11 +500,11 @@ export default function ReviewInformation() {
         <fetcher.Form method="post" onSubmit={handleSubmit} className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
-          <Button id="confirm-button" variant="green" disabled={isSubmitting}>
+          <Button id="confirm-button" variant="green" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Submit - Review Information click">
             {t('apply:review-information.submit-button')}
             {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
           </Button>
-          <ButtonLink routeId="$lang+/_public+/apply+/$id+/exit-application" params={params} variant="alternative" disabled={isSubmitting}>
+          <ButtonLink routeId="$lang+/_public+/apply+/$id+/exit-application" params={params} variant="alternative" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Review Information click">
             {t('apply:review-information.exit-button')}
             <FontAwesomeIcon icon={faX} className="ms-3 block size-4" />
           </ButtonLink>

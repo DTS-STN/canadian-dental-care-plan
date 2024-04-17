@@ -139,11 +139,11 @@ export default function ApplyIndex() {
       <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <Button variant="primary" id="continue-button" disabled={isSubmitting}>
+          <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Agree and Continue - Terms and Conditions click">
             {t('apply:terms-and-conditions.apply.start-button')}
             <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
-          <ButtonLink id="back-button" to={t('apply:terms-and-conditions.apply.link')} disabled={isSubmitting}>
+          <ButtonLink id="back-button" to={t('apply:terms-and-conditions.apply.link')} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Terms and Conditions click">
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply:terms-and-conditions.apply.back-button')}
           </ButtonLink>
