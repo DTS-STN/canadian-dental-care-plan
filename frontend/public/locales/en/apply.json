@@ -438,7 +438,7 @@
       }
     },
     "apply": {
-      "application-start-consent": "By continuing this application you consent to the above Terms and Conditions of use and the Privacy Notice Statement.",
+      "application-start-consent": "By continuing this application you agree to the above Terms and Conditions of use and the Privacy Notice Statement.",
       "back-button": "Back",
       "link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
       "start-button": "Agree and continue"
