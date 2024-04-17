@@ -17,7 +17,7 @@ test.describe('personal information phone number edit page', () => {
     });
 
     await test.step('submit invalid form data', async () => {
-      await page.getByRole('textbox', { name: 'phone number' }).fill('ASDF');
+      await page.getByRole('textbox', { name: 'primaryTelephoneNumber' }).fill('ASDF');
       await page.getByRole('button', { name: 'change' }).click();
     });
 
@@ -28,13 +28,13 @@ test.describe('personal information phone number edit page', () => {
     });
 
     await test.step('detect form errors', async () => {
-      const input = page.getByRole('textbox', { name: 'phone number' });
+      const input = page.getByRole('textbox', { name: 'primaryTelephoneNumber' });
       const errorMessage = await input.evaluate((element) => (element as HTMLInputElement).validationMessage);
       expect(errorMessage).toEqual(expect.anything());
     });
   });
 
-  test('should redirect to phone number confirm page', async ({ page }) => {
+  test('should redirect to phone number personal-information page', async ({ page }) => {
     await test.step('navigate', async () => {
       await page.goto('/en/personal-information/phone-number/edit');
       await expect(page).toHaveURL(/.*personal-information\/phone-number\/edit/);
@@ -47,7 +47,7 @@ test.describe('personal information phone number edit page', () => {
     });
 
     await test.step('detect phone number confirm page', async () => {
-      await expect(page).toHaveURL(/.*personal-information\/phone-number\/confirm/);
+      await expect(page).toHaveURL(/.*personal-information/);
     });
   });
 
