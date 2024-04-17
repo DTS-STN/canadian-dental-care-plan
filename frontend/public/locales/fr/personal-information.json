@@ -4,7 +4,6 @@
     "breadcrumbs": {
       "personal-information": "(FR) Personal information"
     },
-    "on-file": "(FR) We have the following information for you on file.",
     "full-name": "(FR) Full name",
     "phone-number": "(FR) Phone number",
     "addresses": "(FR) Addresses",
@@ -16,7 +15,8 @@
     "change-phone-number": "(FR) Change phone number",
     "change-preferred-language": "(FR) Change preferred language",
     "no-address-on-file": "(FR) No address on file",
-    "no-preferred-language-on-file": "(FR) No preferred language on file"
+    "no-preferred-language-on-file": "(FR) No preferred language on file",
+    "updated-information-success": "(FR) Your information has been updated."
   },
   "home-address": {
     "edit": {
@@ -49,8 +49,7 @@
       "button": {
         "back": "Retour",
         "save": "Enregistrer"
-      },
-      "updated-notification": "(FR) Home address updated"
+      }
     }
   },
   "mailing-address": {
@@ -86,8 +85,7 @@
       "button": {
         "back": "Retour",
         "save": "Enregistrer"
-      },
-      "updated-notification": "(FR) Mailing address updated"
+      }
     }
   },
   "phone-number": {
@@ -111,8 +109,7 @@
       "error-message": {
         "empty-phone-number": "(FR) Enter a phone number",
         "invalid-phone-format": "(FR) Invalid phone number"
-      },
-      "updated-notification": "(FR) Phone number updated"
+      }
     }
   },
   "preferred-language": {

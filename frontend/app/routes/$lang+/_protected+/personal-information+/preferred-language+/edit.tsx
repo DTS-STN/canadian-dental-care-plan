@@ -108,6 +108,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   await personalInformationServie.updatePersonalInformation(userInfoToken.sin ?? '', newPersonalInformation);
 
   instrumentationService.countHttpStatus('preferred-language.edit', 302);
+  session.set('personal-info-updated', true);
   return redirect(getPathById('$lang+/_protected+/personal-information+/index', params));
 }
 

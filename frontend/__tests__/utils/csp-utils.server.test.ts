@@ -32,7 +32,7 @@ describe('csp.server', () => {
       expect(csp).toContain(`frame-src 'self' ${hcaptchaCSP.frameSrc} ${adobeAnalyticsCSP.frameSrc};`);
       expect(csp).toContain(`img-src 'self' data: ${adobeAnalyticsCSP.imgSrc} https://purecatamphetamine.github.io;`);
       expect(csp).toContain(`script-src 'self' 'unsafe-inline' ${hcaptchaCSP.scriptSrc} ${adobeAnalyticsCSP.scriptSrc}`);
-      expect(csp).toContain(`style-src 'self' 'unsafe-inline' ${hcaptchaCSP.styleSrc}`);
+      expect(csp).toContain(`style-src 'self' ${hcaptchaCSP.styleSrc}`);
     });
 
     it('should allow HMR websocket connections when NODE_ENV=development', () => {
