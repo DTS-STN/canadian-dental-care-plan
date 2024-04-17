@@ -10,8 +10,7 @@
       "preferredLanguageConfirm": "CDCP-PROT-0012",
       "telephoneNumberEdit": "CDCP-PROT-0013",
       "telephoneNumberConfirm": "CDCP-PROT-0014",
-      "emailAddressEdit": "CDCP-PROT-0015",
-      "emailAddressConfirm": "CDCP-PROT-0016"
+      "emailAddressEdit": "CDCP-PROT-0015"
     },
     "letters": {
       "index": "CDCP-PROT-0015"

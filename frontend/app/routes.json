@@ -363,7 +363,7 @@
                 "file": "routes/$lang+/_protected+/personal-information+/email-address+/_route.tsx",
                 "paths": {
                   "en": "/:lang/personal-information/email-address",
-                  "fr": "/:lang/informations-personnelles/adresse-postale"
+                  "fr": "/:lang/informations-personnelles/adresse-courriel"
                 },
                 "children": [
                   {
@@ -371,7 +371,7 @@
                     "file": "routes/$lang+/_protected+/personal-information+/email-address+/edit.tsx",
                     "paths": {
                       "en": "/:lang/personal-information/email-address/edit",
-                      "fr": "/:lang/informations-personnelles/adresse-postale/modifier"
+                      "fr": "/:lang/informations-personnelles/adresse-courriel/modifier"
                     }
                   }
                 ]

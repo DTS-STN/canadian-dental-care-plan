@@ -158,8 +158,6 @@ export default function EmailAddressEdit() {
    * @returns The corresponding error message, or undefined if no key is provided.
    */
   function getErrorMessage(errorI18nKey?: string): string | undefined {
-    console.log('getErrorMessage called:');
-    console.log(errorI18nKey);
     if (!errorI18nKey) return undefined;
 
     /**
@@ -176,9 +174,6 @@ export default function EmailAddressEdit() {
   };
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
-  console.log('Errors:');
-  console.log(errorMessages);
-  console.log(errorSummaryItems);
   useEffect(() => {
     if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
       scrollAndFocusToErrorSummary(errorSummaryId);

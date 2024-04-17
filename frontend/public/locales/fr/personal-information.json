@@ -9,6 +9,7 @@
     "primary-phone-number": "(FR) Telephone number",
     "alternate-phone-number": "(FR) Alternate telephone number",
     "no-phone-number": "N/A",
+    "email-address": "Adresse courriel",
     "addresses": "(FR) Addresses",
     "home-address": "(FR) Home address",
     "mailing-address": "(FR) Mailing address",
@@ -16,6 +17,7 @@
     "change-home-address": "(FR) Change home address",
     "change-mailing-address": "(FR) Change mailing address",
     "change-phone-number": "(FR) Change phone number",
+    "change-email-address": "(FR) Change email address",
     "change-preferred-language": "(FR) Change preferred language",
     "no-address-on-file": "(FR) No address on file",
     "no-preferred-language-on-file": "(FR) No preferred language on file",
@@ -113,6 +115,34 @@
         "empty-phone-number": "(FR) Enter a phone number",
         "invalid-phone-format": "(FR) Invalid phone number"
       }
+    }
+  },
+  "email-address": {
+    "edit": {
+      "page-title": "(FR) Update email address",
+      "subtitle": "(FR) Please update your email address below.",
+      "breadcrumbs": {
+        "personal-information": "(FR) Personal information",
+        "change-email-address": "(FR) Change email address"
+      },
+      "update-message": "(FR) Please update your email address below.",
+      "button": {
+        "save": "(FR) Change",
+        "cancel": "Annuler"
+      },
+      "component": {
+        "previous": "(FR) Previous email address",
+        "newEmail": "(FR) New email address",
+        "email": "Adresse courriel",
+        "confirm-email": "Confirmer l'adresse courriel",
+        "error": "(FR) Error"
+      },
+      "error-message": {
+        "empty-email-address": "(FR) Enter an email address",
+        "invalid-email-format": "(FR) Invalid email address",
+        "email-match": "Les adresses courriel entrées ne concordent pas"
+      },
+      "updated-notification": "(FR) Email address updated"
     }
   },
   "preferred-language": {
