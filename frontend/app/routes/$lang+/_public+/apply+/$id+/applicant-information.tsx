@@ -16,7 +16,6 @@ import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
-import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -61,7 +60,6 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const applyRouteHelpers = getApplyRouteHelpers();
   const state = await applyRouteHelpers.loadState({ params, request, session });
-  const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -110,14 +108,15 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const remove = ![MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(parsedDataResult.data.maritalStatus)) ? 'partnerInformation' : undefined;
+  const hasPartner = applyRouteHelpers.hasPartner(parsedDataResult.data);
+  const remove = !hasPartner ? 'partnerInformation' : undefined;
   await applyRouteHelpers.saveState({ params, remove, request, session, state: { applicantInformation: parsedDataResult.data } });
 
   if (state.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/review-information', params));
   }
 
-  if ([MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(parsedDataResult.data.maritalStatus))) {
+  if (hasPartner) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/partner-information', params));
   }
 

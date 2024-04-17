@@ -18,7 +18,6 @@ import { InputField } from '~/components/input-field';
 import { Progress } from '~/components/progress';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
 import { parseDateString } from '~/utils/date-utils';
-import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -49,11 +48,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
   const state = await applyRouteHelpers.loadState({ params, request, session });
-  const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  // TODO: the flow for where to redirect to will need to be determined depending on the state of the form
-  if (![MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(state.applicantInformation?.maritalStatus ?? ''))) {
+  if (state.applicantInformation === undefined || !applyRouteHelpers.hasPartner(state.applicantInformation)) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/applicant-information', params));
   }
 
