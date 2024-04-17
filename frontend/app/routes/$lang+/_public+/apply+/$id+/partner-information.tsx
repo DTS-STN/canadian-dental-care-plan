@@ -102,7 +102,18 @@ export async function action({ context: { session }, params, request }: ActionFu
         .trim()
         .min(1, t('apply:partner-information.error-message.sin-required'))
         .refine(isValidSin, t('apply:partner-information.error-message.sin-valid'))
-        .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.applicantInformation?.socialInsuranceNumber, t('apply:partner-information.error-message.sin-unique')),
+        .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.applicantInformation?.socialInsuranceNumber, t('apply:partner-information.error-message.sin-unique'))
+        .superRefine((sin, ctx) => {
+          if (!isValidSin(sin)) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:partner-information.error-message.sin-valid'), fatal: true });
+            return z.NEVER;
+          }
+
+          if (state.applicantInformation && formatSin(sin) === formatSin(state.applicantInformation.socialInsuranceNumber)) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:partner-information.error-message.sin-unique'), fatal: true });
+            return z.NEVER;
+          }
+        }),
     })
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
@@ -124,7 +135,6 @@ export async function action({ context: { session }, params, request }: ActionFu
       return {
         ...val,
         dateOfBirth: `${parseDateOfBirthString.year}-${parseDateOfBirthString.month}-${parseDateOfBirthString.day}`,
-        socialInsuranceNumber: isValidSin(val.socialInsuranceNumber) ? formatSin(val.socialInsuranceNumber, '') : val.socialInsuranceNumber,
       };
     }) satisfies z.ZodType<PartnerInformationState>;
 
