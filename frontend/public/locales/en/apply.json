@@ -382,34 +382,25 @@
   },
   "terms-and-conditions": {
     "page-title": "Terms and conditions",
-    "page-heading": "Terms and conditions of use and privacy statement",
+    "page-heading": "Terms and conditions of use and privacy notice statement",
     "intro-text": "Thank you for using the Canadian Dental Care Plan (CDCP) Online Application (\"the Online Application\"). We have developed terms and conditions for using this service (\"Terms\"). Please read them carefully.",
     "terms-and-conditions-of-use": {
       "summary": "Terms and Conditions of Use",
       "heading": "Terms and Conditions of Use for the Canadian Dental Care Plan Online Application",
-      "online-application-legal-terms": "<strong>PLEASE READ CAREFULLY.</strong> These Terms for the Canadian Dental Care Plan (CDCP) Online Application contain information about your legal rights and obligations and regulate your use of the Online Application. These Terms should be read in conjunction with the <canadaTermsConditions>Canada.ca website Terms and Conditions</canadaTermsConditions>. In case they are differing, the present Terms take precedence over Canada.ca Terms and Conditions.",
+      "online-application-legal-terms": "<strong>PLEASE READ CAREFULLY.</strong> These Terms for the Canadian Dental Care Plan (CDCP) Online Application contain information about your legal rights and obligations and regulate your use of the Online Application. These Terms should be read in conjunction with the <canadaTermsConditions>Canada.ca</canadaTermsConditions> website Terms and Conditions. In case they are differing, the present Terms take precedence over Canada.ca Terms and Conditions.",
       "online-application-access-terms": "Your access to and use of the Online Application, including any and all content, is subject to (1) your acceptance of, and (2) your compliance with these Terms.",
       "online-application-usage-terms": "Every time you use the Online Application, these Terms will apply. By using the Online Application, you agree to abide by the following Terms. It is your responsibility to understand and retain these Terms.",
+      "online-application-outage": "There will be times when the system might be down for maintenance.",
+      "online-application-timeout": "If you are inactive for 15 minutes on the Online Application, your session will end and you will lose any information you entered.",
       "terms-rejection-policy": "At any time you may decide not to accept the Terms, in which case you will not be permitted to access and use the Online Application.",
       "esdc-definition-clarification": "In these Terms, \"ESDC\" refers to the Minister of Employment and Social Development, representing His Majesty the King in Right of Canada.",
       "online-application": {
-        "heading": "Terms of Use of the Online Application:",
+        "heading": "Terms of Use for the Online Application:",
         "self-agreement": "Using the Online Application means that you have read and agree to these Terms and the Privacy Notice Statement. If, at any time, you withdraw your agreement to any of the Terms you must stop use of the Online Application.",
-        "on-behalf-of-someone-else": "If you are using the Application on behalf of another individual, by using the Application, you certify that you have all the necessary authority, permission, and authorities to agree to the Terms on behalf of that individual, and that you agree to the Terms on your own personal behalf and on behalf of the individual you are representing.",
-        "at-your-own-risk": "You are using this service at your own risk, and you will need to keep any personal information safe. If you are using a public computer make sure to close the browser or log out when you are done.",
-        "only-use": "Only use the Online Application to apply to the CDCP.",
-        "maintenance": "There will be times when the system might be down for maintenance.",
-        "inactive": "If you are inactive for 15 minutes on the Online Application your session will end and you will lose any information you entered.",
+        "on-behalf-of-someone-else": "If you are using the Application on behalf of a child, by using the Online Application, you certify that you have all the necessary authority to agree to the Terms on behalf of that individual, and that you agree to the Terms on behalf of the individual you are representing.",
+        "at-your-own-risk": "If you are using a shared computer or shared internet connection, you are using this service at your own risk, and you will need to keep any personal information safe. If you are using a public computer make sure to close the browser or log out when you are done.",
         "msdc": "ESDC uses services from Microsoft Corporation to run the Online Application. The Microsoft data centres used by ESDC are in Canada in accordance with Microsoft Corporation's Terms of Service Agreement.",
         "antibot": "ESDC uses hCaptcha anti-bot services for our online tools in accordance with hCaptcha's <hcaptchaTermsOfService>Terms of Service</hcaptchaTermsOfService>."
-      },
-      "disclaimers": {
-        "heading": "Disclaimers",
-        "online-application-disclaimer": "You understand and agree that ESDC provides the Online Application \"as is\" with no representation, warranty or guarantee, implied or expressed, of any kind whatsoever and that ESDC disclaims any and all liability in relation to the use of the Online Application, including any loss, damage or injury arising from or related to:",
-        "external-factors-disclaimer": "any matters or factors outside of its control, including the availability or unavailability of the internet, or telecommunications or other infrastructure systems; or",
-        "online-application-information-non-acceptance": "the non-acceptance of information provided through the Online Application; or",
-        "non-compliance": "non-compliance with any of these Terms.",
-        "esdc-liability-indemnification": "You hereby agree to indemnify and hold ESDC harmless from any such liability."
       },
       "changes-to-these-terms-of-use": {
         "heading": "Changes to these Terms of Use",
@@ -424,7 +415,7 @@
       },
       "how-we-protect-your-privacy": {
         "heading": "How we protect your privacy",
-        "personal-information-collection-and-use-authorization": "The collection and use of your personal information is authorized under the <i>Privacy Act</i>, the <i>Department of Health Act</i>, the <i>Dental Care Measures Act</i>, the <i>Department of Employment and Social Development Act</i>, and other applicable laws.",
+        "personal-information-collection-and-use-authorization": "The collection and use of your personal information is authorized under the <i>Privacy Act</i>, the <i>Department of Health Act</i>, the <i>Dental Care Measures Act</i>, the <i>Department of Employment and Social Development Act</i>, and other applicable laws. ",
         "personal-information-rights-and-access": "You have the right to the protection of, access to, and where applicable, the correction of your personal information. It is kept in the following personal information banks:",
         "personal-information-banks": {
           "esdc-ppu-712": "Canadian Dental Care Plan ESDC PPU 712",
