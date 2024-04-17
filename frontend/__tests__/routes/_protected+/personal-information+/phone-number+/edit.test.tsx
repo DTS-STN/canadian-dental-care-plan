@@ -3,7 +3,6 @@ import { createMemorySessionStorage } from '@remix-run/node';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/$lang+/_protected+/personal-information+/phone-number+/edit';
-import { getUserService } from '~/services/user-service.server';
 
 vi.mock('~/services/instrumentation-service.server', () => ({
   getInstrumentationService: () => ({
@@ -25,14 +24,14 @@ vi.mock('~/services/session-service.server', () => ({
     }),
   }),
 }));
-
-vi.mock('~/services/user-service.server', () => ({
-  getUserService: vi.fn().mockReturnValue({
-    getUserId: vi.fn().mockReturnValue('some-id'),
-    getUserInfo: vi.fn(),
+vi.mock('~/services/personal-information-service.server', () => ({
+  getPersonalInformationService: vi.fn().mockReturnValue({
+    getPersonalInformation: vi.fn().mockResolvedValue({
+      clientNumber: '999999999',
+      primaryTelephoneNumber: '819-458-2974',
+    }),
   }),
 }));
-
 vi.mock('~/utils/locale-utils.server', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
 }));
@@ -43,6 +42,7 @@ vi.mock('~/utils/locale-utils.server', () => ({
 }));
 vi.mock('~/utils/env.server', () => ({
   featureEnabled: vi.fn().mockResolvedValue(true),
+  getEnv: vi.fn().mockReturnValue({}),
 }));
 describe('_gcweb-app.personal-information.phone-number.edit', () => {
   afterEach(() => {
@@ -53,9 +53,7 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
   describe('loader()', () => {
     it('should return userInfo object if userInfo is found', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
-
-      const userService = getUserService();
-      vi.mocked(userService.getUserInfo).mockResolvedValue({ id: 'some-id', phoneNumber: '(111) 222-3333' });
+      session.set('userInfoToken', { sin: '999999999', sub: '1111111' });
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/personal-information/phone-number/edit'),
@@ -67,7 +65,7 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
 
       expect(data).toMatchObject({
         meta: {},
-        userInfo: { id: 'some-id', phoneNumber: '(111) 222-3333' },
+        personalInformation: { primaryTelephoneNumber: '819-458-2974' },
       });
     });
   });
@@ -76,10 +74,10 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
     it('should return validation errors', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
       session.set('csrfToken', 'csrfToken');
-
+      session.set('userInfoToken', { sin: '999999999', sub: '1111111' });
       const formData = new FormData();
       formData.append('_csrf', 'csrfToken');
-      formData.append('phoneNumber', '819 426-55');
+      formData.append('primaryTelephoneNumber', '819 426-55');
 
       const response = await action({
         request: new Request('http://localhost:3000/en/personal-information/phone-number/edit', {
@@ -92,7 +90,7 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.errors).toHaveProperty('phoneNumber');
+      expect(data.errors).toHaveProperty('primaryTelephoneNumber');
     });
   });
 });
