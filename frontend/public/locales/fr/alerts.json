@@ -1,0 +1,22 @@
+{
+  "subscribe": {
+    "page-title": "(FR) Subscribe to CDCP email alerts",
+    "breadcrumbs": {
+      "subscribe": "(FR) Subscribe to CDCP email alerts"
+    },
+    "email": "Adresse courriel",
+    "confirm-email": "Confirmer l'adresse courriel",
+    "preferred-language": "Quelle langue de communication préférez-vous?",
+    "button": {
+      "back": "Retour",
+      "subscribe": "(FR) Subscribe"
+    },
+    "error-message": {
+      "email-match": "Les adresses courriel entrées ne concordent pas",
+      "email-required": "Confirmez l'adresse courriel",
+      "confirm-email-required": "Confirm email address ",
+      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
+      "preferred-language-required": "Sélectionnez la langue de communication préférée"
+    }
+  }
+}

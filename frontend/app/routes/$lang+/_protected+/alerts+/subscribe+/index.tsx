@@ -1,0 +1,168 @@
+import { useEffect, useMemo } from 'react';
+
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
+import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
+
+import { useTranslation } from 'react-i18next';
+import validator from 'validator';
+import { z } from 'zod';
+
+import pageIds from '../../../page-ids.json';
+import { Button, ButtonLink } from '~/components/buttons';
+import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { InputField } from '~/components/input-field';
+import { InputRadios } from '~/components/input-radios';
+import { getAuditService } from '~/services/audit-service.server';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
+import { getLookupService } from '~/services/lookup-service.server';
+import { featureEnabled } from '~/utils/env.server';
+import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getFixedT } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
+import { mergeMeta } from '~/utils/meta-utils';
+import { IdToken } from '~/utils/raoidc-utils.server';
+import { getPathById } from '~/utils/route-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
+import { getTitleMetaTags } from '~/utils/seo-utils';
+
+export const handle = {
+  breadcrumbs: [{ labelI18nKey: 'alerts:subscribe.page-title' }],
+  i18nNamespaces: getTypedI18nNamespaces('alerts', 'gcweb'),
+  pageIdentifier: pageIds.protected.alerts.subscribe,
+  pageTitleI18nKey: 'alerts:subscribe.page-title',
+} as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
+  return data ? getTitleMetaTags(data.meta.title) : [];
+});
+
+export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+  const lookupService = getLookupService();
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const preferredLanguages = await lookupService.getAllPreferredLanguages();
+
+  const csrfToken = String(session.get('csrfToken'));
+  const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:subscribe.page-title') }) };
+
+  return json({ csrfToken, meta, preferredLanguages });
+}
+
+export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  featureEnabled('email-alerts');
+
+  const log = getLogger('subscribe/edit');
+
+  const instrumentationService = getInstrumentationService();
+  const auditService = getAuditService();
+  const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const formSchema = z
+    .object({
+      email: z.string().trim().min(1, t('alerts:subscribe.error-message.email-required')).max(100),
+      confirmEmail: z.string().trim().min(1, t('alerts:subscribe.error-message.confirm-email-required')).max(100),
+      preferredLanguage: z.string().trim().min(1, t('alerts:subscribe.error-message.preferred-language-required')),
+    })
+    .superRefine((val, ctx) => {
+      if (!validator.isEmail(val.email)) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('alerts:subscribe.error-message.email-valid'), path: ['email'] });
+      }
+
+      if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('alerts:subscribe.error-message.confirm-email-required'), path: ['confirmEmail'] });
+      } else if (!validator.isEmail(val.confirmEmail)) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('alerts:subscribe.error-message.email-valid'), path: ['confirmEmail'] });
+      } else if (val.email !== val.confirmEmail) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('alerts:subscribe.error-message.email-match'), path: ['confirmEmail'] });
+      }
+    });
+
+  const formData = await request.formData();
+  const expectedCsrfToken = String(session.get('csrfToken'));
+  const submittedCsrfToken = String(formData.get('_csrf'));
+
+  if (expectedCsrfToken !== submittedCsrfToken) {
+    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
+    throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
+  const data = {
+    email: String(formData.get('email') ?? ''),
+    confirmEmail: String(formData.get('confirmEmail') ?? ''),
+    preferredLanguage: String(formData.get('preferredLanguage') ?? ''),
+  };
+  const parsedDataResult = formSchema.safeParse(data);
+
+  if (!parsedDataResult.success) {
+    return json({ errors: parsedDataResult.error.format() });
+  }
+
+  const idToken: IdToken = session.get('idToken');
+  auditService.audit('page-view.alerts', { userId: idToken.sub });
+  instrumentationService.countHttpStatus('preferred-language.edit', 302);
+
+  return redirect(getPathById('$lang+/_protected+/home', params));
+}
+
+export default function SubscribeEmailEdit() {
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { csrfToken, preferredLanguages } = useLoaderData<typeof loader>();
+  const params = useParams();
+  const fetcher = useFetcher<typeof action>();
+  const errorSummaryId = 'error-summary';
+
+  // Keys order should match the input IDs order.
+  const errorMessages = useMemo(
+    () => ({
+      email: fetcher.data?.errors.email?._errors[0],
+      'confirm-email': fetcher.data?.errors.confirmEmail?._errors[0],
+      'input-radio-preferred-language-option-0': fetcher.data?.errors.preferredLanguage?._errors[0],
+    }),
+    [fetcher.data?.errors.email?._errors, fetcher.data?.errors.confirmEmail?._errors, fetcher.data?.errors.preferredLanguage?._errors],
+  );
+
+  const errorSummaryItems = createErrorSummaryItems(errorMessages);
+
+  useEffect(() => {
+    if (hasErrors(errorMessages)) {
+      scrollAndFocusToErrorSummary(errorSummaryId);
+    }
+  }, [errorMessages]);
+
+  return (
+    <>
+      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+      <fetcher.Form className="max-w-prose" method="post" noValidate>
+        <input type="hidden" name="_csrf" value={csrfToken} />
+        <div className="mb-6 grid gap-6 md:grid-cols-2">
+          <InputField id="email" type="email" className="w-full" label={t('alerts:subscribe.email')} maxLength={100} name="email" errorMessage={errorMessages.email} autoComplete="email" required />
+          <InputField id="confirm-email" type="email" className="w-full" label={t('alerts:subscribe.confirm-email')} maxLength={100} name="confirmEmail" errorMessage={errorMessages['confirm-email']} autoComplete="email" required />
+        </div>
+        <div className="mb-8 space-y-6">
+          {preferredLanguages.length > 0 && (
+            <InputRadios
+              id="preferred-language"
+              name="preferredLanguage"
+              legend={t('alerts:subscribe.preferred-language')}
+              options={preferredLanguages.map((language) => ({
+                children: getNameByLanguage(i18n.language, language),
+                value: language.id,
+              }))}
+              errorMessage={errorMessages['input-radio-preferred-language-option-0']}
+              required
+            />
+          )}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <ButtonLink id="back-button" routeId="$lang+/_protected+/personal-information+/index" params={params}>
+            {t('alerts:subscribe.button.back')}
+          </ButtonLink>
+          <Button id="save-button" variant="primary">
+            {t('alerts:subscribe.button.subscribe')}
+          </Button>
+        </div>
+      </fetcher.Form>
+    </>
+  );
+}
