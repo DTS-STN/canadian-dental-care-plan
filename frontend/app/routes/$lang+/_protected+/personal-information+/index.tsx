@@ -125,9 +125,9 @@ export default function PersonalInformationIndex() {
         <DescriptionListItem term={t('personal-information:index.phone-number')}>
           <dl>
             <dt className="font-semibold">{t('personal-information:index.primary-phone-number')}</dt>
-            <p>{personalInformation.primaryTelephoneNumber ?? t('personal-information:index.no-phone-number')}</p>
+            <dd>{personalInformation.primaryTelephoneNumber ?? t('personal-information:index.no-phone-number')}</dd>
             <dt className="font-semibold">{t('personal-information:index.alternate-phone-number')}</dt>
-            <p>{personalInformation.alternateTelephoneNumber ?? t('personal-information:index.no-phone-number')}</p>
+            <dd>{personalInformation.alternateTelephoneNumber ?? t('personal-information:index.no-phone-number')}</dd>
           </dl>
           {useFeature('edit-personal-info') && (
             <p>
