@@ -123,7 +123,10 @@ export default function PersonalInformationIndex() {
           )}
         </DescriptionListItem>
         <DescriptionListItem term={t('personal-information:index.phone-number')}>
-          <p>{personalInformation.primaryTelephoneNumber}</p>
+          <dt className="font-semibold">{t('personal-information:index.primary-phone-number')}</dt>
+          <p>{personalInformation.primaryTelephoneNumber ?? 'N/A'}</p>
+          <dt className="font-semibold">{t('personal-information:index.alternate-phone-number')}</dt>
+          <p>{personalInformation.alternateTelephoneNumber ?? 'N/A'}</p>
           {useFeature('edit-personal-info') && (
             <p>
               <InlineLink id="change-phone-number-button" routeId="$lang+/_protected+/personal-information+/phone-number+/edit" params={params}>

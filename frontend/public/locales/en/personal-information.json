@@ -6,6 +6,8 @@
     },
     "full-name": "Full name",
     "phone-number": "Phone number",
+    "primary-phone-number": "Telephone number",
+    "alternate-phone-number": "Alternate telephone number",
     "addresses": "Addresses",
     "home-address": "Home address",
     "mailing-address": "Mailing address",

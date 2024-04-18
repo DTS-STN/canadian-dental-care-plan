@@ -6,6 +6,8 @@
     },
     "full-name": "(FR) Full name",
     "phone-number": "(FR) Phone number",
+    "primary-phone-number": "(FR) Telephone number",
+    "alternate-phone-number": "(FR) Alternate telephone number",
     "addresses": "(FR) Addresses",
     "home-address": "(FR) Home address",
     "mailing-address": "(FR) Mailing address",
