@@ -16,14 +16,16 @@ import { InputRadios } from '~/components/input-radios';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
-import { featureEnabled, getEnv } from '~/utils/env.server';
+import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { IdToken } from '~/utils/raoidc-utils.server';
+import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { useUserOrigin } from '~/utils/user-origin-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'alerts:subscribe.page-title' }],
@@ -94,24 +96,15 @@ export async function action({ context: { session }, params, request }: ActionFu
   auditService.audit('update-date.subscribe-alerts', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('alerts.subscibe', 302);
-
-  const env = getEnv();
-  const savedUserOrigin = session.get('userOrigin');
-  switch (savedUserOrigin) {
-    case 'msca': {
-      return redirect(env.MSCA_BASE_URI);
-    }
-    default: {
-      return redirect(env.SCCH_BASE_URI);
-    }
-  }
+  return redirect(getPathById('$lang+/_protected+/home', params));
 }
 
-export default function SubscribeEmail() {
+export default function SubscribeEmailEdit() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, preferredLanguages } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
+  const userOrigin = useUserOrigin();
   const errorSummaryId = 'error-summary';
 
   // Keys order should match the input IDs order.
@@ -158,7 +151,7 @@ export default function SubscribeEmail() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" routeId="$lang+/_protected+/personal-information+/index" params={params}>
+          <ButtonLink id="back-button" to={userOrigin?.to} params={params}>
             {t('alerts:subscribe.button.back')}
           </ButtonLink>
           <Button id="save-button" variant="primary">
