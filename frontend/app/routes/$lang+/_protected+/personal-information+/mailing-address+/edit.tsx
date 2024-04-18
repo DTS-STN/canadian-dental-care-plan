@@ -146,7 +146,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   instrumentationService.countHttpStatus('mailing-address.edit', 302);
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const personalInformationServie = getPersonalInformationService();
+  const personalInformationService = getPersonalInformationService();
   const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
 
@@ -174,7 +174,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         }
       : personalInformation.homeAddress,
   };
-  await personalInformationServie.updatePersonalInformation(userInfoToken.sin ?? '', newPersonalInformation);
+  await personalInformationService.updatePersonalInformation(userInfoToken.sin ?? '', newPersonalInformation);
 
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('update-data.mailing-address', { userId: idToken.sub });

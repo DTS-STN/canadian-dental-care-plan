@@ -1,6 +1,7 @@
 import { AppLoadContext, Session } from '@remix-run/node';
 import type { ActionFunctionArgs as RRActionFunctionArgs, LoaderFunctionArgs as RRLoaderFunctionArgs } from '@remix-run/router';
 
+import type alerts from '../public/locales/en/alerts.json';
 import type apply from '../public/locales/en/apply.json';
 import type dataUnavailable from '../public/locales/en/data-unavailable.json';
 import type gcweb from '../public/locales/en/gcweb.json';
@@ -37,6 +38,7 @@ declare module 'i18next' {
       index: typeof index;
       letters: typeof letters;
       'personal-information': typeof personalInformation;
+      alerts: typeof alerts;
       status: typeof status;
       'stub-sin-editor': typeof stubSinEditor;
       'unable-to-process-request': typeof unableToProcessRequest;
