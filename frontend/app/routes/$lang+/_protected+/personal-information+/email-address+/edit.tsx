@@ -102,7 +102,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   const data = {
-    confirmEmailAddress: formData.get('confirmEmailAddress') ? String(formData.get('confirmEmailAdress') ?? '') : undefined,
+    confirmEmailAddress: formData.get('confirmEmailAddress') ? String(formData.get('confirmEmailAddress') ?? '') : undefined,
     emailAddress: formData.get('emailAddress') ? String(formData.get('emailAddress') ?? '') : undefined,
   };
   const parsedDataResult = formDataSchema.safeParse(data);
