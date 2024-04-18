@@ -1,16 +1,16 @@
 trigger:
-  tags:
-    include:
-    - v*
+  - main
 
 pr: none
 
 variables:
   azureContainerRegistry.repository: 'canadian-dental-care-plan/frontend'
-  azureContainerRegistry.name: ''
+  azureContainerRegistry.name: 'dtsshared-04/29/24'
   azureContainerRegistry.domain: 'dtsshared.azurecr.io'
   vmImageName: "ubuntu-latest"
   image.tag: '$(Build.SourceVersion)'
+
+
 
 stages:
   - stage: Build
@@ -29,6 +29,7 @@ stages:
               echo "##vso[task.setvariable variable=image.tag]$short_hash"
             workingDirectory: $(Build.SourcesDirectory)
             displayName: Get short git hash
+
           - task: Docker@2
             inputs:
               containerRegistry: "$(azureContainerRegistry.name)"
@@ -42,21 +43,22 @@ stages:
               containerRegistry: '$(azureContainerRegistry.name)'
               repository: '$(azureContainerRegistry.repository)'
               command: 'build'
-              Dockerfile: './frontend/Dockerfile'
+              Dockerfile: './frontend/dockerfile'
               tags: |
                 $(image.tag)
-                production-release
+                release-candidate
                 latest
-              arguments: | 
+              arguments: |
                 --pull
-                # --build-arg X=$(Y)
+
+
 
           - task: Docker@2
             inputs:
-              containerRegistry: "$(azureContainerRegistry.name)"
-              repository: "$(azureContainerRegistry.repository)"
-              command: "push"
+              containerRegistry: '$(azureContainerRegistry.name)'
+              repository: '$(azureContainerRegistry.repository)'
+              command: 'push'
               tags: |
                 $(image.tag)
-                production-release
+                release-candidate
                 latest
