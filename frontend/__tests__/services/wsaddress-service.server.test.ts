@@ -9,6 +9,7 @@ vi.mock('~/utils/logging.server', () => ({
   getLogger: vi.fn().mockReturnValue({
     info: vi.fn(),
     error: vi.fn(),
+    trace: vi.fn(),
   }),
 }));
 

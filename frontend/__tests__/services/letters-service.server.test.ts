@@ -11,6 +11,7 @@ vi.mock('~/utils/logging.server', () => ({
     error: vi.fn(),
     debug: vi.fn(),
     audit: vi.fn(),
+    trace: vi.fn(),
   }),
 }));
 
