@@ -312,7 +312,7 @@ export default function StatusChecker() {
           </div>
         </Collapsible>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off">
+        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <div className="space-y-6">
@@ -339,7 +339,7 @@ export default function StatusChecker() {
               }}
             />
           </div>
-          <Button variant="primary" id="submit" disabled={isSubmitting} className="my-8">
+          <Button variant="primary" id="submit" disabled={isSubmitting} className="my-8" data-gc-analytics-formsubmit="submit">
             {t('status:form.submit')}
             <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
