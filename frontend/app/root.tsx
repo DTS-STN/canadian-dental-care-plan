@@ -9,11 +9,11 @@ import fontawesomeStyleSheet from '@fortawesome/fontawesome-svg-core/styles.css'
 import { useTranslation } from 'react-i18next';
 import reactPhoneNumberInputStyleSheet from 'react-phone-number-input/style.css';
 
-import { isApplyRoutePathname, removeApplyRouteSessionPathSegment } from './routes/$lang+/_public+/apply+/_route';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import fontLatoStyleSheet from '~/fonts/lato.css';
 import fontNotoSansStyleSheet from '~/fonts/noto-sans.css';
+import { isApplyRouteUrl, removeApplyRouteSessionPathSegment } from '~/route-helpers/apply-route-helpers.client';
 import { getBuildInfoService } from '~/services/build-info-service.server';
 import tailwindStyleSheet from '~/tailwind.css';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
@@ -90,7 +90,7 @@ export default function App() {
 
   useEffect(() => {
     if (adobeAnalytics.isConfigured()) {
-      if (isApplyRoutePathname(location.pathname)) {
+      if (isApplyRouteUrl(document.location.toString())) {
         adobeAnalytics.pageview(removeApplyRouteSessionPathSegment(document.location.toString()));
         return;
       }

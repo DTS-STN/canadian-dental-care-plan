@@ -6,7 +6,6 @@ import SessionTimeout from '~/components/session-timeout';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getLocale } from '~/utils/locale-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
-import { removePathSegment } from '~/utils/url-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces(...layoutI18nNamespaces),
@@ -39,12 +38,4 @@ export default function Layout() {
       <Outlet />
     </PublicLayout>
   );
-}
-
-export function isApplyRoutePathname(pathname: string) {
-  return /^\/(en|fr)\/(apply|appliquer)\//i.test(pathname);
-}
-
-export function removeApplyRouteSessionPathSegment(url: string | URL) {
-  return removePathSegment(url, 2);
 }
