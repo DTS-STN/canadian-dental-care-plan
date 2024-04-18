@@ -16,6 +16,7 @@
       "first-name-required": "Enter first name",
       "last-name-required": "Enter last name",
       "marital-status-required": "Select marital status",
+      "marital-status-no-partner-information": "If you are married or in a common-law relationship you must enter their information on the next page. Select your marital status and press 'Save'.",
       "sin-required": "Enter 9-digit SIN",
       "sin-valid": "Must be a valid SIN",
       "sin-unique": "The Social Insurance Number (SIN) must be unique"
