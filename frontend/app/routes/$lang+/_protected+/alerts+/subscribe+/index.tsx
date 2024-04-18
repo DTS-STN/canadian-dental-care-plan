@@ -16,13 +16,12 @@ import { InputRadios } from '~/components/input-radios';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
-import { featureEnabled } from '~/utils/env.server';
+import { featureEnabled, getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { IdToken } from '~/utils/raoidc-utils.server';
-import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -53,7 +52,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('subscribe/edit');
+  const log = getLogger('alerts/subscribe');
 
   const instrumentationService = getInstrumentationService();
   const auditService = getAuditService();
@@ -95,10 +94,20 @@ export async function action({ context: { session }, params, request }: ActionFu
   auditService.audit('update-date.subscribe-alerts', { userId: idToken.sub });
 
   instrumentationService.countHttpStatus('alerts.subscibe', 302);
-  return redirect(getPathById('$lang+/_protected+/home', params));
+
+  const env = getEnv();
+  const savedUserOrigin = session.get('userOrigin');
+  switch (savedUserOrigin) {
+    case 'msca': {
+      return redirect(env.MSCA_BASE_URI);
+    }
+    default: {
+      return redirect(env.SCCH_BASE_URI);
+    }
+  }
 }
 
-export default function SubscribeEmailEdit() {
+export default function SubscribeEmail() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, preferredLanguages } = useLoaderData<typeof loader>();
   const params = useParams();
