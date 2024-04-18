@@ -8,6 +8,7 @@
     "phone-number": "Phone number",
     "primary-phone-number": "Telephone number",
     "alternate-phone-number": "Alternate telephone number",
+    "no-phone-number":"N/A",
     "addresses": "Addresses",
     "home-address": "Home address",
     "mailing-address": "Mailing address",
