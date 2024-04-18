@@ -4,6 +4,8 @@ import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run
 import { json } from '@remix-run/node';
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useLocation, useRouteLoaderData } from '@remix-run/react';
 
+import { config as fontAwesomeConfig } from '@fortawesome/fontawesome-svg-core';
+import fontawesomeStyleSheet from '@fortawesome/fontawesome-svg-core/styles.css';
 import { useTranslation } from 'react-i18next';
 import reactPhoneNumberInputStyleSheet from 'react-phone-number-input/style.css';
 
@@ -22,10 +24,14 @@ import { useI18nNamespaces } from '~/utils/route-utils';
 import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
 import { getUserOrigin } from '~/utils/user-origin-utils.server';
 
+// see: https://docs.fontawesome.com/web/dig-deeper/security#content-security-policy
+fontAwesomeConfig.autoAddCss = false;
+
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: fontLatoStyleSheet },
   { rel: 'stylesheet', href: fontNotoSansStyleSheet },
   { rel: 'stylesheet', href: reactPhoneNumberInputStyleSheet },
+  { rel: 'stylesheet', href: fontawesomeStyleSheet },
   { rel: 'stylesheet', href: tailwindStyleSheet },
 ];
 
