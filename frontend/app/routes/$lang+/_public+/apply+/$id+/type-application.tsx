@@ -10,6 +10,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
+import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
@@ -127,7 +128,24 @@ export default function ApplyFlowTypeOfApplication() {
       </div>
       <div className="max-w-prose">
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <p className="mb-6 italic" id="form-instructions">
+        <p className="mb-6">{t('apply:eligibility.type-of-application.page-description')}</p>
+        <h2 className="font-bold">{t('apply:eligibility.type-of-application.apply-self')}</h2>
+        <p>{t('apply:eligibility.type-of-application.apply-self-eligibility')}</p>
+        <ul className="mb-6 list-disc pl-6">
+          <li>{t('apply:eligibility.type-of-application.senior')}</li>
+          <li>{t('apply:eligibility.type-of-application.valid-disability-tax-credit')}</li>
+          <li>{t('apply:eligibility.type-of-application.live-independently')}</li>
+        </ul>
+        <h2 className="font-bold">{t('apply:eligibility.type-of-application.apply-child')}</h2>
+        <p>{t('apply:eligibility.type-of-application.apply-child-eligibility')}</p>
+        <ul className="mb-6 list-disc pl-6">
+          <li>{t('apply:eligibility.type-of-application.sixteen-or-older')}</li>
+          <li>{t('apply:eligibility.type-of-application.under-eighteen')}</li>
+        </ul>
+        <Collapsible summary={t('apply:eligibility.type-of-application.split-custody-summary')}>
+          <p>{t('apply:eligibility.type-of-application.split-custody-detail')}</p>
+        </Collapsible>
+        <p className="mb-4 mt-8 italic" id="form-instructions">
           {t('apply:required-label')}
         </p>
         <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
