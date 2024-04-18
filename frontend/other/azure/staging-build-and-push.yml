@@ -1,16 +1,16 @@
 trigger:
   tags:
     include:
-    - v*
+      - v*
 
 pr: none
 
 variables:
-  azureContainerRegistry.repository: 'canadian-dental-care-plan/frontend'
+  azureContainerRegistry.repository: canadian-dental-care-plan/frontend
   azureContainerRegistry.name: ''
-  azureContainerRegistry.domain: 'dtsshared.azurecr.io'
-  vmImageName: "ubuntu-latest"
-  image.tag: '$(Build.SourceVersion)'
+  azureContainerRegistry.domain: dtsshared.azurecr.io
+  vmImageName: ubuntu-latest
+  image.tag: $(Build.SourceVersion)
 
 stages:
   - stage: Build
@@ -31,18 +31,18 @@ stages:
             displayName: Get short git hash
           - task: Docker@2
             inputs:
-              containerRegistry: "$(azureContainerRegistry.name)"
-              repository: "$(azureContainerRegistry.repository)"
-              command: "login"
-          - script: "docker pull $(azureContainerRegistry.domain)/$(azureContainerRegistry.repository):latest"
+              containerRegistry: $(azureContainerRegistry.name)
+              repository: $(azureContainerRegistry.repository)
+              command: login
+          - script: docker pull $(azureContainerRegistry.domain)/$(azureContainerRegistry.repository):latest
             displayName: Pull latest for layer caching
             continueOnError: true
           - task: Docker@2
             inputs:
-              containerRegistry: '$(azureContainerRegistry.name)'
-              repository: '$(azureContainerRegistry.repository)'
-              command: 'build'
-              Dockerfile: './frontend/Dockerfile'
+              containerRegistry: $(azureContainerRegistry.name)
+              repository: $(azureContainerRegistry.repository)
+              command: build
+              Dockerfile: ./frontend/Dockerfile
               tags: |
                 $(image.tag)
                 production-release
@@ -53,9 +53,9 @@ stages:
 
           - task: Docker@2
             inputs:
-              containerRegistry: "$(azureContainerRegistry.name)"
-              repository: "$(azureContainerRegistry.repository)"
-              command: "push"
+              containerRegistry: $(azureContainerRegistry.name)
+              repository: $(azureContainerRegistry.repository)
+              command: push
               tags: |
                 $(image.tag)
                 production-release

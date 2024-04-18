@@ -4,13 +4,11 @@ trigger:
 pr: none
 
 variables:
-  azureContainerRegistry.repository: 'canadian-dental-care-plan/frontend'
-  azureContainerRegistry.name: 'dtsshared-04/29/24'
-  azureContainerRegistry.domain: 'dtsshared.azurecr.io'
-  vmImageName: "ubuntu-latest"
-  image.tag: '$(Build.SourceVersion)'
-
-
+  azureContainerRegistry.repository: canadian-dental-care-plan/frontend
+  azureContainerRegistry.name: dtsshared-04/29/24
+  azureContainerRegistry.domain: dtsshared.azurecr.io
+  vmImageName: ubuntu-latest
+  image.tag: $(Build.SourceVersion)
 
 stages:
   - stage: Build
@@ -32,18 +30,18 @@ stages:
 
           - task: Docker@2
             inputs:
-              containerRegistry: "$(azureContainerRegistry.name)"
-              repository: "$(azureContainerRegistry.repository)"
-              command: "login"
-          - script: "docker pull $(azureContainerRegistry.domain)/$(azureContainerRegistry.repository):latest"
+              containerRegistry: $(azureContainerRegistry.name)
+              repository: $(azureContainerRegistry.repository)
+              command: login
+          - script: docker pull $(azureContainerRegistry.domain)/$(azureContainerRegistry.repository):latest
             displayName: Pull latest for layer caching
             continueOnError: true
           - task: Docker@2
             inputs:
-              containerRegistry: '$(azureContainerRegistry.name)'
-              repository: '$(azureContainerRegistry.repository)'
-              command: 'build'
-              Dockerfile: './frontend/dockerfile'
+              containerRegistry: $(azureContainerRegistry.name)
+              repository: $(azureContainerRegistry.repository)
+              command: build
+              Dockerfile: ./frontend/dockerfile
               tags: |
                 $(image.tag)
                 release-candidate
@@ -51,13 +49,11 @@ stages:
               arguments: |
                 --pull
 
-
-
           - task: Docker@2
             inputs:
-              containerRegistry: '$(azureContainerRegistry.name)'
-              repository: '$(azureContainerRegistry.repository)'
-              command: 'push'
+              containerRegistry: $(azureContainerRegistry.name)
+              repository: $(azureContainerRegistry.repository)
+              command: push
               tags: |
                 $(image.tag)
                 release-candidate
