@@ -6,7 +6,6 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
 import { redirectWithSuccess } from 'remix-toast';
-import validator from 'validator';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
@@ -73,21 +72,11 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const formDataSchema = z
     .object({
-      emailAddress: z.string(),
-      confirmEmailAddress: z.string(),
+      emailAddress: z.string().trim().min(1, t('email-address.edit.error-message.empty-email-address')).email(t('email-address.edit.error-message.invalid-email-format')),
+      confirmEmailAddress: z.string().trim().min(1, t('email-address.edit.error-message.empty-email-address')).email(t('email-address.edit.error-message.invalid-email-format')),
     })
     .superRefine((val, ctx) => {
-      if (validator.isEmpty(val.emailAddress)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('email-address.edit.error-message.empty-email-address'), path: ['emailAddress'] });
-      } else if (!validator.isEmail(val.emailAddress)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('email-address.edit.error-message.invalid-email-format'), path: ['emailAddress'] });
-      }
-
-      if (validator.isEmpty(val.confirmEmailAddress)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('email-address.edit.error-message.empty-email-address'), path: ['confirmEmailAddress'] });
-      } else if (!validator.isEmail(val.confirmEmailAddress)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('email-address.edit.error-message.invalid-email-format'), path: ['confirmEmailAddress'] });
-      } else if (val.emailAddress !== val.confirmEmailAddress) {
+      if (val.emailAddress !== val.confirmEmailAddress) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('email-address.edit.error-message.email-match'), path: ['confirmEmailAddress'] });
       }
     });
@@ -102,8 +91,8 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   const data = {
-    confirmEmailAddress: formData.get('confirmEmailAddress') ? String(formData.get('confirmEmailAddress') ?? '') : undefined,
-    emailAddress: formData.get('emailAddress') ? String(formData.get('emailAddress') ?? '') : undefined,
+    confirmEmailAddress: String(formData.get('confirmEmailAddress')),
+    emailAddress: String(formData.get('emailAddress')),
   };
   const parsedDataResult = formDataSchema.safeParse(data);
 
