@@ -122,7 +122,6 @@
         "personal-information": "Personal information",
         "change-email-address": "Change email address"
       },
-      "update-message": "Please update your email address below.",
       "button": {
         "save": "Change",
         "cancel": "Cancel"
