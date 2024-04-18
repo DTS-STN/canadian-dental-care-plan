@@ -38,6 +38,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+  featureEnabled('email-alerts');
+
+  const instrumentationService = getInstrumentationService();
   const lookupService = getLookupService();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const preferredLanguages = await lookupService.getAllPreferredLanguages();
@@ -45,12 +48,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:subscribe.page-title') }) };
 
+  instrumentationService.countHttpStatus('alerts.subscibe', 302);
   return json({ csrfToken, meta, preferredLanguages });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  featureEnabled('email-alerts');
-
   const log = getLogger('subscribe/edit');
 
   const instrumentationService = getInstrumentationService();
@@ -59,20 +61,12 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const formSchema = z
     .object({
-      email: z.string().trim().min(1, t('alerts:subscribe.error-message.email-required')).max(100),
-      confirmEmail: z.string().trim().min(1, t('alerts:subscribe.error-message.confirm-email-required')).max(100),
+      email: z.string().trim().min(1, t('alerts:subscribe.error-message.email-required')).max(100).email(t('alerts:subscribe.error-message.email-valid')),
+      confirmEmail: z.string().trim().min(1, t('alerts:subscribe.error-message.confirm-email-required')).max(100).email(t('alerts:subscribe.error-message.email-valid')),
       preferredLanguage: z.string().trim().min(1, t('alerts:subscribe.error-message.preferred-language-required')),
     })
     .superRefine((val, ctx) => {
-      if (!validator.isEmail(val.email)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('alerts:subscribe.error-message.email-valid'), path: ['email'] });
-      }
-
-      if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('alerts:subscribe.error-message.confirm-email-required'), path: ['confirmEmail'] });
-      } else if (!validator.isEmail(val.confirmEmail)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('alerts:subscribe.error-message.email-valid'), path: ['confirmEmail'] });
-      } else if (val.email !== val.confirmEmail) {
+      if (!validator.isEmpty(val.email) && !validator.isEmpty(val.confirmEmail) && val.email !== val.confirmEmail) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('alerts:subscribe.error-message.email-match'), path: ['confirmEmail'] });
       }
     });
@@ -98,9 +92,9 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   const idToken: IdToken = session.get('idToken');
-  auditService.audit('page-view.alerts', { userId: idToken.sub });
-  instrumentationService.countHttpStatus('preferred-language.edit', 302);
+  auditService.audit('update-date.subscribe-alerts', { userId: idToken.sub });
 
+  instrumentationService.countHttpStatus('alerts.subscibe', 302);
   return redirect(getPathById('$lang+/_protected+/home', params));
 }
 
