@@ -29,6 +29,9 @@ function createPersonalInformationService() {
   }
 
   async function getPersonalInformation(sin: string, userId: string) {
+    log.debug('Fetching personal information for user id [%s]', userId);
+    log.trace('Fetching personal information for sin [%s] and user id [%s]', sin, userId);
+
     const curentPersonalInformation = createClientInfo(sin);
     const url = `${INTEROP_APPLICANT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant/`;
     const auditService = getAuditService();
@@ -48,7 +51,9 @@ function createPersonalInformationService() {
     instrumentationService.countHttpStatus('http.client.interop-api.applicant.posts', response.status);
 
     if (response.status === 200) {
-      return toPersonalInformation(personalInformationApiSchema.parse(await response.json()));
+      const data = await response.json();
+      log.trace('Personal information for sin [%s] and user id [%s]: [%j]', sin, userId, data);
+      return toPersonalInformation(personalInformationApiSchema.parse(data));
     }
     if (response.status === 204) {
       return null;
@@ -66,6 +71,8 @@ function createPersonalInformationService() {
   }
 
   async function updatePersonalInformation(sin: string, newPersonalInformation: PersonalInfo) {
+    log.debug('Updating personal information for with new information [%j]', newPersonalInformation);
+    log.trace('Updating personal information for sin [%s] and new information [%j]', sin, newPersonalInformation);
     const personalInformationApi = toPersonalInformationApi(newPersonalInformation);
 
     const personalInformationApiRequest = await personalInformationApiSchema.safeParseAsync(personalInformationApi);
@@ -96,6 +103,7 @@ function createPersonalInformationService() {
 
       throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
+    log.trace('Updated personal information: [%j]', await response.text());
   }
 
   return { getPersonalInformation, updatePersonalInformation };

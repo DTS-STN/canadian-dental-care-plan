@@ -42,6 +42,8 @@ async function createWSAddressService() {
   const { INTEROP_API_BASE_URI } = getEnv();
 
   async function correctAddress({ address, city, province, postalCode, country }: { address: string; city: string; province?: string; postalCode?: string; country: string }) {
+    log.debug('Checking correctness of address [%s], city [%s], province [%s], postal code [%s], country [%s]', address, city, province, postalCode, country);
+
     const searchParams = new URLSearchParams({
       addressLine: address,
       city,
@@ -51,6 +53,7 @@ async function createWSAddressService() {
       formatResult: 'true',
       language: 'English', // TODO confirm that we should always have this as "English"
     });
+
     const url = `${INTEROP_API_BASE_URI}/CAN/correct?${searchParams}`;
     const response = await fetch(url);
 
@@ -66,7 +69,9 @@ async function createWSAddressService() {
       throw new Error(`Failed to correct the address. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const correctAddressResponse = correctAddressResponseSchema.parse(await response.json());
+    const data = await response.json();
+    log.trace('Checking correctness of address [%s], city [%s], province [%s], postal code [%s], country [%s]: [%j]', address, city, province, postalCode, country, data);
+    const correctAddressResponse = correctAddressResponseSchema.parse(data);
     const correctionResults = correctAddressResponse['wsaddr:CorrectionResults'];
     return {
       status: correctionResults['wsaddr:StatusCode'],
@@ -79,6 +84,7 @@ async function createWSAddressService() {
   }
 
   async function parseAddress({ address, city, province, postalCode, country }: { address: string; city: string; province: string; postalCode: string; country: string }) {
+    log.debug('Parsing address [%s], city [%s], province [%s], postal code [%s], country [%s]', address, city, province, postalCode, country);
     const searchParams = new URLSearchParams({
       addressLine: address,
       city,
@@ -89,6 +95,7 @@ async function createWSAddressService() {
       parseType: 'parseOnly', // only parse the address - do not correct or validate it
       language: 'English', // TODO confirm that we should always have this as "English"
     });
+
     const url = `${INTEROP_API_BASE_URI}/CAN/parse?${searchParams}`;
     const response = await fetch(url);
 
@@ -104,7 +111,9 @@ async function createWSAddressService() {
       throw new Error(`Failed to parse the address. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const parseAddressResponse = parseAddressResponseSchema.parse(await response.json());
+    const data = await response.json();
+    log.trace('Parsed address [%s], city [%s], province [%s], postal code [%s], country [%s]: [%j]', address, city, province, postalCode, country, data);
+    const parseAddressResponse = parseAddressResponseSchema.parse(data);
     const parsedResults = parseAddressResponse['wsaddr:ParsedResults'];
     return {
       apartmentUnitNumber: parsedResults['wsaddr:AddressSecondaryUnitNumber'],
@@ -117,6 +126,7 @@ async function createWSAddressService() {
   }
 
   async function validateAddress({ address, city, province, postalCode, country }: { address: string; city: string; province: string; postalCode: string; country: string }) {
+    log.debug('Validating address [%s], city [%s], province [%s], postal code [%s], country [%s]', address, city, province, postalCode, country);
     const searchParams = new URLSearchParams({
       addressLine: address,
       city,
@@ -140,7 +150,9 @@ async function createWSAddressService() {
       throw new Error(`Failed to validate the address. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const validateAddressResponse = validateAddressResponseSchema.parse(await response.json());
+    const data = await response.json();
+    log.trace('Validated address [%s], city [%s], province [%s], postal code [%s], country [%s]: [%j]', address, city, province, postalCode, country, data);
+    const validateAddressResponse = validateAddressResponseSchema.parse(data);
     const isValid = 'Valid' === validateAddressResponse['wsaddr:ValidationResults']['wsaddr:Information']['wsaddr:StatusCode'];
     return isValid;
   }
