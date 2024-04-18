@@ -137,6 +137,16 @@ export default function PersonalInformationIndex() {
             </p>
           )}
         </DescriptionListItem>
+        <DescriptionListItem term={t('personal-information:index.email-address')}>
+          <p>{personalInformation.emailAddress}</p>
+          {useFeature('edit-personal-info') && (
+            <p>
+              <InlineLink id="change-email-address-button" routeId="$lang+/_protected+/personal-information+/email-address+/edit" params={params}>
+                {t('personal-information:index.change-email-address')}
+              </InlineLink>
+            </p>
+          )}
+        </DescriptionListItem>
       </dl>
     </>
   );
