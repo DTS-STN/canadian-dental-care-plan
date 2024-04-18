@@ -100,12 +100,12 @@ export async function action({ context: { session }, params, request }: ActionFu
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
-  const personalInformationServie = getPersonalInformationService();
+  const personalInformationService = getPersonalInformationService();
   const newPersonalInformation = {
     ...personalInformation,
     preferredLanguageId: parsedDataResult.data.preferredLanguage,
   };
-  await personalInformationServie.updatePersonalInformation(userInfoToken.sin ?? '', newPersonalInformation);
+  await personalInformationService.updatePersonalInformation(userInfoToken.sin ?? '', newPersonalInformation);
 
   instrumentationService.countHttpStatus('preferred-language.edit', 302);
   session.set('personal-info-updated', true);
