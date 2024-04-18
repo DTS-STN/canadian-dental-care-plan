@@ -29,7 +29,6 @@ function createPersonalInformationService() {
   }
 
   async function getPersonalInformation(sin: string, userId: string) {
-    log.trace('Calling getPersonalInformation');
     const curentPersonalInformation = createClientInfo(sin);
     const url = `${INTEROP_APPLICANT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant/`;
     const auditService = getAuditService();
@@ -49,9 +48,7 @@ function createPersonalInformationService() {
     instrumentationService.countHttpStatus('http.client.interop-api.applicant.posts', response.status);
 
     if (response.status === 200) {
-      const data = await response.json();
-      log.trace('Method getPersonalInformation returned: %j', data);
-      return toPersonalInformation(personalInformationApiSchema.parse(data));
+      return toPersonalInformation(personalInformationApiSchema.parse(await response.json()));
     }
     if (response.status === 204) {
       return null;
@@ -69,7 +66,6 @@ function createPersonalInformationService() {
   }
 
   async function updatePersonalInformation(sin: string, newPersonalInformation: PersonalInfo) {
-    log.trace('Calling updatePersonalInformation');
     const personalInformationApi = toPersonalInformationApi(newPersonalInformation);
 
     const personalInformationApiRequest = await personalInformationApiSchema.safeParseAsync(personalInformationApi);
@@ -100,8 +96,6 @@ function createPersonalInformationService() {
 
       throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
-
-    log.trace('Method updatePersonalInformation returned: %j', await response.json());
   }
 
   return { getPersonalInformation, updatePersonalInformation };
