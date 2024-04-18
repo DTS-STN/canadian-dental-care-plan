@@ -294,7 +294,7 @@ export default function ApplyFlowApplicationInformation() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId="$lang+/_public+/apply+/$id+/review-information"
+                routeId={defaultState ? '$lang+/_public+/apply+/$id+/review-information' : '$lang+/_public+/apply+/$id+/applicant-information'}
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Spouse or Common-law partner information click"
