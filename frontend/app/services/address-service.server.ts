@@ -37,11 +37,14 @@ function createAddressService() {
   const { INTEROP_API_BASE_URI } = getEnv();
 
   async function getAddressInfo(userId: string, addressId: string) {
+    log.trace('Calling getAddressInfo');
     const url = `${INTEROP_API_BASE_URI}/users/${userId}/addresses/${addressId}`;
     const response = await fetch(url);
 
     if (response.ok) {
-      return toAddressInfo(addressDtoSchema.parse(await response.json()));
+      const data = await response.json();
+      log.trace('Method getAddressInfo returned: %j', data);
+      return toAddressInfo(addressDtoSchema.parse(data));
     }
 
     if (response.status === 404) {
@@ -60,6 +63,7 @@ function createAddressService() {
   }
 
   async function updateAddressInfo(userId: string, addressId: string, addressInfo: AddressInfo) {
+    log.trace('Calling updateAddressInfo');
     const currentAddressInfo = await getAddressInfo(userId, addressId);
 
     if (!currentAddressInfo) {
@@ -91,6 +95,8 @@ function createAddressService() {
 
       throw new Error(`Failed to fetch address. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
+
+    log.trace('Method updateAddressInfo returned: %j', await response.json());
   }
 
   return { getAddressInfo, updateAddressInfo };

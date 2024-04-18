@@ -32,7 +32,9 @@ function createLettersService() {
    * @returns returns all the letter types
    */
   async function getAllLetterTypes() {
-    return letterTypesJson.value[0].OptionSet.Options.map((option) => {
+    log.debug('Fetching all letter types');
+
+    const letterTypes = letterTypesJson.value[0].OptionSet.Options.map((option) => {
       const { LocalizedLabels } = option.Label;
       const nameEn = LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label;
       const nameFr = LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label;
@@ -43,12 +45,16 @@ function createLettersService() {
         nameFr,
       };
     });
+
+    log.trace('Returning letter types: %j', letterTypes);
+    return letterTypes;
   }
 
   /**
    * @returns array of letters given the clientId with optional sort parameter
    */
   async function getLetters(clientId: string, userId: string, sortOrder: 'asc' | 'desc' = 'desc') {
+    log.trace('Calling getLetters');
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
     auditService.audit('letters.get', { userId });
@@ -86,7 +92,9 @@ function createLettersService() {
       }),
     );
 
-    const letters = lettersSchema.parse(await response.json()).map((letter) => ({
+    const data = await response.json();
+    log.trace('Method getLetters returned: %j', data);
+    const letters = lettersSchema.parse(data).map((letter) => ({
       id: letter.LetterId,
       issuedOn: letter.LetterDate,
       name: letter.LetterName,
@@ -102,6 +110,7 @@ function createLettersService() {
    * @returns a promise that resolves to a base64 encoded string representing the PDF document
    */
   async function getPdf(letterId: string, userId: string) {
+    log.trace('Calling getPdf');
     const url = new URL(`${INTEROP_CCT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetPdfByLetterId`);
     url.searchParams.set('id', letterId);
     const auditService = getAuditService();
@@ -130,8 +139,10 @@ function createLettersService() {
       throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
+    const data = await response.json();
+    log.trace('Method getPdf returned: %j', data);
     const pdfSchema = z.object({ documentBytes: z.string() });
-    return pdfSchema.parse(await response.json()).documentBytes;
+    return pdfSchema.parse(data).documentBytes;
   }
 
   return {

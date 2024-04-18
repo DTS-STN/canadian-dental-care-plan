@@ -51,6 +51,8 @@ async function createWSAddressService() {
       formatResult: 'true',
       language: 'English', // TODO confirm that we should always have this as "English"
     });
+
+    log.trace('Calling correctAddress with params: %j', searchParams);
     const url = `${INTEROP_API_BASE_URI}/CAN/correct?${searchParams}`;
     const response = await fetch(url);
 
@@ -66,7 +68,9 @@ async function createWSAddressService() {
       throw new Error(`Failed to correct the address. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const correctAddressResponse = correctAddressResponseSchema.parse(await response.json());
+    const data = await response.json();
+    log.trace('Method correctAddress returned: %j', data);
+    const correctAddressResponse = correctAddressResponseSchema.parse(data);
     const correctionResults = correctAddressResponse['wsaddr:CorrectionResults'];
     return {
       status: correctionResults['wsaddr:StatusCode'],
@@ -89,6 +93,8 @@ async function createWSAddressService() {
       parseType: 'parseOnly', // only parse the address - do not correct or validate it
       language: 'English', // TODO confirm that we should always have this as "English"
     });
+
+    log.trace('Calling parseAddress with params: %j', searchParams);
     const url = `${INTEROP_API_BASE_URI}/CAN/parse?${searchParams}`;
     const response = await fetch(url);
 
@@ -104,7 +110,9 @@ async function createWSAddressService() {
       throw new Error(`Failed to parse the address. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const parseAddressResponse = parseAddressResponseSchema.parse(await response.json());
+    const data = await response.json();
+    log.trace('Method parseAddress returned: %j', data);
+    const parseAddressResponse = parseAddressResponseSchema.parse(data);
     const parsedResults = parseAddressResponse['wsaddr:ParsedResults'];
     return {
       apartmentUnitNumber: parsedResults['wsaddr:AddressSecondaryUnitNumber'],
@@ -125,6 +133,7 @@ async function createWSAddressService() {
       country,
       language: 'English', // TODO confirm that we should always have this as "English"
     });
+    log.trace('Calling validateAddress with params: %j', searchParams);
     const url = `${INTEROP_API_BASE_URI}/CAN/validate?${searchParams}`;
     const response = await fetch(url);
 
@@ -140,7 +149,9 @@ async function createWSAddressService() {
       throw new Error(`Failed to validate the address. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const validateAddressResponse = validateAddressResponseSchema.parse(await response.json());
+    const data = await response.json();
+    log.trace('Method validateAddress returned: %j', data);
+    const validateAddressResponse = validateAddressResponseSchema.parse(data);
     const isValid = 'Valid' === validateAddressResponse['wsaddr:ValidationResults']['wsaddr:Information']['wsaddr:StatusCode'];
     return isValid;
   }
