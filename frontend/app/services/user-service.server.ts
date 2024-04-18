@@ -29,32 +29,25 @@ function createUserService() {
   const { INTEROP_API_BASE_URI } = getEnv();
 
   async function getUserId() {
-    log.trace('Calling getUserId');
     return '00000000-0000-0000-0000-000000000000';
   }
 
   async function getUserInfo(userId: string) {
-    log.trace('Calling getUseInfo');
     const url = `${INTEROP_API_BASE_URI}/users/${userId}`;
     const response = await fetch(url);
 
+    if (response.ok) return userInfoSchema.parse(await response.json());
     if (response.status === 404) return null;
 
-    if (!response.ok) {
-      log.error('%j', {
-        message: 'Failed to fetch data',
-        status: response.status,
-        statusText: response.statusText,
-        url: url,
-        responseBody: await response.text(),
-      });
+    log.error('%j', {
+      message: 'Failed to fetch data',
+      status: response.status,
+      statusText: response.statusText,
+      url: url,
+      responseBody: await response.text(),
+    });
 
-      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    log.trace('Method getUserInfo returned: %j', data);
-    return userInfoSchema.parse(data);
+    throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
   async function updateUserInfo(userId: string, userInfo: UserInfo) {
@@ -65,7 +58,6 @@ function createUserService() {
     const patch = jsonpatch.compare(curentUserInfo, { ...curentUserInfo, ...userInfo });
     if (patch.length === 0) return;
 
-    log.trace('calling updateUserInfo with body: %j', JSON.stringify(patch));
     const url = `${INTEROP_API_BASE_URI}/users/${userId}`;
     const response = await fetch(url, {
       method: 'PATCH',

@@ -139,16 +139,13 @@ function createLookupService() {
     throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
   async function getAllIndigenousGroupTypes() {
-    log.debug('Fetching all Indigenous group types');
     const url = `${INTEROP_API_BASE_URI}/lookups/indigenous-group-types/`;
     const response = await fetch(url);
 
     const indigenousGroupSchemaList = z.array(indigenousGroupSchema);
 
     if (response.ok) {
-      const data = await response.json();
-      log.trace('Method getAllIndigenousGroupTypes returned: [%j]', data);
-      return indigenousGroupSchemaList.parse(data);
+      return indigenousGroupSchemaList.parse(await response.json());
     }
 
     log.error('%j', {
@@ -163,16 +160,13 @@ function createLookupService() {
   }
 
   async function getAllAvoidedDentalCostTypes() {
-    log.debug('Fetching all avoided dental cost types');
     const url = `${INTEROP_API_BASE_URI}/lookups/avoided-dental-cost-types/`;
     const response = await fetch(url);
 
     const avoidedDentalCostTypeSchemaList = z.array(avoidedDentalCostTypeSchema);
 
     if (response.ok) {
-      const data = await response.json();
-      log.trace('Method getAllAvoidedDentalCostTypes returned: [%j]', data);
-      return avoidedDentalCostTypeSchemaList.parse(data);
+      return avoidedDentalCostTypeSchemaList.parse(await response.json());
     }
 
     log.error('%j', {
@@ -187,16 +181,13 @@ function createLookupService() {
   }
 
   async function getAllGenderTypes() {
-    log.debug('Fetching all gender types');
     const url = `${INTEROP_API_BASE_URI}/lookups/gender-types/`;
     const response = await fetch(url);
 
     const genderTypeSchemaList = z.array(genderTypeSchema);
 
     if (response.ok) {
-      const data = await response.json();
-      log.trace('Method getAllGenderTypes return: [%j]', data);
-      return genderTypeSchemaList.parse(data);
+      return genderTypeSchemaList.parse(await response.json());
     }
     log.error('%j', {
       message: 'Failed to fetch data',
@@ -210,16 +201,13 @@ function createLookupService() {
   }
 
   async function getAllLastTimeDentistVisitTypes() {
-    log.debug('Fetching all last time dentist visit types');
     const url = `${INTEROP_API_BASE_URI}/lookups/last-time-visited-dentist-types/`;
     const response = await fetch(url);
 
     const lastTimeDentistVisitTypeSchemaList = z.array(lastTimeDentistVisitTypeSchema);
 
     if (response.ok) {
-      const data = await response.json();
-      log.trace('Method getAllLastTimeDentistVisitTypes returned: [%j]', data);
-      return lastTimeDentistVisitTypeSchemaList.parse(data);
+      return lastTimeDentistVisitTypeSchemaList.parse(await response.json());
     }
 
     log.error('%j', {
@@ -234,16 +222,13 @@ function createLookupService() {
   }
 
   async function getAllSexAtBirthTypes() {
-    log.debug('Fetching all sex at birth types');
     const url = `${INTEROP_API_BASE_URI}/lookups/sex-at-birth-types/`;
     const response = await fetch(url);
 
     const sexAtBirthTypeSchemaList = z.array(sexAtBirthTypeSchema);
 
     if (response.ok) {
-      const data = await response.json();
-      log.trace('Method getAllSexAtBirthTypes returned: [%j]', data);
-      return sexAtBirthTypeSchemaList.parse(data);
+      return sexAtBirthTypeSchemaList.parse(await response.json());
     }
 
     log.error('%j', {
@@ -258,16 +243,13 @@ function createLookupService() {
   }
 
   async function getAllDisabilityTypes() {
-    log.debug('Fetching all disability types');
     const url = `${INTEROP_API_BASE_URI}/lookups/disability-types/`;
     const response = await fetch(url);
 
     const disabilityTypeSchemaList = z.array(disabilityTypeSchema);
 
     if (response.ok) {
-      const data = await response.json();
-      log.trace('Method getAllDisabilityTypes returned: [%j]', data);
-      return disabilityTypeSchemaList.parse(data);
+      return disabilityTypeSchemaList.parse(await response.json());
     }
 
     log.error('%j', {
@@ -282,16 +264,13 @@ function createLookupService() {
   }
 
   async function getAllMouthPainTypes() {
-    log.debug('Fetching all mouht pain types');
     const url = `${INTEROP_API_BASE_URI}/lookups/mouth-pain-types/`;
     const response = await fetch(url);
 
     const mouthPainTypeSchemaList = z.array(mouthPainTypeSchema);
 
     if (response.ok) {
-      const data = await response.json();
-      log.trace('Method getAllMouthPainTypes returned: [%j]', data);
-      return mouthPainTypeSchemaList.parse(data);
+      return mouthPainTypeSchemaList.parse(await response.json());
     }
 
     log.error('%j', {
@@ -306,16 +285,13 @@ function createLookupService() {
   }
 
   async function getAllBornTypes() {
-    log.debug('Fetching all born types');
     const url = `${INTEROP_API_BASE_URI}/lookups/born-types/`;
     const response = await fetch(url);
 
     const bornTypeSchemaList = z.array(bornTypeSchema);
 
     if (response.ok) {
-      const data = await response.json();
-      log.trace('Method getAllBornTypes returned: [%j]', data);
-      return bornTypeSchemaList.parse(data);
+      return bornTypeSchemaList.parse(await response.json());
     }
 
     log.error('%j', {
@@ -330,14 +306,12 @@ function createLookupService() {
   }
 
   async function getPreferredLanguage(preferredLanguageId: string) {
-    log.debug('Fetching preferred languages');
     const preferredLanguage = preferredLanguageJson.value[0].OptionSet.Options.find(({ Value }) => Value.toString() === preferredLanguageId);
 
     if (!preferredLanguage) {
       return null;
     }
 
-    log.trace('Returning preferred languages: [%j]', preferredLanguage);
     return {
       id: preferredLanguage.Value.toString(),
       nameEn: preferredLanguage.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label,
@@ -427,7 +401,6 @@ function createLookupService() {
   }
 
   async function getAllEquityTypes() {
-    log.debug('Fetching all equality types');
     const url = `${INTEROP_API_BASE_URI}/lookups/equity-types/`;
     const response = await fetch(url);
 
@@ -442,23 +415,16 @@ function createLookupService() {
       throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const data = await response.json();
-    log.trace('Method getAllEquityTypes returned: [%j]', data);
     const equityTypeSchemaList = z.array(equityTypeSchema);
-    return equityTypeSchemaList.parse(data);
+    return equityTypeSchemaList.parse(await response.json());
   }
 
   async function getAllClientFriendlyStatuses() {
-    log.debug('Fetching all marital statuses');
-
-    const clientFriendlyStatuses = clientFriendlyStatusesJson.value.map((clientFriendlyStatus) => ({
+    return clientFriendlyStatusesJson.value.map((clientFriendlyStatus) => ({
       id: clientFriendlyStatus.esdc_clientfriendlystatusid,
       nameEn: clientFriendlyStatus.esdc_descriptionenglish,
       nameFr: clientFriendlyStatus.esdc_descriptionfrench,
     }));
-
-    log.trace('Returning marital statuses: [%j]', clientFriendlyStatuses);
-    return clientFriendlyStatuses;
   }
 
   return {

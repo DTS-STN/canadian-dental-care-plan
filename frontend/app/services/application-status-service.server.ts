@@ -26,7 +26,6 @@ function createApplicationStatusService() {
    * @returns the status id of a dental application given the sin and application code
    */
   async function getStatusId(sin: string, applicationCode: string, firstName: string, lastName: string, dateOfBirth: string) {
-    log.trace('Calling getStatusId');
     const instrumentationService = getInstrumentationService();
 
     getAuditService().audit('application-status.post', { userId: 'anonymous' });
@@ -84,9 +83,7 @@ function createApplicationStatusService() {
       }),
     });
 
-    const data = await response.json();
-    log.trace('Method getStatusId returned: %j', data);
-    const statusResponse = statusResponseSchema.parse(data);
+    const statusResponse = statusResponseSchema.parse(await response.json());
     return statusResponse.BenefitApplication.BenefitApplicationStatus[0].ReferenceDataID;
   }
 
