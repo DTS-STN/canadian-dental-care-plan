@@ -54,6 +54,8 @@ export type BuildInfo = z.infer<typeof buildInfoSchema>;
 
 export type I18nNamespaces = z.infer<typeof i18nNamespacesSchema>;
 
+export type TransformAdobeAnalyticsUrl = (url: string | URL) => URL;
+
 export type PageIdentifier = z.infer<typeof pageIdentifierSchema>;
 
 export type PageTitleI18nKey = z.infer<typeof i18nKeySchema>;
@@ -64,6 +66,7 @@ export type PageTitleI18nKey = z.infer<typeof i18nKeySchema>;
 export interface RouteHandleData extends Record<string, unknown | undefined> {
   breadcrumbs?: Breadcrumbs;
   i18nNamespaces?: I18nNamespaces;
+  transformAdobeAnalyticsUrl?: TransformAdobeAnalyticsUrl;
   pageIdentifier?: PageIdentifier;
   pageTitleI18nKey?: PageTitleI18nKey;
 }
@@ -94,6 +97,14 @@ export function useBuildInfo() {
     .map(({ data }) => data as { buildInfo?: BuildInfo } | undefined)
     .map((data) => buildInfoSchema.safeParse(data?.buildInfo))
     .map((result) => (result.success ? result.data : undefined))
+    .reduce(coalesce);
+}
+
+export function useTransformAdobeAnalyticsUrl() {
+  return useMatches()
+    .map(({ handle }) => handle as RouteHandleData | undefined)
+    .map((handle) => handle?.transformAdobeAnalyticsUrl)
+    .map((transformAdobeAnalyticsUrl) => (transformAdobeAnalyticsUrl ? transformAdobeAnalyticsUrl : undefined))
     .reduce(coalesce);
 }
 

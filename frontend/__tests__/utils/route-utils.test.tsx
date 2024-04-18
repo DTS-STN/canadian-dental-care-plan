@@ -5,7 +5,7 @@ import { createRemixStub } from '@remix-run/testing';
 
 import { describe, expect, it } from 'vitest';
 
-import { coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey } from '~/utils/route-utils';
+import { coalesce, useBreadcrumbs, useBuildInfo, useI18nNamespaces, usePageIdentifier, usePageTitleI18nKey, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
 import type { Breadcrumbs, BuildInfo, RouteHandleData } from '~/utils/route-utils';
 
 describe('coalesce<T> reducer', () => {
@@ -179,6 +179,49 @@ describe('useI18nNamespaces()', () => {
 
     const element = await waitFor(() => screen.findByTestId('data'));
     expect(element.textContent).toEqual('["index","gcweb"]');
+  });
+});
+
+describe('useTransformAdobeAnalyticsUrl()', () => {
+  it('expect no transform url function from useTransformAdobeAnalyticsUrl() if the loaders do not provide data', async () => {
+    const RemixStub = createRemixStub([
+      {
+        Component: () => <Outlet />,
+        children: [
+          {
+            Component: () => <div data-testid="data">{JSON.stringify({ transformAdobeAnalyticsUrl: useTransformAdobeAnalyticsUrl() ? true : false })}</div>,
+            path: '/',
+          },
+        ],
+      },
+    ]);
+
+    render(<RemixStub />);
+
+    const element = await waitFor(() => screen.findByTestId('data'));
+    expect(element.textContent).toEqual('{"transformAdobeAnalyticsUrl":false}');
+  });
+
+  it('expect correctly coalesced transform url from useTransformAdobeAnalyticsUrl() if the loaders provide data', async () => {
+    const RemixStub = createRemixStub([
+      {
+        Component: () => <Outlet />,
+        handle: {} satisfies RouteHandleData,
+        children: [
+          {
+            Component: () => <div data-testid="data">{JSON.stringify({ transformAdobeAnalyticsUrl: useTransformAdobeAnalyticsUrl() ? true : false })}</div>,
+            handle: { transformAdobeAnalyticsUrl: () => new URL('https//example.com') } satisfies RouteHandleData,
+            path: '/',
+          },
+        ],
+      },
+    ]);
+
+    render(<RemixStub />);
+
+    const element = await waitFor(() => screen.findByTestId('data'));
+    console.log(element.textContent);
+    expect(element.textContent).toEqual('{"transformAdobeAnalyticsUrl":true}');
   });
 });
 

@@ -13,14 +13,13 @@ import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import fontLatoStyleSheet from '~/fonts/lato.css';
 import fontNotoSansStyleSheet from '~/fonts/noto-sans.css';
-import { isApplyRouteUrl, removeApplyRouteSessionPathSegment } from '~/route-helpers/apply-route-helpers.client';
 import { getBuildInfoService } from '~/services/build-info-service.server';
 import tailwindStyleSheet from '~/tailwind.css';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import type { FeatureName } from '~/utils/env.server';
 import { getPublicEnv } from '~/utils/env.server';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
-import { useI18nNamespaces } from '~/utils/route-utils';
+import { useI18nNamespaces, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
 import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
 import { getUserOrigin } from '~/utils/user-origin-utils.server';
 
@@ -87,17 +86,15 @@ export default function App() {
   const { i18n } = useTranslation(ns);
   const canonicalURL = useCanonicalURL(origin);
   const alternateLanguages = useAlternateLanguages(origin);
+  const transformAdobeAnalyticsUrl = useTransformAdobeAnalyticsUrl();
 
   useEffect(() => {
     if (adobeAnalytics.isConfigured()) {
-      if (isApplyRouteUrl(document.location.toString())) {
-        adobeAnalytics.pageview(removeApplyRouteSessionPathSegment(document.location.toString()));
-        return;
-      }
-
-      adobeAnalytics.pageview(document.location.toString());
+      const locationUrl = new URL(location.pathname, origin);
+      const adobeLocationUrl = transformAdobeAnalyticsUrl ? transformAdobeAnalyticsUrl(locationUrl) : locationUrl;
+      adobeAnalytics.pageview(adobeLocationUrl);
     }
-  }, [location.pathname]);
+  }, [location.pathname, origin, transformAdobeAnalyticsUrl]);
 
   return (
     <html lang={i18n.language}>
