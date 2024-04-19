@@ -140,8 +140,8 @@ export async function action({ context: { session }, params, request }: ActionFu
   const parseDateOfBirth = parse(parsedDataResult.data.dateOfBirth, 'yyyy-MM-dd', new Date());
   const age = differenceInYears(new Date(), parseDateOfBirth);
 
-  if (age < 65) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/dob-eligibility', params));
+  if (age >= 18 && age < 65) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/disability-tax-credit', params));
   }
 
   if (state.editMode) {

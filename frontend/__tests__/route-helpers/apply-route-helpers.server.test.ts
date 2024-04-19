@@ -106,17 +106,6 @@ describe('apply-route-helpers.server', () => {
       expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/date-of-birth, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
-    it("should redirect if dateOfBirth's age is less than 65", () => {
-      const mockState: ApplyState = {
-        ...baseState,
-        typeOfApplication: 'personal',
-        taxFiling2023: 'yes',
-        dateOfBirth: '2000-01-01',
-      };
-
-      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/dob-eligibility, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
-    });
-
     it("should redirect if applicantInformation is undefined'", () => {
       const mockState: ApplyState = {
         ...baseState,

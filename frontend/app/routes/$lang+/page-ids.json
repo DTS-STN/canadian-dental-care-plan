@@ -38,7 +38,8 @@
       "federalProvincialTerritorialBenefits": "CDCP-APPL-0014",
       "reviewInformation": "CDCP-APPL-0015",
       "exitApplication": "CDCP-APPL-0016",
-      "confirmation": "CDCP-APPL-0017"
+      "confirmation": "CDCP-APPL-0017",
+      "disabilityTaxCredit": "CDCP-APPL-0018"
     },
     "status": "CDCP-STAT-0001",
     "unableToProcessRequest": "CDCP-UNAB-0001",
