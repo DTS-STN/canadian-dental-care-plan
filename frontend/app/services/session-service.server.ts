@@ -86,7 +86,15 @@ async function createSessionService() {
 
     case 'redis': {
       log.info('Using Redis-backed sessions.');
-      return await createRedisSessionStorage();
+      const sessionStorage = await createRedisSessionStorage();
+
+      return {
+        ...sessionStorage,
+        destroySession: async (session: Session, options?: CookieSerializeOptions) => {
+          Object.keys(session.data).forEach((key) => session.unset(key));
+          return sessionStorage.destroySession(session, options);
+        },
+      };
     }
 
     default: {
