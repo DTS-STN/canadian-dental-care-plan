@@ -9,6 +9,7 @@ import { z } from 'zod';
 
 import pageIds from '../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
+import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
 import { NewTabIndicator } from '~/components/new-tab-indicator';
@@ -56,10 +57,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
-  const letters = personalInformation.clientNumber ? await lettersService.getLetters(personalInformation.clientNumber, userInfoToken.sub, sortOrder) : [];
-  session.set('letters', letters);
 
-  const letterTypes = (await lettersService.getAllLetterTypes()).filter(({ id }) => letters.some(({ name }) => name === id));
+  const allLetters = personalInformation.clientNumber ? await lettersService.getLetters(personalInformation.clientNumber, userInfoToken.sub, sortOrder) : [];
+  const letterTypes = await lettersService.getAllLetterTypes();
+  const letters = allLetters.filter(({ name }) => letterTypes.some(({ id }) => name === id));
+  session.set('letters', letters);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('letters:index.page-title') }) };
@@ -85,45 +87,47 @@ export default function LettersIndex() {
     });
   }
 
-  if (letters.length === 0) {
-    return <p>{t('letters:index.no-letter')}</p>;
-  }
-
   return (
     <>
-      <div className="my-6">
-        <InputSelect
-          className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
-          id="sort-order"
-          value={sortOrder}
-          onChange={handleOnSortOrderChange}
-          label={t('letters:index.filter')}
-          name="sortOrder"
-          options={[
-            { value: orderEnumSchema.enum.desc, children: t('letters:index.newest') },
-            { value: orderEnumSchema.enum.asc, children: t('letters:index.oldest') },
-          ]}
-        />
-      </div>
+      {letters.length === 0 ? (
+        <ContextualAlert type="info">
+          <p>{t('letters:index.no-letter')}</p>
+        </ContextualAlert>
+      ) : (
+        <>
+          <div className="my-6">
+            <InputSelect
+              className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
+              id="sort-order"
+              value={sortOrder}
+              onChange={handleOnSortOrderChange}
+              label={t('letters:index.filter')}
+              name="sortOrder"
+              options={[
+                { value: orderEnumSchema.enum.desc, children: t('letters:index.newest') },
+                { value: orderEnumSchema.enum.asc, children: t('letters:index.oldest') },
+              ]}
+            />
+          </div>
 
-      <ul className="divide-y border-y">
-        {letters.map((letter) => {
-          const letterType = letterTypes.find(({ id }) => id === letter.name);
-          if (!letterType) {
-            return;
-          }
+          <ul className="divide-y border-y">
+            {letters.map((letter) => {
+              const letterType = letterTypes.find(({ id }) => id === letter.name);
+              const letterName = letterType ? getNameByLanguage(i18n.language, letterType) : letter.name;
 
-          return (
-            <li key={letter.id} className="py-4 sm:py-6">
-              <InlineLink reloadDocument routeId="$lang+/_protected+/letters+/$id.download" params={{ ...params, id: letter.id }} className="external-link font-lato font-semibold" target="_blank">
-                {getNameByLanguage(i18n.language, letterType)}
-                <NewTabIndicator />
-              </InlineLink>
-              <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: letter.issuedOn })}</p>
-            </li>
-          );
-        })}
-      </ul>
+              return (
+                <li key={letter.id} className="py-4 sm:py-6">
+                  <InlineLink reloadDocument routeId="$lang+/_protected+/letters+/$id.download" params={{ ...params, id: letter.id }} className="external-link font-lato font-semibold" target="_blank">
+                    {letterName}
+                    <NewTabIndicator />
+                  </InlineLink>
+                  <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: letter.issuedOn })}</p>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      )}
 
       {userOrigin && (
         <div className="my-6 flex flex-wrap items-center gap-3">
