@@ -37,5 +37,11 @@ inputs = {
     "https://cdcp-int.dev-dp.dts-stn.com/oauth/callback",
     "https://cdcp-perf.dev-dp.dts-stn.com/oauth/callback",
     "https://cdcp-staging.dev-dp.dts-stn.com/oauth/callback",
+
+    #
+    # TODO :: GjB :: remove production URL below after go-live
+    #                (on or around May 01, 2024)
+    #
+    "https://srv024.service.canada.ca/oauth/callback",
   ]
 }
