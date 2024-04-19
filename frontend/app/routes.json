@@ -224,6 +224,14 @@
                       "en": "/:lang/apply/:id/type-application",
                       "fr": "/:lang/appliquer/:id/type-demande"
                     }
+                  },
+                  {
+                    "id": "$lang+/_public+/apply+/$id+/disability-tax-credit",
+                    "file": "routes/$lang+/_public+/apply+/$id+/disability-tax-credit.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/disability-tax-credit",
+                      "fr": "/:lang/appliquer/:id/disability-tax-credit"
+                    }
                   }
                 ]
               }

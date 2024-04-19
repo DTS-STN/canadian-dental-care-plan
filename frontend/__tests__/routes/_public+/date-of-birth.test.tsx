@@ -103,7 +103,7 @@ describe('_public.apply.id.date-of-birth', () => {
       expect(response.headers.get('location')).toBe('/en/apply/123/applicant-information');
     });
 
-    it('should redirect to error page if dob is under 65 years', async () => {
+    it('should redirect to disability tax credit page if dob is under 65 years', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
       session.set('csrfToken', 'csrfToken');
 
@@ -125,7 +125,7 @@ describe('_public.apply.id.date-of-birth', () => {
       });
 
       expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe('/en/apply/123/dob-eligibility');
+      expect(response.headers.get('location')).toBe('/en/apply/123/disability-tax-credit');
       expect(parse).toBeCalled();
       expect(differenceInYears).toBeCalled();
     });

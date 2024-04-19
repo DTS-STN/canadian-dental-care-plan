@@ -1,13 +1,14 @@
 import { Session, redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
 
-import { differenceInMinutes, differenceInYears, parse } from 'date-fns';
+import { differenceInMinutes } from 'date-fns';
 import { z } from 'zod';
 
 import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/applicant-information';
 import { CommunicationPreferencesState } from '~/routes/$lang+/_public+/apply+/$id+/communication-preference';
 import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
 import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/dental-insurance';
+import { DisabilityTaxCreditState } from '~/routes/$lang+/_public+/apply+/$id+/disability-tax-credit';
 import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits';
 import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/partner-information';
 import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/personal-information';
@@ -39,6 +40,7 @@ export interface ApplyState {
   readonly typeOfApplication?: TypeOfApplicationState;
   readonly editMode: boolean;
   readonly lastUpdatedOn: string;
+  readonly disabilityTaxCredit?: DisabilityTaxCreditState;
 }
 
 /**
@@ -222,13 +224,6 @@ function validateStateForReview({ params, state }: ValidateStateForReviewArgs) {
 
   if (state.dateOfBirth === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/date-of-birth', params));
-  }
-
-  const parseDateOfBirth = parse(state.dateOfBirth, 'yyyy-MM-dd', new Date());
-  const age = differenceInYears(new Date(), parseDateOfBirth);
-
-  if (age < 65) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/dob-eligibility', params));
   }
 
   if (state.applicantInformation === undefined) {
