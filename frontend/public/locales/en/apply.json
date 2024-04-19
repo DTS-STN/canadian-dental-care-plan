@@ -387,8 +387,7 @@
     "intro-text": "Thank you for using the Canadian Dental Care Plan (CDCP) Online Application (\"the Online Application\"). We have developed terms and conditions for using this service (\"Terms\"). Please read them carefully.",
     "terms-and-conditions-of-use": {
       "summary": "Terms and Conditions of Use",
-      "heading": "Terms and Conditions of Use for the Canadian Dental Care Plan Online Application",
-      "online-application-legal-terms": "<strong>PLEASE READ CAREFULLY.</strong> These Terms for the Canadian Dental Care Plan (CDCP) Online Application contain information about your legal rights and obligations and regulate your use of the Online Application. These Terms should be read in conjunction with the <canadaTermsConditions>Canada.ca</canadaTermsConditions> website Terms and Conditions. In case they are differing, the present Terms take precedence over Canada.ca Terms and Conditions.",
+      "online-application-legal-terms": "PLEASE READ CAREFULLY. These Terms for the Canadian Dental Care Plan (CDCP) Online Application contain information about your legal rights and obligations and regulate your use of the Online Application. These Terms should be read in conjunction with the <canadaTermsConditions>Canada.ca</canadaTermsConditions> website Terms and Conditions. In case they are differing, the present Terms take precedence over Canada.ca Terms and Conditions.",
       "online-application-access-terms": "Your access to and use of the Online Application, including any and all content, is subject to (1) your acceptance of, and (2) your compliance with these Terms.",
       "online-application-usage-terms": "Every time you use the Online Application, these Terms will apply. By using the Online Application, you agree to abide by the following Terms. It is your responsibility to understand and retain these Terms.",
       "online-application-outage": "There will be times when the system might be down for maintenance.",
@@ -400,7 +399,7 @@
         "self-agreement": "Using the Online Application means that you have read and agree to these Terms and the Privacy Notice Statement. If, at any time, you withdraw your agreement to any of the Terms you must stop use of the Online Application.",
         "on-behalf-of-someone-else": "If you are using the Application on behalf of a child, by using the Online Application, you certify that you have all the necessary authority to agree to the Terms on behalf of that individual, and that you agree to the Terms on behalf of the individual you are representing.",
         "at-your-own-risk": "If you are using a shared computer or shared internet connection, you are using this service at your own risk, and you will need to keep any personal information safe. If you are using a public computer make sure to close the browser or log out when you are done.",
-        "msdc": "ESDC uses services from Microsoft Corporation to run the Online Application. The Microsoft data centres used by ESDC are in Canada in accordance with Microsoft Corporation's Terms of Service Agreement.",
+        "msdc": "ESDC uses services from Microsoft Corporation to run the Online Application. The Microsoft data centres used by ESDC are in Canada in accordance with <microsoftDataPrivacyPolicy>Microsoft Corporation's Terms of Service Agreement</microsoftDataPrivacyPolicy>.",
         "antibot": "ESDC uses hCaptcha anti-bot services for our online tools in accordance with hCaptcha's <hcaptchaTermsOfService>Terms of Service</hcaptchaTermsOfService>."
       },
       "changes-to-these-terms-of-use": {
