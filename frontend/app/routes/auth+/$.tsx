@@ -106,6 +106,9 @@ async function handleRaoidcLoginRequest({ context: { session }, request }: Loade
   log.debug('Handling RAOIDC login request');
   getInstrumentationService().createCounter('auth.login.raoidc.requests').add(1);
 
+  const sessionService = await getSessionService();
+  await sessionService.destroySession(session);
+
   const { origin, searchParams } = new URL(request.url);
   const returnUrl = searchParams.get('returnto');
 
