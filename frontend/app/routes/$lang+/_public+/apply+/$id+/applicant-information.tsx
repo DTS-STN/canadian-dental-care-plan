@@ -6,6 +6,7 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
@@ -24,6 +25,12 @@ import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin } from '~/utils/sin-utils';
 import { cn } from '~/utils/tw-utils';
+
+enum FormAction {
+  Continue = 'continue',
+  Cancel = 'cancel',
+  Save = 'save',
+}
 
 export type ApplicantInformationState = {
   firstName: string;
@@ -62,6 +69,30 @@ export async function action({ context: { session }, params, request }: ActionFu
   const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
+  const formData = await request.formData();
+  const expectedCsrfToken = String(session.get('csrfToken'));
+  const submittedCsrfToken = String(formData.get('_csrf'));
+
+  if (expectedCsrfToken !== submittedCsrfToken) {
+    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
+    throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+
+  if (formAction === FormAction.Cancel) {
+    invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
+
+    if (applyRouteHelpers.hasPartner(state.applicantInformation) && state.partnerInformation === undefined) {
+      const errorMessage = t('apply:applicant-information.error-message.marital-status-no-partner-information');
+      const errors: z.ZodFormattedError<ApplicantInformationState, string> = { _errors: [errorMessage], maritalStatus: { _errors: [errorMessage] } };
+      return json({ errors });
+    }
+
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/review-information', params));
+  }
+
+  // Form action Continue & Save
   // state validation schema
   const applicantInformationSchema: z.ZodType<ApplicantInformationState> = z.object({
     socialInsuranceNumber: z
@@ -86,15 +117,6 @@ export async function action({ context: { session }, params, request }: ActionFu
       .trim()
       .min(1, t('apply:applicant-information.error-message.marital-status-required')),
   });
-
-  const formData = await request.formData();
-  const expectedCsrfToken = String(session.get('csrfToken'));
-  const submittedCsrfToken = String(formData.get('_csrf'));
-
-  if (expectedCsrfToken !== submittedCsrfToken) {
-    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
-    throw new Response('Invalid CSRF token', { status: 400 });
-  }
 
   const data = {
     socialInsuranceNumber: String(formData.get('socialInsuranceNumber') ?? ''),
@@ -221,16 +243,16 @@ export default function ApplyFlowApplicationInformation() {
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Applicant Information click">
+              <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Applicant Information click">
                 {t('apply:applicant-information.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Applicant Information click">
+              <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Applicant Information click">
                 {t('apply:applicant-information.cancel-btn')}
-              </ButtonLink>
+              </Button>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Applicant Information click">
+              <Button id="continue-button" name="_action" value={FormAction.Continue} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Applicant Information click">
                 {t('apply:applicant-information.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
