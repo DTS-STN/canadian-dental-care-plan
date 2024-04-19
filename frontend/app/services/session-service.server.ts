@@ -21,7 +21,8 @@
  *
  * @see https://remix.run/docs/en/main/utils/sessions
  */
-import { CookieParseOptions, createCookie, createFileSessionStorage, createSessionStorage } from '@remix-run/node';
+import { CookieParseOptions, Session, createCookie, createFileSessionStorage, createSessionStorage } from '@remix-run/node';
+import type { CookieSerializeOptions } from '@remix-run/node';
 
 import moize from 'moize';
 import { randomUUID } from 'node:crypto';
@@ -56,6 +57,10 @@ async function createSessionService() {
 
       return {
         ...sessionStorage,
+        destroySession: async (session: Session, options?: CookieSerializeOptions) => {
+          Object.keys(session.data).forEach((key) => session.unset(key));
+          return sessionStorage.destroySession(session, options);
+        },
         getSession: async (cookieHeader?: string | null, options?: CookieParseOptions) => {
           // BUG :: GjB :: **POTENTIALLY INCONSISTENT SESSION FILE READS**
           //
