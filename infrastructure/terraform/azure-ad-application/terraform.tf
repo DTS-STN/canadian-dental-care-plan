@@ -10,13 +10,13 @@ terraform {
     azuread = {
       # see: https://registry.terraform.io/providers/hashicorp/azuread/latest/docs
       source  = "hashicorp/azuread"
-      version = "~> 2.47.0"
+      version = "~> 2.0"
     }
 
     azurerm = {
       # see: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs
       source  = "hashicorp/azurerm"
-      version = "~> 3.97.0"
+      version = "~> 3.0"
     }
   }
 }
