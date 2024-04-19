@@ -18,5 +18,16 @@
       "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
       "preferred-language-required": "Sélectionnez la langue de communication préférée"
     }
+  },
+  "confirm":{
+    "page-title": "(FR) Submission Confirmation",
+    "breadcrumbs": {
+      "subscribe": "(FR) Confirm to subscribe to CDCP email alerts"
+    },
+    "confirmation-code-label": "(FR) Confimation Code",
+    "submit-code": "(FR) Submit Confirmation Code",
+    "request-new-code": "(FR) Request New Confirmation Code",
+    "back": "(FR) Back"
   }
+  
 }
