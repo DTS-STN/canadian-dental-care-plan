@@ -10,7 +10,7 @@ export function PageFooter() {
         <section className="container py-6">
           <h2 className="mb-4">{t('gcweb:footer.main-band.header')}</h2>
           <div className="grid gap-x-4 gap-y-2 text-sm sm:grid-cols-3">
-            <Link className="hover:underline" to={t('gcweb:footer.main-band.links.contact-us.href')}>
+            <Link className="hover:underline" to={t('gcweb:footer.main-band.links.contact-us.href')} data-gc-analytics-navigation={`Footer:Footer:${t('gcweb:footer.main-band.links.contact-us.content')}`}>
               {t('gcweb:footer.main-band.links.contact-us.content')}
             </Link>
           </div>
@@ -24,11 +24,11 @@ export function PageFooter() {
               {t('gcweb:footer.gc-corporate')}
             </h3>
             <div className="flex flex-col items-start gap-2 text-sm leading-6 sm:flex-row sm:items-center sm:gap-4">
-              <Link className="text-slate-700 hover:underline" to={t('gcweb:footer.terms-conditions.href')}>
+              <Link className="text-slate-700 hover:underline" to={t('gcweb:footer.terms-conditions.href')} data-gc-analytics-navigation={`Footer:Footer:${t('gcweb:footer.terms-conditions.text')}`}>
                 {t('gcweb:footer.terms-conditions.text')}
               </Link>
               <div className="hidden size-0 rounded-full border-[3px] border-slate-700 sm:block"></div>
-              <Link className="text-slate-700 hover:underline" to={t('gcweb:footer.privacy.href')}>
+              <Link className="text-slate-700 hover:underline" to={t('gcweb:footer.privacy.href')} data-gc-analytics-navigation={`Footer:Footer:${t('gcweb:footer.privacy.text')}`}>
                 {t('gcweb:footer.privacy.text')}
               </Link>
             </div>
