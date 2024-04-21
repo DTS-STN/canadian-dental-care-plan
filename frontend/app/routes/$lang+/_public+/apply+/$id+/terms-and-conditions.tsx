@@ -74,7 +74,6 @@ export default function ApplyIndex() {
         <p>{t('apply:terms-and-conditions.intro-text')}</p>
         <Collapsible summary={t('apply:terms-and-conditions.terms-and-conditions-of-use.summary')}>
           <div className="space-y-4">
-            <h2 className="font-bold">{t('apply:terms-and-conditions.terms-and-conditions-of-use.heading')}</h2>
             <p>
               <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.terms-and-conditions-of-use.online-application-legal-terms" components={{ canadaTermsConditions }} />
             </p>
@@ -90,7 +89,9 @@ export default function ApplyIndex() {
               <li>{t('apply:terms-and-conditions.terms-and-conditions-of-use.online-application.self-agreement')}</li>
               <li>{t('apply:terms-and-conditions.terms-and-conditions-of-use.online-application.on-behalf-of-someone-else')}</li>
               <li>{t('apply:terms-and-conditions.terms-and-conditions-of-use.online-application.at-your-own-risk')}</li>
-              <li>{t('apply:terms-and-conditions.terms-and-conditions-of-use.online-application.msdc')}</li>
+              <li>
+                <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.terms-and-conditions-of-use.online-application.msdc" components={{ microsoftDataPrivacyPolicy }} />
+              </li>
               <li>
                 <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.terms-and-conditions-of-use.online-application.antibot" components={{ hcaptchaTermsOfService }} />
               </li>
