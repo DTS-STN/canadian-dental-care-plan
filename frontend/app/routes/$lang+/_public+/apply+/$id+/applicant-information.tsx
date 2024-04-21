@@ -17,6 +17,7 @@ import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
+import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -169,8 +170,12 @@ export default function ApplyFlowApplicationInformation() {
   useEffect(() => {
     if (hasErrors(errorMessages)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
+
+      if (adobeAnalytics.isConfigured()) {
+        adobeAnalytics.pushValidationErrorEvent(errorSummaryItems.map(({ fieldId }) => fieldId));
+      }
     }
-  }, [errorMessages]);
+  }, [errorMessages, errorSummaryItems]);
 
   return (
     <>

@@ -20,6 +20,7 @@ import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
+import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -284,8 +285,12 @@ export default function ApplyFlowPersonalInformation() {
   useEffect(() => {
     if (hasErrors(errorMessages)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
+
+      if (adobeAnalytics.isConfigured()) {
+        adobeAnalytics.pushValidationErrorEvent(errorSummaryItems.map(({ fieldId }) => fieldId));
+      }
     }
-  }, [errorMessages]);
+  }, [errorMessages, errorSummaryItems]);
 
   const checkHandler = () => {
     setCopyAddressChecked((curState) => !curState);
