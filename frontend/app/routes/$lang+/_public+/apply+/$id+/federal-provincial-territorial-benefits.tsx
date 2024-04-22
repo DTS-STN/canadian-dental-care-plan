@@ -230,10 +230,11 @@ export default function AccessToDentalInsuranceQuestion() {
       scrollAndFocusToErrorSummary(errorSummaryId);
 
       if (adobeAnalytics.isConfigured()) {
-        adobeAnalytics.pushValidationErrorEvent(errorSummaryItems.map(({ fieldId }) => fieldId));
+        const fieldIds = createErrorSummaryItems(errorMessages).map(({ fieldId }) => fieldId);
+        adobeAnalytics.pushValidationErrorEvent(fieldIds);
       }
     }
-  }, [errorMessages, errorSummaryItems]);
+  }, [errorMessages]);
 
   function handleOnHasFederalBenefitChanged(e: React.ChangeEvent<HTMLInputElement>) {
     setHasFederalBenefitValue(e.target.value === HasFederalBenefitsOption.Yes);

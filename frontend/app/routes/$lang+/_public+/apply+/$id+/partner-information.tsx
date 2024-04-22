@@ -206,7 +206,8 @@ export default function ApplyFlowApplicationInformation() {
       scrollAndFocusToErrorSummary(errorSummaryId);
 
       if (adobeAnalytics.isConfigured()) {
-        adobeAnalytics.pushValidationErrorEvent(errorSummaryItems.map(({ fieldId }) => fieldId));
+        const fieldIds = errorSummaryItems.map(({ fieldId }) => fieldId);
+        adobeAnalytics.pushValidationErrorEvent(fieldIds);
       }
     }
   }, [errorSummaryItems]);
