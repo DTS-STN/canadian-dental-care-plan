@@ -11,6 +11,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
+import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
@@ -230,9 +231,12 @@ export default function ApplyFlowApplicationInformation() {
         <fetcher.Form method="post" aria-describedby="form-instructions-provide-sin form-instructions-required-information form-instructions" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="space-y-6">
-            <p className="mb-6 italic" id="form-instructions">
+            <p className="italic" id="form-instructions">
               {t('apply:required-label')}
             </p>
+            <Collapsible id="name-instructions" summary={t('partner-information.single-legal-name')}>
+              <p>{t('partner-information.name-instructions')}</p>
+            </Collapsible>
             <div className="grid gap-6 md:grid-cols-2">
               <InputField
                 id="first-name"
@@ -258,9 +262,6 @@ export default function ApplyFlowApplicationInformation() {
                 aria-describedby="name-instructions"
                 required
               />
-              <em id="name-instructions" className="col-span-full">
-                {t('partner-information.name-instructions')}
-              </em>
             </div>
             <DatePickerField
               id="date-of-birth"
