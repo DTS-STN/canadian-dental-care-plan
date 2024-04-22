@@ -103,14 +103,12 @@ export async function action({ context: { session }, params, request }: ActionFu
         .trim()
         .max(100)
         .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply:personal-information.error-message.phone-number-valid'))
-        .transform((val) => parsePhoneNumber(val, 'CA').formatInternational())
         .optional(),
       phoneNumberAlt: z
         .string()
         .trim()
         .max(100)
         .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply:personal-information.error-message.phone-number-alt-valid'))
-        .transform((val) => parsePhoneNumber(val, 'CA').formatInternational())
         .optional(),
       mailingAddress: z.string().trim().min(1, t('apply:personal-information.error-message.address-required')).max(30),
       mailingApartment: z.string().trim().max(30).optional(),
@@ -167,13 +165,13 @@ export async function action({ context: { session }, params, request }: ActionFu
         }
       }
     })
-    .transform((val) => {
-      return {
-        ...val,
-        mailingPostalCode: val.mailingCountry && val.mailingPostalCode ? formatPostalCode(val.mailingCountry, val.mailingPostalCode) : val.mailingPostalCode,
-        homePostalCode: val.homeCountry && val.homePostalCode ? formatPostalCode(val.homeCountry, val.homePostalCode) : val.homePostalCode,
-      };
-    }) satisfies z.ZodType<PersonalInformationState>;
+    .transform((val) => ({
+      ...val,
+      homePostalCode: val.homeCountry && val.homePostalCode ? formatPostalCode(val.homeCountry, val.homePostalCode) : val.homePostalCode,
+      mailingPostalCode: val.mailingCountry && val.mailingPostalCode ? formatPostalCode(val.mailingCountry, val.mailingPostalCode) : val.mailingPostalCode,
+      phoneNumber: val.phoneNumber ? parsePhoneNumber(val.phoneNumber, 'CA').formatInternational() : val.phoneNumber,
+      phoneNumberAlt: val.phoneNumberAlt ? parsePhoneNumber(val.phoneNumberAlt, 'CA').formatInternational() : val.phoneNumberAlt,
+    })) satisfies z.ZodType<PersonalInformationState>;
 
   const formData = await request.formData();
 
