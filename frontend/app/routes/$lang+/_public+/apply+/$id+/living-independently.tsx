@@ -58,7 +58,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   /**
-   * Schema for application delegate.
+   * Schema for living independently.
    */
   const livingIndependentlySchema: z.ZodType<LivingIndependentlyState> = z.nativeEnum(LivingIndependentlyOption, {
     errorMap: () => ({ message: t('apply:living-independently.error-message.living-independently-required') }),
