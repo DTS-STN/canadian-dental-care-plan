@@ -69,10 +69,10 @@ const SessionTimeout = ({ promptBeforeIdle, timeout, navigateTo }: SessionTimeou
         </DialogHeader>
         {t('session-timeout.description', { timeRemaining })}
         <DialogFooter>
-          <Button id="end-session-button" variant="default" size="sm" onClick={handleOnIdle}>
+          <Button id="end-session-button" variant="default" size="sm" onClick={handleOnIdle} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:End session now">
             {t('session-timeout.end-session')}
           </Button>
-          <Button id="continue-session-button" variant="primary" size="sm" onClick={handleOnIdleContinueSession}>
+          <Button id="continue-session-button" variant="primary" size="sm" onClick={handleOnIdleContinueSession} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue session">
             {t('session-timeout.continue-session')}
           </Button>
         </DialogFooter>
