@@ -170,7 +170,6 @@ export type ServerEnv = z.infer<typeof serverEnv>;
 const publicEnv = serverEnv.pick({
   ENABLED_FEATURES: true,
   I18NEXT_DEBUG: true,
-  LANG_QUERY_PARAM: true,
   SCCH_BASE_URI: true,
   MSCA_BASE_URI: true,
   SESSION_TIMEOUT_SECONDS: true,

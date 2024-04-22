@@ -95,7 +95,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   // Form action Continue & Save
   // state validation schema
-  const applicantInformationSchema: z.ZodType<ApplicantInformationState> = z.object({
+  const applicantInformationSchema = z.object({
     socialInsuranceNumber: z
       .string()
       .trim()
@@ -117,7 +117,7 @@ export async function action({ context: { session }, params, request }: ActionFu
       .string({ errorMap: () => ({ message: t('apply:applicant-information.error-message.marital-status-required') }) })
       .trim()
       .min(1, t('apply:applicant-information.error-message.marital-status-required')),
-  });
+  }) satisfies z.ZodType<ApplicantInformationState>;
 
   const data = {
     socialInsuranceNumber: String(formData.get('socialInsuranceNumber') ?? ''),

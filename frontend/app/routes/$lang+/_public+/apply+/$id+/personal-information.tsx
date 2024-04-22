@@ -96,7 +96,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
-  const personalInformationSchema: z.ZodType<PersonalInformationState> = z
+  const personalInformationSchema = z
     .object({
       phoneNumber: z
         .string()
@@ -173,7 +173,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         mailingPostalCode: val.mailingCountry && val.mailingPostalCode ? formatPostalCode(val.mailingCountry, val.mailingPostalCode) : val.mailingPostalCode,
         homePostalCode: val.homeCountry && val.homePostalCode ? formatPostalCode(val.homeCountry, val.homePostalCode) : val.homePostalCode,
       };
-    });
+    }) satisfies z.ZodType<PersonalInformationState>;
 
   const formData = await request.formData();
 
