@@ -6,6 +6,7 @@
     "sin": "Numéro d'assurance sociale (NAS)",
     "last-name": "Nom de famille",
     "first-name": "Prénom",
+    "single-legal-name": "(FR) If you have a single legal name",
     "name-instructions": "Si vous utilisez un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
     "marital-status": "État civil",
     "back-btn": "Retour",
@@ -187,10 +188,25 @@
   "eligibility": {
     "type-of-application": {
       "page-title": "Type de demande",
+      "page-description": "(FR) Applications for the Canadian Dental Care Plan is opening in phases.",
+      "apply-self": "(FR) Applying for yourself",
+      "apply-self-eligibility": "(FR) You can currently apply for yourself if you are:",
+      "senior": "(FR) 65 or older",
+      "valid-disability-tax-credit": "(FR) 18 to 64 and have a valid Disability Tax Credit certificate",
+      "live-independently": "(FR) 16 and 17 and live independently from your parents",
+      "apply-child": "(FR) Applying on behalf of your child",
+      "apply-child-eligibility": "(FR) You can apply on behalf of your child if:",
+      "sixteen-or-older": "(FR) You are 16 or older and the parent or legal guardian of the child; and",
+      "under-eighteen": "(FR) The child is under 18 years old",
       "form-instructions": "Qui présente la demande?",
+      "note": "(FR) please note, only one application can be processed for each child.",
+      "split-custody-summary": "(FR) If you split custody of a child",
+      "split-custody-detail": "(FR) If you have shared custody agreement for the child, eligibility for the plan and the amount covered is based on the parent or guardian that applies. The child's eligibility and amount covered may change if another parent or guardian applies for that child.",
       "radio-options": {
-        "personal": "Je présente une demande pour moi",
-        "delegate": "Je présente une demande au nom de quelqu'un d'autre"
+        "personal": "Je présente une demande pour <strong>moi</strong>",
+        "delegate": "(FR) I am applying on behalf of someone else as a <strong>legal delegate or Power of Attorney</strong>",
+        "child": "(FR) I am applying for <strong>my child(ren)</strong>",
+        "personal-and-child": "(FR) I am applying for <strong>myself and my child(ren)</strong>"
       },
       "error-message": {
         "type-of-application-required": "Sélectionnez à qui s'adresse cette demande"
@@ -302,6 +318,7 @@
     "date-of-birth": "Date de naissance",
     "last-name": "Nom de famille",
     "first-name": "Prénom",
+    "single-legal-name": "(FR) If your spouse or common-law partner has a single legal name",
     "name-instructions": "Si vous utilisez un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
     "confirm-checkbox": "Je confirme que mon époux/épouse ou mon conjoint/conjointe de fait est au courant et d'accord que ses renseignements personnels soient communiqués.",
     "back-btn": "Retour",

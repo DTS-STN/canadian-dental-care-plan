@@ -11,6 +11,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
+import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
@@ -196,9 +197,12 @@ export default function ApplyFlowApplicationInformation() {
         <fetcher.Form method="post" aria-describedby="form-instructions-sin form-instructions-info form-instructions" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-8 space-y-6">
-            <p className="mb-6 italic" id="form-instructions">
+            <p className="italic" id="form-instructions">
               {t('apply:required-label')}
             </p>
+            <Collapsible id="name-instructions" summary={t('applicant-information.single-legal-name')}>
+              <p>{t('applicant-information.name-instructions')}</p>
+            </Collapsible>
             <div className="grid gap-6 md:grid-cols-2">
               <InputField
                 id="first-name"
@@ -224,9 +228,6 @@ export default function ApplyFlowApplicationInformation() {
                 aria-describedby="name-instructions"
                 required
               />
-              <em id="name-instructions" className="col-span-full">
-                {t('applicant-information.name-instructions')}
-              </em>
             </div>
             <InputField
               id="social-insurance-number"

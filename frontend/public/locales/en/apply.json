@@ -6,6 +6,7 @@
     "sin": "Social Insurance Number (SIN)",
     "last-name": "Last name",
     "first-name": "First name",
+    "single-legal-name": "If you have a single legal name",
     "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
     "marital-status": "Marital status",
     "back-btn": "Back",
@@ -187,10 +188,25 @@
   "eligibility": {
     "type-of-application": {
       "page-title": "Type of application",
-      "form-instructions": "Who is this application for?",
+      "page-description": "Applications for the Canadian Dental Care Plan is opening in phases.",
+      "apply-self": "Applying for yourself",
+      "apply-self-eligibility": "You can currently apply for yourself if you are:",
+      "senior": "65 or older",
+      "valid-disability-tax-credit": "18 to 64 and have a valid Disability Tax Credit certificate",
+      "live-independently": "16 and 17 and live independently from your parents",
+      "apply-child": "Applying on behalf of your child",
+      "apply-child-eligibility": "You can apply on behalf of your child if:",
+      "sixteen-or-older": "You are 16 or older and the parent or legal guardian of the child; and",
+      "under-eighteen": "The child is under 18 years old",
+      "form-instructions": "Who are you applying for?",
+      "note": "please note, only one application can be processed for each child.",
+      "split-custody-summary": "If you split custody of a child",
+      "split-custody-detail": "If you have shared custody agreement for the child, eligibility for the plan and the amount covered is based on the parent or guardian that applies. The child's eligibility and amount covered may change if another parent or guardian applies for that child.",
       "radio-options": {
-        "personal": "I am applying for myself",
-        "delegate": "I am applying on behalf of someone else"
+        "personal": "I am applying for <strong>myself</strong>",
+        "delegate": "I am applying on behalf of someone else as a <strong>legal delegate or Power of Attorney</strong>",
+        "child": "I am applying for <strong>my child(ren)</strong>",
+        "personal-and-child": "I am applying for <strong>myself and my child(ren)</strong>"
       },
       "error-message": {
         "type-of-application-required": "Select who this application is for"
@@ -302,6 +318,7 @@
     "date-of-birth": "Date of birth",
     "last-name": "Last name",
     "first-name": "First name",
+    "single-legal-name": "If your spouse or common-law partner has a single legal name",
     "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
     "confirm-checkbox": "I confirm that my spouse or common-law partner is aware and has agreed to share their personal information.",
     "back-btn": "Back",
