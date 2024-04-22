@@ -159,22 +159,22 @@ export default function ApplyFlowTypeOfApplication() {
             options={[
               {
                 value: ApplicantType.Personal,
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="eligibility.type-of-application.radio-options.personal" />,
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:eligibility.type-of-application.radio-options.personal" />,
                 defaultChecked: defaultState === ApplicantType.Personal,
               },
               {
                 value: ApplicantType.Child,
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="eligibility.type-of-application.radio-options.child" />,
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:eligibility.type-of-application.radio-options.child" />,
                 defaultChecked: defaultState === ApplicantType.Child,
               },
               {
                 value: ApplicantType.Both,
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="eligibility.type-of-application.radio-options.personal-and-child" />,
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:eligibility.type-of-application.radio-options.personal-and-child" />,
                 defaultChecked: defaultState === ApplicantType.Both,
               },
               {
                 value: ApplicantType.Delegate,
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="eligibility.type-of-application.radio-options.delegate" />,
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:eligibility.type-of-application.radio-options.delegate" />,
                 defaultChecked: defaultState === ApplicantType.Delegate,
               },
             ]}
