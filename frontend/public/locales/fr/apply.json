@@ -273,6 +273,20 @@
   "index": {
     "page-title": "Présentation d'une demande d'adhésion au Régime canadien de soins dentaires"
   },
+  "living-independently": {
+    "page-title": "Vivre de manière indépendante",
+    "description": "Vivre indépendamment de vos parents signifie que vous avez 16 ou 17 ans, que vous ne recevez aucune aide financière de vos parents et que votre résidence principale est différente de la leur.",
+    "form-instructions": "Vivez-vous indépendamment de vos parents ?",
+    "radio-options": {
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "error-message": {
+      "living-independently-required": "Sélectionnez une option pour vivre de manière indépendante"
+    },
+    "back-btn": "Retour",
+    "continue-btn": "Continuer"
+  },
   "parent-or-guardian": {
     "page-title": "(FR) Parent or guardian needs to apply",
     "unable-to-apply": "(FR) You are not able to apply for the Canadian Dental Care Plan for yourself. Please have a parent or guardian apply on your behalf.",
