@@ -57,7 +57,7 @@
     "moderndash": "^3.11.1",
     "moize": "^6.1.6",
     "morgan": "^1.10.0",
-    "msw": "^2.2.13",
+    "msw": "^2.2.14",
     "notistack": "^3.0.1",
     "oauth4webapi": "^2.10.4",
     "react": "^18.2.0",
