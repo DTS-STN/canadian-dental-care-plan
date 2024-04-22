@@ -23,6 +23,7 @@ import { PublicLayout } from '~/components/layouts/public-layout';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
+import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { isValidApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString } from '~/utils/date-utils';
 import { featureEnabled, getEnv } from '~/utils/env.server';
@@ -181,10 +182,16 @@ export async function action({ context: { session }, params, request }: ActionFu
   const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
   const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
 
+  function getAlertType() {
+    if (!statusId) return 'danger';
+    if (clientFriendlyStatus?.id === CLIENT_STATUS_SUCCESS_ID) return 'success';
+    return 'info';
+  }
+
   return json({
     status: {
       ...(clientFriendlyStatus ?? {}),
-      alertType: statusId ? (clientFriendlyStatus?.id === CLIENT_STATUS_SUCCESS_ID ? 'success' : 'info') : 'danger',
+      alertType: getAlertType(),
     },
     statusId,
   } as const);
@@ -240,8 +247,12 @@ export default function StatusChecker() {
   useEffect(() => {
     if (hasErrors(errorMessages)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
+
+      if (hasErrors(errorMessages) && adobeAnalytics.isConfigured()) {
+        adobeAnalytics.pushValidationErrorEvent(errorSummaryItems.map(({ fieldId }) => fieldId));
+      }
     }
-  }, [errorMessages]);
+  }, [errorMessages, errorSummaryItems]);
 
   useEffect(() => {
     if (fetcher.data && 'status' in fetcher.data) {

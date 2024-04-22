@@ -92,7 +92,7 @@ export default function App() {
     if (adobeAnalytics.isConfigured()) {
       const locationUrl = new URL(location.pathname, origin);
       const adobeLocationUrl = transformAdobeAnalyticsUrl ? transformAdobeAnalyticsUrl(locationUrl) : locationUrl;
-      adobeAnalytics.pageview(adobeLocationUrl);
+      adobeAnalytics.pushPageviewEvent(adobeLocationUrl);
     }
   }, [location.pathname, origin, transformAdobeAnalyticsUrl]);
 
