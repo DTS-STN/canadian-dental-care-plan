@@ -17,6 +17,7 @@ resources:
   - ../../base/frontend/
   - ../../base/redis/
   - ./deployments.yaml
+  - ./hpas.yaml
   - ./ingresses.yaml
   - ./pvcs.yaml
   - ./services.yaml
