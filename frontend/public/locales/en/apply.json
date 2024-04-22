@@ -273,6 +273,13 @@
   "index": {
     "page-title": "Applying for the Canadian Dental Care Plan"
   },
+  "parent-or-guardian": {
+    "page-title": "Parent or guardian needs to apply",
+    "unable-to-apply": "You are not able to apply for the Canadian Dental Care Plan for yourself. Please have a parent or guardian apply on your behalf.",
+    "back-btn": "Back",
+    "return-btn": "Return to main page",
+    "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+  },
   "partner-information": {
     "page-title": "Spouse or Common-law partner information",
     "provide-sin": "Provide information on your current spouse or common-law partner as indicated on their Social Insurance Number (SIN) card or letter.",

@@ -232,6 +232,14 @@
                       "en": "/:lang/apply/:id/disability-tax-credit",
                       "fr": "/:lang/appliquer/:id/disability-tax-credit"
                     }
+                  },
+                  {
+                    "id": "$lang+/_public+/apply+/$id+/parent-or-guardian",
+                    "file": "routes/$lang+/_public+/apply+/$id+/parent-or-guardian.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/parent-or-guardian",
+                      "fr": "/:lang/appliquer/:id/parent-or-guardian"
+                    }
                   }
                 ]
               }

@@ -5,6 +5,7 @@ import { Link, useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { differenceInYears, parse } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -46,6 +47,12 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:disability-tax-credit.page-title') }) };
+
+  const parseDateOfBirth = parse(state.dateOfBirth ?? '', 'yyyy-MM-dd', new Date());
+  const age = differenceInYears(new Date(), parseDateOfBirth);
+  if (age < 18 || age > 64) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/date-of-birth', params));
+  }
 
   return json({ id: state.id, csrfToken, meta, defaultState: state.disabilityTaxCredit });
 }
@@ -144,7 +151,7 @@ export default function ApplyFlowDisabilityTaxCredit() {
               {t('apply:disability-tax-credit.continue-btn')}
               <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
             </Button>
-            <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/type-application" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Disability tax credit click">
+            <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Disability tax credit click">
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('apply:disability-tax-credit.back-btn')}
             </ButtonLink>
