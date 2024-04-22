@@ -17,7 +17,7 @@
     },
     "alerts": {
       "subscribe": "CDCP-PROT-0016",
-      "confirm":"CDCP-PROT-0017"
+      "confirm": "CDCP-PROT-0017"
     },
     "status-check": {
       "index": "CDCP-PROT-0017"

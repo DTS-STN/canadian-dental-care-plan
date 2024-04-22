@@ -19,7 +19,7 @@
       "preferred-language-required": "Select preferred language of communication"
     }
   },
-  "confirm":{
+  "confirm": {
     "page-title": "Submission Confirmation",
     "breadcrumbs": {
       "subscribe": "Confirm to subscribe to CDCP email alerts"

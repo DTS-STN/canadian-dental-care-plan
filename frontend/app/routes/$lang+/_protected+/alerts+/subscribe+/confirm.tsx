@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
@@ -9,13 +9,11 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { InputField } from '~/components/input-field';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { PersonalInfo } from '~/schemas/personal-informaton-service-schemas.server';
-import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
-import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -34,7 +32,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('email-alerts');
-  const lookupService = getLookupService();
+
   const instrumentationService = getInstrumentationService();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -45,28 +43,36 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformation: PersonalInfo = await personalInformationRouteHelper.getPersonalInformation(userInfoToken, params, request, session);
   const preferredLanguage = personalInformation.preferredLanguageId ? await getLookupService().getPreferredLanguage(personalInformation.preferredLanguageId) : undefined;
-
-  instrumentationService.countHttpStatus('alerts.subscibe', 302);
-  return json({ csrfToken, meta, personalInformation, preferredLanguage });
+  const clickedButton = '';
+  instrumentationService.countHttpStatus('alerts.confirm', 302);
+  return json({ csrfToken, meta, personalInformation, preferredLanguage, clickedButton });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('alerts/subscribe');
+  const personalInformationRouteHelper = getPersonalInformationRouteHelpers();
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const personalInformation: PersonalInfo = await personalInformationRouteHelper.getPersonalInformation(userInfoToken, params, request, session);
 
-  const instrumentationService = getInstrumentationService();
-  const auditService = getAuditService();
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  const formData = await request.formData();
+
+  if (formData.get('new-code')) {
+    //TODO EMAIL THE CODE TO THE CLIENTS ADDRESS
+    personalInformation.emailAddress;
+  }
+
+  if (formData.get('submit')) {
+    //TODO VALIDATE THE CONFIRMATION CODE
+  }
 
   return '';
 }
 
-export default function confirmSubscription() {
+export default function ConfirmSubscription() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, personalInformation, preferredLanguage } = useLoaderData<typeof loader>();
+  const { preferredLanguage } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const userOrigin = useUserOrigin();
-  const errorSummaryId = 'error-summary';
 
   return (
     <>
@@ -90,10 +96,10 @@ export default function confirmSubscription() {
           <ButtonLink id="back-button" to={userOrigin?.to} params={params}>
             {t('alerts:confirm.back')}
           </ButtonLink>
-          <Button id="new-code-button" variant="alternative">
+          <Button id="new-code-button" name="new-code" value="new-code" variant="alternative">
             {t('alerts:confirm.request-new-code')}
           </Button>
-          <Button id="submit-button" variant="primary">
+          <Button id="submit-button" name="submit" value="submit" variant="primary">
             {t('alerts:confirm.submit-code')}
           </Button>
         </div>
