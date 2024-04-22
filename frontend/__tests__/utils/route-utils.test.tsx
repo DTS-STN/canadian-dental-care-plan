@@ -220,7 +220,6 @@ describe('useTransformAdobeAnalyticsUrl()', () => {
     render(<RemixStub />);
 
     const element = await waitFor(() => screen.findByTestId('data'));
-    console.log(element.textContent);
     expect(element.textContent).toEqual('{"transformAdobeAnalyticsUrl":true}');
   });
 });
