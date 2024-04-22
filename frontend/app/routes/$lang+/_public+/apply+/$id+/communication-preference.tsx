@@ -194,10 +194,11 @@ export default function ApplyFlowCommunicationPreferencePage() {
       scrollAndFocusToErrorSummary(errorSummaryId);
 
       if (adobeAnalytics.isConfigured()) {
-        adobeAnalytics.pushValidationErrorEvent(errorSummaryItems.map(({ fieldId }) => fieldId));
+        const fieldIds = createErrorSummaryItems(errorMessages).map(({ fieldId }) => fieldId);
+        adobeAnalytics.pushValidationErrorEvent(fieldIds);
       }
     }
-  }, [errorMessages, errorSummaryItems]);
+  }, [errorMessages]);
 
   const nonEmailOptions: InputRadiosProps['options'] = preferredCommunicationMethods
     .filter((method) => method.id !== communicationMethodEmail.id)

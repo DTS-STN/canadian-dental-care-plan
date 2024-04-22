@@ -249,10 +249,11 @@ export default function StatusChecker() {
       scrollAndFocusToErrorSummary(errorSummaryId);
 
       if (hasErrors(errorMessages) && adobeAnalytics.isConfigured()) {
-        adobeAnalytics.pushValidationErrorEvent(errorSummaryItems.map(({ fieldId }) => fieldId));
+        const fieldIds = createErrorSummaryItems(errorMessages).map(({ fieldId }) => fieldId);
+        adobeAnalytics.pushValidationErrorEvent(fieldIds);
       }
     }
-  }, [errorMessages, errorSummaryItems]);
+  }, [errorMessages]);
 
   useEffect(() => {
     if (fetcher.data && 'status' in fetcher.data) {
