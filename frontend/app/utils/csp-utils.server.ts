@@ -37,7 +37,8 @@ export function generateContentSecurityPolicy(nonce: string) {
     `img-src 'self' data: ${adobeAnalyticsCSP.imgSrc} https://purecatamphetamine.github.io`,
     // unsafe-inline is required by Adobe Analytics 💩
     `script-src 'self' 'unsafe-inline' ${hcaptchaCSP.scriptSrc} ${adobeAnalyticsCSP.scriptSrc}`,
-    `style-src 'self' ${hcaptchaCSP.styleSrc}`,
+    // unsafe-inline is required by Radix Primitives 💩
+    `style-src 'self' 'unsafe-inline' ${hcaptchaCSP.styleSrc}`,
   ].join('; ');
 
   log.debug(`Generated content security policy: [${contentSecurityPolicy}]`);

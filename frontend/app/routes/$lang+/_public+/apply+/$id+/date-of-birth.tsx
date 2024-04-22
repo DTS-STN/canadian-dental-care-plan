@@ -15,6 +15,7 @@ import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { Progress } from '~/components/progress';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -172,6 +173,10 @@ export default function ApplyFlowDateOfBirth() {
   useEffect(() => {
     if (errorSummaryItems.length > 0) {
       scrollAndFocusToErrorSummary(errorSummaryId);
+
+      if (adobeAnalytics.isConfigured()) {
+        adobeAnalytics.pushValidationErrorEvent(errorSummaryItems.map(({ fieldId }) => fieldId));
+      }
     }
   }, [errorSummaryItems]);
 

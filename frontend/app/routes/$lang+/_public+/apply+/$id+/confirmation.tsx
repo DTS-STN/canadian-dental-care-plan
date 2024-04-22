@@ -202,6 +202,7 @@ export default function ApplyFlowConfirm() {
           event.preventDefault();
           window.print();
         }}
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Print a copy of your application top click"
       >
         {t('confirm.print-btn')}
       </Button>
@@ -339,6 +340,7 @@ export default function ApplyFlowConfirm() {
           event.preventDefault();
           window.print();
         }}
+        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Print a copy of your application bottom click"
       >
         {t('confirm.print-btn')}
       </Button>

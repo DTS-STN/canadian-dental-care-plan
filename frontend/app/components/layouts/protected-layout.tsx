@@ -154,7 +154,7 @@ export function NotFoundError({ error }: NotFoundErrorProps) {
 
   useEffect(() => {
     if (adobeAnalytics.isConfigured()) {
-      adobeAnalytics.error(404);
+      adobeAnalytics.pushErrorEvent(404);
     }
   }, []);
 
@@ -189,7 +189,7 @@ export function ServerError({ error }: ServerErrorProps) {
 
   useEffect(() => {
     if (adobeAnalytics.isConfigured()) {
-      adobeAnalytics.error(500);
+      adobeAnalytics.pushErrorEvent(500);
     }
   }, []);
 
