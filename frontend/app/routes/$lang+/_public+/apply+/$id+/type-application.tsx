@@ -133,22 +133,18 @@ export default function ApplyFlowTypeOfApplication() {
         <p className="mb-6">{t('apply:eligibility.type-of-application.page-description')}</p>
         <div className="mb-6 space-y-4">
           <h2 className="font-bold">{t('apply:eligibility.type-of-application.apply-self')}</h2>
-          <div>
-            <p>{t('apply:eligibility.type-of-application.apply-self-eligibility')}</p>
-            <ul className="list-disc space-y-1 pl-7">
-              <li>{t('apply:eligibility.type-of-application.senior')}</li>
-              <li>{t('apply:eligibility.type-of-application.valid-disability-tax-credit')}</li>
-              <li>{t('apply:eligibility.type-of-application.live-independently')}</li>
-            </ul>
-          </div>
+          <p>{t('apply:eligibility.type-of-application.apply-self-eligibility')}</p>
+          <ul className="list-disc space-y-1 pl-7">
+            <li>{t('apply:eligibility.type-of-application.senior')}</li>
+            <li>{t('apply:eligibility.type-of-application.valid-disability-tax-credit')}</li>
+            <li>{t('apply:eligibility.type-of-application.live-independently')}</li>
+          </ul>
           <h2 className="font-bold">{t('apply:eligibility.type-of-application.apply-child')}</h2>
-          <div>
-            <p>{t('apply:eligibility.type-of-application.apply-child-eligibility')}</p>
-            <ul className="list-disc space-y-1 pl-7">
-              <li>{t('apply:eligibility.type-of-application.sixteen-or-older')}</li>
-              <li>{t('apply:eligibility.type-of-application.under-eighteen')}</li>
-            </ul>
-          </div>
+          <p>{t('apply:eligibility.type-of-application.apply-child-eligibility')}</p>
+          <ul className="list-disc space-y-1 pl-7">
+            <li>{t('apply:eligibility.type-of-application.sixteen-or-older')}</li>
+            <li>{t('apply:eligibility.type-of-application.under-eighteen')}</li>
+          </ul>
           <p>{t('apply:eligibility.type-of-application.note')}</p>
         </div>
         <Collapsible summary={t('apply:eligibility.type-of-application.split-custody-summary')}>
