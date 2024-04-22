@@ -20,7 +20,9 @@
 
 
 	<properties>
+		<image.name>cdcp-api</image.name>
 		<java.version>21</java.version>
+		<spring-boot.build-image.imageName>${image.name}</spring-boot.build-image.imageName>
 		<revision>0.0.0-00000000-0000</revision>
 	</properties>
 
