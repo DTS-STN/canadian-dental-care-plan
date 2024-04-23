@@ -31,9 +31,7 @@ import { cn } from '~/utils/tw-utils';
 
 export interface CommunicationPreferencesState {
   confirmEmail?: string;
-  confirmEmailForFuture?: string;
   email?: string;
-  emailForFuture?: string;
   preferredLanguage: string;
   preferredMethod: string;
 }
@@ -82,8 +80,6 @@ export async function action({ context: { session }, params, request }: ActionFu
       preferredMethod: z.string().trim().min(1, t('apply:communication-preference.error-message.preferred-method-required')),
       email: z.string().trim().max(100).optional(),
       confirmEmail: z.string().trim().max(100).optional(),
-      emailForFuture: z.string().trim().max(100).optional(),
-      confirmEmailForFuture: z.string().trim().max(100).optional(),
     })
     .superRefine((val, ctx) => {
       if (val.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID) {
@@ -100,25 +96,6 @@ export async function action({ context: { session }, params, request }: ActionFu
         } else if (val.email !== val.confirmEmail) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.email-match'), path: ['confirmEmail'] });
         }
-      } else {
-        const emailForFutureNotEmpty = typeof val.emailForFuture === 'string' && !validator.isEmpty(val.emailForFuture);
-        const confirmEmailForFutureNotEmpty = typeof val.confirmEmailForFuture === 'string' && !validator.isEmpty(val.confirmEmailForFuture);
-
-        if (emailForFutureNotEmpty || confirmEmailForFutureNotEmpty) {
-          if (!val.emailForFuture || (validator.isEmpty(val.emailForFuture) && val.confirmEmailForFuture)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.email-for-future-required'), path: ['emailForFuture'] });
-          } else if (!validator.isEmail(val.emailForFuture)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.email-valid'), path: ['emailForFuture'] });
-          }
-
-          if (!val.confirmEmailForFuture || validator.isEmpty(val.confirmEmailForFuture)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.confirm-email-for-future-required'), path: ['confirmEmailForFuture'] });
-          } else if (!validator.isEmail(val.confirmEmailForFuture)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.confirm-email-for-future-required'), path: ['confirmEmailForFuture'] });
-          } else if (val.emailForFuture !== val.confirmEmailForFuture) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.email-match'), path: ['confirmEmailForFuture'] });
-          }
-        }
       }
     }) satisfies z.ZodType<CommunicationPreferencesState>;
 
@@ -133,9 +110,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const data = {
     confirmEmail: formData.get('confirmEmail') ? String(formData.get('confirmEmail') ?? '') : undefined,
-    confirmEmailForFuture: formData.get('confirmEmailForFuture') ? String(formData.get('confirmEmailForFuture') ?? '') : undefined,
     email: formData.get('email') ? String(formData.get('email') ?? '') : undefined,
-    emailForFuture: formData.get('emailForFuture') ? String(formData.get('emailForFuture') ?? '') : undefined,
     preferredLanguage: String(formData.get('preferredLanguage') ?? ''),
     preferredMethod: String(formData.get('preferredMethod') ?? ''),
   };
@@ -174,17 +149,8 @@ export default function ApplyFlowCommunicationPreferencePage() {
       'input-radio-preferred-methods-option-0': fetcher.data?.errors.preferredMethod?._errors[0],
       email: fetcher.data?.errors.email?._errors[0],
       'confirm-email': fetcher.data?.errors.confirmEmail?._errors[0],
-      'email-for-future': fetcher.data?.errors.emailForFuture?._errors[0],
-      'confirm-email-for-future': fetcher.data?.errors.confirmEmailForFuture?._errors[0],
     }),
-    [
-      fetcher.data?.errors.confirmEmail?._errors,
-      fetcher.data?.errors.confirmEmailForFuture?._errors,
-      fetcher.data?.errors.email?._errors,
-      fetcher.data?.errors.emailForFuture?._errors,
-      fetcher.data?.errors.preferredLanguage?._errors,
-      fetcher.data?.errors.preferredMethod?._errors,
-    ],
+    [fetcher.data?.errors.confirmEmail?._errors, fetcher.data?.errors.email?._errors, fetcher.data?.errors.preferredLanguage?._errors, fetcher.data?.errors.preferredMethod?._errors],
   );
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -206,35 +172,6 @@ export default function ApplyFlowCommunicationPreferencePage() {
       children: i18n.language === 'fr' ? method.nameFr : method.nameEn,
       value: method.id,
       defaultChecked: defaultState?.preferredMethod === method.id,
-      append: preferredMethodValue === method.id && (
-        <div className="mb-6 grid gap-6 md:grid-cols-2">
-          <p className="md:col-span-2" id="future-email-note">
-            {t('apply:communication-preference.future-email-note')}
-          </p>
-          <InputField
-            id="email-for-future"
-            type="email"
-            className="w-full"
-            label={t('apply:communication-preference.future-email')}
-            maxLength={100}
-            name="emailForFuture"
-            errorMessage={errorMessages['email-for-future']}
-            autoComplete="email"
-            defaultValue={defaultState?.emailForFuture ?? ''}
-          />
-          <InputField
-            id="confirm-email-for-future"
-            type="email"
-            className="w-full"
-            label={t('apply:communication-preference.future-confirm-email')}
-            maxLength={100}
-            name="confirmEmailForFuture"
-            errorMessage={errorMessages['confirm-email-for-future']}
-            autoComplete="email"
-            defaultValue={defaultState?.confirmEmailForFuture ?? ''}
-          />
-        </div>
-      ),
       onChange: handleOnPreferredMethodChecked,
     }));
 
