@@ -350,8 +350,12 @@
   "personal-information": {
     "page-title": "Renseignements personnels",
     "form-instructions": "L'ajout d'un numéro de téléphone permet à Service Canada de vous contacter en cas de problème avec votre demande. Si vous ne fournissez pas de numéro de téléphone, nous communiquerons avec vous par la poste.",
+    "add-phone": "(FR) Adding a phone number helps Government of Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
     "phone-number": "Numéro de téléphone (facultatif)",
     "phone-number-alt": "Autre numéro de téléphone (facultatif)",
+    "add-email": "(FR) Adding an email will help the Government of Canada contact you regarding your Canadian Dental Care Plan membership.",
+    "email": "Adresse courriel (facultatif)",
+    "confirm-email": "Confirmer l'adresse courriel (facultatif)",
     "mailing-address": {
       "header": "Adresse postale"
     },
@@ -383,7 +387,12 @@
       "province-required": "Sélectionnez une province, un territoire, un état ou une région",
       "zip-code-valid": "Entrez un code postal américain dans le bon format, par exemple 12345 ou 12345-6789",
       "phone-number-valid": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
-      "phone-number-alt-valid": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant"
+      "phone-number-alt-valid": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "email-match": "Les adresses courriel entrées ne concordent pas",
+      "confirm-email-required": "Confirmez l'adresse courriel",
+      "email-required": "Entrez l'adresse courriel",
+      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
+      "preferred-language-required": "Sélectionnez la langue de communication préférée"
     }
   },
   "progress": {
