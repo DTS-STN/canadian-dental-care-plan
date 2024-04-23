@@ -229,10 +229,6 @@ function validateStateForReview({ params, state }: ValidateStateForReviewArgs) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/date-of-birth', params));
   }
 
-  if (state.childUnder18 === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/date-of-birth', params));
-  }
-
   if (state.applicantInformation === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/applicant-information', params));
   }
