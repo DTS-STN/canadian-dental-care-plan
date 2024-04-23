@@ -75,13 +75,13 @@ describe('_public.apply.id.date-of-birth', () => {
         params: {},
       });
 
-      const data = await response.json();
-      expect(response.status).toBe(200);
-      expect(data.errors.dateOfBirth).toEqual(undefined);
-      expect(data.errors.dateOfBirthYear?._errors.length).toBeGreaterThan(0);
-      expect(data.errors.dateOfBirthMonth?._errors.length).toBeGreaterThan(0);
-      expect(data.errors.dateOfBirthDay?._errors.length).toBeGreaterThan(0);
-      expect(data.errors.childUnder18?._errors.length).toBeGreaterThan(0);
+      const data = await response?.json();
+      expect(response?.status).toBe(200);
+      expect(data?.errors.dateOfBirth).toEqual(undefined);
+      expect(data?.errors.dateOfBirthYear?._errors.length).toBeGreaterThan(0);
+      expect(data?.errors.dateOfBirthMonth?._errors.length).toBeGreaterThan(0);
+      expect(data?.errors.dateOfBirthDay?._errors.length).toBeGreaterThan(0);
+      expect(data?.errors.childUnder18?._errors.length).toBeGreaterThan(0);
     });
 
     it('should redirect to applicant information page if dob is 65 years or over', async () => {
@@ -106,8 +106,8 @@ describe('_public.apply.id.date-of-birth', () => {
         params: { lang: 'en', id: '123' },
       });
 
-      expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe('/en/apply/123/applicant-information');
+      expect(response?.status).toBe(302);
+      expect(response?.headers.get('location')).toBe('/en/apply/123/applicant-information');
     });
 
     it('should redirect to disability tax credit page if dob is under 65 years', async () => {
@@ -132,8 +132,8 @@ describe('_public.apply.id.date-of-birth', () => {
         params: { lang: 'en', id: '123' },
       });
 
-      expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe('/en/apply/123/disability-tax-credit');
+      expect(response?.status).toBe(302);
+      expect(response?.headers.get('location')).toBe('/en/apply/123/disability-tax-credit');
       expect(parse).toBeCalled();
       expect(differenceInYears).toBeCalled();
     });
