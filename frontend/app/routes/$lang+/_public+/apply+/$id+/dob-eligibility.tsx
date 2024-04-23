@@ -20,7 +20,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.dataOfBirthEligibility,
+  pageIdentifier: pageIds.public.apply.dateOfBirthEligibility,
   pageTitleI18nKey: 'apply:eligibility.dob-eligibility.page-title',
 } as const satisfies RouteHandleData;
 
@@ -58,7 +58,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   return redirect(getPathById('index', params));
 }
 
-export default function ApplyFlowFileYourTaxes() {
+export default function ApplyFlowDobEligibility() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken } = useLoaderData<typeof loader>();
   const params = useParams();
@@ -77,6 +77,8 @@ export default function ApplyFlowFileYourTaxes() {
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
         <p>{t('apply:eligibility.dob-eligibility.ineligible-to-apply')}</p>
+        <p>{t('apply:eligibility.dob-eligibility.currently-accepting')}</p>
+        <p>{t('apply:eligibility.dob-eligibility.later-date')}</p>
         <p>
           <Trans ns={handle.i18nNamespaces} i18nKey="apply:eligibility.dob-eligibility.eligibility-info" components={{ eligibilityInfo }} />
         </p>
