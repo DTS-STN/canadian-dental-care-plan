@@ -22,7 +22,7 @@ function createApplicationStatusService() {
     INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY,
   } = getEnv();
 
-  interface GetStatusId {
+  interface GetStatusIdArgs {
     sin: string;
     applicationCode: string;
     firstName?: string;
@@ -33,7 +33,7 @@ function createApplicationStatusService() {
   /**
    * @returns the status id of a dental application given the sin and application code
    */
-    async function getStatusId({sin, applicationCode, firstName, lastName, dateOfBirth } : GetStatusId) {
+    async function getStatusId({sin, applicationCode, firstName, lastName, dateOfBirth } : GetStatusIdArgs) {
     const instrumentationService = getInstrumentationService();
 
     getAuditService().audit('application-status.post', { userId: 'anonymous' });
