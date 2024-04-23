@@ -25,7 +25,7 @@
       "subscribe": "Confirm to subscribe to CDCP email alerts"
     },
     "no-preferred-language-on-file": "No preferred language on file",
-    "confirmation-information-text": "A confirmation code, required to finish the registration process, will be sent to ||TODO insert email Address when feature completed||. This step must be completed within teh next 48 hours or by immediately entering the confirmation code below.",
+    "confirmation-information-text": "A confirmation code, required to finish the registration process, will be sent to ||TODO insert email Address when feature completed||. This step must be completed within the next 48 hours or by immediately entering the confirmation code below.",
     "confirmation-completed-text": "Upon completion, you will begin to receive email alerts when important information for your Canada Dental Care Plan application is available.",
     "confirmation-selected-language": "Selected language preference:",
     "confirmation-code-label": "Confimation Code",
