@@ -435,6 +435,20 @@
             ]
           },
           {
+            "id": "$lang+/_protected+/status-check+/_route",
+            "file": "routes/$lang+/_protected+/status-check+/_route.tsx",
+            "children": [
+              {
+                "id": "$lang+/_protected+/status-check+/index",
+                "file": "routes/$lang+/_protected+/status-check+/index.tsx",
+                "paths": {
+                  "en": "/:lang/status-check",
+                  "fr": "/:lang/verification-de-statut"
+                }
+              }
+            ]
+          },
+          {
             "id": "$lang+/_protected+/stub-sin-editor",
             "file": "routes/$lang+/_protected+/stub-sin-editor.tsx",
             "paths": {

@@ -15,6 +15,8 @@
   "view-my-application-desc": "In this section, you can see the status of current or past applications for the Canadian Dental Care Program",
   "subscribe": "Subscribe to CDCP email alerts",
   "subscribe-desc": "In this section, you can subscribe to the email alerts for CDCP, Any time you have a new message, you will be alerted.",
+  "status-check": "Status Check",
+  "status-check-desc": "Status Check description",
   "label-in-progress": {
     "sr-only": "State:",
     "text": "In progress"
