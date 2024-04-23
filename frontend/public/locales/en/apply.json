@@ -291,6 +291,20 @@
   "index": {
     "page-title": "Applying for the Canadian Dental Care Plan"
   },
+  "living-independently": {
+    "page-title": "Living independently",
+    "description": "Living independently from your parents means you are 16 or 17, do not receive financial support from your parents, and your primary residence is different from theirs.",
+    "form-instructions": "Do you live independently from your parents?",
+    "radio-options": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "error-message": {
+      "living-independently-required": "Select an option for living independently"
+    },
+    "back-btn": "Back",
+    "continue-btn": "Continue"
+  },
   "parent-or-guardian": {
     "page-title": "Parent or guardian needs to apply",
     "unable-to-apply": "You are not able to apply for the Canadian Dental Care Plan for yourself. Please have a parent or guardian apply on your behalf.",

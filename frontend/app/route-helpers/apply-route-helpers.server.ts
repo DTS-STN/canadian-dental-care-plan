@@ -10,6 +10,7 @@ import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/date-of-b
 import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/dental-insurance';
 import { DisabilityTaxCreditState } from '~/routes/$lang+/_public+/apply+/$id+/disability-tax-credit';
 import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits';
+import { LivingIndependentlyState } from '~/routes/$lang+/_public+/apply+/$id+/living-independently';
 import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/partner-information';
 import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/personal-information';
 import { SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/review-information';
@@ -41,6 +42,7 @@ export interface ApplyState {
   readonly editMode: boolean;
   readonly lastUpdatedOn: string;
   readonly disabilityTaxCredit?: DisabilityTaxCreditState;
+  readonly livingIndependently?: LivingIndependentlyState;
 }
 
 /**

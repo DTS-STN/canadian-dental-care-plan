@@ -240,6 +240,14 @@
                       "en": "/:lang/apply/:id/parent-or-guardian",
                       "fr": "/:lang/appliquer/:id/parent-or-guardian"
                     }
+                  },
+                  {
+                    "id": "$lang+/_public+/apply+/$id+/living-independently",
+                    "file": "routes/$lang+/_public+/apply+/$id+/living-independently.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/living-independently",
+                      "fr": "/:lang/appliquer/:id/living-independently"
+                    }
                   }
                 ]
               }

@@ -145,6 +145,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/disability-tax-credit', params));
   }
 
+  if (age >= 16 && age < 18) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/living-independently', params));
+  }
+
   if (age < 16) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/parent-or-guardian', params));
   }
