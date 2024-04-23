@@ -178,7 +178,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const applicationStatusService = getApplicationStatusService();
   const lookupService = getLookupService();
   const { sin, code, firstName, lastName, dateOfBirth } = parsedDataResult.data;
-  const statusId = await applicationStatusService.getStatusId(sin, code, firstName, lastName, dateOfBirth);
+  const statusId = await applicationStatusService.getStatusId({sin: sin, applicationCode: code, firstName: firstName, lastName: lastName, dateOfBirth: dateOfBirth});
   const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
   const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
 
