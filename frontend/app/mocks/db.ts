@@ -56,6 +56,14 @@ const db = factory({
     preferredMethodCommunicationCode: String,
     sinIdentification: primaryKey(String),
   },
+  subscription: {
+    id: primaryKey(faker.string.uuid),
+    sin: String,
+    email: String,
+    subscribed: Boolean,
+    preferredLanguage: String,
+    alertType: String,
+  },
 });
 
 db.personalInformation.create({
@@ -112,6 +120,25 @@ db.personalInformation.create({
   alternateTelephoneNumber: '789-555-6666',
   preferredMethodCommunicationCode: '775170002',
   sinIdentification: '800000002',
+});
+
+// seed the email alerts subscription
+db.subscription.create({
+  id: '0000001',
+  sin: '800000002',
+  email: 'user@example.com',
+  subscribed: true,
+  preferredLanguage: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
+  alertType: 'cdcp',
+});
+
+db.subscription.create({
+  id: '0000002',
+  sin: '800000002',
+  email: 'tester@example.com',
+  subscribed: true,
+  preferredLanguage: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
+  alertType: 'ei',
 });
 
 // seed avaliable addresses (before user)

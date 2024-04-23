@@ -16,12 +16,13 @@ import { InputRadios } from '~/components/input-radios';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
+import { getSubscriptionService } from '~/services/subscription-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { IdToken } from '~/utils/raoidc-utils.server';
+import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -46,11 +47,14 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
   const preferredLanguages = await lookupService.getAllPreferredLanguages();
 
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
+
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:subscribe.page-title') }) };
 
   instrumentationService.countHttpStatus('alerts.subscibe', 302);
-  return json({ csrfToken, meta, preferredLanguages });
+  return json({ csrfToken, meta, preferredLanguages, alertSubscription });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -95,13 +99,25 @@ export async function action({ context: { session }, params, request }: ActionFu
   const idToken: IdToken = session.get('idToken');
   auditService.audit('update-date.subscribe-alerts', { userId: idToken.sub });
 
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
+  const newAlertSubscription = {
+    id: alertSubscription?.id ?? '',
+    sin: userInfoToken.sin ?? '',
+    email: parsedDataResult.data.email,
+    subscribed: false,
+    preferredLanguage: parsedDataResult.data.preferredLanguage,
+  };
+
+  await getSubscriptionService().updateSubscription(userInfoToken.sin ?? '', newAlertSubscription);
+
   instrumentationService.countHttpStatus('alerts.subscibe', 302);
   return redirect(getPathById('$lang+/_protected+/home', params));
 }
 
 export default function SubscribeEmailEdit() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, preferredLanguages } = useLoaderData<typeof loader>();
+  const { csrfToken, preferredLanguages, alertSubscription } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const userOrigin = useUserOrigin();
@@ -131,8 +147,19 @@ export default function SubscribeEmailEdit() {
       <fetcher.Form className="max-w-prose" method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mb-6 grid gap-6 md:grid-cols-2">
-          <InputField id="email" type="email" className="w-full" label={t('alerts:subscribe.email')} maxLength={100} name="email" errorMessage={errorMessages.email} autoComplete="email" required />
-          <InputField id="confirm-email" type="email" className="w-full" label={t('alerts:subscribe.confirm-email')} maxLength={100} name="confirmEmail" errorMessage={errorMessages['confirm-email']} autoComplete="email" required />
+          <InputField id="email" type="email" className="w-full" label={t('alerts:subscribe.email')} maxLength={100} name="email" errorMessage={errorMessages.email} autoComplete="email" defaultValue={alertSubscription?.email} required />
+          <InputField
+            id="confirm-email"
+            type="email"
+            className="w-full"
+            label={t('alerts:subscribe.confirm-email')}
+            maxLength={100}
+            name="confirmEmail"
+            errorMessage={errorMessages['confirm-email']}
+            autoComplete="email"
+            defaultValue={alertSubscription?.email}
+            required
+          />
         </div>
         <div className="mb-8 space-y-6">
           {preferredLanguages.length > 0 && (
@@ -141,6 +168,7 @@ export default function SubscribeEmailEdit() {
               name="preferredLanguage"
               legend={t('alerts:subscribe.preferred-language')}
               options={preferredLanguages.map((language) => ({
+                defaultChecked: alertSubscription?.preferredLanguage === language.id,
                 children: getNameByLanguage(i18n.language, language),
                 value: language.id,
               }))}
