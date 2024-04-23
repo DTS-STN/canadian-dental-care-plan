@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../page-ids.json';
 import { Address } from '~/components/address';
+import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { useFeature } from '~/root';
@@ -22,6 +23,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { useUserOrigin } from '~/utils/user-origin-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'personal-information:index.page-title' }],
@@ -63,6 +65,7 @@ export default function PersonalInformationIndex() {
   const { personalInformation, preferredLanguage, countryList, regionList, updatedInfo, CANADA_COUNTRY_ID } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const params = useParams();
+  const userOrigin = useUserOrigin();
 
   return (
     <>
@@ -71,75 +74,88 @@ export default function PersonalInformationIndex() {
           <h2 className="text-xl font-semibold">{t('personal-information:index.updated-information-success')}</h2>
         </ContextualAlert>
       )}
-      <dl className="mt-6 divide-y border-y">
+      <dl className="mt-6 divide-y">
         <DescriptionListItem term={t('personal-information:index.full-name')}>{`${personalInformation.firstName} ${personalInformation.lastName}`}</DescriptionListItem>
-        <DescriptionListItem term={t('personal-information:index.preferred-language')}>
-          <p>{preferredLanguage ? getNameByLanguage(i18n.language, preferredLanguage) : t('personal-information:index.no-preferred-language-on-file')}</p>
-          {useFeature('edit-personal-info') && (
-            <p>
-              <InlineLink id="change-preferred-language-button" routeId="$lang+/_protected+/personal-information+/preferred-language+/edit" params={params}>
-                {t('personal-information:index.change-preferred-language')}
-              </InlineLink>
-            </p>
-          )}
-        </DescriptionListItem>
-        <DescriptionListItem term={t('personal-information:index.home-address')}>
-          {personalInformation.homeAddress ? (
-            <Address
-              address={personalInformation.homeAddress.streetName ?? ''}
-              city={personalInformation.homeAddress.cityName ?? ''}
-              provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.homeAddress!.provinceTerritoryStateId)?.abbr}
-              postalZipCode={personalInformation.homeAddress.postalCode}
-              country={countryList.find((country) => country.countryId === personalInformation.homeAddress!.countryId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
-              isCanadianAddress={personalInformation.homeAddress.countryId === CANADA_COUNTRY_ID}
-            />
-          ) : (
-            <p>{t('personal-information:index.no-address-on-file')}</p>
-          )}
-          {useFeature('edit-personal-info') && (
-            <p>
-              <InlineLink id="change-home-address-button" routeId="$lang+/_protected+/personal-information+/home-address+/edit" params={params}>
-                {t('personal-information:index.change-home-address')}
-              </InlineLink>
-            </p>
-          )}
-        </DescriptionListItem>
-        <DescriptionListItem term={t('personal-information:index.mailing-address')}>
-          {personalInformation.mailingAddress ? (
-            <Address
-              address={personalInformation.mailingAddress.streetName ?? ''}
-              city={personalInformation.mailingAddress.cityName ?? ''}
-              provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.mailingAddress!.provinceTerritoryStateId)?.abbr}
-              postalZipCode={personalInformation.mailingAddress.postalCode}
-              country={countryList.find((country) => country.countryId === personalInformation.mailingAddress!.countryId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ''}
-              isCanadianAddress={personalInformation.mailingAddress.countryId === CANADA_COUNTRY_ID}
-            />
-          ) : (
-            <p>{t('personal-information:index.no-address-on-file')}</p>
-          )}
-          {useFeature('edit-personal-info') && (
-            <p>
-              <InlineLink id="change-mailing-address-button" routeId="$lang+/_protected+/personal-information+/mailing-address+/edit" params={params}>
-                {t('personal-information:index.change-mailing-address')}
-              </InlineLink>
-            </p>
-          )}
-        </DescriptionListItem>
-        <DescriptionListItem term={t('personal-information:index.phone-number')}>
+        <DescriptionListItemTwoColumn term={t('personal-information:index.addresses')}>
           <dl>
-            <dt className="font-semibold">{t('personal-information:index.primary-phone-number')}</dt>
-            <dd>{personalInformation.primaryTelephoneNumber ?? t('personal-information:index.no-phone-number')}</dd>
-            <dt className="font-semibold">{t('personal-information:index.alternate-phone-number')}</dt>
-            <dd>{personalInformation.alternateTelephoneNumber ?? t('personal-information:index.no-phone-number')}</dd>
+            <dt className="text-lg font-semibold">{t('personal-information:index.home-address')}</dt>
+            <dd className="mt-4">
+              {personalInformation.homeAddress ? (
+                <Address
+                  address={personalInformation.homeAddress.streetName ?? ''}
+                  city={personalInformation.homeAddress.cityName ?? ''}
+                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.homeAddress!.provinceTerritoryStateId)?.abbr}
+                  postalZipCode={personalInformation.homeAddress.postalCode}
+                  country={countryList.find((country) => country.countryId === personalInformation.homeAddress!.countryId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
+                  isCanadianAddress={personalInformation.homeAddress.countryId === CANADA_COUNTRY_ID}
+                />
+              ) : (
+                <p>{t('personal-information:index.no-address-on-file')}</p>
+              )}
+              {useFeature('edit-personal-info') && (
+                <p className="mt-4">
+                  <InlineLink id="change-home-address-button" routeId="$lang+/_protected+/personal-information+/home-address+/edit" params={params}>
+                    {t('personal-information:index.change-home-address')}
+                  </InlineLink>
+                </p>
+              )}
+            </dd>
           </dl>
-          {useFeature('edit-personal-info') && (
-            <p>
-              <InlineLink id="change-phone-number-button" routeId="$lang+/_protected+/personal-information+/phone-number+/edit" params={params}>
-                {t('personal-information:index.change-phone-number')}
-              </InlineLink>
-            </p>
-          )}
-        </DescriptionListItem>
+          <dl>
+            <dt className="text-lg font-semibold">{t('personal-information:index.mailing-address')}</dt>
+            <dd className="mt-4">
+              {personalInformation.mailingAddress ? (
+                <Address
+                  address={personalInformation.mailingAddress.streetName ?? ''}
+                  city={personalInformation.mailingAddress.cityName ?? ''}
+                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.mailingAddress!.provinceTerritoryStateId)?.abbr}
+                  postalZipCode={personalInformation.mailingAddress.postalCode}
+                  country={countryList.find((country) => country.countryId === personalInformation.mailingAddress!.countryId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ''}
+                  isCanadianAddress={personalInformation.homeAddress.countryId === CANADA_COUNTRY_ID}
+                />
+              ) : (
+                <p>{t('personal-information:index.no-address-on-file')}</p>
+              )}
+              {useFeature('edit-personal-info') && (
+                <p className="mt-4">
+                  <InlineLink id="change-mailing-address-button" routeId="$lang+/_protected+/personal-information+/mailing-address+/edit" params={params}>
+                    {t('personal-information:index.change-mailing-address')}
+                  </InlineLink>
+                </p>
+              )}
+            </dd>
+          </dl>
+        </DescriptionListItemTwoColumn>
+        <DescriptionListItemTwoColumn term={t('personal-information:index.phone-number')}>
+          <dl>
+            <dt className="text-lg font-semibold">{t('personal-information:index.primary-phone-number')}</dt>
+            <dd className="mt-4">
+              {personalInformation.primaryTelephoneNumber ?? t('personal-information:index.no-phone-number')}
+
+              {useFeature('edit-personal-info') && (
+                <p className="mt-4">
+                  <InlineLink id="change-phone-number-button" routeId="$lang+/_protected+/personal-information+/phone-number+/edit" params={params}>
+                    {t('personal-information:index.change-phone-number')}
+                  </InlineLink>
+                </p>
+              )}
+            </dd>
+          </dl>
+          <dl>
+            <dt className="text-lg font-semibold">{t('personal-information:index.alternate-phone-number')}</dt>
+            <dd className="mt-4">
+              {personalInformation.alternateTelephoneNumber ?? t('personal-information:index.no-phone-number')}
+
+              {useFeature('edit-personal-info') && (
+                <p className="mt-4">
+                  <InlineLink id="change-phone-number-button" routeId="$lang+/_protected+/personal-information+/phone-number+/edit" params={params}>
+                    {t('personal-information:index.change-phone-number')}
+                  </InlineLink>
+                </p>
+              )}
+            </dd>
+          </dl>
+        </DescriptionListItemTwoColumn>
         <DescriptionListItem term={t('personal-information:index.email-address')}>
           <p>{personalInformation.emailAddress}</p>
           {useFeature('edit-personal-info') && (
@@ -150,16 +166,43 @@ export default function PersonalInformationIndex() {
             </p>
           )}
         </DescriptionListItem>
+        <DescriptionListItem term={t('personal-information:index.preferred-language')}>
+          <p>{preferredLanguage ? getNameByLanguage(i18n.language, preferredLanguage) : t('personal-information:index.no-preferred-language-on-file')}</p>
+          {useFeature('edit-personal-info') && (
+            <p>
+              <InlineLink id="change-preferred-language-button" routeId="$lang+/_protected+/personal-information+/preferred-language+/edit" params={params}>
+                {t('personal-information:index.change-preferred-language')}
+              </InlineLink>
+            </p>
+          )}
+        </DescriptionListItem>
       </dl>
+
+      {userOrigin && (
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          <ButtonLink id="back-button" to={userOrigin.to}>
+            {t('personal-information:index.dashboard-text')}
+          </ButtonLink>
+        </div>
+      )}
     </>
   );
 }
 
 function DescriptionListItem({ children, term }: { children: ReactNode; term: ReactNode }) {
   return (
-    <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
-      <dt className="font-semibold">{term}</dt>
-      <dd className="mt-3 space-y-3 sm:col-span-2 sm:mt-0">{children}</dd>
+    <div className="space-y-6 border-transparent sm:py-6">
+      <dt className="text-3xl font-bold">{term}</dt>
+      <dd className="mt-3 grid gap-6 sm:col-span-2 sm:mt-4">{children}</dd>
+    </div>
+  );
+}
+
+function DescriptionListItemTwoColumn({ children, term }: { children: ReactNode; term: ReactNode }) {
+  return (
+    <div className="space-y-6 border-transparent sm:py-6">
+      <dt className="text-3xl font-bold">{term}</dt>
+      <dd className="mt-3 grid gap-6 sm:col-span-2 sm:mt-4 md:grid-cols-2">{children}</dd>
     </div>
   );
 }
