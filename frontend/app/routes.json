@@ -436,8 +436,8 @@
                 "id": "$lang+/_protected+/alerts+/subscribe+/confirm",
                 "file": "routes/$lang+/_protected+/alerts+/subscribe+/confirm.tsx",
                 "paths": {
-                  "en": "/:lang/subscribe/confirm",
-                  "fr": "/:lang/abonner/confirmer"
+                  "en": "/:lang/alerts/subscribe/confirm",
+                  "fr": "/:lang/alertes/abonner/confirmer"
                 }
               }
             ]
