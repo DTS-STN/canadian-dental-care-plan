@@ -47,11 +47,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('status-check:page-title') }) };
 
-  // Check if any needed values are undefined
-  /* TODO: If values are missing, do we want to redirect to an error page? 
-   Or perhaps include a form for the missing values?
-   Or simply stay on this page and print an erro message? */
-  if (!userInfoToken.sin || !personalInformation.clientNumber || !personalInformation.birthDate || !personalInformation.firstName || !personalInformation.lastName) {
+  if (!userInfoToken.sin || !personalInformation.clientNumber) {
     instrumentationService.countHttpStatus('status-check', 400);
     throw new Response(null, { status: 400 });
   }
@@ -59,7 +55,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const applicationStatusService = getApplicationStatusService();
   const lookupService = getLookupService();
 
-  const statusId = await applicationStatusService.getStatusId(userInfoToken.sin, personalInformation.clientNumber, personalInformation.firstName, personalInformation.lastName, personalInformation.birthDate.toString());
+  const statusId = await applicationStatusService.getStatusId(userInfoToken.sin, personalInformation.clientNumber);
   const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
   const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
 
