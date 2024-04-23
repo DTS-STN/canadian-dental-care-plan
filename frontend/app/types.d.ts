@@ -8,6 +8,7 @@ import type gcweb from '../public/locales/en/gcweb.json';
 import type index from '../public/locales/en/index.json';
 import type letters from '../public/locales/en/letters.json';
 import type personalInformation from '../public/locales/en/personal-information.json';
+import type statusCheck from '../public/locales/en/status-check.json';
 import type status from '../public/locales/en/status.json';
 import type stubSinEditor from '../public/locales/en/stub-sin-editor.json';
 import type unableToProcessRequest from '../public/locales/en/unable-to-process-request.json';
@@ -40,6 +41,7 @@ declare module 'i18next' {
       'personal-information': typeof personalInformation;
       alerts: typeof alerts;
       status: typeof status;
+      'status-check': typeof statusCheck;
       'stub-sin-editor': typeof stubSinEditor;
       'unable-to-process-request': typeof unableToProcessRequest;
     };

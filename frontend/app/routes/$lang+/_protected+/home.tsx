@@ -83,6 +83,11 @@ export default function Index() {
             {t('index:subscribe-desc')}
           </CardLink>
         )}
+        {useFeature('authenticated-status-check') && (
+          <CardLink title={t('index:status-check')} routeId="$lang+/_protected+/status-check+/index" params={params}>
+            {t('index:status-check-desc')}
+          </CardLink>
+        )}
       </div>
     </>
   );
