@@ -96,7 +96,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
-  const federalBenefitsSchema: z.ZodType<FederalBenefitsState> = z
+  const federalBenefitsSchema = z
     .object({
       hasFederalBenefits: z.boolean({ errorMap: () => ({ message: t('apply:dental-benefits.error-message.federal-benefit-required') }) }),
       federalSocialProgram: z.string().trim().optional(),
@@ -113,9 +113,9 @@ export async function action({ context: { session }, params, request }: ActionFu
         ...val,
         federalSocialProgram: val.hasFederalBenefits ? val.federalSocialProgram : undefined,
       };
-    });
+    }) satisfies z.ZodType<FederalBenefitsState>;
 
-  const provincialTerritorialBenefitsSchema: z.ZodType<ProvincialTerritorialBenefitsState> = z
+  const provincialTerritorialBenefitsSchema = z
     .object({
       hasProvincialTerritorialBenefits: z.boolean({ errorMap: () => ({ message: t('apply:dental-benefits.error-message.provincial-benefit-required') }) }),
       provincialTerritorialSocialProgram: z.string().trim().optional(),
@@ -136,7 +136,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         province: val.hasProvincialTerritorialBenefits ? val.province : undefined,
         provincialTerritorialSocialProgram: val.hasProvincialTerritorialBenefits ? val.provincialTerritorialSocialProgram : undefined,
       };
-    });
+    }) satisfies z.ZodType<ProvincialTerritorialBenefitsState>;
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -230,10 +230,11 @@ export default function AccessToDentalInsuranceQuestion() {
       scrollAndFocusToErrorSummary(errorSummaryId);
 
       if (adobeAnalytics.isConfigured()) {
-        adobeAnalytics.pushValidationErrorEvent(errorSummaryItems.map(({ fieldId }) => fieldId));
+        const fieldIds = createErrorSummaryItems(errorMessages).map(({ fieldId }) => fieldId);
+        adobeAnalytics.pushValidationErrorEvent(fieldIds);
       }
     }
-  }, [errorMessages, errorSummaryItems]);
+  }, [errorMessages]);
 
   function handleOnHasFederalBenefitChanged(e: React.ChangeEvent<HTMLInputElement>) {
     setHasFederalBenefitValue(e.target.value === HasFederalBenefitsOption.Yes);

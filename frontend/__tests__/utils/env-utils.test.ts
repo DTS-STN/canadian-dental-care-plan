@@ -14,7 +14,7 @@ describe('getClientEnv', () => {
   });
 
   it('should return the public environment variables from the window object when called from a client-side browser', () => {
-    const env = { LANG_QUERY_PARAM: 'lang' };
+    const env = { I18NEXT_DEBUG: false };
 
     vi.stubGlobal('document', new Document());
     vi.stubGlobal('window', { env });

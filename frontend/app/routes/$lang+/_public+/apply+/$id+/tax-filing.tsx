@@ -109,10 +109,11 @@ export default function ApplyFlowTaxFiling() {
       scrollAndFocusToErrorSummary(errorSummaryId);
 
       if (adobeAnalytics.isConfigured()) {
-        adobeAnalytics.pushValidationErrorEvent(errorSummaryItems.map(({ fieldId }) => fieldId));
+        const fieldIds = createErrorSummaryItems(errorMessages).map(({ fieldId }) => fieldId);
+        adobeAnalytics.pushValidationErrorEvent(fieldIds);
       }
     }
-  }, [errorMessages, errorSummaryItems]);
+  }, [errorMessages]);
 
   return (
     <>
