@@ -88,13 +88,13 @@ export default function ConfirmSubscription() {
           <InputField id="confirmationCode" className="w-full" label={t('alerts:confirm.confirmation-code-label')} maxLength={100} name="confirmationCode" required />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={userOrigin?.to} params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Subscribe - Confirm - Back">
+          <ButtonLink id="back-button" to={userOrigin?.to} params={params}>
             {t('alerts:confirm.back')}
           </ButtonLink>
-          <Button id="new-code-button" name="action" value={ConfirmSubscriptionCode.NewCode} variant="alternative" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Subscribe - Confirm - New Code requested">
+          <Button id="new-code-button" name="action" value={ConfirmSubscriptionCode.NewCode} variant="alternative">
             {t('alerts:confirm.request-new-code')}
           </Button>
-          <Button id="submit-button" name="action" value={ConfirmSubscriptionCode.Submit} variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Subscribe - Confirm - Submit">
+          <Button id="submit-button" name="action" value={ConfirmSubscriptionCode.Submit} variant="primary">
             {t('alerts:confirm.submit-code')}
           </Button>
         </div>
