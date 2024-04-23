@@ -1,4 +1,14 @@
 {
+  "apply-for-yourself": {
+    "page-title": "Apply for yourself",
+    "ineligible-to-apply": "Your children are not currently eligible to apply for the Canadian Dental Care Plan. Only children under 18 are eligible at this time.",
+    "eligibility-info": "Find out when they can apply.",
+    "eligibility-info-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#when",
+    "submit-application": "You can still submit an application for yourself.",
+    "back-btn": "Back",
+    "proceed-btn": "Proceed to apply for yourself",
+    "procees-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+  },
   "disability-tax-credit": {
     "page-title": "Disability tax credit",
     "non-refundable": "The disability tax credit (DTC) is a non-refundable federal tax credit that helps people with disabilities, or their supporting family member, reduce the amount of income tax they may have to pay.",

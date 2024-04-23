@@ -254,6 +254,14 @@
                       "en": "/:lang/apply/:id/living-independently",
                       "fr": "/:lang/demander/:id/living-independently"
                     }
+                  },
+                  {
+                    "id": "$lang+/_public+/apply+/$id+/apply-for-yourself",
+                    "file": "routes/$lang+/_public+/apply+/$id+/apply-for-yourself.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/apply-for-yourself",
+                      "fr": "/:lang/appliquer/:id/apply-for-yourself"
+                    }
                   }
                 ]
               }

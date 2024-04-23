@@ -49,7 +49,8 @@
       },
       "disabilityTaxCredit": "CDCP-APPL-0018",
       "parentOrGuardian": "CDCP-APPL-0019",
-      "livingIndependently": "CDCP-APPL-0020"
+      "livingIndependently": "CDCP-APPL-0020",
+      "applyForYourself": "CDCP-APPL-0021"
     },
     "status": "CDCP-STAT-0001",
     "unableToProcessRequest": "CDCP-UNAB-0001",
