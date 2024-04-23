@@ -9,6 +9,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InputField } from '~/components/input-field';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
+import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -34,7 +35,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('email-alerts');
-
+  const raoidcService = await getRaoidcService();
+  await raoidcService.handleSessionValidation(request, session);
   const instrumentationService = getInstrumentationService();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -78,7 +80,7 @@ export default function ConfirmSubscription() {
               {t('alerts:confirm.confirmation-completed-text')}
             </p>
             <div className="grid gap-12 md:grid-cols-2">
-              <p id="confirmation-language" className="mb-4">
+              <p id="confirmation-language" className="mb-4 font-bold">
                 {t('alerts:confirm.confirmation-selected-language')}
               </p>
 
