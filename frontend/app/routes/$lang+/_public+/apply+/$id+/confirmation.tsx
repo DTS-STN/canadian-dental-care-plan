@@ -96,7 +96,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     martialStatus: maritalStatus,
     email: state.communicationPreferences.email,
     communicationPreference: communicationPreference,
-    emailForFuture: state.communicationPreferences.emailForFuture,
   };
 
   const spouseInfo = state.partnerInformation
@@ -297,11 +296,6 @@ export default function ApplyFlowConfirm() {
             <DescriptionListItem term={t('confirm.comm-pref')}>
               <div className="flex flex-col">
                 <p>{userInfo.communicationPreference}</p>
-                {userInfo.emailForFuture && (
-                  <p>
-                    <Trans ns={handle.i18nNamespaces} i18nKey="confirm.added-email" values={{ email: userInfo.emailForFuture }} />
-                  </p>
-                )}
               </div>
             </DescriptionListItem>
 

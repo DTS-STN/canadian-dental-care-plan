@@ -8,7 +8,7 @@ import { faSpinner, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { parse } from 'date-fns';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../../page-ids.json';
 import { Address } from '~/components/address';
@@ -437,7 +437,6 @@ export default function ReviewInformation() {
                 ) : (
                   <div className="grid grid-cols-1">
                     <p className="mt-4">{t('apply:review-information.comm-mail')}</p>
-                    {userInfo.communicationPreference.emailForFuture && <Trans ns={handle.i18nNamespaces} i18nKey="review-information.added-email" values={{ email: userInfo.communicationPreference.emailForFuture }} />}
                   </div>
                 )}
                 <p className="mt-4">
