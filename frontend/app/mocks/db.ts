@@ -5,28 +5,7 @@ import { factory, primaryKey } from '@mswjs/data';
 // random values of model properties.
 faker.seed(123);
 
-const phoneFormat = '([0-9]{3}) [0-9]{3}-[0-9]{4}';
-
 const db = factory({
-  user: {
-    id: primaryKey(faker.string.uuid),
-    firstName: faker.person.firstName,
-    lastName: faker.person.lastName,
-    phoneNumber: () => faker.helpers.fromRegExp(phoneFormat),
-    homeAddress: () => 'home-address-id',
-    mailingAddress: () => 'mailing-address-id',
-    preferredLanguage: () => faker.helpers.arrayElement(['en', 'fr']),
-  },
-  // address field names are based off of Power Platform API elements
-  address: {
-    id: primaryKey(String),
-    addressApartmentUnitNumber: faker.location.buildingNumber,
-    addressStreet: faker.location.street,
-    addressCity: faker.location.city,
-    addressProvince: String,
-    addressPostalZipCode: faker.location.zipCode,
-    addressCountry: String,
-  },
   personalInformation: {
     homeAddressStreet: String,
     homeAddressSecondaryUnitText: String,
@@ -112,27 +91,6 @@ db.personalInformation.create({
   alternateTelephoneNumber: '789-555-6666',
   preferredMethodCommunicationCode: '775170002',
   sinIdentification: '800000002',
-});
-
-// seed avaliable addresses (before user)
-db.address.create({
-  id: 'home-address-id',
-  addressProvince: 'daf4d05b-37b3-eb11-8236-0022486d8d5f', // "Ontario", @see /power-platform-data/regions.json
-  addressCountry: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', // "Canada", @see /power-platform-data/countries.json
-});
-
-db.address.create({
-  id: 'mailing-address-id',
-  addressProvince: '5abc28c9-38b3-eb11-8236-0022486d8d5f', // "Newfoundland and Labrador", @see /power-platform-data/regions.json
-  addressCountry: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', // "Canada", @see /power-platform-data/countries.json
-});
-
-// seed users
-db.user.create({
-  id: '00000000-0000-0000-0000-000000000000',
-  firstName: 'John',
-  lastName: 'Maverick',
-  preferredLanguage: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
 });
 
 export { db };
