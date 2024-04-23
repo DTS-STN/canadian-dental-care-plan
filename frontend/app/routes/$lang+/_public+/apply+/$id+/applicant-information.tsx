@@ -96,7 +96,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   // Form action Continue & Save
   // state validation schema
-  const applicantInformationSchema: z.ZodType<ApplicantInformationState> = z.object({
+  const applicantInformationSchema = z.object({
     socialInsuranceNumber: z
       .string()
       .trim()
@@ -118,7 +118,7 @@ export async function action({ context: { session }, params, request }: ActionFu
       .string({ errorMap: () => ({ message: t('apply:applicant-information.error-message.marital-status-required') }) })
       .trim()
       .min(1, t('apply:applicant-information.error-message.marital-status-required')),
-  });
+  }) satisfies z.ZodType<ApplicantInformationState>;
 
   const data = {
     socialInsuranceNumber: String(formData.get('socialInsuranceNumber') ?? ''),
@@ -173,10 +173,11 @@ export default function ApplyFlowApplicationInformation() {
       scrollAndFocusToErrorSummary(errorSummaryId);
 
       if (adobeAnalytics.isConfigured()) {
-        adobeAnalytics.pushValidationErrorEvent(errorSummaryItems.map(({ fieldId }) => fieldId));
+        const fieldIds = createErrorSummaryItems(errorMessages).map(({ fieldId }) => fieldId);
+        adobeAnalytics.pushValidationErrorEvent(fieldIds);
       }
     }
-  }, [errorMessages, errorSummaryItems]);
+  }, [errorMessages]);
 
   return (
     <>

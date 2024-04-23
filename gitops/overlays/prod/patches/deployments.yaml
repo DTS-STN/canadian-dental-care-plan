@@ -10,7 +10,8 @@ spec:
     spec:
       containers:
         - name: canada-dental-care-plan-frontend
-          image: dtsrhpdevscedacr.azurecr.io/canada-dental-care-plan/canada-dental-care-plan-frontend:1.0.0-RC039
+          image: dtsrhpprodscedspokeacr.azurecr.io/canada-dental-care-plan/canada-dental-care-plan-frontend:0.0.0
+          imagePullPolicy: Always # TODO :: GjB :: remove this when switching to an actual release
           envFrom:
             - configMapRef:
                 name: frontend
@@ -18,6 +19,25 @@ spec:
                 name: frontend
             - secretRef:
                 name: redis
+        - name: fluentd
+          image: docker.io/fluentd
+          args: [--config, /etc/fluentd.conf]
+          resources:
+            requests:
+              cpu: 50m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 200Mi
+          volumeMounts:
+            - name: audit-logs
+              mountPath: /logs
+            - name: fluentd-conf
+              mountPath: /etc/fluentd.conf
+              subPath: fluentd.conf
+        #
+        # TODO :: GjB :: remove this during golive May 01
+        #
         - name: oauth-proxy
           image: quay.io/oauth2-proxy/oauth2-proxy:v7.6.0
           args:
@@ -55,26 +75,13 @@ spec:
             - name: oauth-proxy-conf
               mountPath: /etc/oauth-proxy.conf
               subPath: config.conf
-        - name: fluentd
-          image: docker.io/fluentd
-          args: [--config, /etc/fluentd.conf]
-          resources:
-            requests:
-              cpu: 50m
-              memory: 100Mi
-            limits:
-              cpu: 100m
-              memory: 200Mi
-          volumeMounts:
-            - name: audit-logs
-              mountPath: /logs
-            - name: fluentd-conf
-              mountPath: /etc/fluentd.conf
-              subPath: fluentd.conf
       volumes:
         - name: fluentd-conf
           configMap:
             name: frontend-fluentd
+        #
+        # TODO :: GjB :: remove this during golive May 01
+        #
         - name: oauth-proxy-conf
           configMap:
             name: oauth-proxy

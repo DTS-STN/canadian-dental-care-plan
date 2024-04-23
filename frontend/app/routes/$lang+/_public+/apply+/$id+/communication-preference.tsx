@@ -76,7 +76,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const formSchema: z.ZodType<CommunicationPreferencesState> = z
+  const formSchema = z
     .object({
       preferredLanguage: z.string().trim().min(1, t('apply:communication-preference.error-message.preferred-language-required')),
       preferredMethod: z.string().trim().min(1, t('apply:communication-preference.error-message.preferred-method-required')),
@@ -120,7 +120,7 @@ export async function action({ context: { session }, params, request }: ActionFu
           }
         }
       }
-    });
+    }) satisfies z.ZodType<CommunicationPreferencesState>;
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -194,10 +194,11 @@ export default function ApplyFlowCommunicationPreferencePage() {
       scrollAndFocusToErrorSummary(errorSummaryId);
 
       if (adobeAnalytics.isConfigured()) {
-        adobeAnalytics.pushValidationErrorEvent(errorSummaryItems.map(({ fieldId }) => fieldId));
+        const fieldIds = createErrorSummaryItems(errorMessages).map(({ fieldId }) => fieldId);
+        adobeAnalytics.pushValidationErrorEvent(fieldIds);
       }
     }
-  }, [errorMessages, errorSummaryItems]);
+  }, [errorMessages]);
 
   const nonEmailOptions: InputRadiosProps['options'] = preferredCommunicationMethods
     .filter((method) => method.id !== communicationMethodEmail.id)

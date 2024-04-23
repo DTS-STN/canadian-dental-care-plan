@@ -230,6 +230,8 @@
     "date-of-birth": {
       "page-title": "Date de naissance",
       "description": "Les demandes au titre du Régime canadien de soins dentaires seront acceptées progressivement. Votre date de naissance détermine le moment où vous pouvez présenter une demande.",
+      "currently-accepting": "(FR) The Canadian Dental Care Plan is currently accepting applications for people aged 65 and above, children under 18, and adults who receive the Disability Tax Credit.",
+      "later-date": "(FR) Adults 18 to 64 who do not have a disability tax credit will be invited to apply for the Canadian Dental Care Plan in 2025.",
       "form-instructions": "Veuillez sélectionner votre date de naissance",
       "error-message": {
         "date-of-birth-day-number": "Le jour doit être un nombre",
