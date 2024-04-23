@@ -36,6 +36,7 @@ declare module 'i18next' {
       gcweb: typeof gcweb;
       index: typeof index;
       letters: typeof letters;
+      'access-to-governmental-benefits': typeof accessToGovernmentalBenefits;
       'personal-information': typeof personalInformation;
       status: typeof status;
       'stub-sin-editor': typeof stubSinEditor;

@@ -126,6 +126,16 @@ export default function PersonalInformationIndex() {
             </p>
           )}
         </DescriptionListItem>
+        <DescriptionListItem term={t('personal-information:index.phone-number')}>
+          <p>{personalInformation.primaryTelephoneNumber}</p>
+          {useFeature('update-governmental-benefit') && (
+            <p>
+              <InlineLink id="access-your-dental-benefits-button" routeId="$lang+/_protected+/access-to-governmental-benefits+/index" params={params}>
+                {t('personal-information:index.access-your-dental-benefits')}
+              </InlineLink>
+            </p>
+          )}
+        </DescriptionListItem>
       </dl>
     </>
   );

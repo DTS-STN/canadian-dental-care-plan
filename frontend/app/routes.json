@@ -292,6 +292,44 @@
             ]
           },
           {
+            "id": "$lang+/_protected+/access-to-governmental-benefits+/_route",
+            "file": "routes/$lang+/_protected+/access-to-governmental-benefits+/_route.tsx",
+            "children": [
+              {
+                "id": "$lang+/_protected+/access-to-governmental-benefits+/edit",
+                "file": "routes/$lang+/_protected+/access-to-governmental-benefits+/edit.tsx",
+                "paths": {
+                  "en": "/:lang/access-to-governmental-benefits+/edit",
+                  "fr": "/:lang/access-to-governmental-benefits+/edit"
+                }
+              },
+              {
+                "id": "$lang+/_protected+/access-to-governmental-benefits+/view",
+                "file": "routes/$lang+/_protected+/access-to-governmental-benefits+/view.tsx",
+                "paths": {
+                  "en": "/:lang/access-to-governmental-benefits+/view",
+                  "fr": "/:lang/access-to-governmental-benefits+/view"
+                }
+              },
+              {
+                "id": "$lang+/_protected+/access-to-governmental-benefits+/index",
+                "file": "routes/$lang+/_protected+/access-to-governmental-benefits+/index.tsx",
+                "paths": {
+                  "en": "/:lang/access-to-governmental-benefits+/index",
+                  "fr": "/:lang/access-to-governmental-benefits+/index"
+                }
+              },
+              {
+                "id": "$lang+/_protected+/access-to-governmental-benefits+/confirm",
+                "file": "routes/$lang+/_protected+/access-to-governmental-benefits+/confirm.tsx",
+                "paths": {
+                  "en": "/:lang/access-to-governmental-benefits+/confirm",
+                  "fr": "/:lang/access-to-governmental-benefits+/confirm"
+                }
+              }
+            ]
+          },
+          {
             "id": "$lang+/_protected+/personal-information+/_route",
             "file": "routes/$lang+/_protected+/personal-information+/_route.tsx",
             "children": [

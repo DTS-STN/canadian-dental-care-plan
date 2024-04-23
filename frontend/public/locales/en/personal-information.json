@@ -11,6 +11,7 @@
     "home-address": "Home address",
     "mailing-address": "Mailing address",
     "preferred-language": "Preferred language",
+    "access-your-dental-benefits": "Access Your Dental Benefits",
     "change-home-address": "Change home address",
     "change-mailing-address": "Change mailing address",
     "change-phone-number": "Change phone number",
@@ -124,6 +125,20 @@
       "back": "Back",
       "error-message": {
         "preferred-language-required": "Select preferred language of communication"
+      }
+    }
+  },
+  "access-to-governmental-benefits": {
+    "edit": {
+      "page-title": "Access to governmental benefits",
+      "intro-text": "You have indicated that you have access to the following governmental benefits.",
+      "provincial-or-territorial-dental-benefit": "Provincial or Territorial dental benefit:",
+      "alberta-child-health-benefits": "Alberta Child Health Benefits",
+      "federal-benefits-dental-benefits": "Federal benefits dental benefits:",
+      "dental-service-program": "Dental Service Program",
+      "update-your-access-text": "<updateLink>Update your access to governmental benefits.<updateLink>",
+      "links": {
+        "update-your-access-link": "https://www.canada.ca/en/transparency/terms.html"
       }
     }
   }

@@ -71,8 +71,37 @@ export function toPersonalInformationApi(personalInformation: PersonalInfo): Per
           ReferenceDataID: personalInformation.preferredLanguageId,
         },
       },
+      InsurancePlans: toInsurancePlanApi(personalInformation.privateDentalPlanId, personalInformation.federalDentalPlanId, personalInformation.provincialTerritorialDentalPlanId),
+      PrivateDentalInsuranceIndicator: personalInformation.privateDentalPlanId ? true : false,
+      FederalDentalCoverageIndicator: toFederalDentalCoverageIndicator(personalInformation.federalDentalPlanId),
+      ProvicialDentalCoverageIndicator: personalInformation.provincialTerritorialDentalPlanId ? true : false,
     },
   };
+}
+
+function toInsurancePlanApi(
+  federalDentalPlanId: string | undefined,
+  provincialTerritorialDentalPlanId: string | undefined,
+  privateDentalPlanId: string | undefined,
+): {
+  InsurancePlanIdentification?: {
+    IdentificationID?: string;
+    IdentificationCategoryText?: string;
+  };
+}[] {
+  const listOfInsurancePlans = [];
+
+  if (federalDentalPlanId) {
+    listOfInsurancePlans.push({ InsurancePlanIdentification: { IdentificationID: federalDentalPlanId, IdentificationCategoryText: 'Federal' } });
+  }
+  if (provincialTerritorialDentalPlanId) {
+    listOfInsurancePlans.push({ InsurancePlanIdentification: { IdentificationID: provincialTerritorialDentalPlanId, IdentificationCategoryText: 'Provincial and Territorial' } });
+  }
+  if (privateDentalPlanId) {
+    listOfInsurancePlans.push({ InsurancePlanIdentification: { IdentificationID: privateDentalPlanId, IdentificationCategoryText: 'Private' } });
+  }
+
+  return listOfInsurancePlans;
 }
 
 export function toPersonalInformation(personalInformationApi: PersonalInformationApi): PersonalInfo {
@@ -110,12 +139,15 @@ export function toPersonalInformation(personalInformationApi: PersonalInformatio
         postalCode: aMailingAddress.AddressPostalCode,
       }))
       .at(0),
-
     primaryTelephoneNumber: personalInformationApi.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.TelephoneNumber.find((phoneNumber) => phoneNumber.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary')?.FullTelephoneNumber
       .TelephoneNumberFullID,
     alternateTelephoneNumber: personalInformationApi.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.TelephoneNumber.find((phoneNumber) => phoneNumber.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate')?.FullTelephoneNumber
       .TelephoneNumberFullID,
     preferredLanguageId: personalInformationApi.BenefitApplication.Applicant?.PreferredMethodCommunicationCode?.ReferenceDataID,
+    federalDentalPlanId: personalInformationApi.BenefitApplication.InsurancePlans?.find((insurancePlan) => insurancePlan.InsurancePlanIdentification?.IdentificationCategoryText === 'Federal')?.InsurancePlanIdentification?.IdentificationID,
+    provincialTerritorialDentalPlanId: personalInformationApi.BenefitApplication.InsurancePlans?.find((insurancePlan) => insurancePlan.InsurancePlanIdentification?.IdentificationCategoryText === 'Provincial and Territorial')?.InsurancePlanIdentification
+      ?.IdentificationID,
+    privateDentalPlanId: personalInformationApi.BenefitApplication.InsurancePlans?.find((insurancePlan) => insurancePlan.InsurancePlanIdentification?.IdentificationCategoryText === 'Private')?.InsurancePlanIdentification?.IdentificationID,
   };
 }
 
@@ -172,4 +204,7 @@ function toAddress(addressDto: AddressDto | undefined, category: string) {
     province: addressDto?.provinceTerritoryStateId,
     street: addressDto?.streetName,
   });
+}
+function toFederalDentalCoverageIndicator(federalDentalPlanId: string | undefined): { ReferenceDataID?: string | undefined; ReferenceDataName?: string | undefined } | undefined {
+  return federalDentalPlanId ? { ReferenceDataID: federalDentalPlanId, ReferenceDataName: 'true' } : undefined; //TODO: Revisit once sample FederalDentalCoverageIndicator response gets sent
 }
