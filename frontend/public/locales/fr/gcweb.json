@@ -29,7 +29,11 @@
     "menu-security-settings.href": "{{baseUri}}/fr/parametres-securite",
     "menu-contact-us.text": "Contactez-nous",
     "menu-contact-us.href": "{{baseUri}}/fr/contactez-nous",
-    "menu-sign-out.text": "Se déconnecter"
+    "menu-sign-out.text": "Se déconnecter",
+    "banner": {
+      "alert": "Info",
+      "desc": "Il s'agit d'un environnement prototype. Aucune donnée n'est conservée."
+    }
   },
   "footer": {
     "about-site": "À propos de ce site",

@@ -29,7 +29,11 @@
     "menu-security-settings.href": "{{baseUri}}/en/security-settings",
     "menu-contact-us.text": "Contact Us",
     "menu-contact-us.href": "{{baseUri}}/en/contact-us",
-    "menu-sign-out.text": "Sign Out"
+    "menu-sign-out.text": "Sign Out",
+    "banner": {
+      "alert": "Info",
+      "desc": "This is a prototype environment. No data is kept."
+    }
   },
   "footer": {
     "about-site": "About this site",
