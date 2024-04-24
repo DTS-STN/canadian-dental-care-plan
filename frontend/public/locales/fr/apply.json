@@ -233,7 +233,7 @@
         "yes": "Oui",
         "no": "Non",
         "collapsible-content-summary": "(FR) If your child is over 18 and has a Disability Tax Credit",
-        "collapsible-content-detail": "(FR) You must speak to a Service Canada representative to apply on behalf of your child. Please contact Service Canada by calling 1-833-537-4342.",
+        "collapsible-content-detail": "(FR) You must speak to a Service Canada representative to apply on behalf of your child. Please contact Service Canada by calling <span>1-833-537-4342</span>.",
         "error-message": {
           "child-age-required": "(FR) Please indicate if all children are under 18"
         }

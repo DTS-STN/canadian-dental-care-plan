@@ -24,7 +24,7 @@ import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
-enum ApplicantType {
+export enum ApplicantType {
   Delegate = 'delegate',
   Personal = 'personal',
   Child = 'child',

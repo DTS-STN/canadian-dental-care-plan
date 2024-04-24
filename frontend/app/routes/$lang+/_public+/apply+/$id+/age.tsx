@@ -6,7 +6,7 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { differenceInYears, isPast, isValid, parse } from 'date-fns';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
@@ -57,7 +57,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/date-of-birth');
+  const log = getLogger('apply/age');
 
   const applyRouteHelpers = getApplyRouteHelpers();
   const state = await applyRouteHelpers.loadState({ params, request, session });
@@ -184,6 +184,7 @@ export default function AdultChildrenFlowAge() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
+  const span = <span className="whitespace-nowrap" />;
 
   // Keys order should match the input IDs order.
   const errorSummaryItems = useMemo(() => {
@@ -257,25 +258,27 @@ export default function AdultChildrenFlowAge() {
               required
             />
             <Collapsible summary={t('apply:eligibility.date-of-birth.adult-children-flow.collapsible-content-summary')}>
-              <p>{t('apply:eligibility.date-of-birth.adult-children-flow.collapsible-content-detail')}</p>
+              <p>
+                <Trans ns={handle.i18nNamespaces} i18nKey="apply:eligibility.date-of-birth.adult-children-flow.collapsible-content-detail" components={{ span }} />
+              </p>
             </Collapsible>
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Date of birth click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Age click">
                 {t('apply:eligibility.date-of-birth.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Date of birth click">
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Age click">
                 {t('apply:eligibility.date-of-birth.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Date of birth click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Age click">
                 {t('apply:eligibility.date-of-birth.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Date of birth click">
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Age click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply:eligibility.date-of-birth.back-btn')}
               </ButtonLink>

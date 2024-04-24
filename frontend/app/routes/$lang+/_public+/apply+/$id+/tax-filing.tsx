@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
+import { ApplicantType } from './type-application';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
@@ -85,7 +86,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const { typeOfApplication } = await applyRouteHelpers.loadState({ params, request, session });
 
-  if (typeOfApplication === 'personal and child') {
+  if (typeOfApplication === ApplicantType.Both) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/age', params));
   }
 
