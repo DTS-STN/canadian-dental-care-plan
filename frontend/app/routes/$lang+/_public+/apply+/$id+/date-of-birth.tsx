@@ -28,11 +28,11 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
 export type DateOfBirthState = string;
-enum ChildAgeOption {
+enum AllChildrenUnder18Option {
   No = 'no',
   Yes = 'yes',
 }
-export type ChildAgeOptionState = `${ChildAgeOption}`;
+export type AllChildrenUnder18State = `${AllChildrenUnder18Option}`;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -52,7 +52,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.date-of-birth.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state, editMode: state.editMode });
+  const { dateOfBirth, allChildrenUnder18 } = state;
+  return json({ id: state.id, csrfToken, meta, defaultState: { dateOfBirth, allChildrenUnder18 }, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -94,7 +95,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         .int()
         .positive(),
       dateOfBirth: z.string(),
-      childUnder18: z.nativeEnum(ChildAgeOption, {
+      allChildrenUnder18: z.nativeEnum(AllChildrenUnder18Option, {
         errorMap: () => ({ message: t('apply:eligibility.date-of-birth.error-message.child-age-required') }),
       }),
     })
@@ -138,7 +139,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     dateOfBirthMonth: formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined,
     dateOfBirthDay: formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined,
     dateOfBirth: '',
-    childUnder18: formData.get('childUnder18'),
+    allChildrenUnder18: formData.get('allChildrenUnder18'),
   };
 
   const parsedDataResult = dateOfBirthSchema.safeParse(data);
@@ -147,35 +148,33 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  await applyRouteHelpers.saveState({ params, request, session, state: parsedDataResult.data });
+  await applyRouteHelpers.saveState({ params, request, session, state: { dateOfBirth: parsedDataResult.data.dateOfBirth, allChildrenUnder18: parsedDataResult.data.allChildrenUnder18 } });
 
   const parseDateOfBirth = parse(parsedDataResult.data.dateOfBirth, 'yyyy-MM-dd', new Date());
   const age = differenceInYears(new Date(), parseDateOfBirth);
-  const childUnder18 = parsedDataResult.data.childUnder18;
+  const allChildrenUnder18 = parsedDataResult.data.allChildrenUnder18;
 
-  if (age >= 65 && childUnder18 === 'yes') {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/applicant-information', params));
+  if (age < 16 && allChildrenUnder18 === 'yes') {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/parent-or-guardian', params));
   }
 
-  if (age >= 65 && childUnder18 === 'no') {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/apply-for-yourself', params));
+  if ((age === 16 || age === 17) && allChildrenUnder18 === 'yes') {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/living-independently', params));
   }
 
   if (age >= 18 && age < 65) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/disability-tax-credit', params));
   }
 
-  if ((age === 16 || age === 17) && childUnder18 === 'yes') {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/living-independently', params));
-  }
-
-  if (age < 16 && childUnder18 === 'yes') {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/parent-or-guardian', params));
+  if (age >= 65 && allChildrenUnder18 === 'no') {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/apply-for-yourself', params));
   }
 
   if (state.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/review-information', params));
   }
+
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/applicant-information', params));
 }
 
 export default function ApplyFlowDateOfBirth() {
@@ -193,9 +192,9 @@ export default function ApplyFlowDateOfBirth() {
     if (fetcher.data?.errors.dateOfBirthMonth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', fetcher.data.errors.dateOfBirthMonth._errors[0]));
     if (fetcher.data?.errors.dateOfBirthDay?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', fetcher.data.errors.dateOfBirthDay._errors[0]));
     if (fetcher.data?.errors.dateOfBirthYear?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-year', fetcher.data.errors.dateOfBirthYear._errors[0]));
-    if (fetcher.data?.errors.childUnder18?._errors[0]) items.push(createErrorSummaryItem('input-radio-child-under-18-option-0', fetcher.data.errors.childUnder18._errors[0]));
+    if (fetcher.data?.errors.allChildrenUnder18?._errors[0]) items.push(createErrorSummaryItem('input-radio-child-under-18-option-0', fetcher.data.errors.allChildrenUnder18._errors[0]));
     return items;
-  }, [fetcher.data?.errors.dateOfBirth?._errors, fetcher.data?.errors.dateOfBirthDay?._errors, fetcher.data?.errors.dateOfBirthMonth?._errors, fetcher.data?.errors.dateOfBirthYear?._errors, fetcher.data?.errors.childUnder18?._errors]);
+  }, [fetcher.data?.errors.dateOfBirth?._errors, fetcher.data?.errors.dateOfBirthDay?._errors, fetcher.data?.errors.dateOfBirthMonth?._errors, fetcher.data?.errors.dateOfBirthYear?._errors, fetcher.data?.errors.allChildrenUnder18?._errors]);
 
   useEffect(() => {
     if (errorSummaryItems.length > 0) {
@@ -248,13 +247,13 @@ export default function ApplyFlowDateOfBirth() {
             <h2 className="text-xl font-bold">{t('apply:eligibility.date-of-birth.child-age-heading')}</h2>
             <InputRadios
               id="child-under-18"
-              name="childUnder18"
+              name="allChildrenUnder18"
               legend={t('apply:eligibility.date-of-birth.child-age-instruction')}
               options={[
-                { value: ChildAgeOption.Yes, children: t('apply:eligibility.date-of-birth.yes'), defaultChecked: defaultState.childUnder18 === ChildAgeOption.Yes },
-                { value: ChildAgeOption.No, children: t('apply:eligibility.date-of-birth.no'), defaultChecked: defaultState.childUnder18 === ChildAgeOption.No },
+                { value: AllChildrenUnder18Option.Yes, children: t('apply:eligibility.date-of-birth.yes'), defaultChecked: defaultState.allChildrenUnder18 === AllChildrenUnder18Option.Yes },
+                { value: AllChildrenUnder18Option.No, children: t('apply:eligibility.date-of-birth.no'), defaultChecked: defaultState.allChildrenUnder18 === AllChildrenUnder18Option.No },
               ]}
-              errorMessage={fetcher.data?.errors.childUnder18?._errors[0]}
+              errorMessage={fetcher.data?.errors.allChildrenUnder18?._errors[0]}
               required
             />
             <Collapsible summary={t('apply:eligibility.date-of-birth.collapsible-content-summary')}>

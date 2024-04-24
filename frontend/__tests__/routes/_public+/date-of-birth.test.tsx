@@ -12,7 +12,7 @@ vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
     loadState: vi.fn().mockReturnValue({
       id: '123',
       dateOfBirth: '2000-01-01',
-      childUnder18: 'yes',
+      allChildrenUnder18: 'yes',
     }),
     saveState: vi.fn().mockReturnValue({
       headers: {
@@ -55,7 +55,7 @@ describe('_public.apply.id.date-of-birth', () => {
         defaultState: {
           id: '123',
           dateOfBirth: '2000-01-01',
-          childUnder18: 'yes',
+          allChildrenUnder18: 'yes',
         },
       });
     });
@@ -81,7 +81,7 @@ describe('_public.apply.id.date-of-birth', () => {
       expect(data?.errors.dateOfBirthYear?._errors.length).toBeGreaterThan(0);
       expect(data?.errors.dateOfBirthMonth?._errors.length).toBeGreaterThan(0);
       expect(data?.errors.dateOfBirthDay?._errors.length).toBeGreaterThan(0);
-      expect(data?.errors.childUnder18?._errors.length).toBeGreaterThan(0);
+      expect(data?.errors.allChildrenUnder18?._errors.length).toBeGreaterThan(0);
     });
 
     it('should redirect to applicant information page if dob is 65 years or over', async () => {
@@ -93,7 +93,7 @@ describe('_public.apply.id.date-of-birth', () => {
       formData.append('dateOfBirthYear', '1959');
       formData.append('dateOfBirthMonth', '01');
       formData.append('dateOfBirthDay', '01');
-      formData.append('childUnder18', 'yes');
+      formData.append('allChildrenUnder18', 'yes');
 
       vi.mocked(isValid).mockReturnValueOnce(true);
       vi.mocked(isPast).mockReturnValueOnce(true);
@@ -119,7 +119,7 @@ describe('_public.apply.id.date-of-birth', () => {
       formData.append('dateOfBirthYear', '2000');
       formData.append('dateOfBirthMonth', '01');
       formData.append('dateOfBirthDay', '01');
-      formData.append('childUnder18', 'yes');
+      formData.append('allChildrenUnder18', 'yes');
 
       vi.mocked(isValid).mockReturnValueOnce(true);
       vi.mocked(isPast).mockReturnValueOnce(true);
