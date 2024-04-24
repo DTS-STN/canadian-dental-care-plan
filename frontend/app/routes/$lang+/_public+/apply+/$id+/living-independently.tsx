@@ -15,6 +15,7 @@ import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
+import { getUserAge } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -47,6 +48,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:living-independently.page-title') }) };
+
+  const age = getUserAge(state.dateOfBirth ?? '');
+  if (age !== 16 && age !== 17) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/date-of-birth', params));
+  }
 
   return json({ id: state.id, csrfToken, meta, defaultState: state.livingIndependently });
 }

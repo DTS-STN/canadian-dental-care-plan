@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { isExists } from 'date-fns';
+import { differenceInYears, isExists, parse } from 'date-fns';
 
 import { padWithZero } from './string-utils';
 
@@ -59,4 +59,16 @@ export function useMonths(locale: string, format: 'numeric' | '2-digit' | 'long'
 // TODO: add unit tests
 export function toLocaleDateString(date: Date, locale: string) {
   return date.toLocaleDateString(`${locale}-CA`, { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+/**
+ *
+ * @param dateOfBirth
+ * @param timezoneOffset timezone offset in minutes; defaults to -210 for Newfoundland (GMT-3:30)
+ * @returns age in years based on current date and timezone offset
+ */
+export function getUserAge(dateOfBirth: string, timezoneOffset: number = -210) {
+  const parseDateOfBirth = parse(dateOfBirth, 'yyyy-MM-dd', new Date());
+  const adjustedDateOfBirth = new Date(Number(parseDateOfBirth) - timezoneOffset * 60 * 1000);
+  return differenceInYears(new Date(), adjustedDateOfBirth);
 }

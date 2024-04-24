@@ -11,6 +11,7 @@ import pageIds from '../../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { getUserAge } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -30,14 +31,19 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
-  const { id } = await applyRouteHelpers.loadState({ params, request, session });
+  const state = await applyRouteHelpers.loadState({ params, request, session });
 
   const csrfToken = String(session.get('csrfToken'));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.dob-eligibility.page-title') }) };
 
-  return json({ id, csrfToken, meta });
+  const age = getUserAge(state.dateOfBirth ?? '');
+  if (age < 18 || age > 64) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/date-of-birth', params));
+  }
+
+  return json({ id: state.id, csrfToken, meta });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {

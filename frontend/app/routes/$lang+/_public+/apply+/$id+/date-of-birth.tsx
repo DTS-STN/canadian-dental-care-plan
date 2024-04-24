@@ -18,7 +18,7 @@ import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
-import { parseDateString } from '~/utils/date-utils';
+import { getUserAge, parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -150,8 +150,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   await applyRouteHelpers.saveState({ params, request, session, state: { dateOfBirth: parsedDataResult.data.dateOfBirth, allChildrenUnder18: parsedDataResult.data.allChildrenUnder18 } });
 
-  const parseDateOfBirth = parse(parsedDataResult.data.dateOfBirth, 'yyyy-MM-dd', new Date());
-  const age = differenceInYears(new Date(), parseDateOfBirth);
+  const age = getUserAge(parsedDataResult.data.dateOfBirth);
   const allChildrenUnder18 = parsedDataResult.data.allChildrenUnder18;
 
   if (age < 16 && allChildrenUnder18 === 'yes') {
