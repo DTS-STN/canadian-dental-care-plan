@@ -15,6 +15,7 @@ import { InlineLink } from '~/components/inline-link';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { toLocaleDateString } from '~/utils/date-utils';
+import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -40,6 +41,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const state = await applyRouteHelpers.loadState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
+  const { CANADA_COUNTRY_ID } = getEnv();
 
   // prettier-ignore
   if (state.applicantInformation === undefined ||
@@ -114,6 +116,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     province: provinceMailing,
     postalCode: state.personalInformation.mailingPostalCode,
     country: countryMailing,
+    apartment: state.personalInformation.mailingApartment,
+    isCanadianAddress: state.personalInformation.mailingCountry === CANADA_COUNTRY_ID,
   };
 
   const homeAddressInfo = {
@@ -122,6 +126,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     province: provinceHome,
     postalCode: state.personalInformation.homePostalCode,
     country: countryHome,
+    apartment: state.personalInformation.homeApartment,
+    isCanadianAddress: state.personalInformation.homeCountry === CANADA_COUNTRY_ID,
   };
 
   const dentalInsurance = {
@@ -276,6 +282,8 @@ export default function ApplyFlowConfirm() {
                 provinceState={i18n.language === 'en' ? mailingAddressInfo.province?.nameEn : mailingAddressInfo.province?.nameFr}
                 postalZipCode={mailingAddressInfo.postalCode}
                 country={i18n.language === 'en' ? mailingAddressInfo.country?.nameEn ?? '' : mailingAddressInfo.country?.nameFr ?? ''}
+                apartment={mailingAddressInfo.apartment}
+                isCanadianAddress={mailingAddressInfo.isCanadianAddress}
                 altFormat={true}
               />
             </DescriptionListItem>
@@ -286,6 +294,8 @@ export default function ApplyFlowConfirm() {
                 provinceState={i18n.language === 'en' ? homeAddressInfo.province?.nameEn : homeAddressInfo.province?.nameFr}
                 postalZipCode={homeAddressInfo.postalCode ?? ''}
                 country={i18n.language === 'en' ? homeAddressInfo.country?.nameEn ?? '' : homeAddressInfo.country?.nameFr ?? ''}
+                apartment={homeAddressInfo.apartment}
+                isCanadianAddress={homeAddressInfo.isCanadianAddress}
                 altFormat={true}
               />
             </DescriptionListItem>
