@@ -421,16 +421,45 @@
             ]
           },
           {
-            "id": "$lang+/_protected+/alerts+/subscribe+/_route",
-            "file": "routes/$lang+/_protected+/alerts+/subscribe+/_route.tsx",
+            "id": "$lang+/_protected+/alerts+/_route",
+            "file": "routes/$lang+/_protected+/alerts+/_route.tsx",
             "children": [
               {
-                "id": "$lang+/_protected+/alerts+/subscribe+/index",
-                "file": "routes/$lang+/_protected+/alerts+/subscribe+/index.tsx",
+                "id": "$lang+/_protected+/alerts+/index",
+                "file": "routes/$lang+/_protected+/alerts+/index.tsx",
                 "paths": {
-                  "en": "/:lang/alerts/subscribe",
-                  "fr": "/:lang/alertes/abonner"
-                }
+                  "en": "/:lang/alerts",
+                  "fr": "/:lang/alertes"
+                },
+                "index": true
+              },
+              {
+                "id": "$lang+/_protected+/alerts+/subscribe+/_route",
+                "file": "routes/$lang+/_protected+/alerts+/subscribe+/_route.tsx",
+                "children": [
+                  {
+                    "id": "$lang+/_protected+/alerts+/subscribe+/index",
+                    "file": "routes/$lang+/_protected+/alerts+/subscribe+/index.tsx",
+                    "paths": {
+                      "en": "/:lang/alerts/subscribe",
+                      "fr": "/:lang/alertes/abonner"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "$lang+/_protected+/alerts+/manage+/_route",
+                "file": "routes/$lang+/_protected+/alerts+/manage+/_route.tsx",
+                "children": [
+                  {
+                    "id": "$lang+/_protected+/alerts+/manage+/index",
+                    "file": "routes/$lang+/_protected+/alerts+/manage+/index.tsx",
+                    "paths": {
+                      "en": "/:lang/alerts/manage",
+                      "fr": "/:lang/alertes/gerer"
+                    }
+                  }
+                ]
               },
               {
                 "id": "$lang+/_protected+/alerts+/subscribe+/confirm",
