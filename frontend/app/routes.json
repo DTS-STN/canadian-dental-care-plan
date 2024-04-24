@@ -456,7 +456,7 @@
                     "file": "routes/$lang+/_protected+/alerts+/manage+/index.tsx",
                     "paths": {
                       "en": "/:lang/alerts/manage",
-                      "fr": "/:lang/alertes/gérer"
+                      "fr": "/:lang/alertes/gerer"
                     }
                   }
                 ]
