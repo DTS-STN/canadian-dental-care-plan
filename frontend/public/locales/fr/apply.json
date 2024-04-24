@@ -94,6 +94,15 @@
     "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html",
     "status-checker-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html"
   },
+  "contact-apply-child": {
+    "page-title": "(FR) Contact us to apply for your child",
+    "contact-service-canada": "(FR) You must speak to a Service Canada representative if you are under 16 and applying for your child. Please contact Service Canada by calling 1-833-537-4342 or visit a <serviceCanadaOfficeLink>Service Canada Office</serviceCanadaOfficeLink>.",
+    "serviceCanadaOfficeLink": "https://www.servicecanada.gc.ca/tbsc-fsco/sc-hme.jsp?lang=fra",
+    "parent-guardian": "(FR) You must have your parent or guardian apply on your behalf.",
+    "back-btn": "Retour",
+    "return-btn": "Revenir à la page principale",
+    "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+  },
   "dental-benefits": {
     "title": "Accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
     "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",

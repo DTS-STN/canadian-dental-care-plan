@@ -155,7 +155,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const allChildrenUnder18 = parsedDataResult.data.allChildrenUnder18;
 
   if (age < 16 && allChildrenUnder18 === 'yes') {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/parent-or-guardian', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/contact-apply-child', params));
   }
 
   if ((age === 16 || age === 17) && allChildrenUnder18 === 'yes') {
