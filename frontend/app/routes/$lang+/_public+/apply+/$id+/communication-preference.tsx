@@ -63,7 +63,20 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:communication-preference.page-title') }) };
 
-  return json({ communicationMethodEmail, id: state.id, csrfToken, meta, preferredCommunicationMethods, preferredLanguages, defaultState: state.communicationPreferences, editMode: state.editMode });
+  return json({
+    communicationMethodEmail,
+    id: state.id,
+    csrfToken,
+    meta,
+    preferredCommunicationMethods,
+    preferredLanguages,
+    defaultState: {
+      ...state.communicationPreferences,
+      email: state.communicationPreferences?.email ?? state.personalInformation?.email,
+      confirmEmail: state.communicationPreferences?.confirmEmail ?? state.personalInformation?.confirmEmail,
+    },
+    editMode: state.editMode,
+  });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -135,7 +148,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [preferredMethodValue, setPreferredMethodValue] = useState(defaultState?.preferredMethod ?? '');
+  const [preferredMethodValue, setPreferredMethodValue] = useState(defaultState.preferredMethod ?? '');
   const errorSummaryId = 'error-summary';
 
   const handleOnPreferredMethodChecked: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -171,7 +184,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
     .map((method) => ({
       children: i18n.language === 'fr' ? method.nameFr : method.nameEn,
       value: method.id,
-      defaultChecked: defaultState?.preferredMethod === method.id,
+      defaultChecked: defaultState.preferredMethod === method.id,
       onChange: handleOnPreferredMethodChecked,
     }));
 
@@ -179,13 +192,13 @@ export default function ApplyFlowCommunicationPreferencePage() {
     {
       children: getNameByLanguage(i18n.language, communicationMethodEmail),
       value: communicationMethodEmail.id,
-      defaultChecked: defaultState?.preferredMethod === communicationMethodEmail.id,
+      defaultChecked: defaultState.preferredMethod === communicationMethodEmail.id,
       append: preferredMethodValue === communicationMethodEmail.id && (
         <div className="mb-6 grid gap-6 md:grid-cols-2">
           <p className="md:col-span-2" id="email-note">
             {t('apply:communication-preference.email-note')}
           </p>
-          <InputField id="email" type="email" className="w-full" label={t('apply:communication-preference.email')} maxLength={100} name="email" errorMessage={errorMessages.email} autoComplete="email" defaultValue={defaultState?.email ?? ''} required />
+          <InputField id="email" type="email" className="w-full" label={t('apply:communication-preference.email')} maxLength={100} name="email" errorMessage={errorMessages.email} autoComplete="email" defaultValue={defaultState.email ?? ''} required />
           <InputField
             id="confirm-email"
             type="email"
@@ -195,7 +208,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             name="confirmEmail"
             errorMessage={errorMessages['confirm-email']}
             autoComplete="email"
-            defaultValue={defaultState?.confirmEmail ?? ''}
+            defaultValue={defaultState.confirmEmail ?? ''}
             required
           />
         </div>
@@ -230,7 +243,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
                 name="preferredLanguage"
                 legend={t('apply:communication-preference.preferred-language')}
                 options={preferredLanguages.map((language) => ({
-                  defaultChecked: defaultState?.preferredLanguage === language.id,
+                  defaultChecked: defaultState.preferredLanguage === language.id,
                   children: getNameByLanguage(i18n.language, language),
                   value: language.id,
                 }))}
