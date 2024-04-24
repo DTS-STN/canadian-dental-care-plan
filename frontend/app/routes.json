@@ -248,6 +248,14 @@
                       "en": "/:lang/apply/:id/living-independently",
                       "fr": "/:lang/appliquer/:id/living-independently"
                     }
+                  },
+                  {
+                    "id": "$lang+/_public+/apply+/$id+/age",
+                    "file": "routes/$lang+/_public+/apply+/$id+/age.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/age",
+                      "fr": "/:lang/appliquer/:id/age"
+                    }
                   }
                 ]
               }

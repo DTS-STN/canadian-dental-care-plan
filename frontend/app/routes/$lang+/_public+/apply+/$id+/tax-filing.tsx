@@ -83,6 +83,12 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/file-taxes', params));
   }
 
+  const { typeOfApplication } = await applyRouteHelpers.loadState({ params, request, session });
+
+  if (typeOfApplication === 'personal and child') {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/age', params));
+  }
+
   return redirect(getPathById('$lang+/_public+/apply+/$id+/date-of-birth', params));
 }
 

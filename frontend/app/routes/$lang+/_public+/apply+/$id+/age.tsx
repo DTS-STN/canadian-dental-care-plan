@@ -11,8 +11,10 @@ import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
+import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
@@ -25,7 +27,12 @@ import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
-export type DateOfBirthState = string;
+export type AdultChildrenDateOfBirthState = string;
+enum AllChildrenUnder18Option {
+  No = 'no',
+  Yes = 'yes',
+}
+export type AllChildrenUnder18State = `${AllChildrenUnder18Option}`;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -45,7 +52,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.date-of-birth.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.dateOfBirth, editMode: state.editMode });
+  const { adultChildrenDateOfBirth, allChildrenUnder18 } = state;
+  return json({ id: state.id, csrfToken, meta, defaultState: { adultChildrenDateOfBirth, allChildrenUnder18 }, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -87,6 +95,9 @@ export async function action({ context: { session }, params, request }: ActionFu
         .int()
         .positive(),
       dateOfBirth: z.string(),
+      allChildrenUnder18: z.nativeEnum(AllChildrenUnder18Option, {
+        errorMap: () => ({ message: t('apply:eligibility.date-of-birth.adult-children-flow.error-message.child-age-required') }),
+      }),
     })
     .superRefine((val, ctx) => {
       // At this point the year, month and day should have been validated as positive integer
@@ -128,6 +139,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     dateOfBirthMonth: formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined,
     dateOfBirthDay: formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined,
     dateOfBirth: '',
+    allChildrenUnder18: formData.get('allChildrenUnder18'),
   };
 
   const parsedDataResult = dateOfBirthSchema.safeParse(data);
@@ -136,21 +148,26 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  await applyRouteHelpers.saveState({ params, request, session, state: { dateOfBirth: parsedDataResult.data.dateOfBirth } });
+  await applyRouteHelpers.saveState({ params, request, session, state: { adultChildrenDateOfBirth: parsedDataResult.data.dateOfBirth, allChildrenUnder18: parsedDataResult.data.allChildrenUnder18 } });
 
   const parseDateOfBirth = parse(parsedDataResult.data.dateOfBirth, 'yyyy-MM-dd', new Date());
   const age = differenceInYears(new Date(), parseDateOfBirth);
+  const allChildrenUnder18 = parsedDataResult.data.allChildrenUnder18;
+
+  if (age < 16 && allChildrenUnder18 === 'yes') {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/parent-or-guardian', params));
+  }
+
+  if ((age === 16 || age === 17) && allChildrenUnder18 === 'yes') {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/living-independently', params));
+  }
 
   if (age >= 18 && age < 65) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/disability-tax-credit', params));
   }
 
-  if (age >= 16 && age < 18) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/living-independently', params));
-  }
-
-  if (age < 16) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/parent-or-guardian', params));
+  if (age >= 65 && allChildrenUnder18 === 'no') {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/apply-for-yourself', params));
   }
 
   if (state.editMode) {
@@ -160,7 +177,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   return redirect(getPathById('$lang+/_public+/apply+/$id+/applicant-information', params));
 }
 
-export default function ApplyFlowDateOfBirth() {
+export default function AdultChildrenFlowAge() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
@@ -175,8 +192,9 @@ export default function ApplyFlowDateOfBirth() {
     if (fetcher.data?.errors.dateOfBirthMonth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', fetcher.data.errors.dateOfBirthMonth._errors[0]));
     if (fetcher.data?.errors.dateOfBirthDay?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', fetcher.data.errors.dateOfBirthDay._errors[0]));
     if (fetcher.data?.errors.dateOfBirthYear?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-year', fetcher.data.errors.dateOfBirthYear._errors[0]));
+    if (fetcher.data?.errors.allChildrenUnder18?._errors[0]) items.push(createErrorSummaryItem('input-radio-child-under-18-option-0', fetcher.data.errors.allChildrenUnder18._errors[0]));
     return items;
-  }, [fetcher.data?.errors.dateOfBirth?._errors, fetcher.data?.errors.dateOfBirthDay?._errors, fetcher.data?.errors.dateOfBirthMonth?._errors, fetcher.data?.errors.dateOfBirthYear?._errors]);
+  }, [fetcher.data?.errors.dateOfBirth?._errors, fetcher.data?.errors.dateOfBirthDay?._errors, fetcher.data?.errors.dateOfBirthMonth?._errors, fetcher.data?.errors.dateOfBirthYear?._errors, fetcher.data?.errors.allChildrenUnder18?._errors]);
 
   useEffect(() => {
     if (errorSummaryItems.length > 0) {
@@ -202,29 +220,46 @@ export default function ApplyFlowDateOfBirth() {
         <p className="mb-6" id="dob-desc">
           {t('apply:eligibility.date-of-birth.description')}
         </p>
-        <p className="mb-6 italic" id="form-instructions">
+        <p className="mb-2 italic" id="form-instructions">
           {t('apply:required-label')}
         </p>
         <fetcher.Form method="post" aria-describedby="dob-desc form-instructions" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <DatePickerField
-            id="date-of-birth"
-            names={{
-              day: 'dateOfBirthDay',
-              month: 'dateOfBirthMonth',
-              year: 'dateOfBirthYear',
-            }}
-            defaultValue={defaultState ?? ''}
-            legend={t('apply:eligibility.date-of-birth.form-instructions')}
-            errorMessages={{
-              all: fetcher.data?.errors.dateOfBirth?._errors[0],
-              year: fetcher.data?.errors.dateOfBirthYear?._errors[0],
-              month: fetcher.data?.errors.dateOfBirthMonth?._errors[0],
-              day: fetcher.data?.errors.dateOfBirthDay?._errors[0],
-            }}
-            required
-          />
-
+          <div className="mb-6 space-y-4">
+            <h2 className="text-xl font-bold">{t('apply:eligibility.date-of-birth.adult-children-flow.age-heading')}</h2>
+            <DatePickerField
+              id="date-of-birth"
+              names={{
+                day: 'dateOfBirthDay',
+                month: 'dateOfBirthMonth',
+                year: 'dateOfBirthYear',
+              }}
+              defaultValue={defaultState.adultChildrenDateOfBirth ?? ''}
+              legend={t('apply:eligibility.date-of-birth.form-instructions')}
+              errorMessages={{
+                all: fetcher.data?.errors.dateOfBirth?._errors[0],
+                year: fetcher.data?.errors.dateOfBirthYear?._errors[0],
+                month: fetcher.data?.errors.dateOfBirthMonth?._errors[0],
+                day: fetcher.data?.errors.dateOfBirthDay?._errors[0],
+              }}
+              required
+            />
+            <h2 className="text-xl font-bold">{t('apply:eligibility.date-of-birth.adult-children-flow.child-age-heading')}</h2>
+            <InputRadios
+              id="child-under-18"
+              name="allChildrenUnder18"
+              legend={t('apply:eligibility.date-of-birth.adult-children-flow.child-age-instruction')}
+              options={[
+                { value: AllChildrenUnder18Option.Yes, children: t('apply:eligibility.date-of-birth.adult-children-flow.yes'), defaultChecked: defaultState.allChildrenUnder18 === AllChildrenUnder18Option.Yes },
+                { value: AllChildrenUnder18Option.No, children: t('apply:eligibility.date-of-birth.adult-children-flow.no'), defaultChecked: defaultState.allChildrenUnder18 === AllChildrenUnder18Option.No },
+              ]}
+              errorMessage={fetcher.data?.errors.allChildrenUnder18?._errors[0]}
+              required
+            />
+            <Collapsible summary={t('apply:eligibility.date-of-birth.adult-children-flow.collapsible-content-summary')}>
+              <p>{t('apply:eligibility.date-of-birth.adult-children-flow.collapsible-content-detail')}</p>
+            </Collapsible>
+          </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Date of birth click">
