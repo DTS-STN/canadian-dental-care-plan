@@ -223,9 +223,16 @@
       "continue-btn": "Continue"
     },
     "date-of-birth": {
-      "page-title": "Date of birth",
+      "page-title": "Age",
       "description": "Applications for the Canadian Dental Care Plan will open in phases. Your date of birth determines when you can apply.",
+      "age-heading": "Your age",
+      "child-age-heading": "Your child(ren)'s age",
       "form-instructions": "Please select your date of birth",
+      "child-age-instruction": "Are all the children you are applying for under 18?",
+      "yes": "Yes",
+      "no": "No",
+      "collapsible-content-summary": "If your child is over 18 and has a Disability Tax Credit",
+      "collapsible-content-detail": "You must speak to a Service Canada representative to apply on behalf of your child. Please contact Service Canada by calling 1-833-537-4342.",
       "error-message": {
         "date-of-birth-day-number": "Day must be a number",
         "date-of-birth-day-required": "Date of birth must include a day",
@@ -234,7 +241,8 @@
         "date-of-birth-month-required": "Date of birth must include a month",
         "date-of-birth-valid": "Day must be valid for the given month and year",
         "date-of-birth-year-number": "Year must be a number, for example 1950",
-        "date-of-birth-year-required": "Date of birth must include a year"
+        "date-of-birth-year-required": "Date of birth must include a year",
+        "child-age-required": "Please indicate if all children are under 18"
       },
       "back-btn": "Back",
       "continue-btn": "Continue",

@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/applicant-information';
 import { CommunicationPreferencesState } from '~/routes/$lang+/_public+/apply+/$id+/communication-preference';
-import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
+import { AllChildrenUnder18State, DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
 import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/dental-insurance';
 import { DisabilityTaxCreditState } from '~/routes/$lang+/_public+/apply+/$id+/disability-tax-credit';
 import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits';
@@ -43,6 +43,7 @@ export interface ApplyState {
   readonly lastUpdatedOn: string;
   readonly disabilityTaxCredit?: DisabilityTaxCreditState;
   readonly livingIndependently?: LivingIndependentlyState;
+  readonly allChildrenUnder18?: AllChildrenUnder18State;
 }
 
 /**

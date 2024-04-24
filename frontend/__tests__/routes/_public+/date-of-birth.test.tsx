@@ -12,6 +12,7 @@ vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
     loadState: vi.fn().mockReturnValue({
       id: '123',
       dateOfBirth: '2000-01-01',
+      allChildrenUnder18: 'yes',
     }),
     saveState: vi.fn().mockReturnValue({
       headers: {
@@ -51,7 +52,10 @@ describe('_public.apply.id.date-of-birth', () => {
       expect(data).toMatchObject({
         id: '123',
         meta: {},
-        defaultState: '2000-01-01',
+        defaultState: {
+          dateOfBirth: '2000-01-01',
+          allChildrenUnder18: 'yes',
+        },
       });
     });
   });
@@ -76,6 +80,7 @@ describe('_public.apply.id.date-of-birth', () => {
       expect(data.errors.dateOfBirthYear?._errors.length).toBeGreaterThan(0);
       expect(data.errors.dateOfBirthMonth?._errors.length).toBeGreaterThan(0);
       expect(data.errors.dateOfBirthDay?._errors.length).toBeGreaterThan(0);
+      expect(data.errors.allChildrenUnder18?._errors.length).toBeGreaterThan(0);
     });
 
     it('should redirect to applicant information page if dob is 65 years or over', async () => {
@@ -87,11 +92,12 @@ describe('_public.apply.id.date-of-birth', () => {
       formData.append('dateOfBirthYear', '1959');
       formData.append('dateOfBirthMonth', '01');
       formData.append('dateOfBirthDay', '01');
+      formData.append('allChildrenUnder18', 'yes');
 
       vi.mocked(isValid).mockReturnValueOnce(true);
       vi.mocked(isPast).mockReturnValueOnce(true);
       vi.mocked(parse).mockReturnValueOnce(new Date(1959, 0, 1));
-      vi.mocked(differenceInYears).mockReturnValueOnce(65);
+      vi.mocked(differenceInYears).mockReturnValueOnce(65).mockReturnValueOnce(65);
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/date-of-birth', { method: 'POST', body: formData }),
@@ -112,6 +118,7 @@ describe('_public.apply.id.date-of-birth', () => {
       formData.append('dateOfBirthYear', '2000');
       formData.append('dateOfBirthMonth', '01');
       formData.append('dateOfBirthDay', '01');
+      formData.append('allChildrenUnder18', 'yes');
 
       vi.mocked(isValid).mockReturnValueOnce(true);
       vi.mocked(isPast).mockReturnValueOnce(true);
