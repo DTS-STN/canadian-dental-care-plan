@@ -55,7 +55,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const applicationStatusService = getApplicationStatusService();
   const lookupService = getLookupService();
 
-  const statusId = await applicationStatusService.getStatusId(userInfoToken.sin, personalInformation.clientNumber);
+  const statusId = await applicationStatusService.getStatusId({ sin: userInfoToken.sin, applicationCode: personalInformation.clientNumber });
   const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
   const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
 
