@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { AppLink } from '../app-link';
+import { Banner } from '../banner';
 import { Breadcrumbs } from '~/components/breadcrumbs';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '~/components/dropdown-menu';
 import { InlineLink } from '~/components/inline-link';
@@ -16,6 +17,7 @@ import { PageFooter } from '~/components/page-footer';
 import { PageHeaderBrand } from '~/components/page-header-brand';
 import { PageTitle } from '~/components/page-title';
 import { SkipNavigationLinks } from '~/components/skip-navigation-links';
+import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getClientEnv } from '~/utils/env-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -107,6 +109,7 @@ function PageHeader() {
   return (
     <header>
       <SkipNavigationLinks />
+      {useFeature('show-prototype-banner') && <Banner alert={t('gcweb:header.banner.alert')} description={t('gcweb:header.banner.desc')} />}
       <PageHeaderBrand />
       <section className="bg-gray-700 text-white">
         <div className="sm:container">
