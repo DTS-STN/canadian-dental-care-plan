@@ -19,6 +19,26 @@
       "preferred-language-required": "Sélectionnez la langue de communication préférée"
     }
   },
+  "manage": {
+    "page-title": "(FR) Manage CDCP email alerts",
+    "breadcrumbs": {
+      "subscribe": "(FR) Manage CDCP email alerts"
+    },
+    "email": "Adresse courriel",
+    "confirm-email": "Confirmer l'adresse courriel",
+    "preferred-language": "Quelle langue de communication préférez-vous?",
+    "button": {
+      "back": "Retour",
+      "save": "(FR) Save my changes"
+    },
+    "error-message": {
+      "email-match": "Les adresses courriel entrées ne concordent pas",
+      "email-required": "Confirmez l'adresse courriel",
+      "confirm-email-required": "Confirm email address ",
+      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
+      "preferred-language-required": "Sélectionnez la langue de communication préférée"
+    }
+  },
   "confirm": {
     "page-title": "(FR) Submission Confirmation",
     "breadcrumbs": {
