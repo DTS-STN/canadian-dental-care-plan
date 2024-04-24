@@ -68,7 +68,7 @@ export default function PersonalInformationIndex() {
   const userOrigin = useUserOrigin();
 
   return (
-    <div className="max-w-prose">
+    <div className="max-w-prose font-lato">
       {updatedInfo && (
         <ContextualAlert type="success">
           <h2 className="text-xl font-semibold">{t('personal-information:index.updated-information-success')}</h2>
