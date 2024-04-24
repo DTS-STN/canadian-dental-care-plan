@@ -68,7 +68,7 @@ export default function PersonalInformationIndex() {
   const userOrigin = useUserOrigin();
 
   return (
-    <>
+    <div className="max-w-prose">
       {updatedInfo && (
         <ContextualAlert type="success">
           <h2 className="text-xl font-semibold">{t('personal-information:index.updated-information-success')}</h2>
@@ -185,13 +185,13 @@ export default function PersonalInformationIndex() {
           </ButtonLink>
         </div>
       )}
-    </>
+    </div>
   );
 }
 
 function DescriptionListItem({ children, term }: { children: ReactNode; term: ReactNode }) {
   return (
-    <div className="space-y-6 border-transparent sm:py-6">
+    <div className="space-y-7 border-transparent sm:py-6">
       <dt className="text-3xl font-bold">{term}</dt>
       <dd className="mt-3 grid gap-6 sm:col-span-2 sm:mt-4">{children}</dd>
     </div>
@@ -200,7 +200,7 @@ function DescriptionListItem({ children, term }: { children: ReactNode; term: Re
 
 function DescriptionListItemTwoColumn({ children, term }: { children: ReactNode; term: ReactNode }) {
   return (
-    <div className="space-y-6 border-transparent sm:py-6">
+    <div className="space-y-7 border-transparent sm:py-6">
       <dt className="text-3xl font-bold">{term}</dt>
       <dd className="mt-3 grid gap-6 sm:col-span-2 sm:mt-4 md:grid-cols-2">{children}</dd>
     </div>
