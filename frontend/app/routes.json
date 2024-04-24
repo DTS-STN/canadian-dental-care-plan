@@ -254,7 +254,7 @@
                     "file": "routes/$lang+/_public+/apply+/$id+/contact-apply-child.tsx",
                     "paths": {
                       "en": "/:lang/apply/:id/contact-apply-child",
-                      "fr": "/:lang/appliquer/:id/contact-apply-child"
+                      "fr": "/:lang/appliquer/:id/contact-demande-enfant"
                     }
                   }
                 ]
