@@ -15,7 +15,7 @@ export const getApplicationStatusService = moize(createApplicationStatusService,
 
 function createApplicationStatusService() {
   // prettier-ignore
-  const { 
+  const {
     INTEROP_API_BASE_URI,
     INTEROP_API_SUBSCRIPTION_KEY,
     INTEROP_STATUS_CHECK_API_BASE_URI,
@@ -91,7 +91,10 @@ function createApplicationStatusService() {
       }),
     });
 
-    const statusResponse = statusResponseSchema.parse(await response.json());
+    const data = await response.json();
+    log.trace('Status id: [%j]', data);
+
+    const statusResponse = statusResponseSchema.parse(data);
     return statusResponse.BenefitApplication.BenefitApplicationStatus[0].ReferenceDataID;
   }
 
