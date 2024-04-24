@@ -43,7 +43,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/apply-for-yourself');
-  const applyRouteHelpers = getApplyRouteHelpers();
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -54,8 +53,6 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  await applyRouteHelpers.loadState({ params, request, session });
-  await applyRouteHelpers.clearState({ params, request, session });
   return redirect(getPathById('$lang+/_public+/apply+/$id+/applicant-information', params));
 }
 
