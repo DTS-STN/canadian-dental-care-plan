@@ -78,13 +78,14 @@ export default function ApplyFlowContactApplyChild() {
     sessionStorage.removeItem('flow.state');
   }
 
+  const noWrap = <span className="whitespace-nowrap" />;
   const serviceCanadaOfficeLink = <InlineLink to={t('apply:contact-apply-child.serviceCanadaOfficeLink')} />;
 
   return (
     <>
       <div className="mb-8 space-y-4">
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="apply:contact-apply-child.contact-service-canada" components={{ serviceCanadaOfficeLink }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="apply:contact-apply-child.contact-service-canada" components={{ serviceCanadaOfficeLink, noWrap }} />
         </p>
         <p>{t('apply:contact-apply-child.parent-guardian')}</p>
       </div>
