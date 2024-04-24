@@ -5,6 +5,7 @@ import { Link } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 
+import { Banner } from '../banner';
 import { Breadcrumbs } from '~/components/breadcrumbs';
 import { InlineLink } from '~/components/inline-link';
 import { PageDetails } from '~/components/page-details';
@@ -12,6 +13,7 @@ import { PageFooter } from '~/components/page-footer';
 import { PageHeaderBrand } from '~/components/page-header-brand';
 import { PageTitle } from '~/components/page-title';
 import { SkipNavigationLinks } from '~/components/skip-navigation-links';
+import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
@@ -48,9 +50,12 @@ function AppPageTitle() {
 }
 
 function PageHeader() {
+  const { t } = useTranslation(i18nNamespaces);
+
   return (
     <header className="border-b-[3px] border-slate-700 print:hidden">
       <SkipNavigationLinks />
+      {useFeature('show-prototype-banner') && <Banner alert={t('gcweb:header.banner.alert')} description={t('gcweb:header.banner.desc')} />}
       <PageHeaderBrand />
     </header>
   );
