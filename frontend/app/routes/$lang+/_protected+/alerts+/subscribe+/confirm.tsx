@@ -10,10 +10,12 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { InputField } from '~/components/input-field';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
+import { getSubscriptionService } from '~/services/subscription-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';
@@ -44,6 +46,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:confirm.page-title') }) };
 
   instrumentationService.countHttpStatus('alerts.confirm', 302);
+
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
+  console.debug('ALERt SUBSCRIPTIONS!!! ::: ' + JSON.stringify(alertSubscription, null, 2));
+
   return json({ csrfToken, meta }); //TODO get the language and email address entered by the user when they entered their information on the index route...
 }
 

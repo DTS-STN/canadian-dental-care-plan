@@ -14,6 +14,11 @@ const subscriptionApiSchema = z.object({
   preferredLanguage: z.string(),
 });
 
+const validateSubscriptionSchema = z.object({
+  email: z.string(),
+  confirmationCode: z.string(),
+});
+
 /**
  * Server-side MSW mocks for the subscription API.
  */
@@ -73,6 +78,26 @@ export function getSubscriptionApiMockHandlers() {
       }
 
       return HttpResponse.text(null, { status: 204 });
+    }),
+    //MOCK TO VALIDATE THE CONFIRMATION CODE VS THE ONE ENTERED BY THE USER
+    http.put('https://api.example.com/v1/users/codes/verify', async ({ params, request }) => {
+      log.debug('Handling request for [%s]', request.url);
+
+      const requestBody = await request.json();
+      const validateSubscriptionSchemaData = validateSubscriptionSchema.safeParse(requestBody);
+
+      if (!validateSubscriptionSchemaData.success) {
+        throw new HttpResponse(null, { status: 400 });
+      }
+      const subscriptionConfirmationCodesEntities = db.subscriptionConfirmationCode.findMany({
+        where: { email: { equals: validateSubscriptionSchemaData.data?.email } },
+      });
+
+      //if (!subscriptionConfirmationCodesEntities) {
+      //}
+      return HttpResponse.json(subscriptionConfirmationCodesEntities);
+
+      //anything else, return valid
     }),
   ];
 }

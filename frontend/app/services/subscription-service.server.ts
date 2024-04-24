@@ -102,5 +102,27 @@ function createSubscriptionService() {
     }
   }
 
-  return { getSubscription, updateSubscription };
+  async function validateConfirmationCode(subscription: SubscriptionInfo, enteredConfirmationCode: string) {
+    const auditService = getAuditService();
+    const instrumentationService = getInstrumentationService();
+    const userSin = subscription.sin;
+    auditService.audit('alert-subscription.validate', { userSin });
+
+    const dataToPass = {
+      email: subscription.email,
+      confirmationCode: enteredConfirmationCode,
+    };
+    // TODO: "IT-Security won't like SIN being passed as identifier"
+    // TODO: add CDCP_API_BASE_URI
+    const url = new URL(`https://api.example.com/v1/users/codes/verify`);
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToPass),
+    });
+  }
+
+  return { getSubscription, updateSubscription, validateConfirmationCode };
 }

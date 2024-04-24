@@ -43,6 +43,13 @@ const db = factory({
     preferredLanguage: String,
     alertType: String,
   },
+
+  subscriptionConfirmationCode: {
+    id: primaryKey(faker.string.uuid),
+    email: String,
+    confirmationCode: String,
+    expiryDate: () => faker.date.future({ years: 1 }),
+  },
 });
 
 db.personalInformation.create({
@@ -118,6 +125,20 @@ db.subscription.create({
   subscribed: true,
   preferredLanguage: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
   alertType: 'ei',
+});
+
+db.subscriptionConfirmationCode.create({
+  id: '0000001',
+  email: 'user@example.com',
+  confirmationCode: '1001',
+  expiryDate: new Date(+2),
+});
+
+db.subscriptionConfirmationCode.create({
+  id: '0000002',
+  email: 'tester@example.com',
+  confirmationCode: '2002',
+  expiryDate: new Date('2024-01-01'),
 });
 
 export { db };
