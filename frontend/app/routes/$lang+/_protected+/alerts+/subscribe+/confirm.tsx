@@ -2,7 +2,6 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { Console } from 'console';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -58,11 +57,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const alertSubscription = session.get('alertSubscription');
+  //const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  //const alertSubscription = session.get('alertSubscription');
   const action = formData.get('action');
   const instrumentationService = getInstrumentationService();
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  //const t = await getFixedT(request, handle.i18nNamespaces);
   const formDataSchema = z.object({
     confirmationCode: z.string().trim().max(100).optional(),
   });

@@ -90,24 +90,24 @@ export function getSubscriptionApiMockHandlers() {
         throw new HttpResponse(null, { status: 400 });
       }
       const subscriptionConfirmationCodesEntities = db.subscriptionConfirmationCode.findMany({
-        where: { email: { equals: validateSubscriptionSchemaData.data?.email } },
+        where: { email: { equals: validateSubscriptionSchemaData.data.email } },
       });
 
-      if (!subscriptionConfirmationCodesEntities) {
+      if (subscriptionConfirmationCodesEntities.length == 0) {
         return HttpResponse.text('No confirmation code for this user', { status: 200 });
       }
 
       const latestConfirmCode = subscriptionConfirmationCodesEntities.reduce((prev, current) => (prev.createdDate > current.createdDate ? prev : current));
 
-      if (latestConfirmCode.confirmationCode == validateSubscriptionSchemaData.data?.confirmationCode && timeEntered < latestConfirmCode.expiryDate) {
+      if (latestConfirmCode.confirmationCode == validateSubscriptionSchemaData.data.confirmationCode && timeEntered < latestConfirmCode.expiryDate) {
         return HttpResponse.text('Success', { status: 200 });
       }
-      if (latestConfirmCode.confirmationCode == validateSubscriptionSchemaData.data?.confirmationCode && timeEntered > latestConfirmCode.expiryDate) {
+      if (latestConfirmCode.confirmationCode == validateSubscriptionSchemaData.data.confirmationCode && timeEntered > latestConfirmCode.expiryDate) {
         //Code expired
         return HttpResponse.text('Code has expired, request a new one', { status: 200 });
       }
 
-      //anything else, return valid
+      //There is at least 1 confirmation code and the code entered by the user does not match it..
       return HttpResponse.text('No matching code found for this user', { status: 200 });
     }),
   ];

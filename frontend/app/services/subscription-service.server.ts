@@ -122,6 +122,8 @@ function createSubscriptionService() {
       },
       body: JSON.stringify(dataToPass),
     });
+
+    instrumentationService.countHttpStatus('http.client.cdcp-api.alert-confirm.posts', response.status);
     if (!response.ok) {
       log.error('%j', {
         message: 'Failed to update data',
