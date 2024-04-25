@@ -222,10 +222,10 @@ export default function StatusChecker() {
     fetcher.submit(formData, { method: 'POST' });
   }
 
-  const hcaptchaTermsOfService = <InlineLink to={t('status:links.hcaptcha')} className="external-link font-lato font-semibold" target="_blank" />;
-  const microsoftDataPrivacyPolicy = <InlineLink to={t('status:links.microsoft-data-privacy-policy')} className="external-link font-lato font-semibold" target="_blank" />;
-  const microsoftServiceAgreement = <InlineLink to={t('status:links.microsoft-service-agreement')} className="external-link font-lato font-semibold" target="_blank" />;
-  const fileacomplaint = <InlineLink to={t('status:links.file-complaint')} className="external-link font-lato font-semibold" target="_blank" />;
+  const hcaptchaTermsOfService = <InlineLink to={t('status:links.hcaptcha')} />;
+  const microsoftDataPrivacyPolicy = <InlineLink to={t('status:links.microsoft-data-privacy-policy')} />;
+  const microsoftServiceAgreement = <InlineLink to={t('status:links.microsoft-service-agreement')} />;
+  const fileacomplaint = <InlineLink to={t('status:links.file-complaint')} />;
 
   const errorSummaryId = 'error-summary';
 
