@@ -102,14 +102,14 @@ function createSubscriptionService() {
     }
   }
 
-  async function validateConfirmationCode(subscription: SubscriptionInfo, enteredConfirmationCode: string) {
+  async function validateConfirmationCode(userEmail: string, enteredConfirmationCode: string, sin: string) {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
-    const userSin = subscription.sin;
-    auditService.audit('alert-subscription.validate', { userSin });
+
+    auditService.audit('alert-subscription.validate', { sin });
 
     const dataToPass = {
-      email: subscription.email,
+      email: userEmail,
       confirmationCode: enteredConfirmationCode,
     };
     // TODO: "IT-Security won't like SIN being passed as identifier"
@@ -122,6 +122,19 @@ function createSubscriptionService() {
       },
       body: JSON.stringify(dataToPass),
     });
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed to update data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
+
+    return response;
   }
 
   return { getSubscription, updateSubscription, validateConfirmationCode };

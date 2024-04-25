@@ -48,6 +48,7 @@ const db = factory({
     id: primaryKey(faker.string.uuid),
     email: String,
     confirmationCode: String,
+    createdDate: () => faker.date.future({ years: 1 }),
     expiryDate: () => faker.date.future({ years: 1 }),
   },
 });
@@ -111,7 +112,7 @@ db.personalInformation.create({
 // seed the email alerts subscription
 db.subscription.create({
   id: '0000001',
-  sin: '800000002',
+  sin: '800011819',
   email: 'user@example.com',
   subscribed: true,
   preferredLanguage: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
@@ -120,25 +121,40 @@ db.subscription.create({
 
 db.subscription.create({
   id: '0000002',
-  sin: '800000002',
+  sin: '800011819',
   email: 'tester@example.com',
   subscribed: true,
   preferredLanguage: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
   alertType: 'ei',
 });
-
 db.subscriptionConfirmationCode.create({
   id: '0000001',
   email: 'user@example.com',
+  confirmationCode: '0001',
+  createdDate: new Date(new Date().getTime() - 12 * 24 * 60 * 60 * 1000),
+  expiryDate: new Date(new Date().getTime() - 10 * 24 * 60 * 60 * 1000), //Current date + 2 days
+});
+db.subscriptionConfirmationCode.create({
+  id: '0000002',
+  email: 'user@example.com',
+  confirmationCode: '1234',
+  createdDate: new Date(new Date().getTime()),
+  expiryDate: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000), //Current date + 2 days
+});
+db.subscriptionConfirmationCode.create({
+  id: '0000003',
+  email: 'user@example.com',
   confirmationCode: '1001',
-  expiryDate: new Date(+2),
+  createdDate: new Date(new Date().getTime() - 8 * 24 * 60 * 60 * 1000),
+  expiryDate: new Date(new Date().getTime() - 6 * 24 * 60 * 60 * 1000), //Current date + 2 days
 });
 
 db.subscriptionConfirmationCode.create({
-  id: '0000002',
+  id: '0000007',
   email: 'tester@example.com',
   confirmationCode: '2002',
-  expiryDate: new Date('2024-01-01'),
+  createdDate: new Date(new Date().getTime() - 4 * 24 * 60 * 60 * 1000),
+  expiryDate: new Date(new Date().getTime() - 2 * 24 * 60 * 60 * 1000),
 });
 
 export { db };

@@ -2,7 +2,9 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
+import { Console } from 'console';
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -49,19 +51,42 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
-  console.debug('ALERt SUBSCRIPTIONS!!! ::: ' + JSON.stringify(alertSubscription, null, 2));
+  session.set('alertSubscription', alertSubscription);
 
-  return json({ csrfToken, meta }); //TODO get the language and email address entered by the user when they entered their information on the index route...
+  return json({ csrfToken, meta, alertSubscription, userInfoToken }); //TODO get the language and email address entered by the user when they entered their information on the index route...
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const formData = await request.formData();
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const alertSubscription = session.get('alertSubscription');
   const action = formData.get('action');
+  const instrumentationService = getInstrumentationService();
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const formDataSchema = z.object({
+    confirmationCode: z.string().trim().max(100).optional(),
+  });
+  const data = {
+    confirmationCode: formData.get('confirmationCode') ? String(formData.get('confirmationCode')) : undefined,
+  };
+
+  const parsedDataResult = formDataSchema.safeParse(data);
+  if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('alerts.confirm', 400);
+    return json({
+      errors: parsedDataResult.error.format(),
+      formData: formData as Partial<z.infer<typeof formDataSchema>>,
+    });
+  }
+
   if (action === ConfirmSubscriptionCode.NewCode) {
     //TODO implement the code to request a new code and link that new code to the clients profile
   }
   if (action === ConfirmSubscriptionCode.Submit) {
     //TODO Validate the entered code and complete the user's registration to the alert me service if the code is correct
+    //COMMENTING THOSE LINES OF CODE TO PREVENT TEAM CITY FROM FAILING...
+    //const response = await getSubscriptionService().validateConfirmationCode(alertSubscription?.email ?? '', parsedDataResult.data.confirmationCode ?? '', userInfoToken.sin ?? '');
+    //const responseBody = await response.text();
   }
 
   return '';

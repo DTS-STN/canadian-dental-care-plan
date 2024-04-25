@@ -80,12 +80,12 @@ export function getSubscriptionApiMockHandlers() {
       return HttpResponse.text(null, { status: 204 });
     }),
     //MOCK TO VALIDATE THE CONFIRMATION CODE VS THE ONE ENTERED BY THE USER
-    http.put('https://api.example.com/v1/users/codes/verify', async ({ params, request }) => {
+    http.post('https://api.example.com/v1/users/codes/verify', async ({ params, request }) => {
       log.debug('Handling request for [%s]', request.url);
-
+      const timeEntered = new Date();
       const requestBody = await request.json();
       const validateSubscriptionSchemaData = validateSubscriptionSchema.safeParse(requestBody);
-
+      log.debug('validateSubscriptionSchemaData !!! ::: ' + JSON.stringify(validateSubscriptionSchemaData, null, 2));
       if (!validateSubscriptionSchemaData.success) {
         throw new HttpResponse(null, { status: 400 });
       }
@@ -93,11 +93,22 @@ export function getSubscriptionApiMockHandlers() {
         where: { email: { equals: validateSubscriptionSchemaData.data?.email } },
       });
 
-      //if (!subscriptionConfirmationCodesEntities) {
-      //}
-      return HttpResponse.json(subscriptionConfirmationCodesEntities);
+      if (!subscriptionConfirmationCodesEntities) {
+        return HttpResponse.text('No confirmation code for this user', { status: 200 });
+      }
+
+      const latestConfirmCode = subscriptionConfirmationCodesEntities.reduce((prev, current) => (prev.createdDate > current.createdDate ? prev : current));
+
+      if (latestConfirmCode.confirmationCode == validateSubscriptionSchemaData.data?.confirmationCode && timeEntered < latestConfirmCode.expiryDate) {
+        return HttpResponse.text('Success', { status: 200 });
+      }
+      if (latestConfirmCode.confirmationCode == validateSubscriptionSchemaData.data?.confirmationCode && timeEntered > latestConfirmCode.expiryDate) {
+        //Code expired
+        return HttpResponse.text('Code has expired, request a new one', { status: 200 });
+      }
 
       //anything else, return valid
+      return HttpResponse.text('No matching code found for this user', { status: 200 });
     }),
   ];
 }
