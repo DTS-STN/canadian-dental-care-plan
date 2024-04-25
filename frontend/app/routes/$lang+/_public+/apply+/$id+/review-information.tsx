@@ -61,7 +61,6 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const applyRouteHelpers = getApplyRouteHelpers();
   const lookupService = getLookupService();
-  const { CANADA_COUNTRY_ID } = getEnv();
 
   const state = await applyRouteHelpers.loadState({ params, request, session });
   applyRouteHelpers.validateStateForReview({ params, state });
@@ -135,7 +134,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     postalCode: state.personalInformation.mailingPostalCode,
     country: countryMailing,
     apartment: state.personalInformation.mailingApartment,
-    isCanadianAddress: state.personalInformation.mailingCountry === CANADA_COUNTRY_ID,
   };
 
   const homeAddressInfo = {
@@ -145,7 +143,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     postalCode: state.personalInformation.homePostalCode,
     country: countryHome,
     apartment: state.personalInformation.mailingApartment,
-    isCanadianAddress: state.personalInformation.homeCountry === CANADA_COUNTRY_ID,
   };
 
   const dentalInsurance = state.dentalInsurance;
@@ -406,7 +403,6 @@ export default function ReviewInformation() {
                   postalZipCode={mailingAddressInfo.postalCode}
                   country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
                   apartment={mailingAddressInfo.apartment}
-                  isCanadianAddress={mailingAddressInfo.isCanadianAddress}
                   altFormat={true}
                 />
                 <p className="mt-4">
@@ -423,7 +419,6 @@ export default function ReviewInformation() {
                   postalZipCode={homeAddressInfo.postalCode}
                   country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
                   apartment={homeAddressInfo.apartment}
-                  isCanadianAddress={homeAddressInfo.isCanadianAddress}
                   altFormat={true}
                 />
                 <p className="mt-4">
