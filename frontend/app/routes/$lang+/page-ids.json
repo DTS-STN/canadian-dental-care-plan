@@ -17,11 +17,12 @@
     },
     "alerts": {
       "subscribe": "CDCP-PROT-0016",
-      "manage": "CDCP-PROT-0017",
-      "confirm": "CDCP-PROT-0018"
+      "unsubscribe": "CDCP-PROT-0017",
+      "manage": "CDCP-PROT-0018",
+      "confirm": "CDCP-PROT-0019"
     },
     "status-check": {
-      "index": "CDCP-PROT-0019"
+      "index": "CDCP-PROT-0020"
     },
     "dataUnavailable": "CDCP-PROT-0099"
   },

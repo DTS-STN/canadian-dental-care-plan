@@ -27,6 +27,8 @@
     "email": "Adresse courriel",
     "confirm-email": "Confirmer l'adresse courriel",
     "preferred-language": "Quelle langue de communication préférez-vous?",
+    "unsubscribe": "(FR) Unsubscribe from CDCP email alert",
+    "unsubscribe-note": "(FR) Select <unsubscribelink>Unsubscribe from CDCP email alerts</unsubscribelink> to complete the process to no longer receive emails when important new CDCP claim information is available.",
     "button": {
       "back": "Retour",
       "save": "(FR) Save my changes"
@@ -37,6 +39,21 @@
       "confirm-email-required": "Confirm email address ",
       "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
       "preferred-language-required": "Sélectionnez la langue de communication préférée"
+    }
+  },
+  "unsubscribe": {
+    "page-title": "(FR) Unsubscribe from CDCP email alerts",
+    "breadcrumbs": {
+      "subscribe": "(FR) Unsubscribe from CDCP email alerts"
+    },
+    "note": "(FR) If you unsubscribe from CDCP email alerts, you will no longer receive emails when important new CDCP information is available. Email address to be cancelled is: ",
+    "agree": "(FR) I Agree",
+    "button": {
+      "unsubscribe": "(FR) Unsubscribe from CDCP email alerts",
+      "cancel": "Annuler"
+    },
+    "error-message": {
+      "agree-required": "(FR) Check \"I Agree\" piror to select Unsubscribe from CDCP email alerts."
     }
   },
   "confirm": {

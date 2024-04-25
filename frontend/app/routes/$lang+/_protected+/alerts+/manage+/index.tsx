@@ -2,15 +2,16 @@ import { useEffect, useMemo } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { InlineLink } from '~/components/inline-link';
 import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
 import { getAuditService } from '~/services/audit-service.server';
@@ -120,6 +121,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function AlertsSubscribeEdit() {
+  const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, preferredLanguages, alertSubscription } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
@@ -142,6 +144,8 @@ export default function AlertsSubscribeEdit() {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
   }, [errorMessages]);
+
+  const unsubscribelink = <InlineLink routeId="$lang+/_protected+/alerts+/unsubscribe+/index" params={params} />;
 
   return (
     <>
@@ -186,6 +190,13 @@ export default function AlertsSubscribeEdit() {
           </Button>
         </div>
       </fetcher.Form>
+
+      <div className="space-y-4">
+        <h2 className="mt-8 text-3xl font-semibold">{t('alerts:manage.unsubscribe')}</h2>
+        <p>
+          <Trans ns={handle.i18nNamespaces} i18nKey="alerts:manage.unsubscribe-note" components={{ unsubscribelink }} />
+        </p>
+      </div>
     </>
   );
 }
