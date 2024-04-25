@@ -191,7 +191,7 @@ export default function PersonalInformationIndex() {
 
 function DescriptionListItem({ children, term }: { children: ReactNode; term: ReactNode }) {
   return (
-    <div className="border-transparent sm:py-6">
+    <div className="border-transparent py-6">
       <dt className="text-3xl font-bold">{term}</dt>
       <dd className="mt-3 grid gap-6 sm:col-span-2 sm:mt-4">{children}</dd>
     </div>
@@ -200,7 +200,7 @@ function DescriptionListItem({ children, term }: { children: ReactNode; term: Re
 
 function DescriptionListItemTwoColumn({ children, term }: { children: ReactNode; term: ReactNode }) {
   return (
-    <div className="border-transparent sm:py-6">
+    <div className="border-transparent py-6">
       <dt className="text-3xl font-bold">{term}</dt>
       <dd className="mt-3 grid gap-6 sm:col-span-2 sm:mt-4 md:grid-cols-2">{children}</dd>
     </div>
