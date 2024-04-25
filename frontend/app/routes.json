@@ -448,6 +448,20 @@
                 ]
               },
               {
+                "id": "$lang+/_protected+/alerts+/unsubscribe+/_route",
+                "file": "routes/$lang+/_protected+/alerts+/unsubscribe+/_route.tsx",
+                "children": [
+                  {
+                    "id": "$lang+/_protected+/alerts+/unsubscribe+/index",
+                    "file": "routes/$lang+/_protected+/alerts+/unsubscribe+/index.tsx",
+                    "paths": {
+                      "en": "/:lang/alerts/unsubscribe",
+                      "fr": "/:lang/alertes/désabonner"
+                    }
+                  }
+                ]
+              },
+              {
                 "id": "$lang+/_protected+/alerts+/manage+/_route",
                 "file": "routes/$lang+/_protected+/alerts+/manage+/_route.tsx",
                 "children": [
