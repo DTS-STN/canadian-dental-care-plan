@@ -62,11 +62,11 @@ export default function ApplyIndex() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const canadaTermsConditions = <InlineLink to={t('apply:terms-and-conditions.links.canada-ca-terms-and-conditions')} />;
-  const fileacomplaint = <InlineLink to={t('apply:terms-and-conditions.links.file-complaint')} />;
-  const hcaptchaTermsOfService = <InlineLink to={t('apply:terms-and-conditions.links.hcaptcha')} />;
-  const infosource = <InlineLink to={t('apply:terms-and-conditions.links.info-source')} />;
-  const microsoftDataPrivacyPolicy = <InlineLink to={t('apply:terms-and-conditions.links.microsoft-data-privacy-policy')} />;
+  const canadaTermsConditions = <InlineLink to={t('apply:terms-and-conditions.links.canada-ca-terms-and-conditions')} className="external-link font-lato font-semibold" target="_blank" />;
+  const fileacomplaint = <InlineLink to={t('apply:terms-and-conditions.links.file-complaint')} className="external-link font-lato font-semibold" target="_blank" />;
+  const hcaptchaTermsOfService = <InlineLink to={t('apply:terms-and-conditions.links.hcaptcha')} className="external-link font-lato font-semibold" target="_blank" />;
+  const infosource = <InlineLink to={t('apply:terms-and-conditions.links.info-source')} className="external-link font-lato font-semibold" target="_blank" />;
+  const microsoftDataPrivacyPolicy = <InlineLink to={t('apply:terms-and-conditions.links.microsoft-data-privacy-policy')} className="external-link font-lato font-semibold" target="_blank" />;
 
   return (
     <div className="max-w-prose">
