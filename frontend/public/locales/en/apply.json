@@ -1,4 +1,12 @@
 {
+  "apply-children": {
+    "page-title": "Apply for your child(ren)",
+    "not-eligible": "You are not currently eligible to apply for the Canadian Dental Care Plan.",
+    "still-apply": "However, you can still submit an application for you child(ren).",
+    "back-btn": "Back",
+    "continue-btn": "Proceed to apply for your child(ren)"
+  },
+
   "disability-tax-credit": {
     "page-title": "Disability tax credit",
     "non-refundable": "The disability tax credit (DTC) is a non-refundable federal tax credit that helps people with disabilities, or their supporting family member, reduce the amount of income tax they may have to pay.",

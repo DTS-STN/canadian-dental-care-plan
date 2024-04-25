@@ -58,6 +58,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/disability-tax-credit');
+  const state = loadApplyAdultState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -82,6 +83,16 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   saveApplyAdultState({ params, request, session, state: { disabilityTaxCredit: parsedDataResult.data } });
+
+  const parseDateOfBirth = parse(state.adultState.dateOfBirth ?? '', 'yyyy-MM-dd', new Date());
+  const age = differenceInYears(new Date(), parseDateOfBirth);
+  if (age < 18 || age > 64) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/date-of-birth', params));
+  }
+
+  if (parsedDataResult.data === DisabilityTaxCreditOption.No && state.adultState.allChildrenUnder18) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/apply-children', params));
+  }
 
   if (parsedDataResult.data === DisabilityTaxCreditOption.No) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/dob-eligibility', params));
