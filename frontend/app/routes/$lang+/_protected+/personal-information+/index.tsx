@@ -15,7 +15,7 @@ import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-inf
 import { getAuditService } from '~/services/audit-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { featureEnabled, getEnv } from '~/utils/env.server';
+import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -50,17 +50,16 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const countryList = await getLookupService().getAllCountries();
   const regionList = await getLookupService().getAllRegions();
   const preferredLanguage = personalInformation.preferredLanguageId ? await getLookupService().getPreferredLanguage(personalInformation.preferredLanguageId) : undefined;
-  const { CANADA_COUNTRY_ID } = getEnv();
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };
   const updatedInfo = session.get('personal-info-updated');
   session.unset('personal-info-updated');
-  return json({ preferredLanguage, countryList, personalInformation, meta, regionList, updatedInfo, CANADA_COUNTRY_ID });
+  return json({ preferredLanguage, countryList, personalInformation, meta, regionList, updatedInfo });
 }
 
 export default function PersonalInformationIndex() {
-  const { personalInformation, preferredLanguage, countryList, regionList, updatedInfo, CANADA_COUNTRY_ID } = useLoaderData<typeof loader>();
+  const { personalInformation, preferredLanguage, countryList, regionList, updatedInfo } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const params = useParams();
 
@@ -91,7 +90,6 @@ export default function PersonalInformationIndex() {
               provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.homeAddress!.provinceTerritoryStateId)?.abbr}
               postalZipCode={personalInformation.homeAddress.postalCode}
               country={countryList.find((country) => country.countryId === personalInformation.homeAddress!.countryId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
-              isCanadianAddress={personalInformation.homeAddress.countryId === CANADA_COUNTRY_ID}
             />
           ) : (
             <p>{t('personal-information:index.no-address-on-file')}</p>
@@ -112,7 +110,6 @@ export default function PersonalInformationIndex() {
               provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.mailingAddress!.provinceTerritoryStateId)?.abbr}
               postalZipCode={personalInformation.mailingAddress.postalCode}
               country={countryList.find((country) => country.countryId === personalInformation.mailingAddress!.countryId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ''}
-              isCanadianAddress={personalInformation.mailingAddress.countryId === CANADA_COUNTRY_ID}
             />
           ) : (
             <p>{t('personal-information:index.no-address-on-file')}</p>
