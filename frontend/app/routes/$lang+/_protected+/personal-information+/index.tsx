@@ -111,7 +111,7 @@ export default function PersonalInformationIndex() {
                   provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.mailingAddress!.provinceTerritoryStateId)?.abbr}
                   postalZipCode={personalInformation.mailingAddress.postalCode}
                   country={countryList.find((country) => country.countryId === personalInformation.mailingAddress!.countryId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ''}
-                  isCanadianAddress={personalInformation.homeAddress.countryId === CANADA_COUNTRY_ID}
+                  isCanadianAddress={personalInformation.mailingAddress.countryId === CANADA_COUNTRY_ID}
                 />
               ) : (
                 <p>{t('personal-information:index.no-address-on-file')}</p>
@@ -191,7 +191,7 @@ export default function PersonalInformationIndex() {
 
 function DescriptionListItem({ children, term }: { children: ReactNode; term: ReactNode }) {
   return (
-    <div className="space-y-7 border-transparent sm:py-6">
+    <div className="border-transparent sm:py-6">
       <dt className="text-3xl font-bold">{term}</dt>
       <dd className="mt-3 grid gap-6 sm:col-span-2 sm:mt-4">{children}</dd>
     </div>
@@ -200,7 +200,7 @@ function DescriptionListItem({ children, term }: { children: ReactNode; term: Re
 
 function DescriptionListItemTwoColumn({ children, term }: { children: ReactNode; term: ReactNode }) {
   return (
-    <div className="space-y-7 border-transparent sm:py-6">
+    <div className="border-transparent sm:py-6">
       <dt className="text-3xl font-bold">{term}</dt>
       <dd className="mt-3 grid gap-6 sm:col-span-2 sm:mt-4 md:grid-cols-2">{children}</dd>
     </div>
