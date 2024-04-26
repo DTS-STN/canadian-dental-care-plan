@@ -67,6 +67,7 @@ export default function ApplyIndex() {
   const hcaptchaTermsOfService = <InlineLink to={t('apply:terms-and-conditions.links.hcaptcha')} className="external-link font-lato font-semibold" target="_blank" />;
   const infosource = <InlineLink to={t('apply:terms-and-conditions.links.info-source')} className="external-link font-lato font-semibold" target="_blank" />;
   const microsoftDataPrivacyPolicy = <InlineLink to={t('apply:terms-and-conditions.links.microsoft-data-privacy-policy')} className="external-link font-lato font-semibold" target="_blank" />;
+  const sunlife = <InlineLink to={t('apply:terms-and-conditions.links.sun-life')} className="external-link font-lato font-semibold" target="_blank" />;
 
   return (
     <div className="max-w-prose">
@@ -130,6 +131,9 @@ export default function ApplyIndex() {
             <p>{t('apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.esdc-personal-information-sharing')}</p>
             <p>{t('apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.benefits-administration-data-disclosure')}</p>
             <p>{t('apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.esdc-information-usage-policy')}</p>
+            <p>
+              <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.sun-life-authorization" components={{ sunlife }} />
+            </p>
 
             <h2 className="font-bold">{t('apply:terms-and-conditions.privacy-notice-statement.what-happens-if-you-dont-give-us-your-information.heading')} </h2>
             <p>{t('apply:terms-and-conditions.privacy-notice-statement.what-happens-if-you-dont-give-us-your-information.text')}</p>
