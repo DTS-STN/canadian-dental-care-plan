@@ -18,7 +18,12 @@ const validateSubscriptionSchema = z.object({
   email: z.string(),
   confirmationCode: z.string(),
 });
-
+enum httpResponseMessages {
+  ValidCodeSuccess = 'Valid code - Success',
+  NoCodeFound = 'No confirmation code for this user',
+  CodeExpired = 'Code has expired, request a new one',
+  CodeMismatch = 'Code entered does not match the valid confirmation code',
+}
 /**
  * Server-side MSW mocks for the subscription API.
  */
@@ -85,7 +90,6 @@ export function getSubscriptionApiMockHandlers() {
       const timeEntered = new Date();
       const requestBody = await request.json();
       const validateSubscriptionSchemaData = validateSubscriptionSchema.safeParse(requestBody);
-      log.debug('validateSubscriptionSchemaData !!! ::: ' + JSON.stringify(validateSubscriptionSchemaData, null, 2));
       if (!validateSubscriptionSchemaData.success) {
         throw new HttpResponse(null, { status: 400 });
       }
@@ -94,21 +98,21 @@ export function getSubscriptionApiMockHandlers() {
       });
 
       if (subscriptionConfirmationCodesEntities.length == 0) {
-        return HttpResponse.text('No confirmation code for this user', { status: 200 });
+        return HttpResponse.text(httpResponseMessages.NoCodeFound, { status: 200 });
       }
 
       const latestConfirmCode = subscriptionConfirmationCodesEntities.reduce((prev, current) => (prev.createdDate > current.createdDate ? prev : current));
 
       if (latestConfirmCode.confirmationCode == validateSubscriptionSchemaData.data.confirmationCode && timeEntered < latestConfirmCode.expiryDate) {
-        return HttpResponse.text('Success', { status: 200 });
+        return HttpResponse.text(httpResponseMessages.ValidCodeSuccess, { status: 200 });
       }
       if (latestConfirmCode.confirmationCode == validateSubscriptionSchemaData.data.confirmationCode && timeEntered > latestConfirmCode.expiryDate) {
         //Code expired
-        return HttpResponse.text('Code has expired, request a new one', { status: 200 });
+        return HttpResponse.text(httpResponseMessages.CodeExpired, { status: 200 });
       }
 
       //There is at least 1 confirmation code and the code entered by the user does not match it..
-      return HttpResponse.text('No matching code found for this user', { status: 200 });
+      return HttpResponse.text(httpResponseMessages.CodeMismatch, { status: 200 });
     }),
   ];
 }
