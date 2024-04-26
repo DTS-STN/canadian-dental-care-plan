@@ -3,7 +3,7 @@ import { createMemorySessionStorage, redirect } from '@remix-run/node';
 import { differenceInYears, isPast, isValid, parse } from 'date-fns';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
+import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/adult/date-of-birth';
 
 vi.mock('date-fns');
 
@@ -27,7 +27,7 @@ vi.mock('~/utils/locale-utils.server', async (importOriginal) => {
   return {
     ...actual,
     getFixedT: vi.fn().mockResolvedValue(vi.fn()),
-    redirectWithLocale: vi.fn().mockResolvedValueOnce(redirect('/en/apply/123/applicant-information')).mockResolvedValueOnce(redirect('/en/apply/123/dob-eligibility')),
+    redirectWithLocale: vi.fn().mockResolvedValueOnce(redirect('/en/apply/123/adult/applicant-information')).mockResolvedValueOnce(redirect('/en/apply/123/adult/dob-eligibility')),
   };
 });
 
@@ -42,7 +42,7 @@ describe('_public.apply.id.date-of-birth', () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
       const response = await loader({
-        request: new Request('http://localhost:3000/en/apply/123/date-of-birth'),
+        request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth'),
         context: { session },
         params: {},
       });
@@ -69,7 +69,7 @@ describe('_public.apply.id.date-of-birth', () => {
       formData.append('_csrf', 'csrfToken');
 
       const response = await action({
-        request: new Request('http://localhost:3000/en/apply/123/date-of-birth', { method: 'POST', body: formData }),
+        request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth', { method: 'POST', body: formData }),
         context: { session },
         params: {},
       });
@@ -100,13 +100,13 @@ describe('_public.apply.id.date-of-birth', () => {
       vi.mocked(differenceInYears).mockReturnValueOnce(65).mockReturnValueOnce(65);
 
       const response = await action({
-        request: new Request('http://localhost:3000/en/apply/123/date-of-birth', { method: 'POST', body: formData }),
+        request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth', { method: 'POST', body: formData }),
         context: { session },
         params: { lang: 'en', id: '123' },
       });
 
       expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe('/en/apply/123/applicant-information');
+      expect(response.headers.get('location')).toBe('/en/apply/123/adult/applicant-information');
     });
 
     it('should redirect to disability tax credit page if dob is under 65 years', async () => {
@@ -126,7 +126,7 @@ describe('_public.apply.id.date-of-birth', () => {
       vi.mocked(differenceInYears).mockReturnValueOnce(64).mockReturnValueOnce(64);
 
       const response = await action({
-        request: new Request('http://localhost:3000/en/apply/123/date-of-birth', { method: 'POST', body: formData }),
+        request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth', { method: 'POST', body: formData }),
         context: { session },
         params: { lang: 'en', id: '123' },
       });

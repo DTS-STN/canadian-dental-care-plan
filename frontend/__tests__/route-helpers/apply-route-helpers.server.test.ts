@@ -72,7 +72,7 @@ describe('apply-route-helpers.server', () => {
         typeOfApplication: 'delegate',
       };
 
-      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/application-delegate, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult/application-delegate, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if taxFiling2023 is undefined', () => {
@@ -82,7 +82,7 @@ describe('apply-route-helpers.server', () => {
         taxFiling2023: undefined,
       };
 
-      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/tax-filing, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult/tax-filing, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if taxFiling2023 is no', () => {
@@ -92,7 +92,7 @@ describe('apply-route-helpers.server', () => {
         taxFiling2023: 'no',
       };
 
-      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/file-taxes, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult/file-taxes, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if dateOfBirth is undefined', () => {
@@ -103,7 +103,7 @@ describe('apply-route-helpers.server', () => {
         dateOfBirth: undefined,
       };
 
-      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/date-of-birth, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult/date-of-birth, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it("should redirect if applicantInformation is undefined'", () => {
@@ -115,7 +115,7 @@ describe('apply-route-helpers.server', () => {
         applicantInformation: undefined,
       };
 
-      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if partnerInformation is undefined and applicant has partner', () => {
@@ -133,7 +133,7 @@ describe('apply-route-helpers.server', () => {
         partnerInformation: undefined,
       };
 
-      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/partner-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult/partner-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if partnerInformation is not undefined and applicant has no partner', () => {
@@ -157,7 +157,7 @@ describe('apply-route-helpers.server', () => {
         },
       };
 
-      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if personalInformation is undefined', () => {
@@ -182,7 +182,7 @@ describe('apply-route-helpers.server', () => {
         personalInformation: undefined,
       };
 
-      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/personal-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult/personal-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if communicationPreferences is undefined', () => {
@@ -213,7 +213,7 @@ describe('apply-route-helpers.server', () => {
         communicationPreferences: undefined,
       };
 
-      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/communication-preference, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult/communication-preference, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if dentalInsurance is undefined', () => {
@@ -248,7 +248,7 @@ describe('apply-route-helpers.server', () => {
         dentalInsurance: undefined,
       };
 
-      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/dental-insurance, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult/dental-insurance, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if dentalBenefits is undefined', () => {
@@ -284,7 +284,7 @@ describe('apply-route-helpers.server', () => {
         dentalBenefits: undefined,
       };
 
-      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult/federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should not redirect if state is completed', () => {

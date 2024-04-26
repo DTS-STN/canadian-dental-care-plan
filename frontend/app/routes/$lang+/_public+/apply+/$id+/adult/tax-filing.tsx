@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
@@ -80,10 +80,10 @@ export async function action({ context: { session }, params, request }: ActionFu
   await applyRouteHelpers.saveState({ params, request, session, state: { taxFiling2023: parsedDataResult.data } });
 
   if (parsedDataResult.data === TaxFilingOption.No) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/file-taxes', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/file-taxes', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/date-of-birth', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
 }
 
 export default function ApplyFlowTaxFiling() {

@@ -24,7 +24,7 @@ vi.mock('~/utils/locale-utils.server', async (importOriginal) => {
   return {
     ...actual,
     getFixedT: vi.fn().mockResolvedValue(tMockFn),
-    redirectWithLocale: vi.fn().mockResolvedValueOnce(redirect('/en/apply/123/application-delegate')).mockResolvedValueOnce(redirect('/en/apply/123/tax-filing')),
+    redirectWithLocale: vi.fn().mockResolvedValueOnce(redirect('/en/apply/123/adult/application-delegate')).mockResolvedValueOnce(redirect('/en/apply/123/tax-filing')),
   };
 });
 
@@ -39,7 +39,7 @@ describe('_public.apply.id.type-of-application', () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
       const response = await loader({
-        request: new Request('http://localhost:3000/en/apply/123/type-of-application'),
+        request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application'),
         context: { session },
         params: {},
       });
@@ -63,7 +63,7 @@ describe('_public.apply.id.type-of-application', () => {
       formData.append('_csrf', 'csrfToken');
 
       const response = await action({
-        request: new Request('http://localhost:3000/en/apply/123/type-of-application', { method: 'POST', body: formData }),
+        request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }),
         context: { session },
         params: {},
       });
@@ -82,13 +82,13 @@ describe('_public.apply.id.type-of-application', () => {
       formData.append('typeOfApplication', 'delegate');
 
       const response = await action({
-        request: new Request('http://localhost:3000/en/apply/123/type-of-application', { method: 'POST', body: formData }),
+        request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }),
         context: { session },
         params: { lang: 'en', id: '123' },
       });
 
       expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe('/en/apply/123/application-delegate');
+      expect(response.headers.get('location')).toBe('/en/apply/123/adult/application-delegate');
     });
 
     it('should redirect to tax filing page if personal is selected', async () => {
@@ -100,13 +100,13 @@ describe('_public.apply.id.type-of-application', () => {
       formData.append('typeOfApplication', 'personal');
 
       const response = await action({
-        request: new Request('http://localhost:3000/en/apply/123/type-of-application', { method: 'POST', body: formData }),
+        request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }),
         context: { session },
         params: { lang: 'en', id: '123' },
       });
 
       expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe('/en/apply/123/tax-filing');
+      expect(response.headers.get('location')).toBe('/en/apply/123/adult/tax-filing');
     });
   });
 });

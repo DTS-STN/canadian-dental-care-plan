@@ -86,10 +86,10 @@ export async function action({ context: { session }, params, request }: ActionFu
   await applyRouteHelpers.saveState({ params, request, session, state: { typeOfApplication: parsedDataResult.data } });
 
   if (parsedDataResult.data === ApplicantType.Delegate) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/application-delegate', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/application-delegate', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/tax-filing', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/tax-filing', params));
 }
 
 export default function ApplyFlowTypeOfApplication() {

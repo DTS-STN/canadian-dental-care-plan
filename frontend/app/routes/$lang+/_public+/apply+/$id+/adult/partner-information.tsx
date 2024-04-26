@@ -9,7 +9,7 @@ import { differenceInYears, isPast, isValid, parse } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
@@ -53,7 +53,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   if (state.applicantInformation === undefined || !applyRouteHelpers.hasPartner(state.applicantInformation)) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/applicant-information', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
   }
 
   const csrfToken = String(session.get('csrfToken'));
@@ -165,10 +165,10 @@ export async function action({ context: { session }, params, request }: ActionFu
   await applyRouteHelpers.saveState({ params, request, session, state: { partnerInformation: parsedDataResult.data } });
 
   if (state.editMode) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/review-information', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/personal-information', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/personal-information', params));
 }
 
 export default function ApplyFlowApplicationInformation() {
@@ -301,7 +301,7 @@ export default function ApplyFlowApplicationInformation() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId={defaultState ? '$lang+/_public+/apply+/$id+/review-information' : '$lang+/_public+/apply+/$id+/applicant-information'}
+                routeId={defaultState ? '$lang+/_public+/apply+/$id+/adult/review-information' : '$lang+/_public+/apply+/$id+/adult/applicant-information'}
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Spouse or Common-law partner information click"
@@ -317,7 +317,7 @@ export default function ApplyFlowApplicationInformation() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId="$lang+/_public+/apply+/$id+/applicant-information"
+                routeId="$lang+/_public+/apply+/$id+/adult/applicant-information"
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Spouse or Common-law partner information click"

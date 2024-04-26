@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
@@ -91,7 +91,7 @@ export async function action({ context: { session }, params, request }: ActionFu
       return json({ errors });
     }
 
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/review-information', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
   }
 
   // Form action Continue & Save
@@ -137,14 +137,14 @@ export async function action({ context: { session }, params, request }: ActionFu
   await applyRouteHelpers.saveState({ params, remove, request, session, state: { applicantInformation: parsedDataResult.data } });
 
   if (state.editMode) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/review-information', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
   }
 
   if (hasPartner) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/partner-information', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/partner-information', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/personal-information', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/personal-information', params));
 }
 
 export default function ApplyFlowApplicationInformation() {
@@ -263,7 +263,7 @@ export default function ApplyFlowApplicationInformation() {
                 {t('apply:applicant-information.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click">
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply:applicant-information.back-btn')}
               </ButtonLink>

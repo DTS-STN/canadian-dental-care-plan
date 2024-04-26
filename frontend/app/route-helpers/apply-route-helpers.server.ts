@@ -4,17 +4,17 @@ import { Params } from '@remix-run/react';
 import { differenceInMinutes } from 'date-fns';
 import { z } from 'zod';
 
-import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/applicant-information';
-import { CommunicationPreferencesState } from '~/routes/$lang+/_public+/apply+/$id+/communication-preference';
-import { AllChildrenUnder18State, DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
-import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/dental-insurance';
+import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult/applicant-information';
+import { CommunicationPreferencesState } from '~/routes/$lang+/_public+/apply+/$id+/adult/communication-preference';
+import { AllChildrenUnder18State, DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/adult/date-of-birth';
+import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/adult/dental-insurance';
+import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/adult/federal-provincial-territorial-benefits';
+import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult/partner-information';
+import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult/personal-information';
+import { SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/adult/review-information';
+import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/adult/tax-filing';
 import { DisabilityTaxCreditState } from '~/routes/$lang+/_public+/apply+/$id+/disability-tax-credit';
-import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits';
 import { LivingIndependentlyState } from '~/routes/$lang+/_public+/apply+/$id+/living-independently';
-import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/partner-information';
-import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/personal-information';
-import { SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/review-information';
-import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/tax-filing';
 import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-application';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
@@ -97,7 +97,7 @@ async function loadState({ params, request, session }: LoadStateArgs) {
 
   // Redirect to the confirmation page if the application has been submitted and
   // the current route is not the confirmation page.
-  const confirmationRouteUrl = getPathById('$lang+/_public+/apply+/$id+/confirmation', params);
+  const confirmationRouteUrl = getPathById('$lang+/_public+/apply+/$id+/adult/confirmation', params);
   if (state.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has been submitted; sessionName: [%s], ', sessionName, confirmationRouteUrl);
     throw redirect(confirmationRouteUrl);
@@ -214,47 +214,47 @@ function validateStateForReview({ params, state }: ValidateStateForReviewArgs) {
   }
 
   if (state.typeOfApplication === 'delegate') {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/application-delegate', params));
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/application-delegate', params));
   }
 
   if (state.taxFiling2023 === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/tax-filing', params));
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/tax-filing', params));
   }
 
   if (state.taxFiling2023 === 'no') {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/file-taxes', params));
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/file-taxes', params));
   }
 
   if (state.dateOfBirth === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/date-of-birth', params));
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
 
   if (state.applicantInformation === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/applicant-information', params));
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
   }
 
   if (state.partnerInformation === undefined && hasPartner(state.applicantInformation)) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/partner-information', params));
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/partner-information', params));
   }
 
   if (state.partnerInformation !== undefined && !hasPartner(state.applicantInformation)) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/applicant-information', params));
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
   }
 
   if (state.personalInformation === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/personal-information', params));
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/personal-information', params));
   }
 
   if (state.communicationPreferences === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/communication-preference', params));
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/communication-preference', params));
   }
 
   if (state.dentalInsurance === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/dental-insurance', params));
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/dental-insurance', params));
   }
 
   if (state.dentalBenefits === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits', params));
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/federal-provincial-territorial-benefits', params));
   }
 }
 
