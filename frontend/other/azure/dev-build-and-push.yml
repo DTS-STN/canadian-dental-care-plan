@@ -8,7 +8,7 @@ variables:
   azureContainerRegistry.name: dtsshared-04/29/24
   azureContainerRegistry.domain: dtsshared.azurecr.io
   vmImageName: ubuntu-latest
-  image.shortHash: ""
+  image.shortHash: ''
   image.tag: prototype-candidate
 
 stages:
