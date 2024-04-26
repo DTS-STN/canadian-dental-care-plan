@@ -330,7 +330,7 @@ export default function StatusChecker() {
           <div className="space-y-6">
             <InputField id="code" name="code" label={t('status:form.application-code-label')} helpMessagePrimary={t('status:form.application-code-description')} required errorMessage={errorMessages.code} />
             <InputField id="sin" name="sin" label={t('status:form.sin-label')} required errorMessage={errorMessages.sin} />
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid items-end gap-6 md:grid-cols-2">
               <InputField id="first-name" name="firstName" label={t('status:form.first-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errorMessages['first-name']} />
               <InputField id="last-name" name="lastName" label={t('status:form.last-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errorMessages['last-name']} />
             </div>
