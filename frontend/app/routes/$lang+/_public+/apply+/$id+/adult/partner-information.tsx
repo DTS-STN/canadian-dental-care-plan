@@ -38,9 +38,9 @@ export interface PartnerInformationState {
 }
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.partnerInformation,
-  pageTitleI18nKey: 'apply:partner-information.page-title',
+  pageTitleI18nKey: 'adult-apply:partner-information.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -57,7 +57,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   }
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:partner-information.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('adult-apply:partner-information.page-title') }) };
 
   return json({ id: state.id, csrfToken, meta, defaultState: state.partnerInformation, editMode: state.editMode });
 }
@@ -72,44 +72,44 @@ export async function action({ context: { session }, params, request }: ActionFu
   // state validation schema
   const partnerInformationSchema = z
     .object({
-      confirm: z.boolean().refine((val) => val === true, t('apply:partner-information.error-message.confirm-required')),
+      confirm: z.boolean().refine((val) => val === true, t('adult-apply:partner-information.error-message.confirm-required')),
       dateOfBirthYear: z
         .number({
-          required_error: t('apply:partner-information.error-message.date-of-birth-year-required'),
-          invalid_type_error: t('apply:partner-information.error-message.date-of-birth-year-number'),
+          required_error: t('adult-apply:partner-information.error-message.date-of-birth-year-required'),
+          invalid_type_error: t('adult-apply:partner-information.error-message.date-of-birth-year-number'),
         })
         .int()
         .positive(),
       dateOfBirthMonth: z
         .number({
-          required_error: t('apply:partner-information.error-message.date-of-birth-month-required'),
+          required_error: t('adult-apply:partner-information.error-message.date-of-birth-month-required'),
         })
         .int()
         .positive(),
       dateOfBirthDay: z
         .number({
-          required_error: t('apply:partner-information.error-message.date-of-birth-day-required'),
-          invalid_type_error: t('apply:partner-information.error-message.date-of-birth-day-number'),
+          required_error: t('adult-apply:partner-information.error-message.date-of-birth-day-required'),
+          invalid_type_error: t('adult-apply:partner-information.error-message.date-of-birth-day-number'),
         })
         .int()
         .positive(),
       dateOfBirth: z.string(),
-      firstName: z.string().trim().min(1, t('apply:partner-information.error-message.first-name-required')).max(100),
-      lastName: z.string().trim().min(1, t('apply:partner-information.error-message.last-name-required')).max(100),
+      firstName: z.string().trim().min(1, t('adult-apply:partner-information.error-message.first-name-required')).max(100),
+      lastName: z.string().trim().min(1, t('adult-apply:partner-information.error-message.last-name-required')).max(100),
       socialInsuranceNumber: z
         .string()
         .trim()
-        .min(1, t('apply:partner-information.error-message.sin-required'))
-        .refine(isValidSin, t('apply:partner-information.error-message.sin-valid'))
-        .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.applicantInformation?.socialInsuranceNumber, t('apply:partner-information.error-message.sin-unique'))
+        .min(1, t('adult-apply:partner-information.error-message.sin-required'))
+        .refine(isValidSin, t('adult-apply:partner-information.error-message.sin-valid'))
+        .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.applicantInformation?.socialInsuranceNumber, t('adult-apply:partner-information.error-message.sin-unique'))
         .superRefine((sin, ctx) => {
           if (!isValidSin(sin)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:partner-information.error-message.sin-valid'), fatal: true });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:partner-information.error-message.sin-valid'), fatal: true });
             return z.NEVER;
           }
 
           if (state.applicantInformation && formatSin(sin) === formatSin(state.applicantInformation.socialInsuranceNumber)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:partner-information.error-message.sin-unique'), fatal: true });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:partner-information.error-message.sin-unique'), fatal: true });
             return z.NEVER;
           }
         }),
@@ -121,11 +121,11 @@ export async function action({ context: { session }, params, request }: ActionFu
       const parsedDateOfBirth = parse(dateOfBirth, 'yyyy-MM-dd', new Date());
 
       if (!isValid(parsedDateOfBirth)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:partner-information.error-message.date-of-birth-valid'), path: ['dateOfBirth'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:partner-information.error-message.date-of-birth-valid'), path: ['dateOfBirth'] });
       } else if (!isPast(parsedDateOfBirth)) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:partner-information.error-message.date-of-birth-is-past'), path: ['dateOfBirth'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:partner-information.error-message.date-of-birth-is-past'), path: ['dateOfBirth'] });
       } else if (differenceInYears(new Date(), parsedDateOfBirth) > 150) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:partner-information.error-message.date-of-birth-is-past-valid'), path: ['dateOfBirth'] });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:partner-information.error-message.date-of-birth-is-past-valid'), path: ['dateOfBirth'] });
       }
     })
     .transform((val) => {
@@ -243,7 +243,7 @@ export default function ApplyFlowApplicationInformation() {
                 id="first-name"
                 name="firstName"
                 className="w-full"
-                label={t('apply:partner-information.first-name')}
+                label={t('adult-apply:partner-information.first-name')}
                 maxLength={100}
                 autoComplete="given-name"
                 defaultValue={defaultState?.firstName ?? ''}
@@ -255,7 +255,7 @@ export default function ApplyFlowApplicationInformation() {
                 id="last-name"
                 name="lastName"
                 className="w-full"
-                label={t('apply:partner-information.last-name')}
+                label={t('adult-apply:partner-information.last-name')}
                 maxLength={100}
                 autoComplete="family-name"
                 defaultValue={defaultState?.lastName ?? ''}
@@ -272,7 +272,7 @@ export default function ApplyFlowApplicationInformation() {
                 year: 'dateOfBirthYear',
               }}
               defaultValue={defaultState?.dateOfBirth ?? ''}
-              legend={t('apply:partner-information.date-of-birth')}
+              legend={t('adult-apply:partner-information.date-of-birth')}
               errorMessages={{
                 all: fetcher.data?.errors.dateOfBirth?._errors[0],
                 year: fetcher.data?.errors.dateOfBirthYear?._errors[0],
@@ -284,7 +284,7 @@ export default function ApplyFlowApplicationInformation() {
             <InputField
               id="social-insurance-number"
               name="socialInsuranceNumber"
-              label={t('apply:partner-information.sin')}
+              label={t('adult-apply:partner-information.sin')}
               placeholder="000-000-000"
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
               errorMessage={fetcher.data?.errors.socialInsuranceNumber?._errors[0]}
@@ -297,7 +297,7 @@ export default function ApplyFlowApplicationInformation() {
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Spouse or Common-law partner information click">
-                {t('apply:partner-information.save-btn')}
+                {t('adult-apply:partner-information.save-btn')}
               </Button>
               <ButtonLink
                 id="back-button"
@@ -306,13 +306,13 @@ export default function ApplyFlowApplicationInformation() {
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Spouse or Common-law partner information click"
               >
-                {t('apply:partner-information.cancel-btn')}
+                {t('adult-apply:partner-information.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Spouse or Common-law partner information click">
-                {t('apply:partner-information.continue-btn')}
+                {t('adult-apply:partner-information.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
               <ButtonLink
@@ -323,7 +323,7 @@ export default function ApplyFlowApplicationInformation() {
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Spouse or Common-law partner information click"
               >
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-                {t('apply:partner-information.back-btn')}
+                {t('adult-apply:partner-information.back-btn')}
               </ButtonLink>
             </div>
           )}

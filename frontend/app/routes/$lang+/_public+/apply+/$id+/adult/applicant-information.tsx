@@ -42,9 +42,9 @@ export type ApplicantInformationState = {
 };
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.applicantInformation,
-  pageTitleI18nKey: 'apply:applicant-information.page-title',
+  pageTitleI18nKey: 'adult-apply:applicant-information.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -59,7 +59,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const maritalStatuses = await lookupService.getAllMaritalStatuses();
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:applicant-information.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('adult-apply:applicant-information.page-title') }) };
 
   return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.applicantInformation, editMode: state.editMode });
 }
@@ -86,7 +86,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
 
     if (applyRouteHelpers.hasPartner(state.applicantInformation) && state.partnerInformation === undefined) {
-      const errorMessage = t('apply:applicant-information.error-message.marital-status-no-partner-information');
+      const errorMessage = t('adult-apply:applicant-information.error-message.marital-status-no-partner-information');
       const errors: z.ZodFormattedError<ApplicantInformationState, string> = { _errors: [errorMessage], maritalStatus: { _errors: [errorMessage] } };
       return json({ errors });
     }
@@ -100,24 +100,24 @@ export async function action({ context: { session }, params, request }: ActionFu
     socialInsuranceNumber: z
       .string()
       .trim()
-      .min(1, t('apply:applicant-information.error-message.sin-required'))
+      .min(1, t('adult-apply:applicant-information.error-message.sin-required'))
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:applicant-information.error-message.sin-valid'), fatal: true });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:applicant-information.error-message.sin-valid'), fatal: true });
           return z.NEVER;
         }
 
         if (state.partnerInformation && formatSin(sin) === formatSin(state.partnerInformation.socialInsuranceNumber)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:applicant-information.error-message.sin-unique'), fatal: true });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:applicant-information.error-message.sin-unique'), fatal: true });
           return z.NEVER;
         }
       }),
-    firstName: z.string().trim().min(1, t('apply:applicant-information.error-message.first-name-required')).max(100),
-    lastName: z.string().trim().min(1, t('apply:applicant-information.error-message.last-name-required')).max(100),
+    firstName: z.string().trim().min(1, t('adult-apply:applicant-information.error-message.first-name-required')).max(100),
+    lastName: z.string().trim().min(1, t('adult-apply:applicant-information.error-message.last-name-required')).max(100),
     maritalStatus: z
-      .string({ errorMap: () => ({ message: t('apply:applicant-information.error-message.marital-status-required') }) })
+      .string({ errorMap: () => ({ message: t('adult-apply:applicant-information.error-message.marital-status-required') }) })
       .trim()
-      .min(1, t('apply:applicant-information.error-message.marital-status-required')),
+      .min(1, t('adult-apply:applicant-information.error-message.marital-status-required')),
   }) satisfies z.ZodType<ApplicantInformationState>;
 
   const data = {
@@ -251,21 +251,21 @@ export default function ApplyFlowApplicationInformation() {
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
               <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Applicant Information click">
-                {t('apply:applicant-information.save-btn')}
+                {t('adult-apply:applicant-information.save-btn')}
               </Button>
               <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Applicant Information click">
-                {t('apply:applicant-information.cancel-btn')}
+                {t('adult-apply:applicant-information.cancel-btn')}
               </Button>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <Button id="continue-button" name="_action" value={FormAction.Continue} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Applicant Information click">
-                {t('apply:applicant-information.continue-btn')}
+                {t('adult-apply:applicant-information.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
               <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-                {t('apply:applicant-information.back-btn')}
+                {t('adult-apply:applicant-information.back-btn')}
               </ButtonLink>
             </div>
           )}

@@ -1,6 +1,7 @@
 import { AppLoadContext, Session } from '@remix-run/node';
 import type { ActionFunctionArgs as RRActionFunctionArgs, LoaderFunctionArgs as RRLoaderFunctionArgs } from '@remix-run/router';
 
+import type adultApply from '../public/locales/en/adult-apply.json';
 import type alerts from '../public/locales/en/alerts.json';
 import type apply from '../public/locales/en/apply.json';
 import type dataUnavailable from '../public/locales/en/data-unavailable.json';
@@ -33,6 +34,7 @@ declare module 'i18next' {
   interface CustomTypeOptions {
     defaultNS: false;
     resources: {
+      'adult-apply': typeof adultApply;
       apply: typeof apply;
       'data-unavailable': typeof dataUnavailable;
       gcweb: typeof gcweb;
