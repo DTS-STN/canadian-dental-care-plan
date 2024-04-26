@@ -363,7 +363,7 @@ export default function ApplyFlowPersonalInformation() {
         </p>
         <fetcher.Form method="post" noValidate aria-describedby="form-instructions-info form-instructions">
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <div className="mb-6 grid gap-6 md:grid-cols-2">
+          <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
             <InputField
               id="phone-number"
               name="phoneNumber"
@@ -435,7 +435,7 @@ export default function ApplyFlowPersonalInformation() {
                 required
               />
             )}
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid items-end gap-6 md:grid-cols-2">
               <InputField
                 id="mailing-city"
                 name="mailingCity"
@@ -516,7 +516,7 @@ export default function ApplyFlowPersonalInformation() {
                     required
                   />
                 )}
-                <div className="mb-6 grid gap-6 md:grid-cols-2">
+                <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
                   <InputField
                     id="home-city"
                     name="homeCity"

@@ -200,7 +200,7 @@ export default function ApplyFlowApplicationInformation() {
             <p className="mb-6 italic" id="form-instructions">
               {t('apply:required-label')}
             </p>
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid items-end gap-6 md:grid-cols-2">
               <InputField
                 id="first-name"
                 name="firstName"
