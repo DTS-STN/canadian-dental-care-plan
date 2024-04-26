@@ -98,6 +98,15 @@
                 },
                 "children": [
                   {
+                    "id": "$lang+/_public+/apply+/$id+/index",
+                    "file": "routes/$lang+/_public+/apply+/$id+/index.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id",
+                      "fr": "/:lang/appliquer/:id"
+                    },
+                    "index": true
+                  },
+                  {
                     "id": "$lang+/_public+/apply+/$id+/applicant-information",
                     "file": "routes/$lang+/_public+/apply+/$id+/applicant-information.tsx",
                     "paths": {
