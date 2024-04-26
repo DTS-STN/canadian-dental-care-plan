@@ -49,4 +49,3 @@ stages:
                 latest
               arguments: |
                 --pull
-                
