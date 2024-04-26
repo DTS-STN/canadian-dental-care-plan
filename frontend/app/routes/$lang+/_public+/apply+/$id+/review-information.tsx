@@ -142,7 +142,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     province: provinceHome,
     postalCode: state.personalInformation.homePostalCode,
     country: countryHome,
-    apartment: state.personalInformation.mailingApartment,
+    apartment: state.personalInformation.homeApartment,
   };
 
   const dentalInsurance = state.dentalInsurance;
