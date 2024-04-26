@@ -31,8 +31,8 @@
     "menu-contact-us.href": "{{baseUri}}/en/contact-us",
     "menu-sign-out.text": "Sign Out",
     "banner": {
-      "alert": "Info",
-      "desc": "This is a prototype environment. No data is kept."
+      "alert": "Alpha",
+      "desc": "This is a prototype for testing purposes only. Information entered will not be saved."
     }
   },
   "footer": {

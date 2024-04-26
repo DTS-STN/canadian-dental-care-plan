@@ -31,8 +31,8 @@
     "menu-contact-us.href": "{{baseUri}}/fr/contactez-nous",
     "menu-sign-out.text": "Se déconnecter",
     "banner": {
-      "alert": "Info",
-      "desc": "Il s'agit d'un environnement prototype. Aucune donnée n'est conservée."
+      "alert": "Alpha",
+      "desc": "Il s'agit d'un prototype destiné uniquement à des fins de test. Les informations saisies ne seront pas enregistrées."
     }
   },
   "footer": {
