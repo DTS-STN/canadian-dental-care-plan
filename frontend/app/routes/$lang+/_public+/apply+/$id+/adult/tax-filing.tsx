@@ -31,9 +31,9 @@ enum TaxFilingOption {
 export type TaxFilingState = `${TaxFilingOption}`;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.taxFiling,
-  pageTitleI18nKey: 'apply:eligibility.tax-filing.page-title',
+  pageTitleI18nKey: 'adult-apply:eligibility.tax-filing.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -46,7 +46,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.tax-filing.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('adult-apply:eligibility.tax-filing.page-title') }) };
 
   return json({ id: state.id, csrfToken, meta, defaultState: state.taxFiling2023 });
 }
@@ -58,7 +58,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const taxFilingSchema: z.ZodType<TaxFilingState> = z.nativeEnum(TaxFilingOption, {
-    errorMap: () => ({ message: t('apply:eligibility.tax-filing.error-message.tax-filing-required') }),
+    errorMap: () => ({ message: t('adult-apply:eligibility.tax-filing.error-message.tax-filing-required') }),
   });
 
   const formData = await request.formData();
@@ -133,22 +133,22 @@ export default function ApplyFlowTaxFiling() {
           <InputRadios
             id="tax-filing-2023"
             name="taxFiling2023"
-            legend={t('apply:eligibility.tax-filing.form-instructions')}
+            legend={t('adult-apply:eligibility.tax-filing.form-instructions')}
             options={[
-              { value: TaxFilingOption.Yes, children: t('apply:eligibility.tax-filing.radio-options.yes'), defaultChecked: defaultState === TaxFilingOption.Yes },
-              { value: TaxFilingOption.No, children: t('apply:eligibility.tax-filing.radio-options.no'), defaultChecked: defaultState === TaxFilingOption.No },
+              { value: TaxFilingOption.Yes, children: t('adult-apply:eligibility.tax-filing.radio-options.yes'), defaultChecked: defaultState === TaxFilingOption.Yes },
+              { value: TaxFilingOption.No, children: t('adult-apply:eligibility.tax-filing.radio-options.no'), defaultChecked: defaultState === TaxFilingOption.No },
             ]}
             errorMessage={errorMessages['input-radio-tax-filing-2023-option-0']}
             required
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Tax filing click">
-              {t('apply:eligibility.tax-filing.continue-btn')}
+              {t('adult-apply:eligibility.tax-filing.continue-btn')}
               <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
             </Button>
             <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/type-application" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Tax filing click">
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('apply:eligibility.tax-filing.back-btn')}
+              {t('adult-apply:eligibility.tax-filing.back-btn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

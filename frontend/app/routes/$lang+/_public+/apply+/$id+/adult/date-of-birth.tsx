@@ -35,9 +35,9 @@ enum AllChildrenUnder18Option {
 export type AllChildrenUnder18State = `${AllChildrenUnder18Option}`;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.dateOfBirth,
-  pageTitleI18nKey: 'apply:eligibility.date-of-birth.page-title',
+  pageTitleI18nKey: 'adult-apply:eligibility.date-of-birth.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -50,7 +50,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.date-of-birth.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('adult-apply:eligibility.date-of-birth.page-title') }) };
 
   const { dateOfBirth, allChildrenUnder18 } = state;
   return json({ id: state.id, csrfToken, meta, defaultState: { dateOfBirth, allChildrenUnder18 }, editMode: state.editMode });
@@ -76,27 +76,27 @@ export async function action({ context: { session }, params, request }: ActionFu
     .object({
       dateOfBirthYear: z
         .number({
-          required_error: t('apply:eligibility.date-of-birth.error-message.date-of-birth-year-required'),
-          invalid_type_error: t('apply:eligibility.date-of-birth.error-message.date-of-birth-year-number'),
+          required_error: t('adult-apply:eligibility.date-of-birth.error-message.date-of-birth-year-required'),
+          invalid_type_error: t('adult-apply:eligibility.date-of-birth.error-message.date-of-birth-year-number'),
         })
         .int()
         .positive(),
       dateOfBirthMonth: z
         .number({
-          required_error: t('apply:eligibility.date-of-birth.error-message.date-of-birth-month-required'),
+          required_error: t('adult-apply:eligibility.date-of-birth.error-message.date-of-birth-month-required'),
         })
         .int()
         .positive(),
       dateOfBirthDay: z
         .number({
-          required_error: t('apply:eligibility.date-of-birth.error-message.date-of-birth-day-required'),
-          invalid_type_error: t('apply:eligibility.date-of-birth.error-message.date-of-birth-day-number'),
+          required_error: t('adult-apply:eligibility.date-of-birth.error-message.date-of-birth-day-required'),
+          invalid_type_error: t('adult-apply:eligibility.date-of-birth.error-message.date-of-birth-day-number'),
         })
         .int()
         .positive(),
       dateOfBirth: z.string(),
       allChildrenUnder18: z.nativeEnum(AllChildrenUnder18Option, {
-        errorMap: () => ({ message: t('apply:eligibility.date-of-birth.error-message.child-age-required') }),
+        errorMap: () => ({ message: t('adult-apply:eligibility.date-of-birth.error-message.child-age-required') }),
       }),
     })
     .superRefine((val, ctx) => {
@@ -108,19 +108,19 @@ export async function action({ context: { session }, params, request }: ActionFu
       if (!isValid(parsedDateOfBirth)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: t('apply:eligibility.date-of-birth.error-message.date-of-birth-valid'),
+          message: t('adult-apply:eligibility.date-of-birth.error-message.date-of-birth-valid'),
           path: ['dateOfBirth'],
         });
       } else if (!isPast(parsedDateOfBirth)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: t('apply:eligibility.date-of-birth.error-message.date-of-birth-is-past'),
+          message: t('adult-apply:eligibility.date-of-birth.error-message.date-of-birth-is-past'),
           path: ['dateOfBirth'],
         });
       } else if (differenceInYears(new Date(), parsedDateOfBirth) > 150) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: t('apply:eligibility.date-of-birth.error-message.date-of-birth-is-past-valid'),
+          message: t('adult-apply:eligibility.date-of-birth.error-message.date-of-birth-is-past-valid'),
           path: ['dateOfBirth'],
         });
       }
@@ -218,7 +218,7 @@ export default function ApplyFlowDateOfBirth() {
       <div className="max-w-prose">
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <p className="mb-6" id="dob-desc">
-          {t('apply:eligibility.date-of-birth.description')}
+          {t('adult-apply:eligibility.date-of-birth.description')}
         </p>
         <p className="mb-2 italic" id="form-instructions">
           {t('apply:required-label')}
@@ -226,7 +226,7 @@ export default function ApplyFlowDateOfBirth() {
         <fetcher.Form method="post" aria-describedby="dob-desc form-instructions" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-6 space-y-4">
-            <h2 className="text-xl font-bold">{t('apply:eligibility.date-of-birth.age-heading')}</h2>
+            <h2 className="text-xl font-bold">{t('adult-apply:eligibility.date-of-birth.age-heading')}</h2>
             <DatePickerField
               id="date-of-birth"
               names={{
@@ -235,7 +235,7 @@ export default function ApplyFlowDateOfBirth() {
                 year: 'dateOfBirthYear',
               }}
               defaultValue={defaultState.dateOfBirth ?? ''}
-              legend={t('apply:eligibility.date-of-birth.form-instructions')}
+              legend={t('adult-apply:eligibility.date-of-birth.form-instructions')}
               errorMessages={{
                 all: fetcher.data?.errors.dateOfBirth?._errors[0],
                 year: fetcher.data?.errors.dateOfBirthYear?._errors[0],
@@ -244,40 +244,40 @@ export default function ApplyFlowDateOfBirth() {
               }}
               required
             />
-            <h2 className="text-xl font-bold">{t('apply:eligibility.date-of-birth.child-age-heading')}</h2>
+            <h2 className="text-xl font-bold">{t('adult-apply:eligibility.date-of-birth.child-age-heading')}</h2>
             <InputRadios
               id="child-under-18"
               name="allChildrenUnder18"
-              legend={t('apply:eligibility.date-of-birth.child-age-instruction')}
+              legend={t('adult-apply:eligibility.date-of-birth.child-age-instruction')}
               options={[
-                { value: AllChildrenUnder18Option.Yes, children: t('apply:eligibility.date-of-birth.yes'), defaultChecked: defaultState.allChildrenUnder18 === AllChildrenUnder18Option.Yes },
-                { value: AllChildrenUnder18Option.No, children: t('apply:eligibility.date-of-birth.no'), defaultChecked: defaultState.allChildrenUnder18 === AllChildrenUnder18Option.No },
+                { value: AllChildrenUnder18Option.Yes, children: t('adult-apply:eligibility.date-of-birth.yes'), defaultChecked: defaultState.allChildrenUnder18 === AllChildrenUnder18Option.Yes },
+                { value: AllChildrenUnder18Option.No, children: t('adult-apply:eligibility.date-of-birth.no'), defaultChecked: defaultState.allChildrenUnder18 === AllChildrenUnder18Option.No },
               ]}
               errorMessage={fetcher.data?.errors.allChildrenUnder18?._errors[0]}
               required
             />
-            <Collapsible summary={t('apply:eligibility.date-of-birth.collapsible-content-summary')}>
-              <p>{t('apply:eligibility.date-of-birth.collapsible-content-detail')}</p>
+            <Collapsible summary={t('adult-apply:eligibility.date-of-birth.collapsible-content-summary')}>
+              <p>{t('adult-apply:eligibility.date-of-birth.collapsible-content-detail')}</p>
             </Collapsible>
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Date of birth click">
-                {t('apply:eligibility.date-of-birth.save-btn')}
+                {t('adult-apply:eligibility.date-of-birth.save-btn')}
               </Button>
               <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Date of birth click">
-                {t('apply:eligibility.date-of-birth.cancel-btn')}
+                {t('adult-apply:eligibility.date-of-birth.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Date of birth click">
-                {t('apply:eligibility.date-of-birth.continue-btn')}
+                {t('adult-apply:eligibility.date-of-birth.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
               <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Date of birth click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-                {t('apply:eligibility.date-of-birth.back-btn')}
+                {t('adult-apply:eligibility.date-of-birth.back-btn')}
               </ButtonLink>
             </div>
           )}

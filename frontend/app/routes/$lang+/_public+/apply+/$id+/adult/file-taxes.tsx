@@ -19,9 +19,9 @@ import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.fileYourTaxes,
-  pageTitleI18nKey: 'apply:eligibility.file-your-taxes.page-title',
+  pageTitleI18nKey: 'adult-apply:eligibility.file-your-taxes.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -35,7 +35,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.file-your-taxes.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('adult-apply:eligibility.file-your-taxes.page-title') }) };
 
   return json({ id, csrfToken, meta });
 }
@@ -55,7 +55,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   await applyRouteHelpers.clearState({ params, request, session });
-  return redirect(t('apply:eligibility.file-your-taxes.return-btn-link'));
+  return redirect(t('adult-apply:eligibility.file-your-taxes.return-btn-link'));
 }
 
 export default function ApplyFlowFileYourTaxes() {
@@ -65,7 +65,7 @@ export default function ApplyFlowFileYourTaxes() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const taxInfo = <InlineLink to={t('apply:eligibility.file-your-taxes.tax-info-href')} className="external-link font-lato font-semibold" target="_blank" />;
+  const taxInfo = <InlineLink to={t('adult-apply:eligibility.file-your-taxes.tax-info-href')} className="external-link font-lato font-semibold" target="_blank" />;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -76,22 +76,22 @@ export default function ApplyFlowFileYourTaxes() {
   return (
     <>
       <div className="mb-8 space-y-4">
-        <p>{t('apply:eligibility.file-your-taxes.ineligible-to-apply')}</p>
-        <p>{t('apply:eligibility.file-your-taxes.tax-not-filed')}</p>
-        <p>{t('apply:eligibility.file-your-taxes.unable-to-assess')}</p>
+        <p>{t('adult-apply:eligibility.file-your-taxes.ineligible-to-apply')}</p>
+        <p>{t('adult-apply:eligibility.file-your-taxes.tax-not-filed')}</p>
+        <p>{t('adult-apply:eligibility.file-your-taxes.unable-to-assess')}</p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="apply:eligibility.file-your-taxes.tax-info" components={{ taxInfo }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="adult-apply:eligibility.file-your-taxes.tax-info" components={{ taxInfo }} />
         </p>
-        <p>{t('apply:eligibility.file-your-taxes.apply-after')}</p>
+        <p>{t('adult-apply:eligibility.file-your-taxes.apply-after')}</p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
         <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - File your taxes click">
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-          {t('apply:eligibility.file-your-taxes.back-btn')}
+          {t('adult-apply:eligibility.file-your-taxes.back-btn')}
         </ButtonLink>
         <Button type="submit" variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - File your taxes click">
-          {t('apply:eligibility.file-your-taxes.return-btn')}
+          {t('adult-apply:eligibility.file-your-taxes.return-btn')}
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>
       </fetcher.Form>
