@@ -1,5 +1,5 @@
 trigger:
-  - main
+  - ado-prototype-deployment
 
 pr: none
 
@@ -8,7 +8,8 @@ variables:
   azureContainerRegistry.name: dtsshared-04/29/24
   azureContainerRegistry.domain: dtsshared.azurecr.io
   vmImageName: ubuntu-latest
-  image.tag: $(Build.SourceVersion)
+  image.shortHash: ''
+  image.tag: prototype-candidate
 
 stages:
   - stage: Build
@@ -24,7 +25,7 @@ stages:
               echo ""
               echo "Full git hash:  $(Build.SourceVersion)"
               echo "Short git hash: $short_hash"
-              echo "##vso[task.setvariable variable=image.tag]$short_hash"
+              echo "##vso[task.setvariable variable=image.shortHash]$short_hash"
             workingDirectory: $(Build.SourcesDirectory)
             displayName: Get short git hash
 
@@ -40,21 +41,11 @@ stages:
             inputs:
               containerRegistry: $(azureContainerRegistry.name)
               repository: $(azureContainerRegistry.repository)
-              command: build
+              command: buildAndPush
               Dockerfile: ./frontend/dockerfile
               tags: |
+                $(image.shortHash)
                 $(image.tag)
-                release-candidate
                 latest
               arguments: |
                 --pull
-
-          - task: Docker@2
-            inputs:
-              containerRegistry: $(azureContainerRegistry.name)
-              repository: $(azureContainerRegistry.repository)
-              command: push
-              tags: |
-                $(image.tag)
-                release-candidate
-                latest
