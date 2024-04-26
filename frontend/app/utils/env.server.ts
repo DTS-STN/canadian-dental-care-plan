@@ -22,7 +22,7 @@ function tryOrElseFalse(fn: () => unknown) {
 const validMockNames = ['cct', 'lookup', 'power-platform', 'raoidc', 'status-check', 'wsaddress'] as const;
 export type MockName = (typeof validMockNames)[number];
 
-const validFeatureNames = ['doc-upload', 'email-alerts', 'hcaptcha', 'view-personal-info', 'view-applications', 'view-letters', 'view-messages', 'edit-personal-info', 'status', 'authenticated-status-check', 'show-prototype-banner'] as const;
+const validFeatureNames = ['doc-upload', 'email-alerts', 'hcaptcha', 'view-personal-info', 'view-applications', 'view-letters', 'view-messages', 'edit-personal-info', 'status', 'show-prototype-banner'] as const;
 export type FeatureName = (typeof validFeatureNames)[number];
 
 // refiners
