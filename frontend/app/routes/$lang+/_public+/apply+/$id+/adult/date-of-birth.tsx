@@ -9,7 +9,7 @@ import { differenceInYears, isPast, isValid, parse } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
@@ -155,11 +155,11 @@ export async function action({ context: { session }, params, request }: ActionFu
   const allChildrenUnder18 = parsedDataResult.data.allChildrenUnder18;
 
   if (age < 16 && allChildrenUnder18 === 'yes') {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/parent-or-guardian', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/parent-or-guardian', params));
   }
 
   if ((age === 16 || age === 17) && allChildrenUnder18 === 'yes') {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/living-independently', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/living-independently', params));
   }
 
   if (age >= 18 && age < 65) {
@@ -167,14 +167,14 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   if (age >= 65 && allChildrenUnder18 === 'no') {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/apply-for-yourself', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/apply-for-yourself', params));
   }
 
   if (state.editMode) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/review-information', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/applicant-information', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
 }
 
 export default function ApplyFlowDateOfBirth() {
@@ -265,7 +265,7 @@ export default function ApplyFlowDateOfBirth() {
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Date of birth click">
                 {t('apply:eligibility.date-of-birth.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Date of birth click">
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Date of birth click">
                 {t('apply:eligibility.date-of-birth.cancel-btn')}
               </ButtonLink>
             </div>
@@ -275,7 +275,7 @@ export default function ApplyFlowDateOfBirth() {
                 {t('apply:eligibility.date-of-birth.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Date of birth click">
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Date of birth click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply:eligibility.date-of-birth.back-btn')}
               </ButtonLink>

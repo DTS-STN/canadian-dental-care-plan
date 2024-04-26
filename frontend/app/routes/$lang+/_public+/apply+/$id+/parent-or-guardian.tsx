@@ -39,7 +39,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const parseDateOfBirth = parse(state.dateOfBirth ?? '', 'yyyy-MM-dd', new Date());
   const age = differenceInYears(new Date(), parseDateOfBirth);
   if (age > 16) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/date-of-birth', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
 
   return json({ id: state.id, csrfToken, meta, defaultState: state.disabilityTaxCredit });
@@ -84,7 +84,7 @@ export default function ApplyFlowParentOrGuardian() {
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Parent or guardian needs to apply click">
+        <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Parent or guardian needs to apply click">
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply:parent-or-guardian.back-btn')}
         </ButtonLink>

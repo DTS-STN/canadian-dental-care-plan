@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
@@ -248,10 +248,10 @@ export async function action({ context: { session }, params, request }: ActionFu
   await applyRouteHelpers.saveState({ params, request, session, state: { personalInformation: updatedData } });
 
   if (state.editMode) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/review-information', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/communication-preference', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/communication-preference', params));
 }
 
 export default function ApplyFlowPersonalInformation() {
@@ -611,7 +611,7 @@ export default function ApplyFlowPersonalInformation() {
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Personal information click">
                 {t('apply:personal-information.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Personal information click">
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Personal information click">
                 {t('apply:personal-information.cancel-btn')}
               </ButtonLink>
             </div>
@@ -623,7 +623,7 @@ export default function ApplyFlowPersonalInformation() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId={[MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED].includes(Number(maritalStatus)) ? '$lang+/_public+/apply+/$id+/partner-information' : '$lang+/_public+/apply+/$id+/applicant-information'}
+                routeId={[MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED].includes(Number(maritalStatus)) ? '$lang+/_public+/apply+/$id+/adult/partner-information' : '$lang+/_public+/apply+/$id+/adult/applicant-information'}
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Personal information click"

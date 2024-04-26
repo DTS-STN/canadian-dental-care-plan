@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
@@ -136,10 +136,10 @@ export async function action({ context: { session }, params, request }: ActionFu
   await applyRouteHelpers.saveState({ params, request, session, state: { communicationPreferences: parsedDataResult.data } });
 
   if (state.editMode) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/review-information', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/dental-insurance', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/dental-insurance', params));
 }
 
 export default function ApplyFlowCommunicationPreferencePage() {
@@ -260,7 +260,13 @@ export default function ApplyFlowCommunicationPreferencePage() {
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Communication preference click">
                 {t('apply:communication-preference.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Communication preference click">
+              <ButtonLink
+                id="back-button"
+                routeId="$lang+/_public+/apply+/$id+/adult/review-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Communication preference click"
+              >
                 {t('apply:communication-preference.cancel-btn')}
               </ButtonLink>
             </div>
@@ -270,7 +276,13 @@ export default function ApplyFlowCommunicationPreferencePage() {
                 {t('apply:communication-preference.continue')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/personal-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Communication preference click">
+              <ButtonLink
+                id="back-button"
+                routeId="$lang+/_public+/apply+/$id+/adult/personal-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Communication preference click"
+              >
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply:communication-preference.back')}
               </ButtonLink>

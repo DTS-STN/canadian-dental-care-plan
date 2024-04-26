@@ -83,10 +83,10 @@ export async function action({ context: { session }, params, request }: ActionFu
   await applyRouteHelpers.saveState({ params, request, session, state: { livingIndependently: parsedDataResult.data } });
 
   if (parsedDataResult.data === LivingIndependentlyOption.Yes) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/application-delegate', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/application-delegate', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/parent-or-guardian', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/parent-or-guardian', params));
 }
 
 export default function ApplyFlowLivingIndependently() {

@@ -1,13 +1,13 @@
 import { lightFormat, parse } from 'date-fns';
 import validator from 'validator';
 
-import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/applicant-information';
-import { CommunicationPreferencesState } from '~/routes/$lang+/_public+/apply+/$id+/communication-preference';
-import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
-import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/dental-insurance';
-import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits';
-import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/partner-information';
-import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/personal-information';
+import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult/applicant-information';
+import { CommunicationPreferencesState } from '~/routes/$lang+/_public+/apply+/$id+/adult/communication-preference';
+import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/adult/date-of-birth';
+import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/adult/dental-insurance';
+import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/adult/federal-provincial-territorial-benefits';
+import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult/partner-information';
+import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult/personal-information';
 import { BenefitApplicationRequest } from '~/schemas/benefit-application-service-schemas.server';
 
 interface ToBenefitApplicationRequestArgs {

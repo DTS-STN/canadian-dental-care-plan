@@ -98,115 +98,115 @@
                 },
                 "children": [
                   {
-                    "id": "$lang+/_public+/apply+/$id+/applicant-information",
-                    "file": "routes/$lang+/_public+/apply+/$id+/applicant-information.tsx",
+                    "id": "$lang+/_public+/apply+/$id+/adult/applicant-information",
+                    "file": "routes/$lang+/_public+/apply+/$id+/adult/applicant-information.tsx",
                     "paths": {
-                      "en": "/:lang/apply/:id/applicant-information",
-                      "fr": "/:lang/appliquer/:id/renseignements-demandeur"
+                      "en": "/:lang/apply/:id/adult/applicant-information",
+                      "fr": "/:lang/appliquer/:id/adulte/renseignements-demandeur"
                     }
                   },
                   {
-                    "id": "$lang+/_public+/apply+/$id+/application-delegate",
-                    "file": "routes/$lang+/_public+/apply+/$id+/application-delegate.tsx",
+                    "id": "$lang+/_public+/apply+/$id+/adult/application-delegate",
+                    "file": "routes/$lang+/_public+/apply+/$id+/adult/application-delegate.tsx",
                     "paths": {
-                      "en": "/:lang/apply/:id/application-delegate",
-                      "fr": "/:lang/appliquer/:id/delegue-demande"
+                      "en": "/:lang/apply/:id/adult/application-delegate",
+                      "fr": "/:lang/appliquer/:id/adulte/delegue-demande"
                     }
                   },
                   {
-                    "id": "$lang+/_public+/apply+/$id+/communication-preference",
-                    "file": "routes/$lang+/_public+/apply+/$id+/communication-preference.tsx",
+                    "id": "$lang+/_public+/apply+/$id+/adult/communication-preference",
+                    "file": "routes/$lang+/_public+/apply+/$id+/adult/communication-preference.tsx",
                     "paths": {
-                      "en": "/:lang/apply/:id/communication-preference",
-                      "fr": "/:lang/appliquer/:id/preference-communication"
+                      "en": "/:lang/apply/:id/adult/communication-preference",
+                      "fr": "/:lang/appliquer/:id/adult/preference-communication"
                     }
                   },
                   {
-                    "id": "$lang+/_public+/apply+/$id+/confirmation",
-                    "file": "routes/$lang+/_public+/apply+/$id+/confirmation.tsx",
+                    "id": "$lang+/_public+/apply+/$id+/adult/confirmation",
+                    "file": "routes/$lang+/_public+/apply+/$id+/adult/confirmation.tsx",
                     "paths": {
-                      "en": "/:lang/apply/:id/confirmation",
-                      "fr": "/:lang/appliquer/:id/confirmation"
+                      "en": "/:lang/apply/:id/adult/confirmation",
+                      "fr": "/:lang/appliquer/:id/adulte/confirmation"
                     }
                   },
                   {
-                    "id": "$lang+/_public+/apply+/$id+/date-of-birth",
-                    "file": "routes/$lang+/_public+/apply+/$id+/date-of-birth.tsx",
+                    "id": "$lang+/_public+/apply+/$id+/adult/date-of-birth",
+                    "file": "routes/$lang+/_public+/apply+/$id+/adult/date-of-birth.tsx",
                     "paths": {
-                      "en": "/:lang/apply/:id/date-of-birth",
-                      "fr": "/:lang/appliquer/:id/date-de-naissance"
+                      "en": "/:lang/apply/:id/adult/date-of-birth",
+                      "fr": "/:lang/appliquer/:id/adulte/date-de-naissance"
                     }
                   },
                   {
-                    "id": "$lang+/_public+/apply+/$id+/dental-insurance",
-                    "file": "routes/$lang+/_public+/apply+/$id+/dental-insurance.tsx",
+                    "id": "$lang+/_public+/apply+/$id+/adult/dental-insurance",
+                    "file": "routes/$lang+/_public+/apply+/$id+/adult/dental-insurance.tsx",
                     "paths": {
-                      "en": "/:lang/apply/:id/dental-insurance",
-                      "fr": "/:lang/appliquer/:id/assurance-dentaire"
+                      "en": "/:lang/apply/:id/adult/dental-insurance",
+                      "fr": "/:lang/appliquer/:id/adulte/assurance-dentaire"
                     }
                   },
                   {
-                    "id": "$lang+/_public+/apply+/$id+/dob-eligibility",
-                    "file": "routes/$lang+/_public+/apply+/$id+/dob-eligibility.tsx",
+                    "id": "$lang+/_public+/apply+/$id+/adult/dob-eligibility",
+                    "file": "routes/$lang+/_public+/apply+/$id+/adult/dob-eligibility.tsx",
                     "paths": {
-                      "en": "/:lang/apply/:id/dob-eligibility",
-                      "fr": "/:lang/appliquer/:id/ddn-admissibilite"
+                      "en": "/:lang/apply/:id/adult/dob-eligibility",
+                      "fr": "/:lang/appliquer/:id/adulte/ddn-admissibilite"
                     }
                   },
                   {
-                    "id": "$lang+/_public+/apply+/$id+/exit-application",
-                    "file": "routes/$lang+/_public+/apply+/$id+/exit-application.tsx",
+                    "id": "$lang+/_public+/apply+/$id+/adult/exit-application",
+                    "file": "routes/$lang+/_public+/apply+/$id+/adult/exit-application.tsx",
                     "paths": {
-                      "en": "/:lang/apply/:id/exit-application",
-                      "fr": "/:lang/appliquer/:id/quitter-demande"
+                      "en": "/:lang/apply/:id/adult/exit-application",
+                      "fr": "/:lang/appliquer/:id/adulte/quitter-demande"
                     }
                   },
                   {
-                    "id": "$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits",
-                    "file": "routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits.tsx",
+                    "id": "$lang+/_public+/apply+/$id+/adult/federal-provincial-territorial-benefits",
+                    "file": "routes/$lang+/_public+/apply+/$id+/adult/federal-provincial-territorial-benefits.tsx",
                     "paths": {
-                      "en": "/:lang/apply/:id/federal-provincial-territorial-benefits",
-                      "fr": "/:lang/appliquer/:id/prestations-dentaires-federales-provinciales-territoriales"
+                      "en": "/:lang/apply/:id/adult/federal-provincial-territorial-benefits",
+                      "fr": "/:lang/appliquer/:id/adulte/prestations-dentaires-federales-provinciales-territoriales"
                     }
                   },
                   {
-                    "id": "$lang+/_public+/apply+/$id+/file-taxes",
-                    "file": "routes/$lang+/_public+/apply+/$id+/file-taxes.tsx",
+                    "id": "$lang+/_public+/apply+/$id+/adult/file-taxes",
+                    "file": "routes/$lang+/_public+/apply+/$id+/adult/file-taxes.tsx",
                     "paths": {
-                      "en": "/:lang/apply/:id/file-taxes",
-                      "fr": "/:lang/appliquer/:id/produire-declaration-revenus"
+                      "en": "/:lang/apply/:id/adult/file-taxes",
+                      "fr": "/:lang/appliquer/:id/adulte/produire-declaration-revenus"
                     }
                   },
                   {
-                    "id": "$lang+/_public+/apply+/$id+/partner-information",
-                    "file": "routes/$lang+/_public+/apply+/$id+/partner-information.tsx",
+                    "id": "$lang+/_public+/apply+/$id+/adult/partner-information",
+                    "file": "routes/$lang+/_public+/apply+/$id+/adult/partner-information.tsx",
                     "paths": {
-                      "en": "/:lang/apply/:id/partner-information",
-                      "fr": "/:lang/appliquer/:id/renseignements-partenaire"
+                      "en": "/:lang/apply/:id/adult/partner-information",
+                      "fr": "/:lang/appliquer/:id/adulte/renseignements-partenaire"
                     }
                   },
                   {
-                    "id": "$lang+/_public+/apply+/$id+/personal-information",
-                    "file": "routes/$lang+/_public+/apply+/$id+/personal-information.tsx",
+                    "id": "$lang+/_public+/apply+/$id+/adult/personal-information",
+                    "file": "routes/$lang+/_public+/apply+/$id+/adult/personal-information.tsx",
                     "paths": {
-                      "en": "/:lang/apply/:id/personal-information",
-                      "fr": "/:lang/appliquer/:id/renseignements-personnels"
+                      "en": "/:lang/apply/:id/adult/personal-information",
+                      "fr": "/:lang/appliquer/:id/adulte/renseignements-personnels"
                     }
                   },
                   {
-                    "id": "$lang+/_public+/apply+/$id+/review-information",
-                    "file": "routes/$lang+/_public+/apply+/$id+/review-information.tsx",
+                    "id": "$lang+/_public+/apply+/$id+/adult/review-information",
+                    "file": "routes/$lang+/_public+/apply+/$id+/adult/review-information.tsx",
                     "paths": {
-                      "en": "/:lang/apply/:id/review-information",
-                      "fr": "/:lang/appliquer/:id/revue-renseignements"
+                      "en": "/:lang/apply/:id/adult/review-information",
+                      "fr": "/:lang/appliquer/:id/adulte/revue-renseignements"
                     }
                   },
                   {
-                    "id": "$lang+/_public+/apply+/$id+/tax-filing",
-                    "file": "routes/$lang+/_public+/apply+/$id+/tax-filing.tsx",
+                    "id": "$lang+/_public+/apply+/$id+/adult/tax-filing",
+                    "file": "routes/$lang+/_public+/apply+/$id+/adult/tax-filing.tsx",
                     "paths": {
-                      "en": "/:lang/apply/:id/tax-filing",
-                      "fr": "/:lang/appliquer/:id/declaration-impot"
+                      "en": "/:lang/apply/:id/adult/tax-filing",
+                      "fr": "/:lang/appliquer/:id/adulte/declaration-impot"
                     }
                   },
                   {
