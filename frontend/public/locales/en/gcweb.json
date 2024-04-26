@@ -32,7 +32,7 @@
     "menu-sign-out.text": "Sign Out",
     "banner": {
       "alert": "Alpha",
-      "desc": "This is a prototype environment. No data is kept."
+      "desc": "This is a prototype for testing purposes only. Information entered will not be saved."
     }
   },
   "footer": {
