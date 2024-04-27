@@ -65,7 +65,7 @@ export default function ApplyFlowFileYourTaxes() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const eligibilityInfo = <InlineLink to={t('apply:eligibility.dob-eligibility.eligibility-info-href')} className="external-link font-lato font-semibold" target="_blank" />;
+  const eligibilityInfo = <InlineLink to={t('apply:eligibility.dob-eligibility.eligibility-info-href')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

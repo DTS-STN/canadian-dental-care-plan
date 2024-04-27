@@ -12,7 +12,6 @@ import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
-import { NewTabIndicator } from '~/components/new-tab-indicator';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
@@ -123,11 +122,11 @@ export default function LettersIndex() {
                     routeId="$lang+/_protected+/letters+/$id.download"
                     params={{ ...params, id: letter.id }}
                     className="external-link font-lato font-semibold"
+                    newTabIndicator
                     target="_blank"
                     data-gc-analytics-customclick={gcAnalyticsCustomClickValue}
                   >
                     {letterName}
-                    <NewTabIndicator />
                   </InlineLink>
                   <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: letter.issuedOn })}</p>
                 </li>
