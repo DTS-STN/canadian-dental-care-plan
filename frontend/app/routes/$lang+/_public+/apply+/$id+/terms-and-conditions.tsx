@@ -9,7 +9,7 @@ import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { InlineLink } from '~/components/inline-link';
-import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -29,8 +29,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, request, params }: LoaderFunctionArgs) {
-  const applyRouteHelpers = getApplyRouteHelpers();
-  await applyRouteHelpers.loadState({ params, request, session });
+  await loadApplyState({ params, session });
   const csrfToken = String(session.get('csrfToken'));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -41,7 +40,6 @@ export async function loader({ context: { session }, request, params }: LoaderFu
 
 export async function action({ context: { session }, request, params }: ActionFunctionArgs) {
   const log = getLogger('apply/terms-and-conditions');
-  const applyRouteHelpers = getApplyRouteHelpers();
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -52,7 +50,8 @@ export async function action({ context: { session }, request, params }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  await applyRouteHelpers.saveState({ params, request, session, state: {} });
+  saveApplyState({ params, session, state: {} });
+
   return redirect(getPathById('$lang+/_public+/apply+/$id+/type-application', params));
 }
 

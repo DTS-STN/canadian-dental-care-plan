@@ -13,7 +13,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -41,20 +41,18 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const applyRouteHelpers = getApplyRouteHelpers();
-  const state = await applyRouteHelpers.loadState({ params, request, session });
+  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('adult-apply:eligibility.tax-filing.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.taxFiling2023 });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.adultState.taxFiling2023 });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/tax-filing');
 
-  const applyRouteHelpers = getApplyRouteHelpers();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const taxFilingSchema: z.ZodType<TaxFilingState> = z.nativeEnum(TaxFilingOption, {
@@ -77,7 +75,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  await applyRouteHelpers.saveState({ params, request, session, state: { taxFiling2023: parsedDataResult.data } });
+  saveApplyAdultState({ params, request, session, state: { taxFiling2023: parsedDataResult.data } });
 
   if (parsedDataResult.data === TaxFilingOption.No) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/file-taxes', params));

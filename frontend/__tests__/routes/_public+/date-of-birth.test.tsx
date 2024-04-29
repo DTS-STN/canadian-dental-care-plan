@@ -7,18 +7,18 @@ import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/adult/date-
 
 vi.mock('date-fns');
 
-vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
-  getApplyRouteHelpers: vi.fn().mockReturnValue({
-    loadState: vi.fn().mockReturnValue({
-      id: '123',
+vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
+  loadApplyAdultState: vi.fn().mockReturnValue({
+    id: '123',
+    adultState: {
       dateOfBirth: '2000-01-01',
       allChildrenUnder18: 'yes',
-    }),
-    saveState: vi.fn().mockReturnValue({
-      headers: {
-        'Set-Cookie': 'some-set-cookie-header',
-      },
-    }),
+    },
+  }),
+  saveApplyAdultState: vi.fn().mockReturnValue({
+    headers: {
+      'Set-Cookie': 'some-set-cookie-header',
+    },
   }),
 }));
 

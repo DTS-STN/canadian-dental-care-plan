@@ -15,7 +15,7 @@ import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -38,21 +38,19 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const applyRouteHelpers = getApplyRouteHelpers();
-  const state = await applyRouteHelpers.loadState({ params, request, session });
+  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('adult-apply:dental-insurance.title') }) };
 
-  return json({ id: state, csrfToken, meta, defaultState: state.dentalInsurance, editMode: state.editMode });
+  return json({ id: state, csrfToken, meta, defaultState: state.adultState.dentalInsurance, editMode: state.adultState.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/dental-insurance');
 
-  const applyRouteHelpers = getApplyRouteHelpers();
-  const state = await applyRouteHelpers.loadState({ params, request, session });
+  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -74,9 +72,9 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  await applyRouteHelpers.saveState({ params, request, session, state: { dentalInsurance: parsedDataResult.data } });
+  saveApplyAdultState({ params, request, session, state: { dentalInsurance: parsedDataResult.data } });
 
-  if (state.editMode) {
+  if (state.adultState.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
   }
 

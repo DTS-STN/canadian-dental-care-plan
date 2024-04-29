@@ -4,17 +4,17 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/adult/tax-filing';
 
-vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
-  getApplyRouteHelpers: vi.fn().mockReturnValue({
-    loadState: vi.fn().mockReturnValue({
-      id: '123',
+vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
+  loadApplyAdultState: vi.fn().mockReturnValue({
+    id: '123',
+    adultState: {
       taxFiling2023: 'yes',
-    }),
-    saveState: vi.fn().mockReturnValue({
-      headers: {
-        'Set-Cookie': 'some-set-cookie-header',
-      },
-    }),
+    },
+  }),
+  saveApplyAdultState: vi.fn().mockReturnValue({
+    headers: {
+      'Set-Cookie': 'some-set-cookie-header',
+    },
   }),
 }));
 

@@ -16,7 +16,8 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { applicantInformationStateHasPartner, loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -52,23 +53,21 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const applyRouteHelpers = getApplyRouteHelpers();
   const lookupService = getLookupService();
-  const state = await applyRouteHelpers.loadState({ params, request, session });
+  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const maritalStatuses = await lookupService.getAllMaritalStatuses();
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('adult-apply:applicant-information.page-title') }) };
 
-  return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.applicantInformation, editMode: state.editMode });
+  return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.adultState.applicantInformation, editMode: state.adultState.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/applicant-information');
 
-  const applyRouteHelpers = getApplyRouteHelpers();
-  const state = await applyRouteHelpers.loadState({ params, request, session });
+  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formData = await request.formData();
@@ -83,9 +82,9 @@ export async function action({ context: { session }, params, request }: ActionFu
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
 
   if (formAction === FormAction.Cancel) {
-    invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
+    invariant(state.adultState.applicantInformation, 'Expected state.applicantInformation to be defined');
 
-    if (applyRouteHelpers.hasPartner(state.applicantInformation) && state.partnerInformation === undefined) {
+    if (applicantInformationStateHasPartner(state.adultState.applicantInformation) && state.adultState.partnerInformation === undefined) {
       const errorMessage = t('adult-apply:applicant-information.error-message.marital-status-no-partner-information');
       const errors: z.ZodFormattedError<ApplicantInformationState, string> = { _errors: [errorMessage], maritalStatus: { _errors: [errorMessage] } };
       return json({ errors });
@@ -107,7 +106,7 @@ export async function action({ context: { session }, params, request }: ActionFu
           return z.NEVER;
         }
 
-        if (state.partnerInformation && formatSin(sin) === formatSin(state.partnerInformation.socialInsuranceNumber)) {
+        if (state.adultState.partnerInformation && formatSin(sin) === formatSin(state.adultState.partnerInformation.socialInsuranceNumber)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:applicant-information.error-message.sin-unique'), fatal: true });
           return z.NEVER;
         }
@@ -132,11 +131,11 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const hasPartner = applyRouteHelpers.hasPartner(parsedDataResult.data);
+  const hasPartner = applicantInformationStateHasPartner(parsedDataResult.data);
   const remove = !hasPartner ? 'partnerInformation' : undefined;
-  await applyRouteHelpers.saveState({ params, remove, request, session, state: { applicantInformation: parsedDataResult.data } });
+  await saveApplyAdultState({ params, remove, request, session, state: { applicantInformation: parsedDataResult.data } });
 
-  if (state.editMode) {
+  if (state.adultState.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
   }
 

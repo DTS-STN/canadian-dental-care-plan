@@ -16,7 +16,7 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
@@ -48,9 +48,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
-  const applyRouteHelpers = getApplyRouteHelpers();
+
   const lookupService = getLookupService();
-  const state = await applyRouteHelpers.loadState({ params, request, session });
+  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const preferredLanguages = await lookupService.getAllPreferredLanguages();
   const preferredCommunicationMethods = await lookupService.getAllPreferredCommunicationMethods();
@@ -71,11 +71,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     preferredCommunicationMethods,
     preferredLanguages,
     defaultState: {
-      ...state.communicationPreferences,
-      email: state.communicationPreferences?.email ?? state.personalInformation?.email,
-      confirmEmail: state.communicationPreferences?.confirmEmail ?? state.personalInformation?.confirmEmail,
+      ...(state.adultState.communicationPreferences ?? {}),
+      email: state.adultState.communicationPreferences?.email ?? state.adultState.personalInformation?.email,
+      confirmEmail: state.adultState.communicationPreferences?.confirmEmail ?? state.adultState.personalInformation?.confirmEmail,
     },
-    editMode: state.editMode,
+    editMode: state.adultState.editMode,
   });
 }
 
@@ -83,8 +83,8 @@ export async function action({ context: { session }, params, request }: ActionFu
   const log = getLogger('apply/communication-preference');
 
   const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
-  const applyRouteHelpers = getApplyRouteHelpers();
-  const state = await applyRouteHelpers.loadState({ params, request, session });
+
+  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formSchema = z
@@ -133,9 +133,9 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  await applyRouteHelpers.saveState({ params, request, session, state: { communicationPreferences: parsedDataResult.data } });
+  saveApplyAdultState({ params, request, session, state: { communicationPreferences: parsedDataResult.data } });
 
-  if (state.editMode) {
+  if (state.adultState.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
   }
 

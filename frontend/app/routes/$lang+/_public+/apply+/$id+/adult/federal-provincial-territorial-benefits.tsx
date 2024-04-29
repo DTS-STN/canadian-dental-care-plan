@@ -16,7 +16,7 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
-import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
@@ -63,9 +63,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const { CANADA_COUNTRY_ID } = getEnv();
-  const applyRouteHelpers = getApplyRouteHelpers();
+
   const lookupService = getLookupService();
-  const state = await applyRouteHelpers.loadState({ params, request, session });
+  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
@@ -78,8 +78,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   return json({
     csrfToken,
-    defaultState: state.dentalBenefits,
-    editMode: state.editMode,
+    defaultState: state.adultState.dentalBenefits,
+    editMode: state.adultState.editMode,
     federalSocialPrograms,
     id: state.id,
     meta,
@@ -91,7 +91,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/federal-provincial-territorial');
 
-  const applyRouteHelpers = getApplyRouteHelpers();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
@@ -167,7 +166,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     });
   }
 
-  await applyRouteHelpers.saveState({
+  await saveApplyAdultState({
     params,
     request,
     session,

@@ -14,7 +14,8 @@ import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { ApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import { loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -44,8 +45,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const applyRouteHelpers = getApplyRouteHelpers();
-  const state = await applyRouteHelpers.loadState({ params, request, session });
+  const state = loadApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
@@ -57,7 +57,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/type-of-application');
 
-  const applyRouteHelpers = getApplyRouteHelpers();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   /**
@@ -83,7 +82,14 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  await applyRouteHelpers.saveState({ params, request, session, state: { typeOfApplication: parsedDataResult.data } });
+  saveApplyState({
+    params,
+    session,
+    state: {
+      adultState: parsedDataResult.data === 'personal' ? ({ editMode: false } satisfies ApplyAdultState) : undefined,
+      typeOfApplication: parsedDataResult.data,
+    },
+  });
 
   if (parsedDataResult.data === ApplicantType.Delegate) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/application-delegate', params));

@@ -17,7 +17,8 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
-import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyAdultState, saveApplyAdultState, validateApplyAdultStateForReview } from '~/route-helpers/apply-adult-route-helpers.server';
+import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -59,11 +60,10 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const applyRouteHelpers = getApplyRouteHelpers();
   const lookupService = getLookupService();
 
-  const state = await applyRouteHelpers.loadState({ params, request, session });
-  applyRouteHelpers.validateStateForReview({ params, state });
+  const state = loadApplyAdultState({ params, request, session });
+  validateApplyAdultStateForReview({ params, state });
 
   const maritalStatuses = await lookupService.getAllMaritalStatuses();
   const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
@@ -71,13 +71,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const { COMMUNICATION_METHOD_EMAIL_ID, ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
   // prettier-ignore
-  if (state.applicantInformation === undefined ||
-    state.communicationPreferences === undefined ||
-    state.dateOfBirth === undefined ||
-    state.dentalBenefits === undefined ||
-    state.dentalInsurance === undefined ||
-    state.personalInformation === undefined ||
-    state.taxFiling2023 === undefined ||
+  if (state.adultState.applicantInformation === undefined ||
+    state.adultState.communicationPreferences === undefined ||
+    state.adultState.dateOfBirth === undefined ||
+    state.adultState.dentalBenefits === undefined ||
+    state.adultState.dentalInsurance === undefined ||
+    state.adultState.personalInformation === undefined ||
+    state.adultState.taxFiling2023 === undefined ||
     state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
@@ -87,75 +87,75 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   // Getting province by Id
   const allRegions = await lookupService.getAllRegions();
-  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
-  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
+  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.adultState.personalInformation?.mailingProvince);
+  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.adultState.personalInformation?.homeProvince);
 
   // Getting Country by Id
   const allCountries = await lookupService.getAllCountries();
-  const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation?.mailingCountry);
-  const countryHome = allCountries.find((country) => country.countryId === state.personalInformation?.homeCountry);
+  const countryMailing = allCountries.find((country) => country.countryId === state.adultState.personalInformation?.mailingCountry);
+  const countryHome = allCountries.find((country) => country.countryId === state.adultState.personalInformation?.homeCountry);
 
   if (!countryMailing) {
-    throw new Error(`Unexpected mailing address country: ${state.personalInformation.mailingCountry}`);
+    throw new Error(`Unexpected mailing address country: ${state.adultState.personalInformation.mailingCountry}`);
   }
 
   if (!countryHome) {
-    throw new Error(`Unexpected home address country: ${state.personalInformation.homeCountry}`);
+    throw new Error(`Unexpected home address country: ${state.adultState.personalInformation.homeCountry}`);
   }
 
   const userInfo = {
-    firstName: state.applicantInformation.firstName,
-    lastName: state.applicantInformation.lastName,
-    phoneNumber: state.personalInformation.phoneNumber,
-    altPhoneNumber: state.personalInformation.phoneNumberAlt,
-    preferredLanguage: state.communicationPreferences.preferredLanguage,
-    birthday: toLocaleDateString(parse(state.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
-    sin: state.applicantInformation.socialInsuranceNumber,
-    martialStatus: state.applicantInformation.maritalStatus,
-    email: state.communicationPreferences.email,
-    communicationPreference: state.communicationPreferences,
+    firstName: state.adultState.applicantInformation.firstName,
+    lastName: state.adultState.applicantInformation.lastName,
+    phoneNumber: state.adultState.personalInformation.phoneNumber,
+    altPhoneNumber: state.adultState.personalInformation.phoneNumberAlt,
+    preferredLanguage: state.adultState.communicationPreferences.preferredLanguage,
+    birthday: toLocaleDateString(parse(state.adultState.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+    sin: state.adultState.applicantInformation.socialInsuranceNumber,
+    martialStatus: state.adultState.applicantInformation.maritalStatus,
+    email: state.adultState.communicationPreferences.email,
+    communicationPreference: state.adultState.communicationPreferences,
   };
-  const spouseInfo = state.partnerInformation
+  const spouseInfo = state.adultState.partnerInformation
     ? {
-        firstName: state.partnerInformation.firstName,
-        lastName: state.partnerInformation.lastName,
-        birthday: toLocaleDateString(parse(state.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
-        sin: state.partnerInformation.socialInsuranceNumber,
-        consent: state.partnerInformation.confirm,
+        firstName: state.adultState.partnerInformation.firstName,
+        lastName: state.adultState.partnerInformation.lastName,
+        birthday: toLocaleDateString(parse(state.adultState.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+        sin: state.adultState.partnerInformation.socialInsuranceNumber,
+        consent: state.adultState.partnerInformation.confirm,
       }
     : undefined;
 
   const preferredLanguage = await lookupService.getPreferredLanguage(userInfo.preferredLanguage);
 
   const mailingAddressInfo = {
-    address: state.personalInformation.mailingAddress,
-    city: state.personalInformation.mailingCity,
+    address: state.adultState.personalInformation.mailingAddress,
+    city: state.adultState.personalInformation.mailingCity,
     province: provinceMailing,
-    postalCode: state.personalInformation.mailingPostalCode,
+    postalCode: state.adultState.personalInformation.mailingPostalCode,
     country: countryMailing,
-    apartment: state.personalInformation.mailingApartment,
+    apartment: state.adultState.personalInformation.mailingApartment,
   };
 
   const homeAddressInfo = {
-    address: state.personalInformation.homeAddress,
-    city: state.personalInformation.homeCity,
+    address: state.adultState.personalInformation.homeAddress,
+    city: state.adultState.personalInformation.homeCity,
     province: provinceHome,
-    postalCode: state.personalInformation.homePostalCode,
+    postalCode: state.adultState.personalInformation.homePostalCode,
     country: countryHome,
-    apartment: state.personalInformation.homeApartment,
+    apartment: state.adultState.personalInformation.homeApartment,
   };
 
-  const dentalInsurance = state.dentalInsurance;
+  const dentalInsurance = state.adultState.dentalInsurance;
 
   const dentalBenefit = {
     federalBenefit: {
-      access: state.dentalBenefits.hasFederalBenefits,
-      benefit: state.dentalBenefits.federalSocialProgram,
+      access: state.adultState.dentalBenefits.hasFederalBenefits,
+      benefit: state.adultState.dentalBenefits.federalSocialProgram,
     },
     provTerrBenefit: {
-      access: state.dentalBenefits.hasProvincialTerritorialBenefits,
-      province: state.dentalBenefits.province,
-      benefit: state.dentalBenefits.provincialTerritorialSocialProgram,
+      access: state.adultState.dentalBenefits.hasProvincialTerritorialBenefits,
+      province: state.adultState.dentalBenefits.province,
+      benefit: state.adultState.dentalBenefits.provincialTerritorialSocialProgram,
     },
   };
 
@@ -186,7 +186,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/review-information');
-  const applyRouteHelpers = getApplyRouteHelpers();
+
   const benefitApplicationService = getBenefitApplicationService();
   const { ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
@@ -204,35 +204,35 @@ export async function action({ context: { session }, params, request }: ActionFu
   if (hCaptchaEnabled) {
     const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
     if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse(hCaptchaResponse, request))) {
-      await applyRouteHelpers.clearState({ params, request, session });
+      clearApplyState({ params, session });
       return redirect(getPathById('$lang+/_public+/unable-to-process-request', params));
     }
   }
 
-  const state = await applyRouteHelpers.loadState({ params, request, session });
-  applyRouteHelpers.validateStateForReview({ params, state });
+  const state = loadApplyAdultState({ params, request, session });
+  validateApplyAdultStateForReview({ params, state });
 
   // prettier-ignore
-  if (state.applicantInformation === undefined ||
-    state.communicationPreferences === undefined ||
-    state.dateOfBirth === undefined ||
-    state.dentalBenefits === undefined ||
-    state.dentalInsurance === undefined ||
-    state.personalInformation === undefined ||
-    state.taxFiling2023 === undefined ||
+  if (state.adultState.applicantInformation === undefined ||
+    state.adultState.communicationPreferences === undefined ||
+    state.adultState.dateOfBirth === undefined ||
+    state.adultState.dentalBenefits === undefined ||
+    state.adultState.dentalInsurance === undefined ||
+    state.adultState.personalInformation === undefined ||
+    state.adultState.taxFiling2023 === undefined ||
     state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
   // TODO submit to the API and grab the confirmation code from the response
   const benefitApplicationRequest = toBenefitApplicationRequest({
-    applicantInformation: state.applicantInformation,
-    communicationPreferences: state.communicationPreferences,
-    dateOfBirth: state.dateOfBirth,
-    dentalBenefits: state.dentalBenefits,
-    dentalInsurance: state.dentalInsurance,
-    personalInformation: state.personalInformation,
-    partnerInformation: state.partnerInformation,
+    applicantInformation: state.adultState.applicantInformation,
+    communicationPreferences: state.adultState.communicationPreferences,
+    dateOfBirth: state.adultState.dateOfBirth,
+    dentalBenefits: state.adultState.dentalBenefits,
+    dentalInsurance: state.adultState.dentalInsurance,
+    personalInformation: state.adultState.personalInformation,
+    partnerInformation: state.adultState.partnerInformation,
   });
 
   const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
@@ -242,7 +242,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     submittedOn: new Date().toISOString(),
   };
 
-  await applyRouteHelpers.saveState({ params, request, session, state: { submissionInfo } });
+  saveApplyAdultState({ params, request, session, state: { submissionInfo } });
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/confirmation', params));
 }
 

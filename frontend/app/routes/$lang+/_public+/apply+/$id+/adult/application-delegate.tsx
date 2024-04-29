@@ -10,7 +10,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
-import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { clearApplyState, loadApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -29,8 +29,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const applyRouteHelpers = getApplyRouteHelpers();
-  const { id } = await applyRouteHelpers.loadState({ params, request, session });
+  const { id } = loadApplyState({ params, session });
 
   const csrfToken = String(session.get('csrfToken'));
 
@@ -42,7 +41,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/application-delegate');
-  const applyRouteHelpers = getApplyRouteHelpers();
+
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formData = await request.formData();
@@ -54,7 +53,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  await applyRouteHelpers.clearState({ params, request, session });
+  clearApplyState({ params, session });
 
   return redirect(t('adult-apply:eligibility.application-delegate.return-btn-link'));
 }

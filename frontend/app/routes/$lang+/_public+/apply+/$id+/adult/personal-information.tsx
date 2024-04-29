@@ -18,7 +18,7 @@ import { InputField } from '~/components/input-field';
 import { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
-import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
@@ -62,9 +62,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const applyRouteHelpers = getApplyRouteHelpers();
   const lookupService = getLookupService();
-  const state = await applyRouteHelpers.loadState({ params, request, session });
+  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = getEnv();
 
@@ -78,27 +77,22 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     id: state.id,
     csrfToken,
     meta,
-    defaultState: {
-      ...state.personalInformation,
-      email: state.personalInformation?.email ?? state.communicationPreferences?.email,
-      confirmEmail: state.personalInformation?.confirmEmail ?? state.communicationPreferences?.confirmEmail,
-    },
-    maritalStatus: state.applicantInformation?.maritalStatus,
+    defaultState: state.adultState.personalInformation,
+    maritalStatus: state.adultState.applicantInformation?.maritalStatus,
     countryList,
     regionList,
     CANADA_COUNTRY_ID,
     USA_COUNTRY_ID,
     MARITAL_STATUS_CODE_COMMONLAW,
     MARITAL_STATUS_CODE_MARRIED,
-    editMode: state.editMode,
+    editMode: state.adultState.editMode,
   });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/personal-information');
 
-  const applyRouteHelpers = getApplyRouteHelpers();
-  const state = await applyRouteHelpers.loadState({ params, request, session });
+  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
@@ -245,9 +239,9 @@ export async function action({ context: { session }, params, request }: ActionFu
       }
     : parsedDataResult.data;
 
-  await applyRouteHelpers.saveState({ params, request, session, state: { personalInformation: updatedData } });
+  saveApplyAdultState({ params, request, session, state: { personalInformation: updatedData } });
 
-  if (state.editMode) {
+  if (state.adultState.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
   }
 
@@ -260,10 +254,10 @@ export default function ApplyFlowPersonalInformation() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState.mailingCountry);
+  const [selectedMailingCountry, setSelectedMailingCountry] = useState(defaultState?.mailingCountry);
   const [mailingCountryRegions, setMailingCountryRegions] = useState<typeof regionList>([]);
-  const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState.copyMailingAddress === true);
-  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState.homeCountry);
+  const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState?.copyMailingAddress === true);
+  const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState?.homeCountry);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
   const errorSummaryId = 'error-summary';
 
@@ -403,7 +397,7 @@ export default function ApplyFlowPersonalInformation() {
               name="phoneNumber"
               className="w-full"
               autoComplete="tel"
-              defaultValue={defaultState.phoneNumber ?? ''}
+              defaultValue={defaultState?.phoneNumber ?? ''}
               errorMessage={errorMessages['phone-number']}
               label={t('adult-apply:personal-information.phone-number')}
               maxLength={100}
@@ -414,7 +408,7 @@ export default function ApplyFlowPersonalInformation() {
               name="phoneNumberAlt"
               className="w-full"
               autoComplete="tel"
-              defaultValue={defaultState.phoneNumberAlt ?? ''}
+              defaultValue={defaultState?.phoneNumberAlt ?? ''}
               errorMessage={errorMessages['phone-number-alt']}
               label={t('adult-apply:personal-information.phone-number-alt')}
               maxLength={100}
@@ -430,7 +424,7 @@ export default function ApplyFlowPersonalInformation() {
               name="email"
               className="w-full"
               autoComplete="email"
-              defaultValue={defaultState.email ?? ''}
+              defaultValue={defaultState?.email ?? ''}
               errorMessage={errorMessages['email']}
               label={t('adult-apply:personal-information.email')}
               maxLength={100}
@@ -441,7 +435,7 @@ export default function ApplyFlowPersonalInformation() {
               name="confirmEmail"
               className="w-full"
               autoComplete="email"
-              defaultValue={defaultState.confirmEmail ?? ''}
+              defaultValue={defaultState?.confirmEmail ?? ''}
               errorMessage={errorMessages['confirm-email']}
               label={t('adult-apply:personal-information.confirm-email')}
               maxLength={100}
@@ -459,7 +453,7 @@ export default function ApplyFlowPersonalInformation() {
               helpMessagePrimary={t('adult-apply:personal-information.address-field.address-note')}
               helpMessagePrimaryClassName="text-black"
               autoComplete="address-line1"
-              defaultValue={defaultState.mailingAddress ?? ''}
+              defaultValue={defaultState?.mailingAddress ?? ''}
               errorMessage={errorMessages['mailing-address']}
               required
             />
@@ -470,7 +464,7 @@ export default function ApplyFlowPersonalInformation() {
               label={t('adult-apply:personal-information.address-field.apartment')}
               maxLength={30}
               autoComplete="address-line2"
-              defaultValue={defaultState.mailingApartment ?? ''}
+              defaultValue={defaultState?.mailingApartment ?? ''}
               errorMessage={errorMessages['mailing-apartment']}
               required
             />
@@ -480,7 +474,7 @@ export default function ApplyFlowPersonalInformation() {
               className="w-full sm:w-1/2"
               label={t('adult-apply:personal-information.address-field.country')}
               autoComplete="country"
-              defaultValue={defaultState.mailingCountry ?? ''}
+              defaultValue={defaultState?.mailingCountry ?? ''}
               errorMessage={errorMessages['mailing-country']}
               options={[dummyOption, ...countries]}
               onChange={mailingCountryChangeHandler}
@@ -492,7 +486,7 @@ export default function ApplyFlowPersonalInformation() {
                 name="mailingProvince"
                 className="w-full sm:w-1/2"
                 label={t('adult-apply:personal-information.address-field.province')}
-                defaultValue={defaultState.mailingProvince ?? ''}
+                defaultValue={defaultState?.mailingProvince ?? ''}
                 errorMessage={errorMessages['mailing-province']}
                 options={[dummyOption, ...mailingRegions]}
                 required
@@ -506,7 +500,7 @@ export default function ApplyFlowPersonalInformation() {
                 label={t('adult-apply:personal-information.address-field.city')}
                 maxLength={100}
                 autoComplete="address-level2"
-                defaultValue={defaultState.mailingCity ?? ''}
+                defaultValue={defaultState?.mailingCity ?? ''}
                 errorMessage={errorMessages['mailing-city']}
                 required
               />
@@ -517,7 +511,7 @@ export default function ApplyFlowPersonalInformation() {
                 label={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID ? t('adult-apply:personal-information.address-field.postal-code') : t('adult-apply:personal-information.address-field.postal-code-optional')}
                 maxLength={100}
                 autoComplete="postal-code"
-                defaultValue={defaultState.mailingPostalCode}
+                defaultValue={defaultState?.mailingPostalCode}
                 errorMessage={errorMessages['mailing-postal-code']}
                 required={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID}
               />
@@ -540,7 +534,7 @@ export default function ApplyFlowPersonalInformation() {
                   helpMessagePrimaryClassName="text-black"
                   maxLength={30}
                   autoComplete="address-line1"
-                  defaultValue={defaultState.homeAddress ?? ''}
+                  defaultValue={defaultState?.homeAddress ?? ''}
                   errorMessage={errorMessages['home-address']}
                   required
                 />
@@ -551,7 +545,7 @@ export default function ApplyFlowPersonalInformation() {
                   label={t('adult-apply:personal-information.address-field.apartment')}
                   maxLength={30}
                   autoComplete="address-line2"
-                  defaultValue={defaultState.homeApartment ?? ''}
+                  defaultValue={defaultState?.homeApartment ?? ''}
                   errorMessage={errorMessages['home-apartment']}
                   required
                 />
@@ -561,7 +555,7 @@ export default function ApplyFlowPersonalInformation() {
                   className="w-full sm:w-1/2"
                   label={t('adult-apply:personal-information.address-field.country')}
                   autoComplete="country"
-                  defaultValue={defaultState.homeCountry ?? ''}
+                  defaultValue={defaultState?.homeCountry ?? ''}
                   errorMessage={errorMessages['home-country']}
                   options={[dummyOption, ...countries]}
                   onChange={homeCountryChangeHandler}
@@ -573,7 +567,7 @@ export default function ApplyFlowPersonalInformation() {
                     name="homeProvince"
                     className="w-full sm:w-1/2"
                     label={t('adult-apply:personal-information.address-field.province')}
-                    defaultValue={defaultState.homeProvince ?? ''}
+                    defaultValue={defaultState?.homeProvince ?? ''}
                     errorMessage={errorMessages['home-province']}
                     options={[dummyOption, ...homeRegions]}
                     required
@@ -587,7 +581,7 @@ export default function ApplyFlowPersonalInformation() {
                     label={t('adult-apply:personal-information.address-field.city')}
                     maxLength={100}
                     autoComplete="address-level2"
-                    defaultValue={defaultState.homeCity ?? ''}
+                    defaultValue={defaultState?.homeCity ?? ''}
                     errorMessage={errorMessages['home-city']}
                     required
                   />
@@ -598,7 +592,7 @@ export default function ApplyFlowPersonalInformation() {
                     label={selectedHomeCountry === CANADA_COUNTRY_ID || selectedHomeCountry === USA_COUNTRY_ID ? t('adult-apply:personal-information.address-field.postal-code') : t('adult-apply:personal-information.address-field.postal-code-optional')}
                     maxLength={100}
                     autoComplete="postal-code"
-                    defaultValue={defaultState.homePostalCode ?? ''}
+                    defaultValue={defaultState?.homePostalCode ?? ''}
                     errorMessage={errorMessages['home-postal-code']}
                     required={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID}
                   />

@@ -10,7 +10,8 @@ import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -29,26 +30,24 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const applyRouteHelpers = getApplyRouteHelpers();
-  const state = await applyRouteHelpers.loadState({ params, request, session });
+  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:parent-or-guardian.page-title') }) };
 
-  const parseDateOfBirth = parse(state.dateOfBirth ?? '', 'yyyy-MM-dd', new Date());
+  const parseDateOfBirth = parse(state.adultState.dateOfBirth ?? '', 'yyyy-MM-dd', new Date());
   const age = differenceInYears(new Date(), parseDateOfBirth);
   if (age > 16) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.disabilityTaxCredit });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.adultState.disabilityTaxCredit });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/parent-or-guardian');
 
-  const applyRouteHelpers = getApplyRouteHelpers();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formData = await request.formData();
@@ -60,7 +59,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  await applyRouteHelpers.clearState({ params, request, session });
+  clearApplyState({ params, session });
   return redirect(t('apply:parent-or-guardian.return-btn-link'));
 }
 
