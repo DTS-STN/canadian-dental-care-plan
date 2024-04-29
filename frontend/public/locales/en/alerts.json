@@ -68,6 +68,7 @@
     "confirmation-code-label": "Confimation Code",
     "submit-code": "Submit Confirmation Code",
     "request-new-code": "Request New Confirmation Code",
-    "back": "Back"
+    "back": "Back",
+    "confirm-code-expired":"The confirmation code sent to you has expired. Select the \"Request New Confirmation Code\" button below to have a new confirmation code sent to you at ||TODO insert email Address when feature completed||."
   }
 }
