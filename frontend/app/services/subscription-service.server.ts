@@ -102,5 +102,41 @@ function createSubscriptionService() {
     }
   }
 
-  return { getSubscription, updateSubscription };
+  async function validateConfirmationCode(userEmail: string, enteredConfirmationCode: string, userId: string) {
+    const auditService = getAuditService();
+    const instrumentationService = getInstrumentationService();
+
+    auditService.audit('alert-subscription.validate', { userId });
+
+    const dataToPass = {
+      email: userEmail,
+      confirmationCode: enteredConfirmationCode,
+    };
+    // TODO: add CDCP_API_BASE_URI
+    const url = new URL(`https://api.example.com/v1/codes/verify`);
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToPass),
+    });
+
+    instrumentationService.countHttpStatus('http.client.cdcp-api.codes.verify.posts', response.status);
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed to verify data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to verify data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
+
+    return response;
+  }
+
+  return { getSubscription, updateSubscription, validateConfirmationCode };
 }

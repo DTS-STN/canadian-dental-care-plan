@@ -3,6 +3,7 @@ import { json } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -10,10 +11,12 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { InputField } from '~/components/input-field';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
+import { getSubscriptionService } from '~/services/subscription-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';
@@ -44,17 +47,43 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:confirm.page-title') }) };
 
   instrumentationService.countHttpStatus('alerts.confirm', 302);
-  return json({ csrfToken, meta }); //TODO get the language and email address entered by the user when they entered their information on the index route...
+
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
+  session.set('alertSubscription', alertSubscription);
+
+  return json({ csrfToken, meta, alertSubscription, userInfoToken }); //TODO get the language and email address entered by the user when they entered their information on the index route...
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const formData = await request.formData();
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const alertSubscription = session.get('alertSubscription');
   const action = formData.get('action');
+  const instrumentationService = getInstrumentationService();
+
+  const formDataSchema = z.object({
+    confirmationCode: z.string().trim().max(100).optional(),
+  });
+  const data = {
+    confirmationCode: formData.get('confirmationCode') ? String(formData.get('confirmationCode')) : undefined,
+  };
+
+  const parsedDataResult = formDataSchema.safeParse(data);
+  if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('alerts.confirm', 400);
+    return json({
+      errors: parsedDataResult.error.format(),
+      formData: formData as Partial<z.infer<typeof formDataSchema>>,
+    });
+  }
+
   if (action === ConfirmSubscriptionCode.NewCode) {
     //TODO implement the code to request a new code and link that new code to the clients profile
   }
   if (action === ConfirmSubscriptionCode.Submit) {
     //TODO Validate the entered code and complete the user's registration to the alert me service if the code is correct
+    await getSubscriptionService().validateConfirmationCode(alertSubscription?.email ?? '', parsedDataResult.data.confirmationCode ?? '', userInfoToken.sub);
   }
 
   return '';

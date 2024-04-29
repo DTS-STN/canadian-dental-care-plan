@@ -14,6 +14,11 @@ const subscriptionApiSchema = z.object({
   preferredLanguage: z.string(),
 });
 
+const validateSubscriptionSchema = z.object({
+  email: z.string(),
+  confirmationCode: z.string(),
+});
+
 /**
  * Server-side MSW mocks for the subscription API.
  */
@@ -73,6 +78,36 @@ export function getSubscriptionApiMockHandlers() {
       }
 
       return HttpResponse.text(null, { status: 204 });
+    }),
+
+    http.post('https://api.example.com/v1/codes/verify', async ({ params, request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const timeEntered = new Date();
+      const requestBody = await request.json();
+      const validateSubscriptionSchemaData = validateSubscriptionSchema.safeParse(requestBody);
+      if (!validateSubscriptionSchemaData.success) {
+        throw new HttpResponse(null, { status: 400 });
+      }
+      const subscriptionConfirmationCodesEntities = db.subscriptionConfirmationCode.findMany({
+        where: { email: { equals: validateSubscriptionSchemaData.data.email } },
+      });
+
+      if (subscriptionConfirmationCodesEntities.length === 0) {
+        return HttpResponse.json({ confirmCodeStatus: 'noCode' }, { status: 200 });
+      }
+
+      const latestConfirmCode = subscriptionConfirmationCodesEntities.reduce((prev, current) => (prev.createdDate > current.createdDate ? prev : current));
+
+      if (latestConfirmCode.confirmationCode === validateSubscriptionSchemaData.data.confirmationCode && timeEntered < latestConfirmCode.expiryDate) {
+        return HttpResponse.json({ confirmCodeStatus: 'Valid' }, { status: 200 });
+      }
+      if (latestConfirmCode.confirmationCode === validateSubscriptionSchemaData.data.confirmationCode && timeEntered > latestConfirmCode.expiryDate) {
+        //Code expired
+        return HttpResponse.json({ confirmCodeStatus: 'expired' }, { status: 200 });
+      }
+
+      //There is at least 1 confirmation code for this user but the code entered by said user does not match it..
+      return HttpResponse.json({ confirmCodeStatus: 'mismatch' }, { status: 200 });
     }),
   ];
 }
