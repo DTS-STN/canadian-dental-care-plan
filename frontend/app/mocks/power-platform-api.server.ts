@@ -123,6 +123,18 @@ export function getPowerPlatformApiMockHandlers() {
 
       const nameInfoList = [{ PersonSurName: peronalInformationEntity.lastName, PersonGivenName: [peronalInformationEntity.firstName] }];
 
+      const listOfInsurancePlans = [];
+
+      if (peronalInformationEntity.federalDentalPlanId) {
+        listOfInsurancePlans.push({ InsurancePlanIdentification: { IdentificationID: peronalInformationEntity.federalDentalPlanId, IdentificationCategoryText: 'Federal' } });
+      }
+      if (peronalInformationEntity.provincialTerritorialDentalPlanId) {
+        listOfInsurancePlans.push({ InsurancePlanIdentification: { IdentificationID: peronalInformationEntity.provincialTerritorialDentalPlanId, IdentificationCategoryText: 'Provincial and Territorial' } });
+      }
+      if (peronalInformationEntity.privateDentalPlanId) {
+        listOfInsurancePlans.push({ InsurancePlanIdentification: { IdentificationID: peronalInformationEntity.federalDentalPlanId, IdentificationCategoryText: 'Private' } });
+      }
+
       return HttpResponse.json({
         BenefitApplication: {
           Applicant: {
@@ -164,6 +176,10 @@ export function getPowerPlatformApiMockHandlers() {
               IdentificationCategoryText: 'Dental Application ID',
             },
           ],
+          InsurancePlan: listOfInsurancePlans,
+          FederalDentalCoverageIndicator: peronalInformationEntity.federalDentalPlanId ? { ReferenceDataID: peronalInformationEntity.federalDentalPlanId, ReferenceDataName: 'true' } : null, //TODO: Update once sample response with these fields is avaliable
+          ProvicialDentalCoverageIndicator: peronalInformationEntity.provincialTerritorialDentalPlanId ? true : false,
+          PrivateDentalInsuranceIndicator: peronalInformationEntity.privateDentalPlanId ? true : false,
         },
       });
     }),
