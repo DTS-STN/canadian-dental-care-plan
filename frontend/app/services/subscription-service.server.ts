@@ -47,6 +47,7 @@ function createSubscriptionService() {
         id: z.string(),
         sin: z.string(),
         email: z.string(),
+        registered: z.boolean(),
         subscribed: z.boolean(),
         preferredLanguage: z.string(),
         alertType: z.string(),
@@ -56,6 +57,7 @@ function createSubscriptionService() {
     const subscriptions = subscriptionsSchema.parse(await response.json()).map((subscription) => ({
       id: subscription.id,
       email: subscription.email,
+      registered: subscription.registered,
       subscribed: subscription.subscribed,
       preferredLanguage: subscription.preferredLanguage,
       alertType: subscription.alertType,

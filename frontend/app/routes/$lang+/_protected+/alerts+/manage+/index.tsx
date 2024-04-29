@@ -110,6 +110,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     id: alertSubscription?.id ?? '',
     sin: userInfoToken.sin ?? '',
     email: parsedDataResult.data.email,
+    registered: alertSubscription?.registered ?? false,
     subscribed: false,
     preferredLanguage: parsedDataResult.data.preferredLanguage,
   };

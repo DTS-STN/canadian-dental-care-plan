@@ -17,7 +17,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
 
-  if (!alertSubscription) {
+  if (!alertSubscription || alertSubscription.registered === false) {
     return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/index', params));
   } else if (alertSubscription.subscribed === true) {
     return redirect(getPathById('$lang+/_protected+/alerts+/manage+/index', params));
