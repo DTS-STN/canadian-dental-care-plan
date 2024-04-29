@@ -10,6 +10,7 @@ const subscriptionApiSchema = z.object({
   id: z.string(),
   sin: z.string(),
   email: z.string(),
+  registered: z.boolean(),
   subscribed: z.boolean(),
   preferredLanguage: z.string(),
 });
@@ -62,6 +63,7 @@ export function getSubscriptionApiMockHandlers() {
         db.subscription.create({
           sin: parsedSubscriptionApi.data.sin,
           email: parsedSubscriptionApi.data.email,
+          registered: parsedSubscriptionApi.data.registered,
           subscribed: parsedSubscriptionApi.data.subscribed,
           preferredLanguage: parsedSubscriptionApi.data.preferredLanguage,
           alertType: 'cdcp',
@@ -71,6 +73,7 @@ export function getSubscriptionApiMockHandlers() {
           where: { id: { equals: parsedSubscriptionApi.data.id } },
           data: {
             email: parsedSubscriptionApi.data.email,
+            registered: parsedSubscriptionApi.data.registered,
             subscribed: parsedSubscriptionApi.data.subscribed,
             preferredLanguage: parsedSubscriptionApi.data.preferredLanguage,
           },

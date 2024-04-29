@@ -39,6 +39,7 @@ const db = factory({
     id: primaryKey(faker.string.uuid),
     sin: String,
     email: String,
+    registered: Boolean,
     subscribed: Boolean,
     preferredLanguage: String,
     alertType: String,
@@ -114,6 +115,7 @@ db.subscription.create({
   id: '0000001',
   sin: '800011819',
   email: 'user@example.com',
+  registered: true,
   subscribed: true,
   preferredLanguage: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
   alertType: 'cdcp',
@@ -121,11 +123,12 @@ db.subscription.create({
 
 db.subscription.create({
   id: '0000002',
-  sin: '800011819',
+  sin: '800000002',
   email: 'tester@example.com',
-  subscribed: true,
+  registered: false,
+  subscribed: false,
   preferredLanguage: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
-  alertType: 'ei',
+  alertType: 'cdcp',
 });
 db.subscriptionConfirmationCode.create({
   id: '0000001',

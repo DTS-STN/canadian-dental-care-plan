@@ -65,7 +65,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formSchema = z.object({
-    agreeUnsubscribe: z.boolean().refine((val) => val === true, t('alerts:unsubscribe.error-message.agree-required')),
+    agreeToUnsubscribe: z.boolean().refine((val) => val === true, t('alerts:unsubscribe.error-message.agree-required')),
   });
 
   const formData = await request.formData();
@@ -78,7 +78,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   const data = {
-    agreeUnsubscribe: formData.get('agreeUnsubscribe') === 'yes',
+    agreeToUnsubscribe: formData.get('agreeToUnsubscribe') === 'yes',
   };
   const parsedDataResult = formSchema.safeParse(data);
 
@@ -89,13 +89,21 @@ export async function action({ context: { session }, params, request }: ActionFu
   const idToken: IdToken = session.get('idToken');
   auditService.audit('update-date.unsubscribe-alerts', { userId: idToken.sub });
 
-  //TODD: mock api to delete the subscription
-  //const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  //const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
-  //await getSubscriptionService().deleteSubscription(userInfoToken.sin ?? '', newAlertSubscription);
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
+  const newAlertSubscription = {
+    id: alertSubscription?.id ?? '',
+    sin: userInfoToken.sin ?? '',
+    email: alertSubscription?.email ?? '',
+    registered: false,
+    subscribed: false,
+    preferredLanguage: alertSubscription?.preferredLanguage ?? '',
+  };
+
+  await getSubscriptionService().updateSubscription(userInfoToken.sin ?? '', newAlertSubscription);
 
   instrumentationService.countHttpStatus('alerts.unsubscibe', 302);
-  return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/index', params));
+  return redirect(getPathById('$lang+/_protected+/alerts+/unsubscribe+/success', params));
 }
 
 export default function AlertsSubscribe() {
@@ -109,9 +117,9 @@ export default function AlertsSubscribe() {
   // Keys order should match the input IDs order.
   const errorMessages = useMemo(
     () => ({
-      agreeSubscribe: fetcher.data?.errors.agreeUnsubscribe?._errors[0],
+      'input-checkbox-agree-to-unsubscribe': fetcher.data?.errors.agreeToUnsubscribe?._errors[0],
     }),
-    [fetcher.data?.errors.agreeUnsubscribe?._errors],
+    [fetcher.data?.errors.agreeToUnsubscribe?._errors],
   );
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
@@ -131,7 +139,7 @@ export default function AlertsSubscribe() {
           <p>
             {t('alerts:unsubscribe.note')} <strong>${alertSubscription?.email}</strong>
           </p>
-          <InputCheckbox id="agree-unsubscribe" name="agreeToSubscribe" className="my-6" value="yes" errorMessage={fetcher.data?.errors.agreeUnsubscribe?._errors[0]} required>
+          <InputCheckbox id="agree-to-unsubscribe" name="agreeToUnsubscribe" className="my-6" value="yes" errorMessage={fetcher.data?.errors.agreeToUnsubscribe?._errors[0]} required>
             <Trans ns={handle.i18nNamespaces} i18nKey="alerts:unsubscribe.agree" />
           </InputCheckbox>
         </div>
