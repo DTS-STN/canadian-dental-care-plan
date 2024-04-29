@@ -9,7 +9,7 @@ import { removePathSegment } from '~/utils/url-utils';
  */
 export function transformAdobeAnalyticsUrl(url: string | URL) {
   const urlObj = new URL(url);
-  const applyRouteRegex = /^\/(en|fr)\/(apply|appliquer)\//i;
+  const applyRouteRegex = /^\/(en|fr)\/(apply|demander)\//i;
   if (!applyRouteRegex.test(urlObj.pathname)) return urlObj;
   return new URL(removePathSegment(urlObj, 2));
 }

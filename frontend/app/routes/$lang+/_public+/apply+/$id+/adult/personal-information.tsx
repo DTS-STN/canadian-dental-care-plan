@@ -397,7 +397,7 @@ export default function ApplyFlowPersonalInformation() {
           <p id="adding-phone" className="mb-2">
             {t('adult-apply:personal-information.add-phone')}
           </p>
-          <div className="mb-6 grid gap-6 md:grid-cols-2">
+          <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
             <InputField
               id="phone-number"
               name="phoneNumber"
@@ -498,7 +498,7 @@ export default function ApplyFlowPersonalInformation() {
                 required
               />
             )}
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid items-end gap-6 md:grid-cols-2">
               <InputField
                 id="mailing-city"
                 name="mailingCity"
@@ -579,7 +579,7 @@ export default function ApplyFlowPersonalInformation() {
                     required
                   />
                 )}
-                <div className="mb-6 grid gap-6 md:grid-cols-2">
+                <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
                   <InputField
                     id="home-city"
                     name="homeCity"

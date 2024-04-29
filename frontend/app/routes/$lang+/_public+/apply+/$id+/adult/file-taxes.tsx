@@ -65,7 +65,7 @@ export default function ApplyFlowFileYourTaxes() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const taxInfo = <InlineLink to={t('adult-apply:eligibility.file-your-taxes.tax-info-href')} className="external-link font-lato font-semibold" target="_blank" />;
+  const taxInfo = <InlineLink to={t('adult-apply:eligibility.file-your-taxes.tax-info-href')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
