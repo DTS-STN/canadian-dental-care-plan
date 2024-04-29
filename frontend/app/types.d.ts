@@ -1,6 +1,7 @@
 import { AppLoadContext, Session } from '@remix-run/node';
 import type { ActionFunctionArgs as RRActionFunctionArgs, LoaderFunctionArgs as RRLoaderFunctionArgs } from '@remix-run/router';
 
+import type accessToGovernmentalBenefits from '../public/locales/en/access-to-governmental-benefits.json';
 import type alerts from '../public/locales/en/alerts.json';
 import type applyAdult from '../public/locales/en/apply-adult.json';
 import type apply from '../public/locales/en/apply.json';
@@ -40,6 +41,7 @@ declare module 'i18next' {
       gcweb: typeof gcweb;
       index: typeof index;
       letters: typeof letters;
+      'access-to-governmental-benefits': typeof accessToGovernmentalBenefits;
       'personal-information': typeof personalInformation;
       alerts: typeof alerts;
       status: typeof status;
