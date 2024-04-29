@@ -17,9 +17,9 @@ import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adult.exitApplication,
-  pageTitleI18nKey: 'adult-apply:exit-application.page-title',
+  pageTitleI18nKey: 'apply-adult:exit-application.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -32,7 +32,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('adult-apply:exit-application.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:exit-application.page-title') }) };
 
   return json({ id, csrfToken, meta });
 }
@@ -65,17 +65,17 @@ export default function ApplyFlowTaxFiling() {
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
-        <p>{t('adult-apply:exit-application.are-you-sure')}</p>
-        <p>{t('adult-apply:exit-application.click-back')}</p>
+        <p>{t('apply-adult:exit-application.are-you-sure')}</p>
+        <p>{t('apply-adult:exit-application.click-back')}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
         <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Exit Application click">
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-          {t('adult-apply:exit-application.back-btn')}
+          {t('apply-adult:exit-application.back-btn')}
         </ButtonLink>
         <Button variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Exit Application click">
-          {t('adult-apply:exit-application.exit-btn')}
+          {t('apply-adult:exit-application.exit-btn')}
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>
       </fetcher.Form>

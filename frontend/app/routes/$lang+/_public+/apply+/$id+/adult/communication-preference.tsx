@@ -37,9 +37,9 @@ export interface CommunicationPreferencesState {
 }
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adult.communicationPreference,
-  pageTitleI18nKey: 'adult-apply:communication-preference.page-title',
+  pageTitleI18nKey: 'apply-adult:communication-preference.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -61,7 +61,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   }
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('adult-apply:communication-preference.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:communication-preference.page-title') }) };
 
   return json({
     communicationMethodEmail,
@@ -89,25 +89,25 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const formSchema = z
     .object({
-      preferredLanguage: z.string().trim().min(1, t('adult-apply:communication-preference.error-message.preferred-language-required')),
-      preferredMethod: z.string().trim().min(1, t('adult-apply:communication-preference.error-message.preferred-method-required')),
+      preferredLanguage: z.string().trim().min(1, t('apply-adult:communication-preference.error-message.preferred-language-required')),
+      preferredMethod: z.string().trim().min(1, t('apply-adult:communication-preference.error-message.preferred-method-required')),
       email: z.string().trim().max(100).optional(),
       confirmEmail: z.string().trim().max(100).optional(),
     })
     .superRefine((val, ctx) => {
       if (val.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID) {
         if (typeof val.email !== 'string' || validator.isEmpty(val.email)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:communication-preference.error-message.email-required'), path: ['email'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-required'), path: ['email'] });
         } else if (!validator.isEmail(val.email)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:communication-preference.error-message.email-valid'), path: ['email'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-valid'), path: ['email'] });
         }
 
         if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:communication-preference.error-message.confirm-email-required'), path: ['confirmEmail'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.confirm-email-required'), path: ['confirmEmail'] });
         } else if (!validator.isEmail(val.confirmEmail)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:communication-preference.error-message.email-valid'), path: ['confirmEmail'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-valid'), path: ['confirmEmail'] });
         } else if (val.email !== val.confirmEmail) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:communication-preference.error-message.email-match'), path: ['confirmEmail'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-match'), path: ['confirmEmail'] });
         }
       }
     }) satisfies z.ZodType<CommunicationPreferencesState>;
@@ -196,13 +196,13 @@ export default function ApplyFlowCommunicationPreferencePage() {
       append: preferredMethodValue === communicationMethodEmail.id && (
         <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
           <p className="md:col-span-2" id="email-note">
-            {t('adult-apply:communication-preference.email-note')}
+            {t('apply-adult:communication-preference.email-note')}
           </p>
           <InputField
             id="email"
             type="email"
             className="w-full"
-            label={t('adult-apply:communication-preference.email')}
+            label={t('apply-adult:communication-preference.email')}
             maxLength={100}
             name="email"
             errorMessage={errorMessages.email}
@@ -214,7 +214,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             id="confirm-email"
             type="email"
             className="w-full"
-            label={t('adult-apply:communication-preference.confirm-email')}
+            label={t('apply-adult:communication-preference.confirm-email')}
             maxLength={100}
             name="confirmEmail"
             errorMessage={errorMessages['confirm-email']}
@@ -240,7 +240,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
       <div className="max-w-prose">
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <p className="mb-6" id="form-instructions-note">
-          {t('adult-apply:communication-preference.note')}
+          {t('apply-adult:communication-preference.note')}
         </p>
         <p className="mb-6 italic" id="form-instructions">
           {t('apply:required-label')}
@@ -252,7 +252,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
               <InputRadios
                 id="preferred-language"
                 name="preferredLanguage"
-                legend={t('adult-apply:communication-preference.preferred-language')}
+                legend={t('apply-adult:communication-preference.preferred-language')}
                 options={preferredLanguages.map((language) => ({
                   defaultChecked: defaultState.preferredLanguage === language.id,
                   children: getNameByLanguage(i18n.language, language),
@@ -263,13 +263,13 @@ export default function ApplyFlowCommunicationPreferencePage() {
               />
             )}
             {preferredCommunicationMethods.length > 0 && (
-              <InputRadios id="preferred-methods" legend={t('adult-apply:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages['input-radio-preferred-methods-option-0']} required />
+              <InputRadios id="preferred-methods" legend={t('apply-adult:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages['input-radio-preferred-methods-option-0']} required />
             )}
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Communication preference click">
-                {t('adult-apply:communication-preference.save-btn')}
+                {t('apply-adult:communication-preference.save-btn')}
               </Button>
               <ButtonLink
                 id="back-button"
@@ -278,13 +278,13 @@ export default function ApplyFlowCommunicationPreferencePage() {
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Communication preference click"
               >
-                {t('adult-apply:communication-preference.cancel-btn')}
+                {t('apply-adult:communication-preference.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Communication preference click">
-                {t('adult-apply:communication-preference.continue')}
+                {t('apply-adult:communication-preference.continue')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
               <ButtonLink
@@ -295,7 +295,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Communication preference click"
               >
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-                {t('adult-apply:communication-preference.back')}
+                {t('apply-adult:communication-preference.back')}
               </ButtonLink>
             </div>
           )}

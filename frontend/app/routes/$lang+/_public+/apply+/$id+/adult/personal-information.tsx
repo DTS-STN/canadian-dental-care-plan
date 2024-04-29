@@ -52,9 +52,9 @@ export type PersonalInformationState = {
 };
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adult.personalInformation,
-  pageTitleI18nKey: 'adult-apply:personal-information.page-title',
+  pageTitleI18nKey: 'apply-adult:personal-information.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -71,7 +71,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const regionList = await lookupService.getAllRegions();
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('adult-apply:personal-information.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:personal-information.page-title') }) };
 
   return json({
     id: state.id,
@@ -102,21 +102,21 @@ export async function action({ context: { session }, params, request }: ActionFu
         .string()
         .trim()
         .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('adult-apply:personal-information.error-message.phone-number-valid'))
+        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply-adult:personal-information.error-message.phone-number-valid'))
         .optional(),
       phoneNumberAlt: z
         .string()
         .trim()
         .max(100)
-        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('adult-apply:personal-information.error-message.phone-number-alt-valid'))
+        .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply-adult:personal-information.error-message.phone-number-alt-valid'))
         .optional(),
       email: z.string().trim().max(100).optional(),
       confirmEmail: z.string().trim().max(100).optional(),
-      mailingAddress: z.string().trim().min(1, t('adult-apply:personal-information.error-message.address-required')).max(30),
+      mailingAddress: z.string().trim().min(1, t('apply-adult:personal-information.error-message.address-required')).max(30),
       mailingApartment: z.string().trim().max(30).optional(),
-      mailingCountry: z.string().trim().min(1, t('adult-apply:personal-information.error-message.country-required')),
-      mailingProvince: z.string().trim().min(1, t('adult-apply:personal-information.error-message.province-required')).optional(),
-      mailingCity: z.string().trim().min(1, t('adult-apply:personal-information.error-message.city-required')).max(100),
+      mailingCountry: z.string().trim().min(1, t('apply-adult:personal-information.error-message.country-required')),
+      mailingProvince: z.string().trim().min(1, t('apply-adult:personal-information.error-message.province-required')).optional(),
+      mailingCity: z.string().trim().min(1, t('apply-adult:personal-information.error-message.city-required')).max(100),
       mailingPostalCode: z.string().trim().max(100).optional(),
       copyMailingAddress: z.boolean(),
       homeAddress: z.string().trim().max(30).optional(),
@@ -130,55 +130,55 @@ export async function action({ context: { session }, params, request }: ActionFu
       console.log(val);
       if (val.email) {
         if (typeof val.email !== 'string' || validator.isEmpty(val.email)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:personal-information.error-message.email-required'), path: ['email'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:personal-information.error-message.email-required'), path: ['email'] });
         } else if (!validator.isEmail(val.email)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:personal-information.error-message.email-valid'), path: ['email'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:personal-information.error-message.email-valid'), path: ['email'] });
         }
 
         if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:personal-information.error-message.confirm-email-required'), path: ['confirmEmail'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:personal-information.error-message.confirm-email-required'), path: ['confirmEmail'] });
         } else if (!validator.isEmail(val.confirmEmail)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:personal-information.error-message.email-valid'), path: ['confirmEmail'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:personal-information.error-message.email-valid'), path: ['confirmEmail'] });
         } else if (val.email !== val.confirmEmail) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:personal-information.error-message.email-match'), path: ['confirmEmail'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:personal-information.error-message.email-match'), path: ['confirmEmail'] });
         }
       }
 
       if (val.mailingCountry === CANADA_COUNTRY_ID || val.mailingCountry === USA_COUNTRY_ID) {
         if (!val.mailingProvince || validator.isEmpty(val.mailingProvince)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:personal-information.error-message.province-required'), path: ['mailingProvince'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:personal-information.error-message.province-required'), path: ['mailingProvince'] });
         }
 
         if (!val.mailingPostalCode || validator.isEmpty(val.mailingPostalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:personal-information.error-message.postal-code-required'), path: ['mailingPostalCode'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:personal-information.error-message.postal-code-required'), path: ['mailingPostalCode'] });
         } else if (!isValidPostalCode(val.mailingCountry, val.mailingPostalCode)) {
-          const message = val.mailingCountry === CANADA_COUNTRY_ID ? t('adult-apply:personal-information.error-message.postal-code-valid') : t('adult-apply:personal-information.error-message.zip-code-valid');
+          const message = val.mailingCountry === CANADA_COUNTRY_ID ? t('apply-adult:personal-information.error-message.postal-code-valid') : t('apply-adult:personal-information.error-message.zip-code-valid');
           ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['mailingPostalCode'] });
         }
       }
 
       if (val.copyMailingAddress === false) {
         if (!val.homeAddress || validator.isEmpty(val.homeAddress)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:personal-information.error-message.address-required'), path: ['homeAddress'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:personal-information.error-message.address-required'), path: ['homeAddress'] });
         }
 
         if (!val.homeCountry || validator.isEmpty(val.homeCountry)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:personal-information.error-message.country-required'), path: ['homeCountry'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:personal-information.error-message.country-required'), path: ['homeCountry'] });
         }
 
         if (!val.homeCity || validator.isEmpty(val.homeCity)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:personal-information.error-message.city-required'), path: ['homeCity'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:personal-information.error-message.city-required'), path: ['homeCity'] });
         }
 
         if (val.homeCountry === CANADA_COUNTRY_ID || val.homeCountry === USA_COUNTRY_ID) {
           if (!val.homeProvince || validator.isEmpty(val.homeProvince)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:personal-information.error-message.province-required'), path: ['homeProvince'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:personal-information.error-message.province-required'), path: ['homeProvince'] });
           }
 
           if (!val.homePostalCode || validator.isEmpty(val.homePostalCode)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:personal-information.error-message.postal-code-required'), path: ['homePostalCode'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:personal-information.error-message.postal-code-required'), path: ['homePostalCode'] });
           } else if (!isValidPostalCode(val.homeCountry, val.homePostalCode)) {
-            const message = val.homeCountry === CANADA_COUNTRY_ID ? t('adult-apply:personal-information.error-message.postal-code-valid') : t('adult-apply:personal-information.error-message.zip-code-valid');
+            const message = val.homeCountry === CANADA_COUNTRY_ID ? t('apply-adult:personal-information.error-message.postal-code-valid') : t('apply-adult:personal-information.error-message.zip-code-valid');
             ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['homePostalCode'] });
           }
         }
@@ -368,7 +368,7 @@ export default function ApplyFlowPersonalInformation() {
     })
     .sort((region1, region2) => region1.children.localeCompare(region2.children));
 
-  const dummyOption: InputOptionProps = { children: t('adult-apply:personal-information.address-field.select-one'), value: '' };
+  const dummyOption: InputOptionProps = { children: t('apply-adult:personal-information.address-field.select-one'), value: '' };
 
   return (
     <>
@@ -381,7 +381,7 @@ export default function ApplyFlowPersonalInformation() {
       <div className="max-w-prose">
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <p id="form-instructions-info" className="mb-6">
-          {t('adult-apply:personal-information.form-instructions')}
+          {t('apply-adult:personal-information.form-instructions')}
         </p>
         <p className="mb-6 italic" id="form-instructions">
           {t('apply:required-label')}
@@ -389,7 +389,7 @@ export default function ApplyFlowPersonalInformation() {
         <fetcher.Form method="post" noValidate aria-describedby="form-instructions-info form-instructions">
           <input type="hidden" name="_csrf" value={csrfToken} />
           <p id="adding-phone" className="mb-2">
-            {t('adult-apply:personal-information.add-phone')}
+            {t('apply-adult:personal-information.add-phone')}
           </p>
           <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
             <InputField
@@ -399,7 +399,7 @@ export default function ApplyFlowPersonalInformation() {
               autoComplete="tel"
               defaultValue={defaultState?.phoneNumber ?? ''}
               errorMessage={errorMessages['phone-number']}
-              label={t('adult-apply:personal-information.phone-number')}
+              label={t('apply-adult:personal-information.phone-number')}
               maxLength={100}
               aria-describedby="adding-phone"
             />
@@ -410,13 +410,13 @@ export default function ApplyFlowPersonalInformation() {
               autoComplete="tel"
               defaultValue={defaultState?.phoneNumberAlt ?? ''}
               errorMessage={errorMessages['phone-number-alt']}
-              label={t('adult-apply:personal-information.phone-number-alt')}
+              label={t('apply-adult:personal-information.phone-number-alt')}
               maxLength={100}
               aria-describedby="adding-phone"
             />
           </div>
           <p id="adding-email" className="mb-2">
-            {t('adult-apply:personal-information.add-email')}
+            {t('apply-adult:personal-information.add-email')}
           </p>
           <div className="mb-6 grid gap-6 md:grid-cols-2">
             <InputField
@@ -426,7 +426,7 @@ export default function ApplyFlowPersonalInformation() {
               autoComplete="email"
               defaultValue={defaultState?.email ?? ''}
               errorMessage={errorMessages['email']}
-              label={t('adult-apply:personal-information.email')}
+              label={t('apply-adult:personal-information.email')}
               maxLength={100}
               aria-describedby="adding-email"
             />
@@ -437,20 +437,20 @@ export default function ApplyFlowPersonalInformation() {
               autoComplete="email"
               defaultValue={defaultState?.confirmEmail ?? ''}
               errorMessage={errorMessages['confirm-email']}
-              label={t('adult-apply:personal-information.confirm-email')}
+              label={t('apply-adult:personal-information.confirm-email')}
               maxLength={100}
               aria-describedby="adding-email"
             />
           </div>
-          <h2 className="mb-4 font-lato text-2xl font-bold">{t('adult-apply:personal-information.mailing-address.header')}</h2>
+          <h2 className="mb-4 font-lato text-2xl font-bold">{t('apply-adult:personal-information.mailing-address.header')}</h2>
           <div className="my-6 space-y-6">
             <InputField
               id="mailing-address"
               name="mailingAddress"
               className="w-full"
-              label={t('adult-apply:personal-information.address-field.address')}
+              label={t('apply-adult:personal-information.address-field.address')}
               maxLength={30}
-              helpMessagePrimary={t('adult-apply:personal-information.address-field.address-note')}
+              helpMessagePrimary={t('apply-adult:personal-information.address-field.address-note')}
               helpMessagePrimaryClassName="text-black"
               autoComplete="address-line1"
               defaultValue={defaultState?.mailingAddress ?? ''}
@@ -461,7 +461,7 @@ export default function ApplyFlowPersonalInformation() {
               id="mailing-apartment"
               name="mailingApartment"
               className="w-full"
-              label={t('adult-apply:personal-information.address-field.apartment')}
+              label={t('apply-adult:personal-information.address-field.apartment')}
               maxLength={30}
               autoComplete="address-line2"
               defaultValue={defaultState?.mailingApartment ?? ''}
@@ -472,7 +472,7 @@ export default function ApplyFlowPersonalInformation() {
               id="mailing-country"
               name="mailingCountry"
               className="w-full sm:w-1/2"
-              label={t('adult-apply:personal-information.address-field.country')}
+              label={t('apply-adult:personal-information.address-field.country')}
               autoComplete="country"
               defaultValue={defaultState?.mailingCountry ?? ''}
               errorMessage={errorMessages['mailing-country']}
@@ -485,7 +485,7 @@ export default function ApplyFlowPersonalInformation() {
                 id="mailing-province"
                 name="mailingProvince"
                 className="w-full sm:w-1/2"
-                label={t('adult-apply:personal-information.address-field.province')}
+                label={t('apply-adult:personal-information.address-field.province')}
                 defaultValue={defaultState?.mailingProvince ?? ''}
                 errorMessage={errorMessages['mailing-province']}
                 options={[dummyOption, ...mailingRegions]}
@@ -497,7 +497,7 @@ export default function ApplyFlowPersonalInformation() {
                 id="mailing-city"
                 name="mailingCity"
                 className="w-full"
-                label={t('adult-apply:personal-information.address-field.city')}
+                label={t('apply-adult:personal-information.address-field.city')}
                 maxLength={100}
                 autoComplete="address-level2"
                 defaultValue={defaultState?.mailingCity ?? ''}
@@ -508,7 +508,7 @@ export default function ApplyFlowPersonalInformation() {
                 id="mailing-postal-code"
                 name="mailingPostalCode"
                 className="w-full"
-                label={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID ? t('adult-apply:personal-information.address-field.postal-code') : t('adult-apply:personal-information.address-field.postal-code-optional')}
+                label={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID ? t('apply-adult:personal-information.address-field.postal-code') : t('apply-adult:personal-information.address-field.postal-code-optional')}
                 maxLength={100}
                 autoComplete="postal-code"
                 defaultValue={defaultState?.mailingPostalCode}
@@ -518,10 +518,10 @@ export default function ApplyFlowPersonalInformation() {
             </div>
           </div>
 
-          <h2 className="mb-6 font-lato text-2xl font-bold">{t('adult-apply:personal-information.home-address.header')}</h2>
+          <h2 className="mb-6 font-lato text-2xl font-bold">{t('apply-adult:personal-information.home-address.header')}</h2>
           <div className="mb-8 space-y-6">
             <InputCheckbox id="copyMailingAddress" name="copyMailingAddress" value="copy" checked={copyAddressChecked} onChange={checkHandler}>
-              {t('adult-apply:personal-information.home-address.use-mailing-address')}
+              {t('apply-adult:personal-information.home-address.use-mailing-address')}
             </InputCheckbox>
             {!copyAddressChecked && (
               <>
@@ -529,8 +529,8 @@ export default function ApplyFlowPersonalInformation() {
                   id="home-address"
                   name="homeAddress"
                   className="w-full"
-                  label={t('adult-apply:personal-information.address-field.address')}
-                  helpMessagePrimary={t('adult-apply:personal-information.address-field.address-note')}
+                  label={t('apply-adult:personal-information.address-field.address')}
+                  helpMessagePrimary={t('apply-adult:personal-information.address-field.address-note')}
                   helpMessagePrimaryClassName="text-black"
                   maxLength={30}
                   autoComplete="address-line1"
@@ -542,7 +542,7 @@ export default function ApplyFlowPersonalInformation() {
                   id="home-apartment"
                   name="homeApartment"
                   className="w-full"
-                  label={t('adult-apply:personal-information.address-field.apartment')}
+                  label={t('apply-adult:personal-information.address-field.apartment')}
                   maxLength={30}
                   autoComplete="address-line2"
                   defaultValue={defaultState?.homeApartment ?? ''}
@@ -553,7 +553,7 @@ export default function ApplyFlowPersonalInformation() {
                   id="home-country"
                   name="homeCountry"
                   className="w-full sm:w-1/2"
-                  label={t('adult-apply:personal-information.address-field.country')}
+                  label={t('apply-adult:personal-information.address-field.country')}
                   autoComplete="country"
                   defaultValue={defaultState?.homeCountry ?? ''}
                   errorMessage={errorMessages['home-country']}
@@ -566,7 +566,7 @@ export default function ApplyFlowPersonalInformation() {
                     id="home-province"
                     name="homeProvince"
                     className="w-full sm:w-1/2"
-                    label={t('adult-apply:personal-information.address-field.province')}
+                    label={t('apply-adult:personal-information.address-field.province')}
                     defaultValue={defaultState?.homeProvince ?? ''}
                     errorMessage={errorMessages['home-province']}
                     options={[dummyOption, ...homeRegions]}
@@ -578,7 +578,7 @@ export default function ApplyFlowPersonalInformation() {
                     id="home-city"
                     name="homeCity"
                     className="w-full"
-                    label={t('adult-apply:personal-information.address-field.city')}
+                    label={t('apply-adult:personal-information.address-field.city')}
                     maxLength={100}
                     autoComplete="address-level2"
                     defaultValue={defaultState?.homeCity ?? ''}
@@ -589,7 +589,7 @@ export default function ApplyFlowPersonalInformation() {
                     id="home-postal-code"
                     name="homePostalCode"
                     className="w-full"
-                    label={selectedHomeCountry === CANADA_COUNTRY_ID || selectedHomeCountry === USA_COUNTRY_ID ? t('adult-apply:personal-information.address-field.postal-code') : t('adult-apply:personal-information.address-field.postal-code-optional')}
+                    label={selectedHomeCountry === CANADA_COUNTRY_ID || selectedHomeCountry === USA_COUNTRY_ID ? t('apply-adult:personal-information.address-field.postal-code') : t('apply-adult:personal-information.address-field.postal-code-optional')}
                     maxLength={100}
                     autoComplete="postal-code"
                     defaultValue={defaultState?.homePostalCode ?? ''}
@@ -603,16 +603,16 @@ export default function ApplyFlowPersonalInformation() {
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Personal information click">
-                {t('adult-apply:personal-information.save-btn')}
+                {t('apply-adult:personal-information.save-btn')}
               </Button>
               <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Personal information click">
-                {t('adult-apply:personal-information.cancel-btn')}
+                {t('apply-adult:personal-information.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Personal information click">
-                {t('adult-apply:personal-information.continue')}
+                {t('apply-adult:personal-information.continue')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
               <ButtonLink
@@ -623,7 +623,7 @@ export default function ApplyFlowPersonalInformation() {
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Personal information click"
               >
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-                {t('adult-apply:personal-information.back')}
+                {t('apply-adult:personal-information.back')}
               </ButtonLink>
             </div>
           )}
