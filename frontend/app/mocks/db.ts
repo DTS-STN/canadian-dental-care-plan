@@ -131,30 +131,30 @@ db.subscriptionConfirmationCode.create({
   id: '0000001',
   email: 'user@example.com',
   confirmationCode: '0001',
-  createdDate: new Date(new Date().getTime() - 12 * 24 * 60 * 60 * 1000), //Created  date - 12 days
-  expiryDate: new Date(new Date().getTime() - 10 * 24 * 60 * 60 * 1000), //Created  date - 10 days
+  createdDate: new Date(new Date().getTime() - 12 * 24 * 60 * 60 * 1000), // current date  date - 12 days
+  expiryDate: new Date(new Date().getTime() - 10 * 24 * 60 * 60 * 1000), // current date  date - 10 days
 });
 db.subscriptionConfirmationCode.create({
   id: '0000002',
   email: 'user@example.com',
   confirmationCode: '1234',
   createdDate: new Date(new Date().getTime()),
-  expiryDate: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000), //Created date + 2 days
+  expiryDate: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000), // current date date + 2 days
 });
 db.subscriptionConfirmationCode.create({
   id: '0000003',
   email: 'user@example.com',
   confirmationCode: '1001',
-  createdDate: new Date(new Date().getTime() - 8 * 24 * 60 * 60 * 1000), //Created date - 8
-  expiryDate: new Date(new Date().getTime() - 6 * 24 * 60 * 60 * 1000), //Created date - 6 days
+  createdDate: new Date(new Date().getTime() - 8 * 24 * 60 * 60 * 1000), // current date date - 8 days
+  expiryDate: new Date(new Date().getTime() - 6 * 24 * 60 * 60 * 1000), // current date date - 6 days
 });
 
 db.subscriptionConfirmationCode.create({
   id: '0000007',
   email: 'tester@example.com',
   confirmationCode: '2002',
-  createdDate: new Date(new Date().getTime() - 4 * 24 * 60 * 60 * 1000), //Created date - 4 days
-  expiryDate: new Date(new Date().getTime() - 2 * 24 * 60 * 60 * 1000), //Created date - 2 days
+  createdDate: new Date(new Date().getTime() - 4 * 24 * 60 * 60 * 1000), // current date date - 4 days
+  expiryDate: new Date(new Date().getTime() - 2 * 24 * 60 * 60 * 1000), // current date date - 2 days
 });
 
 export { db };

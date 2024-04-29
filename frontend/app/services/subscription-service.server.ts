@@ -102,11 +102,11 @@ function createSubscriptionService() {
     }
   }
 
-  async function validateConfirmationCode(userEmail: string, enteredConfirmationCode: string, sub: string) {
+  async function validateConfirmationCode(userEmail: string, enteredConfirmationCode: string, userId: string) {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
 
-    auditService.audit('alert-subscription.validate', { sub });
+    auditService.audit('alert-subscription.validate', { userId });
 
     const dataToPass = {
       email: userEmail,
