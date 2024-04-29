@@ -71,7 +71,7 @@ describe('apply-route-helpers.server', () => {
       expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult/application-delegate, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
-    it('should redirect if typeOfApplication is not personal', () => {
+    it('should redirect if typeOfApplication is not adult', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
@@ -83,7 +83,7 @@ describe('apply-route-helpers.server', () => {
     it('should redirect if adultState is undefined', () => {
       const mockState = {
         ...baseState,
-        typeOfApplication: 'personal',
+        typeOfApplication: 'adult',
       } satisfies ApplyState;
 
       expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/type-application, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
@@ -92,7 +92,7 @@ describe('apply-route-helpers.server', () => {
     it('should redirect if taxFiling2023 is undefined', () => {
       const mockState = {
         ...baseState,
-        typeOfApplication: 'personal',
+        typeOfApplication: 'adult',
         adultState: {
           editMode: false,
           taxFiling2023: undefined,
@@ -105,7 +105,7 @@ describe('apply-route-helpers.server', () => {
     it('should redirect if taxFiling2023 is no', () => {
       const mockState = {
         ...baseState,
-        typeOfApplication: 'personal',
+        typeOfApplication: 'adult',
         adultState: {
           editMode: false,
           taxFiling2023: 'no',
@@ -118,7 +118,7 @@ describe('apply-route-helpers.server', () => {
     it('should redirect if dateOfBirth is undefined', () => {
       const mockState = {
         ...baseState,
-        typeOfApplication: 'personal',
+        typeOfApplication: 'adult',
         adultState: {
           editMode: false,
           taxFiling2023: 'yes',
@@ -132,7 +132,7 @@ describe('apply-route-helpers.server', () => {
     it("should redirect if applicantInformation is undefined'", () => {
       const mockState = {
         ...baseState,
-        typeOfApplication: 'personal',
+        typeOfApplication: 'adult',
         adultState: {
           editMode: false,
           taxFiling2023: 'yes',
@@ -147,7 +147,7 @@ describe('apply-route-helpers.server', () => {
     it('should redirect if partnerInformation is undefined and applicant has partner', () => {
       const mockState = {
         ...baseState,
-        typeOfApplication: 'personal',
+        typeOfApplication: 'adult',
         adultState: {
           editMode: false,
           taxFiling2023: 'yes',
@@ -168,7 +168,7 @@ describe('apply-route-helpers.server', () => {
     it('should redirect if partnerInformation is not undefined and applicant has no partner', () => {
       const mockState = {
         ...baseState,
-        typeOfApplication: 'personal',
+        typeOfApplication: 'adult',
         adultState: {
           editMode: false,
           taxFiling2023: 'yes',
@@ -195,7 +195,7 @@ describe('apply-route-helpers.server', () => {
     it('should redirect if personalInformation is undefined', () => {
       const mockState = {
         ...baseState,
-        typeOfApplication: 'personal',
+        typeOfApplication: 'adult',
         adultState: {
           editMode: false,
           taxFiling2023: 'yes',
@@ -223,7 +223,7 @@ describe('apply-route-helpers.server', () => {
     it('should redirect if communicationPreferences is undefined', () => {
       const mockState = {
         ...baseState,
-        typeOfApplication: 'personal',
+        typeOfApplication: 'adult',
         adultState: {
           editMode: false,
           taxFiling2023: 'yes',
@@ -257,7 +257,7 @@ describe('apply-route-helpers.server', () => {
     it('should redirect if dentalInsurance is undefined', () => {
       const mockState = {
         ...baseState,
-        typeOfApplication: 'personal',
+        typeOfApplication: 'adult',
         adultState: {
           editMode: false,
           taxFiling2023: 'yes',
@@ -295,7 +295,7 @@ describe('apply-route-helpers.server', () => {
     it('should redirect if dentalBenefits is undefined', () => {
       const mockState = {
         ...baseState,
-        typeOfApplication: 'personal',
+        typeOfApplication: 'adult',
         adultState: {
           editMode: false,
           taxFiling2023: 'yes',
@@ -334,7 +334,7 @@ describe('apply-route-helpers.server', () => {
     it('should not redirect if state is completed', () => {
       const mockState = {
         ...baseState,
-        typeOfApplication: 'personal',
+        typeOfApplication: 'adult',
         adultState: {
           editMode: true,
           taxFiling2023: 'yes',

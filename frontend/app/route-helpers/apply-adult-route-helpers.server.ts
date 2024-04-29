@@ -50,7 +50,7 @@ export function loadApplyAdultState({ params, request, session }: LoadApplyAdult
   const { pathname } = new URL(request.url);
   const applyState = loadApplyState({ params, session }) as ApplyState & { adultState?: ApplyAdultState };
 
-  if (applyState.typeOfApplication !== 'personal' || applyState.adultState === undefined) {
+  if (applyState.typeOfApplication !== 'adult' || applyState.adultState === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/type-application', params));
   }
 
@@ -129,7 +129,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateStat
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/application-delegate', params));
   }
 
-  if (state.typeOfApplication !== 'personal') {
+  if (state.typeOfApplication !== 'adult') {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/type-application', params));
   }
 
