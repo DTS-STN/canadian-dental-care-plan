@@ -5,16 +5,14 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/type-application';
 
 vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
-  getApplyRouteHelpers: vi.fn().mockReturnValue({
-    loadState: vi.fn().mockReturnValue({
-      id: '123',
-      typeOfApplication: 'delegate',
-    }),
-    saveState: vi.fn().mockReturnValue({
-      headers: {
-        'Set-Cookie': 'some-set-cookie-header',
-      },
-    }),
+  loadApplyState: vi.fn().mockReturnValue({
+    id: '123',
+    typeOfApplication: 'delegate',
+  }),
+  saveApplyState: vi.fn().mockReturnValue({
+    headers: {
+      'Set-Cookie': 'some-set-cookie-header',
+    },
   }),
 }));
 

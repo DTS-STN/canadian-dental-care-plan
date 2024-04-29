@@ -4,11 +4,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { loader } from '~/routes/$lang+/_public+/apply+/$id+/adult/dob-eligibility';
 
-vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
-  getApplyRouteHelpers: vi.fn().mockReturnValue({
-    loadState: vi.fn().mockReturnValue({
-      id: '123',
-    }),
+vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
+  loadApplyAdultState: vi.fn().mockReturnValue({
+    id: '123',
+    adultState: {},
   }),
 }));
 

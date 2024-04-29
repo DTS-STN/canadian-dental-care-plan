@@ -17,7 +17,7 @@ import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusT
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import { Progress } from '~/components/progress';
-import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { applicantInformationStateHasPartner, loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -48,25 +48,23 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const applyRouteHelpers = getApplyRouteHelpers();
-  const state = await applyRouteHelpers.loadState({ params, request, session });
+  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  if (state.applicantInformation === undefined || !applyRouteHelpers.hasPartner(state.applicantInformation)) {
+  if (state.adultState.applicantInformation === undefined || !applicantInformationStateHasPartner(state.adultState.applicantInformation)) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
   }
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('adult-apply:partner-information.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.partnerInformation, editMode: state.editMode });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.adultState.partnerInformation, editMode: state.adultState.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/partner-information');
 
-  const applyRouteHelpers = getApplyRouteHelpers();
-  const state = await applyRouteHelpers.loadState({ params, request, session });
+  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -101,14 +99,14 @@ export async function action({ context: { session }, params, request }: ActionFu
         .trim()
         .min(1, t('adult-apply:partner-information.error-message.sin-required'))
         .refine(isValidSin, t('adult-apply:partner-information.error-message.sin-valid'))
-        .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.applicantInformation?.socialInsuranceNumber, t('adult-apply:partner-information.error-message.sin-unique'))
+        .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.adultState.applicantInformation?.socialInsuranceNumber, t('adult-apply:partner-information.error-message.sin-unique'))
         .superRefine((sin, ctx) => {
           if (!isValidSin(sin)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:partner-information.error-message.sin-valid'), fatal: true });
             return z.NEVER;
           }
 
-          if (state.applicantInformation && formatSin(sin) === formatSin(state.applicantInformation.socialInsuranceNumber)) {
+          if (state.adultState.applicantInformation && formatSin(sin) === formatSin(state.adultState.applicantInformation.socialInsuranceNumber)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('adult-apply:partner-information.error-message.sin-unique'), fatal: true });
             return z.NEVER;
           }
@@ -162,9 +160,9 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  await applyRouteHelpers.saveState({ params, request, session, state: { partnerInformation: parsedDataResult.data } });
+  saveApplyAdultState({ params, request, session, state: { partnerInformation: parsedDataResult.data } });
 
-  if (state.editMode) {
+  if (state.adultState.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
   }
 

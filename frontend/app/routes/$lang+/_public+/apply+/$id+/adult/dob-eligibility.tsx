@@ -10,7 +10,8 @@ import { Trans, useTranslation } from 'react-i18next';
 import pageIds from '../../../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
-import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -29,8 +30,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const applyRouteHelpers = getApplyRouteHelpers();
-  const { id } = await applyRouteHelpers.loadState({ params, request, session });
+  const { id } = loadApplyAdultState({ params, request, session });
 
   const csrfToken = String(session.get('csrfToken'));
 
@@ -42,7 +42,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/dob-eligibility');
-  const applyRouteHelpers = getApplyRouteHelpers();
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -53,8 +52,8 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  await applyRouteHelpers.loadState({ params, request, session });
-  await applyRouteHelpers.clearState({ params, request, session });
+  loadApplyAdultState({ params, request, session });
+  clearApplyState({ params, session });
   return redirect(getPathById('index', params));
 }
 
