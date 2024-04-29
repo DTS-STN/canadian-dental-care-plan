@@ -53,7 +53,7 @@ export type PersonalInformationState = {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.personalInformation,
+  pageIdentifier: pageIds.public.apply.adult.personalInformation,
   pageTitleI18nKey: 'adult-apply:personal-information.page-title',
 } as const satisfies RouteHandleData;
 

@@ -20,7 +20,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.dateOfBirthEligibility,
+  pageIdentifier: pageIds.public.apply.adult.dateOfBirthEligibility,
   pageTitleI18nKey: 'adult-apply:eligibility.dob-eligibility.page-title',
 } as const satisfies RouteHandleData;
 

@@ -53,7 +53,7 @@ export type DentalBenefitsState = FederalBenefitsState & ProvincialTerritorialBe
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.federalProvincialTerritorialBenefits,
+  pageIdentifier: pageIds.public.apply.adult.federalProvincialTerritorialBenefits,
   pageTitleI18nKey: 'adult-apply:dental-benefits.title',
 };
 

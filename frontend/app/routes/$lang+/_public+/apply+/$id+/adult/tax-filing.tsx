@@ -32,7 +32,7 @@ export type TaxFilingState = `${TaxFilingOption}`;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.taxFiling,
+  pageIdentifier: pageIds.public.apply.adult.taxFiling,
   pageTitleI18nKey: 'adult-apply:eligibility.tax-filing.page-title',
 } as const satisfies RouteHandleData;
 

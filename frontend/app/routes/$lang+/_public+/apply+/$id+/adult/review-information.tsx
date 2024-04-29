@@ -50,7 +50,7 @@ export interface SubmissionInfoState {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.reviewInformation,
+  pageIdentifier: pageIds.public.apply.adult.reviewInformation,
   pageTitleI18nKey: 'adult-apply:review-information.page-title',
 } as const satisfies RouteHandleData;
 

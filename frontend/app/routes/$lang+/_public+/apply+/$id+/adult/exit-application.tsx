@@ -17,7 +17,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.exitApplication,
+  pageIdentifier: pageIds.public.apply.adult.exitApplication,
   pageTitleI18nKey: 'adult-apply:exit-application.page-title',
 } as const satisfies RouteHandleData;
 

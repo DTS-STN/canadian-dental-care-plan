@@ -39,7 +39,7 @@ export interface PartnerInformationState {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.partnerInformation,
+  pageIdentifier: pageIds.public.apply.adult.partnerInformation,
   pageTitleI18nKey: 'adult-apply:partner-information.page-title',
 } as const satisfies RouteHandleData;
 

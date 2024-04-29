@@ -29,7 +29,7 @@ export type DentalInsuranceState = boolean;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.dentalInsurance,
+  pageIdentifier: pageIds.public.apply.adult.dentalInsurance,
   pageTitleI18nKey: 'adult-apply:dental-insurance.title',
 };
 

@@ -43,7 +43,7 @@ export type ApplicantInformationState = {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.applicantInformation,
+  pageIdentifier: pageIds.public.apply.adult.applicantInformation,
   pageTitleI18nKey: 'adult-apply:applicant-information.page-title',
 } as const satisfies RouteHandleData;
 
