@@ -204,7 +204,7 @@ export default function ApplyFlowApplicationInformation() {
             <Collapsible id="name-instructions" summary={t('applicant-information.single-legal-name')}>
               <p>{t('applicant-information.name-instructions')}</p>
             </Collapsible>
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid items-end gap-6 md:grid-cols-2">
               <InputField
                 id="first-name"
                 name="firstName"
