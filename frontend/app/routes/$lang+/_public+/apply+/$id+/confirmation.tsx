@@ -212,23 +212,10 @@ export default function ApplyFlowConfirm() {
       </Button>
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.whats-next')}</h2>
       <p className="mt-4">{t('confirm.begin-process')}</p>
-
-      {powerPlatformStatusCheckerEnabled ? (
-        <>
-          <p className="mt-4">
-            <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
-          </p>
-          <p className="mt-4">{t('confirm.use-code')}</p>
-        </>
-      ) : (
-        <>
-          {/* TODO: content should be provided before release v1.0.0; AB#3380 */}
-          <p className="mt-4">
-            <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
-          </p>
-          <p className="mt-4">{t('confirm.use-code')}</p>
-        </>
-      )}
+      <p className="mt-4">
+        <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
+      </p>
+      <p className="mt-4">{powerPlatformStatusCheckerEnabled ? t('confirm.use-code') : t('confirm.use-code-one-week')}</p>
 
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.register-msca-title')}</h2>
       <p className="mt-4">
