@@ -27,9 +27,9 @@ import { formatSin } from '~/utils/sin-utils';
 export const applyIdParamSchema = z.string().uuid();
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adult.confirmation,
-  pageTitleI18nKey: 'adult-apply:confirm.page-title',
+  pageTitleI18nKey: 'apply-adult:confirm.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -132,7 +132,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   };
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('adult-apply:confirm.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:confirm.page-title') }) };
 
   return json({
     dentalInsurance,
@@ -173,7 +173,7 @@ export default function ApplyFlowConfirm() {
   const mscaLink = <InlineLink to={t('confirm.msca-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
   const moreInfoLink = <InlineLink to={t('confirm.more-info-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('adult-apply:confirm.status-checker-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('apply-adult:confirm.status-checker-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
 
   // this link will be used in a future release
   // const cdcpLink = <InlineLink routeId="$lang+/_public+/status+/index" params={params} className="external-link font-lato font-semibold" target='_blank' />;
@@ -313,8 +313,8 @@ export default function ApplyFlowConfirm() {
             <DescriptionListItem term={t('confirm.dental-public')}>
               {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
                 <>
-                  <p>{t('adult-apply:review-information.yes')}</p>
-                  <p>{t('adult-apply:review-information.dental-benefit-has-access')}</p>
+                  <p>{t('apply-adult:review-information.yes')}</p>
+                  <p>{t('apply-adult:review-information.dental-benefit-has-access')}</p>
                   <div>
                     <ul className="ml-6 list-disc">
                       {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
@@ -346,7 +346,7 @@ export default function ApplyFlowConfirm() {
       <fetcher.Form method="post" noValidate className="mt-5 flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
         <Button variant="primary" onClick={() => sessionStorage.removeItem('flow.state')} size="lg" className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Confirmation click">
-          {t('adult-apply:confirm.exit')}
+          {t('apply-adult:confirm.exit')}
         </Button>
       </fetcher.Form>
     </div>

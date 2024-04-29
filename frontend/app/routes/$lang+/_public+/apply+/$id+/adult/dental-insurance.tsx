@@ -28,9 +28,9 @@ import { cn } from '~/utils/tw-utils';
 export type DentalInsuranceState = boolean;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adult.dentalInsurance,
-  pageTitleI18nKey: 'adult-apply:dental-insurance.title',
+  pageTitleI18nKey: 'apply-adult:dental-insurance.title',
 };
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -42,7 +42,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('adult-apply:dental-insurance.title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:dental-insurance.title') }) };
 
   return json({ id: state, csrfToken, meta, defaultState: state.adultState.dentalInsurance, editMode: state.adultState.editMode });
 }
@@ -54,7 +54,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
-  const dentalInsuranceSchema: z.ZodType<DentalInsuranceState> = z.boolean({ errorMap: () => ({ message: t('adult-apply:dental-insurance.error-message.dental-insurance-required') }) });
+  const dentalInsuranceSchema: z.ZodType<DentalInsuranceState> = z.boolean({ errorMap: () => ({ message: t('apply-adult:dental-insurance.error-message.dental-insurance-required') }) });
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
