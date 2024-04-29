@@ -67,7 +67,7 @@ db.personalInformation.create({
   lastName: 'Eliot',
   firstName: 'Thomas Stearns',
   emailAddressId: 'rhapsody@domain.ca',
-  primaryTelephoneNumber: '222-555-5555',
+  primaryTelephoneNumber: '807-555-5555',
   alternateTelephoneNumber: '416-555-6666',
   preferredMethodCommunicationCode: '1033',
   sinIdentification: '800011819',
