@@ -22,7 +22,7 @@ import { cn } from '~/utils/tw-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.applyForYourself,
-  pageTitleI18nKey: 'apply:eligibility.apply-for-yourself.page-title',
+  pageTitleI18nKey: 'apply:apply-for-yourself.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -36,7 +36,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:eligibility.apply-for-yourself.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:apply-for-yourself.page-title') }) };
 
   return json({ id, csrfToken, meta });
 }
@@ -73,19 +73,19 @@ export default function ApplyForYourself() {
     <div className="max-w-prose">
       <div className="mb-6 space-y-4">
         <p>
-          {t('apply:eligibility.apply-for-yourself.ineligible-to-apply')}&nbsp;
-          <InlineLink to={t('apply:eligibility.apply-for-yourself.eligibility-info-href')}>{t('apply:eligibility.apply-for-yourself.eligibility-info')}</InlineLink>
+          {t('apply:apply-for-yourself.ineligible-to-apply')}&nbsp;
+          <InlineLink to={t('apply:apply-for-yourself.eligibility-info-href')}>{t('apply:apply-for-yourself.eligibility-info')}</InlineLink>
         </p>
-        <p>{t('apply:eligibility.apply-for-yourself.submit-application')}</p>
+        <p>{t('apply:apply-for-yourself.submit-application')}</p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
         <ButtonLink type="button" routeId="$lang+/_public+/apply+/$id+/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Apply for yourself">
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-          {t('apply:eligibility.apply-for-yourself.back-btn')}
+          {t('apply:apply-for-yourself.back-btn')}
         </ButtonLink>
         <Button variant="primary" id="proceed-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Proceed - Apply for yourself click">
-          {t('apply:eligibility.apply-for-yourself.proceed-btn')}
+          {t('apply:apply-for-yourself.proceed-btn')}
           <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
         </Button>
       </fetcher.Form>
