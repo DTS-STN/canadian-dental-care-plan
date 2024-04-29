@@ -5,7 +5,7 @@ import { Link, Params, useHref } from '@remix-run/react';
 import type { To } from 'react-router';
 import invariant from 'tiny-invariant';
 
-import { NewTabIndicator } from './new-tab-indicator';
+import { NewTabIndicator } from '~/components/new-tab-indicator';
 import { getPathById } from '~/utils/route-utils';
 
 /**
