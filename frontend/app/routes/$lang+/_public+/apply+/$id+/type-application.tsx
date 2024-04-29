@@ -26,10 +26,10 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
 enum ApplicantType {
-  Delegate = 'delegate',
-  Personal = 'personal',
+  Adult = 'adult',
+  AdultChild = 'adult-child',
   Child = 'child',
-  Both = 'personal and child',
+  Delegate = 'delegate',
 }
 
 export type TypeOfApplicationState = `${ApplicantType}`;
@@ -86,7 +86,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     params,
     session,
     state: {
-      adultState: parsedDataResult.data === 'personal' ? ({ editMode: false } satisfies ApplyAdultState) : undefined,
+      adultState: parsedDataResult.data === 'adult' ? ({ editMode: false } satisfies ApplyAdultState) : undefined,
       typeOfApplication: parsedDataResult.data,
     },
   });
@@ -168,9 +168,9 @@ export default function ApplyFlowTypeOfApplication() {
             legend={t('apply:type-of-application.form-instructions')}
             options={[
               {
-                value: ApplicantType.Personal,
+                value: ApplicantType.Adult,
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.personal" />,
-                defaultChecked: defaultState === ApplicantType.Personal,
+                defaultChecked: defaultState === ApplicantType.Adult,
               },
               {
                 value: ApplicantType.Child,
@@ -178,9 +178,9 @@ export default function ApplyFlowTypeOfApplication() {
                 defaultChecked: defaultState === ApplicantType.Child,
               },
               {
-                value: ApplicantType.Both,
+                value: ApplicantType.AdultChild,
                 children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:type-of-application.radio-options.personal-and-child" />,
-                defaultChecked: defaultState === ApplicantType.Both,
+                defaultChecked: defaultState === ApplicantType.AdultChild,
               },
               {
                 value: ApplicantType.Delegate,

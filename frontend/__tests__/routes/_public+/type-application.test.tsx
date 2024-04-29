@@ -95,7 +95,7 @@ describe('_public.apply.id.type-of-application', () => {
 
       const formData = new FormData();
       formData.append('_csrf', 'csrfToken');
-      formData.append('typeOfApplication', 'personal');
+      formData.append('typeOfApplication', 'adult');
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }),
