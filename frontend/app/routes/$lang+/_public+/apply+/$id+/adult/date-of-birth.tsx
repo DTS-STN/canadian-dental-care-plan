@@ -36,7 +36,7 @@ export type AllChildrenUnder18State = `${AllChildrenUnder18Option}`;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.dateOfBirth,
+  pageIdentifier: pageIds.public.apply.adult.dateOfBirth,
   pageTitleI18nKey: 'adult-apply:eligibility.date-of-birth.page-title',
 } as const satisfies RouteHandleData;
 

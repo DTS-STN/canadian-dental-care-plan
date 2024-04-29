@@ -27,7 +27,7 @@ export const applyIdParamSchema = z.string().uuid();
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.confirmation,
+  pageIdentifier: pageIds.public.apply.adult.confirmation,
   pageTitleI18nKey: 'adult-apply:confirm.page-title',
 } as const satisfies RouteHandleData;
 
@@ -173,7 +173,7 @@ export default function ApplyFlowConfirm() {
   const mscaLink = <InlineLink to={t('confirm.msca-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
   const moreInfoLink = <InlineLink to={t('confirm.more-info-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('apply:confirm.status-checker-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('adult-apply:confirm.status-checker-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
 
   // this link will be used in a future release
   // const cdcpLink = <InlineLink routeId="$lang+/_public+/status+/index" params={params} className="external-link font-lato font-semibold" target='_blank' />;

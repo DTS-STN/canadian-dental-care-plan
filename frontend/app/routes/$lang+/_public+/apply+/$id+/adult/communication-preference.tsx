@@ -38,7 +38,7 @@ export interface CommunicationPreferencesState {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('adult-apply', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.communicationPreference,
+  pageIdentifier: pageIds.public.apply.adult.communicationPreference,
   pageTitleI18nKey: 'adult-apply:communication-preference.page-title',
 } as const satisfies RouteHandleData;
 
