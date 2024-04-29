@@ -102,19 +102,18 @@ function createSubscriptionService() {
     }
   }
 
-  async function validateConfirmationCode(userEmail: string, enteredConfirmationCode: string, sin: string) {
+  async function validateConfirmationCode(userEmail: string, enteredConfirmationCode: string, sub: string) {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
 
-    auditService.audit('alert-subscription.validate', { sin });
+    auditService.audit('alert-subscription.validate', { sub });
 
     const dataToPass = {
       email: userEmail,
       confirmationCode: enteredConfirmationCode,
     };
-    // TODO: "IT-Security won't like SIN being passed as identifier"
     // TODO: add CDCP_API_BASE_URI
-    const url = new URL(`https://api.example.com/v1/users/codes/verify`);
+    const url = new URL(`https://api.example.com/v1/codes/verify`);
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -123,17 +122,17 @@ function createSubscriptionService() {
       body: JSON.stringify(dataToPass),
     });
 
-    instrumentationService.countHttpStatus('http.client.cdcp-api.alert-confirm.posts', response.status);
+    instrumentationService.countHttpStatus('http.client.cdcp-api.codes.verify.posts', response.status);
     if (!response.ok) {
       log.error('%j', {
-        message: 'Failed to update data',
+        message: 'Failed to verify data',
         status: response.status,
         statusText: response.statusText,
         url: url,
         responseBody: await response.text(),
       });
 
-      throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
+      throw new Error(`Failed to verify data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
     return response;

@@ -18,12 +18,7 @@ const validateSubscriptionSchema = z.object({
   email: z.string(),
   confirmationCode: z.string(),
 });
-enum httpResponseMessages {
-  ValidCodeSuccess = 'Valid code - Success',
-  NoCodeFound = 'No confirmation code for this user',
-  CodeExpired = 'Code has expired, request a new one',
-  CodeMismatch = 'Code entered does not match the valid confirmation code',
-}
+
 /**
  * Server-side MSW mocks for the subscription API.
  */
@@ -84,8 +79,8 @@ export function getSubscriptionApiMockHandlers() {
 
       return HttpResponse.text(null, { status: 204 });
     }),
-    //MOCK TO VALIDATE THE CONFIRMATION CODE VS THE ONE ENTERED BY THE USER
-    http.post('https://api.example.com/v1/users/codes/verify', async ({ params, request }) => {
+
+    http.post('https://api.example.com/v1/codes/verify', async ({ params, request }) => {
       log.debug('Handling request for [%s]', request.url);
       const timeEntered = new Date();
       const requestBody = await request.json();
@@ -97,22 +92,22 @@ export function getSubscriptionApiMockHandlers() {
         where: { email: { equals: validateSubscriptionSchemaData.data.email } },
       });
 
-      if (subscriptionConfirmationCodesEntities.length == 0) {
-        return HttpResponse.text(httpResponseMessages.NoCodeFound, { status: 200 });
+      if (subscriptionConfirmationCodesEntities.length === 0) {
+        return HttpResponse.json({ confirmCodeStatus: 'noCode' }, { status: 200 });
       }
 
       const latestConfirmCode = subscriptionConfirmationCodesEntities.reduce((prev, current) => (prev.createdDate > current.createdDate ? prev : current));
 
-      if (latestConfirmCode.confirmationCode == validateSubscriptionSchemaData.data.confirmationCode && timeEntered < latestConfirmCode.expiryDate) {
-        return HttpResponse.text(httpResponseMessages.ValidCodeSuccess, { status: 200 });
+      if (latestConfirmCode.confirmationCode === validateSubscriptionSchemaData.data.confirmationCode && timeEntered < latestConfirmCode.expiryDate) {
+        return HttpResponse.json({ confirmCodeStatus: 'Valid' }, { status: 200 });
       }
-      if (latestConfirmCode.confirmationCode == validateSubscriptionSchemaData.data.confirmationCode && timeEntered > latestConfirmCode.expiryDate) {
+      if (latestConfirmCode.confirmationCode === validateSubscriptionSchemaData.data.confirmationCode && timeEntered > latestConfirmCode.expiryDate) {
         //Code expired
-        return HttpResponse.text(httpResponseMessages.CodeExpired, { status: 200 });
+        return HttpResponse.json({ confirmCodeStatus: 'expired' }, { status: 200 });
       }
 
-      //There is at least 1 confirmation code and the code entered by the user does not match it..
-      return HttpResponse.text(httpResponseMessages.CodeMismatch, { status: 200 });
+      //There is at least 1 confirmation code for this user but the code entered by said user does not match it..
+      return HttpResponse.json({ confirmCodeStatus: 'mismatch' }, { status: 200 });
     }),
   ];
 }
