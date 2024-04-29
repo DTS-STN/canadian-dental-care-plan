@@ -60,6 +60,7 @@
     "begin-process": "We will begin processing your application immediately.",
     "cdcp-checker": "You can use the <cdcpLink>Canadian Dental Care Plan Status Checker</cdcpLink> or call <noWrap>1-833-537-4342</noWrap> to track the progress of your application or to recieve more information.",
     "use-code": "You can use your application code to begin tracking the progress within 48 hours of applying.",
+    "use-code-one-week": "You can use your application code to track the progress of your application one week after applying.",
     "register-msca-title": "Register for a My Service Canada Account",
     "register-msca-text": "Once your application is processed, you will be able to sign into <mscaLink>My Service Canada Account (MSCA)</mscaLink>. You will also be able to view letters sent to you from the Government of Canada regarding the Canadian Dental Care Plan.",
     "msca-notify": "You will be notified whether your application has been accepted or rejected in your My Service Canada Account.",
