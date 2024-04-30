@@ -15,6 +15,9 @@
       "disability-tax-credit-required": "(FR) Select whether or not you have a valid disability tax credit"
     }
   },
+  "index": {
+    "page-title": "(FR) Applying for the Canadian Dental Care Plan"
+  },
   "living-independently": {
     "page-title": "Vivre de manière indépendante",
     "description": "Vivre indépendamment de vos parents signifie que vous avez 16 ou 17 ans, que vous ne recevez aucune aide financière de vos parents et que votre résidence principale est différente de la leur.",
@@ -86,10 +89,10 @@
       },
       "who-we-can-share-your-information-with": {
         "heading": "Avec qui nous partagerons vos renseignements",
-        "esdc-personal-information-sharing": "EDSC communiquera vos renseignements personnels à nos partenaires dans l'administration du régime afin de valider votre admissibilité et de vous inscrire au RCSD.",
-        "benefits-administration-data-disclosure": "Vos données peuvent également être divulguées à l'administrateur des prestations du RCSD et aux agents et fournisseurs de services de l'administrateur des prestations aux fins de souscription, de vérification, d'administration, de décision et d'enquête concernant les prestations versées au titre du RCSD.",
+        "esdc-personal-information-sharing": "EDSC communiquera vos renseignements personnels à Santé Canada, l'Agence du revenu du Canada et la Sun Life dans le cadre de l'administration du régime afin de valider votre admissibilité et de vous inscrire au RCSD.",
+        "benefits-administration-data-disclosure": "Vos données peuvent également être divulguées à l'administrateur des prestations du RCSD (Sun Life) et aux agents et fournisseurs de services de l'administrateur des prestations aux fins de souscription, de vérification, d'administration, de décision et d'enquête concernant les prestations versées au titre du RCSD.",
         "esdc-information-usage-policy": "EDSC peut utiliser ou partager les renseignements que vous fournissez pour les activités d'analyse des politiques, de recherche, de surveillance et d'évaluation au sein d'EDSC et de SC. Ces utilisations ou activités n'auront aucune incidence sur les décisions administratives prises à votre sujet.",
-        "sun-life-authorization": "La Sun Life est autorisée à recueillir, à utiliser et à divulguer des renseignements me concernant et à les communiquer à des personnes d'intérêt ou organismes comme, par exemple, des fournisseurs de soins buccodentaires, des institutions, des agences d'enquêtes, ainsi qu'au RCSD pour l'administration du plan, la vérification, les demandes de règlement et la sécurité du patient/client. Si je suis d'âge mineur dans ma province ou mon territoire, mes renseignements personnels peuvent également être communiqués à mes parents ou tuteurs légaux. Pour de plus amples renseignements quant à la politique de confidentialité de la Sun Life, consultez le <sunlife>www.sunlife.ca</sunlife>."
+        "sun-life-authorization": "La Sun Life est autorisée à recueillir, à utiliser et à divulguer des renseignements vous concernant et à les communiquer à des personnes d'intérêt ou organismes comme, par exemple, des fournisseurs de soins buccodentaires, des institutions, des agences d'enquêtes, ainsi qu'au RCSD pour l'administration du plan, la vérification, les demandes de règlement et la sécurité du patient/client. Si vous êtes considéré comme mineur dans votre province ou territoire, vos renseignements personnels peuvent également être communiqués vos parents ou tuteurs légaux. Pour de plus amples renseignements quant à la politique de confidentialité de la Sun Life, consultez le <sunlife>www.sunlife.ca</sunlife>."
       },
       "what-happens-if-you-dont-give-us-your-information": {
         "heading": "Que se passe-t-il si vous ne nous fournissez pas vos renseignements",

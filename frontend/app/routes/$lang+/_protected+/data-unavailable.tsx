@@ -15,7 +15,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'data-unavailable:page-title' }],
+  breadcrumbs: [{ labelI18nKey: 'data-unavailable:breadcrumbs.cdcp' }],
   i18nNamespaces: getTypedI18nNamespaces('data-unavailable', 'gcweb'),
   pageIdentifier: pageIds.protected.dataUnavailable,
   pageTitleI18nKey: 'data-unavailable:page-title',
