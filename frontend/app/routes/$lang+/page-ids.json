@@ -71,6 +71,22 @@
         "childInformation": "CDCP-APPL-ADCH-0015",
         "applyChildren": "CDCP-APPL-ADCH-0016"
       },
+      "child": {
+        "applicationDelegate": "CDCP-APPL-CH-0001",
+        "taxFiling": "CDCP-APPL-CH-0002",
+        "fileYourTaxes": "CDCP-APPL-CH-0003",
+        "dateOfBirth": "CDCP-APPL-CH-0004",
+        "dateOfBirthEligibility": "CDCP-APPL-CH-0005",
+        "applicantInformation": "CDCP-APPL-CH-0006",
+        "partnerInformation": "CDCP-APPL-CH-0007",
+        "personalInformation": "CDCP-APPL-CH-0008",
+        "communicationPreference": "CDCP-APPL-CH-0009",
+        "dentalInsurance": "CDCP-APPL-CH-0010",
+        "federalProvincialTerritorialBenefits": "CDCP-APPL-CH-0011",
+        "reviewInformation": "CDCP-APPL-CH-0012",
+        "exitApplication": "CDCP-APPL-CH-0013",
+        "confirmation": "CDCP-APPL-CH-0014"
+      },
       "disabilityTaxCredit": "CDCP-APPL-0018",
       "parentOrGuardian": "CDCP-APPL-0019",
       "livingIndependently": "CDCP-APPL-0020"
