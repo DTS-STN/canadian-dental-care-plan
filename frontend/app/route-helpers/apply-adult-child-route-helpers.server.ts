@@ -34,7 +34,7 @@ interface LoadApplyAdultChildStateArgs {
 /**
  * Loads apply adult child(ren) state.
  * @param args - The arguments.
- * @returns The loaded adult state.
+ * @returns The loaded adult child(ren) state.
  */
 export function loadApplyAdultChildState({ params, request, session }: LoadApplyAdultChildStateArgs) {
   const { pathname } = new URL(request.url);
