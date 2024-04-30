@@ -35,6 +35,7 @@ const validFeatureNames = [
   'show-prototype-banner',
   'authenticated-status-check',
   'update-governmental-benefit',
+  'power-platform-status-checker',
 ] as const;
 export type FeatureName = (typeof validFeatureNames)[number];
 
