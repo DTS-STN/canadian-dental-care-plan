@@ -53,6 +53,9 @@
         "exitApplication": "CDCP-APPL-AD-0013",
         "confirmation": "CDCP-APPL-AD-0014"
       },
+      "adultChild": {
+        "federalProvincialTerritorialBenefits": "CDCP-APPL-ADCH-0011"
+      },
       "disabilityTaxCredit": "CDCP-APPL-0018",
       "parentOrGuardian": "CDCP-APPL-0019",
       "livingIndependently": "CDCP-APPL-0020"

@@ -1,0 +1,39 @@
+{
+  "dental-benefits": {
+    "title": "{{titleComponent}}: access to other federal, provincial or territorial dental benefits",
+    "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social program will not impact the child's eligibility for the Canadian Dental Care Plan.",
+    "select-one": "Select one",
+    "eligibility-criteria": "If the child meets all the eligibility criteria, their coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
+    "federal-benefits": {
+      "title": "Federal benefits",
+      "legend": "Does {{childName}} have dental benefits through a social program offered by a federal program?",
+      "option-yes": "<strong>Yes</strong>, this child has <strong>federal</strong> dental benefits.",
+      "option-no": "<strong>No</strong>, this child does not have <strong>federal</strong> dental benefits.",
+      "social-programs": {
+        "legend": "Please select which social program the child is covered under. If the child has more than one, please select the one they use most."
+      }
+    },
+    "provincial-territorial-benefits": {
+      "title": "Provincial or territorial benefits",
+      "legend": "Does {{childName}} this child have dental benefits through a social program offered by your province or territory?",
+      "option-yes": "<strong>Yes</strong>, this child has <strong>provincial or territorial</strong> dental benefits.",
+      "option-no": "<strong>No</strong>, this child does not have <strong>provincial or territorial</strong> dental benefits.",
+      "social-programs": {
+        "input-legend": "If yes, through which province or territory?",
+        "radio-legend": "Please select which social program the child is covered under. If the child has more than one, please select the one they use most."
+      }
+    },
+    "button": {
+      "back": "Back",
+      "continue": "Continue",
+      "cancel-btn": "Cancel",
+      "save-btn": "Save"
+    },
+    "error-message": {
+      "federal-benefit-required": "Select whether your child has a federal dental benefits",
+      "program-required": "Select a program",
+      "provincial-benefit-required": "Select whether your child has provincial or territorial dental benefits",
+      "provincial-territorial-required": "Select a province or territory"
+    }
+  }
+}

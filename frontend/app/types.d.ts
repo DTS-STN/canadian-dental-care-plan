@@ -3,6 +3,7 @@ import type { ActionFunctionArgs as RRActionFunctionArgs, LoaderFunctionArgs as 
 
 import type accessToGovernmentalBenefits from '../public/locales/en/access-to-governmental-benefits.json';
 import type alerts from '../public/locales/en/alerts.json';
+import type applyAdultChild from '../public/locales/en/apply-adult-child.json';
 import type applyAdult from '../public/locales/en/apply-adult.json';
 import type apply from '../public/locales/en/apply.json';
 import type dataUnavailable from '../public/locales/en/data-unavailable.json';
@@ -35,6 +36,7 @@ declare module 'i18next' {
   interface CustomTypeOptions {
     defaultNS: false;
     resources: {
+      'apply-adult-child': typeof applyAdultChild;
       'apply-adult': typeof applyAdult;
       apply: typeof apply;
       'data-unavailable': typeof dataUnavailable;
