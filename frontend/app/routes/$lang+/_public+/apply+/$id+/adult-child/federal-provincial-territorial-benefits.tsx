@@ -15,6 +15,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
+import { AppPageTitle } from '~/components/layouts/public-layout';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 //TODO: Change over route helper to adult-child when available
@@ -55,8 +56,6 @@ export type DentalBenefitsState = { isChild: boolean; childName: string | undefi
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adultChild.federalProvincialTerritorialBenefits,
-  pageTitleI18nKey: 'apply-adult-child:dental-benefits.title',
-  pageTitleI18nKeyComponent: '<Child 1 name>', //TODO: set child name from adult-child apply flow
 };
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -197,7 +196,8 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-information', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params)); //TODO: Change over to adult-child when available
+  //return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-information', params));
 }
 
 export default function AccessToDentalInsuranceQuestion() {
@@ -276,6 +276,7 @@ export default function AccessToDentalInsuranceQuestion() {
 
   return (
     <>
+      <AppPageTitle>{t('apply-adult-child:dental-benefits.title', { childName: childName })}</AppPageTitle>
       <div className="my-6 sm:my-8">
         <p id="progress-label" className="sr-only mb-2">
           {t('apply:progress.label')}
@@ -405,7 +406,7 @@ export default function AccessToDentalInsuranceQuestion() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId="$lang+/_public+/apply+/$id+/adult-child/review-information"
+                routeId="$lang+/_public+/apply+/$id+/adult/review-information" //TODO: Change over to adult-child when available
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Access to other federal, provincial or territorial dental benefits click"
@@ -421,7 +422,7 @@ export default function AccessToDentalInsuranceQuestion() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId="$lang+/_public+/apply+/$id+/adult-child/dental-insurance"
+                routeId="$lang+/_public+/apply+/$id+/adult/dental-insurance" //TODO: Change over to adult-child when available
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Access to other federal, provincial or territorial dental benefits click"
