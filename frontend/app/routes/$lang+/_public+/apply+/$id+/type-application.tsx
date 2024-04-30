@@ -16,6 +16,7 @@ import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { ApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { ApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import { ApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import { loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -57,7 +58,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/type-of-application');
-
+  const state = loadApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   /**
@@ -87,21 +88,27 @@ export async function action({ context: { session }, params, request }: ActionFu
     params,
     session,
     state: {
-      adultState: parsedDataResult.data === 'adult' ? ({ editMode: false } satisfies ApplyAdultState) : undefined,
-      adultChildState: parsedDataResult.data === 'adult-child' ? ({ editMode: false } satisfies ApplyAdultChildState) : undefined,
+      adultState: state.adultState ?? ({ editMode: false } satisfies ApplyAdultState),
+      adultChildState: state.adultChildState ?? ({ editMode: false } satisfies ApplyAdultChildState),
+      childState: state.childState ?? ({ editMode: false } satisfies ApplyChildState),
       typeOfApplication: parsedDataResult.data,
     },
   });
 
-  if (parsedDataResult.data === ApplicantType.Delegate) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/application-delegate', params));
+  if (parsedDataResult.data === ApplicantType.Adult) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/tax-filing', params));
   }
 
   if (parsedDataResult.data === ApplicantType.AdultChild) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/tax-filing', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/tax-filing', params));
+  if (parsedDataResult.data === ApplicantType.Child) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/child/tax-filing', params));
+  }
+
+  // TODO: change this route to $lang+/_public+/apply+/$id+/application-delegate
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/application-delegate', params));
 }
 
 export default function ApplyFlowTypeOfApplication() {

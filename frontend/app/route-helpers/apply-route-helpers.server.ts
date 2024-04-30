@@ -16,8 +16,9 @@ const log = getLogger('apply-route-helpers.server');
 const idSchema = z.string().uuid();
 
 export interface ApplyState {
-  readonly adultState?: unknown;
   readonly adultChildState?: unknown;
+  readonly adultState?: unknown;
+  readonly childState?: unknown;
   readonly id: string;
   readonly lastUpdatedOn: string;
   readonly typeOfApplication?: TypeOfApplicationState;
