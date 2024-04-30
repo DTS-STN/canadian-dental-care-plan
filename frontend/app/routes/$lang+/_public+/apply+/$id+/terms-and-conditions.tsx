@@ -129,10 +129,10 @@ export default function ApplyIndex() {
             <h2 className="font-bold"> {t('apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.heading')}</h2>
             <p>{t('apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.esdc-personal-information-sharing')}</p>
             <p>{t('apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.benefits-administration-data-disclosure')}</p>
-            <p>{t('apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.esdc-information-usage-policy')}</p>
             <p>
               <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.sun-life-authorization" components={{ sunlife }} />
             </p>
+            <p>{t('apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.esdc-information-usage-policy')}</p>
 
             <h2 className="font-bold">{t('apply:terms-and-conditions.privacy-notice-statement.what-happens-if-you-dont-give-us-your-information.heading')} </h2>
             <p>{t('apply:terms-and-conditions.privacy-notice-statement.what-happens-if-you-dont-give-us-your-information.text')}</p>

@@ -12,6 +12,7 @@ import { Button } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
+import { useFeature } from '~/root';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -169,6 +170,7 @@ export default function ApplyFlowConfirm() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, csrfToken } = useLoaderData<typeof loader>();
+  const powerPlatformStatusCheckerEnabled = useFeature('power-platform-status-checker');
 
   const mscaLink = <InlineLink to={t('confirm.msca-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
@@ -212,7 +214,8 @@ export default function ApplyFlowConfirm() {
       <p className="mt-4">
         <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
       </p>
-      <p className="mt-4">{t('confirm.use-code')}</p>
+      <p className="mt-4">{powerPlatformStatusCheckerEnabled ? t('confirm.use-code') : t('confirm.use-code-one-week')}</p>
+
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.register-msca-title')}</h2>
       <p className="mt-4">
         <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLink }} />
