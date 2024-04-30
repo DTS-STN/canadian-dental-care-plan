@@ -1,5 +1,7 @@
+import { useEffect, useMemo } from 'react';
+
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
@@ -19,6 +21,7 @@ import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';
 
@@ -84,10 +87,19 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
   if (action === ConfirmSubscriptionCode.Submit) {
     //TODO Validate the entered code and complete the user's registration to the alert me service if the code is correct
-    await getSubscriptionService().validateConfirmationCode(alertSubscription?.email ?? '', parsedDataResult.data.confirmationCode ?? '', userInfoToken.sub);
+    const response = await getSubscriptionService().validateConfirmationCode(alertSubscription?.email ?? '', parsedDataResult.data.confirmationCode ?? '', userInfoToken.sub);
+    const jsonReponseStatus = await response.json();
+
+    console.debug('PARSED::: ' + jsonReponseStatus.confirmCodeStatus);
+    if (jsonReponseStatus.confirmCodeStatus === 'valid') {
+    }
+    if (jsonReponseStatus.confirmCodeStatus === 'expired') {
+    }
+    if (jsonReponseStatus.confirmCodeStatus === 'mismatch') {
+    }
   }
 
-  return '';
+  return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/confirm', params));
 }
 
 export default function ConfirmSubscription() {
@@ -96,9 +108,25 @@ export default function ConfirmSubscription() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const userOrigin = useUserOrigin();
+  const errorSummaryId = 'error-summary';
   //TODO insert the selected language and email address of the client...
+  const errorMessages = useMemo(
+    () => ({
+      confirmationCode: fetcher.data?.errors.confirmationCode?._errors[0],
+    }),
+    [fetcher.data?.errors.confirmationCode?._errors],
+  );
+
+  const errorSummaryItems = createErrorSummaryItems(errorMessages);
+
+  useEffect(() => {
+    if (hasErrors(errorMessages)) {
+      scrollAndFocusToErrorSummary(errorSummaryId);
+    }
+  }, [errorMessages]);
   return (
     <>
+      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <fetcher.Form className="max-w-prose" method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mb-8 space-y-6">
