@@ -258,6 +258,14 @@
                           "en": "/:lang/apply/:id/adult-child/apply-children",
                           "fr": "/:lang/demander/:id/adult-child/apply-children"
                         }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/confirmation",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/confirmation.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/confirmation",
+                          "fr": "/:lang/demander/:id/adulte-enfant/confirmation"
+                        }
                       }
                     ]
                   },

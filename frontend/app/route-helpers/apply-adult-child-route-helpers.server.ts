@@ -32,7 +32,7 @@ interface LoadApplyAdultChildStateArgs {
 }
 
 /**
- * Loads apply adult state.
+ * Loads apply adult child(ren) state.
  * @param args - The arguments.
  * @returns The loaded adult state.
  */
@@ -77,7 +77,7 @@ interface SaveStateArgs {
 /**
  * Saves state.
  * @param args - The arguments.
- * @returns The new adult state.
+ * @returns The new adult child(ren) state.
  */
 export function saveApplyAdultChildState({ params, request, session, state, remove = undefined }: SaveStateArgs) {
   const currentState = loadApplyAdultChildState({ params, request, session });
@@ -139,6 +139,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/date-of-birth', params));
   }
 
+  // TODO: Need to create routes for adult-child flow
   // if (state.adultChildState.applicantInformation === undefined) {
   //   throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
   // }
