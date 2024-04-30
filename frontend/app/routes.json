@@ -258,6 +258,14 @@
                           "en": "/:lang/apply/:id/adult-child/confirmation",
                           "fr": "/:lang/demander/:id/adulte-enfant/confirmation"
                         }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/apply-for-yourself",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/apply-for-yourself.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/apply-for-yourself",
+                          "fr": "/:lang/demander/:id/adulte-enfant/postulez-pour-vous-meme"
+                        }
                       }
                     ]
                   },

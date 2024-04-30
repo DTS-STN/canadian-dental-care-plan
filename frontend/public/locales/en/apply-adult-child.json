@@ -178,6 +178,16 @@
         "has-social-insurance-number": "Select whether or not this child has a social insurance number",
         "is-parent": "Select whether or not you are this child's parent or legal guardian"
       }
+    },
+    "apply-for-yourself": {
+      "page-title": "Apply for yourself",
+      "ineligible-to-apply": "Your children are not currently eligible to apply for the Canadian Dental Care Plan. Only children under 18 are eligible at this time.",
+      "eligibility-info": "Find out when they can apply.",
+      "eligibility-info-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#when",
+      "submit-application": "You can still submit an application for yourself.",
+      "back-btn": "Back",
+      "proceed-btn": "Proceed to apply for yourself",
+      "procees-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
     }
   },
   "exit-application": {
