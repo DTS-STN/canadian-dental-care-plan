@@ -270,6 +270,14 @@
                       "en": "/:lang/apply/:id/apply-children",
                       "fr": "/:lang/demander/:id/apply-children"
                     }
+                  },
+                  {
+                    "id": "$lang+/_public+/apply+/$id+/child-information",
+                    "file": "routes/$lang+/_public+/apply+/$id+/child-information.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/child-information",
+                      "fr": "/:lang/demander/:id/child-information"
+                    }
                   }
                 ]
               }
