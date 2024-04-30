@@ -156,5 +156,9 @@
 @media print {
   a[href]:after {
     content: ' (' attr(href) ')';
+    display: inline;
+    height: auto;
+    margin-left: auto;
+    width: auto;
   }
 }
