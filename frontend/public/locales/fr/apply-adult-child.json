@@ -1,0 +1,39 @@
+{
+  "dental-benefits": {
+    "title": "{{childName}}: accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
+    "access-to-dental": "(FR) Access to dental coverage through a provincial, territorial or federal government social program will not impact the child's eligibility for the Canadian Dental Care Plan.",
+    "eligibility-criteria": "(FR) If the child meets all the eligibility criteria, their coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
+    "select-one": "Choisissez une option",
+    "federal-benefits": {
+      "title": "Prestations fédérales",
+      "legend": "(FR) Does {{childName}} have dental benefits through a social program offered by a federal program?",
+      "option-yes": "(FR) <strong>Yes</strong>, this child has <strong>federal</strong> dental benefits.",
+      "option-no": "(FR) <strong>No</strong>, this child does not have <strong>federal</strong> dental benefits.",
+      "social-programs": {
+        "legend": "(FR) Please select which social program the child is covered under. If the child has more than one, please select the one they use most."
+      }
+    },
+    "provincial-territorial-benefits": {
+      "title": "Assurances provinciales ou territoriales",
+      "legend": "(FR) Does {{childName}} this child have dental benefits through a social program offered by your province or territory?",
+      "option-yes": "(FR) <strong>Yes</strong>, this child has <strong>provincial or territorial</strong> dental benefits.",
+      "option-no": "(FR) <strong>No</strong>, this child does not have <strong>provincial or territorial</strong> dental benefits.",
+      "social-programs": {
+        "input-legend": "Si oui, par l'entremise de quelle province ou de quel territoire?",
+        "radio-legend": "(FR) Please select which social program the child is covered under. If the child has more than one, please select the one they use most."
+      }
+    },
+    "button": {
+      "back": "Retour",
+      "continue": "Continuer",
+      "cancel-btn": "Annuler",
+      "save-btn": "Enregistrer"
+    },
+    "error-message": {
+      "federal-benefit-required": "(FR) Select whether your child has a federal dental benefits",
+      "program-required": "Sélectionnez un programme",
+      "provincial-benefit-required": "(FR) Select whether your child has provincial or territorial dental benefits",
+      "provincial-territorial-required": "Sélectionnez une province ou territoire"
+    }
+  }
+}
