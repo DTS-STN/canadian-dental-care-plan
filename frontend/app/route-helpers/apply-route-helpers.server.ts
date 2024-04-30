@@ -17,6 +17,7 @@ const idSchema = z.string().uuid();
 
 export interface ApplyState {
   readonly adultState?: unknown;
+  readonly adultChildState?: unknown;
   readonly id: string;
   readonly lastUpdatedOn: string;
   readonly typeOfApplication?: TypeOfApplicationState;

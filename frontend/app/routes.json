@@ -224,6 +224,28 @@
                     ]
                   },
                   {
+                    "id": "$lang+/_public+/apply+/$id+/adult-child/_route",
+                    "file": "routes/$lang+/_public+/apply+/$id+/adult-child/_route.tsx",
+                    "children": [
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/tax-filing",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/tax-filing.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/tax-filing",
+                          "fr": "/:lang/demander/:id/adulte-enfant/declaration-impot"
+                        }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/date-of-birth",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/date-of-birth.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/date-of-birth",
+                          "fr": "/:lang/demander/:id/adulte-enfant/date-de-naissance"
+                        }
+                      }
+                    ]
+                  },
+                  {
                     "id": "$lang+/_public+/apply+/$id+/terms-and-conditions",
                     "file": "routes/$lang+/_public+/apply+/$id+/terms-and-conditions.tsx",
                     "paths": {
