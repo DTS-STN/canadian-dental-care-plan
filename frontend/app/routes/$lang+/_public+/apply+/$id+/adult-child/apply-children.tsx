@@ -5,9 +5,9 @@ import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -16,9 +16,9 @@ import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.applyChildren,
-  pageTitleI18nKey: 'apply:apply-children.page-title',
+  i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'gcweb'),
+  pageIdentifier: pageIds.public.apply.adultChild.applyChildren,
+  pageTitleI18nKey: 'apply-adult-child:eligibility.apply-children.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -26,17 +26,17 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const state = loadApplyAdultState({ params, request, session });
+  const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:apply-children.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.apply-children.page-title') }) };
 
   return json({ id: state.id, csrfToken, meta });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/apply-children');
+  const log = getLogger('apply/adult-child/apply-children');
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -48,7 +48,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   // todo: build out route
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/child-information', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/child-information', params));
 }
 
 export default function ApplyFlowApplyChildren() {
@@ -61,17 +61,17 @@ export default function ApplyFlowApplyChildren() {
   return (
     <>
       <div className="mb-8 space-y-4">
-        <p>{t('apply:apply-children.not-eligible')}</p>
-        <p>{t('apply:apply-children.still-apply')}</p>
+        <p>{t('apply-adult-child:eligibility.apply-children.not-eligible')}</p>
+        <p>{t('apply-adult-child:eligibility.apply-children.still-apply')}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
         <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/disability-tax-credit" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Parent or guardian needs to apply click">
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-          {t('apply:apply-children.back-btn')}
+          {t('apply-adult-child:eligibility.apply-children.back-btn')}
         </ButtonLink>
         <Button type="submit" variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Parent or guardian needs to apply click">
-          {t('apply:apply-children.continue-btn')}
+          {t('apply-adult-child:eligibility.apply-children.continue-btn')}
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>
       </fetcher.Form>

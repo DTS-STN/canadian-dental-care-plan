@@ -1,48 +1,4 @@
 {
-  "apply-children": {
-    "page-title": "(FR) Apply for your child(ren)",
-    "not-eligible": "(FR) You are not currently eligible to apply for the Canadian Dental Care Plan.",
-    "still-apply": "(FR) However, you can still submit an application for you child(ren).",
-    "back-btn": "Retour",
-    "continue-btn": "(FR) Proceed to apply for your child(ren)"
-  },
-  "child-information": {
-    "page-title": "(FR) Child 1: information",
-    "form-instructions-sin": "(FR) Provide the child's legal name as indicated on their Social Insurance Number (SIN) card or letter (if available), or other government documentation.",
-    "single-legal-name": "(FR) If the child has a single legal name",
-    "name-instructions": "(FR) If using a single legal name, please enter that name in BOTH the first name and last name fields.",
-    "last-name": "Nom de famille",
-    "first-name": "Prénom",
-    "date-of-birth": "(FR) Date of birth",
-    "sin-legend": "(FR) Does this child have a Social Insurance Number (SIN)?",
-    "sin-yes": "(FR) <bold>Yes</bold>, this child has a SIN",
-    "sin-no": "(FR) <bold>No</bold>, this child does not have a SIN",
-    "sin": "(FR) Enter the 9-digit SIN",
-    "parent-legend": "(FR) Are you the parent or legal guardian of this child?",
-    "radio-options": {
-      "yes": "Oui",
-      "no": "Non"
-    },
-    "back-btn": "Retour",
-    "continue-btn": "Continuer",
-    "cancel-btn": "Annuler",
-    "save-btn": "Enregistrer",
-    "error-message": {
-      "first-name-required": "Entrez le prénom",
-      "sin-required": "Entrez un NAS de 9 chiffres",
-      "sin-valid": "Le NAS doit être valide",
-      "date-of-birth-day-number": "Le jour doit être un nombre",
-      "date-of-birth-day-required": "La date de naissance doit inclure un jour",
-      "date-of-birth-is-past": "La date de naissance doit être dans le passé",
-      "date-of-birth-is-past-valid": "Date de naissance trop éloignée dans le passé",
-      "date-of-birth-month-required": "La date de naissance doit inclure un mois",
-      "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisi",
-      "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
-      "date-of-birth-year-required": "La date de naissance doit inclure une année",
-      "has-social-insurance-number": "(FR) Select whether or not this child has a social insurance number",
-      "is-parent": "(FR) Select whether or not you are this child's parent or legal guardian"
-    }
-  },
   "disability-tax-credit": {
     "page-title": "(FR) Disability tax credit",
     "non-refundable": "(FR) The disability tax credit (DTC) is a non-refundable federal tax credit that helps people with disabilities, or their supporting family member, reduce the amount of income tax they may have to pay.",

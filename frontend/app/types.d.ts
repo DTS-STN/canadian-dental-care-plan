@@ -38,6 +38,7 @@ declare module 'i18next' {
     resources: {
       'apply-adult-child': typeof applyAdultChild;
       'apply-adult': typeof applyAdult;
+      'apply-adult-child': typeof applyAdultChild;
       apply: typeof apply;
       'data-unavailable': typeof dataUnavailable;
       gcweb: typeof gcweb;

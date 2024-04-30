@@ -14,6 +14,7 @@ import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
+import { ApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { ApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
@@ -87,12 +88,17 @@ export async function action({ context: { session }, params, request }: ActionFu
     session,
     state: {
       adultState: parsedDataResult.data === 'adult' ? ({ editMode: false } satisfies ApplyAdultState) : undefined,
+      adultChildState: parsedDataResult.data === 'adult-child' ? ({ editMode: false } satisfies ApplyAdultChildState) : undefined,
       typeOfApplication: parsedDataResult.data,
     },
   });
 
   if (parsedDataResult.data === ApplicantType.Delegate) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/application-delegate', params));
+  }
+
+  if (parsedDataResult.data === ApplicantType.AdultChild) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/tax-filing', params));
   }
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/tax-filing', params));

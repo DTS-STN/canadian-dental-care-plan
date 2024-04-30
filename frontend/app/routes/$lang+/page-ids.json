@@ -54,14 +54,26 @@
         "confirmation": "CDCP-APPL-AD-0014"
       },
       "adultChild": {
-        "federalProvincialTerritorialBenefits": "CDCP-APPL-ADCH-0011"
+        "applicationDelegate": "CDCP-APPL-ADCH-0001",
+        "taxFiling": "CDCP-APPL-ADCH-0002",
+        "fileYourTaxes": "CDCP-APPL-ADCH-0003",
+        "dateOfBirth": "CDCP-APPL-ADCH-0004",
+        "dateOfBirthEligibility": "CDCP-APPL-ADCH-0005",
+        "applicantInformation": "CDCP-APPL-ADCH-0006",
+        "partnerInformation": "CDCP-APPL-ADCH-0007",
+        "personalInformation": "CDCP-APPL-ADCH-0008",
+        "communicationPreference": "CDCP-APPL-ADCH-0009",
+        "dentalInsurance": "CDCP-APPL-ADCH-0010",
+        "federalProvincialTerritorialBenefits": "CDCP-APPL-ADCH-0011",
+        "reviewInformation": "CDCP-APPL-ADCH-0012",
+        "exitApplication": "CDCP-APPL-ADCH-0013",
+        "confirmation": "CDCP-APPL-ADCH-0014",
+        "childInformation": "CDCP-APPL-ADCH-0015",
+        "applyChildren": "CDCP-APPL-ADCH-0016"
       },
-      "dateOfBirth": "CDCP-APPL-0004",
       "disabilityTaxCredit": "CDCP-APPL-0018",
       "parentOrGuardian": "CDCP-APPL-0019",
-      "livingIndependently": "CDCP-APPL-0020",
-      "applyChildren": "CDCP-APPL-0021",
-      "childInformation": "CDCP-APPL-0021"
+      "livingIndependently": "CDCP-APPL-0020"
     },
     "status": "CDCP-STAT-0001",
     "unableToProcessRequest": "CDCP-UNAB-0001",
