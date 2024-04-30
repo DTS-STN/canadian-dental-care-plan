@@ -130,8 +130,6 @@
       "provincial-benefit-required": "(FR) Select whether your child has provincial or territorial dental benefits",
       "provincial-territorial-required": "Sélectionnez une province ou territoire"
     }
-<<<<<<< HEAD
-=======
   },
   "dental-insurance": {
     "title": "Accès à d'autres assurances dentaires",
@@ -423,6 +421,5 @@
     "exit-button": "Quitter la demande",
     "yes": "Oui",
     "no": "Non"
->>>>>>> 4fa8b6e9 (create adult-child flow helper, update locale, refactor)
   }
 }
