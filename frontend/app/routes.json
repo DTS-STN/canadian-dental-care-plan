@@ -254,6 +254,14 @@
                       "en": "/:lang/apply/:id/living-independently",
                       "fr": "/:lang/demander/:id/living-independently"
                     }
+                  },
+                  {
+                    "id": "$lang+/_public+/apply+/$id+/apply-children",
+                    "file": "routes/$lang+/_public+/apply+/$id+/apply-children.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/apply-children",
+                      "fr": "/:lang/demander/:id/apply-children"
+                    }
                   }
                 ]
               }
