@@ -33,6 +33,9 @@ const db = factory({
     maritialStatus: String,
     dentalApplicationID: String,
     preferredMethodCommunicationCode: String,
+    federalDentalPlanId: String,
+    provincialTerritorialDentalPlanId: String,
+    privateDentalPlanId: String,
     sinIdentification: primaryKey(String),
   },
   subscription: {
@@ -79,6 +82,9 @@ db.personalInformation.create({
   primaryTelephoneNumber: '807-555-5555',
   alternateTelephoneNumber: '416-555-6666',
   preferredMethodCommunicationCode: '1033',
+  federalDentalPlanId: 'e174250d-26c5-ee11-9079-000d3a09d640',
+  provincialTerritorialDentalPlanId: 'b5f25fea-a7a9-ee11-a569-000d3af4f898',
+  privateDentalPlanId: '333333',
   sinIdentification: '800011819',
 });
 
@@ -107,6 +113,9 @@ db.personalInformation.create({
   primaryTelephoneNumber: '555-555-5555',
   alternateTelephoneNumber: '789-555-6666',
   preferredMethodCommunicationCode: '775170002',
+  federalDentalPlanId: '5a5c5294-26c5-ee11-9079-000d3a09d640',
+  provincialTerritorialDentalPlanId: '39449f70-37b3-eb11-8236-0022486d8d5f',
+  privateDentalPlanId: '1111111',
   sinIdentification: '800000002',
 });
 

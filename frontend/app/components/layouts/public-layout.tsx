@@ -16,7 +16,7 @@ import { SkipNavigationLinks } from '~/components/skip-navigation-links';
 import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { useI18nNamespaces, usePageTitleI18nKey, usePageTitleI18nKeyComponent } from '~/utils/route-utils';
+import { useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
 
 export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
@@ -25,17 +25,15 @@ export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
  * see: https://wet-boew.github.io/GCWeb/templates/application/application-docs-en.html
  */
 export function PublicLayout({ children }: PropsWithChildren) {
-  const { t } = useTranslation(i18nNamespaces);
+  const { t } = useTranslation(useI18nNamespaces());
+  const pageTitleI18nKey = usePageTitleI18nKey();
   return (
     <>
       <PageHeader />
       <PageBreadcrumbs />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
-        <div className="my-8 border-b border-red-800">
-          <h2 className="font-lato text-lg text-stone-500 sm:text-xl">{t('gcweb:header.application-title')}</h2>
-          <AppPageTitle />
-        </div>
-        <div>{children}</div>
+        {pageTitleI18nKey && <AppPageTitle>{t(pageTitleI18nKey)}</AppPageTitle>}
+        {children}
         <PageDetails />
       </main>
       <PageFooter />
@@ -43,11 +41,14 @@ export function PublicLayout({ children }: PropsWithChildren) {
   );
 }
 
-function AppPageTitle() {
-  const { t } = useTranslation(useI18nNamespaces());
-  const pageTitleI18nKey = usePageTitleI18nKey();
-  const pageTitleI18nKeyComponent = usePageTitleI18nKeyComponent();
-  return pageTitleI18nKey && <PageTitle>{pageTitleI18nKeyComponent ? t(pageTitleI18nKey, { titleComponent: pageTitleI18nKeyComponent }) : t(pageTitleI18nKey)}</PageTitle>;
+export function AppPageTitle({ children }: PropsWithChildren) {
+  const { t } = useTranslation(i18nNamespaces);
+  return (
+    <div className="my-8 border-b border-red-800">
+      <h2 className="font-lato text-lg text-stone-500 sm:text-xl">{t('gcweb:header.application-title')}</h2>
+      <PageTitle>{children}</PageTitle>
+    </div>
+  );
 }
 
 function PageHeader() {
