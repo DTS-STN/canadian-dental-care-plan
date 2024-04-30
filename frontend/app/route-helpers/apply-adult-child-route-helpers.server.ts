@@ -2,6 +2,7 @@ import { Session, redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
 
 import { ApplyState, loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { ChildInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/child-information';
 import { AllChildrenUnder18State, DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/date-of-birth';
 import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/tax-filing';
 import { SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/adult/review-information';
@@ -21,6 +22,7 @@ export interface ApplyAdultChildState {
   readonly disabilityTaxCredit?: DisabilityTaxCreditState;
   readonly livingIndependently?: LivingIndependentlyState;
   readonly allChildrenUnder18?: AllChildrenUnder18State;
+  readonly childInformation?: ChildInformationState;
 }
 
 interface LoadApplyAdultChildStateArgs {
@@ -108,7 +110,7 @@ interface ValidateStateForReviewArgs {
   state: ApplyState & { adultChildState?: ApplyAdultChildState };
 }
 
-export function validateApplyAdultStateForReview({ params, state }: ValidateStateForReviewArgs) {
+export function validateApplyAdultChildStateForReview({ params, state }: ValidateStateForReviewArgs) {
   if (state.typeOfApplication === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/type-application', params));
   }

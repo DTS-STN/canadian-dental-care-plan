@@ -11,7 +11,6 @@ import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/ad
 import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult/personal-information';
 import { SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/adult/review-information';
 import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/adult/tax-filing';
-import { ChildInformationState } from '~/routes/$lang+/_public+/apply+/$id+/child-information';
 import { DisabilityTaxCreditState } from '~/routes/$lang+/_public+/apply+/$id+/disability-tax-credit';
 import { LivingIndependentlyState } from '~/routes/$lang+/_public+/apply+/$id+/living-independently';
 import { getEnv } from '~/utils/env.server';
@@ -34,7 +33,6 @@ export interface ApplyAdultState {
   readonly disabilityTaxCredit?: DisabilityTaxCreditState;
   readonly livingIndependently?: LivingIndependentlyState;
   readonly allChildrenUnder18?: AllChildrenUnder18State;
-  readonly childInformation?: ChildInformationState;
 }
 
 interface LoadApplyAdultStateArgs {

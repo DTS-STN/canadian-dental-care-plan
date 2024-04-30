@@ -10,7 +10,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
@@ -18,7 +18,7 @@ import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusT
 import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import { loadApplyAdultChildState, saveApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { parseDateString } from '~/utils/date-utils';
@@ -49,9 +49,9 @@ export type ChildInformationState = {
 };
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.childInformation,
-  pageTitleI18nKey: 'apply:child-information.page-title',
+  i18nNamespaces: getTypedI18nNamespaces('apply', 'apply-adult-child', 'gcweb'),
+  pageIdentifier: pageIds.public.apply.adultChild.childInformation,
+  pageTitleI18nKey: 'apply-adult-child:eligibility.child-information.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -59,19 +59,19 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const state = loadApplyAdultState({ params, request, session });
+  const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:child-information.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.child-information.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.adultState.childInformation, editMode: state.adultState.editMode });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.adultChildState.childInformation, editMode: state.adultChildState.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/child-information');
+  const log = getLogger('apply/adult-child/child-information');
 
-  const state = loadApplyAdultState({ params, request, session });
+  const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formData = await request.formData();
@@ -86,7 +86,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
 
   if (formAction === FormAction.Cancel) {
-    invariant(state.adultState.childInformation, 'Expected state.childInformation to be defined');
+    invariant(state.adultChildState.childInformation, 'Expected state.childInformation to be defined');
 
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
   }
@@ -95,39 +95,39 @@ export async function action({ context: { session }, params, request }: ActionFu
   // state validation schema
   const childInformationSchema = z
     .object({
-      firstName: z.string().trim().min(1, t('apply:child-information.error-message.first-name-required')).max(100),
-      lastName: z.string().trim().min(1, t('apply:child-information.error-message.last-name-required')).max(100),
+      firstName: z.string().trim().min(1, t('apply-adult-child:eligibility.child-information.error-message.first-name-required')).max(100),
+      lastName: z.string().trim().min(1, t('apply-adult-child:eligibility.child-information.error-message.last-name-required')).max(100),
       dateOfBirthYear: z
         .number({
-          required_error: t('apply:child-information.error-message.date-of-birth-year-required'),
-          invalid_type_error: t('apply:child-information.error-message.date-of-birth-year-number'),
+          required_error: t('apply-adult-child:eligibility.child-information.error-message.date-of-birth-year-required'),
+          invalid_type_error: t('apply-adult-child:eligibility.child-information.error-message.date-of-birth-year-number'),
         })
         .int()
         .positive(),
       dateOfBirthMonth: z
         .number({
-          required_error: t('apply:child-information.error-message.date-of-birth-month-required'),
+          required_error: t('apply-adult-child:eligibility.child-information.error-message.date-of-birth-month-required'),
         })
         .int()
         .positive(),
       dateOfBirthDay: z
         .number({
-          required_error: t('apply:child-information.error-message.date-of-birth-day-required'),
-          invalid_type_error: t('apply:child-information.error-message.date-of-birth-day-number'),
+          required_error: t('apply-adult-child:eligibility.child-information.error-message.date-of-birth-day-required'),
+          invalid_type_error: t('apply-adult-child:eligibility.child-information.error-message.date-of-birth-day-number'),
         })
         .int()
         .positive(),
       dateOfBirth: z.string(),
-      hasSocialInsuranceNumber: z.string().trim().min(1, t('apply:child-information.error-message.has-social-insurance-number')),
+      hasSocialInsuranceNumber: z.string().trim().min(1, t('apply-adult-child:eligibility.child-information.error-message.has-social-insurance-number')),
       socialInsuranceNumber: z.string().trim().optional(),
-      isParent: z.string().trim().min(1, t('apply:child-information.error-message.is-parent')),
+      isParent: z.string().trim().min(1, t('apply-adult-child:eligibility.child-information.error-message.is-parent')),
     })
     .superRefine((val, ctx) => {
       if (val.hasSocialInsuranceNumber === FormAction.Yes) {
         if (!val.socialInsuranceNumber) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:child-information.error-message.sin-required'), path: ['socialInsuranceNumber'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:eligibility.child-information.error-message.sin-required'), path: ['socialInsuranceNumber'] });
         } else if (!isValidSin(val.socialInsuranceNumber)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:child-information.error-message.sin-valid'), path: ['socialInsuranceNumber'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:eligibility.child-information.error-message.sin-valid'), path: ['socialInsuranceNumber'] });
         }
       }
 
@@ -139,19 +139,19 @@ export async function action({ context: { session }, params, request }: ActionFu
       if (!isValid(parsedDateOfBirth)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: t('apply:child-information.error-message.date-of-birth-valid'),
+          message: t('apply-adult-child:eligibility.child-information.error-message.date-of-birth-valid'),
           path: ['dateOfBirth'],
         });
       } else if (!isPast(parsedDateOfBirth)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: t('apply:child-information.error-message.date-of-birth-is-past'),
+          message: t('apply-adult-child:eligibility.child-information.error-message.date-of-birth-is-past'),
           path: ['dateOfBirth'],
         });
       } else if (differenceInYears(new Date(), parsedDateOfBirth) > 150) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: t('apply:child-information.error-message.date-of-birth-is-past-valid'),
+          message: t('apply-adult-child:eligibility.child-information.error-message.date-of-birth-is-past-valid'),
           path: ['dateOfBirth'],
         });
       }
@@ -182,9 +182,9 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  await saveApplyAdultState({ params, request, session, state: { childInformation: parsedDataResult.data } });
+  await saveApplyAdultChildState({ params, request, session, state: { childInformation: parsedDataResult.data } });
 
-  if (state.adultState.editMode) {
+  if (state.adultChildState.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
   }
 
@@ -242,7 +242,7 @@ export default function ApplyFlowChildInformation() {
 
   const options: InputRadiosProps['options'] = [
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:child-information.sin-yes" components={{ bold: <strong /> }} />,
+      children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:eligibility.child-information.sin-yes" components={{ bold: <strong /> }} />,
       value: FormAction.Yes,
       defaultChecked: defaultState?.hasSocialInsuranceNumber === FormAction.Yes,
       append: hasSocialInsuranceNumberValue === FormAction.Yes && (
@@ -250,7 +250,7 @@ export default function ApplyFlowChildInformation() {
           <InputField
             id="social-insurance-number"
             name="socialInsuranceNumber"
-            label={t('apply:child-information.sin')}
+            label={t('apply-adult-child:eligibility.child-information.sin')}
             placeholder="000-000-000"
             defaultValue={defaultState?.socialInsuranceNumber ?? ''}
             errorMessage={fetcher.data?.errors.socialInsuranceNumber?._errors[0]}
@@ -261,7 +261,7 @@ export default function ApplyFlowChildInformation() {
       onChange: handleSocialInsuranceNumberSelection,
     },
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey="apply:child-information.sin-no" components={{ bold: <strong /> }} />,
+      children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:eligibility.child-information.sin-no" components={{ bold: <strong /> }} />,
       value: FormAction.No,
       defaultChecked: defaultState?.hasSocialInsuranceNumber === FormAction.No,
       onChange: handleSocialInsuranceNumberSelection,
@@ -278,7 +278,7 @@ export default function ApplyFlowChildInformation() {
       </div>
       <div className="max-w-prose">
         <p id="form-instructions-sin" className="mb-4">
-          {t('apply:child-information.form-instructions-sin')}
+          {t('apply-adult-child:eligibility.child-information.form-instructions-sin')}
         </p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" aria-describedby="form-instructions-sin form-instructions" noValidate>
@@ -287,14 +287,14 @@ export default function ApplyFlowChildInformation() {
             <p className="italic" id="form-instructions">
               {t('apply:required-label')}
             </p>
-            <Collapsible id="name-instructions" summary={t('apply:child-information.single-legal-name')}>
-              <p>{t('apply:child-information.name-instructions')}</p>
+            <Collapsible id="name-instructions" summary={t('apply-adult-child:eligibility.child-information.single-legal-name')}>
+              <p>{t('apply-adult-child:eligibility.child-information.name-instructions')}</p>
             </Collapsible>
             <div className="grid items-end gap-6 md:grid-cols-2">
               <InputField
                 id="first-name"
                 name="firstName"
-                label={t('apply:child-information.first-name')}
+                label={t('apply-adult-child:eligibility.child-information.first-name')}
                 className="w-full"
                 maxLength={100}
                 aria-describedby="name-instructions"
@@ -306,7 +306,7 @@ export default function ApplyFlowChildInformation() {
               <InputField
                 id="last-name"
                 name="lastName"
-                label={t('apply:child-information.last-name')}
+                label={t('apply-adult-child:eligibility.child-information.last-name')}
                 className="w-full"
                 maxLength={100}
                 autoComplete="family-name"
@@ -324,7 +324,7 @@ export default function ApplyFlowChildInformation() {
                 year: 'dateOfBirthYear',
               }}
               defaultValue={defaultState?.dateOfBirth ?? ''}
-              legend={t('apply:child-information.date-of-birth')}
+              legend={t('apply-adult-child:eligibility.child-information.date-of-birth')}
               errorMessages={{
                 all: fetcher.data?.errors.dateOfBirth?._errors[0],
                 year: fetcher.data?.errors.dateOfBirthYear?._errors[0],
@@ -334,15 +334,22 @@ export default function ApplyFlowChildInformation() {
               required
             />
 
-            <InputRadios id="has-social-insurance-number" legend={t('apply:child-information.sin-legend')} name="hasSocialInsuranceNumber" options={options} errorMessage={fetcher.data?.errors.hasSocialInsuranceNumber?._errors[0]} required />
+            <InputRadios
+              id="has-social-insurance-number"
+              legend={t('apply-adult-child:eligibility.child-information.sin-legend')}
+              name="hasSocialInsuranceNumber"
+              options={options}
+              errorMessage={fetcher.data?.errors.hasSocialInsuranceNumber?._errors[0]}
+              required
+            />
 
             <InputRadios
               id="is-parent-radios"
               name="isParent"
-              legend={t('apply:child-information.parent-legend')}
+              legend={t('apply-adult-child:eligibility.child-information.parent-legend')}
               options={[
-                { value: FormAction.Yes, children: t('apply:child-information.radio-options.yes'), defaultChecked: defaultState?.isParent === FormAction.Yes },
-                { value: FormAction.No, children: t('apply:child-information.radio-options.no'), defaultChecked: defaultState?.isParent === FormAction.No },
+                { value: FormAction.Yes, children: t('apply-adult-child:eligibility.child-information.radio-options.yes'), defaultChecked: defaultState?.isParent === FormAction.Yes },
+                { value: FormAction.No, children: t('apply-adult-child:eligibility.child-information.radio-options.no'), defaultChecked: defaultState?.isParent === FormAction.No },
               ]}
               errorMessage={fetcher.data?.errors.isParent?._errors[0]}
               required
@@ -351,21 +358,21 @@ export default function ApplyFlowChildInformation() {
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
               <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Applicant Information click">
-                {t('apply:child-information.save-btn')}
+                {t('apply-adult-child:eligibility.child-information.save-btn')}
               </Button>
               <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Applicant Information click">
-                {t('apply:child-information.cancel-btn')}
+                {t('apply-adult-child:eligibility.child-information.cancel-btn')}
               </Button>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <Button id="continue-button" name="_action" value={FormAction.Continue} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Applicant Information click">
-                {t('apply:child-information.continue-btn')}
+                {t('apply-adult-child:eligibility.child-information.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
               <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-                {t('apply:child-information.back-btn')}
+                {t('apply-adult-child:eligibility.child-information.back-btn')}
               </ButtonLink>
             </div>
           )}

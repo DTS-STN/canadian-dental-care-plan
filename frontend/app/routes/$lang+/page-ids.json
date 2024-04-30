@@ -67,13 +67,13 @@
         "federalProvincialTerritorialBenefits": "CDCP-APPL-ADCH-0011",
         "reviewInformation": "CDCP-APPL-ADCH-0012",
         "exitApplication": "CDCP-APPL-ADCH-0013",
-        "confirmation": "CDCP-APPL-ADCH-0014"
+        "confirmation": "CDCP-APPL-ADCH-0014",
+        "childInformation": "CDCP-APPL-ADCH-0015",
+        "applyChildren": "CDCP-APPL-ADCH-0016"
       },
       "disabilityTaxCredit": "CDCP-APPL-0018",
       "parentOrGuardian": "CDCP-APPL-0019",
-      "livingIndependently": "CDCP-APPL-0020",
-      "applyChildren": "CDCP-APPL-0021",
-      "childInformation": "CDCP-APPL-0021"
+      "livingIndependently": "CDCP-APPL-0020"
     },
     "status": "CDCP-STAT-0001",
     "unableToProcessRequest": "CDCP-UNAB-0001",
