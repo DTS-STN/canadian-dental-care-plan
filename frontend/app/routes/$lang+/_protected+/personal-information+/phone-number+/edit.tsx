@@ -67,8 +67,9 @@ export async function loader({ context: { session }, request, params }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  featureEnabled('edit-personal-info');
   const log = getLogger('phone-number/edit');
-  const personalInformationService = await getPersonalInformationService();
+  const personalInformationService = getPersonalInformationService();
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
   const personalInformationRouteHelper = getPersonalInformationRouteHelpers();
