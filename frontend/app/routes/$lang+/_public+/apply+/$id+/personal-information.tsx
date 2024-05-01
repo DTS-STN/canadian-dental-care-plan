@@ -385,9 +385,8 @@ export default function ApplyFlowPersonalInformation() {
               maxLength={100}
             />
           </div>
-          <h2 className="mb-4 font-lato text-2xl font-bold">{t('apply:personal-information.mailing-address.header')}</h2>
           <fieldset>
-            <legend className="sr-only">{t('apply:personal-information.mailing-address.header')}</legend>
+            <legend className="mb-4 font-lato text-2xl font-bold">{t('apply:personal-information.mailing-address.header')}</legend>
             <div className="my-6 space-y-6">
               <InputField
                 id="mailing-address"
@@ -464,9 +463,8 @@ export default function ApplyFlowPersonalInformation() {
             </div>
           </fieldset>
 
-          <h2 className="mb-6 font-lato text-2xl font-bold">{t('apply:personal-information.home-address.header')}</h2>
           <fieldset>
-            <legend className="sr-only">{t('apply:personal-information.home-address.header')}</legend>
+            <legend className="mb-6 font-lato text-2xl font-bold">{t('apply:personal-information.home-address.header')}</legend>
             <div className="mb-8 space-y-6">
               <InputCheckbox id="copyMailingAddress" name="copyMailingAddress" value="copy" checked={copyAddressChecked} onChange={checkHandler}>
                 {t('apply:personal-information.home-address.use-mailing-address')}
