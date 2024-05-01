@@ -56,7 +56,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
   session.set('alertSubscription', alertSubscription);
 
-  return json({ csrfToken, meta, alertSubscription, userInfoToken }); //TODO get the language and email address entered by the user when they entered their information on the index route...
+  const confirmationCodeEntered = session.get('codeEntered') ?? '';
+
+  return json({ csrfToken, meta, alertSubscription, userInfoToken, confirmationCodeEntered }); //TODO get the language and email address entered by the user when they entered their information on the index route...
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -86,16 +88,18 @@ export async function action({ context: { session }, params, request }: ActionFu
     //TODO implement the code to request a new code and link that new code to the clients profile
   }
   if (action === ConfirmSubscriptionCode.Submit) {
-    //TODO Validate the entered code and complete the user's registration to the alert me service if the code is correct
+    session.set('codeEntered', parsedDataResult.data.confirmationCode);
     const response = await getSubscriptionService().validateConfirmationCode(alertSubscription?.email ?? '', parsedDataResult.data.confirmationCode ?? '', userInfoToken.sub);
     const jsonReponseStatus = await response.json();
 
-    console.debug('PARSED::: ' + jsonReponseStatus.confirmCodeStatus);
     if (jsonReponseStatus.confirmCodeStatus === 'valid') {
+      //TODO Complete logic
     }
     if (jsonReponseStatus.confirmCodeStatus === 'expired') {
+      return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/expired', params));
     }
     if (jsonReponseStatus.confirmCodeStatus === 'mismatch') {
+      //TODO Complete logic
     }
   }
 
@@ -104,7 +108,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ConfirmSubscription() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken } = useLoaderData<typeof loader>();
+  const { csrfToken, confirmationCodeEntered } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const userOrigin = useUserOrigin();
@@ -118,7 +122,9 @@ export default function ConfirmSubscription() {
   );
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
+  const defaultValues = {
+    confirmationCode: confirmationCodeEntered,
+  };
   useEffect(() => {
     if (hasErrors(errorMessages)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
@@ -145,7 +151,7 @@ export default function ConfirmSubscription() {
               <p>{t('alerts:confirm.no-preferred-language-on-file')}</p>
             </div>
           </ContextualAlert>
-          <InputField id="confirmationCode" className="w-full" label={t('alerts:confirm.confirmation-code-label')} maxLength={100} name="confirmationCode" required />
+          <InputField id="confirmationCode" className="w-full" label={t('alerts:confirm.confirmation-code-label')} maxLength={100} name="confirmationCode" defaultValue={defaultValues.confirmationCode} />
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="back-button" to={userOrigin?.to} params={params}>
