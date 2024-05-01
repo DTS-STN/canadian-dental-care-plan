@@ -7,11 +7,5 @@ spec:
     - name: http
       port: 80
       targetPort: http
-    #
-    # TODO :: GjB :: remove this during golive May 01
-    #
-    - name: oauth-proxy
-      port: 81
-      targetPort: oauth-proxy
   selector:
     app.kubernetes.io/name: frontend
