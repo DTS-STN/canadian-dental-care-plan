@@ -61,6 +61,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export default function PersonalInformationIndex() {
+  featureEnabled('view-personal-info');
   const { personalInformation, preferredLanguage, countryList, regionList, updatedInfo } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const params = useParams();
