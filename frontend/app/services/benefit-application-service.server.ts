@@ -35,7 +35,7 @@ function createBenefitApplicationService() {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
 
-    auditService.audit('application-status.post', { userId: 'anonymous' });
+    auditService.audit('application-submit.post', { userId: 'anonymous' });
 
     const url = new URL(`${INTEROP_BENEFIT_APPLICATION_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application`);
 
