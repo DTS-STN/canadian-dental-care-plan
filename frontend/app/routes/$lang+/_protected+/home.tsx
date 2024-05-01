@@ -64,7 +64,7 @@ export default function Index() {
           </CardLink>
         )}
         {useFeature('view-applications') && (
-          <CardLink title={t('index:view-my-application')} routeId="$lang+/_protected+/home" params={params}>
+          <CardLink title={t('index:view-my-application')} routeId="$lang+/_protected+/applications+/index" params={params}>
             {t('index:view-my-application-desc')}
           </CardLink>
         )}

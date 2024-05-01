@@ -30,6 +30,9 @@
     "status-check": {
       "index": "CDCP-PROT-0020"
     },
+    "applications": {
+      "index": "CDCP-PROT-0021"
+    },
     "dataUnavailable": "CDCP-PROT-0099"
   },
   "public": {

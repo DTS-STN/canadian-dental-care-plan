@@ -670,6 +670,21 @@
             ]
           },
           {
+            "id": "$lang+/_protected+/applications+/_route",
+            "file": "routes/$lang+/_protected+/applications+/_route.tsx",
+            "children": [
+              {
+                "id": "$lang+/_protected+/applications+/index",
+                "file": "routes/$lang+/_protected+/applications+/index.tsx",
+                "paths": {
+                  "en": "/:lang/applications",
+                  "fr": "/:lang/applications"
+                },
+                "index": true
+              }
+            ]
+          },
+          {
             "id": "$lang+/_protected+/stub-sin-editor",
             "file": "routes/$lang+/_protected+/stub-sin-editor.tsx",
             "paths": {

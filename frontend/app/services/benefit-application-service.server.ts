@@ -1,4 +1,6 @@
+import { sort } from 'moderndash';
 import moize from 'moize';
+import { z } from 'zod';
 
 import { BenefitApplicationRequest, benefitApplicationRequestSchema, benefitApplicationResponseSchema } from '~/schemas/benefit-application-service-schemas.server';
 import { getAuditService } from '~/services/audit-service.server';
@@ -76,7 +78,52 @@ function createBenefitApplicationService() {
     return parsedBenefitApplicationResponse.data.BenefitApplication.BenefitApplicationIdentification[0].IdentificationID;
   }
 
-  return { submitApplication };
+  /**
+   * @returns array of applications
+   */
+  async function getApplications(userId: string, sortOrder: 'asc' | 'desc' = 'desc') {
+    log.debug('Fetching applications for user id [%s]', userId);
+
+    const auditService = getAuditService();
+    const instrumentationService = getInstrumentationService();
+    auditService.audit('applications.get', { userId });
+
+    const url = new URL(`${INTEROP_BENEFIT_APPLICATION_API_BASE_URI ?? INTEROP_API_BASE_URI}/v1/users/${userId}/applications`);
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    instrumentationService.countHttpStatus('http.client.application-history-api.applications.gets', response.status);
+
+    const applicationsSchema = z.array(
+      z.object({
+        AppicationId: z.string().optional(),
+        SubmittedDate: z.string().optional(),
+        ApplicationStatus: z.string().optional(),
+        ConfirmationCode: z.string().optional(),
+      }),
+    );
+
+    const data = await response.json();
+    log.trace('Applications for user id [%s]: [%j]', userId, data);
+    const applications = applicationsSchema.parse(data).map((application) => ({
+      id: application.AppicationId,
+      submittedOn: application.SubmittedDate,
+      status: application.ApplicationStatus,
+      confirmationCode: application.ConfirmationCode,
+    }));
+
+    return sort(applications, {
+      order: sortOrder,
+      by: (item) => item.submittedOn ?? 'undefined',
+    });
+  }
+
+  return { submitApplication, getApplications };
 }
 
 /**
