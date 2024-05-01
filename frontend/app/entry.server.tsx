@@ -62,7 +62,12 @@ export function handleError(error: unknown, { request }: LoaderFunctionArgs | Ac
   // note that you generally want to avoid logging when the request was aborted, since remix's
   // cancellation and race-condition handling can cause a lot of requests to be aborted
   if (!request.signal.aborted) {
-    log.error(error);
+    if (error instanceof Error) {
+      log.error('Unexpected server error:', error);
+    } else {
+      log.error('Unexpected server error: [%j]', error);
+    }
+
     instrumentationService.createCounter('http.server.requests.failed').add(1);
   }
 }
