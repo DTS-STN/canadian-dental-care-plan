@@ -56,6 +56,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  featureEnabled('status');
   const log = getLogger('status/index');
   const { CLIENT_STATUS_SUCCESS_ID, ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
