@@ -3,6 +3,7 @@ import type { ActionFunctionArgs as RRActionFunctionArgs, LoaderFunctionArgs as 
 
 import type accessToGovernmentalBenefits from '../public/locales/en/access-to-governmental-benefits.json';
 import type alerts from '../public/locales/en/alerts.json';
+import type applications from '../public/locales/en/applications.json';
 import type applyAdultChild from '../public/locales/en/apply-adult-child.json';
 import type applyAdult from '../public/locales/en/apply-adult.json';
 import type applyChild from '../public/locales/en/apply-child.json';
@@ -48,6 +49,7 @@ declare module 'i18next' {
       'access-to-governmental-benefits': typeof accessToGovernmentalBenefits;
       'personal-information': typeof personalInformation;
       alerts: typeof alerts;
+      applications: typeof applications;
       status: typeof status;
       'status-check': typeof statusCheck;
       'stub-sin-editor': typeof stubSinEditor;

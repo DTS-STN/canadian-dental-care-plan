@@ -1,0 +1,13 @@
+{
+  "index": {
+    "page-title": "(FR) Applications",
+    "breadcrumbs": {
+      "application": "(FR) Applications"
+    },
+    "no-application": "(FR) There are no application submitted on file.",
+    "date": "(FR) Submitted Date: {{date}}",
+    "button": {
+      "back": "Retour"
+    }
+  }
+}
