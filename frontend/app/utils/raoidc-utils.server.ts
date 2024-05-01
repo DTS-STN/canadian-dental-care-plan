@@ -267,7 +267,7 @@ export async function fetchUserInfo(userInfoUri: string, accessToken: string, cl
 
   const fetchOptions = {
     headers: {
-      Accept: 'application/json, applicatin/jwt',
+      Accept: 'application/json, application/jwt',
       Authorization: `Bearer ${accessToken}`,
     },
   };
