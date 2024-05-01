@@ -2,6 +2,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: frontend
+  annotations:
+    #
+    # TODO :: GjB :: remove this during golive May 01
+    #
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 32k # required for OAuth proxy
   labels:
     app.kubernetes.io/name: frontend
 spec:
@@ -16,7 +21,7 @@ spec:
               service:
                 name: frontend
                 port:
-                  name: http
+                  name: oauth-proxy # TODO :: GjB :: change to `http` during golive May 01
 
 ---
 
