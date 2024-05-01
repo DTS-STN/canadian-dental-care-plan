@@ -490,7 +490,6 @@ export default function ApplyFlowPersonalInformation() {
                   autoComplete="address-line2"
                   defaultValue={defaultState?.homeApartment ?? ''}
                   errorMessage={errorMessages['home-apartment']}
-                  required
                 />
                 <InputSelect
                   id="home-country"
