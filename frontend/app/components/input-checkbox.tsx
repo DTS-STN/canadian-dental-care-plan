@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { InputError } from './input-error';
 import { cn } from '~/utils/tw-utils';
 
-const inputBaseClassName = 'h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500';
+const inputBaseClassName = 'h-4 w-4 rounded border-gray-500 bg-gray-50 text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500';
 const inputDisabledClassName = 'pointer-events-none cursor-not-allowed opacity-70';
 const inputErrorClassName = 'border-red-500 text-red-700 focus:border-red-500 focus:ring-red-500';
 
