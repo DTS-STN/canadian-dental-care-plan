@@ -386,7 +386,7 @@ export default function ApplyFlowPersonalInformation() {
             />
           </div>
           <fieldset>
-            <legend className="mb-4 font-lato text-2xl font-bold">{t('apply:personal-information.mailing-address.header')}</legend>
+            <legend className="font-lato text-2xl font-bold">{t('apply:personal-information.mailing-address.header')}</legend>
             <div className="my-6 space-y-6">
               <InputField
                 id="mailing-address"
