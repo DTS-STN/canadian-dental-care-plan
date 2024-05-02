@@ -4,7 +4,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
@@ -108,7 +108,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ConfirmSubscription() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, confirmationCodeEntered } = useLoaderData<typeof loader>();
+  const { csrfToken, confirmationCodeEntered, alertSubscription } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const userOrigin = useUserOrigin();
@@ -138,7 +138,8 @@ export default function ConfirmSubscription() {
         <div className="mb-8 space-y-6">
           <ContextualAlert type="info">
             <p id="confirmation-information" className="mb-4">
-              {t('alerts:confirm.confirmation-information-text')}
+              <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.confirmation-information-text" userEmailAddress={alertSubscription?.email} />
+              {t('alerts:confirm.confirmation-information-text', { userEmailAddress: alertSubscription?.email })}
             </p>
             <p id="confirmation-completed" className="mb-4">
               {t('alerts:confirm.confirmation-completed-text')}

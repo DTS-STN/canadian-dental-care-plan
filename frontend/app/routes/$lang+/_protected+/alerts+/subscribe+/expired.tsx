@@ -53,7 +53,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 export default function ConfirmCodeExpired() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken } = useLoaderData<typeof loader>();
+  const { csrfToken, alertSubscription } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
 
@@ -64,7 +64,7 @@ export default function ConfirmCodeExpired() {
         <div className="mb-8 space-y-6">
           <ContextualAlert type="warning">
             <p id="confirmation-information" className="mb-4">
-              {t('alerts:expired.confirm-code-expired')}
+              {t('alerts:expired.confirm-code-expired', { userEmailAddress: alertSubscription?.email })}
             </p>
           </ContextualAlert>
         </div>
