@@ -138,8 +138,7 @@ export default function ConfirmSubscription() {
         <div className="mb-8 space-y-6">
           <ContextualAlert type="info">
             <p id="confirmation-information" className="mb-4">
-              <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.confirmation-information-text" userEmailAddress={alertSubscription?.email} />
-              {t('alerts:confirm.confirmation-information-text', { userEmailAddress: alertSubscription?.email })}
+              <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.confirmation-information-text" values={{ userEmailAddress: alertSubscription?.email }} />
             </p>
             <p id="confirmation-completed" className="mb-4">
               {t('alerts:confirm.confirmation-completed-text')}

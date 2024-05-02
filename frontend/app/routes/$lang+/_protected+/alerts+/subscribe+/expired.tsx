@@ -2,7 +2,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -64,7 +64,7 @@ export default function ConfirmCodeExpired() {
         <div className="mb-8 space-y-6">
           <ContextualAlert type="warning">
             <p id="confirmation-information" className="mb-4">
-              {t('alerts:expired.confirm-code-expired', { userEmailAddress: alertSubscription?.email })}
+              <Trans ns={handle.i18nNamespaces} i18nKey="alerts:expired.confirm-code-expired" values={{ userEmailAddress: alertSubscription?.email }} />
             </p>
           </ContextualAlert>
         </div>
