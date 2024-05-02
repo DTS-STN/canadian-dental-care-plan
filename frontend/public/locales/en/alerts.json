@@ -69,13 +69,13 @@
     "submit-code": "Submit Confirmation Code",
     "request-new-code": "Request New Confirmation Code",
     "back": "Back"
-     },
-  "expired":{
+  },
+  "expired": {
     "page-title": "Confirmation Code Expired",
     "breadcrumbs": {
       "subscribe": "Confirm to subscribe to CDCP email alerts"
     },
-    "confirm-code-expired":"The confirmation code sent to you has expired. Select the \"Request New Confirmation Code\" button below to have a new confirmation code sent to you at <strong>{{userEmailAddress}}</strong>.",
+    "confirm-code-expired": "The confirmation code sent to you has expired. Select the \"Request New Confirmation Code\" button below to have a new confirmation code sent to you at <strong>{{userEmailAddress}}</strong>.",
     "request-new-code": "Request New Confirmation Code",
     "back": "Back"
   }
