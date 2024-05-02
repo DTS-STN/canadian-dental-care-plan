@@ -30,7 +30,7 @@ export interface ProgressProps extends React.ComponentPropsWithoutRef<typeof Pro
 
 const Progress = React.forwardRef<React.ElementRef<typeof ProgressPrimitive.Root>, ProgressProps>(({ className, size = 'base', variant = 'default', value, ...props }, ref) => {
   return (
-    <ProgressPrimitive.Root ref={ref} className={cn(rootBaseClassName, sizes[size], className)} data-testid="progress-root" {...props}>
+    <ProgressPrimitive.Root ref={ref} className={cn(rootBaseClassName, sizes[size], className)} data-testid="progress-root" value={value} {...props}>
       <ProgressPrimitive.Indicator className={cn(indicatorBaseClassName, variants[variant])} style={{ transform: `translateX(-${100 - (value ?? 0)}%)` }} data-testid="progress-indicator" />
     </ProgressPrimitive.Root>
   );
