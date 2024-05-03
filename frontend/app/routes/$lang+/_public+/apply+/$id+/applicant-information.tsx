@@ -187,19 +187,13 @@ export default function ApplyFlowApplicationInformation() {
         <Progress aria-labelledby="progress-label" value={40} size="lg" />
       </div>
       <div className="max-w-prose">
-        <p id="form-instructions-sin" className="mb-4">
-          {t('applicant-information.form-instructions-sin')}
-        </p>
-        <p id="form-instructions-info" className="mb-6">
-          {t('applicant-information.form-instructions-info')}
-        </p>
+        <p className="mb-4">{t('applicant-information.form-instructions-sin')}</p>
+        <p className="mb-6">{t('applicant-information.form-instructions-info')}</p>
+        <p className="mb-6 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <fetcher.Form method="post" aria-describedby="form-instructions-sin form-instructions-info form-instructions" noValidate>
+        <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-8 space-y-6">
-            <p className="mb-6 italic" id="form-instructions">
-              {t('apply:required-label')}
-            </p>
             <div className="grid items-end gap-6 md:grid-cols-2">
               <InputField
                 id="first-name"
