@@ -27,7 +27,7 @@ export function InputCheckboxes({ errorMessage, helpMessagePrimary, helpMessageP
   const inputWrapperId = `input-checkboxes-${id}`;
 
   function getAriaDescribedby() {
-    const ariaDescribedby = [inputLegendId];
+    const ariaDescribedby = [];
     if (helpMessagePrimary) ariaDescribedby.push(inputHelpMessagePrimaryId);
     if (helpMessageSecondary) ariaDescribedby.push(inputHelpMessageSecondaryId);
     return ariaDescribedby.length > 0 ? ariaDescribedby.join(' ') : undefined;
