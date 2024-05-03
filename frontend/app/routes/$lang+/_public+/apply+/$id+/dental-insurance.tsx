@@ -113,25 +113,25 @@ export default function AccessToDentalInsuranceQuestion() {
   }, [errorMessages]);
 
   const helpMessage = (
-    <ul className="mb-6 list-disc space-y-1 pl-7">
-      <li>{t('dental-insurance.list.employment')}</li>
-      <li>{t('dental-insurance.list.pension')}</li>
-      <li>{t('dental-insurance.list.purchased')}</li>
-      <li>{t('dental-insurance.list.professional')}</li>
-      <li className="list-none">
-        <Collapsible summary={t('dental-insurance.detail.additional-info.title')} className="mt-4">
-          <div className="space-y-4">
-            <p>{t('dental-insurance.detail.additional-info.not-eligible')}</p>
-            <p>{t('dental-insurance.detail.additional-info.not-eligible-purchased')}</p>
-            <p>{t('dental-insurance.detail.additional-info.eligible')}</p>
-            <ul className="list-disc space-y-1 pl-7">
-              <li>{t('dental-insurance.detail.additional-info.list.opted')}</li>
-              <li>{t('dental-insurance.detail.additional-info.list.cannot-opt')}</li>
-            </ul>
-          </div>
-        </Collapsible>
-      </li>
-    </ul>
+    <div className="my-4 space-y-4">
+      <ul className="list-disc space-y-1 pl-7">
+        <li>{t('dental-insurance.list.employment')}</li>
+        <li>{t('dental-insurance.list.pension')}</li>
+        <li>{t('dental-insurance.list.purchased')}</li>
+        <li>{t('dental-insurance.list.professional')}</li>
+      </ul>
+      <Collapsible summary={t('dental-insurance.detail.additional-info.title')}>
+        <div className="space-y-4">
+          <p>{t('dental-insurance.detail.additional-info.not-eligible')}</p>
+          <p>{t('dental-insurance.detail.additional-info.not-eligible-purchased')}</p>
+          <p>{t('dental-insurance.detail.additional-info.eligible')}</p>
+          <ul className="list-disc space-y-1 pl-7">
+            <li>{t('dental-insurance.detail.additional-info.list.opted')}</li>
+            <li>{t('dental-insurance.detail.additional-info.list.cannot-opt')}</li>
+          </ul>
+        </div>
+      </Collapsible>
+    </div>
   );
 
   return (
