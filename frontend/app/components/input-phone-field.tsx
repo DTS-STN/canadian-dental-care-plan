@@ -41,7 +41,6 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
     const describedby = [];
     if (ariaDescribedby) describedby.push(ariaDescribedby);
     if (helpMessagePrimary) describedby.push(inputHelpMessagePrimaryId);
-    if (helpMessagePrimary) describedby.push(inputHelpMessagePrimaryId);
     if (helpMessageSecondary) describedby.push(inputHelpMessageSecondaryId);
     return describedby.length > 0 ? describedby.join(' ') : undefined;
   }
