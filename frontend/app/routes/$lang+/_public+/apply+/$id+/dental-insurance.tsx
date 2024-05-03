@@ -143,13 +143,10 @@ export default function AccessToDentalInsuranceQuestion() {
         <Progress aria-labelledby="progress-label" value={80} size="lg" />
       </div>
       <div className="max-w-prose">
+        <p className="mb-6 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <p className="mb-6 italic" id="form-instructions">
-          {t('apply:required-label')}
-        </p>
-        <fetcher.Form method="post" noValidate aria-describedby="form-instructions">
+        <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-
           <div className="my-6">
             <InputRadios
               id="dental-insurance"
