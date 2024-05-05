@@ -2,7 +2,7 @@ import { json } from '@remix-run/node';
 
 import { subtle } from 'node:crypto';
 
-import { generateJwkId, publicKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
+import { generateCryptoKey, generateJwkId } from '~/utils/crypto-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
@@ -27,8 +27,7 @@ async function getJwks() {
     return [];
   }
 
-  const cryptoKey = await publicKeyPemToCryptoKey(AUTH_JWT_PUBLIC_KEY);
-  const jwk = await subtle.exportKey('jwk', cryptoKey);
+  const jwk = await subtle.exportKey('jwk', await generateCryptoKey(AUTH_JWT_PUBLIC_KEY, 'encrypt'));
   const keyId = generateJwkId(jwk);
 
   return [{ ...jwk, kid: keyId } as JWK];
