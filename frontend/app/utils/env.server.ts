@@ -2,7 +2,7 @@ import { DiagLogLevel } from '@opentelemetry/api';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
-import { privateKeyPemToCryptoKey, publicKeyPemToCryptoKey } from './crypto-utils.server';
+import { generateCryptoKey } from './crypto-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('env.server');
@@ -28,8 +28,8 @@ export type FeatureName = (typeof validFeatureNames)[number];
 // refiners
 const areValidFeatureNames = (arr: Array<string>) => arr.every((featureName) => validFeatureNames.includes(featureName as FeatureName));
 const areValidMockNames = (arr: Array<string>) => arr.every((mockName) => validMockNames.includes(mockName as MockName));
-const isValidPublicKey = (val: string) => tryOrElseFalse(() => publicKeyPemToCryptoKey(val));
-const isValidPrivateKey = (val: string) => tryOrElseFalse(() => privateKeyPemToCryptoKey(val));
+const isValidPublicKey = (val: string) => tryOrElseFalse(() => generateCryptoKey(val, 'verify'));
+const isValidPrivateKey = (val: string) => tryOrElseFalse(() => generateCryptoKey(val, 'sign'));
 
 // transformers
 const csvToArray = (csv?: string) => csv?.split(',').map((str) => str.trim()) ?? [];

@@ -1,7 +1,7 @@
 /**
  * Utility functions to help with RAOIDC requests.
  */
-import { SignJWT, compactDecrypt, decodeJwt, importJWK } from 'jose';
+import { JWTPayload, JWTVerifyResult, SignJWT, compactDecrypt, importJWK, jwtVerify } from 'jose';
 import { createHash, subtle } from 'node:crypto';
 
 import { getLogger } from '~/utils/logging.server';
@@ -80,10 +80,15 @@ export interface ClientMetadata {
    */
   clientId: string;
   /**
-   * The private RSA signing key of the client.
+   * The application's private decryption key.
+   * Used for decrypting the userinfo token payload.
+   */
+  privateDecryptionKey: CryptoKey;
+  /**
+   * The application's private signing key.
    * Used for client assertion signing during token exchange.
    */
-  privateKey: CryptoKey;
+  privateSigningKey: CryptoKey;
   /**
    * A unique identifier identifying the private RSA signing key of the client.
    */
@@ -254,7 +259,10 @@ export async function fetchAccessToken(serverMetadata: ServerMetadata, serverJwk
   validateAuthorizationToken(tokenEndpointResponse);
 
   const accessToken = tokenEndpointResponse.access_token;
-  const idToken: IdToken = decodeJwt(await decryptJwe(tokenEndpointResponse.id_token, client.privateKey));
+
+  const decryptedIdToken = await decryptJwe(tokenEndpointResponse.id_token, client.privateDecryptionKey);
+  const idTokenVerifyResult: JWTVerifyResult<IdToken> = await verifyJwt(decryptedIdToken, serverJwks);
+  const idToken = idTokenVerifyResult.payload;
 
   return { accessToken, idToken };
 }
@@ -262,7 +270,7 @@ export async function fetchAccessToken(serverMetadata: ServerMetadata, serverJwk
 /**
  * Fetch the current user's info from the auth server's userinfo endpoint.
  */
-export async function fetchUserInfo(userInfoUri: string, accessToken: string, client: ClientMetadata, fetchFn?: FetchFunction) {
+export async function fetchUserInfo(userinfoUri: string, serverJwks: JWKSet, accessToken: string, client: ClientMetadata, fetchFn?: FetchFunction) {
   log.debug('Fetching user info');
 
   const fetchOptions = {
@@ -274,17 +282,19 @@ export async function fetchUserInfo(userInfoUri: string, accessToken: string, cl
 
   // prettier-ignore
   const response = fetchFn
-    ? await fetchFn(userInfoUri, fetchOptions)
-    : await fetch(userInfoUri, fetchOptions);
+    ? await fetchFn(userinfoUri, fetchOptions)
+    : await fetch(userinfoUri, fetchOptions);
 
   if (response.status !== 200) {
     throw new Error('Error fetching user info: non-200 status');
   }
 
   const userInfoResponse: UserinfoResponse = await response.json();
-  validateUserInfoToken(userInfoResponse);
+  validateUserInfoTokenResponse(userInfoResponse);
 
-  const userinfoToken: UserinfoToken = decodeJwt(await decryptJwe(userInfoResponse.userinfo_token, client.privateKey));
+  const decryptedUserinfoToken = await decryptJwe(userInfoResponse.userinfo_token, client.privateDecryptionKey);
+  const userinfoTokenVerifyResult: JWTVerifyResult<UserinfoToken> = await verifyJwt(decryptedUserinfoToken, serverJwks);
+  const userinfoToken = userinfoTokenVerifyResult.payload;
 
   return userinfoToken;
 }
@@ -351,7 +361,7 @@ async function createClientAssertion(issuer: string, client: ClientMetadata) {
   // prettier-ignore
   return await new SignJWT(payload)
     .setProtectedHeader(header)
-    .sign(client.privateKey);
+    .sign(client.privateSigningKey);
 }
 
 /**
@@ -428,7 +438,7 @@ function validateAuthorizationToken(tokenEndpointResponse: TokenEndpointResponse
   log.debug('Authorization token successfully validated');
 }
 
-function validateUserInfoToken(userInfoResponse: UserinfoResponse) {
+function validateUserInfoTokenResponse(userInfoResponse: UserinfoResponse) {
   if (!userInfoResponse.userinfo_token) {
     throw new Error('Userinfo token is missing userinfo_token claim');
   }
@@ -474,4 +484,22 @@ function validateServerMetadata(serverMetadata: ServerMetadata) {
   }
 
   log.info('Server metadata has been successfilly validated');
+}
+
+/**
+ * Verify a JWT by checking it against a collection of JWKs.
+ */
+async function verifyJwt<Payload = JWTPayload>(jwt: string, jwks: JWKSet, alg = 'RSA-OAEP') {
+  for (const key of jwks.keys) {
+    const keyLike = await importJWK(key, alg);
+
+    try {
+      return await jwtVerify<Payload>(jwt, keyLike);
+    } catch {
+      // not the right JWK; skip to the next one
+    }
+  }
+
+  log.warn('JWT verification failure; no matching JWK could be found');
+  throw new Error('No matching JWK was found to verify JWT');
 }

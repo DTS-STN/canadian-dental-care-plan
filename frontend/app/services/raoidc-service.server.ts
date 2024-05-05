@@ -27,7 +27,7 @@ import { subtle } from 'node:crypto';
 import { ProxyAgent, fetch as undiciFetch } from 'undici';
 import { toNodeReadable } from 'web-streams-node';
 
-import { generateJwkId, privateKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
+import { generateCryptoKey, generateJwkId } from '~/utils/crypto-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 import type { ClientMetadata, FetchFunctionInit, IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
@@ -87,17 +87,19 @@ async function createRaoidcService() {
       throw new Error(`CSRF error: incoming state [${state}] does not match expected state [${expectedState}]`);
     }
 
-    const privateCryptoKey = await privateKeyPemToCryptoKey(AUTH_JWT_PRIVATE_KEY);
-    const privateKeyId = generateJwkId(await subtle.exportKey('jwk', privateCryptoKey));
+    const privateDecryptionKey = await generateCryptoKey(AUTH_JWT_PRIVATE_KEY, 'decrypt');
+    const privateSigningKey = await generateCryptoKey(AUTH_JWT_PRIVATE_KEY, 'sign');
+    const privateKeyId = generateJwkId(await subtle.exportKey('jwk', privateSigningKey));
 
     const client: ClientMetadata = {
       clientId: AUTH_RAOIDC_CLIENT_ID,
-      privateKey: privateCryptoKey,
+      privateDecryptionKey: privateDecryptionKey,
+      privateSigningKey: privateSigningKey,
       privateKeyId: privateKeyId,
     };
 
     const { accessToken, idToken } = await fetchAccessToken(serverMetadata, jwkSet, authCode, client, codeVerifier, redirectUri, fetchFn);
-    const userInfoToken = await fetchUserInfo(serverMetadata.userinfo_endpoint, accessToken, client, fetchFn);
+    const userInfoToken = await fetchUserInfo(serverMetadata.userinfo_endpoint, jwkSet, accessToken, client, fetchFn);
 
     return { accessToken, idToken, userInfoToken };
   }
