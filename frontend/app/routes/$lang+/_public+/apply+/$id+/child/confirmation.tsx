@@ -304,7 +304,7 @@ export default function ApplyFlowConfirm() {
               <p>{userInfo.communicationPreference}</p>
               {userInfo.email && (
                 <p>
-                  <Trans ns={handle.i18nNamespaces} i18nKey="review-information.email-address" values={{ email: userInfo.email }} />
+                  <Trans ns={handle.i18nNamespaces} i18nKey="confirm.email-address" values={{ email: userInfo.email }} />
                 </p>
               )}
             </DescriptionListItem>
@@ -318,8 +318,8 @@ export default function ApplyFlowConfirm() {
             <DescriptionListItem term={t('confirm.dental-public')}>
               {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
                 <>
-                  <p>{t('apply-child:review-information.yes')}</p>
-                  <p>{t('apply-child:review-information.dental-benefit-has-access')}</p>
+                  <p>{t('apply-child:confirm.yes')}</p>
+                  <p>{t('apply-child:confirm.dental-benefit-has-access')}</p>
                   <div>
                     <ul className="ml-6 list-disc">
                       {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
