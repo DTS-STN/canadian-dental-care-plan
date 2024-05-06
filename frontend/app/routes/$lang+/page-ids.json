@@ -41,8 +41,8 @@
       "index": "CDCP-APPL-0001",
       "termsAndConditions": "CDCP-APPL-0002",
       "typeOfApplication": "CDCP-APPL-0003",
+      "applicationDelegate": "CDCP-APPL-AD-0004",
       "adult": {
-        "applicationDelegate": "CDCP-APPL-AD-0001",
         "taxFiling": "CDCP-APPL-AD-0002",
         "fileYourTaxes": "CDCP-APPL-AD-0003",
         "dateOfBirth": "CDCP-APPL-AD-0004",
@@ -58,7 +58,6 @@
         "confirmation": "CDCP-APPL-AD-0014"
       },
       "adultChild": {
-        "applicationDelegate": "CDCP-APPL-ADCH-0001",
         "taxFiling": "CDCP-APPL-ADCH-0002",
         "fileYourTaxes": "CDCP-APPL-ADCH-0003",
         "dateOfBirth": "CDCP-APPL-ADCH-0004",
@@ -76,7 +75,6 @@
         "applyChildren": "CDCP-APPL-ADCH-0016"
       },
       "child": {
-        "applicationDelegate": "CDCP-APPL-CH-0001",
         "taxFiling": "CDCP-APPL-CH-0002",
         "fileYourTaxes": "CDCP-APPL-CH-0003",
         "dateOfBirth": "CDCP-APPL-CH-0004",

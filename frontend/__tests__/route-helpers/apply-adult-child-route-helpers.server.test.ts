@@ -68,7 +68,7 @@ describe('apply-route-helpers.server', () => {
         typeOfApplication: 'delegate',
       } satisfies ApplyState;
 
-      expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult/application-delegate, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/application-delegate, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if typeOfApplication is not adult-child', () => {

@@ -81,7 +81,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   saveApplyAdultState({ params, request, session, state: { livingIndependently: parsedDataResult.data } });
 
   if (parsedDataResult.data === LivingIndependentlyOption.Yes) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/application-delegate', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/application-delegate', params));
   }
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/parent-or-guardian', params));

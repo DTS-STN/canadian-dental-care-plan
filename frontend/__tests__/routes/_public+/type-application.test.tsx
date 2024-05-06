@@ -22,7 +22,7 @@ vi.mock('~/utils/locale-utils.server', async (importOriginal) => {
   return {
     ...actual,
     getFixedT: vi.fn().mockResolvedValue(tMockFn),
-    redirectWithLocale: vi.fn().mockResolvedValueOnce(redirect('/en/apply/123/adult/application-delegate')).mockResolvedValueOnce(redirect('/en/apply/123/tax-filing')),
+    redirectWithLocale: vi.fn().mockResolvedValueOnce(redirect('/en/apply/123/application-delegate')).mockResolvedValueOnce(redirect('/en/apply/123/tax-filing')),
   };
 });
 
@@ -86,7 +86,7 @@ describe('_public.apply.id.type-of-application', () => {
       });
 
       expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe('/en/apply/123/adult/application-delegate');
+      expect(response.headers.get('location')).toBe('/en/apply/123/application-delegate');
     });
 
     it('should redirect to tax filing page if personal is selected', async () => {
