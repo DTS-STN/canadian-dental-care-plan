@@ -62,12 +62,19 @@
       "subscribe": "(FR) Confirm to subscribe to CDCP email alerts"
     },
     "no-preferred-language-on-file": "(FR) No preferred language on file",
-    "confirmation-information-text": "(FR) A confirmation code, required to finish the registration process, will be sent to ||TODO insert email Address when feature completed||. This step must be completed within the next 48 hours or by immediately entering the confirmation code below.",
+    "confirmation-information-text": "(FR) A confirmation code, required to finish the registration process, will be sent to <strong>{{userEmailAddress}}</strong>. This step must be completed within the next 48 hours or by immediately entering the confirmation code below.",
     "confirmation-completed-text": "(FR) Upon completion, you will begin to receive email alerts when important information for your Canada Dental Care Plan application is available.",
     "confirmation-selected-language": "(FR) Selected language preference:",
     "confirmation-code-label": "(FR) Confimation Code",
     "submit-code": "(FR) Submit Confirmation Code",
     "request-new-code": "(FR) Request New Confirmation Code",
     "back": "(FR) Back"
+  },
+  "expired": {
+    "page-title": "(FR) Confirmation Code Expired",
+    "breadcrumbs": {
+      "subscribe": "(FR) Confirm to subscribe to CDCP email alerts"
+    },
+    "confirm-code-expired": "(FR) The confirmation code sent to you has expired. Select the \"Request New Confirmation Code\" button below to have a new confirmation code sent to you at <strong>{{userEmailAddress}}</strong>."
   }
 }

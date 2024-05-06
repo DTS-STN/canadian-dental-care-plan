@@ -25,13 +25,14 @@
       "subscribe": "CDCP-PROT-0016",
       "unsubscribe": "CDCP-PROT-0017",
       "manage": "CDCP-PROT-0018",
-      "confirm": "CDCP-PROT-0019"
+      "confirm": "CDCP-PROT-0019",
+      "expired": "CDCP-PROT-0020"
     },
     "status-check": {
-      "index": "CDCP-PROT-0020"
+      "index": "CDCP-PROT-0021"
     },
     "applications": {
-      "index": "CDCP-PROT-0021"
+      "index": "CDCP-PROT-0022"
     },
     "dataUnavailable": "CDCP-PROT-0099"
   },

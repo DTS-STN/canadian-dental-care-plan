@@ -150,8 +150,8 @@ db.subscriptionConfirmationCode.create({
   id: '0000002',
   email: 'user@example.com',
   confirmationCode: '1234',
-  createdDate: new Date(new Date().getTime()),
-  expiryDate: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000), // current date date + 2 days
+  createdDate: new Date(new Date().getTime() - 4 * 24 * 60 * 60 * 1000),
+  expiryDate: new Date(new Date().getTime() - 2 * 24 * 60 * 60 * 1000), // current date date + 2 days
 });
 db.subscriptionConfirmationCode.create({
   id: '0000003',

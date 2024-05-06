@@ -1,13 +1,16 @@
+import { useEffect, useMemo } from 'react';
+
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
+import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -18,6 +21,7 @@ import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';
 
@@ -52,7 +56,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
   session.set('alertSubscription', alertSubscription);
 
-  return json({ csrfToken, meta, alertSubscription, userInfoToken }); //TODO get the language and email address entered by the user when they entered their information on the index route...
+  const confirmationCodeEntered = session.get('codeEntered') ?? '';
+
+  return json({ csrfToken, meta, alertSubscription, userInfoToken, confirmationCodeEntered }); //TODO get the language and email address entered by the user when they entered their information on the index route...
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -82,28 +88,57 @@ export async function action({ context: { session }, params, request }: ActionFu
     //TODO implement the code to request a new code and link that new code to the clients profile
   }
   if (action === ConfirmSubscriptionCode.Submit) {
-    //TODO Validate the entered code and complete the user's registration to the alert me service if the code is correct
-    await getSubscriptionService().validateConfirmationCode(alertSubscription?.email ?? '', parsedDataResult.data.confirmationCode ?? '', userInfoToken.sub);
+    session.set('codeEntered', parsedDataResult.data.confirmationCode);
+    const response = await getSubscriptionService().validateConfirmationCode(alertSubscription?.email ?? '', parsedDataResult.data.confirmationCode ?? '', userInfoToken.sub);
+    const jsonReponseStatus = await response.json();
+
+    if (jsonReponseStatus.confirmCodeStatus === 'valid') {
+      //TODO Complete logic
+    }
+    if (jsonReponseStatus.confirmCodeStatus === 'expired') {
+      return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/expired', params));
+    }
+    if (jsonReponseStatus.confirmCodeStatus === 'mismatch') {
+      //TODO Complete logic
+    }
   }
 
-  return '';
+  return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/confirm', params));
 }
 
 export default function ConfirmSubscription() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken } = useLoaderData<typeof loader>();
+  const { csrfToken, confirmationCodeEntered, alertSubscription } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const userOrigin = useUserOrigin();
+  const errorSummaryId = 'error-summary';
   //TODO insert the selected language and email address of the client...
+  const errorMessages = useMemo(
+    () => ({
+      confirmationCode: fetcher.data?.errors.confirmationCode?._errors[0],
+    }),
+    [fetcher.data?.errors.confirmationCode?._errors],
+  );
+
+  const errorSummaryItems = createErrorSummaryItems(errorMessages);
+  const defaultValues = {
+    confirmationCode: confirmationCodeEntered,
+  };
+  useEffect(() => {
+    if (hasErrors(errorMessages)) {
+      scrollAndFocusToErrorSummary(errorSummaryId);
+    }
+  }, [errorMessages]);
   return (
     <>
+      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <fetcher.Form className="max-w-prose" method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mb-8 space-y-6">
           <ContextualAlert type="info">
             <p id="confirmation-information" className="mb-4">
-              {t('alerts:confirm.confirmation-information-text')}
+              <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.confirmation-information-text" values={{ userEmailAddress: alertSubscription?.email }} />
             </p>
             <p id="confirmation-completed" className="mb-4">
               {t('alerts:confirm.confirmation-completed-text')}
@@ -116,7 +151,7 @@ export default function ConfirmSubscription() {
               <p>{t('alerts:confirm.no-preferred-language-on-file')}</p>
             </div>
           </ContextualAlert>
-          <InputField id="confirmationCode" className="w-full" label={t('alerts:confirm.confirmation-code-label')} maxLength={100} name="confirmationCode" required />
+          <InputField id="confirmationCode" className="w-full" label={t('alerts:confirm.confirmation-code-label')} maxLength={100} name="confirmationCode" defaultValue={defaultValues.confirmationCode} />
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="back-button" to={userOrigin?.to} params={params}>
