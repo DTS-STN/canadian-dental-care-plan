@@ -260,11 +260,11 @@
                         }
                       },
                       {
-                        "id": "$lang+/_public+/apply+/$id+/adult-child/apply-for-yourself",
-                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/apply-for-yourself.tsx",
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/apply-yourself",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/apply-yourself.tsx",
                         "paths": {
-                          "en": "/:lang/apply/:id/adult-child/apply-for-yourself",
-                          "fr": "/:lang/demander/:id/adulte-enfant/postulez-pour-vous-meme"
+                          "en": "/:lang/apply/:id/adult-child/apply-yourself",
+                          "fr": "/:lang/demander/:id/adulte-enfant/postulez-vous-meme"
                         }
                       }
                     ]

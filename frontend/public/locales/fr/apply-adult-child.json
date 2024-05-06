@@ -273,7 +273,7 @@
         "is-parent": "(FR) Select whether or not you are this child's parent or legal guardian"
       }
     },
-    "apply-for-yourself": {
+    "apply-yourself": {
       "page-title": "(FR) Apply for yourself",
       "ineligible-to-apply": "(FR) Your children are not currently eligible to apply for the Canadian Dental Care Plan. Only children under 18 are eligible at this time.",
       "eligibility-info": "(FR) Find out when they can apply.",

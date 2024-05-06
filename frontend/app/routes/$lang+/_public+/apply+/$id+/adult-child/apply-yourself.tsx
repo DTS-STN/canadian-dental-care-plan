@@ -22,7 +22,7 @@ import { cn } from '~/utils/tw-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adultChild.applySelf,
-  pageTitleI18nKey: 'apply-adult-child:eligibility.apply-for-yourself.page-title',
+  pageTitleI18nKey: 'apply-adult-child:eligibility.apply-yourself.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -34,13 +34,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.apply-for-yourself.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.apply-yourself.page-title') }) };
 
   return json({ id: state.id, csrfToken, meta });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/adult-child/apply-for-yourself');
+  const log = getLogger('apply/adult-child/apply-yourself');
   const state = loadApplyAdultChildState({ params, request, session });
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -70,19 +70,19 @@ export default function ApplyForYourself() {
     <div className="max-w-prose">
       <div className="mb-6 space-y-4">
         <p>
-          {t('apply-adult-child:eligibility.apply-for-yourself.ineligible-to-apply')}&nbsp;
-          <InlineLink to={t('apply-adult-child:eligibility.apply-for-yourself.eligibility-info-href')}>{t('apply-adult-child:eligibility.apply-for-yourself.eligibility-info')}</InlineLink>
+          {t('apply-adult-child:eligibility.apply-yourself.ineligible-to-apply')}&nbsp;
+          <InlineLink to={t('apply-adult-child:eligibility.apply-yourself.eligibility-info-href')}>{t('apply-adult-child:eligibility.apply-yourself.eligibility-info')}</InlineLink>
         </p>
-        <p>{t('apply-adult-child:eligibility.apply-for-yourself.submit-application')}</p>
+        <p>{t('apply-adult-child:eligibility.apply-yourself.submit-application')}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
         <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult-child/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Apply for yourself">
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-          {t('apply-adult-child:eligibility.apply-for-yourself.back-btn')}
+          {t('apply-adult-child:eligibility.apply-yourself.back-btn')}
         </ButtonLink>
         <Button type="submit" variant="primary" id="proceed-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Proceed - Apply for yourself click">
-          {t('apply-adult-child:eligibility.apply-for-yourself.proceed-btn')}
+          {t('apply-adult-child:eligibility.apply-yourself.proceed-btn')}
           <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
         </Button>
       </fetcher.Form>
