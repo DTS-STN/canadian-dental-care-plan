@@ -110,11 +110,11 @@ export async function action({ context: { session }, params, request }: ActionFu
         .max(100)
         .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply:personal-information.error-message.phone-number-alt-valid'))
         .optional(),
-      mailingAddress: z.string().trim().min(1, t('apply:personal-information.error-message.address-required')).max(30),
+      mailingAddress: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-address.address-required')).max(30),
       mailingApartment: z.string().trim().max(30).optional(),
-      mailingCountry: z.string().trim().min(1, t('apply:personal-information.error-message.country-required')),
-      mailingProvince: z.string().trim().min(1, t('apply:personal-information.error-message.province-required')).optional(),
-      mailingCity: z.string().trim().min(1, t('apply:personal-information.error-message.city-required')).max(100),
+      mailingCountry: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-address.country-required')),
+      mailingProvince: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-address.province-required')).optional(),
+      mailingCity: z.string().trim().min(1, t('apply:personal-information.error-message.mailing-address.city-required')).max(100),
       mailingPostalCode: z.string().trim().max(100).optional(),
       copyMailingAddress: z.boolean(),
       homeAddress: z.string().trim().max(30).optional(),
@@ -127,39 +127,39 @@ export async function action({ context: { session }, params, request }: ActionFu
     .superRefine((val, ctx) => {
       if (val.mailingCountry === CANADA_COUNTRY_ID || val.mailingCountry === USA_COUNTRY_ID) {
         if (!val.mailingProvince || validator.isEmpty(val.mailingProvince)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.province-required'), path: ['mailingProvince'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.mailing-address.province-required'), path: ['mailingProvince'] });
         }
 
         if (!val.mailingPostalCode || validator.isEmpty(val.mailingPostalCode)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.postal-code-required'), path: ['mailingPostalCode'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.mailing-address.postal-code-required'), path: ['mailingPostalCode'] });
         } else if (!isValidPostalCode(val.mailingCountry, val.mailingPostalCode)) {
-          const message = val.mailingCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.postal-code-valid') : t('apply:personal-information.error-message.zip-code-valid');
+          const message = val.mailingCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.mailing-address.postal-code-valid') : t('apply:personal-information.error-message.mailing-address.zip-code-valid');
           ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['mailingPostalCode'] });
         }
       }
 
       if (val.copyMailingAddress === false) {
         if (!val.homeAddress || validator.isEmpty(val.homeAddress)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.address-required'), path: ['homeAddress'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.home-address.address-required'), path: ['homeAddress'] });
         }
 
         if (!val.homeCountry || validator.isEmpty(val.homeCountry)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.country-required'), path: ['homeCountry'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.home-address.country-required'), path: ['homeCountry'] });
         }
 
         if (!val.homeCity || validator.isEmpty(val.homeCity)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.city-required'), path: ['homeCity'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.home-address.city-required'), path: ['homeCity'] });
         }
 
         if (val.homeCountry === CANADA_COUNTRY_ID || val.homeCountry === USA_COUNTRY_ID) {
           if (!val.homeProvince || validator.isEmpty(val.homeProvince)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.province-required'), path: ['homeProvince'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.home-address.province-required'), path: ['homeProvince'] });
           }
 
           if (!val.homePostalCode || validator.isEmpty(val.homePostalCode)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.postal-code-required'), path: ['homePostalCode'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:personal-information.error-message.home-address.postal-code-required'), path: ['homePostalCode'] });
           } else if (!isValidPostalCode(val.homeCountry, val.homePostalCode)) {
-            const message = val.homeCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.postal-code-valid') : t('apply:personal-information.error-message.zip-code-valid');
+            const message = val.homeCountry === CANADA_COUNTRY_ID ? t('apply:personal-information.error-message.home-address.postal-code-valid') : t('apply:personal-information.error-message.home-address.zip-code-valid');
             ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['homePostalCode'] });
           }
         }
