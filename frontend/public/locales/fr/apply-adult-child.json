@@ -277,11 +277,11 @@
       "page-title": "(FR) Apply for yourself",
       "ineligible-to-apply": "(FR) Your children are not currently eligible to apply for the Canadian Dental Care Plan. Only children under 18 are eligible at this time.",
       "eligibility-info": "(FR) Find out when they can apply.",
-      "eligibility-info-href": "(FR) https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#when",
+      "eligibility-info-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#quand",
       "submit-application": "(FR) You can still submit an application for yourself.",
       "back-btn": "Retour",
       "proceed-btn": "(FR) Proceed to apply for yourself",
-      "procees-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+      "procees-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     }
   },
   "exit-application": {
