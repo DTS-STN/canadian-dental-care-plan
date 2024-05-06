@@ -49,7 +49,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/applicant-information', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
 }
 
 export default function ApplyForYourself() {
