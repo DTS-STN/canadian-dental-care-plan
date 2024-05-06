@@ -220,19 +220,13 @@ export default function ApplyFlowApplicationInformation() {
         <Progress aria-labelledby="progress-label" value={50} size="lg" />
       </div>
       <div className="max-w-prose">
-        <p id="form-instructions-provide-sin" className="mb-4">
-          {t('partner-information.provide-sin')}
-        </p>
-        <p id="form-instructions-required-information" className="mb-6">
-          {t('partner-information.required-information')}
-        </p>
+        <p className="mb-4">{t('partner-information.provide-sin')}</p>
+        <p className="mb-6">{t('partner-information.required-information')}</p>
+        <p className="mb-6 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <fetcher.Form method="post" aria-describedby="form-instructions-provide-sin form-instructions-required-information form-instructions" noValidate>
+        <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="space-y-6">
-            <p className="italic" id="form-instructions">
-              {t('apply:required-label')}
-            </p>
             <Collapsible id="name-instructions" summary={t('partner-information.single-legal-name')}>
               <p>{t('partner-information.name-instructions')}</p>
             </Collapsible>

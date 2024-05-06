@@ -149,6 +149,7 @@ export default function ApplyFlowTypeOfApplication() {
         <Progress aria-labelledby="progress-label" value={10} size="lg" />
       </div>
       <div className="max-w-prose">
+        <p className="mb-6 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <p className="mb-6">{t('apply:type-of-application.page-description')}</p>
         <div className="mb-6 space-y-4">
@@ -170,10 +171,8 @@ export default function ApplyFlowTypeOfApplication() {
         <Collapsible summary={t('apply:type-of-application.split-custody-summary')}>
           <p>{t('apply:type-of-application.split-custody-detail')}</p>
         </Collapsible>
-        <p className="mb-4 mt-8 italic" id="form-instructions">
-          {t('apply:required-label')}
-        </p>
-        <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
+        <p className="mb-4 mt-8 italic">{t('apply:required-label')}</p>
+        <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <InputRadios
             id="type-of-application"

@@ -8,7 +8,7 @@ import { faSpinner, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { parse } from 'date-fns';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import pageIds from '../../../../page-ids.json';
 import { Address } from '~/components/address';
@@ -103,6 +103,15 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     throw new Error(`Unexpected home address country: ${state.childState.personalInformation.homeCountry}`);
   }
 
+  // Getting CommunicationPreference by Id
+  const communicationPreferences = await lookupService.getAllPreferredCommunicationMethods();
+  const communicationPreferenceDict = communicationPreferences.find((obj) => obj.id === state.childState.communicationPreferences?.preferredMethod);
+  const communicationPreference = communicationPreferenceDict && getNameByLanguage(locale, communicationPreferenceDict);
+
+  if (!communicationPreference) {
+    throw new Error(`Unexpected communication preference: ${state.childState.communicationPreferences.preferredMethod}`);
+  }
+
   const userInfo = {
     firstName: state.childState.applicantInformation.firstName,
     lastName: state.childState.applicantInformation.lastName,
@@ -113,7 +122,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     sin: state.childState.applicantInformation.socialInsuranceNumber,
     martialStatus: state.childState.applicantInformation.maritalStatus,
     email: state.childState.communicationPreferences.email,
-    communicationPreference: state.childState.communicationPreferences,
+    communicationPreference: communicationPreference,
   };
   const spouseInfo = state.childState.partnerInformation
     ? {
@@ -249,22 +258,8 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ReviewInformation() {
   const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const {
-    userInfo,
-    spouseInfo,
-    maritalStatuses,
-    preferredLanguage,
-    federalSocialPrograms,
-    provincialTerritorialSocialPrograms,
-    homeAddressInfo,
-    mailingAddressInfo,
-    dentalInsurance,
-    dentalBenefit,
-    csrfToken,
-    COMMUNICATION_METHOD_EMAIL_ID,
-    siteKey,
-    hCaptchaEnabled,
-  } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, csrfToken, siteKey, hCaptchaEnabled } =
+    useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -433,14 +428,11 @@ export default function ReviewInformation() {
             <h2 className="mt-8 text-2xl font-semibold">{t('apply-child:review-information.comm-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply-child:review-information.comm-pref-title')}>
-                {userInfo.communicationPreference.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID ? (
-                  <div className="grid grid-cols-1">
-                    <p className="mt-4">{t('apply-child:review-information.comm-electronic')}</p> <span>{userInfo.email}</span>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1">
-                    <p className="mt-4">{t('apply-child:review-information.comm-mail')}</p>
-                  </div>
+                <p>{userInfo.communicationPreference}</p>
+                {userInfo.email && (
+                  <p>
+                    <Trans ns={handle.i18nNamespaces} i18nKey="apply-child:review-information.email-address" values={{ email: userInfo.email }} />
+                  </p>
                 )}
                 <p className="mt-4">
                   <InlineLink id="change-communication-preference" routeId="$lang+/_public+/apply+/$id+/child/communication-preference" params={params}>

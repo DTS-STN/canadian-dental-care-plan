@@ -5,7 +5,7 @@ import { InputHelp } from './input-help';
 import { InputLabel } from '~/components/input-label';
 import { cn } from '~/utils/tw-utils';
 
-const inputBaseClassName = 'block rounded-lg focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-20';
+const inputBaseClassName = 'block rounded-lg border-gray-500 focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-500';
 const inputDisabledClassName = 'disable:bg-gray-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
 const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
@@ -33,7 +33,6 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>((props, ref) =>
   function getAriaDescribedby() {
     const describedby = [];
     if (ariaDescribedby) describedby.push(ariaDescribedby);
-    if (helpMessagePrimary) describedby.push(inputHelpMessagePrimaryId);
     if (helpMessagePrimary) describedby.push(inputHelpMessagePrimaryId);
     if (helpMessageSecondary) describedby.push(inputHelpMessageSecondaryId);
     return describedby.length > 0 ? describedby.join(' ') : undefined;
