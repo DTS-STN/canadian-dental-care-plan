@@ -284,20 +284,14 @@ export default function AccessToDentalInsuranceQuestion() {
         <Progress aria-labelledby="progress-label" value={90} size="lg" />
       </div>
       <div className="max-w-prose">
+        <p className="mb-4">{t('apply-adult-child:dental-benefits.access-to-dental')}</p>
+        <p className="mb-4">{t('apply-adult-child:dental-benefits.eligibility-criteria')}</p>
+        <p className="mb-6 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <fetcher.Form method="post" noValidate aria-describedby="access-to-benefits-note eligibility-note form-instructions">
+        <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <section>
-            <p className="mb-4" id="access-to-benefits-note">
-              {t('apply-adult-child:dental-benefits.access-to-dental')}
-            </p>
-            <p className="mb-4" id="eligibility-note">
-              {t('apply-adult-child:dental-benefits.eligibility-criteria')}
-            </p>
-            <p className="mb-6 italic" id="form-instructions">
-              {t('apply:required-label')}
-            </p>
-            <h2 className="my-6 font-lato text-2xl font-bold">{t('apply-adult-child:dental-benefits.federal-benefits.title')}</h2>
+          <fieldset>
+            <legend className="my-6 font-lato text-2xl font-bold">{t('apply-adult-child:dental-benefits.federal-benefits.title')}</legend>
             <InputRadios
               id="has-federal-benefits"
               name="hasFederalBenefits"
@@ -333,9 +327,9 @@ export default function AccessToDentalInsuranceQuestion() {
               errorMessage={errorMessages['input-radio-has-federal-benefits-option-0']}
               required
             />
-          </section>
-          <section>
-            <h2 className="my-6 font-lato text-2xl font-bold">{t('apply-adult-child:dental-benefits.provincial-territorial-benefits.title')}</h2>
+          </fieldset>
+          <fieldset>
+            <legend className="my-6 font-lato text-2xl font-bold">{t('apply-adult-child:dental-benefits.provincial-territorial-benefits.title')}</legend>
 
             <InputRadios
               id="has-provincial-territorial-benefits"
@@ -398,7 +392,7 @@ export default function AccessToDentalInsuranceQuestion() {
               errorMessage={errorMessages['input-radio-has-provincial-territorial-benefits-option-0']}
               required
             />
-          </section>
+          </fieldset>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Access to other federal, provincial or territorial dental benefits click">

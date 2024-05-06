@@ -214,14 +214,10 @@ export default function ApplyFlowDateOfBirth() {
         <Progress aria-labelledby="progress-label" value={30} size="lg" />
       </div>
       <div className="max-w-prose">
+        <p className="mb-6">{t('apply-adult-child:eligibility.date-of-birth.description')}</p>
+        <p className="mb-2 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <p className="mb-6" id="dob-desc">
-          {t('apply-adult-child:eligibility.date-of-birth.description')}
-        </p>
-        <p className="mb-2 italic" id="form-instructions">
-          {t('apply:required-label')}
-        </p>
-        <fetcher.Form method="post" aria-describedby="dob-desc form-instructions" noValidate>
+        <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-6 space-y-4">
             <h2 className="text-xl font-bold">{t('apply-adult-child:eligibility.date-of-birth.age-heading')}</h2>

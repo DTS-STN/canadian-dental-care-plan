@@ -238,21 +238,14 @@ export default function AccessToGovernmentalsBenefitsEdit() {
     <div className="max-w-prose">
       <>
         <div className="max-w-prose">
+          <p className="mb-4">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.access-to-dental')}</p>
+          <p className="mb-4">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.eligibility-criteria')}</p>
+          <p className="mb-6 italic">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.required-label')}</p>
           {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-          <fetcher.Form method="post" noValidate aria-describedby="access-to-benefits-note eligibility-note form-instructions">
+          <fetcher.Form method="post" noValidate>
             <input type="hidden" name="_csrf" value={csrfToken} />
-
-            <section>
-              <p className="mb-4" id="access-to-benefits-note">
-                {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.access-to-dental')}
-              </p>
-              <p className="mb-4" id="eligibility-note">
-                {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.eligibility-criteria')}
-              </p>
-              <p className="mb-6 italic" id="form-instructions">
-                {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.required-label')}
-              </p>
-              <h2 className="my-6 mb-6 font-lato text-2xl font-bold">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.federal-benefits.title')}</h2>
+            <fieldset>
+              <legend className="my-6 mb-6 font-lato text-2xl font-bold">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.federal-benefits.title')}</legend>
               <InputRadios
                 id="has-federal-benefits"
                 name="hasFederalBenefits"
@@ -282,9 +275,9 @@ export default function AccessToGovernmentalsBenefitsEdit() {
                 ]}
                 required
               />
-            </section>
-            <section>
-              <h2 className="my-6 mb-6 font-lato text-2xl font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.provincial-territorial-benefits.title')}</h2>
+            </fieldset>
+            <fieldset>
+              <legend className="my-6 mb-6 font-lato text-2xl font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.provincial-territorial-benefits.title')}</legend>
               <InputRadios
                 id="has-provincial-territorial-benefits"
                 name="hasProvincialTerritorialBenefits"
@@ -340,7 +333,7 @@ export default function AccessToGovernmentalsBenefitsEdit() {
                 ]}
                 required
               />
-            </section>
+            </fieldset>
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <ButtonLink id="back-button" routeId="$lang+/_protected+/access-to-governmental-benefits+/view" params={params}>
                 {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.button.back')}
