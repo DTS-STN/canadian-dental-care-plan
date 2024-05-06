@@ -30,9 +30,10 @@
       "save-btn": "Save"
     },
     "error-message": {
-      "federal-benefit-required": "Select whether your child has a federal dental benefits",
-      "program-required": "Select a program",
-      "provincial-benefit-required": "Select whether your child has provincial or territorial dental benefits",
+      "federal-benefit-program-required": "Select which federal program you are covered under",
+      "federal-benefit-required": "Select whether you have federal dental benefits",
+      "provincial-benefit-program-required": "Select which provincial or territorial program you are covered under",
+      "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits",
       "provincial-territorial-required": "Select a province or territory"
     }
   },
@@ -251,13 +252,24 @@
     "cancel-btn": "Cancel",
     "save-btn": "Save",
     "error-message": {
-      "address-required": "Enter address, typically number and street",
-      "city-required": "Enter a city or town",
-      "country-required": "Select a country",
-      "postal-code-required": "Enter postal code or zip code",
-      "postal-code-valid": "Enter postal code in the correct format, such as A1A 1A1",
-      "province-required": "Select a province, territory, state or region",
-      "zip-code-valid": "Enter zip code in the correct format, such as 12345 or 12345-6789",
+      "mailing-address": {
+        "address-required": "Enter mailing address, typically number and street",
+        "city-required": "Enter a city or town for your mailing address",
+        "country-required": "Select a country for for your mailing address",
+        "postal-code-required": "Enter postal code or zip code for your mailing address",
+        "postal-code-valid": "Enter mailing address postal code in the correct format, such as A1A 1A1",
+        "province-required": "Select a province, territory, state or region for your mailing address",
+        "zip-code-valid": "Enter mailing address zip code in the correct format, such as 12345 or 12345-6789"
+      },
+      "home-address": {
+        "address-required": "Enter home address, typically number and street",
+        "city-required": "Enter a city or town for your home address",
+        "country-required": "Select a country for your home address",
+        "postal-code-required": "Enter postal code or zip code for your home address",
+        "postal-code-valid": "Enter home address postal code in the correct format, such as A1A 1A1",
+        "province-required": "Select a province, territory, state or region for your home address",
+        "zip-code-valid": "Enter home address zip code in the correct format, such as 12345 or 12345-6789"
+      },
       "phone-number-valid": "Phone number does not exist. If it's an international phone number, add '+' in front",
       "phone-number-alt-valid": "Phone number does not exist. If it's an international phone number, add '+' in front",
       "email-match": "The email addresses entered do not match",
