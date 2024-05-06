@@ -126,7 +126,7 @@ export function validateApplyChildStateForReview({ params, state }: ValidateStat
   }
 
   if (state.typeOfApplication === 'delegate') {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/child/application-delegate', params));
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/application-delegate', params));
   }
 
   if (state.typeOfApplication !== 'child') {

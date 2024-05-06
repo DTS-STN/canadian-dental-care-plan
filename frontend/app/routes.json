@@ -110,14 +110,6 @@
                         }
                       },
                       {
-                        "id": "$lang+/_public+/apply+/$id+/adult/application-delegate",
-                        "file": "routes/$lang+/_public+/apply+/$id+/adult/application-delegate.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult/application-delegate",
-                          "fr": "/:lang/demander/:id/adulte/delegue-demande"
-                        }
-                      },
-                      {
                         "id": "$lang+/_public+/apply+/$id+/adult/communication-preference",
                         "file": "routes/$lang+/_public+/apply+/$id+/adult/communication-preference.tsx",
                         "paths": {
@@ -393,6 +385,14 @@
                     "paths": {
                       "en": "/:lang/apply/:id/type-application",
                       "fr": "/:lang/demander/:id/type-demande"
+                    }
+                  },
+                  {
+                    "id": "$lang+/_public+/apply+/$id+/application-delegate",
+                    "file": "routes/$lang+/_public+/apply+/$id+/application-delegate.tsx",
+                    "paths": {
+                      "en": "/:lang/apply/:id/application-delegate",
+                      "fr": "/:lang/demander/:id/delegue-demande"
                     }
                   },
                   {

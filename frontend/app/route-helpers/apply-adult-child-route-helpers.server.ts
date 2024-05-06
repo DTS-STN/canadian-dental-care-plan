@@ -116,7 +116,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
   }
 
   if (state.typeOfApplication === 'delegate') {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/application-delegate', params));
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/application-delegate', params));
   }
 
   if (state.typeOfApplication !== 'adult-child') {

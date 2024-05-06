@@ -206,16 +206,6 @@
       "cancel-btn": "Cancel",
       "save-btn": "Save"
     },
-    "application-delegate": {
-      "page-title": "Applying on behalf of someone cannot be completed online at this time",
-      "contact-representative": "You must <contactServiceCanada>speak to a Service Canada representative</contactServiceCanada> to apply on behalf of someone. Please contact Service Canada at <span>1-833-537-4342</span> or visit a Service Canada office.",
-      "prepare-to-apply": "<preparingToApply>Preparing to apply on behalf of someone</preparingToApply>",
-      "contact-service-canada-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html",
-      "preparing-to-apply-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#helping",
-      "back-btn": "Back",
-      "return-btn": "Return to main page",
-      "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
-    },
     "file-your-taxes": {
       "page-title": "File your taxes",
       "ineligible-to-apply": "You are not eligible to apply for the Canadian Dental Care Plan at this time.",

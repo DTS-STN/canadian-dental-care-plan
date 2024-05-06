@@ -1,4 +1,14 @@
 {
+  "application-delegate": {
+    "page-title": "Applying on behalf of someone cannot be completed online at this time",
+    "contact-representative": "You must <contactServiceCanada>speak to a Service Canada representative</contactServiceCanada> to apply on behalf of someone. Please contact Service Canada at <span>1-833-537-4342</span> or visit a Service Canada office.",
+    "prepare-to-apply": "<preparingToApply>Preparing to apply on behalf of someone</preparingToApply>",
+    "contact-service-canada-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html",
+    "preparing-to-apply-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#helping",
+    "back-btn": "Back",
+    "return-btn": "Return to main page",
+    "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+  },
   "disability-tax-credit": {
     "page-title": "Disability tax credit",
     "non-refundable": "The disability tax credit (DTC) is a non-refundable federal tax credit that helps people with disabilities, or their supporting family member, reduce the amount of income tax they may have to pay.",

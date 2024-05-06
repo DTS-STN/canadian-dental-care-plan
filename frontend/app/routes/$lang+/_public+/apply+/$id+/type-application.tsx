@@ -108,7 +108,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   // TODO: change this route to $lang+/_public+/apply+/$id+/application-delegate
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/application-delegate', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/application-delegate', params));
 }
 
 export default function ApplyFlowTypeOfApplication() {

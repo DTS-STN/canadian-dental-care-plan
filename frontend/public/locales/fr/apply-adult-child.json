@@ -205,16 +205,6 @@
       "cancel-btn": "Annuler",
       "save-btn": "Enregistrer"
     },
-    "application-delegate": {
-      "page-title": "La demande au nom d'une autre personne ne peut pas être effectuée en ligne pour le moment.",
-      "contact-representative": "Vous devez <contactServiceCanada>parler à un représentant de Service Canada</contactServiceCanada> pour présenter une demande au nom de quelqu'un. Veuillez communiquer avec Service Canada au <span>1-833-537-4342</span> ou vous rendre dans un bureau de Service Canada.",
-      "prepare-to-apply": "<preparingToApply>Se préparer à présenter une demande au nom de quelqu'un</preparingToApply>",
-      "contact-service-canada-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
-      "preparing-to-apply-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#aide",
-      "back-btn": "Retour",
-      "return-btn": "Revenir à la page principale",
-      "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
-    },
     "file-your-taxes": {
       "page-title": "Produire votre déclaration de revenus",
       "ineligible-to-apply": "Vous n'êtes pas admissible au Régime canadien de soins dentaires pour le moment.",
