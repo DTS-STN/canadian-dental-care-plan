@@ -52,7 +52,8 @@
   "progress": {
     "label": "Application Progress Tracking"
   },
-  "required-label": "Complete all fields unless marked as optional",
+  "required-label": "Complete all fields",
+  "optional-label": "Complete all fields unless marked as optional",
   "terms-and-conditions": {
     "page-title": "Terms and conditions",
     "page-heading": "Terms and conditions of use and privacy notice statement",
