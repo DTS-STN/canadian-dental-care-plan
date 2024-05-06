@@ -372,7 +372,7 @@ export default function ReviewInformation() {
             </div>
           )}
           <div>
-            <h2 className="mt-2 text-2xl font-semibold ">{t('apply-child:review-information.personal-info-title')}</h2>
+            <h2 className="mt-2 text-2xl font-semibold ">{t('apply-child:review-information.contact-info-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply-child:review-information.phone-title')}>
                 {userInfo.phoneNumber}

@@ -391,7 +391,7 @@
       "yes": "Mon époux/épouse ou mon conjoint/conjointe de fait est au courant et a consenti à la communication de ses renseignements personnels.",
       "no": "Mon époux/épouse ou mon conjoint/conjointe de fait est au courant et n'a pas consenti à la communication de ses renseignements personnels."
     },
-    "personal-info-title": "Renseignements personnels",
+    "contact-info-title": "Informations de contact",
     "phone-title": "Téléphone",
     "phone-change": "Modifier le numéro de téléphone",
     "alt-phone-title": "Autre numéro de téléphone",
