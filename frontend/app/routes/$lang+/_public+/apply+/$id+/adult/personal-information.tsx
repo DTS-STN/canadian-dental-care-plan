@@ -379,14 +379,10 @@ export default function ApplyFlowPersonalInformation() {
         <Progress aria-labelledby="progress-label" value={60} size="lg" />
       </div>
       <div className="max-w-prose">
+        <p className="mb-6">{t('apply-adult:contact-information.form-instructions')}</p>
+        <p className="mb-6 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <p id="form-instructions-info" className="mb-6">
-          {t('apply-adult:contact-information.form-instructions')}
-        </p>
-        <p className="mb-6 italic" id="form-instructions">
-          {t('apply:required-label')}
-        </p>
-        <fetcher.Form method="post" noValidate aria-describedby="form-instructions-info form-instructions">
+        <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <p id="adding-phone" className="mb-2">
             {t('apply-adult:contact-information.add-phone')}

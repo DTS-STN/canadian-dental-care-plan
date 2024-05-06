@@ -277,16 +277,12 @@ export default function ApplyFlowChildInformation() {
         <Progress aria-labelledby="progress-label" value={40} size="lg" />
       </div>
       <div className="max-w-prose">
-        <p id="form-instructions-sin" className="mb-4">
-          {t('apply-adult-child:eligibility.child-information.form-instructions-sin')}
-        </p>
+        <p className="mb-4">{t('apply-adult-child:eligibility.child-information.form-instructions-sin')}</p>
+        <p className="italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <fetcher.Form method="post" aria-describedby="form-instructions-sin form-instructions" noValidate>
+        <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-8 space-y-6">
-            <p className="italic" id="form-instructions">
-              {t('apply:required-label')}
-            </p>
             <Collapsible id="name-instructions" summary={t('apply-adult-child:eligibility.child-information.single-legal-name')}>
               <p>{t('apply-adult-child:eligibility.child-information.name-instructions')}</p>
             </Collapsible>

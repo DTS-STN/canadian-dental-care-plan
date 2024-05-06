@@ -134,15 +134,13 @@ export default function ApplyFlowDisabilityTaxCredit() {
         <Progress aria-labelledby="progress-label" value={35} size="lg" />
       </div>
       <div className="max-w-prose">
-        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <p className="mb-5">{t('apply:disability-tax-credit.non-refundable')}</p>
         <p className="mb-5">
           <Trans ns={handle.i18nNamespaces} i18nKey="apply:disability-tax-credit.more-info" components={{ dtcLink: <Link to={t('apply:disability-tax-credit.dtc-link')} className="text-slate-700 underline hover:text-blue-700 focus:text-blue-700" /> }} />
         </p>
-        <p className="mb-6 italic" id="form-instructions">
-          {t('apply:required-label')}
-        </p>
-        <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
+        <p className="mb-6 italic">{t('apply:required-label')}</p>
+        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <InputRadios
             id="disability-tax-credit-radios"
