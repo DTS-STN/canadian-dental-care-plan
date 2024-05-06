@@ -74,6 +74,7 @@
     "comm-prefs": "Communication",
     "email-address": "Adresse courriel\u00a0: {{email}}",
     "dental-insurance": "Accès à une assurance ou une couverture dentaire",
+    "dental-benefit-has-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
     "dob": "Date de naissance",
     "sin": "Numéro d'assurance sociale (NAS)",
     "full-name": "Nom complet",
@@ -126,8 +127,9 @@
       "save-btn": "Enregistrer"
     },
     "error-message": {
+      "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel vous êtes couvert",
       "federal-benefit-required": "Sélectionnez si vous avez la prestation dentaire fédérale",
-      "program-required": "Sélectionnez un programme",
+      "provincial-benefit-program-required": "Sélectionnez le programme provincial ou territorial auquel vous êtes couvert",
       "provincial-benefit-required": "Sélectionnez si vous avez la prestation dentaire provinciale ou territoriale",
       "provincial-territorial-required": "Sélectionnez une province ou territoire"
     }
@@ -302,13 +304,24 @@
     "cancel-btn": "Annuler",
     "save-btn": "Enregistrer",
     "error-message": {
-      "address-required": "Entrez l'adresse, normalement le numéro et le nom de la rue",
-      "city-required": "Entrez une ville ou une municipalité",
-      "country-required": "Sélectionnez un pays",
-      "postal-code-required": "Entrez un code postal ou un code postal américain",
-      "postal-code-valid": "Entrez un code postal dans le bon format, par exemple A1A 1A1",
-      "province-required": "Sélectionnez une province, un territoire, un état ou une région",
-      "zip-code-valid": "Entrez un code postal américain dans le bon format, par exemple 12345 ou 12345-6789",
+      "mailing-address": {
+        "address-required": "Entrez l'adresse postale, normalement le numéro et le nom de la rue",
+        "city-required": "Entrez une ville ou une municipalité pour votre adresse postale",
+        "country-required": "Sélectionnez un pays pour votre adresse postale",
+        "postal-code-required": "Entrez un code postal ou un code postal américain pour votre adresse postale",
+        "postal-code-valid": "Entrez un code postal pour l'adresse postale dans le bon format, par exemple A1A 1A1",
+        "province-required": "Sélectionnez une province, un territoire, un état ou une région pour votre adresse postale",
+        "zip-code-valid": "Entrez un code postal américain pour l'adresse postale dans le bon format, par exemple 12345 ou 12345-6789"
+      },
+      "home-address": {
+        "address-required": "Entrez l'adresse du domicile, normalement le numéro et le nom de la rue",
+        "city-required": "Entrez une ville ou une municipalité pour votre adresse du domicile",
+        "country-required": "Sélectionnez un pays pour votre adresse du domicile",
+        "postal-code-required": "Entrez un code postal ou un code postal américain pour votre adresse du domicile",
+        "postal-code-valid": "Entrez un code postal pour  l'adresse du domicile dans le bon format, par exemple A1A 1A1",
+        "province-required": "Sélectionnez une province, un territoire, un état ou une région pour votre adresse du domicile",
+        "zip-code-valid": "Entrez un code postal américain pour l'adresse du domicile dans le bon format, par exemple 12345 ou 12345-6789"
+      },
       "phone-number-valid": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
       "phone-number-alt-valid": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
       "email-match": "Les adresses courriel entrées ne concordent pas",
@@ -359,7 +372,6 @@
     "dental-benefit-title": "Accès à des prestations dentaires gouvernementales",
     "dental-benefit-change": "Modifier la réponse à «\u00a0soins dentaires gouvernementaux\u00a0»",
     "dental-benefit-has-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
-    "dental-benefit-has-no-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
     "submit-app-title": "Soumettre votre demande",
     "submit-p-proceed": "En transmettant votre demande, vous consentez à attester de la véracité des informations fournies.",
     "submit-p-false-info": "Si vous fournissez de fausses informations sur votre demande, vous et les autres personnes pour lesquelles vous avez postulé pourriez être exclus du régime.",

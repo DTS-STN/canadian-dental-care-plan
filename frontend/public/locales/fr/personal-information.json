@@ -44,13 +44,24 @@
       "update-mailing-address": "<strong>(FR) Use this address to also update my mailing address</strong>",
       "update-mailing-address-note": "(FR) Check this box if your home address is the same as your mailing address.",
       "error-message": {
-        "address-required": "Entrez l'adresse, normalement le numéro et le nom de la rue",
-        "city-required": "Entrez une ville",
-        "country-required": "Sélectionnez un pays",
-        "postal-code-required": "Entrez un code postal ou un code postal américain",
-        "postal-code-valid": "Entrez un code postal dans le bon format, par exemple A1A 1A1",
-        "province-required": "Sélectionnez une province",
-        "zip-code-valid": "Entrez un code postal américain dans le bon format, par exemple 12345",
+        "mailing-address": {
+          "address-required": "Entrez l'adresse postale, normalement le numéro et le nom de la rue",
+          "city-required": "Entrez une ville ou une municipalité pour votre adresse postale",
+          "country-required": "Sélectionnez un pays pour votre adresse postale",
+          "postal-code-required": "Entrez un code postal ou un code postal américain pour votre adresse postale",
+          "postal-code-valid": "Entrez un code postal pour l'adresse postale dans le bon format, par exemple A1A 1A1",
+          "province-required": "Sélectionnez une province, un territoire, un état ou une région pour votre adresse postale",
+          "zip-code-valid": "Entrez un code postal américain pour l'adresse postale dans le bon format, par exemple 12345 ou 12345-6789"
+        },
+        "home-address": {
+          "address-required": "Entrez l'adresse du domicile, normalement le numéro et le nom de la rue",
+          "city-required": "Entrez une ville ou une municipalité pour votre adresse du domicile",
+          "country-required": "Sélectionnez un pays pour votre adresse du domicile",
+          "postal-code-required": "Entrez un code postal ou un code postal américain pour votre adresse du domicile",
+          "postal-code-valid": "Entrez un code postal pour  l'adresse du domicile dans le bon format, par exemple A1A 1A1",
+          "province-required": "Sélectionnez une province, un territoire, un état ou une région pour votre adresse du domicile",
+          "zip-code-valid": "Entrez un code postal américain pour l'adresse du domicile dans le bon format, par exemple 12345 ou 12345-6789"
+        },
         "phone-number-valid": "Le numéro de téléphone doit être composé uniquement de chiffres"
       },
       "button": {

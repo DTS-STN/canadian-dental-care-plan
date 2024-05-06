@@ -103,7 +103,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     .superRefine((val, ctx) => {
       if (val.hasFederalBenefits) {
         if (!val.federalSocialProgram || validator.isEmpty(val.federalSocialProgram)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:dental-benefits.error-message.program-required'), path: ['federalSocialProgram'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:dental-benefits.error-message.federal-benefit-program-required'), path: ['federalSocialProgram'] });
         }
       }
     })
@@ -125,7 +125,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         if (!val.province || validator.isEmpty(val.province)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:dental-benefits.error-message.provincial-territorial-required'), path: ['province'] });
         } else if (!val.provincialTerritorialSocialProgram || validator.isEmpty(val.provincialTerritorialSocialProgram)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:dental-benefits.error-message.program-required'), path: ['provincialTerritorialSocialProgram'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:dental-benefits.error-message.provincial-benefit-program-required'), path: ['provincialTerritorialSocialProgram'] });
         }
       }
     })

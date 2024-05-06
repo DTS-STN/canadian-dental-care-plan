@@ -51,8 +51,9 @@
         "save": "Save"
       },
       "error-message": {
+        "federal-benefit-program-required": "Select which federal program you are covered under",
         "federal-benefit-required": "Select whether you have federal dental benefits",
-        "program-required": "Select a program",
+        "provincial-benefit-program-required": "Select which provincial or territorial program you are covered under",
         "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits",
         "provincial-territorial-required": "Select a province or territory"
       }

@@ -51,10 +51,11 @@
         "save": "FR Save"
       },
       "error-message": {
-        "federal-benefit-required": "FR Select whether you have federal dental benefits",
-        "program-required": "FR Select a program",
-        "provincial-benefit-required": "FR Select whether you have provincial or territorial dental benefits",
-        "provincial-territorial-required": "FR Select a province or territory"
+        "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel vous êtes couvert",
+        "federal-benefit-required": "Sélectionnez si vous avez la prestation dentaire fédérale",
+        "provincial-benefit-program-required": "Sélectionnez le programme provincial ou territorial auquel vous êtes couvert",
+        "provincial-benefit-required": "Sélectionnez si vous avez la prestation dentaire provinciale ou territoriale",
+        "provincial-territorial-required": "Sélectionnez une province ou territoire"
       }
     }
   }
