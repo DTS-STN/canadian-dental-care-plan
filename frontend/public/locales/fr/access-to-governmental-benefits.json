@@ -4,14 +4,15 @@
       "page-title": "FR Access to governmental benefits",
       "intro-text": "FR You have indicated that you have access to the following governmental benefits.",
       "provincial-or-territorial-dental-benefit": "FR Provincial or Territorial dental benefit:",
+      "federal-benefits-dental-benefits": "FR Federal benefits dental benefits:",
       "update-your-access-text": "FR Update your access to governmental benefits.",
+      "change-your-access-text": "FR Change access to governmental benefits.",
       "no-government-benefits": "FR You have indicated you do not have access to any government benefits",
       "back": "FR Back",
       "links": {
         "update-your-access-link": "FR https://www.canada.ca/en/transparency/terms.html"
       },
       "info-updated": {
-        "alert-heading": "FR You have successfully applied for the Canadian Dental Care Plan!",
         "your-info-has-been-updated": "FR Your information has been updated."
       }
     },
