@@ -51,14 +51,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  saveApplyState({
-    params,
-    session,
-    state: {
-      ...state,
-      typeOfApplication: 'adult',
-    },
-  });
+  saveApplyState({ params, session, state: { typeOfApplication: 'adult' } });
 
   const { taxFiling2023, dateOfBirth } = state.adultChildState;
   saveApplyAdultState({ params, request, session, state: { taxFiling2023, dateOfBirth } });
