@@ -20,10 +20,13 @@
 
 
 	<properties>
+		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
 		<image.name>cdcp-api</image.name>
 		<java.version>21</java.version>
 		<spring-boot.build-image.imageName>${image.name}</spring-boot.build-image.imageName>
 		<revision>0.0.0-00000000-0000</revision>
+
+		<immutables.version>2.10.0</immutables.version>
 	</properties>
 
 
@@ -46,6 +49,13 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.immutables</groupId>
+			<artifactId>value</artifactId>
+			<version>${immutables.version}</version>
+			<scope>provided</scope>
+		</dependency>		
+
 		<!-- test dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -54,9 +64,21 @@
 		</dependency>
 	</dependencies>
 
-
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.immutables</groupId>
+							<artifactId>value</artifactId>
+							<version>${immutables.version}</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>		
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
