@@ -2,7 +2,7 @@ import { subtle } from 'crypto';
 import { CompactEncrypt, SignJWT } from 'jose';
 import { HttpResponse, http } from 'msw';
 
-import { privateKeyPemToCryptoKey, publicKeyPemToCryptoKey } from '~/utils/crypto-utils.server';
+import { generateCryptoKey } from '~/utils/crypto-utils.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 import type { JWKSet, ServerMetadata, TokenEndpointResponse, UserinfoResponse } from '~/utils/raoidc-utils.server';
@@ -99,29 +99,26 @@ async function getUserInfo() {
 /**
  * Creates an encrypted access token in JWE format.
  */
-async function generateAccessToken(serverPublicKeyPem: string, serverPrivateKeyPem: string) {
+async function generateAccessToken(serverPublicKey: string, serverPrivateKey: string) {
   const accessTokenPayload = {
     /* intentionally left blank */
   };
 
-  const serverPrivateCryptoKey = await privateKeyPemToCryptoKey(serverPrivateKeyPem);
-  const serverPublicCryptoKey = await publicKeyPemToCryptoKey(serverPublicKeyPem);
-
   // prettier-ignore
   const accessToken = await new SignJWT(accessTokenPayload)
     .setProtectedHeader({ alg: 'PS256' })
-    .sign(serverPrivateCryptoKey);
+    .sign(await generateCryptoKey(serverPrivateKey, 'sign'));
 
   // prettier-ignore
   return await new CompactEncrypt(new TextEncoder().encode(accessToken))
     .setProtectedHeader({ alg: 'RSA-OAEP-256', enc: 'A256GCM' })
-    .encrypt(serverPublicCryptoKey);
+    .encrypt(await generateCryptoKey(serverPublicKey, 'encrypt'));
 }
 
 /**
  * Creates an encrypted ID token in JWE format.
  */
-async function generateIdToken(clientPublicKeyPem: string, serverPrivateKeyPem: string) {
+async function generateIdToken(clientPublicKey: string, serverPrivateKey: string) {
   const idTokenPayload = {
     aud: 'CDCP',
     iss: 'GC-ECAS-MOCK',
@@ -129,21 +126,18 @@ async function generateIdToken(clientPublicKeyPem: string, serverPrivateKeyPem: 
     sub: '00000000-0000-0000-0000-000000000000',
   };
 
-  const clientPublicCryptoKey = await publicKeyPemToCryptoKey(clientPublicKeyPem);
-  const serverPrivateCryptoKey = await privateKeyPemToCryptoKey(serverPrivateKeyPem);
-
   // prettier-ignore
   const idToken = await new SignJWT(idTokenPayload)
     .setProtectedHeader({ alg: 'PS256' })
-    .sign(serverPrivateCryptoKey);
+    .sign(await generateCryptoKey(serverPrivateKey, 'sign'));
 
   // prettier-ignore
   return await new CompactEncrypt(new TextEncoder().encode(idToken))
     .setProtectedHeader({ alg: 'RSA-OAEP-256', enc: 'A256GCM' })
-    .encrypt(clientPublicCryptoKey);
+    .encrypt(await generateCryptoKey(clientPublicKey, 'encrypt'));
 }
 
-async function generateUserInfoToken(clientPublicKeyPem: string, serverPrivateKeyPem: string) {
+async function generateUserInfoToken(clientPublicKey: string, serverPrivateKey: string) {
   const userinfoTokenPayload = {
     aud: 'CDCP',
     birthdate: '2000-01-01',
@@ -154,18 +148,15 @@ async function generateUserInfoToken(clientPublicKeyPem: string, serverPrivateKe
     sub: '00000000-0000-0000-0000-000000000000',
   };
 
-  const clientPublicCryptoKey = await publicKeyPemToCryptoKey(clientPublicKeyPem);
-  const serverPrivateCryptoKey = await privateKeyPemToCryptoKey(serverPrivateKeyPem);
-
   // prettier-ignore
   const userinfoToken = await new SignJWT(userinfoTokenPayload)
     .setProtectedHeader({ alg: 'PS256' })
-    .sign(serverPrivateCryptoKey);
+    .sign(await generateCryptoKey(serverPrivateKey, 'sign'));
 
   // prettier-ignore
   return await new CompactEncrypt(new TextEncoder().encode(userinfoToken))
     .setProtectedHeader({ alg: 'RSA-OAEP-256', enc: 'A256GCM' })
-    .encrypt(clientPublicCryptoKey);
+    .encrypt(await generateCryptoKey(clientPublicKey, 'encrypt'));
 }
 
 /**
@@ -176,8 +167,8 @@ async function generateUserInfoToken(clientPublicKeyPem: string, serverPrivateKe
 async function getJwks() {
   const { AUTH_JWT_PUBLIC_KEY } = getEnv();
 
-  const publicCryptoKey = await publicKeyPemToCryptoKey(AUTH_JWT_PUBLIC_KEY);
-  const publicJwk = await subtle.exportKey('jwk', publicCryptoKey);
+  const serverVerificationKey = await generateCryptoKey(AUTH_JWT_PUBLIC_KEY, 'verify');
+  const publicJwk = await subtle.exportKey('jwk', serverVerificationKey);
 
   return {
     keys: [

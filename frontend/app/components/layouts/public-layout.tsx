@@ -202,6 +202,10 @@ export function ServerError({ error }: ServerErrorProps) {
   const home = <InlineLink to="/" />;
 
   useEffect(() => {
+    document.title = t('gcweb:meta.title.template', { title: t('gcweb:server-error.document-title') });
+  }, [t]);
+
+  useEffect(() => {
     if (adobeAnalytics.isConfigured()) {
       adobeAnalytics.pushErrorEvent(500);
     }

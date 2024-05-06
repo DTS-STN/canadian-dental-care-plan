@@ -379,14 +379,10 @@ export default function ApplyFlowPersonalInformation() {
         <Progress aria-labelledby="progress-label" value={60} size="lg" />
       </div>
       <div className="max-w-prose">
+        <p className="mb-6">{t('apply-child:personal-information.form-instructions')}</p>
+        <p className="mb-6 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <p id="form-instructions-info" className="mb-6">
-          {t('apply-child:personal-information.form-instructions')}
-        </p>
-        <p className="mb-6 italic" id="form-instructions">
-          {t('apply:required-label')}
-        </p>
-        <fetcher.Form method="post" noValidate aria-describedby="form-instructions-info form-instructions">
+        <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <p id="adding-phone" className="mb-2">
             {t('apply-child:personal-information.add-phone')}
@@ -442,164 +438,168 @@ export default function ApplyFlowPersonalInformation() {
               aria-describedby="adding-email"
             />
           </div>
-          <h2 className="mb-4 font-lato text-2xl font-bold">{t('apply-child:personal-information.mailing-address.header')}</h2>
-          <div className="my-6 space-y-6">
-            <InputField
-              id="mailing-address"
-              name="mailingAddress"
-              className="w-full"
-              label={t('apply-child:personal-information.address-field.address')}
-              maxLength={30}
-              helpMessagePrimary={t('apply-child:personal-information.address-field.address-note')}
-              helpMessagePrimaryClassName="text-black"
-              autoComplete="address-line1"
-              defaultValue={defaultState?.mailingAddress ?? ''}
-              errorMessage={errorMessages['mailing-address']}
-              required
-            />
-            <InputField
-              id="mailing-apartment"
-              name="mailingApartment"
-              className="w-full"
-              label={t('apply-child:personal-information.address-field.apartment')}
-              maxLength={30}
-              autoComplete="address-line2"
-              defaultValue={defaultState?.mailingApartment ?? ''}
-              errorMessage={errorMessages['mailing-apartment']}
-              required
-            />
-            <InputSelect
-              id="mailing-country"
-              name="mailingCountry"
-              className="w-full sm:w-1/2"
-              label={t('apply-child:personal-information.address-field.country')}
-              autoComplete="country"
-              defaultValue={defaultState?.mailingCountry ?? ''}
-              errorMessage={errorMessages['mailing-country']}
-              options={[dummyOption, ...countries]}
-              onChange={mailingCountryChangeHandler}
-              required
-            />
-            {mailingRegions.length > 0 && (
+          <fieldset>
+            <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-child:personal-information.mailing-address.header')}</legend>
+            <div className="my-6 space-y-6">
+              <InputField
+                id="mailing-address"
+                name="mailingAddress"
+                className="w-full"
+                label={t('apply-child:personal-information.address-field.address')}
+                maxLength={30}
+                helpMessagePrimary={t('apply-child:personal-information.address-field.address-note')}
+                helpMessagePrimaryClassName="text-black"
+                autoComplete="address-line1"
+                defaultValue={defaultState?.mailingAddress ?? ''}
+                errorMessage={errorMessages['mailing-address']}
+                required
+              />
+              <InputField
+                id="mailing-apartment"
+                name="mailingApartment"
+                className="w-full"
+                label={t('apply-child:personal-information.address-field.apartment')}
+                maxLength={30}
+                autoComplete="address-line2"
+                defaultValue={defaultState?.mailingApartment ?? ''}
+                errorMessage={errorMessages['mailing-apartment']}
+                required
+              />
               <InputSelect
-                id="mailing-province"
-                name="mailingProvince"
+                id="mailing-country"
+                name="mailingCountry"
                 className="w-full sm:w-1/2"
-                label={t('apply-child:personal-information.address-field.province')}
-                defaultValue={defaultState?.mailingProvince ?? ''}
-                errorMessage={errorMessages['mailing-province']}
-                options={[dummyOption, ...mailingRegions]}
+                label={t('apply-child:personal-information.address-field.country')}
+                autoComplete="country"
+                defaultValue={defaultState?.mailingCountry ?? ''}
+                errorMessage={errorMessages['mailing-country']}
+                options={[dummyOption, ...countries]}
+                onChange={mailingCountryChangeHandler}
                 required
               />
-            )}
-            <div className="grid items-end gap-6 md:grid-cols-2">
-              <InputField
-                id="mailing-city"
-                name="mailingCity"
-                className="w-full"
-                label={t('apply-child:personal-information.address-field.city')}
-                maxLength={100}
-                autoComplete="address-level2"
-                defaultValue={defaultState?.mailingCity ?? ''}
-                errorMessage={errorMessages['mailing-city']}
-                required
-              />
-              <InputField
-                id="mailing-postal-code"
-                name="mailingPostalCode"
-                className="w-full"
-                label={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID ? t('apply-child:personal-information.address-field.postal-code') : t('apply-child:personal-information.address-field.postal-code-optional')}
-                maxLength={100}
-                autoComplete="postal-code"
-                defaultValue={defaultState?.mailingPostalCode}
-                errorMessage={errorMessages['mailing-postal-code']}
-                required={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID}
-              />
-            </div>
-          </div>
-
-          <h2 className="mb-6 font-lato text-2xl font-bold">{t('apply-child:personal-information.home-address.header')}</h2>
-          <div className="mb-8 space-y-6">
-            <InputCheckbox id="copyMailingAddress" name="copyMailingAddress" value="copy" checked={copyAddressChecked} onChange={checkHandler}>
-              {t('apply-child:personal-information.home-address.use-mailing-address')}
-            </InputCheckbox>
-            {!copyAddressChecked && (
-              <>
-                <InputField
-                  id="home-address"
-                  name="homeAddress"
-                  className="w-full"
-                  label={t('apply-child:personal-information.address-field.address')}
-                  helpMessagePrimary={t('apply-child:personal-information.address-field.address-note')}
-                  helpMessagePrimaryClassName="text-black"
-                  maxLength={30}
-                  autoComplete="address-line1"
-                  defaultValue={defaultState?.homeAddress ?? ''}
-                  errorMessage={errorMessages['home-address']}
-                  required
-                />
-                <InputField
-                  id="home-apartment"
-                  name="homeApartment"
-                  className="w-full"
-                  label={t('apply-child:personal-information.address-field.apartment')}
-                  maxLength={30}
-                  autoComplete="address-line2"
-                  defaultValue={defaultState?.homeApartment ?? ''}
-                  errorMessage={errorMessages['home-apartment']}
-                  required
-                />
+              {mailingRegions.length > 0 && (
                 <InputSelect
-                  id="home-country"
-                  name="homeCountry"
+                  id="mailing-province"
+                  name="mailingProvince"
                   className="w-full sm:w-1/2"
-                  label={t('apply-child:personal-information.address-field.country')}
-                  autoComplete="country"
-                  defaultValue={defaultState?.homeCountry ?? ''}
-                  errorMessage={errorMessages['home-country']}
-                  options={[dummyOption, ...countries]}
-                  onChange={homeCountryChangeHandler}
+                  label={t('apply-child:personal-information.address-field.province')}
+                  defaultValue={defaultState?.mailingProvince ?? ''}
+                  errorMessage={errorMessages['mailing-province']}
+                  options={[dummyOption, ...mailingRegions]}
                   required
                 />
-                {homeRegions.length > 0 && (
+              )}
+              <div className="grid items-end gap-6 md:grid-cols-2">
+                <InputField
+                  id="mailing-city"
+                  name="mailingCity"
+                  className="w-full"
+                  label={t('apply-child:personal-information.address-field.city')}
+                  maxLength={100}
+                  autoComplete="address-level2"
+                  defaultValue={defaultState?.mailingCity ?? ''}
+                  errorMessage={errorMessages['mailing-city']}
+                  required
+                />
+                <InputField
+                  id="mailing-postal-code"
+                  name="mailingPostalCode"
+                  className="w-full"
+                  label={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID ? t('apply-child:personal-information.address-field.postal-code') : t('apply-child:personal-information.address-field.postal-code-optional')}
+                  maxLength={100}
+                  autoComplete="postal-code"
+                  defaultValue={defaultState?.mailingPostalCode}
+                  errorMessage={errorMessages['mailing-postal-code']}
+                  required={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID}
+                />
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend className="mb-6 font-lato text-2xl font-bold">{t('apply-child:personal-information.home-address.header')}</legend>
+            <div className="mb-8 space-y-6">
+              <InputCheckbox id="copyMailingAddress" name="copyMailingAddress" value="copy" checked={copyAddressChecked} onChange={checkHandler}>
+                {t('apply-child:personal-information.home-address.use-mailing-address')}
+              </InputCheckbox>
+              {!copyAddressChecked && (
+                <>
+                  <InputField
+                    id="home-address"
+                    name="homeAddress"
+                    className="w-full"
+                    label={t('apply-child:personal-information.address-field.address')}
+                    helpMessagePrimary={t('apply-child:personal-information.address-field.address-note')}
+                    helpMessagePrimaryClassName="text-black"
+                    maxLength={30}
+                    autoComplete="address-line1"
+                    defaultValue={defaultState?.homeAddress ?? ''}
+                    errorMessage={errorMessages['home-address']}
+                    required
+                  />
+                  <InputField
+                    id="home-apartment"
+                    name="homeApartment"
+                    className="w-full"
+                    label={t('apply-child:personal-information.address-field.apartment')}
+                    maxLength={30}
+                    autoComplete="address-line2"
+                    defaultValue={defaultState?.homeApartment ?? ''}
+                    errorMessage={errorMessages['home-apartment']}
+                    required
+                  />
                   <InputSelect
-                    id="home-province"
-                    name="homeProvince"
+                    id="home-country"
+                    name="homeCountry"
                     className="w-full sm:w-1/2"
-                    label={t('apply-child:personal-information.address-field.province')}
-                    defaultValue={defaultState?.homeProvince ?? ''}
-                    errorMessage={errorMessages['home-province']}
-                    options={[dummyOption, ...homeRegions]}
+                    label={t('apply-child:personal-information.address-field.country')}
+                    autoComplete="country"
+                    defaultValue={defaultState?.homeCountry ?? ''}
+                    errorMessage={errorMessages['home-country']}
+                    options={[dummyOption, ...countries]}
+                    onChange={homeCountryChangeHandler}
                     required
                   />
-                )}
-                <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
-                  <InputField
-                    id="home-city"
-                    name="homeCity"
-                    className="w-full"
-                    label={t('apply-child:personal-information.address-field.city')}
-                    maxLength={100}
-                    autoComplete="address-level2"
-                    defaultValue={defaultState?.homeCity ?? ''}
-                    errorMessage={errorMessages['home-city']}
-                    required
-                  />
-                  <InputField
-                    id="home-postal-code"
-                    name="homePostalCode"
-                    className="w-full"
-                    label={selectedHomeCountry === CANADA_COUNTRY_ID || selectedHomeCountry === USA_COUNTRY_ID ? t('apply-child:personal-information.address-field.postal-code') : t('apply-child:personal-information.address-field.postal-code-optional')}
-                    maxLength={100}
-                    autoComplete="postal-code"
-                    defaultValue={defaultState?.homePostalCode ?? ''}
-                    errorMessage={errorMessages['home-postal-code']}
-                    required={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID}
-                  />
-                </div>
-              </>
-            )}
-          </div>
+                  {homeRegions.length > 0 && (
+                    <InputSelect
+                      id="home-province"
+                      name="homeProvince"
+                      className="w-full sm:w-1/2"
+                      label={t('apply-child:personal-information.address-field.province')}
+                      defaultValue={defaultState?.homeProvince ?? ''}
+                      errorMessage={errorMessages['home-province']}
+                      options={[dummyOption, ...homeRegions]}
+                      required
+                    />
+                  )}
+                  <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
+                    <InputField
+                      id="home-city"
+                      name="homeCity"
+                      className="w-full"
+                      label={t('apply-child:personal-information.address-field.city')}
+                      maxLength={100}
+                      autoComplete="address-level2"
+                      defaultValue={defaultState?.homeCity ?? ''}
+                      errorMessage={errorMessages['home-city']}
+                      required
+                    />
+                    <InputField
+                      id="home-postal-code"
+                      name="homePostalCode"
+                      className="w-full"
+                      label={selectedHomeCountry === CANADA_COUNTRY_ID || selectedHomeCountry === USA_COUNTRY_ID ? t('apply-child:personal-information.address-field.postal-code') : t('apply-child:personal-information.address-field.postal-code-optional')}
+                      maxLength={100}
+                      autoComplete="postal-code"
+                      defaultValue={defaultState?.homePostalCode ?? ''}
+                      errorMessage={errorMessages['home-postal-code']}
+                      required={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+          </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Personal information click">

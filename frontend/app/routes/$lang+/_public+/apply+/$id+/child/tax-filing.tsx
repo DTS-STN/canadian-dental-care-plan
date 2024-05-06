@@ -122,11 +122,9 @@ export default function ApplyFlowTaxFiling() {
         <Progress aria-labelledby="progress-label" value={20} size="lg" />
       </div>
       <div className="max-w-prose">
+        <p className="mb-6 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <p className="mb-6 italic" id="form-instructions">
-          {t('apply:required-label')}
-        </p>
-        <fetcher.Form method="post" aria-describedby="form-instructions" noValidate>
+        <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <InputRadios
             id="tax-filing-2023"

@@ -238,14 +238,10 @@ export default function ApplyFlowCommunicationPreferencePage() {
         <Progress aria-labelledby="progress-label" value={70} size="lg" />
       </div>
       <div className="max-w-prose">
+        <p className="mb-6">{t('apply-child:communication-preference.note')}</p>
+        <p className="mb-6 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-        <p className="mb-6" id="form-instructions-note">
-          {t('apply-child:communication-preference.note')}
-        </p>
-        <p className="mb-6 italic" id="form-instructions">
-          {t('apply:required-label')}
-        </p>
-        <fetcher.Form method="post" noValidate aria-describedby="form-instructions form-instructions-note">
+        <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-8 space-y-6">
             {preferredLanguages.length > 0 && (

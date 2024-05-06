@@ -308,7 +308,7 @@
     "comm-mail": "By mail",
     "comm-pref-title": "Communication preference",
     "comm-pref-change": "Change communication preference",
-    "added-email": "Added email: {{email}}",
+    "email-address": "Email address: {{email}}",
     "lang-pref-title": "Language preference",
     "lang-pref-change": "Change language preference",
     "dental-title": "Access to dental insurance",
