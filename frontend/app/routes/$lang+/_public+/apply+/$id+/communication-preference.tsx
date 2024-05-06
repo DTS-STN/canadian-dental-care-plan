@@ -96,7 +96,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.confirm-email-required'), path: ['confirmEmail'] });
         } else if (!validator.isEmail(val.confirmEmail)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.email-valid'), path: ['confirmEmail'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.confirm-email-valid'), path: ['confirmEmail'] });
         } else if (val.email !== val.confirmEmail) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.email-match'), path: ['confirmEmail'] });
         }
@@ -114,7 +114,7 @@ export async function action({ context: { session }, params, request }: ActionFu
           if (!val.confirmEmailForFuture || validator.isEmpty(val.confirmEmailForFuture)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.confirm-email-for-future-required'), path: ['confirmEmailForFuture'] });
           } else if (!validator.isEmail(val.confirmEmailForFuture)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.confirm-email-for-future-required'), path: ['confirmEmailForFuture'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.confirm-email-valid'), path: ['confirmEmailForFuture'] });
           } else if (val.emailForFuture !== val.confirmEmailForFuture) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply:communication-preference.error-message.email-match'), path: ['confirmEmailForFuture'] });
           }
