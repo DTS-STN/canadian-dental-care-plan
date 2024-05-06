@@ -40,7 +40,7 @@ export function InputCheckbox({ errorMessage, append, appendClassName, children,
           data-testid="input-checkbox"
           {...restProps}
         />
-        <label id={inputLabelId} htmlFor={inputCheckboxId} className={cn('ml-3 block leading-6', restProps.disabled && inputDisabledClassName, labelClassName)}>
+        <label id={inputLabelId} htmlFor={inputCheckboxId} className={cn('block pl-3 leading-6', restProps.disabled && inputDisabledClassName, labelClassName)}>
           {children}
         </label>
       </div>
