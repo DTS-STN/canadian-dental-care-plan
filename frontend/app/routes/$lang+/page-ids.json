@@ -72,7 +72,8 @@
         "exitApplication": "CDCP-APPL-ADCH-0013",
         "confirmation": "CDCP-APPL-ADCH-0014",
         "childInformation": "CDCP-APPL-ADCH-0015",
-        "applyChildren": "CDCP-APPL-ADCH-0016"
+        "applyChildren": "CDCP-APPL-ADCH-0016",
+        "applySelf": "CDCP-APPL-ADCH-0017"
       },
       "child": {
         "taxFiling": "CDCP-APPL-CH-0002",
