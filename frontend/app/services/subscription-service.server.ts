@@ -140,5 +140,40 @@ function createSubscriptionService() {
     return response;
   }
 
-  return { getSubscription, updateSubscription, validateConfirmationCode };
+  async function requestNewConfirmationCode(userEmail: string, userId: string) {
+    const auditService = getAuditService();
+    const instrumentationService = getInstrumentationService();
+
+    auditService.audit('alert-subscription.request-confirmation-code', { userId });
+
+    const dataToPass = {
+      email: userEmail,
+    };
+    // TODO: add CDCP_API_BASE_URI
+    const url = new URL(`https://api.example.com/v1/codes/request`);
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToPass),
+    });
+
+    instrumentationService.countHttpStatus('http.client.cdcp-api.codes.request.posts', response.status);
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed to request data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to request data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
+
+    return response;
+  }
+
+  return { getSubscription, updateSubscription, validateConfirmationCode, requestNewConfirmationCode };
 }

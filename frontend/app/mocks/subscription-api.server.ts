@@ -20,6 +20,10 @@ const validateSubscriptionSchema = z.object({
   confirmationCode: z.string(),
 });
 
+const requestCodeSubscriptionSchema = z.object({
+  email: z.string(),
+});
+
 /**
  * Server-side MSW mocks for the subscription API.
  */
@@ -111,6 +115,43 @@ export function getSubscriptionApiMockHandlers() {
 
       //There is at least 1 confirmation code for this user but the code entered by said user does not match it..
       return HttpResponse.json({ confirmCodeStatus: 'mismatch' }, { status: 200 });
+    }),
+
+    http.post('https://api.example.com/v1/codes/request', async ({ params, request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const timeEntered = new Date();
+      const requestBody = await request.json();
+      const requestCodeSubscriptionSchemaData = requestCodeSubscriptionSchema.safeParse(requestBody);
+      if (!requestCodeSubscriptionSchemaData.success) {
+        throw new HttpResponse(null, { status: 400 });
+      }
+
+      const subscriptionConfirmationCodesEntities = db.subscriptionConfirmationCode.findMany({
+        where: { email: { equals: requestCodeSubscriptionSchemaData.data.email } },
+      });
+
+      if (subscriptionConfirmationCodesEntities.length === 0) {
+        //No code found for that user --- generate a new code and update the user entity
+        db.subscriptionConfirmationCode.create({
+          id: '0000101',
+          email: requestCodeSubscriptionSchemaData.data.email,
+          confirmationCode: '0101',
+          createdDate: timeEntered,
+          expiryDate: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000), // current date date + 2 days
+        });
+      } else {
+        // Email existed with code already, updating the code only.
+        db.subscriptionConfirmationCode.update({
+          where: { email: { equals: requestCodeSubscriptionSchemaData.data.email } },
+          data: {
+            confirmationCode: '0101',
+            createdDate: timeEntered,
+            expiryDate: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000), // current date date + 2 days
+          },
+        });
+      }
+
+      return HttpResponse.json({ confirmCodeStatus: 'No Content' }, { status: 204 });
     }),
   ];
 }
