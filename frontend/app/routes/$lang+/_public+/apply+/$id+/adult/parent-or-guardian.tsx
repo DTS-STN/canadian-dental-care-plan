@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { differenceInYears, parse } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
@@ -20,9 +20,9 @@ import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.parentOrGuardian,
-  pageTitleI18nKey: 'apply:parent-or-guardian.page-title',
+  i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
+  pageIdentifier: pageIds.public.apply.adult.parentOrGuardian,
+  pageTitleI18nKey: 'apply-adult:parent-or-guardian.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -34,7 +34,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:parent-or-guardian.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:parent-or-guardian.page-title') }) };
 
   const parseDateOfBirth = parse(state.adultState.dateOfBirth ?? '', 'yyyy-MM-dd', new Date());
   const age = differenceInYears(new Date(), parseDateOfBirth);
@@ -46,7 +46,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/parent-or-guardian');
+  const log = getLogger('apply/adult/parent-or-guardian');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -60,7 +60,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   clearApplyState({ params, session });
-  return redirect(t('apply:parent-or-guardian.return-btn-link'));
+  return redirect(t('apply-adult:parent-or-guardian.return-btn-link'));
 }
 
 export default function ApplyFlowParentOrGuardian() {
@@ -79,16 +79,16 @@ export default function ApplyFlowParentOrGuardian() {
   return (
     <>
       <div className="mb-8 space-y-4">
-        <p>{t('apply:parent-or-guardian.unable-to-apply')}</p>
+        <p>{t('apply-adult:parent-or-guardian.unable-to-apply')}</p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
         <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Parent or guardian needs to apply click">
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-          {t('apply:parent-or-guardian.back-btn')}
+          {t('apply-adult:parent-or-guardian.back-btn')}
         </ButtonLink>
         <Button type="submit" variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Parent or guardian needs to apply click">
-          {t('apply:parent-or-guardian.return-btn')}
+          {t('apply-adult:parent-or-guardian.return-btn')}
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>
       </fetcher.Form>

@@ -8,12 +8,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import { loadApplyAdultChildState, saveApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -31,9 +31,9 @@ enum LivingIndependentlyOption {
 export type LivingIndependentlyState = `${LivingIndependentlyOption}`;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.livingIndependently,
-  pageTitleI18nKey: 'apply:living-independently.page-title',
+  i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
+  pageIdentifier: pageIds.public.apply.adultChild.livingIndependently,
+  pageTitleI18nKey: 'apply-adult-child:living-independently.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -41,17 +41,17 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const state = loadApplyAdultState({ params, request, session });
+  const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:living-independently.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:living-independently.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.adultState.livingIndependently });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.adultChildState.livingIndependently });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/living-independently');
+  const log = getLogger('apply/adult-child/living-independently');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -59,7 +59,7 @@ export async function action({ context: { session }, params, request }: ActionFu
    * Schema for living independently.
    */
   const livingIndependentlySchema: z.ZodType<LivingIndependentlyState> = z.nativeEnum(LivingIndependentlyOption, {
-    errorMap: () => ({ message: t('apply:living-independently.error-message.living-independently-required') }),
+    errorMap: () => ({ message: t('apply-adult-child:living-independently.error-message.living-independently-required') }),
   });
 
   const formData = await request.formData();
@@ -78,13 +78,13 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  saveApplyAdultState({ params, request, session, state: { livingIndependently: parsedDataResult.data } });
+  saveApplyAdultChildState({ params, request, session, state: { livingIndependently: parsedDataResult.data } });
 
   if (parsedDataResult.data === LivingIndependentlyOption.Yes) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/application-delegate', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/applicant-information', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/parent-or-guardian', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/parent-or-guardian', params));
 }
 
 export default function ApplyFlowLivingIndependently() {
@@ -124,7 +124,7 @@ export default function ApplyFlowLivingIndependently() {
         <Progress aria-labelledby="progress-label" value={10} size="lg" />
       </div>
       <div className="max-w-prose">
-        <p className="mb-6">{t('apply:living-independently.description')}</p>
+        <p className="mb-6">{t('apply-adult-child:living-independently.description')}</p>
         <p className="mb-6 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" noValidate>
@@ -132,16 +132,16 @@ export default function ApplyFlowLivingIndependently() {
           <InputRadios
             id="living-independently"
             name="livingIndependently"
-            legend={t('apply:living-independently.form-instructions')}
+            legend={t('apply-adult-child:living-independently.form-instructions')}
             options={[
               {
                 value: LivingIndependentlyOption.Yes,
-                children: t('apply:living-independently.radio-options.yes'),
+                children: t('apply-adult-child:living-independently.radio-options.yes'),
                 defaultChecked: defaultState === LivingIndependentlyOption.Yes,
               },
               {
                 value: LivingIndependentlyOption.No,
-                children: t('apply:living-independently.radio-options.no'),
+                children: t('apply-adult-child:living-independently.radio-options.no'),
                 defaultChecked: defaultState === LivingIndependentlyOption.No,
               },
             ]}
@@ -150,12 +150,12 @@ export default function ApplyFlowLivingIndependently() {
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Living independently click">
-              {t('apply:living-independently.continue-btn')}
+              {t('apply-adult-child:living-independently.continue-btn')}
               <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
             </Button>
-            <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/terms-and-conditions" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Living independently click">
+            <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Living independently click">
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('apply:living-independently.back-btn')}
+              {t('apply-adult-child:living-independently.back-btn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

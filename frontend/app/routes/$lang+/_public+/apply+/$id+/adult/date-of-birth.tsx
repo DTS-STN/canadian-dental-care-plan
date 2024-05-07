@@ -154,7 +154,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   if (age >= 18 && age < 65) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/disability-tax-credit', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/disability-tax-credit', params));
   }
 
   if (state.adultState.editMode) {
