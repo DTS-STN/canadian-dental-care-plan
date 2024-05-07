@@ -166,14 +166,6 @@
                         }
                       },
                       {
-                        "id": "$lang+/_public+/apply+/$id+/adult-child/federal-provincial-territorial-benefits",
-                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/federal-provincial-territorial-benefits.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/federal-provincial-territorial-benefits",
-                          "fr": "/:lang/demander/:id/adulte-enfant/prestations-dentaires-federales-provinciales-territoriales"
-                        }
-                      },
-                      {
                         "id": "$lang+/_public+/apply+/$id+/adult/file-taxes",
                         "file": "routes/$lang+/_public+/apply+/$id+/adult/file-taxes.tsx",
                         "paths": {
@@ -257,6 +249,30 @@
                         "paths": {
                           "en": "/:lang/apply/:id/adult-child/confirmation",
                           "fr": "/:lang/demander/:id/adulte-enfant/confirmation"
+                        }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/federal-provincial-territorial-benefits",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/federal-provincial-territorial-benefits.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/federal-provincial-territorial-benefits",
+                          "fr": "/:lang/demander/:id/adulte-enfant/prestations-dentaires-federales-provinciales-territoriales"
+                        }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/review-adult-information",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/review-adult-information.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/review-adult-information",
+                          "fr": "/:lang/demander/:id/adulte-enfant/review-adult-information"
+                        }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/review-child-information",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/review-child-information.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/review-child-information",
+                          "fr": "/:lang/demander/:id/adulte-enfant/review-child-information"
                         }
                       },
                       {
