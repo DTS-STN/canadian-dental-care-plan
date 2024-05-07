@@ -274,6 +274,14 @@
                           "en": "/:lang/apply/:id/adult-child/review-child-information",
                           "fr": "/:lang/demander/:id/adulte-enfant/review-child-information"
                         }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/apply-yourself",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/apply-yourself.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/apply-yourself",
+                          "fr": "/:lang/demander/:id/adulte-enfant/postulez-vous-meme"
+                        }
                       }
                     ]
                   },
@@ -672,7 +680,15 @@
                     "file": "routes/$lang+/_protected+/alerts+/unsubscribe+/index.tsx",
                     "paths": {
                       "en": "/:lang/alerts/unsubscribe",
-                      "fr": "/:lang/alertes/désabonner"
+                      "fr": "/:lang/alertes/desabonner"
+                    }
+                  },
+                  {
+                    "id": "$lang+/_protected+/alerts+/unsubscribe+/success",
+                    "file": "routes/$lang+/_protected+/alerts+/unsubscribe+/success.tsx",
+                    "paths": {
+                      "en": "/:lang/alerts/unsubscribe/success",
+                      "fr": "/:lang/alertes/desabonner/succes"
                     }
                   }
                 ]

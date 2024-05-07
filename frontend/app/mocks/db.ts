@@ -121,7 +121,7 @@ db.personalInformation.create({
 
 // seed the email alerts subscription
 db.subscription.create({
-  id: '0000001',
+  id: '10001',
   sin: '800011819',
   email: 'user@example.com',
   registered: true,
@@ -131,7 +131,7 @@ db.subscription.create({
 });
 
 db.subscription.create({
-  id: '0000002',
+  id: '10003',
   sin: '800000002',
   email: 'tester@example.com',
   registered: false,

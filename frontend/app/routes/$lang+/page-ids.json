@@ -26,7 +26,8 @@
       "unsubscribe": "CDCP-PROT-0017",
       "manage": "CDCP-PROT-0018",
       "confirm": "CDCP-PROT-0019",
-      "expired": "CDCP-PROT-0020"
+      "expired": "CDCP-PROT-0020",
+      "success": "CDCP-PROT-0021"
     },
     "status-check": {
       "index": "CDCP-PROT-0021"
@@ -72,7 +73,8 @@
         "exitApplication": "CDCP-APPL-ADCH-0013",
         "confirmation": "CDCP-APPL-ADCH-0014",
         "childInformation": "CDCP-APPL-ADCH-0015",
-        "applyChildren": "CDCP-APPL-ADCH-0016"
+        "applyChildren": "CDCP-APPL-ADCH-0016",
+        "applySelf": "CDCP-APPL-ADCH-0017"
       },
       "child": {
         "taxFiling": "CDCP-APPL-CH-0002",

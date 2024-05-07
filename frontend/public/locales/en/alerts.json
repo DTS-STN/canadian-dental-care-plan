@@ -78,5 +78,11 @@
     "confirm-code-expired": "The confirmation code sent to you has expired. Select the \"Request New Confirmation Code\" button below to have a new confirmation code sent to you at <strong>{{userEmailAddress}}</strong>.",
     "request-new-code": "Request New Confirmation Code",
     "back": "Back"
+  },
+  "success": {
+    "page-title": "Unscubscribe Confirmation",
+    "unsubscribe-successful": "You have successfully unsubscribed from Canada Dental Care Plan. You will no longer receive emails when important new Canada Dental Care Plan information is available in your My Service Canada Account.",
+    "subscribe-again": "You may subscribe again to Canada Dental Care Plan alerts by <subscribelink>completing the subscription process</subscribelink>.",
+    "return-home": "Return <homeLink>Home</homeLink>"
   }
 }

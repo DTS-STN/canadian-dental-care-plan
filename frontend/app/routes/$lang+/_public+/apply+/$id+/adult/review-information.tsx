@@ -8,7 +8,7 @@ import { faSpinner, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { parse } from 'date-fns';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import pageIds from '../../../../page-ids.json';
 import { Address } from '~/components/address';
@@ -68,7 +68,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const maritalStatuses = await lookupService.getAllMaritalStatuses();
   const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
   const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
-  const { COMMUNICATION_METHOD_EMAIL_ID, ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
+  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
   // prettier-ignore
   if (state.adultState.applicantInformation === undefined ||
@@ -103,6 +103,15 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     throw new Error(`Unexpected home address country: ${state.adultState.personalInformation.homeCountry}`);
   }
 
+  // Getting CommunicationPreference by Id
+  const communicationPreferences = await lookupService.getAllPreferredCommunicationMethods();
+  const communicationPreferenceDict = communicationPreferences.find((obj) => obj.id === state.adultState.communicationPreferences?.preferredMethod);
+  const communicationPreference = communicationPreferenceDict && getNameByLanguage(locale, communicationPreferenceDict);
+
+  if (!communicationPreference) {
+    throw new Error(`Unexpected communication preference: ${state.adultState.communicationPreferences.preferredMethod}`);
+  }
+
   const userInfo = {
     firstName: state.adultState.applicantInformation.firstName,
     lastName: state.adultState.applicantInformation.lastName,
@@ -113,7 +122,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     sin: state.adultState.applicantInformation.socialInsuranceNumber,
     martialStatus: state.adultState.applicantInformation.maritalStatus,
     email: state.adultState.communicationPreferences.email,
-    communicationPreference: state.adultState.communicationPreferences,
+    communicationPreference: communicationPreference,
   };
   const spouseInfo = state.adultState.partnerInformation
     ? {
@@ -178,7 +187,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     dentalBenefit,
     csrfToken,
     meta,
-    COMMUNICATION_METHOD_EMAIL_ID,
     siteKey: HCAPTCHA_SITE_KEY,
     hCaptchaEnabled,
   });
@@ -249,22 +257,9 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ReviewInformation() {
   const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const {
-    userInfo,
-    spouseInfo,
-    maritalStatuses,
-    preferredLanguage,
-    federalSocialPrograms,
-    provincialTerritorialSocialPrograms,
-    homeAddressInfo,
-    mailingAddressInfo,
-    dentalInsurance,
-    dentalBenefit,
-    csrfToken,
-    COMMUNICATION_METHOD_EMAIL_ID,
-    siteKey,
-    hCaptchaEnabled,
-  } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, csrfToken, siteKey, hCaptchaEnabled } =
+    useLoaderData<typeof loader>();
+  useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -307,142 +302,143 @@ export default function ReviewInformation() {
       <div className="max-w-prose">
         <p className="my-4 text-lg">{t('apply-adult:review-information.read-carefully')}</p>
         <div className="space-y-10">
-          <div>
+          <div className="space-y-6">
             <h2 className="text-2xl font-semibold">{t('apply-adult:review-information.page-sub-title')}</h2>
-            <dl className="mt-6 divide-y border-y">
+            <dl className="divide-y border-y">
               <DescriptionListItem term={t('apply-adult:review-information.full-name-title')}>
-                {`${userInfo.firstName} ${userInfo.lastName}`}
-                <p className="mt-4">
+                <p>{`${userInfo.firstName} ${userInfo.lastName}`}</p>
+                <div className="mt-4">
                   <InlineLink id="change-full-name" routeId="$lang+/_public+/apply+/$id+/adult/applicant-information" params={params}>
                     {t('apply-adult:review-information.full-name-change')}
                   </InlineLink>
-                </p>
+                </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult:review-information.dob-title')}>
-                {userInfo.birthday}
-                <p className="mt-4">
+                <p>{userInfo.birthday}</p>
+                <div className="mt-4">
                   <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params}>
                     {t('apply-adult:review-information.dob-change')}
                   </InlineLink>
-                </p>
+                </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult:review-information.sin-title')}>
-                {formatSin(userInfo.sin)}
-                <p className="mt-4">
+                <p>{formatSin(userInfo.sin)}</p>
+                <div className="mt-4">
                   <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/adult/applicant-information" params={params}>
                     {t('apply-adult:review-information.sin-change')}
                   </InlineLink>
-                </p>
+                </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult:review-information.marital-title')}>
-                {maritalStatus}
-                <p className="mt-4">
+                <p>{maritalStatus}</p>
+                <div className="mt-4">
                   <InlineLink id="change-martial-status" routeId="$lang+/_public+/apply+/$id+/adult/applicant-information" params={params}>
                     {t('apply-adult:review-information.marital-change')}
                   </InlineLink>
-                </p>
+                </div>
               </DescriptionListItem>
             </dl>
           </div>
           {spouseInfo && (
-            <div>
-              <h2 className="mt-8 text-2xl font-semibold ">{t('apply-adult:review-information.spouse-title')}</h2>
-              <dl className="mt-6 divide-y border-y">
+            <div className="space-y-6">
+              <h2 className="text-2xl font-semibold ">{t('apply-adult:review-information.spouse-title')}</h2>
+              <dl className="divide-y border-y">
                 <DescriptionListItem term={t('apply-adult:review-information.full-name-title')}>
-                  {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
-                  <p className="mt-4">
+                  <p>{`${spouseInfo.firstName} ${spouseInfo.lastName}`}</p>
+                  <div className="mt-4">
                     <InlineLink id="change-spouse-full-name" routeId="$lang+/_public+/apply+/$id+/adult/partner-information" params={params}>
                       {t('apply-adult:review-information.full-name-change')}
                     </InlineLink>
-                  </p>
+                  </div>
                 </DescriptionListItem>
                 <DescriptionListItem term={t('apply-adult:review-information.dob-title')}>
-                  {spouseInfo.birthday}
-                  <p className="mt-4">
+                  <p>{spouseInfo.birthday}</p>
+                  <div className="mt-4">
                     <InlineLink id="change-spouse-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult/partner-information" params={params}>
                       {t('apply-adult:review-information.dob-change')}
                     </InlineLink>
-                  </p>
+                  </div>
                 </DescriptionListItem>
                 <DescriptionListItem term={t('apply-adult:review-information.sin-title')}>
-                  {formatSin(spouseInfo.sin)}
-                  <p className="mt-4">
+                  <p>{formatSin(spouseInfo.sin)}</p>
+                  <div className="mt-4">
                     <InlineLink id="change-spouse-sin" routeId="$lang+/_public+/apply+/$id+/adult/partner-information" params={params}>
                       {t('apply-adult:review-information.sin-change')}
                     </InlineLink>
-                  </p>
+                  </div>
                 </DescriptionListItem>
                 <DescriptionListItem term={t('apply-adult:review-information.spouse-consent.label')}>{spouseInfo.consent ? t('apply-adult:review-information.spouse-consent.yes') : t('apply-adult:review-information.spouse-consent.no')}</DescriptionListItem>
               </dl>
             </div>
           )}
-          <div>
+          <div className="space-y-6">
             <h2 className="mt-2 text-2xl font-semibold ">{t('apply-adult:review-information.contact-info-title')}</h2>
-            <dl className="mt-6 divide-y border-y">
+            <dl className="divide-y border-y">
               <DescriptionListItem term={t('apply-adult:review-information.phone-title')}>
-                {userInfo.phoneNumber}
-                <p className="mt-4">
+                <p>{userInfo.phoneNumber}</p>
+                <div className="mt-4">
                   <InlineLink id="change-phone-number" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
                     {t('apply-adult:review-information.phone-change')}
                   </InlineLink>
-                </p>
+                </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult:review-information.alt-phone-title')}>
-                {userInfo.altPhoneNumber}
-                <p className="mt-4">
+                <p>{userInfo.altPhoneNumber}</p>
+                <div className="mt-4">
                   <InlineLink id="change-alternate-phone-number" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
                     {t('apply-adult:review-information.alt-phone-change')}
                   </InlineLink>
-                </p>
+                </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult:review-information.mailing-title')}>
-                <Address
-                  address={mailingAddressInfo.address}
-                  city={mailingAddressInfo.city}
-                  provinceState={i18n.language === 'en' ? mailingAddressInfo.province?.nameEn : mailingAddressInfo.province?.nameFr}
-                  postalZipCode={mailingAddressInfo.postalCode}
-                  country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
-                  apartment={mailingAddressInfo.apartment}
-                  altFormat={true}
-                />
-                <p className="mt-4">
+                <p>
+                  <Address
+                    address={mailingAddressInfo.address}
+                    city={mailingAddressInfo.city}
+                    provinceState={i18n.language === 'en' ? mailingAddressInfo.province?.nameEn : mailingAddressInfo.province?.nameFr}
+                    postalZipCode={mailingAddressInfo.postalCode}
+                    country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
+                    apartment={mailingAddressInfo.apartment}
+                    altFormat={true}
+                  />
+                </p>
+                <div className="mt-4">
                   <InlineLink id="change-mailing-address" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
                     {t('apply-adult:review-information.mailing-change')}
                   </InlineLink>
-                </p>
+                </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult:review-information.home-title')}>
-                <Address
-                  address={homeAddressInfo.address ?? ''}
-                  city={homeAddressInfo.city ?? ''}
-                  provinceState={i18n.language === 'en' ? homeAddressInfo.province?.nameEn : homeAddressInfo.province?.nameFr}
-                  postalZipCode={homeAddressInfo.postalCode}
-                  country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
-                  apartment={homeAddressInfo.apartment}
-                  altFormat={true}
-                />
-                <p className="mt-4">
+                <p>
+                  <Address
+                    address={homeAddressInfo.address ?? ''}
+                    city={homeAddressInfo.city ?? ''}
+                    provinceState={i18n.language === 'en' ? homeAddressInfo.province?.nameEn : homeAddressInfo.province?.nameFr}
+                    postalZipCode={homeAddressInfo.postalCode}
+                    country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
+                    apartment={homeAddressInfo.apartment}
+                    altFormat={true}
+                  />
+                </p>
+                <div className="mt-4">
                   <InlineLink id="change-home-address" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
                     {t('apply-adult:review-information.home-change')}
                   </InlineLink>
-                </p>
+                </div>
               </DescriptionListItem>
             </dl>
           </div>
-          <div>
-            <h2 className="mt-8 text-2xl font-semibold">{t('apply-adult:review-information.comm-title')}</h2>
-            <dl className="mt-6 divide-y border-y">
+          <div className="space-y-6">
+            <h2 className="text-2xl font-semibold">{t('apply-adult:review-information.comm-title')}</h2>
+            <dl className="divide-y border-y">
               <DescriptionListItem term={t('apply-adult:review-information.comm-pref-title')}>
-                {userInfo.communicationPreference.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID ? (
-                  <div className="grid grid-cols-1">
-                    <p className="mt-4">{t('apply-adult:review-information.comm-electronic')}</p> <span>{userInfo.email}</span>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1">
-                    <p className="mt-4">{t('apply-adult:review-information.comm-mail')}</p>
-                  </div>
+                <p>{userInfo.communicationPreference}</p>
+                {userInfo.email && (
+                  <p>
+                    <Trans ns={handle.i18nNamespaces} i18nKey="review-information.email-address" values={{ email: userInfo.email }} />
+                  </p>
                 )}
-                <p className="mt-4">
+                <p>
                   <InlineLink id="change-communication-preference" routeId="$lang+/_public+/apply+/$id+/adult/communication-preference" params={params}>
                     {t('apply-adult:review-information.comm-pref-change')}
                   </InlineLink>
@@ -450,47 +446,45 @@ export default function ReviewInformation() {
               </DescriptionListItem>
               {preferredLanguage && (
                 <DescriptionListItem term={t('apply-adult:review-information.lang-pref-title')}>
-                  {getNameByLanguage(i18n.language, preferredLanguage)}
-                  <p className="mt-4">
+                  <p>{getNameByLanguage(i18n.language, preferredLanguage)}</p>
+                  <div className="mt-4">
                     <InlineLink id="change-language-preference" routeId="$lang+/_public+/apply+/$id+/adult/communication-preference" params={params}>
                       {t('apply-adult:review-information.lang-pref-change')}
                     </InlineLink>
-                  </p>
+                  </div>
                 </DescriptionListItem>
               )}
             </dl>
           </div>
-          <div>
-            <h2 className="mt-8 text-2xl font-semibold">{t('apply-adult:review-information.dental-title')}</h2>
-            <dl className="mt-6 divide-y border-y">
+          <div className="space-y-6">
+            <h2 className="text-2xl font-semibold">{t('apply-adult:review-information.dental-title')}</h2>
+            <dl className="divide-y border-y">
               <DescriptionListItem term={t('apply-adult:review-information.dental-insurance-title')}>
-                {dentalInsurance ? t('apply-adult:review-information.yes') : t('apply-adult:review-information.no')}
-                <p className="mt-4">
+                <p>{dentalInsurance ? t('apply-adult:review-information.yes') : t('apply-adult:review-information.no')}</p>
+                <div className="mt-4">
                   <InlineLink id="change-access-dental" routeId="$lang+/_public+/apply+/$id+/adult/dental-insurance" params={params}>
                     {t('apply-adult:review-information.dental-insurance-change')}
                   </InlineLink>
-                </p>
+                </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult:review-information.dental-benefit-title')}>
                 {dentalBenefit.federalBenefit.access || dentalBenefit.provTerrBenefit.access ? (
                   <>
                     <p>{t('apply-adult:review-information.yes')}</p>
                     <p>{t('apply-adult:review-information.dental-benefit-has-access')}</p>
-                    <div>
-                      <ul className="ml-6 list-disc">
-                        {dentalBenefit.federalBenefit.access && <li>{federalSocialProgram}</li>}
-                        {dentalBenefit.provTerrBenefit.access && <li>{provincialTerritorialSocialProgram}</li>}
-                      </ul>
-                    </div>
+                    <ul className="ml-6 list-disc">
+                      {dentalBenefit.federalBenefit.access && <li>{federalSocialProgram}</li>}
+                      {dentalBenefit.provTerrBenefit.access && <li>{provincialTerritorialSocialProgram}</li>}
+                    </ul>
                   </>
                 ) : (
-                  <>{t('apply-adult:review-information.no')}</>
+                  <p>{t('apply-adult:review-information.no')}</p>
                 )}
-                <p className="mt-4">
+                <div className="mt-4">
                   <InlineLink id="change-dental-benefits" routeId="$lang+/_public+/apply+/$id+/adult/federal-provincial-territorial-benefits" params={params}>
                     {t('apply-adult:review-information.dental-benefit-change')}
                   </InlineLink>
-                </p>
+                </div>
               </DescriptionListItem>
             </dl>
           </div>

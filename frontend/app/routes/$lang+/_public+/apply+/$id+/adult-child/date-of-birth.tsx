@@ -165,7 +165,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   if (age >= 65 && allChildrenUnder18 === 'no') {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/apply-for-yourself', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/apply-yourself', params));
   }
 
   if (state.adultChildState.editMode) {
