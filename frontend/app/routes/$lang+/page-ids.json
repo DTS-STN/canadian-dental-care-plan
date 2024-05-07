@@ -80,7 +80,8 @@
         "applySelf": "CDCP-APPL-ADCH-0017",
         "disabilityTaxCredit": "CDCP-APPL-ADCH-0018",
         "parentOrGuardian": "CDCP-APPL-ADCH-0019",
-        "livingIndependently": "CDCP-APPL-ADCH-0020"
+        "livingIndependently": "CDCP-APPL-ADCH-0020",
+        "childSummary": "CDCP-APPL-ADCH-0021"
       },
       "child": {
         "taxFiling": "CDCP-APPL-CH-0002",

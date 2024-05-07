@@ -83,12 +83,14 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
+  await saveApplyAdultChildState({ params, request, session, state: { editMode: false } });
+
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
 
   if (formAction === FormAction.Cancel) {
     invariant(state.adultChildState.childInformation, 'Expected state.childInformation to be defined');
 
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/child-summary', params));
   }
 
   // Form action Continue & Save
@@ -184,11 +186,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   await saveApplyAdultChildState({ params, request, session, state: { childInformation: parsedDataResult.data } });
 
-  if (state.adultChildState.editMode) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
-  }
-
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/personal-information', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/child-summary', params));
 }
 
 export default function ApplyFlowChildInformation() {
@@ -366,7 +364,7 @@ export default function ApplyFlowChildInformation() {
                 {t('apply-adult-child:eligibility.child-information.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click">
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult-child/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-adult-child:eligibility.child-information.back-btn')}
               </ButtonLink>

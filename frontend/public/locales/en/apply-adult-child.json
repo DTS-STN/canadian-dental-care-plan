@@ -1,4 +1,19 @@
 {
+  "child-summary": {
+    "page-title": "Summary of child(ren)",
+    "children-added": "The following child(ren) has been added to the application.",
+    "dob-title": "Date of birth",
+    "dob-change": "Change date of birth",
+    "sin-title": "Social Insurance Number (SIN)",
+    "sin-change": "Change SIN",
+    "add-child": "Add another child",
+    "no-children": "There are currently no child in this application.",
+    "remove-child": "Remove child",
+    "back-btn": "Back",
+    "continue-btn": "Continue with application",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save"
+  },
   "dental-benefits": {
     "title": "{{childName}}: access to other federal, provincial or territorial dental benefits",
     "access-to-dental": "Access to dental coverage through a provincial, territorial or federal government social program will not impact the child's eligibility for the Canadian Dental Care Plan.",

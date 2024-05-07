@@ -330,6 +330,14 @@
                           "en": "/:lang/apply/:id/adult-child/living-independently",
                           "fr": "/:lang/demander/:id/adulte-enfant/living-independently"
                         }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/child-summary",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/child-summary.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/child-summary",
+                          "fr": "/:lang/demander/:id/adulte-enfant/child-summary"
+                        }
                       }
                     ]
                   },
