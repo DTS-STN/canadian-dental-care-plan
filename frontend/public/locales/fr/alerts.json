@@ -76,5 +76,11 @@
       "subscribe": "(FR) Confirm to subscribe to CDCP email alerts"
     },
     "confirm-code-expired": "(FR) The confirmation code sent to you has expired. Select the \"Request New Confirmation Code\" button below to have a new confirmation code sent to you at <strong>{{userEmailAddress}}</strong>."
+  },
+  "success": {
+    "page-title": "(FR) Unscubscribe Confirmation",
+    "unsubscribe-successful": "(FR) You have successfully unsubscribed from Canada Dental Care Plan. You will no longer receive emails when important new Canada Dental Care Plan information is available in your My Service Canada Account.",
+    "subscribe-again": "(FR) You may subscribe again to Canada Dental Care Plan alerts by <subscribelink>completing the subscription process</subscribelink>.",
+    "return-home": "(FR) Return <homeLink>Home</homeLink>"
   }
 }
