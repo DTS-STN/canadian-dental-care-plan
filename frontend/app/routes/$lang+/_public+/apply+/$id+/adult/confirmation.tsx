@@ -229,18 +229,18 @@ export default function ApplyFlowConfirm() {
       <p className="mt-4">
         <Trans ns={handle.i18nNamespaces} i18nKey="confirm.more-info-service" components={{ dentalContactUsLink }} />
       </p>
-      <div className="space-y-10">
-        <h2 className="mt-8 text-3xl font-semibold">{t('confirm.application-summ')}</h2>
-        <div>
-          <dl className="mt-6 divide-y border-y">
+      <div className="mt-8 space-y-10">
+        <div className="space-y-6">
+          <h2 className="text-3xl font-semibold">{t('confirm.application-summ')}</h2>
+          <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.application-code')}>
               <strong>{submissionInfo.confirmationCode}</strong>
             </DescriptionListItem>
           </dl>
         </div>
-        <h2 className="text-2xl font-semibold">{t('confirm.applicant-title')}</h2>
-        <div>
-          <dl className="mt-6 divide-y border-y">
+        <div className="space-y-6">
+          <h2 className="text-2xl font-semibold">{t('confirm.applicant-title')}</h2>
+          <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.dob')}>{userInfo.birthday}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.sin')}>
@@ -250,23 +250,21 @@ export default function ApplyFlowConfirm() {
           </dl>
         </div>
         {spouseInfo && (
-          <>
+          <div className="space-y-6">
             <h2 className="text-2xl font-semibold">{t('confirm.spouse-info')}</h2>
-            <div>
-              <dl className="mt-6 divide-y border-y">
-                <DescriptionListItem term={t('confirm.full-name')}>{`${spouseInfo.firstName} ${spouseInfo.lastName}`}</DescriptionListItem>
-                <DescriptionListItem term={t('confirm.dob')}>{spouseInfo.birthday}</DescriptionListItem>
-                <DescriptionListItem term={t('confirm.sin')}>
-                  <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
-                </DescriptionListItem>
-                <DescriptionListItem term={t('confirm.consent')}>{t('confirm.consent-answer')}</DescriptionListItem>
-              </dl>
-            </div>
-          </>
+            <dl className="divide-y border-y">
+              <DescriptionListItem term={t('confirm.full-name')}>{`${spouseInfo.firstName} ${spouseInfo.lastName}`}</DescriptionListItem>
+              <DescriptionListItem term={t('confirm.dob')}>{spouseInfo.birthday}</DescriptionListItem>
+              <DescriptionListItem term={t('confirm.sin')}>
+                <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
+              </DescriptionListItem>
+              <DescriptionListItem term={t('confirm.consent')}>{t('confirm.consent-answer')}</DescriptionListItem>
+            </dl>
+          </div>
         )}
-        <h2 className="text-2xl font-semibold">{t('confirm.contact-info')}</h2>
-        <div>
-          <dl className="mt-6 divide-y border-y">
+        <div className="space-y-6">
+          <h2 className="text-2xl font-semibold">{t('confirm.contact-info')}</h2>
+          <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.phone-number')}>
               <span className="text-nowrap">{userInfo.phoneNumber}</span>
             </DescriptionListItem>
@@ -297,36 +295,36 @@ export default function ApplyFlowConfirm() {
             </DescriptionListItem>
           </dl>
         </div>
-        <h2 className="text-2xl font-semibold">{t('confirm.comm-prefs')}</h2>
-        <div>
-          <dl className="mt-6 divide-y border-y">
+        <div className="space-y-6">
+          <h2 className="text-2xl font-semibold">{t('confirm.comm-prefs')}</h2>
+          <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.comm-pref')}>
-              <div className="flex flex-col">
-                <p>{userInfo.communicationPreference}</p>
-              </div>
+              <p>{userInfo.communicationPreference}</p>
+              {userInfo.email && (
+                <p>
+                  <Trans ns={handle.i18nNamespaces} i18nKey="confirm.email-address" values={{ email: userInfo.email }} />
+                </p>
+              )}
             </DescriptionListItem>
-
-            <DescriptionListItem term={t('confirm.lang-pref')}> {userInfo.preferredLanguage}</DescriptionListItem>
+            <DescriptionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage}</DescriptionListItem>
           </dl>
         </div>
-        <h2 className="text-2xl font-semibold">{t('confirm.dental-insurance')}</h2>
-        <div>
-          <dl className="mt-6 divide-y border-y">
+        <div className="space-y-6">
+          <h2 className="text-2xl font-semibold">{t('confirm.dental-insurance')}</h2>
+          <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.dental-private')}> {dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.dental-public')}>
               {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
                 <>
-                  <p>{t('apply-adult:review-information.yes')}</p>
-                  <p>{t('apply-adult:review-information.dental-benefit-has-access')}</p>
-                  <div>
-                    <ul className="ml-6 list-disc">
-                      {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
-                      {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
-                    </ul>
-                  </div>
+                  <p>{t('apply-adult:confirm.yes')}</p>
+                  <p>{t('apply-adult:confirm.dental-benefit-has-access')}</p>
+                  <ul className="ml-6 list-disc">
+                    {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
+                    {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
+                  </ul>
                 </>
               ) : (
-                t('confirm.no')
+                <p>{t('confirm.no')}</p>
               )}
             </DescriptionListItem>
           </dl>

@@ -74,6 +74,7 @@
     "comm-prefs": "Communication",
     "email-address": "Email address: {{email}}",
     "dental-insurance": "Access to dental insurance",
+    "dental-benefit-has-access": "Has access to the following benefits:",
     "dob": "Date of birth",
     "sin": "Social Insurance Number (SIN)",
     "full-name": "Full name",

@@ -317,8 +317,8 @@ export default function ApplyFlowConfirm() {
             <DescriptionListItem term={t('confirm.dental-public')}>
               {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
                 <>
-                  <p>{t('apply-adult:review-information.yes')}</p>
-                  <p>{t('apply-adult:review-information.dental-benefit-has-access')}</p>
+                  <p>{t('apply-adult:confirm.yes')}</p>
+                  <p>{t('apply-adult:confirm.dental-benefit-has-access')}</p>
                   <div>
                     <ul className="ml-6 list-disc">
                       {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}

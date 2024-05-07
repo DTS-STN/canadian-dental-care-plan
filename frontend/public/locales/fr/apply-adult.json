@@ -74,6 +74,7 @@
     "comm-prefs": "Communication",
     "email-address": "Adresse courriel\u00a0: {{email}}",
     "dental-insurance": "Accès à une assurance ou une couverture dentaire",
+    "dental-benefit-has-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
     "dob": "Date de naissance",
     "sin": "Numéro d'assurance sociale (NAS)",
     "full-name": "Nom complet",
