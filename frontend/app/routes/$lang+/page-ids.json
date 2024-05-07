@@ -26,7 +26,8 @@
       "unsubscribe": "CDCP-PROT-0017",
       "manage": "CDCP-PROT-0018",
       "confirm": "CDCP-PROT-0019",
-      "expired": "CDCP-PROT-0020"
+      "expired": "CDCP-PROT-0020",
+      "success": "CDCP-PROT-0021"
     },
     "status-check": {
       "index": "CDCP-PROT-0021"

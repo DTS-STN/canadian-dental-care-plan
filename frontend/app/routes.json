@@ -664,7 +664,15 @@
                     "file": "routes/$lang+/_protected+/alerts+/unsubscribe+/index.tsx",
                     "paths": {
                       "en": "/:lang/alerts/unsubscribe",
-                      "fr": "/:lang/alertes/désabonner"
+                      "fr": "/:lang/alertes/desabonner"
+                    }
+                  },
+                  {
+                    "id": "$lang+/_protected+/alerts+/unsubscribe+/success",
+                    "file": "routes/$lang+/_protected+/alerts+/unsubscribe+/success.tsx",
+                    "paths": {
+                      "en": "/:lang/alerts/unsubscribe/success",
+                      "fr": "/:lang/alertes/desabonner/succes"
                     }
                   }
                 ]
