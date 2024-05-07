@@ -279,6 +279,7 @@
     "add-phone": "Adding a phone number helps Government of Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
     "phone-number": "Phone number (optional)",
     "phone-number-alt": "Alternate phone number (optional)",
+    "email-header": "Email",
     "add-email": "Adding an email will help the Government of Canada contact you regarding your Canadian Dental Care Plan membership.",
     "email": "Email address (optional)",
     "confirm-email": "Confirm email address (optional)",

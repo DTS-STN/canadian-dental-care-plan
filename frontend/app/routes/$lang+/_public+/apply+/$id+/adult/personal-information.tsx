@@ -410,33 +410,36 @@ export default function ApplyFlowPersonalInformation() {
               />
             </div>
           </fieldset>
-          <p id="adding-email" className="mb-2">
-            {t('apply-adult:contact-information.add-email')}
-          </p>
-          <div className="mb-6 grid gap-6 md:grid-cols-2">
-            <InputField
-              id="email"
-              name="email"
-              className="w-full"
-              autoComplete="email"
-              defaultValue={defaultState?.email ?? ''}
-              errorMessage={errorMessages['email']}
-              label={t('apply-adult:contact-information.email')}
-              maxLength={100}
-              aria-describedby="adding-email"
-            />
-            <InputField
-              id="confirm-email"
-              name="confirmEmail"
-              className="w-full"
-              autoComplete="email"
-              defaultValue={defaultState?.confirmEmail ?? ''}
-              errorMessage={errorMessages['confirm-email']}
-              label={t('apply-adult:contact-information.confirm-email')}
-              maxLength={100}
-              aria-describedby="adding-email"
-            />
-          </div>
+          <fieldset>
+            <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult:contact-information.email-header')}</legend>
+            <p id="adding-email" className="mb-2">
+              {t('apply-adult:contact-information.add-email')}
+            </p>
+            <div className="mb-6 grid gap-6 md:grid-cols-2">
+              <InputField
+                id="email"
+                name="email"
+                className="w-full"
+                autoComplete="email"
+                defaultValue={defaultState?.email ?? ''}
+                errorMessage={errorMessages['email']}
+                label={t('apply-adult:contact-information.email')}
+                maxLength={100}
+                aria-describedby="adding-email"
+              />
+              <InputField
+                id="confirm-email"
+                name="confirmEmail"
+                className="w-full"
+                autoComplete="email"
+                defaultValue={defaultState?.confirmEmail ?? ''}
+                errorMessage={errorMessages['confirm-email']}
+                label={t('apply-adult:contact-information.confirm-email')}
+                maxLength={100}
+                aria-describedby="adding-email"
+              />
+            </div>
+          </fieldset>
           <fieldset>
             <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult:contact-information.mailing-address.header')}</legend>
             <div className="my-6 space-y-6">
