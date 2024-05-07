@@ -202,7 +202,6 @@ export default function ApplyFlowDateOfBirth() {
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-6 space-y-4">
-            <h2 className="text-xl font-bold">{t('apply-adult:eligibility.date-of-birth.age-heading')}</h2>
             <DatePickerField
               id="date-of-birth"
               names={{

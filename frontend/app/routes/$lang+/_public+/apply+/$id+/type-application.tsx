@@ -166,7 +166,8 @@ export default function ApplyFlowTypeOfApplication() {
           <p>{t('apply:type-of-application.note')}</p>
         </div>
         <Collapsible summary={t('apply:type-of-application.split-custody-summary')}>
-          <p>{t('apply:type-of-application.split-custody-detail')}</p>
+          <p className="mb-4">{t('apply:type-of-application.split-custody-detail')}</p>
+          <p>{t('apply:type-of-application.multiple-application')}</p>
         </Collapsible>
         <p className="mb-4 mt-8 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}

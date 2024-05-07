@@ -88,8 +88,9 @@ export default function ApplyFlowParentOrGuardian() {
 
   return (
     <>
-      <div className="mb-8 space-y-4">
-        <p>{t('apply-adult:parent-or-guardian.unable-to-apply')}</p>
+      <div className="mb-8 max-w-prose space-y-4">
+        <p className="mb-4">{t('apply-adult:parent-or-guardian.unable-to-apply')}</p>
+        <p>{t('apply-adult:parent-or-guardian.apply-for-yourself')}</p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />

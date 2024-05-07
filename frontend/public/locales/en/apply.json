@@ -104,6 +104,7 @@
     "note": "please note, only one application can be processed for each child.",
     "split-custody-summary": "If you split custody of a child",
     "split-custody-detail": "If you have shared custody agreement for the child, eligibility for the plan and the amount covered is based on the parent or guardian that applies. The child's eligibility and amount covered may change if another parent or guardian applies for that child.",
+    "multiple-application": "Do not submit multiple applications for a single child. Only one parent should apply per child.",
     "radio-options": {
       "personal": "I am applying for <strong>myself</strong>",
       "delegate": "I am applying on behalf of someone else as a <strong>legal delegate or Power of Attorney</strong>",
