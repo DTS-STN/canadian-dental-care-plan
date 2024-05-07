@@ -20,6 +20,7 @@ import { applicantInformationStateHasPartner, loadApplyAdultState, saveApplyAdul
 import '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
+import { getAgeFromDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -61,7 +62,10 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:applicant-information.page-title') }) };
 
-  return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.adultState.applicantInformation, editMode: state.adultState.editMode });
+  invariant(state.adultState.dateOfBirth, 'Expected state.adultState.dateOfBirth to be defined');
+  const age = getAgeFromDateString(state.adultState.dateOfBirth);
+
+  return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.adultState.applicantInformation, editMode: state.adultState.editMode, age });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -148,11 +152,23 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowApplicationInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, maritalStatuses, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, maritalStatuses, editMode, age } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
+
+  function getBackButtonRouteId() {
+    if (age >= 18 && age <= 64) {
+      return '$lang+/_public+/apply+/$id+/adult/disability-tax-credit';
+    }
+
+    if (age >= 16 && age <= 17) {
+      return '$lang+/_public+/apply+/$id+/adult/living-independently';
+    }
+
+    return '$lang+/_public+/apply+/$id+/adult/date-of-birth';
+  }
 
   // Keys order should match the input IDs order.
   const errorMessages = useMemo(
@@ -256,7 +272,7 @@ export default function ApplyFlowApplicationInformation() {
                 {t('apply-adult:applicant-information.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click">
+              <ButtonLink id="back-button" routeId={getBackButtonRouteId()} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-adult:applicant-information.back-btn')}
               </ButtonLink>

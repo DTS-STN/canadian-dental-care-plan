@@ -4,7 +4,7 @@ import { Params } from '@remix-run/react';
 import { ApplyState, loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult/applicant-information';
 import { CommunicationPreferencesState } from '~/routes/$lang+/_public+/apply+/$id+/adult/communication-preference';
-import { AllChildrenUnder18State, DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/adult/date-of-birth';
+import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/adult/date-of-birth';
 import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/adult/dental-insurance';
 import { DisabilityTaxCreditState } from '~/routes/$lang+/_public+/apply+/$id+/adult/disability-tax-credit';
 import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/adult/federal-provincial-territorial-benefits';
@@ -32,7 +32,6 @@ export interface ApplyAdultState {
   readonly editMode: boolean;
   readonly disabilityTaxCredit?: DisabilityTaxCreditState;
   readonly livingIndependently?: LivingIndependentlyState;
-  readonly allChildrenUnder18?: AllChildrenUnder18State;
 }
 
 interface LoadApplyAdultStateArgs {
