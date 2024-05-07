@@ -15,7 +15,7 @@ const inputDisabledClassName = 'disable:bg-gray-100 disabled:pointer-events-none
 const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
 export interface InputPhoneFieldProps extends Omit<FeatureProps<React.InputHTMLAttributes<HTMLInputElement>>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children' | 'labels'> {
-  defaultValue?: string;
+  defaultValue?: E164Number;
   errorMessage?: string;
   helpMessagePrimary?: React.ReactNode;
   helpMessagePrimaryClassName?: string;
@@ -29,7 +29,7 @@ export interface InputPhoneFieldProps extends Omit<FeatureProps<React.InputHTMLA
 
 export function InputPhoneField(props: InputPhoneFieldProps) {
   const { 'aria-describedby': ariaDescribedby, className, defaultValue, errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, locale, required, ...restProps } = props;
-  const [value, setValue] = useState(defaultValue ?? '');
+  const [value, setValue] = useState(defaultValue);
 
   const inputWrapperId = `input-phone-field-${id}`;
   const inputErrorId = `${inputWrapperId}-error`;
@@ -48,7 +48,7 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
   const labels = locale === 'fr' ? frLabels : enLabels;
 
   function handleOnPhoneInputChange(value?: E164Number) {
-    setValue(value ?? '');
+    setValue(value);
   }
 
   return (
