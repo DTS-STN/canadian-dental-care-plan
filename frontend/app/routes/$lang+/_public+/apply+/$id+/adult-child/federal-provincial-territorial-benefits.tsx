@@ -17,7 +17,7 @@ import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { AppPageTitle } from '~/components/layouts/public-layout';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import { loadApplyAdultChildState, saveApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 //TODO: Change over route helper to adult-child when available
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
@@ -66,7 +66,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const { CANADA_COUNTRY_ID } = getEnv();
 
   const lookupService = getLookupService();
-  const state = loadApplyAdultState({ params, request, session });
+  const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
@@ -75,15 +75,17 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const regions = allRegions.filter((region) => region.countryId === CANADA_COUNTRY_ID);
 
   const csrfToken = String(session.get('csrfToken'));
-  const childName = '<Child 1 name>'; //TODO: set child name from adult-child apply flow
+  const childName = state.adultChildState.childInformation?.firstName ?? '<Child 1 name>';
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:dental-benefits.title', { titleComponent: childName }) }) };
+
+  const currentChildIndex = state.adultChildState.currentChild ?? 0;
+  const currentDentalBenefit = state.adultChildState.childDentalBenefits;
 
   return json({
     childName: childName,
     csrfToken,
-    defaultState: state.adultState.dentalBenefits, //TODO: Change over route helper to adult-child when available
-    //defaultState: state.adultState.dentalBenefits?.find((child) => child.childName === childName),
-    editMode: state.adultState.editMode,
+    defaultState: currentDentalBenefit ? currentDentalBenefit[currentChildIndex] : undefined,
+    editMode: state.adultChildState.editMode,
     federalSocialPrograms,
     id: state.id,
     meta,
@@ -174,7 +176,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     });
   }
 
-  await saveApplyAdultState({
+  await saveApplyAdultChildState({
     params,
     request,
     session,
