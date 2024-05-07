@@ -127,7 +127,7 @@ describe('_public.apply.id.date-of-birth', () => {
       });
 
       expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe('/en/apply/123/disability-tax-credit');
+      expect(response.headers.get('location')).toBe('/en/apply/123/adult/disability-tax-credit');
       expect(parse).toBeCalled();
       expect(differenceInYears).toBeCalled();
     });

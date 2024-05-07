@@ -161,7 +161,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   if (age >= 18 && age < 65) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/disability-tax-credit', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/disability-tax-credit', params));
   }
 
   if (age >= 65 && allChildrenUnder18 === 'no') {
@@ -259,7 +259,7 @@ export default function ApplyFlowDateOfBirth() {
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Date of birth click">
                 {t('apply-adult-child:eligibility.date-of-birth.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Date of birth click">
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult-child/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Date of birth click">
                 {t('apply-adult-child:eligibility.date-of-birth.cancel-btn')}
               </ButtonLink>
             </div>
@@ -269,7 +269,7 @@ export default function ApplyFlowDateOfBirth() {
                 {t('apply-adult-child:eligibility.date-of-birth.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Date of birth click">
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult-child/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Date of birth click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-adult-child:eligibility.date-of-birth.back-btn')}
               </ButtonLink>

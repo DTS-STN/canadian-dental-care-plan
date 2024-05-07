@@ -204,6 +204,30 @@
                           "en": "/:lang/apply/:id/adult/tax-filing",
                           "fr": "/:lang/demander/:id/adulte/declaration-impot"
                         }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult/disability-tax-credit",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult/disability-tax-credit.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult/disability-tax-credit",
+                          "fr": "/:lang/demander/:id/adulte/disability-tax-credit"
+                        }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult/parent-or-guardian",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult/parent-or-guardian.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult/parent-or-guardian",
+                          "fr": "/:lang/demander/:id/adulte/parent-or-guardian"
+                        }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult/living-independently",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult/living-independently.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult/living-independently",
+                          "fr": "/:lang/demander/:id/adulte/living-independently"
+                        }
                       }
                     ]
                   },
@@ -281,6 +305,30 @@
                         "paths": {
                           "en": "/:lang/apply/:id/adult-child/apply-yourself",
                           "fr": "/:lang/demander/:id/adulte-enfant/postulez-vous-meme"
+                        }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/disability-tax-credit",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/disability-tax-credit.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/disability-tax-credit",
+                          "fr": "/:lang/demander/:id/adulte-enfant/disability-tax-credit"
+                        }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/parent-or-guardian",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/parent-or-guardian.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/parent-or-guardian",
+                          "fr": "/:lang/demander/:id/adulte-enfant/parent-or-guardian"
+                        }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/living-independently",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/living-independently.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/living-independently",
+                          "fr": "/:lang/demander/:id/adulte-enfant/living-independently"
                         }
                       }
                     ]
@@ -417,30 +465,6 @@
                     "paths": {
                       "en": "/:lang/apply/:id/application-delegate",
                       "fr": "/:lang/demander/:id/delegue-demande"
-                    }
-                  },
-                  {
-                    "id": "$lang+/_public+/apply+/$id+/disability-tax-credit",
-                    "file": "routes/$lang+/_public+/apply+/$id+/disability-tax-credit.tsx",
-                    "paths": {
-                      "en": "/:lang/apply/:id/disability-tax-credit",
-                      "fr": "/:lang/demander/:id/disability-tax-credit"
-                    }
-                  },
-                  {
-                    "id": "$lang+/_public+/apply+/$id+/parent-or-guardian",
-                    "file": "routes/$lang+/_public+/apply+/$id+/parent-or-guardian.tsx",
-                    "paths": {
-                      "en": "/:lang/apply/:id/parent-or-guardian",
-                      "fr": "/:lang/demander/:id/parent-or-guardian"
-                    }
-                  },
-                  {
-                    "id": "$lang+/_public+/apply+/$id+/living-independently",
-                    "file": "routes/$lang+/_public+/apply+/$id+/living-independently.tsx",
-                    "paths": {
-                      "en": "/:lang/apply/:id/living-independently",
-                      "fr": "/:lang/demander/:id/living-independently"
                     }
                   }
                 ]

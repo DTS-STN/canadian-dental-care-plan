@@ -107,7 +107,6 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/child/tax-filing', params));
   }
 
-  // TODO: change this route to $lang+/_public+/apply+/$id+/application-delegate
   return redirect(getPathById('$lang+/_public+/apply+/$id+/application-delegate', params));
 }
 

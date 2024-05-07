@@ -9,7 +9,7 @@ import { differenceInYears, parse } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
@@ -31,9 +31,9 @@ enum DisabilityTaxCreditOption {
 export type DisabilityTaxCreditState = `${DisabilityTaxCreditOption}`;
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.disabilityTaxCredit,
-  pageTitleI18nKey: 'apply:disability-tax-credit.page-title',
+  i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
+  pageIdentifier: pageIds.public.apply.adult.disabilityTaxCredit,
+  pageTitleI18nKey: 'apply-adult:disability-tax-credit.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -45,7 +45,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply:disability-tax-credit.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:disability-tax-credit.page-title') }) };
 
   const parseDateOfBirth = parse(state.adultState.dateOfBirth ?? '', 'yyyy-MM-dd', new Date());
   const age = differenceInYears(new Date(), parseDateOfBirth);
@@ -57,13 +57,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/disability-tax-credit');
+  const log = getLogger('apply/adult/disability-tax-credit');
   const state = loadApplyAdultState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const disabilityTaxCreditSchema: z.ZodType<DisabilityTaxCreditState> = z.nativeEnum(DisabilityTaxCreditOption, {
-    errorMap: () => ({ message: t('apply:disability-tax-credit.error-message.disability-tax-credit-required') }),
+    errorMap: () => ({ message: t('apply-adult:disability-tax-credit.error-message.disability-tax-credit-required') }),
   });
 
   const formData = await request.formData();
@@ -87,15 +87,15 @@ export async function action({ context: { session }, params, request }: ActionFu
   const parseDateOfBirth = parse(state.adultState.dateOfBirth ?? '', 'yyyy-MM-dd', new Date());
   const age = differenceInYears(new Date(), parseDateOfBirth);
   if (age < 18 || age > 64) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/date-of-birth', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
 
   if (parsedDataResult.data === DisabilityTaxCreditOption.No && state.adultState.allChildrenUnder18) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/apply-children', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/apply-children', params));
   }
 
   if (parsedDataResult.data === DisabilityTaxCreditOption.No) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/dob-eligibility', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/parent-or-guardian', params));
   }
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
@@ -134,9 +134,13 @@ export default function ApplyFlowDisabilityTaxCredit() {
         <Progress aria-labelledby="progress-label" value={35} size="lg" />
       </div>
       <div className="max-w-prose">
-        <p className="mb-5">{t('apply:disability-tax-credit.non-refundable')}</p>
+        <p className="mb-5">{t('apply-adult:disability-tax-credit.non-refundable')}</p>
         <p className="mb-5">
-          <Trans ns={handle.i18nNamespaces} i18nKey="apply:disability-tax-credit.more-info" components={{ dtcLink: <Link to={t('apply:disability-tax-credit.dtc-link')} className="text-slate-700 underline hover:text-blue-700 focus:text-blue-700" /> }} />
+          <Trans
+            ns={handle.i18nNamespaces}
+            i18nKey="apply-adult:disability-tax-credit.more-info"
+            components={{ dtcLink: <Link to={t('apply-adult:disability-tax-credit.dtc-link')} className="text-slate-700 underline hover:text-blue-700 focus:text-blue-700" /> }}
+          />
         </p>
         <p className="mb-6 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
@@ -145,22 +149,22 @@ export default function ApplyFlowDisabilityTaxCredit() {
           <InputRadios
             id="disability-tax-credit-radios"
             name="disabilityTaxCredit"
-            legend={t('apply:disability-tax-credit.form-label')}
+            legend={t('apply-adult:disability-tax-credit.form-label')}
             options={[
-              { value: DisabilityTaxCreditOption.Yes, children: t('apply:disability-tax-credit.radio-options.yes'), defaultChecked: defaultState === DisabilityTaxCreditOption.Yes },
-              { value: DisabilityTaxCreditOption.No, children: t('apply:disability-tax-credit.radio-options.no'), defaultChecked: defaultState === DisabilityTaxCreditOption.No },
+              { value: DisabilityTaxCreditOption.Yes, children: t('apply-adult:disability-tax-credit.radio-options.yes'), defaultChecked: defaultState === DisabilityTaxCreditOption.Yes },
+              { value: DisabilityTaxCreditOption.No, children: t('apply-adult:disability-tax-credit.radio-options.no'), defaultChecked: defaultState === DisabilityTaxCreditOption.No },
             ]}
             errorMessage={errorMessages['input-radio-disability-tax-credit-radios-option-0']}
             required
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Disability tax credit click">
-              {t('apply:disability-tax-credit.continue-btn')}
+              {t('apply-adult:disability-tax-credit.continue-btn')}
               <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
             </Button>
             <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Disability tax credit click">
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('apply:disability-tax-credit.back-btn')}
+              {t('apply-adult:disability-tax-credit.back-btn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

@@ -6,13 +6,13 @@ import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/
 import { CommunicationPreferencesState } from '~/routes/$lang+/_public+/apply+/$id+/adult/communication-preference';
 import { AllChildrenUnder18State, DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/adult/date-of-birth';
 import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/adult/dental-insurance';
+import { DisabilityTaxCreditState } from '~/routes/$lang+/_public+/apply+/$id+/adult/disability-tax-credit';
 import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/adult/federal-provincial-territorial-benefits';
+import { LivingIndependentlyState } from '~/routes/$lang+/_public+/apply+/$id+/adult/living-independently';
 import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult/partner-information';
 import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult/personal-information';
 import { SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/adult/review-information';
 import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/adult/tax-filing';
-import { DisabilityTaxCreditState } from '~/routes/$lang+/_public+/apply+/$id+/disability-tax-credit';
-import { LivingIndependentlyState } from '~/routes/$lang+/_public+/apply+/$id+/living-independently';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
