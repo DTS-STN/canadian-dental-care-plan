@@ -55,6 +55,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
+  const log = getLogger('alerts-subscription.confirm');
+  if (!alertSubscription) {
+    log.warn('Alert Subscription could not be found; responding with 404');
+    throw new Response(null, { status: 404 });
+  }
   session.set('alertSubscription', alertSubscription);
 
   const confirmationCodeEntered = session.get('codeEntered') ?? '';
@@ -170,7 +175,7 @@ export default function ConfirmSubscription() {
             {!newCodeRequested ? (
               <>
                 <p id="confirmation-information" className="mb-4">
-                  <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.confirmation-information-text" values={{ userEmailAddress: alertSubscription?.email }} />
+                  <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.confirmation-information-text" values={{ userEmailAddress: alertSubscription.email }} />
                 </p>
                 <p id="confirmation-completed" className="mb-4">
                   {t('alerts:confirm.confirmation-completed-text')}
@@ -184,8 +189,9 @@ export default function ConfirmSubscription() {
                 </div>
               </>
             ) : (
-              //TODO add content: https://dev.azure.com/DTS-STN/Canada%20Dental%20Care%20Plan/_workitems/edit/3349
-              'Requested'
+              <p>
+                <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.code-sent-by-email" values={{ userEmailAddress: alertSubscription.email }} />
+              </p>
             )}
           </ContextualAlert>
           <InputField id="confirmationCode" className="w-full" label={t('alerts:confirm.confirmation-code-label')} maxLength={100} name="confirmationCode" defaultValue={defaultValues.confirmationCode} />

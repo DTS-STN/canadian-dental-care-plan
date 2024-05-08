@@ -68,6 +68,7 @@
     "confirmation-code-label": "Confimation Code",
     "submit-code": "Submit Confirmation Code",
     "request-new-code": "Request New Confirmation Code",
+    "code-sent-by-email": "You have requested a new confirmation code and will receive an email at <strong>{{userEmailAddress}}</strong> to finish the registration process. This final step which must be completed within the next <strong>48 hours</strong>, will allow you to reveive emails when important new Canadian Dental Care plan information is available in your My Service Canada Account.",
     "back": "Back"
   },
   "expired": {
