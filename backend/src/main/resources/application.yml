@@ -65,4 +65,11 @@ server:
 # Application configuration properties.
 #
 
-application: {} # placeholder for future configuration
+application:
+  swagger-ui:
+    application-name: Canadian Dental Care Plan API
+    contact-name: Digital Technology Solutions
+    contact-url: https://github.com/dts-stn/canadian-dental-care-plan/
+    description: |
+      This OpenAPI document describes the key areas where developers typically engage with this API.
+    tos-url: https://www.canada.ca/en/transparency/terms.html

@@ -8,6 +8,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.event.EventListener;
 
+import ca.gov.dtsstn.cdcp.api.config.properties.ApplicationProperties;
+
 /**
  * @author Greg Baker <gregory.j.baker@hrsdc-rdhcc.gc.ca>
  */
