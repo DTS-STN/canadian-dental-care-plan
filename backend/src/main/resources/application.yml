@@ -1,3 +1,68 @@
+#
+# Spring Boot configuration properties. For a full listing of available properties, see:
+# https://docs.spring.io/spring-boot/docs/3.2.x/reference/html/application-properties.html#appendix.application-properties
+#
+
+---
+
 spring:
   application:
-    name: cdcp-api
+    name: Canadian Dental Care Plan API
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+        max-page-size: 500
+  devtools:
+    livereload:
+      enabled: false
+  main:
+    allow-bean-definition-overriding: true
+
+---
+
+#
+# Actuator configuration properties, see:
+# https://docs.spring.io/spring-boot/docs/3.2.x/reference/html/application-properties.html#appendix.application-properties.actuator
+#
+
+management:
+  endpoint:
+    env:
+      show-values: when-authorized
+    health:
+      probes:
+        enabled: true
+      show-components: always
+      show-details: when-authorized
+
+---
+
+#
+# Server configuration properties, see:
+# https://docs.spring.io/spring-boot/docs/3.2.x/reference/html/application-properties.html#appendix.application-properties.server
+#
+
+server:
+  compression:
+    enabled: true
+    mime-types:
+      - application/hal+json
+      # defaults below...
+      - application/javascript
+      - application/json
+      - application/xml
+      - text/css
+      - text/html
+      - text/javascript
+      - text/plain
+      - text/xml
+  shutdown: graceful
+
+---
+
+#
+# Application configuration properties.
+#
+
+application: {} # placeholder for future configuration

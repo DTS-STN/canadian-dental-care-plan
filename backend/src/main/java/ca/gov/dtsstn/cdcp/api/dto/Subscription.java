@@ -1,31 +1,27 @@
 package ca.gov.dtsstn.cdcp.api.dto;
 
-import java.io.Serializable;
-
-import org.immutables.value.Value;
+import org.immutables.value.Value.Immutable;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import org.springframework.lang.Nullable;
-import org.springframework.validation.annotation.Validated;
-
-@Value.Immutable
+@Immutable
 @JsonSerialize(as = ImmutableSubscription.class)
 @JsonDeserialize(as = ImmutableSubscription.class)
 public interface Subscription {
-    
-    Long getId();
 
-    String getSin();
+	Long getId();
 
-    String getEmail();
+	String getSin();
 
-    Boolean getRegistered();
+	String getEmail();
 
-    Boolean getSubscribed();
+	Boolean getRegistered();
 
-    Long  getPreferredLanguage();
+	Boolean getSubscribed();
 
-    String getAlertType();    
+	Long  getPreferredLanguage();
+
+	String getAlertType();
+
 }

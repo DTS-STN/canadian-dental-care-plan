@@ -21,6 +21,8 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
+
+		<!-- NOTE: when updating Spring Boot, be sure to also update the <spring-boot.version> property below -->
 		<version>3.2.5</version>
 	</parent>
 
@@ -40,6 +42,7 @@
 		<java.version>21</java.version>
 
 		<immutables.version>2.10.1</immutables.version>
+		<spring-boot.version>3.2.5</spring-boot.version>
 	</properties>
 
 
@@ -117,6 +120,11 @@
 							<groupId>org.immutables</groupId>
 							<artifactId>value</artifactId>
 							<version>${immutables.version}</version>
+						</path>
+						<path>
+							<groupId>org.springframework.boot</groupId>
+							<artifactId>spring-boot-configuration-processor</artifactId>
+							<version>${spring-boot.version}</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
