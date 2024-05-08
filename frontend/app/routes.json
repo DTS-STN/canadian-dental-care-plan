@@ -362,6 +362,14 @@
                           "en": "/:lang/apply/:id/adult-child/partner-information",
                           "fr": "/:lang/demander/:id/adulte-enfant/renseignements-partenaire"
                         }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/applicant-information",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/applicant-information.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/applicant-information",
+                          "fr": "/:lang/demander/:id/adulte-enfant/renseignements-demandeur"
+                        }
                       }
                     ]
                   },
