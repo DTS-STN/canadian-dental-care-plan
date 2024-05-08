@@ -15,6 +15,7 @@ import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { Progress } from '~/components/progress';
 import { loadApplyChildState, saveApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
+import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -142,18 +143,17 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   saveApplyChildState({ params, request, session, state: { dateOfBirth: parsedDataResult.data.dateOfBirth } });
 
-  const parseDateOfBirth = parse(parsedDataResult.data.dateOfBirth, 'yyyy-MM-dd', new Date());
-  const age = differenceInYears(new Date(), parseDateOfBirth);
+  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
 
-  if (age < 16) {
+  if (ageCategory === 'children') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/child/parent-or-guardian', params));
   }
 
-  if (age === 16 || age === 17) {
+  if (ageCategory === 'youth') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/child/living-independently', params));
   }
 
-  if (age >= 18 && age < 65) {
+  if (ageCategory === 'adults') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/disability-tax-credit', params));
   }
 

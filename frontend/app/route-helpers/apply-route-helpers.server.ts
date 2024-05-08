@@ -5,6 +5,7 @@ import { differenceInMinutes } from 'date-fns';
 import { z } from 'zod';
 
 import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-application';
+import { getAgeFromDateString } from '~/utils/date-utils';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 
@@ -143,4 +144,19 @@ export function startApplyState({ id, session }: StartArgs) {
   session.set(sessionName, initialState);
 
   return initialState;
+}
+
+export type AgeCategory = 'children' | 'youth' | 'adults' | 'seniors';
+
+export function getAgeCategoryFromDateString(date: string) {
+  const age = getAgeFromDateString(date);
+  return getAgeCategoryFromAge(age);
+}
+
+export function getAgeCategoryFromAge(age: number): AgeCategory {
+  if (age >= 65) return 'seniors';
+  if (age >= 18 && age < 65) return 'adults';
+  if (age >= 16 && age < 18) return 'youth';
+  if (age > 0 && age < 16) return 'children';
+  throw new Error(`Invalid age [${age}]`);
 }

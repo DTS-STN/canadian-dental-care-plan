@@ -17,6 +17,7 @@ import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusT
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState, saveApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -148,23 +149,22 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   saveApplyAdultChildState({ params, request, session, state: { dateOfBirth: parsedDataResult.data.dateOfBirth, allChildrenUnder18: parsedDataResult.data.allChildrenUnder18 } });
 
-  const parseDateOfBirth = parse(parsedDataResult.data.dateOfBirth, 'yyyy-MM-dd', new Date());
-  const age = differenceInYears(new Date(), parseDateOfBirth);
+  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
   const allChildrenUnder18 = parsedDataResult.data.allChildrenUnder18;
 
-  if (age < 16 && allChildrenUnder18 === 'yes') {
+  if (ageCategory === 'children' && allChildrenUnder18 === 'yes') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/parent-or-guardian', params));
   }
 
-  if ((age === 16 || age === 17) && allChildrenUnder18 === 'yes') {
+  if (ageCategory === 'youth' && allChildrenUnder18 === 'yes') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/living-independently', params));
   }
 
-  if (age >= 18 && age < 65) {
+  if (ageCategory === 'adults') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/disability-tax-credit', params));
   }
 
-  if (age >= 65 && allChildrenUnder18 === 'no') {
+  if (ageCategory === 'seniors' && allChildrenUnder18 === 'no') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/apply-yourself', params));
   }
 
