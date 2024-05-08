@@ -64,7 +64,7 @@ export default function Index() {
           </CardLink>
         )}
         {useFeature('view-applications') && (
-          <CardLink title={t('index:view-my-application')} routeId="$lang+/_protected+/home" params={params}>
+          <CardLink title={t('index:view-my-application')} routeId="$lang+/_protected+/applications+/index" params={params}>
             {t('index:view-my-application-desc')}
           </CardLink>
         )}
@@ -79,7 +79,7 @@ export default function Index() {
           </CardLink>
         )}
         {useFeature('email-alerts') && (
-          <CardLink title={t('index:subscribe')} routeId="$lang+/_protected+/alerts+/subscribe+/index" params={params}>
+          <CardLink title={t('index:subscribe')} routeId="$lang+/_protected+/alerts+/index" params={params}>
             {t('index:subscribe-desc')}
           </CardLink>
         )}

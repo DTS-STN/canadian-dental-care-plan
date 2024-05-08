@@ -21,7 +21,9 @@
     "change-preferred-language": "Change preferred language",
     "no-address-on-file": "No address on file",
     "no-preferred-language-on-file": "No preferred language on file",
-    "updated-information-success": "Your information has been updated."
+    "updated-information-success": "Your information has been updated.",
+    "dashboard-text": "Return to dashboard",
+    "dashboard-href": "{{baseUri}}/en/my-dashboard"
   },
   "home-address": {
     "edit": {

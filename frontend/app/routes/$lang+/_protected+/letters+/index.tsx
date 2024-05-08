@@ -12,7 +12,6 @@ import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { InputSelect } from '~/components/input-select';
-import { NewTabIndicator } from '~/components/new-tab-indicator';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
@@ -113,13 +112,21 @@ export default function LettersIndex() {
           <ul className="divide-y border-y">
             {letters.map((letter) => {
               const letterType = letterTypes.find(({ id }) => id === letter.name);
+              const gcAnalyticsCustomClickValue = `ESDC-EDSC:CDCP Letters Click:${letterType?.nameEn ?? letter.name}`;
               const letterName = letterType ? getNameByLanguage(i18n.language, letterType) : letter.name;
 
               return (
                 <li key={letter.id} className="py-4 sm:py-6">
-                  <InlineLink reloadDocument routeId="$lang+/_protected+/letters+/$id.download" params={{ ...params, id: letter.id }} className="external-link font-lato font-semibold" target="_blank">
+                  <InlineLink
+                    reloadDocument
+                    routeId="$lang+/_protected+/letters+/$id.download"
+                    params={{ ...params, id: letter.id }}
+                    className="external-link font-lato font-semibold"
+                    newTabIndicator
+                    target="_blank"
+                    data-gc-analytics-customclick={gcAnalyticsCustomClickValue}
+                  >
                     {letterName}
-                    <NewTabIndicator />
                   </InlineLink>
                   <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: letter.issuedOn })}</p>
                 </li>

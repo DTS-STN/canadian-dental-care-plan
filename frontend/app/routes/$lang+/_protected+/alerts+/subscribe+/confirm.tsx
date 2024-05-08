@@ -1,20 +1,28 @@
+import { useEffect, useMemo } from 'react';
+
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
+import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
+import { getSubscriptionService } from '~/services/subscription-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
+import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';
 
@@ -44,50 +52,143 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:confirm.page-title') }) };
 
   instrumentationService.countHttpStatus('alerts.confirm', 302);
-  return json({ csrfToken, meta }); //TODO get the language and email address entered by the user when they entered their information on the index route...
+
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
+  session.set('alertSubscription', alertSubscription);
+
+  const confirmationCodeEntered = session.get('codeEntered') ?? '';
+
+  return json({ csrfToken, meta, alertSubscription, userInfoToken, confirmationCodeEntered }); //TODO get the language and email address entered by the user when they entered their information on the index route...
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const action = formData.get('action');
-  if (action === ConfirmSubscriptionCode.NewCode) {
-    //TODO implement the code to request a new code and link that new code to the clients profile
+  const log = getLogger('subscribe/confirm');
+  const alertSubscription = session.get('alertSubscription');
+  if (!alertSubscription.email) {
+    log.warn('alert subscription email not found, throwing 400');
+    throw new Response('alert subscription email not found', { status: 400 });
   }
-  if (action === ConfirmSubscriptionCode.Submit) {
-    //TODO Validate the entered code and complete the user's registration to the alert me service if the code is correct
+  const formData = await request.formData();
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const action = formData.get('action');
+  const instrumentationService = getInstrumentationService();
+
+  const formDataSchema = z.object({
+    confirmationCode: z.string().trim().max(100).optional(),
+  });
+  const newCodeRequestedSchema = z.boolean().optional();
+  const data = {
+    confirmationCode: formData.get('confirmationCode') ? String(formData.get('confirmationCode')) : undefined,
+  };
+  const parsedNewCodeRequested = newCodeRequestedSchema.safeParse(false);
+  const parsedDataResult = formDataSchema.safeParse(data);
+  if (!parsedDataResult.success) {
+    instrumentationService.countHttpStatus('alerts.confirm', 400);
+    return json({
+      errors: parsedDataResult.error.format(),
+      formData: formData as Partial<z.infer<typeof formDataSchema>>,
+      newCodeRequested: parsedNewCodeRequested.data,
+    });
   }
 
-  return '';
+  if (action === ConfirmSubscriptionCode.NewCode) {
+    const newCodeResponse = await getSubscriptionService().requestNewConfirmationCode(alertSubscription.email, userInfoToken.sub);
+    if (newCodeResponse.status !== 204) {
+      // TODO: handle request error.
+      return json({
+        errors: {
+          confirmationCode: {
+            _errors: [''],
+          },
+        },
+        newCodeRequested: parsedNewCodeRequested.data,
+      });
+    }
+    const parsedNewCodeRequestedSuccess = newCodeRequestedSchema.safeParse(true);
+    return json({
+      errors: {
+        confirmationCode: {
+          _errors: [''],
+        },
+      },
+      newCodeRequested: parsedNewCodeRequestedSuccess.data,
+    });
+  }
+  if (action === ConfirmSubscriptionCode.Submit) {
+    session.set('codeEntered', parsedDataResult.data.confirmationCode);
+    const response = await getSubscriptionService().validateConfirmationCode(alertSubscription?.email ?? '', parsedDataResult.data.confirmationCode ?? '', userInfoToken.sub);
+    const jsonReponseStatus = await response.json();
+
+    if (jsonReponseStatus.confirmCodeStatus === 'valid') {
+      //TODO Complete logic
+    }
+    if (jsonReponseStatus.confirmCodeStatus === 'expired') {
+      return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/expired', params));
+    }
+    if (jsonReponseStatus.confirmCodeStatus === 'mismatch') {
+      //TODO Complete logic
+    }
+  }
+
+  return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/confirm', params));
 }
 
 export default function ConfirmSubscription() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken } = useLoaderData<typeof loader>();
+  const { csrfToken, confirmationCodeEntered, alertSubscription } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const userOrigin = useUserOrigin();
+  const errorSummaryId = 'error-summary';
+  const newCodeRequested = fetcher.data?.newCodeRequested ?? false;
+
   //TODO insert the selected language and email address of the client...
+  const errorMessages = useMemo(
+    () => ({
+      confirmationCode: fetcher.data?.errors.confirmationCode?._errors[0],
+    }),
+    [fetcher.data?.errors.confirmationCode?._errors],
+  );
+
+  const errorSummaryItems = createErrorSummaryItems(errorMessages);
+  const defaultValues = {
+    confirmationCode: confirmationCodeEntered,
+  };
+  useEffect(() => {
+    if (hasErrors(errorMessages)) {
+      scrollAndFocusToErrorSummary(errorSummaryId);
+    }
+  }, [errorMessages]);
   return (
     <>
+      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <fetcher.Form className="max-w-prose" method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mb-8 space-y-6">
           <ContextualAlert type="info">
-            <p id="confirmation-information" className="mb-4">
-              {t('alerts:confirm.confirmation-information-text')}
-            </p>
-            <p id="confirmation-completed" className="mb-4">
-              {t('alerts:confirm.confirmation-completed-text')}
-            </p>
-            <div className="grid gap-12 md:grid-cols-2">
-              <p id="confirmation-language" className="mb-4 font-bold">
-                {t('alerts:confirm.confirmation-selected-language')}
-              </p>
+            {!newCodeRequested ? (
+              <>
+                <p id="confirmation-information" className="mb-4">
+                  <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.confirmation-information-text" values={{ userEmailAddress: alertSubscription?.email }} />
+                </p>
+                <p id="confirmation-completed" className="mb-4">
+                  {t('alerts:confirm.confirmation-completed-text')}
+                </p>
+                <div className="grid gap-12 md:grid-cols-2">
+                  <p id="confirmation-language" className="mb-4 font-bold">
+                    {t('alerts:confirm.confirmation-selected-language')}
+                  </p>
 
-              <p>{t('alerts:confirm.no-preferred-language-on-file')}</p>
-            </div>
+                  <p>{t('alerts:confirm.no-preferred-language-on-file')}</p>
+                </div>
+              </>
+            ) : (
+              //TODO add content: https://dev.azure.com/DTS-STN/Canada%20Dental%20Care%20Plan/_workitems/edit/3349
+              'Requested'
+            )}
           </ContextualAlert>
-          <InputField id="confirmationCode" className="w-full" label={t('alerts:confirm.confirmation-code-label')} maxLength={100} name="confirmationCode" required />
+          <InputField id="confirmationCode" className="w-full" label={t('alerts:confirm.confirmation-code-label')} maxLength={100} name="confirmationCode" defaultValue={defaultValues.confirmationCode} />
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="back-button" to={userOrigin?.to} params={params}>

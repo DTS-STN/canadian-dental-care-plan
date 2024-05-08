@@ -33,13 +33,6 @@ configMapGenerator:
     files:
       - ./configs/redis/replica.conf
       - ./configs/redis/sentinel.conf
-  #
-  # TODO :: GjB :: remove this during golive May 01
-  #
-  - name: oauth-proxy
-    behavior: create
-    files:
-      - ./configs/oauth-proxy/config.conf
 secretGenerator:
   - name: frontend
     behavior: replace
@@ -49,10 +42,3 @@ secretGenerator:
     behavior: replace
     envs:
       - ./configs/redis/secrets.conf
-  #
-  # TODO :: GjB :: remove this during golive May 01
-  #
-  - name: oauth-proxy
-    behavior: create
-    envs:
-      - ./configs/oauth-proxy/secrets.conf

@@ -1,8 +1,15 @@
 /**
  * Useful utility functions for crypto stuff.
  */
+import { Buffer, atob } from 'node:buffer';
 import { createHash, subtle } from 'node:crypto';
 import type { webcrypto } from 'node:crypto';
+
+import { getLogger } from './logging.server';
+
+const log = getLogger('crypto-utils.server');
+
+export type CryptoKeyAlgorithm = 'encrypt' | 'decrypt' | 'sign' | 'verify';
 
 /**
  * Generate a JWK ID from the modulus of the JWK.
@@ -14,21 +21,43 @@ export function generateJwkId(jwk: webcrypto.JsonWebKey) {
 }
 
 /**
- * Takes a PEM-encoded private key as input and returns a CryptoKey object
- * that can be used to sign data.
+ * Converts a PEM encoded string to a webcrypto CryptoKey.
  */
-export async function privateKeyPemToCryptoKey(pem: string) {
-  const keyData = Buffer.from(atob(pem), 'latin1');
-  const algorithm = { name: 'RSA-PSS', hash: 'SHA-256' };
-  return subtle.importKey('pkcs8', keyData, algorithm, true, ['sign']);
-}
+export async function generateCryptoKey(pem: string, algorithm: CryptoKeyAlgorithm) {
+  log.debug('Converting PEM to [%s] CryptoKey', algorithm);
+  log.trace('PEM value: [%s]', pem);
 
-/**
- * Takes a PEM-encoded public key as input and returns a CryptoKey object
- * that can be used to verify data.
- */
-export async function publicKeyPemToCryptoKey(pem: string) {
-  const keyData = Buffer.from(atob(pem), 'latin1');
-  const algorithm = { name: 'RSA-OAEP', hash: 'SHA-256' };
-  return subtle.importKey('spki', keyData, algorithm, true, ['encrypt', 'wrapKey']);
+  switch (algorithm) {
+    case 'encrypt': {
+      const keyData = Buffer.from(atob(pem), 'ascii');
+      const algorithm: webcrypto.RsaHashedImportParams = { name: 'RSA-OAEP', hash: 'SHA-256' } as const;
+      const keyUsages: Array<webcrypto.KeyUsage> = ['encrypt', 'wrapKey'] as const;
+
+      return await subtle.importKey('spki', keyData, algorithm, true, keyUsages);
+    }
+
+    case 'decrypt': {
+      const keyData = Buffer.from(atob(pem), 'ascii');
+      const algorithm: webcrypto.RsaHashedImportParams = { name: 'RSA-OAEP', hash: 'SHA-256' } as const;
+      const keyUsages: Array<webcrypto.KeyUsage> = ['decrypt', 'unwrapKey'] as const;
+
+      return await subtle.importKey('pkcs8', keyData, algorithm, true, keyUsages);
+    }
+
+    case 'sign': {
+      const keyData = Buffer.from(atob(pem), 'ascii');
+      const algorithm: webcrypto.RsaHashedImportParams = { name: 'RSA-PSS', hash: 'SHA-256' } as const;
+      const keyUsages: Array<webcrypto.KeyUsage> = ['sign'] as const;
+
+      return await subtle.importKey('pkcs8', keyData, algorithm, true, keyUsages);
+    }
+
+    case 'verify': {
+      const keyData = Buffer.from(atob(pem), 'ascii');
+      const algorithm: webcrypto.RsaHashedImportParams = { name: 'RSA-PSS', hash: 'SHA-256' } as const;
+      const keyUsages: Array<webcrypto.KeyUsage> = ['verify'] as const;
+
+      return await subtle.importKey('spki', keyData, algorithm, true, keyUsages);
+    }
+  }
 }

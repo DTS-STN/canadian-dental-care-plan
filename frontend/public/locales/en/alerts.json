@@ -19,18 +19,70 @@
       "preferred-language-required": "Select preferred language of communication"
     }
   },
+  "manage": {
+    "page-title": "Manage CDCP email alerts",
+    "breadcrumbs": {
+      "subscribe": "Manage CDCP email alerts"
+    },
+    "email": "Email address",
+    "confirm-email": "Confirm email address",
+    "preferred-language": "What is your preferred official language of communication?",
+    "unsubscribe": "Unsubscribe from CDCP email alert",
+    "unsubscribe-note": "Select <unsubscribelink>Unsubscribe from CDCP email alerts</unsubscribelink> to complete the process to no longer receive emails when important new CDCP claim information is available.",
+    "button": {
+      "back": "Back",
+      "save": "Save my changes"
+    },
+    "error-message": {
+      "email-match": "The email addresses entered do not match",
+      "email-required": "Enter email address",
+      "confirm-email-required": "Confirm email address ",
+      "email-valid": "Enter an email address in the correct format, such as name@example.com",
+      "preferred-language-required": "Select preferred language of communication"
+    }
+  },
+  "unsubscribe": {
+    "page-title": "Unsubscribe from CDCP email alerts",
+    "breadcrumbs": {
+      "subscribe": "Unsubscribe from CDCP email alerts"
+    },
+    "note": "If you unsubscribe from CDCP email alerts, you will no longer receive emails when important new CDCP information is available. Email address to be cancelled is: ",
+    "agree": "I Agree",
+    "button": {
+      "unsubscribe": "Unsubscribe from CDCP email alerts",
+      "cancel": "Cancel"
+    },
+    "error-message": {
+      "agree-required": "Check \"I Agree\" piror to select Unsubscribe from CDCP email alerts."
+    }
+  },
   "confirm": {
     "page-title": "Submission Confirmation",
     "breadcrumbs": {
       "subscribe": "Confirm to subscribe to CDCP email alerts"
     },
     "no-preferred-language-on-file": "No preferred language on file",
-    "confirmation-information-text": "A confirmation code, required to finish the registration process, will be sent to ||TODO insert email Address when feature completed||. This step must be completed within the next 48 hours or by immediately entering the confirmation code below.",
+    "confirmation-information-text": "A confirmation code, required to finish the registration process, will be sent to <strong>{{userEmailAddress}}</strong>. This step must be completed within the next 48 hours or by immediately entering the confirmation code below.",
     "confirmation-completed-text": "Upon completion, you will begin to receive email alerts when important information for your Canada Dental Care Plan application is available.",
     "confirmation-selected-language": "Selected language preference:",
     "confirmation-code-label": "Confimation Code",
     "submit-code": "Submit Confirmation Code",
     "request-new-code": "Request New Confirmation Code",
     "back": "Back"
+  },
+  "expired": {
+    "page-title": "Confirmation Code Expired",
+    "breadcrumbs": {
+      "subscribe": "Confirm to subscribe to CDCP email alerts"
+    },
+    "confirm-code-expired": "The confirmation code sent to you has expired. Select the \"Request New Confirmation Code\" button below to have a new confirmation code sent to you at <strong>{{userEmailAddress}}</strong>.",
+    "request-new-code": "Request New Confirmation Code",
+    "back": "Back"
+  },
+  "success": {
+    "page-title": "Unscubscribe Confirmation",
+    "unsubscribe-successful": "You have successfully unsubscribed from Canada Dental Care Plan. You will no longer receive emails when important new Canada Dental Care Plan information is available in your My Service Canada Account.",
+    "subscribe-again": "You may subscribe again to Canada Dental Care Plan alerts by <subscribelink>completing the subscription process</subscribelink>.",
+    "return-home": "Return <homeLink>Home</homeLink>"
   }
 }

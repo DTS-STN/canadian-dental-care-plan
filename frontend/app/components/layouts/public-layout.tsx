@@ -25,17 +25,15 @@ export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
  * see: https://wet-boew.github.io/GCWeb/templates/application/application-docs-en.html
  */
 export function PublicLayout({ children }: PropsWithChildren) {
-  const { t } = useTranslation(i18nNamespaces);
+  const { t } = useTranslation(useI18nNamespaces());
+  const pageTitleI18nKey = usePageTitleI18nKey();
   return (
     <>
       <PageHeader />
       <PageBreadcrumbs />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
-        <div className="my-8 border-b border-red-800">
-          <h2 className="font-lato text-lg text-stone-500 sm:text-xl">{t('gcweb:header.application-title')}</h2>
-          <AppPageTitle />
-        </div>
-        <div>{children}</div>
+        {pageTitleI18nKey && <AppPageTitle>{t(pageTitleI18nKey)}</AppPageTitle>}
+        {children}
         <PageDetails />
       </main>
       <PageFooter />
@@ -43,10 +41,14 @@ export function PublicLayout({ children }: PropsWithChildren) {
   );
 }
 
-function AppPageTitle() {
-  const { t } = useTranslation(useI18nNamespaces());
-  const pageTitleI18nKey = usePageTitleI18nKey();
-  return pageTitleI18nKey && <PageTitle>{t(pageTitleI18nKey)}</PageTitle>;
+export function AppPageTitle({ children }: PropsWithChildren) {
+  const { t } = useTranslation(i18nNamespaces);
+  return (
+    <div className="my-8 border-b border-red-800">
+      <h2 className="font-lato text-lg text-stone-500 sm:text-xl">{t('gcweb:header.application-title')}</h2>
+      <PageTitle>{children}</PageTitle>
+    </div>
+  );
 }
 
 function PageHeader() {
@@ -198,6 +200,10 @@ export interface ServerErrorProps {
 export function ServerError({ error }: ServerErrorProps) {
   const { t } = useTranslation(i18nNamespaces);
   const home = <InlineLink to="/" />;
+
+  useEffect(() => {
+    document.title = t('gcweb:meta.title.template', { title: t('gcweb:server-error.document-title') });
+  }, [t]);
 
   useEffect(() => {
     if (adobeAnalytics.isConfigured()) {

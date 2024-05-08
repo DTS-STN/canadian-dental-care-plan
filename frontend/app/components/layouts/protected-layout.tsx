@@ -31,15 +31,15 @@ export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
  * see: https://wet-boew.github.io/GCWeb/templates/application/application-docs-en.html
  */
 export function ProtectedLayout({ children }: PropsWithChildren) {
+  const { t } = useTranslation(useI18nNamespaces());
+  const pageTitleI18nKey = usePageTitleI18nKey();
   return (
     <>
       <PageHeader />
       <PageBreadcrumbs />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
-        <div className="my-8 border-b border-red-800">
-          <AppPageTitle />
-        </div>
-        <div>{children}</div>
+        {pageTitleI18nKey && <AppPageTitle>{t(pageTitleI18nKey)}</AppPageTitle>}
+        {children}
         <PageDetails />
       </main>
       <PageFooter />
@@ -47,10 +47,12 @@ export function ProtectedLayout({ children }: PropsWithChildren) {
   );
 }
 
-function AppPageTitle() {
-  const { t } = useTranslation(useI18nNamespaces());
-  const pageTitleI18nKey = usePageTitleI18nKey();
-  return pageTitleI18nKey && <PageTitle className="mb-2 mt-6">{t(pageTitleI18nKey)}</PageTitle>;
+export function AppPageTitle({ children }: PropsWithChildren) {
+  return (
+    <div className="my-8 border-b border-red-800">
+      <PageTitle>{children}</PageTitle>
+    </div>
+  );
 }
 
 function NavigationMenu() {
@@ -189,6 +191,10 @@ export interface ServerErrorProps {
 export function ServerError({ error }: ServerErrorProps) {
   const { t } = useTranslation(i18nNamespaces);
   const home = <InlineLink to="/" />;
+
+  useEffect(() => {
+    document.title = t('gcweb:meta.title.template', { title: t('gcweb:server-error.document-title') });
+  }, [t]);
 
   useEffect(() => {
     if (adobeAnalytics.isConfigured()) {

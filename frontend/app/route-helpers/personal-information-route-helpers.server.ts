@@ -27,7 +27,7 @@ async function getPersonalInformation(userInfoToken: UserinfoToken, params: Para
   }
 
   const personalInformationFromSession: PersonalInfo | undefined = session.get('personalInformation');
-  if (personalInformationFromSession) {
+  if (personalInformationFromSession && !session.get('personal-info-updated')) {
     log.debug('Returning personal information that already exists in session for userId [%s]', userInfoToken.sub);
     return personalInformationFromSession;
   }

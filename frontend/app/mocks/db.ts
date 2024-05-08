@@ -5,28 +5,7 @@ import { factory, primaryKey } from '@mswjs/data';
 // random values of model properties.
 faker.seed(123);
 
-const phoneFormat = '([0-9]{3}) [0-9]{3}-[0-9]{4}';
-
 const db = factory({
-  user: {
-    id: primaryKey(faker.string.uuid),
-    firstName: faker.person.firstName,
-    lastName: faker.person.lastName,
-    phoneNumber: () => faker.helpers.fromRegExp(phoneFormat),
-    homeAddress: () => 'home-address-id',
-    mailingAddress: () => 'mailing-address-id',
-    preferredLanguage: () => faker.helpers.arrayElement(['en', 'fr']),
-  },
-  // address field names are based off of Power Platform API elements
-  address: {
-    id: primaryKey(String),
-    addressApartmentUnitNumber: faker.location.buildingNumber,
-    addressStreet: faker.location.street,
-    addressCity: faker.location.city,
-    addressProvince: String,
-    addressPostalZipCode: faker.location.zipCode,
-    addressCountry: String,
-  },
   personalInformation: {
     homeAddressStreet: String,
     homeAddressSecondaryUnitText: String,
@@ -54,15 +33,27 @@ const db = factory({
     maritialStatus: String,
     dentalApplicationID: String,
     preferredMethodCommunicationCode: String,
+    federalDentalPlanId: String,
+    provincialTerritorialDentalPlanId: String,
+    privateDentalPlanId: String,
     sinIdentification: primaryKey(String),
   },
   subscription: {
     id: primaryKey(faker.string.uuid),
     sin: String,
     email: String,
+    registered: Boolean,
     subscribed: Boolean,
     preferredLanguage: String,
     alertType: String,
+  },
+
+  subscriptionConfirmationCode: {
+    id: primaryKey(faker.string.uuid),
+    email: String,
+    confirmationCode: String,
+    createdDate: () => faker.date.future({ years: 1 }),
+    expiryDate: () => faker.date.future({ years: 1 }),
   },
 });
 
@@ -88,9 +79,12 @@ db.personalInformation.create({
   lastName: 'Eliot',
   firstName: 'Thomas Stearns',
   emailAddressId: 'rhapsody@domain.ca',
-  primaryTelephoneNumber: '222-555-5555',
+  primaryTelephoneNumber: '807-555-5555',
   alternateTelephoneNumber: '416-555-6666',
   preferredMethodCommunicationCode: '1033',
+  federalDentalPlanId: 'e174250d-26c5-ee11-9079-000d3a09d640',
+  provincialTerritorialDentalPlanId: 'b5f25fea-a7a9-ee11-a569-000d3af4f898',
+  privateDentalPlanId: '333333',
   sinIdentification: '800011819',
 });
 
@@ -119,47 +113,60 @@ db.personalInformation.create({
   primaryTelephoneNumber: '555-555-5555',
   alternateTelephoneNumber: '789-555-6666',
   preferredMethodCommunicationCode: '775170002',
+  federalDentalPlanId: '5a5c5294-26c5-ee11-9079-000d3a09d640',
+  provincialTerritorialDentalPlanId: '39449f70-37b3-eb11-8236-0022486d8d5f',
+  privateDentalPlanId: '1111111',
   sinIdentification: '800000002',
 });
 
 // seed the email alerts subscription
 db.subscription.create({
-  id: '0000001',
-  sin: '800000002',
+  id: '10001',
+  sin: '800011819',
   email: 'user@example.com',
+  registered: true,
   subscribed: true,
   preferredLanguage: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
   alertType: 'cdcp',
 });
 
 db.subscription.create({
-  id: '0000002',
+  id: '10003',
   sin: '800000002',
   email: 'tester@example.com',
-  subscribed: true,
+  registered: false,
+  subscribed: false,
   preferredLanguage: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
-  alertType: 'ei',
+  alertType: 'cdcp',
+});
+db.subscriptionConfirmationCode.create({
+  id: '0000001',
+  email: 'user@example.com',
+  confirmationCode: '0001',
+  createdDate: new Date(new Date().getTime() - 12 * 24 * 60 * 60 * 1000), // current date  date - 12 days
+  expiryDate: new Date(new Date().getTime() - 10 * 24 * 60 * 60 * 1000), // current date  date - 10 days
+});
+db.subscriptionConfirmationCode.create({
+  id: '0000002',
+  email: 'user@example.com',
+  confirmationCode: '1234',
+  createdDate: new Date(new Date().getTime() - 4 * 24 * 60 * 60 * 1000),
+  expiryDate: new Date(new Date().getTime() - 2 * 24 * 60 * 60 * 1000), // current date date + 2 days
+});
+db.subscriptionConfirmationCode.create({
+  id: '0000003',
+  email: 'user@example.com',
+  confirmationCode: '1001',
+  createdDate: new Date(new Date().getTime() - 8 * 24 * 60 * 60 * 1000), // current date date - 8 days
+  expiryDate: new Date(new Date().getTime() - 6 * 24 * 60 * 60 * 1000), // current date date - 6 days
 });
 
-// seed avaliable addresses (before user)
-db.address.create({
-  id: 'home-address-id',
-  addressProvince: 'daf4d05b-37b3-eb11-8236-0022486d8d5f', // "Ontario", @see /power-platform-data/regions.json
-  addressCountry: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', // "Canada", @see /power-platform-data/countries.json
-});
-
-db.address.create({
-  id: 'mailing-address-id',
-  addressProvince: '5abc28c9-38b3-eb11-8236-0022486d8d5f', // "Newfoundland and Labrador", @see /power-platform-data/regions.json
-  addressCountry: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', // "Canada", @see /power-platform-data/countries.json
-});
-
-// seed users
-db.user.create({
-  id: '00000000-0000-0000-0000-000000000000',
-  firstName: 'John',
-  lastName: 'Maverick',
-  preferredLanguage: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
+db.subscriptionConfirmationCode.create({
+  id: '0000007',
+  email: 'tester@example.com',
+  confirmationCode: '2002',
+  createdDate: new Date(new Date().getTime() - 4 * 24 * 60 * 60 * 1000), // current date date - 4 days
+  expiryDate: new Date(new Date().getTime() - 2 * 24 * 60 * 60 * 1000), // current date date - 2 days
 });
 
 export { db };

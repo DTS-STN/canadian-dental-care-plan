@@ -6,7 +6,7 @@ import { useLoaderData, useNavigate, useParams } from '@remix-run/react';
 import { randomUUID } from 'crypto';
 
 import pageIds from '../../page-ids.json';
-import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { startApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -24,12 +24,11 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
-  const applyRouteHelpers = getApplyRouteHelpers();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
   const id = randomUUID().toString();
-  const state = await applyRouteHelpers.start({ id, session });
+  const state = startApplyState({ id, session });
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply:index.page-title') }) };
 

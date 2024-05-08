@@ -15,7 +15,7 @@ export const getApplicationStatusService = moize(createApplicationStatusService,
 
 function createApplicationStatusService() {
   // prettier-ignore
-  const { 
+  const {
     INTEROP_API_BASE_URI,
     INTEROP_API_SUBSCRIPTION_KEY,
     INTEROP_STATUS_CHECK_API_BASE_URI,
@@ -34,6 +34,8 @@ function createApplicationStatusService() {
    * @returns the status id of a dental application given the sin and application code
    */
   async function getStatusId({ sin, applicationCode, firstName, lastName, dateOfBirth }: GetStatusIdArgs) {
+    log.debug('Fetching status id of dental application for application code [%s]', applicationCode);
+    log.trace('Fetching status id of dental application for sin [%s], application code [%s], first name [%s], lastname [%s], date of birth [%s]', sin, applicationCode, firstName, lastName, dateOfBirth);
     const instrumentationService = getInstrumentationService();
 
     getAuditService().audit('application-status.post', { userId: 'anonymous' });
@@ -91,7 +93,10 @@ function createApplicationStatusService() {
       }),
     });
 
-    const statusResponse = statusResponseSchema.parse(await response.json());
+    const data = await response.json();
+    log.trace('Status id: [%j]', data);
+
+    const statusResponse = statusResponseSchema.parse(data);
     return statusResponse.BenefitApplication.BenefitApplicationStatus[0].ReferenceDataID;
   }
 

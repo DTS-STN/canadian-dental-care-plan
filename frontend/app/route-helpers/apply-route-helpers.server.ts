@@ -4,19 +4,8 @@ import { Params } from '@remix-run/react';
 import { differenceInMinutes } from 'date-fns';
 import { z } from 'zod';
 
-import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/applicant-information';
-import { CommunicationPreferencesState } from '~/routes/$lang+/_public+/apply+/$id+/communication-preference';
-import { AllChildrenUnder18State, DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/date-of-birth';
-import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/dental-insurance';
-import { DisabilityTaxCreditState } from '~/routes/$lang+/_public+/apply+/$id+/disability-tax-credit';
-import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits';
-import { LivingIndependentlyState } from '~/routes/$lang+/_public+/apply+/$id+/living-independently';
-import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/partner-information';
-import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/personal-information';
-import { SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/review-information';
-import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/tax-filing';
 import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-application';
-import { getEnv } from '~/utils/env.server';
+import { getAgeFromDateString } from '~/utils/date-utils';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 
@@ -28,22 +17,12 @@ const log = getLogger('apply-route-helpers.server');
 const idSchema = z.string().uuid();
 
 export interface ApplyState {
+  readonly adultChildState?: unknown;
+  readonly adultState?: unknown;
+  readonly childState?: unknown;
   readonly id: string;
-  readonly applicantInformation?: ApplicantInformationState;
-  readonly communicationPreferences?: CommunicationPreferencesState;
-  readonly dateOfBirth?: DateOfBirthState;
-  readonly dentalBenefits?: DentalBenefitsState;
-  readonly dentalInsurance?: DentalInsuranceState;
-  readonly partnerInformation?: PartnerInformationState;
-  readonly personalInformation?: PersonalInformationState;
-  readonly submissionInfo?: SubmissionInfoState;
-  readonly taxFiling2023?: TaxFilingState;
-  readonly typeOfApplication?: TypeOfApplicationState;
-  readonly editMode: boolean;
   readonly lastUpdatedOn: string;
-  readonly disabilityTaxCredit?: DisabilityTaxCreditState;
-  readonly livingIndependently?: LivingIndependentlyState;
-  readonly allChildrenUnder18?: AllChildrenUnder18State;
+  readonly typeOfApplication?: TypeOfApplicationState;
 }
 
 /**
@@ -57,7 +36,6 @@ function getSessionName(id: string) {
 
 interface LoadStateArgs {
   params: Params;
-  request: Request;
   session: Session;
 }
 
@@ -66,8 +44,7 @@ interface LoadStateArgs {
  * @param args - The arguments.
  * @returns The loaded state.
  */
-async function loadState({ params, request, session }: LoadStateArgs) {
-  const { pathname } = new URL(request.url);
+export function loadApplyState({ params, session }: LoadStateArgs) {
   const parsedId = idSchema.safeParse(params.id);
 
   if (!parsedId.success) {
@@ -95,40 +72,23 @@ async function loadState({ params, request, session }: LoadStateArgs) {
     throw redirect(getPathById('$lang+/_public+/apply+/index', params));
   }
 
-  // Redirect to the confirmation page if the application has been submitted and
-  // the current route is not the confirmation page.
-  const confirmationRouteUrl = getPathById('$lang+/_public+/apply+/$id+/confirmation', params);
-  if (state.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
-    log.warn('Redirecting user to "%s" since the application has been submitted; sessionName: [%s], ', sessionName, confirmationRouteUrl);
-    throw redirect(confirmationRouteUrl);
-  }
-
-  // Redirect to the first flow page if the application has not been submitted and
-  // the current route is the confirmation page.
-  const termsAndConditionsRouteUrl = getPathById('$lang+/_public+/apply+/$id+/terms-and-conditions', params);
-  if (!state.submissionInfo && pathname.endsWith(confirmationRouteUrl)) {
-    log.warn('Redirecting user to "%s" since the application has not been submitted; sessionName: [%s], ', sessionName, termsAndConditionsRouteUrl);
-    throw redirect(termsAndConditionsRouteUrl);
-  }
-
   return state;
 }
 
 interface SaveStateArgs {
   params: Params;
-  request: Request;
   session: Session;
   state: Partial<Omit<ApplyState, 'id' | 'lastUpdatedOn'>>;
   remove?: keyof Omit<ApplyState, 'id' | 'lastUpdatedOn'>;
 }
 
 /**
- * Saves state.
+ * Saves apply state.
  * @param args - The arguments.
- * @returns The Set-Cookie header to be used in the HTTP response.
+ * @returns The new apply state.
  */
-async function saveState({ params, request, session, state, remove = undefined }: SaveStateArgs) {
-  const currentState = await loadState({ params, request, session });
+export function saveApplyState({ params, session, state, remove = undefined }: SaveStateArgs) {
+  const currentState = loadApplyState({ params, session });
 
   const newState: ApplyState = {
     ...currentState,
@@ -148,17 +108,15 @@ async function saveState({ params, request, session, state, remove = undefined }
 
 interface ClearStateArgs {
   params: Params;
-  request: Request;
   session: Session;
 }
 
 /**
- * Clears state.
+ * Clears apply state.
  * @param args - The arguments.
- * @returns The Set-Cookie header to be used in the HTTP response.
  */
-async function clearState({ params, request, session }: ClearStateArgs) {
-  const { id } = await loadState({ params, request, session });
+export function clearApplyState({ params, session }: ClearStateArgs) {
+  const { id } = loadApplyState({ params, session });
 
   const sessionName = getSessionName(id);
   session.unset(sessionName);
@@ -170,16 +128,15 @@ interface StartArgs {
 }
 
 /**
- * Starts apply flow.
+ * Starts apply state.
  * @param args - The arguments.
- * @returns The Set-Cookie header to be used in the HTTP response.
+ * @returns The initial apply state.
  */
-async function start({ id, session }: StartArgs) {
+export function startApplyState({ id, session }: StartArgs) {
   const parsedId = idSchema.parse(id);
 
   const initialState: ApplyState = {
     id: parsedId,
-    editMode: false,
     lastUpdatedOn: new Date().toISOString(),
   };
 
@@ -189,86 +146,17 @@ async function start({ id, session }: StartArgs) {
   return initialState;
 }
 
-interface ValidateStateForReviewArgs {
-  params: Params;
-  state: ApplyState;
+export type AgeCategory = 'children' | 'youth' | 'adults' | 'seniors';
+
+export function getAgeCategoryFromDateString(date: string) {
+  const age = getAgeFromDateString(date);
+  return getAgeCategoryFromAge(age);
 }
 
-interface HasPartnerArgs {
-  maritalStatus: string;
-}
-
-function hasPartner({ maritalStatus }: HasPartnerArgs) {
-  const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
-  return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
-}
-
-interface ValidateStateForReviewArgs {
-  params: Params;
-  state: ApplyState;
-}
-
-function validateStateForReview({ params, state }: ValidateStateForReviewArgs) {
-  if (state.typeOfApplication === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/type-application', params));
-  }
-
-  if (state.typeOfApplication === 'delegate') {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/application-delegate', params));
-  }
-
-  if (state.taxFiling2023 === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/tax-filing', params));
-  }
-
-  if (state.taxFiling2023 === 'no') {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/file-taxes', params));
-  }
-
-  if (state.dateOfBirth === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/date-of-birth', params));
-  }
-
-  if (state.applicantInformation === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/applicant-information', params));
-  }
-
-  if (state.partnerInformation === undefined && hasPartner(state.applicantInformation)) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/partner-information', params));
-  }
-
-  if (state.partnerInformation !== undefined && !hasPartner(state.applicantInformation)) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/applicant-information', params));
-  }
-
-  if (state.personalInformation === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/personal-information', params));
-  }
-
-  if (state.communicationPreferences === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/communication-preference', params));
-  }
-
-  if (state.dentalInsurance === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/dental-insurance', params));
-  }
-
-  if (state.dentalBenefits === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/federal-provincial-territorial-benefits', params));
-  }
-}
-
-/**
- * Returns functions related to the apply routes.
- * @returns Functions related to the apply routes.
- */
-export function getApplyRouteHelpers() {
-  return {
-    clearState,
-    hasPartner,
-    loadState,
-    saveState,
-    start,
-    validateStateForReview,
-  };
+export function getAgeCategoryFromAge(age: number): AgeCategory {
+  if (age >= 65) return 'seniors';
+  if (age >= 18 && age < 65) return 'adults';
+  if (age >= 16 && age < 18) return 'youth';
+  if (age > 0 && age < 16) return 'children';
+  throw new Error(`Invalid age [${age}]`);
 }

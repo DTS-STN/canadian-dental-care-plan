@@ -2,7 +2,7 @@ import { DiagLogLevel } from '@opentelemetry/api';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
-import { privateKeyPemToCryptoKey, publicKeyPemToCryptoKey } from './crypto-utils.server';
+import { generateCryptoKey } from './crypto-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('env.server');
@@ -19,17 +19,31 @@ function tryOrElseFalse(fn: () => unknown) {
   catch { return false; }
 }
 
-const validMockNames = ['cct', 'lookup', 'power-platform', 'raoidc', 'status-check', 'wsaddress', 'subscription'] as const;
+const validMockNames = ['cct', 'lookup', 'power-platform', 'raoidc', 'status-check', 'wsaddress', 'subscription', 'application-history'] as const;
 export type MockName = (typeof validMockNames)[number];
 
-const validFeatureNames = ['doc-upload', 'email-alerts', 'hcaptcha', 'view-personal-info', 'view-applications', 'view-letters', 'view-messages', 'edit-personal-info', 'status', 'authenticated-status-check', 'show-prototype-banner'] as const;
+const validFeatureNames = [
+  'doc-upload',
+  'email-alerts',
+  'hcaptcha',
+  'view-personal-info',
+  'view-applications',
+  'view-letters',
+  'view-messages',
+  'edit-personal-info',
+  'status',
+  'show-prototype-banner',
+  'authenticated-status-check',
+  'update-governmental-benefit',
+  'power-platform-status-checker',
+] as const;
 export type FeatureName = (typeof validFeatureNames)[number];
 
 // refiners
 const areValidFeatureNames = (arr: Array<string>) => arr.every((featureName) => validFeatureNames.includes(featureName as FeatureName));
 const areValidMockNames = (arr: Array<string>) => arr.every((mockName) => validMockNames.includes(mockName as MockName));
-const isValidPublicKey = (val: string) => tryOrElseFalse(() => publicKeyPemToCryptoKey(val));
-const isValidPrivateKey = (val: string) => tryOrElseFalse(() => privateKeyPemToCryptoKey(val));
+const isValidPublicKey = (val: string) => tryOrElseFalse(() => generateCryptoKey(val, 'verify'));
+const isValidPrivateKey = (val: string) => tryOrElseFalse(() => generateCryptoKey(val, 'sign'));
 
 // transformers
 const csvToArray = (csv?: string) => csv?.split(',').map((str) => str.trim()) ?? [];

@@ -15,7 +15,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'data-unavailable:page-title' }],
+  breadcrumbs: [{ labelI18nKey: 'data-unavailable:breadcrumbs.cdcp' }],
   i18nNamespaces: getTypedI18nNamespaces('data-unavailable', 'gcweb'),
   pageIdentifier: pageIds.protected.dataUnavailable,
   pageTitleI18nKey: 'data-unavailable:page-title',
@@ -40,28 +40,28 @@ export default function DataUnavailable() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const userOrigin = useUserOrigin();
 
-  const doyouqualify = <InlineLink to={t('do-you-qualify.href')} />;
-  const howtoapply = <InlineLink to={t('how-to-apply.href')} />;
-  const contactus = <InlineLink to={t('contact-us.href')} />;
-  const statuschecker = <InlineLink to={t('status-checker.href')} />;
+  const doyouqualify = <InlineLink to={t('data-unavailable:do-you-qualify.href')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const howtoapply = <InlineLink to={t('data-unavailable:how-to-apply.href')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const contactus = <InlineLink to={t('data-unavailable:contact-us.href')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const statuschecker = <InlineLink to={t('data-unavailable:status-checker.href')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
 
   return (
     <>
-      <p className="mb-6">
-        <Trans ns={handle.i18nNamespaces} i18nKey="service-eligible" components={{ doyouqualify }} />
-        <Trans ns={handle.i18nNamespaces} i18nKey="more-information" components={{ howtoapply }} />
-      </p>
-      <p className="mb-6">
-        <Trans ns={handle.i18nNamespaces} i18nKey="other-enquiry" components={{ contactus }} />
-      </p>
-      <p className="mb-6">
-        <Trans ns={handle.i18nNamespaces} i18nKey="service-delay" components={{ statuschecker }} />
-      </p>
-
+      <div className="space-y-4">
+        <p>
+          <Trans ns={handle.i18nNamespaces} i18nKey="data-unavailable:service-eligible" components={{ doyouqualify, howtoapply }} />
+        </p>
+        <p>
+          <Trans ns={handle.i18nNamespaces} i18nKey="data-unavailable:other-enquiry" components={{ contactus }} />
+        </p>
+        <p>
+          <Trans ns={handle.i18nNamespaces} i18nKey="data-unavailable:service-delay" components={{ statuschecker }} />
+        </p>
+      </div>
       {userOrigin && (
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="mt-6 flex flex-wrap items-center gap-3">
           <ButtonLink id="back-button" to={userOrigin.to}>
-            {t('back-button')}
+            {t('data-unavailable:back-button')}
           </ButtonLink>
         </div>
       )}

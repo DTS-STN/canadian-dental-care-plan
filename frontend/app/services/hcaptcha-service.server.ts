@@ -22,6 +22,8 @@ function createHCaptchaService() {
    * @see https://docs.hcaptcha.com/#verify-the-user-response-server-side
    */
   async function verifyHCaptchaResponse(hCaptchaResponse: string, ipAddress: string | null) {
+    log.debug('Verifying hCaptcha response token');
+    log.trace('hCaptcha response token: [%s]; IP address: [%s]', hCaptchaResponse, ipAddress);
     const instrumentationService = getInstrumentationService();
 
     getAuditService().audit('hcaptcha.verify', { userId: 'anonymous' });
@@ -34,9 +36,9 @@ function createHCaptchaService() {
     }
 
     const response = await fetch(url, { method: 'POST' });
+    instrumentationService.countHttpStatus('http.client.hcaptcha.posts', response.status);
 
     if (!response.ok) {
-      instrumentationService.countHttpStatus('http.client.hcaptcha.posts', response.status);
       log.error('%j', {
         message: 'Failed to verify hCaptcha',
         status: response.status,
@@ -54,16 +56,15 @@ function createHCaptchaService() {
     });
 
     const json = await response.json();
-    const verifyResult = verifyResultSchema.parse(json);
 
+    const verifyResult = verifyResultSchema.parse(json);
     if (verifyResult.success) {
-      instrumentationService.countHttpStatus('http.client.hcaptcha.posts.success', 200);
-      log.info(`hCaptcha verification successful: [${JSON.stringify(json)}]`);
+      log.trace('hCaptcha verification successful with site verify response: [%j]', json);
     } else {
-      instrumentationService.countHttpStatus('http.client.hcaptcha.posts.failed', 200);
-      log.warn(`hCaptcha verification failed: [${JSON.stringify(json)}]`);
+      log.warn('hCaptcha verification unsuccessful with site verify response: [%j]', json);
     }
 
+    log.trace('Returning hCaptcha verify result: [%s]', verifyResult);
     return verifyResult;
   }
 

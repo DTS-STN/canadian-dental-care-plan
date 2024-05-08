@@ -56,6 +56,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  featureEnabled('status');
   const log = getLogger('status/index');
   const { CLIENT_STATUS_SUCCESS_ID, ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
@@ -222,10 +223,10 @@ export default function StatusChecker() {
     fetcher.submit(formData, { method: 'POST' });
   }
 
-  const hcaptchaTermsOfService = <InlineLink to={t('status:links.hcaptcha')} />;
-  const microsoftDataPrivacyPolicy = <InlineLink to={t('status:links.microsoft-data-privacy-policy')} />;
-  const microsoftServiceAgreement = <InlineLink to={t('status:links.microsoft-service-agreement')} />;
-  const fileacomplaint = <InlineLink to={t('status:links.file-complaint')} />;
+  const hcaptchaTermsOfService = <InlineLink to={t('status:links.hcaptcha')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const microsoftDataPrivacyPolicy = <InlineLink to={t('status:links.microsoft-data-privacy-policy')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const microsoftServiceAgreement = <InlineLink to={t('status:links.microsoft-service-agreement')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const fileacomplaint = <InlineLink to={t('status:links.file-complaint')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
 
   const errorSummaryId = 'error-summary';
 
@@ -330,7 +331,7 @@ export default function StatusChecker() {
           <div className="space-y-6">
             <InputField id="code" name="code" label={t('status:form.application-code-label')} helpMessagePrimary={t('status:form.application-code-description')} required errorMessage={errorMessages.code} />
             <InputField id="sin" name="sin" label={t('status:form.sin-label')} required errorMessage={errorMessages.sin} />
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid items-end gap-6 md:grid-cols-2">
               <InputField id="first-name" name="firstName" label={t('status:form.first-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errorMessages['first-name']} />
               <InputField id="last-name" name="lastName" label={t('status:form.last-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errorMessages['last-name']} />
             </div>

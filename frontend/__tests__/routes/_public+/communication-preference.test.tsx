@@ -2,18 +2,17 @@ import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/communication-preference';
+import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/adult/communication-preference';
 
-vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
-  getApplyRouteHelpers: vi.fn().mockReturnValue({
-    loadState: vi.fn().mockReturnValue({
-      id: '123',
-    }),
-    saveState: vi.fn().mockReturnValue({
-      headers: {
-        'Set-Cookie': 'some-set-cookie-header',
-      },
-    }),
+vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
+  loadApplyAdultState: vi.fn().mockReturnValue({
+    id: '123',
+    adultState: {},
+  }),
+  saveApplyAdultState: vi.fn().mockReturnValue({
+    headers: {
+      'Set-Cookie': 'some-set-cookie-header',
+    },
   }),
 }));
 

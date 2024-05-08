@@ -9,7 +9,7 @@ import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { InlineLink } from '~/components/inline-link';
-import { getApplyRouteHelpers } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -29,8 +29,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, request, params }: LoaderFunctionArgs) {
-  const applyRouteHelpers = getApplyRouteHelpers();
-  await applyRouteHelpers.loadState({ params, request, session });
+  await loadApplyState({ params, session });
   const csrfToken = String(session.get('csrfToken'));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -41,7 +40,6 @@ export async function loader({ context: { session }, request, params }: LoaderFu
 
 export async function action({ context: { session }, request, params }: ActionFunctionArgs) {
   const log = getLogger('apply/terms-and-conditions');
-  const applyRouteHelpers = getApplyRouteHelpers();
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -52,7 +50,8 @@ export async function action({ context: { session }, request, params }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  await applyRouteHelpers.saveState({ params, request, session, state: {} });
+  saveApplyState({ params, session, state: {} });
+
   return redirect(getPathById('$lang+/_public+/apply+/$id+/type-application', params));
 }
 
@@ -62,11 +61,12 @@ export default function ApplyIndex() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const canadaTermsConditions = <InlineLink to={t('apply:terms-and-conditions.links.canada-ca-terms-and-conditions')} />;
-  const fileacomplaint = <InlineLink to={t('apply:terms-and-conditions.links.file-complaint')} />;
-  const hcaptchaTermsOfService = <InlineLink to={t('apply:terms-and-conditions.links.hcaptcha')} />;
-  const infosource = <InlineLink to={t('apply:terms-and-conditions.links.info-source')} />;
-  const microsoftDataPrivacyPolicy = <InlineLink to={t('apply:terms-and-conditions.links.microsoft-data-privacy-policy')} />;
+  const canadaTermsConditions = <InlineLink to={t('apply:terms-and-conditions.links.canada-ca-terms-and-conditions')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const fileacomplaint = <InlineLink to={t('apply:terms-and-conditions.links.file-complaint')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const hcaptchaTermsOfService = <InlineLink to={t('apply:terms-and-conditions.links.hcaptcha')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const infosource = <InlineLink to={t('apply:terms-and-conditions.links.info-source')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const microsoftDataPrivacyPolicy = <InlineLink to={t('apply:terms-and-conditions.links.microsoft-data-privacy-policy')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const sunlife = <InlineLink to={t('apply:terms-and-conditions.links.sun-life')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose">
@@ -129,6 +129,9 @@ export default function ApplyIndex() {
             <h2 className="font-bold"> {t('apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.heading')}</h2>
             <p>{t('apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.esdc-personal-information-sharing')}</p>
             <p>{t('apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.benefits-administration-data-disclosure')}</p>
+            <p>
+              <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.sun-life-authorization" components={{ sunlife }} />
+            </p>
             <p>{t('apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.esdc-information-usage-policy')}</p>
 
             <h2 className="font-bold">{t('apply:terms-and-conditions.privacy-notice-statement.what-happens-if-you-dont-give-us-your-information.heading')} </h2>
