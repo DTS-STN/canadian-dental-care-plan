@@ -332,6 +332,14 @@
                         }
                       },
                       {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/personal-information",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/personal-information.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/personal-information",
+                          "fr": "/:lang/demander/:id/adulte-enfant/renseignements-personnels"
+                        }
+                      },
+                      {
                         "id": "$lang+/_public+/apply+/$id+/adult-child/child-summary",
                         "file": "routes/$lang+/_public+/apply+/$id+/adult-child/child-summary.tsx",
                         "paths": {
