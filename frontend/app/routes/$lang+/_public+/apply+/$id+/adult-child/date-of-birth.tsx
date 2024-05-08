@@ -153,7 +153,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const allChildrenUnder18 = parsedDataResult.data.allChildrenUnder18;
 
   if (ageCategory === 'children' && allChildrenUnder18 === 'yes') {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/parent-or-guardian', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/contact-apply-child', params));
   }
 
   if (ageCategory === 'youth' && allChildrenUnder18 === 'yes') {
