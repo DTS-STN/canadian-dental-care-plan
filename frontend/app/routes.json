@@ -378,6 +378,14 @@
                           "en": "/:lang/apply/:id/adult-child/applicant-information",
                           "fr": "/:lang/demander/:id/adulte-enfant/renseignements-demandeur"
                         }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/contact-apply-child",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/contact-apply-child.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/contact-apply-child",
+                          "fr": "/:lang/demander/:id/adulte-enfant/contact-demande-enfant"
+                        }
                       }
                     ]
                   },
@@ -513,14 +521,6 @@
                     "paths": {
                       "en": "/:lang/apply/:id/application-delegate",
                       "fr": "/:lang/demander/:id/delegue-demande"
-                    }
-                  },
-                  {
-                    "id": "$lang+/_public+/apply+/$id+/contact-apply-child",
-                    "file": "routes/$lang+/_public+/apply+/$id+/contact-apply-child.tsx",
-                    "paths": {
-                      "en": "/:lang/apply/:id/contact-apply-child",
-                      "fr": "/:lang/appliquer/:id/contact-demande-enfant"
                     }
                   }
                 ]
