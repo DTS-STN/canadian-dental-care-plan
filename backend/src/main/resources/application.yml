@@ -18,6 +18,27 @@ spring:
       enabled: false
   main:
     allow-bean-definition-overriding: true
+  datasource:
+    url: # must set externally
+    hikari: # see https://github.com/brettwooldridge/HikariCP#frequently-used
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      maximum-pool-size: 10
+      minimum-idle: 10
+  flyway: # see org.springframework.boot.autoconfigure.flyway.FlwayProperties
+    sql-migration-prefix: v
+    sql-migration-separator: '-'
+    locations: classpath:db-migrations/common, classpath:db-migrations/{vendor}
+  jackson:
+    default-property-inclusion: non-null
+    mapper:
+      default-view-inclusion: true
+    serialization:
+      indent-output: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
 
 ---
 
