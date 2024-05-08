@@ -1,18 +1,4 @@
 {
-  "child-summary": {
-    "page-title": "(FR) Summary of child(ren)",
-    "children-added": "(FR) The following child(ren) has been added to the application.",
-    "dob-title": "(FR) Date of birth",
-    "dob-change": "(FR) Change date of birth",
-    "sin-title": "(FR) Social Insurance Number (SIN)",
-    "sin-change": "(FR) Change SIN",
-    "add-child": "(FR) Add another child",
-    "no-children": "(FR) There are currently no child in this application.",
-    "remove-child": "(FR) Back",
-    "continue-btn": "(FR) Continue with application",
-    "cancel-btn": "(FR) Cancel",
-    "save-btn": "(FR) Save"
-  },
   "applicant-information": {
     "page-title": "Renseignements sur le demandeur",
     "form-instructions-sin": "Veuillez indiquer votre nom légal tel qu'indiqué sur votre carte ou votre lettre de numéro d'assurance sociale (NAS).",
@@ -36,6 +22,20 @@
       "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
     }
+  },
+  "child-summary": {
+    "page-title": "(FR) Summary of child(ren)",
+    "children-added": "(FR) The following child(ren) has been added to the application.",
+    "dob-title": "(FR) Date of birth",
+    "dob-change": "(FR) Change date of birth",
+    "sin-title": "(FR) Social Insurance Number (SIN)",
+    "sin-change": "(FR) Change SIN",
+    "add-child": "(FR) Add another child",
+    "no-children": "(FR) There are currently no child in this application.",
+    "remove-child": "(FR) Back",
+    "continue-btn": "(FR) Continue with application",
+    "cancel-btn": "(FR) Cancel",
+    "save-btn": "(FR) Save"
   },
   "communication-preference": {
     "page-title": "Communication",
