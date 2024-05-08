@@ -4,4 +4,24 @@
 
 logging:
   level:
-    "[ca.gov.dtsstn.cdcp.api]": trace
+    '[ca.gov.dtsstn.cdcp.api]': trace
+
+spring:
+  datasource:
+    generate-unique-name: false
+    url: jdbc:h2:mem:test;COLLATION=ENGLISH STRENGTH PRIMARY;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;MODE=PostgreSQL
+  jpa:
+    database-platform: org.hibernate.dialet.H2Dialet
+    open-in-view: false
+    properties:
+      '[hibernate.batch_versioned_data]': true
+      '[hibernate.jdbc.batch_size]': 100
+      '[hibernate.order_inserts]': true
+      '[hibernate.order_updates]': true
+  flyway:
+    enabled: true    
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
