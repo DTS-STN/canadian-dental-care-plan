@@ -4,8 +4,11 @@ import { differenceInYears, isPast, isValid, parse } from 'date-fns';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/adult/date-of-birth';
+import { getAgeFromDateString, parseDateString } from '~/utils/date-utils';
 
 vi.mock('date-fns');
+
+vi.mock('~/utils/date-utils');
 
 vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
   loadApplyAdultState: vi.fn().mockReturnValue({
@@ -94,6 +97,8 @@ describe('_public.apply.id.date-of-birth', () => {
       vi.mocked(isPast).mockReturnValueOnce(true);
       vi.mocked(parse).mockReturnValueOnce(new Date(1959, 0, 1));
       vi.mocked(differenceInYears).mockReturnValueOnce(65).mockReturnValueOnce(65);
+      vi.mocked(parseDateString).mockReturnValue({ year: '1959', month: '01', day: '01' });
+      vi.mocked(getAgeFromDateString).mockReturnValueOnce(65);
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth', { method: 'POST', body: formData }),
@@ -119,6 +124,8 @@ describe('_public.apply.id.date-of-birth', () => {
       vi.mocked(isPast).mockReturnValueOnce(true);
       vi.mocked(parse).mockReturnValueOnce(new Date(2000, 0, 1));
       vi.mocked(differenceInYears).mockReturnValueOnce(64).mockReturnValueOnce(64);
+      vi.mocked(parseDateString).mockReturnValue({ year: '2000', month: '01', day: '01' });
+      vi.mocked(getAgeFromDateString).mockReturnValueOnce(24);
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth', { method: 'POST', body: formData }),

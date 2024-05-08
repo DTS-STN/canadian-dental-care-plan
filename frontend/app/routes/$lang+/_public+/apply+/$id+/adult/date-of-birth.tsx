@@ -16,7 +16,7 @@ import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusT
 import { Progress } from '~/components/progress';
 import { loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
-import { parseDateString } from '~/utils/date-utils';
+import { getAgeFromDateString, parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -26,11 +26,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
 export type DateOfBirthState = string;
-enum AllChildrenUnder18Option {
-  No = 'no',
-  Yes = 'yes',
-}
-export type AllChildrenUnder18State = `${AllChildrenUnder18Option}`;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
@@ -49,8 +44,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:eligibility.date-of-birth.page-title') }) };
 
-  const { dateOfBirth, allChildrenUnder18 } = state.adultState;
-  return json({ id: state.id, csrfToken, meta, defaultState: { dateOfBirth, allChildrenUnder18 }, editMode: state.adultState.editMode });
+  const { dateOfBirth } = state.adultState;
+  return json({ id: state.id, csrfToken, meta, defaultState: { dateOfBirth }, editMode: state.adultState.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -142,23 +137,22 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   saveApplyAdultState({ params, request, session, state: { dateOfBirth: parsedDataResult.data.dateOfBirth } });
 
-  const parseDateOfBirth = parse(parsedDataResult.data.dateOfBirth, 'yyyy-MM-dd', new Date());
-  const age = differenceInYears(new Date(), parseDateOfBirth);
-
-  if (age < 16) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/parent-or-guardian', params));
+  if (state.adultState.editMode) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
   }
 
-  if (age === 16 || age === 17) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/living-independently', params));
-  }
+  const age = getAgeFromDateString(parsedDataResult.data.dateOfBirth);
 
-  if (age >= 18 && age < 65) {
+  if (age >= 18 && age <= 64) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/disability-tax-credit', params));
   }
 
-  if (state.adultState.editMode) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
+  if (age >= 16 && age <= 17) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/living-independently', params));
+  }
+
+  if (age < 16) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/parent-or-guardian', params));
   }
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));

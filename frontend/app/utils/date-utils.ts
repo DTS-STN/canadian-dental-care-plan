@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
-import { isExists } from 'date-fns';
+import { differenceInYears, isExists, isPast, isValid, parse } from 'date-fns';
+import invariant from 'tiny-invariant';
 
 import { padWithZero } from './string-utils';
 
@@ -59,4 +60,11 @@ export function useMonths(locale: string, format: 'numeric' | '2-digit' | 'long'
 // TODO: add unit tests
 export function toLocaleDateString(date: Date, locale: string) {
   return date.toLocaleDateString(`${locale}-CA`, { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+export function getAgeFromDateString(dateOfBirth: string) {
+  const parseDateOfBirth = parse(dateOfBirth, 'yyyy-MM-dd', new Date());
+  invariant(isValid(parseDateOfBirth), `date of birth is invalid [${dateOfBirth}]`);
+  invariant(isPast(parseDateOfBirth), `date of birth must be in past [${dateOfBirth}]`);
+  return differenceInYears(new Date(), parseDateOfBirth);
 }
