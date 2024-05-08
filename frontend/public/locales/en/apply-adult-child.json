@@ -268,6 +268,27 @@
       "sin-unique": "The Social Insurance Number (SIN) must be unique"
     }
   },
+  "communication-preference": {
+    "page-title": "Communication",
+    "note": "If you're eligible, we will share your information with Sun Life Assurance Company of Canada (Sun Life). Sun Life will be responsible for handling member enrolment and administering claims processing and benefits for the Canadian Dental Care Plan.",
+    "preferred-method": "What is your preferred method of communication for Sun Life?",
+    "preferred-language": "What is your preferred official language of communication?",
+    "email": "Email address",
+    "email-note": "Service Canada and Health Canada may use this email for future communication about the Canadian Dental Care Plan.",
+    "confirm-email": "Confirm email address",
+    "back": "Back",
+    "continue": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
+    "error-message": {
+      "email-match": "The email addresses entered do not match",
+      "confirm-email-required": "Confirm email address",
+      "email-required": "Enter email address",
+      "email-valid": "Enter an email address in the correct format, such as name@example.com",
+      "preferred-language-required": "Select preferred language of communication",
+      "preferred-method-required": "Select preferred method of communication"
+    }
+  },
   "contact-information": {
     "page-title": "Contact information",
     "form-instructions": "Adding a phone number helps Service Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
