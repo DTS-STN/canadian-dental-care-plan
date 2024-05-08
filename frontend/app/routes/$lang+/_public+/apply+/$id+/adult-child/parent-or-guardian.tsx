@@ -5,13 +5,13 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { differenceInYears, parse } from 'date-fns';
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { clearApplyState, getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -36,13 +36,14 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:parent-or-guardian.page-title') }) };
 
-  const parseDateOfBirth = parse(state.adultChildState.dateOfBirth ?? '', 'yyyy-MM-dd', new Date());
-  const age = differenceInYears(new Date(), parseDateOfBirth);
-  if (age > 16) {
+  invariant(state.adultChildState.dateOfBirth, 'Expected state.adultChildState.dateOfBirth to be defined');
+  const ageCategory = getAgeCategoryFromDateString(state.adultChildState.dateOfBirth);
+
+  if (ageCategory !== 'children') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.adultChildState.disabilityTaxCredit });
+  return json({ id: state.id, csrfToken, meta });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {

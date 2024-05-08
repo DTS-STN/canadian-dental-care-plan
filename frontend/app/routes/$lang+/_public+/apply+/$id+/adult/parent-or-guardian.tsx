@@ -11,8 +11,7 @@ import invariant from 'tiny-invariant';
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
-import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
-import { getAgeFromDateString } from '~/utils/date-utils';
+import { clearApplyState, getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -38,13 +37,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:parent-or-guardian.page-title') }) };
 
   invariant(state.adultState.dateOfBirth, 'Expected state.adultState.dateOfBirth to be defined');
-  const age = getAgeFromDateString(state.adultState.dateOfBirth);
+  const ageCategory = getAgeCategoryFromDateString(state.adultState.dateOfBirth);
 
-  if (age > 17) {
+  if (ageCategory !== 'children' && ageCategory !== 'youth') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.adultState.disabilityTaxCredit, age });
+  return json({ ageCategory, csrfToken, defaultState: state.adultState.disabilityTaxCredit, id: state.id, meta });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -67,13 +66,13 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowParentOrGuardian() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, age } = useLoaderData<typeof loader>();
+  const { ageCategory, csrfToken } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
   function getBackButtonRouteId() {
-    if (age >= 16 && age <= 17) {
+    if (ageCategory === 'youth') {
       return '$lang+/_public+/apply+/$id+/adult/living-independently';
     }
 

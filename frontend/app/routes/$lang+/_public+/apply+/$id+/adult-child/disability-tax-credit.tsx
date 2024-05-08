@@ -5,8 +5,8 @@ import { Link, useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { differenceInYears, parse } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
@@ -15,6 +15,7 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState, saveApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -47,9 +48,10 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:disability-tax-credit.page-title') }) };
 
-  const parseDateOfBirth = parse(state.adultChildState.dateOfBirth ?? '', 'yyyy-MM-dd', new Date());
-  const age = differenceInYears(new Date(), parseDateOfBirth);
-  if (age < 18 || age > 64) {
+  invariant(state.adultChildState.dateOfBirth, 'Expected state.adultChildState.dateOfBirth to be defined');
+  const ageCategory = getAgeCategoryFromDateString(state.adultChildState.dateOfBirth);
+
+  if (ageCategory !== 'adults') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/date-of-birth', params));
   }
 
@@ -84,9 +86,10 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   saveApplyAdultChildState({ params, request, session, state: { disabilityTaxCredit: parsedDataResult.data } });
 
-  const parseDateOfBirth = parse(state.adultChildState.dateOfBirth ?? '', 'yyyy-MM-dd', new Date());
-  const age = differenceInYears(new Date(), parseDateOfBirth);
-  if (age < 18 || age > 64) {
+  invariant(state.adultChildState.dateOfBirth, 'Expected state.adultChildState.dateOfBirth to be defined');
+  const ageCategory = getAgeCategoryFromDateString(state.adultChildState.dateOfBirth);
+
+  if (ageCategory !== 'adults') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/date-of-birth', params));
   }
 

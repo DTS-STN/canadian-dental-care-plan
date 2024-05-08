@@ -15,7 +15,7 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
-import { getAgeFromDateString } from '~/utils/date-utils';
+import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -49,9 +49,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:disability-tax-credit.page-title') }) };
 
   invariant(state.adultState.dateOfBirth, 'Expected state.adultState.dateOfBirth to be defined');
-  const age = getAgeFromDateString(state.adultState.dateOfBirth);
+  const ageCategory = getAgeCategoryFromDateString(state.adultState.dateOfBirth);
 
-  if (age < 18 || age > 64) {
+  if (ageCategory !== 'adults') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
 
@@ -87,9 +87,9 @@ export async function action({ context: { session }, params, request }: ActionFu
   saveApplyAdultState({ params, request, session, state: { disabilityTaxCredit: parsedDataResult.data } });
 
   invariant(state.adultState.dateOfBirth, 'Expected state.adultState.dateOfBirth to be defined');
-  const age = getAgeFromDateString(state.adultState.dateOfBirth);
+  const ageCategory = getAgeCategoryFromDateString(state.adultState.dateOfBirth);
 
-  if (age < 18 || age > 64) {
+  if (ageCategory !== 'adults') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
 

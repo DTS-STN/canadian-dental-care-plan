@@ -62,9 +62,9 @@ export function toLocaleDateString(date: Date, locale: string) {
   return date.toLocaleDateString(`${locale}-CA`, { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-export function getAgeFromDateString(dateOfBirth: string) {
-  const parseDateOfBirth = parse(dateOfBirth, 'yyyy-MM-dd', new Date());
-  invariant(isValid(parseDateOfBirth), `date of birth is invalid [${dateOfBirth}]`);
-  invariant(isPast(parseDateOfBirth), `date of birth must be in past [${dateOfBirth}]`);
-  return differenceInYears(new Date(), parseDateOfBirth);
+export function getAgeFromDateString(date: string) {
+  const parsedDate = parse(date, 'yyyy-MM-dd', new Date());
+  invariant(isValid(parsedDate), `date is invalid [${date}]`);
+  invariant(isPast(parsedDate), `date must be in past [${date}]`);
+  return differenceInYears(new Date(), parsedDate);
 }

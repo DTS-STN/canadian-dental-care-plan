@@ -17,10 +17,9 @@ import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { applicantInformationStateHasPartner, loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
-import '~/route-helpers/apply-route-helpers.server';
+import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
-import { getAgeFromDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -63,9 +62,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:applicant-information.page-title') }) };
 
   invariant(state.adultState.dateOfBirth, 'Expected state.adultState.dateOfBirth to be defined');
-  const age = getAgeFromDateString(state.adultState.dateOfBirth);
+  const ageCategory = getAgeCategoryFromDateString(state.adultState.dateOfBirth);
 
-  return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.adultState.applicantInformation, editMode: state.adultState.editMode, age });
+  return json({ ageCategory, csrfToken, defaultState: state.adultState.applicantInformation, editMode: state.adultState.editMode, id: state.id, maritalStatuses, meta });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -152,18 +151,18 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowApplicationInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, maritalStatuses, editMode, age } = useLoaderData<typeof loader>();
+  const { ageCategory, csrfToken, defaultState, editMode, maritalStatuses } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
 
   function getBackButtonRouteId() {
-    if (age >= 18 && age <= 64) {
+    if (ageCategory === 'adults') {
       return '$lang+/_public+/apply+/$id+/adult/disability-tax-credit';
     }
 
-    if (age >= 16 && age <= 17) {
+    if (ageCategory === 'youth') {
       return '$lang+/_public+/apply+/$id+/adult/living-independently';
     }
 
