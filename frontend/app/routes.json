@@ -300,6 +300,14 @@
                         }
                       },
                       {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/communication-preference",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/communication-preference.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/communication-preference",
+                          "fr": "/:lang/demander/:id/adulte-enfant/preference-communication"
+                        }
+                      },
+                      {
                         "id": "$lang+/_public+/apply+/$id+/adult-child/apply-yourself",
                         "file": "routes/$lang+/_public+/apply+/$id+/adult-child/apply-yourself.tsx",
                         "paths": {
