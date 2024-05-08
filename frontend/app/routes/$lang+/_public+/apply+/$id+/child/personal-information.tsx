@@ -127,7 +127,6 @@ export async function action({ context: { session }, params, request }: ActionFu
       homePostalCode: z.string().trim().max(100).optional(),
     })
     .superRefine((val, ctx) => {
-      console.log(val);
       if (val.email) {
         if (typeof val.email !== 'string' || validator.isEmpty(val.email)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:contact-information.error-message.email-required'), path: ['email'] });
