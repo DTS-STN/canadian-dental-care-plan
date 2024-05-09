@@ -201,6 +201,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
           <InputField
             id="email"
             type="email"
+            inputMode="email"
             className="w-full"
             label={t('apply-adult-child:communication-preference.email')}
             maxLength={100}
@@ -213,6 +214,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
           <InputField
             id="confirm-email"
             type="email"
+            inputMode="email"
             className="w-full"
             label={t('apply-adult-child:communication-preference.confirm-email')}
             maxLength={100}
