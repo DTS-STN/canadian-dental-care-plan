@@ -17,6 +17,8 @@
   "subscribe-desc": "In this section, you can subscribe to the email alerts for CDCP, Any time you have a new message, you will be alerted.",
   "status-check": "Status Check",
   "status-check-desc": "Status Check description",
+  "dependent-status-check": "Dependent Status Check",
+  "dependent-status-check-desc": "Dependent Status Check description",
   "label-in-progress": {
     "sr-only": "State:",
     "text": "In progress"
