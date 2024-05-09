@@ -19,7 +19,8 @@ spring:
   main:
     allow-bean-definition-overriding: true
   datasource:
-    url: # must set externally
+    generate-unique-name: false
+    url: jdbc:h2:mem:test;COLLATION=ENGLISH STRENGTH PRIMARY;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;MODE=PostgreSQL
     hikari: # see https://github.com/brettwooldridge/HikariCP#frequently-used
       connection-timeout: 30000
       idle-timeout: 600000
@@ -39,6 +40,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+    open-in-view: false
+    properties:
+      '[hibernate.batch_versioned_data]': true
+      '[hibernate.jdbc.batch_size]': 100
+      '[hibernate.order_inserts]': true
+      '[hibernate.order_updates]': true
 
 ---
 
