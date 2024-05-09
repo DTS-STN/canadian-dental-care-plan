@@ -10,7 +10,7 @@ public interface SubscriptionModel {
 
 	String getId();
 
-	String getSin();
+	String getUserId();
 
 	String getEmail();
 
