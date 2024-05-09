@@ -2,47 +2,6 @@ package ca.gov.dtsstn.cdcp.api.web.v1.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import ca.gov.dtsstn.cdcp.api.web.v1.model.ImmutableSubscription;
-import ca.gov.dtsstn.cdcp.api.web.v1.model.Subscription;
-
-@RestController
-@RequestMapping({ "/api/v1" })
-public class SubscriptionController {
-
-	@GetMapping({ "/users/{userId}/subscriptions" })
-	public List<Subscription> getSubscriptions(@PathVariable String userId) {
-		return List.of(
-			ImmutableSubscription.builder()
-				.id(10001L)
-				.sin("800011819")
-				.email("user@example.com")
-				.registered(true)
-				.subscribed(true)
-				.preferredLanguage(1033L)
-				.alertType("cdcp")
-				.build(),
-			ImmutableSubscription.builder()
-				.id(10002L)
-				.sin("800011819")
-				.email("user@example.com")
-				.registered(true)
-				.subscribed(false)
-				.preferredLanguage(1033L)
-				.alertType("ei")
-				.build()
-		);
-	}
-
-}
-package ca.gov.dtsstn.cdcp.api.web.v1.controller;
-
-import java.util.List;
-
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
