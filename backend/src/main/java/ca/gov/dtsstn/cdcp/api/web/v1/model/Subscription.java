@@ -1,4 +1,4 @@
-package ca.gov.dtsstn.cdcp.api.dto;
+package ca.gov.dtsstn.cdcp.api.web.v1.model;
 
 import org.immutables.value.Value.Immutable;
 

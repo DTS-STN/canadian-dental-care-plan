@@ -6,9 +6,6 @@ import org.springframework.validation.annotation.Validated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-/**
- * @author Greg Baker <gregory.j.baker@hrsdc-rdhcc.gc.ca>
- */
 @Validated
 public class SwaggerUiProperties {
 
