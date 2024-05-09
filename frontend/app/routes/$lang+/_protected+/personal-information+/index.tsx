@@ -4,6 +4,7 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData, useParams } from '@remix-run/react';
 
+import { parse } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../page-ids.json';
@@ -16,9 +17,10 @@ import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-inf
 import { getAuditService } from '~/services/audit-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
+import { isValidDate, toLocaleDateString } from '~/utils/date-utils';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -42,6 +44,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
+  const locale = await getLocale(request);
 
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('page-view.personal-information', { userId: idToken.sub });
@@ -52,18 +55,22 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const countryList = await getLookupService().getAllCountries();
   const regionList = await getLookupService().getAllRegions();
   const preferredLanguage = personalInformation.preferredLanguageId ? await getLookupService().getPreferredLanguage(personalInformation.preferredLanguageId) : undefined;
-
+  const maritalStatusList = await getLookupService().getAllMaritalStatuses();
+  const dateString = personalInformation.birthDate ? new Date(personalInformation.birthDate).toLocaleDateString() : undefined;
+  const birthParsedFormat = dateString && isValidDate(dateString, 'mm/dd/yyyy', '/') ? toLocaleDateString(await parse(dateString, 'dd/mm/yyyy', new Date()), locale) : undefined;
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };
   const updatedInfo = session.get('personal-info-updated');
   session.unset('personal-info-updated');
-  return json({ preferredLanguage, countryList, personalInformation, meta, regionList, updatedInfo });
+  return json({ preferredLanguage, countryList, personalInformation, birthParsedFormat, meta, regionList, maritalStatusList, updatedInfo });
 }
 
 export default function PersonalInformationIndex() {
   featureEnabled('view-personal-info');
-  const { personalInformation, preferredLanguage, countryList, regionList, updatedInfo } = useLoaderData<typeof loader>();
+  const { personalInformation, preferredLanguage, countryList, birthParsedFormat, maritalStatusList, regionList, updatedInfo } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const maritalStatus = personalInformation.maritalStatusId ? maritalStatusList.find((maritalStatus) => maritalStatus.id === personalInformation.maritalStatusId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' ' : undefined;
+
   const params = useParams();
   const userOrigin = useUserOrigin();
 
@@ -174,6 +181,8 @@ export default function PersonalInformationIndex() {
             </p>
           )}
         </DescriptionListItem>
+        <DescriptionListItem term={t('personal-information:index.marital-status')}>{`${maritalStatus ? maritalStatus : t('personal-information:index.no-marital-status')} `}</DescriptionListItem>
+        <DescriptionListItem term={t('personal-information:index.date-of-birth')}>{birthParsedFormat}</DescriptionListItem>
       </dl>
 
       {userOrigin && (
