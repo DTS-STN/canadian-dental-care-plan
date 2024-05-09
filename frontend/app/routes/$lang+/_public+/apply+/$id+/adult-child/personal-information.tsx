@@ -390,6 +390,8 @@ export default function ApplyFlowPersonalInformation() {
             <InputField
               id="phone-number"
               name="phoneNumber"
+              type="tel"
+              inputMode="tel"
               className="w-full"
               autoComplete="tel"
               defaultValue={defaultState?.phoneNumber ?? ''}
@@ -401,6 +403,8 @@ export default function ApplyFlowPersonalInformation() {
             <InputField
               id="phone-number-alt"
               name="phoneNumberAlt"
+              type="tel"
+              inputMode="tel"
               className="w-full"
               autoComplete="tel"
               defaultValue={defaultState?.phoneNumberAlt ?? ''}
@@ -417,6 +421,8 @@ export default function ApplyFlowPersonalInformation() {
             <InputField
               id="email"
               name="email"
+              type="email"
+              inputMode="email"
               className="w-full"
               autoComplete="email"
               defaultValue={defaultState?.email ?? ''}
@@ -428,6 +434,8 @@ export default function ApplyFlowPersonalInformation() {
             <InputField
               id="confirm-email"
               name="confirmEmail"
+              type="email"
+              inputMode="email"
               className="w-full"
               autoComplete="email"
               defaultValue={defaultState?.confirmEmail ?? ''}
