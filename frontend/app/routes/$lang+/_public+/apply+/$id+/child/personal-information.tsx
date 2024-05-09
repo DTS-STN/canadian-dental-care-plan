@@ -417,7 +417,7 @@ export default function ApplyFlowPersonalInformation() {
           <p id="adding-email" className="mb-2">
             {t('apply-child:contact-information.add-email')}
           </p>
-          <div className="mb-6 grid gap-6 md:grid-cols-2">
+          <div className="mb-6 grid gap-6">
             <InputField
               id="email"
               name="email"
