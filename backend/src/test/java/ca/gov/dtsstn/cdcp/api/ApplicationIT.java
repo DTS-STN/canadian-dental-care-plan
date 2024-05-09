@@ -8,9 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
 
-/**
- * @author Greg Baker (gregory.j.baker@hrsdc-rhdcc.gc.ca)
- */
 @SpringBootTest
 @ActiveProfiles("test")
 class ApplicationIT {

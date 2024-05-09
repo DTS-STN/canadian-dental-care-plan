@@ -1,4 +1,4 @@
-package ca.gov.dtsstn.cdcp.api.controller;
+package ca.gov.dtsstn.cdcp.api.web.v1.controller;
 
 import java.util.List;
 
@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ca.gov.dtsstn.cdcp.api.dto.ImmutableSubscription;
-import ca.gov.dtsstn.cdcp.api.dto.Subscription;
+import ca.gov.dtsstn.cdcp.api.web.v1.model.ImmutableSubscription;
+import ca.gov.dtsstn.cdcp.api.web.v1.model.Subscription;
 
 @RestController
 @RequestMapping({ "/api/v1" })
-public class SubscriptionControllerV1 {
+public class SubscriptionController {
 
 	@GetMapping({ "/users/{userId}/subscriptions" })
 	public List<Subscription> getSubscriptions(@PathVariable String userId) {

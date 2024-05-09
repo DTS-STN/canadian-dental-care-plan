@@ -4,9 +4,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
 
-/**
- * @author Greg Baker <gregory.j.baker@hrsdc-rdhcc.gc.ca>
- */
 @Validated
 @ConfigurationProperties("application")
 public class ApplicationProperties {
