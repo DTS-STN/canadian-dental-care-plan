@@ -385,7 +385,7 @@ export default function ApplyFlowPersonalInformation() {
           <fieldset>
             <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult:contact-information.phone-header')}</legend>
             <p className="mb-6">{t('apply-adult:contact-information.form-instructions')}</p>
-            <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
+            <div className="mb-6 grid items-end gap-6">
               <InputField
                 id="phone-number"
                 name="phoneNumber"

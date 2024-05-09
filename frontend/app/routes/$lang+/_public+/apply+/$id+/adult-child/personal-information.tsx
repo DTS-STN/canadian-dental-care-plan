@@ -386,7 +386,7 @@ export default function ApplyFlowPersonalInformation() {
           <p id="adding-phone" className="mb-2">
             {t('apply-adult-child:contact-information.add-phone')}
           </p>
-          <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
+          <div className="mb-6 grid items-end gap-6">
             <InputField
               id="phone-number"
               name="phoneNumber"
