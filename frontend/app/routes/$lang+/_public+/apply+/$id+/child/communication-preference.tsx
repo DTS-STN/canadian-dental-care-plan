@@ -76,6 +76,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
       confirmEmail: state.childState.communicationPreferences?.confirmEmail ?? state.childState.personalInformation?.confirmEmail,
     },
     editMode: state.childState.editMode,
+    isReadOnlyEmail: !!state.childState.personalInformation?.email,
   });
 }
 
@@ -144,7 +145,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowCommunicationPreferencePage() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, communicationMethodEmail, preferredLanguages, preferredCommunicationMethods, defaultState, editMode, isReadOnlyEmail } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -210,6 +211,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             autoComplete="email"
             defaultValue={defaultState.email ?? ''}
             required
+            disabled={isReadOnlyEmail}
           />
           <InputField
             id="confirm-email"
@@ -223,6 +225,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             autoComplete="email"
             defaultValue={defaultState.confirmEmail ?? ''}
             required
+            disabled={isReadOnlyEmail}
           />
         </div>
       ),
