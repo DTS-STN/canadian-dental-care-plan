@@ -242,6 +242,7 @@ export default function ApplyFlowApplicationInformation() {
               id="social-insurance-number"
               name="socialInsuranceNumber"
               label={t('applicant-information.sin')}
+              inputMode="numeric"
               placeholder="000-000-000"
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
               errorMessage={errorMessages['social-insurance-number']}
