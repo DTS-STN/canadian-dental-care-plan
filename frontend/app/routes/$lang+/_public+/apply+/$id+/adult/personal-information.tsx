@@ -369,6 +369,10 @@ export default function ApplyFlowPersonalInformation() {
 
   const dummyOption: InputOptionProps = { children: t('apply-adult:contact-information.address-field.select-one'), value: '' };
 
+  const postalCodeRequiredContries = [CANADA_COUNTRY_ID, USA_COUNTRY_ID];
+  const mailingPostalCodeRequired = selectedMailingCountry !== undefined && postalCodeRequiredContries.includes(selectedMailingCountry);
+  const homePostalCodeRequired = selectedHomeCountry !== undefined && postalCodeRequiredContries.includes(selectedHomeCountry);
+
   return (
     <>
       <div className="my-6 sm:my-8">
@@ -473,7 +477,6 @@ export default function ApplyFlowPersonalInformation() {
                 autoComplete="address-line2"
                 defaultValue={defaultState?.mailingApartment ?? ''}
                 errorMessage={errorMessages['mailing-apartment']}
-                required
               />
               <InputSelect
                 id="mailing-country"
@@ -515,12 +518,12 @@ export default function ApplyFlowPersonalInformation() {
                   id="mailing-postal-code"
                   name="mailingPostalCode"
                   className="w-full"
-                  label={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID ? t('apply-adult:contact-information.address-field.postal-code') : t('apply-adult:contact-information.address-field.postal-code-optional')}
+                  label={mailingPostalCodeRequired ? t('apply-adult:contact-information.address-field.postal-code') : t('apply-adult:contact-information.address-field.postal-code-optional')}
                   maxLength={100}
                   autoComplete="postal-code"
                   defaultValue={defaultState?.mailingPostalCode}
                   errorMessage={errorMessages['mailing-postal-code']}
-                  required={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID}
+                  required={mailingPostalCodeRequired}
                 />
               </div>
             </div>
@@ -555,7 +558,6 @@ export default function ApplyFlowPersonalInformation() {
                     autoComplete="address-line2"
                     defaultValue={defaultState?.homeApartment ?? ''}
                     errorMessage={errorMessages['home-apartment']}
-                    required
                   />
                   <InputSelect
                     id="home-country"
@@ -597,12 +599,12 @@ export default function ApplyFlowPersonalInformation() {
                       id="home-postal-code"
                       name="homePostalCode"
                       className="w-full"
-                      label={selectedHomeCountry === CANADA_COUNTRY_ID || selectedHomeCountry === USA_COUNTRY_ID ? t('apply-adult:contact-information.address-field.postal-code') : t('apply-adult:contact-information.address-field.postal-code-optional')}
+                      label={homePostalCodeRequired ? t('apply-adult:contact-information.address-field.postal-code') : t('apply-adult:contact-information.address-field.postal-code-optional')}
                       maxLength={100}
                       autoComplete="postal-code"
                       defaultValue={defaultState?.homePostalCode ?? ''}
                       errorMessage={errorMessages['home-postal-code']}
-                      required={selectedMailingCountry === CANADA_COUNTRY_ID || selectedMailingCountry === USA_COUNTRY_ID}
+                      required={homePostalCodeRequired}
                     />
                   </div>
                 </>
