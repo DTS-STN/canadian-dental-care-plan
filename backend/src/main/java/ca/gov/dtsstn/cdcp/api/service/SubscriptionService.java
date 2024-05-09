@@ -16,7 +16,6 @@ public class SubscriptionService {
 
 	private final SubscriptionRepository repository;
 
-
 	public SubscriptionService(SubscriptionMapper mapper, SubscriptionRepository repository) {
 		Assert.notNull(mapper, "mapper is required; it must not be null");
 		Assert.notNull(repository, "repository is required; it must not be null");
@@ -26,8 +25,7 @@ public class SubscriptionService {
 
 	public List<Subscription> getSubscriptionsByUserId(String userId) {
 		Assert.hasText(userId, "userId is required; it must not be null or blank");
-
-		final var subscriptions = repository.findByUserId(userId).stream().map(mapper::fromEntity).toList();
-		return subscriptions;
+		return mapper.fromEntity(repository.findByUserId(userId));
 	}
+
 }

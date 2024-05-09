@@ -13,4 +13,5 @@ public interface AlertTypeModel {
 	String getCode();
 
 	String getDescription();
+
 }

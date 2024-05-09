@@ -10,28 +10,26 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
-/**
- * @author Lei Ye (lei.ye@hrsdc-rhdcc.gc.ca)
- */
 @Entity(name = "Subscription")
+@SuppressWarnings({ "serial" })
 public class SubscriptionEntity extends AbstractEntity {
 
-    @Column(length = 9, nullable = false, updatable = false)
+	@Column(length = 9, nullable = false, updatable = false)
 	private String userId;
 
 	@Column(length = 256, nullable = false)
 	private String email;
 
-    @Column(nullable = true)
+	@Column(nullable = true)
 	private Boolean registered;
 
-    @Column(nullable = true)
+	@Column(nullable = true)
 	private Boolean subscribed;
 
 	@Column(nullable = false)
 	private Long preferredLanguage ;
 
-    @ManyToOne
+	@ManyToOne
 	private AlertTypeEntity alertType;
 
 	public SubscriptionEntity() {
@@ -39,19 +37,19 @@ public class SubscriptionEntity extends AbstractEntity {
 	}
 
 	@Builder.Constructor
-	protected SubscriptionEntity( // NOSONAR (too many parameters)
-		@Nullable String id,
-		@Nullable String createdBy,
-		@Nullable Instant createdDate,
-		@Nullable String lastModifiedBy,
-		@Nullable Instant lastModifiedDate,
-		@Nullable Boolean isNew,
-		@Nullable String userId,
-		@Nullable String email,
-		@Nullable Boolean registered,
-		@Nullable Boolean subscribed,
-		@Nullable Long preferredLanguage,
-		@Nullable AlertTypeEntity alertType) {
+	protected SubscriptionEntity(
+			@Nullable String id,
+			@Nullable String createdBy,
+			@Nullable Instant createdDate,
+			@Nullable String lastModifiedBy,
+			@Nullable Instant lastModifiedDate,
+			@Nullable Boolean isNew,
+			@Nullable String userId,
+			@Nullable String email,
+			@Nullable Boolean registered,
+			@Nullable Boolean subscribed,
+			@Nullable Long preferredLanguage,
+			@Nullable AlertTypeEntity alertType) {
 		super(id, createdBy, createdDate, lastModifiedBy, lastModifiedDate, isNew);
 		this.userId = userId;
 		this.email = email;
@@ -107,18 +105,6 @@ public class SubscriptionEntity extends AbstractEntity {
 
 	public void setAlertType(AlertTypeEntity alertType) {
 		this.alertType = alertType;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		// keeps SonarLint happy
-		return super.equals(obj);
-	}
-
-	@Override
-	public int hashCode() {
-		// keeps SonarLint happy
-		return super.hashCode();
 	}
 
 	@Override

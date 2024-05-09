@@ -8,4 +8,5 @@ public interface AlertType extends BaseDomainObject {
 	String getCode();
 
 	String getDescription();
+
 }

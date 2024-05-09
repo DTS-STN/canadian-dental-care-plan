@@ -9,10 +9,8 @@ import org.springframework.lang.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
-/**
- * @author Lei Ye (lei.ye@hrsdc-rhdcc.gc.ca)
- */
 @Entity(name = "AlertType")
+@SuppressWarnings({ "serial" })
 public class AlertTypeEntity extends AbstractEntity {
 
 	@Column(length = 16, nullable = false)
@@ -21,13 +19,12 @@ public class AlertTypeEntity extends AbstractEntity {
 	@Column(length = 256)
 	private String description;
 
-
 	public AlertTypeEntity() {
 		super();
 	}
 
 	@Builder.Constructor
-	protected AlertTypeEntity( // NOSONAR (too many parameters)
+	protected AlertTypeEntity(
 			@Nullable String id,
 			@Nullable String createdBy,
 			@Nullable Instant createdDate,
@@ -35,13 +32,11 @@ public class AlertTypeEntity extends AbstractEntity {
 			@Nullable Instant lastModifiedDate,
 			@Nullable Boolean isNew,
 			@Nullable String code,
-			@Nullable String description
-			) {
+			@Nullable String description) {
 		super(id, createdBy, createdDate, lastModifiedBy, lastModifiedDate, isNew);
 		this.code = code;
 		this.description = description;
 	}
-
 
 	public String getCode() {
 		return this.code;
@@ -57,18 +52,6 @@ public class AlertTypeEntity extends AbstractEntity {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		// keeps SonarLint happy
-		return super.equals(obj);
-	}
-
-	@Override
-	public int hashCode() {
-		// keeps SonarLint happy
-		return super.hashCode();
 	}
 
 	@Override

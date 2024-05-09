@@ -33,10 +33,9 @@ import jakarta.persistence.Transient;
  * <li>{@code createdDate}
  * <li>{@code lastModifiedBy}
  * <li>{@code lastModifiedDate}
- *
- * @author Greg Baker (gregory.j.baker@hrsdc-rhdcc.gc.ca)
  */
 @MappedSuperclass
+@SuppressWarnings({ "serial" })
 @EntityListeners({ AuditingEntityListener.class })
 public abstract class AbstractEntity implements Persistable<String>, Serializable {
 
@@ -140,7 +139,7 @@ public abstract class AbstractEntity implements Persistable<String>, Serializabl
 		if (obj == null) { return false; }
 		if (getClass() != obj.getClass()) { return false; }
 
-		final AbstractEntity other = (AbstractEntity) obj;
+		final var other = (AbstractEntity) obj;
 
 		return Objects.equals(id, other.id);
 	}

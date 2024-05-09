@@ -18,9 +18,8 @@ import org.hibernate.id.IdentifierGenerator;
  * &#64;GenericGenerator(name = "uuid-generator", strategy = UuidGenerator.STRATEGY)
  * private String id;
  * </pre>
- *
- * @author Greg Baker (gregory.j.baker@hrsdc-rhdcc.gc.ca)
  */
+@SuppressWarnings({ "serial" })
 public class UuidGenerator implements IdentifierGenerator {
 
 	private final transient ValueGenerator valueGenerator;

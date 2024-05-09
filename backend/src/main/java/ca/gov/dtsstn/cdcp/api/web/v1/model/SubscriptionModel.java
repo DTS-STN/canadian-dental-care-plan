@@ -18,7 +18,7 @@ public interface SubscriptionModel {
 
 	Boolean getSubscribed();
 
-	Long  getPreferredLanguage();
+	String getPreferredLanguage();
 
 	String getAlertType();
 

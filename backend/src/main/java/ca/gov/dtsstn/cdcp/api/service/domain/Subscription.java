@@ -15,6 +15,6 @@ public interface Subscription extends BaseDomainObject {
 
 	Long  getPreferredLanguage();
 
-	String getAlertTypeId();
+	AlertType getAlertType();
 
 }
