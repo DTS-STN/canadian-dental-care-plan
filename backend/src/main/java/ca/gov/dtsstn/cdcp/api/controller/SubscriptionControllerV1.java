@@ -1,5 +1,6 @@
 package ca.gov.dtsstn.cdcp.api.controller;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ import ca.gov.dtsstn.cdcp.api.dto.Subscription;
 public class SubscriptionControllerV1 {
 
 	@GetMapping({ "/users/{userId}/subscriptions" })
-	public List<Subscription> getSubscriptions(@PathVariable String userId) {
+	public Collection<Subscription> getSubscriptions(@PathVariable String userId) {
 		return List.of(
 			ImmutableSubscription.builder()
 				.id(10001L)
