@@ -236,6 +236,20 @@
                     "file": "routes/$lang+/_public+/apply+/$id+/adult-child/_route.tsx",
                     "children": [
                       {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/children/_route",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/children/_route.tsx",
+                        "children": [
+                          {
+                            "id": "$lang+/_public+/apply+/$id+/adult-child/children/child-summary",
+                            "file": "routes/$lang+/_public+/apply+/$id+/adult-child/children/child-summary.tsx",
+                            "paths": {
+                              "en": "/:lang/apply/:id/adult-child/children/children/child-summary",
+                              "fr": "/:lang/demander/:id/adulte-enfant/enfants/child-summary"
+                            }
+                          }
+                        ]
+                      },
+                      {
                         "id": "$lang+/_public+/apply+/$id+/adult-child/tax-filing",
                         "file": "routes/$lang+/_public+/apply+/$id+/adult-child/tax-filing.tsx",
                         "paths": {
@@ -353,14 +367,6 @@
                         "paths": {
                           "en": "/:lang/apply/:id/adult-child/personal-information",
                           "fr": "/:lang/demander/:id/adulte-enfant/renseignements-personnels"
-                        }
-                      },
-                      {
-                        "id": "$lang+/_public+/apply+/$id+/adult-child/child-summary",
-                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/child-summary.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/child-summary",
-                          "fr": "/:lang/demander/:id/adulte-enfant/child-summary"
                         }
                       },
                       {
