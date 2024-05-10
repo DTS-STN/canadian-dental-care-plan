@@ -159,7 +159,6 @@ export default function ApplyFlowTypeOfApplication() {
             <li>{t('apply:type-of-application.sixteen-or-older')}</li>
             <li>{t('apply:type-of-application.under-eighteen')}</li>
           </ul>
-          <p>{t('apply:type-of-application.note')}</p>
         </div>
         <Collapsible summary={t('apply:type-of-application.split-custody-summary')}>
           <p className="mb-4">{t('apply:type-of-application.split-custody-detail')}</p>
