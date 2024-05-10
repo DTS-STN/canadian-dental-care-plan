@@ -7,9 +7,8 @@ import { loader } from '~/routes/$lang+/_public+/apply+/$id+/adult/personal-info
 vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
   loadApplyAdultState: vi.fn().mockReturnValue({
     id: '123',
-    adultState: {},
   }),
-  saveApplyAdultState: vi.fn().mockReturnValue({
+  saveApplyState: vi.fn().mockReturnValue({
     headers: {
       'Set-Cookie': 'some-set-cookie-header',
     },

@@ -29,8 +29,6 @@ enum DisabilityTaxCreditOption {
   Yes = 'yes',
 }
 
-export type DisabilityTaxCreditState = `${DisabilityTaxCreditOption}`;
-
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adultChild.disabilityTaxCredit,
@@ -64,7 +62,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const disabilityTaxCreditSchema: z.ZodType<DisabilityTaxCreditState> = z.nativeEnum(DisabilityTaxCreditOption, {
+  const disabilityTaxCreditSchema = z.nativeEnum(DisabilityTaxCreditOption, {
     errorMap: () => ({ message: t('apply-adult-child:disability-tax-credit.error-message.disability-tax-credit-required') }),
   });
 

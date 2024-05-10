@@ -18,7 +18,8 @@ import { InputField } from '~/components/input-field';
 import { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
@@ -77,15 +78,15 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     id: state.id,
     csrfToken,
     meta,
-    defaultState: state.adultState.personalInformation,
-    maritalStatus: state.adultState.applicantInformation?.maritalStatus,
+    defaultState: state.personalInformation,
+    maritalStatus: state.applicantInformation?.maritalStatus,
     countryList,
     regionList,
     CANADA_COUNTRY_ID,
     USA_COUNTRY_ID,
     MARITAL_STATUS_CODE_COMMONLAW,
     MARITAL_STATUS_CODE_MARRIED,
-    editMode: state.adultState.editMode,
+    editMode: state.editMode,
   });
 }
 
@@ -238,9 +239,9 @@ export async function action({ context: { session }, params, request }: ActionFu
       }
     : parsedDataResult.data;
 
-  saveApplyAdultState({ params, request, session, state: { personalInformation: updatedData } });
+  saveApplyState({ params, session, state: { personalInformation: updatedData } });
 
-  if (state.adultState.editMode) {
+  if (state.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
   }
 
@@ -444,7 +445,7 @@ export default function ApplyFlowPersonalInformation() {
                 inputMode="email"
                 className="w-full"
                 autoComplete="email"
-                defaultValue={defaultState?.confirmEmail ?? ''}
+                defaultValue={defaultState?.email ?? ''}
                 errorMessage={errorMessages['confirm-email']}
                 label={t('apply-adult:contact-information.confirm-email')}
                 maxLength={100}

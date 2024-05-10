@@ -14,7 +14,6 @@ import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { ApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { ApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import { TypeOfApplicationState, loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
@@ -85,9 +84,9 @@ export async function action({ context: { session }, params, request }: ActionFu
     params,
     session,
     state: {
-      adultState: state.adultState ?? ({ editMode: false } satisfies ApplyAdultState),
-      childState: state.childState ?? ({ editMode: false } satisfies ApplyChildState),
+      editMode: false,
       typeOfApplication: parsedDataResult.data,
+      childState: state.childState ?? ({ editMode: false } satisfies ApplyChildState),
     },
   });
 

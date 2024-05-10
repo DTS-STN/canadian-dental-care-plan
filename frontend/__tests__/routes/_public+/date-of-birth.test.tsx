@@ -3,6 +3,7 @@ import { createMemorySessionStorage, redirect } from '@remix-run/node';
 import { differenceInYears, isPast, isValid, parse } from 'date-fns';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
 import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/adult/date-of-birth';
 import { getAgeFromDateString, parseDateString } from '~/utils/date-utils';
 
@@ -13,11 +14,13 @@ vi.mock('~/utils/date-utils');
 vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
   loadApplyAdultState: vi.fn().mockReturnValue({
     id: '123',
-    adultState: {
-      dateOfBirth: '2000-01-01',
-    },
+    dateOfBirth: '2000-01-01',
   }),
-  saveApplyAdultState: vi.fn().mockReturnValue({
+}));
+
+vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
+  getAgeCategoryFromDateString: vi.fn(),
+  saveApplyState: vi.fn().mockReturnValue({
     headers: {
       'Set-Cookie': 'some-set-cookie-header',
     },
@@ -99,6 +102,7 @@ describe('_public.apply.id.date-of-birth', () => {
       vi.mocked(differenceInYears).mockReturnValueOnce(65).mockReturnValueOnce(65);
       vi.mocked(parseDateString).mockReturnValue({ year: '1959', month: '01', day: '01' });
       vi.mocked(getAgeFromDateString).mockReturnValueOnce(65);
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth', { method: 'POST', body: formData }),
@@ -126,6 +130,7 @@ describe('_public.apply.id.date-of-birth', () => {
       vi.mocked(differenceInYears).mockReturnValueOnce(64).mockReturnValueOnce(64);
       vi.mocked(parseDateString).mockReturnValue({ year: '2000', month: '01', day: '01' });
       vi.mocked(getAgeFromDateString).mockReturnValueOnce(24);
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('adults');
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth', { method: 'POST', body: formData }),

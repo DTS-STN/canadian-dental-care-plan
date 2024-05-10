@@ -26,8 +26,6 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
-export type DentalInsuranceState = boolean;
-
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adultChild.dentalInsurance,
@@ -55,7 +53,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
-  const dentalInsuranceSchema: z.ZodType<DentalInsuranceState> = z.boolean({ errorMap: () => ({ message: t('apply-adult-child:dental-insurance.error-message.dental-insurance-required') }) });
+  const dentalInsuranceSchema = z.boolean({ errorMap: () => ({ message: t('apply-adult-child:dental-insurance.error-message.dental-insurance-required') }) });
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));

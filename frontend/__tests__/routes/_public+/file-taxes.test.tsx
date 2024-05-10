@@ -7,7 +7,6 @@ import { loader } from '~/routes/$lang+/_public+/apply+/$id+/adult/file-taxes';
 vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
   loadApplyAdultState: vi.fn().mockReturnValue({
     id: '123',
-    adultState: {},
   }),
 }));
 
