@@ -2,58 +2,58 @@
   "@odata.context": "https://canadadental-uat.crm3.dynamics.com/api/data/v9.2/$metadata#esdc_clientfriendlystatuses(esdc_clientfriendlystatusid,esdc_descriptionenglish,esdc_descriptionfrench)",
   "value": [
     {
-      "@odata.etag": "W/\"1915055850\"",
+      "@odata.etag": "W/\"2064902417\"",
       "esdc_clientfriendlystatusid": "873ac4c6-77c0-ee11-9079-000d3a09d132",
-      "esdc_descriptionenglish": "You have qualified for the Canadian Dental Care Plan. Sun Life will mail your welcome package within 3 months from the date you applied. You must wait to receive this package to confirm when your dental costs will be covered.",
-      "esdc_descriptionfrench": "Vous êtes admissible au Régime canadien de soins dentaires. Sun Life vous enverra une trousse de bienvenue dans les trois mois suivant la date de votre demande. Veuillez attendre de recevoir la trousse pour confirmer à quel moment vos frais dentaires seront couverts."
+      "esdc_descriptionenglish": "You have qualified for the Canadian Dental Care Plan. Sun Life will mail you a welcome package with your member card, coverage details and coverage start date.\n\nAppointments can only be scheduled on or after your coverage start date for the eligible oral health care services covered under the plan. The CDCP will not reimburse you for services received before the start date.\n\nWhen booking an appointment with an oral health provider, make sure to ask if they are participating in the CDCP. Before receiving oral health care, you should always ask your oral health provider about any costs that won't be covered by the plan. Make sure you know what you'll have to pay directly to your oral health provider ahead of receiving treatment.",
+      "esdc_descriptionfrench": "Vous êtes admissible au Régime canadien de soins dentaires. La Sun Life vous enverra par la poste une trousse de bienvenue contenant votre carte de membre, les détails de la couverture et la date de début de la couverture. Attendez le colis avant de prendre rendez-vous.\n\nLes rendez-vous peuvent être pris seulement à compter de cette date, ou après, pour que les services de soins buccodentaires soient couverts par le régime. Le RCSD ne remboursera pas les services reçus avant cette date de début.\n\nAvant de recevoir des soins, vous devriez toujours vérifier le montant des coûts qui ne seront pas couverts par le régime auprès de votre fournisseur de soins buccodentaires. Assurez-vous de connaître le montant que vous devez payer directement à votre fournisseur de soins buccodentaires avant de recevoir le traitement."
     },
     {
-      "@odata.etag": "W/\"1915055851\"",
+      "@odata.etag": "W/\"2064902418\"",
       "esdc_clientfriendlystatusid": "f752c665-c4e6-ee11-a204-000d3a09d1b8",
-      "esdc_descriptionenglish": "This application has been flagged as a Duplicate and not processed",
-      "esdc_descriptionfrench": "This application has been flagged as a Duplicate and not processed"
+      "esdc_descriptionenglish": "We reviewed your application for the Canadian Dental Care Plan.\n\nOur records show that you have already applied and were deemed eligible for the plan. This duplicate application has been cancelled. You can log into My Service Canada Account to view your eligibility decision letter.\n\nIf you think this is an error, contact Service Canada by calling 1-833-537-4342.",
+      "esdc_descriptionfrench": "Nous avons examiné votre demande d'adhésion au Régime canadien de soins dentaires.\n\nD'après nos dossiers, vous avez déjà présenté une demande et vous avez été jugé admissible. Cette demande en double a été annulée. Vous pouvez ouvrir une session dans Mon dossier Service Canada pour consulter votre lettre de décision relative à votre admissibilité.\n\nSi vous croyez qu'il s'agit d'une erreur, communiquez avec Service Canada en composant le 1-833-537-4342."
     },
     {
-      "@odata.etag": "W/\"1915055852\"",
+      "@odata.etag": "W/\"2064902419\"",
       "esdc_clientfriendlystatusid": "e882086c-c4e6-ee11-a204-000d3a09d1b8",
-      "esdc_descriptionenglish": "You have failed SIN Validation.",
-      "esdc_descriptionfrench": "You have failed SIN Validation."
+      "esdc_descriptionenglish": "We reviewed your application for the Canadian Dental Care Plan. Unfortunately, we are not able to process your application at this time. \n\nThe information provided is different from your personal information on your Social Insurance Number (SIN) record. \n\nIf you have confirmed or believe that the information you provided on your CDCP application is accurate, then you may need to correct your information on your SIN record. Please visit online at Canada.ca/social-insurance-number. \n\nYou can apply again after you address the issue.",
+      "esdc_descriptionfrench": "Les renseignements fournis sont différents des renseignements personnels dans votre dossier de numéro d'assurance sociale (NAS).  \n\nSi vous avez confirmé ou si vous croyez que les renseignements que vous avez fournis dans votre demande du Régime canadien de soins dentaires sont exacts, il se peut que vous deviez les corriger dans votre dossier de NAS. Veuillez consulter le site Canada.ca/numero-assurance-social. \n\nVous pouvez présenter une nouvelle demande après avoir résolu la question."
     },
     {
-      "@odata.etag": "W/\"1915055853\"",
+      "@odata.etag": "W/\"2064902420\"",
       "esdc_clientfriendlystatusid": "4d335896-c4e6-ee11-a204-000d3a09d1b8",
-      "esdc_descriptionenglish": "This Application has been reject as your tax information could not be retrieved",
-      "esdc_descriptionfrench": "This Application has been reject as your tax information could not be retrieved"
+      "esdc_descriptionenglish": "We reviewed your application for the Canadian Dental Care Plan. Unfortunately, we are not able to process your application at this time.\n\nThe information provided for you, your spouse or common-law partner (if applicable) is different from your personal information on your Canada Revenue Agency (CRA) file.\n\nIf you have confirmed or believe that the information you provided on your CDCP application is accurate, then you may need to update your file with the CRA by calling 1-800-959-8281.\n\nYou can apply again after you address the issue.",
+      "esdc_descriptionfrench": "Nous avons examiné votre demande d'adhésion au Régime canadien de soins dentaires. Malheureusement, nous ne sommes pas en mesure de la traiter pour le moment.\n\nVos renseignements, ceux de votre époux ou de votre conjoint de fait (s'il y a lieu) ne correspondent pas à ceux de votre dossier de l'Agence du revenu du Canada (ARC).\n\nSi vous avez confirmé ou si vous croyez que les renseignements que vous avez fournis dans votre demande du Régime canadien de soins dentaires sont exacts vous devrez peut-être mettre à jour votre dossier auprès de l'ARC en appelant au 1-800-959-7383.\n\nVous pouvez présenter une nouvelle demande après avoir résolu la question."
     },
     {
-      "@odata.etag": "W/\"1915055854\"",
+      "@odata.etag": "W/\"2064902421\"",
       "esdc_clientfriendlystatusid": "504fba6e-604e-ee11-be6f-000d3a09d640",
       "esdc_descriptionenglish": "You have not completed your application for the Canadian Dental Care Plan for the current year. Please refer to the letter you have received for instructions on how to apply by phone.",
-      "esdc_descriptionfrench": "Vous n’avez pas encore complété votre demande au Régime canadien de soins dentaires pour l'année courante. Veuillez consulter la lettre que vous avez reçue pour savoir comment soumettre une demande par téléphone."
+      "esdc_descriptionfrench": "Vous n'avez pas encore complété votre demande au Régime canadien de soins dentaires pour l'année courante. Veuillez consulter la lettre que vous avez reçue pour savoir comment soumettre une demande par téléphone."
     },
     {
-      "@odata.etag": "W/\"1915055855\"",
+      "@odata.etag": "W/\"2064902422\"",
       "esdc_clientfriendlystatusid": "1e158ec8-604e-ee11-be6f-000d3a09d640",
-      "esdc_descriptionenglish": "Your application for the Canadian Dental Care Plan is currently being processed. No additional actions are required at this time. Once your application is processed you will receive a letter explaining a decision.",
-      "esdc_descriptionfrench": "Votre demande au Régime canadien de soins dentaires est en cours de traitement. Aucune action supplémentaire n'est requise. Lorsque votre demande aura été traitée, vous recevrez une lettre expliquant la décision."
+      "esdc_descriptionenglish": "We have your Canadian Dental Care Plan application. You have completed all steps. Nothing further is required at this time. We will send you an explanation of the decision in approximately 15 business days.",
+      "esdc_descriptionfrench": "Nous avons votre demande au Régime canadien de soins dentaires. Vous avez terminé toutes les étapes. Rien d'autre n'est requis pour le moment. Nous vous enverrons une explication de la décision dans environ 15 jours ouvrables."
     },
     {
-      "@odata.etag": "W/\"1915055856\"",
+      "@odata.etag": "W/\"2064902423\"",
       "esdc_clientfriendlystatusid": "c23252fe-604e-ee11-be6f-000d3a09d640",
-      "esdc_descriptionenglish": "Your application for the Canadian Dental Care Plan has been processed and you do not qualify at this time based on existing access to dental care. You will receive a letter that explains this decision within 15 business days of the date you applied.",
-      "esdc_descriptionfrench": "Votre demande au Régime canadien de soins dentaires a été traitée et vous n’êtes pas admissible pour le moment en raison de votre accès actuel aux soins dentaires. Vous recevrez une lettre expliquant cette décision dans les 15 jours ouvrables suivant la date de votre demande."
+      "esdc_descriptionenglish": "We reviewed your application for the Canadian Dental Care Plan. You do not qualify for the plan at this time. You will receive a letter explaining the decision and any next steps in approximately 15 business days. ",
+      "esdc_descriptionfrench": "Nous avons examiné votre demande au Régime canadien de soins dentaires. Vous n'êtes pas admissible au plan pour le moment. Vous recevrez une lettre expliquant la décision et les prochaines étapes dans environ 15 jours ouvrables."
     },
     {
-      "@odata.etag": "W/\"1915055857\"",
+      "@odata.etag": "W/\"2064902424\"",
       "esdc_clientfriendlystatusid": "9687572e-614e-ee11-be6f-000d3a09d640",
-      "esdc_descriptionenglish": "You have qualified for the Canadian Dental Care Plan. Sun Life will mail your welcome package within 3 months from the date you applied. You must wait to receive this package to confirm when your dental costs will be covered.",
-      "esdc_descriptionfrench": "Vous êtes admissible au Régime canadien de soins dentaires. Sun Life vous enverra une trousse de bienvenue dans les trois mois suivant la date de votre demande. Veuillez attendre de recevoir la trousse pour confirmer à quel moment vos frais dentaires seront couverts."
+      "esdc_descriptionenglish": "You have qualified for the Canadian Dental Care Plan. Sun Life will mail you a welcome package with your member card, coverage details and coverage start date.\n\nAppointments can only be scheduled on or after your coverage start date for the eligible oral health care services covered under the plan. The CDCP will not reimburse you for services received before the start date.\n\nWhen booking an appointment with an oral health provider, make sure to ask if they are participating in the CDCP. Before receiving oral health care, you should always ask your oral health provider about any costs that won't be covered by the plan. Make sure you know what you'll have to pay directly to your oral health provider ahead of receiving treatment.",
+      "esdc_descriptionfrench": "Vous êtes admissible au Régime canadien de soins dentaires. La Sun Life vous enverra par la poste une trousse de bienvenue contenant votre carte de membre, les détails de la couverture et la date de début de la couverture. Attendez le colis avant de prendre rendez-vous.\n\nLes rendez-vous peuvent être pris seulement à compter de cette date, ou après, pour que les services de soins buccodentaires soient couverts par le régime. Le RCSD ne remboursera pas les services reçus avant cette date de début.\n\nAvant de recevoir des soins, vous devriez toujours vérifier le montant des coûts qui ne seront pas couverts par le régime auprès de votre fournisseur de soins buccodentaires. Assurez-vous de connaître le montant que vous devez payer directement à votre fournisseur de soins buccodentaires avant de recevoir le traitement."
     },
     {
-      "@odata.etag": "W/\"1915055858\"",
+      "@odata.etag": "W/\"2064902425\"",
       "esdc_clientfriendlystatusid": "51af5170-614e-ee11-be6f-000d3a09d640",
-      "esdc_descriptionenglish": "You have qualified for the Canadian Dental Care Plan. Within 20 business days, Sun Life will mail you a welcome package with your member card, coverage details and coverage start date. For enquiries, please visit sunlife.ca/cdcp or contact Sun Life at 1-888-888-8110.",
-      "esdc_descriptionfrench": "Vous êtes admissible au Régime canadien de soins dentaires. Dans les prochains 20 jours ouvrables, la Sun Life vous enverra par la poste une trousse de bienvenue contenant votre carte de membre, les détails de la couverture et la date de début de la couverture. Pour toute demande de renseignements, veuillez visiter sunlife.ca/cdcp ou contacter Sun Life au 1-888-888-8110. "
+      "esdc_descriptionenglish": "You have qualified for the Canadian Dental Care Plan. Within 20 business days, Sun Life will mail you a welcome package with your member card, coverage details and coverage start date. For enquiries, please visit sunlife.ca/cdcp or contact Sun Life at 1-888-888-8110. \n\nAppointments can only be scheduled on or after your coverage start date for the eligible oral health care services covered under the plan. The CDCP will not reimburse you for services received before the start date. \n\nWhen booking an appointment with an oral health provider, make sure to ask if they are participating in the CDCP. Before receiving oral health care, you should always ask your oral health provider about any costs that won't be covered by the plan. Make sure you know what you'll have to pay directly to your oral health provider ahead of receiving treatment.",
+      "esdc_descriptionfrench": "Vous êtes admissible au Régime canadien de soins dentaires. Dans les prochains 20 jours ouvrables, la Sun Life vous enverra par la poste une trousse de bienvenue contenant votre carte de membre, les détails de la couverture et la date de début de la couverture. Pour toute demande de renseignements, veuillez visiter sunlife.ca/cdcp ou contacter Sun Life au 1-888-888-8110.\n\nLes rendez-vous peuvent être pris seulement à compter de cette date, ou après, pour que les services de soins buccodentaires soient couverts par le régime. Le RCSD ne remboursera pas les services reçus avant cette date de début.\n\nAvant de recevoir des soins, vous devriez toujours vérifier le montant des coûts qui ne seront pas couverts par le régime auprès de votre fournisseur de soins buccodentaires. Assurez-vous de connaître le montant que vous devez payer directement à votre fournisseur de soins buccodentaires avant de recevoir le traitement."
     }
   ]
 }
