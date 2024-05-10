@@ -5,7 +5,7 @@ import org.immutables.value.Value.Immutable;
 @Immutable
 public interface Subscription extends BaseDomainObject {
 
-	String getSin();
+	String getUserId();
 
 	String getEmail();
 
@@ -15,6 +15,6 @@ public interface Subscription extends BaseDomainObject {
 
 	Long  getPreferredLanguage();
 
-	String getAlertType();
+	AlertType getAlertType();
 
 }

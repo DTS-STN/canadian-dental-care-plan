@@ -10,7 +10,7 @@ public interface SubscriptionModel {
 
 	String getId();
 
-	String getSin();
+	String getUserId();
 
 	String getEmail();
 
@@ -18,7 +18,7 @@ public interface SubscriptionModel {
 
 	Boolean getSubscribed();
 
-	Long  getPreferredLanguage();
+	String getPreferredLanguage();
 
 	String getAlertType();
 

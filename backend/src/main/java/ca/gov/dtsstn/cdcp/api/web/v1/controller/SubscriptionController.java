@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ca.gov.dtsstn.cdcp.api.service.SubscriptionService;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionModel;
-import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionModelMapper;
+import ca.gov.dtsstn.cdcp.api.web.v1.model.mapper.SubscriptionModelMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,7 +35,7 @@ public class SubscriptionController {
 	@Operation(summary = "Get all subscriptions for a user.", operationId = "get-subscriptions")
 	public List<SubscriptionModel> getSubscriptions(
 			@NotBlank(message = "userId must not be null or blank")
-			@Parameter(description = "The id of the user.", example = "00000000-0000-0000-0000-000000000000", required = true)
+			@Parameter(description = "The id of the user.", example = "000000000", required = true)
 			@PathVariable String userId) {
 		return subscriptionModelMapper.toModel(subscriptionService.getSubscriptionsByUserId(userId));
 	}
