@@ -90,7 +90,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   if (formAction === FormAction.Cancel) {
     invariant(state.adultChildState.childInformation, 'Expected state.childInformation to be defined');
 
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/child-summary', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
   }
 
   // Form action Continue & Save
@@ -186,7 +186,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   await saveApplyAdultChildState({ params, request, session, state: { childInformation: parsedDataResult.data } });
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/child-summary', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
 }
 
 export default function ApplyFlowChildInformation() {
