@@ -16,7 +16,7 @@ import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { ApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { ApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
-import { loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { TypeOfApplicationState, loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -32,8 +32,6 @@ enum ApplicantType {
   Child = 'child',
   Delegate = 'delegate',
 }
-
-export type TypeOfApplicationState = `${ApplicantType}`;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),

@@ -17,7 +17,7 @@ import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { CommunicationPreferencesState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
@@ -29,13 +29,6 @@ import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
-
-export interface CommunicationPreferencesState {
-  confirmEmail?: string;
-  email?: string;
-  preferredLanguage: string;
-  preferredMethod: string;
-}
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -74,7 +67,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     defaultState: {
       ...(state.communicationPreferences ?? {}),
       email: state.communicationPreferences?.email ?? state.personalInformation?.email,
-      confirmEmail: state.communicationPreferences?.confirmEmail ?? state.personalInformation?.confirmEmail,
     },
     editMode: state.editMode,
     isReadOnlyEmail: !!state.personalInformation?.email,
@@ -224,7 +216,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             name="confirmEmail"
             errorMessage={errorMessages['confirm-email']}
             autoComplete="email"
-            defaultValue={defaultState.confirmEmail ?? ''}
+            defaultValue={defaultState.email ?? ''}
             required
             disabled={isReadOnlyEmail}
           />

@@ -19,7 +19,7 @@ import { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { PersonalInformationState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
@@ -31,26 +31,6 @@ import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-uti
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
-
-export type PersonalInformationState = {
-  copyMailingAddress: boolean;
-  homeAddress?: string;
-  homeApartment?: string;
-  homeCity?: string;
-  homeCountry?: string;
-  homePostalCode?: string;
-  homeProvince?: string;
-  mailingAddress: string;
-  mailingApartment?: string;
-  mailingCity: string;
-  mailingCountry: string;
-  mailingPostalCode?: string;
-  mailingProvince?: string;
-  phoneNumber?: string;
-  phoneNumberAlt?: string;
-  email?: string;
-  confirmEmail?: string;
-};
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -443,7 +423,7 @@ export default function ApplyFlowPersonalInformation() {
               inputMode="email"
               className="w-full"
               autoComplete="email"
-              defaultValue={defaultState?.confirmEmail ?? ''}
+              defaultValue={defaultState?.email ?? ''}
               errorMessage={errorMessages['confirm-email']}
               label={t('apply-adult-child:contact-information.confirm-email')}
               maxLength={100}

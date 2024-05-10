@@ -79,7 +79,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  saveApplyState({ params, session, state: { livingIndependently: parsedDataResult.data } });
+  saveApplyState({ params, session, state: { livingIndependently: parsedDataResult.data === 'yes' } });
 
   if (parsedDataResult.data === LivingIndependentlyOption.Yes) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/applicant-information', params));
@@ -138,12 +138,12 @@ export default function ApplyFlowLivingIndependently() {
               {
                 value: LivingIndependentlyOption.Yes,
                 children: t('apply-adult-child:living-independently.radio-options.yes'),
-                defaultChecked: defaultState === LivingIndependentlyOption.Yes,
+                defaultChecked: defaultState === true,
               },
               {
                 value: LivingIndependentlyOption.No,
                 children: t('apply-adult-child:living-independently.radio-options.no'),
-                defaultChecked: defaultState === LivingIndependentlyOption.No,
+                defaultChecked: defaultState === false,
               },
             ]}
             required

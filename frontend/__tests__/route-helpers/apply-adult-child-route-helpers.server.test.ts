@@ -96,7 +96,7 @@ describe('apply-route-helpers.server', () => {
         ...baseState,
         typeOfApplication: 'adult-child',
         editMode: false,
-        taxFiling2023: 'no',
+        taxFiling2023: false,
       } satisfies ApplyState;
 
       expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult-child/file-taxes, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
@@ -107,7 +107,7 @@ describe('apply-route-helpers.server', () => {
         ...baseState,
         typeOfApplication: 'adult-child',
         editMode: false,
-        taxFiling2023: 'yes',
+        taxFiling2023: true,
         dateOfBirth: undefined,
       } satisfies ApplyState;
 

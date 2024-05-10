@@ -84,7 +84,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  saveApplyState({ params, session, state: { disabilityTaxCredit: parsedDataResult.data } });
+  saveApplyState({ params, session, state: { disabilityTaxCredit: parsedDataResult.data === 'yes' } });
 
   invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
   const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
@@ -154,8 +154,8 @@ export default function ApplyFlowDisabilityTaxCredit() {
             name="disabilityTaxCredit"
             legend={t('apply-adult-child:disability-tax-credit.form-label')}
             options={[
-              { value: DisabilityTaxCreditOption.Yes, children: t('apply-adult-child:disability-tax-credit.radio-options.yes'), defaultChecked: defaultState === DisabilityTaxCreditOption.Yes },
-              { value: DisabilityTaxCreditOption.No, children: t('apply-adult-child:disability-tax-credit.radio-options.no'), defaultChecked: defaultState === DisabilityTaxCreditOption.No },
+              { value: DisabilityTaxCreditOption.Yes, children: t('apply-adult-child:disability-tax-credit.radio-options.yes'), defaultChecked: defaultState === true },
+              { value: DisabilityTaxCreditOption.No, children: t('apply-adult-child:disability-tax-credit.radio-options.no'), defaultChecked: defaultState === false },
             ]}
             errorMessage={errorMessages['input-radio-disability-tax-credit-radios-option-0']}
             required

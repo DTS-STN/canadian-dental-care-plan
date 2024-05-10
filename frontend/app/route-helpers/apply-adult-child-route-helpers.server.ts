@@ -78,7 +78,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/tax-filing', params));
   }
 
-  if (state.taxFiling2023 === 'no') {
+  if (!state.taxFiling2023) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/file-taxes', params));
   }
 

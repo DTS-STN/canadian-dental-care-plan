@@ -4,19 +4,6 @@ import { Params } from '@remix-run/react';
 import { differenceInMinutes } from 'date-fns';
 import { z } from 'zod';
 
-import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/applicant-information';
-import { ChildInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/child-information';
-import { CommunicationPreferencesState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/communication-preference';
-import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/date-of-birth';
-import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/dental-insurance';
-import { DisabilityTaxCreditState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/disability-tax-credit';
-import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/federal-provincial-territorial-benefits';
-import { LivingIndependentlyState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/living-independently';
-import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/partner-information';
-import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/personal-information';
-import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/tax-filing';
-import { SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/adult/review-information';
-import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-application';
 import { getAgeFromDateString } from '~/utils/date-utils';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
@@ -30,25 +17,99 @@ export interface ApplyState {
   readonly childState?: unknown;
   readonly adultState?: unknown;
   readonly allChildrenUnder18?: boolean;
-  readonly applicantInformation?: ApplicantInformationState;
+  readonly applicantInformation?: {
+    firstName: string;
+    lastName: string;
+    maritalStatus: string;
+    socialInsuranceNumber: string;
+  };
   readonly children?: {
     readonly id: string;
-    readonly dentalBenefits?: DentalBenefitsState;
-    readonly dentalInsurance?: DentalInsuranceState;
-    readonly information?: ChildInformationState;
+    readonly dentalBenefits?: {
+      hasFederalBenefits: boolean;
+      federalSocialProgram?: string;
+      hasProvincialTerritorialBenefits: boolean;
+      provincialTerritorialSocialProgram?: string;
+      province?: string;
+    };
+    readonly dentalInsurance?: boolean;
+    readonly information?: {
+      firstName: string;
+      lastName: string;
+      dateOfBirth: string;
+      hasSocialInsuranceNumber: string;
+      socialInsuranceNumber?: string;
+      isParent: string;
+    };
   }[];
-  readonly communicationPreferences?: CommunicationPreferencesState;
-  readonly dateOfBirth?: DateOfBirthState;
-  readonly dentalBenefits?: DentalBenefitsState;
-  readonly dentalInsurance?: DentalInsuranceState;
-  readonly disabilityTaxCredit?: DisabilityTaxCreditState;
-  readonly livingIndependently?: LivingIndependentlyState;
-  readonly partnerInformation?: PartnerInformationState;
-  readonly personalInformation?: PersonalInformationState;
-  readonly submissionInfo?: SubmissionInfoState;
-  readonly taxFiling2023?: TaxFilingState;
-  readonly typeOfApplication?: TypeOfApplicationState;
+  readonly communicationPreferences?: {
+    email?: string;
+    preferredLanguage: string;
+    preferredMethod: string;
+  };
+  readonly dateOfBirth?: string;
+  readonly dentalBenefits?: {
+    hasFederalBenefits: boolean;
+    federalSocialProgram?: string;
+    hasProvincialTerritorialBenefits: boolean;
+    provincialTerritorialSocialProgram?: string;
+    province?: string;
+  };
+  readonly dentalInsurance?: boolean;
+  readonly disabilityTaxCredit?: boolean;
+  readonly livingIndependently?: boolean;
+  readonly partnerInformation?: {
+    confirm: boolean;
+    dateOfBirth: string;
+    firstName: string;
+    lastName: string;
+    socialInsuranceNumber: string;
+  };
+  readonly personalInformation?: {
+    copyMailingAddress: boolean;
+    homeAddress?: string;
+    homeApartment?: string;
+    homeCity?: string;
+    homeCountry?: string;
+    homePostalCode?: string;
+    homeProvince?: string;
+    mailingAddress: string;
+    mailingApartment?: string;
+    mailingCity: string;
+    mailingCountry: string;
+    mailingPostalCode?: string;
+    mailingProvince?: string;
+    phoneNumber?: string;
+    phoneNumberAlt?: string;
+    email?: string;
+  };
+  readonly submissionInfo?: {
+    /**
+     * The confirmation code associated with the application submission.
+     */
+    confirmationCode: string;
+
+    /**
+     * The UTC date and time when the application was submitted.
+     * Format: ISO 8601 string (e.g., "YYYY-MM-DDTHH:mm:ss.sssZ")
+     */
+    submittedOn: string;
+  };
+  readonly taxFiling2023?: boolean;
+  readonly typeOfApplication?: 'adult' | 'adult-child' | 'child' | 'delegate';
 }
+
+export type ApplicantInformationState = NonNullable<ApplyState['applicantInformation']>;
+export type ChildDentalBenefitsState = NonNullable<NonNullable<ApplyState['children']>[number]['dentalBenefits']>;
+export type ChildDentalInsuranceState = NonNullable<NonNullable<ApplyState['children']>[number]['dentalInsurance']>;
+export type ChildInformationState = NonNullable<NonNullable<ApplyState['children']>[number]['information']>;
+export type CommunicationPreferencesState = NonNullable<ApplyState['communicationPreferences']>;
+export type DentalBenefitsState = NonNullable<ApplyState['dentalBenefits']>;
+export type DentalInsuranceState = NonNullable<ApplyState['dentalInsurance']>;
+export type PartnerInformationState = NonNullable<ApplyState['partnerInformation']>;
+export type PersonalInformationState = NonNullable<ApplyState['personalInformation']>;
+export type SubmissionInfoState = NonNullable<ApplyState['submissionInfo']>;
+export type TypeOfApplicationState = NonNullable<ApplyState['typeOfApplication']>;
 
 /**
  * Schema for validating UUID.

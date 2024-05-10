@@ -29,8 +29,6 @@ enum TaxFilingOption {
   Yes = 'yes',
 }
 
-export type TaxFilingState = `${TaxFilingOption}`;
-
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adultChild.taxFiling,
@@ -56,7 +54,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const taxFilingSchema: z.ZodType<TaxFilingState> = z.nativeEnum(TaxFilingOption, {
+  const taxFilingSchema = z.nativeEnum(TaxFilingOption, {
     errorMap: () => ({ message: t('apply-adult-child:eligibility.tax-filing.error-message.tax-filing-required') }),
   });
 
@@ -76,7 +74,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  saveApplyState({ params, session, state: { taxFiling2023: parsedDataResult.data } });
+  saveApplyState({ params, session, state: { taxFiling2023: parsedDataResult.data === 'yes' } });
 
   if (parsedDataResult.data === TaxFilingOption.No) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/file-taxes', params));
@@ -132,8 +130,8 @@ export default function ApplyFlowTaxFiling() {
             name="taxFiling2023"
             legend={t('apply-adult-child:eligibility.tax-filing.form-instructions')}
             options={[
-              { value: TaxFilingOption.Yes, children: t('apply-adult-child:eligibility.tax-filing.radio-options.yes'), defaultChecked: defaultState === TaxFilingOption.Yes },
-              { value: TaxFilingOption.No, children: t('apply-adult-child:eligibility.tax-filing.radio-options.no'), defaultChecked: defaultState === TaxFilingOption.No },
+              { value: TaxFilingOption.Yes, children: t('apply-adult-child:eligibility.tax-filing.radio-options.yes'), defaultChecked: defaultState === true },
+              { value: TaxFilingOption.No, children: t('apply-adult-child:eligibility.tax-filing.radio-options.no'), defaultChecked: defaultState === false },
             ]}
             errorMessage={errorMessages['input-radio-tax-filing-2023-option-0']}
             required
