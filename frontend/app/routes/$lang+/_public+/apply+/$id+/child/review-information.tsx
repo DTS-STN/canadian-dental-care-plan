@@ -17,8 +17,8 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
-import { loadApplyChildState, saveApplyChildState, validateApplyChildStateForReview } from '~/route-helpers/apply-child-route-helpers.server';
-import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyChildState, validateApplyChildStateForReview } from '~/route-helpers/apply-child-route-helpers.server';
+import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -32,22 +32,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
-
-/**
- * Represents the state of an application submission, holding data such as confirmation code and submission timestamp.
- */
-export interface SubmissionInfoState {
-  /**
-   * The confirmation code associated with the application submission.
-   */
-  confirmationCode: string;
-
-  /**
-   * The UTC date and time when the application was submitted.
-   * Format: ISO 8601 string (e.g., "YYYY-MM-DDTHH:mm:ss.sssZ")
-   */
-  submittedOn: string;
-}
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'),
@@ -71,13 +55,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const { COMMUNICATION_METHOD_EMAIL_ID, ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
   // prettier-ignore
-  if (state.childState.applicantInformation === undefined ||
-    state.childState.communicationPreferences === undefined ||
-    state.childState.dateOfBirth === undefined ||
-    state.childState.dentalBenefits === undefined ||
-    state.childState.dentalInsurance === undefined ||
-    state.childState.personalInformation === undefined ||
-    state.childState.taxFiling2023 === undefined ||
+  if (state.applicantInformation === undefined ||
+    state.communicationPreferences === undefined ||
+    state.dateOfBirth === undefined ||
+    state.dentalBenefits === undefined ||
+    state.dentalInsurance === undefined ||
+    state.personalInformation === undefined ||
+    state.taxFiling2023 === undefined ||
     state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
@@ -87,84 +71,84 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   // Getting province by Id
   const allRegions = await lookupService.getAllRegions();
-  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.childState.personalInformation?.mailingProvince);
-  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.childState.personalInformation?.homeProvince);
+  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
+  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
 
   // Getting Country by Id
   const allCountries = await lookupService.getAllCountries();
-  const countryMailing = allCountries.find((country) => country.countryId === state.childState.personalInformation?.mailingCountry);
-  const countryHome = allCountries.find((country) => country.countryId === state.childState.personalInformation?.homeCountry);
+  const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation?.mailingCountry);
+  const countryHome = allCountries.find((country) => country.countryId === state.personalInformation?.homeCountry);
 
   if (!countryMailing) {
-    throw new Error(`Unexpected mailing address country: ${state.childState.personalInformation.mailingCountry}`);
+    throw new Error(`Unexpected mailing address country: ${state.personalInformation.mailingCountry}`);
   }
 
   if (!countryHome) {
-    throw new Error(`Unexpected home address country: ${state.childState.personalInformation.homeCountry}`);
+    throw new Error(`Unexpected home address country: ${state.personalInformation.homeCountry}`);
   }
 
   // Getting CommunicationPreference by Id
   const communicationPreferences = await lookupService.getAllPreferredCommunicationMethods();
-  const communicationPreferenceDict = communicationPreferences.find((obj) => obj.id === state.childState.communicationPreferences?.preferredMethod);
+  const communicationPreferenceDict = communicationPreferences.find((obj) => obj.id === state.communicationPreferences?.preferredMethod);
   const communicationPreference = communicationPreferenceDict && getNameByLanguage(locale, communicationPreferenceDict);
 
   if (!communicationPreference) {
-    throw new Error(`Unexpected communication preference: ${state.childState.communicationPreferences.preferredMethod}`);
+    throw new Error(`Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
   }
 
   const userInfo = {
-    firstName: state.childState.applicantInformation.firstName,
-    lastName: state.childState.applicantInformation.lastName,
-    phoneNumber: state.childState.personalInformation.phoneNumber,
-    altPhoneNumber: state.childState.personalInformation.phoneNumberAlt,
-    preferredLanguage: state.childState.communicationPreferences.preferredLanguage,
-    birthday: toLocaleDateString(parse(state.childState.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
-    sin: state.childState.applicantInformation.socialInsuranceNumber,
-    martialStatus: state.childState.applicantInformation.maritalStatus,
-    email: state.childState.communicationPreferences.email,
+    firstName: state.applicantInformation.firstName,
+    lastName: state.applicantInformation.lastName,
+    phoneNumber: state.personalInformation.phoneNumber,
+    altPhoneNumber: state.personalInformation.phoneNumberAlt,
+    preferredLanguage: state.communicationPreferences.preferredLanguage,
+    birthday: toLocaleDateString(parse(state.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+    sin: state.applicantInformation.socialInsuranceNumber,
+    martialStatus: state.applicantInformation.maritalStatus,
+    email: state.communicationPreferences.email,
     communicationPreference: communicationPreference,
   };
-  const spouseInfo = state.childState.partnerInformation
+  const spouseInfo = state.partnerInformation
     ? {
-        firstName: state.childState.partnerInformation.firstName,
-        lastName: state.childState.partnerInformation.lastName,
-        birthday: toLocaleDateString(parse(state.childState.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
-        sin: state.childState.partnerInformation.socialInsuranceNumber,
-        consent: state.childState.partnerInformation.confirm,
+        firstName: state.partnerInformation.firstName,
+        lastName: state.partnerInformation.lastName,
+        birthday: toLocaleDateString(parse(state.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+        sin: state.partnerInformation.socialInsuranceNumber,
+        consent: state.partnerInformation.confirm,
       }
     : undefined;
 
   const preferredLanguage = await lookupService.getPreferredLanguage(userInfo.preferredLanguage);
 
   const mailingAddressInfo = {
-    address: state.childState.personalInformation.mailingAddress,
-    city: state.childState.personalInformation.mailingCity,
+    address: state.personalInformation.mailingAddress,
+    city: state.personalInformation.mailingCity,
     province: provinceMailing,
-    postalCode: state.childState.personalInformation.mailingPostalCode,
+    postalCode: state.personalInformation.mailingPostalCode,
     country: countryMailing,
-    apartment: state.childState.personalInformation.mailingApartment,
+    apartment: state.personalInformation.mailingApartment,
   };
 
   const homeAddressInfo = {
-    address: state.childState.personalInformation.homeAddress,
-    city: state.childState.personalInformation.homeCity,
+    address: state.personalInformation.homeAddress,
+    city: state.personalInformation.homeCity,
     province: provinceHome,
-    postalCode: state.childState.personalInformation.homePostalCode,
+    postalCode: state.personalInformation.homePostalCode,
     country: countryHome,
-    apartment: state.childState.personalInformation.homeApartment,
+    apartment: state.personalInformation.homeApartment,
   };
 
-  const dentalInsurance = state.childState.dentalInsurance;
+  const dentalInsurance = state.dentalInsurance;
 
   const dentalBenefit = {
     federalBenefit: {
-      access: state.childState.dentalBenefits.hasFederalBenefits,
-      benefit: state.childState.dentalBenefits.federalSocialProgram,
+      access: state.dentalBenefits.hasFederalBenefits,
+      benefit: state.dentalBenefits.federalSocialProgram,
     },
     provTerrBenefit: {
-      access: state.childState.dentalBenefits.hasProvincialTerritorialBenefits,
-      province: state.childState.dentalBenefits.province,
-      benefit: state.childState.dentalBenefits.provincialTerritorialSocialProgram,
+      access: state.dentalBenefits.hasProvincialTerritorialBenefits,
+      province: state.dentalBenefits.province,
+      benefit: state.dentalBenefits.provincialTerritorialSocialProgram,
     },
   };
 
@@ -222,36 +206,41 @@ export async function action({ context: { session }, params, request }: ActionFu
   validateApplyChildStateForReview({ params, state });
 
   // prettier-ignore
-  if (state.childState.applicantInformation === undefined ||
-    state.childState.communicationPreferences === undefined ||
-    state.childState.dateOfBirth === undefined ||
-    state.childState.dentalBenefits === undefined ||
-    state.childState.dentalInsurance === undefined ||
-    state.childState.personalInformation === undefined ||
-    state.childState.taxFiling2023 === undefined ||
+  if (state.applicantInformation === undefined ||
+    state.communicationPreferences === undefined ||
+    state.dateOfBirth === undefined ||
+    state.dentalBenefits === undefined ||
+    state.dentalInsurance === undefined ||
+    state.personalInformation === undefined ||
+    state.taxFiling2023 === undefined ||
     state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
   // TODO submit to the API and grab the confirmation code from the response
   const benefitApplicationRequest = toBenefitApplicationRequest({
-    applicantInformation: state.childState.applicantInformation,
-    communicationPreferences: state.childState.communicationPreferences,
-    dateOfBirth: state.childState.dateOfBirth,
-    dentalBenefits: state.childState.dentalBenefits,
-    dentalInsurance: state.childState.dentalInsurance,
-    personalInformation: state.childState.personalInformation,
-    partnerInformation: state.childState.partnerInformation,
+    applicantInformation: state.applicantInformation,
+    communicationPreferences: state.communicationPreferences,
+    dateOfBirth: state.dateOfBirth,
+    dentalBenefits: state.dentalBenefits,
+    dentalInsurance: state.dentalInsurance,
+    personalInformation: state.personalInformation,
+    partnerInformation: state.partnerInformation,
   });
 
   const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
 
-  const submissionInfo: SubmissionInfoState = {
-    confirmationCode: confirmationCode,
-    submittedOn: new Date().toISOString(),
-  };
+  saveApplyState({
+    params,
+    session,
+    state: {
+      submissionInfo: {
+        confirmationCode: confirmationCode,
+        submittedOn: new Date().toISOString(),
+      },
+    },
+  });
 
-  saveApplyChildState({ params, request, session, state: { submissionInfo } });
   return redirect(getPathById('$lang+/_public+/apply+/$id+/child/confirmation', params));
 }
 

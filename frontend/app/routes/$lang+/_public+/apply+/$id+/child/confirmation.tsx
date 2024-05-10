@@ -43,14 +43,14 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const locale = getLocale(request);
 
   // prettier-ignore
-  if (state.childState.applicantInformation === undefined ||
-    state.childState.communicationPreferences === undefined ||
-    state.childState.dateOfBirth === undefined ||
-    state.childState.dentalBenefits === undefined ||
-    state.childState.dentalInsurance === undefined ||
-    state.childState.personalInformation === undefined ||
-    state.childState.submissionInfo === undefined ||
-    state.childState.taxFiling2023 === undefined ||
+  if (state.applicantInformation === undefined ||
+    state.communicationPreferences === undefined ||
+    state.dateOfBirth === undefined ||
+    state.dentalBenefits === undefined ||
+    state.dentalInsurance === undefined ||
+    state.personalInformation === undefined ||
+    state.submissionInfo === undefined ||
+    state.taxFiling2023 === undefined ||
     state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
@@ -59,77 +59,77 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const allFederalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
   const allProvincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
   const selectedFederalBenefits = [...allFederalSocialPrograms]
-    .filter((obj) => obj.id === state.childState.dentalBenefits?.federalSocialProgram)
+    .filter((obj) => obj.id === state.dentalBenefits?.federalSocialProgram)
     .map((obj) => getNameByLanguage(locale, obj))
     .join(', ');
   const selectedProvincialBenefits = [...allProvincialTerritorialSocialPrograms]
-    .filter((obj) => obj.id === state.childState.dentalBenefits?.provincialTerritorialSocialProgram)
+    .filter((obj) => obj.id === state.dentalBenefits?.provincialTerritorialSocialProgram)
     .map((obj) => getNameByLanguage(locale, obj))
     .join(', ');
 
   // Getting province by Id
   const allRegions = await lookupService.getAllRegions();
-  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.childState.personalInformation?.mailingProvince);
-  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.childState.personalInformation?.homeProvince);
+  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
+  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
 
   // Getting Country by Id
   const allCountries = await lookupService.getAllCountries();
-  const countryMailing = allCountries.find((country) => country.countryId === state.childState.personalInformation?.mailingCountry);
-  const countryHome = allCountries.find((country) => country.countryId === state.childState.personalInformation?.homeCountry);
+  const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation?.mailingCountry);
+  const countryHome = allCountries.find((country) => country.countryId === state.personalInformation?.homeCountry);
 
-  const preferredLang = await lookupService.getPreferredLanguage(state.childState.communicationPreferences.preferredLanguage);
-  const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : state.childState.communicationPreferences.preferredLanguage;
+  const preferredLang = await lookupService.getPreferredLanguage(state.communicationPreferences.preferredLanguage);
+  const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : state.communicationPreferences.preferredLanguage;
 
   const maritalStatuses = await lookupService.getAllMaritalStatuses();
-  const maritalStatusDict = maritalStatuses.find((obj) => obj.id === state.childState.applicantInformation?.maritalStatus)!;
+  const maritalStatusDict = maritalStatuses.find((obj) => obj.id === state.applicantInformation?.maritalStatus)!;
   const maritalStatus = getNameByLanguage(locale, maritalStatusDict);
 
   const communicationPreferences = await lookupService.getAllPreferredCommunicationMethods();
-  const communicationPreferenceDict = communicationPreferences.find((obj) => obj.id === state.childState.communicationPreferences?.preferredMethod);
+  const communicationPreferenceDict = communicationPreferences.find((obj) => obj.id === state.communicationPreferences?.preferredMethod);
   const communicationPreference = getNameByLanguage(locale, communicationPreferenceDict!);
 
   const userInfo = {
-    firstName: state.childState.applicantInformation.firstName,
-    lastName: state.childState.applicantInformation.lastName,
-    phoneNumber: state.childState.personalInformation.phoneNumber,
-    altPhoneNumber: state.childState.personalInformation.phoneNumberAlt,
+    firstName: state.applicantInformation.firstName,
+    lastName: state.applicantInformation.lastName,
+    phoneNumber: state.personalInformation.phoneNumber,
+    altPhoneNumber: state.personalInformation.phoneNumberAlt,
     preferredLanguage: preferredLanguage,
-    birthday: toLocaleDateString(parse(state.childState.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
-    sin: state.childState.applicantInformation.socialInsuranceNumber,
+    birthday: toLocaleDateString(parse(state.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+    sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: maritalStatus,
-    email: state.childState.communicationPreferences.email,
+    email: state.communicationPreferences.email,
     communicationPreference: communicationPreference,
   };
 
-  const spouseInfo = state.childState.partnerInformation
+  const spouseInfo = state.partnerInformation
     ? {
-        firstName: state.childState.partnerInformation.firstName,
-        lastName: state.childState.partnerInformation.lastName,
-        birthday: toLocaleDateString(parse(state.childState.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
-        sin: state.childState.partnerInformation.socialInsuranceNumber,
+        firstName: state.partnerInformation.firstName,
+        lastName: state.partnerInformation.lastName,
+        birthday: toLocaleDateString(parse(state.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+        sin: state.partnerInformation.socialInsuranceNumber,
       }
     : undefined;
 
   const mailingAddressInfo = {
-    address: state.childState.personalInformation.mailingAddress,
-    city: state.childState.personalInformation.mailingCity,
+    address: state.personalInformation.mailingAddress,
+    city: state.personalInformation.mailingCity,
     province: provinceMailing,
-    postalCode: state.childState.personalInformation.mailingPostalCode,
+    postalCode: state.personalInformation.mailingPostalCode,
     country: countryMailing,
-    apartment: state.childState.personalInformation.mailingApartment,
+    apartment: state.personalInformation.mailingApartment,
   };
 
   const homeAddressInfo = {
-    address: state.childState.personalInformation.homeAddress,
-    city: state.childState.personalInformation.homeCity,
+    address: state.personalInformation.homeAddress,
+    city: state.personalInformation.homeCity,
     province: provinceHome,
-    postalCode: state.childState.personalInformation.homePostalCode,
+    postalCode: state.personalInformation.homePostalCode,
     country: countryHome,
-    apartment: state.childState.personalInformation.homeApartment,
+    apartment: state.personalInformation.homeApartment,
   };
 
   const dentalInsurance = {
-    acessToDentalInsurance: state.childState.dentalInsurance,
+    acessToDentalInsurance: state.dentalInsurance,
     selectedFederalBenefits,
     selectedProvincialBenefits,
   };
@@ -144,7 +144,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     csrfToken,
     meta,
     spouseInfo,
-    submissionInfo: state.childState.submissionInfo,
+    submissionInfo: state.submissionInfo,
     userInfo,
   });
 }

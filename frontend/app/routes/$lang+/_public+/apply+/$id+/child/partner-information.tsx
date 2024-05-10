@@ -17,7 +17,8 @@ import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusT
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import { Progress } from '~/components/progress';
-import { applicantInformationStateHasPartner, loadApplyChildState, saveApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
+import { applicantInformationStateHasPartner, loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -51,14 +52,14 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  if (state.childState.applicantInformation === undefined || !applicantInformationStateHasPartner(state.childState.applicantInformation)) {
+  if (state.applicantInformation === undefined || !applicantInformationStateHasPartner(state.applicantInformation)) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/child/applicant-information', params));
   }
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:partner-information.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.childState.partnerInformation, editMode: state.childState.editMode });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.partnerInformation, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -99,14 +100,14 @@ export async function action({ context: { session }, params, request }: ActionFu
         .trim()
         .min(1, t('apply-child:partner-information.error-message.sin-required'))
         .refine(isValidSin, t('apply-child:partner-information.error-message.sin-valid'))
-        .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.childState.applicantInformation?.socialInsuranceNumber, t('apply-child:partner-information.error-message.sin-unique'))
+        .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.applicantInformation?.socialInsuranceNumber, t('apply-child:partner-information.error-message.sin-unique'))
         .superRefine((sin, ctx) => {
           if (!isValidSin(sin)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:partner-information.error-message.sin-valid'), fatal: true });
             return z.NEVER;
           }
 
-          if (state.childState.applicantInformation && formatSin(sin) === formatSin(state.childState.applicantInformation.socialInsuranceNumber)) {
+          if (state.applicantInformation && formatSin(sin) === formatSin(state.applicantInformation.socialInsuranceNumber)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:partner-information.error-message.sin-unique'), fatal: true });
             return z.NEVER;
           }
@@ -160,9 +161,9 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  saveApplyChildState({ params, request, session, state: { partnerInformation: parsedDataResult.data } });
+  saveApplyState({ params, session, state: { partnerInformation: parsedDataResult.data } });
 
-  if (state.childState.editMode) {
+  if (state.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/child/review-information', params));
   }
 

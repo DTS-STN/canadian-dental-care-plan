@@ -16,7 +16,8 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { loadApplyChildState, saveApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
+import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
@@ -71,12 +72,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     preferredCommunicationMethods,
     preferredLanguages,
     defaultState: {
-      ...(state.childState.communicationPreferences ?? {}),
-      email: state.childState.communicationPreferences?.email ?? state.childState.personalInformation?.email,
-      confirmEmail: state.childState.communicationPreferences?.confirmEmail ?? state.childState.personalInformation?.confirmEmail,
+      ...(state.communicationPreferences ?? {}),
+      email: state.communicationPreferences?.email ?? state.personalInformation?.email,
     },
-    editMode: state.childState.editMode,
-    isReadOnlyEmail: !!state.childState.personalInformation?.email,
+    editMode: state.editMode,
+    isReadOnlyEmail: !!state.personalInformation?.email,
   });
 }
 
@@ -134,9 +134,9 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  saveApplyChildState({ params, request, session, state: { communicationPreferences: parsedDataResult.data } });
+  saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
 
-  if (state.childState.editMode) {
+  if (state.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/child/review-information', params));
   }
 
@@ -223,7 +223,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             name="confirmEmail"
             errorMessage={errorMessages['confirm-email']}
             autoComplete="email"
-            defaultValue={defaultState.confirmEmail ?? ''}
+            defaultValue={defaultState.email ?? ''}
             required
             disabled={isReadOnlyEmail}
           />
