@@ -17,7 +17,7 @@ import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
 import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
-import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
@@ -38,19 +38,6 @@ enum HasProvincialTerritorialBenefitsOption {
   No = 'no',
   Yes = 'yes',
 }
-
-interface FederalBenefitsState {
-  hasFederalBenefits: boolean;
-  federalSocialProgram?: string;
-}
-
-interface ProvincialTerritorialBenefitsState {
-  hasProvincialTerritorialBenefits: boolean;
-  provincialTerritorialSocialProgram?: string;
-  province?: string;
-}
-
-export type DentalBenefitsState = FederalBenefitsState & ProvincialTerritorialBenefitsState;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'),
@@ -113,7 +100,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         ...val,
         federalSocialProgram: val.hasFederalBenefits ? val.federalSocialProgram : undefined,
       };
-    }) satisfies z.ZodType<FederalBenefitsState>;
+    }) satisfies z.ZodType<DentalFederalBenefitsState>;
 
   const provincialTerritorialBenefitsSchema = z
     .object({
@@ -136,7 +123,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         province: val.hasProvincialTerritorialBenefits ? val.province : undefined,
         provincialTerritorialSocialProgram: val.hasProvincialTerritorialBenefits ? val.provincialTerritorialSocialProgram : undefined,
       };
-    }) satisfies z.ZodType<ProvincialTerritorialBenefitsState>;
+    }) satisfies z.ZodType<DentalProvincialTerritorialBenefitsState>;
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
