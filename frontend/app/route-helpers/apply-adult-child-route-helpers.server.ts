@@ -74,6 +74,7 @@ export function loadApplyAdultChildState({ params, request, session }: LoadApply
   if (!applyState.adultChildState.submissionInfo && pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has not been submitted; sessionId: [%s], ', applyState.id, termsAndConditionsRouteUrl);
     //throw redirect(termsAndConditionsRouteUrl);
+    //TODO: re-add throw when apply adult-child flow is completed
   }
 
   return {
