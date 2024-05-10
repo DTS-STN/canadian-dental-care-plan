@@ -54,6 +54,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
+  //TODO: re-enable state check once adult-child flow is complete
+
   const allFederalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
   const allProvincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
   const selectedFederalBenefits = [...allFederalSocialPrograms]
@@ -131,6 +133,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     selectedFederalBenefits,
     selectedProvincialBenefits,
   };*/
+
+  //TODO: replace placeholder data with application data once adult-child flow is complete
 
   const userInfo = {
     firstName: 'firstName',
