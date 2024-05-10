@@ -19,9 +19,9 @@ import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('dependent-status-check', 'gcweb'),
-  pageIdentifier: pageIds.protected['dependent-status-check'].index,
-  pageTitleI18nKey: 'dependent-status-check:page-title',
+  i18nNamespaces: getTypedI18nNamespaces('dependent-status-checker', 'gcweb'),
+  pageIdentifier: pageIds.protected['dependent-status-checker'].index,
+  pageTitleI18nKey: 'dependent-status-checker:page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -29,7 +29,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  featureEnabled('dependent-status-check');
+  featureEnabled('dependent-status-checker');
 
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
@@ -56,10 +56,10 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   };
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('dependent-status-check:page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('dependent-status-checker:page-title') }) };
 
   if (!userInfoToken.sin || !personalInformation.clientNumber) {
-    instrumentationService.countHttpStatus('dependent-status-check', 400);
+    instrumentationService.countHttpStatus('dependent-status-checker', 400);
     throw new Response(null, { status: 400 });
   }
 
@@ -82,7 +82,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     return 'info';
   }
 
-  instrumentationService.countHttpStatus('dependent-status-check', 200);
+  instrumentationService.countHttpStatus('dependent-status-checker', 200);
   return json({
     meta,
     status: {
@@ -99,17 +99,17 @@ export default function StatusChecker() {
   return (
     <div className="max-w-prose">
       <div className="space-y-4">
-        <h2 className="font-bold">{t('dependent-status-check:status-checker-heading')}</h2>
-        <p>{t('dependent-status-check:status-checker-content')}</p>
-        <h2 className="font-bold">{t('dependent-status-check:online-status-heading')}</h2>
-        <p>{t('dependent-status-check:online-status-content')}</p>
+        <h2 className="font-bold">{t('dependent-status-checker:status-checker-heading')}</h2>
+        <p>{t('dependent-status-checker:status-checker-content')}</p>
+        <h2 className="font-bold">{t('dependent-status-checker:online-status-heading')}</h2>
+        <p>{t('dependent-status-checker:online-status-content')}</p>
       </div>
       <ContextualAlert type={status.alertType}>
         <div>
           <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
-            {t('dependent-status-check:status-heading')}
+            {t('dependent-status-checker:status-heading')}
           </h2>
-          {status.id ? getNameByLanguage(i18n.language, status) : t('dependent-status-check:empty-status')}
+          {status.id ? getNameByLanguage(i18n.language, status) : t('dependent-status-checker:empty-status')}
         </div>
       </ContextualAlert>
     </div>

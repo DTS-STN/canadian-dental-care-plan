@@ -51,7 +51,7 @@ declare module 'i18next' {
       alerts: typeof alerts;
       applications: typeof applications;
       status: typeof status;
-      'dependent-status-check': typeof statusCheck;
+      'dependent-status-checker': typeof statusCheck;
       'status-check': typeof statusCheck;
       'stub-sin-editor': typeof stubSinEditor;
       'unable-to-process-request': typeof unableToProcessRequest;

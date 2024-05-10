@@ -15,8 +15,8 @@
   "subscribe-desc": "(FR) In this section, you can subscribe to the email alerts for CDCP, Any time you have a new message, you will be alerted.",
   "status-check": "(FR) Status Check",
   "status-check-desc": "(FR) Status Check description",
-  "dependent-status-check": "(FR) Dependent Status Check",
-  "dependent-status-check-desc": "(FR) Dependent Status Check description",
+  "dependent-status-checker": "(FR) Dependent Status Checker",
+  "dependent-status-checker-desc": "(FR) Dependent Status Checker description",
   "label-in-progress": {
     "sr-only": "(FR)State:",
     "text": "(FR)In progress"

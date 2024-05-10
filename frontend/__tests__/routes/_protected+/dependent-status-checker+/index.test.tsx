@@ -2,7 +2,7 @@ import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { loader } from '~/routes/$lang+/_protected+/dependent-status-check+/index';
+import { loader } from '~/routes/$lang+/_protected+/dependent-status-checker+/index';
 
 vi.mock('~/services/audit-service.server', () => ({
   getAuditService: vi.fn().mockReturnValue({
@@ -69,7 +69,7 @@ describe('Dependent Status Checker Page', () => {
       session.set('userInfoToken', { sin: '999999999', sub: '1111111' });
 
       const response = await loader({
-        request: new Request('http://localhost/dependent-status-check'),
+        request: new Request('http://localhost/dependent-status-checker'),
         context: { session },
         params: {},
       });
