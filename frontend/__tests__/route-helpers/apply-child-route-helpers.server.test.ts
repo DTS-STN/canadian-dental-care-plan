@@ -50,8 +50,9 @@ describe('apply-route-helpers.server', () => {
 
     const baseState = {
       id: '00000000-0000-0000-0000-000000000000',
-      lastUpdatedOn: '',
-    };
+      editMode: false,
+      lastUpdatedOn: '2000-01-01',
+    } satisfies ApplyState;
 
     it('should redirect if typeOfApplication is undefined', () => {
       const mockState = {

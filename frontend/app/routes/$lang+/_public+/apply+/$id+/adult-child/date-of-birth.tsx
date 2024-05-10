@@ -16,8 +16,8 @@ import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultChildState, saveApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -52,8 +52,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.date-of-birth.page-title') }) };
 
-  const { dateOfBirth, allChildrenUnder18 } = state.adultChildState;
-  return json({ id: state.id, csrfToken, meta, defaultState: { dateOfBirth, allChildrenUnder18 }, editMode: state.adultChildState.editMode });
+  const { dateOfBirth, allChildrenUnder18 } = state;
+  return json({ id: state.id, csrfToken, meta, defaultState: { dateOfBirth, allChildrenUnder18 }, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -147,7 +147,14 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  saveApplyAdultChildState({ params, request, session, state: { dateOfBirth: parsedDataResult.data.dateOfBirth, allChildrenUnder18: parsedDataResult.data.allChildrenUnder18 } });
+  saveApplyState({
+    params,
+    session,
+    state: {
+      dateOfBirth: parsedDataResult.data.dateOfBirth,
+      allChildrenUnder18: parsedDataResult.data.allChildrenUnder18 === AllChildrenUnder18Option.Yes,
+    },
+  });
 
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
   const allChildrenUnder18 = parsedDataResult.data.allChildrenUnder18;
@@ -168,7 +175,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/apply-yourself', params));
   }
 
-  if (state.adultChildState.editMode) {
+  if (state.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-information', params));
   }
 
@@ -244,8 +251,8 @@ export default function ApplyFlowDateOfBirth() {
               name="allChildrenUnder18"
               legend={t('apply-adult-child:eligibility.date-of-birth.child-age-instruction')}
               options={[
-                { value: AllChildrenUnder18Option.Yes, children: t('apply-adult-child:eligibility.date-of-birth.yes'), defaultChecked: defaultState.allChildrenUnder18 === AllChildrenUnder18Option.Yes },
-                { value: AllChildrenUnder18Option.No, children: t('apply-adult-child:eligibility.date-of-birth.no'), defaultChecked: defaultState.allChildrenUnder18 === AllChildrenUnder18Option.No },
+                { value: AllChildrenUnder18Option.Yes, children: t('apply-adult-child:eligibility.date-of-birth.yes'), defaultChecked: defaultState.allChildrenUnder18 === true },
+                { value: AllChildrenUnder18Option.No, children: t('apply-adult-child:eligibility.date-of-birth.no'), defaultChecked: defaultState.allChildrenUnder18 === false },
               ]}
               errorMessage={fetcher.data?.errors.allChildrenUnder18?._errors[0]}
               required

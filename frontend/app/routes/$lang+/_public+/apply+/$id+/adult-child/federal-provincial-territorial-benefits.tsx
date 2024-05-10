@@ -7,6 +7,7 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
@@ -17,7 +18,8 @@ import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { AppPageTitle } from '~/components/layouts/public-layout';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultChildState, saveApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 //TODO: Change over route helper to adult-child when available
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
@@ -51,7 +53,7 @@ interface ProvincialTerritorialBenefitsState {
   province?: string;
 }
 
-export type DentalBenefitsState = { isChild: boolean; childName: string | undefined } & FederalBenefitsState & ProvincialTerritorialBenefitsState;
+export type DentalBenefitsState = FederalBenefitsState & ProvincialTerritorialBenefitsState;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -75,17 +77,23 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const regions = allRegions.filter((region) => region.countryId === CANADA_COUNTRY_ID);
 
   const csrfToken = String(session.get('csrfToken'));
-  const childName = state.adultChildState.childInformation?.firstName ?? '<Child 1 name>';
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:dental-benefits.title', { titleComponent: childName }) }) };
 
-  const currentChildIndex = state.adultChildState.currentChild ?? 0;
-  const currentDentalBenefit = state.adultChildState.childDentalBenefits;
+  invariant(state.children, 'Expected state.children to be defined');
+  const child = state.children.find(({ id }) => id === params.childId);
+
+  if (!child) {
+    // TODO: do something else later, maybe log warning and redirect to summary or review page
+    throw new Response(null, { status: 404 });
+  }
+
+  const childName = child.information?.firstName ?? '<Child 1 name>';
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:dental-benefits.title', { titleComponent: childName }) }) };
 
   return json({
     childName: childName,
     csrfToken,
-    defaultState: currentDentalBenefit ? currentDentalBenefit[currentChildIndex] : undefined,
-    editMode: state.adultChildState.editMode,
+    defaultState: child.dentalBenefits,
+    editMode: state.editMode,
     federalSocialPrograms,
     id: state.id,
     meta,
@@ -96,10 +104,16 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/federal-provincial-territorial');
-
+  const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const childName = '<Child 1 name>'; //TODO: set child name from adult-child apply flow
+  invariant(state.children, 'Expected state.children to be defined');
+  const child = state.children.find(({ id }) => id === params.childId);
+
+  if (!child) {
+    // TODO: do something else later, maybe log warning and redirect to summary or review page
+    throw new Response(null, { status: 404 });
+  }
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
@@ -155,8 +169,6 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   const dentalBenefits = {
-    isChild: true,
-    childName: childName,
     hasFederalBenefits: formData.get('hasFederalBenefits') ? formData.get('hasFederalBenefits') === HasFederalBenefitsOption.Yes : undefined,
     federalSocialProgram: formData.get('federalSocialProgram') ? String(formData.get('federalSocialProgram')) : undefined,
     hasProvincialTerritorialBenefits: formData.get('hasProvincialTerritorialBenefits') ? formData.get('hasProvincialTerritorialBenefits') === HasProvincialTerritorialBenefitsOption.Yes : undefined,
@@ -176,25 +188,20 @@ export async function action({ context: { session }, params, request }: ActionFu
     });
   }
 
-  await saveApplyAdultChildState({
+  saveApplyState({
     params,
-    request,
     session,
     state: {
-      //TODO: Change over route helper to adult-child when available
-      dentalBenefits: {
-        ...parsedFederalBenefitsResult.data,
-        ...parsedProvincialTerritorialBenefitsResult.data,
-      },
-      /* dentalBenefits: [
-        {
-          isChild: true,
-          childName: childName,
-          ...parsedFederalBenefitsResult.data,
-          ...parsedProvincialTerritorialBenefitsResult.data,
-        },
-      ],*/
-      editMode: true, // last step in the flow
+      children: state.children.map((obj) => {
+        if (obj.id !== child.id) return obj;
+        return {
+          ...obj,
+          dentalBenefits: {
+            ...parsedFederalBenefitsResult.data,
+            ...parsedProvincialTerritorialBenefitsResult.data,
+          },
+        };
+      }),
     },
   });
 

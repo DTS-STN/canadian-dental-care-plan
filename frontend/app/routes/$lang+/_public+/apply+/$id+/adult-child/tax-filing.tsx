@@ -13,7 +13,8 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultChildState, saveApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -47,7 +48,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.tax-filing.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.adultChildState.taxFiling2023 });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.taxFiling2023 });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -75,7 +76,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  saveApplyAdultChildState({ params, request, session, state: { taxFiling2023: parsedDataResult.data } });
+  saveApplyState({ params, session, state: { taxFiling2023: parsedDataResult.data } });
 
   if (parsedDataResult.data === TaxFilingOption.No) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/file-taxes', params));

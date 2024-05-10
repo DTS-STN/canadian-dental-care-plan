@@ -4,13 +4,14 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronLeft, faChevronRight, faPlus, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
+import { Fragment } from 'react/jsx-runtime';
 
 import pageIds from '../../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultChildState, saveApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -37,9 +38,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.index.page-title') }) };
 
-  await saveApplyAdultChildState({ params, request, session, state: { editMode: true } });
-
-  return json({ id: state.id, csrfToken, meta, defaultState: state.adultChildState.childInformation });
+  return json({ id: state.id, csrfToken, meta, children: state.children });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -58,7 +57,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowChildSummary() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState } = useLoaderData<typeof loader>();
+  const { csrfToken, children } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -73,43 +72,39 @@ export default function ApplyFlowChildSummary() {
       </div>
       <div className="max-w-prose">
         <fetcher.Form method="post" aria-describedby="form-instructions-sin form-instructions" noValidate>
-          {defaultState?.firstName && (
+          {children === undefined || (children.length === 0 && <p>{t('apply-adult-child:children.index.no-children')}</p>)}
+          {children !== undefined && children.length > 0 && (
             <>
               <p className="mb-6">{t('apply-adult-child:children.index.children-added')}</p>
               <input type="hidden" name="_csrf" value={csrfToken} />
-              <DescriptionListItem
-                term={
-                  <>
-                    <h2 className="text-2xl font-semibold">{`${defaultState.firstName} ${defaultState.lastName}`}</h2>
-                    <InlineLink className="text-sm font-normal" id="remove-child" routeId="$lang+/_public+/apply+/$id+/adult-child/child-information" params={params}>
-                      {t('apply-adult-child:children.index.remove-child')}
-                    </InlineLink>
-                  </>
-                }
-              >
-                <dl className="divide-y border-y">
-                  <DescriptionListItem term={t('apply-adult-child:children.index.dob-title')}>
-                    <p>{defaultState.dateOfBirth}</p>
-                    <p className="mt-4">
-                      <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult-child/child-information" params={params}>
-                        {t('apply-adult-child:children.index.dob-change')}
-                      </InlineLink>
-                    </p>
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('apply-adult-child:children.index.sin-title')}>
-                    <p>{defaultState.socialInsuranceNumber}</p>
-                    <p className="mt-4">
-                      <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/adult-child/child-information" params={params}>
-                        {t('apply-adult-child:children.index.sin-change')}
-                      </InlineLink>
-                    </p>
-                  </DescriptionListItem>
-                </dl>
-              </DescriptionListItem>
+              {children.map((child) => {
+                <Fragment key={child.id}>
+                  <h2 className="text-2xl font-semibold">{`${child.information?.firstName} ${child.information?.lastName}`}</h2>
+                  <InlineLink className="text-sm font-normal" id="remove-child" routeId="$lang+/_public+/apply+/$id+/adult-child/child-information" params={params}>
+                    {t('apply-adult-child:children.index.remove-child')}
+                  </InlineLink>
+                  <dl className="divide-y border-y">
+                    <DescriptionListItem term={t('apply-adult-child:children.index.dob-title')}>
+                      <p>{child.information?.dateOfBirth}</p>
+                      <p className="mt-4">
+                        <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult-child/child-information" params={params}>
+                          {t('apply-adult-child:children.index.dob-change')}
+                        </InlineLink>
+                      </p>
+                    </DescriptionListItem>
+                    <DescriptionListItem term={t('apply-adult-child:children.index.sin-title')}>
+                      <p>{child.information?.socialInsuranceNumber}</p>
+                      <p className="mt-4">
+                        <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/adult-child/child-information" params={params}>
+                          {t('apply-adult-child:children.index.sin-change')}
+                        </InlineLink>
+                      </p>
+                    </DescriptionListItem>
+                  </dl>
+                </Fragment>;
+              })}
             </>
           )}
-
-          {!defaultState?.firstName && <p>{t('apply-adult-child:children.index.no-children')}</p>}
 
           <ButtonLink
             className="mb-10"

@@ -153,7 +153,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
       preferredMethod: 'EMAIL',
     },
   };
-  const spouseInfo = state.adultChildState.partnerInformation
+  const spouseInfo = state.partnerInformation
     ? {
         firstName: 'firstName',
         lastName: 'lastName',
@@ -225,7 +225,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     csrfToken,
     meta,
     spouseInfo,
-    submissionInfo: state.adultChildState.submissionInfo,
+    submissionInfo: state.submissionInfo,
     userInfo,
   });
 }

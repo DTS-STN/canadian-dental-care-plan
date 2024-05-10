@@ -53,7 +53,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   saveApplyState({ params, session, state: { typeOfApplication: 'adult' } });
 
-  const { taxFiling2023, dateOfBirth } = state.adultChildState;
+  const { taxFiling2023, dateOfBirth } = state;
   saveApplyAdultState({ params, request, session, state: { taxFiling2023, dateOfBirth } });
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));

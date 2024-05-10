@@ -4,6 +4,18 @@ import { Params } from '@remix-run/react';
 import { differenceInMinutes } from 'date-fns';
 import { z } from 'zod';
 
+import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/applicant-information';
+import { ChildInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/child-information';
+import { CommunicationPreferencesState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/communication-preference';
+import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/date-of-birth';
+import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/dental-insurance';
+import { DisabilityTaxCreditState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/disability-tax-credit';
+import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/federal-provincial-territorial-benefits';
+import { LivingIndependentlyState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/living-independently';
+import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/partner-information';
+import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/personal-information';
+import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/tax-filing';
+import { SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/adult/review-information';
 import { TypeOfApplicationState } from '~/routes/$lang+/_public+/apply+/$id+/type-application';
 import { getAgeFromDateString } from '~/utils/date-utils';
 import { getLogger } from '~/utils/logging.server';
@@ -11,19 +23,37 @@ import { getPathById } from '~/utils/route-utils';
 
 const log = getLogger('apply-route-helpers.server');
 
+export interface ApplyState {
+  readonly id: string;
+  readonly editMode: boolean;
+  readonly lastUpdatedOn: string;
+  readonly childState?: unknown;
+  readonly adultState?: unknown;
+  readonly allChildrenUnder18?: boolean;
+  readonly applicantInformation?: ApplicantInformationState;
+  readonly children?: {
+    readonly id: string;
+    readonly dentalBenefits?: DentalBenefitsState;
+    readonly dentalInsurance?: DentalInsuranceState;
+    readonly information?: ChildInformationState;
+  }[];
+  readonly communicationPreferences?: CommunicationPreferencesState;
+  readonly dateOfBirth?: DateOfBirthState;
+  readonly dentalBenefits?: DentalBenefitsState;
+  readonly dentalInsurance?: DentalInsuranceState;
+  readonly disabilityTaxCredit?: DisabilityTaxCreditState;
+  readonly livingIndependently?: LivingIndependentlyState;
+  readonly partnerInformation?: PartnerInformationState;
+  readonly personalInformation?: PersonalInformationState;
+  readonly submissionInfo?: SubmissionInfoState;
+  readonly taxFiling2023?: TaxFilingState;
+  readonly typeOfApplication?: TypeOfApplicationState;
+}
+
 /**
  * Schema for validating UUID.
  */
 const idSchema = z.string().uuid();
-
-export interface ApplyState {
-  readonly adultChildState?: unknown;
-  readonly adultState?: unknown;
-  readonly childState?: unknown;
-  readonly id: string;
-  readonly lastUpdatedOn: string;
-  readonly typeOfApplication?: TypeOfApplicationState;
-}
 
 /**
  * Gets the session name.
@@ -137,6 +167,7 @@ export function startApplyState({ id, session }: StartArgs) {
 
   const initialState: ApplyState = {
     id: parsedId,
+    editMode: false,
     lastUpdatedOn: new Date().toISOString(),
   };
 
