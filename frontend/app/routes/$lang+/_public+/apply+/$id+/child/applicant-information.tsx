@@ -16,8 +16,8 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { applicantInformationStateHasPartner, loadApplyChildState, saveApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
-import '~/route-helpers/apply-route-helpers.server';
+import { applicantInformationStateHasPartner, loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -61,7 +61,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:applicant-information.page-title') }) };
 
-  return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.childState.applicantInformation, editMode: state.childState.editMode });
+  return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.applicantInformation, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -82,9 +82,9 @@ export async function action({ context: { session }, params, request }: ActionFu
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
 
   if (formAction === FormAction.Cancel) {
-    invariant(state.childState.applicantInformation, 'Expected state.applicantInformation to be defined');
+    invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
 
-    if (applicantInformationStateHasPartner(state.childState.applicantInformation) && state.childState.partnerInformation === undefined) {
+    if (applicantInformationStateHasPartner(state.applicantInformation) && state.partnerInformation === undefined) {
       const errorMessage = t('apply-child:applicant-information.error-message.marital-status-no-partner-information');
       const errors: z.ZodFormattedError<ApplicantInformationState, string> = { _errors: [errorMessage], maritalStatus: { _errors: [errorMessage] } };
       return json({ errors });
@@ -106,7 +106,7 @@ export async function action({ context: { session }, params, request }: ActionFu
           return z.NEVER;
         }
 
-        if (state.childState.partnerInformation && formatSin(sin) === formatSin(state.childState.partnerInformation.socialInsuranceNumber)) {
+        if (state.partnerInformation && formatSin(sin) === formatSin(state.partnerInformation.socialInsuranceNumber)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:applicant-information.error-message.sin-unique'), fatal: true });
           return z.NEVER;
         }
@@ -133,9 +133,9 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const hasPartner = applicantInformationStateHasPartner(parsedDataResult.data);
   const remove = !hasPartner ? 'partnerInformation' : undefined;
-  await saveApplyChildState({ params, remove, request, session, state: { applicantInformation: parsedDataResult.data } });
+  await saveApplyState({ params, remove, session, state: { applicantInformation: parsedDataResult.data } });
 
-  if (state.childState.editMode) {
+  if (state.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/child/review-information', params));
   }
 

@@ -14,7 +14,6 @@ export interface ApplyState {
   readonly id: string;
   readonly editMode: boolean;
   readonly lastUpdatedOn: string;
-  readonly childState?: unknown;
   readonly allChildrenUnder18?: boolean;
   readonly applicantInformation?: {
     firstName: string;

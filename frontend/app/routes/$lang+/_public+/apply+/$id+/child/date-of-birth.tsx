@@ -14,8 +14,8 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { Progress } from '~/components/progress';
-import { loadApplyChildState, saveApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
-import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
+import { getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -50,8 +50,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:eligibility.date-of-birth.page-title') }) };
 
-  const { dateOfBirth, allChildrenUnder18 } = state.childState;
-  return json({ id: state.id, csrfToken, meta, defaultState: { dateOfBirth, allChildrenUnder18 }, editMode: state.childState.editMode });
+  const { dateOfBirth, allChildrenUnder18 } = state;
+  return json({ id: state.id, csrfToken, meta, defaultState: { dateOfBirth, allChildrenUnder18 }, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -141,7 +141,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  saveApplyChildState({ params, request, session, state: { dateOfBirth: parsedDataResult.data.dateOfBirth } });
+  saveApplyState({ params, session, state: { dateOfBirth: parsedDataResult.data.dateOfBirth } });
 
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
 
@@ -157,7 +157,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/disability-tax-credit', params));
   }
 
-  if (state.childState.editMode) {
+  if (state.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/child/review-information', params));
   }
 

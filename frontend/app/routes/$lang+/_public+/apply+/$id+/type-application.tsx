@@ -14,7 +14,6 @@ import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { ApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import { TypeOfApplicationState, loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -54,7 +53,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/type-of-application');
-  const state = loadApplyState({ params, session });
+  loadApplyState({ params, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   /**
@@ -86,7 +85,6 @@ export async function action({ context: { session }, params, request }: ActionFu
     state: {
       editMode: false,
       typeOfApplication: parsedDataResult.data,
-      childState: state.childState ?? ({ editMode: false } satisfies ApplyChildState),
     },
   });
 

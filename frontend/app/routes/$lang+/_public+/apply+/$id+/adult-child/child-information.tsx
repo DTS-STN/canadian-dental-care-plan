@@ -184,7 +184,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  // saveApplyState({ params, request, session, state: { childInformation: parsedDataResult.data } });
+  // saveApplyState({ params, session, state: { childInformation: parsedDataResult.data } });
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
 }
