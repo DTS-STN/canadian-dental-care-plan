@@ -36,7 +36,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const instrumentationService = getInstrumentationService();
 
   const idToken: IdToken = session.get('idToken');
-  getAuditService().audit('page-view.dependent-status-check', { userId: idToken.sub });
+  getAuditService().audit('page-view.dependent-status-checker', { userId: idToken.sub });
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   //const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
