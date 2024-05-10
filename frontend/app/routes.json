@@ -240,11 +240,11 @@
                         "file": "routes/$lang+/_public+/apply+/$id+/adult-child/children/_route.tsx",
                         "children": [
                           {
-                            "id": "$lang+/_public+/apply+/$id+/adult-child/children/child-summary",
-                            "file": "routes/$lang+/_public+/apply+/$id+/adult-child/children/child-summary.tsx",
+                            "id": "$lang+/_public+/apply+/$id+/adult-child/children/index",
+                            "file": "routes/$lang+/_public+/apply+/$id+/adult-child/children/index.tsx",
                             "paths": {
-                              "en": "/:lang/apply/:id/adult-child/children/children/child-summary",
-                              "fr": "/:lang/demander/:id/adulte-enfant/enfants/child-summary"
+                              "en": "/:lang/apply/:id/adult-child/children/index",
+                              "fr": "/:lang/demander/:id/adulte-enfant/enfants/index"
                             }
                           }
                         ]
