@@ -9,7 +9,6 @@ import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -41,7 +40,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/adult-child/apply-yourself');
-  const state = loadApplyAdultChildState({ params, request, session });
+  loadApplyAdultChildState({ params, request, session });
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
   const submittedCsrfToken = String(formData.get('_csrf'));
@@ -51,15 +50,12 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  saveApplyState({ params, session, state: { typeOfApplication: 'adult' } });
-
-  saveApplyAdultState({
+  saveApplyState({
     params,
-    request,
     session,
     state: {
-      taxFiling2023: state.taxFiling2023 ? 'yes' : 'no',
-      dateOfBirth: state.dateOfBirth,
+      editMode: false,
+      typeOfApplication: 'adult',
     },
   });
 

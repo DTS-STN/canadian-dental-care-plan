@@ -29,8 +29,6 @@ enum LivingIndependentlyOption {
   Yes = 'yes',
 }
 
-export type LivingIndependentlyState = `${LivingIndependentlyOption}`;
-
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adultChild.livingIndependently,
@@ -59,7 +57,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   /**
    * Schema for living independently.
    */
-  const livingIndependentlySchema: z.ZodType<LivingIndependentlyState> = z.nativeEnum(LivingIndependentlyOption, {
+  const livingIndependentlySchema = z.nativeEnum(LivingIndependentlyOption, {
     errorMap: () => ({ message: t('apply-adult-child:living-independently.error-message.living-independently-required') }),
   });
 
@@ -79,7 +77,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  saveApplyState({ params, session, state: { livingIndependently: parsedDataResult.data === 'yes' } });
+  saveApplyState({ params, session, state: { livingIndependently: parsedDataResult.data === LivingIndependentlyOption.Yes } });
 
   if (parsedDataResult.data === LivingIndependentlyOption.Yes) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/applicant-information', params));

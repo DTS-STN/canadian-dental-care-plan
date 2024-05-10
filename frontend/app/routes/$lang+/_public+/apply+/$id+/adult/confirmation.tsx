@@ -43,91 +43,91 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const locale = getLocale(request);
 
   // prettier-ignore
-  if (state.adultState.applicantInformation === undefined ||
-    state.adultState.communicationPreferences === undefined ||
-    state.adultState.dateOfBirth === undefined ||
-    state.adultState.dentalBenefits === undefined ||
-    state.adultState.dentalInsurance === undefined ||
-    state.adultState.personalInformation === undefined ||
-    state.adultState.submissionInfo === undefined ||
-    state.adultState.taxFiling2023 === undefined ||
+  if (state.applicantInformation === undefined ||
+    state.communicationPreferences === undefined ||
+    state.dateOfBirth === undefined ||
+    state.dentalBenefits === undefined ||
+    state.dentalInsurance === undefined ||
+    state.personalInformation === undefined ||
+    state.submissionInfo === undefined ||
+    state.taxFiling2023 === undefined ||
     state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
   const allFederalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
   const allProvincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
   const selectedFederalBenefits = [...allFederalSocialPrograms]
-    .filter((obj) => obj.id === state.adultState.dentalBenefits?.federalSocialProgram)
+    .filter((obj) => obj.id === state.dentalBenefits?.federalSocialProgram)
     .map((obj) => getNameByLanguage(locale, obj))
     .join(', ');
   const selectedProvincialBenefits = [...allProvincialTerritorialSocialPrograms]
-    .filter((obj) => obj.id === state.adultState.dentalBenefits?.provincialTerritorialSocialProgram)
+    .filter((obj) => obj.id === state.dentalBenefits?.provincialTerritorialSocialProgram)
     .map((obj) => getNameByLanguage(locale, obj))
     .join(', ');
 
   // Getting province by Id
   const allRegions = await getLookupService().getAllRegions();
-  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.adultState.personalInformation?.mailingProvince);
-  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.adultState.personalInformation?.homeProvince);
+  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
+  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
 
   // Getting Country by Id
   const allCountries = await getLookupService().getAllCountries();
-  const countryMailing = allCountries.find((country) => country.countryId === state.adultState.personalInformation?.mailingCountry);
-  const countryHome = allCountries.find((country) => country.countryId === state.adultState.personalInformation?.homeCountry);
+  const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation?.mailingCountry);
+  const countryHome = allCountries.find((country) => country.countryId === state.personalInformation?.homeCountry);
 
-  const preferredLang = await getLookupService().getPreferredLanguage(state.adultState.communicationPreferences.preferredLanguage);
-  const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : state.adultState.communicationPreferences.preferredLanguage;
+  const preferredLang = await getLookupService().getPreferredLanguage(state.communicationPreferences.preferredLanguage);
+  const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : state.communicationPreferences.preferredLanguage;
 
   const maritalStatuses = await getLookupService().getAllMaritalStatuses();
-  const maritalStatusDict = maritalStatuses.find((obj) => obj.id === state.adultState.applicantInformation?.maritalStatus)!;
+  const maritalStatusDict = maritalStatuses.find((obj) => obj.id === state.applicantInformation?.maritalStatus)!;
   const maritalStatus = getNameByLanguage(locale, maritalStatusDict);
 
   const communicationPreferences = await getLookupService().getAllPreferredCommunicationMethods();
-  const communicationPreferenceDict = communicationPreferences.find((obj) => obj.id === state.adultState.communicationPreferences?.preferredMethod);
+  const communicationPreferenceDict = communicationPreferences.find((obj) => obj.id === state.communicationPreferences?.preferredMethod);
   const communicationPreference = getNameByLanguage(locale, communicationPreferenceDict!);
 
   const userInfo = {
-    firstName: state.adultState.applicantInformation.firstName,
-    lastName: state.adultState.applicantInformation.lastName,
-    phoneNumber: state.adultState.personalInformation.phoneNumber,
-    altPhoneNumber: state.adultState.personalInformation.phoneNumberAlt,
+    firstName: state.applicantInformation.firstName,
+    lastName: state.applicantInformation.lastName,
+    phoneNumber: state.personalInformation.phoneNumber,
+    altPhoneNumber: state.personalInformation.phoneNumberAlt,
     preferredLanguage: preferredLanguage,
-    birthday: toLocaleDateString(parse(state.adultState.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
-    sin: state.adultState.applicantInformation.socialInsuranceNumber,
+    birthday: toLocaleDateString(parse(state.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+    sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: maritalStatus,
-    email: state.adultState.communicationPreferences.email,
+    email: state.communicationPreferences.email,
     communicationPreference: communicationPreference,
   };
 
-  const spouseInfo = state.adultState.partnerInformation
+  const spouseInfo = state.partnerInformation
     ? {
-        firstName: state.adultState.partnerInformation.firstName,
-        lastName: state.adultState.partnerInformation.lastName,
-        birthday: toLocaleDateString(parse(state.adultState.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
-        sin: state.adultState.partnerInformation.socialInsuranceNumber,
+        firstName: state.partnerInformation.firstName,
+        lastName: state.partnerInformation.lastName,
+        birthday: toLocaleDateString(parse(state.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+        sin: state.partnerInformation.socialInsuranceNumber,
       }
     : undefined;
 
   const mailingAddressInfo = {
-    address: state.adultState.personalInformation.mailingAddress,
-    city: state.adultState.personalInformation.mailingCity,
+    address: state.personalInformation.mailingAddress,
+    city: state.personalInformation.mailingCity,
     province: provinceMailing,
-    postalCode: state.adultState.personalInformation.mailingPostalCode,
+    postalCode: state.personalInformation.mailingPostalCode,
     country: countryMailing,
-    apartment: state.adultState.personalInformation.mailingApartment,
+    apartment: state.personalInformation.mailingApartment,
   };
 
   const homeAddressInfo = {
-    address: state.adultState.personalInformation.homeAddress,
-    city: state.adultState.personalInformation.homeCity,
+    address: state.personalInformation.homeAddress,
+    city: state.personalInformation.homeCity,
     province: provinceHome,
-    postalCode: state.adultState.personalInformation.homePostalCode,
+    postalCode: state.personalInformation.homePostalCode,
     country: countryHome,
-    apartment: state.adultState.personalInformation.homeApartment,
+    apartment: state.personalInformation.homeApartment,
   };
 
   const dentalInsurance = {
-    acessToDentalInsurance: state.adultState.dentalInsurance,
+    acessToDentalInsurance: state.dentalInsurance,
     selectedFederalBenefits,
     selectedProvincialBenefits,
   };
@@ -142,7 +142,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     csrfToken,
     meta,
     spouseInfo,
-    submissionInfo: state.adultState.submissionInfo,
+    submissionInfo: state.submissionInfo,
     userInfo,
   });
 }

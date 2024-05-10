@@ -14,8 +14,8 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
-import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import { getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -45,8 +45,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:eligibility.date-of-birth.page-title') }) };
 
-  const { dateOfBirth } = state.adultState;
-  return json({ id: state.id, csrfToken, meta, defaultState: { dateOfBirth }, editMode: state.adultState.editMode });
+  const { dateOfBirth } = state;
+  return json({ id: state.id, csrfToken, meta, defaultState: { dateOfBirth }, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -136,9 +136,9 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  saveApplyAdultState({ params, request, session, state: { dateOfBirth: parsedDataResult.data.dateOfBirth } });
+  saveApplyState({ params, session, state: { dateOfBirth: parsedDataResult.data.dateOfBirth } });
 
-  if (state.adultState.editMode) {
+  if (state.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
   }
 

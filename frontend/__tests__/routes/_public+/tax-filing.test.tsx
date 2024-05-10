@@ -7,11 +7,12 @@ import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/adult/tax-f
 vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
   loadApplyAdultState: vi.fn().mockReturnValue({
     id: '123',
-    adultState: {
-      taxFiling2023: 'yes',
-    },
+    taxFiling2023: true,
   }),
-  saveApplyAdultState: vi.fn().mockReturnValue({
+}));
+
+vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
+  saveApplyState: vi.fn().mockReturnValue({
     headers: {
       'Set-Cookie': 'some-set-cookie-header',
     },
@@ -48,7 +49,7 @@ describe('_public.apply.id.tax-filing', () => {
       expect(data).toMatchObject({
         id: '123',
         meta: {},
-        defaultState: 'yes',
+        defaultState: true,
       });
     });
   });

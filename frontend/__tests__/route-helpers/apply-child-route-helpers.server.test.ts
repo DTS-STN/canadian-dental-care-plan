@@ -109,7 +109,7 @@ describe('apply-route-helpers.server', () => {
         typeOfApplication: 'child',
         childState: {
           editMode: false,
-          taxFiling2023: 'no',
+          taxFiling2023: false,
         } satisfies ApplyChildState,
       } satisfies ApplyState;
 
@@ -122,7 +122,7 @@ describe('apply-route-helpers.server', () => {
         typeOfApplication: 'child',
         childState: {
           editMode: false,
-          taxFiling2023: 'yes',
+          taxFiling2023: true,
           dateOfBirth: undefined,
         } satisfies ApplyChildState,
       } satisfies ApplyState;
@@ -136,7 +136,7 @@ describe('apply-route-helpers.server', () => {
         typeOfApplication: 'child',
         childState: {
           editMode: false,
-          taxFiling2023: 'yes',
+          taxFiling2023: true,
           dateOfBirth: '1900-01-01',
           applicantInformation: undefined,
         } satisfies ApplyChildState,
@@ -151,7 +151,7 @@ describe('apply-route-helpers.server', () => {
         typeOfApplication: 'child',
         childState: {
           editMode: false,
-          taxFiling2023: 'yes',
+          taxFiling2023: true,
           dateOfBirth: '1900-01-01',
           applicantInformation: {
             firstName: 'First Name',
@@ -172,7 +172,7 @@ describe('apply-route-helpers.server', () => {
         typeOfApplication: 'child',
         childState: {
           editMode: false,
-          taxFiling2023: 'yes',
+          taxFiling2023: true,
           dateOfBirth: '1900-01-01',
           applicantInformation: {
             firstName: 'First Name',
@@ -199,7 +199,7 @@ describe('apply-route-helpers.server', () => {
         typeOfApplication: 'child',
         childState: {
           editMode: false,
-          taxFiling2023: 'yes',
+          taxFiling2023: true,
           dateOfBirth: '1900-01-01',
           applicantInformation: {
             firstName: 'First Name',
@@ -227,7 +227,7 @@ describe('apply-route-helpers.server', () => {
         typeOfApplication: 'child',
         childState: {
           editMode: false,
-          taxFiling2023: 'yes',
+          taxFiling2023: true,
           dateOfBirth: '1900-01-01',
           applicantInformation: {
             firstName: 'First Name',
@@ -261,7 +261,7 @@ describe('apply-route-helpers.server', () => {
         typeOfApplication: 'child',
         childState: {
           editMode: false,
-          taxFiling2023: 'yes',
+          taxFiling2023: true,
           dateOfBirth: '1900-01-01',
           applicantInformation: {
             firstName: 'First Name',
@@ -299,7 +299,7 @@ describe('apply-route-helpers.server', () => {
         typeOfApplication: 'child',
         childState: {
           editMode: false,
-          taxFiling2023: 'yes',
+          taxFiling2023: true,
           dateOfBirth: '1900-01-01',
           applicantInformation: {
             firstName: 'First Name',
@@ -338,7 +338,7 @@ describe('apply-route-helpers.server', () => {
         typeOfApplication: 'child',
         childState: {
           editMode: true,
-          taxFiling2023: 'yes',
+          taxFiling2023: true,
           dateOfBirth: '1900-01-01',
           applicantInformation: {
             firstName: 'First Name',

@@ -13,7 +13,8 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -27,8 +28,6 @@ enum LivingIndependentlyOption {
   No = 'no',
   Yes = 'yes',
 }
-
-export type LivingIndependentlyState = `${LivingIndependentlyOption}`;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
@@ -47,7 +46,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:living-independently.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.adultState.livingIndependently });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.livingIndependently });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -58,7 +57,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   /**
    * Schema for living independently.
    */
-  const livingIndependentlySchema: z.ZodType<LivingIndependentlyState> = z.nativeEnum(LivingIndependentlyOption, {
+  const livingIndependentlySchema = z.nativeEnum(LivingIndependentlyOption, {
     errorMap: () => ({ message: t('apply-adult:living-independently.error-message.living-independently-required') }),
   });
 
@@ -78,7 +77,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  saveApplyAdultState({ params, request, session, state: { livingIndependently: parsedDataResult.data } });
+  saveApplyState({ params, session, state: { livingIndependently: parsedDataResult.data === LivingIndependentlyOption.Yes } });
 
   if (parsedDataResult.data === LivingIndependentlyOption.Yes) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
@@ -137,12 +136,12 @@ export default function ApplyFlowLivingIndependently() {
               {
                 value: LivingIndependentlyOption.Yes,
                 children: t('apply-adult:living-independently.radio-options.yes'),
-                defaultChecked: defaultState === LivingIndependentlyOption.Yes,
+                defaultChecked: defaultState === true,
               },
               {
                 value: LivingIndependentlyOption.No,
                 children: t('apply-adult:living-independently.radio-options.no'),
-                defaultChecked: defaultState === LivingIndependentlyOption.No,
+                defaultChecked: defaultState === false,
               },
             ]}
             required

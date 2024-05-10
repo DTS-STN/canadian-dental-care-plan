@@ -14,8 +14,8 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
-import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import { getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -28,8 +28,6 @@ enum DisabilityTaxCreditOption {
   No = 'no',
   Yes = 'yes',
 }
-
-export type DisabilityTaxCreditState = `${DisabilityTaxCreditOption}`;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
@@ -48,14 +46,14 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:disability-tax-credit.page-title') }) };
 
-  invariant(state.adultState.dateOfBirth, 'Expected state.adultState.dateOfBirth to be defined');
-  const ageCategory = getAgeCategoryFromDateString(state.adultState.dateOfBirth);
+  invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
+  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
   if (ageCategory !== 'adults') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.adultState.disabilityTaxCredit });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.disabilityTaxCredit });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -64,7 +62,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const disabilityTaxCreditSchema: z.ZodType<DisabilityTaxCreditState> = z.nativeEnum(DisabilityTaxCreditOption, {
+  const disabilityTaxCreditSchema = z.nativeEnum(DisabilityTaxCreditOption, {
     errorMap: () => ({ message: t('apply-adult:disability-tax-credit.error-message.disability-tax-credit-required') }),
   });
 
@@ -84,10 +82,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  saveApplyAdultState({ params, request, session, state: { disabilityTaxCredit: parsedDataResult.data } });
+  saveApplyState({ params, session, state: { disabilityTaxCredit: parsedDataResult.data === DisabilityTaxCreditOption.Yes } });
 
-  invariant(state.adultState.dateOfBirth, 'Expected state.adultState.dateOfBirth to be defined');
-  const ageCategory = getAgeCategoryFromDateString(state.adultState.dateOfBirth);
+  invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
+  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
   if (ageCategory !== 'adults') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
@@ -150,8 +148,8 @@ export default function ApplyFlowDisabilityTaxCredit() {
             name="disabilityTaxCredit"
             legend={t('apply-adult:disability-tax-credit.form-label')}
             options={[
-              { value: DisabilityTaxCreditOption.Yes, children: t('apply-adult:disability-tax-credit.radio-options.yes'), defaultChecked: defaultState === DisabilityTaxCreditOption.Yes },
-              { value: DisabilityTaxCreditOption.No, children: t('apply-adult:disability-tax-credit.radio-options.no'), defaultChecked: defaultState === DisabilityTaxCreditOption.No },
+              { value: DisabilityTaxCreditOption.Yes, children: t('apply-adult:disability-tax-credit.radio-options.yes'), defaultChecked: defaultState === true },
+              { value: DisabilityTaxCreditOption.No, children: t('apply-adult:disability-tax-credit.radio-options.no'), defaultChecked: defaultState === false },
             ]}
             errorMessage={errorMessages['input-radio-disability-tax-credit-radios-option-0']}
             required

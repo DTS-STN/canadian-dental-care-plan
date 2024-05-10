@@ -2,17 +2,13 @@ import { Session, redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
 
 import { ApplyState, loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
-import { DisabilityTaxCreditState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/disability-tax-credit';
-import { LivingIndependentlyState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/living-independently';
 import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/child/applicant-information';
 import { CommunicationPreferencesState } from '~/routes/$lang+/_public+/apply+/$id+/child/communication-preference';
 import { AllChildrenUnder18State, DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/child/date-of-birth';
-import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/child/dental-insurance';
 import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/child/federal-provincial-territorial-benefits';
 import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/child/partner-information';
 import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/child/personal-information';
 import { SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/child/review-information';
-import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/child/tax-filing';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
@@ -24,14 +20,14 @@ export interface ApplyChildState {
   readonly communicationPreferences?: CommunicationPreferencesState;
   readonly dateOfBirth?: DateOfBirthState;
   readonly dentalBenefits?: DentalBenefitsState;
-  readonly dentalInsurance?: DentalInsuranceState;
+  readonly dentalInsurance?: boolean;
   readonly partnerInformation?: PartnerInformationState;
   readonly personalInformation?: PersonalInformationState;
   readonly submissionInfo?: SubmissionInfoState;
-  readonly taxFiling2023?: TaxFilingState;
+  readonly taxFiling2023?: boolean;
   readonly editMode: boolean;
-  readonly disabilityTaxCredit?: DisabilityTaxCreditState;
-  readonly livingIndependently?: LivingIndependentlyState;
+  readonly disabilityTaxCredit?: boolean;
+  readonly livingIndependently?: boolean;
   readonly allChildrenUnder18?: AllChildrenUnder18State;
 }
 
@@ -141,7 +137,7 @@ export function validateApplyChildStateForReview({ params, state }: ValidateStat
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/child/tax-filing', params));
   }
 
-  if (state.childState.taxFiling2023 === 'no') {
+  if (!state.childState.taxFiling2023) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/child/file-taxes', params));
   }
 

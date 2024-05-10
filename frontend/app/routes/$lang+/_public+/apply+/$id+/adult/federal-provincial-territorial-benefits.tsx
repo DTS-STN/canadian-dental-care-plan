@@ -16,7 +16,8 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultState, saveApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
@@ -78,8 +79,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   return json({
     csrfToken,
-    defaultState: state.adultState.dentalBenefits,
-    editMode: state.adultState.editMode,
+    defaultState: state.dentalBenefits,
+    editMode: state.editMode,
     federalSocialPrograms,
     id: state.id,
     meta,
@@ -166,9 +167,8 @@ export async function action({ context: { session }, params, request }: ActionFu
     });
   }
 
-  await saveApplyAdultState({
+  await saveApplyState({
     params,
-    request,
     session,
     state: {
       dentalBenefits: {

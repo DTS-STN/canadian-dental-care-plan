@@ -36,14 +36,14 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:parent-or-guardian.page-title') }) };
 
-  invariant(state.adultState.dateOfBirth, 'Expected state.adultState.dateOfBirth to be defined');
-  const ageCategory = getAgeCategoryFromDateString(state.adultState.dateOfBirth);
+  invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
+  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
   if (ageCategory !== 'children' && ageCategory !== 'youth') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
 
-  return json({ ageCategory, csrfToken, defaultState: state.adultState.disabilityTaxCredit, id: state.id, meta });
+  return json({ ageCategory, csrfToken, defaultState: state.disabilityTaxCredit, id: state.id, meta });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
