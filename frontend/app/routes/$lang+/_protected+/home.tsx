@@ -88,6 +88,11 @@ export default function Index() {
             {t('index:status-check-desc')}
           </CardLink>
         )}
+        {useFeature('dependent-status-checker') && (
+          <CardLink title={t('index:dependent-status-checker')} routeId="$lang+/_protected+/dependent-status-checker+/index" params={params}>
+            {t('index:dependent-status-checker-desc')}
+          </CardLink>
+        )}
       </div>
     </>
   );

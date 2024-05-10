@@ -827,6 +827,20 @@
             ]
           },
           {
+            "id": "$lang+/_protected+/dependent-status-checker+/_route",
+            "file": "routes/$lang+/_protected+/dependent-status-checker+/_route.tsx",
+            "children": [
+              {
+                "id": "$lang+/_protected+/dependent-status-checker+/index",
+                "file": "routes/$lang+/_protected+/dependent-status-checker+/index.tsx",
+                "paths": {
+                  "en": "/:lang/dependent-status-checker",
+                  "fr": "/:lang/verification-de-statut-a-charge"
+                }
+              }
+            ]
+          },
+          {
             "id": "$lang+/_protected+/applications+/_route",
             "file": "routes/$lang+/_protected+/applications+/_route.tsx",
             "children": [

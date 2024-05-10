@@ -35,6 +35,9 @@
     "applications": {
       "index": "CDCP-PROT-0022"
     },
+    "dependent-status-checker": {
+      "index": "CDCP-PROT-0023"
+    },
     "dataUnavailable": "CDCP-PROT-0099"
   },
   "public": {
