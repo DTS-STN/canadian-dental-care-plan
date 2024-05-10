@@ -23,19 +23,21 @@
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
     }
   },
-  "child-summary": {
-    "page-title": "(FR) Summary of child(ren)",
-    "children-added": "(FR) The following child(ren) has been added to the application.",
-    "dob-title": "(FR) Date of birth",
-    "dob-change": "(FR) Change date of birth",
-    "sin-title": "(FR) Social Insurance Number (SIN)",
-    "sin-change": "(FR) Change SIN",
-    "add-child": "(FR) Add another child",
-    "no-children": "(FR) There are currently no child in this application.",
-    "remove-child": "(FR) Back",
-    "continue-btn": "(FR) Continue with application",
-    "cancel-btn": "(FR) Cancel",
-    "save-btn": "(FR) Save"
+  "children": {
+    "index": {
+      "page-title": "(FR) Summary of child(ren)",
+      "children-added": "(FR) The following child(ren) has been added to the application.",
+      "dob-title": "(FR) Date of birth",
+      "dob-change": "(FR) Change date of birth",
+      "sin-title": "(FR) Social Insurance Number (SIN)",
+      "sin-change": "(FR) Change SIN",
+      "add-child": "(FR) Add another child",
+      "no-children": "(FR) There are currently no child in this application.",
+      "remove-child": "(FR) Back",
+      "continue-btn": "(FR) Continue with application",
+      "cancel-btn": "(FR) Cancel",
+      "save-btn": "(FR) Save"
+    }
   },
   "communication-preference": {
     "page-title": "Communication",
@@ -117,6 +119,65 @@
     "return-btn": "Revenir à la page principale",
     "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
+  "contact-information": {
+    "page-title": "Informations de contact",
+    "form-instructions": "L'ajout d'un numéro de téléphone permet à Service Canada de vous contacter en cas de problème avec votre demande. Si vous ne fournissez pas de numéro de téléphone, nous communiquerons avec vous par la poste.",
+    "add-phone": "(FR) Adding a phone number helps Government of Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
+    "phone-number": "Numéro de téléphone (facultatif)",
+    "phone-number-alt": "Autre numéro de téléphone (facultatif)",
+    "add-email": "(FR) Adding an email will help the Government of Canada contact you regarding your Canadian Dental Care Plan membership.",
+    "email": "Adresse courriel (facultatif)",
+    "confirm-email": "Confirmer l'adresse courriel (facultatif)",
+    "mailing-address": {
+      "header": "Adresse postale"
+    },
+    "home-address": {
+      "header": "Adresse du domicile",
+      "use-mailing-address": "Mon adresse postale et mon adresse domiciliaire sont les mêmes."
+    },
+    "address-field": {
+      "address": "Adresse",
+      "address-note": "Inclure le numéro municipal et le nom de rue",
+      "apartment": "Appartement, suite, etc. (facultatif)",
+      "country": "Pays",
+      "province": "Province, territoire, état ou région",
+      "city": "Ville ou municipalité",
+      "postal-code": "Code postal/code ZIP",
+      "postal-code-optional": "Code postal/code ZIP (facultatif)",
+      "select-one": "Choisissez une option"
+    },
+    "back": "Retour",
+    "continue": "Continuer",
+    "cancel-btn": "Annuler",
+    "save-btn": "Enregistrer",
+    "error-message": {
+      "mailing-address": {
+        "address-required": "Entrez l'adresse postale, normalement le numéro et le nom de la rue",
+        "city-required": "Entrez une ville ou une municipalité pour votre adresse postale",
+        "country-required": "Sélectionnez un pays pour votre adresse postale",
+        "postal-code-required": "Entrez un code postal ou un code postal américain pour votre adresse postale",
+        "postal-code-valid": "Entrez un code postal pour l'adresse postale dans le bon format, par exemple A1A 1A1",
+        "province-required": "Sélectionnez une province, un territoire, un état ou une région pour votre adresse postale",
+        "zip-code-valid": "Entrez un code postal américain pour l'adresse postale dans le bon format, par exemple 12345 ou 12345-6789"
+      },
+      "home-address": {
+        "address-required": "Entrez l'adresse du domicile, normalement le numéro et le nom de la rue",
+        "city-required": "Entrez une ville ou une municipalité pour votre adresse du domicile",
+        "country-required": "Sélectionnez un pays pour votre adresse du domicile",
+        "postal-code-required": "Entrez un code postal ou un code postal américain pour votre adresse du domicile",
+        "postal-code-valid": "Entrez un code postal pour  l'adresse du domicile dans le bon format, par exemple A1A 1A1",
+        "province-required": "Sélectionnez une province, un territoire, un état ou une région pour votre adresse du domicile",
+        "zip-code-valid": "Entrez un code postal américain pour l'adresse du domicile dans le bon format, par exemple 12345 ou 12345-6789"
+      },
+      "phone-number-valid": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "phone-number-alt-valid": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
+      "email-match": "Les adresses courriel entrées ne concordent pas",
+      "confirm-email-required": "Confirmez l'adresse courriel",
+      "email-required": "Entrez l'adresse courriel",
+      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
+      "preferred-language-required": "Sélectionnez la langue de communication préférée"
+    }
+  },
   "dental-benefits": {
     "title": "Accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
     "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",
@@ -186,6 +247,22 @@
     },
     "error-message": {
       "dental-insurance-required": "Sélectionnez si vous avez une assurance dentaire"
+    }
+  },
+  "disability-tax-credit": {
+    "page-title": "(FR) Disability tax credit",
+    "non-refundable": "(FR) The disability tax credit (DTC) is a non-refundable federal tax credit that helps people with disabilities, or their supporting family member, reduce the amount of income tax they may have to pay.",
+    "more-info": "(FR) For more information visit <dtcLink>Disability tax credit (DTC)</dtcLink>",
+    "form-label": "(FR) Did you have a valid disability tax credit (DTC) with the Canada Revenue Agency for 2023?",
+    "dtc-link": "https://www.canada.ca/fr/agence-revenu/services/impot/particuliers/segments/deductions-credits-impot-personnes-handicapees/credit-impot-personnes-handicapees.html",
+    "radio-options": {
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "continue-btn": "Continuer",
+    "back-btn": "Retour",
+    "error-message": {
+      "disability-tax-credit-required": "(FR) Select whether or not you have a valid disability tax credit"
     }
   },
   "eligibility": {
@@ -314,6 +391,27 @@
     "exit-btn": "Quitter",
     "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
+  "living-independently": {
+    "page-title": "Vivre de manière indépendante",
+    "description": "Vivre indépendamment de vos parents signifie que vous avez 16 ou 17 ans, que vous ne recevez aucune aide financière de vos parents et que votre résidence principale est différente de la leur.",
+    "form-instructions": "Vivez-vous indépendamment de vos parents ?",
+    "radio-options": {
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "error-message": {
+      "living-independently-required": "Sélectionnez une option pour vivre de manière indépendante"
+    },
+    "back-btn": "Retour",
+    "continue-btn": "Continuer"
+  },
+  "parent-or-guardian": {
+    "page-title": "(FR) Parent or guardian needs to apply",
+    "unable-to-apply": "(FR) You are not able to apply for the Canadian Dental Care Plan for yourself. Please have a parent or guardian apply on your behalf.",
+    "back-btn": "Retour",
+    "return-btn": "Revenir à la page principale",
+    "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+  },
   "partner-information": {
     "page-title": "Renseignements sur l'époux/épouse ou le conjoint/conjointe de fait",
     "provide-sin": "Fournissez les renseignements sur votre époux/épouse ou conjoint/conjointe de fait actuel tels qu'ils figurent sur sa carte ou lettre d'assurance sociale (NAS).",
@@ -344,65 +442,6 @@
       "sin-required": "Entrez un NAS de 9 chiffres",
       "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
-    }
-  },
-  "contact-information": {
-    "page-title": "Informations de contact",
-    "form-instructions": "L'ajout d'un numéro de téléphone permet à Service Canada de vous contacter en cas de problème avec votre demande. Si vous ne fournissez pas de numéro de téléphone, nous communiquerons avec vous par la poste.",
-    "add-phone": "(FR) Adding a phone number helps Government of Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
-    "phone-number": "Numéro de téléphone (facultatif)",
-    "phone-number-alt": "Autre numéro de téléphone (facultatif)",
-    "add-email": "(FR) Adding an email will help the Government of Canada contact you regarding your Canadian Dental Care Plan membership.",
-    "email": "Adresse courriel (facultatif)",
-    "confirm-email": "Confirmer l'adresse courriel (facultatif)",
-    "mailing-address": {
-      "header": "Adresse postale"
-    },
-    "home-address": {
-      "header": "Adresse du domicile",
-      "use-mailing-address": "Mon adresse postale et mon adresse domiciliaire sont les mêmes."
-    },
-    "address-field": {
-      "address": "Adresse",
-      "address-note": "Inclure le numéro municipal et le nom de rue",
-      "apartment": "Appartement, suite, etc. (facultatif)",
-      "country": "Pays",
-      "province": "Province, territoire, état ou région",
-      "city": "Ville ou municipalité",
-      "postal-code": "Code postal/code ZIP",
-      "postal-code-optional": "Code postal/code ZIP (facultatif)",
-      "select-one": "Choisissez une option"
-    },
-    "back": "Retour",
-    "continue": "Continuer",
-    "cancel-btn": "Annuler",
-    "save-btn": "Enregistrer",
-    "error-message": {
-      "mailing-address": {
-        "address-required": "Entrez l'adresse postale, normalement le numéro et le nom de la rue",
-        "city-required": "Entrez une ville ou une municipalité pour votre adresse postale",
-        "country-required": "Sélectionnez un pays pour votre adresse postale",
-        "postal-code-required": "Entrez un code postal ou un code postal américain pour votre adresse postale",
-        "postal-code-valid": "Entrez un code postal pour l'adresse postale dans le bon format, par exemple A1A 1A1",
-        "province-required": "Sélectionnez une province, un territoire, un état ou une région pour votre adresse postale",
-        "zip-code-valid": "Entrez un code postal américain pour l'adresse postale dans le bon format, par exemple 12345 ou 12345-6789"
-      },
-      "home-address": {
-        "address-required": "Entrez l'adresse du domicile, normalement le numéro et le nom de la rue",
-        "city-required": "Entrez une ville ou une municipalité pour votre adresse du domicile",
-        "country-required": "Sélectionnez un pays pour votre adresse du domicile",
-        "postal-code-required": "Entrez un code postal ou un code postal américain pour votre adresse du domicile",
-        "postal-code-valid": "Entrez un code postal pour  l'adresse du domicile dans le bon format, par exemple A1A 1A1",
-        "province-required": "Sélectionnez une province, un territoire, un état ou une région pour votre adresse du domicile",
-        "zip-code-valid": "Entrez un code postal américain pour l'adresse du domicile dans le bon format, par exemple 12345 ou 12345-6789"
-      },
-      "phone-number-valid": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
-      "phone-number-alt-valid": "Le numéro de téléphone n'existe pas.  S'il s'agit d'un numéro de téléphone international, ajoutez '+' devant",
-      "email-match": "Les adresses courriel entrées ne concordent pas",
-      "confirm-email-required": "Confirmez l'adresse courriel",
-      "email-required": "Entrez l'adresse courriel",
-      "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
-      "preferred-language-required": "Sélectionnez la langue de communication préférée"
     }
   },
   "review-adult-information": {
@@ -480,42 +519,5 @@
     "exit-button": "Quitter la demande",
     "yes": "Oui",
     "no": "Non"
-  },
-  "disability-tax-credit": {
-    "page-title": "(FR) Disability tax credit",
-    "non-refundable": "(FR) The disability tax credit (DTC) is a non-refundable federal tax credit that helps people with disabilities, or their supporting family member, reduce the amount of income tax they may have to pay.",
-    "more-info": "(FR) For more information visit <dtcLink>Disability tax credit (DTC)</dtcLink>",
-    "form-label": "(FR) Did you have a valid disability tax credit (DTC) with the Canada Revenue Agency for 2023?",
-    "dtc-link": "https://www.canada.ca/fr/agence-revenu/services/impot/particuliers/segments/deductions-credits-impot-personnes-handicapees/credit-impot-personnes-handicapees.html",
-    "radio-options": {
-      "yes": "Oui",
-      "no": "Non"
-    },
-    "continue-btn": "Continuer",
-    "back-btn": "Retour",
-    "error-message": {
-      "disability-tax-credit-required": "(FR) Select whether or not you have a valid disability tax credit"
-    }
-  },
-  "living-independently": {
-    "page-title": "Vivre de manière indépendante",
-    "description": "Vivre indépendamment de vos parents signifie que vous avez 16 ou 17 ans, que vous ne recevez aucune aide financière de vos parents et que votre résidence principale est différente de la leur.",
-    "form-instructions": "Vivez-vous indépendamment de vos parents ?",
-    "radio-options": {
-      "yes": "Oui",
-      "no": "Non"
-    },
-    "error-message": {
-      "living-independently-required": "Sélectionnez une option pour vivre de manière indépendante"
-    },
-    "back-btn": "Retour",
-    "continue-btn": "Continuer"
-  },
-  "parent-or-guardian": {
-    "page-title": "(FR) Parent or guardian needs to apply",
-    "unable-to-apply": "(FR) You are not able to apply for the Canadian Dental Care Plan for yourself. Please have a parent or guardian apply on your behalf.",
-    "back-btn": "Retour",
-    "return-btn": "Revenir à la page principale",
-    "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   }
 }

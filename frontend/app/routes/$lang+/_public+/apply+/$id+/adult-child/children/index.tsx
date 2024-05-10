@@ -23,7 +23,7 @@ import { cn } from '~/utils/tw-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adultChild.childInformation,
-  pageTitleI18nKey: 'apply-adult-child:child-summary.page-title',
+  pageTitleI18nKey: 'apply-adult-child:children.index.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -35,7 +35,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:child-summary.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.index.page-title') }) };
 
   await saveApplyAdultChildState({ params, request, session, state: { editMode: true } });
 
@@ -75,32 +75,32 @@ export default function ApplyFlowChildSummary() {
         <fetcher.Form method="post" aria-describedby="form-instructions-sin form-instructions" noValidate>
           {defaultState?.firstName && (
             <>
-              <p className="mb-6">{t('apply-adult-child:child-summary.children-added')}</p>
+              <p className="mb-6">{t('apply-adult-child:children.index.children-added')}</p>
               <input type="hidden" name="_csrf" value={csrfToken} />
               <DescriptionListItem
                 term={
                   <>
                     <h2 className="text-2xl font-semibold">{`${defaultState.firstName} ${defaultState.lastName}`}</h2>
                     <InlineLink className="text-sm font-normal" id="remove-child" routeId="$lang+/_public+/apply+/$id+/adult-child/child-information" params={params}>
-                      {t('apply-adult-child:child-summary.remove-child')}
+                      {t('apply-adult-child:children.index.remove-child')}
                     </InlineLink>
                   </>
                 }
               >
                 <dl className="divide-y border-y">
-                  <DescriptionListItem term={t('apply-adult-child:child-summary.dob-title')}>
+                  <DescriptionListItem term={t('apply-adult-child:children.index.dob-title')}>
                     <p>{defaultState.dateOfBirth}</p>
                     <p className="mt-4">
                       <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult-child/child-information" params={params}>
-                        {t('apply-adult-child:child-summary.dob-change')}
+                        {t('apply-adult-child:children.index.dob-change')}
                       </InlineLink>
                     </p>
                   </DescriptionListItem>
-                  <DescriptionListItem term={t('apply-adult-child:child-summary.sin-title')}>
+                  <DescriptionListItem term={t('apply-adult-child:children.index.sin-title')}>
                     <p>{defaultState.socialInsuranceNumber}</p>
                     <p className="mt-4">
                       <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/adult-child/child-information" params={params}>
-                        {t('apply-adult-child:child-summary.sin-change')}
+                        {t('apply-adult-child:children.index.sin-change')}
                       </InlineLink>
                     </p>
                   </DescriptionListItem>
@@ -109,7 +109,7 @@ export default function ApplyFlowChildSummary() {
             </>
           )}
 
-          {!defaultState?.firstName && <p>{t('apply-adult-child:child-summary.no-children')}</p>}
+          {!defaultState?.firstName && <p>{t('apply-adult-child:children.index.no-children')}</p>}
 
           <ButtonLink
             className="mb-10"
@@ -120,17 +120,17 @@ export default function ApplyFlowChildSummary() {
             data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click"
           >
             <FontAwesomeIcon icon={faPlus} className="me-3 block size-4" />
-            {t('apply-adult-child:child-summary.add-child')}
+            {t('apply-adult-child:children.index.add-child')}
           </ButtonLink>
 
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <Button id="continue-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Applicant Information click">
-              {t('apply-adult-child:child-summary.continue-btn')}
+              {t('apply-adult-child:children.index.continue-btn')}
               <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
             </Button>
             <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult-child/child-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click">
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('apply-adult-child:child-summary.back-btn')}
+              {t('apply-adult-child:children.index.back-btn')}
             </ButtonLink>
           </div>
         </fetcher.Form>

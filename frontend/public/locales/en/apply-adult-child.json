@@ -23,20 +23,95 @@
       "sin-unique": "The Social Insurance Number (SIN) must be unique"
     }
   },
-  "child-summary": {
-    "page-title": "Summary of child(ren)",
-    "children-added": "The following child(ren) has been added to the application.",
-    "dob-title": "Date of birth",
-    "dob-change": "Change date of birth",
-    "sin-title": "Social Insurance Number (SIN)",
-    "sin-change": "Change SIN",
-    "add-child": "Add another child",
-    "no-children": "There are currently no child in this application.",
-    "remove-child": "Remove child",
-    "back-btn": "Back",
-    "continue-btn": "Continue with application",
+  "children": {
+    "index": {
+      "page-title": "Summary of child(ren)",
+      "children-added": "The following child(ren) has been added to the application.",
+      "dob-title": "Date of birth",
+      "dob-change": "Change date of birth",
+      "sin-title": "Social Insurance Number (SIN)",
+      "sin-change": "Change SIN",
+      "add-child": "Add another child",
+      "no-children": "There are currently no child in this application.",
+      "remove-child": "Remove child",
+      "back-btn": "Back",
+      "continue-btn": "Continue with application",
+      "cancel-btn": "Cancel",
+      "save-btn": "Save"
+    }
+  },
+  "communication-preference": {
+    "page-title": "Communication",
+    "note": "If you're eligible, we will share your information with Sun Life Assurance Company of Canada (Sun Life). Sun Life will be responsible for handling member enrolment and administering claims processing and benefits for the Canadian Dental Care Plan.",
+    "preferred-method": "What is your preferred method of communication for Sun Life?",
+    "preferred-language": "What is your preferred official language of communication?",
+    "email": "Email address",
+    "email-note": "Service Canada and Health Canada may use this email for future communication about the Canadian Dental Care Plan.",
+    "confirm-email": "Confirm email address",
+    "back": "Back",
+    "continue": "Continue",
     "cancel-btn": "Cancel",
-    "save-btn": "Save"
+    "save-btn": "Save",
+    "error-message": {
+      "email-match": "The email addresses entered do not match",
+      "confirm-email-required": "Confirm email address",
+      "email-required": "Enter email address",
+      "email-valid": "Enter an email address in the correct format, such as name@example.com",
+      "preferred-language-required": "Select preferred language of communication",
+      "preferred-method-required": "Select preferred method of communication"
+    }
+  },
+  "confirm": {
+    "page-title": "Application submitted",
+    "alert-heading": "You have successfully applied for the Canadian Dental Care Plan!",
+    "app-code-is": "Your application code is:",
+    "make-note": "Save this code, you'll need it to check the status of your application.",
+    "keep-copy": "Keep a copy of your application",
+    "print-copy-text": "You will <strong>not</strong> receive a <strong>confirmation email</strong>. It is important to keep a copy of your application. <noPrint>You can use this button to print.<noPrint>",
+    "print-btn": "Print",
+    "whats-next": "What happens next",
+    "begin-process": "We will begin processing your application immediately.",
+    "cdcp-checker": "You can use the <cdcpLink>Canadian Dental Care Plan Status Checker</cdcpLink> or call <noWrap>1-833-537-4342</noWrap> to track the progress of your application or to recieve more information.",
+    "use-code": "You can use your application code to begin tracking the progress within 48 hours of applying.",
+    "use-code-one-week": "You can use your application code to track the progress of your application one week after applying.",
+    "register-msca-title": "Register for a My Service Canada Account",
+    "register-msca-text": "Once your application is processed, you will be able to sign into <mscaLink>My Service Canada Account (MSCA)</mscaLink>. You will also be able to view letters sent to you from the Government of Canada regarding the Canadian Dental Care Plan.",
+    "msca-notify": "You will be notified whether your application has been accepted or rejected in your My Service Canada Account.",
+    "msca-link": "https://www.canada.ca/en/employment-social-development/services/my-account.html",
+    "how-insurance": "How do I use my Canadian Dental Care Plan",
+    "eligible-text": "If you are deemed eligible, Sun Life will send you a welcome package by mail. Your welcome package will include your member card and details about the Canadian Dental Care Plan, including your coverage start date. The Canadian Dental Care Plan will not cover you for dental services received before that date.",
+    "more-info-cdcp": "For more information on what services and how much will be covered, visit <moreInfoLink>Canadian Dental Care Plan - What is covered</moreInfoLink>.",
+    "more-info-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/coverage.html",
+    "more-info-service": "For more information, please contact <dentalContactUsLink>Service Canada</dentalContactUsLink>.",
+    "dental-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/contact.html",
+    "application-summ": "Application summary",
+    "applicant-title": "Applicant information",
+    "spouse-info": "Spouse / Common-law information",
+    "contact-info": "Contact information",
+    "comm-prefs": "Communication",
+    "email-address": "Email address: {{email}}",
+    "dental-insurance": "Access to dental insurance",
+    "dental-benefit-has-access": "Has access to the following benefits:",
+    "dob": "Date of birth",
+    "sin": "Social Insurance Number (SIN)",
+    "full-name": "Full name",
+    "marital-status": "Marital status",
+    "consent": "Consent",
+    "consent-answer": "My spouse or common-law partner is aware and has consented to sharing of their personal information.",
+    "phone-number": "Phone number",
+    "alt-phone-number": "Alternate phone number",
+    "mailing": "Mailing address",
+    "home": "Home address",
+    "comm-pref": "Communication preference",
+    "lang-pref": "Language preference",
+    "dental-private": "Access to dental insurance or coverage",
+    "dental-public": "Access to government dental benefit",
+    "application-code": "Application code",
+    "yes": "Yes",
+    "no": "No",
+    "exit": "Exit",
+    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html",
+    "status-checker-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html"
   },
   "contact-apply-child": {
     "page-title": "Contact us to apply for your child",
@@ -46,6 +121,64 @@
     "back-btn": "Back",
     "return-btn": "Return to main page",
     "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+  },
+  "contact-information": {
+    "page-title": "Contact information",
+    "form-instructions": "Adding a phone number helps Service Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
+    "add-phone": "Adding a phone number helps Government of Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
+    "phone-number": "Phone number (optional)",
+    "phone-number-alt": "Alternate phone number (optional)",
+    "add-email": "Adding an email will help the Government of Canada contact you regarding your Canadian Dental Care Plan membership.",
+    "email": "Email address (optional)",
+    "confirm-email": "Confirm email address (optional)",
+    "mailing-address": {
+      "header": "Mailing address"
+    },
+    "home-address": {
+      "header": "Home address",
+      "use-mailing-address": "My mailing address is the same as my home address"
+    },
+    "address-field": {
+      "address": "Address",
+      "address-note": "Include street number and name",
+      "apartment": "Apartment, suite, etc. (optional)",
+      "country": "Country",
+      "province": "Province, territory, state, or region",
+      "city": "City or town",
+      "postal-code": "Postal code or ZIP code",
+      "postal-code-optional": "Postal code or ZIP code (optional)",
+      "select-one": "Select one"
+    },
+    "back": "Back",
+    "continue": "Continue",
+    "cancel-btn": "Cancel",
+    "save-btn": "Save",
+    "error-message": {
+      "mailing-address": {
+        "address-required": "Enter mailing address, typically number and street",
+        "city-required": "Enter a city or town for your mailing address",
+        "country-required": "Select a country for for your mailing address",
+        "postal-code-required": "Enter postal code or zip code for your mailing address",
+        "postal-code-valid": "Enter mailing address postal code in the correct format, such as A1A 1A1",
+        "province-required": "Select a province, territory, state or region for your mailing address",
+        "zip-code-valid": "Enter mailing address zip code in the correct format, such as 12345 or 12345-6789"
+      },
+      "home-address": {
+        "address-required": "Enter home address, typically number and street",
+        "city-required": "Enter a city or town for your home address",
+        "country-required": "Select a country for your home address",
+        "postal-code-required": "Enter postal code or zip code for your home address",
+        "postal-code-valid": "Enter home address postal code in the correct format, such as A1A 1A1",
+        "province-required": "Select a province, territory, state or region for your home address",
+        "zip-code-valid": "Enter home address zip code in the correct format, such as 12345 or 12345-6789"
+      },
+      "phone-number-valid": "Phone number does not exist. If it's an international phone number, add '+' in front",
+      "phone-number-alt-valid": "Phone number does not exist. If it's an international phone number, add '+' in front",
+      "email-match": "The email addresses entered do not match",
+      "confirm-email-required": "Confirm email address",
+      "email-required": "Enter email address",
+      "email-valid": "Enter an email address in the correct format, such as name@example.com"
+    }
   },
   "dental-benefits": {
     "title": "{{childName}}: access to other federal, provincial or territorial dental benefits",
@@ -116,6 +249,22 @@
     },
     "error-message": {
       "dental-insurance-required": "Select whether you have access to dental insurance"
+    }
+  },
+  "disability-tax-credit": {
+    "page-title": "Disability tax credit",
+    "non-refundable": "The disability tax credit (DTC) is a non-refundable federal tax credit that helps people with disabilities, or their supporting family member, reduce the amount of income tax they may have to pay.",
+    "more-info": "For more information visit <dtcLink>Disability tax credit (DTC)</dtcLink>",
+    "form-label": "Did you have a valid disability tax credit (DTC) with the Canada Revenue Agency for 2023?",
+    "dtc-link": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/segments/tax-credits-deductions-persons-disabilities/disability-tax-credit.html",
+    "radio-options": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "continue-btn": "Continue",
+    "back-btn": "Back",
+    "error-message": {
+      "disability-tax-credit-required": "Select whether or not you have a valid disability tax credit"
     }
   },
   "eligibility": {
@@ -245,6 +394,27 @@
     "exit-btn": "Exit",
     "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   },
+  "living-independently": {
+    "page-title": "Living independently",
+    "description": "Living independently from your parents means you are 16 or 17, do not receive financial support from your parents, and your primary residence is different from theirs.",
+    "form-instructions": "Do you live independently from your parents?",
+    "radio-options": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "error-message": {
+      "living-independently-required": "Select an option for living independently"
+    },
+    "back-btn": "Back",
+    "continue-btn": "Continue"
+  },
+  "parent-or-guardian": {
+    "page-title": "Parent or guardian needs to apply",
+    "unable-to-apply": "You are not able to apply for the Canadian Dental Care Plan for yourself. Please have a parent or guardian apply on your behalf.",
+    "back-btn": "Back",
+    "return-btn": "Return to main page",
+    "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+  },
   "partner-information": {
     "page-title": "Spouse or Common-law partner information",
     "provide-sin": "Provide information on your current spouse or common-law partner as indicated on their Social Insurance Number (SIN) card or letter.",
@@ -275,85 +445,6 @@
       "sin-required": "Enter 9-digit SIN",
       "sin-valid": "Must be a valid SIN",
       "sin-unique": "The Social Insurance Number (SIN) must be unique"
-    }
-  },
-  "communication-preference": {
-    "page-title": "Communication",
-    "note": "If you're eligible, we will share your information with Sun Life Assurance Company of Canada (Sun Life). Sun Life will be responsible for handling member enrolment and administering claims processing and benefits for the Canadian Dental Care Plan.",
-    "preferred-method": "What is your preferred method of communication for Sun Life?",
-    "preferred-language": "What is your preferred official language of communication?",
-    "email": "Email address",
-    "email-note": "Service Canada and Health Canada may use this email for future communication about the Canadian Dental Care Plan.",
-    "confirm-email": "Confirm email address",
-    "back": "Back",
-    "continue": "Continue",
-    "cancel-btn": "Cancel",
-    "save-btn": "Save",
-    "error-message": {
-      "email-match": "The email addresses entered do not match",
-      "confirm-email-required": "Confirm email address",
-      "email-required": "Enter email address",
-      "email-valid": "Enter an email address in the correct format, such as name@example.com",
-      "preferred-language-required": "Select preferred language of communication",
-      "preferred-method-required": "Select preferred method of communication"
-    }
-  },
-  "contact-information": {
-    "page-title": "Contact information",
-    "form-instructions": "Adding a phone number helps Service Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
-    "add-phone": "Adding a phone number helps Government of Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
-    "phone-number": "Phone number (optional)",
-    "phone-number-alt": "Alternate phone number (optional)",
-    "add-email": "Adding an email will help the Government of Canada contact you regarding your Canadian Dental Care Plan membership.",
-    "email": "Email address (optional)",
-    "confirm-email": "Confirm email address (optional)",
-    "mailing-address": {
-      "header": "Mailing address"
-    },
-    "home-address": {
-      "header": "Home address",
-      "use-mailing-address": "My mailing address is the same as my home address"
-    },
-    "address-field": {
-      "address": "Address",
-      "address-note": "Include street number and name",
-      "apartment": "Apartment, suite, etc. (optional)",
-      "country": "Country",
-      "province": "Province, territory, state, or region",
-      "city": "City or town",
-      "postal-code": "Postal code or ZIP code",
-      "postal-code-optional": "Postal code or ZIP code (optional)",
-      "select-one": "Select one"
-    },
-    "back": "Back",
-    "continue": "Continue",
-    "cancel-btn": "Cancel",
-    "save-btn": "Save",
-    "error-message": {
-      "mailing-address": {
-        "address-required": "Enter mailing address, typically number and street",
-        "city-required": "Enter a city or town for your mailing address",
-        "country-required": "Select a country for for your mailing address",
-        "postal-code-required": "Enter postal code or zip code for your mailing address",
-        "postal-code-valid": "Enter mailing address postal code in the correct format, such as A1A 1A1",
-        "province-required": "Select a province, territory, state or region for your mailing address",
-        "zip-code-valid": "Enter mailing address zip code in the correct format, such as 12345 or 12345-6789"
-      },
-      "home-address": {
-        "address-required": "Enter home address, typically number and street",
-        "city-required": "Enter a city or town for your home address",
-        "country-required": "Select a country for your home address",
-        "postal-code-required": "Enter postal code or zip code for your home address",
-        "postal-code-valid": "Enter home address postal code in the correct format, such as A1A 1A1",
-        "province-required": "Select a province, territory, state or region for your home address",
-        "zip-code-valid": "Enter home address zip code in the correct format, such as 12345 or 12345-6789"
-      },
-      "phone-number-valid": "Phone number does not exist. If it's an international phone number, add '+' in front",
-      "phone-number-alt-valid": "Phone number does not exist. If it's an international phone number, add '+' in front",
-      "email-match": "The email addresses entered do not match",
-      "confirm-email-required": "Confirm email address",
-      "email-required": "Enter email address",
-      "email-valid": "Enter an email address in the correct format, such as name@example.com"
     }
   },
   "review-adult-information": {
@@ -431,42 +522,5 @@
     "exit-button": "Exit application",
     "yes": "Yes",
     "no": "No"
-  },
-  "disability-tax-credit": {
-    "page-title": "Disability tax credit",
-    "non-refundable": "The disability tax credit (DTC) is a non-refundable federal tax credit that helps people with disabilities, or their supporting family member, reduce the amount of income tax they may have to pay.",
-    "more-info": "For more information visit <dtcLink>Disability tax credit (DTC)</dtcLink>",
-    "form-label": "Did you have a valid disability tax credit (DTC) with the Canada Revenue Agency for 2023?",
-    "dtc-link": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/segments/tax-credits-deductions-persons-disabilities/disability-tax-credit.html",
-    "radio-options": {
-      "yes": "Yes",
-      "no": "No"
-    },
-    "continue-btn": "Continue",
-    "back-btn": "Back",
-    "error-message": {
-      "disability-tax-credit-required": "Select whether or not you have a valid disability tax credit"
-    }
-  },
-  "living-independently": {
-    "page-title": "Living independently",
-    "description": "Living independently from your parents means you are 16 or 17, do not receive financial support from your parents, and your primary residence is different from theirs.",
-    "form-instructions": "Do you live independently from your parents?",
-    "radio-options": {
-      "yes": "Yes",
-      "no": "No"
-    },
-    "error-message": {
-      "living-independently-required": "Select an option for living independently"
-    },
-    "back-btn": "Back",
-    "continue-btn": "Continue"
-  },
-  "parent-or-guardian": {
-    "page-title": "Parent or guardian needs to apply",
-    "unable-to-apply": "You are not able to apply for the Canadian Dental Care Plan for yourself. Please have a parent or guardian apply on your behalf.",
-    "back-btn": "Back",
-    "return-btn": "Return to main page",
-    "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
   }
 }
