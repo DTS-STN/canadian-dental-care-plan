@@ -1,6 +1,7 @@
 package ca.gov.dtsstn.cdcp.api.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -21,6 +22,11 @@ public class SubscriptionService {
 		Assert.notNull(repository, "repository is required; it must not be null");
 		this.mapper = mapper;
 		this.repository = repository;
+	}
+
+	public Optional<Subscription> getSubscriptionById(String id) {
+		Assert.hasText(id, "id is required; it must not be null or blank");
+		return repository.findById(id).map(mapper::fromEntity);
 	}
 
 	public List<Subscription> getSubscriptionsByUserId(String userId) {
