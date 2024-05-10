@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
-import { Link, useFetcher, useLoaderData, useParams } from '@remix-run/react';
+import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,6 +12,7 @@ import { z } from 'zod';
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { InlineLink } from '~/components/inline-link';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
@@ -140,7 +141,7 @@ export default function ApplyFlowDisabilityTaxCredit() {
           <Trans
             ns={handle.i18nNamespaces}
             i18nKey="apply-adult-child:disability-tax-credit.more-info"
-            components={{ dtcLink: <Link to={t('apply-adult-child:disability-tax-credit.dtc-link')} className="text-slate-700 underline hover:text-blue-700 focus:text-blue-700" /> }}
+            components={{ dtcLink: <InlineLink to={t('apply-adult-child:disability-tax-credit.dtc-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" /> }}
           />
         </p>
         <p className="mb-6 italic">{t('apply:required-label')}</p>
