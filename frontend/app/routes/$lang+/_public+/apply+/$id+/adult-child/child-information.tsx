@@ -18,8 +18,8 @@ import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusT
 import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultChildState, saveApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import '~/route-helpers/apply-route-helpers.server';
+import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -65,7 +65,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.child-information.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.adultChildState.childInformation, editMode: state.adultChildState.editMode });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.children?.[0].information, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -83,12 +83,12 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  await saveApplyAdultChildState({ params, request, session, state: { editMode: false } });
+  saveApplyState({ params, session, state: {} });
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
 
   if (formAction === FormAction.Cancel) {
-    invariant(state.adultChildState.childInformation, 'Expected state.childInformation to be defined');
+    invariant(state.children, 'Expected state.childInformation to be defined');
 
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
   }
@@ -184,7 +184,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  await saveApplyAdultChildState({ params, request, session, state: { childInformation: parsedDataResult.data } });
+  // saveApplyState({ params, request, session, state: { childInformation: parsedDataResult.data } });
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
 }

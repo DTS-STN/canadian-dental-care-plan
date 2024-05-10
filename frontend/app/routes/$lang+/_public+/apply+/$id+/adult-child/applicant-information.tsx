@@ -16,8 +16,8 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { applicantInformationStateHasPartner, loadApplyAdultChildState, saveApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import '~/route-helpers/apply-route-helpers.server';
+import { applicantInformationStateHasPartner, loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { ApplicantInformationState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -34,13 +34,6 @@ enum FormAction {
   Cancel = 'cancel',
   Save = 'save',
 }
-
-export type ApplicantInformationState = {
-  firstName: string;
-  lastName: string;
-  maritalStatus: string;
-  socialInsuranceNumber: string;
-};
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -61,7 +54,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:applicant-information.page-title') }) };
 
-  return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.adultChildState.applicantInformation, editMode: state.adultChildState.editMode });
+  return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.applicantInformation, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -82,9 +75,9 @@ export async function action({ context: { session }, params, request }: ActionFu
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
 
   if (formAction === FormAction.Cancel) {
-    invariant(state.adultChildState.applicantInformation, 'Expected state.applicantInformation to be defined');
+    invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
 
-    if (applicantInformationStateHasPartner(state.adultChildState.applicantInformation) && state.adultChildState.partnerInformation === undefined) {
+    if (applicantInformationStateHasPartner(state.applicantInformation) && state.partnerInformation === undefined) {
       const errorMessage = t('apply-adult-child:applicant-information.error-message.marital-status-no-partner-information');
       const errors: z.ZodFormattedError<ApplicantInformationState, string> = { _errors: [errorMessage], maritalStatus: { _errors: [errorMessage] } };
       return json({ errors });
@@ -106,7 +99,7 @@ export async function action({ context: { session }, params, request }: ActionFu
           return z.NEVER;
         }
 
-        if (state.adultChildState.partnerInformation && formatSin(sin) === formatSin(state.adultChildState.partnerInformation.socialInsuranceNumber)) {
+        if (state.partnerInformation && formatSin(sin) === formatSin(state.partnerInformation.socialInsuranceNumber)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:applicant-information.error-message.sin-unique'), fatal: true });
           return z.NEVER;
         }
@@ -133,9 +126,9 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const hasPartner = applicantInformationStateHasPartner(parsedDataResult.data);
   const remove = !hasPartner ? 'partnerInformation' : undefined;
-  await saveApplyAdultChildState({ params, remove, request, session, state: { applicantInformation: parsedDataResult.data } });
+  saveApplyState({ params, remove, session, state: { applicantInformation: parsedDataResult.data } });
 
-  if (state.adultChildState.editMode) {
+  if (state.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-information', params));
   }
 

@@ -36,7 +36,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:contact-apply-child.page-title') }) };
 
-  const parseDateOfBirth = parse(state.adultChildState.dateOfBirth ?? '', 'yyyy-MM-dd', new Date());
+  const parseDateOfBirth = parse(state.dateOfBirth ?? '', 'yyyy-MM-dd', new Date());
   const age = differenceInYears(new Date(), parseDateOfBirth);
   if (age > 16) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));

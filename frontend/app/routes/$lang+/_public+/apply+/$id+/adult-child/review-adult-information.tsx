@@ -17,8 +17,8 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
-import { loadApplyAdultChildState, saveApplyAdultChildState, validateApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyAdultChildState, validateApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -72,13 +72,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const { COMMUNICATION_METHOD_EMAIL_ID, ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
   // prettier-ignore
-  /*if (state.adultChildState.applicantInformation === undefined ||
-    state.adultChildState.communicationPreferences === undefined ||
-    state.adultChildState.dateOfBirth === undefined ||
-    state.adultChildState.dentalBenefits === undefined ||
-    state.adultChildState.dentalInsurance === undefined ||
-    state.adultChildState.personalInformation === undefined ||
-    state.adultChildState.taxFiling2023 === undefined ||
+  /*if (state.applicantInformation === undefined ||
+    state.communicationPreferences === undefined ||
+    state.dateOfBirth === undefined ||
+    state.dentalBenefits === undefined ||
+    state.dentalInsurance === undefined ||
+    state.personalInformation === undefined ||
+    state.taxFiling2023 === undefined ||
     state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }*/
@@ -88,75 +88,75 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   // Getting province by Id
   /*const allRegions = await lookupService.getAllRegions();
-  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.adultChildState.personalInformation?.mailingProvince);
-  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.adultChildState.personalInformation?.homeProvince);
+  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
+  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
 
   // Getting Country by Id
   const allCountries = await lookupService.getAllCountries();
-  const countryMailing = allCountries.find((country) => country.countryId === state.adultChildState.personalInformation?.mailingCountry);
-  const countryHome = allCountries.find((country) => country.countryId === state.adultChildState.personalInformation?.homeCountry);
+  const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation?.mailingCountry);
+  const countryHome = allCountries.find((country) => country.countryId === state.personalInformation?.homeCountry);
 
   if (!countryMailing) {
-    throw new Error(`Unexpected mailing address country: ${state.adultChildState.personalInformation.mailingCountry}`);
+    throw new Error(`Unexpected mailing address country: ${state.personalInformation.mailingCountry}`);
   }
 
   if (!countryHome) {
-    throw new Error(`Unexpected home address country: ${state.adultChildState.personalInformation.homeCountry}`);
+    throw new Error(`Unexpected home address country: ${state.personalInformation.homeCountry}`);
   }
 
   const userInfo = {
-    firstName: state.adultChildState.applicantInformation.firstName,
-    lastName: state.adultChildState.applicantInformation.lastName,
-    phoneNumber: state.adultChildState.personalInformation.phoneNumber,
-    altPhoneNumber: state.adultChildState.personalInformation.phoneNumberAlt,
-    preferredLanguage: state.adultChildState.communicationPreferences.preferredLanguage,
-    birthday: toLocaleDateString(parse(state.adultChildState.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
-    sin: state.adultChildState.applicantInformation.socialInsuranceNumber,
-    martialStatus: state.adultChildState.applicantInformation.maritalStatus,
-    email: state.adultChildState.communicationPreferences.email,
-    communicationPreference: state.adultChildState.communicationPreferences,
+    firstName: state.applicantInformation.firstName,
+    lastName: state.applicantInformation.lastName,
+    phoneNumber: state.personalInformation.phoneNumber,
+    altPhoneNumber: state.personalInformation.phoneNumberAlt,
+    preferredLanguage: state.communicationPreferences.preferredLanguage,
+    birthday: toLocaleDateString(parse(state.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+    sin: state.applicantInformation.socialInsuranceNumber,
+    martialStatus: state.applicantInformation.maritalStatus,
+    email: state.communicationPreferences.email,
+    communicationPreference: state.communicationPreferences,
   };
-  const spouseInfo = state.adultChildState.partnerInformation
+  const spouseInfo = state.partnerInformation
     ? {
-        firstName: state.adultChildState.partnerInformation.firstName,
-        lastName: state.adultChildState.partnerInformation.lastName,
-        birthday: toLocaleDateString(parse(state.adultChildState.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
-        sin: state.adultChildState.partnerInformation.socialInsuranceNumber,
-        consent: state.adultChildState.partnerInformation.confirm,
+        firstName: state.partnerInformation.firstName,
+        lastName: state.partnerInformation.lastName,
+        birthday: toLocaleDateString(parse(state.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+        sin: state.partnerInformation.socialInsuranceNumber,
+        consent: state.partnerInformation.confirm,
       }
     : undefined;
 
   const preferredLanguage = await lookupService.getPreferredLanguage(userInfo.preferredLanguage);
 
   const mailingAddressInfo = {
-    address: state.adultChildState.personalInformation.mailingAddress,
-    city: state.adultChildState.personalInformation.mailingCity,
+    address: state.personalInformation.mailingAddress,
+    city: state.personalInformation.mailingCity,
     province: provinceMailing,
-    postalCode: state.adultChildState.personalInformation.mailingPostalCode,
+    postalCode: state.personalInformation.mailingPostalCode,
     country: countryMailing,
-    apartment: state.adultChildState.personalInformation.mailingApartment,
+    apartment: state.personalInformation.mailingApartment,
   };
 
   const homeAddressInfo = {
-    address: state.adultChildState.personalInformation.homeAddress,
-    city: state.adultChildState.personalInformation.homeCity,
+    address: state.personalInformation.homeAddress,
+    city: state.personalInformation.homeCity,
     province: provinceHome,
-    postalCode: state.adultChildState.personalInformation.homePostalCode,
+    postalCode: state.personalInformation.homePostalCode,
     country: countryHome,
-    apartment: state.adultChildState.personalInformation.homeApartment,
+    apartment: state.personalInformation.homeApartment,
   };
 
-  const dentalInsurance = state.adultChildState.dentalInsurance;
+  const dentalInsurance = state.dentalInsurance;
 
   const dentalBenefit = {
     federalBenefit: {
-      access: state.adultChildState.dentalBenefits.hasFederalBenefits,
-      benefit: state.adultChildState.dentalBenefits.federalSocialProgram,
+      access: state.dentalBenefits.hasFederalBenefits,
+      benefit: state.dentalBenefits.federalSocialProgram,
     },
     provTerrBenefit: {
-      access: state.adultChildState.dentalBenefits.hasProvincialTerritorialBenefits,
-      province: state.adultChildState.dentalBenefits.province,
-      benefit: state.adultChildState.dentalBenefits.provincialTerritorialSocialProgram,
+      access: state.dentalBenefits.hasProvincialTerritorialBenefits,
+      province: state.dentalBenefits.province,
+      benefit: state.dentalBenefits.provincialTerritorialSocialProgram,
     },
   };*/
 
@@ -177,7 +177,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
       preferredMethod: 'EMAIL',
     },
   };
-  const spouseInfo = state.adultChildState.partnerInformation
+  const spouseInfo = state.partnerInformation
     ? {
         firstName: 'firstName',
         lastName: 'lastName',
@@ -275,26 +275,26 @@ export async function action({ context: { session }, params, request }: ActionFu
   validateApplyAdultChildStateForReview({ params, state });
 
   // prettier-ignore
-  if (state.adultChildState.applicantInformation === undefined ||
-    state.adultChildState.communicationPreferences === undefined ||
-    state.adultChildState.dateOfBirth === undefined ||
-    state.adultChildState.dentalBenefits === undefined ||
-    state.adultChildState.dentalInsurance === undefined ||
-    state.adultChildState.personalInformation === undefined ||
-    state.adultChildState.taxFiling2023 === undefined ||
+  if (state.applicantInformation === undefined ||
+    state.communicationPreferences === undefined ||
+    state.dateOfBirth === undefined ||
+    state.dentalBenefits === undefined ||
+    state.dentalInsurance === undefined ||
+    state.personalInformation === undefined ||
+    state.taxFiling2023 === undefined ||
     state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
   // TODO submit to the API and grab the confirmation code from the response
   const benefitApplicationRequest = toBenefitApplicationRequest({
-    applicantInformation: state.adultChildState.applicantInformation,
-    communicationPreferences: state.adultChildState.communicationPreferences,
-    dateOfBirth: state.adultChildState.dateOfBirth,
-    dentalBenefits: state.adultChildState.dentalBenefits,
-    dentalInsurance: state.adultChildState.dentalInsurance,
-    personalInformation: state.adultChildState.personalInformation,
-    partnerInformation: state.adultChildState.partnerInformation,
+    applicantInformation: state.applicantInformation,
+    communicationPreferences: state.communicationPreferences,
+    dateOfBirth: state.dateOfBirth,
+    dentalBenefits: state.dentalBenefits,
+    dentalInsurance: state.dentalInsurance,
+    personalInformation: state.personalInformation,
+    partnerInformation: state.partnerInformation,
   });
 
   const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
@@ -304,7 +304,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     submittedOn: new Date().toISOString(),
   };
 
-  saveApplyAdultChildState({ params, request, session, state: { submissionInfo } });
+  saveApplyState({ params, session, state: { submissionInfo } });
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-child-information', params));
 }
 

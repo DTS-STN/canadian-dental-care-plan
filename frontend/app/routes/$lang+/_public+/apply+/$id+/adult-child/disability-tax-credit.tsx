@@ -14,8 +14,8 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultChildState, saveApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -48,14 +48,14 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:disability-tax-credit.page-title') }) };
 
-  invariant(state.adultChildState.dateOfBirth, 'Expected state.adultChildState.dateOfBirth to be defined');
-  const ageCategory = getAgeCategoryFromDateString(state.adultChildState.dateOfBirth);
+  invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
+  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
   if (ageCategory !== 'adults') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/date-of-birth', params));
   }
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.adultChildState.disabilityTaxCredit });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.disabilityTaxCredit });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -84,16 +84,16 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  saveApplyAdultChildState({ params, request, session, state: { disabilityTaxCredit: parsedDataResult.data } });
+  saveApplyState({ params, session, state: { disabilityTaxCredit: parsedDataResult.data === 'yes' } });
 
-  invariant(state.adultChildState.dateOfBirth, 'Expected state.adultChildState.dateOfBirth to be defined');
-  const ageCategory = getAgeCategoryFromDateString(state.adultChildState.dateOfBirth);
+  invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
+  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
   if (ageCategory !== 'adults') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/date-of-birth', params));
   }
 
-  if (parsedDataResult.data === DisabilityTaxCreditOption.No && state.adultChildState.allChildrenUnder18) {
+  if (parsedDataResult.data === DisabilityTaxCreditOption.No && state.allChildrenUnder18) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/apply-children', params));
   }
 
@@ -154,8 +154,8 @@ export default function ApplyFlowDisabilityTaxCredit() {
             name="disabilityTaxCredit"
             legend={t('apply-adult-child:disability-tax-credit.form-label')}
             options={[
-              { value: DisabilityTaxCreditOption.Yes, children: t('apply-adult-child:disability-tax-credit.radio-options.yes'), defaultChecked: defaultState === DisabilityTaxCreditOption.Yes },
-              { value: DisabilityTaxCreditOption.No, children: t('apply-adult-child:disability-tax-credit.radio-options.no'), defaultChecked: defaultState === DisabilityTaxCreditOption.No },
+              { value: DisabilityTaxCreditOption.Yes, children: t('apply-adult-child:disability-tax-credit.radio-options.yes'), defaultChecked: defaultState === true },
+              { value: DisabilityTaxCreditOption.No, children: t('apply-adult-child:disability-tax-credit.radio-options.no'), defaultChecked: defaultState === false },
             ]}
             errorMessage={errorMessages['input-radio-disability-tax-credit-radios-option-0']}
             required

@@ -16,8 +16,8 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
-import { loadApplyAdultChildState, saveApplyAdultChildState, validateApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyAdultChildState, validateApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -70,9 +70,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
   // prettier-ignore
-  /*if (state.adultChildState.childInformation === undefined ||
-    state.adultChildState.childDentalBenefits === undefined ||
-    state.adultChildState.childDentalInsurance === undefined) {
+  /*if (state.childInformation === undefined ||
+    state.childDentalBenefits === undefined ||
+    state.childDentalInsurance === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }*/
 
@@ -82,15 +82,15 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   /*const currentChildIndex = 0;
 
   const childInfo = {
-    firstName: state.adultChildState.childInformation.firstName,
-    lastName: state.adultChildState.childInformation.lastName,
-    birthday: toLocaleDateString(parse(state.adultChildState.childInformation.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
-    sin: state.adultChildState.childInformation.socialInsuranceNumber,
-    isParent: state.adultChildState.childInformation.isParent,
+    firstName: state.childInformation.firstName,
+    lastName: state.childInformation.lastName,
+    birthday: toLocaleDateString(parse(state.childInformation.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+    sin: state.childInformation.socialInsuranceNumber,
+    isParent: state.childInformation.isParent,
   };
 
-  const currentDentalInsurance = state.adultChildState.childDentalInsurance[currentChildIndex];
-  const currentDentalBenefit = state.adultChildState.childDentalBenefits[currentChildIndex];
+  const currentDentalInsurance = state.childDentalInsurance[currentChildIndex];
+  const currentDentalBenefit = state.childDentalBenefits[currentChildIndex];
 
   const childDentalInsurance = currentDentalInsurance;
 
@@ -144,8 +144,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     meta,
     siteKey: HCAPTCHA_SITE_KEY,
     hCaptchaEnabled,
-    currentChildIndex: state.adultChildState.currentChild,
-    maxChildren: state.adultChildState.maxChildren,
   });
 }
 
@@ -178,32 +176,30 @@ export async function action({ context: { session }, params, request }: ActionFu
   validateApplyAdultChildStateForReview({ params, state });
 
   // prettier-ignore
-  if (state.adultChildState.applicantInformation === undefined ||
-    state.adultChildState.communicationPreferences === undefined ||
-    state.adultChildState.dateOfBirth === undefined ||
-    state.adultChildState.dentalBenefits === undefined ||
-    state.adultChildState.dentalInsurance === undefined ||
-    state.adultChildState.personalInformation === undefined ||
-    state.adultChildState.childInformation === undefined ||
-    state.adultChildState.childDentalBenefits === undefined ||
-    state.adultChildState.childDentalInsurance === undefined ||
-    state.adultChildState.taxFiling2023 === undefined ||
+  if (state.applicantInformation === undefined ||
+    state.communicationPreferences === undefined ||
+    state.dateOfBirth === undefined ||
+    state.dentalBenefits === undefined ||
+    state.dentalInsurance === undefined ||
+    state.personalInformation === undefined ||
+    state.children === undefined ||
+    state.taxFiling2023 === undefined ||
     state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
   // TODO submit to the API and grab the confirmation code from the response
   const benefitApplicationRequest = toBenefitApplicationRequest({
-    applicantInformation: state.adultChildState.applicantInformation,
-    communicationPreferences: state.adultChildState.communicationPreferences,
-    dateOfBirth: state.adultChildState.dateOfBirth,
-    dentalBenefits: state.adultChildState.dentalBenefits,
-    dentalInsurance: state.adultChildState.dentalInsurance,
-    personalInformation: state.adultChildState.personalInformation,
-    partnerInformation: state.adultChildState.partnerInformation,
-    //childInformation: state.adultChildState.childInformation,
-    //childDentalBenefits: state.adultChildState.childDentalBenefits,
-    //childDentalInsurance: state.adultChildState.childDentalInsurance,
+    applicantInformation: state.applicantInformation,
+    communicationPreferences: state.communicationPreferences,
+    dateOfBirth: state.dateOfBirth,
+    dentalBenefits: state.dentalBenefits,
+    dentalInsurance: state.dentalInsurance,
+    personalInformation: state.personalInformation,
+    partnerInformation: state.partnerInformation,
+    //childInformation: state.childInformation,
+    //childDentalBenefits: state.childDentalBenefits,
+    //childDentalInsurance: state.childDentalInsurance,
   });
 
   const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
@@ -213,14 +209,14 @@ export async function action({ context: { session }, params, request }: ActionFu
     submittedOn: new Date().toISOString(),
   };
 
-  saveApplyAdultChildState({ params, request, session, state: { submissionInfo } });
+  saveApplyState({ params, session, state: { submissionInfo } });
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/confirmation', params));
 }
 
 export default function ReviewInformation() {
   const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { childInfo, federalSocialPrograms, provincialTerritorialSocialPrograms, childDentalInsurance, childDentalBenefit, csrfToken, siteKey, hCaptchaEnabled, currentChildIndex, maxChildren } = useLoaderData<typeof loader>();
+  const { childInfo, federalSocialPrograms, provincialTerritorialSocialPrograms, childDentalInsurance, childDentalBenefit, csrfToken, siteKey, hCaptchaEnabled } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -331,42 +327,22 @@ export default function ReviewInformation() {
         <fetcher.Form method="post" onSubmit={handleSubmit} className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
-
-          {currentChildIndex && maxChildren && currentChildIndex >= maxChildren ? (
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button id="confirm-button" variant="green" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Submit - Review Information click">
-                {t('apply-adult-child:review-child-information.submit-button')}
-                {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
-              </Button>
-              <ButtonLink
-                id="back-button"
-                routeId="$lang+/_public+/apply+/$id+/adult-child/review-adult-information"
-                params={params}
-                disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Review Adult Information click"
-              >
-                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-                {t('apply-adult-child:review-adult-information.back-button')}
-              </ButtonLink>
-            </div>
-          ) : (
-            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Review Adult Information click">
-                {t('apply-adult-child:review-adult-information.continue-button')}
-                <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-              </Button>
-              <ButtonLink
-                id="back-button"
-                routeId="$lang+/_public+/apply+/$id+/adult-child/review-adult-information"
-                params={params}
-                disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Review Adult Information click"
-              >
-                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-                {t('apply-adult-child:review-adult-information.back-button')}
-              </ButtonLink>
-            </div>
-          )}
+          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Review Adult Information click">
+              {t('apply-adult-child:review-adult-information.continue-button')}
+              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+            </Button>
+            <ButtonLink
+              id="back-button"
+              routeId="$lang+/_public+/apply+/$id+/adult-child/review-adult-information"
+              params={params}
+              disabled={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Review Adult Information click"
+            >
+              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+              {t('apply-adult-child:review-adult-information.back-button')}
+            </ButtonLink>
+          </div>
         </fetcher.Form>
       </div>
     </>

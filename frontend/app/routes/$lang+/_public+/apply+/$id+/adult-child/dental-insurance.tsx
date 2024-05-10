@@ -15,7 +15,8 @@ import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultChildState, saveApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -44,7 +45,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:dental-insurance.title') }) };
 
-  return json({ id: state, csrfToken, meta, defaultState: state.adultChildState.dentalInsurance, editMode: state.adultChildState.editMode });
+  return json({ id: state, csrfToken, meta, defaultState: state.dentalInsurance, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -72,9 +73,9 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  saveApplyAdultChildState({ params, request, session, state: { dentalInsurance: parsedDataResult.data } });
+  saveApplyState({ params, session, state: { dentalInsurance: parsedDataResult.data } });
 
-  if (state.adultChildState.editMode) {
+  if (state.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-information', params));
   }
 

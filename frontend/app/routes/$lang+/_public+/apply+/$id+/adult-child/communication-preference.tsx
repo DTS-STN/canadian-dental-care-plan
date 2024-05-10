@@ -16,7 +16,8 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultChildState, saveApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { CommunicationPreferencesState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
@@ -28,13 +29,6 @@ import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
-
-export interface CommunicationPreferencesState {
-  confirmEmail?: string;
-  email?: string;
-  preferredLanguage: string;
-  preferredMethod: string;
-}
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -71,12 +65,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     preferredCommunicationMethods,
     preferredLanguages,
     defaultState: {
-      ...(state.adultChildState.communicationPreferences ?? {}),
-      email: state.adultChildState.communicationPreferences?.email ?? state.adultChildState.personalInformation?.email,
-      confirmEmail: state.adultChildState.communicationPreferences?.confirmEmail ?? state.adultChildState.personalInformation?.confirmEmail,
+      ...(state.communicationPreferences ?? {}),
+      email: state.communicationPreferences?.email ?? state.personalInformation?.email,
     },
-    editMode: state.adultChildState.editMode,
-    isReadOnlyEmail: !!state.adultChildState.personalInformation?.email,
+    editMode: state.editMode,
+    isReadOnlyEmail: !!state.personalInformation?.email,
   });
 }
 
@@ -134,9 +127,9 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  saveApplyAdultChildState({ params, request, session, state: { communicationPreferences: parsedDataResult.data } });
+  saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
 
-  if (state.adultChildState.editMode) {
+  if (state.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-information', params));
   }
 
@@ -223,7 +216,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             name="confirmEmail"
             errorMessage={errorMessages['confirm-email']}
             autoComplete="email"
-            defaultValue={defaultState.confirmEmail ?? ''}
+            defaultValue={defaultState.email ?? ''}
             required
             disabled={isReadOnlyEmail}
           />

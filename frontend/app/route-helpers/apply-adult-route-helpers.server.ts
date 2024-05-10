@@ -1,7 +1,7 @@
 import { Session, redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
 
-import { ApplyState, loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { ApplyState, SubmissionInfoState, loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult/applicant-information';
 import { CommunicationPreferencesState } from '~/routes/$lang+/_public+/apply+/$id+/adult/communication-preference';
 import { DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/adult/date-of-birth';
@@ -11,7 +11,6 @@ import { DentalBenefitsState } from '~/routes/$lang+/_public+/apply+/$id+/adult/
 import { LivingIndependentlyState } from '~/routes/$lang+/_public+/apply+/$id+/adult/living-independently';
 import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult/partner-information';
 import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult/personal-information';
-import { SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/adult/review-information';
 import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/adult/tax-filing';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';

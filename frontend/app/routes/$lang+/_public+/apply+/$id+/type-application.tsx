@@ -14,10 +14,9 @@ import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { ApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { ApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { ApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
-import { loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { TypeOfApplicationState, loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -33,8 +32,6 @@ enum ApplicantType {
   Child = 'child',
   Delegate = 'delegate',
 }
-
-export type TypeOfApplicationState = `${ApplicantType}`;
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'gcweb'),
@@ -89,7 +86,6 @@ export async function action({ context: { session }, params, request }: ActionFu
     session,
     state: {
       adultState: state.adultState ?? ({ editMode: false } satisfies ApplyAdultState),
-      adultChildState: state.adultChildState ?? ({ editMode: false } satisfies ApplyAdultChildState),
       childState: state.childState ?? ({ editMode: false } satisfies ApplyChildState),
       typeOfApplication: parsedDataResult.data,
     },

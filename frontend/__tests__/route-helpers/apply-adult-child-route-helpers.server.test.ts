@@ -2,7 +2,7 @@ import { Params } from '@remix-run/react';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { ApplyAdultChildState, applicantInformationStateHasPartner, validateApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { applicantInformationStateHasPartner, validateApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { ApplyState } from '~/route-helpers/apply-route-helpers.server';
 
 vi.mock('@remix-run/node', () => ({
@@ -42,7 +42,7 @@ describe('apply-route-helpers.server', () => {
     });
   });
 
-  describe('validateApplyAdultStateForReview', () => {
+  describe('validateApplyAdultChildStateForReview', () => {
     const params: Params = {
       lang: 'en',
       id: '00000000-0000-0000-0000-000000000000',
@@ -50,8 +50,9 @@ describe('apply-route-helpers.server', () => {
 
     const baseState = {
       id: '00000000-0000-0000-0000-000000000000',
-      lastUpdatedOn: '',
-    };
+      editMode: false,
+      lastUpdatedOn: '2000-01-01',
+    } satisfies ApplyState;
 
     it('should redirect if typeOfApplication is undefined', () => {
       const mockState = {
@@ -80,23 +81,11 @@ describe('apply-route-helpers.server', () => {
       expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/type-application, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
-    it('should redirect if adultChildState is undefined', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: 'adult-child',
-      } satisfies ApplyState;
-
-      expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/type-application, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
-    });
-
     it('should redirect if taxFiling2023 is undefined', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'adult-child',
-        adultChildState: {
-          editMode: false,
-          taxFiling2023: undefined,
-        } satisfies ApplyAdultChildState,
+        taxFiling2023: undefined,
       } satisfies ApplyState;
 
       expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult-child/tax-filing, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
@@ -106,10 +95,8 @@ describe('apply-route-helpers.server', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'adult-child',
-        adultChildState: {
-          editMode: false,
-          taxFiling2023: 'no',
-        } satisfies ApplyAdultChildState,
+        editMode: false,
+        taxFiling2023: false,
       } satisfies ApplyState;
 
       expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult-child/file-taxes, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
@@ -119,11 +106,9 @@ describe('apply-route-helpers.server', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'adult-child',
-        adultChildState: {
-          editMode: false,
-          taxFiling2023: 'yes',
-          dateOfBirth: undefined,
-        } satisfies ApplyAdultChildState,
+        editMode: false,
+        taxFiling2023: true,
+        dateOfBirth: undefined,
       } satisfies ApplyState;
 
       expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult-child/date-of-birth, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');

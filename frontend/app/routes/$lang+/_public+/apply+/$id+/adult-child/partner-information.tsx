@@ -17,7 +17,8 @@ import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusT
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import { Progress } from '~/components/progress';
-import { applicantInformationStateHasPartner, loadApplyAdultChildState, saveApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { applicantInformationStateHasPartner, loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { PartnerInformationState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -28,14 +29,6 @@ import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin } from '~/utils/sin-utils';
 import { cn } from '~/utils/tw-utils';
-
-export interface PartnerInformationState {
-  confirm: boolean;
-  dateOfBirth: string;
-  firstName: string;
-  lastName: string;
-  socialInsuranceNumber: string;
-}
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -51,14 +44,14 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  if (state.adultChildState.applicantInformation === undefined || !applicantInformationStateHasPartner(state.adultChildState.applicantInformation)) {
+  if (state.applicantInformation === undefined || !applicantInformationStateHasPartner(state.applicantInformation)) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/applicant-information', params));
   }
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:partner-information.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.adultChildState.partnerInformation, editMode: state.adultChildState.editMode });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.partnerInformation, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -99,14 +92,14 @@ export async function action({ context: { session }, params, request }: ActionFu
         .trim()
         .min(1, t('apply-adult-child:partner-information.error-message.sin-required'))
         .refine(isValidSin, t('apply-adult-child:partner-information.error-message.sin-valid'))
-        .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.adultChildState.applicantInformation?.socialInsuranceNumber, t('apply-adult-child:partner-information.error-message.sin-unique'))
+        .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.applicantInformation?.socialInsuranceNumber, t('apply-adult-child:partner-information.error-message.sin-unique'))
         .superRefine((sin, ctx) => {
           if (!isValidSin(sin)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:partner-information.error-message.sin-valid'), fatal: true });
             return z.NEVER;
           }
 
-          if (state.adultChildState.applicantInformation && formatSin(sin) === formatSin(state.adultChildState.applicantInformation.socialInsuranceNumber)) {
+          if (state.applicantInformation && formatSin(sin) === formatSin(state.applicantInformation.socialInsuranceNumber)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:partner-information.error-message.sin-unique'), fatal: true });
             return z.NEVER;
           }
@@ -160,9 +153,9 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  saveApplyAdultChildState({ params, request, session, state: { partnerInformation: parsedDataResult.data } });
+  saveApplyState({ params, session, state: { partnerInformation: parsedDataResult.data } });
 
-  if (state.adultChildState.editMode) {
+  if (state.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-information', params));
   }
 

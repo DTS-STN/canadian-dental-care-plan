@@ -33,22 +33,6 @@ import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 
-/**
- * Represents the state of an application submission, holding data such as confirmation code and submission timestamp.
- */
-export interface SubmissionInfoState {
-  /**
-   * The confirmation code associated with the application submission.
-   */
-  confirmationCode: string;
-
-  /**
-   * The UTC date and time when the application was submitted.
-   * Format: ISO 8601 string (e.g., "YYYY-MM-DDTHH:mm:ss.sssZ")
-   */
-  submittedOn: string;
-}
-
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adult.reviewInformation,
@@ -245,12 +229,18 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
 
-  const submissionInfo: SubmissionInfoState = {
-    confirmationCode: confirmationCode,
-    submittedOn: new Date().toISOString(),
-  };
+  saveApplyAdultState({
+    params,
+    request,
+    session,
+    state: {
+      submissionInfo: {
+        confirmationCode: confirmationCode,
+        submittedOn: new Date().toISOString(),
+      },
+    },
+  });
 
-  saveApplyAdultState({ params, request, session, state: { submissionInfo } });
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/confirmation', params));
 }
 

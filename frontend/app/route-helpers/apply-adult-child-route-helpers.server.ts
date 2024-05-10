@@ -1,45 +1,12 @@
 import { Session, redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
 
-import { ApplyState, loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
-import { DentalBenefitsState } from '~/routes/$lang+/_protected+/access-to-governmental-benefits+/edit';
-import { ChildInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/child-information';
-import { DisabilityTaxCreditState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/disability-tax-credit';
-import { LivingIndependentlyState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/living-independently';
-import { TaxFilingState } from '~/routes/$lang+/_public+/apply+/$id+/adult-child/tax-filing';
-import { ApplicantInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult/applicant-information';
-import { CommunicationPreferencesState } from '~/routes/$lang+/_public+/apply+/$id+/adult/communication-preference';
-import { DentalInsuranceState } from '~/routes/$lang+/_public+/apply+/$id+/adult/dental-insurance';
-import { PartnerInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult/partner-information';
-import { PersonalInformationState } from '~/routes/$lang+/_public+/apply+/$id+/adult/personal-information';
-import { SubmissionInfoState } from '~/routes/$lang+/_public+/apply+/$id+/adult/review-information';
-import { AllChildrenUnder18State, DateOfBirthState } from '~/routes/$lang+/_public+/apply+/$id+/child/date-of-birth';
+import { ApplyState, loadApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 
 const log = getLogger('apply-route-helpers.server');
-
-export interface ApplyAdultChildState {
-  readonly taxFiling2023?: TaxFilingState;
-  readonly submissionInfo?: SubmissionInfoState;
-  readonly editMode: boolean;
-  readonly disabilityTaxCredit?: DisabilityTaxCreditState;
-  readonly livingIndependently?: LivingIndependentlyState;
-  readonly allChildrenUnder18?: AllChildrenUnder18State;
-  readonly applicantInformation?: ApplicantInformationState;
-  readonly communicationPreferences?: CommunicationPreferencesState;
-  readonly dateOfBirth?: DateOfBirthState;
-  readonly dentalBenefits?: DentalBenefitsState;
-  readonly dentalInsurance?: DentalInsuranceState;
-  readonly partnerInformation?: PartnerInformationState;
-  readonly personalInformation?: PersonalInformationState;
-  readonly childInformation?: ChildInformationState;
-  readonly childDentalBenefits?: DentalBenefitsState[];
-  readonly childDentalInsurance?: DentalInsuranceState[];
-  readonly currentChild?: number;
-  readonly maxChildren?: number;
-}
 
 interface LoadApplyAdultChildStateArgs {
   params: Params;
@@ -54,16 +21,16 @@ interface LoadApplyAdultChildStateArgs {
  */
 export function loadApplyAdultChildState({ params, request, session }: LoadApplyAdultChildStateArgs) {
   const { pathname } = new URL(request.url);
-  const applyState = loadApplyState({ params, session }) as ApplyState & { adultChildState?: ApplyAdultChildState };
+  const applyState = loadApplyState({ params, session });
 
-  if (applyState.typeOfApplication !== 'adult-child' || applyState.adultChildState === undefined) {
+  if (applyState.typeOfApplication !== 'adult-child') {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/type-application', params));
   }
 
   // Redirect to the confirmation page if the application has been submitted and
   // the current route is not the confirmation page.
   const confirmationRouteUrl = getPathById('$lang+/_public+/apply+/$id+/adult-child/confirmation', params);
-  if (applyState.adultChildState.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
+  if (applyState.submissionInfo && !pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has been submitted; sessionId: [%s], ', applyState.id, confirmationRouteUrl);
     throw redirect(confirmationRouteUrl);
   }
@@ -71,46 +38,13 @@ export function loadApplyAdultChildState({ params, request, session }: LoadApply
   // Redirect to the first flow page if the application has not been submitted and
   // the current route is the confirmation page.
   const termsAndConditionsRouteUrl = getPathById('$lang+/_public+/apply+/$id+/terms-and-conditions', params);
-  if (!applyState.adultChildState.submissionInfo && pathname.endsWith(confirmationRouteUrl)) {
+  if (!applyState.submissionInfo && pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has not been submitted; sessionId: [%s], ', applyState.id, termsAndConditionsRouteUrl);
     //throw redirect(termsAndConditionsRouteUrl);
     //TODO: re-add throw when apply adult-child flow is completed
   }
 
-  return {
-    ...applyState,
-    adultChildState: applyState.adultChildState as ApplyAdultChildState,
-  };
-}
-
-interface SaveStateArgs {
-  params: Params;
-  request: Request;
-  session: Session;
-  state: Partial<ApplyAdultChildState>;
-  remove?: keyof ApplyAdultChildState;
-}
-
-/**
- * Saves state.
- * @param args - The arguments.
- * @returns The new adult child(ren) state.
- */
-export function saveApplyAdultChildState({ params, request, session, state, remove = undefined }: SaveStateArgs) {
-  const currentState = loadApplyAdultChildState({ params, request, session });
-
-  const newState: ApplyAdultChildState = {
-    ...currentState.adultChildState,
-    ...state,
-  };
-
-  if (remove && remove in newState) {
-    delete newState[remove];
-  }
-
-  saveApplyState({ params, session, state: { adultChildState: newState } });
-
-  return newState;
+  return applyState;
 }
 
 interface ApplicantInformationStateHasPartnerArgs {
@@ -124,7 +58,7 @@ export function applicantInformationStateHasPartner({ maritalStatus }: Applicant
 
 interface ValidateStateForReviewArgs {
   params: Params;
-  state: ApplyState & { adultChildState?: ApplyAdultChildState };
+  state: ApplyState;
 }
 
 export function validateApplyAdultChildStateForReview({ params, state }: ValidateStateForReviewArgs) {
@@ -140,48 +74,44 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/type-application', params));
   }
 
-  if (state.adultChildState === undefined) {
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/type-application', params));
-  }
-
-  if (state.adultChildState.taxFiling2023 === undefined) {
+  if (state.taxFiling2023 === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/tax-filing', params));
   }
 
-  if (state.adultChildState.taxFiling2023 === 'no') {
+  if (!state.taxFiling2023) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/file-taxes', params));
   }
 
-  if (state.adultChildState.dateOfBirth === undefined) {
+  if (state.dateOfBirth === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/date-of-birth', params));
   }
 
   // TODO: Need to create routes for adult-child flow
-  // if (state.adultChildState.applicantInformation === undefined) {
+  // if (state.applicantInformation === undefined) {
   //   throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
   // }
 
-  // if (state.adultChildState.partnerInformation === undefined && applicantInformationStateHasPartner(state.adultChildState.applicantInformation)) {
+  // if (state.partnerInformation === undefined && applicantInformationStateHasPartner(state.applicantInformation)) {
   //   throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/partner-information', params));
   // }
 
-  // if (state.adultChildState.partnerInformation !== undefined && !applicantInformationStateHasPartner(state.adultChildState.applicantInformation)) {
+  // if (state.partnerInformation !== undefined && !applicantInformationStateHasPartner(state.applicantInformation)) {
   //   throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
   // }
 
-  // if (state.adultChildState.personalInformation === undefined) {
+  // if (state.personalInformation === undefined) {
   //   throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/personal-information', params));
   // }
 
-  // if (state.adultChildState.communicationPreferences === undefined) {
+  // if (state.communicationPreferences === undefined) {
   //   throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/communication-preference', params));
   // }
 
-  // if (state.adultChildState.dentalInsurance === undefined) {
+  // if (state.dentalInsurance === undefined) {
   //   throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/dental-insurance', params));
   // }
 
-  // if (state.adultChildState.dentalBenefits === undefined) {
+  // if (state.dentalBenefits === undefined) {
   //   throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/federal-provincial-territorial-benefits', params));
   // }
 }

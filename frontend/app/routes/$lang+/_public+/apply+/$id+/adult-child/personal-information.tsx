@@ -18,7 +18,8 @@ import { InputField } from '~/components/input-field';
 import { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultChildState, saveApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { PersonalInformationState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
@@ -30,26 +31,6 @@ import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-uti
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
-
-export type PersonalInformationState = {
-  copyMailingAddress: boolean;
-  homeAddress?: string;
-  homeApartment?: string;
-  homeCity?: string;
-  homeCountry?: string;
-  homePostalCode?: string;
-  homeProvince?: string;
-  mailingAddress: string;
-  mailingApartment?: string;
-  mailingCity: string;
-  mailingCountry: string;
-  mailingPostalCode?: string;
-  mailingProvince?: string;
-  phoneNumber?: string;
-  phoneNumberAlt?: string;
-  email?: string;
-  confirmEmail?: string;
-};
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -77,15 +58,15 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     id: state.id,
     csrfToken,
     meta,
-    defaultState: state.adultChildState.personalInformation,
-    maritalStatus: state.adultChildState.applicantInformation?.maritalStatus,
+    defaultState: state.personalInformation,
+    maritalStatus: state.applicantInformation?.maritalStatus,
     countryList,
     regionList,
     CANADA_COUNTRY_ID,
     USA_COUNTRY_ID,
     MARITAL_STATUS_CODE_COMMONLAW,
     MARITAL_STATUS_CODE_MARRIED,
-    editMode: state.adultChildState.editMode,
+    editMode: state.editMode,
   });
 }
 
@@ -238,9 +219,9 @@ export async function action({ context: { session }, params, request }: ActionFu
       }
     : parsedDataResult.data;
 
-  saveApplyAdultChildState({ params, request, session, state: { personalInformation: updatedData } });
+  saveApplyState({ params, session, state: { personalInformation: updatedData } });
 
-  if (state.adultChildState.editMode) {
+  if (state.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-information', params));
   }
 
@@ -442,7 +423,7 @@ export default function ApplyFlowPersonalInformation() {
               inputMode="email"
               className="w-full"
               autoComplete="email"
-              defaultValue={defaultState?.confirmEmail ?? ''}
+              defaultValue={defaultState?.email ?? ''}
               errorMessage={errorMessages['confirm-email']}
               label={t('apply-adult-child:contact-information.confirm-email')}
               maxLength={100}

@@ -36,8 +36,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:parent-or-guardian.page-title') }) };
 
-  invariant(state.adultChildState.dateOfBirth, 'Expected state.adultChildState.dateOfBirth to be defined');
-  const ageCategory = getAgeCategoryFromDateString(state.adultChildState.dateOfBirth);
+  invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
+  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
   if (ageCategory !== 'children') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
