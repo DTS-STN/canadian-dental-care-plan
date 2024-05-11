@@ -90,17 +90,19 @@ export async function action({ context: { session }, params, request }: ActionFu
     })
     .superRefine((val, ctx) => {
       if (val.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID) {
-        if (typeof val.email !== 'string' || validator.isEmpty(val.email)) {
+        const email = val.email ?? state.personalInformation?.email;
+        const confirmEmail = val.confirmEmail ?? state.personalInformation?.email;
+        if (typeof email !== 'string' || validator.isEmpty(email)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:communication-preference.error-message.email-required'), path: ['email'] });
-        } else if (!validator.isEmail(val.email)) {
+        } else if (!validator.isEmail(email)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:communication-preference.error-message.email-valid'), path: ['email'] });
         }
 
-        if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
+        if (typeof confirmEmail !== 'string' || validator.isEmpty(confirmEmail)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:communication-preference.error-message.confirm-email-required'), path: ['confirmEmail'] });
-        } else if (!validator.isEmail(val.confirmEmail)) {
+        } else if (!validator.isEmail(confirmEmail)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:communication-preference.error-message.email-valid'), path: ['confirmEmail'] });
-        } else if (val.email !== val.confirmEmail) {
+        } else if (email !== confirmEmail) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:communication-preference.error-message.email-match'), path: ['confirmEmail'] });
         }
       }

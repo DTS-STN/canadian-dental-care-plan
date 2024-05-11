@@ -102,7 +102,7 @@ export async function action({ context: { session }, params, request }: ActionFu
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.confirm-email-required'), path: ['confirmEmail'] });
         } else if (!validator.isEmail(confirmEmail)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-valid'), path: ['confirmEmail'] });
-        } else if (val.email !== val.confirmEmail) {
+        } else if (email !== confirmEmail) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-match'), path: ['confirmEmail'] });
         }
       }
