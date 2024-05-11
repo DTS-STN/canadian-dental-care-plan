@@ -189,9 +189,6 @@ export default function ApplyFlowCommunicationPreferencePage() {
       defaultChecked: defaultState.preferredMethod === communicationMethodEmail.id,
       append: preferredMethodValue === communicationMethodEmail.id && (
         <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
-          <p className="md:col-span-2" id="email-note">
-            {t('apply-adult-child:communication-preference.email-note')}
-          </p>
           <InputField
             id="email"
             type="email"
