@@ -26,13 +26,6 @@ import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
-export type DateOfBirthState = string;
-enum AllChildrenUnder18Option {
-  No = 'no',
-  Yes = 'yes',
-}
-export type AllChildrenUnder18State = `${AllChildrenUnder18Option}`;
-
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.child.dateOfBirth,

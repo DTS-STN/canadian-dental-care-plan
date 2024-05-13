@@ -19,7 +19,7 @@ import { InputOptionProps } from '~/components/input-option';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
-import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { PersonalInformationState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
@@ -31,26 +31,6 @@ import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-uti
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
-
-export type PersonalInformationState = {
-  copyMailingAddress: boolean;
-  homeAddress?: string;
-  homeApartment?: string;
-  homeCity?: string;
-  homeCountry?: string;
-  homePostalCode?: string;
-  homeProvince?: string;
-  mailingAddress: string;
-  mailingApartment?: string;
-  mailingCity: string;
-  mailingCountry: string;
-  mailingPostalCode?: string;
-  mailingProvince?: string;
-  phoneNumber?: string;
-  phoneNumberAlt?: string;
-  email?: string;
-  confirmEmail?: string;
-};
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
