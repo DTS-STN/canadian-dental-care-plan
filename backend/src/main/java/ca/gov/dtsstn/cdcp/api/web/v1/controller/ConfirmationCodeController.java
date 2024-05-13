@@ -32,7 +32,7 @@ public class ConfirmationCodeController {
 
     @GetMapping({ "/users/{userEmail}/confirmationCodes" })
 	@Operation(summary = "Get all confirmation codes for a user.", operationId = "get-confirmation-codes")
-    public List<ConfirmationCodeModel> getConfirmationCodes(
+    public List<ConfirmationCodeModel> getConfirmationCodesByUserEmail(
         @NotBlank(message = "userEmail must not be null or blank")
         @Parameter(description = "The email of the user.", example = "user@email.com", required = true)
         @PathVariable String userEmail
