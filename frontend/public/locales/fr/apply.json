@@ -1,7 +1,7 @@
 {
   "application-delegate": {
-    "page-title": "La demande au nom d'une autre personne ne peut pas être effectuée en ligne pour le moment.",
-    "contact-representative": "Vous devez <contactServiceCanada>parler à un représentant de Service Canada</contactServiceCanada> pour présenter une demande au nom de quelqu'un. Veuillez communiquer avec Service Canada au <span>1-833-537-4342</span> ou vous rendre dans un bureau de Service Canada.",
+    "page-title": "(FR) Applying on behalf of someone as a legal delegate or Power of Attorney",
+    "contact-representative": "(FR) You must speak to a Service Canada representative if you are applying on behalf of someone as their legal delegate or Power of Attorney. You can contact Service Canada by calling 1-833-537-4342 or by visiting a <contactServiceCanada>Service Canada Centre</contactServiceCanada> near you.",
     "prepare-to-apply": "<preparingToApply>Se préparer à présenter une demande au nom de quelqu'un</preparingToApply>",
     "contact-service-canada-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/contactez.html",
     "preparing-to-apply-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#aide",
