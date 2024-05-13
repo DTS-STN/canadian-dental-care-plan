@@ -7,6 +7,7 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
@@ -15,6 +16,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
+import { AppPageTitle } from '~/components/layouts/public-layout';
 import { Progress } from '~/components/progress';
 import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
@@ -42,7 +44,6 @@ enum HasProvincialTerritorialBenefitsOption {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'),
   pageIdentifier: pageIds.public.apply.child.federalProvincialTerritorialBenefits,
-  pageTitleI18nKey: 'apply-child:dental-benefits.title',
 };
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -62,9 +63,20 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const regions = allRegions.filter((region) => region.countryId === CANADA_COUNTRY_ID);
 
   const csrfToken = String(session.get('csrfToken'));
+
+  invariant(state.children, 'Expected state.children to be defined');
+  const child = state.children.find(({ id }) => id === params.childId);
+
+  if (!child) {
+    // TODO: do something else later, maybe log warning and redirect to summary or review page
+    throw new Response(null, { status: 404 });
+  }
+
+  const childName = child.information?.firstName ?? '<Child 1 name>';
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:dental-benefits.title') }) };
 
   return json({
+    childName,
     csrfToken,
     defaultState: state.dentalBenefits,
     editMode: state.editMode,
@@ -166,12 +178,12 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/child/review-information', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/child/review-information', params)); //TODO: Change over to child flow when available (support multiple children - redirect to next child or review)
 }
 
 export default function AccessToDentalInsuranceQuestion() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, regions, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { childName, csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, regions, defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -245,6 +257,7 @@ export default function AccessToDentalInsuranceQuestion() {
 
   return (
     <>
+      <AppPageTitle>{t('apply-child:dental-benefits.title', { childName: childName })}</AppPageTitle>
       <div className="my-6 sm:my-8">
         <p id="progress-label" className="sr-only mb-2">
           {t('apply:progress.label')}
@@ -258,12 +271,12 @@ export default function AccessToDentalInsuranceQuestion() {
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <section className="mb-6">
-            <h2 className="mb-4 font-lato text-2xl font-bold">{t('apply-child:dental-benefits.federal-benefits.title')}</h2>
+          <fieldset>
+            <legend className="my-6 font-lato text-2xl font-bold">{t('apply-child:dental-benefits.federal-benefits.title')}</legend>
             <InputRadios
               id="has-federal-benefits"
               name="hasFederalBenefits"
-              legend={t('apply-child:dental-benefits.federal-benefits.legend')}
+              legend={t('apply-child:dental-benefits.federal-benefits.legend', { childName: childName })}
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-child:dental-benefits.federal-benefits.option-no" />,
@@ -295,13 +308,14 @@ export default function AccessToDentalInsuranceQuestion() {
               errorMessage={errorMessages['input-radio-has-federal-benefits-option-0']}
               required
             />
-          </section>
-          <section className="mb-8">
-            <h2 className="mb-4 font-lato text-2xl font-bold">{t('apply-child:dental-benefits.provincial-territorial-benefits.title')}</h2>
+          </fieldset>
+          <fieldset>
+            <legend className="my-6 font-lato text-2xl font-bold">{t('apply-child:dental-benefits.provincial-territorial-benefits.title')}</legend>
+
             <InputRadios
               id="has-provincial-territorial-benefits"
               name="hasProvincialTerritorialBenefits"
-              legend={t('apply-child:dental-benefits.provincial-territorial-benefits.legend')}
+              legend={t('apply-child:dental-benefits.provincial-territorial-benefits.legend', { childName: childName })}
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-child:dental-benefits.provincial-territorial-benefits.option-no" />,
@@ -359,7 +373,7 @@ export default function AccessToDentalInsuranceQuestion() {
               errorMessage={errorMessages['input-radio-has-provincial-territorial-benefits-option-0']}
               required
             />
-          </section>
+          </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Access to other federal, provincial or territorial dental benefits click">
@@ -367,7 +381,7 @@ export default function AccessToDentalInsuranceQuestion() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId="$lang+/_public+/apply+/$id+/child/review-information"
+                routeId="$lang+/_public+/apply+/$id+/child/review-information" //TODO: Change over to child flow when available
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Access to other federal, provincial or territorial dental benefits click"
@@ -383,7 +397,7 @@ export default function AccessToDentalInsuranceQuestion() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId="$lang+/_public+/apply+/$id+/child/dental-insurance"
+                routeId="$lang+/_public+/apply+/$id+/child/dental-insurance" //TODO: Change over to child flow when available
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Access to other federal, provincial or territorial dental benefits click"
