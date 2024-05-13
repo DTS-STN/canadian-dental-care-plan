@@ -90,19 +90,17 @@ export async function action({ context: { session }, params, request }: ActionFu
     })
     .superRefine((val, ctx) => {
       if (val.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID) {
-        const email = val.email ?? state.personalInformation?.email;
-        const confirmEmail = val.confirmEmail ?? state.personalInformation?.email;
-        if (typeof email !== 'string' || validator.isEmpty(email)) {
+        if (typeof val.email !== 'string' || validator.isEmpty(val.email)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-required'), path: ['email'] });
-        } else if (!validator.isEmail(email)) {
+        } else if (!validator.isEmail(val.email)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-valid'), path: ['email'] });
         }
 
-        if (typeof confirmEmail !== 'string' || validator.isEmpty(confirmEmail)) {
+        if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.confirm-email-required'), path: ['confirmEmail'] });
-        } else if (!validator.isEmail(confirmEmail)) {
+        } else if (!validator.isEmail(val.confirmEmail)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-valid'), path: ['confirmEmail'] });
-        } else if (email !== confirmEmail) {
+        } else if (val.email !== val.confirmEmail) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-match'), path: ['confirmEmail'] });
         }
       }
@@ -203,7 +201,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             autoComplete="email"
             defaultValue={defaultState.email ?? ''}
             required
-            disabled={isReadOnlyEmail}
+            readOnly={isReadOnlyEmail}
           />
           <InputField
             id="confirm-email"
@@ -217,7 +215,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             autoComplete="email"
             defaultValue={defaultState.email ?? ''}
             required
-            disabled={isReadOnlyEmail}
+            readOnly={isReadOnlyEmail}
           />
         </div>
       ),
