@@ -29,7 +29,6 @@
     "preferred-method": "What is your preferred method of communication for Sun Life?",
     "preferred-language": "What is your preferred official language of communication?",
     "email": "Email address",
-    "email-note": "Service Canada and Health Canada may use this email for future communication about the Canadian Dental Care Plan.",
     "confirm-email": "Confirm email address",
     "back": "Back",
     "continue": "Continue",
@@ -186,7 +185,7 @@
       "description": "Applications for the Canadian Dental Care Plan will open in phases. Your date of birth determines when you can apply.",
       "age-heading": "Your age",
       "child-age-heading": "Your child(ren)'s age",
-      "form-instructions": "Please select your date of birth",
+      "form-instructions": "Please enter your date of birth",
       "child-age-instruction": "Are all the children you are applying for under 18?",
       "yes": "Yes",
       "no": "No",
@@ -280,7 +279,7 @@
     "phone-number": "Phone number (optional)",
     "phone-number-alt": "Alternate phone number (optional)",
     "email-header": "Email",
-    "add-email": "Adding an email will help the Government of Canada contact you regarding your Canadian Dental Care Plan membership.",
+    "add-email": "Adding an email will help the Government of Canada and Sun Life contact you regarding your Canadian Dental Care Plan membership.",
     "email": "Email address (optional)",
     "confirm-email": "Confirm email address (optional)",
     "mailing-address": {
@@ -386,7 +385,7 @@
   "disability-tax-credit": {
     "page-title": "Disability tax credit",
     "non-refundable": "The disability tax credit (DTC) is a non-refundable federal tax credit that helps people with disabilities, or their supporting family member, reduce the amount of income tax they may have to pay.",
-    "more-info": "For more information visit <dtcLink>Disability tax credit (DTC)</dtcLink>",
+    "more-info": "<dtcLink>For more information on the disability tax credit (DTC)</dtcLink>",
     "form-label": "Did you have a valid disability tax credit (DTC) with the Canada Revenue Agency for 2023?",
     "dtc-link": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/segments/tax-credits-deductions-persons-disabilities/disability-tax-credit.html",
     "radio-options": {
@@ -395,6 +394,7 @@
     },
     "continue-btn": "Continue",
     "back-btn": "Back",
+    "save-btn": "Save",
     "error-message": {
       "disability-tax-credit-required": "Select whether or not you have a valid disability tax credit"
     }
@@ -411,7 +411,8 @@
       "living-independently-required": "Select an option for living independently"
     },
     "back-btn": "Back",
-    "continue-btn": "Continue"
+    "continue-btn": "Continue",
+    "save-btn": "Save"
   },
   "parent-or-guardian": {
     "page-title": "Parent or guardian needs to apply",

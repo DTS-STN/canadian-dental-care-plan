@@ -45,7 +45,6 @@
     "preferred-method": "Quel est votre mode de communication préféré pour la Sun Life?",
     "preferred-language": "Quelle langue officielle de communication préférez-vous",
     "email": "Adresse courriel",
-    "email-note": "Service Canada et Santé Canada peuvent utiliser ce courriel pour des communications futures au sujet du Régime canadien de soins dentaires.",
     "confirm-email": "Confirmer l'adresse courriel",
     "back": "Retour",
     "continue": "Continuer",
@@ -129,7 +128,7 @@
     "add-phone": "(FR) Adding a phone number helps Government of Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
     "phone-number": "Numéro de téléphone (facultatif)",
     "phone-number-alt": "Autre numéro de téléphone (facultatif)",
-    "add-email": "(FR) Adding an email will help the Government of Canada contact you regarding your Canadian Dental Care Plan membership.",
+    "add-email": "(FR) Adding an email will help the Government of Canada and Sun Life contact you regarding your Canadian Dental Care Plan membership.",
     "email": "Adresse courriel (facultatif)",
     "confirm-email": "Confirmer l'adresse courriel (facultatif)",
     "mailing-address": {
@@ -256,7 +255,7 @@
   "disability-tax-credit": {
     "page-title": "(FR) Disability tax credit",
     "non-refundable": "(FR) The disability tax credit (DTC) is a non-refundable federal tax credit that helps people with disabilities, or their supporting family member, reduce the amount of income tax they may have to pay.",
-    "more-info": "(FR) For more information visit <dtcLink>Disability tax credit (DTC)</dtcLink>",
+    "more-info": "<dtcLink>(FR) For more information on the disability tax credit (DTC)</dtcLink>",
     "form-label": "(FR) Did you have a valid disability tax credit (DTC) with the Canada Revenue Agency for 2023?",
     "dtc-link": "https://www.canada.ca/fr/agence-revenu/services/impot/particuliers/segments/deductions-credits-impot-personnes-handicapees/credit-impot-personnes-handicapees.html",
     "radio-options": {
@@ -288,7 +287,7 @@
       "description": "Les demandes au titre du Régime canadien de soins dentaires seront acceptées progressivement. Votre date de naissance détermine le moment où vous pouvez présenter une demande.",
       "age-heading": "(FR) Your age",
       "child-age-heading": "(FR) Your child(ren)'s age",
-      "form-instructions": "Veuillez sélectionner votre date de naissance",
+      "form-instructions": "Veuillez entrer votre date de naissance",
       "child-age-instruction": "(FR) Are all the children you are applying for under 18?",
       "yes": "Oui",
       "no": "Non",
