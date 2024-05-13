@@ -394,6 +394,7 @@
     },
     "continue-btn": "Continue",
     "back-btn": "Back",
+    "save-btn": "Save",
     "error-message": {
       "disability-tax-credit-required": "Select whether or not you have a valid disability tax credit"
     }
@@ -410,7 +411,8 @@
       "living-independently-required": "Select an option for living independently"
     },
     "back-btn": "Back",
-    "continue-btn": "Continue"
+    "continue-btn": "Continue",
+    "save-btn": "Save"
   },
   "parent-or-guardian": {
     "page-title": "Parent or guardian needs to apply",

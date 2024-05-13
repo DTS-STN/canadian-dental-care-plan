@@ -54,7 +54,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.disabilityTaxCredit });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.disabilityTaxCredit, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -88,6 +88,16 @@ export async function action({ context: { session }, params, request }: ActionFu
   invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
   const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
+  if (state.editMode) {
+    if (ageCategory !== 'adults') {
+      return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
+    }
+    if (parsedDataResult.data === DisabilityTaxCreditOption.No) {
+      return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/dob-eligibility', params));
+    }
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
+  }
+
   if (ageCategory !== 'adults') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
@@ -101,7 +111,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowDisabilityTaxCredit() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -155,16 +165,33 @@ export default function ApplyFlowDisabilityTaxCredit() {
             errorMessage={errorMessages['input-radio-disability-tax-credit-radios-option-0']}
             required
           />
-          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Disability tax credit click">
-              {t('apply-adult:disability-tax-credit.continue-btn')}
-              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-            </Button>
-            <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Disability tax credit click">
-              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('apply-adult:disability-tax-credit.back-btn')}
-            </ButtonLink>
-          </div>
+          {editMode ? (
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Adult flow disability tax credit click">
+                {t('apply-adult:disability-tax-credit.save-btn')}
+              </Button>
+              <ButtonLink
+                id="back-button"
+                routeId="$lang+/_public+/apply+/$id+/adult/review-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Adult flow disability tax credit click"
+              >
+                {t('apply-adult:disability-tax-credit.back-btn')}
+              </ButtonLink>
+            </div>
+          ) : (
+            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Disability tax credit click">
+                {t('apply-adult:disability-tax-credit.continue-btn')}
+                <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+              </Button>
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Disability tax credit click">
+                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+                {t('apply-adult:disability-tax-credit.back-btn')}
+              </ButtonLink>
+            </div>
+          )}
         </fetcher.Form>
       </div>
     </>
