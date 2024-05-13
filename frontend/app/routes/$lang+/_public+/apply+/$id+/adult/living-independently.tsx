@@ -46,12 +46,12 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:living-independently.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.livingIndependently });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.livingIndependently, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/adult/living-independently');
-
+  const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   /**
@@ -79,6 +79,13 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   saveApplyState({ params, session, state: { livingIndependently: parsedDataResult.data === LivingIndependentlyOption.Yes } });
 
+  if (state.editMode) {
+    if (parsedDataResult.data === LivingIndependentlyOption.Yes) {
+      return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
+    }
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/parent-or-guardian', params));
+  }
+
   if (parsedDataResult.data === LivingIndependentlyOption.Yes) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
   }
@@ -88,7 +95,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowLivingIndependently() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -147,16 +154,33 @@ export default function ApplyFlowLivingIndependently() {
             required
             errorMessage={errorMessages['input-radio-living-independently-option-0']}
           />
-          <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Living independently click">
-              {t('apply-adult:living-independently.continue-btn')}
-              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-            </Button>
-            <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Living independently click">
-              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('apply-adult:living-independently.back-btn')}
-            </ButtonLink>
-          </div>
+          {editMode ? (
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Living independently click">
+                {t('apply-adult:living-independently.save-btn')}
+              </Button>
+              <ButtonLink
+                id="back-button"
+                routeId="$lang+/_public+/apply+/$id+/adult/review-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Adult flow living independently click"
+              >
+                {t('apply-adult:living-independently.back-btn')}
+              </ButtonLink>
+            </div>
+          ) : (
+            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Living independently click">
+                {t('apply-adult:living-independently.continue-btn')}
+                <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+              </Button>
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Living independently click">
+                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+                {t('apply-adult:living-independently.back-btn')}
+              </ButtonLink>
+            </div>
+          )}
         </fetcher.Form>
       </div>
     </>

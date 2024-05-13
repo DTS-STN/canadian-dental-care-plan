@@ -395,6 +395,7 @@
     },
     "continue-btn": "Continuer",
     "back-btn": "Retour",
+    "save-btn": "Enregistrer",
     "error-message": {
       "disability-tax-credit-required": "(FR) Select whether or not you have a valid disability tax credit"
     }
@@ -411,7 +412,8 @@
       "living-independently-required": "Sélectionnez une option pour vivre de manière indépendante"
     },
     "back-btn": "Retour",
-    "continue-btn": "Continuer"
+    "continue-btn": "Continuer",
+    "save-btn": "Enregistrer"
   },
   "parent-or-guardian": {
     "page-title": "(FR) Parent or guardian needs to apply",
