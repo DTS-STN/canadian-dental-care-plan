@@ -103,8 +103,8 @@
     "federal-benefits": {
       "title": "Federal benefits",
       "legend": "Do you have dental benefits through a social program offered by a federal program?",
-      "option-yes": "<strong>Yes</strong>, I have <strong>federal</strong> benefits",
-      "option-no": "<strong>No</strong>, I do not have <strong>federal</strong> benefits",
+      "option-yes": "<strong>Yes</strong>, I have <strong>federal</strong> dental benefits",
+      "option-no": "<strong>No</strong>, I do not have <strong>federal</strong> dental benefits",
       "social-programs": {
         "legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."
       }
