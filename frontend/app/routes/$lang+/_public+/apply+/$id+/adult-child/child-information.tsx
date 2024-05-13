@@ -19,7 +19,7 @@ import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { ChildInformationState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { parseDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -38,15 +38,6 @@ enum FormAction {
   Yes = 'yes',
   No = 'no',
 }
-
-export type ChildInformationState = {
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string;
-  hasSocialInsuranceNumber: string;
-  socialInsuranceNumber?: string;
-  isParent: string;
-};
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'apply-adult-child', 'gcweb'),

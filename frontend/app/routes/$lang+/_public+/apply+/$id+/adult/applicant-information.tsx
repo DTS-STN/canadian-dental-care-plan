@@ -17,7 +17,7 @@ import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { applicantInformationStateHasPartner, loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
-import { getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { ApplicantInformationState, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -34,13 +34,6 @@ enum FormAction {
   Cancel = 'cancel',
   Save = 'save',
 }
-
-export type ApplicantInformationState = {
-  firstName: string;
-  lastName: string;
-  maritalStatus: string;
-  socialInsuranceNumber: string;
-};
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
