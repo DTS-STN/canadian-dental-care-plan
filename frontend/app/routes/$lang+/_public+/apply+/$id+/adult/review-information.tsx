@@ -13,10 +13,12 @@ import { Trans, useTranslation } from 'react-i18next';
 import pageIds from '../../../../page-ids.json';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
+import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
+import { useFeature } from '~/root';
 import { loadApplyAdultState, validateApplyAdultStateForReview } from '~/route-helpers/apply-adult-route-helpers.server';
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
@@ -157,6 +159,16 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:review-information.page-title') }) };
 
+  const payload = toBenefitApplicationRequest({
+    applicantInformation: state.applicantInformation,
+    communicationPreferences: state.communicationPreferences,
+    dateOfBirth: state.dateOfBirth,
+    dentalBenefits: state.dentalBenefits,
+    dentalInsurance: state.dentalInsurance,
+    personalInformation: state.personalInformation,
+    partnerInformation: state.partnerInformation,
+  });
+
   return json({
     id: state.id,
     userInfo,
@@ -169,6 +181,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     mailingAddressInfo,
     dentalInsurance,
     dentalBenefit,
+    payload,
     csrfToken,
     meta,
     siteKey: HCAPTCHA_SITE_KEY,
@@ -217,6 +230,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   // TODO submit to the API and grab the confirmation code from the response
+  // any field change here will update payload assignment in loader()
   const benefitApplicationRequest = toBenefitApplicationRequest({
     applicantInformation: state.applicantInformation,
     communicationPreferences: state.communicationPreferences,
@@ -246,7 +260,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ReviewInformation() {
   const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, csrfToken, siteKey, hCaptchaEnabled } =
+  const { userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, payload, csrfToken, siteKey, hCaptchaEnabled } =
     useLoaderData<typeof loader>();
   useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
@@ -495,6 +509,11 @@ export default function ReviewInformation() {
           </ButtonLink>
         </fetcher.Form>
       </div>
+      {useFeature('view-payload') && (
+        <div className="mt-8">
+          <DebugPayload data={payload} enableCopy></DebugPayload>
+        </div>
+      )}
     </>
   );
 }
