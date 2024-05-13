@@ -241,7 +241,8 @@ export default function ApplyFlowChildInformation() {
             name="socialInsuranceNumber"
             label={t('apply-adult-child:eligibility.child-information.sin')}
             inputMode="numeric"
-            placeholder="000-000-000"
+            helpMessagePrimary={t('apply-adult-child:eligibility.child-information.help-message.sin')}
+            helpMessagePrimaryClassName="text-black"
             defaultValue={defaultState?.socialInsuranceNumber ?? ''}
             errorMessage={fetcher.data?.errors.socialInsuranceNumber?._errors[0]}
             required

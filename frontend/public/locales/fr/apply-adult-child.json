@@ -13,6 +13,9 @@
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
     "save-btn": "Enregistrer",
+    "help-message": {
+      "sin": "Entrez un NAS de 9 chiffres"
+    },
     "error-message": {
       "first-name-required": "Entrez le prénom",
       "last-name-required": "Entrez le nom de famille",
@@ -360,6 +363,9 @@
       "continue-btn": "Continuer",
       "cancel-btn": "Annuler",
       "save-btn": "Enregistrer",
+      "help-message": {
+        "sin": "Entrez un NAS de 9 chiffres"
+      },
       "error-message": {
         "first-name-required": "Entrez le prénom",
         "sin-required": "Entrez un NAS de 9 chiffres",
@@ -430,6 +436,9 @@
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",
     "save-btn": "Enregistrer",
+    "help-message": {
+      "sin": "Entrez un NAS de 9 chiffres"
+    },
     "error-message": {
       "confirm-required": "La case à cocher doit être sélectionnée",
       "date-of-birth-day-number": "Le jour doit être un nombre",

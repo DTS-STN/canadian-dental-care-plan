@@ -13,6 +13,9 @@
     "continue-btn": "Continue",
     "cancel-btn": "Cancel",
     "save-btn": "Save",
+    "help-message": {
+      "sin": "Enter 9-digit SIN"
+    },
     "error-message": {
       "first-name-required": "Enter first name",
       "last-name-required": "Enter last name",
@@ -254,6 +257,9 @@
     "continue-btn": "Continue",
     "cancel-btn": "Cancel",
     "save-btn": "Save",
+    "help-message": {
+      "sin": "Enter 9-digit SIN"
+    },
     "error-message": {
       "confirm-required": "Checkbox must be selected",
       "date-of-birth-day-number": "Day must be a number",

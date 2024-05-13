@@ -221,7 +221,8 @@ export default function ApplyFlowApplicationInformation() {
               name="socialInsuranceNumber"
               label={t('applicant-information.sin')}
               inputMode="numeric"
-              placeholder="000-000-000"
+              helpMessagePrimary={t('apply-child:applicant-information.help-message.sin')}
+              helpMessagePrimaryClassName="text-black"
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
               errorMessage={errorMessages['social-insurance-number']}
               required
