@@ -8,7 +8,8 @@ import { InputOption } from './input-option';
 import { cn } from '~/utils/tw-utils';
 
 const inputBaseClassName = 'block rounded-lg border-gray-500 focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-500';
-const inputDisabledClassName = 'disable:bg-gray-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
+const inputDisabledClassName = 'disabled:bg-gray-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
+const inputReadOnlyClassName = 'read-only:bg-gray-100 read-only:pointer-events-none read-only:cursor-not-allowed read-only:opacity-70';
 const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
 export interface InputSelectProps extends Omit<ComponentProps<'select'>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required'> {
@@ -52,7 +53,7 @@ const InputSelect = forwardRef<HTMLSelectElement, InputSelectProps>((props, ref)
         aria-invalid={!!errorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        className={cn(inputBaseClassName, inputDisabledClassName, errorMessage && inputErrorClassName, className)}
+        className={cn(inputBaseClassName, inputDisabledClassName, inputReadOnlyClassName, errorMessage && inputErrorClassName, className)}
         data-testid={inputTestId}
         id={id}
         required={required}
