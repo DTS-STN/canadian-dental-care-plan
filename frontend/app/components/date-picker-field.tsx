@@ -12,7 +12,8 @@ import { padWithZero } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
 const inputBaseClassName = 'block rounded-lg border-gray-500 focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-500';
-const inputDisabledClassName = 'disable:bg-gray-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
+const inputDisabledClassName = 'disabled:bg-gray-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
+const inputReadOnlyClassName = 'read-only:bg-gray-100 read-only:pointer-events-none read-only:cursor-not-allowed read-only:opacity-70';
 const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
 export interface DatePickerFieldProps {
@@ -235,7 +236,7 @@ function DatePickerMonth({ ariaDescribedBy, ariaErrorMessage, className, default
         aria-invalid={!!ariaErrorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        className={cn(inputBaseClassName, inputDisabledClassName, ariaErrorMessage && inputErrorClassName, className)}
+        className={cn(inputBaseClassName, inputDisabledClassName, inputReadOnlyClassName, ariaErrorMessage && inputErrorClassName, className)}
         data-testid="date-picker-month-select"
         defaultValue={defaultValue}
         disabled={disabled}
@@ -287,7 +288,7 @@ function DatePickerYear({ ariaDescribedBy, ariaErrorMessage, className, defaultV
         aria-invalid={!!ariaErrorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        className={cn(inputBaseClassName, inputDisabledClassName, ariaErrorMessage && inputErrorClassName, className)}
+        className={cn(inputBaseClassName, inputDisabledClassName, inputReadOnlyClassName, ariaErrorMessage && inputErrorClassName, className)}
         data-testid="date-picker-year-input"
         defaultValue={defaultValue}
         disabled={disabled}
@@ -331,7 +332,7 @@ function DatePickerDay({ ariaDescribedBy, ariaErrorMessage, className, defaultVa
         aria-invalid={!!ariaErrorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        className={cn(inputBaseClassName, inputDisabledClassName, ariaErrorMessage && inputErrorClassName, className)}
+        className={cn(inputBaseClassName, inputDisabledClassName, inputReadOnlyClassName, ariaErrorMessage && inputErrorClassName, className)}
         data-testid="date-picker-day-input"
         defaultValue={defaultValue}
         disabled={disabled}
