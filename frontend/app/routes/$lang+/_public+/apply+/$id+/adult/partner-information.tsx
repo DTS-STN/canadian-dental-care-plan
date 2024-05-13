@@ -271,7 +271,8 @@ export default function ApplyFlowApplicationInformation() {
               name="socialInsuranceNumber"
               label={t('apply-adult:partner-information.sin')}
               inputMode="numeric"
-              placeholder="000-000-000"
+              helpMessagePrimary={t('apply-adult:partner-information.help-message.sin')}
+              helpMessagePrimaryClassName="text-black"
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
               errorMessage={fetcher.data?.errors.socialInsuranceNumber?._errors[0]}
               required
