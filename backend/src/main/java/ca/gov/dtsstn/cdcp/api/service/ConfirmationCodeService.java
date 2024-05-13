@@ -32,10 +32,3 @@ public class ConfirmationCodeService {
       
     }
 }
-/*
-
-	public List<Subscription> getSubscriptionsByUserId(String userId) {
-		Assert.hasText(userId, "userId is required; it must not be null or blank");
-		return mapper.fromEntity(repository.findByUserId(userId));
-	}
- */
