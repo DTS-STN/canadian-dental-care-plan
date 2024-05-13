@@ -201,7 +201,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             autoComplete="email"
             defaultValue={defaultState.email ?? ''}
             required
-            disabled={isReadOnlyEmail}
+            readOnly={isReadOnlyEmail}
           />
           <InputField
             id="confirm-email"
@@ -215,7 +215,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             autoComplete="email"
             defaultValue={defaultState.email ?? ''}
             required
-            disabled={isReadOnlyEmail}
+            readOnly={isReadOnlyEmail}
           />
         </div>
       ),
