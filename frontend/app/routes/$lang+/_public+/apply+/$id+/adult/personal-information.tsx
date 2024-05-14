@@ -367,10 +367,10 @@ export default function ApplyFlowPersonalInformation() {
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <fieldset>
+          <fieldset className="mb-6">
             <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult:contact-information.phone-header')}</legend>
-            <p className="mb-6">{t('apply-adult:contact-information.form-instructions')}</p>
-            <div className="mb-6 grid items-end gap-6">
+            <p className="mb-4">{t('apply-adult:contact-information.form-instructions')}</p>
+            <div className="grid items-end gap-6">
               <InputField
                 id="phone-number"
                 name="phoneNumber"
@@ -399,12 +399,12 @@ export default function ApplyFlowPersonalInformation() {
               />
             </div>
           </fieldset>
-          <fieldset>
+          <fieldset className="mb-6">
             <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult:contact-information.email-header')}</legend>
-            <p id="adding-email" className="mb-2">
+            <p id="adding-email" className="mb-4">
               {t('apply-adult:contact-information.add-email')}
             </p>
-            <div className="mb-6 grid gap-6 md:grid-cols-2">
+            <div className="grid gap-6 md:grid-cols-2">
               <InputField
                 id="email"
                 name="email"
@@ -433,9 +433,9 @@ export default function ApplyFlowPersonalInformation() {
               />
             </div>
           </fieldset>
-          <fieldset>
+          <fieldset className="mb-6">
             <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult:contact-information.mailing-address.header')}</legend>
-            <div className="my-6 space-y-6">
+            <div className="space-y-6">
               <InputField
                 id="mailing-address"
                 name="mailingAddress"
@@ -509,9 +509,9 @@ export default function ApplyFlowPersonalInformation() {
               </div>
             </div>
           </fieldset>
-          <fieldset>
-            <legend className="mb-6 font-lato text-2xl font-bold">{t('apply-adult:contact-information.home-address.header')}</legend>
-            <div className="mb-8 space-y-6">
+          <fieldset className="mb-8">
+            <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult:contact-information.home-address.header')}</legend>
+            <div className="space-y-6">
               <InputCheckbox id="copyMailingAddress" name="copyMailingAddress" value="copy" checked={copyAddressChecked} onChange={checkHandler}>
                 {t('apply-adult:contact-information.home-address.use-mailing-address')}
               </InputCheckbox>

@@ -394,17 +394,15 @@ export default function ReviewInformation() {
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult:review-information.mailing-title')}>
-                <p>
-                  <Address
-                    address={mailingAddressInfo.address}
-                    city={mailingAddressInfo.city}
-                    provinceState={i18n.language === 'en' ? mailingAddressInfo.province?.nameEn : mailingAddressInfo.province?.nameFr}
-                    postalZipCode={mailingAddressInfo.postalCode}
-                    country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
-                    apartment={mailingAddressInfo.apartment}
-                    altFormat={true}
-                  />
-                </p>
+                <Address
+                  address={mailingAddressInfo.address}
+                  city={mailingAddressInfo.city}
+                  provinceState={i18n.language === 'en' ? mailingAddressInfo.province?.nameEn : mailingAddressInfo.province?.nameFr}
+                  postalZipCode={mailingAddressInfo.postalCode}
+                  country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
+                  apartment={mailingAddressInfo.apartment}
+                  altFormat={true}
+                />
                 <div className="mt-4">
                   <InlineLink id="change-mailing-address" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
                     {t('apply-adult:review-information.mailing-change')}
@@ -412,17 +410,15 @@ export default function ReviewInformation() {
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult:review-information.home-title')}>
-                <p>
-                  <Address
-                    address={homeAddressInfo.address ?? ''}
-                    city={homeAddressInfo.city ?? ''}
-                    provinceState={i18n.language === 'en' ? homeAddressInfo.province?.nameEn : homeAddressInfo.province?.nameFr}
-                    postalZipCode={homeAddressInfo.postalCode}
-                    country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
-                    apartment={homeAddressInfo.apartment}
-                    altFormat={true}
-                  />
-                </p>
+                <Address
+                  address={homeAddressInfo.address ?? ''}
+                  city={homeAddressInfo.city ?? ''}
+                  provinceState={i18n.language === 'en' ? homeAddressInfo.province?.nameEn : homeAddressInfo.province?.nameFr}
+                  postalZipCode={homeAddressInfo.postalCode}
+                  country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
+                  apartment={homeAddressInfo.apartment}
+                  altFormat={true}
+                />
                 <div className="mt-4">
                   <InlineLink id="change-home-address" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
                     {t('apply-adult:review-information.home-change')}
