@@ -824,6 +824,14 @@
                   "en": "/:lang/alerts/subscribe/expired",
                   "fr": "/:lang/alertes/abonner/echue"
                 }
+              },
+              {
+                "id": "$lang+/_protected+/alerts+/subscribe+/success",
+                "file": "routes/$lang+/_protected+/alerts+/subscribe+/success.tsx",
+                "paths": {
+                  "en": "/:lang/alerts/subscribe/success",
+                  "fr": "/:lang/alertes/abonner/succes"
+                }
               }
             ]
           },

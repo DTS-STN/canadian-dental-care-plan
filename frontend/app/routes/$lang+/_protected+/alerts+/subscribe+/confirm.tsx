@@ -126,7 +126,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     const jsonReponseStatus = await response.json();
 
     if (jsonReponseStatus.confirmCodeStatus === 'valid') {
-      //TODO Complete logic
+      return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/success', params));
     }
     if (jsonReponseStatus.confirmCodeStatus === 'expired') {
       return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/expired', params));
