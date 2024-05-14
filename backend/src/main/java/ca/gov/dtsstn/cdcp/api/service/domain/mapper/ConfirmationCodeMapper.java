@@ -10,7 +10,6 @@ import org.springframework.lang.Nullable;
 import ca.gov.dtsstn.cdcp.api.data.entity.ConfirmationCodeEntity;
 
 import ca.gov.dtsstn.cdcp.api.service.domain.ConfirmationCode;
-import ca.gov.dtsstn.cdcp.api.service.domain.Subscription;
 
 
 @Mapper(componentModel = "spring")

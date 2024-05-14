@@ -41,6 +41,7 @@ public class ConfirmationCodeController {
         if(confirmationCodes!=null){
             return StreamSupport.stream(confirmationCodes.spliterator(),false).map(confirmationCodeModelAssembler::toModel).toList();
         }
+        //TODO Returns something better like a 404 or 200 but with an empty object... im just not sure on what would be more appropriate...
         return null;
     }
 

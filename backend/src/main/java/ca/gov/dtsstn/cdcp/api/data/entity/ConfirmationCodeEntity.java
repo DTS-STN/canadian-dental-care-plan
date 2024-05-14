@@ -1,13 +1,8 @@
 package ca.gov.dtsstn.cdcp.api.data.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import java.util.Date;
 import java.time.Instant;
-import java.time.LocalDateTime;
-
 import org.immutables.builder.Builder;
-import org.springframework.cglib.core.Local;
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.lang.Nullable;
 @Entity(name = "ConfirmationCode")

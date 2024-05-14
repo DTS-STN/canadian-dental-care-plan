@@ -1,7 +1,6 @@
 package ca.gov.dtsstn.cdcp.api.web.v1.model;
 import java.time.Instant;
 
-import org.immutables.value.Value.Immutable;
 import java.util.Objects;
 
 import org.springframework.core.style.ToStringCreator;
