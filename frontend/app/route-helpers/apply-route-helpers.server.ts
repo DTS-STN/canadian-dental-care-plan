@@ -98,9 +98,10 @@ export interface ApplyState {
 }
 
 export type ApplicantInformationState = NonNullable<ApplyState['applicantInformation']>;
-export type ChildDentalBenefitsState = NonNullable<NonNullable<ApplyState['children']>[number]['dentalBenefits']>;
-export type ChildDentalInsuranceState = NonNullable<NonNullable<ApplyState['children']>[number]['dentalInsurance']>;
-export type ChildInformationState = NonNullable<NonNullable<ApplyState['children']>[number]['information']>;
+export type ChildState = NonNullable<ApplyState['children']>[number];
+export type ChildDentalBenefitsState = NonNullable<ChildState['dentalBenefits']>;
+export type ChildDentalInsuranceState = NonNullable<ChildState['dentalInsurance']>;
+export type ChildInformationState = NonNullable<ChildState['information']>;
 export type CommunicationPreferencesState = NonNullable<ApplyState['communicationPreferences']>;
 export type DentalFederalBenefitsState = Pick<NonNullable<ApplyState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
 export type DentalInsuranceState = NonNullable<ApplyState['dentalInsurance']>;
@@ -250,4 +251,24 @@ export function getAgeCategoryFromAge(age: number): AgeCategory {
   if (age >= 16 && age < 18) return 'youth';
   if (age > 0 && age < 16) return 'children';
   throw new Error(`Invalid age [${age}]`);
+}
+
+export function isNewChild(child: ChildState) {
+  return (child.information ?? child.dentalInsurance ?? child.dentalBenefits) === undefined;
+}
+
+export function getChildren<TState extends { children?: ChildState[] }>(state: TState, skipNew: boolean) {
+  if (skipNew) {
+    return state.children?.filter((child) => !isNewChild(child));
+  }
+
+  return state.children;
+}
+
+export function getChild<TState extends { children?: ChildState[] }>(state: TState, childId: string) {
+  return state.children?.find(({ id }) => id === childId);
+}
+
+export function getNewChild<TState extends { children?: ChildState[] }>(state: TState) {
+  return state.children?.find((child) => isNewChild(child));
 }

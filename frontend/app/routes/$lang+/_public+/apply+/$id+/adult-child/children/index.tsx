@@ -3,8 +3,10 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faPlus, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { randomUUID } from 'crypto';
 import { useTranslation } from 'react-i18next';
 import { Fragment } from 'react/jsx-runtime';
+import { z } from 'zod';
 
 import pageIds from '../../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
@@ -12,7 +14,7 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import '~/route-helpers/apply-route-helpers.server';
+import { getChildren, getNewChild, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -20,6 +22,13 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+
+enum FormAction {
+  Add = 'add',
+  Continue = 'continue',
+  Cancel = 'cancel',
+  Save = 'save',
+}
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -38,10 +47,12 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.index.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, children: state.children });
+  return json({ id: state.id, csrfToken, meta, children: getChildren(state, true) });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  const state = loadApplyAdultChildState({ params, request, session });
+
   const log = getLogger('apply/adult-child/child-summary');
 
   const formData = await request.formData();
@@ -52,6 +63,28 @@ export async function action({ context: { session }, params, request }: ActionFu
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
     throw new Response('Invalid CSRF token', { status: 400 });
   }
+
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+
+  if (formAction === FormAction.Add) {
+    const newChild = getNewChild(state);
+    const newChildId = newChild ? newChild.id : randomUUID();
+
+    if (!newChild) {
+      // add new child
+      saveApplyState({
+        params,
+        session,
+        state: {
+          ...state,
+          children: [...(state.children ?? []), { id: newChildId }],
+        },
+      });
+    }
+
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/index', { ...params, childId: newChildId }));
+  }
+
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/personal-information', params));
 }
 
@@ -61,6 +94,7 @@ export default function ApplyFlowChildSummary() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
+  const hasChildren = children !== undefined && children.length > 0;
 
   return (
     <>
@@ -72,11 +106,11 @@ export default function ApplyFlowChildSummary() {
       </div>
       <div className="max-w-prose">
         <fetcher.Form method="post" aria-describedby="form-instructions-sin form-instructions" noValidate>
-          {children === undefined || (children.length === 0 && <p>{t('apply-adult-child:children.index.no-children')}</p>)}
-          {children !== undefined && children.length > 0 && (
+          <input type="hidden" name="_csrf" value={csrfToken} />
+          {!hasChildren && <p>{t('apply-adult-child:children.index.no-children')}</p>}
+          {hasChildren && (
             <>
               <p className="mb-6">{t('apply-adult-child:children.index.children-added')}</p>
-              <input type="hidden" name="_csrf" value={csrfToken} />
               {children.map((child) => {
                 <Fragment key={child.id}>
                   <h2 className="text-2xl font-semibold">{`${child.information?.firstName} ${child.information?.lastName}`}</h2>
@@ -106,20 +140,13 @@ export default function ApplyFlowChildSummary() {
             </>
           )}
 
-          <ButtonLink
-            className="mb-10"
-            id="add-child"
-            routeId="$lang+/_public+/apply+/$id+/adult-child/child-information"
-            params={params}
-            disabled={isSubmitting}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click"
-          >
+          <Button className="mb-10" id="add-child" name="_action" value={FormAction.Add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click">
             <FontAwesomeIcon icon={faPlus} className="me-3 block size-4" />
             {t('apply-adult-child:children.index.add-child')}
-          </ButtonLink>
+          </Button>
 
           <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <Button id="continue-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Applicant Information click">
+            <Button id="continue-button" name="_action" value={FormAction.Continue} variant="primary" disabled={!hasChildren || isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Applicant Information click">
               {t('apply-adult-child:children.index.continue-btn')}
               <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
             </Button>
