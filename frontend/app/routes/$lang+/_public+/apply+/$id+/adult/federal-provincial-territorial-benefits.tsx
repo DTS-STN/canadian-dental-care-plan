@@ -258,8 +258,8 @@ export default function AccessToDentalInsuranceQuestion() {
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <fieldset>
-            <legend className="my-6 font-lato text-2xl font-bold">{t('apply-adult:dental-benefits.federal-benefits.title')}</legend>
+          <fieldset className="mb-6">
+            <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult:dental-benefits.federal-benefits.title')}</legend>
             <InputRadios
               id="has-federal-benefits"
               name="hasFederalBenefits"
@@ -296,9 +296,8 @@ export default function AccessToDentalInsuranceQuestion() {
               required
             />
           </fieldset>
-          <fieldset>
-            <legend className="my-6 font-lato text-2xl font-bold">{t('apply-adult:dental-benefits.provincial-territorial-benefits.title')}</legend>
-
+          <fieldset className="mb-8">
+            <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult:dental-benefits.provincial-territorial-benefits.title')}</legend>
             <InputRadios
               id="has-provincial-territorial-benefits"
               name="hasProvincialTerritorialBenefits"

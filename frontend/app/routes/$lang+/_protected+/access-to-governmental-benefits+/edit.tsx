@@ -244,8 +244,8 @@ export default function AccessToGovernmentalsBenefitsEdit() {
           {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
           <fetcher.Form method="post" noValidate>
             <input type="hidden" name="_csrf" value={csrfToken} />
-            <fieldset>
-              <legend className="my-6 mb-6 font-lato text-2xl font-bold">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.federal-benefits.title')}</legend>
+            <fieldset className="mb-6">
+              <legend className="mb-4 font-lato text-2xl font-bold">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.federal-benefits.title')}</legend>
               <InputRadios
                 id="has-federal-benefits"
                 name="hasFederalBenefits"
@@ -276,8 +276,8 @@ export default function AccessToGovernmentalsBenefitsEdit() {
                 required
               />
             </fieldset>
-            <fieldset>
-              <legend className="my-6 mb-6 font-lato text-2xl font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.provincial-territorial-benefits.title')}</legend>
+            <fieldset className="mb-8">
+              <legend className="mb-4 font-lato text-2xl font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.provincial-territorial-benefits.title')}</legend>
               <InputRadios
                 id="has-provincial-territorial-benefits"
                 name="hasProvincialTerritorialBenefits"
@@ -334,7 +334,7 @@ export default function AccessToGovernmentalsBenefitsEdit() {
                 required
               />
             </fieldset>
-            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <ButtonLink id="back-button" routeId="$lang+/_protected+/access-to-governmental-benefits+/view" params={params}>
                 {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.button.back')}
               </ButtonLink>

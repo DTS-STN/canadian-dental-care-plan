@@ -430,9 +430,9 @@ export default function ApplyFlowPersonalInformation() {
               aria-describedby="adding-email"
             />
           </div>
-          <fieldset>
+          <fieldset className="mb-6">
             <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult-child:contact-information.mailing-address.header')}</legend>
-            <div className="my-6 space-y-6">
+            <div className="space-y-6">
               <InputField
                 id="mailing-address"
                 name="mailingAddress"
@@ -506,9 +506,9 @@ export default function ApplyFlowPersonalInformation() {
               </div>
             </div>
           </fieldset>
-          <fieldset>
-            <legend className="mb-6 font-lato text-2xl font-bold">{t('apply-adult-child:contact-information.home-address.header')}</legend>
-            <div className="mb-8 space-y-6">
+          <fieldset className="mb-8">
+            <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult-child:contact-information.home-address.header')}</legend>
+            <div className="space-y-6">
               <InputCheckbox id="copyMailingAddress" name="copyMailingAddress" value="copy" checked={copyAddressChecked} onChange={checkHandler}>
                 {t('apply-adult-child:contact-information.home-address.use-mailing-address')}
               </InputCheckbox>

@@ -258,8 +258,8 @@ export default function AccessToDentalInsuranceQuestion() {
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <section>
-            <h2 className="my-6 font-lato text-2xl font-bold">{t('apply-child:dental-benefits.federal-benefits.title')}</h2>
+          <section className="mb-6">
+            <h2 className="mb-4 font-lato text-2xl font-bold">{t('apply-child:dental-benefits.federal-benefits.title')}</h2>
             <InputRadios
               id="has-federal-benefits"
               name="hasFederalBenefits"
@@ -296,9 +296,8 @@ export default function AccessToDentalInsuranceQuestion() {
               required
             />
           </section>
-          <section>
-            <h2 className="my-6 font-lato text-2xl font-bold">{t('apply-child:dental-benefits.provincial-territorial-benefits.title')}</h2>
-
+          <section className="mb-8">
+            <h2 className="mb-4 font-lato text-2xl font-bold">{t('apply-child:dental-benefits.provincial-territorial-benefits.title')}</h2>
             <InputRadios
               id="has-provincial-territorial-benefits"
               name="hasProvincialTerritorialBenefits"
@@ -362,7 +361,7 @@ export default function AccessToDentalInsuranceQuestion() {
             />
           </section>
           {editMode ? (
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Access to other federal, provincial or territorial dental benefits click">
                 {t('apply-child:dental-benefits.button.save-btn')}
               </Button>
@@ -377,7 +376,7 @@ export default function AccessToDentalInsuranceQuestion() {
               </ButtonLink>
             </div>
           ) : (
-            <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Access to other federal, provincial or territorial dental benefits click">
                 {t('apply-child:dental-benefits.button.continue')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
