@@ -7,7 +7,6 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
-import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
@@ -64,21 +63,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const csrfToken = String(session.get('csrfToken'));
 
-  invariant(state.children, 'Expected state.children to be defined');
-  const child = state.children.find(({ id }) => id === params.childId);
-
-  if (!child) {
-    // TODO: do something else later, maybe log warning and redirect to summary or review page
-    throw new Response(null, { status: 404 });
-  }
-
-  const childName = child.information?.firstName ?? '<Child 1 name>';
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:dental-benefits.title', { titleComponent: childName }) }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:dental-benefits.title') }) };
 
   return json({
-    childName: childName,
     csrfToken,
-    defaultState: child.dentalBenefits,
+    defaultState: state.dentalBenefits,
     editMode: state.editMode,
     federalSocialPrograms,
     id: state.id,
@@ -90,16 +79,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/federal-provincial-territorial');
-  const state = loadApplyAdultChildState({ params, request, session });
+  loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-
-  invariant(state.children, 'Expected state.children to be defined');
-  const child = state.children.find(({ id }) => id === params.childId);
-
-  if (!child) {
-    // TODO: do something else later, maybe log warning and redirect to summary or review page
-    throw new Response(null, { status: 404 });
-  }
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
   // both question first before the superRefine can be executed
@@ -178,26 +159,19 @@ export async function action({ context: { session }, params, request }: ActionFu
     params,
     session,
     state: {
-      children: state.children.map((obj) => {
-        if (obj.id !== child.id) return obj;
-        return {
-          ...obj,
-          dentalBenefits: {
-            ...parsedFederalBenefitsResult.data,
-            ...parsedProvincialTerritorialBenefitsResult.data,
-          },
-        };
-      }),
+      dentalBenefits: {
+        ...parsedFederalBenefitsResult.data,
+        ...parsedProvincialTerritorialBenefitsResult.data,
+      },
     },
   });
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params)); //TODO: Change over to adult-child when available
-  //return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-information', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
 }
 
 export default function AccessToDentalInsuranceQuestion() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { childName, csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, regions, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, regions, defaultState, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -271,7 +245,7 @@ export default function AccessToDentalInsuranceQuestion() {
 
   return (
     <>
-      <AppPageTitle>{t('apply-adult-child:dental-benefits.title', { childName: childName })}</AppPageTitle>
+      <AppPageTitle>{t('apply-adult-child:dental-benefits.title')}</AppPageTitle>
       <div className="my-6 sm:my-8">
         <p id="progress-label" className="sr-only mb-2">
           {t('apply:progress.label')}
@@ -290,7 +264,7 @@ export default function AccessToDentalInsuranceQuestion() {
             <InputRadios
               id="has-federal-benefits"
               name="hasFederalBenefits"
-              legend={t('apply-adult-child:dental-benefits.federal-benefits.legend', { childName: childName })}
+              legend={t('apply-adult-child:dental-benefits.federal-benefits.legend')}
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:dental-benefits.federal-benefits.option-no" />,
@@ -328,7 +302,7 @@ export default function AccessToDentalInsuranceQuestion() {
             <InputRadios
               id="has-provincial-territorial-benefits"
               name="hasProvincialTerritorialBenefits"
-              legend={t('apply-adult-child:dental-benefits.provincial-territorial-benefits.legend', { childName: childName })}
+              legend={t('apply-adult-child:dental-benefits.provincial-territorial-benefits.legend')}
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:dental-benefits.provincial-territorial-benefits.option-no" />,
