@@ -448,6 +448,14 @@ export default function ReviewInformation() {
                   </InlineLink>
                 </p>
               </DescriptionListItem>
+              <DescriptionListItem term={t('apply-adult-child:review-adult-information.email')}>
+                {userInfo.altPhoneNumber}
+                <p className="mt-4">
+                  <InlineLink id="change-email" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
+                    {t('apply-adult-child:review-adult-information.email-change')}
+                  </InlineLink>
+                </p>
+              </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.mailing-title')}>
                 <Address
                   address={mailingAddressInfo.address}

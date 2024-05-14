@@ -271,6 +271,9 @@ export default function ApplyFlowConfirm() {
             <DescriptionListItem term={t('confirm.alt-phone-number')}>
               <span className="text-nowrap">{userInfo.altPhoneNumber} </span>
             </DescriptionListItem>
+            <DescriptionListItem term={t('confirm.email')}>
+              <span className="text-nowrap">{userInfo.email} </span>
+            </DescriptionListItem>
             <DescriptionListItem term={t('confirm.mailing')}>
               <Address
                 address={mailingAddressInfo.address}
