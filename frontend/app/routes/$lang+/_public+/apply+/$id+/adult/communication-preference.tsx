@@ -96,12 +96,14 @@ export async function action({ context: { session }, params, request }: ActionFu
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-valid'), path: ['email'] });
         }
 
-        if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.confirm-email-required'), path: ['confirmEmail'] });
-        } else if (!validator.isEmail(val.confirmEmail)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-valid'), path: ['confirmEmail'] });
-        } else if (val.email !== val.confirmEmail) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-match'), path: ['confirmEmail'] });
+        if (!state.personalInformation?.email) {
+          if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.confirm-email-required'), path: ['confirmEmail'] });
+          } else if (!validator.isEmail(val.confirmEmail)) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-valid'), path: ['confirmEmail'] });
+          } else if (val.email !== val.confirmEmail) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-match'), path: ['confirmEmail'] });
+          }
         }
       }
     }) satisfies z.ZodType<CommunicationPreferencesState>;
@@ -203,20 +205,21 @@ export default function ApplyFlowCommunicationPreferencePage() {
             required
             readOnly={isReadOnlyEmail}
           />
-          <InputField
-            id="confirm-email"
-            type="email"
-            inputMode="email"
-            className="w-full"
-            label={t('apply-adult:communication-preference.confirm-email')}
-            maxLength={100}
-            name="confirmEmail"
-            errorMessage={errorMessages['confirm-email']}
-            autoComplete="email"
-            defaultValue={defaultState.email ?? ''}
-            required
-            readOnly={isReadOnlyEmail}
-          />
+          {!isReadOnlyEmail && (
+            <InputField
+              id="confirm-email"
+              type="email"
+              inputMode="email"
+              className="w-full"
+              label={t('apply-adult:communication-preference.confirm-email')}
+              maxLength={100}
+              name="confirmEmail"
+              errorMessage={errorMessages['confirm-email']}
+              autoComplete="email"
+              defaultValue={defaultState.email ?? ''}
+              required
+            />
+          )}
         </div>
       ),
       onChange: handleOnPreferredMethodChecked,
