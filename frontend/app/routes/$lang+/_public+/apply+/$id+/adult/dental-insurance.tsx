@@ -111,7 +111,7 @@ export default function AccessToDentalInsuranceQuestion() {
 
   const helpMessage = (
     <div className="my-4 space-y-4">
-      <ul className="list-disc space-y-1 pl-7">
+      <ul className="list-disc pl-7">
         <li>{t('dental-insurance.list.employment')}</li>
         <li>{t('dental-insurance.list.pension')}</li>
         <li>{t('dental-insurance.list.purchased')}</li>
@@ -120,6 +120,12 @@ export default function AccessToDentalInsuranceQuestion() {
       <Collapsible summary={t('dental-insurance.detail.additional-info.title')}>
         <div className="space-y-4">
           <p>{t('dental-insurance.detail.additional-info.not-eligible')}</p>
+          <ul className="list-disc space-y-1 pl-7">
+            <li>{t('dental-insurance.detail.additional-info.not-eligible-employer')}</li>
+            <li>{t('dental-insurance.detail.additional-info.not-eligible-pension')}</li>
+            <li>{t('dental-insurance.detail.additional-info.not-eligible-organization')}</li>
+          </ul>
+          <p>{t('dental-insurance.detail.additional-info.not-eligible-note')}</p>
           <p>{t('dental-insurance.detail.additional-info.not-eligible-purchased')}</p>
           <p>{t('dental-insurance.detail.additional-info.eligible')}</p>
           <ul className="list-disc space-y-1 pl-7">
