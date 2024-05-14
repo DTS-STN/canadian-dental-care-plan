@@ -225,8 +225,8 @@
     "dob-eligibility": {
       "page-title": "Find out when you can apply",
       "ineligible-to-apply": "You are not currently eligible to apply for the Canadian Dental Care Plan.",
-      "currently-accepting": "The Canadian Dental Care Plan is currently accepting applications for people aged 65 and above, children under 18, and adults who receive the Disability Tax Credit.",
-      "later-date": "Adults 18 to 64 who do not have a disability tax credit will be invited to apply for the Canadian Dental Care Plan in 2025.",
+      "currently-accepting": "The Canadian Dental Care Plan is currently accepting applications for people aged 65 and above, children under 18, and adults with a valid disability tax credit.",
+      "later-date": "Adults 18 to 64 who do not have a disability tax credit will be able to apply for the Canadian Dental Care Plan in 2025.",
       "eligibility-info": "<eligibilityInfo>Find out when you can apply for the Canadian Dental Care Plan</eligibilityInfo>",
       "eligibility-info-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#when",
       "back-btn": "Back",
@@ -279,7 +279,7 @@
   },
   "contact-information": {
     "page-title": "Contact information",
-    "form-instructions": "Adding a phone number helps Service Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
+    "form-instructions": "Adding a phone number helps Government of Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
     "phone-header": "Phone number",
     "add-phone": "Adding a phone number helps Government of Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
     "phone-number": "Phone number (optional)",
@@ -293,7 +293,7 @@
     },
     "home-address": {
       "header": "Home address",
-      "use-mailing-address": "My mailing address is the same as my home address"
+      "use-mailing-address": "My home address is the same as my mailing address"
     },
     "address-field": {
       "address": "Address",
@@ -422,8 +422,8 @@
   },
   "parent-or-guardian": {
     "page-title": "Parent or guardian needs to apply",
-    "unable-to-apply": "You are not able to apply for the Canadian Dental Care Plan for yourself. Please have a parent or guardian apply on your behalf.",
-    "apply-for-yourself": "If you have already applied for your child and are now looking to apply for yourself, you must speak to a Service Canada representative. Contact Service Canada by calling 1-833-537-4342.",
+    "unable-to-apply": "You are not able to apply for the Canadian Dental Care Plan for yourself. Please have a parent or legal guardian apply on your behalf.",
+    "apply-for-yourself": "If you have already applied for your child and now want to apply for yourself, you must speak to a Service Canada representative. Contact Service Canada by calling 1-833-537-4342.",
     "back-btn": "Back",
     "return-btn": "Return to main page",
     "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
