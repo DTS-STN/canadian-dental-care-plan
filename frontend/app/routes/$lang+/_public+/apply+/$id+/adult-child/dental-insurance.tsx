@@ -39,11 +39,12 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const childName = state.children?.[0].information?.firstName ?? '<Child 1 name>';
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:dental-insurance.title') }) };
 
-  return json({ id: state, csrfToken, meta, defaultState: state.dentalInsurance, editMode: state.editMode });
+  return json({ id: state, csrfToken, meta, defaultState: state.dentalInsurance, childName, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -82,7 +83,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function AccessToDentalInsuranceQuestion() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, childName, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -119,12 +120,18 @@ export default function AccessToDentalInsuranceQuestion() {
       </ul>
       <Collapsible summary={t('dental-insurance.detail.additional-info.title')}>
         <div className="space-y-4">
-          <p>{t('dental-insurance.detail.additional-info.not-eligible')}</p>
-          <p>{t('dental-insurance.detail.additional-info.not-eligible-purchased')}</p>
           <p>{t('dental-insurance.detail.additional-info.eligible')}</p>
           <ul className="list-disc space-y-1 pl-7">
-            <li>{t('dental-insurance.detail.additional-info.list.opted')}</li>
-            <li>{t('dental-insurance.detail.additional-info.list.cannot-opt')}</li>
+            <li>{t('dental-insurance.detail.additional-info.eligible-list.employer')}</li>
+            <li>{t('dental-insurance.detail.additional-info.eligible-list.pension')}</li>
+            <li>{t('dental-insurance.detail.additional-info.eligible-list.professional')}</li>
+          </ul>
+          <p>{t('dental-insurance.detail.additional-info.not-eligible')}</p>
+          <p>{t('dental-insurance.detail.additional-info.not-eligible-purchased')}</p>
+          <p>{t('dental-insurance.detail.additional-info.excepton')}</p>
+          <ul className="list-disc space-y-1 pl-7">
+            <li>{t('dental-insurance.detail.additional-info.exception-list.opted-out')}</li>
+            <li>{t('dental-insurance.detail.additional-info.exception-list.opt-back')}</li>
           </ul>
         </div>
       </Collapsible>
@@ -148,7 +155,7 @@ export default function AccessToDentalInsuranceQuestion() {
             <InputRadios
               id="dental-insurance"
               name="dentalInsurance"
-              legend={t('dental-insurance.legend')}
+              legend={t('dental-insurance.legend', { titleComponent: childName })}
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance.option-yes" />,

@@ -264,8 +264,8 @@
     }
   },
   "dental-insurance": {
-    "title": "Accès à d'autres assurances dentaires",
-    "legend": "Avez-vous accès à une assurance dentaire ou à une couverture dans l'une des quatre situations suivantes?",
+    "title": "(FR) {{childName}}: Access to other dental insurance",
+    "legend": "(FR) Does {{childName}} have access to dental insurance or coverage:",
     "list": {
       "employment": "Vos avantages en matière d'emploi ou les avantages en matière d'emploi d'un membre de votre famille, y compris vos comptes de santé et de bien-être",
       "pension": "Vos prestations de retraite ou celles d'un membre de votre famille",
@@ -283,13 +283,19 @@
     "detail": {
       "additional-info": {
         "title": "Renseignements supplémentaires",
-        "eligible": "Exception\u00a0: vous pourriez toujours être admissible si vous avez pris votre retraite et\u00a0:",
-        "list": {
-          "opted": "Vous avez choisi de ne pas recevoir de prestations de retraite avant le 11 décembre 2023;",
-          "cannot-opt": "Vous ne pouvez pas vous réinscrire en vertu des règles relatives aux régimes de retraite;"
+        "eligible": "(FR) The child is still considered to have access to dental insurance or coverage if a parent or guardian chooses to opt out of benefits provided through:",
+        "eligible-list": {
+          "employer": "(FR) an employer;",
+          "pension": "(FR) pension (see exception); or",
+          "professional": "(FR) professional or student organization"
         },
-        "not-eligible": "Vous êtes toujours considéré comme ayant accès à une assurance ou à une couverture dentaire si vous choisissez de vous retirer des avantages offerts par votre employeur ou votre régime de retraite (voir l'exception) ou par l'entremise d'une organisation professionnelle ou étudiante. Par conséquent, vous n'êtes pas admissible au Régime canadien de soins dentaires.",
-        "not-eligible-purchased": "Si vous avez souscrit votre police d'assurance dentaire actuelle de votre propre chef (et non dans le cadre de l'une des couvertures décrites ci-dessus), vous n'êtes pas admissible au RCSD pendant que cette protection est en vigueur."
+        "not-eligible": "(FR) As such, the child is not eligible for Canadian Dental Care Plan.",
+        "not-eligible-purchased": "(FR) If a parent or guardian purchased the current dental insurance policy privately, the child is not eligible for the Canadian Dental Care Plan while that coverage is in effect.",
+        "excepton": "(FR) Exception\u00a0: Your child may still be eligible if a parent or guardian retired and:",
+        "exception-list": {
+          "opted-out": "(FR) Opted out of pension benefits before December 11, 2023, and",
+          "opt-back": "(FR) Can't opt back in under the pension rules"
+        }
       }
     },
     "error-message": {
