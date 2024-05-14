@@ -7,10 +7,9 @@ import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-soli
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { differenceInYears, isPast, isValid, parse } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
-import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
-import pageIds from '../../../../page-ids.json';
+import pageIds from '../../../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
@@ -18,7 +17,7 @@ import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusT
 import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { ChildInformationState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { parseDateString } from '~/utils/date-utils';
@@ -35,6 +34,9 @@ enum FormAction {
   Continue = 'continue',
   Cancel = 'cancel',
   Save = 'save',
+}
+
+enum YesNoOption {
   Yes = 'yes',
   No = 'no',
 }
@@ -42,7 +44,7 @@ enum FormAction {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'apply-adult-child', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adultChild.childInformation,
-  pageTitleI18nKey: 'apply-adult-child:eligibility.child-information.page-title',
+  pageTitleI18nKey: 'apply-adult-child:children.information.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -50,19 +52,20 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const state = loadApplyAdultChildState({ params, request, session });
+  const state = loadApplyAdultSingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.child-information.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.information.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.children?.[0].information, editMode: state.editMode });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.information, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/adult-child/child-information');
+  const log = getLogger('apply/adult-child/children/information');
 
-  const state = loadApplyAdultChildState({ params, request, session });
+  const state = loadApplyAdultSingleChildState({ params, request, session });
+  const applyState = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formData = await request.formData();
@@ -76,51 +79,43 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   saveApplyState({ params, session, state: {} });
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
-
-  if (formAction === FormAction.Cancel) {
-    invariant(state.children, 'Expected state.childInformation to be defined');
-
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
-  }
-
   // Form action Continue & Save
   // state validation schema
   const childInformationSchema = z
     .object({
-      firstName: z.string().trim().min(1, t('apply-adult-child:eligibility.child-information.error-message.first-name-required')).max(100),
-      lastName: z.string().trim().min(1, t('apply-adult-child:eligibility.child-information.error-message.last-name-required')).max(100),
+      firstName: z.string().trim().min(1, t('apply-adult-child:children.information.error-message.first-name-required')).max(100),
+      lastName: z.string().trim().min(1, t('apply-adult-child:children.information.error-message.last-name-required')).max(100),
       dateOfBirthYear: z
         .number({
-          required_error: t('apply-adult-child:eligibility.child-information.error-message.date-of-birth-year-required'),
-          invalid_type_error: t('apply-adult-child:eligibility.child-information.error-message.date-of-birth-year-number'),
+          required_error: t('apply-adult-child:children.information.error-message.date-of-birth-year-required'),
+          invalid_type_error: t('apply-adult-child:children.information.error-message.date-of-birth-year-number'),
         })
         .int()
         .positive(),
       dateOfBirthMonth: z
         .number({
-          required_error: t('apply-adult-child:eligibility.child-information.error-message.date-of-birth-month-required'),
+          required_error: t('apply-adult-child:children.information.error-message.date-of-birth-month-required'),
         })
         .int()
         .positive(),
       dateOfBirthDay: z
         .number({
-          required_error: t('apply-adult-child:eligibility.child-information.error-message.date-of-birth-day-required'),
-          invalid_type_error: t('apply-adult-child:eligibility.child-information.error-message.date-of-birth-day-number'),
+          required_error: t('apply-adult-child:children.information.error-message.date-of-birth-day-required'),
+          invalid_type_error: t('apply-adult-child:children.information.error-message.date-of-birth-day-number'),
         })
         .int()
         .positive(),
       dateOfBirth: z.string(),
-      hasSocialInsuranceNumber: z.string().trim().min(1, t('apply-adult-child:eligibility.child-information.error-message.has-social-insurance-number')),
+      hasSocialInsuranceNumber: z.boolean({ errorMap: () => ({ message: t('apply-adult-child:children.information.error-message.has-social-insurance-number') }) }),
       socialInsuranceNumber: z.string().trim().optional(),
-      isParent: z.string().trim().min(1, t('apply-adult-child:eligibility.child-information.error-message.is-parent')),
+      isParent: z.boolean({ errorMap: () => ({ message: t('apply-adult-child:children.information.error-message.is-parent') }) }),
     })
     .superRefine((val, ctx) => {
-      if (val.hasSocialInsuranceNumber === FormAction.Yes) {
+      if (val.hasSocialInsuranceNumber) {
         if (!val.socialInsuranceNumber) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:eligibility.child-information.error-message.sin-required'), path: ['socialInsuranceNumber'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-required'), path: ['socialInsuranceNumber'] });
         } else if (!isValidSin(val.socialInsuranceNumber)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:eligibility.child-information.error-message.sin-valid'), path: ['socialInsuranceNumber'] });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-valid'), path: ['socialInsuranceNumber'] });
         }
       }
 
@@ -132,19 +127,19 @@ export async function action({ context: { session }, params, request }: ActionFu
       if (!isValid(parsedDateOfBirth)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: t('apply-adult-child:eligibility.child-information.error-message.date-of-birth-valid'),
+          message: t('apply-adult-child:children.information.error-message.date-of-birth-valid'),
           path: ['dateOfBirth'],
         });
       } else if (!isPast(parsedDateOfBirth)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: t('apply-adult-child:eligibility.child-information.error-message.date-of-birth-is-past'),
+          message: t('apply-adult-child:children.information.error-message.date-of-birth-is-past'),
           path: ['dateOfBirth'],
         });
       } else if (differenceInYears(new Date(), parsedDateOfBirth) > 150) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: t('apply-adult-child:eligibility.child-information.error-message.date-of-birth-is-past-valid'),
+          message: t('apply-adult-child:children.information.error-message.date-of-birth-is-past-valid'),
           path: ['dateOfBirth'],
         });
       }
@@ -165,9 +160,9 @@ export async function action({ context: { session }, params, request }: ActionFu
     dateOfBirthMonth: formData.get('dateOfBirthMonth') ? Number(formData.get('dateOfBirthMonth')) : undefined,
     dateOfBirthDay: formData.get('dateOfBirthDay') ? Number(formData.get('dateOfBirthDay')) : undefined,
     dateOfBirth: '',
-    hasSocialInsuranceNumber: String(formData.get('hasSocialInsuranceNumber') ?? ''),
+    hasSocialInsuranceNumber: formData.get('hasSocialInsuranceNumber') ? formData.get('hasSocialInsuranceNumber') === YesNoOption.Yes : undefined,
     socialInsuranceNumber: formData.get('socialInsuranceNumber') ? String(formData.get('socialInsuranceNumber') ?? '') : undefined,
-    isParent: String(formData.get('isParent') ?? ''),
+    isParent: formData.get('isParent') ? formData.get('isParent') === YesNoOption.Yes : undefined,
   };
 
   const parsedDataResult = childInformationSchema.safeParse(data);
@@ -175,7 +170,16 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  // saveApplyState({ params, session, state: { childInformation: parsedDataResult.data } });
+  saveApplyState({
+    params,
+    session,
+    state: {
+      children: applyState.children.map((child) => {
+        if (child.id !== state.id) return child;
+        return { ...child, information: parsedDataResult.data };
+      }),
+    },
+  });
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
 }
@@ -187,10 +191,10 @@ export default function ApplyFlowChildInformation() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
-  const [hasSocialInsuranceNumberValue, setHasSocialInsuranceNumberValue] = useState(defaultState?.hasSocialInsuranceNumber ?? '');
+  const [hasSocialInsuranceNumberValue, setHasSocialInsuranceNumberValue] = useState(defaultState?.hasSocialInsuranceNumber);
 
   const handleSocialInsuranceNumberSelection: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setHasSocialInsuranceNumberValue(e.target.value);
+    setHasSocialInsuranceNumberValue(e.target.value === YesNoOption.Yes);
   };
 
   // Keys order should match the input IDs order.
@@ -231,17 +235,17 @@ export default function ApplyFlowChildInformation() {
 
   const options: InputRadiosProps['options'] = [
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:eligibility.child-information.sin-yes" components={{ bold: <strong /> }} />,
-      value: FormAction.Yes,
-      defaultChecked: defaultState?.hasSocialInsuranceNumber === FormAction.Yes,
-      append: hasSocialInsuranceNumberValue === FormAction.Yes && (
+      children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:children.information.sin-yes" components={{ bold: <strong /> }} />,
+      value: YesNoOption.Yes,
+      defaultChecked: defaultState?.hasSocialInsuranceNumber === true,
+      append: hasSocialInsuranceNumberValue === true && (
         <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
           <InputField
             id="social-insurance-number"
             name="socialInsuranceNumber"
-            label={t('apply-adult-child:eligibility.child-information.sin')}
+            label={t('apply-adult-child:children.information.sin')}
             inputMode="numeric"
-            helpMessagePrimary={t('apply-adult-child:eligibility.child-information.help-message.sin')}
+            helpMessagePrimary={t('apply-adult-child:children.information.help-message.sin')}
             helpMessagePrimaryClassName="text-black"
             defaultValue={defaultState?.socialInsuranceNumber ?? ''}
             errorMessage={fetcher.data?.errors.socialInsuranceNumber?._errors[0]}
@@ -252,9 +256,9 @@ export default function ApplyFlowChildInformation() {
       onChange: handleSocialInsuranceNumberSelection,
     },
     {
-      children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:eligibility.child-information.sin-no" components={{ bold: <strong /> }} />,
-      value: FormAction.No,
-      defaultChecked: defaultState?.hasSocialInsuranceNumber === FormAction.No,
+      children: <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:children.information.sin-no" components={{ bold: <strong /> }} />,
+      value: YesNoOption.No,
+      defaultChecked: defaultState?.hasSocialInsuranceNumber === false,
       onChange: handleSocialInsuranceNumberSelection,
     },
   ];
@@ -268,20 +272,20 @@ export default function ApplyFlowChildInformation() {
         <Progress aria-labelledby="progress-label" value={40} size="lg" />
       </div>
       <div className="max-w-prose">
-        <p className="mb-4">{t('apply-adult-child:eligibility.child-information.form-instructions-sin')}</p>
+        <p className="mb-4">{t('apply-adult-child:children.information.form-instructions-sin')}</p>
         <p className="italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-8 space-y-6">
-            <Collapsible id="name-instructions" summary={t('apply-adult-child:eligibility.child-information.single-legal-name')}>
-              <p>{t('apply-adult-child:eligibility.child-information.name-instructions')}</p>
+            <Collapsible id="name-instructions" summary={t('apply-adult-child:children.information.single-legal-name')}>
+              <p>{t('apply-adult-child:children.information.name-instructions')}</p>
             </Collapsible>
             <div className="grid items-end gap-6 md:grid-cols-2">
               <InputField
                 id="first-name"
                 name="firstName"
-                label={t('apply-adult-child:eligibility.child-information.first-name')}
+                label={t('apply-adult-child:children.information.first-name')}
                 className="w-full"
                 maxLength={100}
                 aria-describedby="name-instructions"
@@ -293,7 +297,7 @@ export default function ApplyFlowChildInformation() {
               <InputField
                 id="last-name"
                 name="lastName"
-                label={t('apply-adult-child:eligibility.child-information.last-name')}
+                label={t('apply-adult-child:children.information.last-name')}
                 className="w-full"
                 maxLength={100}
                 autoComplete="family-name"
@@ -311,7 +315,7 @@ export default function ApplyFlowChildInformation() {
                 year: 'dateOfBirthYear',
               }}
               defaultValue={defaultState?.dateOfBirth ?? ''}
-              legend={t('apply-adult-child:eligibility.child-information.date-of-birth')}
+              legend={t('apply-adult-child:children.information.date-of-birth')}
               errorMessages={{
                 all: fetcher.data?.errors.dateOfBirth?._errors[0],
                 year: fetcher.data?.errors.dateOfBirthYear?._errors[0],
@@ -321,22 +325,15 @@ export default function ApplyFlowChildInformation() {
               required
             />
 
-            <InputRadios
-              id="has-social-insurance-number"
-              legend={t('apply-adult-child:eligibility.child-information.sin-legend')}
-              name="hasSocialInsuranceNumber"
-              options={options}
-              errorMessage={fetcher.data?.errors.hasSocialInsuranceNumber?._errors[0]}
-              required
-            />
+            <InputRadios id="has-social-insurance-number" legend={t('apply-adult-child:children.information.sin-legend')} name="hasSocialInsuranceNumber" options={options} errorMessage={fetcher.data?.errors.hasSocialInsuranceNumber?._errors[0]} required />
 
             <InputRadios
               id="is-parent-radios"
               name="isParent"
-              legend={t('apply-adult-child:eligibility.child-information.parent-legend')}
+              legend={t('apply-adult-child:children.information.parent-legend')}
               options={[
-                { value: FormAction.Yes, children: t('apply-adult-child:eligibility.child-information.radio-options.yes'), defaultChecked: defaultState?.isParent === FormAction.Yes },
-                { value: FormAction.No, children: t('apply-adult-child:eligibility.child-information.radio-options.no'), defaultChecked: defaultState?.isParent === FormAction.No },
+                { value: YesNoOption.Yes, children: t('apply-adult-child:children.information.radio-options.yes'), defaultChecked: defaultState?.isParent === true },
+                { value: YesNoOption.No, children: t('apply-adult-child:children.information.radio-options.no'), defaultChecked: defaultState?.isParent === false },
               ]}
               errorMessage={fetcher.data?.errors.isParent?._errors[0]}
               required
@@ -345,21 +342,21 @@ export default function ApplyFlowChildInformation() {
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
               <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Applicant Information click">
-                {t('apply-adult-child:eligibility.child-information.save-btn')}
+                {t('apply-adult-child:children.information.save-btn')}
               </Button>
               <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Applicant Information click">
-                {t('apply-adult-child:eligibility.child-information.cancel-btn')}
+                {t('apply-adult-child:children.information.cancel-btn')}
               </Button>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
               <Button id="continue-button" name="_action" value={FormAction.Continue} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Applicant Information click">
-                {t('apply-adult-child:eligibility.child-information.continue-btn')}
+                {t('apply-adult-child:children.information.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
               <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult-child/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-                {t('apply-adult-child:eligibility.child-information.back-btn')}
+                {t('apply-adult-child:children.information.back-btn')}
               </ButtonLink>
             </div>
           )}

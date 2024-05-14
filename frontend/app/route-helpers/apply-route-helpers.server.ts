@@ -21,7 +21,7 @@ export interface ApplyState {
     maritalStatus: string;
     socialInsuranceNumber: string;
   };
-  readonly children?: {
+  readonly children: {
     readonly id: string;
     readonly dentalBenefits?: {
       hasFederalBenefits: boolean;
@@ -35,9 +35,9 @@ export interface ApplyState {
       firstName: string;
       lastName: string;
       dateOfBirth: string;
-      hasSocialInsuranceNumber: string;
+      hasSocialInsuranceNumber: boolean;
       socialInsuranceNumber?: string;
-      isParent: string;
+      isParent: boolean;
     };
   }[];
   readonly communicationPreferences?: {
@@ -98,7 +98,7 @@ export interface ApplyState {
 }
 
 export type ApplicantInformationState = NonNullable<ApplyState['applicantInformation']>;
-export type ChildState = NonNullable<ApplyState['children']>[number];
+export type ChildState = ApplyState['children'][number];
 export type ChildDentalBenefitsState = NonNullable<ChildState['dentalBenefits']>;
 export type ChildDentalInsuranceState = NonNullable<ChildState['dentalInsurance']>;
 export type ChildInformationState = NonNullable<ChildState['information']>;
@@ -230,6 +230,7 @@ export function startApplyState({ id, session }: StartArgs) {
     id: parsedId,
     editMode: false,
     lastUpdatedOn: new Date().toISOString(),
+    children: [],
   };
 
   const sessionName = getSessionName(parsedId);
@@ -253,22 +254,13 @@ export function getAgeCategoryFromAge(age: number): AgeCategory {
   throw new Error(`Invalid age [${age}]`);
 }
 
-export function isNewChild(child: ChildState) {
-  return (child.information ?? child.dentalInsurance ?? child.dentalBenefits) === undefined;
+export function isNewChildState(child: ChildState) {
+  return child.dentalBenefits === undefined || child.dentalInsurance === undefined || child.information === undefined;
 }
 
-export function getChildren<TState extends { children?: ChildState[] }>(state: TState, skipNew: boolean) {
-  if (skipNew) {
-    return state.children?.filter((child) => !isNewChild(child));
-  }
-
-  return state.children;
-}
-
-export function getChild<TState extends { children?: ChildState[] }>(state: TState, childId: string) {
-  return state.children?.find(({ id }) => id === childId);
-}
-
-export function getNewChild<TState extends { children?: ChildState[] }>(state: TState) {
-  return state.children?.find((child) => isNewChild(child));
+export function getChildrenState<TState extends Pick<ApplyState, 'children'>>(state: TState, includesNewChildState: boolean = false) {
+  // prettier-ignore
+  return includesNewChildState
+    ? state.children
+    : state.children.filter((child) => isNewChildState(child) === false);
 }

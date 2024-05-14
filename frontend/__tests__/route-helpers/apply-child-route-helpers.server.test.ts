@@ -52,6 +52,7 @@ describe('apply-route-helpers.server', () => {
       id: '00000000-0000-0000-0000-000000000000',
       editMode: false,
       lastUpdatedOn: '2000-01-01',
+      children: [],
     } satisfies ApplyState;
 
     it('should redirect if typeOfApplication is undefined', () => {
