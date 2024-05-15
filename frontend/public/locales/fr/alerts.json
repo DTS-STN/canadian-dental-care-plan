@@ -17,6 +17,12 @@
       "confirm-email-required": "Confirm email address ",
       "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
       "preferred-language-required": "Sélectionnez la langue de communication préférée"
+    },
+    "success": {
+      "page-title": "(FR) Subscription Confirmation",
+      "subscribe-successful": "(FR) You have successfully subscribed to Canada Dental Care Plan. You will receive emails at <strong>{{userEmailAddress}}</strong> when important new Canada Dental Care Plan information is available in your My Service Canada Account.",
+      "change-email": "(FR) If you wish to update your email address, navigate to <personalInformationLink>Manage my Personal Information</personalInformationLink>.",
+      "return-home": "(FR) Return <homeLink>Home</homeLink>"
     }
   },
   "manage": {
@@ -79,7 +85,7 @@
     "confirm-code-expired": "(FR) The confirmation code sent to you has expired. Select the \"Request New Confirmation Code\" button below to have a new confirmation code sent to you at <strong>{{userEmailAddress}}</strong>."
   },
   "success": {
-    "page-title": "(FR) Unscubscribe Confirmation",
+    "page-title": "(FR) Unsubscribe Confirmation",
     "unsubscribe-successful": "(FR) You have successfully unsubscribed from Canada Dental Care Plan. You will no longer receive emails when important new Canada Dental Care Plan information is available in your My Service Canada Account.",
     "subscribe-again": "(FR) You may subscribe again to Canada Dental Care Plan alerts by <subscribelink>completing the subscription process</subscribelink>.",
     "return-home": "(FR) Return <homeLink>Home</homeLink>"

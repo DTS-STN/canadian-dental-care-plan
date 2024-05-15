@@ -17,6 +17,12 @@
       "confirm-email-required": "Confirm email address ",
       "email-valid": "Enter an email address in the correct format, such as name@example.com",
       "preferred-language-required": "Select preferred language of communication"
+    },
+    "success": {
+      "page-title": "Subscription Confirmation",
+      "subscribe-successful": "You have successfully subscribed to Canada Dental Care Plan. You will receive emails at <strong>{{userEmailAddress}}</strong> when important new Canada Dental Care Plan information is available in your My Service Canada Account.",
+      "change-email": "If you wish to update your email address, navigate to <personalInformationLink>Manage my Personal Information</personalInformationLink>.",
+      "return-home": "Return <homeLink>Home</homeLink>"
     }
   },
   "manage": {
@@ -81,7 +87,7 @@
     "back": "Back"
   },
   "success": {
-    "page-title": "Unscubscribe Confirmation",
+    "page-title": "Unsubscribe Confirmation",
     "unsubscribe-successful": "You have successfully unsubscribed from Canada Dental Care Plan. You will no longer receive emails when important new Canada Dental Care Plan information is available in your My Service Canada Account.",
     "subscribe-again": "You may subscribe again to Canada Dental Care Plan alerts by <subscribelink>completing the subscription process</subscribelink>.",
     "return-home": "Return <homeLink>Home</homeLink>"
