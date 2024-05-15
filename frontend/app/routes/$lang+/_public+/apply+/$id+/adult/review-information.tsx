@@ -107,7 +107,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     birthday: toLocaleDateString(parse(state.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: state.applicantInformation.maritalStatus,
-    email: state.communicationPreferences.email,
+    contactInformationEmail: state.personalInformation.email,
+    communicationPreferenceEmail: state.communicationPreferences.email,
     communicationPreference: communicationPreference,
   };
   const spouseInfo = state.partnerInformation
@@ -394,7 +395,7 @@ export default function ReviewInformation() {
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult:review-information.email')}>
-                <p>{userInfo.email}</p>
+                <p>{userInfo.contactInformationEmail}</p>
                 <div className="mt-4">
                   <InlineLink id="change-email" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
                     {t('apply-adult:review-information.email-change')}
@@ -440,9 +441,9 @@ export default function ReviewInformation() {
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('apply-adult:review-information.comm-pref-title')}>
                 <p>{userInfo.communicationPreference}</p>
-                {userInfo.email && (
+                {userInfo.communicationPreferenceEmail && (
                   <p>
-                    <Trans ns={handle.i18nNamespaces} i18nKey="review-information.email-address" values={{ email: userInfo.email }} />
+                    <Trans ns={handle.i18nNamespaces} i18nKey="review-information.email-address" values={{ email: userInfo.communicationPreferenceEmail }} />
                   </p>
                 )}
                 <p>
