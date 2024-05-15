@@ -181,7 +181,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/dental-insurance', params));
 }
 
 export default function ApplyFlowChildInformation() {

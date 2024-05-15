@@ -259,6 +259,14 @@
                                   "en": "/:lang/apply/:id/adult-child/children/:childId/information",
                                   "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/information"
                                 }
+                              },
+                              {
+                                "id": "$lang+/_public+/apply+/$id+/adult-child/children/$childId/dental-insurance",
+                                "file": "routes/$lang+/_public+/apply+/$id+/adult-child/children/$childId/dental-insurance.tsx",
+                                "paths": {
+                                  "en": "/:lang/apply/:id/adult-child/children/:childId/dental-insurance",
+                                  "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/assurance-dentaire"
+                                }
                               }
                             ]
                           }
