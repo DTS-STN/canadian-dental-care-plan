@@ -13,10 +13,12 @@ import { useTranslation } from 'react-i18next';
 import pageIds from '../../../../page-ids.json';
 import { Address } from '~/components/address';
 import { Button, ButtonLink } from '~/components/buttons';
+import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
+import { useFeature } from '~/root';
 import { loadApplyAdultChildState, validateApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
@@ -210,6 +212,17 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:review-adult-information.page-title') }) };
 
+  // TODO update with correct state
+  const payload = toBenefitApplicationRequest({
+    applicantInformation: state.applicantInformation!,
+    communicationPreferences: state.communicationPreferences!,
+    dateOfBirth: state.dateOfBirth!,
+    dentalBenefits: state.dentalBenefits!,
+    dentalInsurance: state.dentalInsurance!,
+    personalInformation: state.personalInformation!,
+    partnerInformation: state.partnerInformation,
+  });
+
   return json({
     id: state.id,
     userInfo,
@@ -222,6 +235,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     mailingAddressInfo,
     dentalInsurance,
     dentalBenefit,
+    payload,
     csrfToken,
     meta,
     COMMUNICATION_METHOD_EMAIL_ID,
@@ -315,6 +329,7 @@ export default function ReviewInformation() {
     COMMUNICATION_METHOD_EMAIL_ID,
     siteKey,
     hCaptchaEnabled,
+    payload,
   } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -575,6 +590,11 @@ export default function ReviewInformation() {
           </ButtonLink>
         </fetcher.Form>
       </div>
+      {useFeature('view-payload') && (
+        <div className="mt-8">
+          <DebugPayload data={payload} enableCopy></DebugPayload>
+        </div>
+      )}
     </>
   );
 }
