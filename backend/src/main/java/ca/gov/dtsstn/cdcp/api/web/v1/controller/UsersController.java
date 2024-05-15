@@ -81,9 +81,9 @@ public class UsersController {
 			@NotBlank(message = "userId must not be null or blank")
 			@Parameter(description = "The user id of the user.", example = "000000000", required = true)
 			@PathVariable String userId) throws Exception {
-		final Optional<AlertType> convertedAlertType = Optional.ofNullable(alertTypeService.readByCode(createSubscriptionRequest.getAlertType())).orElseThrow(() -> new Exception("alertType not found"));
-		createSubscriptionRequest.setAlertType(convertedAlertType.get().getId());
-		final var subscription = mapper.toDomain(createSubscriptionRequest);
+		// TODO -- throw better exception
+		final var alertType = alertTypeService.readByCode(createSubscriptionRequest.getAlertType()).orElseThrow(() -> new Exception("alertType not found"));
+		final var subscription = mapper.toDomain(createSubscriptionRequest, alertType.getId());
 		log.debug("Creating subscription: {}", subscription);
 		subscriptionService.create(subscription);
 	}
@@ -98,11 +98,11 @@ public class UsersController {
 			@Parameter(description = "The user id of the user.", example = "000000000", required = true)
 			@PathVariable String userId,
 			@NotBlank(message = "subscriptionId must not be null or blank")
-			@Parameter(description = "The individaul subscription id. ", required = true)
+			@Parameter(description = "The id of the subscription to update. ", required = true)
 			@PathVariable String subscriptionId) throws Exception {
-		final Optional<AlertType> convertedAlertType = Optional.ofNullable(alertTypeService.readByCode(updateSubscriptionRequest.getAlertType())).orElseThrow(() -> new Exception("alertType not found"));
-		updateSubscriptionRequest.setAlertType(convertedAlertType.get().getId());
-		final var subscription = mapper.toDomain(updateSubscriptionRequest);
+		// TODO -- throw better exception
+		final var alertType = alertTypeService.readByCode(updateSubscriptionRequest.getAlertType()).orElseThrow(() -> new Exception("alertType not found"));
+		final var subscription = mapper.toDomain(updateSubscriptionRequest, alertType.getId());
 		log.debug("Updating subscription: {}", subscription);
 		subscriptionService.update(subscription);
 	}	
