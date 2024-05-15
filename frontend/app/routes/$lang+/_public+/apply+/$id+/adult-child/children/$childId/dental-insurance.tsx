@@ -39,7 +39,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const child = state.children?.find((child) => child.id === params.childId);
+  const child = state.children.find((child) => child.id === params.childId);
   const childName = child ? child.information?.firstName : '<Child 1 name>';
 
   const csrfToken = String(session.get('csrfToken'));
