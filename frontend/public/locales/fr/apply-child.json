@@ -100,17 +100,17 @@
     "status-checker-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html"
   },
   "dental-benefits": {
-    "title": "Accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
-    "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",
-    "eligibility-criteria": "Si vous répondez à tous les critères d'admissibilité, votre couverture sera coordonnée entre les régimes afin qu'il n'y ait pas de lacunes ou de dédoublement dans la couverture.",
+    "title": "(FR) {{childName}}: access to other federal, provincial or territorial dental benefits",
+    "access-to-dental": "(FR) Access to dental coverage through a provincial, territorial or federal government social program will not impact the child's eligibility for the Canadian Dental Care Plan.",
+    "eligibility-criteria": "(FR) If the child meets all the eligibility criteria, their coverage will be coordinated between the plans to ensure there are no gaps or duplication in coverage.",
     "select-one": "Choisissez une option",
     "federal-benefits": {
       "title": "Prestations fédérales",
-      "legend": "Bénéficiez-vous d'une assurance dentaire dans le cadre d'un programme social offert par un programme fédéral?",
-      "option-yes": "<strong>Oui</strong>, je bénéficie d'une assurance dentaire <strong>fédérale</strong>",
-      "option-no": "<strong>Non</strong>, je ne bénéficie pas d'une assurance dentaire <strong>fédérale</strong>",
+      "legend": "(FR) Does {{childName}} have dental benefits through a social program offered by a federal program?",
+      "option-yes": "(FR) <strong>Yes</strong>, this child has <strong>federal</strong> dental benefits.",
+      "option-no": "(FR) <strong>No</strong>, this child does not have <strong>federal</strong> dental benefits.",
       "social-programs": {
-        "legend": "Veuillez sélectionner le programme de protection sociale avec lequel vous êtes assuré. Si vous en avez plus d'un, veuillez sélectionner celui que vous utilisez le plus."
+        "legend": "(FR) Please select which social program the child is covered under. If the child has more than one, please select the one they use most."
       }
     },
     "provincial-territorial-benefits": {
