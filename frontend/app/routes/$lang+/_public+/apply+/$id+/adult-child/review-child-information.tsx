@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { SyntheticEvent } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
@@ -210,9 +210,9 @@ export default function ReviewInformation() {
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
 
     if (hCaptchaEnabled && captchaRef.current) {
       try {

@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { SyntheticEvent } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
@@ -9,10 +9,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { parse } from 'date-fns';
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
 import { Address } from '~/components/address';
-import { Button, ButtonLink } from '~/components/buttons';
+import { Button } from '~/components/buttons';
 import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
@@ -35,6 +36,11 @@ import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 import { cn } from '~/utils/tw-utils';
+
+enum FormAction {
+  Back = 'back',
+  Submit = 'submit',
+}
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -223,6 +229,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     partnerInformation: state.partnerInformation,
   });
 
+  saveApplyState({ params, session, state: { editMode: true } });
+
   return json({
     id: state.id,
     userInfo,
@@ -258,6 +266,12 @@ export async function action({ context: { session }, params, request }: ActionFu
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
     throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  if (formAction === FormAction.Back) {
+    saveApplyState({ params, session, state: { editMode: false } });
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-child-information', params));
   }
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
@@ -335,9 +349,9 @@ export default function ReviewInformation() {
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
 
     if (hCaptchaEnabled && captchaRef.current) {
       try {
@@ -578,17 +592,14 @@ export default function ReviewInformation() {
             {t('apply-adult-child:review-adult-information.continue-button')}
             <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
-          <ButtonLink
-            id="back-button"
-            routeId="$lang+/_public+/apply+/$id+/adult-child/federal-provincial-territorial-benefits"
-            params={params}
-            disabled={isSubmitting}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Review Adult Information click"
-          >
+          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Review Information click">
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply-adult-child:review-adult-information.back-button')}
-          </ButtonLink>
+          </Button>
         </fetcher.Form>
+        <InlineLink routeId="$lang+/_public+/apply+/$id+/adult-child/exit-application" params={params} className="mt-4 block font-lato font-semibold">
+          {t('apply-adult-child:review-adult-information.exit-button')}
+        </InlineLink>
       </div>
       {useFeature('view-payload') && (
         <div className="mt-8">

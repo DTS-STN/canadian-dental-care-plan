@@ -1,18 +1,19 @@
-import { FormEvent } from 'react';
+import { SyntheticEvent } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faSpinner, faX } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { parse } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
 import { Address } from '~/components/address';
-import { Button, ButtonLink } from '~/components/buttons';
+import { Button } from '~/components/buttons';
 import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
@@ -34,6 +35,11 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
+
+enum FormAction {
+  Back = 'back',
+  Submit = 'submit',
+}
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'),
@@ -170,6 +176,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     partnerInformation: state.partnerInformation,
   });
 
+  saveApplyState({ params, session, state: { editMode: true } });
+
   return json({
     id: state.id,
     userInfo,
@@ -205,6 +213,12 @@ export async function action({ context: { session }, params, request }: ActionFu
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
     throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  if (formAction === FormAction.Back) {
+    saveApplyState({ params, session, state: { editMode: false } });
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/child/federal-provincial-territorial-benefits', params));
   }
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
@@ -267,9 +281,9 @@ export default function ReviewInformation() {
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
 
     if (hCaptchaEnabled && captchaRef.current) {
       try {
@@ -502,19 +516,23 @@ export default function ReviewInformation() {
         <p className="mb-4">{t('apply-child:review-information.submit-p-proceed')}</p>
         <p className="mb-4">{t('apply-child:review-information.submit-p-false-info')}</p>
         <p className="mb-4">{t('apply-child:review-information.submit-p-repayment')}</p>
-        <fetcher.Form method="post" onSubmit={handleSubmit} className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+
+        <fetcher.Form method="post" onSubmit={handleSubmit} className="mt-6 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <Button id="confirm-button" variant="green" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Submit - Review Information click">
             {t('apply-child:review-information.submit-button')}
             {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
           </Button>
-          <ButtonLink routeId="$lang+/_public+/apply+/$id+/child/exit-application" params={params} variant="alternative" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Review Information click">
-            {t('apply-child:review-information.exit-button')}
-            <FontAwesomeIcon icon={faX} className="ms-3 block size-4" />
-          </ButtonLink>
+          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Review Information click">
+            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+            {t('apply-child:review-information.back-button')}
+          </Button>
         </fetcher.Form>
       </div>
+      <InlineLink routeId="$lang+/_public+/apply+/$id+/child/exit-application" params={params} className="mt-4 block font-lato font-semibold">
+        {t('apply-child:review-information.exit-button')}
+      </InlineLink>
       {useFeature('view-payload') && (
         <div className="mt-8">
           <DebugPayload data={payload} enableCopy></DebugPayload>
