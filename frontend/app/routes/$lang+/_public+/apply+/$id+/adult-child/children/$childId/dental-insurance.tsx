@@ -15,7 +15,7 @@ import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -37,10 +37,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const state = loadApplyAdultChildState({ params, request, session });
+  const state = loadApplyAdultSingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const child = state.children.find((child) => child.id === params.childId);
-  const childName = child ? child.information?.firstName : '<Child 1 name>';
+  const childName = state.information?.firstName ?? '<Child 1 name>';
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.dental-insurance.title') }) };
@@ -51,7 +50,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/adult-child/dental-insurance');
 
-  const state = loadApplyAdultChildState({ params, request, session });
+  const state = loadApplyAdultSingleChildState({ params, request, session });
+  const applyState = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -73,7 +73,16 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format()._errors });
   }
 
-  saveApplyState({ params, session, state: { dentalInsurance: parsedDataResult.data } });
+  saveApplyState({
+    params,
+    session,
+    state: {
+      children: applyState.children.map((child) => {
+        if (child.id !== state.id) return child;
+        return { ...child, dentalInsurance: parsedDataResult.data };
+      }),
+    },
+  });
 
   if (state.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-information', params));
@@ -198,7 +207,7 @@ export default function AccessToDentalInsuranceQuestion() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId="$lang+/_public+/apply+/$id+/adult-child/communication-preference"
+                routeId="$lang+/_public+/apply+/$id+/adult-child/children/$childId/information"
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Access to other dental insurance click"
