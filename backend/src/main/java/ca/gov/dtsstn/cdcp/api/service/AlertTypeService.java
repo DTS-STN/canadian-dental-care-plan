@@ -27,9 +27,14 @@ public class AlertTypeService {
 	}
 
 	@Cacheable
-	public Optional<AlertType> findById(String id) {
+	public Optional<AlertType> readById(String id) {
 		Assert.hasText(id, "id is required; it must not be null or blank");
 		return repository.findById(id).map(mapper::fromEntity);
 	}
+
+	public Optional<AlertType> readByCode(String code) {
+		Assert.hasText(code, "code is required; it must not be null or blank");
+		return repository.findByCode(code).map(mapper::fromEntity);
+	}	
 
 }

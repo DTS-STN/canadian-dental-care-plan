@@ -24,6 +24,20 @@ public class SubscriptionService {
 		this.repository = repository;
 	}
 
+	public Subscription create(Subscription subscription) {
+		Assert.notNull(subscription, "subscription is required; it must not be null");
+		Assert.isNull(subscription.getId(), "subscription.id must be null when creating new instance");
+
+		return mapper.fromEntity(repository.save(mapper.toEntity(subscription)));
+	}
+
+	public Subscription update(Subscription subscription) {
+		Assert.notNull(subscription, "subscription is required; it must not be null");
+		final var originalSubscription = repository.findById(subscription.getId()).orElseThrow();
+		final var updatedSubscription = mapper.fromEntity(repository.save(mapper.update(subscription, originalSubscription)));
+		return updatedSubscription;
+	}
+
 	public Optional<Subscription> getSubscriptionById(String id) {
 		Assert.hasText(id, "id is required; it must not be null or blank");
 		return repository.findById(id).map(mapper::fromEntity);

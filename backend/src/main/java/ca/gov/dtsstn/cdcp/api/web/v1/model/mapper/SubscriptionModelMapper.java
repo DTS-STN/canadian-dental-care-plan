@@ -18,4 +18,7 @@ public interface SubscriptionModelMapper {
 	@Mapping(target = "add", ignore = true) // fixes a weird vscode/eclipse & mapstruct bug quirk/bug 💩
 	SubscriptionModel toModel(@Nullable Subscription subscription);
 
+	@Mapping(target = "alertType.id", source = "alertTypeId")
+	Subscription toDomain(@Nullable SubscriptionModel subscriptionModel, String alertTypeId);
+
 }

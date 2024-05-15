@@ -3,12 +3,15 @@ package ca.gov.dtsstn.cdcp.api.service.domain.mapper;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.lang.Nullable;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import ca.gov.dtsstn.cdcp.api.data.entity.SubscriptionEntity;
 import ca.gov.dtsstn.cdcp.api.service.domain.Subscription;
+import jakarta.annotation.Nullable;
 
 @Mapper(componentModel = "spring", uses = { AlertTypeMapper.class })
 public interface SubscriptionMapper {
@@ -32,4 +35,8 @@ public interface SubscriptionMapper {
 	@Mapping(target = "isNew", ignore = true)
 	SubscriptionEntity toEntity(@Nullable Subscription subscription);
 
+	@Nullable
+	@Mapping(target = "isNew", ignore = true)
+	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+	SubscriptionEntity update(@Nullable Subscription subscription, @MappingTarget SubscriptionEntity target);	
 }
