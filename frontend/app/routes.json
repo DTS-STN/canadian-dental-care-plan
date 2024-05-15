@@ -253,12 +253,11 @@
                             "file": "routes/$lang+/_public+/apply+/$id+/adult-child/children/$childId/_route.tsx",
                             "children": [
                               {
-                                "id": "$lang+/_public+/apply+/$id+/adult-child/children/$childId/index",
-                                "file": "routes/$lang+/_public+/apply+/$id+/adult-child/children/$childId/index.tsx",
-                                "index": true,
+                                "id": "$lang+/_public+/apply+/$id+/adult-child/children/$childId/information",
+                                "file": "routes/$lang+/_public+/apply+/$id+/adult-child/children/$childId/information.tsx",
                                 "paths": {
-                                  "en": "/:lang/apply/:id/adult-child/children/:childId",
-                                  "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId"
+                                  "en": "/:lang/apply/:id/adult-child/children/:childId/information",
+                                  "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/information"
                                 }
                               }
                             ]
@@ -279,14 +278,6 @@
                         "paths": {
                           "en": "/:lang/apply/:id/adult-child/date-of-birth",
                           "fr": "/:lang/demander/:id/adulte-enfant/date-de-naissance"
-                        }
-                      },
-                      {
-                        "id": "$lang+/_public+/apply+/$id+/adult-child/child-information",
-                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/child-information.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/child-information",
-                          "fr": "/:lang/demander/:id/adult-child/child-information"
                         }
                       },
                       {

@@ -1,6 +1,8 @@
 import { Session, redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
 
+import { z } from 'zod';
+
 import { ApplyState, loadApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
@@ -45,6 +47,39 @@ export function loadApplyAdultChildState({ params, request, session }: LoadApply
   }
 
   return applyState;
+}
+
+interface LoadApplyAdultSingleChildStateArgs {
+  params: Params;
+  request: Request;
+  session: Session;
+}
+
+/**
+ * Loads single child state from apply adult child state.
+ * @param args - The arguments.
+ * @returns The loaded child state.
+ */
+export function loadApplyAdultSingleChildState({ params, request, session }: LoadApplyAdultSingleChildStateArgs) {
+  const applyState = loadApplyAdultChildState({ params, request, session });
+
+  const parsedChildId = z.string().uuid().safeParse(params.childId);
+
+  if (!parsedChildId.success) {
+    log.warn('Invalid "childId" param format; childId: [%s]', params.childId);
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/children/index', params));
+  }
+
+  const childId = parsedChildId.data;
+  const childState = applyState.children.find(({ id }) => id === childId);
+
+  if (!childState) {
+    log.warn('Apply single child has not been found; childId: [%s]', childId);
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/children/index', params));
+  }
+
+  const { editMode } = applyState;
+  return { ...childState, editMode };
 }
 
 interface ApplicantInformationStateHasPartnerArgs {

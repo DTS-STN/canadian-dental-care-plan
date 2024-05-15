@@ -166,7 +166,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     state.dentalBenefits === undefined ||
     state.dentalInsurance === undefined ||
     state.personalInformation === undefined ||
-    state.children === undefined ||
+    state.children.length === 0 ||
     state.taxFiling2023 === undefined ||
     state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);

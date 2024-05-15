@@ -14,7 +14,7 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { getChildren, getNewChild, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { getChildrenState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -47,7 +47,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.index.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta, children: getChildren(state, true) });
+  return json({ id: state.id, csrfToken, meta, children: getChildrenState(state, false) });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -67,22 +67,10 @@ export async function action({ context: { session }, params, request }: ActionFu
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
 
   if (formAction === FormAction.Add) {
-    const newChild = getNewChild(state);
-    const newChildId = newChild ? newChild.id : randomUUID();
-
-    if (!newChild) {
-      // add new child
-      saveApplyState({
-        params,
-        session,
-        state: {
-          ...state,
-          children: [...(state.children ?? []), { id: newChildId }],
-        },
-      });
-    }
-
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/index', { ...params, childId: newChildId }));
+    const childId = randomUUID();
+    const children = [...getChildrenState(state, false), { id: childId }];
+    saveApplyState({ params, session, state: { children } });
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/information', { ...params, childId }));
   }
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/personal-information', params));
@@ -94,7 +82,7 @@ export default function ApplyFlowChildSummary() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const hasChildren = children !== undefined && children.length > 0;
+  const hasChildren = children.length > 0;
 
   return (
     <>
@@ -107,35 +95,38 @@ export default function ApplyFlowChildSummary() {
       <div className="max-w-prose">
         <fetcher.Form method="post" aria-describedby="form-instructions-sin form-instructions" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          {!hasChildren && <p>{t('apply-adult-child:children.index.no-children')}</p>}
-          {hasChildren && (
+          {!hasChildren ? (
+            <p>{t('apply-adult-child:children.index.no-children')}</p>
+          ) : (
             <>
               <p className="mb-6">{t('apply-adult-child:children.index.children-added')}</p>
               {children.map((child) => {
-                <Fragment key={child.id}>
-                  <h2 className="text-2xl font-semibold">{`${child.information?.firstName} ${child.information?.lastName}`}</h2>
-                  <InlineLink className="text-sm font-normal" id="remove-child" routeId="$lang+/_public+/apply+/$id+/adult-child/child-information" params={params}>
-                    {t('apply-adult-child:children.index.remove-child')}
-                  </InlineLink>
-                  <dl className="divide-y border-y">
-                    <DescriptionListItem term={t('apply-adult-child:children.index.dob-title')}>
-                      <p>{child.information?.dateOfBirth}</p>
-                      <p className="mt-4">
-                        <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult-child/child-information" params={params}>
-                          {t('apply-adult-child:children.index.dob-change')}
-                        </InlineLink>
-                      </p>
-                    </DescriptionListItem>
-                    <DescriptionListItem term={t('apply-adult-child:children.index.sin-title')}>
-                      <p>{child.information?.socialInsuranceNumber}</p>
-                      <p className="mt-4">
-                        <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/adult-child/child-information" params={params}>
-                          {t('apply-adult-child:children.index.sin-change')}
-                        </InlineLink>
-                      </p>
-                    </DescriptionListItem>
-                  </dl>
-                </Fragment>;
+                return (
+                  <Fragment key={child.id}>
+                    <h2 className="text-2xl font-semibold">{`${child.information?.firstName} ${child.information?.lastName}`}</h2>
+                    <Button variant="alternative" size="xs" id="remove-child" className="my-2">
+                      {t('apply-adult-child:children.index.remove-child')}
+                    </Button>
+                    <dl className="mb-6 divide-y border-y">
+                      <DescriptionListItem term={t('apply-adult-child:children.index.dob-title')}>
+                        <p>{child.information?.dateOfBirth}</p>
+                        <p className="mt-4">
+                          <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult-child/children/$childId/information" params={{ ...params, childId: child.id }}>
+                            {t('apply-adult-child:children.index.dob-change')}
+                          </InlineLink>
+                        </p>
+                      </DescriptionListItem>
+                      <DescriptionListItem term={t('apply-adult-child:children.index.sin-title')}>
+                        <p>{child.information?.socialInsuranceNumber}</p>
+                        <p className="mt-4">
+                          <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/adult-child/children/$childId/information" params={{ ...params, childId: child.id }}>
+                            {t('apply-adult-child:children.index.sin-change')}
+                          </InlineLink>
+                        </p>
+                      </DescriptionListItem>
+                    </dl>
+                  </Fragment>
+                );
               })}
             </>
           )}
@@ -150,7 +141,13 @@ export default function ApplyFlowChildSummary() {
               {t('apply-adult-child:children.index.continue-btn')}
               <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
             </Button>
-            <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult-child/child-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click">
+            <ButtonLink
+              id="back-button"
+              routeId="$lang+/_public+/apply+/$id+/adult-child/federal-provincial-territorial-benefits"
+              params={params}
+              disabled={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click"
+            >
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('apply-adult-child:children.index.back-btn')}
             </ButtonLink>
