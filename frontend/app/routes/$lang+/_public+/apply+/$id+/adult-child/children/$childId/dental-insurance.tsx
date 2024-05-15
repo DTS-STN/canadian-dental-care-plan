@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../../../page-ids.json';
+import pageIds from '../../../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
@@ -39,7 +39,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const childName = state.children?.[0].information?.firstName ?? '<Child 1 name>';
+  const child = state.children?.find((child) => child.id === params.childId);
+  const childName = child ? child.information?.firstName : '<Child 1 name>';
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:dental-insurance.title') }) };
@@ -155,7 +156,7 @@ export default function AccessToDentalInsuranceQuestion() {
             <InputRadios
               id="dental-insurance"
               name="dentalInsurance"
-              legend={t('dental-insurance.legend', { titleComponent: childName })}
+              legend={t('dental-insurance.legend', { childName: childName })}
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="dental-insurance.option-yes" />,
