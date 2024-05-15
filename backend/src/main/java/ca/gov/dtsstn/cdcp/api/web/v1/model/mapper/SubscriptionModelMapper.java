@@ -15,7 +15,6 @@ public interface SubscriptionModelMapper {
 	@Nullable
 	@Mapping(target = "alertType", source = "alertType.code")
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-	@Mapping(target = "add", ignore = true) // fixes a weird vscode/eclipse & mapstruct bug quirk/bug 💩
 	SubscriptionModel toModel(@Nullable Subscription subscription);
 
 	@Mapping(target = "alertType.id", source = "alertTypeId")
