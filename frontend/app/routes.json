@@ -345,6 +345,14 @@
                         }
                       },
                       {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/dental-insurance",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/dental-insurance.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/dental-insurance",
+                          "fr": "/:lang/demander/:id/adulte-enfant/assurance-dentaire"
+                        }
+                      },
+                      {
                         "id": "$lang+/_public+/apply+/$id+/adult-child/disability-tax-credit",
                         "file": "routes/$lang+/_public+/apply+/$id+/adult-child/disability-tax-credit.tsx",
                         "paths": {
