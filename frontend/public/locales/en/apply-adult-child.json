@@ -580,7 +580,7 @@
       "no": "No"
     },
     "error-message": {
-      "living-independently-required": "Select an option for living independently"
+      "living-independently-required": "Select whether or not you live independently from your parents"
     },
     "back-btn": "Back",
     "continue-btn": "Continue"
