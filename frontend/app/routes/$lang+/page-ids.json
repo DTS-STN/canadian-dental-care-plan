@@ -85,7 +85,8 @@
         "parentOrGuardian": "CDCP-APPL-ADCH-0019",
         "livingIndependently": "CDCP-APPL-ADCH-0020",
         "childSummary": "CDCP-APPL-ADCH-0021",
-        "contactapplychild": "CDCP-APPL-0022"
+        "contactapplychild": "CDCP-APPL-0022",
+        "ineligible": "CDCP-APPL-ADCH-0023"
       },
       "child": {
         "taxFiling": "CDCP-APPL-CH-0002",
