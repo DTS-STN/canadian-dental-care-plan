@@ -237,7 +237,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
       </div>
       <div className="max-w-prose">
         <p className="mb-6">{t('apply-adult-child:communication-preference.note')}</p>
-        <p className="mb-6 italic">{t('apply:required-label')}</p>
+        <p className="mb-4 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />

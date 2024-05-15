@@ -144,7 +144,7 @@ export default function ApplyFlowDisabilityTaxCredit() {
             components={{ dtcLink: <InlineLink to={t('apply-adult-child:disability-tax-credit.dtc-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" /> }}
           />
         </p>
-        <p className="mb-6 italic">{t('apply:required-label')}</p>
+        <p className="mb-4 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
