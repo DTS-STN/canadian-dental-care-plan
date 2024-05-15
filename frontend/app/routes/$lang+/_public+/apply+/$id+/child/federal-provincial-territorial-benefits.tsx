@@ -254,7 +254,7 @@ export default function AccessToDentalInsuranceQuestion() {
       <div className="max-w-prose">
         <p className="mb-4">{t('apply-child:dental-benefits.access-to-dental')}</p>
         <p className="mb-4">{t('apply-child:dental-benefits.eligibility-criteria')}</p>
-        <p className="mb-6 italic">{t('apply:required-label')}</p>
+        <p className="mb-4 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
