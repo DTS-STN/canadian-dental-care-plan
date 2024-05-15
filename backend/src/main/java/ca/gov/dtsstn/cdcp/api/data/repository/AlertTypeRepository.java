@@ -11,4 +11,6 @@ public interface AlertTypeRepository extends JpaRepository<AlertTypeEntity, Stri
 	@Override
 	Optional<AlertTypeEntity> findById(String id);
 
+	Optional<AlertTypeEntity> findByCode(String code);
+
 }
