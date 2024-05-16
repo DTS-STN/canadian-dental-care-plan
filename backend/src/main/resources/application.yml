@@ -43,6 +43,7 @@ spring:
     open-in-view: false
     properties:
       '[hibernate.batch_versioned_data]': true
+      '[hibernate.globally_quoted_identifiers]': true
       '[hibernate.jdbc.batch_size]': 100
       '[hibernate.order_inserts]': true
       '[hibernate.order_updates]': true
