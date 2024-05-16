@@ -1,4 +1,5 @@
 package ca.gov.dtsstn.cdcp.api.web.v1.model;
+
 import java.time.Instant;
 
 import java.util.Objects;
@@ -11,20 +12,20 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import ca.gov.dtsstn.cdcp.api.web.model.BaseResourceModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
+
 @Schema(name = "ConfirmationCode")
 @Relation(collectionRelation = "confirmationCodes", itemRelation = "confirmationCode")
-@JsonPropertyOrder({ "id", "userId","email", "confirmationCode", "codeCreatedDate", "codeExpiryDate", "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate" })
-public class ConfirmationCodeModel extends BaseResourceModel<ConfirmationCodeModel>{
-    
+@JsonPropertyOrder({"id", "userId", "email", "confirmationCode", "codeCreatedDate",
+        "codeExpiryDate", "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate"})
+public class ConfirmationCodeModel extends BaseResourceModel<ConfirmationCodeModel> {
+
     private String userId;
 
-	private String email;
+    private String email;
 
-	private String confirmationCode;
+    private String code;
 
-	private Instant codeCreatedDate;
-
-    private Instant codeExpiryDate;
+    private Instant expiryDate;
 
     public String getUserId() {
         return userId;
@@ -42,65 +43,50 @@ public class ConfirmationCodeModel extends BaseResourceModel<ConfirmationCodeMod
         this.email = email;
     }
 
-    public String getConfirmationCode() {
-        return confirmationCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setConfirmationCode(String confirmationCode) {
-        this.confirmationCode = confirmationCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public Instant getCodeCreatedDate() {
-        return codeCreatedDate;
+    public Instant getExpiryDate() {
+        return expiryDate;
     }
 
-    public void setCodeCreatedDate(Instant codeCreatedDate) {
-        this.codeCreatedDate = codeCreatedDate;
-    }
-
-    public Instant getCodeExpiryDate() {
-        return codeExpiryDate;
-    }
-
-    public void setCodeExpiryDate(Instant codeExpiryDate) {
-        this.codeExpiryDate = codeExpiryDate;
+    public void setExpiryDate(Instant expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     @Override
-	public boolean equals(@Nullable Object obj) {
-		if (this == obj) { return true; }
-		if (obj == null || !super.equals(obj)) { return false; }
-		if (getClass() != obj.getClass()) { return false; }
+    public boolean equals(@Nullable Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || !super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
 
-		final var other = (ConfirmationCodeModel) obj;
+        final var other = (ConfirmationCodeModel) obj;
 
-		return Objects.equals(email, other.email)
-            && Objects.equals(confirmationCode, other.confirmationCode)
-            && Objects.equals(codeCreatedDate, other.codeCreatedDate)
-            && Objects.equals(codeExpiryDate, other.codeExpiryDate)
-			&& Objects.equals(userId, other.userId);
-	}
-
-    @Override
-	public int hashCode() {
-		return Objects.hash(
-			super.hashCode(),
-			confirmationCode,
-			email,
-			codeCreatedDate,
-			codeExpiryDate,
-			userId);
-	}
+        return Objects.equals(email, other.email) && Objects.equals(code, other.code)
+                && Objects.equals(expiryDate, other.expiryDate)
+                && Objects.equals(userId, other.userId);
+    }
 
     @Override
-	public String toString() {
-		return new ToStringCreator(this)
-			.append("super", super.toString())
-			.append("email", email)
-			.append("codeExpiryDate", codeExpiryDate)
-			.append("codeCreatedDate", codeCreatedDate)
-			.append("confirmationCode", confirmationCode)
-			.append("userId", userId)
-			.toString();
-	}
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), code, email, expiryDate, userId);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringCreator(this).append("super", super.toString()).append("email", email)
+                .append("expiryDate", expiryDate).append("cde", code).append("userId", userId)
+                .toString();
+    }
 }

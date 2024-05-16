@@ -1,19 +1,18 @@
 package ca.gov.dtsstn.cdcp.api.service.domain;
+
 import org.immutables.value.Value.Immutable;
 
 import java.time.Instant;
 
 @Immutable
-public interface  ConfirmationCode extends BaseDomainObject {
+public interface ConfirmationCode extends BaseDomainObject {
 
-    String getUserId();
+	String getUserId();
 
 	String getEmail();
 
-	String getConfirmationCode();
+	String getCode();
 
-	Instant getCodeCreatedDate();
+	Instant getExpiryDate();
 
-    Instant getCodeExpiryDate();
-	
 }

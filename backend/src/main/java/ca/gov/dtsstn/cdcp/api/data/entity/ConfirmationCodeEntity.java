@@ -1,55 +1,45 @@
 package ca.gov.dtsstn.cdcp.api.data.entity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import java.time.Instant;
 import org.immutables.builder.Builder;
 import org.springframework.core.style.ToStringCreator;
-import org.springframework.lang.Nullable;
+import jakarta.annotation.Nullable;
+
 @Entity(name = "ConfirmationCode")
-@SuppressWarnings({ "serial" })
+@SuppressWarnings({"serial"})
 public class ConfirmationCodeEntity extends AbstractEntity {
-    
+
     @Column(length = 9, nullable = false, updatable = false)
-	private String userId;
-
-	@Column(length = 50, nullable = false)
-	private String email;
+    private String userId;
 
     @Column(length = 50, nullable = false)
-	private String confirmationCode;
+    private String email;
 
-    @Column(length = 50, nullable = false)
-	private Instant codeCreatedDate;
+    @Column(length = 10, nullable = false)
+    private String code;
 
-    @Column(length = 50, nullable = false)
-	private Instant codeExpiryDate;
-    
-    
+    @Column(nullable = false)
+    private Instant expiryDate;
+
+
     public ConfirmationCodeEntity() {
-		super();
-	}
+        super();
+    }
 
     @Builder.Constructor
-	protected ConfirmationCodeEntity(
-        @Nullable String id,
-        @Nullable String createdBy,
-        @Nullable Instant createdDate,
-        @Nullable String lastModifiedBy,
-        @Nullable Instant lastModifiedDate,
-        @Nullable Boolean isNew,
-        @Nullable String userId,
-        @Nullable String email,
-        @Nullable String confirmationCode,
-        @Nullable Instant codeCreatedDate,
-        @Nullable Instant codeExpiryDate )
-        {
-            super(id, createdBy, createdDate, lastModifiedBy, lastModifiedDate, isNew);
-            this.userId = userId;
-            this.email = email;
-            this.confirmationCode = confirmationCode;
-            this.codeCreatedDate = codeCreatedDate;
-            this.codeExpiryDate = codeExpiryDate;
-        }
+    protected ConfirmationCodeEntity(@Nullable String id, @Nullable String createdBy,
+            @Nullable Instant createdDate, @Nullable String lastModifiedBy,
+            @Nullable Instant lastModifiedDate, @Nullable Boolean isNew, @Nullable String userId,
+            @Nullable String email, @Nullable String code, @Nullable Instant codeCreatedDate,
+            @Nullable Instant expiryDate) {
+        super(id, createdBy, createdDate, lastModifiedBy, lastModifiedDate, isNew);
+        this.userId = userId;
+        this.email = email;
+        this.code = code;
+        this.expiryDate = expiryDate;
+    }
 
     public String getUserId() {
         return userId;
@@ -67,39 +57,26 @@ public class ConfirmationCodeEntity extends AbstractEntity {
         this.email = email;
     }
 
-    public String getConfirmationCode() {
-        return confirmationCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setConfirmationCode(String confirmationCode) {
-        this.confirmationCode = confirmationCode;
+    public void setCode(String confirmationCode) {
+        this.code = confirmationCode;
     }
 
-    public Instant getCodeCreatedDate() {
-        return codeCreatedDate;
+    public Instant getExpiryDate() {
+        return expiryDate;
     }
 
-    public void setCodeCreatedDate(Instant codeCreatedDate) {
-        this.codeCreatedDate = codeCreatedDate;
-    }
-
-    public Instant getCodeExpiryDate() {
-        return codeExpiryDate;
-    }
-
-    public void setCodeExpiryDate(Instant codeExpiryDate) {
-        this.codeExpiryDate = codeExpiryDate;
+    public void setCodeExpiryDate(Instant expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     @Override
-	public String toString() {
-		return new ToStringCreator(this)
-			.append("super", super.toString())
-			.append("userId", userId)
-			.append("email", email)
-			.append("confirmationCode", confirmationCode)
-            .append("codeCreatedDate", codeCreatedDate)
-            .append("codeExpriryDate", codeExpiryDate)
-			.toString();
-	}
+    public String toString() {
+        return new ToStringCreator(this).append("super", super.toString()).append("userId", userId)
+                .append("email", email).append("code", code).append("expriryDate", expiryDate)
+                .toString();
+    }
 }

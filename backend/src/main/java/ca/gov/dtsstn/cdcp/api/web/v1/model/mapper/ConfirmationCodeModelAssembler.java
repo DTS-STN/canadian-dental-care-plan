@@ -11,18 +11,23 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.util.Assert;
 
 @Component
-public class ConfirmationCodeModelAssembler extends AbstractModelAssembler<ConfirmationCode, ConfirmationCodeModel> {
-    
-    private final ConfirmationCodeModelMapper confirmationCodeModelMapper;
+public class ConfirmationCodeModelAssembler
+		extends AbstractModelAssembler<ConfirmationCode, ConfirmationCodeModel> {
 
-    protected ConfirmationCodeModel instantiateModel(ConfirmationCode confirmationCode) {
-		Assert.notNull(confirmationCode, "subscription is required; it must not be null");
-		return confirmationCodeModelMapper.toModel(confirmationCode);
-    }
+	private final ConfirmationCodeModelMapper confirmationCodeModelMapper;
 
-    protected ConfirmationCodeModelAssembler(PagedResourcesAssembler<ConfirmationCode> pagedResourcesAssembler, ConfirmationCodeModelMapper confirmationCodeModelMapper) {
-		super(ConfirmationCodeController.class, ConfirmationCodeModel.class, pagedResourcesAssembler);
-		Assert.notNull(confirmationCodeModelMapper, "subscriptionModelMapper is required; it must not be null");
+	protected ConfirmationCodeModel instantiateModel(ConfirmationCode code) {
+		Assert.notNull(code, "code is required; it must not be null");
+		return confirmationCodeModelMapper.toModel(code);
+	}
+
+	protected ConfirmationCodeModelAssembler(
+			PagedResourcesAssembler<ConfirmationCode> pagedResourcesAssembler,
+			ConfirmationCodeModelMapper confirmationCodeModelMapper) {
+		super(ConfirmationCodeController.class, ConfirmationCodeModel.class,
+				pagedResourcesAssembler);
+		Assert.notNull(confirmationCodeModelMapper,
+				"confirmationCodeModelMapper is required; it must not be null");
 		this.confirmationCodeModelMapper = confirmationCodeModelMapper;
 	}
 
