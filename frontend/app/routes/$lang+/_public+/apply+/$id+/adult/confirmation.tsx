@@ -349,7 +349,7 @@ export default function ApplyFlowConfirm() {
         </Button>
       </div>
       <Dialog>
-        <DialogTrigger>
+        <DialogTrigger asChild>
           <button className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Exit click">
             {t('apply-adult:confirm.close-application')}
           </button>
@@ -361,7 +361,7 @@ export default function ApplyFlowConfirm() {
           <p>{t('apply-adult:confirm.modal.info')}</p>
           <p>{t('apply-adult:confirm.modal.are-you-sure')}</p>
           <DialogFooter>
-            <DialogClose>
+            <DialogClose asChild>
               <Button id="confirm-modal-back" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Back click">
                 {t('apply-adult:confirm.modal.back-btn')}
               </Button>
