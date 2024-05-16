@@ -1,7 +1,7 @@
 import { Session, redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
 
-import { ApplyState, loadApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { ApplyState, getAgeCategoryFromDateString, loadApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
@@ -85,15 +85,37 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateStat
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
 
+  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
+
+  if (ageCategory === 'children') {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/parent-or-guardian', params));
+  }
+
+  if (ageCategory === 'youth' && state.livingIndependently === undefined) {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/living-independently', params));
+  }
+
+  if (ageCategory === 'youth' && state.livingIndependently === false) {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/parent-or-guardian', params));
+  }
+
+  if (ageCategory === 'adults' && state.disabilityTaxCredit === undefined) {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/disability-tax-credit', params));
+  }
+
+  if (ageCategory === 'adults' && state.disabilityTaxCredit === false) {
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/dob-eligibility', params));
+  }
+
   if (state.applicantInformation === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
   }
 
-  if (state.partnerInformation === undefined && applicantInformationStateHasPartner(state.applicantInformation)) {
+  if (applicantInformationStateHasPartner(state.applicantInformation) && !state.partnerInformation) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/partner-information', params));
   }
 
-  if (state.partnerInformation !== undefined && !applicantInformationStateHasPartner(state.applicantInformation)) {
+  if (!applicantInformationStateHasPartner(state.applicantInformation) && state.partnerInformation) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
   }
 
