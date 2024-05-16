@@ -87,7 +87,7 @@ CREATE TABLE confirmation_code (
 	`user_id` VARCHAR(9) NOT NULL,
 	`email` VARCHAR(50) NOT NULL,
 	`code` VARCHAR(10) NOT NULL,
-	expiry_date TIMESTAMP WITH TIME ZONE NOT NULL,
+	`expiry_date` TIMESTAMP WITH TIME ZONE NOT NULL,
 	-- audit fields
 	`created_by` VARCHAR(64) NOT NULL,
 	`created_date` TIMESTAMP WITH TIME ZONE NOT NULL,

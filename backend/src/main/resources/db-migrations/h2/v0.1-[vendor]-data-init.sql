@@ -20,9 +20,8 @@ INSERT INTO `subscription` (`id`, `user_id`, `email`, `registered`, `subscribed`
 VALUES
 	('a6ea4925-f813-493e-80ec-a5b90ca28b6c', '800011819', 'user0001@example.com', true, true, 1033, 'cf185099-8a17-4086-a890-c456250822a3', 'flyway-community-edition', CURRENT_TIMESTAMP, 'flyway-community-edition', CURRENT_TIMESTAMP),
 	('d3419bcb-5e46-4678-831b-c9211d479429', '800011819', 'user0002@example.com', true, false, 1033, 'daf8b8d9-95f4-4f38-9ee3-17ac7826c1e7', 'flyway-community-edition', CURRENT_TIMESTAMP, 'flyway-community-edition', CURRENT_TIMESTAMP);
-INSERT INTO confirmation_code
-	(id, user_id, email, code, expiry_date, created_by, created_date, last_modified_by, last_modified_date)
-VALUES
 
-	('a6ea4925-f813-493e-80ec-a5b90ca28b6c', '800011819', 'example@gmail.com', '12345', CURRENT_TIMESTAMP, 'flyway-community-edition', CURRENT_TIMESTAMP, 'flyway-community-edition', CURRENT_TIMESTAMP),
-	('a6ea4925-f813-493e-80ec-a5b90ca28b6d', '800011819', 'example@gmail.com', '54321', CURRENT_TIMESTAMP + 2000000, 'flyway-community-edition', CURRENT_TIMESTAMP, 'flyway-community-edition', CURRENT_TIMESTAMP);
+INSERT INTO `confirmation_code` (`id`, `user_id`, `email`, `code`, `expiry_date`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`)
+VALUES
+	('a6ea4925-f813-493e-80ec-a5b90ca28b6c', '800011819', 'user0001@example.com', '12345', CURRENT_TIMESTAMP, 'flyway-community-edition', CURRENT_TIMESTAMP, 'flyway-community-edition', CURRENT_TIMESTAMP),
+	('a6ea4925-f813-493e-80ec-a5b90ca28b6d', '800011819', 'user0002@example.com', '54321', CURRENT_TIMESTAMP + 2000000, 'flyway-community-edition', CURRENT_TIMESTAMP, 'flyway-community-edition', CURRENT_TIMESTAMP);

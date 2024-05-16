@@ -60,23 +60,16 @@ public class ConfirmationCodeModel extends BaseResourceModel<ConfirmationCodeMod
     }
 
     @Override
-    public boolean equals(@Nullable Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || !super.equals(obj)) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-
-        final var other = (ConfirmationCodeModel) obj;
-
-        return Objects.equals(email, other.email) && Objects.equals(code, other.code)
-                && Objects.equals(expiryDate, other.expiryDate)
-                && Objects.equals(userId, other.userId);
-    }
+	public boolean equals(@Nullable Object obj) {
+		if (this == obj) { return true; }
+		if (obj == null || !super.equals(obj)) { return false; }
+		if (getClass() != obj.getClass()) { return false; }
+		final var other = (ConfirmationCodeModel) obj;
+		return Objects.equals(email, other.email)
+			&& Objects.equals(code, other.code)
+			&& Objects.equals(expiryDate, other.expiryDate)
+			&& Objects.equals(userId, other.userId);
+	}
 
     @Override
     public int hashCode() {
@@ -84,9 +77,13 @@ public class ConfirmationCodeModel extends BaseResourceModel<ConfirmationCodeMod
     }
 
     @Override
-    public String toString() {
-        return new ToStringCreator(this).append("super", super.toString()).append("email", email)
-                .append("expiryDate", expiryDate).append("cde", code).append("userId", userId)
-                .toString();
-    }
+	public String toString() {
+		return new ToStringCreator(this)
+			.append("super", super.toString())
+			.append("code", code)
+			.append("email", email)
+			.append("expiryDate", expiryDate)
+			.append("userId", userId)
+			.toString();
+	}
 }

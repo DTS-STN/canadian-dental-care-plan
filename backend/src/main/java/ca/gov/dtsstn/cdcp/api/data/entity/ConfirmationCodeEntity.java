@@ -29,17 +29,23 @@ public class ConfirmationCodeEntity extends AbstractEntity {
     }
 
     @Builder.Constructor
-    protected ConfirmationCodeEntity(@Nullable String id, @Nullable String createdBy,
-            @Nullable Instant createdDate, @Nullable String lastModifiedBy,
-            @Nullable Instant lastModifiedDate, @Nullable Boolean isNew, @Nullable String userId,
-            @Nullable String email, @Nullable String code, @Nullable Instant codeCreatedDate,
-            @Nullable Instant expiryDate) {
-        super(id, createdBy, createdDate, lastModifiedBy, lastModifiedDate, isNew);
-        this.userId = userId;
-        this.email = email;
-        this.code = code;
-        this.expiryDate = expiryDate;
-    }
+	protected ConfirmationCodeEntity(
+			@Nullable String id,
+			@Nullable String code,
+			@Nullable String email,
+			@Nullable Instant expiryDate,
+			@Nullable String userId,
+			@Nullable String createdBy,
+			@Nullable Instant createdDate,
+			@Nullable String lastModifiedBy,
+			@Nullable Instant lastModifiedDate,
+			@Nullable Boolean isNew) {
+		super(id, createdBy, createdDate, lastModifiedBy, lastModifiedDate, isNew);
+		this.code = code;
+		this.email = email;
+		this.expiryDate = expiryDate;
+		this.userId = userId;
+	}
 
     public String getUserId() {
         return userId;
@@ -74,9 +80,13 @@ public class ConfirmationCodeEntity extends AbstractEntity {
     }
 
     @Override
-    public String toString() {
-        return new ToStringCreator(this).append("super", super.toString()).append("userId", userId)
-                .append("email", email).append("code", code).append("expriryDate", expiryDate)
-                .toString();
-    }
+	public String toString() {
+		return new ToStringCreator(this)
+			.append("super", super.toString())
+			.append("code", code)
+			.append("email", email)
+			.append("expriryDate", expiryDate)
+			.append("userId", userId)
+			.toString();
+	}
 }

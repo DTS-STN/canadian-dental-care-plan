@@ -24,12 +24,9 @@ public interface ConfirmationCodeMapper {
 
 
 	@Nullable
-	public default List<ConfirmationCode> fromEntity(
-			@Nullable Iterable<ConfirmationCodeEntity> confirmationCodes) {
-		if (confirmationCodes == null) {
-			return null;
-		}
-		return StreamSupport.stream(confirmationCodes.spliterator(), false).map(this::fromEntity)
-				.toList();
+	public default List<ConfirmationCode> fromEntity(@Nullable Iterable<ConfirmationCodeEntity> confirmationCodes) {
+		if (confirmationCodes == null) { return null; }
+		return StreamSupport.stream(confirmationCodes.spliterator(), false).map(this::fromEntity).toList();
 	}
+
 }

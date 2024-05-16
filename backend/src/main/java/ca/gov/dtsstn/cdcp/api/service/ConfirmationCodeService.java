@@ -15,13 +15,13 @@ public class ConfirmationCodeService {
 
     private final ConfirmationCodeRepository repository;
 
-    public ConfirmationCodeService(ConfirmationCodeMapper mapper,
-            ConfirmationCodeRepository repository) {
-        Assert.notNull(mapper, "mapper is required; it must not be null");
-        Assert.notNull(repository, "repository is required; it must not be null");
-        this.mapper = mapper;
-        this.repository = repository;
-    }
+    public ConfirmationCodeService(ConfirmationCodeMapper mapper, ConfirmationCodeRepository repository) {
+		Assert.notNull(mapper, "mapper is required; it must not be null");
+		Assert.notNull(repository, "repository is required; it must not be null");
+		this.mapper = mapper;
+		this.repository = repository;
+	}
+
 
     public List<ConfirmationCode> getConfirmationCodesByUserId(String userId) {
         Assert.hasText(userId, "userId is required; it must not be null or blank");
