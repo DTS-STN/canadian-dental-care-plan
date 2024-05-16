@@ -173,7 +173,8 @@ export default function ApplyFlowConfirm() {
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, csrfToken } = useLoaderData<typeof loader>();
   const powerPlatformStatusCheckerEnabled = useFeature('power-platform-status-checker');
 
-  const mscaLink = <InlineLink to={t('confirm.msca-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const mscaLinkCreate = <InlineLink to={t('confirm.msca-link-create')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
   const moreInfoLink = <InlineLink to={t('confirm.more-info-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('apply-adult:confirm.status-checker-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
@@ -216,12 +217,11 @@ export default function ApplyFlowConfirm() {
         <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
       </p>
       <p className="mt-4">{powerPlatformStatusCheckerEnabled ? t('confirm.use-code') : t('confirm.use-code-one-week')}</p>
-
+      <p className="mt-4">{t('confirm.letter')}</p>
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.register-msca-title')}</h2>
       <p className="mt-4">
-        <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLink }} />
+        <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLinkAccount, mscaLinkCreate }} />
       </p>
-      <p className="mt-4">{t('confirm.msca-notify')}</p>
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.how-insurance')}</h2>
       <p className="mt-4">{t('confirm.eligible-text')}</p>
       <p className="mt-4">
