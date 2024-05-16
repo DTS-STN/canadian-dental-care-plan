@@ -11,6 +11,7 @@ import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { DescriptionListItem } from '~/components/description-list-item';
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
 import { useFeature } from '~/root';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
@@ -333,26 +334,47 @@ export default function ApplyFlowConfirm() {
           </dl>
         </div>
       </div>
-
-      <Button
-        className="mt-5 print:hidden"
-        size="lg"
-        variant="primary"
-        onClick={(event) => {
-          event.preventDefault();
-          window.print();
-        }}
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Print a copy of your application bottom click"
-      >
-        {t('confirm.print-btn')}
-      </Button>
-
-      <fetcher.Form method="post" noValidate className="mt-5 flex flex-wrap items-center gap-3">
-        <input type="hidden" name="_csrf" value={csrfToken} />
-        <Button variant="primary" onClick={() => sessionStorage.removeItem('flow.state')} size="lg" className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Confirmation click">
-          {t('apply-adult:confirm.exit')}
+      <div className="my-6">
+        <Button
+          className="px-12 print:hidden"
+          size="lg"
+          variant="primary"
+          onClick={(event) => {
+            event.preventDefault();
+            window.print();
+          }}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Print a copy of your application bottom click"
+        >
+          {t('confirm.print-btn')}
         </Button>
-      </fetcher.Form>
+      </div>
+      <Dialog>
+        <DialogTrigger>
+          <button className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Exit click">
+            {t('apply-adult:confirm.close-application')}
+          </button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t('apply-adult:confirm.modal.header')}</DialogTitle>
+          </DialogHeader>
+          <p>{t('apply-adult:confirm.modal.info')}</p>
+          <p>{t('apply-adult:confirm.modal.are-you-sure')}</p>
+          <DialogFooter>
+            <DialogClose>
+              <Button id="confirm-modal-back" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Back click">
+                {t('apply-adult:confirm.modal.back-btn')}
+              </Button>
+            </DialogClose>
+            <fetcher.Form method="post" noValidate>
+              <input type="hidden" name="_csrf" value={csrfToken} />
+              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => sessionStorage.removeItem('flow.state')} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Confirmation click">
+                {t('apply-adult:confirm.modal.close-btn')}
+              </Button>
+            </fetcher.Form>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
