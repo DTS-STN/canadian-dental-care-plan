@@ -4,12 +4,13 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -44,6 +45,9 @@ export async function action({ context: { session }, params, request }: ActionFu
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
   const submittedCsrfToken = String(formData.get('_csrf'));
+  const state = loadApplyAdultChildState({ params, request, session });
+
+  invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
 
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
@@ -59,7 +63,17 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
+  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
+
+  if (ageCategory === 'children') {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/contact-apply-child', params));
+  } else if (ageCategory === 'youth') {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/living-independently', params));
+  } else if (ageCategory === 'adults') {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/disability-tax-credit', params));
+  } else {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
+  }
 }
 
 export default function ApplyForYourself() {
