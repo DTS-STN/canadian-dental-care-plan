@@ -83,16 +83,16 @@ CREATE INDEX `ix_subscription_email` on `subscription` (`email`);
 CREATE INDEX `ix_subscription_user_id` on `subscription` (`user_id`);
 
 CREATE TABLE confirmation_code (
-	id VARCHAR(64) NOT NULL,
-	user_id VARCHAR(9) NOT NULL,
-	email VARCHAR(50) NOT NULL,
-	code VARCHAR(10) NOT NULL,
+	`id` VARCHAR(64) NOT NULL,
+	`user_id` VARCHAR(9) NOT NULL,
+	`email` VARCHAR(50) NOT NULL,
+	`code` VARCHAR(10) NOT NULL,
 	expiry_date TIMESTAMP WITH TIME ZONE NOT NULL,
 	-- audit fields
-	created_by VARCHAR(64) NOT NULL,
-	created_date TIMESTAMP WITH TIME ZONE NOT NULL,
-	last_modified_by VARCHAR(64),
-	last_modified_date TIMESTAMP WITH TIME ZONE,
+	`created_by` VARCHAR(64) NOT NULL,
+	`created_date` TIMESTAMP WITH TIME ZONE NOT NULL,
+	`last_modified_by` VARCHAR(64),
+	`last_modified_date` TIMESTAMP WITH TIME ZONE,
 
 	CONSTRAINT pk_confirmation_code PRIMARY KEY (id)
 );
