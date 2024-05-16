@@ -3,7 +3,6 @@ package ca.gov.dtsstn.cdcp.api.data.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.time.Instant;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -12,14 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 
+import ca.gov.dtsstn.cdcp.api.config.DataSourceConfig;
 import ca.gov.dtsstn.cdcp.api.data.entity.UserAttributeEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.entity.UserEntityBuilder;
 
 @DataJpaTest
 @ActiveProfiles("test")
+@Import({ DataSourceConfig.class })
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 class UserRepositoryIT {
 
@@ -51,11 +53,7 @@ class UserRepositoryIT {
 			.userAttributes(List.of(new UserAttributeEntityBuilder()
 				.name("RAOIDC_USER_ID")
 				.value("d827416b-f808-4035-9ccc-7572f3297015")
-				.createdBy("JUnit Test")
-				.createdDate(Instant.now())
 				.build()))
-			.createdBy("JUnit Test")
-			.createdDate(Instant.now())
 			.build());
 
 		assertThrows(IncorrectResultSizeDataAccessException.class, () -> userRepository.findByRaoidcUserId("d827416b-f808-4035-9ccc-7572f3297015"));
