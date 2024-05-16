@@ -69,7 +69,7 @@ public class ConfirmationCodeEntity extends AbstractEntity {
         return expiryDate;
     }
 
-    public void setCodeExpiryDate(Instant expiryDate) {
+    public void setExpiryDate(Instant expiryDate) {
         this.expiryDate = expiryDate;
     }
 
