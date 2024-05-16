@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
 import pageIds from '../../../../page-ids.json';
-import { ButtonLink } from '~/components/buttons';
+import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
@@ -16,7 +16,7 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { RouteHandleData, getPathById } from '~/utils/route-utils';
+import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
@@ -41,8 +41,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/dob-eligibility');
+  const log = getLogger('apply/adult/dob-eligibility');
 
+  const t = await getFixedT(request, handle.i18nNamespaces);
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
   const submittedCsrfToken = String(formData.get('_csrf'));
@@ -54,7 +55,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   loadApplyAdultState({ params, request, session });
   clearApplyState({ params, session });
-  return redirect(getPathById('index', params));
+  return redirect(t('apply-adult:eligibility.dob-eligibility.return-btn-link'));
 }
 
 export default function ApplyFlowDobEligibility() {
@@ -88,16 +89,10 @@ export default function ApplyFlowDobEligibility() {
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply-adult:eligibility.dob-eligibility.back-btn')}
         </ButtonLink>
-        <ButtonLink
-          type="submit"
-          variant="primary"
-          onClick={() => sessionStorage.removeItem('flow.state')}
-          to={t('apply-adult:eligibility.dob-eligibility.return-btn-link')}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Find out when you can apply click"
-        >
+        <Button type="submit" variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Find out when you can apply click">
           {t('apply-adult:eligibility.dob-eligibility.return-btn')}
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
-        </ButtonLink>
+        </Button>
       </fetcher.Form>
     </div>
   );
