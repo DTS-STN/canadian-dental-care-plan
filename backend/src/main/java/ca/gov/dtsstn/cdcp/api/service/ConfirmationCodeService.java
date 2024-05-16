@@ -26,12 +26,10 @@ public class ConfirmationCodeService {
     public List<ConfirmationCode> getConfirmationCodesByUserId(String userId) {
         Assert.hasText(userId, "userId is required; it must not be null or blank");
         return mapper.fromEntity(repository.findByUserId(userId));
-
     }
 
     public List<ConfirmationCode> getConfirmationCodesByEmail(String email) {
         Assert.hasText(email, "email is required; it must not be null or blank");
         return mapper.fromEntity(repository.findByEmail(email));
-
     }
 }
