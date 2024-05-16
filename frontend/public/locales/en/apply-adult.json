@@ -2,7 +2,7 @@
   "applicant-information": {
     "page-title": "Applicant Information",
     "form-instructions-sin": "Please provide your legal name as indicated on your Social Insurance Number (SIN) card or letter.",
-    "form-instructions-info": "We'll use the information you provide to verify your identity. Any information that does not match the information on your SIN application may cause a delay in the processing of your application.",
+    "form-instructions-info": "We'll use the information you provide to verify your identity. Any information that does not match the information on your SIN record may cause a delay in the processing of your application.",
     "sin": "Social Insurance Number (SIN)",
     "last-name": "Last name",
     "first-name": "First name",
@@ -14,7 +14,7 @@
     "cancel-btn": "Cancel",
     "save-btn": "Save",
     "help-message": {
-      "sin": "Enter 9-digit SIN"
+      "sin": "Enter the 9-digit SIN"
     },
     "error-message": {
       "first-name-required": "Enter first name",
@@ -270,7 +270,7 @@
     "cancel-btn": "Cancel",
     "save-btn": "Save",
     "help-message": {
-      "sin": "Enter 9-digit SIN"
+      "sin": "Enter the 9-digit SIN"
     },
     "error-message": {
       "confirm-required": "Checkbox must be selected",
