@@ -236,115 +236,111 @@ export default function AccessToGovernmentalsBenefitsEdit() {
 
   return (
     <div className="max-w-prose">
-      <>
-        <div className="max-w-prose">
-          <p className="mb-4">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.access-to-dental')}</p>
-          <p className="mb-4">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.eligibility-criteria')}</p>
-          <p className="mb-4 italic">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.required-label')}</p>
-          {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-          <fetcher.Form method="post" noValidate>
-            <input type="hidden" name="_csrf" value={csrfToken} />
-            <fieldset className="mb-6">
-              <legend className="mb-4 font-lato text-2xl font-bold">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.federal-benefits.title')}</legend>
-              <InputRadios
-                id="has-federal-benefits"
-                name="hasFederalBenefits"
-                legend={t('access-to-governmental-benefits:access-to-governmental-benefits.edit.federal-benefits.legend')}
-                options={[
-                  {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey="access-to-governmental-benefits:access-to-governmental-benefits.edit.federal-benefits.option-no" />,
-                    value: HasFederalBenefitsOption.No,
-                    onChange: handleOnHasFederalBenefitChanged,
-                  },
-                  {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey="access-to-governmental-benefits:access-to-governmental-benefits.edit.federal-benefits.option-yes" />,
-                    value: HasFederalBenefitsOption.Yes,
-                    onChange: handleOnHasFederalBenefitChanged,
-                    append: hasFederalBenefitValue === true && (
+      <p className="mb-4">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.access-to-dental')}</p>
+      <p className="mb-4">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.eligibility-criteria')}</p>
+      <p className="mb-4 italic">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.required-label')}</p>
+      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+      <fetcher.Form method="post" noValidate>
+        <input type="hidden" name="_csrf" value={csrfToken} />
+        <fieldset className="mb-6">
+          <legend className="mb-4 font-lato text-2xl font-bold">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.federal-benefits.title')}</legend>
+          <InputRadios
+            id="has-federal-benefits"
+            name="hasFederalBenefits"
+            legend={t('access-to-governmental-benefits:access-to-governmental-benefits.edit.federal-benefits.legend')}
+            options={[
+              {
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="access-to-governmental-benefits:access-to-governmental-benefits.edit.federal-benefits.option-no" />,
+                value: HasFederalBenefitsOption.No,
+                onChange: handleOnHasFederalBenefitChanged,
+              },
+              {
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="access-to-governmental-benefits:access-to-governmental-benefits.edit.federal-benefits.option-yes" />,
+                value: HasFederalBenefitsOption.Yes,
+                onChange: handleOnHasFederalBenefitChanged,
+                append: hasFederalBenefitValue === true && (
+                  <InputRadios
+                    id="federal-social-programs"
+                    name="federalSocialProgram"
+                    legend={t('access-to-governmental-benefits:access-to-governmental-benefits.edit.federal-benefits.social-programs.legend')}
+                    options={federalSocialPrograms.map((option) => ({
+                      children: getNameByLanguage(i18n.language, option),
+                      value: option.id,
+                    }))}
+                  />
+                ),
+              },
+            ]}
+            required
+          />
+        </fieldset>
+        <fieldset className="mb-8">
+          <legend className="mb-4 font-lato text-2xl font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.provincial-territorial-benefits.title')}</legend>
+          <InputRadios
+            id="has-provincial-territorial-benefits"
+            name="hasProvincialTerritorialBenefits"
+            legend={t('access-to-governmental-benefits:access-to-governmental-benefits.edit.provincial-territorial-benefits.legend')}
+            options={[
+              {
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="access-to-governmental-benefits:access-to-governmental-benefits.edit.provincial-territorial-benefits.option-no" />,
+                value: HasProvincialTerritorialBenefitsOption.No,
+                onChange: handleOnHasProvincialTerritorialBenefitChanged,
+              },
+              {
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="access-to-governmental-benefits:access-to-governmental-benefits.edit.provincial-territorial-benefits.option-yes" />,
+                value: HasProvincialTerritorialBenefitsOption.Yes,
+                onChange: handleOnHasProvincialTerritorialBenefitChanged,
+                append: hasProvincialTerritorialBenefitValue === true && (
+                  <div className="space-y-6">
+                    <InputSelect
+                      id="province"
+                      name="province"
+                      className="w-full sm:w-1/2"
+                      label={t('access-to-governmental-benefits:access-to-governmental-benefits.edit.provincial-territorial-benefits.social-programs.input-legend')}
+                      onChange={handleOnRegionChanged}
+                      options={[
+                        { children: t('access-to-governmental-benefits:access-to-governmental-benefits.edit.select-one'), value: '', hidden: true },
+                        ...sortedRegions.map((region) => ({
+                          key: region.provinceTerritoryStateId,
+                          id: region.provinceTerritoryStateId,
+                          value: region.provinceTerritoryStateId,
+                          children: getNameByLanguage(i18n.language, region),
+                        })),
+                      ]}
+                      required
+                    />
+                    {
                       <InputRadios
-                        id="federal-social-programs"
-                        name="federalSocialProgram"
-                        legend={t('access-to-governmental-benefits:access-to-governmental-benefits.edit.federal-benefits.social-programs.legend')}
-                        options={federalSocialPrograms.map((option) => ({
-                          children: getNameByLanguage(i18n.language, option),
-                          value: option.id,
-                        }))}
+                        id="provincial-territorial-social-programs"
+                        name="provincialTerritorialSocialProgram"
+                        legend={t('access-to-governmental-benefits:access-to-governmental-benefits.edit.provincial-territorial-benefits.social-programs.radio-legend')}
+                        options={provincialTerritorialSocialPrograms
+                          .filter((program) => program.provinceTerritoryStateId === provinceValue)
+                          .map((option) => ({
+                            children: getNameByLanguage(i18n.language, option),
+                            value: option.id,
+                            checked: provincialTerritorialSocialProgramValue === option.id,
+                            onChange: handleOnProvincialTerritorialSocialProgramChanged,
+                          }))}
+                        required
                       />
-                    ),
-                  },
-                ]}
-                required
-              />
-            </fieldset>
-            <fieldset className="mb-8">
-              <legend className="mb-4 font-lato text-2xl font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.provincial-territorial-benefits.title')}</legend>
-              <InputRadios
-                id="has-provincial-territorial-benefits"
-                name="hasProvincialTerritorialBenefits"
-                legend={t('access-to-governmental-benefits:access-to-governmental-benefits.edit.provincial-territorial-benefits.legend')}
-                options={[
-                  {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey="access-to-governmental-benefits:access-to-governmental-benefits.edit.provincial-territorial-benefits.option-no" />,
-                    value: HasProvincialTerritorialBenefitsOption.No,
-                    onChange: handleOnHasProvincialTerritorialBenefitChanged,
-                  },
-                  {
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey="access-to-governmental-benefits:access-to-governmental-benefits.edit.provincial-territorial-benefits.option-yes" />,
-                    value: HasProvincialTerritorialBenefitsOption.Yes,
-                    onChange: handleOnHasProvincialTerritorialBenefitChanged,
-                    append: hasProvincialTerritorialBenefitValue === true && (
-                      <div className="space-y-6">
-                        <InputSelect
-                          id="province"
-                          name="province"
-                          className="w-full sm:w-1/2"
-                          label={t('access-to-governmental-benefits:access-to-governmental-benefits.edit.provincial-territorial-benefits.social-programs.input-legend')}
-                          onChange={handleOnRegionChanged}
-                          options={[
-                            { children: t('access-to-governmental-benefits:access-to-governmental-benefits.edit.select-one'), value: '', hidden: true },
-                            ...sortedRegions.map((region) => ({
-                              key: region.provinceTerritoryStateId,
-                              id: region.provinceTerritoryStateId,
-                              value: region.provinceTerritoryStateId,
-                              children: getNameByLanguage(i18n.language, region),
-                            })),
-                          ]}
-                          required
-                        />
-                        {
-                          <InputRadios
-                            id="provincial-territorial-social-programs"
-                            name="provincialTerritorialSocialProgram"
-                            legend={t('access-to-governmental-benefits:access-to-governmental-benefits.edit.provincial-territorial-benefits.social-programs.radio-legend')}
-                            options={provincialTerritorialSocialPrograms
-                              .filter((program) => program.provinceTerritoryStateId === provinceValue)
-                              .map((option) => ({
-                                children: getNameByLanguage(i18n.language, option),
-                                value: option.id,
-                                checked: provincialTerritorialSocialProgramValue === option.id,
-                                onChange: handleOnProvincialTerritorialSocialProgramChanged,
-                              }))}
-                            required
-                          />
-                        }
-                      </div>
-                    ),
-                  },
-                ]}
-                required
-              />
-            </fieldset>
-            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <ButtonLink id="back-button" routeId="$lang+/_protected+/access-to-governmental-benefits+/view" params={params}>
-                {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.button.back')}
-              </ButtonLink>
-              <Button id="save-button" variant="primary">
-                {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.button.save')}
-              </Button>
-            </div>
-          </fetcher.Form>
+                    }
+                  </div>
+                ),
+              },
+            ]}
+            required
+          />
+        </fieldset>
+        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+          <ButtonLink id="back-button" routeId="$lang+/_protected+/access-to-governmental-benefits+/view" params={params}>
+            {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.button.back')}
+          </ButtonLink>
+          <Button id="save-button" variant="primary">
+            {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.button.save')}
+          </Button>
         </div>
-      </>
+      </fetcher.Form>
     </div>
   );
 }
