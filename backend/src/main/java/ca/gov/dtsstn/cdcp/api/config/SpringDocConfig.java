@@ -16,7 +16,7 @@ import io.swagger.v3.oas.models.info.Contact;
 @Configuration
 public class SpringDocConfig {
 
-	private static final Logger log = LoggerFactory.getLogger(SpringDocConfig.class);
+	static final Logger log = LoggerFactory.getLogger(SpringDocConfig.class);
 
 	@Autowired ApplicationProperties applicationProperties;
 

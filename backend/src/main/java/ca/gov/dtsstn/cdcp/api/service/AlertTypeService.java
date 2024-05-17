@@ -15,26 +15,27 @@ import ca.gov.dtsstn.cdcp.api.service.domain.mapper.AlertTypeMapper;
 @CacheConfig(cacheNames = { "alert-types" })
 public class AlertTypeService {
 
-	private final AlertTypeMapper mapper;
+	private final AlertTypeMapper alertTypeMapper;
 
-	private final AlertTypeRepository repository;
+	private final AlertTypeRepository alertTypeRepository;
 
-	public AlertTypeService(AlertTypeMapper mapper, AlertTypeRepository repository) {
-		Assert.notNull(mapper, "mapper is required; it must not be null");
-		Assert.notNull(repository, "repository is required; it must not be null");
-		this.mapper = mapper;
-		this.repository = repository;
+	public AlertTypeService(AlertTypeMapper alertTypeMapper, AlertTypeRepository alertTypeRepository) {
+		Assert.notNull(alertTypeMapper, "alertTypeMapper is required; it must not be null");
+		Assert.notNull(alertTypeRepository, "alertTypeRepository is required; it must not be null");
+		this.alertTypeMapper = alertTypeMapper;
+		this.alertTypeRepository = alertTypeRepository;
 	}
 
-	@Cacheable
+	@Cacheable(key = "{ 'id', #id }", sync = true)
 	public Optional<AlertType> readById(String id) {
 		Assert.hasText(id, "id is required; it must not be null or blank");
-		return repository.findById(id).map(mapper::fromEntity);
+		return alertTypeRepository.findById(id).map(alertTypeMapper::fromEntity);
 	}
 
+	@Cacheable(key = "{ 'code', #code }", sync = true)
 	public Optional<AlertType> readByCode(String code) {
 		Assert.hasText(code, "code is required; it must not be null or blank");
-		return repository.findByCode(code).map(mapper::fromEntity);
-	}	
+		return alertTypeRepository.findByCode(code).map(alertTypeMapper::fromEntity);
+	}
 
 }

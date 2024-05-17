@@ -9,7 +9,14 @@ import org.springframework.validation.annotation.Validated;
 public class ApplicationProperties {
 
 	@NestedConfigurationProperty
+	private final CachingProperties caching = new CachingProperties();
+
+	@NestedConfigurationProperty
 	private final SwaggerUiProperties swaggerUi = new SwaggerUiProperties();
+
+	public CachingProperties getCaching() {
+		return caching;
+	}
 
 	public SwaggerUiProperties getSwaggerUi() {
 		return swaggerUi;

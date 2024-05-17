@@ -5,6 +5,12 @@
 
 ---
 
+logging:
+  level:
+    '[ca.gov.dtsstn.cdcp.api]': info
+
+---
+
 spring:
   application:
     name: Canadian Dental Care Plan API
@@ -12,7 +18,7 @@ spring:
     web:
       pageable:
         one-indexed-parameters: true
-        max-page-size: 500
+        max-page-size: 20
   devtools:
     livereload:
       enabled: false
@@ -28,9 +34,9 @@ spring:
       maximum-pool-size: 10
       minimum-idle: 10
   flyway: # see org.springframework.boot.autoconfigure.flyway.FlwayProperties
+    locations: classpath:db-migrations/common, classpath:db-migrations/{vendor}
     sql-migration-prefix: v
     sql-migration-separator: '-'
-    locations: classpath:db-migrations/common, classpath:db-migrations/{vendor}
   jackson:
     default-property-inclusion: non-null
     mapper:
@@ -95,6 +101,14 @@ server:
 #
 
 application:
+  caching:
+    enabled: true
+    caches:
+      alert-types:
+        # cache alert types for one minute to
+        # reduce excessive database calls
+        expire-after-write: 1
+        time-unit: minutes
   swagger-ui:
     application-name: Canadian Dental Care Plan API
     contact-name: Digital Technology Solutions
