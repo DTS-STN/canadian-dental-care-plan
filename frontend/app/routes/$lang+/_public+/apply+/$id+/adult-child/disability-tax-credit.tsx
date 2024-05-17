@@ -96,15 +96,15 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/apply-children', params));
   }
 
-  if (parsedDataResult.data === DisabilityTaxCreditOption.Yes && state.allChildrenUnder18) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/applicant-information', params));
+  if (parsedDataResult.data === DisabilityTaxCreditOption.No) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/parent-or-guardian', params));
   }
 
-  if (parsedDataResult.data === DisabilityTaxCreditOption.Yes) {
+  if (!state.allChildrenUnder18) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/apply-yourself', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/parent-or-guardian', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/applicant-information', params));
 }
 
 export default function ApplyFlowDisabilityTaxCredit() {

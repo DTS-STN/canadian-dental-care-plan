@@ -68,7 +68,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   if (ageCategory === 'children') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/contact-apply-child', params));
   } else if (ageCategory === 'youth') {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/living-independently', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/living-independently', params));
   } else if (ageCategory === 'adults') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/disability-tax-credit', params));
   } else {
