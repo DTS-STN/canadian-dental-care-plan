@@ -16,6 +16,7 @@ CREATE TABLE `user` (
 CREATE INDEX `ix_user_email` ON `user` (`email`);
 
 
+
 create TABLE `user_attribute` (
 	`id` VARCHAR(64) NOT NULL,
 
@@ -82,18 +83,23 @@ CREATE INDEX `ix_subscription_alert_type_id` on `subscription` (`alert_type_id`)
 CREATE INDEX `ix_subscription_email` on `subscription` (`email`);
 CREATE INDEX `ix_subscription_user_id` on `subscription` (`user_id`);
 
-CREATE TABLE confirmation_code (
+
+
+CREATE TABLE `confirmation_code` (
 	`id` VARCHAR(64) NOT NULL,
-	`user_id` VARCHAR(9) NOT NULL,
-	`email` VARCHAR(50) NOT NULL,
-	`code` VARCHAR(10) NOT NULL,
+
+	`code` VARCHAR(8) NOT NULL,
 	`expiry_date` TIMESTAMP WITH TIME ZONE NOT NULL,
+	`user_id` VARCHAR(64) NOT NULL,
+	
 	-- audit fields
 	`created_by` VARCHAR(64) NOT NULL,
 	`created_date` TIMESTAMP WITH TIME ZONE NOT NULL,
 	`last_modified_by` VARCHAR(64),
 	`last_modified_date` TIMESTAMP WITH TIME ZONE,
 
-	CONSTRAINT `pk_confirmation_code `PRIMARY KEY (`id`)
+	CONSTRAINT `pk_confirmation_code `PRIMARY KEY (`id`),
+	CONSTRAINT `fk_confirmation_code_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 );
 
+CREATE INDEX `ix_confirmation_code_user_id` on `confirmation_code` (`user_id`);
