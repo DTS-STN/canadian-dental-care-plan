@@ -94,6 +94,6 @@ CREATE TABLE confirmation_code (
 	`last_modified_by` VARCHAR(64),
 	`last_modified_date` TIMESTAMP WITH TIME ZONE,
 
-	CONSTRAINT pk_confirmation_code PRIMARY KEY (id)
+	CONSTRAINT `pk_confirmation_code `PRIMARY KEY (`id`)
 );
 

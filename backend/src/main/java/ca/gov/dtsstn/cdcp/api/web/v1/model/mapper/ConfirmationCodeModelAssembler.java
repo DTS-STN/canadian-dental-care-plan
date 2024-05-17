@@ -13,13 +13,17 @@ import org.springframework.util.Assert;
 @Component
 public class ConfirmationCodeModelAssembler extends AbstractModelAssembler<ConfirmationCode, ConfirmationCodeModel> {
 	private final ConfirmationCodeModelMapper confirmationCodeModelMapper;
+	
 	protected ConfirmationCodeModel instantiateModel(ConfirmationCode confirmationCode) {
+
 		Assert.notNull(confirmationCode, "confirmationCode is required; it must not be null");
 		return confirmationCodeModelMapper.toModel(confirmationCode);
 	}
+
 	protected ConfirmationCodeModelAssembler(
 			PagedResourcesAssembler<ConfirmationCode> pagedResourcesAssembler,
 			ConfirmationCodeModelMapper confirmationCodeModelMapper) {
+		
 		super(ConfirmationCodeController.class, ConfirmationCodeModel.class, pagedResourcesAssembler);
 		Assert.notNull(confirmationCodeModelMapper, "confirmationCodeModelMapper is required; it must not be null");
 		this.confirmationCodeModelMapper = confirmationCodeModelMapper;
