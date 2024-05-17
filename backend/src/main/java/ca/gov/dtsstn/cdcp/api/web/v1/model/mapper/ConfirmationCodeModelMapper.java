@@ -11,8 +11,8 @@ import ca.gov.dtsstn.cdcp.api.web.v1.model.ConfirmationCodeModel;
 @Mapper(componentModel = "spring")
 public interface ConfirmationCodeModelMapper {
 
-    @Nullable
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    ConfirmationCodeModel toModel(@Nullable ConfirmationCode code);
+	@Nullable
+	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+	ConfirmationCodeModel toModel(@Nullable ConfirmationCode code);
 
 }

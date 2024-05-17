@@ -24,30 +24,30 @@ import ca.gov.dtsstn.cdcp.api.service.domain.ConfirmationCode;
 @Tag(name = "confirmationCodes", description = "CRUD endpoint for confirmation codes.")
 public class ConfirmationCodeController {
 
-    private final ConfirmationCodeModelAssembler confirmationCodeModelAssembler;
-    private final ConfirmationCodeService confirmationCodeService;
+	private final ConfirmationCodeModelAssembler confirmationCodeModelAssembler;
+	private final ConfirmationCodeService confirmationCodeService;
 
-    public ConfirmationCodeController(ConfirmationCodeModelAssembler confirmationCodeModelAssembler,
-            ConfirmationCodeService confirmationCodeService) {
-        this.confirmationCodeModelAssembler = confirmationCodeModelAssembler;
-        this.confirmationCodeService = confirmationCodeService;
-    }
+	public ConfirmationCodeController(ConfirmationCodeModelAssembler confirmationCodeModelAssembler,
+			ConfirmationCodeService confirmationCodeService) {
+		this.confirmationCodeModelAssembler = confirmationCodeModelAssembler;
+		this.confirmationCodeService = confirmationCodeService;
+	}
 
-    @GetMapping({"/confirmation-codes/{userEmail}"})
-    @Operation(summary = "Get all confirmation codes for a user.",
-            operationId = "get-confirmation-codes")
-    public List<ConfirmationCodeModel> getConfirmationCodesByUserEmail(
-            @NotBlank(message = "userEmail must not be null or blank") @Parameter(
-                    description = "The email of the user.", example = "user@email.com",
-                    required = true) @PathVariable String userEmail) {
-        List<ConfirmationCode> confirmationCodes =
-                confirmationCodeService.getConfirmationCodesByEmail(userEmail);
-        if (confirmationCodes.size() > 0) {
-            return StreamSupport.stream(confirmationCodes.spliterator(), false)
-                    .map(confirmationCodeModelAssembler::toModel).toList();
-        }
-        List<ConfirmationCodeModel> emptyList = new ArrayList<>();
-        return emptyList;
-    }
+	@GetMapping({"/confirmation-codes/{userEmail}"})
+	@Operation(summary = "Get all confirmation codes for a user.",
+			operationId = "get-confirmation-codes")
+	public List<ConfirmationCodeModel> getConfirmationCodesByUserEmail(
+			@NotBlank(message = "userEmail must not be null or blank") @Parameter(
+					description = "The email of the user.", example = "user@email.com",
+					required = true) @PathVariable String userEmail) {
+		List<ConfirmationCode> confirmationCodes =
+				confirmationCodeService.getConfirmationCodesByEmail(userEmail);
+		if (confirmationCodes.size() > 0) {
+			return StreamSupport.stream(confirmationCodes.spliterator(), false)
+					.map(confirmationCodeModelAssembler::toModel).toList();
+		}
+		List<ConfirmationCodeModel> emptyList = new ArrayList<>();
+		return emptyList;
+}
 
 }

@@ -16,50 +16,50 @@ import jakarta.annotation.Nullable;
 @Schema(name = "ConfirmationCode")
 @Relation(collectionRelation = "confirmationCodes", itemRelation = "confirmationCode")
 @JsonPropertyOrder({"id", "userId", "email", "confirmationCode", "codeCreatedDate",
-        "codeExpiryDate", "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate"})
+	"codeExpiryDate", "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate"})
 public class ConfirmationCodeModel extends BaseResourceModel<ConfirmationCodeModel> {
 
-    private String userId;
+	private String userId;
 
-    private String email;
+	private String email;
 
-    private String code;
+	private String code;
 
-    private Instant expiryDate;
+	private Instant expiryDate;
 
-    public String getUserId() {
-        return userId;
-    }
+	public String getUserId() {
+		return userId;
+	}
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getCode() {
-        return code;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+	public void setCode(String code) {
+		this.code = code;
+	}
 
-    public Instant getExpiryDate() {
-        return expiryDate;
-    }
+	public Instant getExpiryDate() {
+		return expiryDate;
+	}
 
-    public void setExpiryDate(Instant expiryDate) {
-        this.expiryDate = expiryDate;
-    }
+	public void setExpiryDate(Instant expiryDate) {
+		this.expiryDate = expiryDate;
+	}
 
-    @Override
+	@Override
 	public boolean equals(@Nullable Object obj) {
 		if (this == obj) { return true; }
 		if (obj == null || !super.equals(obj)) { return false; }
@@ -71,12 +71,12 @@ public class ConfirmationCodeModel extends BaseResourceModel<ConfirmationCodeMod
 			&& Objects.equals(userId, other.userId);
 	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), code, email, expiryDate, userId);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), code, email, expiryDate, userId);
+	}
 
-    @Override
+	@Override
 	public String toString() {
 		return new ToStringCreator(this)
 			.append("super", super.toString())

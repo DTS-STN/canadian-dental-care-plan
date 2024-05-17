@@ -14,6 +14,6 @@ public interface ConfirmationCodeRepository extends JpaRepository<ConfirmationCo
 	Optional<ConfirmationCodeEntity> findById(String id);
 
 
-    List<ConfirmationCodeEntity> findByUserId(String userId);
-    List<ConfirmationCodeEntity> findByEmail(String email);
+	List<ConfirmationCodeEntity> findByUserId(String userId);
+	List<ConfirmationCodeEntity> findByEmail(String email);
 }
