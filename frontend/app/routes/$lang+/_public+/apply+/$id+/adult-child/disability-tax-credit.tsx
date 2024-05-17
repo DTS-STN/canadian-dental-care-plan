@@ -100,6 +100,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/parent-or-guardian', params));
   }
 
+  if (!state.allChildrenUnder18) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/apply-yourself', params));
+  }
+
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/applicant-information', params));
 }
 
