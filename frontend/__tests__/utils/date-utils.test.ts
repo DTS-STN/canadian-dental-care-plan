@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react';
 
 import { describe, expect, it } from 'vitest';
 
-import { isValidDate, parseDateString, useMonths } from '~/utils/date-utils';
+import { parseDateString, useMonths } from '~/utils/date-utils';
 
 describe('parseDateString', () => {
   it('should parse valid date string correctly', () => {
@@ -59,26 +59,5 @@ describe('useMonths', () => {
     expect(result.current).toHaveLength(12);
     expect(result.current[0]).toHaveProperty('index', 1);
     expect(result.current[0]).toHaveProperty('text', 'janvier');
-  });
-});
-
-describe('isValidDate', () => {
-  it('should parse valid date string correctly', () => {
-    expect(isValidDate('2024/03/18', 'yyyy/mm/dd', '/')).toEqual(true);
-    expect(isValidDate('03/18/2024', 'mm/dd/yyyy', '/')).toEqual(true);
-    expect(isValidDate('2024-03-18', 'yyyy-mm-dd', '-')).toEqual(true);
-    expect(isValidDate('03-18-2024', 'mm-dd-yyyy', '-')).toEqual(true);
-  });
-
-  it('invalid date', () => {
-    expect(isValidDate('02/31/2024', 'mm/dd/yyyy', '/')).toEqual(false);
-    expect(isValidDate('02/29/2001', 'mm/dd/yyyy', '/')).toEqual(false);
-    expect(isValidDate('13-18-2024', 'mm-dd-yyyy', '-')).toEqual(false);
-    expect(isValidDate('13-18-3000', 'mm-dd-yyyy', '-')).toEqual(false);
-  });
-
-  it('invalid format', () => {
-    expect(isValidDate('03/17/2024', 'yyyy/mm/dd', '/')).toEqual(false);
-    expect(isValidDate('03/18/2024', 'yyyymm/dd', '/')).toEqual(false);
   });
 });

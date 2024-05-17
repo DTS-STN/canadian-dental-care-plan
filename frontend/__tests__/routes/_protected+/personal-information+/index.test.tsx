@@ -133,7 +133,7 @@ describe('_gcweb-app.personal-information._index', () => {
       const data = await response.json();
 
       expect(data).toEqual({
-        birthParsedFormat: 'January 10, 1950',
+        birthParsedFormat: 'October 11, 1950',
         countryList: [
           {
             code: 'SUP',
