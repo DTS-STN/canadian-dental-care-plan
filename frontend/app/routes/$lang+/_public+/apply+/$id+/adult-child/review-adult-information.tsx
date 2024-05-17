@@ -1,4 +1,4 @@
-import { SyntheticEvent } from 'react';
+import { SyntheticEvent, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
@@ -349,6 +349,8 @@ export default function ReviewInformation() {
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
 
+  const [isSubmitAction, setIsSubmitAction] = useState(false);
+
   function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
@@ -357,6 +359,7 @@ export default function ReviewInformation() {
       try {
         const response = captchaRef.current.getResponse();
         formData.set('h-captcha-response', response);
+        setIsSubmitAction(true);
       } catch (error) {
         /* intentionally ignore and proceed with submission */
       } finally {
@@ -590,7 +593,7 @@ export default function ReviewInformation() {
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Review Adult Information click">
             {t('apply-adult-child:review-adult-information.continue-button')}
-            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+            <FontAwesomeIcon icon={isSubmitting && isSubmitAction ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
           <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Review Information click">
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
