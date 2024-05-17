@@ -12,10 +12,17 @@ public class ApplicationProperties {
 	private final CachingProperties caching = new CachingProperties();
 
 	@NestedConfigurationProperty
+	private final EmailNotificationProperties emailNotifications = new EmailNotificationProperties();
+
+	@NestedConfigurationProperty
 	private final SwaggerUiProperties swaggerUi = new SwaggerUiProperties();
 
 	public CachingProperties getCaching() {
 		return caching;
+	}
+
+	public EmailNotificationProperties getEmailNotifications() {
+		return emailNotifications;
 	}
 
 	public SwaggerUiProperties getSwaggerUi() {

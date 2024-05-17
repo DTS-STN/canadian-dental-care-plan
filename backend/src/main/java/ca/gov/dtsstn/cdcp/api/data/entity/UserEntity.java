@@ -20,6 +20,10 @@ import jakarta.persistence.OneToMany;
 @SuppressWarnings({ "serial" })
 public class UserEntity extends AbstractEntity {
 
+	@JoinColumn(name = "userId", nullable = false)
+	@OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
+	private Set<ConfirmationCodeEntity> confirmationCodes = new HashSet<>();
+
 	@Column(length = 256, nullable = true)
 	private String email;
 
@@ -37,6 +41,7 @@ public class UserEntity extends AbstractEntity {
 	@Builder.Constructor
 	public UserEntity(
 			@Nullable String id,
+			@Nullable Iterable<ConfirmationCodeEntity> confirmationCodes,
 			@Nullable String email,
 			@Nullable Boolean emailVerified,
 			@Nullable Iterable<UserAttributeEntity> userAttributes,
@@ -46,12 +51,25 @@ public class UserEntity extends AbstractEntity {
 			@Nullable Instant lastModifiedDate,
 			@Nullable Boolean isNew) {
 		super(id, createdBy, createdDate, lastModifiedBy, lastModifiedDate, isNew);
+
 		this.email = email;
 		this.emailVerified = emailVerified;
+
+		if (confirmationCodes != null) {
+			this.confirmationCodes = StreamSupport.stream(confirmationCodes.spliterator(), false).collect(Collectors.toSet());
+		}
 
 		if (userAttributes != null) {
 			this.userAttributes = StreamSupport.stream(userAttributes.spliterator(), false).collect(Collectors.toSet());
 		}
+	}
+
+	public Set<ConfirmationCodeEntity> getConfirmationCodes() {
+		return confirmationCodes;
+	}
+
+	public void setConfirmationCodes(Set<ConfirmationCodeEntity> confirmationCodes) {
+		this.confirmationCodes = confirmationCodes;
 	}
 
 	public String getEmail() {
@@ -82,6 +100,7 @@ public class UserEntity extends AbstractEntity {
 	public String toString() {
 		return new ToStringCreator(this)
 			.append("super", super.toString())
+			.append("confirmationCodes", confirmationCodes)
 			.append("email", email)
 			.append("emailVerified", emailVerified)
 			.append("userAttributes", userAttributes)

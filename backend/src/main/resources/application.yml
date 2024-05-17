@@ -109,6 +109,12 @@ application:
         # reduce excessive database calls
         expire-after-write: 1
         time-unit: minutes
+  email-notifications:
+    confirmation-codes:
+      expiry:
+        value: 24
+        time-unit: hours
+      length: 5
   swagger-ui:
     application-name: Canadian Dental Care Plan API
     contact-name: Digital Technology Solutions
