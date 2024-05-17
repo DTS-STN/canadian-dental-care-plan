@@ -407,6 +407,14 @@
                           "en": "/:lang/apply/:id/adult-child/contact-apply-child",
                           "fr": "/:lang/demander/:id/adulte-enfant/contact-demande-enfant"
                         }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/ineligible",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/ineligible.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/ineligible",
+                          "fr": "/:lang/demander/:id/adult-child/ineligible"
+                        }
                       }
                     ]
                   },
