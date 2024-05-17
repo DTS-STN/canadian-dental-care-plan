@@ -38,6 +38,41 @@ export function parseDateString(dateString: string, validate: boolean = true): {
 }
 
 /**
+ * Checks if a string is a validad date. Else returns false.
+ * @param dateString The date string to parse.
+ * @param pattern Format to check against.
+ * @param delimitter What to splice the dateString by.
+ * @returns Returns a boolean.
+ */
+export function isValidDate(dateString: string, pattern: string, delimitter: string): boolean {
+  const dateParts = dateString.split(delimitter);
+
+  if (dateParts.length !== 3) {
+    return false;
+  }
+
+  const { day, month, year } = parseDateValue(dateParts, pattern);
+
+  if (isNaN(year) || isNaN(month) || isNaN(day)) {
+    return false;
+  }
+
+  if (!isExists(year, month - 1, day)) {
+    return false;
+  }
+
+  try {
+    parse(dateString, pattern, new Date());
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+}
+
+/**
  * Custom hook to retrieve an array of months based on the provided locale and format.
  * @param locale - The locale to use for formatting the months.
  * @param format - The format for displaying the months.
@@ -67,4 +102,28 @@ export function getAgeFromDateString(date: string) {
   invariant(isValid(parsedDate), `date is invalid [${date}]`);
   invariant(isPast(parsedDate), `date must be in past [${date}]`);
   return differenceInYears(new Date(), parsedDate);
+}
+
+/**
+ * Checks if a string is a validad date. Else returns false.
+ * @param dateParts String[3] with the corresponding date components
+ * @param pattern Format to check against.
+ * @returns An object containing the parsed components (year, month, day). Returns { day: -1, month: -1, year: -1 } if the date does not exist or is invalid.
+ */
+function parseDateValue(dateParts: string[], pattern: string): { day: number; month: number; year: number } {
+  // Have to add the '+' because that is how TS isNaN works apparently
+  if (dateParts.filter((element) => isNaN(+element)).length > 0) {
+    return { day: -1, month: -1, year: -1 };
+  }
+
+  // TODO: TO FILL OUT OTHER DATE FORMATS
+  if (pattern == 'yyyy/mm/dd' || pattern == 'yyyy-mm-dd' || pattern == 'yyyymmdd') {
+    return { day: Number.parseInt(dateParts[2]), month: Number.parseInt(dateParts[1]), year: Number.parseInt(dateParts[0]) };
+  } else if (pattern == 'dd/mm/yyyy' || pattern == 'dd-mm-yyyy' || pattern == 'ddmmyyyy') {
+    return { day: Number.parseInt(dateParts[0]), month: Number.parseInt(dateParts[1]), year: Number.parseInt(dateParts[2]) };
+  } else if (pattern == 'mm/dd/yyyy' || pattern == 'mm-dd-yyyy' || pattern == 'mmddyyyy') {
+    return { day: Number.parseInt(dateParts[1]), month: Number.parseInt(dateParts[0]), year: Number.parseInt(dateParts[2]) };
+  } else {
+    return { day: -1, month: -1, year: -1 };
+  }
 }

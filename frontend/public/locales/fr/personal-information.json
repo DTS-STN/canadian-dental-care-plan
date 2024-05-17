@@ -5,6 +5,9 @@
       "personal-information": "(FR) Personal information"
     },
     "full-name": "(FR) Full name",
+    "date-of-birth": "(FR) Date of Birth",
+    "marital-status": "(FR)Marital Status",
+    "no-marital-status": "Pas d'état civil",
     "phone-number": "(FR) Phone number",
     "primary-phone-number": "(FR) Telephone number",
     "alternate-phone-number": "(FR) Alternate telephone number",

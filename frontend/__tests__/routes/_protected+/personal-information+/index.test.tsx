@@ -20,6 +20,7 @@ vi.mock('~/services/lookup-service.server', () => ({
     getPreferredLanguage: vi.fn().mockReturnValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' }),
     getAllCountries: vi.fn().mockReturnValue([{ code: 'SUP', nameEn: 'super country', nameFr: '(FR) super country' }]),
     getAllRegions: vi.fn().mockReturnValue([{ code: 'SP', country: { code: 'SUP', nameEn: 'super country', nameFr: '(FR) super country' }, nameEn: 'sample', nameFr: '(FR) sample' }]),
+    getAllMaritalStatuses: vi.fn().mockReturnValue([{ id: 'SINGLE', nameEn: 'Single', nameFr: 'Single but in french' }]),
   }),
 }));
 
@@ -39,6 +40,8 @@ vi.mock('~/services/session-service.server', () => ({
 
 vi.mock('~/utils/locale-utils.server', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+  getLocale: vi.fn().mockResolvedValue('en'),
+  getAltLanguage: vi.fn(),
 }));
 
 vi.mock('~/utils/env.server', () => ({
@@ -62,6 +65,8 @@ vi.mock('~/services/personal-information-service.server', () => ({
       lastName: 'Maverick',
       mailingAddress: '123 Mailing Street',
       phoneNumber: '(555) 555-5555',
+      birthDate: new Date('1950-10-11'),
+      maritalStatusId: 'SINGLE',
       getHomeAddress: vi.fn().mockReturnValue({
         address: 'address',
         city: 'mega-city',
@@ -92,7 +97,7 @@ describe('_gcweb-app.personal-information._index', () => {
       session.set('userInfoToken', { sin: '999999999' });
 
       const response = await loader({
-        request: new Request('http://localhost:3000/personal-information'),
+        request: new Request('http://localhost:3000/en/personal-information'),
         context: { session },
         params: {},
       });
@@ -106,7 +111,7 @@ describe('_gcweb-app.personal-information._index', () => {
       session.set('userInfoToken', { sin: '999999999' });
 
       const response = await loader({
-        request: new Request('http://localhost:3000/personal-information'),
+        request: new Request('http://localhost:3000/fr/personal-information'),
         context: { session },
         params: {},
       });
@@ -120,7 +125,7 @@ describe('_gcweb-app.personal-information._index', () => {
       session.set('userInfoToken', { sin: '999999999' });
 
       const response = await loader({
-        request: new Request('http://localhost:3000/personal-information'),
+        request: new Request('http://localhost:3000/en/personal-information'),
         context: { session },
         params: {},
       });
@@ -128,6 +133,7 @@ describe('_gcweb-app.personal-information._index', () => {
       const data = await response.json();
 
       expect(data).toEqual({
+        birthParsedFormat: 'January 10, 1950',
         countryList: [
           {
             code: 'SUP',
@@ -153,6 +159,7 @@ describe('_gcweb-app.personal-information._index', () => {
             nameFr: '(FR) sample',
           },
         ],
+        maritalStatusList: [{ id: 'SINGLE', nameEn: 'Single', nameFr: 'Single but in french' }],
         personalInformation: {
           clientNumber: '999999999',
           firstName: 'John',
@@ -161,6 +168,8 @@ describe('_gcweb-app.personal-information._index', () => {
           mailingAddress: '123 Mailing Street',
           phoneNumber: '(555) 555-5555',
           preferredLanguageId: '1033',
+          birthDate: '1950-10-11T00:00:00.000Z',
+          maritalStatusId: 'SINGLE',
         },
       });
     });
