@@ -1,7 +1,6 @@
 import moize from 'moize';
 import { z } from 'zod';
 
-import applicationTypesJson from '~/resources/power-platform/application-types.json';
 import clientFriendlyStatusesJson from '~/resources/power-platform/client-friendly-statuses.json';
 import countriesJson from '~/resources/power-platform/countries.json';
 import federalProgramsJson from '~/resources/power-platform/federal-programs.json';
@@ -102,7 +101,6 @@ function createLookupService() {
     LOOKUP_SVC_ALL_REGIONS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_SEX_AT_BIRTH_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_APPLICATION_TYPES_CACHE_TTL_SECONDS,
     ENGLISH_LANGUAGE_CODE,
     FRENCH_LANGUAGE_CODE,
   } = getEnv();
@@ -463,19 +461,6 @@ function createLookupService() {
     return clientFriendlyStatuses;
   }
 
-  async function getAllApplicationTypes() {
-    log.debug('Fetching all marital statuses');
-
-    const applicationTypes = applicationTypesJson.value[0].OptionSet.Options.map((o) => ({
-      id: o.Value.toString(),
-      nameEn: o.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label,
-      nameFr: o.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label,
-    }));
-
-    log.trace('Returning application types: [%j]', applicationTypes);
-    return applicationTypes;
-  }
-
   return {
     getAllAvoidedDentalCostTypes: moize(getAllAvoidedDentalCostTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_AVOIDED_DENTAL_COST_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllAvoidedDentalCostTypes memo') }),
     getAllBornTypes: moize(getAllBornTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllBornTypes memo') }),
@@ -499,6 +484,5 @@ function createLookupService() {
     getAllRegions: moize(getAllRegions, { maxAge: 1000 * LOOKUP_SVC_ALL_REGIONS_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllRegions memo') }),
     getAllSexAtBirthTypes: moize(getAllSexAtBirthTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_SEX_AT_BIRTH_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllSexAtBirthTypes memo') }),
     getPreferredLanguage: moize(getPreferredLanguage, { maxAge: 1000 * LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new PreferredLanguage memo') }),
-    getAllApplicationTypes: moize(getAllApplicationTypes, { maxAge: 1000 * LOOKUP_SVC_APPLICATION_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllApplicationTypes memo') }),
   };
 }

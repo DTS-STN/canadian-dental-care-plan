@@ -61,6 +61,11 @@ const serverEnv = z.object({
   ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default(""),
   I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
 
+  // applicant category codes
+  APPLICANT_CATEGORY_CODE_INDIVIDUAL: z.coerce.number().default(775170000),
+  APPLICANT_CATEGORY_CODE_FAMILY: z.coerce.number().default(775170001),
+  APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY: z.coerce.number().default(775170002),
+
   // lookup identifiers
   CANADA_COUNTRY_ID: z.string().trim().min(1).default('0cf5389e-97ae-eb11-8236-000d3af4bfc3'),
   COMMUNICATION_METHOD_EMAIL_ID: z.string().trim().min(1).default('775170000'),
@@ -159,7 +164,6 @@ const serverEnv = z.object({
   LOOKUP_SVC_ALL_REGIONS_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_SEX_AT_BIRTH_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_APPLICATION_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
 
   // OpenTelemetry/Dynatrace settings
