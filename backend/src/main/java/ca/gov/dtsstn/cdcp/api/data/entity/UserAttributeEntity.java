@@ -25,15 +25,15 @@ public class UserAttributeEntity extends AbstractEntity {
 
 	@Builder.Constructor
 	public UserAttributeEntity(
+			@Nullable Boolean isNew,
 			@Nullable String id,
-			@Nullable String name,
-			@Nullable String value,
 			@Nullable String createdBy,
 			@Nullable Instant createdDate,
 			@Nullable String lastModifiedBy,
 			@Nullable Instant lastModifiedDate,
-			@Nullable Boolean isNew) {
-		super(id, createdBy, createdDate, lastModifiedBy, lastModifiedDate, isNew);
+			@Nullable String name,
+			@Nullable String value) {
+		super(isNew, id, createdBy, createdDate, lastModifiedBy, lastModifiedDate);
 		this.name = name;
 		this.value = value;
 	}

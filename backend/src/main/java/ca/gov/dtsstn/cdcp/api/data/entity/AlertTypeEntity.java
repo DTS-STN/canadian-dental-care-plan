@@ -25,15 +25,15 @@ public class AlertTypeEntity extends AbstractEntity {
 
 	@Builder.Constructor
 	protected AlertTypeEntity(
+			@Nullable Boolean isNew,
 			@Nullable String id,
 			@Nullable String createdBy,
 			@Nullable Instant createdDate,
 			@Nullable String lastModifiedBy,
 			@Nullable Instant lastModifiedDate,
-			@Nullable Boolean isNew,
 			@Nullable String code,
 			@Nullable String description) {
-		super(id, createdBy, createdDate, lastModifiedBy, lastModifiedDate, isNew);
+		super(isNew, id, createdBy, createdDate, lastModifiedBy, lastModifiedDate);
 		this.code = code;
 		this.description = description;
 	}

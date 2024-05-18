@@ -14,11 +14,14 @@ import jakarta.persistence.ManyToOne;
 @SuppressWarnings({ "serial" })
 public class SubscriptionEntity extends AbstractEntity {
 
-	@Column(length = 9, nullable = false, updatable = false)
-	private String userId;
+	@ManyToOne
+	private AlertTypeEntity alertType;
 
 	@Column(length = 256, nullable = false)
 	private String email;
+
+	@Column(nullable = false)
+	private Long preferredLanguage ;
 
 	@Column(nullable = true)
 	private Boolean registered;
@@ -26,11 +29,8 @@ public class SubscriptionEntity extends AbstractEntity {
 	@Column(nullable = true)
 	private Boolean subscribed;
 
-	@Column(nullable = false)
-	private Long preferredLanguage ;
-
-	@ManyToOne
-	private AlertTypeEntity alertType;
+	@Column(length = 9, nullable = false, updatable = false)
+	private String userId;
 
 	public SubscriptionEntity() {
 		super();
@@ -38,33 +38,33 @@ public class SubscriptionEntity extends AbstractEntity {
 
 	@Builder.Constructor
 	protected SubscriptionEntity(
+			@Nullable Boolean isNew,
 			@Nullable String id,
 			@Nullable String createdBy,
 			@Nullable Instant createdDate,
 			@Nullable String lastModifiedBy,
 			@Nullable Instant lastModifiedDate,
-			@Nullable Boolean isNew,
-			@Nullable String userId,
+			@Nullable AlertTypeEntity alertType,
 			@Nullable String email,
+			@Nullable Long preferredLanguage,
 			@Nullable Boolean registered,
 			@Nullable Boolean subscribed,
-			@Nullable Long preferredLanguage,
-			@Nullable AlertTypeEntity alertType) {
-		super(id, createdBy, createdDate, lastModifiedBy, lastModifiedDate, isNew);
-		this.userId = userId;
+			@Nullable String userId) {
+		super(isNew, id, createdBy, createdDate, lastModifiedBy, lastModifiedDate);
+		this.alertType = alertType;
 		this.email = email;
+		this.preferredLanguage = preferredLanguage;
 		this.registered = registered;
 		this.subscribed = subscribed;
-		this.preferredLanguage = preferredLanguage;
-		this.alertType = alertType;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public AlertTypeEntity getAlertType() {
+		return alertType;
+	}
+
+	public void setAlertType(AlertTypeEntity alertType) {
+		this.alertType = alertType;
 	}
 
 	public String getEmail() {
@@ -73,6 +73,14 @@ public class SubscriptionEntity extends AbstractEntity {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Long getPreferredLanguage() {
+		return preferredLanguage;
+	}
+
+	public void setPreferredLanguage(Long preferredLanguage) {
+		this.preferredLanguage = preferredLanguage;
 	}
 
 	public Boolean getRegistered() {
@@ -91,32 +99,24 @@ public class SubscriptionEntity extends AbstractEntity {
 		this.subscribed = subscribed;
 	}
 
-	public Long getPreferredLanguage() {
-		return preferredLanguage;
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setPreferredLanguage(Long preferredLanguage) {
-		this.preferredLanguage = preferredLanguage;
-	}
-
-	public AlertTypeEntity getAlertType() {
-		return alertType;
-	}
-
-	public void setAlertType(AlertTypeEntity alertType) {
-		this.alertType = alertType;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	@Override
 	public String toString() {
 		return new ToStringCreator(this)
 			.append("super", super.toString())
-			.append("userId", userId)
+			.append("alertType", alertType)
 			.append("email", email)
+			.append("preferredLanguage", preferredLanguage)
 			.append("registered", registered)
 			.append("subscribed", subscribed)
-			.append("preferredLanguage", preferredLanguage)
-			.append("alertType", alertType)
+			.append("userId", userId)
 			.toString();
 	}
 

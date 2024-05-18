@@ -40,17 +40,17 @@ public class UserEntity extends AbstractEntity {
 
 	@Builder.Constructor
 	public UserEntity(
+			@Nullable Boolean isNew,
 			@Nullable String id,
-			@Nullable Iterable<ConfirmationCodeEntity> confirmationCodes,
-			@Nullable String email,
-			@Nullable Boolean emailVerified,
-			@Nullable Iterable<UserAttributeEntity> userAttributes,
 			@Nullable String createdBy,
 			@Nullable Instant createdDate,
 			@Nullable String lastModifiedBy,
 			@Nullable Instant lastModifiedDate,
-			@Nullable Boolean isNew) {
-		super(id, createdBy, createdDate, lastModifiedBy, lastModifiedDate, isNew);
+			@Nullable Iterable<ConfirmationCodeEntity> confirmationCodes,
+			@Nullable String email,
+			@Nullable Boolean emailVerified,
+			@Nullable Iterable<UserAttributeEntity> userAttributes) {
+		super(isNew, id, createdBy, createdDate, lastModifiedBy, lastModifiedDate);
 
 		this.email = email;
 		this.emailVerified = emailVerified;

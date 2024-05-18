@@ -25,15 +25,15 @@ public class ConfirmationCodeEntity extends AbstractEntity {
 
 	@Builder.Constructor
 	protected ConfirmationCodeEntity(
+			@Nullable Boolean isNew,
 			@Nullable String id,
-			@Nullable String code,
-			@Nullable Instant expiryDate,
 			@Nullable String createdBy,
 			@Nullable Instant createdDate,
 			@Nullable String lastModifiedBy,
 			@Nullable Instant lastModifiedDate,
-			@Nullable Boolean isNew) {
-		super(id, createdBy, createdDate, lastModifiedBy, lastModifiedDate, isNew);
+			@Nullable String code,
+			@Nullable Instant expiryDate) {
+		super(isNew, id, createdBy, createdDate, lastModifiedBy, lastModifiedDate);
 		this.code = code;
 		this.expiryDate = expiryDate;
 	}
