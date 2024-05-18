@@ -3,8 +3,7 @@ package ca.gov.dtsstn.cdcp.api.web.v1.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.util.Optional;
-
+import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.CollectionModel;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ca.gov.dtsstn.cdcp.api.service.AlertTypeService;
 import ca.gov.dtsstn.cdcp.api.service.SubscriptionService;
-import ca.gov.dtsstn.cdcp.api.service.domain.AlertType;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.mapper.SubscriptionModelAssembler;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.mapper.SubscriptionModelMapper;
@@ -37,27 +35,24 @@ public class UsersController {
 
 	private static final Logger log = LoggerFactory.getLogger(UsersController.class);
 
+	private final AlertTypeService alertTypeService;
+
 	private final SubscriptionModelAssembler subscriptionModelAssembler;
+
+	private final SubscriptionModelMapper subscriptionModelMapper = Mappers.getMapper(SubscriptionModelMapper.class);
 
 	private final SubscriptionService subscriptionService;
 
-	private final SubscriptionModelMapper mapper;
-
-	private final AlertTypeService alertTypeService;
-
 	public UsersController(
-				SubscriptionModelAssembler subscriptionModelAssembler, 
-				SubscriptionService subscriptionService, 
-				SubscriptionModelMapper mapper, 
-				AlertTypeService alertTypeService) {
+			AlertTypeService alertTypeService,
+			SubscriptionModelAssembler subscriptionModelAssembler,
+			SubscriptionService subscriptionService) {
+		Assert.notNull(alertTypeService, "alertTypeService is required; it must not be null");
 		Assert.notNull(subscriptionModelAssembler, "subscriptionModelAssembler is required; it must not be null");
 		Assert.notNull(subscriptionService, "subscriptionService is required; it must not be null");
-		Assert.notNull(mapper, "mapper is required; it must not be null");
-		Assert.notNull(alertTypeService, "alertTypeService is required; it must not be null");
+		this.alertTypeService = alertTypeService;
 		this.subscriptionModelAssembler = subscriptionModelAssembler;
 		this.subscriptionService = subscriptionService;
-		this.mapper = mapper;
-		this.alertTypeService = alertTypeService;
 	}
 
 	@GetMapping({ "/{userId}/subscriptions" })
@@ -69,41 +64,45 @@ public class UsersController {
 		final var subscriptions = subscriptionModelAssembler.toCollectionModel(subscriptionService.getSubscriptionsByUserId(userId));
 		final var selfLink = linkTo(methodOn(getClass()).getSubscriptionsByUserId(userId)).withSelfRel();
 		return subscriptionModelAssembler.wrapCollection(subscriptions, SubscriptionModel.class).add(selfLink);
-	}	
+	}
 
 
 	@PostMapping({ "/{userId}/subscriptions" })
-	@Operation(summary = "Create a subscription for a user.", operationId = "user-subscriptions-create")
+	@Operation(summary = "Create a subscription for a user.", operationId = "create-user-subscriptions")
 	@ApiResponse(responseCode = "204", description = "The request has been successfully processed.")
-	public void create(
-			@RequestBody(required = true)
-			SubscriptionModel createSubscriptionRequest,
+	public void createSubscriptionForUser(
 			@NotBlank(message = "userId must not be null or blank")
 			@Parameter(description = "The user id of the user.", example = "000000000", required = true)
-			@PathVariable String userId) throws Exception {
+			@PathVariable String userId,
+
+			@RequestBody SubscriptionModel createSubscriptionRequest) {
 		// TODO -- throw better exception
-		final var alertType = alertTypeService.readByCode(createSubscriptionRequest.getAlertType()).orElseThrow(() -> new Exception("alertType not found"));
-		final var subscription = mapper.toDomain(createSubscriptionRequest, alertType.getId());
+		final var alertType = alertTypeService.readByCode(createSubscriptionRequest.getAlertType()).orElseThrow(() -> new RuntimeException("alertType not found"));
+		final var subscription = subscriptionModelMapper.toDomain(createSubscriptionRequest, alertType.getId());
+
 		log.debug("Creating subscription: {}", subscription);
 		subscriptionService.create(subscription);
 	}
 
 	@PostMapping({ "/{userId}/subscriptions/{subscriptionId}" })
-	@Operation(summary = "Update a subscription for a user.", operationId = "user-subscriptions-update")
+	@Operation(summary = "Update a subscription for a user.", operationId = "update-user-subscriptions")
 	@ApiResponse(responseCode = "204", description = "The request has been successfully processed.")
-	public void update(
-			@RequestBody(required = true)
-			SubscriptionModel updateSubscriptionRequest,
+	public void updateSubscriptionForUser(
 			@NotBlank(message = "userId must not be null or blank")
 			@Parameter(description = "The user id of the user.", example = "000000000", required = true)
 			@PathVariable String userId,
+
 			@NotBlank(message = "subscriptionId must not be null or blank")
 			@Parameter(description = "The id of the subscription to update. ", required = true)
-			@PathVariable String subscriptionId) throws Exception {
+			@PathVariable String subscriptionId,
+
+			@RequestBody SubscriptionModel updateSubscriptionRequest) {
 		// TODO -- throw better exception
-		final var alertType = alertTypeService.readByCode(updateSubscriptionRequest.getAlertType()).orElseThrow(() -> new Exception("alertType not found"));
-		final var subscription = mapper.toDomain(updateSubscriptionRequest, alertType.getId());
+		final var alertType = alertTypeService.readByCode(updateSubscriptionRequest.getAlertType()).orElseThrow(() -> new RuntimeException("alertType not found"));
+		final var subscription = subscriptionModelMapper.toDomain(updateSubscriptionRequest, alertType.getId());
+
 		log.debug("Updating subscription: {}", subscription);
 		subscriptionService.update(subscription);
-	}	
+	}
+
 }

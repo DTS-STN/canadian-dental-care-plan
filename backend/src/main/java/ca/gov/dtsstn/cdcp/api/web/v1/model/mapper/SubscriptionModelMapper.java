@@ -9,7 +9,7 @@ import ca.gov.dtsstn.cdcp.api.service.domain.Subscription;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionModel;
 import jakarta.annotation.Nullable;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface SubscriptionModelMapper {
 
 	@Nullable

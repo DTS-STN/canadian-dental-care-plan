@@ -2,6 +2,7 @@ package ca.gov.dtsstn.cdcp.api.service;
 
 import java.util.Optional;
 
+import org.mapstruct.factory.Mappers;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -15,14 +16,12 @@ import ca.gov.dtsstn.cdcp.api.service.domain.mapper.AlertTypeMapper;
 @CacheConfig(cacheNames = { "alert-types" })
 public class AlertTypeService {
 
-	private final AlertTypeMapper alertTypeMapper;
+	private final AlertTypeMapper alertTypeMapper = Mappers.getMapper(AlertTypeMapper.class);
 
 	private final AlertTypeRepository alertTypeRepository;
 
-	public AlertTypeService(AlertTypeMapper alertTypeMapper, AlertTypeRepository alertTypeRepository) {
-		Assert.notNull(alertTypeMapper, "alertTypeMapper is required; it must not be null");
+	public AlertTypeService(AlertTypeRepository alertTypeRepository) {
 		Assert.notNull(alertTypeRepository, "alertTypeRepository is required; it must not be null");
-		this.alertTypeMapper = alertTypeMapper;
 		this.alertTypeRepository = alertTypeRepository;
 	}
 

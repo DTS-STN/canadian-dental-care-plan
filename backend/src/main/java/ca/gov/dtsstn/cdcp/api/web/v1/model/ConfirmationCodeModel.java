@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 
 @Schema(name = "ConfirmationCode")
-@JsonPropertyOrder({"id", "code", "expiryDate", "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate"})
+@JsonPropertyOrder({ "id", "code", "expiryDate", "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate" })
 public class ConfirmationCodeModel extends BaseResourceModel<ConfirmationCodeModel> {
 
 	private String code;

@@ -1,6 +1,7 @@
 package ca.gov.dtsstn.cdcp.api.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mapstruct.factory.Mappers;
 import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,7 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ca.gov.dtsstn.cdcp.api.config.properties.ApplicationProperties;
 import ca.gov.dtsstn.cdcp.api.data.entity.UserEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.repository.UserRepository;
-import ca.gov.dtsstn.cdcp.api.service.domain.mapper.ConfirmationCodeMapper;
+import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUser;
 
 @ExtendWith({ MockitoExtension.class })
 class UserServiceTests {
@@ -35,12 +35,32 @@ class UserServiceTests {
 
 	@BeforeEach
 	void setUp() {
-		when(applicationProperties.getEmailNotifications().getConfirmationCodes().getLength()).thenReturn(8);
-		when(applicationProperties.getEmailNotifications().getConfirmationCodes().getExpiry().getTimeUnit()).thenReturn(ChronoUnit.HOURS);
-		when(applicationProperties.getEmailNotifications().getConfirmationCodes().getExpiry().getValue()).thenReturn(24);
+		this.userService = new UserService(applicationProperties, userRepository);
+	}
 
-		final var confirmationCodeMapper = Mappers.getMapper(ConfirmationCodeMapper.class);
-		this.userService = new UserService(applicationProperties, confirmationCodeMapper, userRepository);
+	@Test()
+	@DisplayName("Test userService.createUser(..) with null user")
+	void testCreateUser_NullUser() {
+		assertThrowsExactly(IllegalArgumentException.class, () -> userService.createUser(null), "user is required; it must not be null");
+	}
+
+	@Test()
+	@DisplayName("Test userService.createUser(..) with non-null user.id")
+	void testCreateUser_NonNullUserId() {
+		assertThrowsExactly(IllegalArgumentException.class, () -> userService.createUser(ImmutableUser.builder().id("id").build()), "user.id must be null when creating new instance");
+	}
+
+	@Test()
+	@DisplayName("Test userService.createUser(..)")
+	void testCreateUser() {
+		when(userRepository.save(any())).thenReturn(new UserEntityBuilder().build());
+		assertThat(userService.createUser(ImmutableUser.builder().build())).isNotNull();
+	}
+
+	@Test()
+	@DisplayName("Test userService.createConfirmationCodeForUser(..) with null userId")
+	void testCreateConfirmationCodeForUser_NullUserId() {
+		assertThrowsExactly(IllegalArgumentException.class, () -> userService.createConfirmationCodeForUser(""), "user is required; it must not be null");
 	}
 
 	@Test
@@ -48,6 +68,9 @@ class UserServiceTests {
 	void testCreateConfirmationCodeForUser() {
 		final var mockUser = new UserEntityBuilder().build();
 
+		when(applicationProperties.getEmailNotifications().getConfirmationCodes().getLength()).thenReturn(8);
+		when(applicationProperties.getEmailNotifications().getConfirmationCodes().getExpiry().getTimeUnit()).thenReturn(ChronoUnit.HOURS);
+		when(applicationProperties.getEmailNotifications().getConfirmationCodes().getExpiry().getValue()).thenReturn(24);
 		when(userRepository.findById(any())).thenReturn(Optional.of(mockUser));
 		when(userRepository.save(any())).thenReturn(mockUser);
 

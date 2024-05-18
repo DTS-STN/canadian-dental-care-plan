@@ -8,7 +8,7 @@ import ca.gov.dtsstn.cdcp.api.service.domain.ConfirmationCode;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.ConfirmationCodeModel;
 import jakarta.annotation.Nullable;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface ConfirmationCodeModelMapper {
 
 	@Nullable

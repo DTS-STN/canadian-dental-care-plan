@@ -3,6 +3,7 @@ package ca.gov.dtsstn.cdcp.api.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -13,39 +14,36 @@ import ca.gov.dtsstn.cdcp.api.service.domain.mapper.SubscriptionMapper;
 @Service
 public class SubscriptionService {
 
-	private final SubscriptionMapper mapper;
+	private final SubscriptionMapper subscriptionMapper = Mappers.getMapper(SubscriptionMapper.class);
 
-	private final SubscriptionRepository repository;
+	private final SubscriptionRepository subscriptionRepository;
 
-	public SubscriptionService(SubscriptionMapper mapper, SubscriptionRepository repository) {
-		Assert.notNull(mapper, "mapper is required; it must not be null");
-		Assert.notNull(repository, "repository is required; it must not be null");
-		this.mapper = mapper;
-		this.repository = repository;
+	public SubscriptionService(SubscriptionRepository repository) {
+		Assert.notNull(repository, "subscriptionRepository is required; it must not be null");
+		this.subscriptionRepository = repository;
 	}
 
 	public Subscription create(Subscription subscription) {
 		Assert.notNull(subscription, "subscription is required; it must not be null");
 		Assert.isNull(subscription.getId(), "subscription.id must be null when creating new instance");
 
-		return mapper.fromEntity(repository.save(mapper.toEntity(subscription)));
+		return subscriptionMapper.fromEntity(subscriptionRepository.save(subscriptionMapper.toEntity(subscription)));
 	}
 
 	public Subscription update(Subscription subscription) {
 		Assert.notNull(subscription, "subscription is required; it must not be null");
-		final var originalSubscription = repository.findById(subscription.getId()).orElseThrow();
-		final var updatedSubscription = mapper.fromEntity(repository.save(mapper.update(subscription, originalSubscription)));
-		return updatedSubscription;
+		final var originalSubscription = subscriptionRepository.findById(subscription.getId()).orElseThrow();
+		return subscriptionMapper.fromEntity(subscriptionRepository.save(subscriptionMapper.update(subscription, originalSubscription)));
 	}
 
 	public Optional<Subscription> getSubscriptionById(String id) {
 		Assert.hasText(id, "id is required; it must not be null or blank");
-		return repository.findById(id).map(mapper::fromEntity);
+		return subscriptionRepository.findById(id).map(subscriptionMapper::fromEntity);
 	}
 
 	public List<Subscription> getSubscriptionsByUserId(String userId) {
 		Assert.hasText(userId, "userId is required; it must not be null or blank");
-		return mapper.fromEntity(repository.findByUserId(userId));
+		return subscriptionRepository.findByUserId(userId).stream().map(subscriptionMapper::fromEntity).toList();
 	}
 
 }

@@ -9,10 +9,13 @@ import jakarta.annotation.Nullable;
 public interface Subscription extends BaseDomainObject {
 
 	@Nullable
-	String getUserId();
+	AlertType getAlertType();
 
 	@Nullable
 	String getEmail();
+
+	@Nullable
+	Long  getPreferredLanguage();
 
 	@Nullable
 	Boolean getRegistered();
@@ -21,9 +24,6 @@ public interface Subscription extends BaseDomainObject {
 	Boolean getSubscribed();
 
 	@Nullable
-	Long  getPreferredLanguage();
-
-	@Nullable
-	AlertType getAlertType();
+	String getUserId();
 
 }

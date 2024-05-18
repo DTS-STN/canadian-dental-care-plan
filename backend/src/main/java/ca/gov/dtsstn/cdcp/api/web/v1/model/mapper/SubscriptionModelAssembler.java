@@ -1,5 +1,6 @@
 package ca.gov.dtsstn.cdcp.api.web.v1.model.mapper;
 
+import org.mapstruct.factory.Mappers;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -12,12 +13,10 @@ import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionModel;
 @Component
 public class SubscriptionModelAssembler extends AbstractModelAssembler<Subscription, SubscriptionModel> {
 
-	private final SubscriptionModelMapper subscriptionModelMapper;
+	private final SubscriptionModelMapper subscriptionModelMapper = Mappers.getMapper(SubscriptionModelMapper.class);
 
-	protected SubscriptionModelAssembler(PagedResourcesAssembler<Subscription> pagedResourcesAssembler, SubscriptionModelMapper subscriptionModelMapper) {
+	protected SubscriptionModelAssembler(PagedResourcesAssembler<Subscription> pagedResourcesAssembler) {
 		super(SubscriptionsController.class, SubscriptionModel.class, pagedResourcesAssembler);
-		Assert.notNull(subscriptionModelMapper, "subscriptionModelMapper is required; it must not be null");
-		this.subscriptionModelMapper = subscriptionModelMapper;
 	}
 
 	@Override
