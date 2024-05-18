@@ -10,6 +10,11 @@ import org.springframework.context.annotation.Configuration;
 
 import ca.gov.dtsstn.cdcp.api.cache.CaffeineCacheFactory;
 
+/**
+ * Configuration class for caching.
+ *
+ * This class enables caching and defines any caffeine caches required by the application.
+ */
 @Configuration
 @EnableCaching
 @ConditionalOnProperty(name = { "application.caching.enabled" }, matchIfMissing = true)

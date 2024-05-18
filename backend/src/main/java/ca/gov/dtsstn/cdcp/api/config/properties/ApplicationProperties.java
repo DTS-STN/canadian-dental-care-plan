@@ -4,6 +4,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
 
+/**
+ * Configuration properties for the application.
+ * <p>
+ * These properties are loaded from the `application.yml` file.
+ */
 @Validated
 @ConfigurationProperties("application")
 public class ApplicationProperties {

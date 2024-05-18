@@ -8,11 +8,21 @@ import org.springframework.validation.annotation.Validated;
 
 import jakarta.validation.constraints.Min;
 
+/**
+ * Caching properties for the application.
+ */
 @Validated
 public class CachingProperties {
 
+	/**
+	 * Whether or not caching is enabled or disabled globally.
+	 * Defaults to {@code true}.
+	 */
 	private boolean enabled = true;
 
+	/**
+	 * A map of cache names to their corresponding properties.
+	 */
 	private final Map<String, CacheProperties> caches = new HashMap<>();
 
 	public Map<String, CacheProperties> getCaches() {
@@ -27,22 +37,51 @@ public class CachingProperties {
 		this.enabled = enabled;
 	}
 
+	/**
+	 * Configuration properties for a specific cache.
+	 */
 	public static class CacheProperties {
 
+		/**
+		 * The time in the specified {@code timeUnit} after which an entry
+		 * should expire, based on the last time it was accessed.
+		 * Must be a non-negative integer.
+		 */
 		@Min(0)
 		private Long expireAfterAccess;
 
+		/**
+		 * The time in the specified {@code timeUnit} after which an entry
+		 * should expire based on the last time it was modified.
+		 * Must be a non-negative integer.
+		 */
 		@Min(0)
 		private Long expireAfterWrite;
 
+		/**
+		 * The initial capacity of the cache.
+		 * Must be a non-negative integer.
+		 */
 		@Min(0)
 		private Integer initialCapacity;
 
+		/**
+		 * The maximum size of the cache.
+		 * Must be a non-negative integer.
+		 */
 		@Min(0)
 		private Integer maximumSize;
 
+		/**
+		 * Whether or not to record statistics for the cache.
+		 * Defaults to {@ true}.
+		 */
 		private boolean recordStats = true;
 
+		/**
+		 * The time unit used for the {@code expireAfterAccess} and {@code expireAfterWrite} fields.
+		 * Defaults to {@code TimeUnit.MINUTES}.
+		 */
 		private TimeUnit timeUnit = TimeUnit.MINUTES;
 
 		public Long getExpireAfterAccess() {

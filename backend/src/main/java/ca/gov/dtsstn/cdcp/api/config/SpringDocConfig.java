@@ -13,6 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ca.gov.dtsstn.cdcp.api.config.properties.ApplicationProperties;
 import io.swagger.v3.oas.models.info.Contact;
 
+/**
+ * This class configures SpringDoc and customizes the OpenAPI documentation.
+ */
 @Configuration
 public class SpringDocConfig {
 
@@ -26,6 +29,9 @@ public class SpringDocConfig {
 
 	@Autowired ObjectMapper objectMapper;
 
+	/**
+	 * Creates an {@link OpenApiCustomizer} bean that customizes the OpenAPI documentation.
+	 */
 	@Bean OpenApiCustomizer openApiCustomizer() {
 		log.info("Creating 'openApiCustomizer' bean");
 
@@ -36,10 +42,13 @@ public class SpringDocConfig {
 				.url(applicationProperties.getSwaggerUi().getContactUrl()))
 			.description(applicationProperties.getSwaggerUi().getDescription())
 			.termsOfService(applicationProperties.getSwaggerUi().getTosUrl())
-			.version(getApplicationVersion(gitProperties));
+			.version(getApplicationVersion());
 	}
 
-	protected String getApplicationVersion(GitProperties gitProperties) {
+	/**
+	 * Generates the application version string based on Git properties.
+	 */
+	protected String getApplicationVersion() {
 		return "v%s (%s)".formatted(gitProperties.get("build.version"), gitProperties.getShortCommitId());
 	}
 

@@ -10,13 +10,12 @@ import org.hibernate.id.IdentifierGenerator;
  * A Hibernate {@link IdentifierGenerator} that will generate a string-representation of a {@link UUID}.
  * <p>
  * Usage example:
- *
  * <pre>
- * &#64;Id
- * &#64;Column(nullable = false, updatable = false)
- * &#64;GeneratedValue(generator = "uuid-generator")
- * &#64;GenericGenerator(name = "uuid-generator", strategy = UuidGenerator.STRATEGY)
- * private String id;
+ * {@code @Id}
+ * {@code @Column(nullable = false, updatable = false)}
+ * {@code @GeneratedValue(generator = "uuid-generator")}
+ * {@code @GenericGenerator(name = "uuid-generator", strategy = UuidGenerator.STRATEGY)}
+ * {@code private String id;}
  * </pre>
  */
 @SuppressWarnings({ "serial" })

@@ -25,8 +25,8 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
 
 /**
- *
- * Base class for all {@link Entity} classes. Provides tombstone columns that are common to all database tables:
+ * Base class for all {@link Entity} classes.
+ * Provides tombstone columns that are common to all database tables:
  *
  * <li>{@code id}
  * <li>{@code createdBy}

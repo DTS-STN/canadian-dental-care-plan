@@ -11,27 +11,24 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
  * A {@link SmartFactoryBean} that generates {@link CaffeineCache} instances.
- *
- * <p>This factory exists because Caffeine caches do not work well
+ * <p>
+ * This factory exists because Caffeine caches do not work well
  * with Spring Boot's property binding mechanisms. Using this factory
  * makes it possible to use configuration properties to configure
  * each cache at runtime via {@code application.yml}.
- *
- * <p>Usage:
- *
+ * <p>
+ * Usage:
  * <pre>
- * 	application:
- * 	  caches:
- * 	    my-cache:
- * 	      expire-after-write: 30
- * 	      time-unit: minutes
- * </pre>
+ * application:
+ *   caches:
+ *     my-cache:
+ *       expire-after-write: 30
+ *       time-unit: minutes
  *
- * <pre>
- * 	{@code @ConfigurationProperties("application.caches.my-cache")}
- * 	{@code @Bean CaffeineCacheFactory myCache()} {
- * 		return new CaffeineCacheFactory("my-cache");
- * 	}
+ * {@code @ConfigurationProperties("application.caches.my-cache")}
+ * {@code @Bean CaffeineCacheFactory myCache()} {
+ *   return new CaffeineCacheFactory("my-cache");
+ * }
  * </pre>
  */
 public class CaffeineCacheFactory implements SmartFactoryBean<CaffeineCache> {
