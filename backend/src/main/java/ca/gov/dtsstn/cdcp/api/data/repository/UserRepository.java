@@ -6,9 +6,11 @@ import java.util.Optional;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import ca.gov.dtsstn.cdcp.api.data.entity.UserEntity;
 
+@Repository
 public interface UserRepository extends JpaRepository<UserEntity, String> {
 
 	List<UserEntity> findByEmail(String email);
