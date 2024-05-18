@@ -8,6 +8,7 @@ import org.springframework.hateoas.server.core.Relation;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import ca.gov.dtsstn.cdcp.api.web.model.BaseResourceModel;
+import ca.gov.dtsstn.cdcp.api.web.validation.AlertTypeCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 
@@ -16,6 +17,7 @@ import jakarta.annotation.Nullable;
 @JsonPropertyOrder({ "id", "alertType",	"email", "preferredLanguage", "registered", "subscribed", "userId", "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate" })
 public class SubscriptionModel extends BaseResourceModel<SubscriptionModel> {
 
+	@AlertTypeCode(message = "alertType is invalid or unknown")
 	private String alertType;
 
 	private String email;

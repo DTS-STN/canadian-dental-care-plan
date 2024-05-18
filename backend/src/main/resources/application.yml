@@ -92,6 +92,8 @@ server:
       - text/javascript
       - text/plain
       - text/xml
+  error:
+    include-stacktrace: never 
   shutdown: graceful
 
 ---

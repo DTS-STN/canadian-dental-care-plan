@@ -1,6 +1,7 @@
 package ca.gov.dtsstn.cdcp.api.service;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -70,6 +71,11 @@ public class UserService {
 		return userRepository.save(user).getConfirmationCodes().stream()
 			.filter(byCode(confirmationCode.getCode())).findFirst()
 			.map(confirmationCodeMapper::fromEntity).orElseThrow();
+	}
+
+	public Optional<User> getUserById(String id) {
+		Assert.hasText(id, "id is required; it must not be null or blank");
+		return userRepository.findById(id).map(userMapper::fromEntity);
 	}
 
 	private Predicate<ConfirmationCodeEntity> byCode(String code) {
