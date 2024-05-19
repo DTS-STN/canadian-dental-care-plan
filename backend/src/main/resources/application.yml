@@ -19,11 +19,6 @@ spring:
       pageable:
         one-indexed-parameters: true
         max-page-size: 20
-  devtools:
-    livereload:
-      enabled: false
-  main:
-    allow-bean-definition-overriding: true
   datasource:
     generate-unique-name: false
     url: jdbc:h2:mem:test;COLLATION=ENGLISH STRENGTH PRIMARY;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;MODE=PostgreSQL
@@ -33,10 +28,18 @@ spring:
       max-lifetime: 1800000
       maximum-pool-size: 10
       minimum-idle: 10
+  devtools:
+    livereload:
+      enabled: false
   flyway: # see org.springframework.boot.autoconfigure.flyway.FlwayProperties
     locations: classpath:db-migrations/common, classpath:db-migrations/{vendor}
     sql-migration-prefix: v
     sql-migration-separator: '-'
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
   jackson:
     default-property-inclusion: non-null
     mapper:
@@ -53,6 +56,19 @@ spring:
       '[hibernate.jdbc.batch_size]': 100
       '[hibernate.order_inserts]': true
       '[hibernate.order_updates]': true
+  main:
+    allow-bean-definition-overriding: true
+  security:
+    oauth2:
+      #
+      # ⚠️ Spring Security's resource server settings must be configured
+      # externally when `application.security.enabled` is set to `true`
+      #
+      resourceserver:
+        jwt:
+          audiences: 00000000-0000-0000-0000-000000000000
+          issuer-uri: https://login.microsoftonline.com/00000000-0000-0000-0000-000000000000/v2.0
+          jwk-set-uri: https://login.microsoftonline.com/00000000-0000-0000-0000-000000000000/discovery/v2.0/keys
 
 ---
 
@@ -98,6 +114,18 @@ server:
 
 ---
 
+springdoc:
+  swagger-ui:
+    #
+    # ⚠️ SpringDoc OAuth settings must be configured externally
+    # when `application.security.enabled` is set to `true`
+    #
+    oauth:
+      client-id: api://api.example.com
+      scopes: api://api.example.com/.default 
+
+---
+
 #
 # Application configuration properties.
 #
@@ -121,6 +149,13 @@ application:
     application-name: Canadian Dental Care Plan API
     contact-name: Digital Technology Solutions
     contact-url: https://github.com/dts-stn/canadian-dental-care-plan/
-    description: |
-      This OpenAPI document describes the key areas where developers typically engage with this API.
+    description: This OpenAPI document describes the key areas where developers typically engage with this API.
     tos-url: https://www.canada.ca/en/transparency/terms.html
+    #
+    # ⚠️ Swagger UI authentication settings must be configured
+    # externally when `application.security.enabled` is set to `true`
+    #
+    authentication:
+      client-id: api://api.example.com
+      authorization-url: https://login.microsoftonline.com/00000000-0000-0000-0000-000000000000/oauth2/v2.0/authorize
+      token-url: https://login.microsoftonline.com/00000000-0000-0000-0000-000000000000/oauth2/v2.0/token

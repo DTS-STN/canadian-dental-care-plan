@@ -17,12 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import ca.gov.dtsstn.cdcp.api.config.WebSecurityConfig;
 import ca.gov.dtsstn.cdcp.api.service.AlertTypeService;
 import ca.gov.dtsstn.cdcp.api.service.SubscriptionService;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
@@ -31,6 +33,7 @@ import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUserAttribute;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.mapper.SubscriptionModelAssembler;
 
 @ActiveProfiles("test")
+@Import({ WebSecurityConfig.class })
 @WebMvcTest({ UsersController.class })
 @ComponentScan({ "ca.gov.dtsstn.cdcp.api.web.v1.model.mapper" })
 class UsersControllerIT {

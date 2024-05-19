@@ -20,6 +20,9 @@ public class ApplicationProperties {
 	private final EmailNotificationProperties emailNotifications = new EmailNotificationProperties();
 
 	@NestedConfigurationProperty
+	private final SecurityProperties security = new SecurityProperties();
+
+	@NestedConfigurationProperty
 	private final SwaggerUiProperties swaggerUi = new SwaggerUiProperties();
 
 	public CachingProperties getCaching() {
@@ -28,6 +31,10 @@ public class ApplicationProperties {
 
 	public EmailNotificationProperties getEmailNotifications() {
 		return emailNotifications;
+	}
+
+	public SecurityProperties getSecurity() {
+		return security;
 	}
 
 	public SwaggerUiProperties getSwaggerUi() {

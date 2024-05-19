@@ -1,8 +1,10 @@
 package ca.gov.dtsstn.cdcp.api.config.properties;
 
 import org.hibernate.validator.constraints.URL;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
 
+import io.swagger.v3.oas.models.security.Scopes;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -19,6 +21,12 @@ public class SwaggerUiProperties {
 	 */
 	@NotBlank
 	private String applicationName;
+
+	/**
+	 * Authentication configuration for Swagger UI.
+	 */
+	@NestedConfigurationProperty
+	private final AuthenticationProperties authentication = new AuthenticationProperties();
 
 	/**
 	 * The name of the contact person or team for the application.
@@ -62,6 +70,10 @@ public class SwaggerUiProperties {
 		this.applicationName = applicationName;
 	}
 
+	public AuthenticationProperties getAuthentication() {
+		return authentication;
+	}
+
 	public String getContactName() {
 		return contactName;
 	}
@@ -92,6 +104,50 @@ public class SwaggerUiProperties {
 
 	public void setTosUrl(String tosUrl) {
 		this.tosUrl = tosUrl;
+	}
+
+	@Validated
+	public static class AuthenticationProperties {
+
+		@NotBlank @URL
+		private String authorizationUrl;
+
+		@NotBlank
+		private String clientId;
+
+		private final Scopes scopes = new Scopes();
+
+		@NotBlank @URL
+		private String tokenUrl;
+
+		public String getAuthorizationUrl() {
+			return authorizationUrl;
+		}
+
+		public void setAuthorizationUrl(String authorizationUrl) {
+			this.authorizationUrl = authorizationUrl;
+		}
+
+		public String getClientId() {
+			return clientId;
+		}
+
+		public void setClientId(String clientId) {
+			this.clientId = clientId;
+		}
+
+		public Scopes getScopes() {
+			return scopes;
+		}
+
+		public String getTokenUrl() {
+			return tokenUrl;
+		}
+
+		public void setTokenUrl(String tokenUrl) {
+			this.tokenUrl = tokenUrl;
+		}
+
 	}
 
 }

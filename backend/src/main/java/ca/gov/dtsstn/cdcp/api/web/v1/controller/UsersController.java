@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
 import ca.gov.dtsstn.cdcp.api.service.AlertTypeService;
 import ca.gov.dtsstn.cdcp.api.service.SubscriptionService;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
@@ -35,6 +36,7 @@ import jakarta.validation.constraints.NotBlank;
 
 @Validated
 @RestController
+@OAuthSecurityRequirement
 @RequestMapping({ "/api/v1/users" })
 @Tag(name = "Users", description = "Endpoint for managing user resources.")
 public class UsersController {
