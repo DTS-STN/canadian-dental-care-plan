@@ -80,7 +80,9 @@ public class UsersController {
 			@NotBlank(message = "id must not be null or blank")
 			@Parameter(description = "The id of the user.", example = "00000000-0000-0000-0000-000000000000")
 			@PathVariable String id) {
-		final var user = userService.getUserById(id).orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(id)));
+		final var user = userService.getUserById(id)
+			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(id)));
+
 		return userModelAssembler.toModel(user);
 	}
 
@@ -92,9 +94,9 @@ public class UsersController {
 			@PathVariable String id) {
 		final var subscriptions = subscriptionModelAssembler.toCollectionModel(subscriptionService.getSubscriptionsByUserId(id));
 		final var selfLink = linkTo(methodOn(getClass()).getSubscriptionsByUserId(id)).withSelfRel();
+
 		return subscriptionModelAssembler.wrapCollection(subscriptions, SubscriptionModel.class).add(selfLink);
 	}
-
 
 	@PostMapping({ "/{id}/subscriptions" })
 	@Operation(summary = "Create a subscription for a user")
@@ -104,7 +106,7 @@ public class UsersController {
 			@PathVariable String id,
 
 			@Validated @RequestBody SubscriptionModel subscription) {
-		final var alertTypeId = alertTypeService.readByCode(subscription.getAlertType()).map(AlertType::getId).orElseThrow();
+		final var alertTypeId = alertTypeService.readByCode(subscription.getAlertType()).map(AlertType::getId).get();
 		subscriptionService.create(subscriptionModelMapper.toDomain(subscription, alertTypeId));
 	}
 
@@ -121,7 +123,7 @@ public class UsersController {
 			@PathVariable String subscriptionId,
 
 			@Validated @RequestBody SubscriptionModel subscription) {
-		final var alertTypeId = alertTypeService.readByCode(subscription.getAlertType()).map(AlertType::getId).orElseThrow();
+		final var alertTypeId = alertTypeService.readByCode(subscription.getAlertType()).map(AlertType::getId).get();
 		subscriptionService.update(subscriptionModelMapper.toDomain(subscription, alertTypeId));
 	}
 

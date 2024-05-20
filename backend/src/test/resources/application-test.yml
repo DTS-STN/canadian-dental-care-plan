@@ -4,3 +4,7 @@
 #
 
 ---
+
+application:
+  security:
+    enabled: true

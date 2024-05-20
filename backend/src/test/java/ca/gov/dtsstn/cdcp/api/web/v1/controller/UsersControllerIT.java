@@ -21,6 +21,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -49,7 +51,8 @@ class UsersControllerIT {
 	@Autowired MockMvc mockMvc;
 
 	@Test
-	@DisplayName("Test GET /api/v1/users/{id}")
+	@DisplayName("Test authenticated GET /api/v1/users/{id}")
+	@WithMockUser(roles = { "Users.Administer" })
 	void testGetUserById() throws Exception {
 		final var mockUser = ImmutableUser.builder()
 			.id("00000000-0000-0000-0000-000000000000")
@@ -76,7 +79,8 @@ class UsersControllerIT {
 	}
 
 	@Test
-	@DisplayName("Test GET /api/v1/users/{id} -- 404 not found")
+	@WithMockUser(roles = { "Users.Administer" })
+	@DisplayName("Test authenticated GET /api/v1/users/{id} -- 404 not found")
 	void testGetUserById_NotFound() throws Exception {
 		when(userService.getUserById(any())).thenReturn(Optional.empty());
 
@@ -89,6 +93,24 @@ class UsersControllerIT {
 			.andExpect(jsonPath("$.detail", is("No user with id=[00000000-0000-0000-0000-000000000000] was found")))
 			.andExpect(jsonPath("$.instance", is("/api/v1/users/00000000-0000-0000-0000-000000000000")))
 			.andExpect(jsonPath("$.type", is("https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4")));
+	}
+
+	@Test
+	@WithAnonymousUser
+	@DisplayName("Test unauthenticated GET /api/v1/users/{id}")
+	void testGetUserById_Unauthorized() throws Exception {
+		mockMvc.perform(get("/api/v1/users/00000000-0000-0000-0000-000000000000"))
+			.andDo(print())
+			.andExpect(status().isUnauthorized());
+	}
+
+	@Test
+	@WithMockUser(roles = { /* intentionally left blank */ })
+	@DisplayName("Test insufficient privilege GET /api/v1/users/{id}")
+	void testGetUserById_Forbidden() throws Exception {
+		mockMvc.perform(get("/api/v1/users/00000000-0000-0000-0000-000000000000"))
+			.andDo(print())
+			.andExpect(status().isForbidden());
 	}
 
 }
