@@ -12,18 +12,6 @@ public interface Subscription extends BaseDomainObject {
 	AlertType getAlertType();
 
 	@Nullable
-	String getEmail();
-
-	@Nullable
 	Long  getPreferredLanguage();
-
-	@Nullable
-	Boolean getRegistered();
-
-	@Nullable
-	Boolean getSubscribed();
-
-	@Nullable
-	String getUserId();
 
 }

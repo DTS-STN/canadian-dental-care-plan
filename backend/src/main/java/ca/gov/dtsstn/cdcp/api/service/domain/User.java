@@ -17,6 +17,8 @@ public interface User extends BaseDomainObject {
 	@Nullable
 	Boolean getEmailVerified();
 
+	Set<Subscription> getSubscriptions();
+
 	Set<UserAttribute> getUserAttributes();
 
 }

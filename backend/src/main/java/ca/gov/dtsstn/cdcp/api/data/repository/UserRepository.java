@@ -10,9 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import ca.gov.dtsstn.cdcp.api.data.entity.UserEntity;
 
-/**
- * Repository for {@link UserEntity} entities.
- */
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, String> {
 

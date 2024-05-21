@@ -8,17 +8,24 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import ca.gov.dtsstn.cdcp.api.config.properties.ApplicationProperties;
+import ca.gov.dtsstn.cdcp.api.data.entity.AlertTypeEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.entity.ConfirmationCodeEntity;
 import ca.gov.dtsstn.cdcp.api.data.entity.ConfirmationCodeEntityBuilder;
+import ca.gov.dtsstn.cdcp.api.data.entity.SubscriptionEntity;
+import ca.gov.dtsstn.cdcp.api.data.entity.SubscriptionEntityBuilder;
+import ca.gov.dtsstn.cdcp.api.data.repository.AlertTypeRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.UserRepository;
 import ca.gov.dtsstn.cdcp.api.service.domain.ConfirmationCode;
+import ca.gov.dtsstn.cdcp.api.service.domain.Subscription;
 import ca.gov.dtsstn.cdcp.api.service.domain.User;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.ConfirmationCodeMapper;
+import ca.gov.dtsstn.cdcp.api.service.domain.mapper.SubscriptionMapper;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.UserMapper;
 
 @Service
@@ -27,17 +34,26 @@ public class UserService {
 
 	private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
+	private final AlertTypeRepository alertTypeRepository;
+
 	private final ApplicationProperties applicationProperties;
 
 	private final ConfirmationCodeMapper confirmationCodeMapper = Mappers.getMapper(ConfirmationCodeMapper.class);
+
+	private final SubscriptionMapper subscriptionMapper = Mappers.getMapper(SubscriptionMapper.class);
 
 	private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
 	private final UserRepository userRepository;
 
-	public UserService(ApplicationProperties applicationProperties, UserRepository userRepository) {
+	public UserService(
+			AlertTypeRepository alertTypeRepository,
+			ApplicationProperties applicationProperties,
+			UserRepository userRepository) {
+		Assert.notNull(alertTypeRepository, "alertTypeRepository is requird; it must not be null");
 		Assert.notNull(applicationProperties, "applicationProperties is requird; it must not be null");
 		Assert.notNull(userRepository, "userRepository is required; it must not be null");
+		this.alertTypeRepository = alertTypeRepository;
 		this.applicationProperties = applicationProperties;
 		this.userRepository = userRepository;
 	}
@@ -73,9 +89,45 @@ public class UserService {
 			.map(confirmationCodeMapper::fromEntity).orElseThrow();
 	}
 
+	public Subscription createSubscriptionForUser(String userId, Subscription subscription) {
+		Assert.hasText(userId, "userId is required; it must not be null or blank");
+		Assert.hasText(subscription.getAlertType().getCode(), "subscription.alertType.code is required; it must not be null or blank");
+		Assert.notNull(subscription.getPreferredLanguage(), "subscription.preferredLanguage is required; it must not be null");
+
+		log.debug("Fetching user [{}] from repository", userId);
+		final var user = userRepository.findById(userId).orElseThrow();
+
+		log.debug("Fetching alert type [{}] from repository", subscription.getAlertType().getCode());
+		final var alertType = alertTypeRepository.findByCode(subscription.getAlertType().getCode()).orElseThrow();
+
+		final var existingSubscription = user.getSubscriptions().stream()
+			.filter(byAlertTypeId(alertType.getId())).findFirst();
+
+		if (existingSubscription.isPresent()) {
+			throw new DataIntegrityViolationException("User [%s] is already subscribed to alert type [%s]".formatted(userId, subscription.getAlertType().getCode()));
+		}
+
+		user.getSubscriptions().add(new SubscriptionEntityBuilder()
+			.alertType(new AlertTypeEntityBuilder()
+				.id(alertType.getId())
+				.build())
+			.preferredLanguage(subscription.getPreferredLanguage())
+			.build());
+
+		return userRepository.save(user).getSubscriptions().stream()
+			.filter(byAlertTypeId(alertType.getId())).findFirst()
+			.map(subscriptionMapper::fromEntity).get();
+	}
+
 	public Optional<User> getUserById(String id) {
 		Assert.hasText(id, "id is required; it must not be null or blank");
 		return userRepository.findById(id).map(userMapper::fromEntity);
+	}
+
+	private Predicate<SubscriptionEntity> byAlertTypeId(String alertTypeId) {
+		return subscription -> {
+			return alertTypeId.equals(subscription.getAlertType().getId());
+		};
 	}
 
 	private Predicate<ConfirmationCodeEntity> byCode(String code) {

@@ -8,7 +8,6 @@ import org.springframework.hateoas.server.core.Relation;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import ca.gov.dtsstn.cdcp.api.web.model.BaseResourceModel;
-import ca.gov.dtsstn.cdcp.api.web.validation.AlertTypeCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 
@@ -17,33 +16,16 @@ import jakarta.annotation.Nullable;
 @JsonPropertyOrder({ "id", "alertType",	"email", "preferredLanguage", "registered", "subscribed", "userId", "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate" })
 public class SubscriptionModel extends BaseResourceModel<SubscriptionModel> {
 
-	@AlertTypeCode(message = "alertType is invalid or unknown")
-	private String alertType;
-
-	private String email;
+	private String alertTypeCode;
 
 	private String preferredLanguage;
 
-	private Boolean registered;
-
-	private Boolean subscribed;
-
-	private String userId;
-
-	public String getAlertType() {
-		return alertType;
+	public String getAlertTypeCode() {
+		return alertTypeCode;
 	}
 
-	public void setAlertType(String alertType) {
-		this.alertType = alertType;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
+	public void setAlertTypeCode(String alertTypeCode) {
+		this.alertTypeCode = alertTypeCode;
 	}
 
 	public String getPreferredLanguage() {
@@ -54,30 +36,6 @@ public class SubscriptionModel extends BaseResourceModel<SubscriptionModel> {
 		this.preferredLanguage = preferredLanguage;
 	}
 
-	public Boolean getRegistered() {
-		return registered;
-	}
-
-	public void setRegistered(Boolean registered) {
-		this.registered = registered;
-	}
-
-	public Boolean getSubscribed() {
-		return subscribed;
-	}
-
-	public void setSubscribed(Boolean subscribed) {
-		this.subscribed = subscribed;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
 	@Override
 	public boolean equals(@Nullable Object obj) {
 		if (this == obj) { return true; }
@@ -86,36 +44,22 @@ public class SubscriptionModel extends BaseResourceModel<SubscriptionModel> {
 
 		final var other = (SubscriptionModel) obj;
 
-		return Objects.equals(alertType, other.alertType)
-			&& Objects.equals(email, other.email)
-			&& Objects.equals(preferredLanguage, other.preferredLanguage)
-			&& Objects.equals(registered, other.registered)
-			&& Objects.equals(subscribed, other.subscribed)
-			&& Objects.equals(userId, other.userId);
+		return Objects.equals(alertTypeCode, other.alertTypeCode)
+			&& Objects.equals(preferredLanguage, other.preferredLanguage);
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(
 			super.hashCode(),
-			alertType,
-			email,
-			preferredLanguage,
-			registered,
-			subscribed,
-			userId);
+			preferredLanguage);
 	}
 
 	@Override
 	public String toString() {
 		return new ToStringCreator(this)
 			.append("super", super.toString())
-			.append("alertType", alertType)
-			.append("email", email)
 			.append("preferredLanguage", preferredLanguage)
-			.append("registered", registered)
-			.append("subscribed", subscribed)
-			.append("userId", userId)
 			.toString();
 	}
 

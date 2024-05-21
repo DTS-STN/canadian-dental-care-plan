@@ -28,11 +28,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import ca.gov.dtsstn.cdcp.api.config.WebSecurityConfig;
 import ca.gov.dtsstn.cdcp.api.service.AlertTypeService;
-import ca.gov.dtsstn.cdcp.api.service.SubscriptionService;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUser;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUserAttribute;
-import ca.gov.dtsstn.cdcp.api.web.v1.model.mapper.SubscriptionModelAssembler;
 
 @ActiveProfiles("test")
 @Import({ WebSecurityConfig.class })
@@ -41,10 +39,6 @@ import ca.gov.dtsstn.cdcp.api.web.v1.model.mapper.SubscriptionModelAssembler;
 class UsersControllerIT {
 
 	@MockBean AlertTypeService alertTypeService;
-
-	@MockBean SubscriptionModelAssembler subscriptionModelAssembler;
-
-	@MockBean SubscriptionService subscriptionService;
 
 	@MockBean UserService userService;
 

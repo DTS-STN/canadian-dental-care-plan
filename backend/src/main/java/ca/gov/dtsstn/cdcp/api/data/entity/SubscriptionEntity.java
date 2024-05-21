@@ -14,23 +14,11 @@ import jakarta.persistence.ManyToOne;
 @SuppressWarnings({ "serial" })
 public class SubscriptionEntity extends AbstractEntity {
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private AlertTypeEntity alertType;
 
-	@Column(length = 256, nullable = false)
-	private String email;
-
 	@Column(nullable = false)
-	private Long preferredLanguage ;
-
-	@Column(nullable = true)
-	private Boolean registered;
-
-	@Column(nullable = true)
-	private Boolean subscribed;
-
-	@Column(length = 9, nullable = false, updatable = false)
-	private String userId;
+	private Long preferredLanguage;
 
 	public SubscriptionEntity() {
 		super();
@@ -45,18 +33,11 @@ public class SubscriptionEntity extends AbstractEntity {
 			@Nullable String lastModifiedBy,
 			@Nullable Instant lastModifiedDate,
 			@Nullable AlertTypeEntity alertType,
-			@Nullable String email,
 			@Nullable Long preferredLanguage,
-			@Nullable Boolean registered,
-			@Nullable Boolean subscribed,
 			@Nullable String userId) {
 		super(isNew, id, createdBy, createdDate, lastModifiedBy, lastModifiedDate);
 		this.alertType = alertType;
-		this.email = email;
 		this.preferredLanguage = preferredLanguage;
-		this.registered = registered;
-		this.subscribed = subscribed;
-		this.userId = userId;
 	}
 
 	public AlertTypeEntity getAlertType() {
@@ -67,14 +48,6 @@ public class SubscriptionEntity extends AbstractEntity {
 		this.alertType = alertType;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
 	public Long getPreferredLanguage() {
 		return preferredLanguage;
 	}
@@ -83,40 +56,12 @@ public class SubscriptionEntity extends AbstractEntity {
 		this.preferredLanguage = preferredLanguage;
 	}
 
-	public Boolean getRegistered() {
-		return registered;
-	}
-
-	public void setRegistered(Boolean registered) {
-		this.registered = registered;
-	}
-
-	public Boolean getSubscribed() {
-		return subscribed;
-	}
-
-	public void setSubscribed(Boolean subscribed) {
-		this.subscribed = subscribed;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
 	@Override
 	public String toString() {
 		return new ToStringCreator(this)
 			.append("super", super.toString())
 			.append("alertType", alertType)
-			.append("email", email)
 			.append("preferredLanguage", preferredLanguage)
-			.append("registered", registered)
-			.append("subscribed", subscribed)
-			.append("userId", userId)
 			.toString();
 	}
 
