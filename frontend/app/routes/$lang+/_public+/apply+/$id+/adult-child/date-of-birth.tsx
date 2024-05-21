@@ -6,7 +6,7 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { differenceInYears, isPast, isValid, parse } from 'date-fns';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
@@ -14,6 +14,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { InlineLink } from '~/components/inline-link';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
@@ -188,6 +189,9 @@ export default function ApplyFlowDateOfBirth() {
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
 
+  const noWrap = <span className="whitespace-nowrap" />;
+  const serviceCanada = <InlineLink to={t('apply-adult-child:eligibility.date-of-birth.service-canada-centre-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+
   // Keys order should match the input IDs order.
   const errorSummaryItems = useMemo(() => {
     const items: ErrorSummaryItem[] = [];
@@ -256,7 +260,12 @@ export default function ApplyFlowDateOfBirth() {
               required
             />
             <Collapsible summary={t('apply-adult-child:eligibility.date-of-birth.collapsible-content-summary')}>
-              <p>{t('apply-adult-child:eligibility.date-of-birth.collapsible-content-detail')}</p>
+              <p className="mb-4">
+                <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:eligibility.date-of-birth.collapsible-content-detail" components={{ serviceCanada, noWrap }} />
+              </p>
+              <InlineLink to={t('apply-adult-child:eligibility.date-of-birth.apply-delegate-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank">
+                {t('apply-adult-child:eligibility.date-of-birth.apply-delegate')}
+              </InlineLink>
             </Collapsible>
           </div>
           {editMode ? (
