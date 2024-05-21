@@ -29,9 +29,6 @@ public class SubscriptionEntity extends AbstractEntity {
 	@Column(nullable = true)
 	private Boolean subscribed;
 
-	@Column(length = 9, nullable = false, updatable = false)
-	private String userId;
-
 	public SubscriptionEntity() {
 		super();
 	}
@@ -53,17 +50,9 @@ public class SubscriptionEntity extends AbstractEntity {
 		super(isNew, id, createdBy, createdDate, lastModifiedBy, lastModifiedDate);
 		this.alertType = alertType;
 		this.email = email;
-		this.preferredLanguage = preferredLanguage;
 		this.registered = registered;
 		this.subscribed = subscribed;
-		this.userId = userId;
-	}
-
-	public AlertTypeEntity getAlertType() {
-		return alertType;
-	}
-
-	public void setAlertType(AlertTypeEntity alertType) {
+		this.preferredLanguage = preferredLanguage;
 		this.alertType = alertType;
 	}
 
@@ -73,14 +62,6 @@ public class SubscriptionEntity extends AbstractEntity {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public Long getPreferredLanguage() {
-		return preferredLanguage;
-	}
-
-	public void setPreferredLanguage(Long preferredLanguage) {
-		this.preferredLanguage = preferredLanguage;
 	}
 
 	public Boolean getRegistered() {
@@ -99,24 +80,31 @@ public class SubscriptionEntity extends AbstractEntity {
 		this.subscribed = subscribed;
 	}
 
-	public String getUserId() {
-		return userId;
+	public Long getPreferredLanguage() {
+		return preferredLanguage;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setPreferredLanguage(Long preferredLanguage) {
+		this.preferredLanguage = preferredLanguage;
+	}
+
+	public AlertTypeEntity getAlertType() {
+		return alertType;
+	}
+
+	public void setAlertType(AlertTypeEntity alertType) {
+		this.alertType = alertType;
 	}
 
 	@Override
 	public String toString() {
 		return new ToStringCreator(this)
 			.append("super", super.toString())
-			.append("alertType", alertType)
 			.append("email", email)
-			.append("preferredLanguage", preferredLanguage)
 			.append("registered", registered)
 			.append("subscribed", subscribed)
-			.append("userId", userId)
+			.append("preferredLanguage", preferredLanguage)
+			.append("alertType", alertType)
 			.toString();
 	}
 

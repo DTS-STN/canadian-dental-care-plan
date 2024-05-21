@@ -4,8 +4,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.mapstruct.factory.Mappers;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
@@ -40,8 +38,6 @@ import jakarta.validation.constraints.NotBlank;
 @RequestMapping({ "/api/v1/users" })
 @Tag(name = "Users", description = "Endpoint for managing user resources.")
 public class UsersController {
-
-	private static final Logger log = LoggerFactory.getLogger(UsersController.class);
 
 	private final AlertTypeService alertTypeService;
 
@@ -94,9 +90,8 @@ public class UsersController {
 			@PathVariable String id) {
 		final var subscriptions = subscriptionModelAssembler.toCollectionModel(subscriptionService.getSubscriptionsByUserId(id));
 		final var selfLink = linkTo(methodOn(getClass()).getSubscriptionsByUserId(id)).withSelfRel();
-
 		return subscriptionModelAssembler.wrapCollection(subscriptions, SubscriptionModel.class).add(selfLink);
-	}
+	}	
 
 	@PostMapping({ "/{id}/subscriptions" })
 	@Operation(summary = "Create a subscription for a user")
@@ -104,27 +99,25 @@ public class UsersController {
 			@NotBlank(message = "id must not be null or blank")
 			@Parameter(description = "The id of the user.", example = "0000000-0000-0000-0000-000000000000")
 			@PathVariable String id,
-
-			@Validated @RequestBody SubscriptionModel subscription) {
-		final var alertTypeId = alertTypeService.readByCode(subscription.getAlertType()).map(AlertType::getId).get();
-		subscriptionService.create(subscriptionModelMapper.toDomain(subscription, alertTypeId));
+			@Validated @RequestBody SubscriptionModel subscriptionModel) {
+		final var alertTypeId = alertTypeService.readByCode(subscriptionModel.getAlertType()).map(AlertType::getId).get();
+		final var subscription = subscriptionModelMapper.toDomain(subscriptionModel, alertTypeId);
+		subscriptionService.create(subscription, id);
 	}
 
 	@PutMapping({ "/{id}/subscriptions/{subscriptionId}" })
-	@Operation(summary = "Update a subscription for a user.")
+	@Operation(summary = "Update a subscription for a user.", operationId = "user-subscriptions-update")
 	@ApiResponse(responseCode = "204", description = "The request has been successfully processed.")
 	public void updateSubscriptionForUser(
-			@NotBlank(message = "id must not be null or blank")
-			@Parameter(description = "The user id of the user.", example = "0000000-0000-0000-0000-000000000000")
-			@PathVariable String id,
-
-			@NotBlank(message = "subscriptionId must not be null or blank")
-			@Parameter(description = "The id of the subscription to update.")
-			@PathVariable String subscriptionId,
-
-			@Validated @RequestBody SubscriptionModel subscription) {
-		final var alertTypeId = alertTypeService.readByCode(subscription.getAlertType()).map(AlertType::getId).get();
-		subscriptionService.update(subscriptionModelMapper.toDomain(subscription, alertTypeId));
+		@NotBlank(message = "id must not be null or blank")
+		@Parameter(description = "The user id of the user.", example = "0000000-0000-0000-0000-000000000000")
+		@PathVariable String id,
+		@NotBlank(message = "subscriptionId must not be null or blank")
+		@Parameter(description = "The id of the subscription to update.")
+		@PathVariable String subscriptionId,
+		@Validated @RequestBody SubscriptionModel subscriptionModel) {
+		final var alertTypeId = alertTypeService.readByCode(subscriptionModel.getAlertType()).map(AlertType::getId).get();
+		final var subscription = subscriptionModelMapper.toDomain(subscriptionModel, alertTypeId);
+		subscriptionService.update(subscription, id, subscriptionId);
 	}
-
 }

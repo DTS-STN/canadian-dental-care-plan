@@ -19,4 +19,6 @@ public interface User extends BaseDomainObject {
 
 	Set<UserAttribute> getUserAttributes();
 
+	Set<Subscription> getSubscriptions();
+
 }

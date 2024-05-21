@@ -28,8 +28,6 @@ public class SubscriptionModel extends BaseResourceModel<SubscriptionModel> {
 
 	private Boolean subscribed;
 
-	private String userId;
-
 	public String getAlertType() {
 		return alertType;
 	}
@@ -70,14 +68,6 @@ public class SubscriptionModel extends BaseResourceModel<SubscriptionModel> {
 		this.subscribed = subscribed;
 	}
 
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
 	@Override
 	public boolean equals(@Nullable Object obj) {
 		if (this == obj) { return true; }
@@ -90,8 +80,7 @@ public class SubscriptionModel extends BaseResourceModel<SubscriptionModel> {
 			&& Objects.equals(email, other.email)
 			&& Objects.equals(preferredLanguage, other.preferredLanguage)
 			&& Objects.equals(registered, other.registered)
-			&& Objects.equals(subscribed, other.subscribed)
-			&& Objects.equals(userId, other.userId);
+			&& Objects.equals(subscribed, other.subscribed);
 	}
 
 	@Override
@@ -102,8 +91,7 @@ public class SubscriptionModel extends BaseResourceModel<SubscriptionModel> {
 			email,
 			preferredLanguage,
 			registered,
-			subscribed,
-			userId);
+			subscribed);
 	}
 
 	@Override
@@ -115,7 +103,6 @@ public class SubscriptionModel extends BaseResourceModel<SubscriptionModel> {
 			.append("preferredLanguage", preferredLanguage)
 			.append("registered", registered)
 			.append("subscribed", subscribed)
-			.append("userId", userId)
 			.toString();
 	}
 

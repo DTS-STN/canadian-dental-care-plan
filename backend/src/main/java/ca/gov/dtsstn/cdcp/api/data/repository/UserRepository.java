@@ -31,4 +31,10 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
 		return users.stream().findFirst();
 	}
 
+	@Query("""
+		SELECT user FROM User user LEFT OUTER JOIN FETCH user.subscriptions subscription
+		 WHERE user.id=:id
+	""")
+	Optional<UserEntity> findById(String id);
+
 }

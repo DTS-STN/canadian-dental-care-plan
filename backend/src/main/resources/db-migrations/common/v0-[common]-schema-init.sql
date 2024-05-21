@@ -62,7 +62,7 @@ CREATE INDEX `ix_alert_type_code` on `alert_type` (`code`);
 CREATE TABLE `subscription` (
 	`id` VARCHAR(64) NOT NULL,
 
-	`user_id` VARCHAR(9) NOT NULL,
+	`user_id` VARCHAR(64) NOT NULL,
 	`email` VARCHAR(50) NOT NULL,
 	`registered` BOOLEAN,
 	`subscribed` BOOLEAN,
@@ -76,6 +76,7 @@ CREATE TABLE `subscription` (
 	`last_modified_date` TIMESTAMP WITH TIME ZONE,
 
 	CONSTRAINT `pk_subscription` PRIMARY KEY (`id`),
+	CONSTRAINT `fk_subscription_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
 	CONSTRAINT `fk_subscription_alert_type` FOREIGN KEY (`alert_type_id`) REFERENCES `alert_type` (`id`)
 );
 

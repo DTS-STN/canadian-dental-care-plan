@@ -22,8 +22,4 @@ public interface Subscription extends BaseDomainObject {
 
 	@Nullable
 	Boolean getSubscribed();
-
-	@Nullable
-	String getUserId();
-
 }
