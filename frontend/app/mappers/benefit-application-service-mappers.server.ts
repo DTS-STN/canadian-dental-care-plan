@@ -1,10 +1,22 @@
 import { lightFormat, parse } from 'date-fns';
 import validator from 'validator';
 
-import { ApplicantInformationState, CommunicationPreferencesState, DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, PartnerInformationState, PersonalInformationState } from '~/route-helpers/apply-route-helpers.server';
+import {
+  ApplicantInformationState,
+  ChildState,
+  CommunicationPreferencesState,
+  DentalFederalBenefitsState,
+  DentalProvincialTerritorialBenefitsState,
+  PartnerInformationState,
+  PersonalInformationState,
+  TypeOfApplicationState,
+} from '~/route-helpers/apply-route-helpers.server';
 import { BenefitApplicationRequest } from '~/schemas/benefit-application-service-schemas.server';
 
 interface ToBenefitApplicationRequestArgs {
+  typeOfApplication: TypeOfApplicationState;
+  disabilityTaxCredit: boolean | undefined;
+  livingIndependently: boolean | undefined;
   applicantInformation: ApplicantInformationState;
   communicationPreferences: CommunicationPreferencesState;
   dateOfBirth: string;
@@ -12,12 +24,42 @@ interface ToBenefitApplicationRequestArgs {
   dentalInsurance: boolean;
   partnerInformation: PartnerInformationState | undefined;
   personalInformation: PersonalInformationState;
+  children: ChildState[] | undefined;
 }
 
-export function toBenefitApplicationRequest({ partnerInformation, applicantInformation, communicationPreferences, dateOfBirth, dentalBenefits, dentalInsurance, personalInformation }: ToBenefitApplicationRequestArgs): BenefitApplicationRequest {
+export function toBenefitApplicationRequest({
+  typeOfApplication,
+  disabilityTaxCredit,
+  livingIndependently,
+  partnerInformation,
+  applicantInformation,
+  communicationPreferences,
+  dateOfBirth,
+  dentalBenefits,
+  dentalInsurance,
+  personalInformation,
+  children,
+}: ToBenefitApplicationRequestArgs): BenefitApplicationRequest {
   return {
     BenefitApplication: {
       Applicant: {
+        ApplicantDetail: {
+          PrivateDentalInsuranceIndicator: dentalInsurance,
+          DisabilityTaxCreditIndicator: disabilityTaxCredit ?? false, //default for adult type
+          LivingIndependentlyIndicator: livingIndependently ?? true, //default for adult type
+          InsurancePlan: [
+            {
+              InsurancePlanIdentification: [
+                {
+                  IdentificationID: dentalBenefits.federalSocialProgram,
+                },
+                {
+                  IdentificationID: dentalBenefits.provincialTerritorialSocialProgram,
+                },
+              ],
+            },
+          ],
+        },
         PersonBirthDate: toDate(dateOfBirth),
         PersonContactInformation: [
           {
@@ -48,11 +90,14 @@ export function toBenefitApplicationRequest({ partnerInformation, applicantInfor
         PersonSINIdentification: {
           IdentificationID: applicantInformation.socialInsuranceNumber,
         },
-        RelatedPerson: partnerInformation ? [toRelatedPerson({ ...partnerInformation, personRelationshipCode: 'Spouse' })] : [],
+        RelatedPerson: toRelatedPersons({ partnerInformation, children }),
         MailingSameAsHomeIndicator: personalInformation.copyMailingAddress,
         PreferredMethodCommunicationCode: {
           ReferenceDataID: communicationPreferences.preferredMethod,
         },
+      },
+      BenefitApplicationCategoryCode: {
+        ReferenceDataID: typeOfApplication,
       },
       BenefitApplicationChannelCode: {
         ReferenceDataID: '775170001', // PP's static value for "Online"
@@ -199,15 +244,54 @@ function toInsurancePlan({ hasFederalBenefits, federalSocialProgram, hasProvinci
   return [{ InsurancePlanIdentification: insurancePlanIdentification }];
 }
 
+interface RelatedPerson {
+  PersonBirthDate: { dateTime: string };
+  PersonName: { PersonGivenName: string[]; PersonSurName: string }[];
+  PersonRelationshipCode: { ReferenceDataName: string };
+  PersonSINIdentification: { IdentificationID: string };
+  ApplicantDetail: {
+    ConsentToSharePersonalInformationIndicator: boolean | undefined;
+    AttestParentOrGuardianIndicator: boolean | undefined;
+    PrivateDentalInsuranceIndicator: boolean | undefined;
+    InsurancePlan:
+      | {
+          InsurancePlanIdentification:
+            | {
+                IdentificationID: string | undefined;
+              }[]
+            | undefined;
+        }[]
+      | undefined;
+  };
+}
+
 interface ToRelatedPersonArgs {
+  partnerInformation: PartnerInformationState | undefined;
+  children: ChildState[] | undefined;
+}
+
+function toRelatedPersons({ partnerInformation, children }: ToRelatedPersonArgs): RelatedPerson[] {
+  let personData: RelatedPerson[] = [];
+
+  if (children) {
+    personData = toRelatedPersonDependent({ children });
+  }
+  if (partnerInformation) {
+    personData.push(toRelatedPersonSpouse({ ...partnerInformation }));
+  }
+
+  return personData;
+}
+
+interface ToRelatedPersonSpouseArgs {
+  confirm: boolean;
   dateOfBirth: string;
   firstName: string;
   lastName: string;
   socialInsuranceNumber: string;
-  personRelationshipCode: 'Dependent' | 'Spouse';
 }
 
-function toRelatedPerson({ dateOfBirth, firstName, lastName, personRelationshipCode, socialInsuranceNumber }: ToRelatedPersonArgs) {
+function toRelatedPersonSpouse({ confirm, dateOfBirth, firstName, lastName, socialInsuranceNumber }: ToRelatedPersonSpouseArgs): RelatedPerson {
   return {
     PersonBirthDate: toDate(dateOfBirth),
     PersonName: [
@@ -217,12 +301,65 @@ function toRelatedPerson({ dateOfBirth, firstName, lastName, personRelationshipC
       },
     ],
     PersonRelationshipCode: {
-      ReferenceDataName: personRelationshipCode,
+      ReferenceDataName: 'Spouse',
     },
     PersonSINIdentification: {
       IdentificationID: socialInsuranceNumber,
     },
+    ApplicantDetail: {
+      ConsentToSharePersonalInformationIndicator: confirm,
+      AttestParentOrGuardianIndicator: undefined,
+      PrivateDentalInsuranceIndicator: undefined,
+      InsurancePlan: undefined,
+    },
   };
+}
+
+interface ToRelatedPersonDependentArgs {
+  children: ChildState[];
+}
+
+function toRelatedPersonDependent({ children }: ToRelatedPersonDependentArgs): RelatedPerson[] {
+  const childData: RelatedPerson[] = [];
+
+  children.forEach((child) => {
+    if (child.information) {
+      childData.push({
+        PersonBirthDate: toDate(child.information.dateOfBirth),
+        PersonName: [
+          {
+            PersonGivenName: [child.information.firstName],
+            PersonSurName: child.information.lastName,
+          },
+        ],
+        PersonRelationshipCode: {
+          ReferenceDataName: 'Dependent',
+        },
+        PersonSINIdentification: {
+          IdentificationID: child.information.socialInsuranceNumber ?? '',
+        },
+        ApplicantDetail: {
+          ConsentToSharePersonalInformationIndicator: undefined,
+          AttestParentOrGuardianIndicator: child.information.isParent,
+          PrivateDentalInsuranceIndicator: child.dentalInsurance,
+          InsurancePlan: [
+            {
+              InsurancePlanIdentification: [
+                {
+                  IdentificationID: child.dentalBenefits?.federalSocialProgram,
+                },
+                {
+                  IdentificationID: child.dentalBenefits?.provincialTerritorialSocialProgram,
+                },
+              ],
+            },
+          ],
+        },
+      });
+    }
+  });
+
+  return childData;
 }
 
 interface ToEmailAddressArgs {

@@ -136,25 +136,6 @@ export const personalInformationApiSchema = z.object({
         }),
       })
       .optional(),
-    InsurancePlan: z
-      .object({
-        InsurancePlanIdentification: z
-          .object({
-            IdentificationID: z.string(),
-            IdentificationCategoryText: z.string().optional(),
-          })
-          .optional(),
-      })
-      .array()
-      .optional(),
-    PrivateDentalInsuranceIndicator: z.boolean().optional(),
-    FederalDentalCoverageIndicator: z
-      .object({
-        ReferenceDataID: z.string().optional(),
-        ReferenceDataName: z.string().optional(),
-      })
-      .optional(),
-    ProvicialDentalCoverageIndicator: z.boolean().optional(),
   }),
 });
 
@@ -168,6 +149,7 @@ export const personalInfoDtoSchema = z.object({
   birthDate: z.coerce.date().optional(),
   lastName: z.string().optional(),
   firstName: z.string().optional(),
+  sin: z.string().optional(),
   homeAddress: z
     .object({
       streetName: z.string().optional(),
@@ -197,6 +179,7 @@ export const personalInfoDtoSchema = z.object({
   privateDentalPlanId: z.string().optional(),
   federalDentalPlanId: z.string().optional(),
   provincialTerritorialDentalPlanId: z.string().optional(),
+  benefitApplicationIdentification: z.string().optional(),
 });
 
 export type PersonalInfo = z.infer<typeof personalInfoDtoSchema>;
