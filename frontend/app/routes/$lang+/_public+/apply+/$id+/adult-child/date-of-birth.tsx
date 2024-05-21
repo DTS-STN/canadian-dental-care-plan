@@ -190,7 +190,7 @@ export default function ApplyFlowDateOfBirth() {
   const errorSummaryId = 'error-summary';
 
   const noWrap = <span className="whitespace-nowrap" />;
-  const serviceCanada = <InlineLink to={t('apply-adult-child:eligibility.date-of-birth.service-canada-centre-link')} className="font-lato font-semibold" />;
+  const serviceCanada = <InlineLink to={t('apply-adult-child:eligibility.date-of-birth.service-canada-centre-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
 
   // Keys order should match the input IDs order.
   const errorSummaryItems = useMemo(() => {
@@ -263,7 +263,7 @@ export default function ApplyFlowDateOfBirth() {
               <p className="mb-4">
                 <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:eligibility.date-of-birth.collapsible-content-detail" components={{ serviceCanada, noWrap }} />
               </p>
-              <InlineLink to={t('apply-adult-child:eligibility.date-of-birth.apply-delegate-link')} className="font-lato font-semibold">
+              <InlineLink to={t('apply-adult-child:eligibility.date-of-birth.apply-delegate-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank">
                 {t('apply-adult-child:eligibility.date-of-birth.apply-delegate')}
               </InlineLink>
             </Collapsible>
