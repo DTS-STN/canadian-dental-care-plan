@@ -4,7 +4,7 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData, useParams } from '@remix-run/react';
 
-import { parse } from 'date-fns';
+import { isValid, parse } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../page-ids.json';
@@ -17,7 +17,7 @@ import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-inf
 import { getAuditService } from '~/services/audit-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { isValidDate, toLocaleDateString } from '~/utils/date-utils';
+import { toLocaleDateString } from '~/utils/date-utils';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -57,7 +57,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const preferredLanguage = personalInformation.preferredLanguageId ? await getLookupService().getPreferredLanguage(personalInformation.preferredLanguageId) : undefined;
   const maritalStatusList = await getLookupService().getAllMaritalStatuses();
   const dateString = personalInformation.birthDate ? new Date(personalInformation.birthDate).toLocaleDateString() : undefined;
-  const birthParsedFormat = dateString && isValidDate(dateString, 'mm/dd/yyyy', '/') ? toLocaleDateString(await parse(dateString, 'dd/mm/yyyy', new Date()), locale) : undefined;
+  const birthParsedFormat = dateString && isValid(parse(dateString, 'MM/dd/yyyy', new Date())) ? toLocaleDateString(parse(dateString, 'MM/dd/yyyy', new Date()), locale) : undefined;
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };
   const updatedInfo = session.get('personal-info-updated');
