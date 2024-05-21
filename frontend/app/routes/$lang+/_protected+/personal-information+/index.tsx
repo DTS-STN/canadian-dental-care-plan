@@ -56,6 +56,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const regionList = await getLookupService().getAllRegions();
   const preferredLanguage = personalInformation.preferredLanguageId ? await getLookupService().getPreferredLanguage(personalInformation.preferredLanguageId) : undefined;
   const maritalStatusList = await getLookupService().getAllMaritalStatuses();
+  //Update date format
   const dateString = personalInformation.birthDate ? new Date(personalInformation.birthDate).toLocaleDateString() : undefined;
   const birthParsedFormat = dateString && isValidDate(dateString, 'yyyy-mm-dd', '-') ? toLocaleDateString(await parse(dateString, 'yyyy-mm-dd', new Date()), locale) : undefined;
   const t = await getFixedT(request, handle.i18nNamespaces);
