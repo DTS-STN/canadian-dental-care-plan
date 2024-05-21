@@ -261,7 +261,7 @@ export default function ApplyFlowDateOfBirth() {
             />
             <Collapsible summary={t('apply-adult-child:eligibility.date-of-birth.collapsible-content-summary')}>
               <p className="mb-4">
-                <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:eligibility.date-of-birth.collapsible-content-detail" component={{ serviceCanada, noWrap }} />
+                <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:eligibility.date-of-birth.collapsible-content-detail" components={{ serviceCanada, noWrap }} />
               </p>
               <InlineLink to={t('apply-adult-child:eligibility.date-of-birth.apply-delegate-link')} className="font-lato font-semibold">
                 {t('apply-adult-child:eligibility.date-of-birth.apply-delegate')}
