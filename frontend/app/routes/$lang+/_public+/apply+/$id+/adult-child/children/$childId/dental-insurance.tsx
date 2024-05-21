@@ -88,7 +88,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-information', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/federal-provincial-territorial-benefits', params));
 }
 
 export default function AccessToDentalInsuranceQuestion() {
