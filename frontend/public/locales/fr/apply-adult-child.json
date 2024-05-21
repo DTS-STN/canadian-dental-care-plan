@@ -375,7 +375,10 @@
       "yes": "Oui",
       "no": "Non",
       "collapsible-content-summary": "(FR) If your child is over 18 and has a Disability Tax Credit",
-      "collapsible-content-detail": "(FR) You must speak to a Service Canada representative to apply on behalf of your child. Please contact Service Canada by calling 1-833-537-4342.",
+      "collapsible-content-detail": "(FR) You must speak to a Service Canada representative if you are applying on behalf of your child as their legal delegate or Power of Attorney. You can contact Service Canada by calling <noWrap>1-833-537-4342</noWrap> or by visiting a <serviceCanada>Service Canada Centre</serviceCanada> near you.",
+      "service-canada-centre-link": "https://www.servicecanada.gc.ca/tbsc-fsco/sc-hme.jsp?lang=fra",
+      "apply-delegate": "Preparing to apply on behalf of someone",
+      "apply-delegate-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#aide",
       "error-message": {
         "date-of-birth-day-number": "Le jour doit être un nombre",
         "date-of-birth-day-required": "La date de naissance doit inclure un jour",
