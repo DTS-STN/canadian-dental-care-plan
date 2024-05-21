@@ -61,8 +61,25 @@ resource "azuread_application" "main" {
     }
   }
 
+  dynamic "app_role" {
+    for_each = var.application_app_roles
+
+    content {
+      allowed_member_types = app_role.value.allowed_member_types
+      description          = app_role.value.description
+      display_name         = app_role.value.display_name
+      id                   = app_role.value.id
+      value                = app_role.value.value
+    }
+  }
+
   web {
     redirect_uris = var.application_web_redirect_uris
+
+    implicit_grant {
+      access_token_issuance_enabled = var.application_web_implicit_grants_access_token_issuance_enabled
+      id_token_issuance_enabled = var.application_web_implicit_grants_id_token_issuance_enabled
+    }
   }
 }
 
