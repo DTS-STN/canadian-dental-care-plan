@@ -16,7 +16,7 @@ import { SkipNavigationLinks } from '~/components/skip-navigation-links';
 import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
+import { useI18nNamespaces, usePageTitleI18nKey, usePageTitleI18nOptions } from '~/utils/route-utils';
 
 export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 
@@ -27,12 +27,14 @@ export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 export function PublicLayout({ children }: PropsWithChildren) {
   const { t } = useTranslation(useI18nNamespaces());
   const pageTitleI18nKey = usePageTitleI18nKey();
+  const i18nOptions = usePageTitleI18nOptions();
+
   return (
     <>
       <PageHeader />
       <PageBreadcrumbs />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
-        {pageTitleI18nKey && <AppPageTitle>{t(pageTitleI18nKey)}</AppPageTitle>}
+        {pageTitleI18nKey && <AppPageTitle>{t(pageTitleI18nKey, i18nOptions)}</AppPageTitle>}
         {children}
         <PageDetails />
       </main>

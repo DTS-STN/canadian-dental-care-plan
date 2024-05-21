@@ -133,6 +133,13 @@ export function usePageTitleI18nKey() {
     .reduce(coalesce);
 }
 
+export function usePageTitleI18nOptions() {
+  return useMatches()
+    .map(({ data }) => data as { i18nOptions?: { [key: string]: string } } | undefined)
+    .map((data) => data?.i18nOptions)
+    .reduce(coalesce);
+}
+
 export function findRouteById(id: string, routes: Array<Route> = []): Route | undefined {
   for (const route of routes) {
     const match = route.id === id ? route : findRouteById(id, route.children);
