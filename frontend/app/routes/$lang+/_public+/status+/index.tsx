@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { FormEvent, useEffect, useMemo } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
@@ -8,14 +8,17 @@ import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Trans, useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import pageIds from '../../page-ids.json';
 import { Button } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
+import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputRadios } from '~/components/input-radios';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
+import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { featureEnabled, getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -31,7 +34,7 @@ enum CheckFor {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
-  pageIdentifier: pageIds.public.status,
+  pageIdentifier: pageIds.public.status.index,
   pageTitleI18nKey: 'status:page-title',
 } as const satisfies RouteHandleData;
 
@@ -54,7 +57,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const log = getLogger('status/index');
   const { ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
-
+  const t = await getFixedT(request, handle.i18nNamespaces);
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
   const submittedCsrfToken = String(formData.get('_csrf'));
@@ -63,8 +66,17 @@ export async function action({ context: { session }, params, request }: ActionFu
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
     throw new Response('Invalid CSRF token', { status: 400 });
   }
-
+  const checkForSchema = z.nativeEnum(CheckFor, {
+    errorMap: () => {
+      return { message: t('status:form.error-message.selection-required') };
+    },
+  });
   const statusCheckFor = formData.get('statusCheckFor');
+  const parsedCheckFor = checkForSchema.safeParse(statusCheckFor);
+
+  if (!parsedCheckFor.success) {
+    return json({ errors: parsedCheckFor.error.format()._errors });
+  }
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   if (hCaptchaEnabled) {
@@ -74,12 +86,11 @@ export async function action({ context: { session }, params, request }: ActionFu
     }
   }
 
-  if (statusCheckFor === CheckFor.Myself) {
-    //TODO: redirect to $lang+/_public+/status+/myself
-  } else if (statusCheckFor === CheckFor.Child) {
-    //TODO: redirect to $lang+/_public+/status+/child
+  if (parsedCheckFor.data === CheckFor.Myself) {
+    return redirect(getPathById('$lang+/_public+/status+/myself+/index', params));
   }
-  //Temporary retrun null until redirects are implemented.
+  // Child selected
+  //TODO: redirect to $lang+/_public+/status+/child
   return null;
 }
 
@@ -89,6 +100,27 @@ export default function StatusChecker() {
   const isSubmitting = fetcher.state !== 'idle';
   const { t } = useTranslation(handle.i18nNamespaces);
   const { captchaRef } = useHCaptcha();
+  const errorSummaryId = 'error-summary';
+
+  const errorMessages = useMemo(
+    () => ({
+      'input-radio-status-check-option-0': fetcher.data?.errors[0],
+    }),
+    [fetcher.data?.errors],
+  );
+
+  const errorSummaryItems = createErrorSummaryItems(errorMessages);
+
+  useEffect(() => {
+    if (hasErrors(errorMessages)) {
+      scrollAndFocusToErrorSummary(errorSummaryId);
+
+      if (adobeAnalytics.isConfigured()) {
+        const fieldIds = createErrorSummaryItems(errorMessages).map(({ fieldId }) => fieldId);
+        adobeAnalytics.pushValidationErrorEvent(fieldIds);
+      }
+    }
+  }, [errorMessages]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -166,26 +198,24 @@ export default function StatusChecker() {
             </p>
           </div>
         </Collapsible>
+        <p className="mb-4 italic">{t('status:form.complete-fields')}</p>
+        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
-          <p className="italic">{t('status:form.complete-fields')}</p>
           <fieldset>
             <InputRadios
               id="status-check-for"
               name="statusCheckFor"
-              legend={<Trans ns={handle.i18nNamespaces} i18nKey="status:form.radio-text.myself" />}
+              legend={<Trans ns={handle.i18nNamespaces} i18nKey="status:form.radio-legend" />}
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="status:form.radio-text.myself" />,
                   value: CheckFor.Myself,
-                  defaultChecked: true,
-                  inputClassName: 'p-4 focus:bg-slate-700 active:bg-slate-700 checked:bg-slate-700 hover:ring-2',
                 },
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="status:form.radio-text.child" />,
                   value: CheckFor.Child,
-                  inputClassName: 'p-4 focus:bg-slate-700 active:bg-slate-700 checked:bg-slate-700 hover:ring-2',
                 },
               ]}
               required

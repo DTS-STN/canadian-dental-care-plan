@@ -58,10 +58,28 @@
     "continue": "Continue",
     "submit": "Check status",
     "error-message": {
-      "sin-required": "The Social Insurance Number (SIN) is required.",
-      "sin-valid": "The Social Insurance Number (SIN) must be valid.",
-      "application-code-required": "The application code or client number is required",
-      "application-code-valid": "The application code or client number must be valid"
+      "selection-required": "(FR) Select an option."
+    }
+  },
+  "myself": {
+    "page-title": "Status Checker",
+    "status-heading": "Status",
+    "empty-status": "The information you gave us doesn't match the information in our system.",
+    "check-another": "Check another status",
+    "form": {
+      "complete-fields": "Complete all fields.",
+      "application-code-label": "Application Code or Client Number",
+      "application-code-description": "Enter the number you received after applying online, or the number found in the upper right-hand corner from the letter you may have reveived from Service Canada",
+      "application-code-placeholder": "Your Application Code or Client Number",
+      "sin-label": "Social Insurance Number (SIN)",
+      "sin-description": "Enter the 9-digit SIN",
+      "submit": "Check status",
+      "error-message": {
+        "sin-required": "The Social Insurance Number (SIN) is required.",
+        "sin-valid": "The Social Insurance Number (SIN) must be valid.",
+        "application-code-required": "The application code or client number is required",
+        "application-code-valid": "The application code or client number must be valid"
+      }
     }
   }
 }

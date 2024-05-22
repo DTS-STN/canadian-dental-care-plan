@@ -58,10 +58,28 @@
     "continue": "Continuer",
     "submit": "Vérifier l'état de votre demande",
     "error-message": {
-      "sin-required": "Le numéro d'assurance sociale (NAS) est requis.",
-      "sin-valid": "Le numéro d'assurance sociale (NAS) doit être valide.",
-      "application-code-required": "(FR) The application code or client number is required",
-      "application-code-valid": "(FR) The application code or client number must be valid"
+      "selection-required": "(FR) Select an option."
+    }
+  },
+  "myself": {
+    "page-title": "Vérificateur de l'état d'une demande",
+    "status-heading": "Statut",
+    "empty-status": "Les informations que vous nous avez fournies ne correspondent pas aux informations dans notre système.",
+    "check-another": "Vérifier un autre état",
+    "form": {
+      "complete-fields": "Remplir tous les champs",
+      "application-code-label": "Code de demande ou numéro de client",
+      "application-code-description": "Entrez le numéro que vous avez reçu sur la page de confirmation de la demande en ligne ou le numéro figurant dans le coin supérieur droit de la lettre que vous avez peut-être reçue de Service Canada.",
+      "application-code-placeholder": "Code de demande ou numéro de client",
+      "sin-label": "Numéro d'assurance sociale (NAS)",
+      "sin-description": "Entrez un NAS de 9 chiffres",
+      "submit": "Vérifier l'état",
+      "error-message": {
+        "sin-required": "Le numéro d'assurance sociale (NAS) est requis.",
+        "sin-valid": "Le numéro d'assurance sociale (NAS) doit être valide.",
+        "application-code-required": "(FR) The application code or client number is required",
+        "application-code-valid": "(FR) The application code or client number must be valid"
+      }
     }
   }
 }
