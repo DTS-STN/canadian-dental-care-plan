@@ -104,7 +104,12 @@
         "confirmation": "CDCP-APPL-CH-0014"
       }
     },
-    "status": "CDCP-STAT-0001",
+    "status": {
+      "index": "CDCP-STAT-0001",
+      "myself": {
+        "index": "CDCP-STAT-0002"
+      }
+    },
     "unableToProcessRequest": "CDCP-UNAB-0001",
     "notFound": "CDCP-ERR-0404"
   }
