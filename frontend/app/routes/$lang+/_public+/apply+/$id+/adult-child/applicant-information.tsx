@@ -54,7 +54,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:applicant-information.page-title') }) };
 
-  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth ?? '');
+  invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
+  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
   return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.applicantInformation, ageCategory, editMode: state.editMode });
 }
