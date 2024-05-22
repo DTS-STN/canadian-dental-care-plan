@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app.kubernetes.io/name: backend
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: backend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: backend
+    spec:
+      containers:
+        - name: canada-dental-care-plan-backend
+          # Note: image tag should be pinned to a specific version in overlays
+          image: dtsrhpdevscedacr.azurecr.io/canada-dental-care-plan/canada-dental-care-plan-backend:latest
+          ports:
+            - name: http
+              containerPort: 8080
+          #livenessProbe:
+          #  tcpSocket:
+          #    port: http
+          #readinessProbe:
+          #  httpGet:
+          #    path: /api/readyz
+          #    port: http
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 1024Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: audit-logs
+              mountPath: /home/node/logs
+      volumes:
+        - name: audit-logs
+          emptyDir: {}

@@ -14,6 +14,7 @@ labels:
       app.kubernetes.io/environment: dev
       app.kubernetes.io/tier: nonprod
 resources:
+  - ../../base/backend/
   - ../../base/frontend/
   - ../../base/fluentd-archiver/
   - ../../base/redis/
