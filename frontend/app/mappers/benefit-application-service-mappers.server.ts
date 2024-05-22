@@ -12,6 +12,7 @@ import {
   TypeOfApplicationState,
 } from '~/route-helpers/apply-route-helpers.server';
 import { BenefitApplicationRequest } from '~/schemas/benefit-application-service-schemas.server';
+import { getEnv } from '~/utils/env.server';
 
 interface ToBenefitApplicationRequestArgs {
   typeOfApplication: TypeOfApplicationState;
@@ -97,7 +98,7 @@ export function toBenefitApplicationRequest({
         },
       },
       BenefitApplicationCategoryCode: {
-        ReferenceDataID: typeOfApplication,
+        ReferenceDataID: toBenefitApplicationCategoryCode(typeOfApplication),
       },
       BenefitApplicationChannelCode: {
         ReferenceDataID: '775170001', // PP's static value for "Online"
@@ -106,6 +107,14 @@ export function toBenefitApplicationRequest({
       PrivateDentalInsuranceIndicator: dentalInsurance,
     },
   };
+}
+
+function toBenefitApplicationCategoryCode(typeOfApplication: TypeOfApplicationState) {
+  const { APPLICANT_CATEGORY_CODE_INDIVIDUAL, APPLICANT_CATEGORY_CODE_FAMILY, APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY } = getEnv();
+  if (typeOfApplication === 'adult') return APPLICANT_CATEGORY_CODE_INDIVIDUAL.toString();
+  if (typeOfApplication === 'adult-child') return APPLICANT_CATEGORY_CODE_FAMILY.toString();
+  if (typeOfApplication === 'child') return APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY.toString();
+  return '';
 }
 
 function toDate(date?: string) {
