@@ -33,8 +33,7 @@ public class SubscriptionEntity extends AbstractEntity {
 			@Nullable String lastModifiedBy,
 			@Nullable Instant lastModifiedDate,
 			@Nullable AlertTypeEntity alertType,
-			@Nullable Long preferredLanguage,
-			@Nullable String userId) {
+			@Nullable Long preferredLanguage) {
 		super(isNew, id, createdBy, createdDate, lastModifiedBy, lastModifiedDate);
 		this.alertType = alertType;
 		this.preferredLanguage = preferredLanguage;
