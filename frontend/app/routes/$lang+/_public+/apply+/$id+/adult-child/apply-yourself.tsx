@@ -10,7 +10,7 @@ import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -63,17 +63,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
-  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
-
-  if (ageCategory === 'children') {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/contact-apply-child', params));
-  } else if (ageCategory === 'youth') {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/living-independently', params));
-  } else if (ageCategory === 'adults') {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/disability-tax-credit', params));
-  } else {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
-  }
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
 }
 
 export default function ApplyForYourself() {
