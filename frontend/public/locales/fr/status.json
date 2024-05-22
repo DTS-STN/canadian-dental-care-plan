@@ -58,10 +58,7 @@
     "continue": "Continuer",
     "submit": "Vérifier l'état de votre demande",
     "error-message": {
-      "sin-required": "Le numéro d'assurance sociale (NAS) est requis.",
-      "sin-valid": "Le numéro d'assurance sociale (NAS) doit être valide.",
-      "application-code-required": "(FR) The application code or client number is required",
-      "application-code-valid": "(FR) The application code or client number must be valid"
+      "selection-required":"(FR) Select an option."
     }
   },
   "myself": {

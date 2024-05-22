@@ -57,7 +57,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const log = getLogger('status/index');
   const { ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
-
+  const t = await getFixedT(request, handle.i18nNamespaces);
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
   const submittedCsrfToken = String(formData.get('_csrf'));
@@ -68,7 +68,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
   const checkForSchema = z.nativeEnum(CheckFor, {
     errorMap: () => {
-      return { message: 'Must select a value.' };
+      return { message: t('status:form.error-message.selection-required') };
     },
   });
   const statusCheckFor = formData.get('statusCheckFor');
