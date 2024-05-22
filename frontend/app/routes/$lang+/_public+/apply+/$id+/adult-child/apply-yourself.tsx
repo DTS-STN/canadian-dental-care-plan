@@ -86,9 +86,13 @@ export default function ApplyForYourself() {
   return (
     <div className="max-w-prose">
       <div className="mb-6 space-y-4">
+        <p>{t('apply-adult-child:eligibility.apply-yourself.ineligible-to-apply')}</p>
+        <p>{t('apply-adult-child:eligibility.apply-yourself.eligibility-info')}</p>
+        <p>{t('apply-adult-child:eligibility.apply-yourself.eligibility-2025')}</p>
         <p>
-          {t('apply-adult-child:eligibility.apply-yourself.ineligible-to-apply')}&nbsp;
-          <InlineLink to={t('apply-adult-child:eligibility.apply-yourself.eligibility-info-href')}>{t('apply-adult-child:eligibility.apply-yourself.eligibility-info')}</InlineLink>
+          <InlineLink to={t('apply-adult-child:eligibility.apply-yourself.when-to-apply-href')} className="external-link font-lato font-semibold" newTabIndicator target="_blank">
+            {t('apply-adult-child:eligibility.apply-yourself.when-to-apply')}
+          </InlineLink>
         </p>
         <p>{t('apply-adult-child:eligibility.apply-yourself.submit-application')}</p>
       </div>
