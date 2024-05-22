@@ -25,7 +25,7 @@ interface ToBenefitApplicationRequestArgs {
   dentalInsurance: boolean;
   partnerInformation: PartnerInformationState | undefined;
   personalInformation: PersonalInformationState;
-  children: ChildState[] | undefined;
+  children?: ChildState[];
 }
 
 export function toBenefitApplicationRequest({
@@ -46,20 +46,9 @@ export function toBenefitApplicationRequest({
       Applicant: {
         ApplicantDetail: {
           PrivateDentalInsuranceIndicator: dentalInsurance,
-          DisabilityTaxCreditIndicator: disabilityTaxCredit ?? false, //default for adult type
-          LivingIndependentlyIndicator: livingIndependently ?? true, //default for adult type
-          InsurancePlan: [
-            {
-              InsurancePlanIdentification: [
-                {
-                  IdentificationID: dentalBenefits.federalSocialProgram,
-                },
-                {
-                  IdentificationID: dentalBenefits.provincialTerritorialSocialProgram,
-                },
-              ],
-            },
-          ],
+          DisabilityTaxCreditIndicator: disabilityTaxCredit,
+          LivingIndependentlyIndicator: livingIndependently,
+          InsurancePlan: toInsurancePlan(dentalBenefits),
         },
         PersonBirthDate: toDate(dateOfBirth),
         PersonContactInformation: [
@@ -103,8 +92,6 @@ export function toBenefitApplicationRequest({
       BenefitApplicationChannelCode: {
         ReferenceDataID: '775170001', // PP's static value for "Online"
       },
-      InsurancePlan: toInsurancePlan(dentalBenefits),
-      PrivateDentalInsuranceIndicator: dentalInsurance,
     },
   };
 }
@@ -253,7 +240,7 @@ function toInsurancePlan({ hasFederalBenefits, federalSocialProgram, hasProvinci
   return [{ InsurancePlanIdentification: insurancePlanIdentification }];
 }
 
-interface RelatedPerson {
+/*interface RelatedPerson {
   PersonBirthDate: { dateTime: string };
   PersonName: { PersonGivenName: string[]; PersonSurName: string }[];
   PersonRelationshipCode: { ReferenceDataName: string };
@@ -272,24 +259,24 @@ interface RelatedPerson {
         }[]
       | undefined;
   };
-}
+}*/
 
 interface ToRelatedPersonArgs {
   partnerInformation: PartnerInformationState | undefined;
-  children: ChildState[] | undefined;
+  children?: ChildState[];
 }
 
-function toRelatedPersons({ partnerInformation, children }: ToRelatedPersonArgs): RelatedPerson[] {
-  let personData: RelatedPerson[] = [];
+function toRelatedPersons({ partnerInformation, children }: ToRelatedPersonArgs) {
+  const relatedPersons = [];
 
-  if (children) {
-    personData = toRelatedPersonDependent({ children });
-  }
   if (partnerInformation) {
-    personData.push(toRelatedPersonSpouse({ ...partnerInformation }));
+    relatedPersons.push(toRelatedPersonSpouse(partnerInformation));
+  }
+  if (children) {
+    relatedPersons.push(...toRelatedPersonDependent({ children }));
   }
 
-  return personData;
+  return relatedPersons;
 }
 
 interface ToRelatedPersonSpouseArgs {
@@ -300,7 +287,7 @@ interface ToRelatedPersonSpouseArgs {
   socialInsuranceNumber: string;
 }
 
-function toRelatedPersonSpouse({ confirm, dateOfBirth, firstName, lastName, socialInsuranceNumber }: ToRelatedPersonSpouseArgs): RelatedPerson {
+function toRelatedPersonSpouse({ confirm, dateOfBirth, firstName, lastName, socialInsuranceNumber }: ToRelatedPersonSpouseArgs) {
   return {
     PersonBirthDate: toDate(dateOfBirth),
     PersonName: [
@@ -310,16 +297,13 @@ function toRelatedPersonSpouse({ confirm, dateOfBirth, firstName, lastName, soci
       },
     ],
     PersonRelationshipCode: {
-      ReferenceDataName: 'Spouse',
+      ReferenceDataName: 'Spouse' as const,
     },
     PersonSINIdentification: {
       IdentificationID: socialInsuranceNumber,
     },
     ApplicantDetail: {
       ConsentToSharePersonalInformationIndicator: confirm,
-      AttestParentOrGuardianIndicator: undefined,
-      PrivateDentalInsuranceIndicator: undefined,
-      InsurancePlan: undefined,
     },
   };
 }
@@ -328,47 +312,29 @@ interface ToRelatedPersonDependentArgs {
   children: ChildState[];
 }
 
-function toRelatedPersonDependent({ children }: ToRelatedPersonDependentArgs): RelatedPerson[] {
-  const childData: RelatedPerson[] = [];
-
-  children.forEach((child) => {
-    if (child.information) {
-      childData.push({
-        PersonBirthDate: toDate(child.information.dateOfBirth),
-        PersonName: [
-          {
-            PersonGivenName: [child.information.firstName],
-            PersonSurName: child.information.lastName,
-          },
-        ],
-        PersonRelationshipCode: {
-          ReferenceDataName: 'Dependent',
+function toRelatedPersonDependent({ children }: ToRelatedPersonDependentArgs) {
+  return children
+    .filter((child): child is Required<ChildState> => child.dentalBenefits !== undefined && child.dentalInsurance !== undefined && child.information !== undefined)
+    .map((child) => ({
+      PersonBirthDate: toDate(child.information.dateOfBirth),
+      PersonName: [
+        {
+          PersonGivenName: [child.information.firstName],
+          PersonSurName: child.information.lastName,
         },
-        PersonSINIdentification: {
-          IdentificationID: child.information.socialInsuranceNumber ?? '',
-        },
-        ApplicantDetail: {
-          ConsentToSharePersonalInformationIndicator: undefined,
-          AttestParentOrGuardianIndicator: child.information.isParent,
-          PrivateDentalInsuranceIndicator: child.dentalInsurance,
-          InsurancePlan: [
-            {
-              InsurancePlanIdentification: [
-                {
-                  IdentificationID: child.dentalBenefits?.federalSocialProgram,
-                },
-                {
-                  IdentificationID: child.dentalBenefits?.provincialTerritorialSocialProgram,
-                },
-              ],
-            },
-          ],
-        },
-      });
-    }
-  });
-
-  return childData;
+      ],
+      PersonRelationshipCode: {
+        ReferenceDataName: 'Dependent' as const,
+      },
+      PersonSINIdentification: {
+        IdentificationID: child.information.socialInsuranceNumber ?? '',
+      },
+      ApplicantDetail: {
+        AttestParentOrGuardianIndicator: child.information.isParent,
+        PrivateDentalInsuranceIndicator: child.dentalInsurance,
+        InsurancePlan: toInsurancePlan(child.dentalBenefits),
+      },
+    }));
 }
 
 interface ToEmailAddressArgs {

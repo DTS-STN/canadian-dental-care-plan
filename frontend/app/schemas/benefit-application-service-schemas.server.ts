@@ -130,16 +130,6 @@ export const benefitApplicationRequestSchema = z.object({
     BenefitApplicationChannelCode: z.object({
       ReferenceDataID: z.string(),
     }),
-    InsurancePlan: z.array(
-      z.object({
-        InsurancePlanIdentification: z.array(
-          z.object({
-            IdentificationID: z.string(),
-          }),
-        ),
-      }),
-    ),
-    PrivateDentalInsuranceIndicator: z.boolean(),
   }),
 });
 
