@@ -29,7 +29,8 @@
   "children": {
     "index": {
       "page-title": "(FR) Summary of child(ren)",
-      "children-added": "(FR) The following child(ren) has been added to the application.",
+      "you-have-completed": "(FR) You have completed your application for the Canadian Dental Care Plan.",
+      "in-this-section": "(FR) In this section you will add your child(ren) to the application.",
       "dob-title": "(FR) Date of birth",
       "dob-change": "(FR) Change date of birth",
       "sin-title": "(FR) Social Insurance Number (SIN)",
@@ -39,7 +40,15 @@
       "remove-child": "(FR) Back",
       "continue-btn": "(FR) Continue with application",
       "cancel-btn": "(FR) Cancel",
-      "save-btn": "(FR) Save"
+      "save-btn": "(FR) Save",
+      "dental-insurance-title": "(FR) Access to other dental insurance or coverage",
+      "dental-insurance-change": "(FR) Change answer to dental insurance",
+      "dental-benefit-title": "(FR) Access to government dental benefit",
+      "dental-benefit-change": "(FR) Change answer to public dental benefits",
+      "dental-benefit-has-access": "(FR) Has access to the following benefits:",
+      "dental-benefit-has-no-access": "(FR) Has access to the following benefits:",
+      "yes": "(FR) Yes",
+      "no": "(FR) No"
     },
     "information": {
       "page-title": "(FR) Child 1: information",
