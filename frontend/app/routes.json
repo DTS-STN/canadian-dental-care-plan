@@ -267,6 +267,14 @@
                                   "en": "/:lang/apply/:id/adult-child/children/:childId/dental-insurance",
                                   "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/assurance-dentaire"
                                 }
+                              },
+                              {
+                                "id": "$lang+/_public+/apply+/$id+/adult-child/children/$childId/federal-provincial-territorial-benefits",
+                                "file": "routes/$lang+/_public+/apply+/$id+/adult-child/children/$childId/federal-provincial-territorial-benefits.tsx",
+                                "paths": {
+                                  "en": "/:lang/apply/:id/adult-child/children/:childId/federal-provincial-territorial-benefits",
+                                  "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/prestations-dentaires-federales-provinciales-territoriales"
+                                }
                               }
                             ]
                           }
