@@ -17,7 +17,7 @@ import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { applicantInformationStateHasPartner, loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { ApplicantInformationState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { ApplicantInformationState, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -54,7 +54,10 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:applicant-information.page-title') }) };
 
-  return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.applicantInformation, editMode: state.editMode });
+  invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
+  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
+
+  return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.applicantInformation, ageCategory, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -141,11 +144,23 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowApplicationInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, maritalStatuses, editMode } = useLoaderData<typeof loader>();
+  const { ageCategory, csrfToken, defaultState, maritalStatuses, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
+
+  function getBackButtonRouteId() {
+    if (ageCategory === 'adults') {
+      return '$lang+/_public+/apply+/$id+/adult-child/disability-tax-credit';
+    }
+
+    if (ageCategory === 'youth') {
+      return '$lang+/_public+/apply+/$id+/adult-child/living-independently';
+    }
+
+    return '$lang+/_public+/apply+/$id+/adult-child/date-of-birth';
+  }
 
   // Keys order should match the input IDs order.
   const errorMessages = useMemo(
@@ -251,7 +266,7 @@ export default function ApplyFlowApplicationInformation() {
                 {t('apply-adult-child:applicant-information.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult-child/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click">
+              <ButtonLink id="back-button" routeId={getBackButtonRouteId()} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-adult-child:applicant-information.back-btn')}
               </ButtonLink>
