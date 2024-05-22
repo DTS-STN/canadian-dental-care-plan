@@ -177,7 +177,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     dentalInsurance: state.dentalInsurance,
     personalInformation: state.personalInformation,
     partnerInformation: state.partnerInformation,
-    children: undefined,
+    children: state.children,
   });
 
   saveApplyState({ params, session, state: { editMode: true } });
@@ -261,7 +261,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     dentalInsurance: state.dentalInsurance,
     personalInformation: state.personalInformation,
     partnerInformation: state.partnerInformation,
-    children: undefined,
+    children: state.children,
   });
 
   const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
