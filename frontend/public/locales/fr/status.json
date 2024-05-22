@@ -58,7 +58,7 @@
     "continue": "Continuer",
     "submit": "Vérifier l'état de votre demande",
     "error-message": {
-      "selection-required":"(FR) Select an option."
+      "selection-required": "(FR) Select an option."
     }
   },
   "myself": {
