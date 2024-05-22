@@ -240,27 +240,6 @@ function toInsurancePlan({ hasFederalBenefits, federalSocialProgram, hasProvinci
   return [{ InsurancePlanIdentification: insurancePlanIdentification }];
 }
 
-/*interface RelatedPerson {
-  PersonBirthDate: { dateTime: string };
-  PersonName: { PersonGivenName: string[]; PersonSurName: string }[];
-  PersonRelationshipCode: { ReferenceDataName: string };
-  PersonSINIdentification: { IdentificationID: string };
-  ApplicantDetail: {
-    ConsentToSharePersonalInformationIndicator: boolean | undefined;
-    AttestParentOrGuardianIndicator: boolean | undefined;
-    PrivateDentalInsuranceIndicator: boolean | undefined;
-    InsurancePlan:
-      | {
-          InsurancePlanIdentification:
-            | {
-                IdentificationID: string | undefined;
-              }[]
-            | undefined;
-        }[]
-      | undefined;
-  };
-}*/
-
 interface ToRelatedPersonArgs {
   partnerInformation: PartnerInformationState | undefined;
   children?: ChildState[];
