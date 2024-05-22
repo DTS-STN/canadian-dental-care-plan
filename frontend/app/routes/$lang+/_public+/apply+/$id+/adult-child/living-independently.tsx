@@ -79,11 +79,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   saveApplyState({ params, session, state: { livingIndependently: parsedDataResult.data === LivingIndependentlyOption.Yes } });
 
-  if (parsedDataResult.data === LivingIndependentlyOption.Yes) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/applicant-information', params));
-  }
-
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/parent-or-guardian', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/applicant-information', params));
 }
 
 export default function ApplyFlowLivingIndependently() {
@@ -152,7 +148,7 @@ export default function ApplyFlowLivingIndependently() {
               {t('apply-adult-child:living-independently.continue-btn')}
               <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
             </Button>
-            <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Living independently click">
+            <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult-child/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Living independently click">
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('apply-adult-child:living-independently.back-btn')}
             </ButtonLink>
