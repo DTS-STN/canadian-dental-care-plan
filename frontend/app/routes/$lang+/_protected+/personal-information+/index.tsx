@@ -56,8 +56,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const regionList = await getLookupService().getAllRegions();
   const preferredLanguage = personalInformation.preferredLanguageId ? await getLookupService().getPreferredLanguage(personalInformation.preferredLanguageId) : undefined;
   const maritalStatusList = await getLookupService().getAllMaritalStatuses();
-  const dateString = personalInformation.birthDate ? new Date(personalInformation.birthDate).toLocaleDateString() : undefined;
-  const birthParsedFormat = dateString && isValid(parse(dateString, 'MM/dd/yyyy', new Date())) ? toLocaleDateString(parse(dateString, 'MM/dd/yyyy', new Date()), locale) : undefined;
+  const dateString = personalInformation.birthDate ? new Date(personalInformation.birthDate).toISOString() : undefined;
+  const birthParsedFormat = dateString && isValid(parse(dateString, "yyyy-MM-dd'T'HH:mm:ss.SSSX", new Date())) ? toLocaleDateString(parse(dateString, "yyyy-MM-dd'T'HH:mm:ss.SSSX", new Date()), locale) : undefined;
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };
   const updatedInfo = session.get('personal-info-updated');

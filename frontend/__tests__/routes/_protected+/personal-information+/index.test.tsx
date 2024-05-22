@@ -65,7 +65,7 @@ vi.mock('~/services/personal-information-service.server', () => ({
       lastName: 'Maverick',
       mailingAddress: '123 Mailing Street',
       phoneNumber: '(555) 555-5555',
-      birthDate: new Date('1950-10-11'),
+      birthDate: new Date('1950-10-11T00:00:00.000Z'),
       maritalStatusId: 'SINGLE',
       getHomeAddress: vi.fn().mockReturnValue({
         address: 'address',
@@ -133,7 +133,7 @@ describe('_gcweb-app.personal-information._index', () => {
       const data = await response.json();
 
       expect(data).toEqual({
-        birthParsedFormat: 'October 11, 1950',
+        birthParsedFormat: 'October 10, 1950',
         countryList: [
           {
             code: 'SUP',
