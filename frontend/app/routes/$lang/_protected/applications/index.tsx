@@ -1,13 +1,16 @@
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
-import { useLoaderData, useParams } from '@remix-run/react';
+import type { ChangeEvent } from 'react';
+
+import { LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
+import { useLoaderData, useParams, useSearchParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import pageIds from '../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
+import { InputSelect } from '~/components/input-select';
 import { getAuditService } from '~/services/audit-service.server';
 import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
@@ -28,6 +31,8 @@ export const handle = {
   pageTitleI18nKey: 'applications:index.page-title',
 } as const satisfies RouteHandleData;
 
+const orderEnumSchema = z.enum(['asc', 'desc']);
+
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   if (!data) return [];
   return getTitleMetaTags(data.meta.title);
@@ -39,12 +44,17 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const auditService = getAuditService();
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
-  const benefitApplicationService = getBenefitApplicationService();
 
   await raoidcService.handleSessionValidation(request, session);
 
+  const sortParam = new URL(request.url).searchParams.get('sort');
+  const sortOrder = orderEnumSchema.catch('desc').parse(sortParam);
+
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const applications = await benefitApplicationService.getApplications(userInfoToken.sub);
+
+  const benefitApplicationService = getBenefitApplicationService();
+  const applications = await benefitApplicationService.getApplications(userInfoToken.sub, sortOrder);
+  session.set('applications', applications);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('applications:index.page-title') }) };
@@ -53,16 +63,23 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   auditService.audit('page-view.applications', { userId: idToken.sub });
   instrumentationService.countHttpStatus('applications.view', 200);
 
-  return json({ applications, meta });
+  return json({ applications, meta, sortOrder });
 }
 
 export default function ApplicationsIndex() {
+  const [, setSearchParams] = useSearchParams();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { applications } = useLoaderData<typeof loader>();
+  const { applications, sortOrder } = useLoaderData<typeof loader>();
   const params = useParams();
   const userOrigin = useUserOrigin();
 
-  //TODO: will update <InlineLink rounteId> when view details page is ready
+  function handleOnSortOrderChange(e: ChangeEvent<HTMLSelectElement>) {
+    setSearchParams((prev) => {
+      prev.set('sort', e.target.value);
+      return prev;
+    });
+  }
+
   return (
     <>
       {applications.length === 0 ? (
@@ -71,15 +88,31 @@ export default function ApplicationsIndex() {
         </ContextualAlert>
       ) : (
         <>
+          <div className="my-6">
+            <InputSelect
+              className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
+              id="sort-order"
+              value={sortOrder}
+              onChange={handleOnSortOrderChange}
+              label={t('applications:index.filter')}
+              name="sortOrder"
+              options={[
+                { value: orderEnumSchema.enum.desc, children: t('applications:index.newest') },
+                { value: orderEnumSchema.enum.asc, children: t('applications:index.oldest') },
+              ]}
+            />
+          </div>
+
           <ul className="divide-y border-y">
             {applications.map((application) => {
+              const gcAnalyticsCustomClickValue = `ESDC-EDSC:CDCP Applications Click:${application.confirmationCode}`;
               return (
                 <li key={application.id} className="py-4 sm:py-6">
-                  <InlineLink routeId="$lang/_protected/letters/$id.download" params={{ ...params, id: application.id }} className="external-link font-lato font-semibold" newTabIndicator target="_blank">
-                    {t('applications:index.date', { date: application.submittedOn })}
+                  <InlineLink id="view-application-details" routeId="$lang/_protected/applications/$id" className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4" params={{ ...params, id: application.id }} data-gc-analytics-customclick={gcAnalyticsCustomClickValue}>
+                    {application.submittedOn}
                   </InlineLink>
-                  <p className="mt-1 text-sm text-gray-500">{application.status}</p>
-                  <p className="mt-1 text-sm text-gray-500">{application.confirmationCode}</p>
+                  <p className="mt-1 text-sm text-gray-500">{t('applications:index.confirmation-code', { confirmationCode: application.confirmationCode })}</p>
+                  <p className="mt-1 text-sm text-gray-500">{t('applications:index.status', { status: application.status })}</p>
                 </li>
               );
             })}

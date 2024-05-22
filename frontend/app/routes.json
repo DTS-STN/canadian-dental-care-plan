@@ -1018,9 +1018,17 @@
                 "file": "routes/$lang/_protected/applications/index.tsx",
                 "paths": {
                   "en": "/:lang/applications",
-                  "fr": "/:lang/applications"
+                  "fr": "/:lang/candidatures"
                 },
                 "index": true
+              },
+              {
+                "id": "$lang/_protected/applications/$id",
+                "file": "routes/$lang/_protected/applications/$id.tsx",
+                "paths": {
+                  "en": "/:lang/applications/:id/",
+                  "fr": "/:lang/candidatures/:id/"
+                }
               }
             ]
           },
