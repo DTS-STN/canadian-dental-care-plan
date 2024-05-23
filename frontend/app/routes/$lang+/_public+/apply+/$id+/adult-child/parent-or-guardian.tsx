@@ -43,7 +43,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
 
-  return json({ id: state.id, csrfToken, meta, isYouth: ageCategory === 'youth' });
+  return json({ id: state.id, csrfToken, meta, ageCategory });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -66,7 +66,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowParentOrGuardian() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, isYouth } = useLoaderData<typeof loader>();
+  const { csrfToken, ageCategory } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -84,7 +84,7 @@ export default function ApplyFlowParentOrGuardian() {
       <div className="mb-8 space-y-4">
         <p>{t('apply-adult-child:parent-or-guardian.unable-to-apply-child')}</p>
         <p>{t('apply-adult-child:parent-or-guardian.unable-to-apply')}</p>
-        {isYouth && (
+        {ageCategory === 'youth' && (
           <p>
             <Trans ns={handle.i18nNamespaces} i18nKey="parent-or-guardian.service-canada" components={{ noWrap }} />
           </p>
