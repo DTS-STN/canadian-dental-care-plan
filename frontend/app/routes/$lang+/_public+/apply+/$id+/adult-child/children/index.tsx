@@ -10,6 +10,7 @@ import { z } from 'zod';
 import pageIds from '../../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
@@ -126,15 +127,38 @@ export default function ApplyFlowChildSummary() {
         <p className="mb-4">{t('apply-adult-child:children.index.you-have-completed')}</p>
         <p className="mb-6">{t('apply-adult-child:children.index.in-this-section')}</p>
         {children.map((child) => {
+          const childName = `${child.information?.firstName} ${child.information?.lastName}`;
           return (
-            <fetcher.Form method="post" noValidate key={child.id}>
-              <input type="hidden" name="_csrf" value={csrfToken} />
-              <input type="hidden" name="childId" value={child.id} />
+            <div key={child.id}>
               <h2 className="text-2xl font-semibold">{`${child.information?.firstName} ${child.information?.lastName}`}</h2>
-              {/* TODO remove child button should open a modal for confirmation */}
-              <Button id="remove-child" name="_action" value={FormAction.Remove} variant="alternative" size="xs" className="my-2">
-                {t('apply-adult-child:children.index.remove-child')}
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="alternative" size="xs" className="my-2">
+                    {t('apply-adult-child:children.index.modal.remove-btn')}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>{t('apply-adult-child:children.index.modal.header', { childName })}</DialogTitle>
+                  </DialogHeader>
+                  <p>{t('apply-adult-child:children.index.modal.info', { childName })}</p>
+                  <DialogFooter>
+                    <DialogClose>
+                      <Button id="confirm-modal-back" variant="default" size="sm">
+                        {t('apply-adult-child:children.index.modal.back-btn')}
+                      </Button>
+                    </DialogClose>
+                    <fetcher.Form method="post" noValidate>
+                      <input type="hidden" name="_csrf" value={csrfToken} />
+                      <input type="hidden" name="childId" value={child.id} />
+                      <Button id="remove-child" name="_action" value={FormAction.Remove} variant="primary" className="my-2">
+                        {t('apply-adult-child:children.index.modal.remove-btn')}
+                      </Button>
+                    </fetcher.Form>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
               <dl className="mb-6 divide-y border-y">
                 <DescriptionListItem term={t('apply-adult-child:children.index.dob-title')}>
                   <p>{child.information?.dateOfBirth}</p>
@@ -182,7 +206,7 @@ export default function ApplyFlowChildSummary() {
                   </p>
                 </DescriptionListItem>
               </dl>
-            </fetcher.Form>
+            </div>
           );
         })}
 

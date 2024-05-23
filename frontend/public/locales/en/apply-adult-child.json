@@ -49,7 +49,13 @@
       "dental-benefit-has-access": "Has access to the following benefits:",
       "dental-benefit-has-no-access": "Has access to the following benefits:",
       "yes": "Yes",
-      "no": "No"
+      "no": "No",
+      "modal": {
+        "header": "Remove {{childName}}",
+        "info": "Do you want to remove {{childName}} from this application?",
+        "back-btn": "Return to summary page",
+        "remove-btn": "Remove child"
+      }
     },
     "information": {
       "page-title": "Child 1: information",
