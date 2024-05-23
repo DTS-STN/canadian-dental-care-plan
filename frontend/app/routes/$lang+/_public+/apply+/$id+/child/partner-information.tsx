@@ -95,12 +95,12 @@ export async function action({ context: { session }, params, request }: ActionFu
         .refine((sin) => isValidSin(sin) && formatSin(sin, '') !== state.applicantInformation?.socialInsuranceNumber, t('apply-child:partner-information.error-message.sin-unique'))
         .superRefine((sin, ctx) => {
           if (!isValidSin(sin)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:partner-information.error-message.sin-valid'), fatal: true });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:partner-information.error-message.sin-valid') });
             return z.NEVER;
           }
 
           if (state.applicantInformation && formatSin(sin) === formatSin(state.applicantInformation.socialInsuranceNumber)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:partner-information.error-message.sin-unique'), fatal: true });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:partner-information.error-message.sin-unique') });
             return z.NEVER;
           }
         }),
