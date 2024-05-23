@@ -47,8 +47,7 @@
     }
   },
   "confirm": {
-    "page-title": "Demande transmise",
-    "alert-heading": "Vous avez présenté avec succès une demande au Régime canadien de soins dentaires!",
+    "page-title": "(FR) Application successfully submitted",
     "app-code-is": "Votre code de demande est\u00a0:",
     "make-note": "Prenez ce code en note, car vous en aurez besoin pour vérifier l'état de votre demande.",
     "keep-copy": "Conservez une copie de votre demande",

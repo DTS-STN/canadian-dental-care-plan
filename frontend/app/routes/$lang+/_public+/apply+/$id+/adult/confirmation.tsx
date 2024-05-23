@@ -17,6 +17,7 @@ import { useFeature } from '~/root';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
+import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -186,11 +187,10 @@ export default function ApplyFlowConfirm() {
     <div className="max-w-prose">
       <ContextualAlert type="success">
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold">{t('confirm.alert-heading')}</h2>
-          <p>
-            {t('confirm.app-code-is')}
+          <p className="text-2xl">
+            <strong>{t('confirm.app-code-is')}</strong>
             <br />
-            <strong>{submissionInfo.confirmationCode}</strong>
+            <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
           </p>
           <p>{t('confirm.make-note')}</p>
         </div>
