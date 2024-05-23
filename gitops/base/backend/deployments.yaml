@@ -20,13 +20,16 @@ spec:
           ports:
             - name: http
               containerPort: 8080
-          #livenessProbe:
-          #  tcpSocket:
-          #    port: http
-          #readinessProbe:
-          #  httpGet:
-          #    path: /api/readyz
-          #    port: http
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            initialDelaySeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+            initialDelaySeconds: 30
           resources:
             requests:
               cpu: 250m
@@ -36,9 +39,4 @@ spec:
               memory: 1024Mi
           securityContext:
             allowPrivilegeEscalation: false
-          volumeMounts:
-            - name: audit-logs
-              mountPath: /home/node/logs
-      volumes:
-        - name: audit-logs
-          emptyDir: {}
+        
