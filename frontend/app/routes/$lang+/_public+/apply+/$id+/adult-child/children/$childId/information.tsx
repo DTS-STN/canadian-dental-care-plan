@@ -181,6 +181,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
+  if (!parsedDataResult.data.isParent) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/parent-or-guardian', params));
+  }
+
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/dental-insurance', params));
 }
 

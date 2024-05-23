@@ -166,6 +166,13 @@
         "provincial-benefit-required": "Sélectionnez si vous avez la prestation dentaire provinciale ou territoriale",
         "provincial-territorial-required": "Sélectionnez une province ou territoire"
       }
+    },
+    "parent-or-guardian": {
+      "page-title": "(FR) You must be a parent or legal guardian",
+      "must-be": "(FR) You must be a parent or legal guardian.",
+      "unable-to-apply": "(FR) You are not able to apply for this child. You must be a parent or legal guardian to apply on behalf of a child.",
+      "back-btn": "(FR) Back",
+      "continue-btn": "(FR) Proceed to apply for yourself"
     }
   },
   "communication-preference": {

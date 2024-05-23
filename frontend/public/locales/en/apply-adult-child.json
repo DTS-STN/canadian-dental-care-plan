@@ -168,6 +168,13 @@
         "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits",
         "provincial-territorial-required": "Select a province or territory"
       }
+    },
+    "parent-or-guardian": {
+      "page-title": "You must be a parent or legal guardian",
+      "must-be": "You must be a parent or legal guardian.",
+      "unable-to-apply": "You are not able to apply for this child. You must be a parent or legal guardian to apply on behalf of a child.",
+      "back-btn": "Back",
+      "continue-btn": "Proceed to apply for yourself"
     }
   },
   "communication-preference": {
