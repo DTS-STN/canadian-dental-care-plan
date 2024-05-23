@@ -58,7 +58,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     params,
     session,
     state: {
-      editMode: false,
+      editMode: true,
       typeOfApplication: 'adult',
     },
   });

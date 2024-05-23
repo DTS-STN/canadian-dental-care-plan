@@ -185,7 +185,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/parent-or-guardian', params));
   }
 
-  if (ageCategory === 'adults') {
+  if (ageCategory === 'adults' || ageCategory === 'seniors') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/cannot-apply-child', params));
   }
 
