@@ -48,7 +48,13 @@
       "dental-benefit-has-access": "(FR) Has access to the following benefits:",
       "dental-benefit-has-no-access": "(FR) Has access to the following benefits:",
       "yes": "(FR) Yes",
-      "no": "(FR) No"
+      "no": "(FR) No",
+      "modal": {
+        "header": "(FR) Remove {{childName}}",
+        "info": "(FR) Do you want to remove {{childName}} from this application?",
+        "back-btn": "(FR) Return to summary page",
+        "remove-btn": "(FR) Remove child"
+      }
     },
     "information": {
       "page-title": "(FR) Child 1: information",
