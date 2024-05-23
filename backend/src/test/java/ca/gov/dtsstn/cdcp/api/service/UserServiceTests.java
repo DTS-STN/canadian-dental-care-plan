@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ca.gov.dtsstn.cdcp.api.config.properties.ApplicationProperties;
 import ca.gov.dtsstn.cdcp.api.data.entity.UserEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.repository.AlertTypeRepository;
+import ca.gov.dtsstn.cdcp.api.data.repository.LanguageRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.UserRepository;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUser;
 
@@ -28,6 +29,9 @@ class UserServiceTests {
 
 	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
 	AlertTypeRepository alertTypeRepository;
+
+	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
+	LanguageRepository preferredLanguageRepository;
 
 	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
 	ApplicationProperties applicationProperties;
@@ -39,7 +43,7 @@ class UserServiceTests {
 
 	@BeforeEach
 	void setUp() {
-		this.userService = new UserService(alertTypeRepository, applicationProperties, userRepository);
+		this.userService = new UserService(alertTypeRepository, preferredLanguageRepository, applicationProperties, userRepository);
 	}
 
 	@Test()

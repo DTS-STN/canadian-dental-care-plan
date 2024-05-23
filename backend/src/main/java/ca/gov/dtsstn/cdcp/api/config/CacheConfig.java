@@ -28,4 +28,11 @@ public class CacheConfig {
 		return new CaffeineCacheFactory("alert-types");
 	}
 
+	@ConfigurationProperties("application.caching.caches.languages")
+	@Bean CaffeineCacheFactory languagesCache() {
+		log.info("Creating 'languagesCache' bean");
+		return new CaffeineCacheFactory("languages");
+	}
+
+
 }

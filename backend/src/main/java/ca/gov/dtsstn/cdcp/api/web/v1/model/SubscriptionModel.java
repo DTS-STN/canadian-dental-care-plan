@@ -13,12 +13,12 @@ import jakarta.annotation.Nullable;
 
 @Schema(name = "Subscription")
 @Relation(collectionRelation = "subscriptions", itemRelation = "subscription")
-@JsonPropertyOrder({ "id", "alertType",	"email", "preferredLanguage", "registered", "subscribed", "userId", "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate" })
+@JsonPropertyOrder({ "id", "alertType",	"email", "msLanguageCode", "registered", "subscribed", "userId", "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate" })
 public class SubscriptionModel extends BaseResourceModel<SubscriptionModel> {
 
 	private String alertTypeCode;
 
-	private String preferredLanguage;
+	private String msLanguageCode;
 
 	public String getAlertTypeCode() {
 		return alertTypeCode;
@@ -28,12 +28,12 @@ public class SubscriptionModel extends BaseResourceModel<SubscriptionModel> {
 		this.alertTypeCode = alertTypeCode;
 	}
 
-	public String getPreferredLanguage() {
-		return preferredLanguage;
+	public String getMsLanguageCode() {
+		return msLanguageCode;
 	}
 
-	public void setPreferredLanguage(String preferredLanguage) {
-		this.preferredLanguage = preferredLanguage;
+	public void setMsLanguageCode(String msLanguageCode) {
+		this.msLanguageCode = msLanguageCode;
 	}
 
 	@Override
@@ -45,21 +45,13 @@ public class SubscriptionModel extends BaseResourceModel<SubscriptionModel> {
 		final var other = (SubscriptionModel) obj;
 
 		return Objects.equals(alertTypeCode, other.alertTypeCode)
-			&& Objects.equals(preferredLanguage, other.preferredLanguage);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(
-			super.hashCode(),
-			preferredLanguage);
+			&& Objects.equals(msLanguageCode, other.msLanguageCode);
 	}
 
 	@Override
 	public String toString() {
 		return new ToStringCreator(this)
 			.append("super", super.toString())
-			.append("preferredLanguage", preferredLanguage)
 			.toString();
 	}
 

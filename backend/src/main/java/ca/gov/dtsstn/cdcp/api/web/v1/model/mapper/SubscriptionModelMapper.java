@@ -34,6 +34,7 @@ public interface SubscriptionModelMapper {
 
 	@Nullable
 	@Mapping(target = "alertTypeCode", source = "subscription.alertType.code")
+	@Mapping(target = "msLanguageCode", source = "subscription.language.msLocaleCode")
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 	SubscriptionModel toModel(String userId, @Nullable Subscription subscription);
 
@@ -46,15 +47,13 @@ public interface SubscriptionModelMapper {
 		subscription.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionById(userId, subscription.getId())).withSelfRel());
 	}
 
-	@Mapping(target = "alertType.id", source = "alertTypeId")
-	Subscription toDomain(@Nullable SubscriptionModel subscriptionModel, String alertTypeId);
-
 	@Mapping(target= "id", ignore = true)
 	@Mapping(target= "createdBy", ignore = true)
 	@Mapping(target= "createdDate", ignore = true)
 	@Mapping(target= "lastModifiedBy", ignore = true)
 	@Mapping(target= "lastModifiedDate", ignore = true)
 	@Mapping(target= "alertType.code", source = "alertTypeCode")
+	@Mapping(target= "language.msLocaleCode", source = "msLanguageCode")	
 	Subscription toDomain(@Nullable SubscriptionCreateModel subscriptionModel);
 
 }

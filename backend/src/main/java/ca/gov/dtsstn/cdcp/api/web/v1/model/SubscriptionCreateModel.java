@@ -5,6 +5,7 @@ import org.immutables.value.Value.Immutable;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import ca.gov.dtsstn.cdcp.api.web.validation.AlertTypeCode;
+import ca.gov.dtsstn.cdcp.api.web.validation.LanguageCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
@@ -18,6 +19,7 @@ public interface SubscriptionCreateModel {
 	String getAlertTypeCode();
 
 	@Schema(example = "1033")
-	Long getPreferredLanguage();
+	@LanguageCode(message = "Preferred language code does not exist")
+	String getMsLanguageCode();
 
 }
