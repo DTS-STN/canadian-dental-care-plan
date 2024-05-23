@@ -42,3 +42,7 @@ spec:
       volumes:
         - name: audit-logs
           emptyDir: {}
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0%
+      maxSurge: 100%
