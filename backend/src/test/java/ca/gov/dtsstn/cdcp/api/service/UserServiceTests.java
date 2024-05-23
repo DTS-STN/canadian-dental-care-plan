@@ -2,12 +2,15 @@ package ca.gov.dtsstn.cdcp.api.service;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +33,8 @@ import ca.gov.dtsstn.cdcp.api.data.entity.UserEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.repository.AlertTypeRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.LanguageRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.UserRepository;
+import ca.gov.dtsstn.cdcp.api.service.domain.ConfirmationCode;
+import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableConfirmationCode;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUser;
 
 @ExtendWith({ MockitoExtension.class })
@@ -139,5 +144,49 @@ class UserServiceTests {
 		when(userRepository.findById(any())).thenReturn(Optional.of(new UserEntity()));
 		assertThat(userService.getUserById("00000000-0000-0000-0000-000000000000")).isNotEmpty();
 	}
+	@Test
+	@DisplayName("Test userService.verifyConfirmationCode(..)")
+	void testVerifyConfirmationCode_verified() {
+		final Instant creationDate = LocalDateTime.now().minusDays(73).toInstant(ZoneOffset.UTC);
+		final Instant expiryDate = LocalDateTime.now().plusDays(288).toInstant(ZoneOffset.UTC);
+		final ConfirmationCode confirmationCode = ImmutableConfirmationCode.builder().code("code value").createdDate(creationDate).expiryDate(expiryDate).build();
+		final var user = ImmutableUser.builder().addConfirmationCodes(confirmationCode).build();
 
+		assertEquals(ConfirmationCodeStatus.VALID, userService.verifyConfirmationCode(confirmationCode, user));
+	}
+
+	@Test
+	@DisplayName("Test userService.verifyConfirmationCode(..)")
+	void testVerifyConfirmationCode_expired() {
+		final Instant creationDate = LocalDateTime.now().minusDays(73).toInstant(ZoneOffset.UTC);
+		final Instant expiryDate = LocalDateTime.now().minusDays(28).toInstant(ZoneOffset.UTC);
+		final ConfirmationCode confirmationCode = ImmutableConfirmationCode.builder().code("code value").createdDate(creationDate).expiryDate(expiryDate).build();
+		final var user = ImmutableUser.builder().addConfirmationCodes(confirmationCode).build();
+	
+		assertEquals(ConfirmationCodeStatus.EXPIRED, userService.verifyConfirmationCode(confirmationCode, user));
+	}
+
+
+	@Test
+	void testVerifyConfirmationCode_no_code() {
+		final var user = ImmutableUser.builder().build();
+
+		final Instant creationDate = LocalDateTime.now().minusDays(73).toInstant(ZoneOffset.UTC);
+		final Instant expiryDate = LocalDateTime.now().plusDays(288).toInstant(ZoneOffset.UTC);
+		ConfirmationCode confirmationCode = ImmutableConfirmationCode.builder().code("").createdDate(creationDate).expiryDate(expiryDate).build();
+		assertEquals(ConfirmationCodeStatus.NO_CODE, userService.verifyConfirmationCode(confirmationCode, user));
+		assertEquals(ConfirmationCodeStatus.NO_CODE, userService.verifyConfirmationCode(null, user));
+	}
+
+	@Test
+	@DisplayName("Test userService.verifyConfirmationCode(..)")
+	void testVerifyConfirmationCode_mistached() {
+		final Instant creationDate = LocalDateTime.now().minusDays(73).toInstant(ZoneOffset.UTC);
+		final Instant expiryDate = LocalDateTime.now().plusDays(288).toInstant(ZoneOffset.UTC);
+		final ConfirmationCode confirmationCode = ImmutableConfirmationCode.builder().code("code value").createdDate(creationDate).expiryDate(expiryDate).build();
+		final ConfirmationCode otherConfirmationCode = ImmutableConfirmationCode.builder().code("other code value").createdDate(creationDate).expiryDate(expiryDate).build();
+		final var user = ImmutableUser.builder().addConfirmationCodes(otherConfirmationCode).build();
+	
+		assertEquals(ConfirmationCodeStatus.MISMATCH, userService.verifyConfirmationCode(confirmationCode, user));
+	}
 }

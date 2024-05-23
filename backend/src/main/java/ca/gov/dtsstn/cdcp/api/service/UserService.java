@@ -189,4 +189,16 @@ public class UserService {
 		return subscription -> id.equals(subscription.getId());
 	}
 
+    public ConfirmationCodeStatus verifyConfirmationCode(ConfirmationCode confirmationCode, User user){
+        if (confirmationCode == null || confirmationCode.getCode().isBlank()) {
+            return ConfirmationCodeStatus.NO_CODE;
+        }
+    	if (!user.getConfirmationCodes().contains(confirmationCode)) {
+    		return ConfirmationCodeStatus.MISMATCH;
+    	}
+        if (confirmationCode.getExpiryDate().isBefore(Instant.now())) {
+        	return ConfirmationCodeStatus.EXPIRED;
+        }
+        return ConfirmationCodeStatus.VALID;
+    }
 }
