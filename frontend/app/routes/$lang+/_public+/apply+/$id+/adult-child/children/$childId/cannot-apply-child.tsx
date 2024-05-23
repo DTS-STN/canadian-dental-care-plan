@@ -54,14 +54,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  saveApplyState({
-    params,
-    session,
-    state: {
-      editMode: true,
-      typeOfApplication: 'adult',
-    },
-  });
+  saveApplyState({ params, session, state: { editMode: true, typeOfApplication: 'adult' } });
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
 }
