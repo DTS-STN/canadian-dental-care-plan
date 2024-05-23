@@ -96,6 +96,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/apply-children', params));
   }
 
+  if (parsedDataResult.data === DisabilityTaxCreditOption.No && !state.allChildrenUnder18) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/dob-eligibility', params));
+  }
+
   if (parsedDataResult.data === DisabilityTaxCreditOption.No) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/parent-or-guardian', params));
   }

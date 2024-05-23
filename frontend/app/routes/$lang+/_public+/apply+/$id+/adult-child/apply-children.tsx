@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
+import { InlineLink } from '~/components/inline-link';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -62,11 +63,24 @@ export default function ApplyFlowApplyChildren() {
     <>
       <div className="mb-8 space-y-4">
         <p>{t('apply-adult-child:eligibility.apply-children.not-eligible')}</p>
+        <p>{t('apply-adult-child:eligibility.apply-children.eligibility-info')}</p>
+        <p>{t('apply-adult-child:eligibility.apply-children.eligibility-2025')}</p>
+        <p>
+          <InlineLink to={t('apply-adult-child:eligibility.apply-children.when-to-apply-href')} className="external-link font-lato font-semibold" newTabIndicator target="_blank">
+            {t('apply-adult-child:eligibility.apply-children.when-to-apply')}
+          </InlineLink>
+        </p>
         <p>{t('apply-adult-child:eligibility.apply-children.still-apply')}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/disability-tax-credit" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Parent or guardian needs to apply click">
+        <ButtonLink
+          id="back-button"
+          routeId="$lang+/_public+/apply+/$id+/adult-child/disability-tax-credit"
+          params={params}
+          disabled={isSubmitting}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Parent or guardian needs to apply click"
+        >
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply-adult-child:eligibility.apply-children.back-btn')}
         </ButtonLink>
