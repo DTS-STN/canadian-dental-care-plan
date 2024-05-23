@@ -17,7 +17,7 @@ import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { ChildInformationState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { ChildInformationState, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -179,8 +179,14 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
+  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+
   if (!parsedDataResult.data.isParent) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/parent-or-guardian', params));
+  }
+
+  if (ageCategory === 'adults' || ageCategory === 'seniors') {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/cannot-apply-child', params));
   }
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/dental-insurance', params));
