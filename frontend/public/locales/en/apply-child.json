@@ -1,6 +1,6 @@
 {
   "applicant-information": {
-    "page-title": "Applicant Information",
+    "page-title": "Applicant information",
     "form-instructions-sin": "Please provide your legal name as indicated on your Social Insurance Number (SIN) card or letter.",
     "form-instructions-info": "We'll use the information you provide to verify your identity. Any information that does not match the information on your SIN record may cause a delay in the processing of your application.",
     "sin": "Social Insurance Number (SIN)",
@@ -339,7 +339,7 @@
   "review-information": {
     "read-carefully": "Please review this information carefully. The information provided will be used by Sun Life to create your member account and will be reflected on your member card.",
     "page-title": "Review Information",
-    "page-sub-title": "Applicant Information",
+    "page-sub-title": "Applicant information",
     "dob-title": "Date of birth",
     "dob-change": "Change date of birth",
     "sin-title": "Social Insurance Number (SIN)",
