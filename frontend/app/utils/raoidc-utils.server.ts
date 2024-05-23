@@ -1,6 +1,7 @@
 /**
  * Utility functions to help with RAOIDC requests.
  */
+import { UTCDate } from '@date-fns/utc';
 import { JWTPayload, JWTVerifyResult, SignJWT, compactDecrypt, importJWK, jwtVerify } from 'jose';
 import { createHash, subtle } from 'node:crypto';
 
@@ -339,7 +340,7 @@ export async function validateSession(authUrl: string, clientId: string, session
 async function createClientAssertion(issuer: string, client: ClientMetadata) {
   log.debug(`Creating client [%s] assertion for issuer [%s]`, client.clientId, issuer);
 
-  const now = Math.floor(Date.now() / 1000); // current time, rounded down to the nearest second
+  const now = Math.floor(UTCDate.now() / 1000); // current time, rounded down to the nearest second
   const expiry = now + 60; // valid for 1 minute
   const jwtId = generateRandomString(32); // mitigate replay attacks
 

@@ -7,7 +7,7 @@ import { InputHelp } from './input-help';
 import { InputLabel } from './input-label';
 import { InputLegend } from './input-legend';
 import { InputOption } from './input-option';
-import { parseDateString, useMonths } from '~/utils/date-utils';
+import { extractDateParts, useMonths } from '~/utils/date-utils';
 import { padWithZero } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
@@ -40,7 +40,7 @@ export interface DatePickerFieldProps {
 
 export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, names, required }: DatePickerFieldProps) => {
   const { i18n, t } = useTranslation(['gcweb']);
-  const [value] = useState(parseDateString(defaultValue));
+  const [value] = useState(extractDateParts(defaultValue));
 
   const inputWrapperId = `date-picker-${id}`;
   const inputErrorId = `${inputWrapperId}-error`;

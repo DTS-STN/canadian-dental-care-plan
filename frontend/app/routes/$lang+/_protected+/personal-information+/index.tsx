@@ -4,6 +4,7 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData, useParams } from '@remix-run/react';
 
+import { UTCDate } from '@date-fns/utc';
 import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../page-ids.json';
@@ -55,7 +56,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const regionList = await getLookupService().getAllRegions();
   const preferredLanguage = personalInformation.preferredLanguageId ? await getLookupService().getPreferredLanguage(personalInformation.preferredLanguageId) : undefined;
   const maritalStatusList = await getLookupService().getAllMaritalStatuses();
-  const birthParsedFormat = personalInformation.birthDate ? toLocaleDateString(personalInformation.birthDate, locale) : undefined;
+  const birthParsedFormat = personalInformation.birthDate ? toLocaleDateString(new UTCDate(personalInformation.birthDate), locale) : undefined;
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };
   const updatedInfo = session.get('personal-info-updated');

@@ -16,7 +16,7 @@ export const personalInformationApiSchema = z.object({
           .array()
           .optional(),
         PersonBirthDate: z.object({
-          dateTime: z.coerce.date().optional(),
+          dateTime: z.string().datetime().optional(),
         }),
         PersonContactInformation: z
           .object({
@@ -146,7 +146,7 @@ export const personalInfoDtoSchema = z.object({
   applictantId: z.string().optional(),
   clientId: z.string().optional(),
   clientNumber: z.string().optional(),
-  birthDate: z.coerce.date().optional(),
+  birthDate: z.string().datetime().optional(),
   lastName: z.string().optional(),
   firstName: z.string().optional(),
   sin: z.string().optional(),

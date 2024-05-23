@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
 import { Form, useActionData } from '@remix-run/react';
 
+import { UTCDate } from '@date-fns/utc';
 import md5 from 'md5';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -58,7 +59,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const sinToMock = parsedDataResult.data.socialInsuranceNumberToStub;
   const hashedMockedSin = md5(String(sinToMock));
-  const currentDateInSeconds = Math.floor(Date.now() / 1000);
+  const currentDateInSeconds = Math.floor(UTCDate.now() / 1000);
 
   const idToken = {
     iss: 'GC-ECAS',

@@ -1,4 +1,3 @@
-import { lightFormat, parse } from 'date-fns';
 import validator from 'validator';
 
 import {
@@ -12,6 +11,7 @@ import {
   TypeOfApplicationState,
 } from '~/route-helpers/apply-route-helpers.server';
 import { BenefitApplicationRequest } from '~/schemas/benefit-application-service-schemas.server';
+import { parseDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env.server';
 
 interface ToBenefitApplicationRequestArgs {
@@ -106,17 +106,11 @@ function toBenefitApplicationCategoryCode(typeOfApplication: TypeOfApplicationSt
 
 function toDate(date?: string) {
   if (!date || validator.isEmpty(date)) {
-    return { date: '', dateTime: '', DayDate: '', MonthDate: '', YearDate: '' };
+    return { dateTime: '' };
   }
 
-  const parsedDate = parse(date, 'yyyy-MM-dd', new Date());
-
   return {
-    date: lightFormat(parsedDate, 'yyyy-MM-dd'),
-    dateTime: parsedDate.toISOString(),
-    DayDate: lightFormat(parsedDate, 'dd'),
-    MonthDate: lightFormat(parsedDate, 'MM'),
-    YearDate: lightFormat(parsedDate, 'yyyy'),
+    dateTime: parseDateString(date).toISOString(),
   };
 }
 

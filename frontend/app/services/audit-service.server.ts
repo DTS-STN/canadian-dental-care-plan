@@ -1,3 +1,4 @@
+import { UTCDate } from '@date-fns/utc';
 import moize from 'moize';
 
 import { getLogger } from '~/utils/logging.server';
@@ -18,7 +19,7 @@ function createAuditService() {
     audit: function (eventId: string, auditDetails?: AuditDetails) {
       const { userId, ...otherDetails } = auditDetails ?? {};
       const details = Object.keys(otherDetails).length === 0 ? undefined : otherDetails;
-      log.audit('%j', { eventId, userId, details, timestamp: new Date().toISOString() });
+      log.audit('%j', { eventId, userId, details, timestamp: new UTCDate().toISOString() });
     },
   };
 }

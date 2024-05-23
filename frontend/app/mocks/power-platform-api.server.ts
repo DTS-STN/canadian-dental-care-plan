@@ -266,7 +266,7 @@ function toPersonalInformationDB(personalInformation: PersonalInfo) {
     clientId: personalInformation.clientId,
     applicantId: personalInformation.applictantId,
     applicantCategoryCode: personalInformation.applicantCategoryCode,
-    birthdate: personalInformation.birthDate,
+    birthdate: personalInformation.birthDate !== undefined ? new Date(personalInformation.birthDate) : undefined,
     lastName: personalInformation.lastName,
     firstName: personalInformation.firstName,
     emailAddressId: personalInformation.emailAddress,

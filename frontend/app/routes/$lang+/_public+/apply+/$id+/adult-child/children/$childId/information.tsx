@@ -5,7 +5,6 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { differenceInYears, isPast, isValid, parse } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -20,7 +19,7 @@ import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { ChildInformationState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
-import { parseDateString } from '~/utils/date-utils';
+import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -120,23 +119,22 @@ export async function action({ context: { session }, params, request }: ActionFu
       }
 
       // At this point the year, month and day should have been validated as positive integer
-      const parseDateOfBirthString = parseDateString(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
-      const dateOfBirth = `${parseDateOfBirthString.year}-${parseDateOfBirthString.month}-${parseDateOfBirthString.day}`;
-      const parsedDateOfBirth = parse(dateOfBirth, 'yyyy-MM-dd', new Date());
+      const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
+      const dateOfBirth = `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`;
 
-      if (!isValid(parsedDateOfBirth)) {
+      if (!isValidDateString(dateOfBirth)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: t('apply-adult-child:children.information.error-message.date-of-birth-valid'),
           path: ['dateOfBirth'],
         });
-      } else if (!isPast(parsedDateOfBirth)) {
+      } else if (!isPastDateString(dateOfBirth)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: t('apply-adult-child:children.information.error-message.date-of-birth-is-past'),
           path: ['dateOfBirth'],
         });
-      } else if (differenceInYears(new Date(), parsedDateOfBirth) > 150) {
+      } else if (getAgeFromDateString(dateOfBirth) > 150) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: t('apply-adult-child:children.information.error-message.date-of-birth-is-past-valid'),
@@ -146,10 +144,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     })
     .transform((val) => {
       // At this point the year, month and day should have been validated as positive integer
-      const parseDateOfBirthString = parseDateString(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
+      const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
       return {
         ...val,
-        dateOfBirth: `${parseDateOfBirthString.year}-${parseDateOfBirthString.month}-${parseDateOfBirthString.day}`,
+        dateOfBirth: `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`,
       };
     }) satisfies z.ZodType<ChildInformationState>;
 

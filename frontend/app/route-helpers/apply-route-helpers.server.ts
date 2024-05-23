@@ -1,6 +1,7 @@
 import { Session, redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
 
+import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns';
 import { z } from 'zod';
 
@@ -154,8 +155,8 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
 
   // Checks if the elapsed time since the last update exceeds 15 minutes,
   // and performs necessary actions if it does.
-  const lastUpdatedOn = new Date(state.lastUpdatedOn);
-  const now = new Date();
+  const lastUpdatedOn = new UTCDate(state.lastUpdatedOn);
+  const now = new UTCDate();
 
   if (differenceInMinutes(now, lastUpdatedOn) >= 15) {
     session.unset(sessionName);
@@ -184,7 +185,7 @@ export function saveApplyState({ params, session, state, remove = undefined }: S
   const newState: ApplyState = {
     ...currentState,
     ...state,
-    lastUpdatedOn: new Date().toISOString(),
+    lastUpdatedOn: new UTCDate().toISOString(),
   };
 
   if (remove && remove in newState) {
@@ -229,7 +230,7 @@ export function startApplyState({ id, session }: StartArgs) {
   const initialState: ApplyState = {
     id: parsedId,
     editMode: false,
-    lastUpdatedOn: new Date().toISOString(),
+    lastUpdatedOn: new UTCDate().toISOString(),
     children: [],
   };
 
