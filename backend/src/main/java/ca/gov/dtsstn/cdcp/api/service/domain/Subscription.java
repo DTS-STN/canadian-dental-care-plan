@@ -12,6 +12,6 @@ public interface Subscription extends BaseDomainObject {
 	AlertType getAlertType();
 
 	@Nullable
-	Long  getPreferredLanguage();
+	Language getLanguage();
 
 }

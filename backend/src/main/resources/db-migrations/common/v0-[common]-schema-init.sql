@@ -43,7 +43,7 @@ CREATE INDEX `ix_user_attribute_name_value` ON `user_attribute` (`name`, `value`
 CREATE TABLE `alert_type` (
 	`id` VARCHAR(64) NOT NULL,
 
-	`code` VARCHAR(64) NOT NULL,
+	`code` VARCHAR(16) NOT NULL,
 	`description` VARCHAR(256),
 
 	-- audit fields
@@ -59,11 +59,34 @@ CREATE INDEX `ix_alert_type_code` on `alert_type` (`code`);
 
 
 
+CREATE TABLE `language` (
+	`id` VARCHAR(64) NOT NULL,
+
+	`code` VARCHAR(16) NOT NULL,
+	`description` VARCHAR(256),
+	`iso_code` VARCHAR(16),
+	`ms_locale_code` VARCHAR(16),
+
+	-- audit fields
+	`created_by` VARCHAR(64) NOT NULL,
+	`created_date` TIMESTAMP WITH TIME ZONE NOT NULL,
+	`last_modified_by` VARCHAR(64),
+	`last_modified_date` TIMESTAMP WITH TIME ZONE,
+
+	CONSTRAINT `pk_language` PRIMARY KEY (`id`)
+);
+
+CREATE INDEX `ix_language_code` on `language` (`code`);
+CREATE INDEX `ix_language_iso_code` on `language` (`iso_code`);
+CREATE INDEX `ix_language_ms_locale_code` on `language` (`ms_locale_code`);
+
+
+
 CREATE TABLE `subscription` (
 	`id` VARCHAR(64) NOT NULL,
 
 	`user_id` VARCHAR(64) NOT NULL,
-	`preferred_language` BIGINT NOT NULL,
+	`language_id` VARCHAR(64) NOT NULL,
 	`alert_type_id` VARCHAR(64) NOT NULL,
 
 	-- audit fields
@@ -74,7 +97,8 @@ CREATE TABLE `subscription` (
 
 	CONSTRAINT `pk_subscription` PRIMARY KEY (`id`),
 	CONSTRAINT `fk_subscription_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-	CONSTRAINT `fk_subscription_alert_type` FOREIGN KEY (`alert_type_id`) REFERENCES `alert_type` (`id`)
+	CONSTRAINT `fk_subscription_alert_type` FOREIGN KEY (`alert_type_id`) REFERENCES `alert_type` (`id`),
+	CONSTRAINT `fk_subscription_language` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`)
 );
 
 CREATE INDEX `ix_subscription_alert_type_id` on `subscription` (`alert_type_id`);

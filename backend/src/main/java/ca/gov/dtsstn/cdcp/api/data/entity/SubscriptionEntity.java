@@ -17,8 +17,8 @@ public class SubscriptionEntity extends AbstractEntity {
 	@ManyToOne(optional = false)
 	private AlertTypeEntity alertType;
 
-	@Column(nullable = false)
-	private Long preferredLanguage;
+	@ManyToOne(optional = false)
+	private LanguageEntity language;
 
 	public SubscriptionEntity() {
 		super();
@@ -33,10 +33,10 @@ public class SubscriptionEntity extends AbstractEntity {
 			@Nullable String lastModifiedBy,
 			@Nullable Instant lastModifiedDate,
 			@Nullable AlertTypeEntity alertType,
-			@Nullable Long preferredLanguage) {
+			@Nullable LanguageEntity language) {
 		super(isNew, id, createdBy, createdDate, lastModifiedBy, lastModifiedDate);
 		this.alertType = alertType;
-		this.preferredLanguage = preferredLanguage;
+		this.language = language;
 	}
 
 	public AlertTypeEntity getAlertType() {
@@ -47,12 +47,12 @@ public class SubscriptionEntity extends AbstractEntity {
 		this.alertType = alertType;
 	}
 
-	public Long getPreferredLanguage() {
-		return preferredLanguage;
+	public LanguageEntity getLanguage() {
+		return language;
 	}
 
-	public void setPreferredLanguage(Long preferredLanguage) {
-		this.preferredLanguage = preferredLanguage;
+	public void setLanguage(LanguageEntity language) {
+		this.language = language;
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class SubscriptionEntity extends AbstractEntity {
 		return new ToStringCreator(this)
 			.append("super", super.toString())
 			.append("alertType", alertType)
-			.append("preferredLanguage", preferredLanguage)
+			.append("language", language)
 			.toString();
 	}
 

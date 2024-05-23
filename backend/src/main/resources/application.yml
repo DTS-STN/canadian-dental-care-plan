@@ -139,6 +139,11 @@ application:
         # reduce excessive database calls
         expire-after-write: 1
         time-unit: minutes
+      languages:
+        # cache preferred languages for one minute to
+        # reduce excessive database calls
+        expire-after-write: 1
+        time-unit: minutes        
   email-notifications:
     confirmation-codes:
       expiry:
