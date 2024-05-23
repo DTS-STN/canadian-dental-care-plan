@@ -160,15 +160,23 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/contact-apply-child', params));
   }
 
+  if (ageCategory === 'children') {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/parent-or-guardian', params));
+  }
+
   if (ageCategory === 'youth' && allChildrenUnder18 === 'yes') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/living-independently', params));
+  }
+
+  if (ageCategory === 'youth') {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/parent-or-guardian', params));
   }
 
   if (ageCategory === 'adults') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/disability-tax-credit', params));
   }
 
-  if (ageCategory === 'seniors' && allChildrenUnder18 === 'no') {
+  if (allChildrenUnder18 === 'no') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/apply-yourself', params));
   }
 

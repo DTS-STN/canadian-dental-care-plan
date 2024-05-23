@@ -5,7 +5,7 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 
 import pageIds from '../../../../page-ids.json';
@@ -39,11 +39,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
   const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
-  if (ageCategory !== 'children') {
+  if (ageCategory !== 'children' && ageCategory !== 'youth') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
 
-  return json({ id: state.id, csrfToken, meta });
+  return json({ id: state.id, csrfToken, meta, isYouth: ageCategory === 'youth' });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -66,7 +66,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowParentOrGuardian() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken } = useLoaderData<typeof loader>();
+  const { csrfToken, isYouth } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -77,10 +77,19 @@ export default function ApplyFlowParentOrGuardian() {
     sessionStorage.removeItem('flow.state');
   }
 
+  const noWrap = <span className="whitespace-nowrap" />;
+
   return (
     <>
       <div className="mb-8 space-y-4">
+        <p>{t('apply-adult-child:parent-or-guardian.unable-to-apply-child')}</p>
         <p>{t('apply-adult-child:parent-or-guardian.unable-to-apply')}</p>
+        {isYouth && (
+          <p>
+            <Trans ns={handle.i18nNamespaces} i18nKey="parent-or-guardian.service-canada" components={{ noWrap }} />
+          </p>
+        )}
+        <p>{t('apply-adult-child:parent-or-guardian.eligibility')}</p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
