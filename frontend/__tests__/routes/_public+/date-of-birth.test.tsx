@@ -1,11 +1,10 @@
 import { createMemorySessionStorage, redirect } from '@remix-run/node';
 
-import { differenceInYears, isPast, isValid, parse } from 'date-fns';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
 import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/adult/date-of-birth';
-import { getAgeFromDateString, parseDateString } from '~/utils/date-utils';
+import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 
 vi.mock('date-fns');
 
@@ -96,11 +95,10 @@ describe('_public.apply.id.date-of-birth', () => {
       formData.append('dateOfBirthMonth', '01');
       formData.append('dateOfBirthDay', '01');
 
-      vi.mocked(isValid).mockReturnValueOnce(true);
-      vi.mocked(isPast).mockReturnValueOnce(true);
-      vi.mocked(parse).mockReturnValueOnce(new Date(1959, 0, 1));
-      vi.mocked(differenceInYears).mockReturnValueOnce(65).mockReturnValueOnce(65);
-      vi.mocked(parseDateString).mockReturnValue({ year: '1959', month: '01', day: '01' });
+      vi.mocked(isValidDateString).mockReturnValueOnce(true);
+      vi.mocked(isPastDateString).mockReturnValueOnce(true);
+      vi.mocked(getAgeFromDateString).mockReturnValueOnce(65).mockReturnValueOnce(65);
+      vi.mocked(extractDateParts).mockReturnValue({ year: '1959', month: '01', day: '01' });
       vi.mocked(getAgeFromDateString).mockReturnValueOnce(65);
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
 
@@ -124,11 +122,10 @@ describe('_public.apply.id.date-of-birth', () => {
       formData.append('dateOfBirthMonth', '01');
       formData.append('dateOfBirthDay', '01');
 
-      vi.mocked(isValid).mockReturnValueOnce(true);
-      vi.mocked(isPast).mockReturnValueOnce(true);
-      vi.mocked(parse).mockReturnValueOnce(new Date(2000, 0, 1));
-      vi.mocked(differenceInYears).mockReturnValueOnce(64).mockReturnValueOnce(64);
-      vi.mocked(parseDateString).mockReturnValue({ year: '2000', month: '01', day: '01' });
+      vi.mocked(isValidDateString).mockReturnValueOnce(true);
+      vi.mocked(isPastDateString).mockReturnValueOnce(true);
+      vi.mocked(getAgeFromDateString).mockReturnValueOnce(64).mockReturnValueOnce(64);
+      vi.mocked(extractDateParts).mockReturnValue({ year: '2000', month: '01', day: '01' });
       vi.mocked(getAgeFromDateString).mockReturnValueOnce(24);
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('adults');
 
@@ -140,8 +137,7 @@ describe('_public.apply.id.date-of-birth', () => {
 
       expect(response.status).toBe(302);
       expect(response.headers.get('location')).toBe('/en/apply/123/adult/disability-tax-credit');
-      expect(parse).toBeCalled();
-      expect(differenceInYears).toBeCalled();
+      expect(getAgeFromDateString).toBeCalled();
     });
   });
 });

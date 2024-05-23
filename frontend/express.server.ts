@@ -2,6 +2,7 @@ import { createRemixRequest, sendRemixResponse } from '@remix-run/express/dist/s
 import type { ServerBuild } from '@remix-run/node';
 import { broadcastDevReady, installGlobals, createRequestHandler as remixCreateRequestHandler } from '@remix-run/node';
 
+import { UTCDate } from '@date-fns/utc';
 import chokidar from 'chokidar';
 import compression from 'compression';
 import express, { NextFunction, Request, Response } from 'express';
@@ -164,7 +165,7 @@ async function createRequestHandler(build: ServerBuild, mode: string) {
       }
 
       const session = await sessionService.getSession(req.headers.cookie);
-      session.set('lastAccessTime', new Date().toISOString());
+      session.set('lastAccessTime', new UTCDate().toISOString());
 
       // We use session-scoped CSRF tokens to ensure back button and multi-tab navigation still works.
       // @see: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern

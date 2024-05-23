@@ -21,6 +21,7 @@
     "test:unit:ui": "vitest --ui --coverage.enabled=true"
   },
   "dependencies": {
+    "@date-fns/utc": "^1.2.0",
     "@faker-js/faker": "^8.4.1",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-regular-svg-icons": "^6.5.2",

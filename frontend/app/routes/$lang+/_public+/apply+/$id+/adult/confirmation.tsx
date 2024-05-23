@@ -2,7 +2,6 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
-import { parse } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -18,7 +17,7 @@ import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.s
 import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
-import { toLocaleDateString } from '~/utils/date-utils';
+import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -94,7 +93,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     phoneNumber: state.personalInformation.phoneNumber,
     altPhoneNumber: state.personalInformation.phoneNumberAlt,
     preferredLanguage: preferredLanguage,
-    birthday: toLocaleDateString(parse(state.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+    birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: maritalStatus,
     email: state.communicationPreferences.email,
@@ -105,7 +104,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     ? {
         firstName: state.partnerInformation.firstName,
         lastName: state.partnerInformation.lastName,
-        birthday: toLocaleDateString(parse(state.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+        birthday: toLocaleDateString(parseDateString(state.partnerInformation.dateOfBirth), locale),
         sin: state.partnerInformation.socialInsuranceNumber,
       }
     : undefined;

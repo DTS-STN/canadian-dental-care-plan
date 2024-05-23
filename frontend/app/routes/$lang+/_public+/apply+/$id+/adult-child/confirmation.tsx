@@ -3,7 +3,6 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
-import { parse } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -17,7 +16,7 @@ import { useFeature } from '~/root';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
-import { toLocaleDateString } from '~/utils/date-utils';
+import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -95,7 +94,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     phoneNumber: state.personalInformation.phoneNumber,
     altPhoneNumber: state.personalInformation.phoneNumberAlt,
     preferredLanguage: preferredLanguage,
-    birthday: toLocaleDateString(parse(state.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+    birthday: toLocaleDateString(parse(state.dateOfBirth, 'yyyy-MM-dd', new UTCDate()), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: maritalStatus,
     email: state.communicationPreferences.email,
@@ -106,7 +105,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     ? {
         firstName: state.partnerInformation.firstName,
         lastName: state.partnerInformation.lastName,
-        birthday: toLocaleDateString(parse(state.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new Date()), locale),
+        birthday: toLocaleDateString(parse(state.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new UTCDate()), locale),
         sin: state.partnerInformation.socialInsuranceNumber,
       }
     : undefined;
@@ -143,7 +142,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     phoneNumber: '1112223333',
     altPhoneNumber: '1112223333',
     preferredLanguage: '1033',
-    birthday: toLocaleDateString(parse('1990-11-11', 'yyyy-MM-dd', new Date()), locale),
+    birthday: toLocaleDateString(parseDateString('1990-11-11'), locale),
     sin: '800000002',
     martialStatus: 'MARRIED',
     email: 'EMAIL',
@@ -158,7 +157,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     ? {
         firstName: 'firstName',
         lastName: 'lastName',
-        birthday: toLocaleDateString(parse('1990-11-11', 'yyyy-MM-dd', new Date()), locale),
+        birthday: toLocaleDateString(parseDateString('1990-11-11'), locale),
         sin: '700000003',
         consent: true,
       }
@@ -198,7 +197,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const childInfo = {
     firstName: 'firstName',
     lastName: 'lastName',
-    birthday: toLocaleDateString(parse('2009-11-11', 'yyyy-MM-dd', new Date()), locale),
+    birthday: toLocaleDateString(parseDateString('2009-11-11'), locale),
     sin: '800000002',
     isParent: true,
     dentalInsurance: {

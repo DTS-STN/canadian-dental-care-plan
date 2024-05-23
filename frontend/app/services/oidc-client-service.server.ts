@@ -9,6 +9,7 @@
  *   - https://tools.ietf.org/html/rfc6749#section-1.1
  *   - https://tools.ietf.org/html/rfc6749#section-1.3.4
  */
+import { UTCDate } from '@date-fns/utc';
 import moize from 'moize';
 import { Client, clientCredentialsGrantRequest, discoveryRequest, isOAuth2Error, processClientCredentialsResponse, processDiscoveryResponse, protectedResourceRequest } from 'oauth4webapi';
 
@@ -72,7 +73,7 @@ async function createOidcClientService(issuer: string, clientId: string, clientS
     // reuse the existing cached token if it has not expired
     //
     if (tokenCache.token && isTokenValid(tokenCache.token)) {
-      const expiresIn = Math.floor(((tokenCache.token.expiresAt ?? Number.POSITIVE_INFINITY) - Date.now()) / 1000);
+      const expiresIn = Math.floor(((tokenCache.token.expiresAt ?? Number.POSITIVE_INFINITY) - UTCDate.now()) / 1000);
       log.debug('Returning cached token (valid for another %s seconds)', expiresIn);
       return tokenCache.token;
     }
@@ -90,7 +91,7 @@ async function createOidcClientService(issuer: string, clientId: string, clientS
 
     tokenCache.token = {
       accessToken: clientCredentialsGrantResult.access_token,
-      expiresAt: clientCredentialsGrantResult.expires_in && Date.now() + clientCredentialsGrantResult.expires_in * 1000,
+      expiresAt: clientCredentialsGrantResult.expires_in && UTCDate.now() + clientCredentialsGrantResult.expires_in * 1000,
     } as const;
 
     return tokenCache.token;
@@ -115,7 +116,7 @@ async function createOidcClientService(issuer: string, clientId: string, clientS
    * Return true if the token's expiry time has not yet passed.
    */
   function isTokenValid(token: OidcToken) {
-    const currentTime = Date.now() - CLOCK_SKEW_MS;
+    const currentTime = UTCDate.now() - CLOCK_SKEW_MS;
     const expiresAt = token.expiresAt ?? Number.POSITIVE_INFINITY;
 
     return currentTime < expiresAt;
