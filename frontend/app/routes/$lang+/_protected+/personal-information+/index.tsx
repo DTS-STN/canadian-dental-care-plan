@@ -4,7 +4,6 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData, useParams } from '@remix-run/react';
 
-import { isValid, parse } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../page-ids.json';
@@ -56,8 +55,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const regionList = await getLookupService().getAllRegions();
   const preferredLanguage = personalInformation.preferredLanguageId ? await getLookupService().getPreferredLanguage(personalInformation.preferredLanguageId) : undefined;
   const maritalStatusList = await getLookupService().getAllMaritalStatuses();
-  const dateString = personalInformation.birthDate ? new Date(personalInformation.birthDate).toLocaleDateString() : undefined;
-  const birthParsedFormat = dateString && isValid(parse(dateString, 'MM/dd/yyyy', new Date())) ? toLocaleDateString(parse(dateString, 'MM/dd/yyyy', new Date()), locale) : undefined;
+  const birthParsedFormat = personalInformation.birthDate ? toLocaleDateString(personalInformation.birthDate, locale) : undefined;
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };
   const updatedInfo = session.get('personal-info-updated');
@@ -69,7 +67,7 @@ export default function PersonalInformationIndex() {
   featureEnabled('view-personal-info');
   const { personalInformation, preferredLanguage, countryList, birthParsedFormat, maritalStatusList, regionList, updatedInfo } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const maritalStatus = personalInformation.maritalStatusId ? maritalStatusList.find((maritalStatus) => maritalStatus.id === personalInformation.maritalStatusId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' ' : undefined;
+  const maritalStatus = maritalStatusList.find((maritalStatus) => maritalStatus.id === personalInformation.maritalStatusId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'];
 
   const params = useParams();
   const userOrigin = useUserOrigin();
@@ -181,7 +179,7 @@ export default function PersonalInformationIndex() {
             </p>
           )}
         </DescriptionListItem>
-        <DescriptionListItem term={t('personal-information:index.marital-status')}>{`${maritalStatus ? maritalStatus : t('personal-information:index.no-marital-status')} `}</DescriptionListItem>
+        <DescriptionListItem term={t('personal-information:index.marital-status')}>{`${maritalStatus ?? t('personal-information:index.no-marital-status')} `}</DescriptionListItem>
         <DescriptionListItem term={t('personal-information:index.date-of-birth')}>{birthParsedFormat}</DescriptionListItem>
       </dl>
 
