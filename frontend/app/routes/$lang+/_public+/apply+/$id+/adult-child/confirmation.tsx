@@ -316,9 +316,9 @@ export default function ApplyFlowConfirm() {
       <div className="space-y-10">
         <h2 className="mt-8 text-3xl font-semibold">{t('confirm.application-summ')}</h2>
         <div>
-          <dl className="mt-6 divide-y border-y">
+          <dl className="mt-6 divide-y border-y text-xl">
             <DescriptionListItem term={t('confirm.application-code')}>
-              <strong>{submissionInfo?.confirmationCode ?? 'confirmationCode'}</strong>
+              <strong>{formatSubmissionApplicationCode(submissionInfo?.confirmationCode ?? 'confirmationCode')}</strong>
             </DescriptionListItem>
           </dl>
         </div>
