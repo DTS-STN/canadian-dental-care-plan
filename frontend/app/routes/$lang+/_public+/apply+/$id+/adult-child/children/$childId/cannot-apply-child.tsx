@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 
-import pageIds from '../../../../page-ids.json';
+import pageIds from '../../../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
@@ -22,7 +22,7 @@ import { cn } from '~/utils/tw-utils';
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adultChild.applySelf,
-  pageTitleI18nKey: 'apply-adult-child:eligibility.apply-yourself.page-title',
+  pageTitleI18nKey: 'apply-adult-child:eligibility.cannot-apply-child.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -34,7 +34,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.apply-yourself.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.cannot-apply-child.page-title') }) };
 
   return json({ id: state.id, csrfToken, meta });
 }
@@ -63,7 +63,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
 }
 
 export default function ApplyForYourself() {
@@ -76,19 +76,18 @@ export default function ApplyForYourself() {
   return (
     <div className="max-w-prose">
       <div className="mb-6 space-y-4">
-        <p>{t('apply-adult-child:eligibility.apply-yourself.ineligible-to-apply')}</p>
-        <p>{t('apply-adult-child:eligibility.apply-yourself.eligibility-info')}</p>
-        <p>{t('apply-adult-child:eligibility.apply-yourself.eligibility-2025')}</p>
+        <p>{t('apply-adult-child:eligibility.cannot-apply-child.ineligible-to-apply')}</p>
+        <p>{t('apply-adult-child:eligibility.cannot-apply-child.eligibility-info')}</p>
+        <p>{t('apply-adult-child:eligibility.cannot-apply-child.eligibility-2025')}</p>
         <p>
-          <InlineLink to={t('apply-adult-child:eligibility.apply-yourself.when-to-apply-href')} className="external-link font-lato font-semibold" newTabIndicator target="_blank">
-            {t('apply-adult-child:eligibility.apply-yourself.when-to-apply')}
+          <InlineLink to={t('apply-adult-child:eligibility.cannot-apply-child.when-to-apply-href')} className="external-link font-lato font-semibold" newTabIndicator target="_blank">
+            {t('apply-adult-child:eligibility.cannot-apply-child.when-to-apply')}
           </InlineLink>
         </p>
-        <p>{t('apply-adult-child:eligibility.apply-yourself.submit-application')}</p>
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult-child/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Apply for yourself">
+        <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult-child/children/$childId/information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Apply for yourself">
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply-adult-child:eligibility.apply-yourself.back-btn')}
         </ButtonLink>

@@ -281,7 +281,15 @@
                                 "file": "routes/$lang+/_public+/apply+/$id+/adult-child/children/$childId/parent-or-guardian.tsx",
                                 "paths": {
                                   "en": "/:lang/apply/:id/adult-child/children/:childId/parent-or-guardian",
-                                  "fr": "/:lang/demander/:id/adulte-enfant/children/:childId/parent-or-guardian"
+                                  "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/parent-or-guardian"
+                                }
+                              },
+                              {
+                                "id": "$lang+/_public+/apply+/$id+/adult-child/children/$childId/cannot-apply-child",
+                                "file": "routes/$lang+/_public+/apply+/$id+/adult-child/children/$childId/cannot-apply-child.tsx",
+                                "paths": {
+                                  "en": "/:lang/apply/:id/adult-child/children/:childId/cannot-apply-child",
+                                  "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/cannot-apply-child"
                                 }
                               }
                             ]
