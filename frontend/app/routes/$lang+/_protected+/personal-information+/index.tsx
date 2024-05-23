@@ -64,7 +64,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export default function PersonalInformationIndex() {
-  featureEnabled('view-personal-info');
   const { personalInformation, preferredLanguage, countryList, birthParsedFormat, maritalStatusList, regionList, updatedInfo } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const maritalStatus = maritalStatusList.find((maritalStatus) => maritalStatus.id === personalInformation.maritalStatusId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'];
