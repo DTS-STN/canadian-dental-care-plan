@@ -174,6 +174,9 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   // TODO submit to the API and grab the confirmation code from the response
   const benefitApplicationRequest = toBenefitApplicationRequest({
+    typeOfApplication: state.typeOfApplication,
+    disabilityTaxCredit: state.disabilityTaxCredit,
+    livingIndependently: state.livingIndependently,
     applicantInformation: state.applicantInformation,
     communicationPreferences: state.communicationPreferences,
     dateOfBirth: state.dateOfBirth,
@@ -181,9 +184,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     dentalInsurance: state.dentalInsurance,
     personalInformation: state.personalInformation,
     partnerInformation: state.partnerInformation,
-    //childInformation: state.childInformation,
-    //childDentalBenefits: state.childDentalBenefits,
-    //childDentalInsurance: state.childDentalInsurance,
+    children: state.children,
   });
 
   const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);

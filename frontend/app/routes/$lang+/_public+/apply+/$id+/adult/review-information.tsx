@@ -167,6 +167,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:review-information.page-title') }) };
 
   const payload = toBenefitApplicationRequest({
+    typeOfApplication: state.typeOfApplication,
+    disabilityTaxCredit: state.disabilityTaxCredit,
+    livingIndependently: state.livingIndependently,
     applicantInformation: state.applicantInformation,
     communicationPreferences: state.communicationPreferences,
     dateOfBirth: state.dateOfBirth,
@@ -247,6 +250,9 @@ export async function action({ context: { session }, params, request }: ActionFu
   // TODO submit to the API and grab the confirmation code from the response
   // any field change here will update payload assignment in loader()
   const benefitApplicationRequest = toBenefitApplicationRequest({
+    typeOfApplication: state.typeOfApplication,
+    disabilityTaxCredit: state.disabilityTaxCredit,
+    livingIndependently: state.livingIndependently,
     applicantInformation: state.applicantInformation,
     communicationPreferences: state.communicationPreferences,
     dateOfBirth: state.dateOfBirth,

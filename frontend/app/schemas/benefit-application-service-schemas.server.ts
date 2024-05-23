@@ -3,12 +3,24 @@ import { z } from 'zod';
 export const benefitApplicationRequestSchema = z.object({
   BenefitApplication: z.object({
     Applicant: z.object({
+      ApplicantDetail: z.object({
+        PrivateDentalInsuranceIndicator: z.boolean().optional(),
+        DisabilityTaxCreditIndicator: z.boolean().optional(),
+        LivingIndependentlyIndicator: z.boolean().optional(),
+        InsurancePlan: z
+          .object({
+            InsurancePlanIdentification: z
+              .object({
+                IdentificationID: z.string().optional(),
+              })
+              .array()
+              .optional(),
+          })
+          .array()
+          .optional(),
+      }),
       PersonBirthDate: z.object({
-        date: z.string(),
         dateTime: z.string(),
-        DayDate: z.string(),
-        MonthDate: z.string(),
-        YearDate: z.string(),
       }),
       PersonContactInformation: z.array(
         z.object({
@@ -75,11 +87,7 @@ export const benefitApplicationRequestSchema = z.object({
       RelatedPerson: z.array(
         z.object({
           PersonBirthDate: z.object({
-            date: z.string(),
             dateTime: z.string(),
-            DayDate: z.string(),
-            MonthDate: z.string(),
-            YearDate: z.string(),
           }),
           PersonName: z.array(
             z.object({
@@ -93,6 +101,22 @@ export const benefitApplicationRequestSchema = z.object({
           PersonSINIdentification: z.object({
             IdentificationID: z.string(),
           }),
+          ApplicantDetail: z.object({
+            ConsentToSharePersonalInformationIndicator: z.boolean().optional(),
+            AttestParentOrGuardianIndicator: z.boolean().optional(),
+            PrivateDentalInsuranceIndicator: z.boolean().optional(),
+            InsurancePlan: z
+              .object({
+                InsurancePlanIdentification: z
+                  .object({
+                    IdentificationID: z.string().optional(),
+                  })
+                  .array()
+                  .optional(),
+              })
+              .array()
+              .optional(),
+          }),
         }),
       ),
       MailingSameAsHomeIndicator: z.boolean(),
@@ -100,19 +124,12 @@ export const benefitApplicationRequestSchema = z.object({
         ReferenceDataID: z.string(),
       }),
     }),
+    BenefitApplicationCategoryCode: z.object({
+      ReferenceDataID: z.string(),
+    }),
     BenefitApplicationChannelCode: z.object({
       ReferenceDataID: z.string(),
     }),
-    InsurancePlan: z.array(
-      z.object({
-        InsurancePlanIdentification: z.array(
-          z.object({
-            IdentificationID: z.string(),
-          }),
-        ),
-      }),
-    ),
-    PrivateDentalInsuranceIndicator: z.boolean(),
   }),
 });
 

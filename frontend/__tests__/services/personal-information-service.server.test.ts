@@ -53,7 +53,6 @@ describe('personal-information-service.server tests', () => {
         clientId: undefined,
         clientNumber: undefined,
         emailAddress: undefined,
-        federalDentalPlanId: '000000',
         firstName: undefined,
         homeAddress: undefined,
         lastName: undefined,
@@ -61,8 +60,6 @@ describe('personal-information-service.server tests', () => {
         maritalStatusId: undefined,
         preferredLanguageId: undefined,
         primaryTelephoneNumber: undefined,
-        privateDentalPlanId: '222222222',
-        provincialTerritorialDentalPlanId: '1111111',
       });
     });
 

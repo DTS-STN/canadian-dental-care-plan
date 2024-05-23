@@ -64,7 +64,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const { COMMUNICATION_METHOD_EMAIL_ID, ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
   // prettier-ignore
-  /*if (state.applicantInformation === undefined ||
+  if (state.applicantInformation === undefined ||
     state.communicationPreferences === undefined ||
     state.dateOfBirth === undefined ||
     state.dentalBenefits === undefined ||
@@ -73,7 +73,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     state.taxFiling2023 === undefined ||
     state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
-  }*/
+  }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -220,12 +220,15 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   // TODO update with correct state
   const payload = toBenefitApplicationRequest({
-    applicantInformation: state.applicantInformation!,
-    communicationPreferences: state.communicationPreferences!,
-    dateOfBirth: state.dateOfBirth!,
-    dentalBenefits: state.dentalBenefits!,
-    dentalInsurance: state.dentalInsurance!,
-    personalInformation: state.personalInformation!,
+    typeOfApplication: state.typeOfApplication,
+    disabilityTaxCredit: state.disabilityTaxCredit,
+    livingIndependently: state.livingIndependently,
+    applicantInformation: state.applicantInformation,
+    communicationPreferences: state.communicationPreferences,
+    dateOfBirth: state.dateOfBirth,
+    dentalBenefits: state.dentalBenefits,
+    dentalInsurance: state.dentalInsurance,
+    personalInformation: state.personalInformation,
     partnerInformation: state.partnerInformation,
   });
 
@@ -300,6 +303,9 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   // TODO submit to the API and grab the confirmation code from the response
   const benefitApplicationRequest = toBenefitApplicationRequest({
+    typeOfApplication: state.typeOfApplication,
+    disabilityTaxCredit: state.disabilityTaxCredit,
+    livingIndependently: state.livingIndependently,
     applicantInformation: state.applicantInformation,
     communicationPreferences: state.communicationPreferences,
     dateOfBirth: state.dateOfBirth,

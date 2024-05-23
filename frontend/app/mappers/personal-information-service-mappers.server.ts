@@ -64,17 +64,20 @@ export function toPersonalInformationApi(personalInformation: PersonalInfo): Per
           },
         ],
         PersonSINIdentification: {
-          IdentificationID: '',
+          IdentificationID: personalInformation.sin ?? '',
+          IdentificationCategoryText: 'some text',
         },
         MailingSameAsHomeIndicator: personalInformation.homeAndMailingAddressTheSame,
         PreferredMethodCommunicationCode: {
           ReferenceDataID: personalInformation.preferredLanguageId,
         },
       },
-      InsurancePlan: toInsurancePlanApi(personalInformation.privateDentalPlanId, personalInformation.federalDentalPlanId, personalInformation.provincialTerritorialDentalPlanId),
-      PrivateDentalInsuranceIndicator: personalInformation.privateDentalPlanId ? true : false,
-      FederalDentalCoverageIndicator: toFederalDentalCoverageIndicator(personalInformation.federalDentalPlanId),
-      ProvicialDentalCoverageIndicator: personalInformation.provincialTerritorialDentalPlanId ? true : false,
+      BenefitApplicationIdentification: [
+        {
+          IdentificationID: personalInformation.benefitApplicationIdentification ?? '',
+          IdentificationCategoryText: 'Dental Application ID',
+        },
+      ],
     },
   };
 }
@@ -120,10 +123,6 @@ export function toPersonalInformation(personalInformationApi: PersonalInformatio
     alternateTelephoneNumber: personalInformationApi.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.TelephoneNumber.find((phoneNumber) => phoneNumber.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate')?.FullTelephoneNumber
       .TelephoneNumberFullID,
     preferredLanguageId: personalInformationApi.BenefitApplication.Applicant?.PreferredMethodCommunicationCode?.ReferenceDataID,
-    federalDentalPlanId: personalInformationApi.BenefitApplication.InsurancePlan?.find((insurancePlan) => insurancePlan.InsurancePlanIdentification?.IdentificationCategoryText === 'Federal')?.InsurancePlanIdentification?.IdentificationID,
-    provincialTerritorialDentalPlanId: personalInformationApi.BenefitApplication.InsurancePlan?.find((insurancePlan) => insurancePlan.InsurancePlanIdentification?.IdentificationCategoryText === 'Provincial and Territorial')?.InsurancePlanIdentification
-      ?.IdentificationID,
-    privateDentalPlanId: personalInformationApi.BenefitApplication.InsurancePlan?.find((insurancePlan) => insurancePlan.InsurancePlanIdentification?.IdentificationCategoryText === 'Private')?.InsurancePlanIdentification?.IdentificationID,
   };
 }
 
@@ -180,33 +179,4 @@ function toAddress(addressDto: AddressDto | undefined, category: string) {
     province: addressDto?.provinceTerritoryStateId,
     street: addressDto?.streetName,
   });
-}
-
-function toInsurancePlanApi(
-  federalDentalPlanId: string | undefined,
-  provincialTerritorialDentalPlanId: string | undefined,
-  privateDentalPlanId: string | undefined,
-): {
-  InsurancePlanIdentification?: {
-    IdentificationID: string;
-    IdentificationCategoryText?: string;
-  };
-}[] {
-  const listOfInsurancePlans = [];
-
-  if (federalDentalPlanId) {
-    listOfInsurancePlans.push({ InsurancePlanIdentification: { IdentificationID: federalDentalPlanId, IdentificationCategoryText: 'Federal' } });
-  }
-  if (provincialTerritorialDentalPlanId) {
-    listOfInsurancePlans.push({ InsurancePlanIdentification: { IdentificationID: provincialTerritorialDentalPlanId, IdentificationCategoryText: 'Provincial and Territorial' } });
-  }
-  if (privateDentalPlanId) {
-    listOfInsurancePlans.push({ InsurancePlanIdentification: { IdentificationID: privateDentalPlanId, IdentificationCategoryText: 'Private' } });
-  }
-
-  return listOfInsurancePlans;
-}
-
-function toFederalDentalCoverageIndicator(federalDentalPlanId: string | undefined): { ReferenceDataID: string | undefined; ReferenceDataName: string | undefined } | undefined {
-  return federalDentalPlanId ? { ReferenceDataID: federalDentalPlanId, ReferenceDataName: 'true' } : undefined; //TODO: Revisit once sample FederalDentalCoverageIndicator response gets sent
 }
