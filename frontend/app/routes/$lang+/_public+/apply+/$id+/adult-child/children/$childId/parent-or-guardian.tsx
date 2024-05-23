@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import pageIds from '../../../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { loadApplyAdultSingleChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -49,7 +50,8 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  // TODO where are we actually routing to?
+  saveApplyState({ params, session, state: { editMode: true, typeOfApplication: 'adult' } });
+
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
 }
 

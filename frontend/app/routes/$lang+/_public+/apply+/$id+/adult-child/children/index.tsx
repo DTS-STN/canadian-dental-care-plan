@@ -104,7 +104,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-adult-information', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-child-information', params));
 }
 
 export default function ApplyFlowChildSummary() {

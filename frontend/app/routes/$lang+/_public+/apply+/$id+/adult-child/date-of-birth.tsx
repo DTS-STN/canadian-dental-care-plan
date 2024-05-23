@@ -181,7 +181,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   if (state.editMode) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-information', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-adult-information', params));
   }
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/applicant-information', params));
@@ -279,7 +279,13 @@ export default function ApplyFlowDateOfBirth() {
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Date of birth click">
                 {t('apply-adult-child:eligibility.date-of-birth.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult-child/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Date of birth click">
+              <ButtonLink
+                id="back-button"
+                routeId="$lang+/_public+/apply+/$id+/adult-child/review-adult-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Date of birth click"
+              >
                 {t('apply-adult-child:eligibility.date-of-birth.cancel-btn')}
               </ButtonLink>
             </div>

@@ -86,7 +86,7 @@ export async function action({ context: { session }, params, request }: ActionFu
       return json({ errors });
     }
 
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-information', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-adult-information', params));
   }
 
   // Form action Continue & Save
@@ -132,7 +132,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   saveApplyState({ params, remove, session, state: { applicantInformation: parsedDataResult.data } });
 
   if (state.editMode) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-information', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-adult-information', params));
   }
 
   if (hasPartner) {

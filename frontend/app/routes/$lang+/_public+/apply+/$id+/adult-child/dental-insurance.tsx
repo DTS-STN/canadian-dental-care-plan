@@ -74,7 +74,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   saveApplyState({ params, session, state: { dentalInsurance: parsedDataResult.data } });
 
   if (state.editMode) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-information', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-adult-information', params));
   }
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/federal-provincial-territorial-benefits', params));
@@ -174,7 +174,7 @@ export default function AccessToDentalInsuranceQuestion() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId="$lang+/_public+/apply+/$id+/adult-child/review-information"
+                routeId="$lang+/_public+/apply+/$id+/adult-child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Access to other dental insurance click"
