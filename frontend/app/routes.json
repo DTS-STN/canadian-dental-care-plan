@@ -437,7 +437,7 @@
                         "file": "routes/$lang+/_public+/apply+/$id+/adult-child/dob-eligibility.tsx",
                         "paths": {
                           "en": "/:lang/apply/:id/adult-child/dob-eligibility",
-                          "fr": "/:lang/demander/:id/aadulte-enfant/ddn-admissibilite"
+                          "fr": "/:lang/demander/:id/adulte-enfant/ddn-admissibilite"
                         }
                       }
                     ]
