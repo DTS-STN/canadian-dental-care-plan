@@ -65,7 +65,7 @@ vi.mock('~/services/personal-information-service.server', () => ({
       lastName: 'Maverick',
       mailingAddress: '123 Mailing Street',
       phoneNumber: '(555) 555-5555',
-      birthDate: new Date('1950-10-11'),
+      birthDate: new Date('1950-10-11T00:00:00.000Z'),
       maritalStatusId: 'SINGLE',
       getHomeAddress: vi.fn().mockReturnValue({
         address: 'address',

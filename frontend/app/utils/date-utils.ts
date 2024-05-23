@@ -58,8 +58,8 @@ export function useMonths(locale: string, format: 'numeric' | '2-digit' | 'long'
 }
 
 // TODO: add unit tests
-export function toLocaleDateString(date: Date, locale: string) {
-  return date.toLocaleDateString(`${locale}-CA`, { year: 'numeric', month: 'long', day: 'numeric' });
+export function toLocaleDateString(date: Date, locale: string, timeZone: string = 'UTC') {
+  return date.toLocaleDateString(`${locale}-CA`, { year: 'numeric', month: 'long', day: 'numeric', timeZone });
 }
 
 export function getAgeFromDateString(date: string) {
