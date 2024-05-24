@@ -56,17 +56,18 @@
       }
     },
     "information": {
-      "page-title": "Child 1: information",
+      "page-title": "{{childName}}: information",
+      "child-number": "Child {{childNumber}}",
       "form-instructions-sin": "Provide the child's legal name as indicated on their Social Insurance Number (SIN) card or letter (if available), or other government documentation.",
       "single-legal-name": "If the child has a single legal name",
-      "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
+      "name-instructions": "If the child uses a single legal name, please enter that name in BOTH the first name and last name fields.",
       "last-name": "Last name",
       "first-name": "First name",
       "date-of-birth": "Date of birth",
       "sin-legend": "Does this child have a Social Insurance Number (SIN)?",
       "sin-yes": "<bold>Yes</bold>, this child has a SIN",
       "sin-no": "<bold>No</bold>, this child does not have a SIN",
-      "sin": "Enter the 9-digit SIN",
+      "sin": "Social Insurance Number (SIN)",
       "parent-legend": "Are you the parent or legal guardian of this child?",
       "radio-options": {
         "yes": "Yes",

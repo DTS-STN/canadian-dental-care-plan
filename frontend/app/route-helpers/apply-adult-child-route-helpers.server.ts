@@ -3,7 +3,7 @@ import { Params } from '@remix-run/react';
 
 import { z } from 'zod';
 
-import { ApplyState, loadApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { ApplyState, isNewChildState, loadApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
@@ -71,15 +71,23 @@ export function loadApplyAdultSingleChildState({ params, request, session }: Loa
   }
 
   const childId = parsedChildId.data;
-  const childState = applyState.children.find(({ id }) => id === childId);
+  const childStateIndex = applyState.children.findIndex(({ id }) => id === childId);
 
-  if (!childState) {
+  if (childStateIndex === -1) {
     log.warn('Apply single child has not been found; childId: [%s]', childId);
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/children/index', params));
   }
 
-  const { editMode } = applyState;
-  return { ...childState, editMode };
+  const childState = applyState.children[childStateIndex];
+  const isNew = isNewChildState(childState);
+  const editMode = !isNew && applyState.editMode;
+
+  return {
+    ...childState,
+    childNumber: childStateIndex + 1,
+    editMode,
+    isNew,
+  };
 }
 
 interface ApplicantInformationStateHasPartnerArgs {
