@@ -178,6 +178,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
+  if (state.editMode) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-child-information', params));
+  }
+
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
 }
 
@@ -379,7 +383,7 @@ export default function AccessToDentalInsuranceQuestion() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId="$lang+/_public+/apply+/$id+/adult-child/children/index"
+                routeId="$lang+/_public+/apply+/$id+/adult-child/review-child-information"
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Access to other federal, provincial or territorial dental benefits click"
