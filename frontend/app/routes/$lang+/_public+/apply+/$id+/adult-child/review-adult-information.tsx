@@ -222,7 +222,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   saveApplyState({
     params,
     session,
-    state,
+    state: {},
   });
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-child-information', params));
