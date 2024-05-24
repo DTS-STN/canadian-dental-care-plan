@@ -52,14 +52,14 @@
     "breadcrumbs": {
       "subscribe": "Unsubscribe from CDCP email alerts"
     },
-    "note": "If you unsubscribe from CDCP email alerts, you will no longer receive emails when important new CDCP information is available. Email address to be cancelled is: ",
+    "note": "If you unsubscribe from CDCP email alerts, you will no longer receive emails when important new CDCP information is available. Email address to be cancelled is: <strong>{{email}}</strong>",
     "agree": "I Agree",
     "button": {
       "unsubscribe": "Unsubscribe from CDCP email alerts",
       "cancel": "Cancel"
     },
     "error-message": {
-      "agree-required": "Check \"I Agree\" piror to select Unsubscribe from CDCP email alerts."
+      "agree-required": "Check \"I Agree\" prior to selecting Unsubscribe from CDCP email alerts."
     }
   },
   "confirm": {
@@ -90,6 +90,6 @@
     "page-title": "Unsubscribe Confirmation",
     "unsubscribe-successful": "You have successfully unsubscribed from Canada Dental Care Plan. You will no longer receive emails when important new Canada Dental Care Plan information is available in your My Service Canada Account.",
     "subscribe-again": "You may subscribe again to Canada Dental Care Plan alerts by <subscribelink>completing the subscription process</subscribelink>.",
-    "return-home": "Return <homeLink>Home</homeLink>"
+    "return-dashboard": "Return to dashboard"
   }
 }

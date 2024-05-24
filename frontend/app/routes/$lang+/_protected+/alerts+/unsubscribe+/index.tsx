@@ -5,6 +5,7 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
@@ -24,7 +25,10 @@ import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { useUserOrigin } from '~/utils/user-origin-utils';
+
+enum AgreeToUnsubscribeOption {
+  Yes = 'yes',
+}
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'alerts:unsubscribe.page-title' }],
@@ -40,28 +44,40 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('email-alerts');
 
+  const auditService = getAuditService();
+  const instrumentationService = getInstrumentationService();
+  const subscriptionService = getSubscriptionService();
   const raoidcService = await getRaoidcService();
 
   await raoidcService.handleSessionValidation(request, session);
 
-  const instrumentationService = getInstrumentationService();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:unsubscribe.page-title') }) };
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  instrumentationService.countHttpStatus('alerts.unsubscibe', 302);
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sin);
+  if (!alertSubscription) {
+    instrumentationService.countHttpStatus('alerts.unsubscribe', 302);
+    return redirect(getPathById('$lang+/_protected+/alerts+/index', params));
+  }
+
+  const idToken: IdToken = session.get('idToken');
+  auditService.audit('page-view.unsubscribe-alerts', { userId: idToken.sub });
+  instrumentationService.countHttpStatus('alerts.unsubscribe', 200);
+
   return json({ csrfToken, meta, alertSubscription });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('alerts/unsubscribe');
 
-  const instrumentationService = getInstrumentationService();
   const auditService = getAuditService();
+  const instrumentationService = getInstrumentationService();
+  const subscriptionService = getSubscriptionService();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formSchema = z.object({
@@ -78,7 +94,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   const data = {
-    agreeToUnsubscribe: formData.get('agreeToUnsubscribe') === 'yes',
+    agreeToUnsubscribe: formData.get('agreeToUnsubscribe') === AgreeToUnsubscribeOption.Yes,
   };
   const parsedDataResult = formSchema.safeParse(data);
 
@@ -86,32 +102,35 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const idToken: IdToken = session.get('idToken');
-  auditService.audit('update-date.unsubscribe-alerts', { userId: idToken.sub });
-
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
+
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sin);
+  invariant(alertSubscription, 'Expected alertSubscription to be defined');
+
   const newAlertSubscription = {
-    id: alertSubscription?.id ?? '',
-    sin: userInfoToken.sin ?? '',
-    email: alertSubscription?.email ?? '',
+    id: alertSubscription.id,
+    sin: userInfoToken.sin,
+    email: alertSubscription.email,
     registered: false,
     subscribed: false,
-    preferredLanguage: alertSubscription?.preferredLanguage ?? '',
+    preferredLanguage: alertSubscription.preferredLanguage,
   };
+  await subscriptionService.updateSubscription(userInfoToken.sin, newAlertSubscription);
 
-  await getSubscriptionService().updateSubscription(userInfoToken.sin ?? '', newAlertSubscription);
+  const idToken: IdToken = session.get('idToken');
+  auditService.audit('update-data.unsubscribe-alerts', { userId: idToken.sub });
+  instrumentationService.countHttpStatus('alerts.unsubscribe', 302);
 
-  instrumentationService.countHttpStatus('alerts.unsubscibe', 302);
   return redirect(getPathById('$lang+/_protected+/alerts+/unsubscribe+/success', params));
 }
 
-export default function AlertsSubscribe() {
+export default function UnsubscribeAlerts() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, alertSubscription } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
-  const userOrigin = useUserOrigin();
+
   const errorSummaryId = 'error-summary';
 
   // Keys order should match the input IDs order.
@@ -137,9 +156,9 @@ export default function AlertsSubscribe() {
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div>
           <p>
-            {t('alerts:unsubscribe.note')} <strong>${alertSubscription?.email}</strong>
+            <Trans ns={handle.i18nNamespaces} i18nKey="alerts:unsubscribe.note" values={{ email: alertSubscription.email }} />
           </p>
-          <InputCheckbox id="agree-to-unsubscribe" name="agreeToUnsubscribe" className="my-6" value="yes" errorMessage={fetcher.data?.errors.agreeToUnsubscribe?._errors[0]} required>
+          <InputCheckbox id="agree-to-unsubscribe" name="agreeToUnsubscribe" className="my-6" value={AgreeToUnsubscribeOption.Yes} errorMessage={fetcher.data?.errors.agreeToUnsubscribe?._errors[0]} required>
             <Trans ns={handle.i18nNamespaces} i18nKey="alerts:unsubscribe.agree" />
           </InputCheckbox>
         </div>
@@ -148,7 +167,7 @@ export default function AlertsSubscribe() {
           <Button id="unsubscribe-button" variant="primary">
             {t('alerts:unsubscribe.button.unsubscribe')}
           </Button>
-          <ButtonLink id="cancel-button" to={userOrigin?.to} params={params}>
+          <ButtonLink id="cancel-button" routeId="$lang+/_protected+/alerts+/manage+/index" params={params}>
             {t('alerts:unsubscribe.button.cancel')}
           </ButtonLink>
         </div>

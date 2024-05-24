@@ -3,18 +3,21 @@ import { json } from '@remix-run/node';
 import { useParams } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 
 import pageIds from '../../../page-ids.json';
+import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
+import { getAuditService } from '~/services/audit-service.server';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getSubscriptionService } from '~/services/subscription-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
-import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { UserinfoToken } from '~/utils/raoidc-utils.server';
+import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { useUserOrigin } from '~/utils/user-origin-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'alerts:success.page-title' }],
@@ -28,45 +31,43 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+  const auditService = getAuditService();
+  const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
 
   await raoidcService.handleSessionValidation(request, session);
 
-  const log = getLogger('alerts.unsubscribe.success');
   const t = await getFixedT(request, handle.i18nNamespaces);
-
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:success.page-title') }) };
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  if (!userInfoToken.sin) {
-    log.warn('SIN was not found in session, returning a 500 status');
-    throw new Response(null, { status: 500 });
-  }
-  const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin);
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  if (alertSubscription?.subscribed) {
-    log.warn('User is already subscribed, returning a 400 status');
-    throw new Response(null, { status: 400 });
-  }
+  const idToken: IdToken = session.get('idToken');
+  auditService.audit('page-view.unsubscribe-alerts-success', { userId: idToken.sub });
+  instrumentationService.countHttpStatus('alerts.unsubscribe-success', 200);
 
   return json({ meta });
 }
 
-export default function SuccessSubscription() {
+export default function UnsubscribeAlertsSuccess() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const params = useParams();
+  const userOrigin = useUserOrigin();
 
   const subscribelink = <InlineLink routeId="$lang+/_protected+/alerts+/subscribe+/index" params={params} />;
-  const homeLink = <InlineLink routeId="$lang+/_protected+/home" params={params} />;
+
   return (
     <>
       <p className="mb-4">{t('alerts:success.unsubscribe-successful')}</p>
       <p className="mb-4">
         <Trans ns={handle.i18nNamespaces} i18nKey="alerts:success.subscribe-again" components={{ subscribelink }} />
       </p>
-      <p className="mb-4">
-        <Trans ns={handle.i18nNamespaces} i18nKey="alerts:success.return-home" components={{ homeLink }} />
-      </p>
+      {userOrigin && (
+        <ButtonLink id="back-button" to={userOrigin.to}>
+          {t('alerts:success.return-dashboard')}
+        </ButtonLink>
+      )}
     </>
   );
 }
