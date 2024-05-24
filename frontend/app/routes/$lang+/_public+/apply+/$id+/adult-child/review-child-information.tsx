@@ -223,7 +223,7 @@ export default function ReviewInformation() {
                   </p>
                 </DescriptionListItem>
                 <DescriptionListItem term={t('apply-adult-child:review-child-information.sin-title')}>
-                  {formatSin(childData.information?.socialInsuranceNumber ?? '')}
+                  {childData.information?.socialInsuranceNumber ? formatSin(childData.information?.socialInsuranceNumber) : ''}
                   <p className="mt-4">
                     <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/adult/applicant-information" params={params}>
                       {t('apply-adult-child:review-child-information.sin-change')}
