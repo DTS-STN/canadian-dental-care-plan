@@ -16,7 +16,6 @@ import { Button } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
-import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
 import { loadApplyAdultChildState, validateApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
@@ -298,7 +297,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.full-name-title')}>
                 {`${userInfo.firstName} ${userInfo.lastName}`}
                 <p className="mt-4">
-                  <InlineLink id="change-full-name" routeId="$lang+/_public+/apply+/$id+/adult/applicant-information" params={params}>
+                  <InlineLink id="change-full-name" routeId="$lang+/_public+/apply+/$id+/adult-child/applicant-information" params={params}>
                     {t('apply-adult-child:review-adult-information.full-name-change')}
                   </InlineLink>
                 </p>
@@ -306,7 +305,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.dob-title')}>
                 {userInfo.birthday}
                 <p className="mt-4">
-                  <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params}>
+                  <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult-child/date-of-birth" params={params}>
                     {t('apply-adult-child:review-adult-information.dob-change')}
                   </InlineLink>
                 </p>
@@ -314,7 +313,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.sin-title')}>
                 {formatSin(userInfo.sin)}
                 <p className="mt-4">
-                  <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/adult/applicant-information" params={params}>
+                  <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/adult-child/applicant-information" params={params}>
                     {t('apply-adult-child:review-adult-information.sin-change')}
                   </InlineLink>
                 </p>
@@ -322,7 +321,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.marital-title')}>
                 {maritalStatus ? maritalStatus[0].toUpperCase() + maritalStatus.slice(1).toLowerCase() : maritalStatus}
                 <p className="mt-4">
-                  <InlineLink id="change-martial-status" routeId="$lang+/_public+/apply+/$id+/adult/applicant-information" params={params}>
+                  <InlineLink id="change-martial-status" routeId="$lang+/_public+/apply+/$id+/adult-child/applicant-information" params={params}>
                     {t('apply-adult-child:review-adult-information.marital-change')}
                   </InlineLink>
                 </p>
@@ -336,7 +335,7 @@ export default function ReviewInformation() {
                 <DescriptionListItem term={t('apply-adult-child:review-adult-information.full-name-title')}>
                   {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
                   <p className="mt-4">
-                    <InlineLink id="change-spouse-full-name" routeId="$lang+/_public+/apply+/$id+/adult/partner-information" params={params}>
+                    <InlineLink id="change-spouse-full-name" routeId="$lang+/_public+/apply+/$id+/adult-child/partner-information" params={params}>
                       {t('apply-adult-child:review-adult-information.full-name-change')}
                     </InlineLink>
                   </p>
@@ -344,7 +343,7 @@ export default function ReviewInformation() {
                 <DescriptionListItem term={t('apply-adult-child:review-adult-information.dob-title')}>
                   {spouseInfo.birthday}
                   <p className="mt-4">
-                    <InlineLink id="change-spouse-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult/partner-information" params={params}>
+                    <InlineLink id="change-spouse-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult-child/partner-information" params={params}>
                       {t('apply-adult-child:review-adult-information.dob-change')}
                     </InlineLink>
                   </p>
@@ -352,7 +351,7 @@ export default function ReviewInformation() {
                 <DescriptionListItem term={t('apply-adult-child:review-adult-information.sin-title')}>
                   {formatSin(spouseInfo.sin)}
                   <p className="mt-4">
-                    <InlineLink id="change-spouse-sin" routeId="$lang+/_public+/apply+/$id+/adult/partner-information" params={params}>
+                    <InlineLink id="change-spouse-sin" routeId="$lang+/_public+/apply+/$id+/adult-child/partner-information" params={params}>
                       {t('apply-adult-child:review-adult-information.sin-change')}
                     </InlineLink>
                   </p>
@@ -369,7 +368,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.phone-title')}>
                 {userInfo.phoneNumber}
                 <p className="mt-4">
-                  <InlineLink id="change-phone-number" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
+                  <InlineLink id="change-phone-number" routeId="$lang+/_public+/apply+/$id+/adult-child/personal-information" params={params}>
                     {t('apply-adult-child:review-adult-information.phone-change')}
                   </InlineLink>
                 </p>
@@ -377,7 +376,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.alt-phone-title')}>
                 {userInfo.altPhoneNumber}
                 <p className="mt-4">
-                  <InlineLink id="change-alternate-phone-number" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
+                  <InlineLink id="change-alternate-phone-number" routeId="$lang+/_public+/apply+/$id+/adult-child/personal-information" params={params}>
                     {t('apply-adult-child:review-adult-information.alt-phone-change')}
                   </InlineLink>
                 </p>
@@ -385,7 +384,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.email')}>
                 {userInfo.altPhoneNumber}
                 <p className="mt-4">
-                  <InlineLink id="change-email" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
+                  <InlineLink id="change-email" routeId="$lang+/_public+/apply+/$id+/adult-child/personal-information" params={params}>
                     {t('apply-adult-child:review-adult-information.email-change')}
                   </InlineLink>
                 </p>
@@ -401,7 +400,7 @@ export default function ReviewInformation() {
                   altFormat={true}
                 />
                 <p className="mt-4">
-                  <InlineLink id="change-mailing-address" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
+                  <InlineLink id="change-mailing-address" routeId="$lang+/_public+/apply+/$id+/adult-child/personal-information" params={params}>
                     {t('apply-adult-child:review-adult-information.mailing-change')}
                   </InlineLink>
                 </p>
@@ -417,7 +416,7 @@ export default function ReviewInformation() {
                   altFormat={true}
                 />
                 <p className="mt-4">
-                  <InlineLink id="change-home-address" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
+                  <InlineLink id="change-home-address" routeId="$lang+/_public+/apply+/$id+/adult-child/personal-information" params={params}>
                     {t('apply-adult-child:review-adult-information.home-change')}
                   </InlineLink>
                 </p>
@@ -438,7 +437,7 @@ export default function ReviewInformation() {
                   </div>
                 )}
                 <p className="mt-4">
-                  <InlineLink id="change-communication-preference" routeId="$lang+/_public+/apply+/$id+/adult/communication-preference" params={params}>
+                  <InlineLink id="change-communication-preference" routeId="$lang+/_public+/apply+/$id+/adult-child/communication-preference" params={params}>
                     {t('apply-adult-child:review-adult-information.comm-pref-change')}
                   </InlineLink>
                 </p>
@@ -447,7 +446,7 @@ export default function ReviewInformation() {
                 <DescriptionListItem term={t('apply-adult-child:review-adult-information.lang-pref-title')}>
                   {getNameByLanguage(i18n.language, preferredLanguage)}
                   <p className="mt-4">
-                    <InlineLink id="change-language-preference" routeId="$lang+/_public+/apply+/$id+/adult/communication-preference" params={params}>
+                    <InlineLink id="change-language-preference" routeId="$lang+/_public+/apply+/$id+/adult-child/communication-preference" params={params}>
                       {t('apply-adult-child:review-adult-information.lang-pref-change')}
                     </InlineLink>
                   </p>
@@ -461,7 +460,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.dental-insurance-title')}>
                 {dentalInsurance ? t('apply-adult-child:review-adult-information.yes') : t('apply-adult-child:review-adult-information.no')}
                 <p className="mt-4">
-                  <InlineLink id="change-access-dental" routeId="$lang+/_public+/apply+/$id+/adult/dental-insurance" params={params}>
+                  <InlineLink id="change-access-dental" routeId="$lang+/_public+/apply+/$id+/adult-child/dental-insurance" params={params}>
                     {t('apply-adult-child:review-adult-information.dental-insurance-change')}
                   </InlineLink>
                 </p>
@@ -482,7 +481,7 @@ export default function ReviewInformation() {
                   <>{t('apply-adult-child:review-adult-information.no')}</>
                 )}
                 <p className="mt-4">
-                  <InlineLink id="change-dental-benefits" routeId="$lang+/_public+/apply+/$id+/adult/federal-provincial-territorial-benefits" params={params}>
+                  <InlineLink id="change-dental-benefits" routeId="$lang+/_public+/apply+/$id+/adult-child/federal-provincial-territorial-benefits" params={params}>
                     {t('apply-adult-child:review-adult-information.dental-benefit-change')}
                   </InlineLink>
                 </p>
@@ -493,7 +492,7 @@ export default function ReviewInformation() {
         <fetcher.Form method="post" onSubmit={handleSubmit} className="mt-6 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
-          <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Review Adult Information click">
+          <Button variant="primary" id="continue-button" name="_action" value={FormAction.Submit} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Review Adult Information click">
             {t('apply-adult-child:review-adult-information.continue-button')}
             {isSubmitting && submitAction === FormAction.Submit ? <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" /> : <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />}
           </Button>
