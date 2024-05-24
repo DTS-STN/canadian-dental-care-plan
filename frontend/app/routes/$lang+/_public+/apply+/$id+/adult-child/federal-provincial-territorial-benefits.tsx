@@ -384,7 +384,7 @@ export default function AccessToDentalInsuranceQuestion() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId="$lang+/_public+/apply+/$id+/adult/dental-insurance" //TODO: Change over to adult-child when available
+                routeId="$lang+/_public+/apply+/$id+/adult-child/dental-insurance"
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Access to other federal, provincial or territorial dental benefits click"
