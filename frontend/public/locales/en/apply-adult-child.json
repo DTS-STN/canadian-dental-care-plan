@@ -580,7 +580,7 @@
     }
   },
   "review-adult-information": {
-    "read-carefully": "Please review this information carefully. The information provided will be used by Sun Life to create your member account and will be reflected on your member card.",
+    "read-carefully": "Please review this information carefully. The information provided will be used by Sun Life to create your member account.",
     "page-title": "Review your information",
     "page-sub-title": "Applicant information",
     "dob-title": "Date of birth",
@@ -591,7 +591,7 @@
     "full-name-change": "Change full name",
     "marital-title": "Marital status",
     "marital-change": "Change marital status",
-    "spouse-title": "Spouse / Commom-law information",
+    "spouse-title": "Spouse or commom-law partner information",
     "spouse-consent": {
       "label": "Consent",
       "yes": "My spouse or common-law partner is aware and has consented to sharing of their personal information.",
@@ -616,8 +616,8 @@
     "email-address": "Email address: {{email}}",
     "lang-pref-title": "Language preference",
     "lang-pref-change": "Change language preference",
-    "dental-title": "Access to other dental insurance or coverage",
-    "dental-insurance-title": "Access to dental insurance",
+    "dental-title": "Access to dental insurance",
+    "dental-insurance-title": "Access to other dental insurance or coverage",
     "dental-insurance-change": "Change answer to dental insurance",
     "dental-benefit-title": "Access to government dental benefit",
     "dental-benefit-change": "Change answer to public dental benefits",

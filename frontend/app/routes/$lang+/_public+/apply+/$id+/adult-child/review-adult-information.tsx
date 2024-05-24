@@ -4,7 +4,6 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { UTCDate } from '@date-fns/utc';
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
@@ -17,11 +16,9 @@ import { Button } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
-import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
 import { loadApplyAdultChildState, validateApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
-import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env.server';
@@ -33,7 +30,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
-import { cn } from '~/utils/tw-utils';
 
 enum FormAction {
   Back = 'back',
@@ -77,7 +73,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const locale = getLocale(request);
 
   // Getting province by Id
-  /*const allRegions = await lookupService.getAllRegions();
+  const allRegions = await lookupService.getAllRegions();
   const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
   const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
 
@@ -100,7 +96,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     phoneNumber: state.personalInformation.phoneNumber,
     altPhoneNumber: state.personalInformation.phoneNumberAlt,
     preferredLanguage: state.communicationPreferences.preferredLanguage,
-    birthday: toLocaleDateString(parse(state.dateOfBirth, 'yyyy-MM-dd', new UTCDate()), locale),
+    birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: state.applicantInformation.maritalStatus,
     email: state.communicationPreferences.email,
@@ -110,7 +106,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     ? {
         firstName: state.partnerInformation.firstName,
         lastName: state.partnerInformation.lastName,
-        birthday: toLocaleDateString(parse(state.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new UTCDate()), locale),
+        birthday: toLocaleDateString(parseDateString(state.partnerInformation.dateOfBirth), locale),
         sin: state.partnerInformation.socialInsuranceNumber,
         consent: state.partnerInformation.confirm,
       }
@@ -148,67 +144,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
       province: state.dentalBenefits.province,
       benefit: state.dentalBenefits.provincialTerritorialSocialProgram,
     },
-  };*/
-
-  const userInfo = {
-    firstName: 'firstName',
-    lastName: 'lastName',
-    phoneNumber: '1112223333',
-    altPhoneNumber: '1112223333',
-    preferredLanguage: '1033',
-    birthday: toLocaleDateString(parseDateString('1990-11-11'), locale),
-    sin: '800000002',
-    martialStatus: 'MARRIED',
-    email: 'EMAIL',
-    communicationPreference: {
-      confirmEmail: 'confirmEmail',
-      email: 'email',
-      preferredLanguage: '1033',
-      preferredMethod: 'EMAIL',
-    },
-  };
-  const spouseInfo = state.partnerInformation
-    ? {
-        firstName: 'firstName',
-        lastName: 'lastName',
-        birthday: toLocaleDateString(parseDateString('1990-11-11'), locale),
-        sin: '700000003',
-        consent: true,
-      }
-    : undefined;
-
-  const preferredLanguage = await lookupService.getPreferredLanguage('1033');
-
-  const mailingAddressInfo = {
-    address: '111 Main St',
-    city: 'Ottawa',
-    province: { provinceTerritoryStateId: 'daf4d05b-37b3-eb11-8236-0022486d8d5f', countryId: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', nameEn: 'Ontario', nameFr: 'Ontario', abbr: 'ON' },
-    postalCode: 'K1K2H2',
-    country: { countryId: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', nameEn: 'Canada', nameFr: 'Canada' },
-    apartment: '',
-  };
-
-  const homeAddressInfo = {
-    address: '111 Main St',
-    city: 'Ottawa',
-    province: { provinceTerritoryStateId: 'daf4d05b-37b3-eb11-8236-0022486d8d5f', countryId: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', nameEn: 'Ontario', nameFr: 'Ontario', abbr: 'ON' },
-    postalCode: 'K1K2H2',
-    country: { countryId: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', nameEn: 'Canada', nameFr: 'Canada' },
-    apartment: '',
-  };
-
-  const dentalInsurance = true;
-
-  const dentalBenefit = {
-    federalBenefit: {
-      access: true,
-      benefit: '758bb862-26c5-ee11-9079-000d3a09d640',
-    },
-    provTerrBenefit: {
-      access: true,
-      province: '9c440baa-35b3-eb11-8236-0022486d8d5f',
-      benefit: 'b3f25fea-a7a9-ee11-a569-000d3af4f898',
-    },
   };
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
@@ -241,7 +176,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/review-adult-information');
 
-  const benefitApplicationService = getBenefitApplicationService();
   const { ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
@@ -255,9 +189,10 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+
   if (formAction === FormAction.Back) {
     saveApplyState({ params, session, state: { editMode: false } });
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-child-information', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
   }
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
@@ -284,31 +219,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
-  // TODO submit to the API and grab the confirmation code from the response
-  const benefitApplicationRequest = toBenefitApplicationRequest({
-    typeOfApplication: state.typeOfApplication,
-    disabilityTaxCredit: state.disabilityTaxCredit,
-    livingIndependently: state.livingIndependently,
-    applicantInformation: state.applicantInformation,
-    communicationPreferences: state.communicationPreferences,
-    dateOfBirth: state.dateOfBirth,
-    dentalBenefits: state.dentalBenefits,
-    dentalInsurance: state.dentalInsurance,
-    personalInformation: state.personalInformation,
-    partnerInformation: state.partnerInformation,
-  });
-
-  const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
-
   saveApplyState({
     params,
     session,
-    state: {
-      submissionInfo: {
-        confirmationCode: confirmationCode,
-        submittedOn: new UTCDate().toISOString(),
-      },
-    },
+    state: {},
   });
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-child-information', params));
@@ -336,18 +250,17 @@ export default function ReviewInformation() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
-
-  const [isSubmitAction, setIsSubmitAction] = useState(false);
+  const [submitAction, setSubmitAction] = useState<string>();
 
   function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
+    setSubmitAction(String(formData.get('_action')));
 
     if (hCaptchaEnabled && captchaRef.current) {
       try {
         const response = captchaRef.current.getResponse();
         formData.set('h-captcha-response', response);
-        setIsSubmitAction(true);
       } catch (error) {
         /* intentionally ignore and proceed with submission */
       } finally {
@@ -384,7 +297,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.full-name-title')}>
                 {`${userInfo.firstName} ${userInfo.lastName}`}
                 <p className="mt-4">
-                  <InlineLink id="change-full-name" routeId="$lang+/_public+/apply+/$id+/adult/applicant-information" params={params}>
+                  <InlineLink id="change-full-name" routeId="$lang+/_public+/apply+/$id+/adult-child/applicant-information" params={params}>
                     {t('apply-adult-child:review-adult-information.full-name-change')}
                   </InlineLink>
                 </p>
@@ -392,7 +305,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.dob-title')}>
                 {userInfo.birthday}
                 <p className="mt-4">
-                  <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params}>
+                  <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult-child/date-of-birth" params={params}>
                     {t('apply-adult-child:review-adult-information.dob-change')}
                   </InlineLink>
                 </p>
@@ -400,15 +313,15 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.sin-title')}>
                 {formatSin(userInfo.sin)}
                 <p className="mt-4">
-                  <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/adult/applicant-information" params={params}>
+                  <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/adult-child/applicant-information" params={params}>
                     {t('apply-adult-child:review-adult-information.sin-change')}
                   </InlineLink>
                 </p>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.marital-title')}>
-                {maritalStatus}
+                {maritalStatus ? maritalStatus[0].toUpperCase() + maritalStatus.slice(1).toLowerCase() : maritalStatus}
                 <p className="mt-4">
-                  <InlineLink id="change-martial-status" routeId="$lang+/_public+/apply+/$id+/adult/applicant-information" params={params}>
+                  <InlineLink id="change-martial-status" routeId="$lang+/_public+/apply+/$id+/adult-child/applicant-information" params={params}>
                     {t('apply-adult-child:review-adult-information.marital-change')}
                   </InlineLink>
                 </p>
@@ -422,7 +335,7 @@ export default function ReviewInformation() {
                 <DescriptionListItem term={t('apply-adult-child:review-adult-information.full-name-title')}>
                   {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
                   <p className="mt-4">
-                    <InlineLink id="change-spouse-full-name" routeId="$lang+/_public+/apply+/$id+/adult/partner-information" params={params}>
+                    <InlineLink id="change-spouse-full-name" routeId="$lang+/_public+/apply+/$id+/adult-child/partner-information" params={params}>
                       {t('apply-adult-child:review-adult-information.full-name-change')}
                     </InlineLink>
                   </p>
@@ -430,7 +343,7 @@ export default function ReviewInformation() {
                 <DescriptionListItem term={t('apply-adult-child:review-adult-information.dob-title')}>
                   {spouseInfo.birthday}
                   <p className="mt-4">
-                    <InlineLink id="change-spouse-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult/partner-information" params={params}>
+                    <InlineLink id="change-spouse-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult-child/partner-information" params={params}>
                       {t('apply-adult-child:review-adult-information.dob-change')}
                     </InlineLink>
                   </p>
@@ -438,7 +351,7 @@ export default function ReviewInformation() {
                 <DescriptionListItem term={t('apply-adult-child:review-adult-information.sin-title')}>
                   {formatSin(spouseInfo.sin)}
                   <p className="mt-4">
-                    <InlineLink id="change-spouse-sin" routeId="$lang+/_public+/apply+/$id+/adult/partner-information" params={params}>
+                    <InlineLink id="change-spouse-sin" routeId="$lang+/_public+/apply+/$id+/adult-child/partner-information" params={params}>
                       {t('apply-adult-child:review-adult-information.sin-change')}
                     </InlineLink>
                   </p>
@@ -455,7 +368,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.phone-title')}>
                 {userInfo.phoneNumber}
                 <p className="mt-4">
-                  <InlineLink id="change-phone-number" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
+                  <InlineLink id="change-phone-number" routeId="$lang+/_public+/apply+/$id+/adult-child/personal-information" params={params}>
                     {t('apply-adult-child:review-adult-information.phone-change')}
                   </InlineLink>
                 </p>
@@ -463,7 +376,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.alt-phone-title')}>
                 {userInfo.altPhoneNumber}
                 <p className="mt-4">
-                  <InlineLink id="change-alternate-phone-number" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
+                  <InlineLink id="change-alternate-phone-number" routeId="$lang+/_public+/apply+/$id+/adult-child/personal-information" params={params}>
                     {t('apply-adult-child:review-adult-information.alt-phone-change')}
                   </InlineLink>
                 </p>
@@ -471,7 +384,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.email')}>
                 {userInfo.altPhoneNumber}
                 <p className="mt-4">
-                  <InlineLink id="change-email" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
+                  <InlineLink id="change-email" routeId="$lang+/_public+/apply+/$id+/adult-child/personal-information" params={params}>
                     {t('apply-adult-child:review-adult-information.email-change')}
                   </InlineLink>
                 </p>
@@ -480,30 +393,30 @@ export default function ReviewInformation() {
                 <Address
                   address={mailingAddressInfo.address}
                   city={mailingAddressInfo.city}
-                  provinceState={i18n.language === 'en' ? mailingAddressInfo.province.nameEn : mailingAddressInfo.province.nameFr}
+                  provinceState={mailingAddressInfo.province ? (i18n.language === 'en' ? mailingAddressInfo.province.nameEn : mailingAddressInfo.province.nameFr) : ''}
                   postalZipCode={mailingAddressInfo.postalCode}
                   country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
                   apartment={mailingAddressInfo.apartment}
                   altFormat={true}
                 />
                 <p className="mt-4">
-                  <InlineLink id="change-mailing-address" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
+                  <InlineLink id="change-mailing-address" routeId="$lang+/_public+/apply+/$id+/adult-child/personal-information" params={params}>
                     {t('apply-adult-child:review-adult-information.mailing-change')}
                   </InlineLink>
                 </p>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.home-title')}>
                 <Address
-                  address={homeAddressInfo.address}
-                  city={homeAddressInfo.city}
-                  provinceState={i18n.language === 'en' ? homeAddressInfo.province.nameEn : homeAddressInfo.province.nameFr}
+                  address={homeAddressInfo.address ?? ''}
+                  city={homeAddressInfo.city ?? ''}
+                  provinceState={homeAddressInfo.province ? (i18n.language === 'en' ? homeAddressInfo.province.nameEn : homeAddressInfo.province.nameFr) : ''}
                   postalZipCode={homeAddressInfo.postalCode}
                   country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
                   apartment={homeAddressInfo.apartment}
                   altFormat={true}
                 />
                 <p className="mt-4">
-                  <InlineLink id="change-home-address" routeId="$lang+/_public+/apply+/$id+/adult/personal-information" params={params}>
+                  <InlineLink id="change-home-address" routeId="$lang+/_public+/apply+/$id+/adult-child/personal-information" params={params}>
                     {t('apply-adult-child:review-adult-information.home-change')}
                   </InlineLink>
                 </p>
@@ -524,7 +437,7 @@ export default function ReviewInformation() {
                   </div>
                 )}
                 <p className="mt-4">
-                  <InlineLink id="change-communication-preference" routeId="$lang+/_public+/apply+/$id+/adult/communication-preference" params={params}>
+                  <InlineLink id="change-communication-preference" routeId="$lang+/_public+/apply+/$id+/adult-child/communication-preference" params={params}>
                     {t('apply-adult-child:review-adult-information.comm-pref-change')}
                   </InlineLink>
                 </p>
@@ -533,7 +446,7 @@ export default function ReviewInformation() {
                 <DescriptionListItem term={t('apply-adult-child:review-adult-information.lang-pref-title')}>
                   {getNameByLanguage(i18n.language, preferredLanguage)}
                   <p className="mt-4">
-                    <InlineLink id="change-language-preference" routeId="$lang+/_public+/apply+/$id+/adult/communication-preference" params={params}>
+                    <InlineLink id="change-language-preference" routeId="$lang+/_public+/apply+/$id+/adult-child/communication-preference" params={params}>
                       {t('apply-adult-child:review-adult-information.lang-pref-change')}
                     </InlineLink>
                   </p>
@@ -547,7 +460,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.dental-insurance-title')}>
                 {dentalInsurance ? t('apply-adult-child:review-adult-information.yes') : t('apply-adult-child:review-adult-information.no')}
                 <p className="mt-4">
-                  <InlineLink id="change-access-dental" routeId="$lang+/_public+/apply+/$id+/adult/dental-insurance" params={params}>
+                  <InlineLink id="change-access-dental" routeId="$lang+/_public+/apply+/$id+/adult-child/dental-insurance" params={params}>
                     {t('apply-adult-child:review-adult-information.dental-insurance-change')}
                   </InlineLink>
                 </p>
@@ -568,7 +481,7 @@ export default function ReviewInformation() {
                   <>{t('apply-adult-child:review-adult-information.no')}</>
                 )}
                 <p className="mt-4">
-                  <InlineLink id="change-dental-benefits" routeId="$lang+/_public+/apply+/$id+/adult/federal-provincial-territorial-benefits" params={params}>
+                  <InlineLink id="change-dental-benefits" routeId="$lang+/_public+/apply+/$id+/adult-child/federal-provincial-territorial-benefits" params={params}>
                     {t('apply-adult-child:review-adult-information.dental-benefit-change')}
                   </InlineLink>
                 </p>
@@ -579,9 +492,9 @@ export default function ReviewInformation() {
         <fetcher.Form method="post" onSubmit={handleSubmit} className="mt-6 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
-          <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Review Adult Information click">
+          <Button variant="primary" id="continue-button" name="_action" value={FormAction.Submit} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Review Adult Information click">
             {t('apply-adult-child:review-adult-information.continue-button')}
-            <FontAwesomeIcon icon={isSubmitting && isSubmitAction ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+            {isSubmitting && submitAction === FormAction.Submit ? <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" /> : <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />}
           </Button>
           <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Review Information click">
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
