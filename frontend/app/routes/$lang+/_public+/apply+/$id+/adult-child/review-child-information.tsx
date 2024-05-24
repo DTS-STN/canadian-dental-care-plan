@@ -12,10 +12,12 @@ import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
+import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
+import { useFeature } from '~/root';
 import { loadApplyAdultChildState, validateApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
@@ -117,6 +119,20 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:review-child-information.page-title') }) };
 
+  // TODO update with correct state
+  const payload = toBenefitApplicationRequest({
+    typeOfApplication: state.typeOfApplication!,
+    disabilityTaxCredit: state.disabilityTaxCredit!,
+    livingIndependently: state.livingIndependently!,
+    applicantInformation: state.applicantInformation!,
+    communicationPreferences: state.communicationPreferences!,
+    dateOfBirth: state.dateOfBirth!,
+    dentalBenefits: state.dentalBenefits!,
+    dentalInsurance: state.dentalInsurance!,
+    personalInformation: state.personalInformation!,
+    partnerInformation: state.partnerInformation!,
+  });
+
   return json({
     id: state.id,
     childInfo,
@@ -128,6 +144,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     meta,
     siteKey: HCAPTCHA_SITE_KEY,
     hCaptchaEnabled,
+    payload,
   });
 }
 
@@ -206,7 +223,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ReviewInformation() {
   const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { childInfo, federalSocialPrograms, provincialTerritorialSocialPrograms, childDentalInsurance, childDentalBenefit, csrfToken, siteKey, hCaptchaEnabled } = useLoaderData<typeof loader>();
+  const { childInfo, federalSocialPrograms, provincialTerritorialSocialPrograms, childDentalInsurance, childDentalBenefit, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -334,7 +351,15 @@ export default function ReviewInformation() {
             </ButtonLink>
           </div>
         </fetcher.Form>
+        <InlineLink routeId="$lang+/_public+/apply+/$id+/adult-child/exit-application" params={params} className="mt-4 block font-lato font-semibold">
+          {t('apply-adult-child:review-child-information.exit-button')}
+        </InlineLink>
       </div>
+      {useFeature('view-payload') && (
+        <div className="mt-8">
+          <DebugPayload data={payload} enableCopy></DebugPayload>
+        </div>
+      )}
     </>
   );
 }
