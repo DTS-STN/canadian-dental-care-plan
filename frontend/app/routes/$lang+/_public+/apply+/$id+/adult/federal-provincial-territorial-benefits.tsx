@@ -325,7 +325,6 @@ export default function AccessToDentalInsuranceQuestion() {
                         options={[
                           { children: t('apply-adult:dental-benefits.select-one'), value: '', hidden: true },
                           ...sortedRegions.map((region) => ({
-                            key: region.provinceTerritoryStateId,
                             id: region.provinceTerritoryStateId,
                             value: region.provinceTerritoryStateId,
                             children: getNameByLanguage(i18n.language, region),
