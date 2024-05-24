@@ -77,7 +77,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const locale = getLocale(request);
 
   // Getting province by Id
-  /*const allRegions = await lookupService.getAllRegions();
+  const allRegions = await lookupService.getAllRegions();
   const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
   const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
 
@@ -100,7 +100,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     phoneNumber: state.personalInformation.phoneNumber,
     altPhoneNumber: state.personalInformation.phoneNumberAlt,
     preferredLanguage: state.communicationPreferences.preferredLanguage,
-    birthday: toLocaleDateString(parse(state.dateOfBirth, 'yyyy-MM-dd', new UTCDate()), locale),
+    birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: state.applicantInformation.maritalStatus,
     email: state.communicationPreferences.email,
@@ -110,7 +110,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     ? {
         firstName: state.partnerInformation.firstName,
         lastName: state.partnerInformation.lastName,
-        birthday: toLocaleDateString(parse(state.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new UTCDate()), locale),
+        birthday: toLocaleDateString(parseDateString(state.partnerInformation.dateOfBirth), locale),
         sin: state.partnerInformation.socialInsuranceNumber,
         consent: state.partnerInformation.confirm,
       }
@@ -147,67 +147,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
       access: state.dentalBenefits.hasProvincialTerritorialBenefits,
       province: state.dentalBenefits.province,
       benefit: state.dentalBenefits.provincialTerritorialSocialProgram,
-    },
-  };*/
-
-  const userInfo = {
-    firstName: 'firstName',
-    lastName: 'lastName',
-    phoneNumber: '1112223333',
-    altPhoneNumber: '1112223333',
-    preferredLanguage: '1033',
-    birthday: toLocaleDateString(parseDateString('1990-11-11'), locale),
-    sin: '800000002',
-    martialStatus: 'MARRIED',
-    email: 'EMAIL',
-    communicationPreference: {
-      confirmEmail: 'confirmEmail',
-      email: 'email',
-      preferredLanguage: '1033',
-      preferredMethod: 'EMAIL',
-    },
-  };
-  const spouseInfo = state.partnerInformation
-    ? {
-        firstName: 'firstName',
-        lastName: 'lastName',
-        birthday: toLocaleDateString(parseDateString('1990-11-11'), locale),
-        sin: '700000003',
-        consent: true,
-      }
-    : undefined;
-
-  const preferredLanguage = await lookupService.getPreferredLanguage('1033');
-
-  const mailingAddressInfo = {
-    address: '111 Main St',
-    city: 'Ottawa',
-    province: { provinceTerritoryStateId: 'daf4d05b-37b3-eb11-8236-0022486d8d5f', countryId: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', nameEn: 'Ontario', nameFr: 'Ontario', abbr: 'ON' },
-    postalCode: 'K1K2H2',
-    country: { countryId: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', nameEn: 'Canada', nameFr: 'Canada' },
-    apartment: '',
-  };
-
-  const homeAddressInfo = {
-    address: '111 Main St',
-    city: 'Ottawa',
-    province: { provinceTerritoryStateId: 'daf4d05b-37b3-eb11-8236-0022486d8d5f', countryId: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', nameEn: 'Ontario', nameFr: 'Ontario', abbr: 'ON' },
-    postalCode: 'K1K2H2',
-    country: { countryId: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', nameEn: 'Canada', nameFr: 'Canada' },
-    apartment: '',
-  };
-
-  const dentalInsurance = true;
-
-  const dentalBenefit = {
-    federalBenefit: {
-      access: true,
-      benefit: '758bb862-26c5-ee11-9079-000d3a09d640',
-    },
-    provTerrBenefit: {
-      access: true,
-      province: '9c440baa-35b3-eb11-8236-0022486d8d5f',
-      benefit: 'b3f25fea-a7a9-ee11-a569-000d3af4f898',
     },
   };
 
@@ -406,7 +345,7 @@ export default function ReviewInformation() {
                 </p>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.marital-title')}>
-                {maritalStatus}
+                {maritalStatus ? maritalStatus[0].toUpperCase() + maritalStatus.slice(1).toLowerCase() : maritalStatus}
                 <p className="mt-4">
                   <InlineLink id="change-martial-status" routeId="$lang+/_public+/apply+/$id+/adult/applicant-information" params={params}>
                     {t('apply-adult-child:review-adult-information.marital-change')}
@@ -480,7 +419,7 @@ export default function ReviewInformation() {
                 <Address
                   address={mailingAddressInfo.address}
                   city={mailingAddressInfo.city}
-                  provinceState={i18n.language === 'en' ? mailingAddressInfo.province.nameEn : mailingAddressInfo.province.nameFr}
+                  provinceState={mailingAddressInfo.province ? (i18n.language === 'en' ? mailingAddressInfo.province.nameEn : mailingAddressInfo.province.nameFr) : ''}
                   postalZipCode={mailingAddressInfo.postalCode}
                   country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
                   apartment={mailingAddressInfo.apartment}
@@ -494,9 +433,9 @@ export default function ReviewInformation() {
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.home-title')}>
                 <Address
-                  address={homeAddressInfo.address}
-                  city={homeAddressInfo.city}
-                  provinceState={i18n.language === 'en' ? homeAddressInfo.province.nameEn : homeAddressInfo.province.nameFr}
+                  address={homeAddressInfo.address ?? ''}
+                  city={homeAddressInfo.city ?? ''}
+                  provinceState={homeAddressInfo.province ? (i18n.language === 'en' ? homeAddressInfo.province.nameEn : homeAddressInfo.province.nameFr) : ''}
                   postalZipCode={homeAddressInfo.postalCode}
                   country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
                   apartment={homeAddressInfo.apartment}
