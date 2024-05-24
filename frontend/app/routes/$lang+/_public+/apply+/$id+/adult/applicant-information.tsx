@@ -129,7 +129,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const hasPartner = applicantInformationStateHasPartner(parsedDataResult.data);
   const remove = !hasPartner ? 'partnerInformation' : undefined;
-  await saveApplyState({ params, remove, session, state: { applicantInformation: parsedDataResult.data } });
+  saveApplyState({ params, remove, session, state: { applicantInformation: parsedDataResult.data } });
 
   if (state.editMode) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));

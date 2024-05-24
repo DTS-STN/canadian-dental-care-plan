@@ -154,7 +154,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     });
   }
 
-  await saveApplyState({
+  saveApplyState({
     params,
     session,
     state: {
