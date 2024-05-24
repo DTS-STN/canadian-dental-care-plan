@@ -15,6 +15,7 @@ import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
+import { AppPageTitle } from '~/components/layouts/public-layout';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { ChildInformationState, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
@@ -29,12 +30,6 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { isValidSin } from '~/utils/sin-utils';
 import { cn } from '~/utils/tw-utils';
 
-enum FormAction {
-  Continue = 'continue',
-  Cancel = 'cancel',
-  Save = 'save',
-}
-
 enum YesNoOption {
   Yes = 'yes',
   No = 'no',
@@ -43,7 +38,6 @@ enum YesNoOption {
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply', 'apply-adult-child', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adultChild.childInformation,
-  pageTitleI18nKey: 'apply-adult-child:children.information.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -53,11 +47,12 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyAdultSingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const childName = state.isNew ? t('apply-adult-child:children.information.child-number', { childNumber: state.childNumber }) : `${state.information?.firstName}`;
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.information.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.information.page-title', { childName }) }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.information, editMode: state.editMode });
+  return json({ id: state.id, csrfToken, meta, defaultState: state.information, childName, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -179,14 +174,17 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
-  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
-
   if (!parsedDataResult.data.isParent) {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/parent-or-guardian', params));
   }
 
-  if (ageCategory === 'adults' || ageCategory === 'seniors') {
+  const childAgeCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+  if (childAgeCategory === 'adults' || childAgeCategory === 'seniors') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/cannot-apply-child', params));
+  }
+
+  if (state.editMode) {
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-child-information', params));
   }
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/dental-insurance', params));
@@ -194,7 +192,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowChildInformation() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, childName, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -273,6 +271,7 @@ export default function ApplyFlowChildInformation() {
 
   return (
     <>
+      <AppPageTitle>{t('apply-adult-child:children.information.page-title', { childName })}</AppPageTitle>
       <div className="my-6 sm:my-8">
         <p id="progress-label" className="sr-only mb-2">
           {t('apply:progress.label')}
@@ -349,20 +348,26 @@ export default function ApplyFlowChildInformation() {
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button id="save-button" name="_action" value={FormAction.Save} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Applicant Information click">
+              <Button id="save-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Child Information click">
                 {t('apply-adult-child:children.information.save-btn')}
               </Button>
-              <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Applicant Information click">
+              <ButtonLink
+                id="cancel-button"
+                routeId="$lang+/_public+/apply+/$id+/adult-child/review-child-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Child Information click"
+              >
                 {t('apply-adult-child:children.information.cancel-btn')}
-              </Button>
+              </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Button id="continue-button" name="_action" value={FormAction.Continue} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Applicant Information click">
+              <Button id="continue-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Child Information click">
                 {t('apply-adult-child:children.information.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult-child/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click">
+              <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult-child/children/index" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Child Information click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-adult-child:children.information.back-btn')}
               </ButtonLink>
