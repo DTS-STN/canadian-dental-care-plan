@@ -301,7 +301,6 @@ export default function AccessToGovernmentalsBenefitsEdit() {
                       options={[
                         { children: t('access-to-governmental-benefits:access-to-governmental-benefits.edit.select-one'), value: '', hidden: true },
                         ...sortedRegions.map((region) => ({
-                          key: region.provinceTerritoryStateId,
                           id: region.provinceTerritoryStateId,
                           value: region.provinceTerritoryStateId,
                           children: getNameByLanguage(i18n.language, region),
