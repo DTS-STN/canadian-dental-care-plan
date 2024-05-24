@@ -2,14 +2,6 @@
   "@odata.context": "https://canadadental-uat.crm3.dynamics.com/api/data/v9.2/$metadata#esdc_governmentinsuranceplans(esdc_code,esdc_governmentinsuranceplanid,esdc_nameenglish,esdc_namefrench,_esdc_provinceterritorystateid_value)",
   "value": [
     {
-      "@odata.etag": "W/\"2167654176\"",
-      "esdc_code": "45",
-      "esdc_governmentinsuranceplanid": "440f45ea-bdd5-ee11-904d-000d3a09d132",
-      "esdc_nameenglish": "At Home Program (AHP)",
-      "esdc_namefrench": "At Home Program (AHP)",
-      "_esdc_provinceterritorystateid_value": "9c440baa-35b3-eb11-8236-0022486d8d5f"
-    },
-    {
       "@odata.etag": "W/\"2167654122\"",
       "esdc_code": "88",
       "esdc_governmentinsuranceplanid": "ce7f0f40-790c-ef11-9f8a-000d3a09d132",

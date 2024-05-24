@@ -21,7 +21,7 @@
       "last-name-required": "Entrez le nom de famille",
       "marital-status-required": "Sélectionnez l'état civil",
       "marital-status-no-partner-information": "Si vous êtes marié ou vivez en conjoint de fait, vous devez saisir leurs informations sur la page suivante. Sélectionnez votre état civil et appuyez sur «\u00a0Enregistrer\u00a0».",
-      "sin-required": "Entrez un NAS de 9 chiffres",
+      "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789 ",
       "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
     }
@@ -272,7 +272,7 @@
       "date-of-birth-year-required": "La date de naissance doit inclure une année",
       "first-name-required": "Entrez le prénom",
       "last-name-required": "Entrez le nom de famille",
-      "sin-required": "Entrez un NAS de 9 chiffres",
+      "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789 ",
       "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
     }
