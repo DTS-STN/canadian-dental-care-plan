@@ -359,7 +359,6 @@ export default function AccessToDentalInsuranceQuestion() {
                           options={provincialTerritorialSocialPrograms
                             .filter((program) => program.provinceTerritoryStateId === provinceValue)
                             .map((option) => ({
-                              key: option.id,
                               children: getNameByLanguage(i18n.language, option),
                               value: option.id,
                               checked: provincialTerritorialSocialProgramValue === option.id,
