@@ -40,7 +40,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
   const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
-  if (ageCategory !== 'youth') {
+  if (ageCategory !== 'children') {
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
 
