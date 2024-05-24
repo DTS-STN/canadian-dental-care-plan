@@ -4,7 +4,6 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { UTCDate } from '@date-fns/utc';
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
@@ -21,7 +20,6 @@ import { toBenefitApplicationRequest } from '~/mappers/benefit-application-servi
 import { loadApplyAdultChildState, validateApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
-import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env.server';
@@ -33,7 +31,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
-import { cn } from '~/utils/tw-utils';
 
 enum FormAction {
   Back = 'back',
@@ -180,7 +177,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/review-adult-information');
 
-  const benefitApplicationService = getBenefitApplicationService();
   const { ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
@@ -193,12 +189,11 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  if (formData && formData.get('_action')) {
-    const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
-    if (formAction === FormAction.Back) {
-      saveApplyState({ params, session, state: { editMode: false } });
-      return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
-    }
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+
+  if (formAction === FormAction.Back) {
+    saveApplyState({ params, session, state: { editMode: false } });
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
   }
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
@@ -256,18 +251,17 @@ export default function ReviewInformation() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
-
-  const [isSubmitAction, setIsSubmitAction] = useState(false);
+  const [submitAction, setSubmitAction] = useState<string>();
 
   function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
+    setSubmitAction(String(formData.get('_action')));
 
     if (hCaptchaEnabled && captchaRef.current) {
       try {
         const response = captchaRef.current.getResponse();
         formData.set('h-captcha-response', response);
-        setIsSubmitAction(true);
       } catch (error) {
         /* intentionally ignore and proceed with submission */
       } finally {
@@ -501,7 +495,7 @@ export default function ReviewInformation() {
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Review Adult Information click">
             {t('apply-adult-child:review-adult-information.continue-button')}
-            <FontAwesomeIcon icon={isSubmitting && isSubmitAction ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+            {isSubmitting && submitAction === FormAction.Submit ? <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" /> : <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />}
           </Button>
           <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Review Information click">
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
