@@ -447,6 +447,14 @@
                           "en": "/:lang/apply/:id/adult-child/file-taxes",
                           "fr": "/:lang/demander/:id/adulte-enfant/produire-declaration-revenus"
                         }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/exit-application",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/exit-application.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/exit-application",
+                          "fr": "/:lang/demander/:id/adulte-enfant/quitter-demande"
+                        }
                       }
                     ]
                   },
