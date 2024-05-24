@@ -5,6 +5,7 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
@@ -43,30 +44,37 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('email-alerts');
 
+  const auditService = getAuditService();
+  const instrumentationService = getInstrumentationService();
+  const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
+  const subscriptionService = getSubscriptionService();
 
   await raoidcService.handleSessionValidation(request, session);
 
-  const instrumentationService = getInstrumentationService();
-  const lookupService = getLookupService();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const preferredLanguages = await lookupService.getAllPreferredLanguages();
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sin);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:manage.page-title') }) };
 
-  instrumentationService.countHttpStatus('alerts.manage', 302);
+  const idToken: IdToken = session.get('idToken');
+  auditService.audit('page-view.manage-alerts', { userId: idToken.sub });
+  instrumentationService.countHttpStatus('alerts.manage', 200);
+
   return json({ csrfToken, meta, preferredLanguages, alertSubscription });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('alerts/manage');
 
-  const instrumentationService = getInstrumentationService();
   const auditService = getAuditService();
+  const instrumentationService = getInstrumentationService();
+  const subscriptionService = getSubscriptionService();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formSchema = z
@@ -101,27 +109,30 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const idToken: IdToken = session.get('idToken');
-  auditService.audit('update-date.manage-alerts', { userId: idToken.sub });
-
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
+
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sin);
+  invariant(alertSubscription, 'Expected alertSubscription to be defined');
+
   const newAlertSubscription = {
-    id: alertSubscription?.id ?? '',
-    sin: userInfoToken.sin ?? '',
+    id: alertSubscription.id,
+    sin: userInfoToken.sin,
     email: parsedDataResult.data.email,
-    registered: alertSubscription?.registered ?? false,
+    registered: alertSubscription.registered,
     subscribed: false,
     preferredLanguage: parsedDataResult.data.preferredLanguage,
   };
+  await subscriptionService.updateSubscription(userInfoToken.sin, newAlertSubscription);
 
-  await getSubscriptionService().updateSubscription(userInfoToken.sin ?? '', newAlertSubscription);
-
+  const idToken: IdToken = session.get('idToken');
+  auditService.audit('update-data.manage-alerts', { userId: idToken.sub });
   instrumentationService.countHttpStatus('alerts.manage', 302);
+
   return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/confirm', params));
 }
 
-export default function AlertsSubscribeEdit() {
+export default function ManageAlerts() {
   const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, preferredLanguages, alertSubscription } = useLoaderData<typeof loader>();
