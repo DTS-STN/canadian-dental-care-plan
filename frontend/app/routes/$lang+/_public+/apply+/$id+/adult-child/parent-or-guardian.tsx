@@ -93,7 +93,13 @@ export default function ApplyFlowParentOrGuardian() {
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <ButtonLink id="back-button" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Parent or guardian needs to apply click">
+        <ButtonLink
+          id="back-button"
+          routeId="$lang+/_public+/apply+/$id+/adult-child/date-of-birth"
+          params={params}
+          disabled={isSubmitting}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Parent or guardian needs to apply click"
+        >
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply-adult-child:parent-or-guardian.back-btn')}
         </ButtonLink>
