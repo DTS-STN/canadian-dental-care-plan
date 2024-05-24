@@ -1,7 +1,9 @@
+import { SyntheticEvent, useState } from 'react';
+
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faChevronLeft, faChevronRight, faPlus, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faEdit, faPlus, faRemove, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { randomUUID } from 'crypto';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +13,6 @@ import pageIds from '../../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
-import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { getChildrenState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
@@ -22,7 +23,6 @@ import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { cn } from '~/utils/tw-utils';
 
 enum FormAction {
   Add = 'add',
@@ -71,7 +71,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     };
   });
 
-  return json({ id: state.id, csrfToken, meta, children });
+  return json({ id: state.id, csrfToken, meta, children, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -104,16 +104,25 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-child-information', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-adult-information', params));
 }
 
 export default function ApplyFlowChildSummary() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, children } = useLoaderData<typeof loader>();
+  const { csrfToken, children, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const hasChildren = children.length > 0;
+
+  const [submitAction, setSubmitAction] = useState<string>();
+
+  function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
+    setSubmitAction(String(formData.get('_action')));
+    fetcher.submit(formData, { method: 'POST' });
+  }
 
   return (
     <>
@@ -125,114 +134,142 @@ export default function ApplyFlowChildSummary() {
       </div>
       <div className="max-w-prose">
         <p className="mb-4">{t('apply-adult-child:children.index.you-have-completed')}</p>
-        <p className="mb-6">{t('apply-adult-child:children.index.in-this-section')}</p>
-        {children.map((child) => {
-          const childName = `${child.information?.firstName} ${child.information?.lastName}`;
-          return (
-            <div key={child.id}>
-              <h2 className="text-2xl font-semibold">{`${child.information?.firstName} ${child.information?.lastName}`}</h2>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="alternative" size="xs" className="my-2">
-                    {t('apply-adult-child:children.index.modal.remove-btn')}
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>{t('apply-adult-child:children.index.modal.header', { childName })}</DialogTitle>
-                  </DialogHeader>
-                  <p>{t('apply-adult-child:children.index.modal.info', { childName })}</p>
-                  <DialogFooter>
-                    <DialogClose>
-                      <Button id="confirm-modal-back" variant="default" size="sm">
-                        {t('apply-adult-child:children.index.modal.back-btn')}
-                      </Button>
-                    </DialogClose>
-                    <fetcher.Form method="post" noValidate>
-                      <input type="hidden" name="_csrf" value={csrfToken} />
-                      <input type="hidden" name="childId" value={child.id} />
-                      <Button id="remove-child" name="_action" value={FormAction.Remove} variant="primary" className="my-2">
-                        {t('apply-adult-child:children.index.modal.remove-btn')}
-                      </Button>
-                    </fetcher.Form>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+        <p>{t('apply-adult-child:children.index.in-this-section')}</p>
+        {children.length > 0 && (
+          <div className="mt-6 space-y-8">
+            {children.map((child) => {
+              const childName = `${child.information?.firstName} ${child.information?.lastName}`;
+              return (
+                <section key={child.id}>
+                  <h2 className="mb-4 text-2xl font-semibold">{childName}</h2>
+                  <dl className="mb-6 divide-y border-y">
+                    <DescriptionListItem term={t('apply-adult-child:children.index.dob-title')}>
+                      <p>{child.information?.dateOfBirth}</p>
+                    </DescriptionListItem>
+                    <DescriptionListItem term={t('apply-adult-child:children.index.sin-title')}>
+                      <p>{child.information?.socialInsuranceNumber}</p>
+                    </DescriptionListItem>
+                    <DescriptionListItem term={t('apply-adult-child:children.index.dental-insurance-title')}>{child.dentalInsurance ? t('apply-adult-child:children.index.yes') : t('apply-adult-child:children.index.no')}</DescriptionListItem>
+                    <DescriptionListItem term={t('apply-adult-child:children.index.dental-benefit-title')}>
+                      {!!child.dentalBenefits.hasFederalBenefits || !!child.dentalBenefits.hasProvincialTerritorialBenefits ? (
+                        <>
+                          <p>{t('apply-adult-child:children.index.yes')}</p>
+                          <p>{t('apply-adult-child:children.index.dental-benefit-has-access')}</p>
+                          <div>
+                            <ul className="ml-6 list-disc">
+                              {child.dentalBenefits.hasFederalBenefits && <li>{child.dentalBenefits.federalSocialProgram}</li>}
+                              {child.dentalBenefits.hasProvincialTerritorialBenefits && <li>{child.dentalBenefits.provincialTerritorialSocialProgram}</li>}
+                            </ul>
+                          </div>
+                        </>
+                      ) : (
+                        <>{t('apply-adult-child:children.index.no')}</>
+                      )}
+                    </DescriptionListItem>
+                  </dl>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <ButtonLink
+                      id="edit-child"
+                      disabled={isSubmitting}
+                      size="sm"
+                      variant="alternative"
+                      routeId="$lang+/_public+/apply+/$id+/adult-child/children/$childId/information"
+                      params={{ ...params, childId: child.id }}
+                      data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Edit child - Summary of children click"
+                    >
+                      <FontAwesomeIcon icon={faEdit} className="me-3 block size-3" />
+                      {t('apply-adult-child:children.index.edit-child')}
+                    </ButtonLink>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button id="remove-child" disabled={isSubmitting} size="sm" variant="alternative">
+                          <FontAwesomeIcon icon={faRemove} className="me-3 block size-3" />
+                          {t('apply-adult-child:children.index.modal.remove-btn')}
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                          <DialogTitle>{t('apply-adult-child:children.index.modal.header', { childName })}</DialogTitle>
+                        </DialogHeader>
+                        <p>{t('apply-adult-child:children.index.modal.info', { childName })}</p>
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button id="confirm-modal-back" disabled={isSubmitting} variant="default" size="sm">
+                              {t('apply-adult-child:children.index.modal.back-btn')}
+                            </Button>
+                          </DialogClose>
+                          <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
+                            <input type="hidden" name="_csrf" value={csrfToken} />
+                            <input type="hidden" name="childId" value={child.id} />
+                            <Button
+                              id="remove-child"
+                              name="_action"
+                              value={FormAction.Remove}
+                              disabled={isSubmitting}
+                              variant="primary"
+                              size="sm"
+                              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Remove child - Summary of children click"
+                            >
+                              {t('apply-adult-child:children.index.modal.remove-btn')}
+                            </Button>
+                          </fetcher.Form>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </section>
+              );
+            })}
+          </div>
+        )}
 
-              <dl className="mb-6 divide-y border-y">
-                <DescriptionListItem term={t('apply-adult-child:children.index.dob-title')}>
-                  <p>{child.information?.dateOfBirth}</p>
-                  <p className="mt-4">
-                    <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult-child/children/$childId/information" params={{ ...params, childId: child.id }}>
-                      {t('apply-adult-child:children.index.dob-change')}
-                    </InlineLink>
-                  </p>
-                </DescriptionListItem>
-                <DescriptionListItem term={t('apply-adult-child:children.index.sin-title')}>
-                  <p>{child.information?.socialInsuranceNumber}</p>
-                  <p className="mt-4">
-                    <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/adult-child/children/$childId/information" params={{ ...params, childId: child.id }}>
-                      {t('apply-adult-child:children.index.sin-change')}
-                    </InlineLink>
-                  </p>
-                </DescriptionListItem>
-                <DescriptionListItem term={t('apply-adult-child:children.index.dental-insurance-title')}>
-                  {child.dentalInsurance ? t('apply-adult-child:children.index.yes') : t('apply-adult-child:children.index.no')}
-                  <p className="mt-4">
-                    <InlineLink id="change-access-dental" routeId="$lang+/_public+/apply+/$id+/adult-child/children/$childId/dental-insurance" params={{ ...params, childId: child.id }}>
-                      {t('apply-adult-child:children.index.dental-insurance-change')}
-                    </InlineLink>
-                  </p>
-                </DescriptionListItem>
-                <DescriptionListItem term={t('apply-adult-child:children.index.dental-benefit-title')}>
-                  {!!child.dentalBenefits.hasFederalBenefits || !!child.dentalBenefits.hasProvincialTerritorialBenefits ? (
-                    <>
-                      <p>{t('apply-adult-child:children.index.yes')}</p>
-                      <p>{t('apply-adult-child:children.index.dental-benefit-has-access')}</p>
-                      <div>
-                        <ul className="ml-6 list-disc">
-                          {child.dentalBenefits.hasFederalBenefits && <li>{child.dentalBenefits.federalSocialProgram}</li>}
-                          {child.dentalBenefits.hasProvincialTerritorialBenefits && <li>{child.dentalBenefits.provincialTerritorialSocialProgram}</li>}
-                        </ul>
-                      </div>
-                    </>
-                  ) : (
-                    <>{t('apply-adult-child:children.index.no')}</>
-                  )}
-                  <p className="mt-4">
-                    <InlineLink id="change-dental-benefits" routeId="$lang+/_public+/apply+/$id+/adult-child/children/$childId/federal-provincial-territorial-benefits" params={{ ...params, childId: child.id }}>
-                      {t('apply-adult-child:children.index.dental-benefit-change')}
-                    </InlineLink>
-                  </p>
-                </DescriptionListItem>
-              </dl>
-            </div>
-          );
-        })}
-
-        <fetcher.Form method="post" noValidate>
+        <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <Button className="mb-10" id="add-child" name="_action" value={FormAction.Add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click">
+          <Button className="my-10" id="add-child" name="_action" value={FormAction.Add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Add child - Summary of children click">
             <FontAwesomeIcon icon={faPlus} className="me-3 block size-4" />
-            {t('apply-adult-child:children.index.add-child')}
+            {children.length === 0 ? t('apply-adult-child:children.index.add-child') : t('apply-adult-child:children.index.add-another-child')}
           </Button>
 
-          <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <Button id="continue-button" name="_action" value={FormAction.Continue} variant="primary" disabled={!hasChildren || isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Applicant Information click">
-              {t('apply-adult-child:children.index.continue-btn')}
-              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-            </Button>
-            <ButtonLink
-              id="back-button"
-              routeId="$lang+/_public+/apply+/$id+/adult-child/federal-provincial-territorial-benefits"
-              params={params}
-              disabled={isSubmitting}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Applicant Information click"
-            >
-              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('apply-adult-child:children.index.back-btn')}
-            </ButtonLink>
-          </div>
+          {editMode ? (
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <ButtonLink
+                id="save-button"
+                routeId="$lang+/_public+/apply+/$id+/adult-child/review-child-information"
+                params={params}
+                disabled={!hasChildren || isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Summary of children click"
+                variant="primary"
+              >
+                {t('children.index.save-btn')}
+              </ButtonLink>
+              <ButtonLink
+                id="cancel-button"
+                routeId="$lang+/_public+/apply+/$id+/adult-child/review-child-information"
+                params={params}
+                disabled={!hasChildren || isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Summary of children click"
+              >
+                {t('children.index.cancel-btn')}
+              </ButtonLink>
+            </div>
+          ) : (
+            <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+              <Button id="continue-button" name="_action" value={FormAction.Continue} variant="primary" disabled={!hasChildren || isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Summary of children click">
+                {t('apply-adult-child:children.index.continue-btn')}
+                {isSubmitting && submitAction === FormAction.Continue ? <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" /> : <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />}
+              </Button>
+              <ButtonLink
+                id="back-button"
+                routeId="$lang+/_public+/apply+/$id+/adult-child/federal-provincial-territorial-benefits"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Summary of children click"
+              >
+                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+                {t('apply-adult-child:children.index.back-btn')}
+              </ButtonLink>
+            </div>
+          )}
         </fetcher.Form>
       </div>
     </>
