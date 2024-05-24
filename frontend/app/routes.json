@@ -433,14 +433,6 @@
                         }
                       },
                       {
-                        "id": "$lang+/_public+/apply+/$id+/adult-child/ineligible",
-                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/ineligible.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/adult-child/ineligible",
-                          "fr": "/:lang/demander/:id/adulte-enfant/ineligible"
-                        }
-                      },
-                      {
                         "id": "$lang+/_public+/apply+/$id+/adult-child/dob-eligibility",
                         "file": "routes/$lang+/_public+/apply+/$id+/adult-child/dob-eligibility.tsx",
                         "paths": {
