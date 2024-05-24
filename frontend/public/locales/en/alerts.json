@@ -63,11 +63,10 @@
     }
   },
   "confirm": {
-    "page-title": "Submission Confirmation",
+    "page-title": "Confirmation code",
     "breadcrumbs": {
       "subscribe": "Confirm to subscribe to CDCP email alerts"
     },
-    "no-preferred-language-on-file": "No preferred language on file",
     "confirmation-information-text": "A confirmation code, required to finish the registration process, will be sent to <strong>{{userEmailAddress}}</strong>. This step must be completed within the next 48 hours or by immediately entering the confirmation code below.",
     "confirmation-completed-text": "Upon completion, you will begin to receive email alerts when important information for your Canada Dental Care Plan application is available.",
     "confirmation-selected-language": "Selected language preference:",
@@ -75,7 +74,10 @@
     "submit-code": "Submit Confirmation Code",
     "request-new-code": "Request New Confirmation Code",
     "code-sent-by-email": "You have requested a new confirmation code and will receive an email at <strong>{{userEmailAddress}}</strong> to finish the registration process. This final step which must be completed within the next <strong>48 hours</strong>, will allow you to reveive emails when important new Canadian Dental Care plan information is available in your My Service Canada Account.",
-    "back": "Back"
+    "back": "Back",
+    "error-message": {
+      "code-required": "Enter confirmation code"
+    }
   },
   "expired": {
     "page-title": "Confirmation Code Expired",

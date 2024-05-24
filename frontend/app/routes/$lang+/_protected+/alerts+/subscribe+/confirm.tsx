@@ -5,6 +5,8 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
+import validator from 'validator';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
@@ -13,11 +15,12 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
+import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSubscriptionService } from '~/services/subscription-service.server';
 import { featureEnabled } from '~/utils/env.server';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
+import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { UserinfoToken } from '~/utils/raoidc-utils.server';
@@ -26,9 +29,15 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';
 
-enum ConfirmSubscriptionCode {
+enum ConfirmationCodeAction {
   NewCode = 'new-code',
   Submit = 'submit',
+}
+
+// TODO remove the /subscribe+/expired route and place the message on this page
+enum AlertMessage {
+  NewCode = 'new-code',
+  Mismatch = 'mismatch',
 }
 
 export const handle = {
@@ -43,128 +52,131 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('email-alerts');
-  const raoidcService = await getRaoidcService();
-  await raoidcService.handleSessionValidation(request, session);
+
   const instrumentationService = getInstrumentationService();
+  const lookupService = getLookupService();
+  const raoidcService = await getRaoidcService();
+  const subscriptionService = getSubscriptionService();
+
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = getLocale(request);
+
+  await raoidcService.handleSessionValidation(request, session);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:confirm.page-title') }) };
 
-  instrumentationService.countHttpStatus('alerts.confirm', 302);
-
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
-  const log = getLogger('alerts-subscription.confirm');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
+
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sin);
   if (!alertSubscription) {
-    log.warn('Alert Subscription could not be found; responding with 404');
-    throw new Response(null, { status: 404 });
+    instrumentationService.countHttpStatus('alerts.subscribe-confirm', 302);
+    return redirect(getPathById('$lang+/_protected+/alerts+/index', params));
   }
-  session.set('alertSubscription', alertSubscription);
 
-  const confirmationCodeEntered = session.get('codeEntered') ?? '';
+  const preferredLanguages = await lookupService.getAllPreferredLanguages();
+  const preferredLanguageDict = preferredLanguages.find((obj) => obj.id === alertSubscription.preferredLanguage);
+  const preferredLanguage = preferredLanguageDict && getNameByLanguage(locale, preferredLanguageDict);
 
-  return json({ csrfToken, meta, alertSubscription, userInfoToken, confirmationCodeEntered }); //TODO get the language and email address entered by the user when they entered their information on the index route...
+  instrumentationService.countHttpStatus('alerts.subscribe-confirm', 200);
+
+  return json({ csrfToken, meta, alertSubscription, preferredLanguage, userInfoToken });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('subscribe/confirm');
-  const alertSubscription = session.get('alertSubscription');
-  if (!alertSubscription.email) {
-    log.warn('alert subscription email not found, throwing 400');
-    throw new Response('alert subscription email not found', { status: 400 });
-  }
-  const formData = await request.formData();
-  const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const action = formData.get('action');
-  const instrumentationService = getInstrumentationService();
+  const log = getLogger('alerts/subscribe/confirm');
 
-  const formDataSchema = z.object({
-    confirmationCode: z.string().trim().max(100).optional(),
-  });
-  const newCodeRequestedSchema = z.boolean().optional();
+  const instrumentationService = getInstrumentationService();
+  const subscriptionService = getSubscriptionService();
+  const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const formSchema = z
+    .object({
+      action: z.nativeEnum(ConfirmationCodeAction),
+      confirmationCode: z.string().trim().max(100).optional(),
+    })
+    .superRefine((val, ctx) => {
+      if (val.action === ConfirmationCodeAction.Submit) {
+        if (!val.confirmationCode || validator.isEmpty(val.confirmationCode)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('alerts:confirm.error-message.code-required'), path: ['confirmationCode'] });
+        }
+      }
+    });
+
+  const formData = await request.formData();
+  const expectedCsrfToken = String(session.get('csrfToken'));
+  const submittedCsrfToken = String(formData.get('_csrf'));
+
+  if (expectedCsrfToken !== submittedCsrfToken) {
+    log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
+    throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
   const data = {
+    action: formData.get('action') ? String(formData.get('action')) : '',
     confirmationCode: formData.get('confirmationCode') ? String(formData.get('confirmationCode')) : undefined,
   };
-  const parsedNewCodeRequested = newCodeRequestedSchema.safeParse(false);
-  const parsedDataResult = formDataSchema.safeParse(data);
+  const parsedDataResult = formSchema.safeParse(data);
+
   if (!parsedDataResult.success) {
     instrumentationService.countHttpStatus('alerts.confirm', 400);
-    return json({
-      errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof formDataSchema>>,
-      newCodeRequested: parsedNewCodeRequested.data,
-    });
+    return json({ errors: parsedDataResult.error.format() });
   }
 
-  if (action === ConfirmSubscriptionCode.NewCode) {
-    const newCodeResponse = await getSubscriptionService().requestNewConfirmationCode(alertSubscription.email, userInfoToken.sub);
-    if (newCodeResponse.status !== 204) {
-      // TODO: handle request error.
-      return json({
-        errors: {
-          confirmationCode: {
-            _errors: [''],
-          },
-        },
-        newCodeRequested: parsedNewCodeRequested.data,
-      });
-    }
-    const parsedNewCodeRequestedSuccess = newCodeRequestedSchema.safeParse(true);
-    return json({
-      errors: {
-        confirmationCode: {
-          _errors: [''],
-        },
-      },
-      newCodeRequested: parsedNewCodeRequestedSuccess.data,
-    });
-  }
-  if (action === ConfirmSubscriptionCode.Submit) {
-    session.set('codeEntered', parsedDataResult.data.confirmationCode);
-    const response = await getSubscriptionService().validateConfirmationCode(alertSubscription?.email ?? '', parsedDataResult.data.confirmationCode ?? '', userInfoToken.sub);
-    const jsonReponseStatus = await response.json();
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
 
-    if (jsonReponseStatus.confirmCodeStatus === 'valid') {
-      return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/success', params));
-    }
-    if (jsonReponseStatus.confirmCodeStatus === 'expired') {
-      return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/expired', params));
-    }
-    if (jsonReponseStatus.confirmCodeStatus === 'mismatch') {
-      //TODO Complete logic
-    }
+  if (parsedDataResult.data.action === ConfirmationCodeAction.NewCode) {
+    // TODO service function shouldn't accept email; remove when services are changed
+    await subscriptionService.requestNewConfirmationCode('test@example.com', userInfoToken.sub);
+    return json({ alertMessage: AlertMessage.NewCode } as const);
   }
 
-  return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/confirm', params));
+  const confirmationCode = parsedDataResult.data.confirmationCode;
+  invariant(confirmationCode, 'Expected confirmationCode to be defined');
+
+  // TODO service function shouldn't accept email; remove when services are changed
+  const response = await subscriptionService.validateConfirmationCode('test@example.com', confirmationCode, userInfoToken.sub);
+  const jsonReponseStatus = await response.json();
+
+  if (jsonReponseStatus.confirmCodeStatus === 'valid') {
+    return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/success', params));
+  }
+  if (jsonReponseStatus.confirmCodeStatus === 'expired') {
+    return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/expired', params));
+  }
+  if (jsonReponseStatus.confirmCodeStatus === 'mismatch') {
+    // TODO there is currently no message for a mismatch
+    return json({ alertMessage: AlertMessage.Mismatch } as const);
+  }
 }
 
 export default function ConfirmSubscription() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, confirmationCodeEntered, alertSubscription } = useLoaderData<typeof loader>();
+  const { csrfToken, alertSubscription, preferredLanguage } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const userOrigin = useUserOrigin();
-  const errorSummaryId = 'error-summary';
-  const newCodeRequested = fetcher.data?.newCodeRequested ?? false;
 
-  //TODO insert the selected language and email address of the client...
-  const errorMessages = useMemo(
-    () => ({
-      confirmationCode: fetcher.data?.errors.confirmationCode?._errors[0],
-    }),
-    [fetcher.data?.errors.confirmationCode?._errors],
-  );
+  const alertMessage = fetcher.data && 'alertMessage' in fetcher.data ? fetcher.data.alertMessage : undefined;
+
+  const errorSummaryId = 'error-summary';
+
+  const errorMessages = useMemo(() => {
+    const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
+    return {
+      confirmationCode: errors?.confirmationCode?._errors[0],
+    };
+  }, [fetcher.data]);
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
-  const defaultValues = {
-    confirmationCode: confirmationCodeEntered,
-  };
+
   useEffect(() => {
     if (hasErrors(errorMessages)) {
       scrollAndFocusToErrorSummary(errorSummaryId);
     }
   }, [errorMessages]);
+
   return (
     <>
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
@@ -172,38 +184,38 @@ export default function ConfirmSubscription() {
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mb-8 space-y-6">
           <ContextualAlert type="info">
-            {!newCodeRequested ? (
+            {!alertMessage && (
               <>
-                <p id="confirmation-information" className="mb-4">
+                <p id="confirmation-information">
                   <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.confirmation-information-text" values={{ userEmailAddress: alertSubscription.email }} />
                 </p>
-                <p id="confirmation-completed" className="mb-4">
+                <p id="confirmation-completed" className="mt-4">
                   {t('alerts:confirm.confirmation-completed-text')}
                 </p>
-                <div className="grid gap-12 md:grid-cols-2">
-                  <p id="confirmation-language" className="mb-4 font-bold">
+                <dl>
+                  <dt id="confirmation-language" className="mt-4 font-bold">
                     {t('alerts:confirm.confirmation-selected-language')}
-                  </p>
-
-                  <p>{t('alerts:confirm.no-preferred-language-on-file')}</p>
-                </div>
+                  </dt>
+                  <dd>{preferredLanguage}</dd>
+                </dl>
               </>
-            ) : (
+            )}
+            {alertMessage === AlertMessage.NewCode && (
               <p>
                 <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.code-sent-by-email" values={{ userEmailAddress: alertSubscription.email }} />
               </p>
             )}
           </ContextualAlert>
-          <InputField id="confirmationCode" className="w-full" label={t('alerts:confirm.confirmation-code-label')} maxLength={100} name="confirmationCode" defaultValue={defaultValues.confirmationCode} />
+          <InputField id="confirmationCode" label={t('alerts:confirm.confirmation-code-label')} maxLength={100} name="confirmationCode" errorMessage={errorMessages.confirmationCode} />
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="back-button" to={userOrigin?.to} params={params}>
             {t('alerts:confirm.back')}
           </ButtonLink>
-          <Button id="new-code-button" name="action" value={ConfirmSubscriptionCode.NewCode} variant="alternative">
+          <Button id="new-code-button" name="action" value={ConfirmationCodeAction.NewCode} variant="alternative">
             {t('alerts:confirm.request-new-code')}
           </Button>
-          <Button id="submit-button" name="action" value={ConfirmSubscriptionCode.Submit} variant="primary">
+          <Button id="submit-button" name="action" value={ConfirmationCodeAction.Submit} variant="primary">
             {t('alerts:confirm.submit-code')}
           </Button>
         </div>
