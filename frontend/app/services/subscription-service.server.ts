@@ -3,16 +3,16 @@ import { z } from 'zod';
 
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
+import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('subscription-service.server');
 
 const subscriptionInfoSchema = z.object({
   id: z.string(),
-  sin: z.string(),
-  email: z.string(),
-  subscribed: z.boolean(),
+  userId: z.string(),
   preferredLanguage: z.string(),
+  alertType: z.string(),
 });
 
 type SubscriptionInfo = z.infer<typeof subscriptionInfoSchema>;
@@ -23,15 +23,21 @@ type SubscriptionInfo = z.infer<typeof subscriptionInfoSchema>;
 export const getSubscriptionService = moize(createSubscriptionService, { onCacheAdd: () => log.info('Creating new subscription service') });
 
 function createSubscriptionService() {
+  const {
+    CDCP_API_BASE_URI,
+    //INTEROP_API_SUBSCRIPTION_KEY,
+  } = getEnv();
+
   async function getSubscription(sin: string) {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
     auditService.audit('alert-subscription.get', { sin });
-
+    //76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6
     // TODO: "IT-Security won't like SIN being passed as identifier"
     // TODO: add CDCP_API_BASE_URI
     const userId = sin;
-    const url = new URL(`https://api.example.com/v1/users/${userId}/subscriptions`);
+    //const url = new URL(`https://api.example.com/v1/users/${userId}/subscriptions`);
+    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users/${userId}/subscriptions`);
 
     const response = await fetch(url, {
       method: 'GET',
@@ -45,20 +51,18 @@ function createSubscriptionService() {
     const subscriptionsSchema = z.array(
       z.object({
         id: z.string(),
-        sin: z.string(),
-        email: z.string(),
-        registered: z.boolean(),
-        subscribed: z.boolean(),
+        userId: z.string(),
         preferredLanguage: z.string(),
         alertType: z.string(),
       }),
     );
 
+    //const test = await response.json();
+    //console.log(JSON.stringify(test, undefined, 4));
+    // console.debug();
+
     const subscriptions = subscriptionsSchema.parse(await response.json()).map((subscription) => ({
       id: subscription.id,
-      email: subscription.email,
-      registered: subscription.registered,
-      subscribed: subscription.subscribed,
       preferredLanguage: subscription.preferredLanguage,
       alertType: subscription.alertType,
     }));

@@ -40,10 +40,7 @@ const db = factory({
   },
   subscription: {
     id: primaryKey(faker.string.uuid),
-    sin: String,
-    email: String,
-    registered: Boolean,
-    subscribed: Boolean,
+    userId: String,
     preferredLanguage: String,
     alertType: String,
   },

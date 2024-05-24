@@ -8,11 +8,9 @@ const log = getLogger('subscription-api.server');
 
 const subscriptionApiSchema = z.object({
   id: z.string(),
-  sin: z.string(),
-  email: z.string(),
-  registered: z.boolean(),
-  subscribed: z.boolean(),
+  userId: z.string(),
   preferredLanguage: z.string(),
+  alertType: z.string(),
 });
 
 const validateSubscriptionSchema = z.object({
@@ -44,7 +42,7 @@ export function getSubscriptionApiMockHandlers() {
       }
 
       const subscriptionEntities = db.subscription.findMany({
-        where: { sin: { equals: parsedUserId.data } },
+        where: { userId: { equals: parsedUserId.data } },
       });
 
       return HttpResponse.json(subscriptionEntities);
@@ -65,10 +63,7 @@ export function getSubscriptionApiMockHandlers() {
 
       if (parsedSubscriptionApi.data.id === '') {
         db.subscription.create({
-          sin: parsedSubscriptionApi.data.sin,
-          email: parsedSubscriptionApi.data.email,
-          registered: parsedSubscriptionApi.data.registered,
-          subscribed: parsedSubscriptionApi.data.subscribed,
+          userId: parsedSubscriptionApi.data.userId,
           preferredLanguage: parsedSubscriptionApi.data.preferredLanguage,
           alertType: 'cdcp',
         });
@@ -76,9 +71,6 @@ export function getSubscriptionApiMockHandlers() {
         db.subscription.update({
           where: { id: { equals: parsedSubscriptionApi.data.id } },
           data: {
-            email: parsedSubscriptionApi.data.email,
-            registered: parsedSubscriptionApi.data.registered,
-            subscribed: parsedSubscriptionApi.data.subscribed,
             preferredLanguage: parsedSubscriptionApi.data.preferredLanguage,
           },
         });
