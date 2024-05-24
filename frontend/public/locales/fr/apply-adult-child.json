@@ -532,16 +532,6 @@
     "back-btn": "Retour",
     "continue-btn": "Continuer"
   },
-  "ineligible": {
-    "page-title": "(FR) You cannot apply for your child",
-    "currently-ineligible": "(FR) Your child is not currently eligible for the Canadian Dental Care Plan.",
-    "accepting-applications": "(FR) The Canadian Dental Care Plan is currently accepting applications for people aged 65 and above, children under 18, and adults with a valid disability tax credit.",
-    "adults-dtc": "(FR) Adults 18 to 64 who do not have a disability tax credit will be able to apply for the Canadian Dental Care Plan in 2025",
-    "find-out-when": "<findOutWhen>(FR) Find out when you can apply for the Canadian Dental Care Plan</findOutWhen>",
-    "find-out-when-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#quand",
-    "back-btn": "Retour",
-    "continue-btn": "(FR) Proceed to apply for yourself"
-  },
   "parent-or-guardian": {
     "page-title": "(FR) Parent or legal guardian needs to apply",
     "unable-to-apply-child": "(FR) Your child is not currently eligible to apply for the Canadian Dental Care Plan at this time.",
