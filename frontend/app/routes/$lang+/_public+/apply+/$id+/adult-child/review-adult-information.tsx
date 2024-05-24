@@ -193,10 +193,12 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
-  if (formAction === FormAction.Back) {
-    saveApplyState({ params, session, state: { editMode: false } });
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-child-information', params));
+  if (formData && formData.get('_action')) {
+    const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+    if (formAction === FormAction.Back) {
+      saveApplyState({ params, session, state: { editMode: false } });
+      return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
+    }
   }
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
@@ -223,31 +225,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
-  // TODO submit to the API and grab the confirmation code from the response
-  const benefitApplicationRequest = toBenefitApplicationRequest({
-    typeOfApplication: state.typeOfApplication,
-    disabilityTaxCredit: state.disabilityTaxCredit,
-    livingIndependently: state.livingIndependently,
-    applicantInformation: state.applicantInformation,
-    communicationPreferences: state.communicationPreferences,
-    dateOfBirth: state.dateOfBirth,
-    dentalBenefits: state.dentalBenefits,
-    dentalInsurance: state.dentalInsurance,
-    personalInformation: state.personalInformation,
-    partnerInformation: state.partnerInformation,
-  });
-
-  const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
-
   saveApplyState({
     params,
     session,
-    state: {
-      submissionInfo: {
-        confirmationCode: confirmationCode,
-        submittedOn: new UTCDate().toISOString(),
-      },
-    },
+    state,
   });
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-child-information', params));
