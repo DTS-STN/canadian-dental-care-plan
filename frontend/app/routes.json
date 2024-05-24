@@ -447,6 +447,14 @@
                           "en": "/:lang/apply/:id/adult-child/dob-eligibility",
                           "fr": "/:lang/demander/:id/adulte-enfant/ddn-admissibilite"
                         }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/adult-child/file-taxes",
+                        "file": "routes/$lang+/_public+/apply+/$id+/adult-child/file-taxes.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/adult-child/file-taxes",
+                          "fr": "/:lang/demander/:id/adulte-enfant/produire-declaration-revenus"
+                        }
                       }
                     ]
                   },
