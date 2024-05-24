@@ -189,16 +189,25 @@ public class UserService {
 		return subscription -> id.equals(subscription.getId());
 	}
 
-    public ConfirmationCodeStatus verifyConfirmationCode(ConfirmationCode confirmationCode, User user){
-        if (confirmationCode == null || confirmationCode.getCode().isBlank()) {
-            return ConfirmationCodeStatus.NO_CODE;
-        }
-    	if (!user.getConfirmationCodes().contains(confirmationCode)) {
-    		return ConfirmationCodeStatus.MISMATCH;
+	private Predicate<ConfirmationCodeEntity> notExpired() {
+		return confirmationCode -> confirmationCode.getExpiryDate().isAfter(Instant.now());
+	}
+
+    public Boolean verifyConfirmationCode(String code, User user){
+		Assert.hasText(code, "code is required; it must not be null or blank");
+		Assert.notNull(user, "user is required; it must not be null");
+		if (user.getConfirmationCodes().stream().map(confirmationCodeMapper::toEntity).filter(notExpired()).noneMatch(byCode(code))) {
+    		return false;
     	}
-        if (confirmationCode.getExpiryDate().isBefore(Instant.now())) {
-        	return ConfirmationCodeStatus.EXPIRED;
-        }
-        return ConfirmationCodeStatus.VALID;
+        return true;
     }
+
+	public void setEmailValidated(String userId) {
+		Assert.hasText(userId, "userId is required; it must not be null or blank");
+		log.debug("Fetching user [{}] from repository", userId);
+		final var user = userRepository.findById(userId).orElseThrow();
+		user.setEmailVerified(true);
+		user.setConfirmationCodes(null);
+		userRepository.save(user);
+	}
 }

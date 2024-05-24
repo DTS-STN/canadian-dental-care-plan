@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
-import ca.gov.dtsstn.cdcp.api.service.ConfirmationCodeStatus;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
-import ca.gov.dtsstn.cdcp.api.service.domain.ConfirmationCode;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.UserModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.UserUpdateModel;
@@ -70,20 +68,26 @@ public class UsersController {
 	}	
 
 
-    @PostMapping({ "/verifyCode/"})
+    @PostMapping({ "/{userId}/email-validations"})
     @Operation(summary = "Verify the status of a confirmation code.", operationId="verify-confirmation-code")
-    public ConfirmationCodeStatus getConfirmationCodeStatus(
-            @NotBlank(message = "code must not be null or blank")
-            @Parameter(description = "The confirmation code.", required = true)
-            @RequestParam ConfirmationCode code,
+    public ResponseEntity<?>  verifyConfirmationCodeStatus(
             @NotBlank(message = "userId must not be null or blank")
             @Parameter(description = "The ID of the user.", required = true)
-            @RequestParam String userId
+            @PathVariable String userId,
+            @NotBlank(message = "code must not be null or blank")
+            @Parameter(description = "The confirmation code.", required = true)
+            @RequestParam String code
         ){
-			if (userService.getUserById(userId).isEmpty()) {
-				return ConfirmationCodeStatus.NO_CODE;
+			final var user = userService.getUserById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));
+			Assert.hasText(code, "id is required; it must not be null or blank");
+			if (userService.verifyConfirmationCode(code, user)) {
+				userService.setEmailValidated(userId);
+				return new ResponseEntity<>(HttpStatus.ACCEPTED);
 			}
-    		return userService.verifyConfirmationCode(code, userService.getUserById(userId).get());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+
     }
 }
 

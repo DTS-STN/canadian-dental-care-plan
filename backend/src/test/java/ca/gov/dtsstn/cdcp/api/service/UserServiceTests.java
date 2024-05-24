@@ -166,7 +166,6 @@ class UserServiceTests {
 		assertEquals(ConfirmationCodeStatus.EXPIRED, userService.verifyConfirmationCode(confirmationCode, user));
 	}
 
-
 	@Test
 	void testVerifyConfirmationCode_no_code() {
 		final var user = ImmutableUser.builder().build();
