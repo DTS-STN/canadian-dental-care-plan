@@ -23,7 +23,7 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 
 		<!-- NOTE: when updating Spring Boot, be sure to also update the <spring-boot.version> property below -->
-		<version>3.2.5</version>
+		<version>3.3.0</version>
 	</parent>
 
 
@@ -44,7 +44,7 @@
 		<immutables.version>2.10.1</immutables.version>
 		<jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
-		<spring-boot.version>3.2.5</spring-boot.version>
+		<spring-boot.version>3.3.0</spring-boot.version>
 		<springdoc.version>2.5.0</springdoc.version>
 	</properties>
 
