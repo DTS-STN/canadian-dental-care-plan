@@ -341,7 +341,6 @@ export default function AccessToDentalInsuranceQuestion() {
                         options={[
                           { children: t('apply-adult-child:children.dental-benefits.select-one'), value: '', hidden: true },
                           ...sortedRegions.map((region) => ({
-                            key: region.provinceTerritoryStateId,
                             id: region.provinceTerritoryStateId,
                             value: region.provinceTerritoryStateId,
                             children: getNameByLanguage(i18n.language, region),
@@ -360,6 +359,7 @@ export default function AccessToDentalInsuranceQuestion() {
                           options={provincialTerritorialSocialPrograms
                             .filter((program) => program.provinceTerritoryStateId === provinceValue)
                             .map((option) => ({
+                              key: option.id,
                               children: getNameByLanguage(i18n.language, option),
                               value: option.id,
                               checked: provincialTerritorialSocialProgramValue === option.id,
