@@ -56,16 +56,31 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
   // prettier-ignore
-  /*if (state.childInformation === undefined ||
-    state.childDentalBenefits === undefined ||
-    state.childDentalInsurance === undefined) {
+  if (state.children === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
-  }*/
+  }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = getLocale(request);
+  //const locale = getLocale(request);
 
   /*const currentChildIndex = 0;
+
+  const childrenList = [];
+  state.children.forEach((child) => {
+    childrenList.push(
+      {
+        childInfo: {
+          firstName: state.childInformation.firstName,
+          lastName: state.childInformation.lastName,
+          birthday: toLocaleDateString(parse(state.childInformation.dateOfBirth, 'yyyy-MM-dd', new UTCDate()), locale),
+          sin: state.childInformation.socialInsuranceNumber,
+          isParent: state.childInformation.isParent,
+        },
+        childDentalInsurance: currentDentalInsurance,
+
+      }
+    )
+  });
 
   const childInfo = {
     firstName: state.childInformation.firstName,
@@ -90,7 +105,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
       province: currentDentalBenefit.province,
       benefit: currentDentalBenefit.provincialTerritorialSocialProgram,
     },
-  };*/
+  };
 
   const childInfo = {
     firstName: 'firstName',
@@ -112,7 +127,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
       province: '9c440baa-35b3-eb11-8236-0022486d8d5f',
       benefit: 'b3f25fea-a7a9-ee11-a569-000d3af4f898',
     },
-  };
+  };*/
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
 
@@ -135,11 +150,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   return json({
     id: state.id,
-    childInfo,
+    children: state.children,
     federalSocialPrograms,
     provincialTerritorialSocialPrograms,
-    childDentalInsurance,
-    childDentalBenefit,
     csrfToken,
     meta,
     siteKey: HCAPTCHA_SITE_KEY,
@@ -223,7 +236,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ReviewInformation() {
   const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { childInfo, federalSocialPrograms, provincialTerritorialSocialPrograms, childDentalInsurance, childDentalBenefit, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
+  const { children, federalSocialPrograms, provincialTerritorialSocialPrograms, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -351,7 +364,7 @@ export default function ReviewInformation() {
             </ButtonLink>
           </div>
         </fetcher.Form>
-        <InlineLink routeId="$lang+/_public+/apply+/$id+/adult-child/exit-application" params={params} className="mt-4 block font-lato font-semibold">
+        <InlineLink routeId="$lang+/_public+/apply+/$id+/adult/exit-application" params={params} className="mt-4 block font-lato font-semibold">
           {t('apply-adult-child:review-child-information.exit-button')}
         </InlineLink>
       </div>
