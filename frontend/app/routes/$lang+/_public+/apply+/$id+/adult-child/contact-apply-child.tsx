@@ -81,7 +81,7 @@ export default function ApplyFlowContactApplyChild() {
   const serviceCanadaOfficeLink = <InlineLink to={t('apply-adult-child:contact-apply-child.serviceCanadaOfficeLink')} />;
 
   return (
-    <>
+    <div className="max-w-prose">
       <div className="mb-8 space-y-4">
         <p>
           <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:contact-apply-child.contact-service-canada" components={{ serviceCanadaOfficeLink, noWrap }} />
@@ -99,6 +99,6 @@ export default function ApplyFlowContactApplyChild() {
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>
       </fetcher.Form>
-    </>
+    </div>
   );
 }

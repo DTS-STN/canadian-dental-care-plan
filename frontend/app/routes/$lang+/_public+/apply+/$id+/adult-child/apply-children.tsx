@@ -9,6 +9,7 @@ import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -48,8 +49,9 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  // todo: build out route
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/child-information', params));
+  saveApplyState({ params, session, state: { editMode: false, typeOfApplication: 'child' } });
+
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/child/children/index', params));
 }
 
 export default function ApplyFlowApplyChildren() {
@@ -60,7 +62,7 @@ export default function ApplyFlowApplyChildren() {
   const isSubmitting = fetcher.state !== 'idle';
 
   return (
-    <>
+    <div className="max-w-prose">
       <div className="mb-8 space-y-4">
         <p>{t('apply-adult-child:eligibility.apply-children.not-eligible')}</p>
         <p>{t('apply-adult-child:eligibility.apply-children.eligibility-info')}</p>
@@ -89,6 +91,6 @@ export default function ApplyFlowApplyChildren() {
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>
       </fetcher.Form>
-    </>
+    </div>
   );
 }
