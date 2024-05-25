@@ -63,7 +63,7 @@ public class SubscriptionsController {
 				throw new ResourceConflictException("A subscription with code [%s] already exists for user [%s]".formatted(subscription.getAlertTypeCode(), userId));
 			});
 
-		userService.createSubscriptionForUser(userId, subscriptionModelMapper.toDomain(subscription));
+		userService.createSubscriptionForUser(userId, subscriptionModelMapper.toDomainObject(subscription));
 	}
 
 	@GetMapping

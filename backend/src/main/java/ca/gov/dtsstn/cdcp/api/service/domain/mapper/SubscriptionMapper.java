@@ -17,16 +17,16 @@ import jakarta.annotation.Nullable;
 public interface SubscriptionMapper {
 
 	@Nullable
-	public default List<Subscription> fromEntity(@Nullable Iterable<SubscriptionEntity> subscriptions) {
+	public default List<Subscription> toDomainObjects(@Nullable Iterable<SubscriptionEntity> subscriptions) {
 		if (subscriptions == null) { return null; }
-		return StreamSupport.stream(subscriptions.spliterator(), false).map(this::fromEntity).toList();
+		return StreamSupport.stream(subscriptions.spliterator(), false).map(this::toDomainObject).toList();
 	}
 
 	@Nullable
-	Subscription fromEntity(@Nullable SubscriptionEntity subscription);
+	Subscription toDomainObject(@Nullable SubscriptionEntity subscription);
 
 	@Nullable
-	public default List<SubscriptionEntity> toEntity(@Nullable Iterable<Subscription> subscriptions) {
+	public default List<SubscriptionEntity> toEntities(@Nullable Iterable<Subscription> subscriptions) {
 		if (subscriptions == null) { return null; }
 		return StreamSupport.stream(subscriptions.spliterator(), false).map(this::toEntity).toList();
 	}
@@ -38,5 +38,6 @@ public interface SubscriptionMapper {
 	@Nullable
 	@Mapping(target = "isNew", ignore = true)
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-	SubscriptionEntity update(@Nullable Subscription subscription, @MappingTarget SubscriptionEntity target);
+	SubscriptionEntity update(@MappingTarget SubscriptionEntity target, @Nullable Subscription subscription);
+
 }

@@ -28,13 +28,13 @@ public class AlertTypeService {
 	@Cacheable(key = "{ 'id', #id }", sync = true)
 	public Optional<AlertType> readById(String id) {
 		Assert.hasText(id, "id is required; it must not be null or blank");
-		return alertTypeRepository.findById(id).map(alertTypeMapper::fromEntity);
+		return alertTypeRepository.findById(id).map(alertTypeMapper::toDomainObject);
 	}
 
 	@Cacheable(key = "{ 'code', #code }", sync = true)
 	public Optional<AlertType> readByCode(String code) {
 		Assert.hasText(code, "code is required; it must not be null or blank");
-		return alertTypeRepository.findByCode(code).map(alertTypeMapper::fromEntity);
+		return alertTypeRepository.findByCode(code).map(alertTypeMapper::toDomainObject);
 	}
 
 }

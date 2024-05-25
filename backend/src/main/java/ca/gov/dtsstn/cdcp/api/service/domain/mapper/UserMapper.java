@@ -18,7 +18,7 @@ public interface UserMapper {
 	UserEntity toEntity(@Nullable User user);
 
 	@Nullable
-	User fromEntity(@Nullable UserEntity user);
+	User toDomainObject(@Nullable UserEntity user);
 
 	@Nullable
 	@Mapping(target = "isNew", ignore = true)

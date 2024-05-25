@@ -11,7 +11,7 @@ import ca.gov.dtsstn.cdcp.api.service.domain.AlertType;
 public interface AlertTypeMapper {
 
 	@Nullable
-	AlertType fromEntity(@Nullable AlertTypeEntity alertType);
+	AlertType toDomainObject(@Nullable AlertTypeEntity alertType);
 
 	@Nullable
 	@Mapping(target = "isNew", ignore = true)

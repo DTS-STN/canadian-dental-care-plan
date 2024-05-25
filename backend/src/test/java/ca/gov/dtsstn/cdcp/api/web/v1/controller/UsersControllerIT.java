@@ -27,7 +27,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import ca.gov.dtsstn.cdcp.api.config.WebSecurityConfig;
-import ca.gov.dtsstn.cdcp.api.service.AlertTypeService;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUser;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUserAttribute;
@@ -38,7 +37,7 @@ import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUserAttribute;
 @ComponentScan({ "ca.gov.dtsstn.cdcp.api.web.v1.model.mapper" })
 class UsersControllerIT {
 
-	@MockBean AlertTypeService alertTypeService;
+//	@MockBean AlertTypeService alertTypeService;
 
 	@MockBean UserService userService;
 

@@ -25,8 +25,7 @@ public interface SubscriptionModelMapper {
 	@Nullable
 	default CollectionModel<SubscriptionModel> toModel(String userId, @Nullable Iterable<Subscription> subscriptions) {
 		final var subscriptionModels = StreamSupport.stream(subscriptions.spliterator(), false)
-			.map(subscription -> toModel(userId, subscription))
-			.toList();
+			.map(subscription -> toModel(userId, subscription)).toList();
 
 		return CollectionModel.of(subscriptionModels)
 			.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionsByUserId(userId)).withSelfRel());
@@ -38,13 +37,9 @@ public interface SubscriptionModelMapper {
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 	SubscriptionModel toModel(String userId, @Nullable Subscription subscription);
 
-	/**
-	 * Adds a HATEOAS self link to a subscription.
-	 */
-	@Nullable
 	@AfterMapping
-	default void addLinks(String userId, @MappingTarget SubscriptionModel subscription) {
-		subscription.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionById(userId, subscription.getId())).withSelfRel());
+	default SubscriptionModel afterMappingToModel(String userId, @MappingTarget SubscriptionModel subscription) {
+		return subscription.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionById(userId, subscription.getId())).withSelfRel());
 	}
 
 	@Mapping(target= "id", ignore = true)
@@ -53,7 +48,7 @@ public interface SubscriptionModelMapper {
 	@Mapping(target= "lastModifiedBy", ignore = true)
 	@Mapping(target= "lastModifiedDate", ignore = true)
 	@Mapping(target= "alertType.code", source = "alertTypeCode")
-	@Mapping(target= "language.msLocaleCode", source = "msLanguageCode")	
-	Subscription toDomain(@Nullable SubscriptionCreateModel subscriptionModel);
+	@Mapping(target= "language.msLocaleCode", source = "msLanguageCode")
+	Subscription toDomainObject(@Nullable SubscriptionCreateModel subscriptionModel);
 
 }

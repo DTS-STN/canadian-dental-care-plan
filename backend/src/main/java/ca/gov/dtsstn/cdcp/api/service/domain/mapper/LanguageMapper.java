@@ -11,7 +11,7 @@ import ca.gov.dtsstn.cdcp.api.service.domain.Language;
 public interface LanguageMapper {
 
 	@Nullable
-	Language fromEntity(@Nullable LanguageEntity language);
+	Language toDomainObject(@Nullable LanguageEntity language);
 
 	@Nullable
 	@Mapping(target = "isNew", ignore = true)

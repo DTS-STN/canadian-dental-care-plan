@@ -1,5 +1,6 @@
 package ca.gov.dtsstn.cdcp.api.web.v1.controller;
 
+import org.mapstruct.factory.Mappers;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +12,7 @@ import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.UserModel;
-import ca.gov.dtsstn.cdcp.api.web.v1.model.mapper.UserModelAssembler;
+import ca.gov.dtsstn.cdcp.api.web.v1.model.mapper.UserModelMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,17 +25,12 @@ import jakarta.validation.constraints.NotBlank;
 @Tag(name = "Users", description = "Endpoint for managing user resources.")
 public class UsersController {
 
-	private final UserModelAssembler userModelAssembler;
+	private final UserModelMapper userModelMapper = Mappers.getMapper(UserModelMapper.class);
 
 	private final UserService userService;
 
-	public UsersController(
-			UserModelAssembler userModelAssembler,
-			UserService userService) {
-		Assert.notNull(userModelAssembler, "userModelAssembler is required; it must not be null");
+	public UsersController(UserService userService) {
 		Assert.notNull(userService, "userService is required; it must not be null");
-
-		this.userModelAssembler = userModelAssembler;
 		this.userService = userService;
 	}
 
@@ -44,10 +40,9 @@ public class UsersController {
 			@NotBlank(message = "id must not be null or blank")
 			@Parameter(description = "The id of the user.", example = "00000000-0000-0000-0000-000000000000")
 			@PathVariable String id) {
-		final var user = userService.getUserById(id)
+		return userService.getUserById(id)
+			.map(userModelMapper::toModel)
 			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(id)));
-
-		return userModelAssembler.toModel(user);
 	}
 
 }

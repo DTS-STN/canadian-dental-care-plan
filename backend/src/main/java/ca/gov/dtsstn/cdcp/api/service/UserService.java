@@ -70,7 +70,7 @@ public class UserService {
 		Assert.notNull(user, "user is required; it must not be null");
 		Assert.isNull(user.getId(), "user.id must be null when creating new instance");
 
-		return userMapper.fromEntity(userRepository.save(userMapper.toEntity(user)));
+		return userMapper.toDomainObject(userRepository.save(userMapper.toEntity(user)));
 	}
 
 	public ConfirmationCode createConfirmationCodeForUser(String userId) {
@@ -94,7 +94,7 @@ public class UserService {
 		// return the persisted entity so it includes the id and audit fields
 		return userRepository.save(user).getConfirmationCodes().stream()
 			.filter(byCode(confirmationCode.getCode())).findFirst()
-			.map(confirmationCodeMapper::fromEntity).orElseThrow();
+			.map(confirmationCodeMapper::toDomainObject).orElseThrow();
 	}
 
 	public Subscription createSubscriptionForUser(String userId, Subscription subscription) {
@@ -129,12 +129,12 @@ public class UserService {
 
 		return userRepository.save(user).getSubscriptions().stream()
 			.filter(byAlertTypeId(alertType.getId())).findFirst()
-			.map(subscriptionMapper::fromEntity).get();
+			.map(subscriptionMapper::toDomainObject).get();
 	}
 
 	public Optional<User> getUserById(String id) {
 		Assert.hasText(id, "id is required; it must not be null or blank");
-		return userRepository.findById(id).map(userMapper::fromEntity);
+		return userRepository.findById(id).map(userMapper::toDomainObject);
 	}
 
 	private Predicate<SubscriptionEntity> byAlertTypeId(String alertTypeId) {
