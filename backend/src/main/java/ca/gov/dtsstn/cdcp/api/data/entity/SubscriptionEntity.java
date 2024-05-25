@@ -6,7 +6,6 @@ import org.immutables.builder.Builder;
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.lang.Nullable;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
