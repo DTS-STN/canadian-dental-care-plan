@@ -67,7 +67,7 @@ export function loadApplyAdultSingleChildState({ params, request, session }: Loa
 
   if (!parsedChildId.success) {
     log.warn('Invalid "childId" param format; childId: [%s]', params.childId);
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/children/index', params));
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
   }
 
   const childId = parsedChildId.data;
@@ -75,7 +75,7 @@ export function loadApplyAdultSingleChildState({ params, request, session }: Loa
 
   if (childStateIndex === -1) {
     log.warn('Apply single child has not been found; childId: [%s]', childId);
-    throw redirect(getPathById('$lang+/_public+/apply+/$id+/children/index', params));
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
   }
 
   const childState = applyState.children[childStateIndex];
