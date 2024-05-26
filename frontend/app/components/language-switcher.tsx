@@ -2,6 +2,7 @@ import { useMatches, useParams } from '@remix-run/react';
 
 import type { InlineLinkProps } from '~/components/inline-link';
 import { InlineLink } from '~/components/inline-link';
+import { RouteId } from '~/route-id';
 import { getAltLanguage } from '~/utils/locale-utils';
 
 export type LanguageSwitcherProps = OmitStrict<InlineLinkProps, 'to' | 'reloadDocument'>;
@@ -16,7 +17,7 @@ export function LanguageSwitcher({ children, ...props }: LanguageSwitcherProps) 
 
   const altLang = getAltLanguage(params.lang);
   const currentRoute = matches[matches.length - 1];
-  const routeId = currentRoute.id.replace(/-(en|fr)$/, '');
+  const routeId = currentRoute.id.replace(/-(en|fr)$/, '') as RouteId;
 
   return (
     <InlineLink data-testid="language-switcher" reloadDocument routeId={routeId} params={params} targetLang={altLang} {...props}>
