@@ -25,7 +25,8 @@ describe('AppLink', () => {
 
   const defaultProps: AppLinkProps = {
     children: 'Click me',
-    routeId: 'test-route',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    routeId: 'test-route' as any,
   };
 
   it('should render correctly', () => {

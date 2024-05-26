@@ -7,6 +7,7 @@ import type { To } from 'react-router';
 import invariant from 'tiny-invariant';
 
 import { NewTabIndicator } from '~/components/new-tab-indicator';
+import { RouteId } from '~/route-id';
 import { getPathById } from '~/utils/route-utils';
 
 /**
@@ -15,12 +16,12 @@ import { getPathById } from '~/utils/route-utils';
 export interface AppLinkProps extends OmitStrict<ComponentProps<typeof Link>, 'to'> {
   newTabIndicator?: boolean;
   params?: Params;
-  routeId?: string;
+  routeId?: RouteId;
   targetLang?: 'en' | 'fr';
   to?: To;
 }
 
-function getTo(params?: Params, routeId?: string, targetLang?: 'en' | 'fr', to?: To) {
+function getTo(params?: Params, routeId?: RouteId, targetLang?: 'en' | 'fr', to?: To) {
   if (to) {
     return to;
   }

@@ -8,10 +8,11 @@ import { useTranslation } from 'react-i18next';
 import type { To } from 'react-router';
 
 import { InlineLink } from './inline-link';
+import { RouteId } from '~/route-id';
 
 export interface BreadcrumbsProps {
   className?: string;
-  items: Array<{ content: string; routeId?: string; to?: To }>;
+  items: Array<{ content: string; routeId?: RouteId; to?: To }>;
 }
 
 export function Breadcrumbs({ className, items }: BreadcrumbsProps) {
@@ -40,11 +41,14 @@ export function Breadcrumbs({ className, items }: BreadcrumbsProps) {
   );
 }
 
-function Breadcrumb({ children, routeId, to }: { children: ReactNode; routeId?: string; to?: To }) {
+function Breadcrumb({ children, routeId, to }: { children: ReactNode; routeId?: RouteId; to?: To }) {
   const params = useParams();
 
-  // prettier-ignore
-  return routeId === undefined && to === undefined
-    ? <span property="name">{children}</span>
-    : <InlineLink routeId={routeId} params={params} to={to} property="item" typeof="WebPage"><span property="name">{children}</span></InlineLink>;
+  return routeId === undefined && to === undefined ? (
+    <span property="name">{children}</span>
+  ) : (
+    <InlineLink routeId={routeId} params={params} to={to} property="item" typeof="WebPage">
+      <span property="name">{children}</span>
+    </InlineLink>
+  );
 }

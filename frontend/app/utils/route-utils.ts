@@ -6,6 +6,7 @@ import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
+import { RouteId, routeIds } from '~/route-id';
 import routes from '~/routes.json';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -21,7 +22,7 @@ const breadcrumbsSchema = z
     z
       .object({
         labelI18nKey: z.custom<ParsedKeysByNamespaces>(),
-        routeId: z.string().optional(),
+        routeId: z.enum(routeIds).optional(),
         to: z.string().optional(),
       })
       .readonly(),
@@ -73,7 +74,7 @@ export interface RouteHandleData extends Record<string, unknown | undefined> {
 }
 
 export interface Route {
-  id: string;
+  id: RouteId;
   file: string;
   paths?: {
     en: string;
@@ -141,7 +142,7 @@ export function usePageTitleI18nOptions() {
     .reduce(coalesce);
 }
 
-export function findRouteById(id: string, routes: Array<Route> = []): Route | undefined {
+export function findRouteById(id: RouteId, routes: Array<Route> = []): Route | undefined {
   for (const route of routes) {
     const match = route.id === id ? route : findRouteById(id, route.children);
 
@@ -151,10 +152,10 @@ export function findRouteById(id: string, routes: Array<Route> = []): Route | un
   }
 }
 
-export function getPathById(id: string, params: Params = {}) {
+export function getPathById(id: RouteId, params: Params = {}) {
   const { lang = 'en' } = params as { lang?: 'en' | 'fr' };
 
-  const route = findRouteById(id, routes);
+  const route = findRouteById(id, routes as Array<Route>);
   const path = route?.paths?.[lang];
   invariant(path, `path not found for route [${id}] and language [${lang}]`);
 
