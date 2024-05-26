@@ -54,7 +54,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
   const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
 
-  const children = getChildrenState(state, false).map((child) => {
+  const children = getChildrenState(state).map((child) => {
     const federalSocialProgramEntity = federalSocialPrograms.find((p) => p.id === child.dentalBenefits?.federalSocialProgram);
     const federalSocialProgram = federalSocialProgramEntity ? getNameByLanguage(i18n, federalSocialProgramEntity) : federalSocialProgramEntity;
 
@@ -92,14 +92,14 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   if (formAction === FormAction.Add) {
     const childId = randomUUID();
-    const children = [...getChildrenState(state, false), { id: childId }];
+    const children = [...getChildrenState(state), { id: childId }];
     saveApplyState({ params, session, state: { children } });
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/information', { ...params, childId }));
   }
 
   if (formAction === FormAction.Remove) {
     const removeChildId = formData.get('childId');
-    const children = [...getChildrenState(state, false)].filter((child) => child.id !== removeChildId);
+    const children = [...getChildrenState(state)].filter((child) => child.id !== removeChildId);
     saveApplyState({ params, session, state: { children } });
     return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
   }

@@ -16,8 +16,8 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
-import { applicantInformationStateHasPartner, loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { ApplicantInformationState, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { ApplicantInformationState, applicantInformationStateHasPartner, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';

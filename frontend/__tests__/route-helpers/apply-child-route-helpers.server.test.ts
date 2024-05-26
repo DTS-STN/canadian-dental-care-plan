@@ -2,44 +2,26 @@ import { Params } from '@remix-run/react';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { applicantInformationStateHasPartner, validateApplyChildStateForReview } from '~/route-helpers/apply-child-route-helpers.server';
-import { ApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { validateApplyChildStateForReview } from '~/route-helpers/apply-child-route-helpers.server';
+import { ApplyState, applicantInformationStateHasPartner, getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
 
 vi.mock('@remix-run/node', () => ({
   redirect: vi.fn((to: string) => `MockedRedirect(${to})`),
-}));
-
-vi.mock('~/utils/env.server', () => ({
-  getEnv: vi.fn(() => ({
-    MARITAL_STATUS_CODE_MARRIED: 1,
-    MARITAL_STATUS_CODE_COMMONLAW: 2,
-  })),
 }));
 
 vi.mock('~/utils/route-utils', () => ({
   getPathById: vi.fn((path: string, params: Params) => `MockedPath(${path}, ${JSON.stringify(params)})`),
 }));
 
-describe('apply-route-helpers.server', () => {
+vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
+  applicantInformationStateHasPartner: vi.fn(),
+  getAgeCategoryFromDateString: vi.fn(),
+  getChildrenState: vi.fn(({ children }) => children),
+}));
+
+describe('apply-child-route-helpers.server', () => {
   afterEach(() => {
     vi.restoreAllMocks();
-  });
-
-  describe('applicantInformationStateHasPartner', () => {
-    it('should return true for marital status code "1" for MARRIED', () => {
-      const result = applicantInformationStateHasPartner({ maritalStatus: '1' });
-      expect(result).toBe(true);
-    });
-
-    it('should return true for marital status code  "2" for COMMONLAW', () => {
-      const result = applicantInformationStateHasPartner({ maritalStatus: '2' });
-      expect(result).toBe(true);
-    });
-
-    it('should return false for other marital status codes', () => {
-      const result = applicantInformationStateHasPartner({ maritalStatus: '99' });
-      expect(result).toBe(false);
-    });
   });
 
   describe('validateApplyChildStateForReview', () => {
@@ -86,7 +68,6 @@ describe('apply-route-helpers.server', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        editMode: false,
         taxFiling2023: undefined,
       } satisfies ApplyState;
 
@@ -97,31 +78,202 @@ describe('apply-route-helpers.server', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        editMode: false,
         taxFiling2023: false,
       } satisfies ApplyState;
 
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/file-taxes, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
+    it('should redirect if children is empty', () => {
+      const mockState = {
+        ...baseState,
+        typeOfApplication: 'child',
+        taxFiling2023: true,
+        children: [],
+      } satisfies ApplyState;
+
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/children/index, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+    });
+
+    it('should redirect if a child information is undefined', () => {
+      const mockState = {
+        ...baseState,
+        typeOfApplication: 'child',
+        taxFiling2023: true,
+        children: [
+          {
+            id: '1',
+            information: undefined,
+          },
+        ],
+      } satisfies ApplyState;
+
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow(
+        'MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/children/$childId/information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
+      );
+    });
+
+    it('should redirect if a child information.isParent is false', () => {
+      const mockState = {
+        ...baseState,
+        typeOfApplication: 'child',
+        taxFiling2023: true,
+        children: [
+          {
+            id: '1',
+            information: {
+              dateOfBirth: '2012-02-23',
+              firstName: 'John',
+              hasSocialInsuranceNumber: false,
+              isParent: false,
+              lastName: 'Doe',
+            },
+          },
+        ],
+      } satisfies ApplyState;
+
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow(
+        'MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/children/$childId/parent-or-guardian, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
+      );
+    });
+
+    it.each([
+      ['adults' as const, '1985-01-10'],
+      ['seniors' as const, '1900-01-10'],
+    ])('should redirect if a child age category is %s', (childAgeCategory, childDateOfBirth) => {
+      const mockState = {
+        ...baseState,
+        typeOfApplication: 'child',
+        taxFiling2023: true,
+        children: [
+          {
+            id: '1',
+            information: {
+              dateOfBirth: childDateOfBirth,
+              firstName: 'John',
+              hasSocialInsuranceNumber: false,
+              isParent: true,
+              lastName: 'Doe',
+            },
+          },
+        ],
+      } satisfies ApplyState;
+
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce(childAgeCategory);
+      vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
+
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow(
+        'MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/children/$childId/cannot-apply-child, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
+      );
+    });
+
+    it('should redirect if a child dentalInsurance is undefined', () => {
+      const mockState = {
+        ...baseState,
+        typeOfApplication: 'child',
+        taxFiling2023: true,
+        children: [
+          {
+            id: '1',
+            information: {
+              dateOfBirth: '2012-02-23',
+              firstName: 'John',
+              hasSocialInsuranceNumber: false,
+              isParent: true,
+              lastName: 'Doe',
+            },
+            dentalInsurance: undefined,
+          },
+        ],
+      } satisfies ApplyState;
+
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
+      vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
+
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow(
+        'MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/children/$childId/dental-insurance, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
+      );
+    });
+
+    it('should redirect if a child dentalBenefits is undefined', () => {
+      const mockState = {
+        ...baseState,
+        typeOfApplication: 'child',
+        taxFiling2023: true,
+        children: [
+          {
+            id: '1',
+            information: {
+              dateOfBirth: '2012-02-23',
+              firstName: 'John',
+              hasSocialInsuranceNumber: false,
+              isParent: true,
+              lastName: 'Doe',
+            },
+            dentalInsurance: true,
+            dentalBenefits: undefined,
+          },
+        ],
+      } satisfies ApplyState;
+
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
+      vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
+
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow(
+        'MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/children/$childId/federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
+      );
+    });
+
     it('should redirect if dateOfBirth is undefined', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        editMode: false,
         taxFiling2023: true,
+        children: [
+          {
+            id: '1',
+            information: {
+              dateOfBirth: '2012-02-23',
+              firstName: 'John',
+              hasSocialInsuranceNumber: false,
+              isParent: true,
+              lastName: 'Doe',
+            },
+            dentalInsurance: true,
+            dentalBenefits: {
+              hasFederalBenefits: false,
+              hasProvincialTerritorialBenefits: false,
+            },
+          },
+        ],
         dateOfBirth: undefined,
       } satisfies ApplyState;
 
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/date-of-birth, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
-    it("should redirect if applicantInformation is undefined'", () => {
+    it('should redirect if applicantInformation is undefined', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        editMode: false,
         taxFiling2023: true,
+        children: [
+          {
+            id: '1',
+            information: {
+              dateOfBirth: '2012-02-23',
+              firstName: 'John',
+              hasSocialInsuranceNumber: false,
+              isParent: true,
+              lastName: 'Doe',
+            },
+            dentalInsurance: true,
+            dentalBenefits: {
+              hasFederalBenefits: false,
+              hasProvincialTerritorialBenefits: false,
+            },
+          },
+        ],
         dateOfBirth: '1900-01-01',
         applicantInformation: undefined,
       } satisfies ApplyState;
@@ -129,12 +281,65 @@ describe('apply-route-helpers.server', () => {
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
+    it('should redirect if age category is "children"', () => {
+      const mockState = {
+        ...baseState,
+        typeOfApplication: 'child',
+        taxFiling2023: true,
+        children: [
+          {
+            id: '1',
+            information: {
+              dateOfBirth: '2012-02-23',
+              firstName: 'John',
+              hasSocialInsuranceNumber: false,
+              isParent: true,
+              lastName: 'Doe',
+            },
+            dentalInsurance: true,
+            dentalBenefits: {
+              hasFederalBenefits: false,
+              hasProvincialTerritorialBenefits: false,
+            },
+          },
+        ],
+        dateOfBirth: '2022-01-01',
+        applicantInformation: {
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          maritalStatus: '1',
+          socialInsuranceNumber: '000-000-001',
+        },
+      } satisfies ApplyState;
+
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
+
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/contact-apply-child, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+    });
+
     it('should redirect if partnerInformation is undefined and applicant has partner', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        editMode: false,
         taxFiling2023: true,
+        children: [
+          {
+            id: '1',
+            information: {
+              dateOfBirth: '2012-02-23',
+              firstName: 'John',
+              hasSocialInsuranceNumber: false,
+              isParent: true,
+              lastName: 'Doe',
+            },
+            dentalInsurance: true,
+            dentalBenefits: {
+              hasFederalBenefits: false,
+              hasProvincialTerritorialBenefits: false,
+            },
+          },
+        ],
         dateOfBirth: '1900-01-01',
         applicantInformation: {
           firstName: 'First Name',
@@ -145,6 +350,10 @@ describe('apply-route-helpers.server', () => {
         partnerInformation: undefined,
       } satisfies ApplyState;
 
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
+      vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
+
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/partner-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
@@ -152,8 +361,24 @@ describe('apply-route-helpers.server', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        editMode: false,
         taxFiling2023: true,
+        children: [
+          {
+            id: '1',
+            information: {
+              dateOfBirth: '2012-02-23',
+              firstName: 'John',
+              hasSocialInsuranceNumber: false,
+              isParent: true,
+              lastName: 'Doe',
+            },
+            dentalInsurance: true,
+            dentalBenefits: {
+              hasFederalBenefits: false,
+              hasProvincialTerritorialBenefits: false,
+            },
+          },
+        ],
         dateOfBirth: '1900-01-01',
         applicantInformation: {
           firstName: 'First Name',
@@ -170,6 +395,10 @@ describe('apply-route-helpers.server', () => {
         },
       } satisfies ApplyState;
 
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
+      vi.mocked(applicantInformationStateHasPartner).mockReturnValue(false);
+
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
@@ -177,8 +406,24 @@ describe('apply-route-helpers.server', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        editMode: false,
         taxFiling2023: true,
+        children: [
+          {
+            id: '1',
+            information: {
+              dateOfBirth: '2012-02-23',
+              firstName: 'John',
+              hasSocialInsuranceNumber: false,
+              isParent: true,
+              lastName: 'Doe',
+            },
+            dentalInsurance: true,
+            dentalBenefits: {
+              hasFederalBenefits: false,
+              hasProvincialTerritorialBenefits: false,
+            },
+          },
+        ],
         dateOfBirth: '1900-01-01',
         applicantInformation: {
           firstName: 'First Name',
@@ -196,6 +441,10 @@ describe('apply-route-helpers.server', () => {
         personalInformation: undefined,
       } satisfies ApplyState;
 
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
+      vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
+
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/personal-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
@@ -203,8 +452,24 @@ describe('apply-route-helpers.server', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        editMode: false,
         taxFiling2023: true,
+        children: [
+          {
+            id: '1',
+            information: {
+              dateOfBirth: '2012-02-23',
+              firstName: 'John',
+              hasSocialInsuranceNumber: false,
+              isParent: true,
+              lastName: 'Doe',
+            },
+            dentalInsurance: true,
+            dentalBenefits: {
+              hasFederalBenefits: false,
+              hasProvincialTerritorialBenefits: false,
+            },
+          },
+        ],
         dateOfBirth: '1900-01-01',
         applicantInformation: {
           firstName: 'First Name',
@@ -228,88 +493,35 @@ describe('apply-route-helpers.server', () => {
         communicationPreferences: undefined,
       } satisfies ApplyState;
 
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
+      vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
+
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/communication-preference, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
-    });
-
-    it('should redirect if dentalInsurance is undefined', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: 'child',
-        editMode: false,
-        taxFiling2023: true,
-        dateOfBirth: '1900-01-01',
-        applicantInformation: {
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          maritalStatus: '1',
-          socialInsuranceNumber: '000-000-001',
-        },
-        partnerInformation: {
-          confirm: true,
-          dateOfBirth: '1900-01-01',
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          socialInsuranceNumber: '000-000-002',
-        },
-        personalInformation: {
-          copyMailingAddress: true,
-          mailingAddress: '123 rue Peuplier',
-          mailingCity: 'City',
-          mailingCountry: 'Country',
-        },
-        communicationPreferences: {
-          preferredLanguage: 'en',
-          preferredMethod: 'email',
-        },
-        dentalInsurance: undefined,
-      } satisfies ApplyState;
-
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/dental-insurance, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
-    });
-
-    it('should redirect if dentalBenefits is undefined', () => {
-      const mockState = {
-        ...baseState,
-        typeOfApplication: 'child',
-        editMode: false,
-        taxFiling2023: true,
-        dateOfBirth: '1900-01-01',
-        applicantInformation: {
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          maritalStatus: '1',
-          socialInsuranceNumber: '000-000-001',
-        },
-        partnerInformation: {
-          confirm: true,
-          dateOfBirth: '1900-01-01',
-          firstName: 'First Name',
-          lastName: 'Last Name',
-          socialInsuranceNumber: '000-000-002',
-        },
-        personalInformation: {
-          copyMailingAddress: true,
-          mailingAddress: '123 rue Peuplier',
-          mailingCity: 'City',
-          mailingCountry: 'Country',
-        },
-        communicationPreferences: {
-          preferredLanguage: 'en',
-          preferredMethod: 'email',
-        },
-        dentalInsurance: false,
-        dentalBenefits: undefined,
-      } satisfies ApplyState;
-
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should not redirect if state is completed', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'child',
-        editMode: true,
         taxFiling2023: true,
+        children: [
+          {
+            id: '1',
+            information: {
+              dateOfBirth: '2012-02-23',
+              firstName: 'John',
+              hasSocialInsuranceNumber: false,
+              isParent: true,
+              lastName: 'Doe',
+            },
+            dentalInsurance: true,
+            dentalBenefits: {
+              hasFederalBenefits: false,
+              hasProvincialTerritorialBenefits: false,
+            },
+          },
+        ],
         dateOfBirth: '1900-01-01',
         applicantInformation: {
           firstName: 'First Name',
@@ -334,12 +546,11 @@ describe('apply-route-helpers.server', () => {
           preferredLanguage: 'en',
           preferredMethod: 'email',
         },
-        dentalInsurance: false,
-        dentalBenefits: {
-          hasFederalBenefits: false,
-          hasProvincialTerritorialBenefits: false,
-        },
       } satisfies ApplyState;
+
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
+      vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
+      vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).not.toThrow();
     });

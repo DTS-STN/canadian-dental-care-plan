@@ -16,8 +16,8 @@ import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusT
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import { Progress } from '~/components/progress';
-import { applicantInformationStateHasPartner, loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
-import { PartnerInformationState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
+import { PartnerInformationState, applicantInformationStateHasPartner, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
