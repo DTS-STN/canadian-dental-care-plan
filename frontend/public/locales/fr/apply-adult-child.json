@@ -638,7 +638,7 @@
   "review-child-information": {
     "read-carefully": "(FR) Please review this information carefully. The information provided will be used by Sun Life to create your child(ren)'s member account.",
     "page-title": "(FR) Review child(ren) information",
-    "page-sub-title": "(FR) {{child}} Information",
+    "page-sub-title": "(FR) {{child}} information",
     "dob-title": "Date de naissance",
     "dob-change": "Modifier la date de naissance",
     "is-parent": "(FR) Parent or legal guardian of child",
