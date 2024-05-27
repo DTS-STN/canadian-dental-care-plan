@@ -57,6 +57,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const log = getLogger('apply/adult-child/partner-information');
 
   const state = loadApplyAdultChildState({ params, request, session });
+  const applyState = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
@@ -98,8 +99,13 @@ export async function action({ context: { session }, params, request }: ActionFu
             return z.NEVER;
           }
 
-          if (state.applicantInformation && formatSin(sin) === formatSin(state.applicantInformation.socialInsuranceNumber)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:partner-information.error-message.sin-unique') });
+          if (
+            [applyState.applicantInformation?.socialInsuranceNumber, ...applyState.children.map((child) => child.information?.socialInsuranceNumber)]
+              .filter((sin) => sin !== undefined)
+              .map((sin) => formatSin(sin as string))
+              .includes(formatSin(sin))
+          ) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-unique'), path: ['socialInsuranceNumber'], fatal: true });
             return z.NEVER;
           }
         }),
