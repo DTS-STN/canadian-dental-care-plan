@@ -14,6 +14,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
+import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -23,7 +24,7 @@ import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils'
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { UserinfoToken } from '~/utils/raoidc-utils.server';
+import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -53,6 +54,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('email-alerts');
 
+  const auditService = getAuditService();
   const instrumentationService = getInstrumentationService();
   const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
@@ -79,6 +81,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const preferredLanguageDict = preferredLanguages.find((obj) => obj.id === alertSubscription.preferredLanguage);
   const preferredLanguage = preferredLanguageDict && getNameByLanguage(locale, preferredLanguageDict);
 
+  const idToken: IdToken = session.get('idToken');
+  auditService.audit('page-view.subscribe-alerts-confirm', { userId: idToken.sub });
   instrumentationService.countHttpStatus('alerts.subscribe-confirm', 200);
 
   return json({ csrfToken, meta, alertSubscription, preferredLanguage, userInfoToken });
@@ -87,6 +91,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('alerts/subscribe/confirm');
 
+  const auditService = getAuditService();
   const instrumentationService = getInstrumentationService();
   const subscriptionService = getSubscriptionService();
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -123,6 +128,9 @@ export async function action({ context: { session }, params, request }: ActionFu
     instrumentationService.countHttpStatus('alerts.confirm', 400);
     return json({ errors: parsedDataResult.error.format() });
   }
+
+  const idToken: IdToken = session.get('idToken');
+  auditService.audit('update-data.subscribe-alerts-confirm', { userId: idToken.sub });
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
 
@@ -178,9 +186,9 @@ export default function ConfirmSubscription() {
   }, [errorMessages]);
 
   return (
-    <>
+    <div className="max-w-prose">
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <fetcher.Form className="max-w-prose" method="post" noValidate>
+      <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mb-8 space-y-6">
           <ContextualAlert type="info">
@@ -220,6 +228,6 @@ export default function ConfirmSubscription() {
           </Button>
         </div>
       </fetcher.Form>
-    </>
+    </div>
   );
 }

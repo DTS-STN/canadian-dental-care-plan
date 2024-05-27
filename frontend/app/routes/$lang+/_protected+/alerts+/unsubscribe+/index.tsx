@@ -150,9 +150,9 @@ export default function UnsubscribeAlerts() {
   }, [errorMessages]);
 
   return (
-    <>
+    <div className="max-w-prose">
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <fetcher.Form className="max-w-prose" method="post" noValidate>
+      <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div>
           <p>
@@ -172,6 +172,6 @@ export default function UnsubscribeAlerts() {
           </ButtonLink>
         </div>
       </fetcher.Form>
-    </>
+    </div>
   );
 }
