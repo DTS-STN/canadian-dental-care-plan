@@ -1,17 +1,18 @@
-import { SyntheticEvent } from 'react';
+import { SyntheticEvent, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { UTCDate } from '@date-fns/utc';
-import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
-import { Button, ButtonLink } from '~/components/buttons';
+import { Button } from '~/components/buttons';
 import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
@@ -23,17 +24,20 @@ import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-hel
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
-import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, getLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
-import { cn } from '~/utils/tw-utils';
+
+enum FormAction {
+  Back = 'back',
+  Submit = 'submit',
+}
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -56,63 +60,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
   // prettier-ignore
-  /*if (state.childInformation === undefined ||
-    state.childDentalBenefits === undefined ||
-    state.childDentalInsurance === undefined) {
+  if (state.children.length === 0) {
     throw new Error(`Incomplete application "${state.id}" state!`);
-  }*/
+  }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = getLocale(request);
-
-  /*const currentChildIndex = 0;
-
-  const childInfo = {
-    firstName: state.childInformation.firstName,
-    lastName: state.childInformation.lastName,
-    birthday: toLocaleDateString(parse(state.childInformation.dateOfBirth, 'yyyy-MM-dd', new UTCDate()), locale),
-    sin: state.childInformation.socialInsuranceNumber,
-    isParent: state.childInformation.isParent,
-  };
-
-  const currentDentalInsurance = state.childDentalInsurance[currentChildIndex];
-  const currentDentalBenefit = state.childDentalBenefits[currentChildIndex];
-
-  const childDentalInsurance = currentDentalInsurance;
-
-  const childDentalBenefit = {
-    federalBenefit: {
-      access: currentDentalBenefit.hasFederalBenefits,
-      benefit: currentDentalBenefit.federalSocialProgram,
-    },
-    provTerrBenefit: {
-      access: currentDentalBenefit.hasProvincialTerritorialBenefits,
-      province: currentDentalBenefit.province,
-      benefit: currentDentalBenefit.provincialTerritorialSocialProgram,
-    },
-  };*/
-
-  const childInfo = {
-    firstName: 'firstName',
-    lastName: 'lastName',
-    birthday: toLocaleDateString(parseDateString('2009-11-11'), locale),
-    sin: '800000002',
-    isParent: true,
-  };
-
-  const childDentalInsurance = true;
-
-  const childDentalBenefit = {
-    federalBenefit: {
-      access: true,
-      benefit: '758bb862-26c5-ee11-9079-000d3a09d640',
-    },
-    provTerrBenefit: {
-      access: true,
-      province: '9c440baa-35b3-eb11-8236-0022486d8d5f',
-      benefit: 'b3f25fea-a7a9-ee11-a569-000d3af4f898',
-    },
-  };
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
 
@@ -135,11 +87,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   return json({
     id: state.id,
-    childInfo,
+    children: state.children,
     federalSocialPrograms,
     provincialTerritorialSocialPrograms,
-    childDentalInsurance,
-    childDentalBenefit,
     csrfToken,
     meta,
     siteKey: HCAPTCHA_SITE_KEY,
@@ -162,6 +112,12 @@ export async function action({ context: { session }, params, request }: ActionFu
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
     throw new Response('Invalid CSRF token', { status: 400 });
+  }
+
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  if (formAction === FormAction.Back) {
+    saveApplyState({ params, session, state: { editMode: false } });
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-adult-information', params));
   }
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
@@ -223,15 +179,17 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ReviewInformation() {
   const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { childInfo, federalSocialPrograms, provincialTerritorialSocialPrograms, childDentalInsurance, childDentalBenefit, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
+  const { children, federalSocialPrograms, provincialTerritorialSocialPrograms, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
 
+  const [isSubmitAction, setIsSubmitAction] = useState(false);
+
   function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
-
+    setIsSubmitAction(formData.get('_action') === FormAction.Submit);
     if (hCaptchaEnabled && captchaRef.current) {
       try {
         const response = captchaRef.current.getResponse();
@@ -246,12 +204,6 @@ export default function ReviewInformation() {
     fetcher.submit(formData, { method: 'POST' });
   }
 
-  const federalSocialProgramEntity = federalSocialPrograms.find((p) => p.id === childDentalBenefit.federalBenefit.benefit);
-  const federalSocialProgram = federalSocialProgramEntity ? getNameByLanguage(i18n.language, federalSocialProgramEntity) : federalSocialProgramEntity;
-
-  const provincialTerritorialSocialProgramEntity = provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === childDentalBenefit.provTerrBenefit.province).find((p) => p.id === childDentalBenefit.provTerrBenefit.benefit);
-  const provincialTerritorialSocialProgram = provincialTerritorialSocialProgramEntity ? getNameByLanguage(i18n.language, provincialTerritorialSocialProgramEntity) : provincialTerritorialSocialProgramEntity;
-
   return (
     <>
       <div className="my-6 sm:my-8">
@@ -262,70 +214,88 @@ export default function ReviewInformation() {
       </div>
       <div className="max-w-prose">
         <p className="my-4 text-lg">{t('apply-adult-child:review-child-information.read-carefully')}</p>
-        <div className="space-y-10">
-          <div>
-            <h2 className="text-2xl font-semibold">{t('apply-adult-child:review-child-information.page-sub-title', { child: childInfo.firstName })}</h2>
-            <dl className="mt-6 divide-y border-y">
-              <DescriptionListItem term={t('apply-adult-child:review-child-information.full-name-title')}>
-                {`${childInfo.firstName} ${childInfo.lastName}`}
-                <p className="mt-4">
-                  <InlineLink id="change-full-name" routeId="$lang+/_public+/apply+/$id+/adult/applicant-information" params={params}>
-                    {t('apply-adult-child:review-child-information.full-name-change')}
-                  </InlineLink>
-                </p>
-              </DescriptionListItem>
-              <DescriptionListItem term={t('apply-adult-child:review-child-information.dob-title')}>
-                {childInfo.birthday}
-                <p className="mt-4">
-                  <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params}>
-                    {t('apply-adult-child:review-child-information.dob-change')}
-                  </InlineLink>
-                </p>
-              </DescriptionListItem>
-              <DescriptionListItem term={t('apply-adult-child:review-child-information.sin-title')}>
-                {formatSin(childInfo.sin)}
-                <p className="mt-4">
-                  <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/adult/applicant-information" params={params}>
-                    {t('apply-adult-child:review-child-information.sin-change')}
-                  </InlineLink>
-                </p>
-              </DescriptionListItem>
-            </dl>
-          </div>
-          <div>
-            <h2 className="mt-8 text-2xl font-semibold">{t('apply-adult-child:review-child-information.dental-title', { child: childInfo.firstName })}</h2>
-            <dl className="mt-6 divide-y border-y">
-              <DescriptionListItem term={t('apply-adult-child:review-child-information.dental-insurance-title')}>
-                {childDentalInsurance ? t('apply-adult-child:review-child-information.yes') : t('apply-adult-child:review-child-information.no')}
-                <p className="mt-4">
-                  <InlineLink id="change-access-dental" routeId="$lang+/_public+/apply+/$id+/adult/dental-insurance" params={params}>
-                    {t('apply-adult-child:review-child-information.dental-insurance-change')}
-                  </InlineLink>
-                </p>
-              </DescriptionListItem>
-              <DescriptionListItem term={t('apply-adult-child:review-child-information.dental-benefit-title')}>
-                {childDentalBenefit.federalBenefit.access || childDentalBenefit.provTerrBenefit.access ? (
-                  <>
-                    <p>{t('apply-adult-child:review-child-information.yes')}</p>
-                    <p>{t('apply-adult-child:review-child-information.dental-benefit-has-access')}</p>
-                    <div>
-                      <ul className="ml-6 list-disc">
-                        {childDentalBenefit.federalBenefit.access && <li>{federalSocialProgram}</li>}
-                        {childDentalBenefit.provTerrBenefit.access && <li>{provincialTerritorialSocialProgram}</li>}
-                      </ul>
-                    </div>
-                  </>
-                ) : (
-                  <>{t('apply-adult-child:review-child-information.no')}</>
-                )}
-                <p className="mt-4">
-                  <InlineLink id="change-dental-benefits" routeId="$lang+/_public+/apply+/$id+/adult/federal-provincial-territorial-benefits" params={params}>
-                    {t('apply-adult-child:review-child-information.dental-benefit-change')}
-                  </InlineLink>
-                </p>
-              </DescriptionListItem>
-            </dl>
-          </div>
+        <div className="mb-8 space-y-10">
+          {children.map((childData) => (
+            <section key={childData.id} className="space-y-10">
+              <h2 className="font-lato text-3xl font-semibold">{childData.information?.firstName}</h2>
+              <div>
+                <h3 className="mb-6 font-lato text-2xl font-semibold">{t('apply-adult-child:review-child-information.page-sub-title', { child: childData.information?.firstName })}</h3>
+                <dl className="divide-y border-y">
+                  <DescriptionListItem term={t('apply-adult-child:review-child-information.full-name-title')}>
+                    {`${childData.information?.firstName} ${childData.information?.lastName}`}
+                    <p className="mt-4">
+                      <InlineLink id="change-full-name" routeId="$lang+/_public+/apply+/$id+/adult/applicant-information" params={params}>
+                        {t('apply-adult-child:review-child-information.full-name-change')}
+                      </InlineLink>
+                    </p>
+                  </DescriptionListItem>
+                  <DescriptionListItem term={t('apply-adult-child:review-child-information.dob-title')}>
+                    {childData.information?.dateOfBirth}
+                    <p className="mt-4">
+                      <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/adult/date-of-birth" params={params}>
+                        {t('apply-adult-child:review-child-information.dob-change')}
+                      </InlineLink>
+                    </p>
+                  </DescriptionListItem>
+                  <DescriptionListItem term={t('apply-adult-child:review-child-information.sin-title')}>
+                    {childData.information?.socialInsuranceNumber ? formatSin(childData.information.socialInsuranceNumber) : ''}
+                    <p className="mt-4">
+                      <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/adult/applicant-information" params={params}>
+                        {t('apply-adult-child:review-child-information.sin-change')}
+                      </InlineLink>
+                    </p>
+                  </DescriptionListItem>
+                  <DescriptionListItem term={t('apply-adult-child:review-child-information.is-parent')}>
+                    {childData.information?.isParent ? t('apply-adult-child:review-child-information.yes') : t('apply-adult-child:review-child-information.no')}
+                  </DescriptionListItem>
+                </dl>
+              </div>
+              <div>
+                <h3 className="mb-6 font-lato text-2xl font-semibold">{t('apply-adult-child:review-child-information.dental-title', { child: childData.information?.firstName })}</h3>
+                <dl className="divide-y border-y">
+                  <DescriptionListItem term={t('apply-adult-child:review-child-information.dental-insurance-title')}>
+                    {childData.dentalInsurance ? t('apply-adult-child:review-child-information.yes') : t('apply-adult-child:review-child-information.no')}
+                    <p className="mt-4">
+                      <InlineLink id="change-access-dental" routeId="$lang+/_public+/apply+/$id+/adult/dental-insurance" params={params}>
+                        {t('apply-adult-child:review-child-information.dental-insurance-change')}
+                      </InlineLink>
+                    </p>
+                  </DescriptionListItem>
+                  <DescriptionListItem term={t('apply-adult-child:review-child-information.dental-benefit-title')}>
+                    {childData.dentalBenefits?.hasFederalBenefits ?? childData.dentalBenefits?.hasProvincialTerritorialBenefits ? (
+                      <>
+                        <p>{t('apply-adult-child:review-child-information.yes')}</p>
+                        <p>{t('apply-adult-child:review-child-information.dental-benefit-has-access')}</p>
+                        <div>
+                          <ul className="ml-6 list-disc">
+                            {childData.dentalBenefits.hasFederalBenefits && <li>{getNameByLanguage(i18n.language, federalSocialPrograms.find((p) => p.id === childData.dentalBenefits?.federalSocialProgram) ?? { nameEn: '', nameFr: '' })}</li>}
+                            {childData.dentalBenefits.hasProvincialTerritorialBenefits && (
+                              <li>
+                                {getNameByLanguage(
+                                  i18n.language,
+                                  provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === childData.dentalBenefits?.province).find((p) => p.id === childData.dentalBenefits?.provincialTerritorialSocialProgram) ?? {
+                                    nameEn: '',
+                                    nameFr: '',
+                                  },
+                                )}
+                              </li>
+                            )}
+                          </ul>
+                        </div>
+                      </>
+                    ) : (
+                      <>{t('apply-adult-child:review-child-information.no')}</>
+                    )}
+                    <p className="mt-4">
+                      <InlineLink id="change-dental-benefits" routeId="$lang+/_public+/apply+/$id+/adult/federal-provincial-territorial-benefits" params={params}>
+                        {t('apply-adult-child:review-child-information.dental-benefit-change')}
+                      </InlineLink>
+                    </p>
+                  </DescriptionListItem>
+                </dl>
+              </div>
+            </section>
+          ))}
         </div>
         <h2 className="mb-5 mt-8 text-2xl font-semibold">{t('apply-adult-child:review-child-information.submit-app-title')}</h2>
         <p className="mb-4">{t('apply-adult-child:review-child-information.submit-p-proceed')}</p>
@@ -335,23 +305,17 @@ export default function ReviewInformation() {
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Review Adult Information click">
-              {t('apply-adult-child:review-adult-information.continue-button')}
-              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+            <Button id="confirm-button" name="_action" value={FormAction.Submit} variant="green" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Submit - Review Child Information click">
+              {t('apply-adult-child:review-child-information.submit-button')}
+              {isSubmitting && !isSubmitAction && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
             </Button>
-            <ButtonLink
-              id="back-button"
-              routeId="$lang+/_public+/apply+/$id+/adult-child/review-adult-information"
-              params={params}
-              disabled={isSubmitting}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Review Adult Information click"
-            >
+            <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Review Child Information click">
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('apply-adult-child:review-adult-information.back-button')}
-            </ButtonLink>
+              {t('apply-adult-child:review-child-information.back-button')}
+            </Button>
           </div>
         </fetcher.Form>
-        <InlineLink routeId="$lang+/_public+/apply+/$id+/adult-child/exit-application" params={params} className="mt-4 block font-lato font-semibold">
+        <InlineLink routeId="$lang+/_public+/apply+/$id+/adult-child/exit-application" params={params} className="mt-8 block font-lato font-semibold">
           {t('apply-adult-child:review-child-information.exit-button')}
         </InlineLink>
       </div>
