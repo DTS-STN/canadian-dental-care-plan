@@ -1,10 +1,11 @@
 /* eslint @typescript-eslint/no-unused-vars: ["error", { "varsIgnorePattern": "^_" }] */
-import { createFileSessionStorage, createSessionStorage } from '@remix-run/node';
+import { createSessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { getRedisService } from '~/services/redis-service.server';
 import { getEnv } from '~/utils/env.server';
+import { createFileSessionStorage } from '~/utils/session-utils';
 
 vi.mock('@remix-run/node', () => ({
   createCookie: vi.fn(),
@@ -31,6 +32,10 @@ vi.mock('~/utils/logging.server', () => ({
     info: vi.fn(),
     warn: vi.fn(),
   }),
+}));
+
+vi.mock('~/utils/session-utils', () => ({
+  createFileSessionStorage: vi.fn(),
 }));
 
 describe('session-service.server tests', () => {
