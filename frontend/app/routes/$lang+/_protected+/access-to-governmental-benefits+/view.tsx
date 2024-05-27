@@ -75,7 +75,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   await raoidcService.handleSessionValidation(request, session);
 
   instrumentationService.countHttpStatus('access-to-governmental-benefits.view', 302);
-  return redirect(getPathById('$lang+/_protected+/personal-information+/view', params));
+  return redirect(getPathById('$lang+/_protected+/access-to-governmental-benefits+/view', params));
 }
 
 export default function AccessToGovernmentalsBenefitsView() {
