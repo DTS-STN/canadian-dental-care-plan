@@ -639,7 +639,7 @@
     "no": "No"
   },
   "review-child-information": {
-    "read-carefully": "Please review this information carefully. The information provided will be used by Sun Life to create your child(ren)'s member account and will be reflected on their membership card.",
+    "read-carefully": "Please review this information carefully. The information provided will be used by Sun Life to create your child(ren)'s member account.",
     "page-title": "Review child(ren) information",
     "page-sub-title": "{{child}} Information",
     "dob-title": "Date of birth",

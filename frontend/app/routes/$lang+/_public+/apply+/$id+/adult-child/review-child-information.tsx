@@ -1,17 +1,18 @@
-import { SyntheticEvent } from 'react';
+import { SyntheticEvent, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { UTCDate } from '@date-fns/utc';
-import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
-import { Button, ButtonLink } from '~/components/buttons';
+import { Button } from '~/components/buttons';
 import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
@@ -32,7 +33,11 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
-import { cn } from '~/utils/tw-utils';
+
+enum FormAction {
+  Back = 'back',
+  Submit = 'submit',
+}
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
@@ -109,6 +114,12 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+  if (formAction === FormAction.Back) {
+    saveApplyState({ params, session, state: { editMode: false } });
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-adult-information', params));
+  }
+
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   if (hCaptchaEnabled) {
     const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
@@ -173,10 +184,12 @@ export default function ReviewInformation() {
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
 
+  const [isSubmitAction, setIsSubmitAction] = useState(false);
+
   function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
-
+    setIsSubmitAction(formData.get('_action') === FormAction.Submit);
     if (hCaptchaEnabled && captchaRef.current) {
       try {
         const response = captchaRef.current.getResponse();
@@ -203,6 +216,7 @@ export default function ReviewInformation() {
         <p className="my-4 text-lg">{t('apply-adult-child:review-child-information.read-carefully')}</p>
         {children.map((childData, index) => (
           <div key={childData.id} className="space-y-10">
+            <h2 className="text-4xl font-semibold">{childData.information?.firstName}</h2>
             <div>
               <h2 className="text-2xl font-semibold">{t('apply-adult-child:review-child-information.page-sub-title', { child: childData.information?.firstName })}</h2>
               <dl className="mt-6 divide-y border-y">
@@ -229,6 +243,9 @@ export default function ReviewInformation() {
                       {t('apply-adult-child:review-child-information.sin-change')}
                     </InlineLink>
                   </p>
+                </DescriptionListItem>
+                <DescriptionListItem term={t('apply-adult-child:review-child-information.is-parent')}>
+                  {childData.information?.isParent ? t('apply-adult-child:review-child-information.yes') : t('apply-adult-child:review-child-information.no')}
                 </DescriptionListItem>
               </dl>
             </div>
@@ -286,20 +303,16 @@ export default function ReviewInformation() {
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Review Adult Information click">
-              {t('apply-adult-child:review-adult-information.continue-button')}
-              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+            <Button id="confirm-button" name="_action" value={FormAction.Submit} variant="green" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Submit - Review Child Information click">
+              {t('apply-adult-child:review-child-information.submit-button')}
+              {isSubmitting && !isSubmitAction && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
             </Button>
-            <ButtonLink
-              id="back-button"
-              routeId="$lang+/_public+/apply+/$id+/adult-child/review-adult-information"
-              params={params}
-              disabled={isSubmitting}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Review Adult Information click"
-            >
+            <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Review Child Information click">
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-              {t('apply-adult-child:review-adult-information.back-button')}
-            </ButtonLink>
+              {t('apply-adult-child:review-child-information.back-button')}
+            </Button>
+            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+            {t('apply-adult-child:review-adult-information.back-button')}
           </div>
         </fetcher.Form>
         <InlineLink routeId="$lang+/_public+/apply+/$id+/adult/exit-application" params={params} className="mt-4 block font-lato font-semibold">
