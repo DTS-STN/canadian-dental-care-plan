@@ -23,10 +23,7 @@ type SubscriptionInfo = z.infer<typeof subscriptionInfoSchema>;
 export const getSubscriptionService = moize(createSubscriptionService, { onCacheAdd: () => log.info('Creating new subscription service') });
 
 function createSubscriptionService() {
-  const {
-    CDCP_API_BASE_URI,
-    //INTEROP_API_SUBSCRIPTION_KEY,
-  } = getEnv();
+  const { CDCP_API_BASE_URI } = getEnv();
 
   async function getSubscription(sin: string) {
     const auditService = getAuditService();
@@ -34,9 +31,8 @@ function createSubscriptionService() {
     auditService.audit('alert-subscription.get', { sin });
     //76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6
     // TODO: "IT-Security won't like SIN being passed as identifier"
-    // TODO: add CDCP_API_BASE_URI
+
     const userId = sin;
-    //const url = new URL(`https://api.example.com/v1/users/${userId}/subscriptions`);
     const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users/${userId}/subscriptions`);
 
     const response = await fetch(url, {
@@ -48,23 +44,27 @@ function createSubscriptionService() {
 
     instrumentationService.countHttpStatus('http.client.cdcp-api.alert-subscription.gets', response.status);
 
-    const subscriptionsSchema = z.array(
-      z.object({
-        id: z.string(),
-        userId: z.string(),
-        preferredLanguage: z.string(),
-        alertType: z.string(),
+    const newSchema = z.object({
+      _embedded: z.object({
+        subscriptions: z.array(
+          z.object({
+            id: z.string(),
+            msLanguageCode: z.string(),
+            alertTypeCode: z.string(),
+          }),
+        ),
       }),
-    );
+      _links: z.object({
+        self: z.object({
+          href: z.string(),
+        }),
+      }),
+    });
 
-    //const test = await response.json();
-    //console.log(JSON.stringify(test, undefined, 4));
-    // console.debug();
-
-    const subscriptions = subscriptionsSchema.parse(await response.json()).map((subscription) => ({
+    const subscriptions = newSchema.parse(await response.json())._embedded.subscriptions.map((subscription) => ({
       id: subscription.id,
-      preferredLanguage: subscription.preferredLanguage,
-      alertType: subscription.alertType,
+      preferredLanguage: subscription.msLanguageCode,
+      alertType: subscription.alertTypeCode,
     }));
 
     //TODO: alertType 'cdcp' is configuarable
