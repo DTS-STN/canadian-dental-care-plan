@@ -20,7 +20,7 @@ export const benefitApplicationRequestSchema = z.object({
           .optional(),
       }),
       PersonBirthDate: z.object({
-        dateTime: z.string(),
+        date: z.string(),
       }),
       PersonContactInformation: z.array(
         z.object({
@@ -87,7 +87,7 @@ export const benefitApplicationRequestSchema = z.object({
       RelatedPerson: z.array(
         z.object({
           PersonBirthDate: z.object({
-            dateTime: z.string(),
+            date: z.string(),
           }),
           PersonName: z.array(
             z.object({
