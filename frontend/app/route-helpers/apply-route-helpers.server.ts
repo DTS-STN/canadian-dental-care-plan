@@ -6,6 +6,7 @@ import { differenceInMinutes } from 'date-fns';
 import { z } from 'zod';
 
 import { getAgeFromDateString } from '~/utils/date-utils';
+import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 
@@ -264,4 +265,13 @@ export function getChildrenState<TState extends Pick<ApplyState, 'children'>>(st
   return includesNewChildState
     ? state.children
     : state.children.filter((child) => isNewChildState(child) === false);
+}
+
+interface ApplicantInformationStateHasPartnerArgs {
+  maritalStatus: string;
+}
+
+export function applicantInformationStateHasPartner({ maritalStatus }: ApplicantInformationStateHasPartnerArgs) {
+  const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
+  return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
 }

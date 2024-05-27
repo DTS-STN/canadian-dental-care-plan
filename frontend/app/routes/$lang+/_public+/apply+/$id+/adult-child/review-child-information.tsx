@@ -49,7 +49,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const lookupService = getLookupService();
 
   const state = loadApplyAdultChildState({ params, request, session });
-  // validateApplyAdultChildStateForReview({ params, state });
+  validateApplyAdultChildStateForReview({ params, state });
 
   const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
   const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();

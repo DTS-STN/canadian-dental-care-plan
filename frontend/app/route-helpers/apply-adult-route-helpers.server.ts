@@ -1,8 +1,7 @@
 import { Session, redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
 
-import { ApplyState, getAgeCategoryFromDateString, loadApplyState } from '~/route-helpers/apply-route-helpers.server';
-import { getEnv } from '~/utils/env.server';
+import { ApplyState, applicantInformationStateHasPartner, getAgeCategoryFromDateString, loadApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 
@@ -44,15 +43,6 @@ export function loadApplyAdultState({ params, request, session }: LoadApplyAdult
   }
 
   return applyState;
-}
-
-interface ApplicantInformationStateHasPartnerArgs {
-  maritalStatus: string;
-}
-
-export function applicantInformationStateHasPartner({ maritalStatus }: ApplicantInformationStateHasPartnerArgs) {
-  const { MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW } = getEnv();
-  return [MARITAL_STATUS_CODE_MARRIED, MARITAL_STATUS_CODE_COMMONLAW].includes(Number(maritalStatus));
 }
 
 interface ValidateStateForReviewArgs {
