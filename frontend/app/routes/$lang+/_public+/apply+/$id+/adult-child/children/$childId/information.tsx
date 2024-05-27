@@ -27,7 +27,7 @@ import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { isValidSin } from '~/utils/sin-utils';
+import { formatSin, isValidSin } from '~/utils/sin-utils';
 import { cn } from '~/utils/tw-utils';
 
 enum YesNoOption {
@@ -110,6 +110,14 @@ export async function action({ context: { session }, params, request }: ActionFu
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-required'), path: ['socialInsuranceNumber'] });
         } else if (!isValidSin(val.socialInsuranceNumber)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-valid'), path: ['socialInsuranceNumber'] });
+        } else if (
+          val.socialInsuranceNumber &&
+          [applyState.applicantInformation?.socialInsuranceNumber, applyState.partnerInformation?.socialInsuranceNumber, ...applyState.children.filter((child) => state.id !== child.id).map((child) => child.information?.socialInsuranceNumber)]
+            .filter((sin) => sin !== undefined)
+            .map((sin) => formatSin(sin as string))
+            .includes(formatSin(val.socialInsuranceNumber))
+        ) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-unique'), path: ['socialInsuranceNumber'] });
         }
       }
 
