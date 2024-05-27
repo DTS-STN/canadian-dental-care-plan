@@ -1,6 +1,8 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 
+import invariant from 'tiny-invariant';
+
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSubscriptionService } from '~/services/subscription-service.server';
 import { featureEnabled } from '~/utils/env.server';
@@ -15,13 +17,15 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   await raoidcService.handleSessionValidation(request, session);
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
+
+  const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin);
 
   if (!alertSubscription || alertSubscription.registered === false) {
     return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/index', params));
-  } else if (alertSubscription.subscribed === true) {
-    return redirect(getPathById('$lang+/_protected+/alerts+/manage+/index', params));
-  } else {
-    return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/confirm', params));
   }
+  if (alertSubscription.subscribed === true) {
+    return redirect(getPathById('$lang+/_protected+/alerts+/manage+/index', params));
+  }
+  return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/confirm', params));
 }

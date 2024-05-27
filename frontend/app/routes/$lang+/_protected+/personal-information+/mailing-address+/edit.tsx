@@ -5,6 +5,7 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
@@ -147,6 +148,8 @@ export async function action({ context: { session }, params, request }: ActionFu
   instrumentationService.countHttpStatus('mailing-address.edit', 302);
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
+
   const personalInformationService = getPersonalInformationService();
   const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
@@ -175,7 +178,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         }
       : personalInformation.homeAddress,
   };
-  await personalInformationService.updatePersonalInformation(userInfoToken.sin ?? '', newPersonalInformation);
+  await personalInformationService.updatePersonalInformation(userInfoToken.sin, newPersonalInformation);
 
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('update-data.mailing-address', { userId: idToken.sub });

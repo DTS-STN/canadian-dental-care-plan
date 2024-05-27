@@ -5,6 +5,7 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
@@ -106,6 +107,8 @@ export async function action({ context: { session }, params, request }: ActionFu
   instrumentationService.countHttpStatus('email-address.edit', 302);
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
+
   const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
   const personalInformationService = getPersonalInformationService();
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
@@ -114,7 +117,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     ...personalInformation,
     emailAddress: parsedDataResult.data.emailAddress,
   };
-  await personalInformationService.updatePersonalInformation(userInfoToken.sin ?? '', newPersonalInformation);
+  await personalInformationService.updatePersonalInformation(userInfoToken.sin, newPersonalInformation);
 
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('update-data.email-address', { userId: idToken.sub });
