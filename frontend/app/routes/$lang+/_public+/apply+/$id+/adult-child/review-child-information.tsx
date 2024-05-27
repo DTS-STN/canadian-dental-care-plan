@@ -237,7 +237,7 @@ export default function ReviewInformation() {
                   </p>
                 </DescriptionListItem>
                 <DescriptionListItem term={t('apply-adult-child:review-child-information.sin-title')}>
-                  {childData.information?.socialInsuranceNumber ? formatSin(childData.information?.socialInsuranceNumber) : ''}
+                  {childData.information?.socialInsuranceNumber ? formatSin(childData.information.socialInsuranceNumber) : ''}
                   <p className="mt-4">
                     <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/adult/applicant-information" params={params}>
                       {t('apply-adult-child:review-child-information.sin-change')}
@@ -311,8 +311,6 @@ export default function ReviewInformation() {
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('apply-adult-child:review-child-information.back-button')}
             </Button>
-            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-            {t('apply-adult-child:review-adult-information.back-button')}
           </div>
         </fetcher.Form>
         <InlineLink routeId="$lang+/_public+/apply+/$id+/adult/exit-application" params={params} className="mt-4 block font-lato font-semibold">
