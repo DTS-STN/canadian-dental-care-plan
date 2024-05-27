@@ -23,7 +23,7 @@ class UuidGeneratorTests {
 	final UUID id = UUID.randomUUID();
 
 	@BeforeEach
-	void setUp() {
+	void beforeEach() {
 		this.uuidGenerator = new UuidGenerator(() -> id);
 	}
 
@@ -31,14 +31,14 @@ class UuidGeneratorTests {
 	void testGenerate_withId() {
 		final var sharedSessionContractImplementor = mock(SharedSessionContractImplementor.class, Mockito.RETURNS_DEEP_STUBS);
 		when(sharedSessionContractImplementor.getEntityPersister(any(), any()).getIdentifier(any(), any(SharedSessionContractImplementor.class))).thenReturn(id.toString());
-		assertThat(uuidGenerator.generate(sharedSessionContractImplementor, null, new Object(), EventType.INSERT)).asString().isEqualTo(id.toString());
+		assertThat(uuidGenerator.generate(sharedSessionContractImplementor, new Object(), null, EventType.INSERT)).asString().isEqualTo(id.toString());
 	}
 
 	@Test
 	void testGenerate_withNullId() {
 		final var sharedSessionContractImplementor = mock(SharedSessionContractImplementor.class, Mockito.RETURNS_DEEP_STUBS);
 		when(sharedSessionContractImplementor.getEntityPersister(any(), any()).getIdentifier(any(), any(SharedSessionContractImplementor.class))).thenReturn(null);
-		assertThat(uuidGenerator.generate(sharedSessionContractImplementor, null, new Object(), EventType.INSERT)).asString().isEqualTo(id.toString());
+		assertThat(uuidGenerator.generate(sharedSessionContractImplementor, new Object(), null, EventType.INSERT)).asString().isEqualTo(id.toString());
 	}
 
 }
