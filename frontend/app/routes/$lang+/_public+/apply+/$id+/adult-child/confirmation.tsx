@@ -3,7 +3,10 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
+import { UTCDate } from '@date-fns/utc';
+import { parse } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
+import { Fragment } from 'react/jsx-runtime';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
@@ -11,13 +14,15 @@ import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { DescriptionListItem } from '~/components/description-list-item';
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
 import { useFeature } from '~/root';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { getLookupService } from '~/services/lookup-service.server';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
-import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { toLocaleDateString } from '~/utils/date-utils';
+import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -43,7 +48,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const locale = getLocale(request);
 
   // prettier-ignore
-  /*if (state.applicantInformation === undefined ||
+  if (state.applicantInformation === undefined ||
     state.communicationPreferences === undefined ||
     state.dateOfBirth === undefined ||
     state.dentalBenefits === undefined ||
@@ -54,7 +59,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     state.typeOfApplication === undefined) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
-  //TODO: re-enable state check once adult-child flow is complete
 
   const allFederalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
   const allProvincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
@@ -132,93 +136,40 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     acessToDentalInsurance: state.dentalInsurance,
     selectedFederalBenefits,
     selectedProvincialBenefits,
-  };*/
-
-  //TODO: replace placeholder data with application data once adult-child flow is complete
-
-  const userInfo = {
-    firstName: 'firstName',
-    lastName: 'lastName',
-    phoneNumber: '1112223333',
-    altPhoneNumber: '1112223333',
-    preferredLanguage: '1033',
-    birthday: toLocaleDateString(parseDateString('1990-11-11'), locale),
-    sin: '800000002',
-    martialStatus: 'MARRIED',
-    email: 'EMAIL',
-    communicationPreference: {
-      confirmEmail: 'confirmEmail',
-      email: 'email',
-      preferredLanguage: '1033',
-      preferredMethod: 'EMAIL',
-    },
-  };
-  const spouseInfo = state.partnerInformation
-    ? {
-        firstName: 'firstName',
-        lastName: 'lastName',
-        birthday: toLocaleDateString(parseDateString('1990-11-11'), locale),
-        sin: '700000003',
-        consent: true,
-      }
-    : undefined;
-
-  const mailingAddressInfo = {
-    address: '111 Main St',
-    city: 'Ottawa',
-    province: { provinceTerritoryStateId: 'daf4d05b-37b3-eb11-8236-0022486d8d5f', countryId: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', nameEn: 'Ontario', nameFr: 'Ontario', abbr: 'ON' },
-    postalCode: 'K1K2H2',
-    country: { countryId: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', nameEn: 'Canada', nameFr: 'Canada' },
-    apartment: '',
   };
 
-  const homeAddressInfo = {
-    address: '111 Main St',
-    city: 'Ottawa',
-    province: { provinceTerritoryStateId: 'daf4d05b-37b3-eb11-8236-0022486d8d5f', countryId: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', nameEn: 'Ontario', nameFr: 'Ontario', abbr: 'ON' },
-    postalCode: 'K1K2H2',
-    country: { countryId: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', nameEn: 'Canada', nameFr: 'Canada' },
-    apartment: '',
-  };
-
-  const dentalInsurance = {
-    acessToDentalInsurance: true,
-    selectedFederalBenefits: {
-      access: true,
-      benefit: '758bb862-26c5-ee11-9079-000d3a09d640',
-    },
-    selectedProvincialBenefits: {
-      access: true,
-      province: '9c440baa-35b3-eb11-8236-0022486d8d5f',
-      benefit: 'b3f25fea-a7a9-ee11-a569-000d3af4f898',
-    },
-  };
-
-  const childInfo = {
-    firstName: 'firstName',
-    lastName: 'lastName',
-    birthday: toLocaleDateString(parseDateString('2009-11-11'), locale),
-    sin: '800000002',
-    isParent: true,
+  const childrenInfo = state.children.map((child) => ({
+    id: child.id,
+    firstName: child.information?.firstName,
+    lastName: child.information?.lastName,
+    birthday: toLocaleDateString(parse(child.information?.dateOfBirth ?? '', 'yyyy-MM-dd', new UTCDate()), locale),
+    sin: child.information?.socialInsuranceNumber,
+    isParent: child.information?.isParent,
     dentalInsurance: {
-      acessToDentalInsurance: true,
+      acessToDentalInsurance: child.dentalInsurance,
       federalBenefit: {
-        access: true,
-        benefit: '758bb862-26c5-ee11-9079-000d3a09d640',
+        access: child.dentalBenefits?.hasFederalBenefits,
+        benefit: [...allFederalSocialPrograms]
+          .filter((obj) => obj.id === child.dentalBenefits?.federalSocialProgram)
+          .map((obj) => getNameByLanguage(locale, obj))
+          .join(', '),
       },
       provTerrBenefit: {
-        access: true,
-        province: '9c440baa-35b3-eb11-8236-0022486d8d5f',
-        benefit: 'b3f25fea-a7a9-ee11-a569-000d3af4f898',
+        access: child.dentalBenefits?.hasProvincialTerritorialBenefits,
+        province: child.dentalBenefits?.province,
+        benefit: [...allProvincialTerritorialSocialPrograms]
+          .filter((obj) => obj.id === child.dentalBenefits?.provincialTerritorialSocialProgram)
+          .map((obj) => getNameByLanguage(locale, obj))
+          .join(', '),
       },
     },
-  };
+  }));
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:confirm.page-title') }) };
 
   return json({
-    childInfo,
+    childrenInfo,
     dentalInsurance,
     homeAddressInfo,
     mailingAddressInfo,
@@ -252,7 +203,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ApplyFlowConfirm() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { childInfo, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, csrfToken } = useLoaderData<typeof loader>();
+  const { childrenInfo, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, csrfToken } = useLoaderData<typeof loader>();
   const powerPlatformStatusCheckerEnabled = useFeature('power-platform-status-checker');
 
   const mscaLink = <InlineLink to={t('confirm.msca-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
@@ -271,7 +222,7 @@ export default function ApplyFlowConfirm() {
           <p className="text-2xl">
             <strong>{t('confirm.app-code-is')}</strong>
             <br />
-            <strong>{formatSubmissionApplicationCode(submissionInfo?.confirmationCode ?? '1234567891011')}</strong>
+            <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
           </p>
           <p>{t('confirm.make-note')}</p>
         </div>
@@ -318,7 +269,7 @@ export default function ApplyFlowConfirm() {
         <div>
           <dl className="mt-6 divide-y border-y text-xl">
             <DescriptionListItem term={t('confirm.application-code')}>
-              <strong>{formatSubmissionApplicationCode(submissionInfo?.confirmationCode ?? 'confirmationCode')}</strong>
+              <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
             </DescriptionListItem>
           </dl>
         </div>
@@ -364,20 +315,20 @@ export default function ApplyFlowConfirm() {
               <Address
                 address={mailingAddressInfo.address}
                 city={mailingAddressInfo.city}
-                provinceState={i18n.language === 'en' ? mailingAddressInfo.province.nameEn : mailingAddressInfo.province.nameFr}
+                provinceState={i18n.language === 'en' ? mailingAddressInfo.province?.nameEn : mailingAddressInfo.province?.nameFr}
                 postalZipCode={mailingAddressInfo.postalCode}
-                country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
+                country={i18n.language === 'en' ? mailingAddressInfo.country?.nameEn ?? '' : mailingAddressInfo.country?.nameFr ?? ''}
                 apartment={mailingAddressInfo.apartment}
                 altFormat={true}
               />
             </DescriptionListItem>
             <DescriptionListItem term={t('confirm.home')}>
               <Address
-                address={homeAddressInfo.address}
-                city={homeAddressInfo.city}
-                provinceState={i18n.language === 'en' ? homeAddressInfo.province.nameEn : homeAddressInfo.province.nameFr}
+                address={homeAddressInfo.address ?? ''}
+                city={homeAddressInfo.city ?? ''}
+                provinceState={i18n.language === 'en' ? homeAddressInfo.province?.nameEn : homeAddressInfo.province?.nameFr}
                 postalZipCode={homeAddressInfo.postalCode}
-                country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
+                country={i18n.language === 'en' ? homeAddressInfo.country?.nameEn ?? '' : homeAddressInfo.country?.nameFr ?? ''}
                 apartment={homeAddressInfo.apartment}
                 altFormat={true}
               />
@@ -389,7 +340,7 @@ export default function ApplyFlowConfirm() {
           <dl className="mt-6 divide-y border-y">
             <DescriptionListItem term={t('confirm.comm-pref')}>
               <div className="flex flex-col">
-                <p>{userInfo.communicationPreference.preferredMethod}</p>
+                <p>{userInfo.communicationPreference}</p>
               </div>
             </DescriptionListItem>
 
@@ -401,61 +352,98 @@ export default function ApplyFlowConfirm() {
           <dl className="mt-6 divide-y border-y">
             <DescriptionListItem term={t('confirm.dental-private')}> {dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.dental-public')}>
-              <p>{t('apply-adult-child:confirm.yes')}</p>
-              <p>{t('apply-adult-child:confirm.dental-benefit-has-access')}</p>
-              <div>
-                <ul className="ml-6 list-disc">
-                  <li>{dentalInsurance.selectedFederalBenefits.benefit}</li>
-                  <li>{dentalInsurance.selectedProvincialBenefits.benefit}</li>
-                </ul>
-              </div>
+              {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
+                <>
+                  <p>{t('apply-adult-child:confirm.yes')}</p>
+                  <p>{t('apply-adult-child:confirm.dental-benefit-has-access')}</p>
+                  <ul className="ml-6 list-disc">
+                    {dentalInsurance.selectedFederalBenefits && <li>{dentalInsurance.selectedFederalBenefits}</li>}
+                    {dentalInsurance.selectedProvincialBenefits && <li>{dentalInsurance.selectedProvincialBenefits}</li>}
+                  </ul>
+                </>
+              ) : (
+                <p>{t('confirm.no')}</p>
+              )}
             </DescriptionListItem>
           </dl>
         </div>
-        <h2 className="mt-8 text-3xl font-semibold">{childInfo.firstName}</h2>
-        <h2 className="text-2xl font-semibold">{t('confirm.child-title', { childName: childInfo.firstName })}</h2>
-        <div>
-          <dl className="mt-6 divide-y border-y">
-            <DescriptionListItem term={t('confirm.full-name')}>{`${childInfo.firstName} ${childInfo.lastName}`}</DescriptionListItem>
-            <DescriptionListItem term={t('confirm.dob')}>{childInfo.birthday}</DescriptionListItem>
-            <DescriptionListItem term={t('confirm.sin')}>
-              <span className="text-nowrap">{formatSin(childInfo.sin)}</span>
-            </DescriptionListItem>
-            <DescriptionListItem term={t('confirm.dental-private')}> {dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
-            <DescriptionListItem term={t('confirm.dental-public')}>
-              <p>{t('apply-adult-child:confirm.yes')}</p>
-              <p>{t('apply-adult-child:confirm.dental-benefit-has-access')}</p>
-              <div>
-                <ul className="ml-6 list-disc">
-                  <li>{dentalInsurance.selectedFederalBenefits.benefit}</li>
-                  <li>{dentalInsurance.selectedProvincialBenefits.benefit}</li>
-                </ul>
-              </div>
-            </DescriptionListItem>
-            <DescriptionListItem term={t('confirm.is-parent')}>{childInfo.isParent ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
-          </dl>
-        </div>
+
+        {/* CHILDREN DETAILS */}
+        {childrenInfo.map((childInfo) => (
+          <Fragment key={childInfo.id}>
+            <h2 className="mt-8 text-3xl font-semibold">{childInfo.firstName}</h2>
+            <h3 className="text-2xl font-semibold">{t('confirm.child-title', { childName: childInfo.firstName })}</h3>
+            <div>
+              <dl className="mt-6 divide-y border-y">
+                <DescriptionListItem term={t('confirm.full-name')}>{`${childInfo.firstName} ${childInfo.lastName}`}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.dob')}>{childInfo.birthday}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.sin')}>
+                  <span className="text-nowrap">{formatSin(childInfo.sin ?? '')}</span>
+                </DescriptionListItem>
+                <DescriptionListItem term={t('confirm.dental-private')}> {dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.dental-public')}>
+                  {childInfo.dentalInsurance.federalBenefit.benefit || childInfo.dentalInsurance.provTerrBenefit.benefit ? (
+                    <>
+                      <p>{t('apply-adult-child:confirm.yes')}</p>
+                      <p>{t('apply-adult-child:confirm.dental-benefit-has-access')}</p>
+                      <ul className="ml-6 list-disc">
+                        {childInfo.dentalInsurance.federalBenefit.benefit && <li>{childInfo.dentalInsurance.federalBenefit.benefit}</li>}
+                        {childInfo.dentalInsurance.provTerrBenefit.benefit && <li>{childInfo.dentalInsurance.provTerrBenefit.benefit}</li>}
+                      </ul>
+                    </>
+                  ) : (
+                    <p>{t('confirm.no')}</p>
+                  )}
+                </DescriptionListItem>
+                <DescriptionListItem term={t('confirm.is-parent')}>{childInfo.isParent ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
+              </dl>
+            </div>
+          </Fragment>
+        ))}
       </div>
 
-      <Button
-        className="mt-5 print:hidden"
-        size="lg"
-        variant="primary"
-        onClick={(event) => {
-          event.preventDefault();
-          window.print();
-        }}
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Print a copy of your application bottom click"
-      >
-        {t('confirm.print-btn')}
-      </Button>
-
-      <fetcher.Form method="post" noValidate className="mt-5 flex flex-wrap items-center gap-3">
-        <input type="hidden" name="_csrf" value={csrfToken} />
-        <Button variant="primary" onClick={() => sessionStorage.removeItem('flow.state')} size="lg" className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Confirmation click">
-          {t('apply-adult-child:confirm.exit')}
+      <div className="my-6">
+        <Button
+          className="mt-5 print:hidden"
+          size="lg"
+          variant="primary"
+          onClick={(event) => {
+            event.preventDefault();
+            window.print();
+          }}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Print a copy of your application bottom click"
+        >
+          {t('confirm.print-btn')}
         </Button>
-      </fetcher.Form>
+      </div>
+
+      <Dialog>
+        <DialogTrigger asChild>
+          <button className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Exit click">
+            {t('confirm.close-application')}
+          </button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t('confirm.modal.header')}</DialogTitle>
+          </DialogHeader>
+          <p>{t('confirm.modal.info')}</p>
+          <p>{t('confirm.modal.are-you-sure')}</p>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button id="confirm-modal-back" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Back click">
+                {t('confirm.modal.back-btn')}
+              </Button>
+            </DialogClose>
+            <fetcher.Form method="post" noValidate>
+              <input type="hidden" name="_csrf" value={csrfToken} />
+              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => sessionStorage.removeItem('flow.state')} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Confirmation click">
+                {t('confirm.modal.close-btn')}
+              </Button>
+            </fetcher.Form>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
