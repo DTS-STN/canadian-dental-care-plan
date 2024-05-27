@@ -19,9 +19,8 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
-import { useFeature } from '~/root';
 import { loadApplyAdultState, validateApplyAdultStateForReview } from '~/route-helpers/apply-adult-route-helpers.server';
-import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { clearApplyState, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -52,15 +51,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const lookupService = getLookupService();
-
   const state = loadApplyAdultState({ params, request, session });
   validateApplyAdultStateForReview({ params, state });
-
-  const maritalStatuses = await lookupService.getAllMaritalStatuses();
-  const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
-  const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
-  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
   // prettier-ignore
   if (state.applicantInformation === undefined ||
@@ -74,8 +66,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
+  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
+  const lookupService = getLookupService();
+  const maritalStatuses = await lookupService.getAllMaritalStatuses();
+  const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
+  const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
 
   // Getting province by Id
   const allRegions = await lookupService.getAllRegions();
@@ -117,6 +114,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     communicationPreferenceEmail: state.communicationPreferences.email,
     communicationPreference: communicationPreference,
   };
+
   const spouseInfo = state.partnerInformation
     ? {
         firstName: state.partnerInformation.firstName,
@@ -162,22 +160,26 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   };
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
+  const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:review-information.page-title') }) };
 
-  const payload = toBenefitApplicationRequest({
-    typeOfApplication: state.typeOfApplication,
-    disabilityTaxCredit: state.disabilityTaxCredit,
-    livingIndependently: state.livingIndependently,
-    applicantInformation: state.applicantInformation,
-    communicationPreferences: state.communicationPreferences,
-    dateOfBirth: state.dateOfBirth,
-    dentalBenefits: state.dentalBenefits,
-    dentalInsurance: state.dentalInsurance,
-    personalInformation: state.personalInformation,
-    partnerInformation: state.partnerInformation,
-  });
+  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
+  const payload = viewPayloadEnabled
+    ? toBenefitApplicationRequest({
+        typeOfApplication: 'adult',
+        disabilityTaxCredit: ageCategory === 'adults' ? state.disabilityTaxCredit : undefined,
+        livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
+        applicantInformation: state.applicantInformation,
+        communicationPreferences: state.communicationPreferences,
+        dateOfBirth: state.dateOfBirth,
+        dentalBenefits: state.dentalBenefits,
+        dentalInsurance: state.dentalInsurance,
+        personalInformation: state.personalInformation,
+        partnerInformation: state.partnerInformation,
+      })
+    : undefined;
 
   saveApplyState({ params, session, state: { editMode: true } });
 
@@ -204,8 +206,23 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/review-information');
 
-  const benefitApplicationService = getBenefitApplicationService();
+  const state = loadApplyAdultState({ params, request, session });
+  validateApplyAdultStateForReview({ params, state });
+
+  // prettier-ignore
+  if (state.applicantInformation === undefined ||
+    state.communicationPreferences === undefined ||
+    state.dateOfBirth === undefined ||
+    state.dentalBenefits === undefined ||
+    state.dentalInsurance === undefined ||
+    state.personalInformation === undefined ||
+    state.taxFiling2023 === undefined ||
+    state.typeOfApplication === undefined) {
+    throw new Error(`Incomplete application "${state.id}" state!`);
+  }
+
   const { ENABLED_FEATURES } = getEnv();
+  const benefitApplicationService = getBenefitApplicationService();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
   const formData = await request.formData();
@@ -232,27 +249,11 @@ export async function action({ context: { session }, params, request }: ActionFu
     }
   }
 
-  const state = loadApplyAdultState({ params, request, session });
-  validateApplyAdultStateForReview({ params, state });
-
-  // prettier-ignore
-  if (state.applicantInformation === undefined ||
-    state.communicationPreferences === undefined ||
-    state.dateOfBirth === undefined ||
-    state.dentalBenefits === undefined ||
-    state.dentalInsurance === undefined ||
-    state.personalInformation === undefined ||
-    state.taxFiling2023 === undefined ||
-    state.typeOfApplication === undefined) {
-    throw new Error(`Incomplete application "${state.id}" state!`);
-  }
-
-  // TODO submit to the API and grab the confirmation code from the response
-  // any field change here will update payload assignment in loader()
+  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
   const benefitApplicationRequest = toBenefitApplicationRequest({
-    typeOfApplication: state.typeOfApplication,
-    disabilityTaxCredit: state.disabilityTaxCredit,
-    livingIndependently: state.livingIndependently,
+    typeOfApplication: 'adult',
+    disabilityTaxCredit: ageCategory === 'adults' ? state.disabilityTaxCredit : undefined,
+    livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
     applicantInformation: state.applicantInformation,
     communicationPreferences: state.communicationPreferences,
     dateOfBirth: state.dateOfBirth,
@@ -539,7 +540,7 @@ export default function ReviewInformation() {
           {t('apply-adult:review-information.exit-button')}
         </InlineLink>
       </div>
-      {useFeature('view-payload') && (
+      {payload && (
         <div className="mt-8">
           <DebugPayload data={payload} enableCopy></DebugPayload>
         </div>

@@ -1,3 +1,4 @@
+import { formatISO } from 'date-fns';
 import validator from 'validator';
 
 import {
@@ -16,8 +17,8 @@ import { getEnv } from '~/utils/env.server';
 
 interface ToBenefitApplicationRequestArgs {
   typeOfApplication: TypeOfApplicationState;
-  disabilityTaxCredit: boolean | undefined;
-  livingIndependently: boolean | undefined;
+  disabilityTaxCredit?: boolean;
+  livingIndependently?: boolean;
   applicantInformation: ApplicantInformationState;
   communicationPreferences: CommunicationPreferencesState;
   dateOfBirth: string;
@@ -101,16 +102,12 @@ function toBenefitApplicationCategoryCode(typeOfApplication: TypeOfApplicationSt
   if (typeOfApplication === 'adult') return APPLICANT_CATEGORY_CODE_INDIVIDUAL.toString();
   if (typeOfApplication === 'adult-child') return APPLICANT_CATEGORY_CODE_FAMILY.toString();
   if (typeOfApplication === 'child') return APPLICANT_CATEGORY_CODE_DEPENDENT_ONLY.toString();
-  return '';
+  throw Error(`TypeOfApplication '${typeOfApplication}' not supported.`);
 }
 
-function toDate(date?: string) {
-  if (!date || validator.isEmpty(date)) {
-    return { dateTime: '' };
-  }
-
+function toDate(date: string) {
   return {
-    dateTime: parseDateString(date).toISOString(),
+    date: formatISO(parseDateString(date), { representation: 'date' }),
   };
 }
 
