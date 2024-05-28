@@ -44,6 +44,7 @@ public class UserService {
 
 	private final ConfirmationCodeMapper confirmationCodeMapper = Mappers.getMapper(ConfirmationCodeMapper.class);
 	private final SubscriptionMapper subscriptionMapper = Mappers.getMapper(SubscriptionMapper.class);
+
 	private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
 	public UserService(
@@ -133,6 +134,46 @@ public class UserService {
 		return userRepository.findById(id).map(userMapper::toDomainObject);
 	}
 
+	public void updateUser(String userId, String email) {
+		Assert.hasText(userId, "userId is required; it must not be null or blank");
+		Assert.hasText(email, "email is required; it must not be null or blank");
+
+		log.debug("Fetching user [{}] from repository", userId);
+		final var user = userRepository.findById(userId).orElseThrow();
+
+		if (email.equals(user.getEmail()) == false) {
+			user.setEmail(email);
+			user.setEmailVerified(false);
+
+			userRepository.save(user);
+		}
+	}
+
+	public void updateSubscriptionForUser(String userId, String subscriptionId, String languageId) {
+		Assert.hasText(userId, "userId is required; it must not be null or blank");
+		Assert.hasText(subscriptionId, "subscriptionId is required; it must not be null or blank");
+		Assert.hasText(languageId, "languageId is required; it must not be null or blank");
+
+		log.debug("Fetching user [{}] from repository", userId);
+		final var user = userRepository.findById(userId).orElseThrow();
+		final var preferredLanguage = languageRepository.findById(languageId).orElseThrow();
+
+		final var subscription = user.getSubscriptions().stream()
+			.filter(byId(subscriptionId)).findFirst().orElseThrow();
+		subscription.setLanguage(preferredLanguage);
+			
+		userRepository.save(user);
+	}	
+
+	public void deleteSubscriptionForUser(String userId, String subscriptionId) {
+		Assert.hasText(userId, "userId is required; it must not be null or blank");
+		Assert.hasText(subscriptionId, "subscriptionId is required; it must not be null or blank");
+
+		final var user = userRepository.findById(userId).orElseThrow();
+		user.getSubscriptions().removeIf(subscription -> subscription.getId().equals(subscriptionId));
+		userRepository.save(user);
+	}
+
 	private Predicate<SubscriptionEntity> byAlertTypeId(String alertTypeId) {
 		Assert.hasText(alertTypeId, "alertTypeId is required; it must not be null or blank");
 		return subscription -> alertTypeId.equals(subscription.getAlertType().getId());
@@ -142,5 +183,10 @@ public class UserService {
 		Assert.hasText(code, "code is required; it must not be null or blank");
 		return confirmationCode -> code.equals(confirmationCode.getCode());
 	}
+
+	private Predicate<SubscriptionEntity> byId(String id) {
+		Assert.hasText(id, "id is required; it must not be null or blank");
+		return subscription -> id.equals(subscription.getId());
+	}	
 
 }
