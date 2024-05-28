@@ -378,7 +378,7 @@ export default function ApplyFlowConfirm() {
                 <DescriptionListItem term={t('confirm.full-name')}>{`${childInfo.firstName} ${childInfo.lastName}`}</DescriptionListItem>
                 <DescriptionListItem term={t('confirm.dob')}>{childInfo.birthday}</DescriptionListItem>
                 <DescriptionListItem term={t('confirm.sin')}>
-                  <span className="text-nowrap">{formatSin(childInfo.sin ?? '')}</span>
+                  <span className="text-nowrap">{childInfo.sin && formatSin(childInfo.sin)}</span>
                 </DescriptionListItem>
                 <DescriptionListItem term={t('confirm.dental-private')}> {dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
                 <DescriptionListItem term={t('confirm.dental-public')}>
