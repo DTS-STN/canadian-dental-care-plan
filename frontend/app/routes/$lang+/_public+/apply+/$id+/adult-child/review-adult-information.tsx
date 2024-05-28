@@ -17,7 +17,7 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState, validateApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { clearApplyState, getChildrenState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
@@ -65,7 +65,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     state.dentalInsurance === undefined ||
     state.personalInformation === undefined ||
     state.taxFiling2023 === undefined ||
-    state.typeOfApplication === undefined) {
+    state.typeOfApplication === undefined ||
+    getChildrenState(state).length === 0) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
@@ -215,7 +216,8 @@ export async function action({ context: { session }, params, request }: ActionFu
     state.dentalInsurance === undefined ||
     state.personalInformation === undefined ||
     state.taxFiling2023 === undefined ||
-    state.typeOfApplication === undefined) {
+    state.typeOfApplication === undefined ||
+    getChildrenState(state).length === 0) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 

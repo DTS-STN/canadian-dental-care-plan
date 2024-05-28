@@ -19,7 +19,7 @@ import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
 import { loadApplyAdultChildState, validateApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { clearApplyState, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { clearApplyState, getAgeCategoryFromDateString, getChildrenState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -54,14 +54,14 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   // prettier-ignore
   if (state.applicantInformation === undefined ||
-    state.children.length === 0 ||
     state.communicationPreferences === undefined ||
     state.dateOfBirth === undefined ||
     state.dentalBenefits === undefined ||
     state.dentalInsurance === undefined ||
     state.personalInformation === undefined ||
     state.taxFiling2023 === undefined ||
-    state.typeOfApplication === undefined) {
+    state.typeOfApplication === undefined ||
+    getChildrenState(state).length === 0) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
@@ -115,14 +115,14 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   // prettier-ignore
   if (state.applicantInformation === undefined ||
-    state.children.length === 0 ||
     state.communicationPreferences === undefined ||
     state.dateOfBirth === undefined ||
     state.dentalBenefits === undefined ||
     state.dentalInsurance === undefined ||
     state.personalInformation === undefined ||
     state.taxFiling2023 === undefined ||
-    state.typeOfApplication === undefined) {
+    state.typeOfApplication === undefined ||
+    getChildrenState(state).length === 0) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
