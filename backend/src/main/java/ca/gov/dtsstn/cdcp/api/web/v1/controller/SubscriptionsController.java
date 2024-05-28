@@ -7,7 +7,9 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,9 +30,11 @@ import ca.gov.dtsstn.cdcp.api.web.exception.ResourceConflictException;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionCreateModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionModel;
+import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionUpdateModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.mapper.SubscriptionModelMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 
@@ -126,8 +130,60 @@ public class SubscriptionsController {
 		return subscriptionModelMapper.toModel(userId, subscription);
 	}
 
-	private Predicate<? super BaseDomainObject> byId(String id) {
-		return domainObject -> id.equals(domainObject.getId());
+	//TODO: will use JSON PATCH in later PR
+	@PatchMapping({ "/{subscriptionId}" })
+	@Operation(summary = "Update a subscription by ID")
+	@ApiResponse(responseCode = "204", description = "The request has been successfully processed.")
+	public void updateSubscriptionById(
+			@NotBlank(message = "userId must not be null or blank")
+			@Parameter(description = "The id of the user.", example = "00000000-0000-0000-0000-000000000000")
+			@PathVariable String userId,
+
+			@NotBlank(message = "subscriptionId must not be null or blank")
+			@Parameter(description = "The id of the subscription.", example = "00000000-0000-0000-0000-000000000000")
+			@PathVariable String subscriptionId,
+			
+			@Validated @RequestBody SubscriptionUpdateModel subscriptionUpdateModel) {
+
+		final var user = userService.getUserById(userId)
+			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));
+
+		final var subscription = user.getSubscriptions().stream()
+			.filter(byId(subscriptionId)).findFirst()
+			.orElseThrow(() -> new ResourceNotFoundException("No subscription with id=[%s] was found".formatted(subscriptionId)));
+
+		final var language = languageService.readByMsLocaleCode(subscriptionUpdateModel.getMsLanguageCode())
+				.orElseThrow(() -> new ResourceNotFoundException("No language with msLanguageCode=[%s] was found".formatted(subscriptionUpdateModel.getMsLanguageCode())));
+		
+		userService.updateSubscriptionForUser(userId, subscription.getId(), language.getId());
 	}
 
+	@DeleteMapping({ "/{subscriptionId}" })
+	@Operation(summary = "Delete a subscription by ID")
+	@ApiResponse(responseCode = "204", description = "The request has been successfully processed.")
+	public void deleteSubscriptionById(
+			@NotBlank(message = "userId must not be null or blank")
+			@Parameter(description = "The id of the user.", example = "00000000-0000-0000-0000-000000000000")
+			@PathVariable String userId,
+
+			@NotBlank(message = "subscriptionId must not be null or blank")
+			@Parameter(description = "The id of the subscription.", example = "00000000-0000-0000-0000-000000000000")
+			@PathVariable String subscriptionId) {
+		final var user = userService.getUserById(userId)
+			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));
+
+		final var subscription = user.getSubscriptions().stream()
+			.filter(byId(subscriptionId)).findFirst()
+			.orElseThrow(() -> new ResourceNotFoundException("No subscription with id=[%s] was found".formatted(subscriptionId)));
+
+		userService.deleteSubscriptionForUser(userId, subscription.getId());
+	}	
+
+	private Predicate<Subscription> byAlertTypeCode(String alertTypeCode) {
+		return subscription -> alertTypeCode.equals(subscription.getAlertType().getCode());
+	}
+
+	private Predicate<? super BaseDomainObject> byId(String id) {
+		return domainObject -> id.equals(domainObject.getId());
+	}	
 }

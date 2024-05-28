@@ -51,4 +51,12 @@ public interface SubscriptionModelMapper {
 	@Mapping(target= "language.msLocaleCode", source = "msLanguageCode")
 	Subscription toDomainObject(@Nullable SubscriptionCreateModel subscriptionModel);
 
+	@Mapping(target= "createdBy", ignore = true)
+	@Mapping(target= "createdDate", ignore = true)
+	@Mapping(target= "lastModifiedBy", ignore = true)
+	@Mapping(target= "lastModifiedDate", ignore = true)
+	@Mapping(target= "alertType.code", source = "alertTypeCode")
+	@Mapping(target= "language.msLocaleCode", source = "msLanguageCode")
+	Subscription toDomain(@Nullable SubscriptionModel subscriptionModel);
+
 }
