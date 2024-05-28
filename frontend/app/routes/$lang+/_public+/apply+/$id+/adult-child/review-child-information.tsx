@@ -17,7 +17,7 @@ import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
-import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
+import { toBenefitApplicationRequestFromApplyAdultChildState } from '~/mappers/benefit-application-service-mappers.server';
 import { loadApplyAdultChildState, validateApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
@@ -63,21 +63,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:review-child-information.page-title') }) };
 
-  const payload = viewPayloadEnabled
-    ? toBenefitApplicationRequest({
-        typeOfApplication: 'adult-child',
-        disabilityTaxCredit: state.ageCategory === 'adults' ? state.disabilityTaxCredit : undefined,
-        livingIndependently: state.ageCategory === 'youth' ? state.livingIndependently : undefined,
-        applicantInformation: state.applicantInformation,
-        communicationPreferences: state.communicationPreferences,
-        dateOfBirth: state.dateOfBirth,
-        dentalBenefits: state.dentalBenefits,
-        dentalInsurance: state.dentalInsurance,
-        personalInformation: state.personalInformation,
-        partnerInformation: state.partnerInformation,
-        children: state.children,
-      })
-    : undefined;
+  const payload = viewPayloadEnabled ? toBenefitApplicationRequestFromApplyAdultChildState(state) : undefined;
 
   return json({
     id: state.id,
@@ -125,32 +111,11 @@ export async function action({ context: { session }, params, request }: ActionFu
     }
   }
 
-  const benefitApplicationRequest = toBenefitApplicationRequest({
-    typeOfApplication: 'adult-child',
-    disabilityTaxCredit: state.ageCategory === 'adults' ? state.disabilityTaxCredit : undefined,
-    livingIndependently: state.ageCategory === 'youth' ? state.livingIndependently : undefined,
-    applicantInformation: state.applicantInformation,
-    communicationPreferences: state.communicationPreferences,
-    dateOfBirth: state.dateOfBirth,
-    dentalBenefits: state.dentalBenefits,
-    dentalInsurance: state.dentalInsurance,
-    personalInformation: state.personalInformation,
-    partnerInformation: state.partnerInformation,
-    children: state.children,
-  });
-
+  const benefitApplicationRequest = toBenefitApplicationRequestFromApplyAdultChildState(state);
   const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
+  const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
 
-  saveApplyState({
-    params,
-    session,
-    state: {
-      submissionInfo: {
-        confirmationCode: confirmationCode,
-        submittedOn: new UTCDate().toISOString(),
-      },
-    },
-  });
+  saveApplyState({ params, session, state: { submissionInfo } });
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/confirmation', params));
 }
