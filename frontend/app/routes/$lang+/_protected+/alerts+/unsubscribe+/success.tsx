@@ -58,7 +58,7 @@ export default function UnsubscribeAlertsSuccess() {
   const subscribelink = <InlineLink routeId="$lang+/_protected+/alerts+/subscribe+/index" params={params} />;
 
   return (
-    <>
+    <div className="max-w-prose">
       <p className="mb-4">{t('alerts:success.unsubscribe-successful')}</p>
       <p className="mb-4">
         <Trans ns={handle.i18nNamespaces} i18nKey="alerts:success.subscribe-again" components={{ subscribelink }} />
@@ -68,6 +68,6 @@ export default function UnsubscribeAlertsSuccess() {
           {t('alerts:success.return-dashboard')}
         </ButtonLink>
       )}
-    </>
+    </div>
   );
 }

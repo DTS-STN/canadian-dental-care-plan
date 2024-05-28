@@ -5,6 +5,7 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
@@ -43,27 +44,32 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('email-alerts');
 
+  const auditService = getAuditService();
+  const instrumentationService = getInstrumentationService();
+  const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
 
   await raoidcService.handleSessionValidation(request, session);
 
-  const instrumentationService = getInstrumentationService();
-  const lookupService = getLookupService();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const preferredLanguages = await lookupService.getAllPreferredLanguages();
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:subscribe.page-title') }) };
 
-  instrumentationService.countHttpStatus('alerts.subscibe', 302);
+  const idToken: IdToken = session.get('idToken');
+  auditService.audit('page-view.subscribe-alerts', { userId: idToken.sub });
+  instrumentationService.countHttpStatus('alerts.subscribe', 200);
+
   return json({ csrfToken, meta, preferredLanguages });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('alerts/subscribe');
 
-  const instrumentationService = getInstrumentationService();
   const auditService = getAuditService();
+  const instrumentationService = getInstrumentationService();
+  const subscriptionService = getSubscriptionService();
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formSchema = z
@@ -98,23 +104,27 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const idToken: IdToken = session.get('idToken');
-  auditService.audit('update-date.subscribe-alerts', { userId: idToken.sub });
-
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin ?? '');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
+
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sin);
+  invariant(alertSubscription, 'Expected alertSubscription to be defined');
+
   const newAlertSubscription = {
-    id: alertSubscription?.id ?? '',
-    sin: userInfoToken.sin ?? '',
+    id: alertSubscription.id,
+    sin: userInfoToken.sin,
     email: parsedDataResult.data.email,
     registered: true,
     subscribed: false,
     preferredLanguage: parsedDataResult.data.preferredLanguage,
   };
 
-  await getSubscriptionService().updateSubscription(userInfoToken.sin ?? '', newAlertSubscription);
+  await subscriptionService.updateSubscription(userInfoToken.sin, newAlertSubscription);
 
-  instrumentationService.countHttpStatus('alerts.subscibe', 302);
+  const idToken: IdToken = session.get('idToken');
+  auditService.audit('update-data.subscribe-alerts', { userId: idToken.sub });
+  instrumentationService.countHttpStatus('alerts.subscribe', 302);
+
   return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/confirm', params));
 }
 
@@ -145,9 +155,9 @@ export default function AlertsSubscribe() {
   }, [errorMessages]);
 
   return (
-    <>
+    <div className="max-w-prose">
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <fetcher.Form className="max-w-prose" method="post" noValidate>
+      <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mb-6 grid gap-6 md:grid-cols-2">
           <InputField id="email" type="email" className="w-full" label={t('alerts:subscribe.email')} maxLength={100} name="email" errorMessage={errorMessages.email} autoComplete="email" required />
@@ -173,11 +183,11 @@ export default function AlertsSubscribe() {
           <ButtonLink id="back-button" to={userOrigin?.to} params={params}>
             {t('alerts:subscribe.button.back')}
           </ButtonLink>
-          <Button id="save-button" variant="primary">
+          <Button id="subscribe-button" variant="primary">
             {t('alerts:subscribe.button.subscribe')}
           </Button>
         </div>
       </fetcher.Form>
-    </>
+    </div>
   );
 }
