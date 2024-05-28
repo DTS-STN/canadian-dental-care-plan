@@ -105,19 +105,19 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
+  invariant(userInfoToken.sub, 'Expected userInfoToken.sub to be defined');
 
-  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sin);
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
   invariant(alertSubscription, 'Expected alertSubscription to be defined');
 
   const newAlertSubscription = {
     id: alertSubscription.id,
     userId: userInfoToken.sub,
-    preferredLanguage: parsedDataResult.data.preferredLanguage,
-    alertType: 'CDCP',
+    msLanguageCode: parsedDataResult.data.preferredLanguage,
+    alertTypeCode: 'CDCP',
   };
 
-  await subscriptionService.updateSubscription(userInfoToken.sin, newAlertSubscription);
+  await subscriptionService.updateSubscription(userInfoToken.sub, newAlertSubscription);
 
   const idToken: IdToken = session.get('idToken');
   auditService.audit('update-data.subscribe-alerts', { userId: idToken.sub });

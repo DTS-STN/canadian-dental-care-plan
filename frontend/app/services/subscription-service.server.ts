@@ -11,8 +11,8 @@ const log = getLogger('subscription-service.server');
 const subscriptionInfoSchema = z.object({
   id: z.string(),
   userId: z.string(),
-  preferredLanguage: z.string(),
-  alertType: z.string(),
+  msLanguageCode: z.string(),
+  alertTypeCode: z.string(),
 });
 
 type SubscriptionInfo = z.infer<typeof subscriptionInfoSchema>;
@@ -25,14 +25,12 @@ export const getSubscriptionService = moize(createSubscriptionService, { onCache
 function createSubscriptionService() {
   const { CDCP_API_BASE_URI } = getEnv();
 
-  async function getSubscription(sin: string) {
+  async function getSubscription(userIdSub: string) {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
-    auditService.audit('alert-subscription.get', { sin });
-    //76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6
-    // TODO: "IT-Security won't like SIN being passed as identifier"
+    auditService.audit('alert-subscription.get', { userIdSub });
 
-    const userId = sin;
+    const userId = userIdSub;
     const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users/${userId}/subscriptions`);
 
     const response = await fetch(url, {
@@ -79,7 +77,7 @@ function createSubscriptionService() {
     // TODO: "IT-Security won't like SIN being passed as identifier"
     // TODO: add CDCP_API_BASE_URI
     const userId = sin;
-    const url = new URL(`https://api.example.com/v1/users/${userId}/subscriptions`);
+    const url = new URL(`https://api.cdcp.example.com/v1/users/${userId}/subscriptions`);
 
     const response = await fetch(url, {
       method: 'PUT',
@@ -119,7 +117,7 @@ function createSubscriptionService() {
       confirmationCode: enteredConfirmationCode,
     };
     // TODO: add CDCP_API_BASE_URI
-    const url = new URL(`https://api.example.com/v1/codes/verify`);
+    const url = new URL(`https://api.cdcp.example.com/v1/codes/verify`);
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -154,7 +152,7 @@ function createSubscriptionService() {
       email: userEmail,
     };
     // TODO: add CDCP_API_BASE_URI
-    const url = new URL(`https://api.example.com/v1/codes/request`);
+    const url = new URL(`https://api.cdcp.example.com/v1/codes/request`);
     const response = await fetch(url, {
       method: 'POST',
       headers: {

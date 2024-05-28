@@ -123,6 +123,7 @@ async function generateIdToken(clientPublicKey: string, serverPrivateKey: string
     aud: 'CDCP',
     iss: 'GC-ECAS-MOCK',
     sid: '00000000-0000-0000-0000-000000000000',
+    //TODO We would need a future PR that would allow to allow a caller to specify this method.
     sub: '76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6',
   };
 
@@ -145,6 +146,7 @@ async function generateUserInfoToken(clientPublicKey: string, serverPrivateKey: 
     locale: 'en-CA',
     sid: '00000000-0000-0000-0000-000000000000',
     sin: '800011819',
+    //TODO We would need a future PR that would allow to allow a caller to specify this method.
     sub: '76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6',
   };
 

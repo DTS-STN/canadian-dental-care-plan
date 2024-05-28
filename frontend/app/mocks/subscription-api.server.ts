@@ -9,8 +9,8 @@ const log = getLogger('subscription-api.server');
 const subscriptionApiSchema = z.object({
   id: z.string(),
   userId: z.string(),
-  preferredLanguage: z.string(),
-  alertType: z.string(),
+  msLanguageCode: z.string(),
+  alertTypeCode: z.string(),
 });
 
 const validateSubscriptionSchema = z.object({
@@ -32,7 +32,7 @@ export function getSubscriptionApiMockHandlers() {
     //
     // Handler for GET request to retrieve email alerts decription by sin
     //
-    http.get('https://api.example.com/v1/users/:userId/subscriptions', ({ params, request }) => {
+    http.get('https://api.cdcp.example.com/v1/users/:userId/subscriptions', ({ params, request }) => {
       log.debug('Handling request for [%s]', request.url);
 
       const parsedUserId = z.string().safeParse(params.userId);
@@ -51,7 +51,7 @@ export function getSubscriptionApiMockHandlers() {
     //
     // Handler for PUT request to update email alerts decription
     //
-    http.put('https://api.example.com/v1/users/:userId/subscriptions', async ({ params, request }) => {
+    http.put('https://api.cdcp.example.com/v1/users/:userId/subscriptions', async ({ params, request }) => {
       log.debug('Handling request for [%s]', request.url);
 
       const requestBody = await request.json();
@@ -64,14 +64,14 @@ export function getSubscriptionApiMockHandlers() {
       if (parsedSubscriptionApi.data.id === '') {
         db.subscription.create({
           userId: parsedSubscriptionApi.data.userId,
-          preferredLanguage: parsedSubscriptionApi.data.preferredLanguage,
-          alertType: 'cdcp',
+          msLanguageCode: parsedSubscriptionApi.data.msLanguageCode,
+          alertTypeCode: 'cdcp',
         });
       } else {
         db.subscription.update({
           where: { id: { equals: parsedSubscriptionApi.data.id } },
           data: {
-            preferredLanguage: parsedSubscriptionApi.data.preferredLanguage,
+            msLanguageCode: parsedSubscriptionApi.data.msLanguageCode,
           },
         });
       }
@@ -79,7 +79,7 @@ export function getSubscriptionApiMockHandlers() {
       return HttpResponse.text(null, { status: 204 });
     }),
 
-    http.post('https://api.example.com/v1/codes/verify', async ({ params, request }) => {
+    http.post('https://api.cdcp.example.com/v1/codes/verify', async ({ params, request }) => {
       log.debug('Handling request for [%s]', request.url);
       const timeEntered = new Date();
       const requestBody = await request.json();
@@ -109,7 +109,7 @@ export function getSubscriptionApiMockHandlers() {
       return HttpResponse.json({ confirmCodeStatus: 'mismatch' }, { status: 200 });
     }),
 
-    http.post('https://api.example.com/v1/codes/request', async ({ params, request }) => {
+    http.post('https://api.cdcp.example.com/v1/codes/request', async ({ params, request }) => {
       log.debug('Handling request for [%s]', request.url);
       const timeEntered = new Date();
       const requestBody = await request.json();

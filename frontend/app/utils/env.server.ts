@@ -96,8 +96,8 @@ const serverEnv = z.object({
   INTEROP_STATUS_CHECK_API_BASE_URI: z.string().trim().transform(emptyToUndefined).optional(),
   INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY: z.string().trim().transform(emptyToUndefined).optional(),
 
-	CDCP_API_BASE_URI: z.string().url(),
-	
+  CDCP_API_BASE_URI: z.string().url(),
+  
   SHOW_SIN_EDIT_STUB_PAGE : z.string().transform(toBoolean).default('false'),
 
   // base URIs for My Service Canada Account variations

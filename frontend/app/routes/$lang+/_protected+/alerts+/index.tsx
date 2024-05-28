@@ -19,7 +19,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  //const alertSubscription = await getSubscriptionService().getSubscription(userInfoToken.sin);
   return redirect(getPathById('$lang+/_protected+/alerts+/subscribe+/index', params));
 
   //TODO fix the redirection once we can retrieve the status of the subscription
