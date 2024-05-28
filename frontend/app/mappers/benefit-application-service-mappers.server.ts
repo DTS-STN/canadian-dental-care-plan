@@ -49,7 +49,7 @@ export function toBenefitApplicationRequest({
           PrivateDentalInsuranceIndicator: dentalInsurance,
           DisabilityTaxCreditIndicator: disabilityTaxCredit,
           LivingIndependentlyIndicator: livingIndependently,
-          InsurancePlan: dentalBenefits ? toInsurancePlan(dentalBenefits) : undefined,
+          InsurancePlan: dentalBenefits && toInsurancePlan(dentalBenefits),
         },
         PersonBirthDate: toDate(dateOfBirth),
         PersonContactInformation: [
