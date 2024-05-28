@@ -304,7 +304,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-child:review-adult-information.dob-title')}>
                 {userInfo.birthday}
                 <p className="mt-4">
-                  <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/child/date-of-birth" params={params}>
+                  <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/child/applicant-information" params={params}>
                     {t('apply-child:review-adult-information.dob-change')}
                   </InlineLink>
                 </p>
