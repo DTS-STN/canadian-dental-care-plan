@@ -29,7 +29,7 @@ function createSubscriptionService() {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
     auditService.audit('alert-subscription.get', { userId });
-
+    //TODO, for a future PR, use HATEOAS links to get the /subscriptions endpoint
     const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users/${userId}/subscriptions`);
 
     const response = await fetch(url, {
