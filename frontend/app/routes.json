@@ -588,11 +588,19 @@
                         }
                       },
                       {
-                        "id": "$lang+/_public+/apply+/$id+/child/review-information",
-                        "file": "routes/$lang+/_public+/apply+/$id+/child/review-information.tsx",
+                        "id": "$lang+/_public+/apply+/$id+/child/review-adult-information",
+                        "file": "routes/$lang+/_public+/apply+/$id+/child/review-adult-information.tsx",
                         "paths": {
-                          "en": "/:lang/apply/:id/child/review-information",
-                          "fr": "/:lang/demander/:id/enfant/revue-renseignements"
+                          "en": "/:lang/apply/:id/child/review-adult-information",
+                          "fr": "/:lang/demander/:id/enfant/revue-adulte-renseignements"
+                        }
+                      },
+                      {
+                        "id": "$lang+/_public+/apply+/$id+/child/review-child-information",
+                        "file": "routes/$lang+/_public+/apply+/$id+/child/review-child-information.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/child/review-child-information",
+                          "fr": "/:lang/demander/:id/enfant/revue-enfant-renseignements"
                         }
                       },
                       {
