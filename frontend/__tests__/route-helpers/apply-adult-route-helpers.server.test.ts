@@ -31,7 +31,7 @@ describe('apply-adult-route-helpers.server', () => {
 
     const baseState = {
       id: '00000000-0000-0000-0000-000000000000',
-      editMode: false,
+      editMode: true,
       lastUpdatedOn: '2000-01-01',
       children: [],
     } satisfies ApplyState;
@@ -379,11 +379,10 @@ describe('apply-adult-route-helpers.server', () => {
       expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/adult/federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
-    it('should not redirect if state is completed', () => {
+    it('should not redirect if state is valid', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'adult',
-        editMode: true,
         taxFiling2023: true,
         dateOfBirth: '1900-01-01',
         applicantInformation: {
@@ -419,7 +418,48 @@ describe('apply-adult-route-helpers.server', () => {
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
-      expect(() => validateApplyAdultStateForReview({ params, state: mockState })).not.toThrow();
+      const act = validateApplyAdultStateForReview({ params, state: mockState });
+
+      expect(act).toEqual({
+        ageCategory: 'seniors',
+        applicantInformation: {
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          maritalStatus: '1',
+          socialInsuranceNumber: '000-000-001',
+        },
+        communicationPreferences: {
+          preferredLanguage: 'en',
+          preferredMethod: 'email',
+        },
+        dateOfBirth: '1900-01-01',
+        dentalBenefits: {
+          hasFederalBenefits: false,
+          hasProvincialTerritorialBenefits: false,
+        },
+        dentalInsurance: false,
+        disabilityTaxCredit: undefined,
+        editMode: true,
+        id: '00000000-0000-0000-0000-000000000000',
+        lastUpdatedOn: '2000-01-01',
+        livingIndependently: undefined,
+        partnerInformation: {
+          confirm: true,
+          dateOfBirth: '1900-01-01',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          socialInsuranceNumber: '000-000-002',
+        },
+        personalInformation: {
+          copyMailingAddress: true,
+          mailingAddress: '123 rue Peuplier',
+          mailingCity: 'City',
+          mailingCountry: 'Country',
+        },
+        submissionInfo: undefined,
+        taxFiling2023: true,
+        typeOfApplication: 'adult',
+      });
     });
   });
 });

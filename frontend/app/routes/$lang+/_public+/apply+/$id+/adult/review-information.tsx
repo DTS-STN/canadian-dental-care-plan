@@ -20,7 +20,7 @@ import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
 import { loadApplyAdultState, validateApplyAdultStateForReview } from '~/route-helpers/apply-adult-route-helpers.server';
-import { clearApplyState, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -51,20 +51,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const state = loadApplyAdultState({ params, request, session });
-  validateApplyAdultStateForReview({ params, state });
-
-  // prettier-ignore
-  if (state.applicantInformation === undefined ||
-    state.communicationPreferences === undefined ||
-    state.dateOfBirth === undefined ||
-    state.dentalBenefits === undefined ||
-    state.dentalInsurance === undefined ||
-    state.personalInformation === undefined ||
-    state.taxFiling2023 === undefined ||
-    state.typeOfApplication === undefined) {
-    throw new Error(`Incomplete application "${state.id}" state!`);
-  }
+  const state = validateApplyAdultStateForReview({ params, state: loadApplyAdultState({ params, request, session }) });
 
   const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -76,13 +63,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   // Getting province by Id
   const allRegions = await lookupService.getAllRegions();
-  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
-  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
+  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation.mailingProvince);
+  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation.homeProvince);
 
   // Getting Country by Id
   const allCountries = await lookupService.getAllCountries();
-  const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation?.mailingCountry);
-  const countryHome = allCountries.find((country) => country.countryId === state.personalInformation?.homeCountry);
+  const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation.mailingCountry);
+  const countryHome = allCountries.find((country) => country.countryId === state.personalInformation.homeCountry);
 
   if (!countryMailing) {
     throw new Error(`Unexpected mailing address country: ${state.personalInformation.mailingCountry}`);
@@ -94,7 +81,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   // Getting CommunicationPreference by Id
   const communicationPreferences = await lookupService.getAllPreferredCommunicationMethods();
-  const communicationPreferenceDict = communicationPreferences.find((obj) => obj.id === state.communicationPreferences?.preferredMethod);
+  const communicationPreferenceDict = communicationPreferences.find((obj) => obj.id === state.communicationPreferences.preferredMethod);
   const communicationPreference = communicationPreferenceDict && getNameByLanguage(locale, communicationPreferenceDict);
 
   if (!communicationPreference) {
@@ -165,12 +152,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:review-information.page-title') }) };
 
-  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
   const payload = viewPayloadEnabled
     ? toBenefitApplicationRequest({
         typeOfApplication: 'adult',
-        disabilityTaxCredit: ageCategory === 'adults' ? state.disabilityTaxCredit : undefined,
-        livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
+        disabilityTaxCredit: state.ageCategory === 'adults' ? state.disabilityTaxCredit : undefined,
+        livingIndependently: state.ageCategory === 'youth' ? state.livingIndependently : undefined,
         applicantInformation: state.applicantInformation,
         communicationPreferences: state.communicationPreferences,
         dateOfBirth: state.dateOfBirth,
@@ -206,20 +192,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/review-information');
 
-  const state = loadApplyAdultState({ params, request, session });
-  validateApplyAdultStateForReview({ params, state });
-
-  // prettier-ignore
-  if (state.applicantInformation === undefined ||
-    state.communicationPreferences === undefined ||
-    state.dateOfBirth === undefined ||
-    state.dentalBenefits === undefined ||
-    state.dentalInsurance === undefined ||
-    state.personalInformation === undefined ||
-    state.taxFiling2023 === undefined ||
-    state.typeOfApplication === undefined) {
-    throw new Error(`Incomplete application "${state.id}" state!`);
-  }
+  const state = validateApplyAdultStateForReview({ params, state: loadApplyAdultState({ params, request, session }) });
 
   const { ENABLED_FEATURES } = getEnv();
   const benefitApplicationService = getBenefitApplicationService();
@@ -249,11 +222,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     }
   }
 
-  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
   const benefitApplicationRequest = toBenefitApplicationRequest({
     typeOfApplication: 'adult',
-    disabilityTaxCredit: ageCategory === 'adults' ? state.disabilityTaxCredit : undefined,
-    livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
+    disabilityTaxCredit: state.ageCategory === 'adults' ? state.disabilityTaxCredit : undefined,
+    livingIndependently: state.ageCategory === 'youth' ? state.livingIndependently : undefined,
     applicantInformation: state.applicantInformation,
     communicationPreferences: state.communicationPreferences,
     dateOfBirth: state.dateOfBirth,

@@ -45,83 +45,120 @@ export function loadApplyAdultState({ params, request, session }: LoadApplyAdult
   return applyState;
 }
 
-interface ValidateStateForReviewArgs {
+interface ValidateApplyAdultStateForReviewArgs {
   params: Params;
   state: ApplyState;
 }
 
-export function validateApplyAdultStateForReview({ params, state }: ValidateStateForReviewArgs) {
-  if (state.typeOfApplication === undefined) {
+export function validateApplyAdultStateForReview({ params, state }: ValidateApplyAdultStateForReviewArgs) {
+  const {
+    applicantInformation,
+    communicationPreferences,
+    dateOfBirth,
+    dentalBenefits,
+    dentalInsurance,
+    disabilityTaxCredit,
+    editMode,
+    id,
+    lastUpdatedOn,
+    livingIndependently,
+    partnerInformation,
+    personalInformation,
+    submissionInfo,
+    taxFiling2023,
+    typeOfApplication,
+  } = state;
+
+  if (typeOfApplication === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/type-application', params));
   }
 
-  if (state.typeOfApplication === 'delegate') {
+  if (typeOfApplication === 'delegate') {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/application-delegate', params));
   }
 
-  if (state.typeOfApplication !== 'adult') {
+  if (typeOfApplication !== 'adult') {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/type-application', params));
   }
 
-  if (state.taxFiling2023 === undefined) {
+  if (taxFiling2023 === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/tax-filing', params));
   }
 
-  if (state.taxFiling2023 === false) {
+  if (taxFiling2023 === false) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/file-taxes', params));
   }
 
-  if (state.dateOfBirth === undefined) {
+  if (dateOfBirth === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/date-of-birth', params));
   }
 
-  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
+  const ageCategory = getAgeCategoryFromDateString(dateOfBirth);
 
   if (ageCategory === 'children') {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/parent-or-guardian', params));
   }
 
-  if (ageCategory === 'youth' && state.livingIndependently === undefined) {
+  if (ageCategory === 'youth' && livingIndependently === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/living-independently', params));
   }
 
-  if (ageCategory === 'youth' && state.livingIndependently === false) {
+  if (ageCategory === 'youth' && livingIndependently === false) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/parent-or-guardian', params));
   }
 
-  if (ageCategory === 'adults' && state.disabilityTaxCredit === undefined) {
+  if (ageCategory === 'adults' && disabilityTaxCredit === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/disability-tax-credit', params));
   }
 
-  if (ageCategory === 'adults' && state.disabilityTaxCredit === false) {
+  if (ageCategory === 'adults' && disabilityTaxCredit === false) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/dob-eligibility', params));
   }
 
-  if (state.applicantInformation === undefined) {
+  if (applicantInformation === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
   }
 
-  if (applicantInformationStateHasPartner(state.applicantInformation) && !state.partnerInformation) {
+  if (applicantInformationStateHasPartner(applicantInformation) && !partnerInformation) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/partner-information', params));
   }
 
-  if (!applicantInformationStateHasPartner(state.applicantInformation) && state.partnerInformation) {
+  if (!applicantInformationStateHasPartner(applicantInformation) && partnerInformation) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/applicant-information', params));
   }
 
-  if (state.personalInformation === undefined) {
+  if (personalInformation === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/personal-information', params));
   }
 
-  if (state.communicationPreferences === undefined) {
+  if (communicationPreferences === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/communication-preference', params));
   }
 
-  if (state.dentalInsurance === undefined) {
+  if (dentalInsurance === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/dental-insurance', params));
   }
 
-  if (state.dentalBenefits === undefined) {
+  if (dentalBenefits === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult/federal-provincial-territorial-benefits', params));
   }
+
+  return {
+    ageCategory,
+    applicantInformation,
+    communicationPreferences,
+    dateOfBirth,
+    dentalBenefits,
+    dentalInsurance,
+    disabilityTaxCredit,
+    editMode,
+    id,
+    lastUpdatedOn,
+    livingIndependently,
+    partnerInformation,
+    personalInformation,
+    submissionInfo,
+    taxFiling2023,
+    typeOfApplication,
+  };
 }
