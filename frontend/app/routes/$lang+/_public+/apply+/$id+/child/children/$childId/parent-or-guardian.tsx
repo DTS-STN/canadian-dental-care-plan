@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { loadApplyAdultSingleChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { loadApplySingleChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -30,7 +30,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const state = loadApplyAdultSingleChildState({ params, request, session });
+  const state = loadApplySingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));

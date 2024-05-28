@@ -135,7 +135,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/child/review-information', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/child/dental-insurance', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/child/review-information', params));
 }
 
 export default function ApplyFlowCommunicationPreferencePage() {

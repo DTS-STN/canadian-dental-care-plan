@@ -472,7 +472,7 @@
                             "index": true,
                             "paths": {
                               "en": "/:lang/apply/:id/child/children",
-                              "fr": "/:lang/demander/:id/adulte-enfant/enfants"
+                              "fr": "/:lang/demander/:id/enfant/enfants"
                             }
                           },
                           {

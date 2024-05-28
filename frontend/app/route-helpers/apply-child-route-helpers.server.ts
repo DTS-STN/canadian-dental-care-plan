@@ -1,7 +1,9 @@
 import { Session, redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
 
-import { ApplyState, applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, loadApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { z } from 'zod';
+
+import { ApplyState, applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, isNewChildState, loadApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 
@@ -43,6 +45,47 @@ export function loadApplyChildState({ params, request, session }: LoadApplyChild
   }
 
   return applyState;
+}
+
+interface LoadApplySingleChildStateArgs {
+  params: Params;
+  request: Request;
+  session: Session;
+}
+
+/**
+ * Loads single child state from apply child state.
+ * @param args - The arguments.
+ * @returns The loaded child state.
+ */
+export function loadApplySingleChildState({ params, request, session }: LoadApplySingleChildStateArgs) {
+  const applyState = loadApplyChildState({ params, request, session });
+
+  const parsedChildId = z.string().uuid().safeParse(params.childId);
+
+  if (!parsedChildId.success) {
+    log.warn('Invalid "childId" param format; childId: [%s]', params.childId);
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/child/children/index', params));
+  }
+
+  const childId = parsedChildId.data;
+  const childStateIndex = applyState.children.findIndex(({ id }) => id === childId);
+
+  if (childStateIndex === -1) {
+    log.warn('Apply single child has not been found; childId: [%s]', childId);
+    throw redirect(getPathById('$lang+/_public+/apply+/$id+/child/children/index', params));
+  }
+
+  const childState = applyState.children[childStateIndex];
+  const isNew = isNewChildState(childState);
+  const editMode = !isNew && applyState.editMode;
+
+  return {
+    ...childState,
+    childNumber: childStateIndex + 1,
+    editMode,
+    isNew,
+  };
 }
 
 interface ValidateStateForReviewArgs {

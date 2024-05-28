@@ -16,7 +16,7 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { loadApplyChildState, loadApplySingleChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
@@ -53,7 +53,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const { CANADA_COUNTRY_ID } = getEnv();
 
   const lookupService = getLookupService();
-  const state = loadApplyAdultSingleChildState({ params, request, session });
+  const state = loadApplySingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const childName = state.information?.firstName ?? '<Child 1 name>';
@@ -84,8 +84,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/child/children/federal-provincial-territorial-benefits');
 
-  const state = loadApplyAdultSingleChildState({ params, request, session });
-  const applyState = loadApplyAdultChildState({ params, request, session });
+  const state = loadApplySingleChildState({ params, request, session });
+  const applyState = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
