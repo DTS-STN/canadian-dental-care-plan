@@ -25,12 +25,11 @@ export const getSubscriptionService = moize(createSubscriptionService, { onCache
 function createSubscriptionService() {
   const { CDCP_API_BASE_URI } = getEnv();
 
-  async function getSubscription(userIdSub: string) {
+  async function getSubscription(userId: string) {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
-    auditService.audit('alert-subscription.get', { userIdSub });
+    auditService.audit('alert-subscription.get', { userId });
 
-    const userId = userIdSub;
     const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users/${userId}/subscriptions`);
 
     const response = await fetch(url, {
