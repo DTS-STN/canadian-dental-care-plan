@@ -22,8 +22,8 @@ interface ToBenefitApplicationRequestArgs {
   applicantInformation: ApplicantInformationState;
   communicationPreferences: CommunicationPreferencesState;
   dateOfBirth: string;
-  dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
-  dentalInsurance: boolean;
+  dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
+  dentalInsurance?: boolean;
   partnerInformation: PartnerInformationState | undefined;
   personalInformation: PersonalInformationState;
   children?: ChildState[];
@@ -49,7 +49,7 @@ export function toBenefitApplicationRequest({
           PrivateDentalInsuranceIndicator: dentalInsurance,
           DisabilityTaxCreditIndicator: disabilityTaxCredit,
           LivingIndependentlyIndicator: livingIndependently,
-          InsurancePlan: toInsurancePlan(dentalBenefits),
+          InsurancePlan: dentalBenefits ? toInsurancePlan(dentalBenefits) : undefined,
         },
         PersonBirthDate: toDate(dateOfBirth),
         PersonContactInformation: [
