@@ -2,7 +2,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 
 import pageIds from '../../../page-ids.json';
@@ -75,7 +75,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 export default function ConfirmCodeExpired() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, alertSubscription } = useLoaderData<typeof loader>();
+  const { csrfToken } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
 
@@ -84,12 +84,21 @@ export default function ConfirmCodeExpired() {
       <div className="mb-8 space-y-6">
         <ContextualAlert type="warning">
           <p id="confirmation-information" className="mb-4">
-            <Trans ns={handle.i18nNamespaces} i18nKey="alerts:expired.confirm-code-expired" values={{ userEmailAddress: alertSubscription.email }} />
+            {/* TODO, implement the usage of email address with the user schema... */}
+            {/*<Trans ns={handle.i18nNamespaces} i18nKey="alerts:expired.confirm-code-expired" values={{ userEmailAddress: alertSubscription.email }} />*/}
           </p>
         </ContextualAlert>
       </div>
       <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
+        <div className="mb-8 space-y-6">
+          <ContextualAlert type="warning">
+            <p id="confirmation-information" className="mb-4">
+              {/* TODO, implement the usage of email address with the user schema... */}
+              {/*<Trans ns={handle.i18nNamespaces} i18nKey="alerts:expired.confirm-code-expired" values={{ userEmailAddress: alertSubscription?.email }} />*/}
+            </p>
+          </ContextualAlert>
+        </div>
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="cancel" routeId="$lang+/_protected+/alerts+/subscribe+/confirm" params={params}>
             {t('alerts:expired.back')}

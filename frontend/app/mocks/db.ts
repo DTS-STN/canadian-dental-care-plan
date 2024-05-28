@@ -119,20 +119,14 @@ db.personalInformation.create({
 // seed the email alerts subscription
 db.subscription.create({
   id: '10001',
-  sin: '800011819',
-  email: 'user@example.com',
-  registered: true,
-  subscribed: true,
+  userId: '76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6',
   preferredLanguage: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
   alertType: 'cdcp',
 });
 
 db.subscription.create({
   id: '10003',
-  sin: '800000002',
-  email: 'tester@example.com',
-  registered: false,
-  subscribed: false,
+  userId: 'f9f33652-0ebd-46bc-8d93-04cef538a689',
   preferredLanguage: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
   alertType: 'cdcp',
 });

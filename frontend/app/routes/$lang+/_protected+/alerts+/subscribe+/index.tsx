@@ -112,11 +112,9 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const newAlertSubscription = {
     id: alertSubscription.id,
-    sin: userInfoToken.sin,
-    email: parsedDataResult.data.email,
-    registered: true,
-    subscribed: false,
+    userId: userInfoToken.sub,
     preferredLanguage: parsedDataResult.data.preferredLanguage,
+    alertType: 'CDCP',
   };
 
   await subscriptionService.updateSubscription(userInfoToken.sin, newAlertSubscription);
