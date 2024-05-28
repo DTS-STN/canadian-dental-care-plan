@@ -23,9 +23,7 @@ import ca.gov.dtsstn.cdcp.api.data.entity.SubscriptionEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.repository.AlertTypeRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.LanguageRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.UserRepository;
-import ca.gov.dtsstn.cdcp.api.service.domain.AlertType;
 import ca.gov.dtsstn.cdcp.api.service.domain.ConfirmationCode;
-import ca.gov.dtsstn.cdcp.api.service.domain.Language;
 import ca.gov.dtsstn.cdcp.api.service.domain.Subscription;
 import ca.gov.dtsstn.cdcp.api.service.domain.User;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.ConfirmationCodeMapper;
@@ -38,28 +36,26 @@ public class UserService {
 
 	private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-	private final AlertTypeRepository alertTypeRepository;
-
-	private final LanguageRepository languageRepository;
-
 	private final ApplicationProperties applicationProperties;
 
-	private final ConfirmationCodeMapper confirmationCodeMapper = Mappers.getMapper(ConfirmationCodeMapper.class);
-
-	private final SubscriptionMapper subscriptionMapper = Mappers.getMapper(SubscriptionMapper.class);
-
-	private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-
+	private final AlertTypeRepository alertTypeRepository;
+	private final LanguageRepository languageRepository;
 	private final UserRepository userRepository;
 
+	private final ConfirmationCodeMapper confirmationCodeMapper = Mappers.getMapper(ConfirmationCodeMapper.class);
+	private final SubscriptionMapper subscriptionMapper = Mappers.getMapper(SubscriptionMapper.class);
+	private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+
 	public UserService(
+			ApplicationProperties applicationProperties,
 			AlertTypeRepository alertTypeRepository,
 			LanguageRepository languageRepository,
-			ApplicationProperties applicationProperties,
 			UserRepository userRepository) {
-		Assert.notNull(alertTypeRepository, "alertTypeRepository is requird; it must not be null");
-		Assert.notNull(applicationProperties, "applicationProperties is requird; it must not be null");
+		Assert.notNull(applicationProperties, "applicationProperties is required; it must not be null");
+		Assert.notNull(alertTypeRepository, "alertTypeRepository is required; it must not be null");
+		Assert.notNull(languageRepository, "languageRepository is required; it must not be null");
 		Assert.notNull(userRepository, "userRepository is required; it must not be null");
+
 		this.alertTypeRepository = alertTypeRepository;
 		this.languageRepository = languageRepository;
 		this.applicationProperties = applicationProperties;
@@ -97,39 +93,39 @@ public class UserService {
 			.map(confirmationCodeMapper::toDomainObject).orElseThrow();
 	}
 
-	public Subscription createSubscriptionForUser(String userId, Subscription subscription) {
+	public Subscription createSubscriptionForUser(String userId, String alertTypeId, String languageId) {
 		Assert.hasText(userId, "userId is required; it must not be null or blank");
-		Assert.notNull(Optional.ofNullable(subscription.getAlertType()).map(AlertType::getCode).orElse(null), "subscription.alertType.code is required; it must not be null or blank");
-		Assert.notNull(Optional.ofNullable(subscription.getLanguage()).map(Language::getMsLocaleCode).orElse(null), "subscription.getLanguage.getMsLocaleCode is required; it must not be null");
+		Assert.hasText(alertTypeId, "alertTypeId is required; it must not be null or blank");
+		Assert.hasText(languageId, "languageId is required; it must not be null or blank");
 
 		log.debug("Fetching user [{}] from repository", userId);
 		final var user = userRepository.findById(userId).orElseThrow();
 
-		log.debug("Fetching alert type [{}] from repository", subscription.getAlertType().getCode());
-		final var alertType = alertTypeRepository.findByCode(subscription.getAlertType().getCode()).orElseThrow();
-
-		log.debug("Fetching language with msLocaleCode=[{}] from repository", subscription.getLanguage().getMsLocaleCode());
-		final var preferredLanguage = languageRepository.findByMsLocaleCode(subscription.getLanguage().getMsLocaleCode()).orElseThrow();		
-
 		final var existingSubscription = user.getSubscriptions().stream()
-			.filter(byAlertTypeId(alertType.getId())).findFirst();
+			.filter(byAlertTypeId(alertTypeId)).findFirst();
 
 		if (existingSubscription.isPresent()) {
-			throw new DataIntegrityViolationException("User [%s] is already subscribed to alert type [%s]".formatted(userId, subscription.getAlertType().getCode()));
+			throw new DataIntegrityViolationException("User [%s] is already subscribed to alert type [%s]".formatted(userId, alertTypeId));
 		}
+
+		log.debug("Fetching alert type [{}] from repository", alertTypeId);
+		final var alertType = alertTypeRepository.findById(alertTypeId).orElseThrow();
+
+		log.debug("Fetching language [{}] from repository", languageId);
+		final var language = languageRepository.findById(languageId).orElseThrow();
 
 		user.getSubscriptions().add(new SubscriptionEntityBuilder()
 			.alertType(new AlertTypeEntityBuilder()
 				.id(alertType.getId())
 				.build())
 			.language(new LanguageEntityBuilder()
-				.id(preferredLanguage.getId())
+				.id(language.getId())
 				.build())
 			.build());
 
 		return userRepository.save(user).getSubscriptions().stream()
 			.filter(byAlertTypeId(alertType.getId())).findFirst()
-			.map(subscriptionMapper::toDomainObject).get();
+			.map(subscriptionMapper::toDomainObject).orElseThrow();
 	}
 
 	public Optional<User> getUserById(String id) {
@@ -138,13 +134,13 @@ public class UserService {
 	}
 
 	private Predicate<SubscriptionEntity> byAlertTypeId(String alertTypeId) {
-		return subscription -> {
-			return alertTypeId.equals(subscription.getAlertType().getId());
-		};
+		Assert.hasText(alertTypeId, "alertTypeId is required; it must not be null or blank");
+		return subscription -> alertTypeId.equals(subscription.getAlertType().getId());
 	}
 
 	private Predicate<ConfirmationCodeEntity> byCode(String code) {
-		return confirmationCode -> confirmationCode.getCode().equals(code);
+		Assert.hasText(code, "code is required; it must not be null or blank");
+		return confirmationCode -> code.equals(confirmationCode.getCode());
 	}
 
 }
