@@ -251,9 +251,9 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/parent-or-guardian', { ...params, childId }));
     }
 
-    const childAgeCategory = getAgeCategoryFromDateString(information.dateOfBirth);
+    const ageCategory = getAgeCategoryFromDateString(information.dateOfBirth);
 
-    if (childAgeCategory === 'adults' || childAgeCategory === 'seniors') {
+    if (ageCategory === 'adults' || ageCategory === 'seniors') {
       throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/cannot-apply-child', { ...params, childId }));
     }
 
@@ -265,6 +265,12 @@ function validateChildrenStateForReview({ childrenState, params }: ValidateChild
       throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/federal-provincial-territorial-benefits', { ...params, childId }));
     }
 
-    return { id, dentalBenefits, dentalInsurance, information };
+    return {
+      ageCategory,
+      id,
+      dentalBenefits,
+      dentalInsurance,
+      information,
+    };
   });
 }
