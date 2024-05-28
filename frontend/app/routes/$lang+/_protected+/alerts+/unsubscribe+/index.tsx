@@ -59,7 +59,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sin);
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
   if (!alertSubscription) {
     instrumentationService.countHttpStatus('alerts.unsubscribe', 302);
     return redirect(getPathById('$lang+/_protected+/alerts+/index', params));
@@ -105,14 +105,14 @@ export async function action({ context: { session }, params, request }: ActionFu
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sin);
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
   invariant(alertSubscription, 'Expected alertSubscription to be defined');
 
   const newAlertSubscription = {
     id: alertSubscription.id,
     userId: userInfoToken.sub,
-    preferredLanguage: alertSubscription.preferredLanguage,
-    alertType: 'CDCP',
+    msLanguageCode: alertSubscription.preferredLanguage,
+    alertTypeCode: 'CDCP',
   };
   await subscriptionService.updateSubscription(userInfoToken.sin, newAlertSubscription);
 

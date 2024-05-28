@@ -105,9 +105,9 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sub, 'Expected userInfoToken.sub to be defined');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sin);
   invariant(alertSubscription, 'Expected alertSubscription to be defined');
 
   const newAlertSubscription = {
@@ -117,7 +117,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     alertTypeCode: 'CDCP',
   };
 
-  await subscriptionService.updateSubscription(userInfoToken.sub, newAlertSubscription);
+  await subscriptionService.updateSubscription(userInfoToken.sin, newAlertSubscription);
 
   const idToken: IdToken = session.get('idToken');
   auditService.audit('update-data.subscribe-alerts', { userId: idToken.sub });
