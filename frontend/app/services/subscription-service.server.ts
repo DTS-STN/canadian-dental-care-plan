@@ -3,16 +3,16 @@ import { z } from 'zod';
 
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
+import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('subscription-service.server');
 
 const subscriptionInfoSchema = z.object({
   id: z.string(),
-  sin: z.string(),
-  email: z.string(),
-  subscribed: z.boolean(),
-  preferredLanguage: z.string(),
+  userId: z.string(),
+  msLanguageCode: z.string(),
+  alertTypeCode: z.string(),
 });
 
 type SubscriptionInfo = z.infer<typeof subscriptionInfoSchema>;
@@ -23,15 +23,14 @@ type SubscriptionInfo = z.infer<typeof subscriptionInfoSchema>;
 export const getSubscriptionService = moize(createSubscriptionService, { onCacheAdd: () => log.info('Creating new subscription service') });
 
 function createSubscriptionService() {
-  async function getSubscription(sin: string) {
+  const { CDCP_API_BASE_URI } = getEnv();
+
+  async function getSubscription(userId: string) {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
-    auditService.audit('alert-subscription.get', { sin });
-
-    // TODO: "IT-Security won't like SIN being passed as identifier"
-    // TODO: add CDCP_API_BASE_URI
-    const userId = sin;
-    const url = new URL(`https://api.example.com/v1/users/${userId}/subscriptions`);
+    auditService.audit('alert-subscription.get', { userId });
+    //TODO, for a future PR, use HATEOAS links to get the /subscriptions endpoint
+    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users/${userId}/subscriptions`);
 
     const response = await fetch(url, {
       method: 'GET',
@@ -42,25 +41,27 @@ function createSubscriptionService() {
 
     instrumentationService.countHttpStatus('http.client.cdcp-api.alert-subscription.gets', response.status);
 
-    const subscriptionsSchema = z.array(
-      z.object({
-        id: z.string(),
-        sin: z.string(),
-        email: z.string(),
-        registered: z.boolean(),
-        subscribed: z.boolean(),
-        preferredLanguage: z.string(),
-        alertType: z.string(),
+    const newSchema = z.object({
+      _embedded: z.object({
+        subscriptions: z.array(
+          z.object({
+            id: z.string(),
+            msLanguageCode: z.string(),
+            alertTypeCode: z.string(),
+          }),
+        ),
       }),
-    );
+      _links: z.object({
+        self: z.object({
+          href: z.string(),
+        }),
+      }),
+    });
 
-    const subscriptions = subscriptionsSchema.parse(await response.json()).map((subscription) => ({
+    const subscriptions = newSchema.parse(await response.json())._embedded.subscriptions.map((subscription) => ({
       id: subscription.id,
-      email: subscription.email,
-      registered: subscription.registered,
-      subscribed: subscription.subscribed,
-      preferredLanguage: subscription.preferredLanguage,
-      alertType: subscription.alertType,
+      preferredLanguage: subscription.msLanguageCode,
+      alertType: subscription.alertTypeCode,
     }));
 
     //TODO: alertType 'cdcp' is configuarable
@@ -75,7 +76,7 @@ function createSubscriptionService() {
     // TODO: "IT-Security won't like SIN being passed as identifier"
     // TODO: add CDCP_API_BASE_URI
     const userId = sin;
-    const url = new URL(`https://api.example.com/v1/users/${userId}/subscriptions`);
+    const url = new URL(`https://api.cdcp.example.com/v1/users/${userId}/subscriptions`);
 
     const response = await fetch(url, {
       method: 'PUT',
@@ -115,7 +116,7 @@ function createSubscriptionService() {
       confirmationCode: enteredConfirmationCode,
     };
     // TODO: add CDCP_API_BASE_URI
-    const url = new URL(`https://api.example.com/v1/codes/verify`);
+    const url = new URL(`https://api.cdcp.example.com/v1/codes/verify`);
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -150,7 +151,7 @@ function createSubscriptionService() {
       email: userEmail,
     };
     // TODO: add CDCP_API_BASE_URI
-    const url = new URL(`https://api.example.com/v1/codes/request`);
+    const url = new URL(`https://api.cdcp.example.com/v1/codes/request`);
     const response = await fetch(url, {
       method: 'POST',
       headers: {

@@ -59,7 +59,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sin);
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
   if (!alertSubscription) {
     instrumentationService.countHttpStatus('alerts.unsubscribe', 302);
     return redirect(getPathById('$lang+/_protected+/alerts+/index', params));
@@ -105,16 +105,14 @@ export async function action({ context: { session }, params, request }: ActionFu
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sin);
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
   invariant(alertSubscription, 'Expected alertSubscription to be defined');
 
   const newAlertSubscription = {
     id: alertSubscription.id,
-    sin: userInfoToken.sin,
-    email: alertSubscription.email,
-    registered: false,
-    subscribed: false,
-    preferredLanguage: alertSubscription.preferredLanguage,
+    userId: userInfoToken.sub,
+    msLanguageCode: alertSubscription.preferredLanguage,
+    alertTypeCode: 'CDCP',
   };
   await subscriptionService.updateSubscription(userInfoToken.sin, newAlertSubscription);
 
@@ -127,7 +125,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function UnsubscribeAlerts() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, alertSubscription } = useLoaderData<typeof loader>();
+  const { csrfToken } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
 
@@ -156,7 +154,8 @@ export default function UnsubscribeAlerts() {
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div>
           <p>
-            <Trans ns={handle.i18nNamespaces} i18nKey="alerts:unsubscribe.note" values={{ email: alertSubscription.email }} />
+            {/* TODO, implement the usage of email address with the user schema... */}
+            {/* <Trans ns={handle.i18nNamespaces} i18nKey="alerts:unsubscribe.note" values={{ email: alertSubscription.email }} />*/}
           </p>
           <InputCheckbox id="agree-to-unsubscribe" name="agreeToUnsubscribe" className="my-6" value={AgreeToUnsubscribeOption.Yes} errorMessage={fetcher.data?.errors.agreeToUnsubscribe?._errors[0]} required>
             <Trans ns={handle.i18nNamespaces} i18nKey="alerts:unsubscribe.agree" />

@@ -56,8 +56,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const preferredLanguages = await lookupService.getAllPreferredLanguages();
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
-  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sin);
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:manage.page-title') }) };
@@ -112,16 +111,14 @@ export async function action({ context: { session }, params, request }: ActionFu
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sin);
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
   invariant(alertSubscription, 'Expected alertSubscription to be defined');
 
   const newAlertSubscription = {
     id: alertSubscription.id,
-    sin: userInfoToken.sin,
-    email: parsedDataResult.data.email,
-    registered: alertSubscription.registered,
-    subscribed: false,
-    preferredLanguage: parsedDataResult.data.preferredLanguage,
+    userId: userInfoToken.sub,
+    msLanguageCode: parsedDataResult.data.preferredLanguage,
+    alertTypeCode: 'CDCP',
   };
   await subscriptionService.updateSubscription(userInfoToken.sin, newAlertSubscription);
 
@@ -165,19 +162,8 @@ export default function ManageAlerts() {
       <fetcher.Form className="max-w-prose" method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mb-6 grid gap-6 md:grid-cols-2">
-          <InputField id="email" type="email" className="w-full" label={t('alerts:manage.email')} maxLength={100} name="email" errorMessage={errorMessages.email} autoComplete="email" defaultValue={alertSubscription?.email} required />
-          <InputField
-            id="confirm-email"
-            type="email"
-            className="w-full"
-            label={t('alerts:manage.confirm-email')}
-            maxLength={100}
-            name="confirmEmail"
-            errorMessage={errorMessages['confirm-email']}
-            autoComplete="email"
-            defaultValue={alertSubscription?.email}
-            required
-          />
+          <InputField id="email" type="email" className="w-full" label={t('alerts:manage.email')} maxLength={100} name="email" errorMessage={errorMessages.email} autoComplete="email" required />
+          <InputField id="confirm-email" type="email" className="w-full" label={t('alerts:manage.confirm-email')} maxLength={100} name="confirmEmail" errorMessage={errorMessages['confirm-email']} autoComplete="email" required />
         </div>
         <div className="mb-8 space-y-6">
           {preferredLanguages.length > 0 && (

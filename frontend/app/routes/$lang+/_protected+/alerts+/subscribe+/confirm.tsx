@@ -4,7 +4,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
@@ -71,7 +71,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sin);
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
   if (!alertSubscription) {
     instrumentationService.countHttpStatus('alerts.subscribe-confirm', 302);
     return redirect(getPathById('$lang+/_protected+/alerts+/index', params));
@@ -161,7 +161,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ConfirmSubscription() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, alertSubscription, preferredLanguage } = useLoaderData<typeof loader>();
+  const { csrfToken, preferredLanguage } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const userOrigin = useUserOrigin();
@@ -195,7 +195,8 @@ export default function ConfirmSubscription() {
             {!alertMessage && (
               <>
                 <p id="confirmation-information">
-                  <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.confirmation-information-text" values={{ userEmailAddress: alertSubscription.email }} />
+                  {/* TODO, implement the usage of email address with the user schema... */}
+                  {/*<Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.confirmation-information-text" values={{ userEmailAddress: alertSubscription.email }} />*/}
                 </p>
                 <p id="confirmation-completed" className="mt-4">
                   {t('alerts:confirm.confirmation-completed-text')}
@@ -210,7 +211,8 @@ export default function ConfirmSubscription() {
             )}
             {alertMessage === AlertMessage.NewCode && (
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.code-sent-by-email" values={{ userEmailAddress: alertSubscription.email }} />
+                {/* TODO, implement the usage of email address with the user schema... */}
+                {/* <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.code-sent-by-email" values={{ userEmailAddress: alertSubscription.email }} />*/}
               </p>
             )}
           </ContextualAlert>

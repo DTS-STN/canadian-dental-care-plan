@@ -78,7 +78,8 @@ export async function action({ context: { session }, params, request }: ActionFu
     birthdate: '2000-01-01',
     iss: 'GC-ECAS-MOCK',
     locale: 'en-CA',
-    sid: '00000000-0000-0000-0000-000000000000',
+    //TODO implement a future PR to have this value dynamic
+    sid: '76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6',
     sin: sinToMock,
     sub: hashedMockedSin,
     mocked: true,
