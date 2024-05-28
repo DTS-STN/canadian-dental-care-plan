@@ -180,10 +180,11 @@
       "must-be": "You must be a parent or legal guardian.",
       "unable-to-apply": "You are not able to apply for this child. You must be a parent or legal guardian to apply on behalf of a child.",
       "back-btn": "Back",
-      "continue-btn": "Proceed to apply for yourself"
+      "return-btn": "Return to main page",
+      "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
     },
     "cannot-apply-child": {
-      "page-title": "You cannot apply for your child",
+      "page-title": "Find out when you can apply",
       "ineligible-to-apply": "Your child is not currently eligible for the Canadian Dental Care Plan.",
       "eligibility-info": "The Canadian Dental Care Plan is currently accepting applications for people aged 65 and above, children under 18, and adults with a valid disability tax credit.",
       "eligibility-2025": "Adults 18 to 64 who do not have a disability tax credit will be able to apply for the Canadian Dental Care Plan in 2025.",

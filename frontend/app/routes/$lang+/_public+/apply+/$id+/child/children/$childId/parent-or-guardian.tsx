@@ -10,12 +10,12 @@ import { useTranslation } from 'react-i18next';
 import pageIds from '../../../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { loadApplySingleChildState } from '~/route-helpers/apply-child-route-helpers.server';
-import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { RouteHandleData, getPathById } from '~/utils/route-utils';
+import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 
@@ -42,6 +42,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/child/children/parent-or-guardian');
 
+  const t = await getFixedT(request, handle.i18nNamespaces);
+
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
   const submittedCsrfToken = String(formData.get('_csrf'));
@@ -51,9 +53,8 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  saveApplyState({ params, session, state: { editMode: true, typeOfApplication: 'adult' } });
-
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/adult/review-information', params));
+  clearApplyState({ params, session });
+  return redirect(t('apply-child:children.parent-or-guardian.return-btn-link'));
 }
 
 export default function ApplyFlowParentOrGuardian() {
@@ -88,7 +89,7 @@ export default function ApplyFlowParentOrGuardian() {
           {t('apply-child:children.parent-or-guardian.back-btn')}
         </ButtonLink>
         <Button type="submit" variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Parent or guardian needs to apply click">
-          {t('apply-child:children.parent-or-guardian.continue-btn')}
+          {t('apply-child:children.parent-or-guardian.return-btn')}
           <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
         </Button>
       </fetcher.Form>
