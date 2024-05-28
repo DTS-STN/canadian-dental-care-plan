@@ -10,6 +10,14 @@ import jakarta.validation.ConstraintValidatorContext;
 @Component
 public class LanguageCodeValidator implements ConstraintValidator<LanguageCode, String> {
 
+	public enum CodeType {
+		INTERNAL_CODE,
+		ISO_CODE,
+		MS_LOCALE_CODE
+	};
+
+	private CodeType codeType;
+
 	private final LanguageService languageService;
 
 	public LanguageCodeValidator(LanguageService languageService) {
@@ -18,9 +26,19 @@ public class LanguageCodeValidator implements ConstraintValidator<LanguageCode, 
 	}
 
 	@Override
+	public void initialize(LanguageCode constraintAnnotation) {
+		this.codeType = constraintAnnotation.codeType();
+	}
+
+	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
 		if (value == null) { return true; }
-		return languageService.readByMsLocaleCode(value).isPresent();
+
+		return switch (codeType) {
+			case CodeType.INTERNAL_CODE -> languageService.readByCode(value).isPresent();
+			case CodeType.ISO_CODE -> languageService.readByIsoCode(value).isPresent();
+			case CodeType.MS_LOCALE_CODE -> languageService.readByMsLocaleCode(value).isPresent();
+		};
 	}
 
 }

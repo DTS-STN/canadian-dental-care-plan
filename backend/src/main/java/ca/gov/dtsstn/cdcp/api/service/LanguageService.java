@@ -37,11 +37,16 @@ public class LanguageService {
 		return languageRepository.findByCode(code).map(languageMapper::toDomainObject);
 	}
 
-	@Cacheable(key = "{ 'msLocaleCode', #mslocalecode }", sync = true)
+	@Cacheable(key = "{ 'isoCode', #isoCode }", sync = true)
+	public Optional<Language> readByIsoCode(String isoCode) {
+		Assert.hasText(isoCode, "isoCode is required; it must not be null or blank");
+		return languageRepository.findByIsoCode(isoCode).map(languageMapper::toDomainObject);
+	}
+
+	@Cacheable(key = "{ 'msLocaleCode', #msLocaleCode }", sync = true)
 	public Optional<Language> readByMsLocaleCode(String msLocaleCode) {
 		Assert.hasText(msLocaleCode, "msLocaleCode is required; it must not be null or blank");
 		return languageRepository.findByMsLocaleCode(msLocaleCode).map(languageMapper::toDomainObject);
 	}
-
 
 }

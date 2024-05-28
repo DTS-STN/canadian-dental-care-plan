@@ -36,6 +36,19 @@ class LanguageRepositoryIT {
 	}
 
 	@Test
+	@DisplayName("Test languageRepository.findByIsoCode(..)")
+	void testFindByIsoCode() {
+		assertThat(languageRepository.findByIsoCode("ISO_CODE")).isEmpty();
+
+		languageRepository.save(new LanguageEntityBuilder()
+			.code("CODE")
+			.isoCode("ISO_CODE")
+			.build());
+
+		assertThat(languageRepository.findByIsoCode("ISO_CODE")).isNotEmpty();
+	}
+
+	@Test
 	@DisplayName("Test languageRepository.findByMsLocaleCode(..)")
 	void testFindByMsLocaleCode() {
 		assertThat(languageRepository.findByMsLocaleCode("MS_LOCALE_CODE")).isEmpty();

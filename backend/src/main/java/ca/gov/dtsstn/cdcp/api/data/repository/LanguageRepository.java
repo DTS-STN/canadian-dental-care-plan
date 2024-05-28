@@ -12,6 +12,8 @@ public interface LanguageRepository extends JpaRepository<LanguageEntity, String
 
 	Optional<LanguageEntity> findByCode(String code);
 
+	Optional<LanguageEntity> findByIsoCode(String isoCode);
+
 	Optional<LanguageEntity> findByMsLocaleCode(String msLocaleCode);
 
 }
