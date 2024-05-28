@@ -54,6 +54,18 @@ class LanguageServiceTests {
 	}
 
 	@Test
+	@DisplayName("Test languageService.readByIsoCode(..)")
+	void testReadByIsoCode() {
+		assertThrows(IllegalArgumentException.class, () -> languageService.readByIsoCode(null));
+
+		when(languageRepository.findByIsoCode(any())).thenReturn(Optional.empty());
+		assertThat(languageService.readByIsoCode("CODE")).isEmpty();
+
+		when(languageRepository.findByIsoCode(any())).thenReturn(Optional.of(new LanguageEntity()));
+		assertThat(languageService.readByIsoCode("CODE")).isNotEmpty();
+	}
+
+	@Test
 	@DisplayName("Test languageService.readByMsLocaleCode(..)")
 	void testReadByMsLocaleCode() {
 		assertThrows(IllegalArgumentException.class, () -> languageService.readByMsLocaleCode(null));
