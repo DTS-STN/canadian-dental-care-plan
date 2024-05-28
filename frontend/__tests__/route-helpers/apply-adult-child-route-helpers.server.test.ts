@@ -778,7 +778,7 @@ describe('apply-adult-child-route-helpers.server', () => {
       );
     });
 
-    it('should not redirect if state is completed', () => {
+    it('should not redirect if state is valid', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'adult-child',
@@ -836,7 +836,66 @@ describe('apply-adult-child-route-helpers.server', () => {
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
-      expect(() => validateApplyAdultChildStateForReview({ params, state: mockState })).not.toThrow();
+      const act = validateApplyAdultChildStateForReview({ params, state: mockState });
+
+      expect(act).toEqual({
+        ageCategory: 'seniors',
+        allChildrenUnder18: true,
+        applicantInformation: {
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          maritalStatus: '1',
+          socialInsuranceNumber: '000-000-001',
+        },
+        children: [
+          {
+            dentalBenefits: {
+              hasFederalBenefits: false,
+              hasProvincialTerritorialBenefits: false,
+            },
+            dentalInsurance: true,
+            id: '1',
+            information: {
+              dateOfBirth: '2012-02-23',
+              firstName: 'John',
+              hasSocialInsuranceNumber: false,
+              isParent: true,
+              lastName: 'Doe',
+            },
+          },
+        ],
+        communicationPreferences: {
+          preferredLanguage: 'en',
+          preferredMethod: 'email',
+        },
+        dateOfBirth: '1900-01-01',
+        dentalBenefits: {
+          hasFederalBenefits: false,
+          hasProvincialTerritorialBenefits: false,
+        },
+        dentalInsurance: false,
+        disabilityTaxCredit: undefined,
+        editMode: false,
+        id: '00000000-0000-0000-0000-000000000000',
+        lastUpdatedOn: '2000-01-01',
+        livingIndependently: undefined,
+        partnerInformation: {
+          confirm: true,
+          dateOfBirth: '1900-01-01',
+          firstName: 'First Name',
+          lastName: 'Last Name',
+          socialInsuranceNumber: '000-000-002',
+        },
+        personalInformation: {
+          copyMailingAddress: true,
+          mailingAddress: '123 rue Peuplier',
+          mailingCity: 'City',
+          mailingCountry: 'Country',
+        },
+        submissionInfo: undefined,
+        taxFiling2023: true,
+        typeOfApplication: 'adult-child',
+      });
     });
   });
 });

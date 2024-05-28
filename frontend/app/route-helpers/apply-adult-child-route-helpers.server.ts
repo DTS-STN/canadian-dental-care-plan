@@ -3,7 +3,7 @@ import { Params } from '@remix-run/react';
 
 import { z } from 'zod';
 
-import { ApplyState, applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, isNewChildState, loadApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { ApplyState, ChildState, applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, isNewChildState, loadApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 
@@ -89,129 +89,182 @@ export function loadApplyAdultSingleChildState({ params, request, session }: Loa
   };
 }
 
-interface ValidateStateForReviewArgs {
+interface ValidateApplyAdultChildStateForReviewArgs {
   params: Params;
   state: ApplyState;
 }
 
-export function validateApplyAdultChildStateForReview({ params, state }: ValidateStateForReviewArgs) {
-  if (state.typeOfApplication === undefined) {
+export function validateApplyAdultChildStateForReview({ params, state }: ValidateApplyAdultChildStateForReviewArgs) {
+  const {
+    allChildrenUnder18,
+    applicantInformation,
+    communicationPreferences,
+    dateOfBirth,
+    dentalBenefits,
+    dentalInsurance,
+    disabilityTaxCredit,
+    editMode,
+    id,
+    lastUpdatedOn,
+    livingIndependently,
+    partnerInformation,
+    personalInformation,
+    submissionInfo,
+    taxFiling2023,
+    typeOfApplication,
+  } = state;
+
+  if (typeOfApplication === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/type-application', params));
   }
 
-  if (state.typeOfApplication === 'delegate') {
+  if (typeOfApplication === 'delegate') {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/application-delegate', params));
   }
 
-  if (state.typeOfApplication !== 'adult-child') {
+  if (typeOfApplication !== 'adult-child') {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/type-application', params));
   }
 
-  if (state.taxFiling2023 === undefined) {
+  if (taxFiling2023 === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/tax-filing', params));
   }
 
-  if (state.taxFiling2023 === false) {
+  if (taxFiling2023 === false) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/file-taxes', params));
   }
 
-  if (state.dateOfBirth === undefined || state.allChildrenUnder18 === undefined) {
+  if (dateOfBirth === undefined || allChildrenUnder18 === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/date-of-birth', params));
   }
 
-  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
+  const ageCategory = getAgeCategoryFromDateString(dateOfBirth);
 
-  if (ageCategory === 'children' && state.allChildrenUnder18) {
+  if (ageCategory === 'children' && allChildrenUnder18) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/contact-apply-child', params));
   }
 
-  if (ageCategory === 'children' && !state.allChildrenUnder18) {
+  if (ageCategory === 'children' && !allChildrenUnder18) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/parent-or-guardian', params));
   }
 
-  if (ageCategory === 'youth' && !state.allChildrenUnder18) {
+  if (ageCategory === 'youth' && !allChildrenUnder18) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/parent-or-guardian', params));
   }
 
-  if (ageCategory === 'youth' && state.allChildrenUnder18 && state.livingIndependently === undefined) {
+  if (ageCategory === 'youth' && allChildrenUnder18 && livingIndependently === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/living-independently', params));
   }
 
-  if (ageCategory === 'adults' && state.disabilityTaxCredit === undefined) {
+  if (ageCategory === 'adults' && disabilityTaxCredit === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/disability-tax-credit', params));
   }
 
-  if (ageCategory === 'adults' && state.disabilityTaxCredit === true && !state.allChildrenUnder18) {
+  if (ageCategory === 'adults' && disabilityTaxCredit === true && !allChildrenUnder18) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/apply-yourself', params));
   }
 
-  if (ageCategory === 'adults' && state.disabilityTaxCredit === false && state.allChildrenUnder18) {
+  if (ageCategory === 'adults' && disabilityTaxCredit === false && allChildrenUnder18) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/apply-children', params));
   }
 
-  if (ageCategory === 'adults' && state.disabilityTaxCredit === false && !state.allChildrenUnder18) {
+  if (ageCategory === 'adults' && disabilityTaxCredit === false && !allChildrenUnder18) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/dob-eligibility', params));
   }
 
-  if (ageCategory === 'seniors' && !state.allChildrenUnder18) {
+  if (ageCategory === 'seniors' && !allChildrenUnder18) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/apply-yourself', params));
   }
 
-  if (state.applicantInformation === undefined) {
+  if (applicantInformation === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/applicant-information', params));
   }
 
-  if (applicantInformationStateHasPartner(state.applicantInformation) && !state.partnerInformation) {
+  if (applicantInformationStateHasPartner(applicantInformation) && !partnerInformation) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/partner-information', params));
   }
 
-  if (!applicantInformationStateHasPartner(state.applicantInformation) && state.partnerInformation) {
+  if (!applicantInformationStateHasPartner(applicantInformation) && partnerInformation) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/applicant-information', params));
   }
 
-  if (state.personalInformation === undefined) {
+  if (personalInformation === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/personal-information', params));
   }
 
-  if (state.communicationPreferences === undefined) {
+  if (communicationPreferences === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/communication-preference', params));
   }
 
-  if (state.dentalInsurance === undefined) {
+  if (dentalInsurance === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/dental-insurance', params));
   }
 
-  if (state.dentalBenefits === undefined) {
+  if (dentalBenefits === undefined) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/federal-provincial-territorial-benefits', params));
   }
 
-  if (getChildrenState(state).length === 0) {
+  const children = validateChildrenStateForReview({ childrenState: state.children, params });
+
+  return {
+    ageCategory,
+    allChildrenUnder18,
+    applicantInformation,
+    children,
+    communicationPreferences,
+    dateOfBirth,
+    dentalBenefits,
+    dentalInsurance,
+    disabilityTaxCredit,
+    editMode,
+    id,
+    lastUpdatedOn,
+    livingIndependently,
+    partnerInformation,
+    personalInformation,
+    submissionInfo,
+    taxFiling2023,
+    typeOfApplication,
+  };
+}
+
+interface ValidateChildrenStateForReviewArgs {
+  childrenState: ChildState[];
+  params: Params;
+}
+
+function validateChildrenStateForReview({ childrenState, params }: ValidateChildrenStateForReviewArgs) {
+  const children = getChildrenState({ children: childrenState });
+
+  if (children.length === 0) {
     throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/index', params));
   }
 
-  getChildrenState(state).forEach((child) => {
-    const childId = child.id;
+  return children.map(({ id, dentalBenefits, dentalInsurance, information }) => {
+    const childId = id;
 
-    if (child.information === undefined) {
+    if (information === undefined) {
       throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/information', { ...params, childId }));
     }
 
-    if (!child.information.isParent) {
+    if (!information.isParent) {
       throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/parent-or-guardian', { ...params, childId }));
     }
 
-    const childAgeCategory = getAgeCategoryFromDateString(child.information.dateOfBirth);
+    const childAgeCategory = getAgeCategoryFromDateString(information.dateOfBirth);
 
     if (childAgeCategory === 'adults' || childAgeCategory === 'seniors') {
       throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/cannot-apply-child', { ...params, childId }));
     }
 
-    if (child.dentalInsurance === undefined) {
+    if (dentalInsurance === undefined) {
       throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/dental-insurance', { ...params, childId }));
     }
 
-    if (child.dentalBenefits === undefined) {
+    if (dentalBenefits === undefined) {
       throw redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/children/$childId/federal-provincial-territorial-benefits', { ...params, childId }));
     }
+
+    return { id, dentalBenefits, dentalInsurance, information };
   });
 }
