@@ -17,7 +17,7 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState, validateApplyAdultChildStateForReview } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { clearApplyState, getChildrenState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
@@ -49,39 +49,25 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const lookupService = getLookupService();
 
-  const state = loadApplyAdultChildState({ params, request, session });
-  validateApplyAdultChildStateForReview({ params, state });
+  const state = validateApplyAdultChildStateForReview({ params, state: loadApplyAdultChildState({ params, request, session }) });
 
   const maritalStatuses = await lookupService.getAllMaritalStatuses();
   const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
   const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
   const { COMMUNICATION_METHOD_EMAIL_ID, ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
-  // prettier-ignore
-  if (state.applicantInformation === undefined ||
-    state.communicationPreferences === undefined ||
-    state.dateOfBirth === undefined ||
-    state.dentalBenefits === undefined ||
-    state.dentalInsurance === undefined ||
-    state.personalInformation === undefined ||
-    state.taxFiling2023 === undefined ||
-    state.typeOfApplication === undefined ||
-    getChildrenState(state).length === 0) {
-    throw new Error(`Incomplete application "${state.id}" state!`);
-  }
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
   // Getting province by Id
   const allRegions = await lookupService.getAllRegions();
-  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
-  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
+  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation.mailingProvince);
+  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation.homeProvince);
 
   // Getting Country by Id
   const allCountries = await lookupService.getAllCountries();
-  const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation?.mailingCountry);
-  const countryHome = allCountries.find((country) => country.countryId === state.personalInformation?.homeCountry);
+  const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation.mailingCountry);
+  const countryHome = allCountries.find((country) => country.countryId === state.personalInformation.homeCountry);
 
   if (!countryMailing) {
     throw new Error(`Unexpected mailing address country: ${state.personalInformation.mailingCountry}`);
@@ -177,6 +163,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/review-adult-information');
 
+  validateApplyAdultChildStateForReview({ params, state: loadApplyAdultChildState({ params, request, session }) });
+
   const { ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
 
@@ -205,27 +193,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     }
   }
 
-  const state = loadApplyAdultChildState({ params, request, session });
-  validateApplyAdultChildStateForReview({ params, state });
-
-  // prettier-ignore
-  if (state.applicantInformation === undefined ||
-    state.communicationPreferences === undefined ||
-    state.dateOfBirth === undefined ||
-    state.dentalBenefits === undefined ||
-    state.dentalInsurance === undefined ||
-    state.personalInformation === undefined ||
-    state.taxFiling2023 === undefined ||
-    state.typeOfApplication === undefined ||
-    getChildrenState(state).length === 0) {
-    throw new Error(`Incomplete application "${state.id}" state!`);
-  }
-
-  saveApplyState({
-    params,
-    session,
-    state: {},
-  });
+  saveApplyState({ params, session, state: {} });
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/adult-child/review-child-information', params));
 }
