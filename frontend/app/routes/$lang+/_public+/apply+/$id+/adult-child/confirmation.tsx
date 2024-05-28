@@ -3,8 +3,6 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
-import { UTCDate } from '@date-fns/utc';
-import { parse } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 import { Fragment } from 'react/jsx-runtime';
 import { z } from 'zod';
@@ -18,10 +16,10 @@ import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogT
 import { InlineLink } from '~/components/inline-link';
 import { useFeature } from '~/root';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { clearApplyState, getChildrenState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
-import { toLocaleDateString } from '~/utils/date-utils';
+import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -56,17 +54,18 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     state.personalInformation === undefined ||
     state.submissionInfo === undefined ||
     state.taxFiling2023 === undefined ||
-    state.typeOfApplication === undefined) {
+    state.typeOfApplication === undefined ||
+    getChildrenState(state).length === 0) {
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
   const allFederalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
   const allProvincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
-  const selectedFederalBenefits = [...allFederalSocialPrograms]
+  const selectedFederalBenefits = allFederalSocialPrograms
     .filter((obj) => obj.id === state.dentalBenefits?.federalSocialProgram)
     .map((obj) => getNameByLanguage(locale, obj))
     .join(', ');
-  const selectedProvincialBenefits = [...allProvincialTerritorialSocialPrograms]
+  const selectedProvincialBenefits = allProvincialTerritorialSocialPrograms
     .filter((obj) => obj.id === state.dentalBenefits?.provincialTerritorialSocialProgram)
     .map((obj) => getNameByLanguage(locale, obj))
     .join(', ');
@@ -98,7 +97,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     phoneNumber: state.personalInformation.phoneNumber,
     altPhoneNumber: state.personalInformation.phoneNumberAlt,
     preferredLanguage: preferredLanguage,
-    birthday: toLocaleDateString(parse(state.dateOfBirth, 'yyyy-MM-dd', new UTCDate()), locale),
+    birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: maritalStatus,
     email: state.communicationPreferences.email,
@@ -109,7 +108,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     ? {
         firstName: state.partnerInformation.firstName,
         lastName: state.partnerInformation.lastName,
-        birthday: toLocaleDateString(parse(state.partnerInformation.dateOfBirth, 'yyyy-MM-dd', new UTCDate()), locale),
+        birthday: toLocaleDateString(parseDateString(state.partnerInformation.dateOfBirth), locale),
         sin: state.partnerInformation.socialInsuranceNumber,
       }
     : undefined;
@@ -138,32 +137,41 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     selectedProvincialBenefits,
   };
 
-  const childrenInfo = state.children.map((child) => ({
-    id: child.id,
-    firstName: child.information?.firstName,
-    lastName: child.information?.lastName,
-    birthday: toLocaleDateString(parse(child.information?.dateOfBirth ?? '', 'yyyy-MM-dd', new UTCDate()), locale),
-    sin: child.information?.socialInsuranceNumber,
-    isParent: child.information?.isParent,
-    dentalInsurance: {
-      acessToDentalInsurance: child.dentalInsurance,
-      federalBenefit: {
-        access: child.dentalBenefits?.hasFederalBenefits,
-        benefit: [...allFederalSocialPrograms]
-          .filter((obj) => obj.id === child.dentalBenefits?.federalSocialProgram)
-          .map((obj) => getNameByLanguage(locale, obj))
-          .join(', '),
+  const childrenInfo = state.children.map((child) => {
+    // prettier-ignore
+    if (child.dentalBenefits === undefined ||
+      child.dentalInsurance === undefined ||
+      child.information === undefined) {
+      throw new Error(`Incomplete application "${state.id}" child "${child.id}" state!`);
+    }
+
+    return {
+      id: child.id,
+      firstName: child.information.firstName,
+      lastName: child.information.lastName,
+      birthday: toLocaleDateString(parseDateString(child.information.dateOfBirth), locale),
+      sin: child.information.socialInsuranceNumber,
+      isParent: child.information.isParent,
+      dentalInsurance: {
+        acessToDentalInsurance: child.dentalInsurance,
+        federalBenefit: {
+          access: child.dentalBenefits.hasFederalBenefits,
+          benefit: allFederalSocialPrograms
+            .filter((obj) => obj.id === child.dentalBenefits?.federalSocialProgram)
+            .map((obj) => getNameByLanguage(locale, obj))
+            .join(', '),
+        },
+        provTerrBenefit: {
+          access: child.dentalBenefits.hasProvincialTerritorialBenefits,
+          province: child.dentalBenefits.province,
+          benefit: allProvincialTerritorialSocialPrograms
+            .filter((obj) => obj.id === child.dentalBenefits?.provincialTerritorialSocialProgram)
+            .map((obj) => getNameByLanguage(locale, obj))
+            .join(', '),
+        },
       },
-      provTerrBenefit: {
-        access: child.dentalBenefits?.hasProvincialTerritorialBenefits,
-        province: child.dentalBenefits?.province,
-        benefit: [...allProvincialTerritorialSocialPrograms]
-          .filter((obj) => obj.id === child.dentalBenefits?.provincialTerritorialSocialProgram)
-          .map((obj) => getNameByLanguage(locale, obj))
-          .join(', '),
-      },
-    },
-  }));
+    };
+  });
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:confirm.page-title') }) };

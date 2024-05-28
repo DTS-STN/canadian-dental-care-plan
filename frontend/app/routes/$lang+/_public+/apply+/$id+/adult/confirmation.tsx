@@ -57,11 +57,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   }
   const allFederalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
   const allProvincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
-  const selectedFederalBenefits = [...allFederalSocialPrograms]
+  const selectedFederalBenefits = allFederalSocialPrograms
     .filter((obj) => obj.id === state.dentalBenefits?.federalSocialProgram)
     .map((obj) => getNameByLanguage(locale, obj))
     .join(', ');
-  const selectedProvincialBenefits = [...allProvincialTerritorialSocialPrograms]
+  const selectedProvincialBenefits = allProvincialTerritorialSocialPrograms
     .filter((obj) => obj.id === state.dentalBenefits?.provincialTerritorialSocialProgram)
     .map((obj) => getNameByLanguage(locale, obj))
     .join(', ');
