@@ -849,6 +849,7 @@ describe('apply-adult-child-route-helpers.server', () => {
         },
         children: [
           {
+            ageCategory: 'children',
             dentalBenefits: {
               hasFederalBenefits: false,
               hasProvincialTerritorialBenefits: false,
