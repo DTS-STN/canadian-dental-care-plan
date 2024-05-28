@@ -30,7 +30,7 @@ import { randomUUID } from 'node:crypto';
 import { getRedisService } from '~/services/redis-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
-import { createFileSessionStorage } from '~/utils/session-utils';
+import { createFileSessionStorage } from '~/utils/session-utils.server';
 
 const log = getLogger('session-service.server');
 
