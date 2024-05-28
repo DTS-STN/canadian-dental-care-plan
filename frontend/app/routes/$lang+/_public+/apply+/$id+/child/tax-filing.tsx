@@ -80,7 +80,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang+/_public+/apply+/$id+/child/file-taxes', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/child/date-of-birth', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/child/children/index', params));
 }
 
 export default function ApplyFlowTaxFiling() {
