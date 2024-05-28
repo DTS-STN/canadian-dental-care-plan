@@ -463,6 +463,67 @@
                     "file": "routes/$lang+/_public+/apply+/$id+/child/_route.tsx",
                     "children": [
                       {
+                        "id": "$lang+/_public+/apply+/$id+/child/children/_route",
+                        "file": "routes/$lang+/_public+/apply+/$id+/child/children/_route.tsx",
+                        "children": [
+                          {
+                            "id": "$lang+/_public+/apply+/$id+/child/children/index",
+                            "file": "routes/$lang+/_public+/apply+/$id+/child/children/index.tsx",
+                            "index": true,
+                            "paths": {
+                              "en": "/:lang/apply/:id/child/children",
+                              "fr": "/:lang/demander/:id/adulte-enfant/enfants"
+                            }
+                          },
+                          {
+                            "id": "$lang+/_public+/apply+/$id+/child/children/$childId/_route",
+                            "file": "routes/$lang+/_public+/apply+/$id+/child/children/$childId/_route.tsx",
+                            "children": [
+                              {
+                                "id": "$lang+/_public+/apply+/$id+/child/children/$childId/information",
+                                "file": "routes/$lang+/_public+/apply+/$id+/child/children/$childId/information.tsx",
+                                "paths": {
+                                  "en": "/:lang/apply/:id/child/children/:childId/information",
+                                  "fr": "/:lang/demander/:id/enfant/enfants/:childId/information"
+                                }
+                              },
+                              {
+                                "id": "$lang+/_public+/apply+/$id+/child/children/$childId/dental-insurance",
+                                "file": "routes/$lang+/_public+/apply+/$id+/child/children/$childId/dental-insurance.tsx",
+                                "paths": {
+                                  "en": "/:lang/apply/:id/child/children/:childId/dental-insurance",
+                                  "fr": "/:lang/demander/:id/enfant/enfants/:childId/assurance-dentaire"
+                                }
+                              },
+                              {
+                                "id": "$lang+/_public+/apply+/$id+/child/children/$childId/federal-provincial-territorial-benefits",
+                                "file": "routes/$lang+/_public+/apply+/$id+/child/children/$childId/federal-provincial-territorial-benefits.tsx",
+                                "paths": {
+                                  "en": "/:lang/apply/:id/child/children/:childId/federal-provincial-territorial-benefits",
+                                  "fr": "/:lang/demander/:id/enfant/enfants/:childId/prestations-dentaires-federales-provinciales-territoriales"
+                                }
+                              },
+                              {
+                                "id": "$lang+/_public+/apply+/$id+/child/children/$childId/parent-or-guardian",
+                                "file": "routes/$lang+/_public+/apply+/$id+/child/children/$childId/parent-or-guardian.tsx",
+                                "paths": {
+                                  "en": "/:lang/apply/:id/child/children/:childId/parent-or-guardian",
+                                  "fr": "/:lang/demander/:id/enfant/enfants/:childId/parent-or-guardian"
+                                }
+                              },
+                              {
+                                "id": "$lang+/_public+/apply+/$id+/child/children/$childId/cannot-apply-child",
+                                "file": "routes/$lang+/_public+/apply+/$id+/child/children/$childId/cannot-apply-child.tsx",
+                                "paths": {
+                                  "en": "/:lang/apply/:id/child/children/:childId/cannot-apply-child",
+                                  "fr": "/:lang/demander/:id/enfant/enfants/:childId/cannot-apply-child"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
                         "id": "$lang+/_public+/apply+/$id+/child/applicant-information",
                         "file": "routes/$lang+/_public+/apply+/$id+/child/applicant-information.tsx",
                         "paths": {
@@ -487,22 +548,6 @@
                         }
                       },
                       {
-                        "id": "$lang+/_public+/apply+/$id+/child/date-of-birth",
-                        "file": "routes/$lang+/_public+/apply+/$id+/child/date-of-birth.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/child/date-of-birth",
-                          "fr": "/:lang/demander/:id/enfant/date-de-naissance"
-                        }
-                      },
-                      {
-                        "id": "$lang+/_public+/apply+/$id+/child/dental-insurance",
-                        "file": "routes/$lang+/_public+/apply+/$id+/child/dental-insurance.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/child/dental-insurance",
-                          "fr": "/:lang/demander/:id/enfant/assurance-dentaire"
-                        }
-                      },
-                      {
                         "id": "$lang+/_public+/apply+/$id+/child/dob-eligibility",
                         "file": "routes/$lang+/_public+/apply+/$id+/child/dob-eligibility.tsx",
                         "paths": {
@@ -516,14 +561,6 @@
                         "paths": {
                           "en": "/:lang/apply/:id/child/exit-application",
                           "fr": "/:lang/demander/:id/enfant/quitter-demande"
-                        }
-                      },
-                      {
-                        "id": "$lang+/_public+/apply+/$id+/child/federal-provincial-territorial-benefits",
-                        "file": "routes/$lang+/_public+/apply+/$id+/child/federal-provincial-territorial-benefits.tsx",
-                        "paths": {
-                          "en": "/:lang/apply/:id/child/federal-provincial-territorial-benefits",
-                          "fr": "/:lang/demander/:id/enfant/prestations-dentaires-federales-provinciales-territoriales"
                         }
                       },
                       {
