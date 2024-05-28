@@ -205,7 +205,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
     saveApplyState({ params, session, state: { editMode: false } });
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/child/review-adult-information', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/child/review-child-information', params));
   }
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
