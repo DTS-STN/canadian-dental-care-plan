@@ -17,7 +17,7 @@ import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { AppPageTitle } from '~/components/layouts/public-layout';
 import { Progress } from '~/components/progress';
-import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { loadApplyChildState, loadApplySingleChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import { ChildInformationState, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
@@ -45,7 +45,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const state = loadApplyAdultSingleChildState({ params, request, session });
+  const state = loadApplySingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const childName = state.isNew ? t('apply-child:children.information.child-number', { childNumber: state.childNumber }) : `${state.information?.firstName}`;
 
@@ -58,8 +58,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/child/children/information');
 
-  const state = loadApplyAdultSingleChildState({ params, request, session });
-  const applyState = loadApplyAdultChildState({ params, request, session });
+  const state = loadApplySingleChildState({ params, request, session });
+  const applyState = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const formData = await request.formData();

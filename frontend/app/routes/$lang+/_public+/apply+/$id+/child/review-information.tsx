@@ -14,12 +14,10 @@ import { z } from 'zod';
 import pageIds from '../../../../page-ids.json';
 import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
-import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
-import { useFeature } from '~/root';
 import { loadApplyChildState, validateApplyChildStateForReview } from '~/route-helpers/apply-child-route-helpers.server';
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
@@ -55,24 +53,26 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const lookupService = getLookupService();
 
   const state = loadApplyChildState({ params, request, session });
-  validateApplyChildStateForReview({ params, state });
+  // TODO uncomment when this method has been updated
+  // validateApplyChildStateForReview({ params, state });
 
   const maritalStatuses = await lookupService.getAllMaritalStatuses();
   const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
   const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
   const { COMMUNICATION_METHOD_EMAIL_ID, ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
-  // prettier-ignore
-  if (state.applicantInformation === undefined ||
-    state.communicationPreferences === undefined ||
-    state.dateOfBirth === undefined ||
-    state.dentalBenefits === undefined ||
-    state.dentalInsurance === undefined ||
-    state.personalInformation === undefined ||
-    state.taxFiling2023 === undefined ||
-    state.typeOfApplication === undefined) {
-    throw new Error(`Incomplete application "${state.id}" state!`);
-  }
+  // TODO uncomment when finished reviewing routes
+  // // prettier-ignore
+  // if (state.applicantInformation === undefined ||
+  //   state.communicationPreferences === undefined ||
+  //   state.dateOfBirth === undefined ||
+  //   state.dentalBenefits === undefined ||
+  //   state.dentalInsurance === undefined ||
+  //   state.personalInformation === undefined ||
+  //   state.taxFiling2023 === undefined ||
+  //   state.typeOfApplication === undefined) {
+  //   throw new Error(`Incomplete application "${state.id}" state!`);
+  // }
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -88,11 +88,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const countryHome = allCountries.find((country) => country.countryId === state.personalInformation?.homeCountry);
 
   if (!countryMailing) {
-    throw new Error(`Unexpected mailing address country: ${state.personalInformation.mailingCountry}`);
+    throw new Error(`Unexpected mailing address country: ${state.personalInformation?.mailingCountry}`);
   }
 
   if (!countryHome) {
-    throw new Error(`Unexpected home address country: ${state.personalInformation.homeCountry}`);
+    throw new Error(`Unexpected home address country: ${state.personalInformation?.homeCountry}`);
   }
 
   // Getting CommunicationPreference by Id
@@ -101,19 +101,19 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const communicationPreference = communicationPreferenceDict && getNameByLanguage(locale, communicationPreferenceDict);
 
   if (!communicationPreference) {
-    throw new Error(`Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
+    throw new Error(`Unexpected communication preference: ${state.communicationPreferences?.preferredMethod}`);
   }
 
   const userInfo = {
-    firstName: state.applicantInformation.firstName,
-    lastName: state.applicantInformation.lastName,
-    phoneNumber: state.personalInformation.phoneNumber,
-    altPhoneNumber: state.personalInformation.phoneNumberAlt,
-    preferredLanguage: state.communicationPreferences.preferredLanguage,
-    birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
-    sin: state.applicantInformation.socialInsuranceNumber,
-    martialStatus: state.applicantInformation.maritalStatus,
-    email: state.communicationPreferences.email,
+    firstName: state.applicantInformation?.firstName,
+    lastName: state.applicantInformation?.lastName,
+    phoneNumber: state.personalInformation?.phoneNumber,
+    altPhoneNumber: state.personalInformation?.phoneNumberAlt,
+    preferredLanguage: state.communicationPreferences?.preferredLanguage,
+    birthday: toLocaleDateString(parseDateString(state.dateOfBirth ?? '1999-10-10'), locale),
+    sin: state.applicantInformation?.socialInsuranceNumber,
+    martialStatus: state.applicantInformation?.maritalStatus,
+    email: state.communicationPreferences?.email,
     communicationPreference: communicationPreference,
   };
   const spouseInfo = state.partnerInformation
@@ -126,37 +126,37 @@ export async function loader({ context: { session }, params, request }: LoaderFu
       }
     : undefined;
 
-  const preferredLanguage = await lookupService.getPreferredLanguage(userInfo.preferredLanguage);
+  const preferredLanguage = await lookupService.getPreferredLanguage(userInfo.preferredLanguage ?? '');
 
   const mailingAddressInfo = {
-    address: state.personalInformation.mailingAddress,
-    city: state.personalInformation.mailingCity,
+    address: state.personalInformation?.mailingAddress,
+    city: state.personalInformation?.mailingCity,
     province: provinceMailing,
-    postalCode: state.personalInformation.mailingPostalCode,
+    postalCode: state.personalInformation?.mailingPostalCode,
     country: countryMailing,
-    apartment: state.personalInformation.mailingApartment,
+    apartment: state.personalInformation?.mailingApartment,
   };
 
   const homeAddressInfo = {
-    address: state.personalInformation.homeAddress,
-    city: state.personalInformation.homeCity,
+    address: state.personalInformation?.homeAddress,
+    city: state.personalInformation?.homeCity,
     province: provinceHome,
-    postalCode: state.personalInformation.homePostalCode,
+    postalCode: state.personalInformation?.homePostalCode,
     country: countryHome,
-    apartment: state.personalInformation.homeApartment,
+    apartment: state.personalInformation?.homeApartment,
   };
 
   const dentalInsurance = state.dentalInsurance;
 
   const dentalBenefit = {
     federalBenefit: {
-      access: state.dentalBenefits.hasFederalBenefits,
-      benefit: state.dentalBenefits.federalSocialProgram,
+      access: state.dentalBenefits?.hasFederalBenefits,
+      benefit: state.dentalBenefits?.federalSocialProgram,
     },
     provTerrBenefit: {
-      access: state.dentalBenefits.hasProvincialTerritorialBenefits,
-      province: state.dentalBenefits.province,
-      benefit: state.dentalBenefits.provincialTerritorialSocialProgram,
+      access: state.dentalBenefits?.hasProvincialTerritorialBenefits,
+      province: state.dentalBenefits?.province,
+      benefit: state.dentalBenefits?.provincialTerritorialSocialProgram,
     },
   };
 
@@ -165,20 +165,20 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:review-information.page-title') }) };
 
-  // TODO update with correct state
-  const payload = toBenefitApplicationRequest({
-    typeOfApplication: state.typeOfApplication,
-    disabilityTaxCredit: state.disabilityTaxCredit,
-    livingIndependently: state.livingIndependently,
-    applicantInformation: state.applicantInformation,
-    communicationPreferences: state.communicationPreferences,
-    dateOfBirth: state.dateOfBirth,
-    dentalBenefits: state.dentalBenefits,
-    dentalInsurance: state.dentalInsurance,
-    personalInformation: state.personalInformation,
-    partnerInformation: state.partnerInformation,
-    children: state.children,
-  });
+  // TODO update with correct state and uncomment when finished
+  // const payload = toBenefitApplicationRequest({
+  //   typeOfApplication: state.typeOfApplication,
+  //   disabilityTaxCredit: state.disabilityTaxCredit,
+  //   livingIndependently: state.livingIndependently,
+  //   applicantInformation: state.applicantInformation,
+  //   communicationPreferences: state.communicationPreferences,
+  //   dateOfBirth: state.dateOfBirth,
+  //   dentalBenefits: state.dentalBenefits,
+  //   dentalInsurance: state.dentalInsurance,
+  //   personalInformation: state.personalInformation,
+  //   partnerInformation: state.partnerInformation,
+  //   children: state.children,
+  // });
 
   saveApplyState({ params, session, state: { editMode: true } });
 
@@ -194,7 +194,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     mailingAddressInfo,
     dentalInsurance,
     dentalBenefit,
-    payload,
     csrfToken,
     meta,
     COMMUNICATION_METHOD_EMAIL_ID,
@@ -222,7 +221,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
     saveApplyState({ params, session, state: { editMode: false } });
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/child/federal-provincial-territorial-benefits', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/child/communication-preference', params));
   }
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
@@ -283,8 +282,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ReviewInformation() {
   const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, csrfToken, siteKey, hCaptchaEnabled, payload } =
-    useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, maritalStatuses, preferredLanguage, homeAddressInfo, mailingAddressInfo, csrfToken, siteKey, hCaptchaEnabled } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -313,12 +311,6 @@ export default function ReviewInformation() {
   const maritalStatusEntity = maritalStatuses.find((ms) => ms.id === userInfo.martialStatus);
   const maritalStatus = maritalStatusEntity ? getNameByLanguage(i18n.language, maritalStatusEntity) : userInfo.martialStatus;
 
-  const federalSocialProgramEntity = federalSocialPrograms.find((p) => p.id === dentalBenefit.federalBenefit.benefit);
-  const federalSocialProgram = federalSocialProgramEntity ? getNameByLanguage(i18n.language, federalSocialProgramEntity) : federalSocialProgramEntity;
-
-  const provincialTerritorialSocialProgramEntity = provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === dentalBenefit.provTerrBenefit.province).find((p) => p.id === dentalBenefit.provTerrBenefit.benefit);
-  const provincialTerritorialSocialProgram = provincialTerritorialSocialProgramEntity ? getNameByLanguage(i18n.language, provincialTerritorialSocialProgramEntity) : provincialTerritorialSocialProgramEntity;
-
   return (
     <>
       <div className="my-6 sm:my-8">
@@ -341,16 +333,8 @@ export default function ReviewInformation() {
                   </InlineLink>
                 </p>
               </DescriptionListItem>
-              <DescriptionListItem term={t('apply-child:review-information.dob-title')}>
-                {userInfo.birthday}
-                <p className="mt-4">
-                  <InlineLink id="change-date-of-birth" routeId="$lang+/_public+/apply+/$id+/child/date-of-birth" params={params}>
-                    {t('apply-child:review-information.dob-change')}
-                  </InlineLink>
-                </p>
-              </DescriptionListItem>
               <DescriptionListItem term={t('apply-child:review-information.sin-title')}>
-                {formatSin(userInfo.sin)}
+                {formatSin(userInfo.sin ?? '')}
                 <p className="mt-4">
                   <InlineLink id="change-sin" routeId="$lang+/_public+/apply+/$id+/child/applicant-information" params={params}>
                     {t('apply-child:review-information.sin-change')}
@@ -428,8 +412,8 @@ export default function ReviewInformation() {
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-child:review-information.mailing-title')}>
                 <Address
-                  address={mailingAddressInfo.address}
-                  city={mailingAddressInfo.city}
+                  address={mailingAddressInfo.address ?? ''}
+                  city={mailingAddressInfo.city ?? ''}
                   provinceState={i18n.language === 'en' ? mailingAddressInfo.province?.nameEn : mailingAddressInfo.province?.nameFr}
                   postalZipCode={mailingAddressInfo.postalCode}
                   country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
@@ -488,40 +472,6 @@ export default function ReviewInformation() {
               )}
             </dl>
           </div>
-          <div>
-            <h2 className="mt-8 text-2xl font-semibold">{t('apply-child:review-information.dental-title')}</h2>
-            <dl className="mt-6 divide-y border-y">
-              <DescriptionListItem term={t('apply-child:review-information.dental-insurance-title')}>
-                {dentalInsurance ? t('apply-child:review-information.yes') : t('apply-child:review-information.no')}
-                <p className="mt-4">
-                  <InlineLink id="change-access-dental" routeId="$lang+/_public+/apply+/$id+/child/dental-insurance" params={params}>
-                    {t('apply-child:review-information.dental-insurance-change')}
-                  </InlineLink>
-                </p>
-              </DescriptionListItem>
-              <DescriptionListItem term={t('apply-child:review-information.dental-benefit-title')}>
-                {dentalBenefit.federalBenefit.access || dentalBenefit.provTerrBenefit.access ? (
-                  <>
-                    <p>{t('apply-child:review-information.yes')}</p>
-                    <p>{t('apply-child:review-information.dental-benefit-has-access')}</p>
-                    <div>
-                      <ul className="ml-6 list-disc">
-                        {dentalBenefit.federalBenefit.access && <li>{federalSocialProgram}</li>}
-                        {dentalBenefit.provTerrBenefit.access && <li>{provincialTerritorialSocialProgram}</li>}
-                      </ul>
-                    </div>
-                  </>
-                ) : (
-                  <>{t('apply-child:review-information.no')}</>
-                )}
-                <p className="mt-4">
-                  <InlineLink id="change-dental-benefits" routeId="$lang+/_public+/apply+/$id+/child/federal-provincial-territorial-benefits" params={params}>
-                    {t('apply-child:review-information.dental-benefit-change')}
-                  </InlineLink>
-                </p>
-              </DescriptionListItem>
-            </dl>
-          </div>
         </div>
         <h2 className="mb-5 mt-8 text-2xl font-semibold">{t('apply-child:review-information.submit-app-title')}</h2>
         <p className="mb-4">{t('apply-child:review-information.submit-p-proceed')}</p>
@@ -544,11 +494,12 @@ export default function ReviewInformation() {
       <InlineLink routeId="$lang+/_public+/apply+/$id+/child/exit-application" params={params} className="mt-4 block font-lato font-semibold">
         {t('apply-child:review-information.exit-button')}
       </InlineLink>
-      {useFeature('view-payload') && (
+      {/* TODO uncomment when payload has been updated */}
+      {/* {useFeature('view-payload') && (
         <div className="mt-8">
           <DebugPayload data={payload} enableCopy></DebugPayload>
         </div>
-      )}
+      )} */}
     </>
   );
 }
