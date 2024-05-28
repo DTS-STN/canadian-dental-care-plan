@@ -1,12 +1,15 @@
 package ca.gov.dtsstn.cdcp.api.service;
 
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +19,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import ca.gov.dtsstn.cdcp.api.config.properties.ApplicationProperties;
+import ca.gov.dtsstn.cdcp.api.data.entity.AlertTypeEntityBuilder;
+import ca.gov.dtsstn.cdcp.api.data.entity.LanguageEntityBuilder;
+import ca.gov.dtsstn.cdcp.api.data.entity.SubscriptionEntityBuilder;
+import ca.gov.dtsstn.cdcp.api.data.entity.UserEntity;
 import ca.gov.dtsstn.cdcp.api.data.entity.UserEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.repository.AlertTypeRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.LanguageRepository;
@@ -28,13 +36,13 @@ import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUser;
 class UserServiceTests {
 
 	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
+	ApplicationProperties applicationProperties;
+
+	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
 	AlertTypeRepository alertTypeRepository;
 
 	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
-	LanguageRepository preferredLanguageRepository;
-
-	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
-	ApplicationProperties applicationProperties;
+	LanguageRepository languageRepository;
 
 	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
 	UserRepository userRepository;
@@ -43,7 +51,7 @@ class UserServiceTests {
 
 	@BeforeEach
 	void setUp() {
-		this.userService = new UserService(alertTypeRepository, preferredLanguageRepository, applicationProperties, userRepository);
+		this.userService = new UserService(applicationProperties, alertTypeRepository, languageRepository, userRepository);
 	}
 
 	@Test()
@@ -87,6 +95,49 @@ class UserServiceTests {
 		assertThat(confirmationCode).isNotNull();
 		assertThat(confirmationCode.getCode()).hasSize(8);
 		assertThat(confirmationCode.getExpiryDate()).isAfter(Instant.now());
+	}
+
+	@Test
+	@DisplayName("Test userService.createSubscriptionForUser(..)")
+	void testCreateSubscriptionForUser() {
+		final var mockId = "00000000-0000-0000-0000-000000000000";
+
+		final var mockAlertType = new AlertTypeEntityBuilder().id(mockId).build();
+		final var mockLanguage = new LanguageEntityBuilder().id(mockId).build();
+		final var mockUser = new UserEntityBuilder().id(mockId).subscriptions(emptyList()).build();
+
+		when(userRepository.findById(any())).thenReturn(Optional.of(mockUser));
+		when(alertTypeRepository.findById(any())).thenReturn(Optional.of(mockAlertType));
+		when(languageRepository.findById(any())).thenReturn(Optional.of(mockLanguage));
+		when(userRepository.save(any())).thenReturn(mockUser);
+
+		assertThat(userService.createSubscriptionForUser(mockId, mockId, mockId)).isNotNull();
+	}
+
+	@Test
+	@DisplayName("Test userService.createSubscriptionForUser(..); user has existing subscription")
+	void testCreateSubscriptionForUser_ExistingSubscription() {
+		final var mockId = "00000000-0000-0000-0000-000000000000";
+
+		final var mockUser = new UserEntityBuilder()
+			.id(mockId)
+			.subscriptions(List.of(new SubscriptionEntityBuilder()
+				.alertType(new AlertTypeEntityBuilder()
+					.id(mockId)
+					.build())
+				.build()))
+			.build();
+
+		when(userRepository.findById(any())).thenReturn(Optional.of(mockUser));
+
+		assertThrows(DataIntegrityViolationException.class, () -> userService.createSubscriptionForUser(mockId, mockId, mockId));
+	}
+
+	@Test
+	@DisplayName("Test userService.getUserById(..)")
+	void testGetUserById() {
+		when(userRepository.findById(any())).thenReturn(Optional.of(new UserEntity()));
+		assertThat(userService.getUserById("00000000-0000-0000-0000-000000000000")).isNotEmpty();
 	}
 
 }

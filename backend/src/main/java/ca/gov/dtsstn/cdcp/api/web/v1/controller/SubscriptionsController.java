@@ -16,7 +16,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
+import ca.gov.dtsstn.cdcp.api.service.AlertTypeService;
+import ca.gov.dtsstn.cdcp.api.service.LanguageService;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
+import ca.gov.dtsstn.cdcp.api.service.domain.AlertType;
+import ca.gov.dtsstn.cdcp.api.service.domain.BaseDomainObject;
+import ca.gov.dtsstn.cdcp.api.service.domain.Language;
 import ca.gov.dtsstn.cdcp.api.service.domain.Subscription;
 import ca.gov.dtsstn.cdcp.api.service.domain.User;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceConflictException;
@@ -38,10 +43,22 @@ public class SubscriptionsController {
 
 	private final SubscriptionModelMapper subscriptionModelMapper = Mappers.getMapper(SubscriptionModelMapper.class);
 
+	private final AlertTypeService alertTypeService;
+
+	private final LanguageService languageService;
+
 	private final UserService userService;
 
-	public SubscriptionsController(UserService userService) {
+	public SubscriptionsController(
+			AlertTypeService alertTypeService,
+			LanguageService languageService,
+			UserService userService) {
+		Assert.notNull(alertTypeService, "alertTypeService is required; it must not be null");
+		Assert.notNull(languageService, "languageService is required; it must not be null");
 		Assert.notNull(userService, "userService is required; it must not be null");
+
+		this.alertTypeService = alertTypeService;
+		this.languageService = languageService;
 		this.userService = userService;
 	}
 
@@ -57,13 +74,24 @@ public class SubscriptionsController {
 		final var user = userService.getUserById(userId)
 			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));
 
+		final var alertTypeId = alertTypeService
+			.readByCode(subscription.getAlertTypeCode())
+			.map(AlertType::getId)
+			.orElseThrow(/* pre-validated input */);
+
+		final var languageId = languageService
+			.readByMsLocaleCode(subscription.getMsLanguageCode())
+			.map(Language::getId)
+			.orElseThrow(/* pre-validated input */);
+
 		user.getSubscriptions().stream()
-			.filter(byAlertTypeCode(subscription.getAlertTypeCode())).findFirst()
-			.ifPresent((existingSubscription) -> {
+			.map(Subscription::getAlertType)
+			.filter(byId(alertTypeId)).findFirst()
+			.ifPresent(xxx -> {
 				throw new ResourceConflictException("A subscription with code [%s] already exists for user [%s]".formatted(subscription.getAlertTypeCode(), userId));
 			});
 
-		userService.createSubscriptionForUser(userId, subscriptionModelMapper.toDomainObject(subscription));
+		userService.createSubscriptionForUser(userId, alertTypeId, languageId);
 	}
 
 	@GetMapping
@@ -98,12 +126,8 @@ public class SubscriptionsController {
 		return subscriptionModelMapper.toModel(userId, subscription);
 	}
 
-	private Predicate<Subscription> byAlertTypeCode(String alertTypeCode) {
-		return subscription -> alertTypeCode.equals(subscription.getAlertType().getCode());
-	}
-
-	private Predicate<Subscription> byId(String id) {
-		return subscription -> id.equals(subscription.getId());
+	private Predicate<? super BaseDomainObject> byId(String id) {
+		return domainObject -> id.equals(domainObject.getId());
 	}
 
 }
