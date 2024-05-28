@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { getRedisService } from '~/services/redis-service.server';
 import { getEnv } from '~/utils/env.server';
-import { createFileSessionStorage } from '~/utils/session-utils';
+import { createFileSessionStorage } from '~/utils/session-utils.server';
 
 vi.mock('@remix-run/node', () => ({
   createCookie: vi.fn(),
@@ -34,7 +34,7 @@ vi.mock('~/utils/logging.server', () => ({
   }),
 }));
 
-vi.mock('~/utils/session-utils', () => ({
+vi.mock('~/utils/session-utils.server', () => ({
   createFileSessionStorage: vi.fn(),
 }));
 
