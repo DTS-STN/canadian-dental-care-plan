@@ -56,7 +56,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const preferredLanguages = await lookupService.getAllPreferredLanguages();
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sub, 'Expected userInfoToken.sub to be defined');
   const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
 
   const csrfToken = String(session.get('csrfToken'));
