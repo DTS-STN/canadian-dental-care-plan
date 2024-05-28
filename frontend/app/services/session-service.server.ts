@@ -21,7 +21,7 @@
  *
  * @see https://remix.run/docs/en/main/utils/sessions
  */
-import { CookieParseOptions, Session, createCookie, createFileSessionStorage, createSessionStorage } from '@remix-run/node';
+import { CookieParseOptions, Session, createCookie, createSessionStorage } from '@remix-run/node';
 import type { CookieSerializeOptions } from '@remix-run/node';
 
 import moize from 'moize';
@@ -30,6 +30,7 @@ import { randomUUID } from 'node:crypto';
 import { getRedisService } from '~/services/redis-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
+import { createFileSessionStorage } from '~/utils/session-utils';
 
 const log = getLogger('session-service.server');
 
