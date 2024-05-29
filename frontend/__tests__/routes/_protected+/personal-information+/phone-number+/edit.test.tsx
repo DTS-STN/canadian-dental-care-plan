@@ -2,7 +2,7 @@ import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/$lang+/_protected+/personal-information+/phone-number+/edit';
+import { action, loader } from '~/routes/$lang/_protected/personal-information+/phone-number+/edit';
 
 vi.mock('~/services/instrumentation-service.server', () => ({
   getInstrumentationService: () => ({

@@ -2,7 +2,7 @@ import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { loader } from '~/routes/$lang+/_protected+/personal-information+/mailing-address+/edit';
+import { loader } from '~/routes/$lang/_protected/personal-information+/mailing-address+/edit';
 
 vi.mock('~/services/address-service.server', () => ({
   getAddressService: vi.fn().mockReturnValue({
