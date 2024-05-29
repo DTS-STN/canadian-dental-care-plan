@@ -222,7 +222,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   saveApplyState({ params, session, state: { personalInformation: updatedData } });
 
   if (state.editMode) {
-    return redirect(getPathById('$lang+/_public+/apply/$id/child/review-information', params));
+    return redirect(getPathById('$lang+/_public+/apply/$id/child/review-adult-information', params));
   }
 
   return redirect(getPathById('$lang+/_public+/apply/$id/child/communication-preference', params));
@@ -594,7 +594,13 @@ export default function ApplyFlowPersonalInformation() {
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Personal information click">
                 {t('apply-child:contact-information.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply/$id/child/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Personal information click">
+              <ButtonLink
+                id="back-button"
+                routeId="$lang+/_public+/apply/$id/child/review-adult-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Personal information click"
+              >
                 {t('apply-child:contact-information.cancel-btn')}
               </ButtonLink>
             </div>
