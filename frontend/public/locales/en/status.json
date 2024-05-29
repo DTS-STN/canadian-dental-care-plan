@@ -81,5 +81,45 @@
         "application-code-valid": "The application code or client number must be valid"
       }
     }
+  },
+  "child": {
+    "page-title": "Status Checker",
+    "status-heading": "Status",
+    "empty-status": "The information you gave us doesn't match the information in our system.",
+    "check-another": "Check another status",
+    "form": {
+      "complete-fields": "Complete all fields.",
+      "application-code-label": "Application Code or Client Number",
+      "application-code-description": "Enter the number you received after applying online, or the number found in the upper right-hand corner from the letter you may have reveived from Service Canada",
+      "application-code-placeholder": "Your Application Code or Client Number",
+      "radio-legend": "Does the child have a Social Insurance Number (SIN)?",
+      "sin-label": "Social Insurance Number (SIN)",
+      "sin-description": "Enter the 9-digit SIN",
+      "option-yes": "<strong>Yes</strong>, the child has a SIN",
+      "option-no": "<strong>No</strong>, the child does not have a SIN",
+      "if-child-summary": "If the child has a single legal name",
+      "if-child-desc": "If the child goes by a single legal name, leave the first name field blank",
+      "last-name": "Child's last name",
+      "first-name": "Child's first name",
+      "date-of-birth-label": "Child's date of birth",
+      "submit": "Check status",
+      "error-message": {
+        "radio-required": "Please select an option.",
+        "sin-required": "The Social Insurance Number (SIN) is required.",
+        "sin-valid": "The Social Insurance Number (SIN) must be valid.",
+        "application-code-required": "The application code or client number is required",
+        "application-code-valid": "The application code or client number must be valid",
+        "first-name-too-long": "First name too long.",
+        "last-name-required": "Enter last name",
+        "date-of-birth-day-number": "Day must be a number",
+        "date-of-birth-day-required": "Date of birth must include a day",
+        "date-of-birth-is-past": "Date of birth must be in the past",
+        "date-of-birth-is-past-valid": "Date of birth too far in the past",
+        "date-of-birth-month-required": "Date of birth must include a month",
+        "date-of-birth-valid": "Day must be valid for the given month and year",
+        "date-of-birth-year-number": "Year must be a number, for example 1950",
+        "date-of-birth-year-required": "Date of birth must include a year"
+      }
+    }
   }
 }

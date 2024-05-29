@@ -180,7 +180,7 @@ export default function ApplyFlowConfirm() {
   const cdcpLink = <InlineLink to={t('apply-adult:confirm.status-checker-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
 
   // this link will be used in a future release
-  // const cdcpLink = <InlineLink routeId="$lang/_public/status+/index" params={params} className="external-link font-lato font-semibold" target='_blank' />;
+  // const cdcpLink = <InlineLink routeId="$lang/_public/status/index" params={params} className="external-link font-lato font-semibold" target='_blank' />;
 
   return (
     <div className="max-w-prose">
