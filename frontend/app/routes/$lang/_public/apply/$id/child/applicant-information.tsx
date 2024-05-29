@@ -18,7 +18,7 @@ import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
-import { ApplicantInformationState, ParentGuardianInformationState, applicantInformationStateHasPartner, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { ApplicantInformationState, applicantInformationStateHasPartner, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
@@ -56,7 +56,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:applicant-information.page-title') }) };
 
-  return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.parentGuardianInformation, editMode: state.editMode });
+  return json({ id: state.id, maritalStatuses, csrfToken, meta, defaultState: state.applicantInformation, dateOfBirth: state.dateOfBirth, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -81,7 +81,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
     if (applicantInformationStateHasPartner(state.applicantInformation) && state.partnerInformation === undefined) {
       const errorMessage = t('apply-child:applicant-information.error-message.marital-status-no-partner-information');
-      const errors: z.ZodFormattedError<ParentGuardianInformationState, string> = { _errors: [errorMessage], maritalStatus: { _errors: [errorMessage] } };
+      const errors: z.ZodFormattedError<ApplicantInformationState & { dateOfBirthYear: number; dateOfBirthMonth: number; dateOfBirthDay: number; dateOfBirth: string }, string> = { _errors: [errorMessage], maritalStatus: { _errors: [errorMessage] } };
       return json({ errors });
     }
 
@@ -217,7 +217,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowApplicationInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, maritalStatuses, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, dateOfBirth, maritalStatuses, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -309,7 +309,7 @@ export default function ApplyFlowApplicationInformation() {
                 month: 'dateOfBirthMonth',
                 year: 'dateOfBirthYear',
               }}
-              defaultValue={defaultState?.dateOfBirth ?? ''}
+              defaultValue={dateOfBirth ?? ''}
               legend={t('apply-child:applicant-information.date-of-birth')}
               errorMessages={{
                 all: fetcher.data?.errors.dateOfBirth?._errors[0],
