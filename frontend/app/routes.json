@@ -548,6 +548,14 @@
                         }
                       },
                       {
+                        "id": "$lang/_public/apply/$id/child/contact-apply-child",
+                        "file": "routes/$lang/_public/apply/$id/child/contact-apply-child.tsx",
+                        "paths": {
+                          "en": "/:lang/apply/:id/child/contact-apply-child",
+                          "fr": "/:lang/demander/:id/enfant/contact-demande-enfant"
+                        }
+                      },
+                      {
                         "id": "$lang/_public/apply/$id/child/dob-eligibility",
                         "file": "routes/$lang/_public/apply/$id/child/dob-eligibility.tsx",
                         "paths": {
