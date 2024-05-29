@@ -56,7 +56,7 @@ function createSubscriptionService() {
         }),
       }),
     });
-    instrumentationService.countHttpStatus('http.client.cdcp-api.user.gets', response.status);
+    instrumentationService.countHttpStatus('http.client.cdcp-api.users.gets', response.status);
     const userParsed = userSchema.parse(await response.json());
 
     const userSubscriptionsURL = userParsed._links.subscriptions.href;
@@ -69,7 +69,7 @@ function createSubscriptionService() {
 
     instrumentationService.countHttpStatus('http.client.cdcp-api.alert-subscription.gets', response.status);
 
-    const subscriptionSchema = z.object({
+    const subscriptionsSchema = z.object({
       _embedded: z.object({
         subscriptions: z.array(
           z.object({
@@ -86,7 +86,7 @@ function createSubscriptionService() {
       }),
     });
 
-    const subscriptions = subscriptionSchema.parse(await subscriptionsResponse.json())._embedded.subscriptions.map((subscription) => ({
+    const subscriptions = subscriptionsSchema.parse(await subscriptionsResponse.json())._embedded.subscriptions.map((subscription) => ({
       id: subscription.id,
       preferredLanguage: subscription.msLanguageCode,
       alertType: subscription.alertTypeCode,
