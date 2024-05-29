@@ -11,7 +11,7 @@ import invariant from 'tiny-invariant';
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
-import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -21,9 +21,9 @@ import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('apply-child', 'gcweb'),
   pageIdentifier: pageIds.public.apply.adultChild.contactapplychild,
-  pageTitleI18nKey: 'apply-adult-child:contact-apply-child.page-title',
+  pageTitleI18nKey: 'apply-child:contact-apply-child.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -31,24 +31,24 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const state = loadApplyAdultChildState({ params, request, session });
+  const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:contact-apply-child.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:contact-apply-child.page-title') }) };
 
   invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
   const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
   if (ageCategory !== 'children') {
-    return redirect(getPathById('$lang/_public/apply/$id/adult/date-of-birth', params));
+    return redirect(getPathById('$lang/_public/apply/$id/adult/applicant-information', params));
   }
 
   return json({ id: state.id, csrfToken, meta });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/adult-child/contact-apply-child');
+  const log = getLogger('apply/child/contact-apply-child');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -61,7 +61,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  return redirect(t('apply-adult-child:contact-apply-child.return-btn-link'));
+  return redirect(t('apply-child:contact-apply-child.return-btn-link'));
 }
 
 export default function ApplyFlowContactApplyChild() {
@@ -78,24 +78,24 @@ export default function ApplyFlowContactApplyChild() {
   }
 
   const noWrap = <span className="whitespace-nowrap" />;
-  const serviceCanadaOfficeLink = <InlineLink to={t('apply-adult-child:contact-apply-child.service-canada-office-link')} />;
+  const serviceCanadaOfficeLink = <InlineLink to={t('apply-child:contact-apply-child.service-canada-office-link')} />;
 
   return (
     <div className="max-w-prose">
       <div className="mb-8 space-y-4">
+        <p>{t('apply-child:contact-apply-child.speak-service-canada')}</p>
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:contact-apply-child.contact-service-canada" components={{ serviceCanadaOfficeLink, noWrap }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="apply-child:contact-apply-child.contact-service-canada" components={{ serviceCanadaOfficeLink, noWrap }} />
         </p>
-        <p>{t('apply-adult-child:contact-apply-child.parent-guardian')}</p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/adult-child/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Contact us to apply for child click">
+        <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/child/applicant-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Contact us to apply for child click">
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
-          {t('apply-adult-child:contact-apply-child.back-btn')}
+          {t('apply-child:contact-apply-child.back-btn')}
         </ButtonLink>
         <Button type="submit" variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Contact us to apply for child click">
-          {t('apply-adult-child:contact-apply-child.return-btn')}
+          {t('apply-child:contact-apply-child.return-btn')}
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>
       </fetcher.Form>

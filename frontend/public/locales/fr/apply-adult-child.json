@@ -267,7 +267,7 @@
   "contact-apply-child": {
     "page-title": "(FR) Contact us to apply for your child",
     "contact-service-canada": "(FR) You must speak to a Service Canada representative if you are under 16 and applying for your child. Please contact Service Canada by calling <noWrap>1-833-537-4342</noWrap> or visit a <serviceCanadaOfficeLink>Service Canada Office</serviceCanadaOfficeLink>.",
-    "serviceCanadaOfficeLink": "https://www.servicecanada.gc.ca/tbsc-fsco/sc-hme.jsp?lang=fra",
+    "service-canada-office-link": "https://www.servicecanada.gc.ca/tbsc-fsco/sc-hme.jsp?lang=fra",
     "parent-guardian": "(FR) A parent or legal guardian needs to apply to enrol you to the Canadian Dental Care Plan.",
     "back-btn": "Retour",
     "return-btn": "Revenir à la page principale",
