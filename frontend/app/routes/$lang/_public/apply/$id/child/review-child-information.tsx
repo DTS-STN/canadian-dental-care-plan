@@ -16,7 +16,7 @@ import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
 import { loadApplyChildState, validateApplyChildStateForReview } from '~/route-helpers/apply-child-route-helpers.server';
-import { clearApplyState, getChildrenState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
@@ -45,21 +45,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const state = loadApplyChildState({ params, request, session });
-  validateApplyChildStateForReview({ params, state });
-
-  // prettier-ignore
-  if (state.applicantInformation === undefined ||
-    state.communicationPreferences === undefined ||
-    state.dateOfBirth === undefined ||
-    state.dentalBenefits === undefined ||
-    state.dentalInsurance === undefined ||
-    state.personalInformation === undefined ||
-    state.taxFiling2023 === undefined ||
-    state.typeOfApplication === undefined ||
-    getChildrenState(state).length === 0) {
-    throw new Error(`Incomplete application "${state.id}" state!`);
-  }
+  const state = validateApplyChildStateForReview({ params, state: loadApplyChildState({ params, request, session }) });
 
   const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -87,21 +73,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply-child/review-adult-information');
 
-  const state = loadApplyChildState({ params, request, session });
-  validateApplyChildStateForReview({ params, state });
-
-  // prettier-ignore
-  if (state.applicantInformation === undefined ||
-    state.communicationPreferences === undefined ||
-    state.dateOfBirth === undefined ||
-    state.dentalBenefits === undefined ||
-    state.dentalInsurance === undefined ||
-    state.personalInformation === undefined ||
-    state.taxFiling2023 === undefined ||
-    state.typeOfApplication === undefined ||
-    getChildrenState(state).length === 0) {
-    throw new Error(`Incomplete application "${state.id}" state!`);
-  }
+  validateApplyChildStateForReview({ params, state: loadApplyChildState({ params, request, session }) });
 
   const { ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
@@ -184,12 +156,12 @@ export default function ReviewInformation() {
             const childParams = { ...params, childId: child.id };
             return (
               <section key={child.id} className="space-y-10">
-                <h2 className="font-lato text-3xl font-semibold">{child.information?.firstName}</h2>
+                <h2 className="font-lato text-3xl font-semibold">{child.information.firstName}</h2>
                 <div>
-                  <h3 className="mb-6 font-lato text-2xl font-semibold">{t('apply-child:review-child-information.page-sub-title', { child: child.information?.firstName })}</h3>
+                  <h3 className="mb-6 font-lato text-2xl font-semibold">{t('apply-child:review-child-information.page-sub-title', { child: child.information.firstName })}</h3>
                   <dl className="divide-y border-y">
                     <DescriptionListItem term={t('apply-child:review-child-information.full-name-title')}>
-                      {`${child.information?.firstName} ${child.information?.lastName}`}
+                      {`${child.information.firstName} ${child.information.lastName}`}
                       <p className="mt-4">
                         <InlineLink id="change-full-name" routeId="$lang/_public/apply/$id/child/children/$childId/information" params={childParams}>
                           {t('apply-child:review-child-information.full-name-change')}
@@ -197,7 +169,7 @@ export default function ReviewInformation() {
                       </p>
                     </DescriptionListItem>
                     <DescriptionListItem term={t('apply-child:review-child-information.dob-title')}>
-                      {child.information?.dateOfBirth}
+                      {child.information.dateOfBirth}
                       <p className="mt-4">
                         <InlineLink id="change-date-of-birth" routeId="$lang/_public/apply/$id/child/children/$childId/information" params={childParams}>
                           {t('apply-child:review-child-information.dob-change')}
@@ -205,18 +177,18 @@ export default function ReviewInformation() {
                       </p>
                     </DescriptionListItem>
                     <DescriptionListItem term={t('apply-child:review-child-information.sin-title')}>
-                      {child.information?.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}
+                      {child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}
                       <p className="mt-4">
                         <InlineLink id="change-sin" routeId="$lang/_public/apply/$id/child/children/$childId/information" params={childParams}>
                           {t('apply-child:review-child-information.sin-change')}
                         </InlineLink>
                       </p>
                     </DescriptionListItem>
-                    <DescriptionListItem term={t('apply-child:review-child-information.is-parent')}>{child.information?.isParent ? t('apply-child:review-child-information.yes') : t('apply-child:review-child-information.no')}</DescriptionListItem>
+                    <DescriptionListItem term={t('apply-child:review-child-information.is-parent')}>{child.information.isParent ? t('apply-child:review-child-information.yes') : t('apply-child:review-child-information.no')}</DescriptionListItem>
                   </dl>
                 </div>
                 <div>
-                  <h3 className="mb-6 font-lato text-2xl font-semibold">{t('apply-child:review-child-information.dental-title', { child: child.information?.firstName })}</h3>
+                  <h3 className="mb-6 font-lato text-2xl font-semibold">{t('apply-child:review-child-information.dental-title', { child: child.information.firstName })}</h3>
                   <dl className="divide-y border-y">
                     <DescriptionListItem term={t('apply-child:review-child-information.dental-insurance-title')}>
                       {child.dentalInsurance ? t('apply-child:review-child-information.yes') : t('apply-child:review-child-information.no')}
@@ -227,18 +199,18 @@ export default function ReviewInformation() {
                       </p>
                     </DescriptionListItem>
                     <DescriptionListItem term={t('apply-child:review-child-information.dental-benefit-title')}>
-                      {child.dentalBenefits?.hasFederalBenefits ?? child.dentalBenefits?.hasProvincialTerritorialBenefits ? (
+                      {child.dentalBenefits.hasFederalBenefits || child.dentalBenefits.hasProvincialTerritorialBenefits ? (
                         <>
                           <p>{t('apply-child:review-child-information.yes')}</p>
                           <p>{t('apply-child:review-child-information.dental-benefit-has-access')}</p>
                           <div>
                             <ul className="ml-6 list-disc">
-                              {child.dentalBenefits.hasFederalBenefits && <li>{getNameByLanguage(i18n.language, federalSocialPrograms.find((p) => p.id === child.dentalBenefits?.federalSocialProgram) ?? { nameEn: '', nameFr: '' })}</li>}
+                              {child.dentalBenefits.hasFederalBenefits && <li>{getNameByLanguage(i18n.language, federalSocialPrograms.find((p) => p.id === child.dentalBenefits.federalSocialProgram) ?? { nameEn: '', nameFr: '' })}</li>}
                               {child.dentalBenefits.hasProvincialTerritorialBenefits && (
                                 <li>
                                   {getNameByLanguage(
                                     i18n.language,
-                                    provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === child.dentalBenefits?.province).find((p) => p.id === child.dentalBenefits?.provincialTerritorialSocialProgram) ?? {
+                                    provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === child.dentalBenefits.province).find((p) => p.id === child.dentalBenefits.provincialTerritorialSocialProgram) ?? {
                                       nameEn: '',
                                       nameFr: '',
                                     },

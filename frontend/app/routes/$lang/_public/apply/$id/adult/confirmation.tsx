@@ -216,7 +216,7 @@ export default function ApplyFlowConfirm() {
         <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
       </p>
       <p className="mt-4">{powerPlatformStatusCheckerEnabled ? t('confirm.use-code') : t('confirm.use-code-one-week')}</p>
-      <p className="mt-4">{t('confirm.letter')}</p>
+      <p className="mt-4">{t('confirm.mail-letter')}</p>
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.register-msca-title')}</h2>
       <p className="mt-4">
         <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLinkAccount, mscaLinkCreate }} />
