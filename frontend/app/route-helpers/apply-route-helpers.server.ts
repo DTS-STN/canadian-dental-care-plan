@@ -58,6 +58,16 @@ export interface ApplyState {
   readonly dentalInsurance?: boolean;
   readonly disabilityTaxCredit?: boolean;
   readonly livingIndependently?: boolean;
+  readonly parentGuardianInformation?: {
+    firstName: string;
+    lastName: string;
+    maritalStatus: string;
+    socialInsuranceNumber: string;
+    dateOfBirthYear: number;
+    dateOfBirthMonth: number;
+    dateOfBirthDay: number;
+    dateOfBirth: string;
+  };
   readonly partnerInformation?: {
     confirm: boolean;
     dateOfBirth: string;
@@ -109,6 +119,7 @@ export type CommunicationPreferencesState = NonNullable<ApplyState['communicatio
 export type DentalFederalBenefitsState = Pick<NonNullable<ApplyState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
 export type DentalInsuranceState = NonNullable<ApplyState['dentalInsurance']>;
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<ApplyState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
+export type ParentGuardianInformationState = NonNullable<ApplyState['parentGuardianInformation']>;
 export type PartnerInformationState = NonNullable<ApplyState['partnerInformation']>;
 export type PersonalInformationState = NonNullable<ApplyState['personalInformation']>;
 export type SubmissionInfoState = NonNullable<ApplyState['submissionInfo']>;
