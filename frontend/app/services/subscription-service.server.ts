@@ -29,10 +29,38 @@ function createSubscriptionService() {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
     auditService.audit('alert-subscription.get', { userId });
-    //TODO, for a future PR, use HATEOAS links to get the /subscriptions endpoint
-    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users/${userId}/subscriptions`);
-
+    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users/${userId}`);
     const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const userSchema = z.object({
+      id: z.string(),
+      email: z.string(),
+      emailVerified: z.boolean(),
+      userAttributes: z.array(
+        z.object({
+          name: z.string(),
+          value: z.string(),
+        }),
+      ),
+      _links: z.object({
+        self: z.object({
+          href: z.string(),
+        }),
+        subscriptions: z.object({
+          href: z.string(),
+        }),
+      }),
+    });
+    instrumentationService.countHttpStatus('http.client.cdcp-api.users.gets', response.status);
+    const userParsed = userSchema.parse(await response.json());
+
+    const userSubscriptionsURL = userParsed._links.subscriptions.href;
+    const subscriptionsResponse = await fetch(userSubscriptionsURL, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -41,7 +69,7 @@ function createSubscriptionService() {
 
     instrumentationService.countHttpStatus('http.client.cdcp-api.alert-subscription.gets', response.status);
 
-    const newSchema = z.object({
+    const subscriptionsSchema = z.object({
       _embedded: z.object({
         subscriptions: z.array(
           z.object({
@@ -58,7 +86,7 @@ function createSubscriptionService() {
       }),
     });
 
-    const subscriptions = newSchema.parse(await response.json())._embedded.subscriptions.map((subscription) => ({
+    const subscriptions = subscriptionsSchema.parse(await subscriptionsResponse.json())._embedded.subscriptions.map((subscription) => ({
       id: subscription.id,
       preferredLanguage: subscription.msLanguageCode,
       alertType: subscription.alertTypeCode,
