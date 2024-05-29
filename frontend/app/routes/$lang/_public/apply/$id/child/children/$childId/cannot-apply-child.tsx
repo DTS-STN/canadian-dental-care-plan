@@ -73,7 +73,7 @@ export default function ApplyForYourself() {
         <p>{t('apply-child:children.cannot-apply-child.eligibility-info')}</p>
         <p>{t('apply-child:children.cannot-apply-child.eligibility-2025')}</p>
         <p>
-          <InlineLink to={t('apply-child:children.cannot-apply-child.when-to-apply-href')} className="external-link font-lato font-semibold" newTabIndicator target="_blank">
+          <InlineLink to={t('apply-child:children.cannot-apply-child.when-to-apply-href')} className="external-link" newTabIndicator target="_blank">
             {t('apply-child:children.cannot-apply-child.when-to-apply')}
           </InlineLink>
         </p>

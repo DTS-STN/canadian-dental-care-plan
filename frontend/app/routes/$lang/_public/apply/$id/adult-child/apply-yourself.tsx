@@ -80,7 +80,7 @@ export default function ApplyForYourself() {
         <p>{t('apply-adult-child:eligibility.apply-yourself.eligibility-info')}</p>
         <p>{t('apply-adult-child:eligibility.apply-yourself.eligibility-2025')}</p>
         <p>
-          <InlineLink to={t('apply-adult-child:eligibility.apply-yourself.when-to-apply-href')} className="external-link font-lato font-semibold" newTabIndicator target="_blank">
+          <InlineLink to={t('apply-adult-child:eligibility.apply-yourself.when-to-apply-href')} className="external-link" newTabIndicator target="_blank">
             {t('apply-adult-child:eligibility.apply-yourself.when-to-apply')}
           </InlineLink>
         </p>

@@ -117,15 +117,7 @@ export default function LettersIndex() {
 
               return (
                 <li key={letter.id} className="py-4 sm:py-6">
-                  <InlineLink
-                    reloadDocument
-                    routeId="$lang/_protected/letters/$id.download"
-                    params={{ ...params, id: letter.id }}
-                    className="external-link font-lato font-semibold"
-                    newTabIndicator
-                    target="_blank"
-                    data-gc-analytics-customclick={gcAnalyticsCustomClickValue}
-                  >
+                  <InlineLink reloadDocument routeId="$lang/_protected/letters/$id.download" params={{ ...params, id: letter.id }} className="external-link" newTabIndicator target="_blank" data-gc-analytics-customclick={gcAnalyticsCustomClickValue}>
                     {letterName}
                   </InlineLink>
                   <p className="mt-1 text-sm text-gray-500">{t('letters:index.date', { date: letter.issuedOn })}</p>

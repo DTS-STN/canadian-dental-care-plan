@@ -64,7 +64,7 @@ export default function ApplyFlowDobEligibility() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const eligibilityInfo = <InlineLink to={t('apply-child:eligibility.dob-eligibility.eligibility-info-href')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const eligibilityInfo = <InlineLink to={t('apply-child:eligibility.dob-eligibility.eligibility-info-href')} className="external-link" newTabIndicator target="_blank" />;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

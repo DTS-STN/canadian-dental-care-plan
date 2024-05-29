@@ -153,7 +153,7 @@ export default function AccessToGovernmentalsBenefitsView() {
             <p>{t('access-to-governmental-benefits:access-to-governmental-benefits.view.no-government-benefits')}</p>
           </div>
           <div className="mb-5 space-y-4">
-            <InlineLink routeId="$lang/_protected/access-to-governmental-benefits/edit" params={{ ...params }} className="external-link font-lato font-semibold" target="_blank">
+            <InlineLink routeId="$lang/_protected/access-to-governmental-benefits/edit" params={{ ...params }} className="external-link" target="_blank">
               {t('access-to-governmental-benefits:access-to-governmental-benefits.view.update-your-access-text')}
             </InlineLink>
           </div>

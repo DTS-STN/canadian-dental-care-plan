@@ -144,11 +144,7 @@ export default function ApplyFlowDisabilityTaxCredit() {
       <div className="max-w-prose">
         <p className="mb-5">{t('apply-adult:disability-tax-credit.non-refundable')}</p>
         <p className="mb-5">
-          <Trans
-            ns={handle.i18nNamespaces}
-            i18nKey="apply-adult:disability-tax-credit.more-info"
-            components={{ dtcLink: <InlineLink to={t('apply-adult:disability-tax-credit.dtc-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" /> }}
-          />
+          <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult:disability-tax-credit.more-info" components={{ dtcLink: <InlineLink to={t('apply-adult:disability-tax-credit.dtc-link')} className="external-link" newTabIndicator target="_blank" /> }} />
         </p>
         <p className="mb-4 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}

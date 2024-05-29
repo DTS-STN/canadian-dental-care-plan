@@ -214,14 +214,14 @@ export default function ApplyFlowConfirm() {
   const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, csrfToken } = useLoaderData<typeof loader>();
   const powerPlatformStatusCheckerEnabled = useFeature('power-platform-status-checker');
 
-  const mscaLink = <InlineLink to={t('confirm.msca-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const mscaLinkApply = <InlineLink to={t('confirm.msca-link-apply')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const moreInfoLink = <InlineLink to={t('confirm.more-info-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('apply-adult-child:confirm.status-checker-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const mscaLink = <InlineLink to={t('confirm.msca-link')} className="external-link" newTabIndicator target="_blank" />;
+  const mscaLinkApply = <InlineLink to={t('confirm.msca-link-apply')} className="external-link" newTabIndicator target="_blank" />;
+  const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} className="external-link" newTabIndicator target="_blank" />;
+  const moreInfoLink = <InlineLink to={t('confirm.more-info-link')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('apply-adult-child:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
 
   // this link will be used in a future release
-  // const cdcpLink = <InlineLink routeId="$lang/_public/status/index" params={params} className="external-link font-lato font-semibold" target='_blank' />;
+  // const cdcpLink = <InlineLink routeId="$lang/_public/status/index" params={params} className="external-link" target='_blank' />;
 
   return (
     <div className="max-w-prose">

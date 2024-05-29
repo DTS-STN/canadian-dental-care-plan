@@ -65,8 +65,8 @@ export default function ApplyFlowApplicationDelegate() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const contactServiceCanada = <InlineLink to={t('apply:application-delegate.contact-service-canada-href')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const preparingToApply = <InlineLink to={t('apply:application-delegate.preparing-to-apply-href')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const contactServiceCanada = <InlineLink to={t('apply:application-delegate.contact-service-canada-href')} className="external-link" newTabIndicator target="_blank" />;
+  const preparingToApply = <InlineLink to={t('apply:application-delegate.preparing-to-apply-href')} className="external-link" newTabIndicator target="_blank" />;
   const span = <span className="whitespace-nowrap" />;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
