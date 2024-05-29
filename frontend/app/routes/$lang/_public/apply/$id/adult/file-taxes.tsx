@@ -74,7 +74,7 @@ export default function ApplyFlowFileYourTaxes() {
   }
 
   return (
-    <>
+    <div className="max-w-prose">
       <div className="mb-8 space-y-4">
         <p>{t('apply-adult:eligibility.file-your-taxes.ineligible-to-apply')}</p>
         <p>{t('apply-adult:eligibility.file-your-taxes.tax-not-filed')}</p>
@@ -95,6 +95,6 @@ export default function ApplyFlowFileYourTaxes() {
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>
       </fetcher.Form>
-    </>
+    </div>
   );
 }
