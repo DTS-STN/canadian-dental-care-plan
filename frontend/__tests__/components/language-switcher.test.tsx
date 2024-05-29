@@ -48,7 +48,7 @@ describe('Language Switcher', () => {
 
     vi.mocked(useParams).mockReturnValue({ lang: requestedLang });
     vi.mocked(getAltLanguage).mockReturnValue(responseLang);
-    vi.mocked(useMatches).mockReturnValue([{ id: '$lang+/_public+/apply/index', data: {}, handle: {}, params: {}, pathname: '' }]);
+    vi.mocked(useMatches).mockReturnValue([{ id: '$lang/_public/apply/index', data: {}, handle: {}, params: {}, pathname: '' }]);
 
     const RemixStub = createRemixStub([{ Component: () => <LanguageSwitcher>Français</LanguageSwitcher>, path: '/' }]);
     render(<RemixStub />);

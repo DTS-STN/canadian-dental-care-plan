@@ -2,7 +2,7 @@ import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { loader } from '~/routes/$lang+/_protected+/access-to-governmental-benefits+/edit';
+import { loader } from '~/routes/$lang/_protected/access-to-governmental-benefits+/edit';
 
 vi.mock('~/services/audit-service.server', () => ({
   getAuditService: vi.fn().mockReturnValue({
