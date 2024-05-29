@@ -18,9 +18,9 @@ import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
-import { toBenefitApplicationRequest } from '~/mappers/benefit-application-service-mappers.server';
+import { toBenefitApplicationRequestFromApplyChildState } from '~/mappers/benefit-application-service-mappers.server';
 import { loadApplyChildState, validateApplyChildStateForReview } from '~/route-helpers/apply-child-route-helpers.server';
-import { clearApplyState, getAgeCategoryFromDateString, getChildrenState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -51,37 +51,23 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const lookupService = getLookupService();
+  const state = validateApplyChildStateForReview({ params, state: loadApplyChildState({ params, request, session }) });
 
-  const state = loadApplyChildState({ params, request, session });
-  validateApplyChildStateForReview({ params, state });
-
-  const maritalStatuses = await lookupService.getAllMaritalStatuses();
   const { COMMUNICATION_METHOD_EMAIL_ID, ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
-
-  // prettier-ignore
-  if (state.applicantInformation === undefined ||
-    state.communicationPreferences === undefined ||
-    state.dateOfBirth === undefined ||
-    state.personalInformation === undefined ||
-    state.taxFiling2023 === undefined ||
-    state.typeOfApplication === undefined ||
-    getChildrenState(state).length === 0) {
-    throw new Error(`Incomplete application "${state.id}" state!`);
-  }
-
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
+  const lookupService = getLookupService();
+  const maritalStatuses = await lookupService.getAllMaritalStatuses();
 
   // Getting province by Id
   const allRegions = await lookupService.getAllRegions();
-  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
-  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
+  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation.mailingProvince);
+  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation.homeProvince);
 
   // Getting Country by Id
   const allCountries = await lookupService.getAllCountries();
-  const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation?.mailingCountry);
-  const countryHome = allCountries.find((country) => country.countryId === state.personalInformation?.homeCountry);
+  const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation.mailingCountry);
+  const countryHome = allCountries.find((country) => country.countryId === state.personalInformation.homeCountry);
 
   if (!countryMailing) {
     throw new Error(`Unexpected mailing address country: ${state.personalInformation.mailingCountry}`);
@@ -138,20 +124,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:review-adult-information.page-title') }) };
-  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
-  const payload = viewPayloadEnabled
-    ? toBenefitApplicationRequest({
-        typeOfApplication: 'child',
-        disabilityTaxCredit: ageCategory === 'adults' ? state.disabilityTaxCredit : undefined,
-        livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
-        applicantInformation: state.applicantInformation,
-        communicationPreferences: state.communicationPreferences,
-        dateOfBirth: state.dateOfBirth,
-        personalInformation: state.personalInformation,
-        partnerInformation: state.partnerInformation,
-        children: state.children,
-      })
-    : undefined;
+  const payload = viewPayloadEnabled ? toBenefitApplicationRequestFromApplyChildState(state) : undefined;
 
   saveApplyState({ params, session, state: { editMode: true } });
 
@@ -175,19 +148,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply-child/review-child-information');
 
-  const state = loadApplyChildState({ params, request, session });
-  validateApplyChildStateForReview({ params, state });
-
-  // prettier-ignore
-  if (state.applicantInformation === undefined ||
-    state.communicationPreferences === undefined ||
-    state.dateOfBirth === undefined ||
-    state.personalInformation === undefined ||
-    state.taxFiling2023 === undefined ||
-    state.typeOfApplication === undefined ||
-    getChildrenState(state).length === 0) {
-    throw new Error(`Incomplete application "${state.id}" state!`);
-  }
+  const state = validateApplyChildStateForReview({ params, state: loadApplyChildState({ params, request, session }) });
 
   const { ENABLED_FEATURES } = getEnv();
   const benefitApplicationService = getBenefitApplicationService();
@@ -217,31 +178,11 @@ export async function action({ context: { session }, params, request }: ActionFu
     }
   }
 
-  const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
-  const benefitApplicationRequest = toBenefitApplicationRequest({
-    typeOfApplication: 'child',
-    disabilityTaxCredit: ageCategory === 'adults' ? state.disabilityTaxCredit : undefined,
-    livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
-    applicantInformation: state.applicantInformation,
-    communicationPreferences: state.communicationPreferences,
-    dateOfBirth: state.dateOfBirth,
-    personalInformation: state.personalInformation,
-    partnerInformation: state.partnerInformation,
-    children: state.children,
-  });
-
+  const benefitApplicationRequest = toBenefitApplicationRequestFromApplyChildState(state);
   const confirmationCode = await benefitApplicationService.submitApplication(benefitApplicationRequest);
+  const submissionInfo = { confirmationCode, submittedOn: new UTCDate().toISOString() };
 
-  saveApplyState({
-    params,
-    session,
-    state: {
-      submissionInfo: {
-        confirmationCode: confirmationCode,
-        submittedOn: new UTCDate().toISOString(),
-      },
-    },
-  });
+  saveApplyState({ params, session, state: { submissionInfo } });
 
   return redirect(getPathById('$lang+/_public+/apply+/$id+/child/confirmation', params));
 }

@@ -10,37 +10,163 @@ import {
   PartnerInformationState,
   PersonalInformationState,
   TypeOfApplicationState,
+  getAgeCategoryFromDateString,
 } from '~/route-helpers/apply-route-helpers.server';
 import { BenefitApplicationRequest } from '~/schemas/benefit-application-service-schemas.server';
 import { parseDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env.server';
 
-interface ToBenefitApplicationRequestArgs {
-  typeOfApplication: TypeOfApplicationState;
-  disabilityTaxCredit?: boolean;
-  livingIndependently?: boolean;
+export interface ToBenefitApplicationRequestFromApplyAdultStateArgs {
   applicantInformation: ApplicantInformationState;
   communicationPreferences: CommunicationPreferencesState;
   dateOfBirth: string;
-  dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
-  dentalInsurance?: boolean;
+  dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
+  dentalInsurance: boolean;
+  disabilityTaxCredit?: boolean;
+  livingIndependently?: boolean;
   partnerInformation: PartnerInformationState | undefined;
   personalInformation: PersonalInformationState;
-  children?: ChildState[];
+  typeOfApplication: Extract<TypeOfApplicationState, 'adult'>;
 }
 
-export function toBenefitApplicationRequest({
-  typeOfApplication,
-  disabilityTaxCredit,
-  livingIndependently,
-  partnerInformation,
+export function toBenefitApplicationRequestFromApplyAdultState({
   applicantInformation,
   communicationPreferences,
   dateOfBirth,
   dentalBenefits,
   dentalInsurance,
+  disabilityTaxCredit,
+  livingIndependently,
+  partnerInformation,
   personalInformation,
+  typeOfApplication,
+}: ToBenefitApplicationRequestFromApplyAdultStateArgs) {
+  const ageCategory = getAgeCategoryFromDateString(dateOfBirth);
+
+  if (ageCategory === 'adults' && disabilityTaxCredit === undefined) {
+    throw Error('Expected disabilityTaxCredit to be defined');
+  }
+
+  if (ageCategory === 'youth' && livingIndependently === undefined) {
+    throw Error('Expected livingIndependently to be defined');
+  }
+
+  return toBenefitApplicationRequest({
+    applicantInformation,
+    communicationPreferences,
+    dateOfBirth,
+    dentalBenefits,
+    dentalInsurance,
+    disabilityTaxCredit: ageCategory === 'adults' ? disabilityTaxCredit : undefined,
+    livingIndependently: ageCategory === 'youth' ? livingIndependently : undefined,
+    partnerInformation,
+    personalInformation,
+    typeOfApplication,
+  });
+}
+
+export interface ToBenefitApplicationRequestFromApplyAdultChildStateArgs {
+  applicantInformation: ApplicantInformationState;
+  children: Required<ChildState>[];
+  communicationPreferences: CommunicationPreferencesState;
+  dateOfBirth: string;
+  dentalBenefits: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
+  dentalInsurance: boolean;
+  disabilityTaxCredit?: boolean;
+  livingIndependently?: boolean;
+  partnerInformation: PartnerInformationState | undefined;
+  personalInformation: PersonalInformationState;
+  typeOfApplication: Extract<TypeOfApplicationState, 'adult-child'>;
+}
+
+export function toBenefitApplicationRequestFromApplyAdultChildState({
+  applicantInformation,
   children,
+  communicationPreferences,
+  dateOfBirth,
+  dentalBenefits,
+  dentalInsurance,
+  disabilityTaxCredit,
+  livingIndependently,
+  partnerInformation,
+  personalInformation,
+  typeOfApplication,
+}: ToBenefitApplicationRequestFromApplyAdultChildStateArgs) {
+  const ageCategory = getAgeCategoryFromDateString(dateOfBirth);
+
+  if (ageCategory === 'adults' && disabilityTaxCredit === undefined) {
+    throw Error('Expected disabilityTaxCredit to be defined');
+  }
+
+  if (ageCategory === 'youth' && livingIndependently === undefined) {
+    throw Error('Expected livingIndependently to be defined');
+  }
+
+  return toBenefitApplicationRequest({
+    applicantInformation,
+    children,
+    communicationPreferences,
+    dateOfBirth,
+    dentalBenefits,
+    dentalInsurance,
+    disabilityTaxCredit: ageCategory === 'adults' ? disabilityTaxCredit : undefined,
+    livingIndependently: ageCategory === 'youth' ? livingIndependently : undefined,
+    partnerInformation,
+    personalInformation,
+    typeOfApplication,
+  });
+}
+
+export interface ToBenefitApplicationRequestFromApplyChildStateArgs {
+  applicantInformation: ApplicantInformationState;
+  children: Required<ChildState>[];
+  communicationPreferences: CommunicationPreferencesState;
+  dateOfBirth: string;
+  disabilityTaxCredit?: boolean;
+  livingIndependently?: boolean;
+  partnerInformation: PartnerInformationState | undefined;
+  personalInformation: PersonalInformationState;
+  typeOfApplication: Extract<TypeOfApplicationState, 'child'>;
+}
+
+export function toBenefitApplicationRequestFromApplyChildState({ applicantInformation, children, communicationPreferences, dateOfBirth, partnerInformation, personalInformation, typeOfApplication }: ToBenefitApplicationRequestFromApplyChildStateArgs) {
+  return toBenefitApplicationRequest({
+    applicantInformation,
+    children,
+    communicationPreferences,
+    dateOfBirth,
+    partnerInformation,
+    personalInformation,
+    typeOfApplication,
+  });
+}
+
+interface ToBenefitApplicationRequestArgs {
+  applicantInformation: ApplicantInformationState;
+  children?: Required<ChildState>[];
+  communicationPreferences: CommunicationPreferencesState;
+  dateOfBirth: string;
+  dentalBenefits?: DentalFederalBenefitsState & DentalProvincialTerritorialBenefitsState;
+  dentalInsurance?: boolean;
+  disabilityTaxCredit?: boolean;
+  livingIndependently?: boolean;
+  partnerInformation: PartnerInformationState | undefined;
+  personalInformation: PersonalInformationState;
+  typeOfApplication: TypeOfApplicationState;
+}
+
+function toBenefitApplicationRequest({
+  applicantInformation,
+  children,
+  communicationPreferences,
+  dateOfBirth,
+  dentalBenefits,
+  dentalInsurance,
+  disabilityTaxCredit,
+  livingIndependently,
+  partnerInformation,
+  personalInformation,
+  typeOfApplication,
 }: ToBenefitApplicationRequestArgs): BenefitApplicationRequest {
   return {
     BenefitApplication: {
