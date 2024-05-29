@@ -80,7 +80,8 @@
         "sin": "Entrez un NAS de 9 chiffres"
       },
       "error-message": {
-        "first-name-required": "Entrez le prénom",
+        "first-name-required": "Entrez le prénom de l'enfant",
+        "last-name-required": "Entrez le nom de famille de l'enfant",
         "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789 ",
         "sin-valid": "Le NAS doit être valide",
         "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique",
@@ -92,8 +93,8 @@
         "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisi",
         "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
         "date-of-birth-year-required": "La date de naissance doit inclure une année",
-        "has-social-insurance-number": "(FR) Select whether or not this child has a social insurance number",
-        "is-parent": "(FR) Select whether or not you are this child's parent or legal guardian"
+        "has-social-insurance-number": "Sélectionnez si l'enfant a un NAS",
+        "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant"
       }
     },
     "dental-insurance": {

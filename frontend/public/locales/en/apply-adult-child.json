@@ -81,8 +81,8 @@
         "sin": "Enter the 9-digit SIN"
       },
       "error-message": {
-        "first-name-required": "Enter first name",
-        "last-name-required": "Enter last name",
+        "first-name-required": "Enter child's first name",
+        "last-name-required": "Enter child's last name",
         "sin-required": "Enter 9-digit SIN, for example 123 456 789",
         "sin-valid": "Must be a valid SIN",
         "sin-unique": "The Social Insurance Number (SIN) must be unique",
@@ -94,8 +94,8 @@
         "date-of-birth-valid": "Day must be valid for the given month and year",
         "date-of-birth-year-number": "Year must be a number, for example 1950",
         "date-of-birth-year-required": "Date of birth must include a year",
-        "has-social-insurance-number": "Select whether or not this child has a social insurance number",
-        "is-parent": "Select whether or not you are this child's parent or legal guardian"
+        "has-social-insurance-number": "Select whether the child has a SIN",
+        "is-parent": "Select whether you are the parent or legal guardian of the child"
       }
     },
     "dental-insurance": {

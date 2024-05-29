@@ -18,7 +18,7 @@ import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { AppPageTitle } from '~/components/layouts/public-layout';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { ChildInformationState, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { ChildInformationState, ChildSinState, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -100,27 +100,9 @@ export async function action({ context: { session }, params, request }: ActionFu
         .int()
         .positive(),
       dateOfBirth: z.string(),
-      hasSocialInsuranceNumber: z.boolean({ errorMap: () => ({ message: t('apply-adult-child:children.information.error-message.has-social-insurance-number') }) }),
-      socialInsuranceNumber: z.string().trim().optional(),
       isParent: z.boolean({ errorMap: () => ({ message: t('apply-adult-child:children.information.error-message.is-parent') }) }),
     })
     .superRefine((val, ctx) => {
-      if (val.hasSocialInsuranceNumber) {
-        if (!val.socialInsuranceNumber) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-required'), path: ['socialInsuranceNumber'] });
-        } else if (!isValidSin(val.socialInsuranceNumber)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-valid'), path: ['socialInsuranceNumber'] });
-        } else if (
-          val.socialInsuranceNumber &&
-          [applyState.applicantInformation?.socialInsuranceNumber, applyState.partnerInformation?.socialInsuranceNumber, ...applyState.children.filter((child) => state.id !== child.id).map((child) => child.information?.socialInsuranceNumber)]
-            .filter((sin) => sin !== undefined)
-            .map((sin) => formatSin(sin as string))
-            .includes(formatSin(val.socialInsuranceNumber))
-        ) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-unique'), path: ['socialInsuranceNumber'] });
-        }
-      }
-
       // At this point the year, month and day should have been validated as positive integer
       const dateOfBirthParts = extractDateParts(`${val.dateOfBirthYear}-${val.dateOfBirthMonth}-${val.dateOfBirthDay}`);
       const dateOfBirth = `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`;
@@ -152,7 +134,30 @@ export async function action({ context: { session }, params, request }: ActionFu
         ...val,
         dateOfBirth: `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`,
       };
-    }) satisfies z.ZodType<ChildInformationState>;
+    }) satisfies z.ZodType<Omit<ChildInformationState, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>>;
+
+  const childSinSchema = z
+    .object({
+      hasSocialInsuranceNumber: z.boolean({ errorMap: () => ({ message: t('apply-adult-child:children.information.error-message.has-social-insurance-number') }) }),
+      socialInsuranceNumber: z.string().trim().optional(),
+    })
+    .superRefine((val, ctx) => {
+      if (val.hasSocialInsuranceNumber) {
+        if (!val.socialInsuranceNumber) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-required'), path: ['socialInsuranceNumber'] });
+        } else if (!isValidSin(val.socialInsuranceNumber)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-valid'), path: ['socialInsuranceNumber'] });
+        } else if (
+          val.socialInsuranceNumber &&
+          [applyState.applicantInformation?.socialInsuranceNumber, applyState.partnerInformation?.socialInsuranceNumber, ...applyState.children.filter((child) => state.id !== child.id).map((child) => child.information?.socialInsuranceNumber)]
+            .filter((sin) => sin !== undefined)
+            .map((sin) => formatSin(sin as string))
+            .includes(formatSin(val.socialInsuranceNumber))
+        ) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-unique'), path: ['socialInsuranceNumber'] });
+        }
+      }
+    }) satisfies z.ZodType<ChildSinState>;
 
   const data = {
     firstName: String(formData.get('firstName') ?? ''),
@@ -167,8 +172,14 @@ export async function action({ context: { session }, params, request }: ActionFu
   };
 
   const parsedDataResult = childInformationSchema.safeParse(data);
-  if (!parsedDataResult.success) {
-    return json({ errors: parsedDataResult.error.format() });
+  const parsedSinDataResult = childSinSchema.safeParse(data);
+  if (!parsedDataResult.success || !parsedSinDataResult.success) {
+    return json({
+      errors: {
+        ...(!parsedDataResult.success ? parsedDataResult.error.format() : {}),
+        ...(!parsedSinDataResult.success ? parsedSinDataResult.error.format() : {}),
+      },
+    });
   }
 
   saveApplyState({
@@ -177,7 +188,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     state: {
       children: applyState.children.map((child) => {
         if (child.id !== state.id) return child;
-        return { ...child, information: parsedDataResult.data };
+        return { ...child, information: { ...parsedDataResult.data, ...parsedSinDataResult.data } };
       }),
     },
   });

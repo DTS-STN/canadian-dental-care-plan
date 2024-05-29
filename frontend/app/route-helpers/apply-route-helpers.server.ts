@@ -37,9 +37,9 @@ export interface ApplyState {
       firstName: string;
       lastName: string;
       dateOfBirth: string;
+      isParent: boolean;
       hasSocialInsuranceNumber: boolean;
       socialInsuranceNumber?: string;
-      isParent: boolean;
     };
   }[];
   readonly communicationPreferences?: {
@@ -104,6 +104,7 @@ export type ChildState = ApplyState['children'][number];
 export type ChildDentalBenefitsState = NonNullable<ChildState['dentalBenefits']>;
 export type ChildDentalInsuranceState = NonNullable<ChildState['dentalInsurance']>;
 export type ChildInformationState = NonNullable<ChildState['information']>;
+export type ChildSinState = Pick<NonNullable<ChildState['information']>, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>;
 export type CommunicationPreferencesState = NonNullable<ApplyState['communicationPreferences']>;
 export type DentalFederalBenefitsState = Pick<NonNullable<ApplyState['dentalBenefits']>, 'federalSocialProgram' | 'hasFederalBenefits'>;
 export type DentalInsuranceState = NonNullable<ApplyState['dentalInsurance']>;
