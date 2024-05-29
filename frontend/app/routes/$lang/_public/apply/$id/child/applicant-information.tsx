@@ -60,7 +60,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/applicant-information');
+  const log = getLogger('apply-child/applicant-information');
 
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -88,6 +88,8 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang/_public/apply/$id/child/review-adult-information', params));
   }
 
+  // Form action Continue & Save
+  // state validation schema
   const dateOfBirthSchema = z
     .object({
       dateOfBirthYear: z
@@ -146,8 +148,6 @@ export async function action({ context: { session }, params, request }: ActionFu
       };
     });
 
-  // Form action Continue & Save
-  // state validation schema
   const applicantInformationSchema = z.object({
     socialInsuranceNumber: z
       .string()
