@@ -1,8 +1,9 @@
 {
   "applicant-information": {
-    "page-title": "Renseignements sur le demandeur",
+    "page-title": "(FR) Parent or legal guardian personal information",
     "form-instructions-sin": "Veuillez indiquer votre nom légal tel qu'indiqué sur votre carte ou votre lettre de numéro d'assurance sociale (NAS).",
     "form-instructions-info": "Nous utiliserons les renseignements que vous avez fournis pour vérifier votre identité. Tout renseignement qui ne correspond pas à ceux associés à votre numéro d'assurance sociale pourrait retarder le traitement de votre demande.",
+    "date-of-birth": "Date de naissance",
     "sin": "Numéro d'assurance sociale (NAS)",
     "last-name": "Nom de famille",
     "first-name": "Prénom",
@@ -23,7 +24,15 @@
       "marital-status-no-partner-information": "Si vous êtes marié ou vivez en conjoint de fait, vous devez saisir leurs informations sur la page suivante. Sélectionnez votre état civil et appuyez sur «\u00a0Enregistrer\u00a0».",
       "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789 ",
       "sin-valid": "Le NAS doit être valide",
-      "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
+      "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique",
+      "date-of-birth-day-number": "Le jour doit être un nombre",
+      "date-of-birth-day-required": "La date de naissance doit inclure un jour",
+      "date-of-birth-is-past": "La date de naissance doit être dans le passé",
+      "date-of-birth-is-past-valid": "Date de naissance trop éloignée dans le passé",
+      "date-of-birth-month-required": "La date de naissance doit inclure un mois",
+      "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisi",
+      "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
+      "date-of-birth-year-required": "La date de naissance doit inclure une année"
     }
   },
   "children": {
