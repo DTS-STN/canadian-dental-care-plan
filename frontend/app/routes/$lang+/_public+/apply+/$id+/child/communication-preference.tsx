@@ -132,10 +132,10 @@ export async function action({ context: { session }, params, request }: ActionFu
   saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
 
   if (state.editMode) {
-    return redirect(getPathById('$lang+/_public+/apply+/$id+/child/review-information', params));
+    return redirect(getPathById('$lang+/_public+/apply+/$id+/child/review-adult-information', params));
   }
 
-  return redirect(getPathById('$lang+/_public+/apply+/$id+/child/review-information', params));
+  return redirect(getPathById('$lang+/_public+/apply+/$id+/child/review-adult-information', params));
 }
 
 export default function ApplyFlowCommunicationPreferencePage() {
