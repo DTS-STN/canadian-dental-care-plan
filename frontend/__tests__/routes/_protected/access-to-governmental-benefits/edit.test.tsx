@@ -2,7 +2,7 @@ import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { loader } from '~/routes/$lang/_protected/access-to-governmental-benefits+/edit';
+import { loader } from '~/routes/$lang/_protected/access-to-governmental-benefits/edit';
 
 vi.mock('~/services/audit-service.server', () => ({
   getAuditService: vi.fn().mockReturnValue({
@@ -140,7 +140,7 @@ describe('Access View Governmental Page', () => {
       session.set('userInfoToken', { sin: '999999999' });
 
       const response = await loader({
-        request: new Request('http://localhost:3000/en/access-to-governmental-benefits+/edit'),
+        request: new Request('http://localhost:3000/en/access-to-governmental-benefits/edit'),
         context: { session },
         params: {},
       });

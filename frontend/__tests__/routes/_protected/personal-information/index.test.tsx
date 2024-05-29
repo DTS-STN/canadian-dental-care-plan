@@ -3,7 +3,7 @@ import { createMemorySessionStorage } from '@remix-run/node';
 import { UTCDate } from '@date-fns/utc';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { loader } from '~/routes/$lang/_protected/personal-information+/index';
+import { loader } from '~/routes/$lang/_protected/personal-information/index';
 
 vi.mock('~/services/audit-service.server', () => ({
   getAuditService: vi.fn().mockReturnValue({

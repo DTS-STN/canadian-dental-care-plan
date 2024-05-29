@@ -54,17 +54,17 @@ export default function Index() {
     <>
       <div className="grid gap-4">
         {useFeature('view-personal-info') && (
-          <CardLink title={t('index:personal-info')} routeId="$lang/_protected/personal-information+/index" params={params}>
+          <CardLink title={t('index:personal-info')} routeId="$lang/_protected/personal-information/index" params={params}>
             {t('index:personal-info-desc')}
           </CardLink>
         )}
         {useFeature('view-letters') && (
-          <CardLink title={t('index:view-letters')} routeId="$lang/_protected/letters+/index" params={params}>
+          <CardLink title={t('index:view-letters')} routeId="$lang/_protected/letters/index" params={params}>
             {t('index:view-letters-desc')}
           </CardLink>
         )}
         {useFeature('view-applications') && (
-          <CardLink title={t('index:view-my-application')} routeId="$lang/_protected/applications+/index" params={params}>
+          <CardLink title={t('index:view-my-application')} routeId="$lang/_protected/applications/index" params={params}>
             {t('index:view-my-application-desc')}
           </CardLink>
         )}
@@ -79,17 +79,17 @@ export default function Index() {
           </CardLink>
         )}
         {useFeature('email-alerts') && (
-          <CardLink title={t('index:subscribe')} routeId="$lang/_protected/alerts+/index" params={params}>
+          <CardLink title={t('index:subscribe')} routeId="$lang/_protected/alerts/index" params={params}>
             {t('index:subscribe-desc')}
           </CardLink>
         )}
         {useFeature('authenticated-status-check') && (
-          <CardLink title={t('index:status-check')} routeId="$lang/_protected/status-check+/index" params={params}>
+          <CardLink title={t('index:status-check')} routeId="$lang/_protected/status-check/index" params={params}>
             {t('index:status-check-desc')}
           </CardLink>
         )}
         {useFeature('dependent-status-checker') && (
-          <CardLink title={t('index:dependent-status-checker')} routeId="$lang/_protected/dependent-status-checker+/index" params={params}>
+          <CardLink title={t('index:dependent-status-checker')} routeId="$lang/_protected/dependent-status-checker/index" params={params}>
             {t('index:dependent-status-checker-desc')}
           </CardLink>
         )}
