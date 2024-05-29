@@ -196,12 +196,12 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const hasPartner = applicantInformationStateHasPartner(parsedDataResult.data);
   const remove = !hasPartner ? 'partnerInformation' : undefined;
-  saveApplyState({ params, remove, session, state: { applicantInformation: parsedDataResult.data } });
+  saveApplyState({ params, remove, session, state: { applicantInformation: parsedDataResult.data, dateOfBirth: parsedDobResult.data.dateOfBirth } });
 
   const ageCategory = getAgeCategoryFromDateString(parsedDobResult.data.dateOfBirth);
 
   if (ageCategory === 'children') {
-    return redirect(getPathById('$lang/_public/apply/$id/adult-child/contact-apply-child', params));
+    return redirect(getPathById('$lang/_public/apply/$id/child/contact-apply-child', params));
   }
 
   if (state.editMode) {
