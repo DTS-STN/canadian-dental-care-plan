@@ -145,7 +145,7 @@
       "federal-benefits": {
         "title": "Federal benefits",
         "legend": "Does {{childName}} have dental benefits through a social program offered by a federal program?",
-        "option-yes": "<strong>Yes</strong>, yes this child has <strong>federal</strong> dental benefits",
+        "option-yes": "<strong>Yes</strong>, this child has <strong>federal</strong> dental benefits",
         "option-no": "<strong>No</strong>, this child does not have <strong>federal</strong> dental benefits",
         "social-programs": {
           "legend": "Please select which social program you are covered under. If you have more than one, please select the one you use most."

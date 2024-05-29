@@ -153,7 +153,7 @@
       "federal-benefits": {
         "title": "Prestations fédérales",
         "legend": "(FR) Does {{childName}} have dental benefits through a social program offered by a federal program?",
-        "option-yes": "(FR) <strong>Yes</strong>, yes this child has <strong>federal</strong> dental benefits",
+        "option-yes": "(FR) <strong>Yes</strong>, this child has <strong>federal</strong> dental benefits",
         "option-no": "(FR) <strong>No</strong>, this child does not have <strong>federal</strong> dental benefits",
         "social-programs": {
           "legend": "Veuillez sélectionner le programme de protection sociale avec lequel vous êtes assuré. Si vous en avez plus d'un, veuillez sélectionner celui que vous utilisez le plus."
