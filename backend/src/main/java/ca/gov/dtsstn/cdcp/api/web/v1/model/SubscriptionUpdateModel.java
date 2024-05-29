@@ -5,6 +5,7 @@ import org.immutables.value.Value.Immutable;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import ca.gov.dtsstn.cdcp.api.web.validation.LanguageCode;
+import ca.gov.dtsstn.cdcp.api.web.validation.LanguageCodeValidator.CodeType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
@@ -14,7 +15,7 @@ public interface SubscriptionUpdateModel {
 
 	@NotNull
 	@Schema(example = "1036")
-	@LanguageCode(message = "Preferred language code does not exist")
+	@LanguageCode(codeType = CodeType.MS_LOCALE_CODE, message = "Preferred language code does not exist")
 	String getMsLanguageCode();
 
 }
