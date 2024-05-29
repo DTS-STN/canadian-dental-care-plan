@@ -376,8 +376,8 @@
     }
   },
   "exit-application": {
-    "page-title": "Exit Application",
-    "are-you-sure": "Are you sure you want to exit this application? If you click \"Exit\", the form will reset and your information will be lost.",
+    "page-title": "Exiting the application",
+    "are-you-sure": "Are you sure you want to exit this application? If you click \"Exit\", the form will reset and the information will be lost.",
     "click-back": "Click \"Back\" to return to the form.",
     "back-btn": "Back",
     "exit-btn": "Exit",
