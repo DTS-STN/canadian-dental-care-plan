@@ -61,12 +61,12 @@ export default function ApplyIndex() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const canadaTermsConditions = <InlineLink to={t('apply:terms-and-conditions.links.canada-ca-terms-and-conditions')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const fileacomplaint = <InlineLink to={t('apply:terms-and-conditions.links.file-complaint')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const hcaptchaTermsOfService = <InlineLink to={t('apply:terms-and-conditions.links.hcaptcha')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const infosource = <InlineLink to={t('apply:terms-and-conditions.links.info-source')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const microsoftDataPrivacyPolicy = <InlineLink to={t('apply:terms-and-conditions.links.microsoft-data-privacy-policy')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const sunlife = <InlineLink to={t('apply:terms-and-conditions.links.sun-life')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const canadaTermsConditions = <InlineLink to={t('apply:terms-and-conditions.links.canada-ca-terms-and-conditions')} className="external-link" newTabIndicator target="_blank" />;
+  const fileacomplaint = <InlineLink to={t('apply:terms-and-conditions.links.file-complaint')} className="external-link" newTabIndicator target="_blank" />;
+  const hcaptchaTermsOfService = <InlineLink to={t('apply:terms-and-conditions.links.hcaptcha')} className="external-link" newTabIndicator target="_blank" />;
+  const infosource = <InlineLink to={t('apply:terms-and-conditions.links.info-source')} className="external-link" newTabIndicator target="_blank" />;
+  const microsoftDataPrivacyPolicy = <InlineLink to={t('apply:terms-and-conditions.links.microsoft-data-privacy-policy')} className="external-link" newTabIndicator target="_blank" />;
+  const sunlife = <InlineLink to={t('apply:terms-and-conditions.links.sun-life')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose">

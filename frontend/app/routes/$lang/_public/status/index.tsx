@@ -138,11 +138,11 @@ export default function StatusChecker() {
     fetcher.submit(formData, { method: 'POST' });
   }
 
-  const hcaptchaTermsOfService = <InlineLink to={t('status:links.hcaptcha')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const microsoftDataPrivacyPolicy = <InlineLink to={t('status:links.microsoft-data-privacy-policy')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const microsoftServiceAgreement = <InlineLink to={t('status:links.microsoft-service-agreement')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const fileacomplaint = <InlineLink to={t('status:links.file-complaint')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const canadaTermsConditions = <InlineLink to={t('status:links.canada-terms-conditions')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const hcaptchaTermsOfService = <InlineLink to={t('status:links.hcaptcha')} className="external-link" newTabIndicator target="_blank" />;
+  const microsoftDataPrivacyPolicy = <InlineLink to={t('status:links.microsoft-data-privacy-policy')} className="external-link" newTabIndicator target="_blank" />;
+  const microsoftServiceAgreement = <InlineLink to={t('status:links.microsoft-service-agreement')} className="external-link" newTabIndicator target="_blank" />;
+  const fileacomplaint = <InlineLink to={t('status:links.file-complaint')} className="external-link" newTabIndicator target="_blank" />;
+  const canadaTermsConditions = <InlineLink to={t('status:links.canada-terms-conditions')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <PublicLayout>

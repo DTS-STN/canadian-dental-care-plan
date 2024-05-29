@@ -32,8 +32,8 @@ export default function UnableToProcessRequest() {
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const noWrap = <span className="whitespace-nowrap" />;
-  const eServiceCanadaLink = <InlineLink to={t('unable-to-process-request:e-service-canada-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
-  const cdcpLink = <InlineLink to={t('unable-to-process-request:cdcp-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
+  const eServiceCanadaLink = <InlineLink to={t('unable-to-process-request:e-service-canada-link')} className="external-link" newTabIndicator target="_blank" />;
+  const cdcpLink = <InlineLink to={t('unable-to-process-request:cdcp-link')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <PublicLayout>
