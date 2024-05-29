@@ -374,68 +374,72 @@ export default function ApplyFlowPersonalInformation() {
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <p id="adding-phone" className="mb-2">
-            {t('apply-adult-child:contact-information.add-phone')}
-          </p>
-          <div className="mb-6 grid items-end gap-6">
-            <InputField
-              id="phone-number"
-              name="phoneNumber"
-              type="tel"
-              inputMode="tel"
-              className="w-full"
-              autoComplete="tel"
-              defaultValue={defaultState?.phoneNumber ?? ''}
-              errorMessage={errorMessages['phone-number']}
-              label={t('apply-adult-child:contact-information.phone-number')}
-              maxLength={100}
-              aria-describedby="adding-phone"
-            />
-            <InputField
-              id="phone-number-alt"
-              name="phoneNumberAlt"
-              type="tel"
-              inputMode="tel"
-              className="w-full"
-              autoComplete="tel"
-              defaultValue={defaultState?.phoneNumberAlt ?? ''}
-              errorMessage={errorMessages['phone-number-alt']}
-              label={t('apply-adult-child:contact-information.phone-number-alt')}
-              maxLength={100}
-              aria-describedby="adding-phone"
-            />
-          </div>
-          <p id="adding-email" className="mb-2">
-            {t('apply-adult-child:contact-information.add-email')}
-          </p>
-          <div className="mb-6 grid gap-6 md:grid-cols-2">
-            <InputField
-              id="email"
-              name="email"
-              type="email"
-              inputMode="email"
-              className="w-full"
-              autoComplete="email"
-              defaultValue={defaultState?.email ?? ''}
-              errorMessage={errorMessages['email']}
-              label={t('apply-adult-child:contact-information.email')}
-              maxLength={100}
-              aria-describedby="adding-email"
-            />
-            <InputField
-              id="confirm-email"
-              name="confirmEmail"
-              type="email"
-              inputMode="email"
-              className="w-full"
-              autoComplete="email"
-              defaultValue={defaultState?.email ?? ''}
-              errorMessage={errorMessages['confirm-email']}
-              label={t('apply-adult-child:contact-information.confirm-email')}
-              maxLength={100}
-              aria-describedby="adding-email"
-            />
-          </div>
+          <fieldset className="mb-6">
+            <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult-child:contact-information.phone-header')}</legend>
+            <p className="mb-4">{t('apply-adult-child:contact-information.form-instructions')}</p>
+            <div className="grid items-end gap-6">
+              <InputField
+                id="phone-number"
+                name="phoneNumber"
+                type="tel"
+                inputMode="tel"
+                className="w-full"
+                autoComplete="tel"
+                defaultValue={defaultState?.phoneNumber ?? ''}
+                errorMessage={errorMessages['phone-number']}
+                label={t('apply-adult-child:contact-information.phone-number')}
+                maxLength={100}
+                aria-describedby="adding-phone"
+              />
+              <InputField
+                id="phone-number-alt"
+                name="phoneNumberAlt"
+                type="tel"
+                inputMode="tel"
+                className="w-full"
+                autoComplete="tel"
+                defaultValue={defaultState?.phoneNumberAlt ?? ''}
+                errorMessage={errorMessages['phone-number-alt']}
+                label={t('apply-adult-child:contact-information.phone-number-alt')}
+                maxLength={100}
+                aria-describedby="adding-phone"
+              />
+            </div>
+          </fieldset>
+          <fieldset className="mb-6">
+            <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult-child:contact-information.email-header')}</legend>
+            <p id="adding-email" className="mb-4">
+              {t('apply-adult-child:contact-information.add-email')}
+            </p>
+            <div className="grid gap-6 md:grid-cols-2">
+              <InputField
+                id="email"
+                name="email"
+                type="email"
+                inputMode="email"
+                className="w-full"
+                autoComplete="email"
+                defaultValue={defaultState?.email ?? ''}
+                errorMessage={errorMessages['email']}
+                label={t('apply-adult-child:contact-information.email')}
+                maxLength={100}
+                aria-describedby="adding-email"
+              />
+              <InputField
+                id="confirm-email"
+                name="confirmEmail"
+                type="email"
+                inputMode="email"
+                className="w-full"
+                autoComplete="email"
+                defaultValue={defaultState?.email ?? ''}
+                errorMessage={errorMessages['confirm-email']}
+                label={t('apply-adult-child:contact-information.confirm-email')}
+                maxLength={100}
+                aria-describedby="adding-email"
+              />
+            </div>
+          </fieldset>
           <fieldset className="mb-6">
             <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult-child:contact-information.mailing-address.header')}</legend>
             <div className="space-y-6">
