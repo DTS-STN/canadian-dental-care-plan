@@ -2,7 +2,7 @@ import { createMemorySessionStorage, redirect } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/adult/tax-filing';
+import { action, loader } from '~/routes/$lang+/_public+/apply+/$id/adult/tax-filing';
 
 vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
   loadApplyAdultState: vi.fn().mockReturnValue({

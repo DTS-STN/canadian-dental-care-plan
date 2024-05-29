@@ -3,7 +3,7 @@ import { createMemorySessionStorage, redirect } from '@remix-run/node';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
-import { action, loader } from '~/routes/$lang+/_public+/apply+/$id+/adult/date-of-birth';
+import { action, loader } from '~/routes/$lang+/_public+/apply+/$id/adult/date-of-birth';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 
 vi.mock('date-fns');

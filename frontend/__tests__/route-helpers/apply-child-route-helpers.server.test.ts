@@ -43,7 +43,7 @@ describe('apply-child-route-helpers.server', () => {
         typeOfApplication: undefined,
       };
 
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/type-application, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id/type-application, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if typeOfApplication is delegate', () => {
@@ -52,7 +52,7 @@ describe('apply-child-route-helpers.server', () => {
         typeOfApplication: 'delegate',
       } satisfies ApplyState;
 
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/application-delegate, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id/application-delegate, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if typeOfApplication is not child', () => {
@@ -61,7 +61,7 @@ describe('apply-child-route-helpers.server', () => {
         typeOfApplication: 'adult',
       } satisfies ApplyState;
 
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/type-application, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id/type-application, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if taxFiling2023 is undefined', () => {
@@ -71,7 +71,7 @@ describe('apply-child-route-helpers.server', () => {
         taxFiling2023: undefined,
       } satisfies ApplyState;
 
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/tax-filing, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id/child/tax-filing, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if taxFiling2023 is no', () => {
@@ -81,7 +81,7 @@ describe('apply-child-route-helpers.server', () => {
         taxFiling2023: false,
       } satisfies ApplyState;
 
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/file-taxes, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id/child/file-taxes, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if children is empty', () => {
@@ -92,7 +92,7 @@ describe('apply-child-route-helpers.server', () => {
         children: [],
       } satisfies ApplyState;
 
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/children/index, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id/child/children/index, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if a child information is undefined', () => {
@@ -109,7 +109,7 @@ describe('apply-child-route-helpers.server', () => {
       } satisfies ApplyState;
 
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow(
-        'MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/children/$childId/information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
+        'MockedRedirect(MockedPath($lang+/_public+/apply+/$id/child/children/$childId/information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
       );
     });
 
@@ -133,7 +133,7 @@ describe('apply-child-route-helpers.server', () => {
       } satisfies ApplyState;
 
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow(
-        'MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/children/$childId/parent-or-guardian, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
+        'MockedRedirect(MockedPath($lang+/_public+/apply+/$id/child/children/$childId/parent-or-guardian, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
       );
     });
 
@@ -163,7 +163,7 @@ describe('apply-child-route-helpers.server', () => {
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow(
-        'MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/children/$childId/cannot-apply-child, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
+        'MockedRedirect(MockedPath($lang+/_public+/apply+/$id/child/children/$childId/cannot-apply-child, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
       );
     });
 
@@ -191,7 +191,7 @@ describe('apply-child-route-helpers.server', () => {
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow(
-        'MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/children/$childId/dental-insurance, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
+        'MockedRedirect(MockedPath($lang+/_public+/apply+/$id/child/children/$childId/dental-insurance, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
       );
     });
 
@@ -220,7 +220,7 @@ describe('apply-child-route-helpers.server', () => {
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
       expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow(
-        'MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/children/$childId/federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
+        'MockedRedirect(MockedPath($lang+/_public+/apply+/$id/child/children/$childId/federal-provincial-territorial-benefits, {"lang":"en","id":"00000000-0000-0000-0000-000000000000","childId":"1"}))',
       );
     });
 
@@ -249,7 +249,7 @@ describe('apply-child-route-helpers.server', () => {
         dateOfBirth: undefined,
       } satisfies ApplyState;
 
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id/child/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if applicantInformation is undefined', () => {
@@ -278,7 +278,7 @@ describe('apply-child-route-helpers.server', () => {
         applicantInformation: undefined,
       } satisfies ApplyState;
 
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id/child/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if age category is "children"', () => {
@@ -315,7 +315,7 @@ describe('apply-child-route-helpers.server', () => {
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('children');
 
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/contact-apply-child, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id/child/contact-apply-child, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if partnerInformation is undefined and applicant has partner', () => {
@@ -354,7 +354,7 @@ describe('apply-child-route-helpers.server', () => {
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/partner-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id/child/partner-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if partnerInformation is not undefined and applicant has no partner', () => {
@@ -399,7 +399,7 @@ describe('apply-child-route-helpers.server', () => {
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
       vi.mocked(applicantInformationStateHasPartner).mockReturnValue(false);
 
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id/child/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if personalInformation is undefined', () => {
@@ -445,7 +445,7 @@ describe('apply-child-route-helpers.server', () => {
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/personal-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id/child/personal-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should redirect if communicationPreferences is undefined', () => {
@@ -497,7 +497,7 @@ describe('apply-child-route-helpers.server', () => {
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
       vi.mocked(applicantInformationStateHasPartner).mockResolvedValue(true);
 
-      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id+/child/communication-preference, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
+      expect(() => validateApplyChildStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang+/_public+/apply+/$id/child/communication-preference, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
     it('should not redirect if state is valid', () => {

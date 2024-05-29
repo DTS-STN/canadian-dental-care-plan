@@ -40,7 +40,7 @@ export default function ApplyIndex() {
   const params = useParams();
   const navigate = useNavigate();
 
-  const path = getPathById('$lang+/_public+/apply+/$id+/terms-and-conditions', { ...params, id });
+  const path = getPathById('$lang+/_public+/apply+/$id/terms-and-conditions', { ...params, id });
 
   useEffect(() => {
     sessionStorage.setItem('flow.state', 'active');
