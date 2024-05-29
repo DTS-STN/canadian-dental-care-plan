@@ -276,9 +276,11 @@
   "contact-information": {
     "page-title": "Informations de contact",
     "form-instructions": "L'ajout d'un numéro de téléphone permet à Service Canada de vous contacter en cas de problème avec votre demande. Si vous ne fournissez pas de numéro de téléphone, nous communiquerons avec vous par la poste.",
+    "phone-header": "Numéro de téléphone",
     "add-phone": "(FR) Adding a phone number helps Government of Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
     "phone-number": "Numéro de téléphone (facultatif)",
     "phone-number-alt": "Autre numéro de téléphone (facultatif)",
+    "email-header": "Adresse courriel",
     "add-email": "(FR) Adding an email will help the Government of Canada and Sun Life contact you regarding your Canadian Dental Care Plan membership.",
     "email": "Adresse courriel (facultatif)",
     "confirm-email": "Confirmer l'adresse courriel (facultatif)",
