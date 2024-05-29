@@ -74,20 +74,6 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
-
-  if (formAction === FormAction.Cancel) {
-    invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
-
-    if (applicantInformationStateHasPartner(state.applicantInformation) && state.partnerInformation === undefined) {
-      const errorMessage = t('apply-child:applicant-information.error-message.marital-status-no-partner-information');
-      const errors: z.ZodFormattedError<ApplicantInformationState & { dateOfBirthYear: number; dateOfBirthMonth: number; dateOfBirthDay: number; dateOfBirth: string }, string> = { _errors: [errorMessage], maritalStatus: { _errors: [errorMessage] } };
-      return json({ errors });
-    }
-
-    return redirect(getPathById('$lang/_public/apply/$id/child/review-adult-information', params));
-  }
-
   // Form action Continue & Save
   // state validation schema
   const dateOfBirthSchema = z
@@ -171,6 +157,20 @@ export async function action({ context: { session }, params, request }: ActionFu
       .trim()
       .min(1, t('apply-child:applicant-information.error-message.marital-status-required')),
   }) satisfies z.ZodType<ApplicantInformationState>;
+
+  const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
+
+  if (formAction === FormAction.Cancel) {
+    invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
+
+    if (applicantInformationStateHasPartner(state.applicantInformation) && state.partnerInformation === undefined) {
+      const errorMessage = t('apply-child:applicant-information.error-message.marital-status-no-partner-information');
+      const errors: z.inferFormattedError<typeof applicantInformationSchema & typeof dateOfBirthSchema> = { _errors: [errorMessage], maritalStatus: { _errors: [errorMessage] } };
+      return json({ errors });
+    }
+
+    return redirect(getPathById('$lang/_public/apply/$id/child/review-adult-information', params));
+  }
 
   const data = {
     socialInsuranceNumber: String(formData.get('socialInsuranceNumber') ?? ''),
