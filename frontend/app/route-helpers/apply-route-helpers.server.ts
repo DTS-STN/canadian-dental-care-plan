@@ -142,14 +142,14 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
 
   if (!parsedId.success) {
     log.warn('Invalid "id" param format; id: [%s]', params.id);
-    throw redirect(getPathById('$lang+/_public+/apply+/index', params));
+    throw redirect(getPathById('$lang+/_public+/apply/index', params));
   }
 
   const sessionName = getSessionName(parsedId.data);
 
   if (!session.has(sessionName)) {
     log.warn('Apply session has not been found; sessionName: [%s]', sessionName);
-    throw redirect(getPathById('$lang+/_public+/apply+/index', params));
+    throw redirect(getPathById('$lang+/_public+/apply/index', params));
   }
 
   const state: ApplyState = session.get(sessionName);
@@ -162,7 +162,7 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
   if (differenceInMinutes(now, lastUpdatedOn) >= 15) {
     session.unset(sessionName);
     log.warn('Apply session has expired; sessionName: [%s]', sessionName);
-    throw redirect(getPathById('$lang+/_public+/apply+/index', params));
+    throw redirect(getPathById('$lang+/_public+/apply/index', params));
   }
 
   return state;
