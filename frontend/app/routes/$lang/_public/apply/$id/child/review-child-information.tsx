@@ -180,85 +180,88 @@ export default function ReviewInformation() {
       <div className="max-w-prose">
         <p className="my-4 text-lg">{t('apply-child:review-child-information.read-carefully')}</p>
         <div className="mb-8 space-y-10">
-          {children.map((childData) => (
-            <section key={childData.id} className="space-y-10">
-              <h2 className="font-lato text-3xl font-semibold">{childData.information?.firstName}</h2>
-              <div>
-                <h3 className="mb-6 font-lato text-2xl font-semibold">{t('apply-child:review-child-information.page-sub-title', { child: childData.information?.firstName })}</h3>
-                <dl className="divide-y border-y">
-                  <DescriptionListItem term={t('apply-child:review-child-information.full-name-title')}>
-                    {`${childData.information?.firstName} ${childData.information?.lastName}`}
-                    <p className="mt-4">
-                      <InlineLink id="change-full-name" routeId="$lang/_public/apply/$id/adult/applicant-information" params={params}>
-                        {t('apply-child:review-child-information.full-name-change')}
-                      </InlineLink>
-                    </p>
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('apply-child:review-child-information.dob-title')}>
-                    {childData.information?.dateOfBirth}
-                    <p className="mt-4">
-                      <InlineLink id="change-date-of-birth" routeId="$lang/_public/apply/$id/adult/date-of-birth" params={params}>
-                        {t('apply-child:review-child-information.dob-change')}
-                      </InlineLink>
-                    </p>
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('apply-child:review-child-information.sin-title')}>
-                    {childData.information?.socialInsuranceNumber ? formatSin(childData.information.socialInsuranceNumber) : ''}
-                    <p className="mt-4">
-                      <InlineLink id="change-sin" routeId="$lang/_public/apply/$id/adult/applicant-information" params={params}>
-                        {t('apply-child:review-child-information.sin-change')}
-                      </InlineLink>
-                    </p>
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('apply-child:review-child-information.is-parent')}>{childData.information?.isParent ? t('apply-child:review-child-information.yes') : t('apply-child:review-child-information.no')}</DescriptionListItem>
-                </dl>
-              </div>
-              <div>
-                <h3 className="mb-6 font-lato text-2xl font-semibold">{t('apply-child:review-child-information.dental-title', { child: childData.information?.firstName })}</h3>
-                <dl className="divide-y border-y">
-                  <DescriptionListItem term={t('apply-child:review-child-information.dental-insurance-title')}>
-                    {childData.dentalInsurance ? t('apply-child:review-child-information.yes') : t('apply-child:review-child-information.no')}
-                    <p className="mt-4">
-                      <InlineLink id="change-access-dental" routeId="$lang/_public/apply/$id/adult/dental-insurance" params={params}>
-                        {t('apply-child:review-child-information.dental-insurance-change')}
-                      </InlineLink>
-                    </p>
-                  </DescriptionListItem>
-                  <DescriptionListItem term={t('apply-child:review-child-information.dental-benefit-title')}>
-                    {childData.dentalBenefits?.hasFederalBenefits ?? childData.dentalBenefits?.hasProvincialTerritorialBenefits ? (
-                      <>
-                        <p>{t('apply-child:review-child-information.yes')}</p>
-                        <p>{t('apply-child:review-child-information.dental-benefit-has-access')}</p>
-                        <div>
-                          <ul className="ml-6 list-disc">
-                            {childData.dentalBenefits.hasFederalBenefits && <li>{getNameByLanguage(i18n.language, federalSocialPrograms.find((p) => p.id === childData.dentalBenefits?.federalSocialProgram) ?? { nameEn: '', nameFr: '' })}</li>}
-                            {childData.dentalBenefits.hasProvincialTerritorialBenefits && (
-                              <li>
-                                {getNameByLanguage(
-                                  i18n.language,
-                                  provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === childData.dentalBenefits?.province).find((p) => p.id === childData.dentalBenefits?.provincialTerritorialSocialProgram) ?? {
-                                    nameEn: '',
-                                    nameFr: '',
-                                  },
-                                )}
-                              </li>
-                            )}
-                          </ul>
-                        </div>
-                      </>
-                    ) : (
-                      <>{t('apply-child:review-child-information.no')}</>
-                    )}
-                    <p className="mt-4">
-                      <InlineLink id="change-dental-benefits" routeId="$lang/_public/apply/$id/adult/federal-provincial-territorial-benefits" params={params}>
-                        {t('apply-child:review-child-information.dental-benefit-change')}
-                      </InlineLink>
-                    </p>
-                  </DescriptionListItem>
-                </dl>
-              </div>
-            </section>
-          ))}
+          {children.map((child) => {
+            const childParams = { ...params, childId: child.id };
+            return (
+              <section key={child.id} className="space-y-10">
+                <h2 className="font-lato text-3xl font-semibold">{child.information?.firstName}</h2>
+                <div>
+                  <h3 className="mb-6 font-lato text-2xl font-semibold">{t('apply-child:review-child-information.page-sub-title', { child: child.information?.firstName })}</h3>
+                  <dl className="divide-y border-y">
+                    <DescriptionListItem term={t('apply-child:review-child-information.full-name-title')}>
+                      {`${child.information?.firstName} ${child.information?.lastName}`}
+                      <p className="mt-4">
+                        <InlineLink id="change-full-name" routeId="$lang/_public/apply/$id/child/children/$childId/information" params={childParams}>
+                          {t('apply-child:review-child-information.full-name-change')}
+                        </InlineLink>
+                      </p>
+                    </DescriptionListItem>
+                    <DescriptionListItem term={t('apply-child:review-child-information.dob-title')}>
+                      {child.information?.dateOfBirth}
+                      <p className="mt-4">
+                        <InlineLink id="change-date-of-birth" routeId="$lang/_public/apply/$id/child/children/$childId/information" params={childParams}>
+                          {t('apply-child:review-child-information.dob-change')}
+                        </InlineLink>
+                      </p>
+                    </DescriptionListItem>
+                    <DescriptionListItem term={t('apply-child:review-child-information.sin-title')}>
+                      {child.information?.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}
+                      <p className="mt-4">
+                        <InlineLink id="change-sin" routeId="$lang/_public/apply/$id/child/children/$childId/information" params={childParams}>
+                          {t('apply-child:review-child-information.sin-change')}
+                        </InlineLink>
+                      </p>
+                    </DescriptionListItem>
+                    <DescriptionListItem term={t('apply-child:review-child-information.is-parent')}>{child.information?.isParent ? t('apply-child:review-child-information.yes') : t('apply-child:review-child-information.no')}</DescriptionListItem>
+                  </dl>
+                </div>
+                <div>
+                  <h3 className="mb-6 font-lato text-2xl font-semibold">{t('apply-child:review-child-information.dental-title', { child: child.information?.firstName })}</h3>
+                  <dl className="divide-y border-y">
+                    <DescriptionListItem term={t('apply-child:review-child-information.dental-insurance-title')}>
+                      {child.dentalInsurance ? t('apply-child:review-child-information.yes') : t('apply-child:review-child-information.no')}
+                      <p className="mt-4">
+                        <InlineLink id="change-access-dental" routeId="$lang/_public/apply/$id/child/children/$childId/dental-insurance" params={childParams}>
+                          {t('apply-child:review-child-information.dental-insurance-change')}
+                        </InlineLink>
+                      </p>
+                    </DescriptionListItem>
+                    <DescriptionListItem term={t('apply-child:review-child-information.dental-benefit-title')}>
+                      {child.dentalBenefits?.hasFederalBenefits ?? child.dentalBenefits?.hasProvincialTerritorialBenefits ? (
+                        <>
+                          <p>{t('apply-child:review-child-information.yes')}</p>
+                          <p>{t('apply-child:review-child-information.dental-benefit-has-access')}</p>
+                          <div>
+                            <ul className="ml-6 list-disc">
+                              {child.dentalBenefits.hasFederalBenefits && <li>{getNameByLanguage(i18n.language, federalSocialPrograms.find((p) => p.id === child.dentalBenefits?.federalSocialProgram) ?? { nameEn: '', nameFr: '' })}</li>}
+                              {child.dentalBenefits.hasProvincialTerritorialBenefits && (
+                                <li>
+                                  {getNameByLanguage(
+                                    i18n.language,
+                                    provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === child.dentalBenefits?.province).find((p) => p.id === child.dentalBenefits?.provincialTerritorialSocialProgram) ?? {
+                                      nameEn: '',
+                                      nameFr: '',
+                                    },
+                                  )}
+                                </li>
+                              )}
+                            </ul>
+                          </div>
+                        </>
+                      ) : (
+                        <>{t('apply-child:review-child-information.no')}</>
+                      )}
+                      <p className="mt-4">
+                        <InlineLink id="change-dental-benefits" routeId="$lang/_public/apply/$id/child/children/$childId/federal-provincial-territorial-benefits" params={childParams}>
+                          {t('apply-child:review-child-information.dental-benefit-change')}
+                        </InlineLink>
+                      </p>
+                    </DescriptionListItem>
+                  </dl>
+                </div>
+              </section>
+            );
+          })}
         </div>
         <fetcher.Form method="post" onSubmit={handleSubmit} className="mt-6 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <input type="hidden" name="_csrf" value={csrfToken} />

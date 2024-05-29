@@ -41,7 +41,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
   if (ageCategory !== 'children') {
-    return redirect(getPathById('$lang/_public/apply/$id/adult/date-of-birth', params));
+    return redirect(getPathById('$lang/_public/apply/$id/adult-child/date-of-birth', params));
   }
 
   return json({ id: state.id, csrfToken, meta });
