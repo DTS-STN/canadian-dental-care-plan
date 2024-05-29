@@ -137,7 +137,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     selectedProvincialBenefits,
   };
 
-  const childrenInfo = state.children.map((child) => {
+  const children = getChildrenState(state).map((child) => {
     // prettier-ignore
     if (child.dentalBenefits === undefined ||
       child.dentalInsurance === undefined ||
@@ -177,11 +177,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:confirm.page-title') }) };
 
   return json({
-    childrenInfo,
+    children,
+    csrfToken,
     dentalInsurance,
     homeAddressInfo,
     mailingAddressInfo,
-    csrfToken,
     meta,
     spouseInfo,
     submissionInfo: state.submissionInfo,
@@ -211,7 +211,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ApplyFlowConfirm() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
-  const { childrenInfo, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, csrfToken } = useLoaderData<typeof loader>();
+  const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, csrfToken } = useLoaderData<typeof loader>();
   const powerPlatformStatusCheckerEnabled = useFeature('power-platform-status-checker');
 
   const mscaLink = <InlineLink to={t('confirm.msca-link')} className="external-link font-lato font-semibold" newTabIndicator target="_blank" />;
@@ -263,7 +263,6 @@ export default function ApplyFlowConfirm() {
       <p className="mt-4">
         <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLink, mscaLinkApply }} />
       </p>
-      <p className="mt-4">{t('confirm.msca-notify')}</p>
       <h2 className="mt-8 text-3xl font-semibold">{t('confirm.how-insurance')}</h2>
       <p className="mt-4">{t('confirm.eligible-text')}</p>
       <p className="mt-4">
@@ -377,33 +376,33 @@ export default function ApplyFlowConfirm() {
         </div>
 
         {/* CHILDREN DETAILS */}
-        {childrenInfo.map((childInfo) => (
-          <Fragment key={childInfo.id}>
-            <h2 className="mt-8 text-3xl font-semibold">{childInfo.firstName}</h2>
-            <h3 className="text-2xl font-semibold">{t('confirm.child-title', { childName: childInfo.firstName })}</h3>
+        {children.map((child) => (
+          <Fragment key={child.id}>
+            <h2 className="mt-8 text-3xl font-semibold">{child.firstName}</h2>
+            <h3 className="text-2xl font-semibold">{t('confirm.child-title', { childName: child.firstName })}</h3>
             <div>
               <dl className="mt-6 divide-y border-y">
-                <DescriptionListItem term={t('confirm.full-name')}>{`${childInfo.firstName} ${childInfo.lastName}`}</DescriptionListItem>
-                <DescriptionListItem term={t('confirm.dob')}>{childInfo.birthday}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.full-name')}>{`${child.firstName} ${child.lastName}`}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.dob')}>{child.birthday}</DescriptionListItem>
                 <DescriptionListItem term={t('confirm.sin')}>
-                  <span className="text-nowrap">{childInfo.sin && formatSin(childInfo.sin)}</span>
+                  <span className="text-nowrap">{child.sin && formatSin(child.sin)}</span>
                 </DescriptionListItem>
-                <DescriptionListItem term={t('confirm.dental-private')}> {dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.dental-private')}>{child.dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
                 <DescriptionListItem term={t('confirm.dental-public')}>
-                  {childInfo.dentalInsurance.federalBenefit.benefit || childInfo.dentalInsurance.provTerrBenefit.benefit ? (
+                  {child.dentalInsurance.federalBenefit.benefit || child.dentalInsurance.provTerrBenefit.benefit ? (
                     <>
                       <p>{t('apply-adult-child:confirm.yes')}</p>
                       <p>{t('apply-adult-child:confirm.dental-benefit-has-access')}</p>
                       <ul className="ml-6 list-disc">
-                        {childInfo.dentalInsurance.federalBenefit.benefit && <li>{childInfo.dentalInsurance.federalBenefit.benefit}</li>}
-                        {childInfo.dentalInsurance.provTerrBenefit.benefit && <li>{childInfo.dentalInsurance.provTerrBenefit.benefit}</li>}
+                        {child.dentalInsurance.federalBenefit.benefit && <li>{child.dentalInsurance.federalBenefit.benefit}</li>}
+                        {child.dentalInsurance.provTerrBenefit.benefit && <li>{child.dentalInsurance.provTerrBenefit.benefit}</li>}
                       </ul>
                     </>
                   ) : (
                     <p>{t('confirm.no')}</p>
                   )}
                 </DescriptionListItem>
-                <DescriptionListItem term={t('confirm.is-parent')}>{childInfo.isParent ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.is-parent')}>{child.isParent ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
               </dl>
             </div>
           </Fragment>
