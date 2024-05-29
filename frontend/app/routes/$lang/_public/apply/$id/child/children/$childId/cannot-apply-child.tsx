@@ -80,7 +80,7 @@ export default function ApplyForYourself() {
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/adult-child/children/$childId/information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Apply for yourself">
+        <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/child/children/$childId/information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Apply for yourself">
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply-child:children.cannot-apply-child.back-btn')}
         </ButtonLink>
