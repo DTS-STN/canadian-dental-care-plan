@@ -265,7 +265,13 @@ export default function ApplyFlowCommunicationPreferencePage() {
               <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Communication preference click">
                 {t('apply-child:communication-preference.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="$lang+/_public+/apply/$id/child/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Communication preference click">
+              <ButtonLink
+                id="back-button"
+                routeId="$lang+/_public+/apply/$id/child/review-adult-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Communication preference click"
+              >
                 {t('apply-child:communication-preference.cancel-btn')}
               </ButtonLink>
             </div>

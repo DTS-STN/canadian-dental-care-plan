@@ -154,7 +154,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   saveApplyState({ params, session, state: { partnerInformation: parsedDataResult.data } });
 
   if (state.editMode) {
-    return redirect(getPathById('$lang+/_public+/apply/$id/child/review-information', params));
+    return redirect(getPathById('$lang+/_public+/apply/$id/child/review-adult-information', params));
   }
 
   return redirect(getPathById('$lang+/_public+/apply/$id/child/personal-information', params));
@@ -286,7 +286,7 @@ export default function ApplyFlowApplicationInformation() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId={defaultState ? '$lang+/_public+/apply/$id/child/review-information' : '$lang+/_public+/apply/$id/child/applicant-information'}
+                routeId={defaultState ? '$lang+/_public+/apply/$id/child/review-adult-information' : '$lang+/_public+/apply/$id/child/applicant-information'}
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Spouse or Common-law partner information click"
