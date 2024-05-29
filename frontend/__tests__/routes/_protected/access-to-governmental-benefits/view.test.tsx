@@ -2,7 +2,7 @@ import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { loader } from '~/routes/$lang/_protected/access-to-governmental-benefits+/view';
+import { loader } from '~/routes/$lang/_protected/access-to-governmental-benefits/view';
 
 vi.mock('~/services/audit-service.server', () => ({
   getAuditService: vi.fn().mockReturnValue({
@@ -118,7 +118,7 @@ describe('Access View Governmental Page', () => {
       }));
 
       const response = await loader({
-        request: new Request('http://localhost:3000/en/access-to-governmental-benefits+/view'),
+        request: new Request('http://localhost:3000/en/access-to-governmental-benefits/view'),
         context: { session },
         params: {},
       });
@@ -189,7 +189,7 @@ describe('Access View Governmental Page', () => {
       }));
 
       const response = await loader({
-        request: new Request('http://localhost:3000/en/access-to-governmental-benefits+/view'),
+        request: new Request('http://localhost:3000/en/access-to-governmental-benefits/view'),
         context: { session },
         params: {},
       });
@@ -310,7 +310,7 @@ describe('Access View Governmental Page', () => {
       }));
 
       const response = await loader({
-        request: new Request('http://localhost:3000/en/access-to-governmental-benefits+/view'),
+        request: new Request('http://localhost:3000/en/access-to-governmental-benefits/view'),
         context: { session },
         params: {},
       });
