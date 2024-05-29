@@ -106,8 +106,8 @@
         "purchased": "Assurance ou couverture achetée individuellement par vous, par un membre de votre famille ou par l'entremise d'un plan de groupe d'une compagnie d'assurance ou de prestations",
         "professional": "Assurance ou couverture par une organisation professionnelle ou étudiante"
       },
-      "option-yes": "<strong>Oui</strong>, j'ai accès à une assurance dentaire",
-      "option-no": "<strong>Non</strong>, je n'ai pas accès à une assurance dentaire",
+      "option-yes": "(FR) <strong>Yes</strong>, the child has access to dental insurance or coverage",
+      "option-no": "(FR) <strong>No</strong>, the child does not have access to dental insurance or coverage",
       "button": {
         "back": "Retour",
         "continue": "Continuer",
@@ -133,11 +133,11 @@
         }
       },
       "error-message": {
-        "dental-insurance-required": "Sélectionnez si vous avez une assurance dentaire"
+        "dental-insurance-required": "Sélectionnez si l'enfant a accès à une assurance dentaire"
       }
     },
     "dental-benefits": {
-      "title": "(FR) {{childName}}: Access to other dental insurance",
+      "title": "(FR) {{childName}}: access to other federal, provincial or territorial dental benefits",
       "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",
       "eligibility-criteria": "Si vous répondez à tous les critères d'admissibilité, votre couverture sera coordonnée entre les régimes afin qu'il n'y ait pas de lacunes ou de dédoublement dans la couverture.",
       "select-one": "Choisissez une option",
@@ -167,10 +167,10 @@
         "save-btn": "Enregistrer"
       },
       "error-message": {
-        "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel vous êtes couvert",
-        "federal-benefit-required": "Sélectionnez si vous avez la prestation dentaire fédérale",
-        "provincial-benefit-program-required": "Sélectionnez le programme provincial ou territorial auquel vous êtes couvert",
-        "provincial-benefit-required": "Sélectionnez si vous avez la prestation dentaire provinciale ou territoriale",
+        "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel l'enfant est couvert",
+        "federal-benefit-required": "Sélectionnez si l'enfant bénéficie d'une prestation dentaire fédérale",
+        "provincial-benefit-program-required": "Sélectionnez le programme provincial ou territorial auquel l'enfant est couvert",
+        "provincial-benefit-required": "Sélectionnez si l'enfant avez la prestation dentaire provinciale ou territoriale ",
         "provincial-territorial-required": "Sélectionnez une province ou territoire"
       }
     },
