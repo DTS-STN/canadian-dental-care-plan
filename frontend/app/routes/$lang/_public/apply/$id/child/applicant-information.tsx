@@ -222,28 +222,29 @@ export default function ApplyFlowApplicationInformation() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
+  const errors = fetcher.data?.errors;
 
   // Keys order should match the input IDs order.
   const errorSummaryItems = useMemo(() => {
     const items: ErrorSummaryItem[] = [];
-    if (fetcher.data?.errors.firstName?._errors[0]) items.push(createErrorSummaryItem('first-name', fetcher.data.errors.firstName._errors[0]));
-    if (fetcher.data?.errors.lastName?._errors[0]) items.push(createErrorSummaryItem('last-name', fetcher.data.errors.lastName._errors[0]));
-    if (fetcher.data?.errors.dateOfBirth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', fetcher.data.errors.dateOfBirth._errors[0]));
-    if (fetcher.data?.errors.dateOfBirthMonth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', fetcher.data.errors.dateOfBirthMonth._errors[0]));
-    if (fetcher.data?.errors.dateOfBirthDay?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', fetcher.data.errors.dateOfBirthDay._errors[0]));
-    if (fetcher.data?.errors.dateOfBirthYear?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-year', fetcher.data.errors.dateOfBirthYear._errors[0]));
-    if (fetcher.data?.errors.socialInsuranceNumber?._errors[0]) items.push(createErrorSummaryItem('social-insurance-number', fetcher.data.errors.socialInsuranceNumber._errors[0]));
-    if (fetcher.data?.errors.maritalStatus?._errors[0]) items.push(createErrorSummaryItem('input-radio-marital-status-option-0', fetcher.data.errors.maritalStatus._errors[0]));
+    if (errors?.firstName?._errors[0]) items.push(createErrorSummaryItem('first-name', errors.firstName._errors[0]));
+    if (errors?.lastName?._errors[0]) items.push(createErrorSummaryItem('last-name', errors.lastName._errors[0]));
+    if (errors?.dateOfBirth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', errors.dateOfBirth._errors[0]));
+    if (errors?.dateOfBirthMonth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', errors.dateOfBirthMonth._errors[0]));
+    if (errors?.dateOfBirthDay?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', errors.dateOfBirthDay._errors[0]));
+    if (errors?.dateOfBirthYear?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-year', errors.dateOfBirthYear._errors[0]));
+    if (errors?.socialInsuranceNumber?._errors[0]) items.push(createErrorSummaryItem('social-insurance-number', errors.socialInsuranceNumber._errors[0]));
+    if (errors?.maritalStatus?._errors[0]) items.push(createErrorSummaryItem('input-radio-marital-status-option-0', errors.maritalStatus._errors[0]));
     return items;
   }, [
-    fetcher.data?.errors.firstName?._errors,
-    fetcher.data?.errors.lastName?._errors,
-    fetcher.data?.errors.maritalStatus?._errors,
-    fetcher.data?.errors.socialInsuranceNumber?._errors,
-    fetcher.data?.errors.dateOfBirth?._errors,
-    fetcher.data?.errors.dateOfBirthDay?._errors,
-    fetcher.data?.errors.dateOfBirthMonth?._errors,
-    fetcher.data?.errors.dateOfBirthYear?._errors,
+    errors?.firstName?._errors,
+    errors?.lastName?._errors,
+    errors?.maritalStatus?._errors,
+    errors?.socialInsuranceNumber?._errors,
+    errors?.dateOfBirth?._errors,
+    errors?.dateOfBirthDay?._errors,
+    errors?.dateOfBirthMonth?._errors,
+    errors?.dateOfBirthYear?._errors,
   ]);
 
   useEffect(() => {
@@ -285,7 +286,7 @@ export default function ApplyFlowApplicationInformation() {
                 maxLength={100}
                 aria-describedby="name-instructions"
                 autoComplete="given-name"
-                errorMessage={fetcher.data?.errors.firstName?._errors[0]}
+                errorMessage={errors?.firstName?._errors[0]}
                 defaultValue={defaultState?.firstName ?? ''}
                 required
               />
@@ -297,7 +298,7 @@ export default function ApplyFlowApplicationInformation() {
                 maxLength={100}
                 autoComplete="family-name"
                 defaultValue={defaultState?.lastName ?? ''}
-                errorMessage={fetcher.data?.errors.lastName?._errors[0]}
+                errorMessage={errors?.lastName?._errors[0]}
                 aria-describedby="name-instructions"
                 required
               />
@@ -312,10 +313,10 @@ export default function ApplyFlowApplicationInformation() {
               defaultValue={dateOfBirth ?? ''}
               legend={t('apply-child:applicant-information.date-of-birth')}
               errorMessages={{
-                all: fetcher.data?.errors.dateOfBirth?._errors[0],
-                year: fetcher.data?.errors.dateOfBirthYear?._errors[0],
-                month: fetcher.data?.errors.dateOfBirthMonth?._errors[0],
-                day: fetcher.data?.errors.dateOfBirthDay?._errors[0],
+                all: errors?.dateOfBirth?._errors[0],
+                year: errors?.dateOfBirthYear?._errors[0],
+                month: errors?.dateOfBirthMonth?._errors[0],
+                day: errors?.dateOfBirthDay?._errors[0],
               }}
               required
             />
@@ -327,7 +328,7 @@ export default function ApplyFlowApplicationInformation() {
               helpMessagePrimary={t('apply-child:applicant-information.help-message.sin')}
               helpMessagePrimaryClassName="text-black"
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
-              errorMessage={fetcher.data?.errors.socialInsuranceNumber?._errors[0]}
+              errorMessage={errors?.socialInsuranceNumber?._errors[0]}
               required
             />
             <InputRadios
@@ -335,7 +336,7 @@ export default function ApplyFlowApplicationInformation() {
               name="maritalStatus"
               legend={t('applicant-information.marital-status')}
               options={maritalStatuses.map((status) => ({ defaultChecked: status.id === defaultState?.maritalStatus, children: getNameByLanguage(i18n.language, status), value: status.id }))}
-              errorMessage={fetcher.data?.errors.maritalStatus?._errors[0]}
+              errorMessage={errors?.maritalStatus?._errors[0]}
               required
             />
           </div>
