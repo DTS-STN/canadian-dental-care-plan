@@ -3,7 +3,6 @@ package ca.gov.dtsstn.cdcp.api.service;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -12,14 +11,16 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.context.ActiveProfiles;
 
 import ca.gov.dtsstn.cdcp.api.config.properties.ApplicationProperties;
 import ca.gov.dtsstn.cdcp.api.data.entity.AlertTypeEntityBuilder;
@@ -31,39 +32,37 @@ import ca.gov.dtsstn.cdcp.api.data.repository.AlertTypeRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.LanguageRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.UserRepository;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUser;
+import jakarta.validation.ConstraintViolationException;
 
-@ExtendWith({ MockitoExtension.class })
-class UserServiceTests {
+@ActiveProfiles("test")
+@Import({ ValidationAutoConfiguration.class })
+@SpringBootTest(classes = { UserService.class })
+class UserServiceIT {
 
-	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
+	@MockBean(answer = Answers.RETURNS_DEEP_STUBS)
 	ApplicationProperties applicationProperties;
 
-	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
+	@MockBean(answer = Answers.RETURNS_DEEP_STUBS)
 	AlertTypeRepository alertTypeRepository;
 
-	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
+	@MockBean(answer = Answers.RETURNS_DEEP_STUBS)
 	LanguageRepository languageRepository;
 
-	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
+	@MockBean(answer = Answers.RETURNS_DEEP_STUBS)
 	UserRepository userRepository;
 
-	UserService userService;
-
-	@BeforeEach
-	void setUp() {
-		this.userService = new UserService(applicationProperties, alertTypeRepository, languageRepository, userRepository);
-	}
+	@Autowired UserService userService;
 
 	@Test()
 	@DisplayName("Test userService.createUser(..) with null user")
 	void testCreateUser_NullUser() {
-		assertThrowsExactly(IllegalArgumentException.class, () -> userService.createUser(null), "user is required; it must not be null");
+		assertThrows(IllegalArgumentException.class, () -> userService.createUser(null));
 	}
 
 	@Test()
 	@DisplayName("Test userService.createUser(..) with non-null user.id")
 	void testCreateUser_NonNullUserId() {
-		assertThrowsExactly(IllegalArgumentException.class, () -> userService.createUser(ImmutableUser.builder().id("id").build()), "user.id must be null when creating new instance");
+		assertThrows(ConstraintViolationException.class, () -> userService.createUser(ImmutableUser.builder().id("id").build()));
 	}
 
 	@Test()
@@ -76,7 +75,7 @@ class UserServiceTests {
 	@Test()
 	@DisplayName("Test userService.createConfirmationCodeForUser(..) with null userId")
 	void testCreateConfirmationCodeForUser_NullUserId() {
-		assertThrowsExactly(IllegalArgumentException.class, () -> userService.createConfirmationCodeForUser(""), "user is required; it must not be null");
+		assertThrows(IllegalArgumentException.class, () -> userService.createConfirmationCodeForUser(""));
 	}
 
 	@Test

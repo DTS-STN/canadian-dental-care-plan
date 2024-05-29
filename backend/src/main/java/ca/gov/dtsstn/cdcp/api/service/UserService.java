@@ -12,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.annotation.Validated;
 
 import ca.gov.dtsstn.cdcp.api.config.properties.ApplicationProperties;
 import ca.gov.dtsstn.cdcp.api.data.entity.AlertTypeEntityBuilder;
@@ -24,13 +25,18 @@ import ca.gov.dtsstn.cdcp.api.data.repository.AlertTypeRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.LanguageRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.UserRepository;
 import ca.gov.dtsstn.cdcp.api.service.domain.ConfirmationCode;
+import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUser;
 import ca.gov.dtsstn.cdcp.api.service.domain.Subscription;
 import ca.gov.dtsstn.cdcp.api.service.domain.User;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.ConfirmationCodeMapper;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.SubscriptionMapper;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.UserMapper;
+import ca.gov.dtsstn.cdcp.api.service.domain.validation.ValidationGroup;
+import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
 
 @Service
+@Validated
 @Transactional
 public class UserService {
 
@@ -63,10 +69,9 @@ public class UserService {
 		this.userRepository = userRepository;
 	}
 
-	public User createUser(User user) {
+	@Validated({ Default.class, ValidationGroup.Create.class })
+	public User createUser(@Valid User user) {
 		Assert.notNull(user, "user is required; it must not be null");
-		Assert.isNull(user.getId(), "user.id must be null when creating new instance");
-
 		return userMapper.toDomainObject(userRepository.save(userMapper.toEntity(user)));
 	}
 
@@ -134,19 +139,27 @@ public class UserService {
 		return userRepository.findById(id).map(userMapper::toDomainObject);
 	}
 
-	public void updateUser(String userId, String email) {
+	@Validated({ Default.class, ValidationGroup.Update.class })
+	public void updateUser(String userId, @Valid User userUpdate) {
 		Assert.hasText(userId, "userId is required; it must not be null or blank");
-		Assert.hasText(email, "email is required; it must not be null or blank");
+		Assert.notNull(userUpdate, "userUpdate is required; it must not be null");
 
 		log.debug("Fetching user [{}] from repository", userId);
-		final var user = userRepository.findById(userId).orElseThrow();
+		final var existingUser = userRepository.findById(userId).orElseThrow();
 
-		if (email.equals(user.getEmail()) == false) {
-			user.setEmail(email);
-			user.setEmailVerified(false);
+		// copy incoming changes into a builder so we can customize the updates
+		final var userBuilder = ImmutableUser.builder().from(userUpdate);
 
-			userRepository.save(user);
-		}
+		Optional.ofNullable(userUpdate.getEmail()).ifPresent(email -> {
+			final var emailUpdated = email.equalsIgnoreCase(existingUser.getEmail()) == false;
+
+			if (emailUpdated) {
+				log.debug("User email has changed; setting emailVerified=false");
+				userBuilder.emailVerified(false);
+			}
+		});
+
+		userRepository.save(userMapper.updateEntity(existingUser, userBuilder.build()));
 	}
 
 	public void updateSubscriptionForUser(String userId, String subscriptionId, String languageId) {
@@ -161,9 +174,9 @@ public class UserService {
 		final var subscription = user.getSubscriptions().stream()
 			.filter(byId(subscriptionId)).findFirst().orElseThrow();
 		subscription.setLanguage(preferredLanguage);
-			
+
 		userRepository.save(user);
-	}	
+	}
 
 	public void deleteSubscriptionForUser(String userId, String subscriptionId) {
 		Assert.hasText(userId, "userId is required; it must not be null or blank");
@@ -187,6 +200,6 @@ public class UserService {
 	private Predicate<SubscriptionEntity> byId(String id) {
 		Assert.hasText(id, "id is required; it must not be null or blank");
 		return subscription -> id.equals(subscription.getId());
-	}	
+	}
 
 }

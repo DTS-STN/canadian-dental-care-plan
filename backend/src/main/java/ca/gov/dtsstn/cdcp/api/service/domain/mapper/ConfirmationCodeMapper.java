@@ -1,5 +1,8 @@
 package ca.gov.dtsstn.cdcp.api.service.domain.mapper;
 
+import static org.mapstruct.NullValueMappingStrategy.RETURN_DEFAULT;
+
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -11,6 +14,7 @@ import jakarta.annotation.Nullable;
 public interface ConfirmationCodeMapper {
 
 	@Nullable
+	@IterableMapping(nullValueMappingStrategy = RETURN_DEFAULT)
 	ConfirmationCode toDomainObject(@Nullable ConfirmationCodeEntity confirmationCode);
 
 	@Nullable

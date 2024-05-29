@@ -4,7 +4,6 @@ import org.immutables.value.Value.Immutable;
 
 import jakarta.annotation.Nullable;
 
-
 @Immutable
 public interface Subscription extends BaseDomainObject {
 

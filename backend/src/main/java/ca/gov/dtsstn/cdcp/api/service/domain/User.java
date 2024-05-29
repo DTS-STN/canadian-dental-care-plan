@@ -5,20 +5,26 @@ import java.util.Set;
 import org.immutables.value.Value.Immutable;
 
 import jakarta.annotation.Nullable;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 
 @Immutable
 public interface User extends BaseDomainObject {
 
-	Set<ConfirmationCode> getConfirmationCodes();
+	@Nullable
+	Set<@Valid ConfirmationCode> getConfirmationCodes();
 
+	@Email
 	@Nullable
 	String getEmail();
 
 	@Nullable
 	Boolean getEmailVerified();
 
-	Set<Subscription> getSubscriptions();
+	@Nullable
+	Set<@Valid Subscription> getSubscriptions();
 
-	Set<UserAttribute> getUserAttributes();
+	@Nullable
+	Set<@Valid UserAttribute> getUserAttributes();
 
 }

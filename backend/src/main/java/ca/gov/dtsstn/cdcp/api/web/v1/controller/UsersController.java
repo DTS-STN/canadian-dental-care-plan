@@ -4,14 +4,15 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
+import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUser;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.UserModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.UserUpdateModel;
@@ -62,7 +63,7 @@ public class UsersController {
 		final var user = userService.getUserById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(id)));
 
-		userService.updateUser(user.getId(), userUpdateModel.getEmail());
-	}	
+		userService.updateUser(user.getId(), ImmutableUser.builder().email(userUpdateModel.getEmail()).build());
+	}
 
 }
