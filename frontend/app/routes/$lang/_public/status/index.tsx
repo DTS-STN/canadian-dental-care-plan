@@ -85,13 +85,11 @@ export async function action({ context: { session }, params, request }: ActionFu
       return redirect(getPathById('$lang/_public/unable-to-process-request', params));
     }
   }
-
   if (parsedCheckFor.data === CheckFor.Myself) {
-    return redirect(getPathById('$lang/_public/status+/myself+/index', params));
+    return redirect(getPathById('$lang/_public/status/myself/index', params));
   }
   // Child selected
-  //TODO: redirect to $lang/_public/status+/child
-  return null;
+  return redirect(getPathById('$lang/_public/status/child/index', params));
 }
 
 export default function StatusChecker() {

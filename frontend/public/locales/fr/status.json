@@ -81,5 +81,45 @@
         "application-code-valid": "(FR) The application code or client number must be valid"
       }
     }
+  },
+  "child": {
+    "page-title": "Vérificateur de l'état d'une demande",
+    "status-heading": "Statut",
+    "empty-status": "Les informations que vous nous avez fournies ne correspondent pas aux informations dans notre système.",
+    "check-another": "Vérifier un autre état",
+    "form": {
+      "complete-fields": "Remplir tous les champs",
+      "application-code-label": "Code de demande ou numéro de client",
+      "application-code-description": "Entrez le numéro que vous avez reçu sur la page de confirmation de la demande en ligne ou le numéro figurant dans le coin supérieur droit de la lettre que vous avez peut-être reçue de Service Canada.",
+      "application-code-placeholder": "Code de demande ou numéro de client",
+      "radio-legend": "L'enfant a-t-il un numéro d'assurance sociale (NAS)?",
+      "sin-label": "Numéro d'assurance sociale (NAS)",
+      "sin-description": "Entrez un NAS de 9 chiffres",
+      "option-yes": "<strong>Oui</strong>, l'enfant a un NAS",
+      "option-no": "<strong>Non</strong>, l'enfant n'a pas de NAS",
+      "if-child-summary": "Si l'enfant a un seul nom légal",
+      "if-child-desc": "(FR) If the child goes by a single legal name, leave the first name field blank",
+      "last-name": "Nom de famille de l'enfant",
+      "first-name": "Prénom de l'enfant",
+      "date-of-birth-label": "Date de naissance e l'enfant",
+      "submit": "Vérifier l'état",
+      "error-message": {
+        "radio-required": "(FR) Please select an option.",
+        "sin-required": "Le numéro d'assurance sociale (NAS) est requis.",
+        "sin-valid": "Le numéro d'assurance sociale (NAS) doit être valide.",
+        "application-code-required": "(FR) The application code or client number is required",
+        "application-code-valid": "(FR) The application code or client number must be valid",
+        "first-name-too-long": "Prénom trop long.",
+        "last-name-required": "Entrez le nom de famille",
+        "date-of-birth-day-number": "Le jour doit être un nombre",
+        "date-of-birth-day-required": "La date de naissance doit inclure un jour",
+        "date-of-birth-is-past": "La date de naissance doit être dans le passé",
+        "date-of-birth-is-past-valid": "Date de naissance trop éloignée dans le passé",
+        "date-of-birth-month-required": "La date de naissance doit inclure un mois",
+        "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisi",
+        "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
+        "date-of-birth-year-required": "La date de naissance doit inclure une année"
+      }
+    }
   }
 }

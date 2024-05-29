@@ -193,7 +193,7 @@ export default function StatusCheckerMyself() {
                 {fetcher.data.status.id ? getNameByLanguage(i18n.language, fetcher.data.status) : t('status:myself.empty-status')}
               </div>
             </ContextualAlert>
-            <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status+/index" params={params} className="mt-12">
+            <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} className="mt-12">
               {t('status:myself.check-another')}
               <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
             </ButtonLink>

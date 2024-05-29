@@ -650,16 +650,16 @@
             ]
           },
           {
-            "id": "$lang/_public/status+/_route",
-            "file": "routes/$lang/_public/status+/_route.tsx",
+            "id": "$lang/_public/status/_route",
+            "file": "routes/$lang/_public/status/_route.tsx",
             "paths": {
               "en": "/:lang/status",
               "fr": "/:lang/statut"
             },
             "children": [
               {
-                "id": "$lang/_public/status+/index",
-                "file": "routes/$lang/_public/status+/index.tsx",
+                "id": "$lang/_public/status/index",
+                "file": "routes/$lang/_public/status/index.tsx",
                 "index": true,
                 "paths": {
                   "en": "/:lang/status",
@@ -667,19 +667,37 @@
                 }
               },
               {
-                "id": "$lang/_public/status+/myself+/_route",
-                "file": "routes/$lang/_public/status+/myself+/_route.tsx",
+                "id": "$lang/_public/status/myself/_route",
+                "file": "routes/$lang/_public/status/myself/_route.tsx",
                 "paths": {
                   "en": "/:lang/status",
                   "fr": "/:lang/statut"
                 },
                 "children": [
                   {
-                    "id": "$lang/_public/status+/myself+/index",
-                    "file": "routes/$lang/_public/status+/myself+/index.tsx",
+                    "id": "$lang/_public/status/myself/index",
+                    "file": "routes/$lang/_public/status/myself/index.tsx",
                     "paths": {
                       "en": "/:lang/status/myself",
                       "fr": "/:lang/statut/moi-meme"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "$lang/_public/status/child/_route",
+                "file": "routes/$lang/_public/status/child/_route.tsx",
+                "paths": {
+                  "en": "/:lang/status",
+                  "fr": "/:lang/statut"
+                },
+                "children": [
+                  {
+                    "id": "$lang/_public/status/child/index",
+                    "file": "routes/$lang/_public/status/child/index.tsx",
+                    "paths": {
+                      "en": "/:lang/status/child",
+                      "fr": "/:lang/statut/enfant"
                     }
                   }
                 ]
