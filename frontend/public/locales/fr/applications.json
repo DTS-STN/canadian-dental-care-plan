@@ -6,8 +6,20 @@
     },
     "no-application": "(FR) There are no application submitted on file.",
     "date": "(FR) Submitted Date: {{date}}",
+    "confirmation-code": "(FR) Confirmation Code: {{confirmationCode}}",
+    "status": "(FR) Status: {{status}}",
+    "filter": "(FR) Filter by:",
+    "newest": "(FR) Newest first",
+    "oldest": "(FR) Oldest first",
     "button": {
-      "back": "Retour"
+      "back": "(FR) Back"
     }
+  },
+  "view-application": {
+    "page-title": "(FR) View Applcation",
+    "submitted-date": "(FR) Submitted Date:",
+    "confirmation-code": "(FR) Confirmation Code:",
+    "status": "(FR) Status:",
+    "back-button": "(FR) Back"
   }
 }

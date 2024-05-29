@@ -6,8 +6,20 @@
     },
     "no-application": "There are no application submitted on file.",
     "date": "Submitted Date: {{date}}",
+    "confirmation-code": "Confirmation Code: {{confirmationCode}}",
+    "status": "Status: {{status}}",
+    "filter": "Filter by:",
+    "newest": "Newest first",
+    "oldest": "Oldest first",
     "button": {
       "back": "Back"
     }
+  },
+  "view-application": {
+    "page-title": "View Applcation",
+    "submitted-date": "Submitted Date:",
+    "confirmation-code": "Confirmation Code:",
+    "status": "Status:",
+    "back-button": "Back"
   }
 }
