@@ -234,7 +234,7 @@ export default function ApplyFlowChildSummary() {
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <ButtonLink
                 id="save-button"
-                routeId="$lang/_public/apply/$id/adult-child/review-child-information"
+                routeId="$lang/_public/apply/$id/child/review-child-information"
                 params={params}
                 disabled={!hasChildren || isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Summary of children click"
@@ -244,7 +244,7 @@ export default function ApplyFlowChildSummary() {
               </ButtonLink>
               <ButtonLink
                 id="cancel-button"
-                routeId="$lang/_public/apply/$id/adult-child/review-child-information"
+                routeId="$lang/_public/apply/$id/child/review-child-information"
                 params={params}
                 disabled={!hasChildren || isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Summary of children click"
@@ -258,13 +258,7 @@ export default function ApplyFlowChildSummary() {
                 {t('apply-child:children.index.continue-btn')}
                 {isSubmitting && submitAction === FormAction.Continue ? <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" /> : <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />}
               </Button>
-              <ButtonLink
-                id="back-button"
-                routeId="$lang/_public/apply/$id/adult-child/federal-provincial-territorial-benefits"
-                params={params}
-                disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Summary of children click"
-              >
+              <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/child/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Summary of children click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-child:children.index.back-btn')}
               </ButtonLink>
