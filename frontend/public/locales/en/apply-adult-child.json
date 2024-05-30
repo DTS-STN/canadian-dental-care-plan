@@ -393,13 +393,19 @@
     "detail": {
       "additional-info": {
         "title": "Additional information",
-        "eligible": "Exception: You may still be eligible if you are retired and:",
-        "list": {
-          "opted": "you opted out of pension benefits before December 11, 2023, and",
-          "cannot-opt": "you can't opt back in under the pension rules"
+        "eligible": "You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your or a family member's:",
+        "eligible-list": {
+          "employer": "employer;",
+          "pension": "pension (see exception); or",
+          "professional": "professional or student organization"
         },
-        "not-eligible": "You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your employer/pension (see exception) benefits or through a professional or student organization. As such, you are not eligible for the Canadian Dental Care Plan.",
-        "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own (and not part of any of the coverage described above), you are not eligible for the CDCP while that coverage is in effect."
+        "not-eligible": "As such, you are not eligible for the Canadian Dental Care Plan.",
+        "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own, you are not eligible for the Canadian Dental Care Plan while that coverage is in effect.",
+        "excepton": "Exception:\u00a0You may still be eligible if you are retired and:",
+        "exception-list": {
+          "opted-out": "Opted out of pension benefits before December 11, 2023, and",
+          "opt-back": "Can't opt back in under the pension rules"
+        }
       }
     },
     "error-message": {

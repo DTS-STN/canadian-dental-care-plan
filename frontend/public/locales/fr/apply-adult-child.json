@@ -392,13 +392,19 @@
     "detail": {
       "additional-info": {
         "title": "Renseignements supplémentaires",
-        "eligible": "Exception\u00a0: vous pourriez toujours être admissible si vous avez pris votre retraite et\u00a0:",
-        "list": {
-          "opted": "Vous avez choisi de ne pas recevoir de prestations de retraite avant le 11 décembre 2023;",
-          "cannot-opt": "Vous ne pouvez pas vous réinscrire en vertu des règles relatives aux régimes de retraite;"
+        "eligible": "Vous êtes toujours considéré comme ayant accès à l'assurance ou à la couverture dentaire si vous choisissez de ne pas bénéficier des prestations fournies par votre assurance ou celle d'un membre de votre famille\u00a0:",
+        "eligible-list": {
+          "employer": "un employeur",
+          "pension": "un régime de retraite (voir exception)",
+          "professional": "une organisation professionnelle ou étudiante"
         },
-        "not-eligible": "Vous êtes toujours considéré comme ayant accès à une assurance ou à une couverture dentaire si vous choisissez de vous retirer des avantages offerts par votre employeur ou votre régime de retraite (voir l'exception) ou par l'entremise d'une organisation professionnelle ou étudiante. Par conséquent, vous n'êtes pas admissible au Régime canadien de soins dentaires.",
-        "not-eligible-purchased": "Si vous avez souscrit votre police d'assurance dentaire actuelle de votre propre chef (et non dans le cadre de l'une des couvertures décrites ci-dessus), vous n'êtes pas admissible au RCSD pendant que cette protection est en vigueur."
+        "not-eligible": "À ce titre, vous n'êtes pas admissible au Régime canadien de soins dentaires.",
+        "not-eligible-purchased": "Si vous avez souscrit votre police d'assurance dentaire actuelle de votre propre chef, vous n'êtes pas admissible au Régime canadien de soins dentaires pendant que cette protection est en vigueur.",
+        "excepton": "Exception\u00a0: Vous pourriez toujours être admissible si vous avez pris votre retraite et\u00a0:",
+        "exception-list": {
+          "opted-out": "vous avez renoncé aux prestations de retraite avant le 11 décembre 2023, et",
+          "opt-back": "vous ne pouvez pas vous réinscrire en vertu des règles relatives aux régimes de retraite"
+        }
       }
     },
     "error-message": {
