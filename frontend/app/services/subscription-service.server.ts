@@ -88,11 +88,13 @@ function createSubscriptionService() {
 
     const subscriptions = subscriptionsSchema.parse(await subscriptionsResponse.json())._embedded.subscriptions.map((subscription) => ({
       id: subscription.id,
-      msLanguageCode: subscription.msLanguageCode,
-      alertTypeCode: subscription.alertTypeCode,
+      preferredLanguageId: subscription.msLanguageCode,
+      alertType: subscription.alertTypeCode,
+      email: userParsed.email,
+      emailVerified: userParsed.emailVerified,
     }));
 
-    return subscriptions.filter((subscription) => subscription.alertTypeCode === 'CDCP').at(0);
+    return subscriptions.filter((subscription) => subscription.alertType === 'cdcp').at(0);
   }
 
   async function updateSubscription(sin: string, subscription: SubscriptionInfo) {
