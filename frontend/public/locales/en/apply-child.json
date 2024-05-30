@@ -465,7 +465,7 @@
       "mailing-address": {
         "address-required": "Enter mailing address, typically number and street",
         "city-required": "Enter a city or town for your mailing address",
-        "country-required": "Select a country for for your mailing address",
+        "country-required": "Select a country for your mailing address your mailing address",
         "postal-code-required": "Enter postal code or zip code for your mailing address",
         "postal-code-valid": "Enter mailing address postal code in the correct format, such as A1A 1A1",
         "province-required": "Select a province, territory, state or region for your mailing address",

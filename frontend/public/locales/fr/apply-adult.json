@@ -214,8 +214,7 @@
         "date-of-birth-month-required": "La date de naissance doit inclure un mois",
         "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisi",
         "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
-        "date-of-birth-year-required": "La date de naissance doit inclure une année",
-        "child-age-required": "(FR) Please indicate if all children are under 18"
+        "date-of-birth-year-required": "La date de naissance doit inclure une année"
       },
       "back-btn": "Retour",
       "continue-btn": "Continuer",
