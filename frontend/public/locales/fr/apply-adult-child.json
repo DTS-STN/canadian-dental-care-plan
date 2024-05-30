@@ -137,7 +137,7 @@
       }
     },
     "dental-benefits": {
-      "title": "(FR) {{childName}}: Access to other dental insurance",
+      "title": "(FR) {{childName}}: access to other federal, provincial or territorial dental benefits",
       "access-to-dental": "L'accès à une assurance dentaire dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur votre admissibilité au Régime canadien de soins dentaires.",
       "eligibility-criteria": "Si vous répondez à tous les critères d'admissibilité, votre couverture sera coordonnée entre les régimes afin qu'il n'y ait pas de lacunes ou de dédoublement dans la couverture.",
       "select-one": "Choisissez une option",
