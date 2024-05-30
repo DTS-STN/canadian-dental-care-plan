@@ -4,7 +4,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
@@ -33,12 +33,6 @@ import { useUserOrigin } from '~/utils/user-origin-utils';
 enum ConfirmationCodeAction {
   NewCode = 'new-code',
   Submit = 'submit',
-}
-
-// TODO remove the /subscribe/expired route and place the message on this page
-enum AlertMessage {
-  NewCode = 'new-code',
-  Mismatch = 'mismatch',
 }
 
 export const handle = {
@@ -81,11 +75,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const preferredLanguageDict = preferredLanguages.find((obj) => obj.id === alertSubscription.preferredLanguage);
   const preferredLanguage = preferredLanguageDict && getNameByLanguage(locale, preferredLanguageDict);
 
+  const newCodeRequested = session.get('newCodeRequested');
+
   const idToken: IdToken = session.get('idToken');
   auditService.audit('page-view.subscribe-alerts-confirm', { userId: idToken.sub });
   instrumentationService.countHttpStatus('alerts.subscribe-confirm', 200);
 
-  return json({ csrfToken, meta, alertSubscription, preferredLanguage, userInfoToken });
+  return json({ csrfToken, meta, alertSubscription, newCodeRequested, preferredLanguage, userInfoToken });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -136,15 +132,16 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   if (parsedDataResult.data.action === ConfirmationCodeAction.NewCode) {
     // TODO service function shouldn't accept email; remove when services are changed
-    await subscriptionService.requestNewConfirmationCode('test@example.com', userInfoToken.sub);
-    return json({ alertMessage: AlertMessage.NewCode } as const);
+    await subscriptionService.requestNewConfirmationCode('user@example.com', userInfoToken.sub);
+    session.set('newCodeRequested', true);
+    return redirect(getPathById('$lang/_protected/alerts/subscribe/confirm', params));
   }
 
   const confirmationCode = parsedDataResult.data.confirmationCode;
   invariant(confirmationCode, 'Expected confirmationCode to be defined');
 
   // TODO service function shouldn't accept email; remove when services are changed
-  const response = await subscriptionService.validateConfirmationCode('test@example.com', confirmationCode, userInfoToken.sub);
+  const response = await subscriptionService.validateConfirmationCode('user@example.com', confirmationCode, userInfoToken.sub);
   const jsonReponseStatus = await response.json();
 
   if (jsonReponseStatus.confirmCodeStatus === 'valid') {
@@ -154,19 +151,18 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang/_protected/alerts/subscribe/expired', params));
   }
   if (jsonReponseStatus.confirmCodeStatus === 'mismatch') {
-    // TODO there is currently no message for a mismatch
-    return json({ alertMessage: AlertMessage.Mismatch } as const);
+    return json({ invalidConfirmationCode: true });
   }
 }
 
 export default function ConfirmSubscription() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, preferredLanguage } = useLoaderData<typeof loader>();
+  const { csrfToken, newCodeRequested, preferredLanguage } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const userOrigin = useUserOrigin();
 
-  const alertMessage = fetcher.data && 'alertMessage' in fetcher.data ? fetcher.data.alertMessage : undefined;
+  const invalidConfirmationCode = fetcher.data && 'invalidConfirmationCode' in fetcher.data ? fetcher.data.invalidConfirmationCode : undefined;
 
   const errorSummaryId = 'error-summary';
 
@@ -186,36 +182,43 @@ export default function ConfirmSubscription() {
   }, [errorMessages]);
 
   return (
-    <div className="max-w-prose">
+    <div className="max-w-prose space-y-6">
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+
+      <ContextualAlert type="info">
+        {newCodeRequested ? (
+          <p>
+            {/* TODO, implement the usage of email address with the user schema... */}
+            <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.code-sent-by-email" values={{ userEmailAddress: 'user@example.com' }} />
+          </p>
+        ) : (
+          <>
+            <p id="confirmation-information">
+              {/* TODO, implement the usage of email address with the user schema... */}
+              <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.confirmation-information-text" values={{ userEmailAddress: 'user@example.com' }} />
+            </p>
+            <p id="confirmation-completed" className="mt-4">
+              {t('alerts:confirm.confirmation-completed-text')}
+            </p>
+            <dl>
+              <dt id="confirmation-language" className="mt-4 font-bold">
+                {t('alerts:confirm.confirmation-selected-language')}
+              </dt>
+              <dd>{preferredLanguage}</dd>
+            </dl>
+          </>
+        )}
+      </ContextualAlert>
+
+      {invalidConfirmationCode && (
+        <ContextualAlert type="danger">
+          <p>{t('alerts:confirm.invalid')}</p>
+        </ContextualAlert>
+      )}
+
       <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mb-8 space-y-6">
-          <ContextualAlert type="info">
-            {!alertMessage && (
-              <>
-                <p id="confirmation-information">
-                  {/* TODO, implement the usage of email address with the user schema... */}
-                  {/*<Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.confirmation-information-text" values={{ userEmailAddress: alertSubscription.email }} />*/}
-                </p>
-                <p id="confirmation-completed" className="mt-4">
-                  {t('alerts:confirm.confirmation-completed-text')}
-                </p>
-                <dl>
-                  <dt id="confirmation-language" className="mt-4 font-bold">
-                    {t('alerts:confirm.confirmation-selected-language')}
-                  </dt>
-                  <dd>{preferredLanguage}</dd>
-                </dl>
-              </>
-            )}
-            {alertMessage === AlertMessage.NewCode && (
-              <p>
-                {/* TODO, implement the usage of email address with the user schema... */}
-                {/* <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.code-sent-by-email" values={{ userEmailAddress: alertSubscription.email }} />*/}
-              </p>
-            )}
-          </ContextualAlert>
           <InputField id="confirmationCode" label={t('alerts:confirm.confirmation-code-label')} maxLength={100} name="confirmationCode" errorMessage={errorMessages.confirmationCode} />
         </div>
         <div className="flex flex-wrap items-center gap-3">
