@@ -50,5 +50,49 @@ export function getStatusCheckApiMockHandlers() {
         },
       });
     }),
+    http.post('https://api.example.com/dental-care/application/v1/status_fnlndob', async ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+      const statusRequestSchema = z.object({
+        BenefitApplication: z.object({
+          Applicant: z.object({
+            PersonName: z.array(
+              z.object({
+                PersonGivenName: z.array(z.string()),
+                PersonSurName: z.string(),
+              }),
+            ),
+            PersonBirthDate: z.object({
+              date: z.string(),
+            }),
+            ClientIdentification: z.array(
+              z.object({
+                IdentificationID: z.string(),
+              }),
+            ),
+          }),
+        }),
+      });
+
+      const statusRequest = statusRequestSchema.safeParse(await request.json());
+      if (!statusRequest.success) {
+        return new HttpResponse(null, { status: 400 });
+      }
+
+      const subscriptionKey = request.headers.get('Ocp-Apim-Subscription-Key');
+      if (!subscriptionKey) {
+        return new HttpResponse(null, { status: 401 });
+      }
+
+      return HttpResponse.json({
+        BenefitApplication: {
+          BenefitApplicationStatus: [
+            {
+              ReferenceDataID: 'c23252fe-604e-ee11-be6f-000d3a09d640',
+              ReferenceDataName: 'Dental Status Code',
+            },
+          ],
+        },
+      });
+    }),
   ];
 }

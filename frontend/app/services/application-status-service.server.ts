@@ -22,20 +22,24 @@ function createApplicationStatusService() {
     INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY,
   } = getEnv();
 
-  interface GetStatusIdArgs {
+  interface GetStatusIdWithSinArgs {
     sin: string;
     applicationCode: string;
-    firstName?: string;
-    lastName?: string;
-    dateOfBirth?: string;
+  }
+
+  interface GetStatusIdWithoutSinArgs {
+    applicationCode: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
   }
 
   /**
    * @returns the status id of a dental application given the sin and application code
    */
-  async function getStatusId({ sin, applicationCode, firstName, lastName, dateOfBirth }: GetStatusIdArgs) {
+  async function getStatusIdWithSin({ sin, applicationCode }: GetStatusIdWithSinArgs) {
     log.debug('Fetching status id of dental application for application code [%s]', applicationCode);
-    log.trace('Fetching status id of dental application for sin [%s], application code [%s], first name [%s], lastname [%s], date of birth [%s]', sin, applicationCode, firstName, lastName, dateOfBirth);
+    log.trace('Fetching status id of dental application for sin [%s], application code [%s]', sin, applicationCode);
     const instrumentationService = getInstrumentationService();
 
     getAuditService().audit('application-status.post', { userId: 'anonymous' });
@@ -50,9 +54,6 @@ function createApplicationStatusService() {
           ClientIdentification: [
             {
               IdentificationID: applicationCode,
-              firstName: firstName,
-              lastName: lastName,
-              dateOfBirth: dateOfBirth,
             },
           ],
         },
@@ -67,9 +68,8 @@ function createApplicationStatusService() {
       },
       body: JSON.stringify(statusRequest),
     });
-
+    instrumentationService.countHttpStatus('http.client.interop-api.status.posts', response.status);
     if (!response.ok) {
-      instrumentationService.countHttpStatus('http.client.interop-api.status.posts', response.status);
       log.error('%j', {
         message: "Failed to 'POST' for application status",
         status: response.status,
@@ -81,7 +81,6 @@ function createApplicationStatusService() {
       throw new Error(`Failed to 'POST' for application status. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    instrumentationService.countHttpStatus('http.client.interop-api.status.posts', 200);
     const statusResponseSchema = z.object({
       BenefitApplication: z.object({
         BenefitApplicationStatus: z.array(
@@ -100,5 +99,75 @@ function createApplicationStatusService() {
     return statusResponse.BenefitApplication.BenefitApplicationStatus[0].ReferenceDataID;
   }
 
-  return { getStatusId };
+  /**
+   * @returns the status id of a dental application given the application code and client information without the SIN
+   */
+  async function getStatusIdWithoutSin({ applicationCode, firstName, lastName, dateOfBirth }: GetStatusIdWithoutSinArgs) {
+    log.debug('Fetching status id of dental application for application code [%s]', applicationCode);
+    log.trace('Fetching status id of dental application for application code [%s], first name [%s], lastname [%s], date of birth [%s]', applicationCode, firstName, lastName, dateOfBirth);
+    const instrumentationService = getInstrumentationService();
+
+    getAuditService().audit('application-status.post', { userId: 'anonymous' });
+
+    const url = new URL(`${INTEROP_STATUS_CHECK_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/application/v1/status_fnlndob`);
+    const statusRequest = {
+      BenefitApplication: {
+        Applicant: {
+          PersonName: [
+            {
+              PersonGivenName: [firstName],
+              PersonSurName: lastName,
+            },
+          ],
+          PersonBirthDate: {
+            date: dateOfBirth,
+          },
+          ClientIdentification: [
+            {
+              IdentificationID: applicationCode,
+            },
+          ],
+        },
+      },
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY ?? INTEROP_API_SUBSCRIPTION_KEY,
+      },
+      body: JSON.stringify(statusRequest),
+    });
+    instrumentationService.countHttpStatus('http.client.interop-api.status-fnlndob.posts', response.status);
+    if (!response.ok) {
+      log.error('%j', {
+        message: "Failed to 'POST' for application status",
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+      throw new Error(`Failed to 'POST' for application status. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
+
+    const statusResponseSchema = z.object({
+      BenefitApplication: z.object({
+        BenefitApplicationStatus: z.array(
+          z.object({
+            ReferenceDataID: z.string().nullable(),
+            ReferenceDataName: z.string(),
+          }),
+        ),
+      }),
+    });
+
+    const data = await response.json();
+    log.trace('Status id: [%j]', data);
+
+    const statusResponse = statusResponseSchema.parse(data);
+    return statusResponse.BenefitApplication.BenefitApplicationStatus[0].ReferenceDataID;
+  }
+
+  return { getStatusIdWithSin, getStatusIdWithoutSin };
 }

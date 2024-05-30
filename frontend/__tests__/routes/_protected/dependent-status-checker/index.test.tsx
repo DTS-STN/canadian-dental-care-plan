@@ -54,7 +54,8 @@ vi.mock('~/utils/locale-utils.server', () => ({
 }));
 
 vi.mock('~/services/application-status-service.server', () => ({
-  getStatusId: vi.fn().mockResolvedValue(vi.fn()),
+  getStatusIdWithSin: vi.fn().mockResolvedValue(vi.fn()),
+  getStatusIdWithoutSin: vi.fn().mockResolvedValue(vi.fn()),
 }));
 
 describe('Dependent Status Checker Page', () => {
