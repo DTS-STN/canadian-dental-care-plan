@@ -214,8 +214,7 @@
         "date-of-birth-month-required": "Date of birth must include a month",
         "date-of-birth-valid": "Day must be valid for the given month and year",
         "date-of-birth-year-number": "Year must be a number, for example 1950",
-        "date-of-birth-year-required": "Date of birth must include a year",
-        "child-age-required": "Please indicate if all children are under 18"
+        "date-of-birth-year-required": "Date of birth must include a year"
       },
       "back-btn": "Back",
       "continue-btn": "Continue",
@@ -326,7 +325,7 @@
       "mailing-address": {
         "address-required": "Enter mailing address, typically number and street",
         "city-required": "Enter a city or town for your mailing address",
-        "country-required": "Select a country for for your mailing address",
+        "country-required": "Select a country for your mailing address your mailing address",
         "postal-code-required": "Enter postal code or zip code for your mailing address",
         "postal-code-valid": "Enter mailing address postal code in the correct format, such as A1A 1A1",
         "province-required": "Select a province, territory, state or region for your mailing address",

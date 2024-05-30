@@ -134,7 +134,7 @@
         }
       },
       "error-message": {
-        "dental-insurance-required": "Select whether you have access to dental insurance"
+        "dental-insurance-required": "Select whether the child has access to dental insurance"
       }
     },
     "dental-benefits": {
@@ -168,10 +168,10 @@
         "save-btn": "Save"
       },
       "error-message": {
-        "federal-benefit-program-required": "Select which federal program you are covered under",
-        "federal-benefit-required": "Select whether you have federal dental benefits",
-        "provincial-benefit-program-required": "Select which provincial or territorial program you are covered under",
-        "provincial-benefit-required": "Select whether you have provincial or territorial dental benefits",
+        "federal-benefit-program-required": "Select which federal program the child is covered under",
+        "federal-benefit-required": "Select whether the child has federal dental benefits",
+        "provincial-benefit-program-required": "Select which provincial or territorial program the child is covered under",
+        "provincial-benefit-required": "Select whether the child has provincial or territorial dental benefits",
         "provincial-territorial-required": "Select a province or territory"
       }
     },
@@ -312,7 +312,7 @@
       "mailing-address": {
         "address-required": "Enter mailing address, typically number and street",
         "city-required": "Enter a city or town for your mailing address",
-        "country-required": "Select a country for for your mailing address",
+        "country-required": "Select a country for your mailing address your mailing address",
         "postal-code-required": "Enter postal code or zip code for your mailing address",
         "postal-code-valid": "Enter mailing address postal code in the correct format, such as A1A 1A1",
         "province-required": "Select a province, territory, state or region for your mailing address",
@@ -459,7 +459,7 @@
         "date-of-birth-valid": "Day must be valid for the given month and year",
         "date-of-birth-year-number": "Year must be a number, for example 1950",
         "date-of-birth-year-required": "Date of birth must include a year",
-        "child-age-required": "Please indicate if all children are under 18"
+        "child-age-required": "Select wether or not all the children are under 18 "
       },
       "back-btn": "Back",
       "continue-btn": "Continue",
