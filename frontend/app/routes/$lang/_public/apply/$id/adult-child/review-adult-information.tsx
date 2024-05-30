@@ -224,6 +224,7 @@ export default function ReviewInformation() {
 
   function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
+
     const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
     setSubmitAction(String(formData.get('_action')));
 

@@ -114,13 +114,14 @@ export default function ApplyFlowChildSummary() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const hasChildren = children.length > 0;
-
   const [submitAction, setSubmitAction] = useState<string>();
 
   function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
+
     const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
     setSubmitAction(String(formData.get('_action')));
+
     fetcher.submit(formData, { method: 'POST' });
   }
 
