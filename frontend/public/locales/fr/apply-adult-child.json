@@ -98,7 +98,7 @@
       }
     },
     "dental-insurance": {
-      "title": "(FR) {{childName}}: Access to other dental insurance",
+      "title": "(FR) {{childName}}: access to other dental insurance",
       "legend": "(FR) Does {{childName}} have access to dental insurance or coverage:",
       "list": {
         "employment": "Vos avantages en matière d'emploi ou les avantages en matière d'emploi d'un membre de votre famille, y compris vos comptes de santé et de bien-être",
@@ -106,8 +106,8 @@
         "purchased": "Assurance ou couverture achetée individuellement par vous, par un membre de votre famille ou par l'entremise d'un plan de groupe d'une compagnie d'assurance ou de prestations",
         "professional": "Assurance ou couverture par une organisation professionnelle ou étudiante"
       },
-      "option-yes": "<strong>Oui</strong>, j'ai accès à une assurance dentaire",
-      "option-no": "<strong>Non</strong>, je n'ai pas accès à une assurance dentaire",
+      "option-yes": "(FR) <strong>Yes</strong>, this child has access to dental insurance or coverage",
+      "option-no": "(FR) <strong>No</strong>, this child does not have access to dental insurance or coverage",
       "button": {
         "back": "Retour",
         "continue": "Continuer",
