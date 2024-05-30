@@ -159,14 +159,14 @@ export default function ReviewInformation() {
       </div>
       <div className="max-w-prose">
         <p className="my-4 text-lg">{t('apply-adult-child:review-child-information.read-carefully')}</p>
-        <div className="mb-8 space-y-10">
+        <div className="space-y-10">
           {children.map((child) => {
             const childParams = { ...params, childId: child.id };
             return (
-              <section key={child.id} className="space-y-10">
-                <h2 className="font-lato text-3xl font-semibold">{child.information.firstName}</h2>
-                <div>
-                  <h3 className="mb-6 font-lato text-2xl font-semibold">{t('apply-adult-child:review-child-information.page-sub-title', { child: child.information.firstName })}</h3>
+              <section key={child.id} className="space-y-8">
+                <h2 className="font-lato text-3xl font-bold">{child.information.firstName}</h2>
+                <section className="space-y-6">
+                  <h3 className="font-lato text-2xl font-bold">{t('apply-adult-child:review-child-information.page-sub-title', { child: child.information.firstName })}</h3>
                   <dl className="divide-y border-y">
                     <DescriptionListItem term={t('apply-adult-child:review-child-information.full-name-title')}>
                       {`${child.information.firstName} ${child.information.lastName}`}
@@ -196,9 +196,9 @@ export default function ReviewInformation() {
                       {child.information.isParent ? t('apply-adult-child:review-child-information.yes') : t('apply-adult-child:review-child-information.no')}
                     </DescriptionListItem>
                   </dl>
-                </div>
-                <div>
-                  <h3 className="mb-6 font-lato text-2xl font-semibold">{t('apply-adult-child:review-child-information.dental-title', { child: child.information.firstName })}</h3>
+                </section>
+                <section className="space-y-6">
+                  <h3 className="font-lato text-2xl font-bold">{t('apply-adult-child:review-child-information.dental-title', { child: child.information.firstName })}</h3>
                   <dl className="divide-y border-y">
                     <DescriptionListItem term={t('apply-adult-child:review-child-information.dental-insurance-title')}>
                       {child.dentalInsurance ? t('apply-adult-child:review-child-information.yes') : t('apply-adult-child:review-child-information.no')}
@@ -240,15 +240,17 @@ export default function ReviewInformation() {
                       </p>
                     </DescriptionListItem>
                   </dl>
-                </div>
+                </section>
               </section>
             );
           })}
+          <section className="space-y-4">
+            <h2 className="font-lato text-2xl font-bold">{t('apply-adult-child:review-child-information.submit-app-title')}</h2>
+            <p className="mb-4">{t('apply-adult-child:review-child-information.submit-p-proceed')}</p>
+            <p className="mb-4">{t('apply-adult-child:review-child-information.submit-p-false-info')}</p>
+            <p className="mb-4">{t('apply-adult-child:review-child-information.submit-p-repayment')}</p>
+          </section>
         </div>
-        <h2 className="mb-5 mt-8 text-2xl font-semibold">{t('apply-adult-child:review-child-information.submit-app-title')}</h2>
-        <p className="mb-4">{t('apply-adult-child:review-child-information.submit-p-proceed')}</p>
-        <p className="mb-4">{t('apply-adult-child:review-child-information.submit-p-false-info')}</p>
-        <p className="mb-4">{t('apply-adult-child:review-child-information.submit-p-repayment')}</p>
         <fetcher.Form method="post" onSubmit={handleSubmit} className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
@@ -263,7 +265,7 @@ export default function ReviewInformation() {
             </Button>
           </div>
         </fetcher.Form>
-        <InlineLink routeId="$lang/_public/apply/$id/adult-child/exit-application" params={params} className="mt-8 block font-lato font-semibold">
+        <InlineLink routeId="$lang/_public/apply/$id/adult-child/exit-application" params={params} className="mt-8 block font-lato font-bold">
           {t('apply-adult-child:review-child-information.exit-button')}
         </InlineLink>
       </div>
