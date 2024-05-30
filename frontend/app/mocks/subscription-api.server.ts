@@ -30,9 +30,38 @@ export function getSubscriptionApiMockHandlers() {
 
   return [
     //
-    // Handler for GET request to retrieve email alerts decription by sin
+    // Handler for GET request to retrieve user by userId
     //
-    http.get('https://api.cdcp.example.com/v1/users/:userId/subscriptions', ({ params, request }) => {
+    http.get('https://api.cdcp.example.com/api/v1/users/:userId', ({ params, request }) => {
+      log.debug('Handling request for [%s]', request.url);
+
+      const parsedUserId = z.string().safeParse(params.userId);
+
+      if (!parsedUserId.success) {
+        throw new HttpResponse(null, { status: 400 });
+      }
+
+      const userEntity = db.user.findFirst({
+        where: { id: { equals: parsedUserId.data } },
+      });
+
+      return HttpResponse.json({
+        ...userEntity,
+        _links: {
+          self: {
+            href: `https://api.cdcp.example.com/api/v1/users/${parsedUserId.data}`,
+          },
+          subscriptions: {
+            href: `https://api.cdcp.example.com/api/v1/users/${parsedUserId.data}/subscriptions`,
+          },
+        },
+      });
+    }),
+
+    //
+    // Handler for GET request to retrieve subscriptions by userId
+    //
+    http.get('https://api.cdcp.example.com/api/v1/users/:userId/subscriptions', ({ params, request }) => {
       log.debug('Handling request for [%s]', request.url);
 
       const parsedUserId = z.string().safeParse(params.userId);
@@ -45,7 +74,16 @@ export function getSubscriptionApiMockHandlers() {
         where: { userId: { equals: parsedUserId.data } },
       });
 
-      return HttpResponse.json(subscriptionEntities);
+      return HttpResponse.json({
+        _embedded: {
+          subscriptions: subscriptionEntities,
+        },
+        _links: {
+          self: {
+            href: `https://api.cdcp.example.com/api/v1/users/${parsedUserId.data}/subscriptions`,
+          },
+        },
+      });
     }),
 
     //

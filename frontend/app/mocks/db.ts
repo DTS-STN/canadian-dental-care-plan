@@ -1,5 +1,5 @@
 import { fakerEN_CA as faker } from '@faker-js/faker';
-import { factory, primaryKey } from '@mswjs/data';
+import { factory, manyOf, primaryKey } from '@mswjs/data';
 
 // (Optional) Seed `faker` to ensure reproducible
 // random values of model properties.
@@ -44,13 +44,23 @@ const db = factory({
     msLanguageCode: String,
     alertTypeCode: String,
   },
-
   subscriptionConfirmationCode: {
     id: primaryKey(faker.string.uuid),
     email: String,
     confirmationCode: String,
     createdDate: () => faker.date.future({ years: 1 }),
     expiryDate: () => faker.date.future({ years: 1 }),
+  },
+  user: {
+    id: primaryKey(faker.string.uuid),
+    email: faker.internet.email,
+    emailVerified: () => faker.datatype.boolean(),
+    userAttributes: manyOf('userAttributes'),
+  },
+  userAttributes: {
+    id: primaryKey(faker.string.uuid),
+    name: String,
+    value: String,
   },
 });
 
@@ -116,20 +126,48 @@ db.personalInformation.create({
   sinIdentification: '800000002',
 });
 
-// seed the email alerts subscription
+const unverifiedUserAttributes = [
+  db.userAttributes.create({
+    name: 'RAOIDC_USER_ID',
+    value: 'b5336580-d93d-4da9-9e19-c2a5e098bd08',
+  }),
+];
+
+const unverifiedUser = db.user.create({
+  id: '76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6',
+  email: 'unverified@example.com',
+  emailVerified: false,
+  userAttributes: unverifiedUserAttributes,
+});
+
 db.subscription.create({
   id: '10001',
-  userId: '76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6',
+  userId: unverifiedUser.id,
   msLanguageCode: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
   alertTypeCode: 'cdcp',
 });
 
+const verifiedUserAttributes = [
+  db.userAttributes.create({
+    name: 'RAOIDC_USER_ID',
+    value: 'd827416b-f808-4035-9ccc-7572f3297015',
+  }),
+];
+
+const verifiedUser = db.user.create({
+  id: 'f9f33652-0ebd-46bc-8d93-04cef538a689',
+  email: 'verified@example.com',
+  emailVerified: true,
+  userAttributes: verifiedUserAttributes,
+});
+
 db.subscription.create({
   id: '10003',
-  userId: 'f9f33652-0ebd-46bc-8d93-04cef538a689',
+  userId: verifiedUser.id,
   msLanguageCode: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
   alertTypeCode: 'cdcp',
 });
+
 db.subscriptionConfirmationCode.create({
   id: '0000001',
   email: 'user@example.com',
