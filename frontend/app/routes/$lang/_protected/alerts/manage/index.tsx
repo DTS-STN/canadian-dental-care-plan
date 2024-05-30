@@ -172,7 +172,7 @@ export default function ManageAlerts() {
               name="preferredLanguage"
               legend={t('alerts:manage.preferred-language')}
               options={preferredLanguages.map((language) => ({
-                defaultChecked: alertSubscription?.preferredLanguage === language.id,
+                defaultChecked: alertSubscription?.msLanguageCode === language.id,
                 children: getNameByLanguage(i18n.language, language),
                 value: language.id,
               }))}
