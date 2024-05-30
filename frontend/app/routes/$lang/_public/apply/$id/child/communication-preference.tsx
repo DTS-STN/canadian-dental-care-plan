@@ -85,8 +85,8 @@ export async function action({ context: { session }, params, request }: ActionFu
     .object({
       preferredLanguage: z.string().trim().min(1, t('apply-child:communication-preference.error-message.preferred-language-required')),
       preferredMethod: z.string().trim().min(1, t('apply-child:communication-preference.error-message.preferred-method-required')),
-      email: z.string().trim().max(100).optional(),
-      confirmEmail: z.string().trim().max(100).optional(),
+      email: z.string().trim().max(64).optional(),
+      confirmEmail: z.string().trim().max(64).optional(),
     })
     .superRefine((val, ctx) => {
       if (val.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID) {
@@ -197,7 +197,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             inputMode="email"
             className="w-full"
             label={t('apply-child:communication-preference.email')}
-            maxLength={100}
+            maxLength={64}
             name="email"
             errorMessage={errorMessages.email}
             autoComplete="email"
@@ -212,7 +212,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
               inputMode="email"
               className="w-full"
               label={t('apply-child:communication-preference.confirm-email')}
-              maxLength={100}
+              maxLength={64}
               name="confirmEmail"
               errorMessage={errorMessages['confirm-email']}
               autoComplete="email"

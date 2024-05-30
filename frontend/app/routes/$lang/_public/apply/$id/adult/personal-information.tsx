@@ -91,8 +91,8 @@ export async function action({ context: { session }, params, request }: ActionFu
         .max(100)
         .refine((val) => !val || isValidPhoneNumber(val, 'CA'), t('apply-adult:contact-information.error-message.phone-number-alt-valid'))
         .optional(),
-      email: z.string().trim().max(100).optional(),
-      confirmEmail: z.string().trim().max(100).optional(),
+      email: z.string().trim().max(64).optional(),
+      confirmEmail: z.string().trim().max(64).optional(),
       mailingAddress: z.string().trim().min(1, t('apply-adult:contact-information.error-message.mailing-address.address-required')).max(30),
       mailingApartment: z.string().trim().max(30).optional(),
       mailingCountry: z.string().trim().min(1, t('apply-adult:contact-information.error-message.mailing-address.country-required')),
@@ -425,7 +425,7 @@ export default function ApplyFlowPersonalInformation() {
                 defaultValue={defaultState?.email ?? ''}
                 errorMessage={errorMessages['email']}
                 label={t('apply-adult:contact-information.email')}
-                maxLength={100}
+                maxLength={64}
                 aria-describedby="adding-email"
               />
               <InputField
@@ -438,7 +438,7 @@ export default function ApplyFlowPersonalInformation() {
                 defaultValue={defaultState?.email ?? ''}
                 errorMessage={errorMessages['confirm-email']}
                 label={t('apply-adult:contact-information.confirm-email')}
-                maxLength={100}
+                maxLength={64}
                 aria-describedby="adding-email"
               />
             </div>
