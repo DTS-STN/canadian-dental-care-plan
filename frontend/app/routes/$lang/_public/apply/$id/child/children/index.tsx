@@ -119,8 +119,10 @@ export default function ApplyFlowChildSummary() {
 
   function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
+
     const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
     setSubmitAction(String(formData.get('_action')));
+
     fetcher.submit(formData, { method: 'POST' });
   }
 

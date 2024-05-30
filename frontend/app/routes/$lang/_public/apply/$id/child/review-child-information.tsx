@@ -119,14 +119,14 @@ export default function ReviewInformation() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
-
   const [submitAction, setSubmitAction] = useState<string>();
 
   function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
 
+    const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
     setSubmitAction(String(formData.get('_action')));
+
     if (hCaptchaEnabled && captchaRef.current) {
       try {
         const response = captchaRef.current.getResponse();

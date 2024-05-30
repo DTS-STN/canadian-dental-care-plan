@@ -226,13 +226,14 @@ export default function ReviewInformation() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
-
-  const [isSubmitAction, setIsSubmitAction] = useState(false);
+  const [submitAction, setSubmitAction] = useState<string>();
 
   function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
+
     const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
-    setIsSubmitAction(formData.get('_action') === FormAction.Submit);
+    setSubmitAction(String(formData.get('_action')));
+
     if (hCaptchaEnabled && captchaRef.current) {
       try {
         const response = captchaRef.current.getResponse();
@@ -468,7 +469,7 @@ export default function ReviewInformation() {
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <Button id="confirm-button" name="_action" value={FormAction.Submit} variant="green" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Submit - Review Information click">
             {t('apply-adult:review-information.submit-button')}
-            {isSubmitting && !isSubmitAction && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
+            {isSubmitting && submitAction === FormAction.Submit && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
           </Button>
           <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Review Information click">
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />

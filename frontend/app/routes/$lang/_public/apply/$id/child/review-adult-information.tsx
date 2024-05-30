@@ -194,14 +194,13 @@ export default function ReviewInformation() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
-
-  const [isSubmitAction, setIsSubmitAction] = useState(false);
+  const [submitAction, setSubmitAction] = useState<string>();
 
   function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
 
-    setIsSubmitAction(formData.get('_action') === FormAction.Submit);
+    const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
+    setSubmitAction(String(formData.get('_action')));
 
     if (hCaptchaEnabled && captchaRef.current) {
       try {
@@ -333,7 +332,7 @@ export default function ReviewInformation() {
                 <Address
                   address={mailingAddressInfo.address}
                   city={mailingAddressInfo.city}
-                  provinceState={mailingAddressInfo.province ? (i18n.language === 'en' ? mailingAddressInfo.province.nameEn : mailingAddressInfo.province.nameFr) : ''}
+                  provinceState={mailingAddressInfo.province && (i18n.language === 'en' ? mailingAddressInfo.province.nameEn : mailingAddressInfo.province.nameFr)}
                   postalZipCode={mailingAddressInfo.postalCode}
                   country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
                   apartment={mailingAddressInfo.apartment}
@@ -349,7 +348,7 @@ export default function ReviewInformation() {
                 <Address
                   address={homeAddressInfo.address ?? ''}
                   city={homeAddressInfo.city ?? ''}
-                  provinceState={homeAddressInfo.province ? (i18n.language === 'en' ? homeAddressInfo.province.nameEn : homeAddressInfo.province.nameFr) : ''}
+                  provinceState={homeAddressInfo.province && (i18n.language === 'en' ? homeAddressInfo.province.nameEn : homeAddressInfo.province.nameFr)}
                   postalZipCode={homeAddressInfo.postalCode}
                   country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
                   apartment={homeAddressInfo.apartment}
@@ -405,7 +404,7 @@ export default function ReviewInformation() {
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
             <Button id="confirm-button" name="_action" value={FormAction.Submit} variant="green" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Submit - Review Adult Information click">
               {t('apply-child:review-adult-information.submit-button')}
-              {isSubmitting && !isSubmitAction && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
+              {isSubmitting && submitAction === FormAction.Submit && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
             </Button>
             <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Review Adult Information click">
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
