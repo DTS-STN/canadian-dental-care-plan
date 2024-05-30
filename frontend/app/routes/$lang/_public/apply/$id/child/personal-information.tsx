@@ -594,16 +594,22 @@ export default function ApplyFlowPersonalInformation() {
           </fieldset>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Personal information click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Personal information click">
                 {t('apply-child:contact-information.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/child/review-adult-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Personal information click">
+              <ButtonLink
+                id="back-button"
+                routeId="$lang/_public/apply/$id/child/review-adult-information"
+                params={params}
+                disabled={isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Personal information click"
+              >
                 {t('apply-child:contact-information.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Personal information click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Personal information click">
                 {t('apply-child:contact-information.continue')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
@@ -612,7 +618,7 @@ export default function ApplyFlowPersonalInformation() {
                 routeId={[MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED].includes(Number(maritalStatus)) ? '$lang/_public/apply/$id/child/partner-information' : '$lang/_public/apply/$id/child/applicant-information'}
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Personal information click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Personal information click"
               >
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-child:contact-information.back')}

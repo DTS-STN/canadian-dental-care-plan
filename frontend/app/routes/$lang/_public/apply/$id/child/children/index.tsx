@@ -177,7 +177,7 @@ export default function ApplyFlowChildSummary() {
                       variant="alternative"
                       routeId="$lang/_public/apply/$id/child/children/$childId/information"
                       params={{ ...params, childId: child.id }}
-                      data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Edit child - Summary of children click"
+                      data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Edit child - Summary of children click"
                     >
                       <FontAwesomeIcon icon={faEdit} className="me-3 block size-3" />
                       {t('apply-child:children.index.edit-child')}
@@ -210,7 +210,7 @@ export default function ApplyFlowChildSummary() {
                               disabled={isSubmitting}
                               variant="primary"
                               size="sm"
-                              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Remove child - Summary of children click"
+                              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Remove child - Summary of children click"
                             >
                               {t('apply-child:children.index.modal.remove-btn')}
                             </Button>
@@ -227,7 +227,7 @@ export default function ApplyFlowChildSummary() {
 
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <Button className="my-10" id="add-child" name="_action" value={FormAction.Add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Add child - Summary of children click">
+          <Button className="my-10" id="add-child" name="_action" value={FormAction.Add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Add child - Summary of children click">
             <FontAwesomeIcon icon={faPlus} className="me-3 block size-4" />
             {children.length === 0 ? t('apply-child:children.index.add-child') : t('apply-child:children.index.add-another-child')}
           </Button>
@@ -239,7 +239,7 @@ export default function ApplyFlowChildSummary() {
                 routeId="$lang/_public/apply/$id/child/review-child-information"
                 params={params}
                 disabled={!hasChildren || isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Summary of children click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Summary of children click"
                 variant="primary"
               >
                 {t('children.index.save-btn')}
@@ -249,18 +249,25 @@ export default function ApplyFlowChildSummary() {
                 routeId="$lang/_public/apply/$id/child/review-child-information"
                 params={params}
                 disabled={!hasChildren || isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Summary of children click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Summary of children click"
               >
                 {t('children.index.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Button id="continue-button" name="_action" value={FormAction.Continue} variant="primary" disabled={!hasChildren || isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Summary of children click">
+              <Button
+                id="continue-button"
+                name="_action"
+                value={FormAction.Continue}
+                variant="primary"
+                disabled={!hasChildren || isSubmitting}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Summary of children click"
+              >
                 {t('apply-child:children.index.continue-btn')}
                 {isSubmitting && submitAction === FormAction.Continue ? <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" /> : <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />}
               </Button>
-              <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/child/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Summary of children click">
+              <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/child/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Summary of children click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-child:children.index.back-btn')}
               </ButtonLink>
