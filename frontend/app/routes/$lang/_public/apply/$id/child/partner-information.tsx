@@ -281,7 +281,7 @@ export default function ApplyFlowApplicationInformation() {
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Spouse or Common-law partner information click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Save - Spouse or Common-law partner information click">
                 {t('apply-child:partner-information.save-btn')}
               </Button>
               <ButtonLink
@@ -289,14 +289,14 @@ export default function ApplyFlowApplicationInformation() {
                 routeId={defaultState ? '$lang/_public/apply/$id/child/review-adult-information' : '$lang/_public/apply/$id/child/applicant-information'}
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Spouse or Common-law partner information click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Cancel - Spouse or Common-law partner information click"
               >
                 {t('apply-child:partner-information.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Spouse or Common-law partner information click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Spouse or Common-law partner information click">
                 {t('apply-child:partner-information.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
@@ -305,7 +305,7 @@ export default function ApplyFlowApplicationInformation() {
                 routeId="$lang/_public/apply/$id/child/applicant-information"
                 params={params}
                 disabled={isSubmitting}
-                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Spouse or Common-law partner information click"
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Spouse or Common-law partner information click"
               >
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-child:partner-information.back-btn')}

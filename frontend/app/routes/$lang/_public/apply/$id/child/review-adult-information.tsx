@@ -402,11 +402,11 @@ export default function ReviewInformation() {
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <Button id="confirm-button" name="_action" value={FormAction.Submit} variant="green" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Submit - Review Adult Information click">
+            <Button id="confirm-button" name="_action" value={FormAction.Submit} variant="green" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Submit - Review adult information click">
               {t('apply-child:review-adult-information.submit-button')}
               {isSubmitting && submitAction === FormAction.Submit && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
             </Button>
-            <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Review Adult Information click">
+            <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - Review adult information click">
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('apply-child:review-adult-information.back-button')}
             </Button>

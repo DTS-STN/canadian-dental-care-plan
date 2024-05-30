@@ -239,11 +239,11 @@ export default function ReviewInformation() {
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
 
-          <Button variant="primary" id="continue-button" name="_action" value={FormAction.Submit} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Review Child Information click">
+          <Button variant="primary" id="continue-button" name="_action" value={FormAction.Submit} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Review child information click">
             {t('apply-child:review-child-information.continue-button')}
             {isSubmitting && submitAction === FormAction.Submit ? <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" /> : <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />}
           </Button>
-          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Review Information click">
+          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - Review child information click">
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply-child:review-child-information.back-button')}
           </Button>

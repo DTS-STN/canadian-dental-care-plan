@@ -83,12 +83,12 @@ export default function ApplyFlowParentOrGuardian() {
           routeId="$lang/_public/apply/$id/child/children/$childId/information"
           params={params}
           disabled={isSubmitting}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Parent or guardian needs to apply click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Parent or guardian needs to apply click"
         >
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply-child:children.parent-or-guardian.back-btn')}
         </ButtonLink>
-        <Button type="submit" variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Parent or guardian needs to apply click">
+        <Button type="submit" variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - Parent or guardian needs to apply click">
           {t('apply-child:children.parent-or-guardian.return-btn')}
           <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
         </Button>
