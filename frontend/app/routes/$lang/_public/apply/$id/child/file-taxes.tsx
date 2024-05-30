@@ -86,7 +86,7 @@ export default function ApplyFlowFileYourTaxes() {
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/child/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - File your taxes click">
+        <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/child/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - File your taxes click">
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply-child:eligibility.file-your-taxes.back-btn')}
         </ButtonLink>
