@@ -94,7 +94,7 @@ function createSubscriptionService() {
       emailVerified: userParsed.emailVerified,
     }));
 
-    return subscriptions.filter((subscription) => subscription.alertType === 'cdcp').at(0);
+    return subscriptions.filter((subscription) => subscription.alertType === 'CDCP').at(0);
   }
 
   async function updateSubscription(sin: string, subscription: SubscriptionInfo) {
