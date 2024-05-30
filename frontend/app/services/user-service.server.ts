@@ -8,9 +8,6 @@ import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('user-service.server');
 
-//export const getSubscriptionService = moize(createSubscriptionService,
-//{ onCacheAdd: () => log.info('Creating new subscription service') });
-
 export const getUserService = moize(createUserService, { onCacheAdd: () => log.info('Creating new user service') });
 
 function createUserService() {
