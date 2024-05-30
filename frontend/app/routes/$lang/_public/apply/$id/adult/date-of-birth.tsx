@@ -228,20 +228,20 @@ export default function ApplyFlowDateOfBirth() {
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Save - Adult flow date of birth click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Save - Date of birth click">
                 {t('apply-adult:eligibility.date-of-birth.save-btn')}
               </Button>
-              <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Cancel - Adult flow date of birth click">
+              <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Cancel - Date of birth click">
                 {t('apply-adult:eligibility.date-of-birth.cancel-btn')}
               </ButtonLink>
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Adult flow date of birth click">
+              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Date of birth click">
                 {t('apply-adult:eligibility.date-of-birth.continue-btn')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/adult/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Adult flow date of birth click">
+              <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/adult/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Date of birth click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-adult:eligibility.date-of-birth.back-btn')}
               </ButtonLink>

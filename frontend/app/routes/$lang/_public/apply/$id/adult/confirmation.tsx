@@ -208,7 +208,7 @@ export default function ApplyFlowConfirm() {
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Print a copy of your application top click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Print top - Application successfully submitted click"
         >
           {t('confirm.print-btn')}
         </Button>
@@ -361,14 +361,14 @@ export default function ApplyFlowConfirm() {
             event.preventDefault();
             window.print();
           }}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Print a copy of your application bottom click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Print bottom - Application successfully submitted click"
         >
           {t('confirm.print-btn')}
         </Button>
       </div>
       <Dialog>
         <DialogTrigger asChild>
-          <button className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Exit click">
+          <button className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Exit - Application successfully submitted click">
             {t('apply-adult:confirm.close-application')}
           </button>
         </DialogTrigger>
@@ -380,13 +380,19 @@ export default function ApplyFlowConfirm() {
           <p>{t('apply-adult:confirm.modal.are-you-sure')}</p>
           <DialogFooter>
             <DialogClose asChild>
-              <Button id="confirm-modal-back" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Back click">
+              <Button id="confirm-modal-back" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back exit modal - Application successfully submitted click">
                 {t('apply-adult:confirm.modal.back-btn')}
               </Button>
             </DialogClose>
             <fetcher.Form method="post" noValidate>
               <input type="hidden" name="_csrf" value={csrfToken} />
-              <Button id="confirm-modal-close" variant="primary" size="sm" onClick={() => sessionStorage.removeItem('flow.state')} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Confirmation click">
+              <Button
+                id="confirm-modal-close"
+                variant="primary"
+                size="sm"
+                onClick={() => sessionStorage.removeItem('flow.state')}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Confirmation exit modal - Application successfully submitted click"
+              >
                 {t('apply-adult:confirm.modal.close-btn')}
               </Button>
             </fetcher.Form>
