@@ -234,45 +234,49 @@ export default function ApplyFlowDateOfBirth() {
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <div className="mb-6 space-y-4">
-            <h2 className="text-xl font-bold">{t('apply-adult-child:eligibility.date-of-birth.age-heading')}</h2>
-            <DatePickerField
-              id="date-of-birth"
-              names={{
-                day: 'dateOfBirthDay',
-                month: 'dateOfBirthMonth',
-                year: 'dateOfBirthYear',
-              }}
-              defaultValue={defaultState.dateOfBirth ?? ''}
-              legend={t('apply-adult-child:eligibility.date-of-birth.form-instructions')}
-              errorMessages={{
-                all: fetcher.data?.errors.dateOfBirth?._errors[0],
-                year: fetcher.data?.errors.dateOfBirthYear?._errors[0],
-                month: fetcher.data?.errors.dateOfBirthMonth?._errors[0],
-                day: fetcher.data?.errors.dateOfBirthDay?._errors[0],
-              }}
-              required
-            />
-            <h2 className="text-xl font-bold">{t('apply-adult-child:eligibility.date-of-birth.child-age-heading')}</h2>
-            <InputRadios
-              id="child-under-18"
-              name="allChildrenUnder18"
-              legend={t('apply-adult-child:eligibility.date-of-birth.child-age-instruction')}
-              options={[
-                { value: AllChildrenUnder18Option.Yes, children: t('apply-adult-child:eligibility.date-of-birth.yes'), defaultChecked: defaultState.allChildrenUnder18 === true },
-                { value: AllChildrenUnder18Option.No, children: t('apply-adult-child:eligibility.date-of-birth.no'), defaultChecked: defaultState.allChildrenUnder18 === false },
-              ]}
-              errorMessage={fetcher.data?.errors.allChildrenUnder18?._errors[0]}
-              required
-            />
-            <Collapsible summary={t('apply-adult-child:eligibility.date-of-birth.collapsible-content-summary')}>
-              <p className="mb-4">
-                <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:eligibility.date-of-birth.collapsible-content-detail" components={{ serviceCanada, noWrap }} />
-              </p>
-              <InlineLink to={t('apply-adult-child:eligibility.date-of-birth.apply-delegate-link')} className="external-link" newTabIndicator target="_blank">
-                {t('apply-adult-child:eligibility.date-of-birth.apply-delegate')}
-              </InlineLink>
-            </Collapsible>
+          <div className="mb-6 space-y-6">
+            <fieldset className="space-y-4">
+              <legend className="font-lato text-2xl font-bold">{t('apply-adult-child:eligibility.date-of-birth.age-heading')}</legend>
+              <DatePickerField
+                id="date-of-birth"
+                names={{
+                  day: 'dateOfBirthDay',
+                  month: 'dateOfBirthMonth',
+                  year: 'dateOfBirthYear',
+                }}
+                defaultValue={defaultState.dateOfBirth ?? ''}
+                legend={t('apply-adult-child:eligibility.date-of-birth.form-instructions')}
+                errorMessages={{
+                  all: fetcher.data?.errors.dateOfBirth?._errors[0],
+                  year: fetcher.data?.errors.dateOfBirthYear?._errors[0],
+                  month: fetcher.data?.errors.dateOfBirthMonth?._errors[0],
+                  day: fetcher.data?.errors.dateOfBirthDay?._errors[0],
+                }}
+                required
+              />
+            </fieldset>
+            <fieldset className="space-y-4">
+              <legend className="font-lato text-2xl font-bold">{t('apply-adult-child:eligibility.date-of-birth.child-age-heading')}</legend>
+              <InputRadios
+                id="child-under-18"
+                name="allChildrenUnder18"
+                legend={t('apply-adult-child:eligibility.date-of-birth.child-age-instruction')}
+                options={[
+                  { value: AllChildrenUnder18Option.Yes, children: t('apply-adult-child:eligibility.date-of-birth.yes'), defaultChecked: defaultState.allChildrenUnder18 === true },
+                  { value: AllChildrenUnder18Option.No, children: t('apply-adult-child:eligibility.date-of-birth.no'), defaultChecked: defaultState.allChildrenUnder18 === false },
+                ]}
+                errorMessage={fetcher.data?.errors.allChildrenUnder18?._errors[0]}
+                required
+              />
+              <Collapsible summary={t('apply-adult-child:eligibility.date-of-birth.collapsible-content-summary')}>
+                <p className="mb-4">
+                  <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult-child:eligibility.date-of-birth.collapsible-content-detail" components={{ serviceCanada, noWrap }} />
+                </p>
+                <InlineLink to={t('apply-adult-child:eligibility.date-of-birth.apply-delegate-link')} className="external-link" newTabIndicator target="_blank">
+                  {t('apply-adult-child:eligibility.date-of-birth.apply-delegate')}
+                </InlineLink>
+              </Collapsible>
+            </fieldset>
           </div>
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">

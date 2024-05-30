@@ -215,7 +215,7 @@ export default function ApplyFlowConfirm() {
       </ContextualAlert>
 
       <section>
-        <h2 className="font-lato text-3xl font-semibold">{t('confirm.keep-copy')}</h2>
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.keep-copy')}</h2>
         <p className="mt-4">
           <Trans ns={handle.i18nNamespaces} i18nKey="confirm.print-copy-text" components={{ noPrint: <span className="print:hidden" /> }} />
         </p>
@@ -234,7 +234,7 @@ export default function ApplyFlowConfirm() {
       </section>
 
       <section>
-        <h2 className="font-lato text-3xl font-semibold">{t('confirm.whats-next')}</h2>
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.whats-next')}</h2>
         <p className="mt-4">{t('confirm.begin-process')}</p>
         <p className="mt-4">
           <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
@@ -244,14 +244,14 @@ export default function ApplyFlowConfirm() {
       </section>
 
       <section>
-        <h2 className="font-lato text-3xl font-semibold">{t('confirm.register-msca-title')}</h2>
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.register-msca-title')}</h2>
         <p className="mt-4">
           <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLink, mscaLinkApply }} />
         </p>
       </section>
 
       <section>
-        <h2 className="font-lato text-3xl font-semibold">{t('confirm.how-insurance')}</h2>
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.how-insurance')}</h2>
         <p className="mt-4">{t('confirm.eligible-text')}</p>
         <p className="mt-4">
           <Trans ns={handle.i18nNamespaces} i18nKey="confirm.more-info-cdcp" components={{ moreInfoLink }} />
@@ -263,7 +263,7 @@ export default function ApplyFlowConfirm() {
 
       <section className="space-y-8">
         <div className="space-y-6">
-          <h2 className="font-lato text-3xl font-semibold">{t('confirm.application-summ')}</h2>
+          <h2 className="font-lato text-3xl font-bold">{t('confirm.application-summ')}</h2>
           <dl className="divide-y border-y text-xl">
             <DescriptionListItem term={t('confirm.application-code')}>
               <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
@@ -274,38 +274,40 @@ export default function ApplyFlowConfirm() {
         {/* CHILDREN DETAILS */}
         {children.map((child) => (
           <section className="space-y-6" key={child.id}>
-            <h3 className="font-lato text-2xl font-semibold">{t('confirm.child-applicant', { childName: child.firstName })}</h3>
-            <h4 className="font-lato text-xl font-semibold">{t('confirm.child-title', { childName: child.firstName })}</h4>
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('confirm.full-name')}>{`${child.firstName} ${child.lastName}`}</DescriptionListItem>
-              <DescriptionListItem term={t('confirm.dob')}>{child.birthday}</DescriptionListItem>
-              <DescriptionListItem term={t('confirm.sin')}>
-                <span className="text-nowrap">{child.sin && formatSin(child.sin)}</span>
-              </DescriptionListItem>
-              <DescriptionListItem term={t('confirm.dental-private')}> {child.dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
-              <DescriptionListItem term={t('confirm.dental-public')}>
-                {child.dentalInsurance.federalBenefit.benefit || child.dentalInsurance.provTerrBenefit.benefit ? (
-                  <>
-                    <p>{t('apply-child:confirm.yes')}</p>
-                    <p>{t('apply-child:confirm.dental-benefit-has-access')}</p>
-                    <ul className="ml-6 list-disc">
-                      {child.dentalInsurance.federalBenefit.benefit && <li>{child.dentalInsurance.federalBenefit.benefit}</li>}
-                      {child.dentalInsurance.provTerrBenefit.benefit && <li>{child.dentalInsurance.provTerrBenefit.benefit}</li>}
-                    </ul>
-                  </>
-                ) : (
-                  <p>{t('confirm.no')}</p>
-                )}
-              </DescriptionListItem>
-            </dl>
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.child-applicant', { childName: child.firstName })}</h3>
+            <section>
+              <h4 className="font-lato text-xl font-bold">{t('confirm.child-title', { childName: child.firstName })}</h4>
+              <dl className="divide-y border-y">
+                <DescriptionListItem term={t('confirm.full-name')}>{`${child.firstName} ${child.lastName}`}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.dob')}>{child.birthday}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.sin')}>
+                  <span className="text-nowrap">{child.sin && formatSin(child.sin)}</span>
+                </DescriptionListItem>
+                <DescriptionListItem term={t('confirm.dental-private')}> {child.dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
+                <DescriptionListItem term={t('confirm.dental-public')}>
+                  {child.dentalInsurance.federalBenefit.benefit || child.dentalInsurance.provTerrBenefit.benefit ? (
+                    <>
+                      <p>{t('apply-child:confirm.yes')}</p>
+                      <p>{t('apply-child:confirm.dental-benefit-has-access')}</p>
+                      <ul className="ml-6 list-disc">
+                        {child.dentalInsurance.federalBenefit.benefit && <li>{child.dentalInsurance.federalBenefit.benefit}</li>}
+                        {child.dentalInsurance.provTerrBenefit.benefit && <li>{child.dentalInsurance.provTerrBenefit.benefit}</li>}
+                      </ul>
+                    </>
+                  ) : (
+                    <p>{t('confirm.no')}</p>
+                  )}
+                </DescriptionListItem>
+              </dl>
+            </section>
           </section>
         ))}
 
         <section>
-          <h3 className="mb-6 font-lato text-2xl font-semibold">{t('confirm.parent-legal-guardian')}</h3>
+          <h3 className="mb-6 font-lato text-2xl font-bold">{t('confirm.parent-legal-guardian')}</h3>
           <div className="space-y-8">
             <section className="space-y-6">
-              <h4 className="font-lato text-xl font-semibold">{t('confirm.parent-legal-guardian-info')}</h4>
+              <h4 className="font-lato text-xl font-bold">{t('confirm.parent-legal-guardian-info')}</h4>
               <dl className="divide-y border-y">
                 <DescriptionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DescriptionListItem>
                 <DescriptionListItem term={t('confirm.dob')}>{userInfo.birthday}</DescriptionListItem>
@@ -317,7 +319,7 @@ export default function ApplyFlowConfirm() {
             </section>
             {spouseInfo && (
               <section className="space-y-6">
-                <h4 className="font-lato text-xl font-semibold">{t('confirm.spouse-info')}</h4>
+                <h4 className="font-lato text-xl font-bold">{t('confirm.spouse-info')}</h4>
                 <dl className="divide-y border-y">
                   <DescriptionListItem term={t('confirm.full-name')}>{`${spouseInfo.firstName} ${spouseInfo.lastName}`}</DescriptionListItem>
                   <DescriptionListItem term={t('confirm.dob')}>{spouseInfo.birthday}</DescriptionListItem>
@@ -329,7 +331,7 @@ export default function ApplyFlowConfirm() {
               </section>
             )}
             <section className="space-y-6">
-              <h4 className="font-lato text-xl font-semibold">{t('confirm.contact-info')}</h4>
+              <h4 className="font-lato text-xl font-bold">{t('confirm.contact-info')}</h4>
               <dl className="divide-y border-y">
                 <DescriptionListItem term={t('confirm.phone-number')}>
                   <span className="text-nowrap">{userInfo.phoneNumber}</span>
@@ -365,7 +367,7 @@ export default function ApplyFlowConfirm() {
               </dl>
             </section>
             <section className="space-y-6">
-              <h4 className="font-lato text-xl font-semibold">{t('confirm.comm-prefs')}</h4>
+              <h4 className="font-lato text-xl font-bold">{t('confirm.comm-prefs')}</h4>
               <dl className="divide-y border-y">
                 <DescriptionListItem term={t('confirm.comm-pref')}>
                   <p>{userInfo.communicationPreference}</p>

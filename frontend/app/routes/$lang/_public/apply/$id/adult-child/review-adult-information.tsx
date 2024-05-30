@@ -260,10 +260,10 @@ export default function ReviewInformation() {
         <Progress aria-labelledby="progress-label" value={100} size="lg" />
       </div>
       <div className="max-w-prose">
-        <p className="my-4 text-lg">{t('apply-adult-child:review-adult-information.read-carefully')}</p>
+        <p className="my-6 text-lg">{t('apply-adult-child:review-adult-information.read-carefully')}</p>
         <div className="space-y-10">
-          <div>
-            <h2 className="text-2xl font-semibold">{t('apply-adult-child:review-adult-information.page-sub-title')}</h2>
+          <section>
+            <h2 className="font-lato text-2xl font-bold">{t('apply-adult-child:review-adult-information.page-sub-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.full-name-title')}>
                 {`${userInfo.firstName} ${userInfo.lastName}`}
@@ -298,10 +298,10 @@ export default function ReviewInformation() {
                 </p>
               </DescriptionListItem>
             </dl>
-          </div>
+          </section>
           {spouseInfo && (
-            <div>
-              <h2 className="mt-8 text-2xl font-semibold ">{t('apply-adult-child:review-adult-information.spouse-title')}</h2>
+            <section>
+              <h2 className="mt-8 font-lato text-2xl font-bold">{t('apply-adult-child:review-adult-information.spouse-title')}</h2>
               <dl className="mt-6 divide-y border-y">
                 <DescriptionListItem term={t('apply-adult-child:review-adult-information.full-name-title')}>
                   {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
@@ -331,10 +331,10 @@ export default function ReviewInformation() {
                   {spouseInfo.consent ? t('apply-adult-child:review-adult-information.spouse-consent.yes') : t('apply-adult-child:review-adult-information.spouse-consent.no')}
                 </DescriptionListItem>
               </dl>
-            </div>
+            </section>
           )}
-          <div>
-            <h2 className="mt-2 text-2xl font-semibold ">{t('apply-adult-child:review-adult-information.contact-info-title')}</h2>
+          <section>
+            <h2 className="mt-2 font-lato text-2xl font-bold">{t('apply-adult-child:review-adult-information.contact-info-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.phone-title')}>
                 {userInfo.phoneNumber}
@@ -353,7 +353,7 @@ export default function ReviewInformation() {
                 </p>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.email')}>
-                {userInfo.altPhoneNumber}
+                {userInfo.email}
                 <p className="mt-4">
                   <InlineLink id="change-email" routeId="$lang/_public/apply/$id/adult-child/personal-information" params={params}>
                     {t('apply-adult-child:review-adult-information.email-change')}
@@ -364,7 +364,7 @@ export default function ReviewInformation() {
                 <Address
                   address={mailingAddressInfo.address}
                   city={mailingAddressInfo.city}
-                  provinceState={mailingAddressInfo.province ? (i18n.language === 'en' ? mailingAddressInfo.province.nameEn : mailingAddressInfo.province.nameFr) : ''}
+                  provinceState={mailingAddressInfo.province && (i18n.language === 'en' ? mailingAddressInfo.province.nameEn : mailingAddressInfo.province.nameFr)}
                   postalZipCode={mailingAddressInfo.postalCode}
                   country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
                   apartment={mailingAddressInfo.apartment}
@@ -380,7 +380,7 @@ export default function ReviewInformation() {
                 <Address
                   address={homeAddressInfo.address ?? ''}
                   city={homeAddressInfo.city ?? ''}
-                  provinceState={homeAddressInfo.province ? (i18n.language === 'en' ? homeAddressInfo.province.nameEn : homeAddressInfo.province.nameFr) : ''}
+                  provinceState={homeAddressInfo.province && (i18n.language === 'en' ? homeAddressInfo.province.nameEn : homeAddressInfo.province.nameFr)}
                   postalZipCode={homeAddressInfo.postalCode}
                   country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
                   apartment={homeAddressInfo.apartment}
@@ -393,9 +393,9 @@ export default function ReviewInformation() {
                 </p>
               </DescriptionListItem>
             </dl>
-          </div>
-          <div>
-            <h2 className="mt-8 text-2xl font-semibold">{t('apply-adult-child:review-adult-information.comm-title')}</h2>
+          </section>
+          <section>
+            <h2 className="mt-8 font-lato text-2xl font-bold">{t('apply-adult-child:review-adult-information.comm-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.comm-pref-title')}>
                 {userInfo.communicationPreference.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID ? (
@@ -424,9 +424,9 @@ export default function ReviewInformation() {
                 </DescriptionListItem>
               )}
             </dl>
-          </div>
-          <div>
-            <h2 className="mt-8 text-2xl font-semibold">{t('apply-adult-child:review-adult-information.dental-title')}</h2>
+          </section>
+          <section>
+            <h2 className="mt-8 font-lato text-2xl font-bold">{t('apply-adult-child:review-adult-information.dental-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.dental-insurance-title')}>
                 {dentalInsurance ? t('apply-adult-child:review-adult-information.yes') : t('apply-adult-child:review-adult-information.no')}
@@ -458,7 +458,7 @@ export default function ReviewInformation() {
                 </p>
               </DescriptionListItem>
             </dl>
-          </div>
+          </section>
         </div>
         <fetcher.Form method="post" onSubmit={handleSubmit} className="mt-6 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <input type="hidden" name="_csrf" value={csrfToken} />

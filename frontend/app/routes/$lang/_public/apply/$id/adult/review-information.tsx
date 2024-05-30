@@ -266,10 +266,10 @@ export default function ReviewInformation() {
         <Progress aria-labelledby="progress-label" value={100} size="lg" />
       </div>
       <div className="max-w-prose">
-        <p className="my-4 text-lg">{t('apply-adult:review-information.read-carefully')}</p>
+        <p className="mb-8 text-lg">{t('apply-adult:review-information.read-carefully')}</p>
         <div className="space-y-10">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">{t('apply-adult:review-information.page-sub-title')}</h2>
+          <section className="space-y-6">
+            <h2 className="font-lato text-2xl font-bold">{t('apply-adult:review-information.page-sub-title')}</h2>
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('apply-adult:review-information.full-name-title')}>
                 <p>{`${userInfo.firstName} ${userInfo.lastName}`}</p>
@@ -304,10 +304,10 @@ export default function ReviewInformation() {
                 </div>
               </DescriptionListItem>
             </dl>
-          </div>
+          </section>
           {spouseInfo && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-semibold ">{t('apply-adult:review-information.spouse-title')}</h2>
+            <section className="space-y-6">
+              <h2 className="font-lato text-2xl font-bold">{t('apply-adult:review-information.spouse-title')}</h2>
               <dl className="divide-y border-y">
                 <DescriptionListItem term={t('apply-adult:review-information.full-name-title')}>
                   <p>{`${spouseInfo.firstName} ${spouseInfo.lastName}`}</p>
@@ -335,10 +335,10 @@ export default function ReviewInformation() {
                 </DescriptionListItem>
                 <DescriptionListItem term={t('apply-adult:review-information.spouse-consent.label')}>{spouseInfo.consent ? t('apply-adult:review-information.spouse-consent.yes') : t('apply-adult:review-information.spouse-consent.no')}</DescriptionListItem>
               </dl>
-            </div>
+            </section>
           )}
-          <div className="space-y-6">
-            <h2 className="mt-2 text-2xl font-semibold ">{t('apply-adult:review-information.contact-info-title')}</h2>
+          <section className="space-y-6">
+            <h2 className="font-lato text-2xl font-bold">{t('apply-adult:review-information.contact-info-title')}</h2>
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('apply-adult:review-information.phone-title')}>
                 <p>{userInfo.phoneNumber}</p>
@@ -397,9 +397,9 @@ export default function ReviewInformation() {
                 </div>
               </DescriptionListItem>
             </dl>
-          </div>
-          <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">{t('apply-adult:review-information.comm-title')}</h2>
+          </section>
+          <section className="space-y-6">
+            <h2 className="font-lato text-2xl font-bold">{t('apply-adult:review-information.comm-title')}</h2>
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('apply-adult:review-information.comm-pref-title')}>
                 <p>{userInfo.communicationPreference}</p>
@@ -425,9 +425,9 @@ export default function ReviewInformation() {
                 </DescriptionListItem>
               )}
             </dl>
-          </div>
-          <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">{t('apply-adult:review-information.dental-title')}</h2>
+          </section>
+          <section className="space-y-6">
+            <h2 className="font-lato text-2xl font-bold">{t('apply-adult:review-information.dental-title')}</h2>
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('apply-adult:review-information.dental-insurance-title')}>
                 <p>{dentalInsurance ? t('apply-adult:review-information.yes') : t('apply-adult:review-information.no')}</p>
@@ -457,14 +457,15 @@ export default function ReviewInformation() {
                 </div>
               </DescriptionListItem>
             </dl>
-          </div>
+          </section>
+          <section className="space-y-4">
+            <h2 className="font-lato text-2xl font-bold">{t('apply-adult:review-information.submit-app-title')}</h2>
+            <p>{t('apply-adult:review-information.submit-p-proceed')}</p>
+            <p>{t('apply-adult:review-information.submit-p-false-info')}</p>
+            <p>{t('apply-adult:review-information.submit-p-repayment')}</p>
+          </section>
         </div>
-        <h2 className="mb-5 mt-8 text-2xl font-semibold">{t('apply-adult:review-information.submit-app-title')}</h2>
-        <p className="mb-4">{t('apply-adult:review-information.submit-p-proceed')}</p>
-        <p className="mb-4">{t('apply-adult:review-information.submit-p-false-info')}</p>
-        <p className="mb-4">{t('apply-adult:review-information.submit-p-repayment')}</p>
-
-        <fetcher.Form onSubmit={handleSubmit} method="post" className="mt-6 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
+        <fetcher.Form onSubmit={handleSubmit} method="post" className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
           <Button id="confirm-button" name="_action" value={FormAction.Submit} variant="green" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Submit - Review Information click">
@@ -476,7 +477,7 @@ export default function ReviewInformation() {
             {t('apply-adult:review-information.back-button')}
           </Button>
         </fetcher.Form>
-        <InlineLink routeId="$lang/_public/apply/$id/adult/exit-application" params={params} className="mt-4 block font-lato font-semibold">
+        <InlineLink routeId="$lang/_public/apply/$id/adult/exit-application" params={params} className="mt-6 block font-lato font-semibold">
           {t('apply-adult:review-information.exit-button')}
         </InlineLink>
       </div>

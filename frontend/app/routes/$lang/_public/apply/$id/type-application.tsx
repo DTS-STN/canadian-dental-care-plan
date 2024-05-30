@@ -142,27 +142,31 @@ export default function ApplyFlowTypeOfApplication() {
       </div>
       <div className="max-w-prose">
         <p className="mb-6">{t('apply:type-of-application.page-description')}</p>
-        <div className="mb-6 space-y-4">
-          <h2 className="font-bold">{t('apply:type-of-application.apply-self')}</h2>
-          <p>{t('apply:type-of-application.apply-self-eligibility')}</p>
-          <ul className="list-disc space-y-1 pl-7">
-            <li>{t('apply:type-of-application.senior')}</li>
-            <li>{t('apply:type-of-application.valid-disability-tax-credit')}</li>
-            <li>{t('apply:type-of-application.live-independently')}</li>
-          </ul>
-          <h2 className="font-bold">{t('apply:type-of-application.apply-child')}</h2>
-          <p>{t('apply:type-of-application.apply-child-eligibility')}</p>
-          <ul className="list-disc space-y-1 pl-7">
-            <li>{t('apply:type-of-application.sixteen-or-older')}</li>
-            <li>{t('apply:type-of-application.under-eighteen')}</li>
-          </ul>
+        <div className="space-y-6">
+          <section className="space-y-4">
+            <h2 className="font-lato text-lg font-bold">{t('apply:type-of-application.apply-self')}</h2>
+            <p>{t('apply:type-of-application.apply-self-eligibility')}</p>
+            <ul className="list-disc space-y-1 pl-7">
+              <li>{t('apply:type-of-application.senior')}</li>
+              <li>{t('apply:type-of-application.valid-disability-tax-credit')}</li>
+              <li>{t('apply:type-of-application.live-independently')}</li>
+            </ul>
+          </section>
+          <section className="space-y-4">
+            <h2 className="font-lato text-lg font-bold">{t('apply:type-of-application.apply-child')}</h2>
+            <p>{t('apply:type-of-application.apply-child-eligibility')}</p>
+            <ul className="list-disc space-y-1 pl-7">
+              <li>{t('apply:type-of-application.sixteen-or-older')}</li>
+              <li>{t('apply:type-of-application.under-eighteen')}</li>
+            </ul>
+            <Collapsible summary={t('apply:type-of-application.split-custody-summary')}>
+              <div className="space-y-4">
+                <p>{t('apply:type-of-application.multiple-application')}</p>
+                <p>{t('apply:type-of-application.split-custody-detail')}</p>
+              </div>
+            </Collapsible>
+          </section>
         </div>
-        <Collapsible summary={t('apply:type-of-application.split-custody-summary')}>
-          <div className="space-y-4">
-            <p>{t('apply:type-of-application.multiple-application')}</p>
-            <p>{t('apply:type-of-application.split-custody-detail')}</p>
-          </div>
-        </Collapsible>
         <p className="mb-4 mt-8 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
         <fetcher.Form method="post" noValidate>

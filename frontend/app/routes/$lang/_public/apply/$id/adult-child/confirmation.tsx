@@ -1,10 +1,8 @@
-// TODO: Need to refactor for adult-child flow
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
-import { Fragment } from 'react/jsx-runtime';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
@@ -224,7 +222,7 @@ export default function ApplyFlowConfirm() {
   // const cdcpLink = <InlineLink routeId="$lang/_public/status/index" params={params} className="external-link" target='_blank' />;
 
   return (
-    <div className="max-w-prose">
+    <div className="max-w-prose space-y-10">
       <ContextualAlert type="success">
         <div className="space-y-4">
           <p className="text-2xl">
@@ -235,54 +233,69 @@ export default function ApplyFlowConfirm() {
           <p>{t('confirm.make-note')}</p>
         </div>
       </ContextualAlert>
-      <h2 className="mt-8 text-3xl font-semibold">{t('confirm.keep-copy')}</h2>
-      <p className="mt-4">
-        <Trans ns={handle.i18nNamespaces} i18nKey="confirm.print-copy-text" components={{ noPrint: <span className="print:hidden" /> }} />
-      </p>
-      <Button
-        variant="primary"
-        size="lg"
-        className="mt-8 print:hidden"
-        onClick={(event) => {
-          event.preventDefault();
-          window.print();
-        }}
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Print a copy of your application top click"
-      >
-        {t('confirm.print-btn')}
-      </Button>
-      <h2 className="mt-8 text-3xl font-semibold">{t('confirm.whats-next')}</h2>
-      <p className="mt-4">{t('confirm.begin-process')}</p>
-      <p className="mt-4">
-        <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
-      </p>
-      <p className="mt-4">{powerPlatformStatusCheckerEnabled ? t('confirm.use-code') : t('confirm.use-code-one-week')}</p>
-      <p className="mt-4">{t('confirm.mail-letter')}</p>
 
-      <h2 className="mt-8 text-3xl font-semibold">{t('confirm.register-msca-title')}</h2>
-      <p className="mt-4">
-        <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLink, mscaLinkApply }} />
-      </p>
-      <h2 className="mt-8 text-3xl font-semibold">{t('confirm.how-insurance')}</h2>
-      <p className="mt-4">{t('confirm.eligible-text')}</p>
-      <p className="mt-4">
-        <Trans ns={handle.i18nNamespaces} i18nKey="confirm.more-info-cdcp" components={{ moreInfoLink }} />
-      </p>
-      <p className="mt-4">
-        <Trans ns={handle.i18nNamespaces} i18nKey="confirm.more-info-service" components={{ dentalContactUsLink }} />
-      </p>
-      <div className="space-y-10">
-        <h2 className="mt-8 text-3xl font-semibold">{t('confirm.application-summ')}</h2>
-        <div>
-          <dl className="mt-6 divide-y border-y text-xl">
-            <DescriptionListItem term={t('confirm.application-code')}>
-              <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
-            </DescriptionListItem>
-          </dl>
+      <section>
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.keep-copy')}</h2>
+        <p className="mt-4">
+          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.print-copy-text" components={{ noPrint: <span className="print:hidden" /> }} />
+        </p>
+        <Button
+          variant="primary"
+          size="lg"
+          className="mt-8 print:hidden"
+          onClick={(event) => {
+            event.preventDefault();
+            window.print();
+          }}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Print a copy of your application top click"
+        >
+          {t('confirm.print-btn')}
+        </Button>
+      </section>
+
+      <section>
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.whats-next')}</h2>
+        <p className="mt-4">{t('confirm.begin-process')}</p>
+        <p className="mt-4">
+          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.cdcp-checker" components={{ cdcpLink, noWrap: <span className="whitespace-nowrap" /> }} />
+        </p>
+        <p className="mt-4">{powerPlatformStatusCheckerEnabled ? t('confirm.use-code') : t('confirm.use-code-one-week')}</p>
+        <p className="mt-4">{t('confirm.mail-letter')}</p>
+      </section>
+
+      <section>
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.register-msca-title')}</h2>
+        <p className="mt-4">
+          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLink, mscaLinkApply }} />
+        </p>
+      </section>
+
+      <section>
+        <h2 className="font-lato text-3xl font-bold">{t('confirm.how-insurance')}</h2>
+        <p className="mt-4">{t('confirm.eligible-text')}</p>
+        <p className="mt-4">
+          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.more-info-cdcp" components={{ moreInfoLink }} />
+        </p>
+        <p className="mt-4">
+          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.more-info-service" components={{ dentalContactUsLink }} />
+        </p>
+      </section>
+
+      <section className="space-y-8">
+        <div className="space-y-6">
+          <h2 className="font-lato text-3xl font-bold">{t('confirm.application-summ')}</h2>
+          <div>
+            <dl className="mt-6 divide-y border-y text-xl">
+              <DescriptionListItem term={t('confirm.application-code')}>
+                <strong>{formatSubmissionApplicationCode(submissionInfo.confirmationCode)}</strong>
+              </DescriptionListItem>
+            </dl>
+          </div>
         </div>
-        <h2 className="text-2xl font-semibold">{t('confirm.applicant-title')}</h2>
-        <div>
-          <dl className="mt-6 divide-y border-y">
+
+        <section className="space-y-6">
+          <h3 className="font-lato text-2xl font-bold">{t('confirm.applicant-title')}</h3>
+          <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.full-name')}>{`${userInfo.firstName} ${userInfo.lastName}`}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.dob')}>{userInfo.birthday}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.sin')}>
@@ -290,25 +303,25 @@ export default function ApplyFlowConfirm() {
             </DescriptionListItem>
             <DescriptionListItem term={t('confirm.marital-status')}>{userInfo.martialStatus}</DescriptionListItem>
           </dl>
-        </div>
+        </section>
+
         {spouseInfo && (
-          <>
-            <h2 className="text-2xl font-semibold">{t('confirm.spouse-info')}</h2>
-            <div>
-              <dl className="mt-6 divide-y border-y">
-                <DescriptionListItem term={t('confirm.full-name')}>{`${spouseInfo.firstName} ${spouseInfo.lastName}`}</DescriptionListItem>
-                <DescriptionListItem term={t('confirm.dob')}>{spouseInfo.birthday}</DescriptionListItem>
-                <DescriptionListItem term={t('confirm.sin')}>
-                  <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
-                </DescriptionListItem>
-                <DescriptionListItem term={t('confirm.consent')}>{t('confirm.consent-answer')}</DescriptionListItem>
-              </dl>
-            </div>
-          </>
+          <section className="space-y-6">
+            <h3 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h3>
+            <dl className=" divide-y border-y">
+              <DescriptionListItem term={t('confirm.full-name')}>{`${spouseInfo.firstName} ${spouseInfo.lastName}`}</DescriptionListItem>
+              <DescriptionListItem term={t('confirm.dob')}>{spouseInfo.birthday}</DescriptionListItem>
+              <DescriptionListItem term={t('confirm.sin')}>
+                <span className="text-nowrap">{formatSin(spouseInfo.sin)}</span>
+              </DescriptionListItem>
+              <DescriptionListItem term={t('confirm.consent')}>{t('confirm.consent-answer')}</DescriptionListItem>
+            </dl>
+          </section>
         )}
-        <h2 className="text-2xl font-semibold">{t('confirm.contact-info')}</h2>
-        <div>
-          <dl className="mt-6 divide-y border-y">
+
+        <section className="space-y-6">
+          <h3 className="font-lato text-2xl font-bold">{t('confirm.contact-info')}</h3>
+          <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.phone-number')}>
               <span className="text-nowrap">{userInfo.phoneNumber}</span>
             </DescriptionListItem>
@@ -341,22 +354,23 @@ export default function ApplyFlowConfirm() {
               />
             </DescriptionListItem>
           </dl>
-        </div>
-        <h2 className="text-2xl font-semibold">{t('confirm.comm-prefs')}</h2>
-        <div>
-          <dl className="mt-6 divide-y border-y">
+        </section>
+
+        <section className="space-y-6">
+          <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-prefs')}</h3>
+          <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.comm-pref')}>
               <div className="flex flex-col">
                 <p>{userInfo.communicationPreference}</p>
               </div>
             </DescriptionListItem>
-
             <DescriptionListItem term={t('confirm.lang-pref')}> {userInfo.preferredLanguage}</DescriptionListItem>
           </dl>
-        </div>
-        <h2 className="text-2xl font-semibold">{t('confirm.dental-insurance')}</h2>
-        <div>
-          <dl className="mt-6 divide-y border-y">
+        </section>
+
+        <section className="space-y-6">
+          <h3 className="font-lato text-2xl font-bold">{t('confirm.dental-insurance')}</h3>
+          <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.dental-private')}> {dentalInsurance.acessToDentalInsurance ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
             <DescriptionListItem term={t('confirm.dental-public')}>
               {dentalInsurance.selectedFederalBenefits || dentalInsurance.selectedProvincialBenefits ? (
@@ -373,14 +387,14 @@ export default function ApplyFlowConfirm() {
               )}
             </DescriptionListItem>
           </dl>
-        </div>
+        </section>
 
         {/* CHILDREN DETAILS */}
         {children.map((child) => (
-          <Fragment key={child.id}>
-            <h2 className="mt-8 text-3xl font-semibold">{child.firstName}</h2>
-            <h3 className="text-2xl font-semibold">{t('confirm.child-title', { childName: child.firstName })}</h3>
-            <div>
+          <section className="space-y-6" key={child.id}>
+            <h3 className="font-lato text-2xl font-bold">{child.firstName}</h3>
+            <section>
+              <h4 className="font-lato text-xl font-bold">{t('confirm.child-title', { childName: child.firstName })}</h4>
               <dl className="mt-6 divide-y border-y">
                 <DescriptionListItem term={t('confirm.full-name')}>{`${child.firstName} ${child.lastName}`}</DescriptionListItem>
                 <DescriptionListItem term={t('confirm.dob')}>{child.birthday}</DescriptionListItem>
@@ -404,10 +418,10 @@ export default function ApplyFlowConfirm() {
                 </DescriptionListItem>
                 <DescriptionListItem term={t('confirm.is-parent')}>{child.isParent ? t('confirm.yes') : t('confirm.no')}</DescriptionListItem>
               </dl>
-            </div>
-          </Fragment>
+            </section>
+          </section>
         ))}
-      </div>
+      </section>
 
       <div className="my-6">
         <Button

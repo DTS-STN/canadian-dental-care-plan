@@ -156,9 +156,9 @@ export default function ReviewInformation() {
             const childParams = { ...params, childId: child.id };
             return (
               <section key={child.id} className="space-y-10">
-                <h2 className="font-lato text-3xl font-semibold">{child.information.firstName}</h2>
+                <h2 className="font-lato text-3xl font-bold">{child.information.firstName}</h2>
                 <div>
-                  <h3 className="mb-6 font-lato text-2xl font-semibold">{t('apply-child:review-child-information.page-sub-title', { child: child.information.firstName })}</h3>
+                  <h3 className="mb-6 font-lato text-2xl font-bold">{t('apply-child:review-child-information.page-sub-title', { child: child.information.firstName })}</h3>
                   <dl className="divide-y border-y">
                     <DescriptionListItem term={t('apply-child:review-child-information.full-name-title')}>
                       {`${child.information.firstName} ${child.information.lastName}`}
@@ -188,7 +188,7 @@ export default function ReviewInformation() {
                   </dl>
                 </div>
                 <div>
-                  <h3 className="mb-6 font-lato text-2xl font-semibold">{t('apply-child:review-child-information.dental-title', { child: child.information.firstName })}</h3>
+                  <h3 className="mb-6 font-lato text-2xl font-bold">{t('apply-child:review-child-information.dental-title', { child: child.information.firstName })}</h3>
                   <dl className="divide-y border-y">
                     <DescriptionListItem term={t('apply-child:review-child-information.dental-insurance-title')}>
                       {child.dentalInsurance ? t('apply-child:review-child-information.yes') : t('apply-child:review-child-information.no')}
