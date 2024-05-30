@@ -231,7 +231,7 @@ export default function ReviewInformation() {
         <p className="my-4 text-lg">{t('apply-child:review-adult-information.read-carefully')}</p>
         <div className="space-y-10">
           <div>
-            <h2 className="text-2xl font-semibold">{t('apply-child:review-adult-information.page-sub-title')}</h2>
+            <h2 className="font-lato text-2xl font-bold">{t('apply-child:review-adult-information.page-sub-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply-child:review-adult-information.full-name-title')}>
                 {`${userInfo.firstName} ${userInfo.lastName}`}
@@ -269,7 +269,7 @@ export default function ReviewInformation() {
           </div>
           {spouseInfo && (
             <div>
-              <h2 className="mt-8 text-2xl font-semibold ">{t('apply-child:review-adult-information.spouse-title')}</h2>
+              <h2 className="mt-8 font-lato text-2xl font-bold">{t('apply-child:review-adult-information.spouse-title')}</h2>
               <dl className="mt-6 divide-y border-y">
                 <DescriptionListItem term={t('apply-child:review-adult-information.full-name-title')}>
                   {`${spouseInfo.firstName} ${spouseInfo.lastName}`}
@@ -302,7 +302,7 @@ export default function ReviewInformation() {
             </div>
           )}
           <div>
-            <h2 className="mt-2 text-2xl font-semibold ">{t('apply-child:review-adult-information.contact-info-title')}</h2>
+            <h2 className="mt-2 font-lato text-2xl font-bold ">{t('apply-child:review-adult-information.contact-info-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply-child:review-adult-information.phone-title')}>
                 {userInfo.phoneNumber}
@@ -363,7 +363,7 @@ export default function ReviewInformation() {
             </dl>
           </div>
           <div>
-            <h2 className="mt-8 text-2xl font-semibold">{t('apply-child:review-adult-information.comm-title')}</h2>
+            <h2 className="mt-8 font-lato text-2xl font-bold">{t('apply-child:review-adult-information.comm-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply-child:review-adult-information.comm-pref-title')}>
                 {userInfo.communicationPreference.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID ? (
@@ -394,7 +394,7 @@ export default function ReviewInformation() {
             </dl>
           </div>
         </div>
-        <h2 className="mb-5 mt-8 text-2xl font-semibold">{t('apply-child:review-adult-information.submit-app-title')}</h2>
+        <h2 className="mb-5 mt-8 font-lato text-2xl font-bold">{t('apply-child:review-adult-information.submit-app-title')}</h2>
         <p className="mb-4">{t('apply-child:review-adult-information.submit-p-proceed')}</p>
         <p className="mb-4">{t('apply-child:review-adult-information.submit-p-false-info')}</p>
         <p className="mb-4">{t('apply-child:review-adult-information.submit-p-repayment')}</p>
