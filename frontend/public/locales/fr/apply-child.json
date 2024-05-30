@@ -382,17 +382,6 @@
       "back-btn": "Retour",
       "return-btn": "Revenir à la page principale",
       "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
-    },
-    "dob-eligibility": {
-      "page-title": "Découvrez quand vous pouvez présenter une demande",
-      "ineligible-to-apply": "Vous n'êtes actuellement pas admissible au Régime canadien de soins dentaires.",
-      "currently-accepting": "(FR) The Canadian Dental Care Plan is currently accepting applications for people aged 65 and above, children under 18, and adults with a valid disability tax credit.",
-      "later-date": "(FR) Adults 18 to 64 who do not have a disability tax credit will be able to apply for the Canadian Dental Care Plan in 2025.",
-      "eligibility-info": "<eligibilityInfo>Découvrez quand vous pouvez faire une demande au Régime canadien de soins dentaires.</eligibilityInfo>",
-      "eligibility-info-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#quand",
-      "back-btn": "Retour",
-      "return-btn": "Revenir à la page principale",
-      "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     }
   },
   "exit-application": {
