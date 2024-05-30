@@ -144,7 +144,7 @@ db.subscription.create({
   id: '10001',
   userId: unverifiedUser.id,
   msLanguageCode: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
-  alertTypeCode: 'cdcp',
+  alertTypeCode: 'CDCP',
 });
 
 const verifiedUserAttributes = [
@@ -165,7 +165,7 @@ db.subscription.create({
   id: '10003',
   userId: verifiedUser.id,
   msLanguageCode: '1033', // "English", @see ~/resources/power-platform/preferred-language.json
-  alertTypeCode: 'cdcp',
+  alertTypeCode: 'CDCP',
 });
 
 db.subscriptionConfirmationCode.create({
