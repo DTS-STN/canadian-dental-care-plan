@@ -413,7 +413,7 @@
     "first-name": "Prénom",
     "single-legal-name": "(FR) If your spouse or common-law partner has a single legal name",
     "name-instructions": "Si vous utilisez un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
-    "confirm-checkbox": "Je confirme que mon époux/épouse ou mon conjoint/conjointe de fait est au courant et d'accord que ses renseignements personnels soient communiqués.",
+    "confirm-checkbox": "(FR) I confirm that my spouse or common-law partner is aware and has consented to the sharing of their personal information.",
     "back-btn": "Retour",
     "continue-btn": "Continuer",
     "cancel-btn": "Annuler",

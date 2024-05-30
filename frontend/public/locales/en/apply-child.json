@@ -414,7 +414,7 @@
     "first-name": "First name",
     "single-legal-name": "If your spouse or common-law partner has a single legal name",
     "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
-    "confirm-checkbox": "I confirm that my spouse or common-law partner is aware and has agreed to share their personal information.",
+    "confirm-checkbox": "I confirm that my spouse or common-law partner is aware and has consented to the sharing of their personal information.",
     "back-btn": "Back",
     "continue-btn": "Continue",
     "cancel-btn": "Cancel",
