@@ -195,17 +195,17 @@ export async function action({ context: { session }, params, request }: ActionFu
   const applicationStatusService = getApplicationStatusService();
   const lookupService = getLookupService();
 
-  const statusId = parsedSinResult  
-  ? await applicationStatusService.getStatusIdWithSin({  
-      sin: parsedSinResult.data.sin,  
-      applicationCode: parsedCodeResult.data.code,  
-    })  
-  : await applicationStatusService.getStatusIdWithoutSin({  
-      applicationCode: parsedCodeResult.data.code,  
-      firstName: parsedChildInfoResult?.data.firstName ?? '',  
-      lastName: parsedChildInfoResult?.data.lastName ?? '',  
-      dateOfBirth: parsedChildInfoResult?.data.dateOfBirth ?? '',  
-    });  
+  const statusId = parsedSinResult
+    ? await applicationStatusService.getStatusIdWithSin({
+        sin: parsedSinResult.data.sin,
+        applicationCode: parsedCodeResult.data.code,
+      })
+    : await applicationStatusService.getStatusIdWithoutSin({
+        applicationCode: parsedCodeResult.data.code,
+        firstName: parsedChildInfoResult?.data.firstName ?? '',
+        lastName: parsedChildInfoResult?.data.lastName ?? '',
+        dateOfBirth: parsedChildInfoResult?.data.dateOfBirth ?? '',
+      });
 
   const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
   const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
