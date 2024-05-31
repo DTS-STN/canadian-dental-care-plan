@@ -81,12 +81,12 @@ export default function ApplyFlowApplyChildren() {
           routeId="$lang/_public/apply/$id/adult-child/disability-tax-credit"
           params={params}
           disabled={isSubmitting}
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Parent or guardian needs to apply click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Apply for your child(ren) click"
         >
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply-adult-child:eligibility.apply-children.back-btn')}
         </ButtonLink>
-        <Button type="submit" variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Parent or guardian needs to apply click">
+        <Button type="submit" variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Apply for your child(ren) click">
           {t('apply-adult-child:eligibility.apply-children.continue-btn')}
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>
