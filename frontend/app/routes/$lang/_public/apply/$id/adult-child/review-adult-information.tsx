@@ -47,10 +47,12 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const lookupService = getLookupService();
-
   const state = validateApplyAdultChildStateForReview({ params, state: loadApplyAdultChildState({ params, request, session }) });
 
+  // apply state is valid then edit mode can be set to true
+  saveApplyState({ params, session, state: { editMode: true } });
+
+  const lookupService = getLookupService();
   const maritalStatuses = await lookupService.getAllMaritalStatuses();
   const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
   const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
@@ -137,8 +139,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:review-adult-information.page-title') }) };
-
-  saveApplyState({ params, session, state: { editMode: true } });
 
   return json({
     id: state.id,

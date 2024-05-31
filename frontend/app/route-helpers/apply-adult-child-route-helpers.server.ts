@@ -41,8 +41,7 @@ export function loadApplyAdultChildState({ params, request, session }: LoadApply
   const termsAndConditionsRouteUrl = getPathById('$lang/_public/apply/$id/terms-and-conditions', params);
   if (!applyState.submissionInfo && pathname.endsWith(confirmationRouteUrl)) {
     log.warn('Redirecting user to "%s" since the application has not been submitted; sessionId: [%s], ', applyState.id, termsAndConditionsRouteUrl);
-    //throw redirect(termsAndConditionsRouteUrl);
-    //TODO: re-add throw when apply adult-child flow is completed
+    throw redirect(termsAndConditionsRouteUrl);
   }
 
   return applyState;

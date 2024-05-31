@@ -53,6 +53,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const state = validateApplyAdultStateForReview({ params, state: loadApplyAdultState({ params, request, session }) });
 
+  // apply state is valid then edit mode can be set to true
+  saveApplyState({ params, session, state: { editMode: true } });
+
   const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -153,8 +156,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:review-information.page-title') }) };
 
   const payload = viewPayloadEnabled ? toBenefitApplicationRequestFromApplyAdultState(state) : undefined;
-
-  saveApplyState({ params, session, state: { editMode: true } });
 
   return json({
     id: state.id,

@@ -129,7 +129,14 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  saveApplyState({ params, session, state: { communicationPreferences: parsedDataResult.data } });
+  saveApplyState({
+    params,
+    session,
+    state: {
+      communicationPreferences: parsedDataResult.data,
+      editMode: true, // last step in the flow
+    },
+  });
 
   if (state.editMode) {
     return redirect(getPathById('$lang/_public/apply/$id/child/review-adult-information', params));

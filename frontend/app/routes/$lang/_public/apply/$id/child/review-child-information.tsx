@@ -47,6 +47,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const state = validateApplyChildStateForReview({ params, state: loadApplyChildState({ params, request, session }) });
 
+  // apply state is valid then edit mode can be set to true
+  saveApplyState({ params, session, state: { editMode: true } });
+
   const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const lookupService = getLookupService();

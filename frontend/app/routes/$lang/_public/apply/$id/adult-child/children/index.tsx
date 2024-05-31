@@ -104,6 +104,14 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang/_public/apply/$id/adult-child/children/index', params));
   }
 
+  saveApplyState({
+    params,
+    session,
+    state: {
+      editMode: true, // last step in the flow
+    },
+  });
+
   return redirect(getPathById('$lang/_public/apply/$id/adult-child/review-adult-information', params));
 }
 

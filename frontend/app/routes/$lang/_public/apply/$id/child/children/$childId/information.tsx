@@ -71,8 +71,6 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  saveApplyState({ params, session, state: {} });
-
   // Form action Continue & Save
   // state validation schema
   const childInformationSchema = z

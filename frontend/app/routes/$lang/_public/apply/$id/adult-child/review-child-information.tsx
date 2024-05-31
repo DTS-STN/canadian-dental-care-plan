@@ -51,6 +51,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const state = validateApplyAdultChildStateForReview({ params, state: loadApplyAdultChildState({ params, request, session }) });
 
+  // apply state is valid then edit mode can be set to true
+  saveApplyState({ params, session, state: { editMode: true } });
+
   const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const lookupService = getLookupService();
@@ -98,7 +101,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
-    saveApplyState({ params, session, state: { editMode: false } });
+    saveApplyState({ params, session, state: {} });
     return redirect(getPathById('$lang/_public/apply/$id/adult-child/review-adult-information', params));
   }
 
