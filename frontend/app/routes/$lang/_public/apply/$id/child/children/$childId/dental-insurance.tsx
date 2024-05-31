@@ -130,7 +130,7 @@ export default function AccessToDentalInsuranceQuestion() {
       </ul>
       <Collapsible summary={t('children.dental-insurance.detail.additional-info.title')}>
         <div className="space-y-4">
-          <p>{t('dental-insurance.detail.additional-info.eligible')}</p>
+          <p>{t('children.dental-insurance.detail.additional-info.eligible')}</p>
           <ul className="list-disc space-y-1 pl-7">
             <li>{t('children.dental-insurance.detail.additional-info.eligible-list.employer')}</li>
             <li>{t('children.dental-insurance.detail.additional-info.eligible-list.pension')}</li>

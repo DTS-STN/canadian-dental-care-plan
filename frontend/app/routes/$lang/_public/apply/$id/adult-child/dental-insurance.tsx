@@ -120,11 +120,16 @@ export default function AccessToDentalInsuranceQuestion() {
       <Collapsible summary={t('dental-insurance.detail.additional-info.title')}>
         <div className="space-y-4">
           <p>{t('dental-insurance.detail.additional-info.not-eligible')}</p>
+          <ul className="list-disc space-y-1 pl-7">
+            <li>{t('dental-insurance.detail.additional-info.eligible-list.employer')}</li>
+            <li>{t('dental-insurance.detail.additional-info.eligible-list.pension')}</li>
+            <li>{t('dental-insurance.detail.additional-info.eligible-list.professional')}</li>
+          </ul>
           <p>{t('dental-insurance.detail.additional-info.not-eligible-purchased')}</p>
           <p>{t('dental-insurance.detail.additional-info.eligible')}</p>
           <ul className="list-disc space-y-1 pl-7">
-            <li>{t('dental-insurance.detail.additional-info.list.opted')}</li>
-            <li>{t('dental-insurance.detail.additional-info.list.cannot-opt')}</li>
+            <li>{t('dental-insurance.detail.additional-info.exception-list.opted-out')}</li>
+            <li>{t('dental-insurance.detail.additional-info.exception-list.opt-back')}</li>
           </ul>
         </div>
       </Collapsible>
