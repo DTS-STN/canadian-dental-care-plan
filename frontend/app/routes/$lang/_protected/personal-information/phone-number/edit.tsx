@@ -167,7 +167,7 @@ export default function PhoneNumberEdit() {
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <fetcher.Form className="max-w-prose" method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <div className="grid gap-6 ">
+        <div className="grid gap-6">
           <InputField
             id="primaryTelephoneNumber"
             name="primaryTelephoneNumber"

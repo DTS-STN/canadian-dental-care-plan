@@ -308,7 +308,7 @@ export default function ApplyFlowConfirm() {
         {spouseInfo && (
           <section className="space-y-6">
             <h3 className="font-lato text-2xl font-bold">{t('confirm.spouse-info')}</h3>
-            <dl className=" divide-y border-y">
+            <dl className="divide-y border-y">
               <DescriptionListItem term={t('confirm.full-name')}>{`${spouseInfo.firstName} ${spouseInfo.lastName}`}</DescriptionListItem>
               <DescriptionListItem term={t('confirm.dob')}>{spouseInfo.birthday}</DescriptionListItem>
               <DescriptionListItem term={t('confirm.sin')}>
