@@ -199,7 +199,8 @@
       "when-to-apply": "Find out when you can apply for the Canadian Dental Care Plan",
       "when-to-apply-href": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#when",
       "back-btn": "Back",
-      "proceed-btn": "Proceed to apply for yourself"
+      "return-btn": "Return to main page",
+      "return-btn-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
     }
   },
   "communication-preference": {

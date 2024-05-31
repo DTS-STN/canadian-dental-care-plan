@@ -3,7 +3,7 @@ import { FormEvent } from 'react';
 import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
@@ -17,7 +17,6 @@ import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'),
@@ -30,17 +29,19 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const state = loadApplySingleChildState({ params, request, session });
+  loadApplySingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:children.parent-or-guardian.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta });
+  return json({ csrfToken, meta });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/child/children/parent-or-guardian');
+
+  loadApplySingleChildState({ params, request, session });
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
@@ -90,7 +91,7 @@ export default function ApplyFlowParentOrGuardian() {
         </ButtonLink>
         <Button type="submit" variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - Child parent or guardian needs to apply click">
           {t('apply-child:children.parent-or-guardian.return-btn')}
-          <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+          {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>
       </fetcher.Form>
     </>

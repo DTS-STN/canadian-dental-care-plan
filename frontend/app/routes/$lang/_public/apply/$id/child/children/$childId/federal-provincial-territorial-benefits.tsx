@@ -50,14 +50,11 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const { CANADA_COUNTRY_ID } = getEnv();
-
-  const lookupService = getLookupService();
   const state = loadApplySingleChildState({ params, request, session });
+
+  const { CANADA_COUNTRY_ID } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
-
-  const childName = state.information?.firstName ?? '<Child 1 name>';
-
+  const lookupService = getLookupService();
   const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
   const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
   const allRegions = await lookupService.getAllRegions();
@@ -65,6 +62,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const csrfToken = String(session.get('csrfToken'));
 
+  const childName = state.information?.firstName ?? '<Child 1 name>';
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:children.dental-benefits.title', { childName }) }) };
 
   return json({
@@ -72,7 +70,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     defaultState: state.dentalBenefits,
     editMode: state.editMode,
     federalSocialPrograms,
-    id: state.id,
     meta,
     provincialTerritorialSocialPrograms,
     regions,
