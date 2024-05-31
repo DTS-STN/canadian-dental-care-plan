@@ -53,6 +53,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const state = validateApplyChildStateForReview({ params, state: loadApplyChildState({ params, request, session }) });
 
+  // apply state is valid then edit mode can be set to true
+  saveApplyState({ params, session, state: { editMode: true } });
+
   const { COMMUNICATION_METHOD_EMAIL_ID, ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -126,8 +129,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:review-adult-information.page-title') }) };
   const payload = viewPayloadEnabled ? toBenefitApplicationRequestFromApplyChildState(state) : undefined;
 
-  saveApplyState({ params, session, state: { editMode: true } });
-
   return json({
     id: state.id,
     userInfo,
@@ -165,7 +166,6 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
   if (formAction === FormAction.Back) {
-    saveApplyState({ params, session, state: { editMode: false } });
     return redirect(getPathById('$lang/_public/apply/$id/child/review-child-information', params));
   }
 
