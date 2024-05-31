@@ -21,14 +21,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const subscriptions = await subscriptionService.getSubscription(userInfoToken.sub);
   const emailVerified = subscriptions?.emailVerified;
-
-  if (emailVerified === false && !subscriptions) {
+  if (!subscriptions) {
     return redirect(getPathById('$lang/_protected/alerts/subscribe/index', params));
   }
-
-  if (emailVerified) {
-    return redirect(getPathById('$lang/_protected/alerts/manage/index', params));
+  if (!emailVerified) {
+    return redirect(getPathById('$lang/_protected/alerts/subscribe/confirm', params));
   }
-
-  return redirect(getPathById('$lang/_protected/alerts/subscribe/confirm', params));
+  return redirect(getPathById('$lang/_protected/alerts/manage/index', params));
 }

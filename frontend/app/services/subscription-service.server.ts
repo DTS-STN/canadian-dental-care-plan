@@ -93,8 +93,11 @@ function createSubscriptionService() {
       email: userParsed.email,
       emailVerified: userParsed.emailVerified,
     }));
-
-    return subscriptions.filter((subscription) => subscription.alertType === 'CDCP').at(0);
+    try {
+      return subscriptions.filter((subscription) => subscription.alertType === 'CDCP').at(0);
+    } catch (error) {
+      return undefined;
+    }
   }
 
   async function updateSubscription(sin: string, subscription: SubscriptionInfo) {
