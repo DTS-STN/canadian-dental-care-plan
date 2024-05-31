@@ -19,6 +19,7 @@ import { loadApplyChildState, validateApplyChildStateForReview } from '~/route-h
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
+import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -157,6 +158,7 @@ export default function ReviewInformation() {
         <div className="mb-8 space-y-10">
           {children.map((child) => {
             const childParams = { ...params, childId: child.id };
+            const dateOfBirth = toLocaleDateString(parseDateString(child.information.dateOfBirth), i18n.language);
             return (
               <section key={child.id} className="space-y-10">
                 <h2 className="font-lato text-3xl font-bold">{child.information.firstName}</h2>
@@ -172,7 +174,7 @@ export default function ReviewInformation() {
                       </p>
                     </DescriptionListItem>
                     <DescriptionListItem term={t('apply-child:review-child-information.dob-title')}>
-                      {child.information.dateOfBirth}
+                      {dateOfBirth}
                       <p className="mt-4">
                         <InlineLink id="change-date-of-birth" routeId="$lang/_public/apply/$id/child/children/$childId/information" params={childParams}>
                           {t('apply-child:review-child-information.dob-change')}
