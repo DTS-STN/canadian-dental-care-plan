@@ -266,7 +266,7 @@ export default function ApplyFlowChildInformation() {
           <InputField
             id="social-insurance-number"
             name="socialInsuranceNumber"
-            label={t('apply-adult-child:children.information.help-message.sin')}
+            label={t('apply-adult-child:children.information.sin')}
             inputMode="numeric"
             defaultValue={defaultState?.socialInsuranceNumber ?? ''}
             errorMessage={fetcher.data?.errors.socialInsuranceNumber?._errors[0]}

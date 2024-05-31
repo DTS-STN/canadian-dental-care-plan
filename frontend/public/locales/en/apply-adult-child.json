@@ -67,7 +67,7 @@
       "sin-legend": "Does this child have a Social Insurance Number (SIN)?",
       "sin-yes": "<bold>Yes</bold>, this child has a SIN",
       "sin-no": "<bold>No</bold>, this child does not have a SIN",
-      "sin": "Social Insurance Number (SIN)",
+      "sin": "Enter the 9-digit SIN",
       "parent-legend": "Are you the parent or legal guardian of this child?",
       "radio-options": {
         "yes": "Yes",
@@ -77,9 +77,6 @@
       "continue-btn": "Continue",
       "cancel-btn": "Cancel",
       "save-btn": "Save",
-      "help-message": {
-        "sin": "Enter the 9-digit SIN"
-      },
       "error-message": {
         "first-name-required": "Enter child's first name",
         "last-name-required": "Enter child's last name",
@@ -118,7 +115,7 @@
       "detail": {
         "additional-info": {
           "title": "Additional information",
-          "eligible": "A child is still considered to have access to dental insurance or coverage if a parent or guardian chooses to opt out of benefits provided through:",
+          "eligible": "The child is still considered to have access to dental insurance or coverage if a parent or guardian chooses to opt out of benefits provided through:",
           "eligible-list": {
             "employer": "an employer;",
             "pension": "pension (see exception); or",
@@ -375,10 +372,10 @@
   },
   "dental-insurance": {
     "title": "Access to other dental insurance",
-    "legend": "Do you have access to dental insurance or coverage:",
+    "legend": "Do you have access to dental insurance or coverage through one of the following four situations?",
     "list": {
-      "employment": "Through your employment benefits or a family member's employment benefits, including health and wellness accounts",
-      "pension": "Through your pension benefits or a family member's pension benefits",
+      "employment": "Your employment benefits or a family member's employment benefits, including health and wellness accounts",
+      "pension": "Your pension benefits or a family member's pension benefits",
       "purchased": "Purchased by you or a family member or through a group plan from an insurance or benefits company",
       "professional": "Through a professional or student organization"
     },
@@ -393,19 +390,13 @@
     "detail": {
       "additional-info": {
         "title": "Additional information",
-        "eligible": "You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your or a family member's:",
-        "eligible-list": {
-          "employer": "employer;",
-          "pension": "pension (see exception); or",
-          "professional": "professional or student organization"
+        "eligible": "Exception: You may still be eligible if you are retired and:",
+        "list": {
+          "opted": "you opted out of pension benefits before December 11, 2023, and",
+          "cannot-opt": "you can't opt back in under the pension rules"
         },
-        "not-eligible": "As such, you are not eligible for the Canadian Dental Care Plan.",
-        "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own, you are not eligible for the Canadian Dental Care Plan while that coverage is in effect.",
-        "excepton": "Exception:\u00a0You may still be eligible if you are retired and:",
-        "exception-list": {
-          "opted-out": "Opted out of pension benefits before December 11, 2023, and",
-          "opt-back": "Can't opt back in under the pension rules"
-        }
+        "not-eligible": "You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your employer/pension (see exception) benefits or through a professional or student organization. As such, you are not eligible for the Canadian Dental Care Plan.",
+        "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own (and not part of any of the coverage described above), you are not eligible for the CDCP while that coverage is in effect."
       }
     },
     "error-message": {
