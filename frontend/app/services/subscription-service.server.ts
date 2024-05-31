@@ -101,9 +101,9 @@ function createSubscriptionService() {
 
     const cdcpSubscriptions = subscriptions.filter((subscription) => subscription.alertType === 'CDCP');
     if (cdcpSubscriptions.length === 0) {
-      return undefined;
+      return null;
     }
-    return subscriptions.filter((subscription) => subscription.alertType === 'CDCP').at(0);
+    return cdcpSubscriptions.at(0);
   }
 
   async function updateSubscription(sin: string, subscription: SubscriptionInfo) {
