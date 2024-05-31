@@ -17,6 +17,7 @@ import { Progress } from '~/components/progress';
 import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import { getChildrenState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
+import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -108,7 +109,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function ApplyFlowChildSummary() {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t, i18n } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, children, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
@@ -141,12 +142,13 @@ export default function ApplyFlowChildSummary() {
           <div className="mt-6 space-y-8">
             {children.map((child) => {
               const childName = `${child.information?.firstName} ${child.information?.lastName}`;
+              const dateOfBirth = child.information?.dateOfBirth ? toLocaleDateString(parseDateString(child.information.dateOfBirth), i18n.language) : '';
               return (
                 <section key={child.id}>
                   <h2 className="mb-4 font-lato text-2xl font-bold">{childName}</h2>
                   <dl className="mb-6 divide-y border-y">
                     <DescriptionListItem term={t('apply-child:children.index.dob-title')}>
-                      <p>{child.information?.dateOfBirth}</p>
+                      <p>{dateOfBirth}</p>
                     </DescriptionListItem>
                     <DescriptionListItem term={t('apply-child:children.index.sin-title')}>
                       <p>{child.information?.socialInsuranceNumber}</p>
