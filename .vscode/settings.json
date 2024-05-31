@@ -1,4 +1,7 @@
 {
+  "[java]": {
+    "editor.insertSpaces": false
+  },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
@@ -25,13 +28,7 @@
   // Fix: Typescript aliases not working with VSCode Eslint in monorepo
   // https://stackoverflow.com/a/73025516
   "eslint.workingDirectories": [{ "mode": "auto" }],
-  // clsx Tailwind Support
-  // https://github.com/lukeed/clsx/tree/master?tab=readme-ov-file#tailwind-support
-  "tailwindCSS.experimental.classRegex": [
-    ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
-    ["cn\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
-  ],
-
+  "java.compile.nullAnalysis.mode": "automatic",
   "java.completion.favoriteStaticMembers": [
     "org.assertj.core.api.Assertions.*",
     "org.hamcrest.CoreMatchers.*",
@@ -54,5 +51,12 @@
     "org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*",
     "org.springframework.test.web.servlet.result.MockMvcResultHandlers.*",
     "org.springframework.test.web.servlet.result.MockMvcResultMatchers.*"
+  ],
+  "java.configuration.updateBuildConfiguration": "automatic",
+  // clsx Tailwind Support
+  // https://github.com/lukeed/clsx/tree/master?tab=readme-ov-file#tailwind-support
+  "tailwindCSS.experimental.classRegex": [
+    ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+    ["cn\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ]
 }
