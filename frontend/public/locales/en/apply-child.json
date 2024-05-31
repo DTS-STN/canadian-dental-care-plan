@@ -75,7 +75,7 @@
       "sin-legend": "Does this child have a Social Insurance Number (SIN)?",
       "sin-yes": "<bold>Yes</bold>, this child has a SIN",
       "sin-no": "<bold>No</bold>, this child does not have a SIN",
-      "sin": "Social Insurance Number (SIN)",
+      "sin": "Enter the 9-digit SIN",
       "parent-legend": "Are you the parent or legal guardian of this child?",
       "radio-options": {
         "yes": "Yes",
@@ -85,9 +85,6 @@
       "continue-btn": "Continue",
       "cancel-btn": "Cancel",
       "save-btn": "Save",
-      "help-message": {
-        "sin": "Enter the 9-digit SIN"
-      },
       "error-message": {
         "first-name-required": "Enter child's first name",
         "last-name-required": "Enter child's last name",
