@@ -358,8 +358,8 @@ export default function ApplyFlowChildInformation() {
               name="isParent"
               legend={t('apply-child:children.information.parent-legend')}
               options={[
-                { value: YesNoOption.Yes, children: t('apply-child:children.information.radio-options.yes'), defaultChecked: defaultState?.isParent === true },
-                { value: YesNoOption.No, children: t('apply-child:children.information.radio-options.no'), defaultChecked: defaultState?.isParent === false },
+                { value: YesNoOption.Yes, children: t('apply-child:children.information.radio-options.yes'), defaultChecked: defaultState?.isParent === true, readOnly: editMode },
+                { value: YesNoOption.No, children: t('apply-child:children.information.radio-options.no'), defaultChecked: defaultState?.isParent === false, readOnly: editMode },
               ]}
               errorMessage={fetcher.data?.errors.isParent?._errors[0]}
               required
