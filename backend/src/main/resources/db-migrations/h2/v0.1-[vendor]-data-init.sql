@@ -1,6 +1,7 @@
 INSERT INTO `user` (`id`, `email`, `email_verified`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`)
 VALUES
 	('76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6', 'unverified@example.com', false, 'flyway-community-edition', CURRENT_TIMESTAMP, 'flyway-community-edition', CURRENT_TIMESTAMP),
+	('fade01ac-097c-4f14-99dc-46155b863305', 'unverifiedNoSubscriptions@example.com', false, 'flyway-community-edition', CURRENT_TIMESTAMP, 'flyway-community-edition', CURRENT_TIMESTAMP),
 	('f9f33652-0ebd-46bc-8d93-04cef538a689', 'verified@example.com', true, 'flyway-community-edition', CURRENT_TIMESTAMP, 'flyway-community-edition', CURRENT_TIMESTAMP);
 
 

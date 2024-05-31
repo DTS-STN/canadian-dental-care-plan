@@ -103,7 +103,7 @@ export function getSubscriptionApiMockHandlers() {
         db.subscription.create({
           userId: parsedSubscriptionApi.data.userId,
           msLanguageCode: parsedSubscriptionApi.data.msLanguageCode,
-          alertTypeCode: 'cdcp',
+          alertTypeCode: 'CDCP',
         });
       } else {
         db.subscription.update({

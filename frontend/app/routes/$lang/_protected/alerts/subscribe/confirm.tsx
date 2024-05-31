@@ -72,7 +72,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   }
 
   const preferredLanguages = await lookupService.getAllPreferredLanguages();
-  const preferredLanguageDict = preferredLanguages.find((obj) => obj.id === alertSubscription.preferredLanguage);
+  const preferredLanguageDict = preferredLanguages.find((obj) => obj.id === alertSubscription.preferredLanguageId);
   const preferredLanguage = preferredLanguageDict && getNameByLanguage(locale, preferredLanguageDict);
 
   const newCodeRequested = session.get('newCodeRequested');
