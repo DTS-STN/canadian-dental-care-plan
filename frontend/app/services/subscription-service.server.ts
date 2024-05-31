@@ -25,6 +25,11 @@ export const getSubscriptionService = moize(createSubscriptionService, { onCache
 function createSubscriptionService() {
   const { CDCP_API_BASE_URI } = getEnv();
 
+  /**
+   *
+   * @param userId
+   * @returns the subscription details for the user or null if no user is found or the user has no CDCP subscriptions.
+   */
   async function getSubscription(userId: string) {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
@@ -93,11 +98,12 @@ function createSubscriptionService() {
       email: userParsed.email,
       emailVerified: userParsed.emailVerified,
     }));
-    try {
-      return subscriptions.filter((subscription) => subscription.alertType === 'CDCP').at(0);
-    } catch (error) {
+
+    const cdcpSubscriptions = subscriptions.filter((subscription) => subscription.alertType === 'CDCP');
+    if (cdcpSubscriptions.length === 0) {
       return undefined;
     }
+    return subscriptions.filter((subscription) => subscription.alertType === 'CDCP').at(0);
   }
 
   async function updateSubscription(sin: string, subscription: SubscriptionInfo) {
