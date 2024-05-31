@@ -24,6 +24,7 @@ import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { formatSin } from '~/utils/sin-utils';
 
 enum FormAction {
   Add = 'add',
@@ -158,7 +159,7 @@ export default function ApplyFlowChildSummary() {
                       <p>{dateOfBirth}</p>
                     </DescriptionListItem>
                     <DescriptionListItem term={t('apply-adult-child:children.index.sin-title')}>
-                      <p>{child.information?.socialInsuranceNumber}</p>
+                      <p>{child.information?.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</p>
                     </DescriptionListItem>
                     <DescriptionListItem term={t('apply-adult-child:children.index.dental-insurance-title')}>{child.dentalInsurance ? t('apply-adult-child:children.index.yes') : t('apply-adult-child:children.index.no')}</DescriptionListItem>
                     <DescriptionListItem term={t('apply-adult-child:children.index.dental-benefit-title')}>
