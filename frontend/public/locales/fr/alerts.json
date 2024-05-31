@@ -74,6 +74,7 @@
     "submit-code": "(FR) Submit Confirmation Code",
     "request-new-code": "(FR) Request New Confirmation Code",
     "code-sent-by-email": "(FR) You have requested a new confirmation code and will receive an email at <strong>{{userEmailAddress}}</strong> to finish the registration process. This final step which must be completed within the next <strong>48 hours</strong>, will allow you to reveive emails when important new Canadian Dental Care plan information is available in your My Service Canada Account.",
+    "invalid": "(FR) The confirmation code you entered does not match our records. Please request a new confirmation code or ensure you are entering the correct confirmation code you received.",
     "back": "(FR) Back",
     "error-message": {
       "code-required": "(FR) Enter confirmation code"
