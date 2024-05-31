@@ -275,8 +275,16 @@
     "yes": "Yes",
     "no": "No",
     "exit": "Exit",
+    "close-application": "Close application",
     "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html",
-    "status-checker-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html"
+    "status-checker-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
+    "modal": {
+      "header": "Close application",
+      "info": "By closing the application, you will end your session and any information entered will be cleared from your browser. Make sure you printed or save a copy of your application code.",
+      "are-you-sure": "Are you sure you want to close the application?",
+      "back-btn": "Back",
+      "close-btn": "Close application"
+    }
   },
   "contact-apply-child": {
     "page-title": "Contact us to apply for your child",

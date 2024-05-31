@@ -10,6 +10,7 @@ import { Address } from '~/components/address';
 import { Button } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { DescriptionListItem } from '~/components/description-list-item';
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
 import { useFeature } from '~/root';
 import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
@@ -213,7 +214,6 @@ export default function ApplyFlowConfirm() {
           <p>{t('confirm.make-note')}</p>
         </div>
       </ContextualAlert>
-
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.keep-copy')}</h2>
         <p className="mt-4">
@@ -232,7 +232,6 @@ export default function ApplyFlowConfirm() {
           {t('confirm.print-btn')}
         </Button>
       </section>
-
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.whats-next')}</h2>
         <p className="mt-4">{t('confirm.begin-process')}</p>
@@ -242,14 +241,12 @@ export default function ApplyFlowConfirm() {
         <p className="mt-4">{powerPlatformStatusCheckerEnabled ? t('confirm.use-code') : t('confirm.use-code-one-week')}</p>
         <p className="mt-4">{t('confirm.mail-letter')}</p>
       </section>
-
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.register-msca-title')}</h2>
         <p className="mt-4">
           <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLink, mscaLinkApply }} />
         </p>
       </section>
-
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.how-insurance')}</h2>
         <p className="mt-4">{t('confirm.eligible-text')}</p>
@@ -260,7 +257,6 @@ export default function ApplyFlowConfirm() {
           <Trans ns={handle.i18nNamespaces} i18nKey="confirm.more-info-service" components={{ dentalContactUsLink }} />
         </p>
       </section>
-
       <section className="space-y-8">
         <div className="space-y-6">
           <h2 className="font-lato text-3xl font-bold">{t('confirm.application-summ')}</h2>
@@ -383,25 +379,53 @@ export default function ApplyFlowConfirm() {
           </div>
         </section>
       </section>
-      <Button
-        className="mt-5 print:hidden"
-        size="lg"
-        variant="primary"
-        onClick={(event) => {
-          event.preventDefault();
-          window.print();
-        }}
-        data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Print - Confirmation click"
-      >
-        {t('confirm.print-btn')}
-      </Button>
-
-      <fetcher.Form method="post" noValidate className="mt-5 flex flex-wrap items-center gap-3">
-        <input type="hidden" name="_csrf" value={csrfToken} />
-        <Button variant="primary" onClick={() => sessionStorage.removeItem('flow.state')} size="lg" className="print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - Confirmation click">
-          {t('apply-child:confirm.exit')}
+      <div className="my-6">
+        <Button
+          className="mt-5 print:hidden"
+          size="lg"
+          variant="primary"
+          onClick={(event) => {
+            event.preventDefault();
+            window.print();
+          }}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Print bottom - Application successfully submitted click"
+        >
+          {t('confirm.print-btn')}
         </Button>
-      </fetcher.Form>
+      </div>
+      <Dialog>
+        <DialogTrigger asChild>
+          <button className="text-slate-700 underline outline-offset-4 hover:text-blue-700 focus:text-blue-700 print:hidden" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - Application successfully submitted click">
+            {t('confirm.close-application')}
+          </button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t('confirm.modal.header')}</DialogTitle>
+          </DialogHeader>
+          <p>{t('confirm.modal.info')}</p>
+          <p>{t('confirm.modal.are-you-sure')}</p>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button id="confirm-modal-back" variant="default" size="sm" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back exit modal - Application successfully submitted click">
+                {t('confirm.modal.back-btn')}
+              </Button>
+            </DialogClose>
+            <fetcher.Form method="post" noValidate>
+              <input type="hidden" name="_csrf" value={csrfToken} />
+              <Button
+                id="confirm-modal-close"
+                variant="primary"
+                size="sm"
+                onClick={() => sessionStorage.removeItem('flow.state')}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Confirmation exit modal - Application successfully submitted click"
+              >
+                {t('confirm.modal.close-btn')}
+              </Button>
+            </fetcher.Form>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>{' '}
     </div>
   );
 }

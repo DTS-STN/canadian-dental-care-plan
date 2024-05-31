@@ -274,8 +274,16 @@
     "yes": "Oui",
     "no": "Non",
     "exit": "Sortie",
+    "close-application": "(FR) Close application",
     "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html",
-    "status-checker-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html"
+    "status-checker-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html",
+    "modal": {
+      "header": "(FR) Close application",
+      "info": "(FR) By closing the application, you will end your session and any information entered will be cleared from your browser. Make sure you printed or save a copy of your application code.",
+      "are-you-sure": "Are you sure you want to close the application?",
+      "back-btn": "(FR) Back",
+      "close-btn": "(FR) Close application"
+    }
   },
   "contact-apply-child": {
     "page-title": "(FR) Contact us to apply for your child",
