@@ -102,7 +102,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const applicationStatusService = getApplicationStatusService();
   const lookupService = getLookupService();
   const { sin, code } = parsedDataResult.data;
-  const statusId = await applicationStatusService.getStatusId({ sin, applicationCode: code });
+  const statusId = await applicationStatusService.getStatusIdWithSin({ sin, applicationCode: code });
   const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
   const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
 
