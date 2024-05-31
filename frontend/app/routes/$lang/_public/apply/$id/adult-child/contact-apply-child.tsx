@@ -78,7 +78,7 @@ export default function ApplyFlowContactApplyChild() {
   }
 
   const noWrap = <span className="whitespace-nowrap" />;
-  const serviceCanadaOfficeLink = <InlineLink to={t('apply-adult-child:contact-apply-child.service-canada-office-link')} />;
+  const serviceCanadaOfficeLink = <InlineLink to={t('apply-adult-child:contact-apply-child.service-canada-office-link')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose">
