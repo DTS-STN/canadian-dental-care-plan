@@ -52,7 +52,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.information.page-title', { childName }) }) };
 
-  return json({ id: state.id, csrfToken, meta, defaultState: state.information, childName, editMode: state.editMode });
+  return json({ csrfToken, meta, defaultState: state.information, childName, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {

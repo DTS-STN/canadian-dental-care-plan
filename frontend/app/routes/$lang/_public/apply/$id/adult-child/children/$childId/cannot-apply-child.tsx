@@ -4,12 +4,11 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
-import invariant from 'tiny-invariant';
 
 import pageIds from '../../../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
-import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
+import { loadApplyAdultSingleChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -30,24 +29,23 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const state = loadApplyAdultChildState({ params, request, session });
-  const t = await getFixedT(request, handle.i18nNamespaces);
+  loadApplyAdultSingleChildState({ params, request, session });
 
+  const t = await getFixedT(request, handle.i18nNamespaces);
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:eligibility.cannot-apply-child.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta });
+  return json({ csrfToken, meta });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/adult-child/apply-yourself');
-  loadApplyAdultChildState({ params, request, session });
+
+  loadApplyAdultSingleChildState({ params, request, session });
+
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
   const submittedCsrfToken = String(formData.get('_csrf'));
-  const state = loadApplyAdultChildState({ params, request, session });
-
-  invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
 
   if (expectedCsrfToken !== submittedCsrfToken) {
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);

@@ -44,7 +44,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.dental-insurance.title', { childName }) }) };
 
-  return json({ id: state, csrfToken, meta, defaultState: state.dentalInsurance, childName, editMode: state.editMode, i18nOptions: { childName } });
+  return json({ csrfToken, meta, defaultState: state.dentalInsurance, childName, editMode: state.editMode, i18nOptions: { childName } });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
