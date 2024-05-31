@@ -74,7 +74,7 @@
       "sin-legend": "(FR) Does this child have a Social Insurance Number (SIN)?",
       "sin-yes": "(FR) <bold>Yes</bold>, this child has a SIN",
       "sin-no": "(FR) <bold>No</bold>, this child does not have a SIN",
-      "sin": "(FR) Social Insurance Number (SIN)",
+      "sin": "Entrez un NAS de 9 chiffres",
       "parent-legend": "(FR) Are you the parent or legal guardian of this child?",
       "radio-options": {
         "yes": "Oui",
@@ -84,9 +84,6 @@
       "continue-btn": "Continuer",
       "cancel-btn": "Annuler",
       "save-btn": "Enregistrer",
-      "help-message": {
-        "sin": "Entrez un NAS de 9 chiffres"
-      },
       "error-message": {
         "first-name-required": "Entrez le prénom de l'enfant",
         "last-name-required": "Entrez le nom de famille de l'enfant",
