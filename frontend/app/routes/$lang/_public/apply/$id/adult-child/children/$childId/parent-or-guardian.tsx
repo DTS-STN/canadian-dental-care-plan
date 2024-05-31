@@ -30,17 +30,19 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const state = loadApplyAdultSingleChildState({ params, request, session });
+  loadApplyAdultSingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.parent-or-guardian.page-title') }) };
 
-  return json({ id: state.id, csrfToken, meta });
+  return json({ csrfToken, meta });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/adult-child/children/parent-or-guardian');
+
+  loadApplyAdultSingleChildState({ params, request, session });
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
