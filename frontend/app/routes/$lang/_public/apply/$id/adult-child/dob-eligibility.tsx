@@ -85,11 +85,17 @@ export default function ApplyFlowDobEligibility() {
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <ButtonLink type="button" routeId="$lang/_public/apply/$id/adult-child/disability-tax-credit" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Find out when you can apply click">
+        <ButtonLink
+          type="button"
+          routeId="$lang/_public/apply/$id/adult-child/disability-tax-credit"
+          params={params}
+          disabled={isSubmitting}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Find out when you can apply click"
+        >
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply-adult-child:eligibility.dob-eligibility.back-btn')}
         </ButtonLink>
-        <Button type="submit" variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Find out when you can apply click">
+        <Button type="submit" variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Find out when you can apply click">
           {t('apply-adult-child:eligibility.dob-eligibility.return-btn')}
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>

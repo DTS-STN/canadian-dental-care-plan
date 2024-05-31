@@ -70,11 +70,17 @@ export default function ApplyFlowTaxFiling() {
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/adult-child/review-child-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Exiting the application click">
+        <ButtonLink
+          id="back-button"
+          routeId="$lang/_public/apply/$id/adult-child/review-child-information"
+          params={params}
+          disabled={isSubmitting}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Exiting the application click"
+        >
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply-adult-child:exit-application.back-btn')}
         </ButtonLink>
-        <Button variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Exit - Exiting the application click">
+        <Button variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Exiting the application click">
           {t('apply-adult-child:exit-application.exit-btn')}
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>

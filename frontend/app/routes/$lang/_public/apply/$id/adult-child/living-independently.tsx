@@ -144,11 +144,17 @@ export default function ApplyFlowLivingIndependently() {
             errorMessage={errorMessages['input-radio-living-independently-option-0']}
           />
           <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-            <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Continue - Living independently click">
+            <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Living independently click">
               {t('apply-adult-child:living-independently.continue-btn')}
               <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
             </Button>
-            <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/adult-child/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Living independently click">
+            <ButtonLink
+              id="back-button"
+              routeId="$lang/_public/apply/$id/adult-child/date-of-birth"
+              params={params}
+              disabled={isSubmitting}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Living independently click"
+            >
               <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('apply-adult-child:living-independently.back-btn')}
             </ButtonLink>
