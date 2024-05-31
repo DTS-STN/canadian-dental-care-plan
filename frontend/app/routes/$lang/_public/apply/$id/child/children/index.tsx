@@ -136,7 +136,6 @@ export default function ApplyFlowChildSummary() {
         <Progress aria-labelledby="progress-label" value={40} size="lg" />
       </div>
       <div className="max-w-prose">
-        <p className="mb-4">{t('apply-child:children.index.you-have-completed')}</p>
         <p>{t('apply-child:children.index.in-this-section')}</p>
         {children.length > 0 && (
           <div className="mt-6 space-y-8">
