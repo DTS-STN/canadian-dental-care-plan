@@ -72,7 +72,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     };
   });
 
-  return json({ id: state.id, csrfToken, meta, children, editMode: state.editMode });
+  return json({ csrfToken, meta, children, editMode: state.editMode });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {

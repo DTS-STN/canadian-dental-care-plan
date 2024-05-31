@@ -198,7 +198,8 @@
       "when-to-apply": "(FR) Find out when you can apply for the Canadian Dental Care Plan",
       "when-to-apply-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#quand",
       "back-btn": "Retour",
-      "proceed-btn": "(FR) Proceed to apply for yourself"
+      "return-btn": "(FR) Return to main page",
+      "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
     }
   },
   "communication-preference": {
