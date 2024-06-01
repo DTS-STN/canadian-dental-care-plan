@@ -32,6 +32,40 @@ export function getSubscriptionApiMockHandlers() {
     //
     // Handler for GET request to retrieve user by userId
     //
+    http.get('https://api.cdcp.example.com/api/v1/users', ({ request }) => {
+      log.debug('Handling request for [%s]', request.url);
+
+      const url = new URL(request.url);
+      const raoidcUserId = url.searchParams.get('raoidcUserId');
+
+      const parsedRaoidUserId = z.string().safeParse(raoidcUserId);
+
+      if (!parsedRaoidUserId.success) {
+        throw new HttpResponse(null, { status: 400 });
+      }
+
+      const userEntity = db.user.findFirst({
+        where: { userAttributes: { value: { equals: parsedRaoidUserId.data } } },
+      });
+
+      return HttpResponse.json({
+        _embedded: {
+          users: [userEntity],
+        },
+        _links: {
+          self: {
+            href: `https://api.cdcp.example.com/api/v1/users/${userEntity?.id}`,
+          },
+          subscriptions: {
+            href: `https://api.cdcp.example.com/api/v1/users/${userEntity?.id}/subscriptions`,
+          },
+        },
+      });
+    }),
+
+    //
+    // Handler for GET request to retrieve user by userId
+    //
     http.get('https://api.cdcp.example.com/api/v1/users/:userId', ({ params, request }) => {
       log.debug('Handling request for [%s]', request.url);
 
