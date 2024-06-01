@@ -7,14 +7,23 @@ import org.springframework.lang.Nullable;
 import ca.gov.dtsstn.cdcp.api.data.entity.LanguageEntity;
 import ca.gov.dtsstn.cdcp.api.service.domain.Language;
 
+/**
+ * Mapper for converting between {@link Language} domain objects and {@link LanguageEntity} entities.
+ */
 @Mapper
-public interface LanguageMapper {
+public abstract class LanguageMapper extends AbstractDomainMapper {
 
+	/**
+	 * Converts a {@link LanguageEntity} to a {@link Language} domain object.
+	 */
 	@Nullable
-	Language toDomainObject(@Nullable LanguageEntity language);
+	public abstract Language toLanguage(@Nullable LanguageEntity language);
 
+	/**
+	 * Converts a {@link Language} domain object to a {@link LanguageEntity} entity.
+	 */
 	@Nullable
 	@Mapping(target = "isNew", ignore = true)
-	LanguageEntity toEntity(@Nullable Language language);
+	public abstract LanguageEntity toLanguageEntity(@Nullable Language language);
 
 }

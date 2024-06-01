@@ -28,25 +28,25 @@ public class LanguageService {
 	@Cacheable(key = "{ 'id', #id }", sync = true)
 	public Optional<Language> readById(String id) {
 		Assert.hasText(id, "id is required; it must not be null or blank");
-		return languageRepository.findById(id).map(languageMapper::toDomainObject);
+		return languageRepository.findById(id).map(languageMapper::toLanguage);
 	}
 
 	@Cacheable(key = "{ 'code', #code }", sync = true)
 	public Optional<Language> readByCode(String code) {
 		Assert.hasText(code, "code is required; it must not be null or blank");
-		return languageRepository.findByCode(code).map(languageMapper::toDomainObject);
+		return languageRepository.findByCode(code).map(languageMapper::toLanguage);
 	}
 
 	@Cacheable(key = "{ 'isoCode', #isoCode }", sync = true)
 	public Optional<Language> readByIsoCode(String isoCode) {
 		Assert.hasText(isoCode, "isoCode is required; it must not be null or blank");
-		return languageRepository.findByIsoCode(isoCode).map(languageMapper::toDomainObject);
+		return languageRepository.findByIsoCode(isoCode).map(languageMapper::toLanguage);
 	}
 
 	@Cacheable(key = "{ 'msLocaleCode', #msLocaleCode }", sync = true)
 	public Optional<Language> readByMsLocaleCode(String msLocaleCode) {
 		Assert.hasText(msLocaleCode, "msLocaleCode is required; it must not be null or blank");
-		return languageRepository.findByMsLocaleCode(msLocaleCode).map(languageMapper::toDomainObject);
+		return languageRepository.findByMsLocaleCode(msLocaleCode).map(languageMapper::toLanguage);
 	}
 
 }

@@ -67,7 +67,7 @@ public class UserService {
 		Assert.notNull(user, "user is required; it must not be null");
 		Assert.isNull(user.getId(), "user.id must be null when creating new instance");
 
-		return userMapper.toDomainObject(userRepository.save(userMapper.toEntity(user)));
+		return userMapper.toUser(userRepository.save(userMapper.toUserEntity(user)));
 	}
 
 	public ConfirmationCode createConfirmationCodeForUser(String userId) {
@@ -91,7 +91,7 @@ public class UserService {
 		// return the persisted entity so it includes the id and audit fields
 		return userRepository.save(user).getConfirmationCodes().stream()
 			.filter(byCode(confirmationCode.getCode())).findFirst()
-			.map(confirmationCodeMapper::toDomainObject).orElseThrow();
+			.map(confirmationCodeMapper::toConfirmationCode).orElseThrow();
 	}
 
 	public Subscription createSubscriptionForUser(String userId, String alertTypeId, String languageId) {
@@ -126,12 +126,12 @@ public class UserService {
 
 		return userRepository.save(user).getSubscriptions().stream()
 			.filter(byAlertTypeId(alertType.getId())).findFirst()
-			.map(subscriptionMapper::toDomainObject).orElseThrow();
+			.map(subscriptionMapper::toSubscription).orElseThrow();
 	}
 
 	public Optional<User> getUserById(String id) {
 		Assert.hasText(id, "id is required; it must not be null or blank");
-		return userRepository.findById(id).map(userMapper::toDomainObject);
+		return userRepository.findById(id).map(userMapper::toUser);
 	}
 
 	public void updateUser(String userId, String email) {
@@ -161,9 +161,9 @@ public class UserService {
 		final var subscription = user.getSubscriptions().stream()
 			.filter(byId(subscriptionId)).findFirst().orElseThrow();
 		subscription.setLanguage(preferredLanguage);
-			
+
 		userRepository.save(user);
-	}	
+	}
 
 	public void deleteSubscriptionForUser(String userId, String subscriptionId) {
 		Assert.hasText(userId, "userId is required; it must not be null or blank");
@@ -187,6 +187,6 @@ public class UserService {
 	private Predicate<SubscriptionEntity> byId(String id) {
 		Assert.hasText(id, "id is required; it must not be null or blank");
 		return subscription -> id.equals(subscription.getId());
-	}	
+	}
 
 }

@@ -1,10 +1,9 @@
 package ca.gov.dtsstn.cdcp.api.data.entity;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.immutables.builder.Builder;
 import org.springframework.core.style.ToStringCreator;
@@ -32,11 +31,11 @@ public class UserEntity extends AbstractEntity {
 
 	@JoinColumn(name = "userId", nullable = false)
 	@OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-	private Set<UserAttributeEntity> userAttributes = new HashSet<>();
+	private Set<SubscriptionEntity> subscriptions = new HashSet<>();
 
 	@JoinColumn(name = "userId", nullable = false)
 	@OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-	private Set<SubscriptionEntity> subscriptions = new HashSet<>();	
+	private Set<UserAttributeEntity> userAttributes = new HashSet<>();
 
 	public UserEntity() {
 		super();
@@ -46,31 +45,31 @@ public class UserEntity extends AbstractEntity {
 	public UserEntity(
 			@Nullable Boolean isNew,
 			@Nullable String id,
-			@Nullable String email,
-			@Nullable Boolean emailVerified,
-			@Nullable Iterable<UserAttributeEntity> userAttributes,
-			@Nullable Iterable<SubscriptionEntity> subscriptions,			
 			@Nullable String createdBy,
 			@Nullable Instant createdDate,
 			@Nullable String lastModifiedBy,
 			@Nullable Instant lastModifiedDate,
-			@Nullable Iterable<ConfirmationCodeEntity> confirmationCodes) {
+			@Nullable Collection<ConfirmationCodeEntity> confirmationCodes,
+			@Nullable String email,
+			@Nullable Boolean emailVerified,
+			@Nullable Collection<SubscriptionEntity> subscriptions,
+			@Nullable Collection<UserAttributeEntity> userAttributes) {
 		super(isNew, id, createdBy, createdDate, lastModifiedBy, lastModifiedDate);
 
 		this.email = email;
 		this.emailVerified = emailVerified;
 
-		if (confirmationCodes != null) {
-			this.confirmationCodes = StreamSupport.stream(confirmationCodes.spliterator(), false).collect(Collectors.toSet());
-		}
+		if (confirmationCodes != null) { this.confirmationCodes = new HashSet<>(confirmationCodes); }
+		if (subscriptions != null) { this.subscriptions = new HashSet<>(subscriptions); }
+		if (userAttributes != null) { this.userAttributes = new HashSet<>(userAttributes); }
+	}
 
-		if (userAttributes != null) {
-			this.userAttributes = StreamSupport.stream(userAttributes.spliterator(), false).collect(Collectors.toSet());
-		}
+	public Set<ConfirmationCodeEntity> getConfirmationCodes() {
+		return confirmationCodes;
+	}
 
-		if (subscriptions != null) {
-			this.subscriptions = StreamSupport.stream(subscriptions.spliterator(), false).collect(Collectors.toSet());
-		}		
+	public void setConfirmationCodes(Collection<ConfirmationCodeEntity> confirmationCodes) {
+		this.confirmationCodes = confirmationCodes == null ? new HashSet<> () : new HashSet<>(confirmationCodes);
 	}
 
 	public String getEmail() {
@@ -93,24 +92,16 @@ public class UserEntity extends AbstractEntity {
 		return userAttributes;
 	}
 
-	public void setUserAttributes(Iterable<UserAttributeEntity> userAttributes) {
-		this.userAttributes = StreamSupport.stream(userAttributes.spliterator(), false).collect(Collectors.toSet());
-	}
-
-	public Set<ConfirmationCodeEntity> getConfirmationCodes() {
-		return confirmationCodes;
-	}
-
-	public void setConfirmationCodes(Set<ConfirmationCodeEntity> confirmationCodes) {
-		this.confirmationCodes = confirmationCodes;
+	public void setUserAttributes(Collection<UserAttributeEntity> userAttributes) {
+		this.userAttributes = userAttributes == null ? new HashSet<> () : new HashSet<>(userAttributes);
 	}
 
 	public Set<SubscriptionEntity> getSubscriptions() {
 		return subscriptions;
 	}
 
-	public void setSubscriptions(Iterable<SubscriptionEntity> subscriptions) {
-		this.subscriptions = StreamSupport.stream(subscriptions.spliterator(), false).collect(Collectors.toSet());
+	public void setSubscriptions(Collection<SubscriptionEntity> subscriptions) {
+		this.subscriptions = subscriptions == null ? new HashSet<> () : new HashSet<>(subscriptions);
 	}
 
 	@Override
@@ -120,8 +111,8 @@ public class UserEntity extends AbstractEntity {
 			.append("confirmationCodes", confirmationCodes)
 			.append("email", email)
 			.append("emailVerified", emailVerified)
+			.append("subscriptions", subscriptions)
 			.append("userAttributes", userAttributes)
-			.append("subscriptions", subscriptions)			
 			.toString();
 	}
 
