@@ -70,7 +70,6 @@
       "complete-fields": "Complete all fields.",
       "application-code-label": "Application Code or Client Number",
       "application-code-description": "Enter the number you received after applying online, or the number found in the upper right-hand corner from the letter you may have reveived from Service Canada",
-      "application-code-placeholder": "Your Application Code or Client Number",
       "sin-label": "Social Insurance Number (SIN)",
       "sin-description": "Enter the 9-digit SIN",
       "submit": "Check status",
@@ -91,7 +90,7 @@
       "complete-fields": "Complete all fields.",
       "application-code-label": "Application Code or Client Number",
       "application-code-description": "Enter the number you received after applying online, or the number found in the upper right-hand corner from the letter you may have reveived from Service Canada",
-      "application-code-placeholder": "Your Application Code or Client Number",
+
       "radio-legend": "Does the child have a Social Insurance Number (SIN)?",
       "sin-label": "Social Insurance Number (SIN)",
       "sin-description": "Enter the 9-digit SIN",

@@ -211,7 +211,6 @@ export default function StatusCheckerMyself() {
                   name="code"
                   label={t('status:myself.form.application-code-label')}
                   helpMessagePrimary={t('status:myself.form.application-code-description')}
-                  placeholder={t('status:myself.form.application-code-placeholder')}
                   required
                   errorMessage={errorMessages.code}
                 />
