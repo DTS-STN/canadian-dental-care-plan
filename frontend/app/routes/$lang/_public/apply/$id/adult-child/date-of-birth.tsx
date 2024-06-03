@@ -153,6 +153,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
+  if (state.editMode) {
+    return redirect(getPathById('$lang/_public/apply/$id/adult-child/review-adult-information', params));
+  }
+
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
   const allChildrenUnder18 = parsedDataResult.data.allChildrenUnder18;
 
@@ -178,10 +182,6 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   if (allChildrenUnder18 === 'no') {
     return redirect(getPathById('$lang/_public/apply/$id/adult-child/apply-yourself', params));
-  }
-
-  if (state.editMode) {
-    return redirect(getPathById('$lang/_public/apply/$id/adult-child/review-adult-information', params));
   }
 
   return redirect(getPathById('$lang/_public/apply/$id/adult-child/applicant-information', params));

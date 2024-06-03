@@ -18,7 +18,7 @@ import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
-import { ApplicantInformationState, applicantInformationStateHasPartner, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { ApplicantInformationState, applicantInformationStateHasPartner, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
@@ -198,12 +198,6 @@ export async function action({ context: { session }, params, request }: ActionFu
   const hasPartner = applicantInformationStateHasPartner(parsedDataResult.data);
   const remove = !hasPartner ? 'partnerInformation' : undefined;
   saveApplyState({ params, remove, session, state: { applicantInformation: parsedDataResult.data, dateOfBirth: parsedDobResult.data.dateOfBirth } });
-
-  const ageCategory = getAgeCategoryFromDateString(parsedDobResult.data.dateOfBirth);
-
-  if (ageCategory === 'children') {
-    return redirect(getPathById('$lang/_public/apply/$id/child/contact-apply-child', params));
-  }
 
   if (state.editMode) {
     return redirect(getPathById('$lang/_public/apply/$id/child/review-adult-information', params));

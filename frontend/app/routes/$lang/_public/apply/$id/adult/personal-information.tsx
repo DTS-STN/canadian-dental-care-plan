@@ -219,11 +219,7 @@ export async function action({ context: { session }, params, request }: ActionFu
       }
     : parsedDataResult.data;
 
-  saveApplyState({
-    params,
-    session,
-    state: { personalInformation: updatedData },
-  });
+  saveApplyState({ params, session, state: { personalInformation: updatedData } });
 
   // if email is defined and comm. pref. preferredMethod is EMAIL then sync email
   const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();

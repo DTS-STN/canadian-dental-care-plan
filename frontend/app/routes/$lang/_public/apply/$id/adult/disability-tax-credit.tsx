@@ -89,12 +89,6 @@ export async function action({ context: { session }, params, request }: ActionFu
   const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
   if (state.editMode) {
-    if (ageCategory !== 'adults') {
-      return redirect(getPathById('$lang/_public/apply/$id/adult/date-of-birth', params));
-    }
-    if (parsedDataResult.data === DisabilityTaxCreditOption.No) {
-      return redirect(getPathById('$lang/_public/apply/$id/adult/dob-eligibility', params));
-    }
     return redirect(getPathById('$lang/_public/apply/$id/adult/review-information', params));
   }
 

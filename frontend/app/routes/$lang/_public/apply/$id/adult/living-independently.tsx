@@ -80,10 +80,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   saveApplyState({ params, session, state: { livingIndependently: parsedDataResult.data === LivingIndependentlyOption.Yes } });
 
   if (state.editMode) {
-    if (parsedDataResult.data === LivingIndependentlyOption.Yes) {
-      return redirect(getPathById('$lang/_public/apply/$id/adult/review-information', params));
-    }
-    return redirect(getPathById('$lang/_public/apply/$id/adult/parent-or-guardian', params));
+    return redirect(getPathById('$lang/_public/apply/$id/adult/review-information', params));
   }
 
   if (parsedDataResult.data === LivingIndependentlyOption.Yes) {
