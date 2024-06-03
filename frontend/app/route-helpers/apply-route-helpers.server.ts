@@ -253,7 +253,7 @@ export function getAgeCategoryFromAge(age: number): AgeCategory {
   if (age >= 65) return 'seniors';
   if (age >= 18 && age < 65) return 'adults';
   if (age >= 16 && age < 18) return 'youth';
-  if (age > 0 && age < 16) return 'children';
+  if (age >= 0 && age < 16) return 'children';
   throw new Error(`Invalid age [${age}]`);
 }
 
