@@ -3,6 +3,7 @@ package ca.gov.dtsstn.cdcp.api.web.v1.model.mapper;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.List;
 import java.util.stream.StreamSupport;
 
 import org.mapstruct.AfterMapping;
@@ -12,6 +13,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.core.EmbeddedWrappers;
+import org.springframework.util.Assert;
 
 import ca.gov.dtsstn.cdcp.api.service.domain.Subscription;
 import ca.gov.dtsstn.cdcp.api.web.v1.controller.SubscriptionsController;
@@ -22,13 +25,27 @@ import jakarta.annotation.Nullable;
 @Mapper
 public interface SubscriptionModelMapper {
 
+	final EmbeddedWrappers embeddedWrappers = new EmbeddedWrappers(false);
+
 	@Nullable
 	default CollectionModel<SubscriptionModel> toModel(String userId, @Nullable Iterable<Subscription> subscriptions) {
 		final var subscriptionModels = StreamSupport.stream(subscriptions.spliterator(), false)
-			.map(subscription -> toModel(userId, subscription)).toList();
+				.map(subscription -> toModel(userId, subscription)).toList();
 
-		return CollectionModel.of(subscriptionModels)
-			.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionsByUserId(userId)).withSelfRel());
+		final var collection = CollectionModel.of(subscriptionModels)
+				.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionsByUserId(userId)).withSelfRel());
+
+		return wrapCollection(collection, SubscriptionModel.class);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	default <C> CollectionModel<C> wrapCollection(CollectionModel<C> collectionModel, Class<C> type) {
+		Assert.notNull(collectionModel, "collectionModel is required; it must not be null");
+		Assert.notNull(type, "type is requred; it must not be null");
+		return collectionModel.getContent().isEmpty()
+				? (CollectionModel<C>) CollectionModel.of(List.of(embeddedWrappers.emptyCollectionOf(type)),
+						collectionModel.getLinks())
+				: collectionModel;
 	}
 
 	@Nullable
@@ -39,24 +56,26 @@ public interface SubscriptionModelMapper {
 
 	@AfterMapping
 	default SubscriptionModel afterMappingToModel(String userId, @MappingTarget SubscriptionModel subscription) {
-		return subscription.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionById(userId, subscription.getId())).withSelfRel());
+		return subscription
+				.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionById(userId, subscription.getId()))
+						.withSelfRel());
 	}
 
-	@Mapping(target= "id", ignore = true)
-	@Mapping(target= "createdBy", ignore = true)
-	@Mapping(target= "createdDate", ignore = true)
-	@Mapping(target= "lastModifiedBy", ignore = true)
-	@Mapping(target= "lastModifiedDate", ignore = true)
-	@Mapping(target= "alertType.code", source = "alertTypeCode")
-	@Mapping(target= "language.msLocaleCode", source = "msLanguageCode")
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "createdBy", ignore = true)
+	@Mapping(target = "createdDate", ignore = true)
+	@Mapping(target = "lastModifiedBy", ignore = true)
+	@Mapping(target = "lastModifiedDate", ignore = true)
+	@Mapping(target = "alertType.code", source = "alertTypeCode")
+	@Mapping(target = "language.msLocaleCode", source = "msLanguageCode")
 	Subscription toDomainObject(@Nullable SubscriptionCreateModel subscriptionModel);
 
-	@Mapping(target= "createdBy", ignore = true)
-	@Mapping(target= "createdDate", ignore = true)
-	@Mapping(target= "lastModifiedBy", ignore = true)
-	@Mapping(target= "lastModifiedDate", ignore = true)
-	@Mapping(target= "alertType.code", source = "alertTypeCode")
-	@Mapping(target= "language.msLocaleCode", source = "msLanguageCode")
+	@Mapping(target = "createdBy", ignore = true)
+	@Mapping(target = "createdDate", ignore = true)
+	@Mapping(target = "lastModifiedBy", ignore = true)
+	@Mapping(target = "lastModifiedDate", ignore = true)
+	@Mapping(target = "alertType.code", source = "alertTypeCode")
+	@Mapping(target = "language.msLocaleCode", source = "msLanguageCode")
 	Subscription toDomain(@Nullable SubscriptionModel subscriptionModel);
 
 }
