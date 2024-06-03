@@ -471,10 +471,10 @@
     "file-your-taxes": {
       "page-title": "Produire votre déclaration de revenus",
       "ineligible-to-apply": "Vous n'êtes pas admissible au Régime canadien de soins dentaires pour le moment.",
-      "tax-not-filed": "Vous, votre épouse/époux ou conjoint(e) de fait n'avez pas produit de déclaration de revenus pour l'année 2023 auprès de l'Agence du revenu du Canada.",
-      "unable-to-assess": "Nous utilisons les renseignements de votre déclaration de revenus pour nous assurer que vous répondez aux critères d'admissibilité au RCSD. Tant que vous n'aurez pas produit votre déclaration de revenus de 2023, nous ne pourrons pas évaluer votre admissibilité.",
+      "tax-not-filed": "Vous, votre épouse/époux ou conjoint/conjointe de fait n'avez pas produit de déclaration de revenus pour l'année 2023 auprès de l'Agence du revenu du Canada.",
+      "unable-to-assess": "Nous utilisons les renseignements de votre déclaration de revenus pour nous assurer que les critères d'admissibilité relatifs au revenu et à la résidence sont remplis. Tant que vous n'aurez pas produit votre déclaration de revenus de 2023, nous ne pourrons pas évaluer votre admissibilité.",
       "tax-info": "Pour en savoir plus sur la façon de produire votre déclaration de revenus, consultez la page <taxInfo>Préparez-vous à faire vos impôts</taxInfo>.",
-      "apply-after": "Vous pouvez demander le plan après avoir produit vos déclarations de revenus et reçu votre avis de cotisation.",
+      "apply-after": "Vous pouvez vous inscrire au régime après que vous ou votre époux/épouse ou conjoint/conjointe de fait avez produit vos déclarations de revenus et reçu votre avis de cotisation.",
       "tax-info-href": "https://www.canada.ca/fr/services/impots/impot-sur-le-revenu/impot-sur-le-revenu-des-particuliers/preparez-vous-impots.html",
       "back-btn": "Retour",
       "return-btn": "Revenir à la page principale",
