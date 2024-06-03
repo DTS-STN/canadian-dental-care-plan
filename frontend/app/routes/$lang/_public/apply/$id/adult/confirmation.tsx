@@ -174,7 +174,7 @@ export default function ApplyFlowConfirm() {
   const powerPlatformStatusCheckerEnabled = useFeature('power-platform-status-checker');
 
   const mscaLinkAccount = <InlineLink to={t('confirm.msca-link-account')} className="external-link" newTabIndicator target="_blank" />;
-  const mscaLinkCreate = <InlineLink to={t('confirm.msca-link-create')} className="external-link" newTabIndicator target="_blank" />;
+  const mscaLinkChecker = <InlineLink to={t('confirm.msca-link-checker')} className="external-link" newTabIndicator target="_blank" />;
   const dentalContactUsLink = <InlineLink to={t('confirm.dental-link')} className="external-link" newTabIndicator target="_blank" />;
   const moreInfoLink = <InlineLink to={t('confirm.more-info-link')} className="external-link" newTabIndicator target="_blank" />;
   const cdcpLink = <InlineLink to={t('apply-adult:confirm.status-checker-link')} className="external-link" newTabIndicator target="_blank" />;
@@ -227,7 +227,15 @@ export default function ApplyFlowConfirm() {
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.register-msca-title')}</h2>
         <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLinkAccount, mscaLinkCreate }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLinkAccount }} />
+        </p>
+        <p className="mt-4">{t('confirm.register-msca-info')}</p>
+        <ul className="list-disc space-y-1 pl-7">
+          <li>{t('confirm.register-msca-correspondence')}</li>
+          <li>{t('confirm.register-msca-confirm')}</li>
+        </ul>
+        <p className="mt-4">
+          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-checker" components={{ mscaLinkChecker }} />
         </p>
       </section>
 
