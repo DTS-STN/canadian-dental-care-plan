@@ -181,7 +181,7 @@ function toBenefitApplicationRequest({
         PersonContactInformation: [
           {
             Address: [toMailingAddress(personalInformation), toHomeAddress(personalInformation)],
-            EmailAddress: toEmailAddress(communicationPreferences),
+            EmailAddress: toEmailAddress({ contactEmail: personalInformation.email, communicationEmail: communicationPreferences.email }),
             TelephoneNumber: toTelephoneNumber(personalInformation),
           },
         ],
@@ -434,20 +434,20 @@ function toRelatedPersonDependent({ children }: ToRelatedPersonDependentArgs) {
 }
 
 interface ToEmailAddressArgs {
-  email?: string;
-  emailForFuture?: string;
+  contactEmail?: string;
+  communicationEmail?: string;
 }
 
-function toEmailAddress({ email, emailForFuture }: ToEmailAddressArgs) {
+function toEmailAddress({ contactEmail, communicationEmail }: ToEmailAddressArgs) {
   const emailAddress = [];
 
-  if (email && !validator.isEmpty(email)) {
+  if (contactEmail && !validator.isEmpty(contactEmail)) {
     emailAddress.push({
-      EmailAddressID: email,
+      EmailAddressID: contactEmail,
     });
-  } else if (emailForFuture && !validator.isEmpty(emailForFuture)) {
+  } else if (communicationEmail && !validator.isEmpty(communicationEmail)) {
     emailAddress.push({
-      EmailAddressID: emailForFuture,
+      EmailAddressID: communicationEmail,
     });
   }
 
