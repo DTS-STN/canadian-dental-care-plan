@@ -132,9 +132,17 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  saveApplyState({ params, session, state: { dateOfBirth: parsedDataResult.data.dateOfBirth } });
-
   const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+
+  saveApplyState({
+    params,
+    session,
+    state: {
+      dateOfBirth: parsedDataResult.data.dateOfBirth,
+      disabilityTaxCredit: ageCategory === 'adults' ? state.disabilityTaxCredit : undefined,
+      livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
+    },
+  });
 
   if (state.editMode) {
     return redirect(getPathById('$lang/_public/apply/$id/adult/review-information', params));

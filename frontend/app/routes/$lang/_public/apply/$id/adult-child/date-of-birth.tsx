@@ -144,12 +144,16 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
+  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+
   saveApplyState({
     params,
     session,
     state: {
-      dateOfBirth: parsedDataResult.data.dateOfBirth,
       allChildrenUnder18: parsedDataResult.data.allChildrenUnder18 === AllChildrenUnder18Option.Yes,
+      dateOfBirth: parsedDataResult.data.dateOfBirth,
+      disabilityTaxCredit: ageCategory === 'adults' ? state.disabilityTaxCredit : undefined,
+      livingIndependently: ageCategory === 'youth' ? state.livingIndependently : undefined,
     },
   });
 
@@ -157,10 +161,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang/_public/apply/$id/adult-child/review-adult-information', params));
   }
 
-  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
-  const allChildrenUnder18 = parsedDataResult.data.allChildrenUnder18;
-
-  if (ageCategory === 'children' && allChildrenUnder18 === 'yes') {
+  if (ageCategory === 'children' && parsedDataResult.data.allChildrenUnder18 === 'yes') {
     return redirect(getPathById('$lang/_public/apply/$id/adult-child/contact-apply-child', params));
   }
 
@@ -168,7 +169,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang/_public/apply/$id/adult-child/parent-or-guardian', params));
   }
 
-  if (ageCategory === 'youth' && allChildrenUnder18 === 'yes') {
+  if (ageCategory === 'youth' && parsedDataResult.data.allChildrenUnder18 === 'yes') {
     return redirect(getPathById('$lang/_public/apply/$id/adult-child/living-independently', params));
   }
 
@@ -180,7 +181,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang/_public/apply/$id/adult-child/disability-tax-credit', params));
   }
 
-  if (allChildrenUnder18 === 'no') {
+  if (parsedDataResult.data.allChildrenUnder18 === 'no') {
     return redirect(getPathById('$lang/_public/apply/$id/adult-child/apply-yourself', params));
   }
 
