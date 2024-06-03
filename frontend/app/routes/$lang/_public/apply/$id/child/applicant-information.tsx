@@ -141,13 +141,14 @@ export async function action({ context: { session }, params, request }: ActionFu
       .min(1, t('apply-child:applicant-information.error-message.sin-required'))
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:applicant-information.error-message.sin-valid'), fatal: true });
-          return z.NEVER;
-        }
-
-        if (state.partnerInformation && formatSin(sin) === formatSin(state.partnerInformation.socialInsuranceNumber)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:applicant-information.error-message.sin-unique'), fatal: true });
-          return z.NEVER;
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:applicant-information.error-message.sin-valid') });
+        } else if (
+          [state.partnerInformation?.socialInsuranceNumber, ...state.children.map((child) => child.information?.socialInsuranceNumber)]
+            .filter((sin) => sin !== undefined)
+            .map((sin) => formatSin(sin as string))
+            .includes(formatSin(sin))
+        ) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:children.information.error-message.sin-unique') });
         }
       }),
     firstName: z.string().trim().min(1, t('apply-child:applicant-information.error-message.first-name-required')).max(100),
