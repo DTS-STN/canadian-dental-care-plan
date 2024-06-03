@@ -47,7 +47,7 @@
   },
   "form": {
     "complete-fields": "Complete all fields.",
-    "radio-legend": "<strong>Are you checking the status for yourself or for your child?</strong>",
+    "radio-legend": "Are you checking the status for yourself or for your child?",
     "radio-text": {
       "myself": "I am checking the status for <strong>myself</strong>",
       "child": "I am checking the status for <strong>my child</strong>"
