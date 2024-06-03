@@ -408,10 +408,10 @@
     "no": "Non"
   },
   "disability-tax-credit": {
-    "page-title": "(FR) Disability tax credit",
-    "non-refundable": "(FR) The disability tax credit (DTC) is a non-refundable federal tax credit that helps people with disabilities, or their supporting family member, reduce the amount of income tax they may have to pay.",
-    "more-info": "<dtcLink>(FR) For more information on the disability tax credit (DTC)</dtcLink>",
-    "form-label": "(FR) Did you have a valid disability tax credit (DTC) with the Canada Revenue Agency for 2023?",
+    "page-title": "Vous pouvez demander le plan après avoir produit vos déclarations de revenus et reçu votre avis de cotisation.",
+    "non-refundable": "Le crédit d'impôt pour personnes handicapées (CIPH) est un crédit d'impôt non remboursable qui aide les personnes handicapées et les membres de leur famille à réduire l'impôt sur le revenu qu'ils pourraient avoir à payer.",
+    "more-info": "<dtcLink>Pour en savoir plus sur le crédit d'impôt pour personnes handicapées</dtcLink>",
+    "form-label": "Avez-vous un certificat valide pour le crédit d'impôt pour personnes handicapées (CIPH) auprès de l'Agence du revenu du Canada pour 2023?",
     "dtc-link": "https://www.canada.ca/fr/agence-revenu/services/impot/particuliers/segments/deductions-credits-impot-personnes-handicapees/credit-impot-personnes-handicapees.html",
     "radio-options": {
       "yes": "Oui",
@@ -421,7 +421,7 @@
     "back-btn": "Retour",
     "save-btn": "Enregistrer",
     "error-message": {
-      "disability-tax-credit-required": "(FR) Select whether or not you have a valid disability tax credit"
+      "disability-tax-credit-required": "Sélectionnez si vous avez un crédit d'impôt d'invalidité valide "
     }
   },
   "living-independently": {
