@@ -75,7 +75,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
+  const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
 
   const personalInformationSchema = z
     .object({
@@ -222,7 +222,6 @@ export async function action({ context: { session }, params, request }: ActionFu
   saveApplyState({ params, session, state: { personalInformation: updatedData } });
 
   // if email is defined and comm. pref. preferredMethod is EMAIL then sync email
-  const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
   if (updatedData.email && state.communicationPreferences?.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID) {
     saveApplyState({ params, session, state: { communicationPreferences: { ...state.communicationPreferences, email: updatedData.email } } });
   }
