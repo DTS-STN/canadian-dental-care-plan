@@ -206,15 +206,7 @@ export default function StatusCheckerMyself() {
               <input type="hidden" name="_csrf" value={csrfToken} />
               {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
               <div className="mb-8 space-y-6">
-                <InputField
-                  id="code"
-                  name="code"
-                  label={t('status:myself.form.application-code-label')}
-                  helpMessagePrimary={t('status:myself.form.application-code-description')}
-                  placeholder={t('status:myself.form.application-code-placeholder')}
-                  required
-                  errorMessage={errorMessages.code}
-                />
+                <InputField id="code" name="code" label={t('status:myself.form.application-code-label')} helpMessagePrimary={t('status:myself.form.application-code-description')} required errorMessage={errorMessages.code} />
                 <InputField id="sin" name="sin" label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errorMessages.sin} />
               </div>
               <Button variant="primary" id="submit" disabled={isSubmitting} data-gc-analytics-formsubmit="submit">
