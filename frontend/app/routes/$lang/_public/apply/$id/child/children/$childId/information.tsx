@@ -191,6 +191,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
+  if (state.editMode) {
+    return redirect(getPathById('$lang/_public/apply/$id/child/review-child-information', params));
+  }
+
   if (!parsedDataResult.data.isParent) {
     return redirect(getPathById('$lang/_public/apply/$id/child/children/$childId/parent-or-guardian', params));
   }
@@ -198,10 +202,6 @@ export async function action({ context: { session }, params, request }: ActionFu
   const childAgeCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
   if (childAgeCategory === 'adults' || childAgeCategory === 'seniors') {
     return redirect(getPathById('$lang/_public/apply/$id/child/children/$childId/cannot-apply-child', params));
-  }
-
-  if (state.editMode) {
-    return redirect(getPathById('$lang/_public/apply/$id/child/review-child-information', params));
   }
 
   return redirect(getPathById('$lang/_public/apply/$id/child/children/$childId/dental-insurance', params));
