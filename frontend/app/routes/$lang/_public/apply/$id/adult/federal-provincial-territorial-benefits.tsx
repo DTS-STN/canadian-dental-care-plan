@@ -281,6 +281,7 @@ export default function AccessToDentalInsuranceQuestion() {
                       id="federal-social-programs"
                       name="federalSocialProgram"
                       legend={t('apply-adult:dental-benefits.federal-benefits.social-programs.legend')}
+                      legendClassName="font-normal"
                       options={federalSocialPrograms.map((option) => ({
                         children: getNameByLanguage(i18n.language, option),
                         defaultChecked: defaultState?.federalSocialProgram === option.id,
@@ -339,6 +340,7 @@ export default function AccessToDentalInsuranceQuestion() {
                           id="provincial-territorial-social-programs"
                           name="provincialTerritorialSocialProgram"
                           legend={t('apply-adult:dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}
+                          legendClassName="font-normal"
                           errorMessage={errorMessages['input-radio-provincial-territorial-social-programs-option-0']}
                           options={provincialTerritorialSocialPrograms
                             .filter((program) => program.provinceTerritoryStateId === provinceValue)

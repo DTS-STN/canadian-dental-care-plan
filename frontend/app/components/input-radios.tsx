@@ -17,9 +17,10 @@ export interface InputRadiosProps {
   legend: ReactNode;
   name: string;
   required?: boolean;
+  legendClassName?: string;
 }
 
-const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, name, options, required }: InputRadiosProps) => {
+const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, legend, name, options, required, legendClassName }: InputRadiosProps) => {
   const inputErrorId = `input-radios-${id}-error`;
   const inputHelpMessagePrimaryId = `input-radios-${id}-help-primary`;
   const inputHelpMessageSecondaryId = `input-radios-${id}-help-secondary`;
@@ -35,7 +36,7 @@ const InputRadios = ({ errorMessage, helpMessagePrimary, helpMessagePrimaryClass
 
   return (
     <fieldset id={inputWrapperId} data-testid={inputWrapperId}>
-      <InputLegend id={inputLegendId} className="mb-2">
+      <InputLegend id={inputLegendId} className={cn('mb-2', legendClassName)}>
         {legend}
       </InputLegend>
       {errorMessage && (
