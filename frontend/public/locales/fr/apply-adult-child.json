@@ -262,10 +262,10 @@
     }
   },
   "contact-apply-child": {
-    "page-title": "(FR) Contact us to apply for your child",
-    "contact-service-canada": "(FR) You must speak to a Service Canada representative if you are under 16 and applying for your child. Please contact Service Canada by calling <noWrap>1-833-537-4342</noWrap> or visit a <serviceCanadaOfficeLink>Service Canada Office</serviceCanadaOfficeLink>.",
+    "page-title": "Communiquez avec nous pour faire une demande pour votre enfant",
+    "contact-service-canada": "Vous devez parler à un représentant de Service Canada si vous avez moins de 16 ans et présentez une demande pour votre enfant. Veuillez communiquer avec Service Canada au <noWrap>1-833-537-4342</noWrap> ou vous rendre dans un <serviceCanadaOfficeLink>bureau de Service Canada</serviceCanadaOfficeLink>.",
     "service-canada-office-link": "https://www.servicecanada.gc.ca/tbsc-fsco/sc-hme.jsp?lang=fra",
-    "parent-guardian": "(FR) A parent or legal guardian needs to apply to enrol you to the Canadian Dental Care Plan.",
+    "parent-guardian": "Un parent ou tuteur légal doit faire une demande pour vous inscrire au Régime canadien de soins dentaire.",
     "back-btn": "Retour",
     "return-btn": "Revenir à la page principale",
     "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
@@ -534,7 +534,7 @@
   },
   "living-independently": {
     "page-title": "Vivre de manière indépendante",
-    "description": "Vivre indépendamment de vos parents signifie que vous avez 16 ou 17 ans, que vous ne recevez aucune aide financière de vos parents et que votre résidence principale est différente de la leur.",
+    "description": "Vivre de manière indépendante signifie que vous avez 16 ou 17 ans, que vous ne recevez pas d'aide financière de vos parents et que votre résidence principale est différente de la leur.",
     "form-instructions": "Vivez-vous indépendamment de vos parents ?",
     "radio-options": {
       "yes": "Oui",
