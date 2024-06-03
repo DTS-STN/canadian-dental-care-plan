@@ -8,6 +8,7 @@ import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-soli
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
@@ -56,7 +57,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const maritalStatuses = await lookupService.getAllMaritalStatuses();
   const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
   const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
-  const { COMMUNICATION_METHOD_EMAIL_ID, ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
+  const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -70,14 +71,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const allCountries = await lookupService.getAllCountries();
   const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation.mailingCountry);
   const countryHome = allCountries.find((country) => country.countryId === state.personalInformation.homeCountry);
+  invariant(countryMailing, `Unexpected mailing address country: ${state.personalInformation.mailingCountry}`);
+  invariant(countryHome, `Unexpected home address country: ${state.personalInformation.homeCountry}`);
 
-  if (!countryMailing) {
-    throw new Error(`Unexpected mailing address country: ${state.personalInformation.mailingCountry}`);
-  }
-
-  if (!countryHome) {
-    throw new Error(`Unexpected home address country: ${state.personalInformation.homeCountry}`);
-  }
+  // Getting CommunicationPreference by Id
+  const communicationPreferences = await lookupService.getAllPreferredCommunicationMethods();
+  const communicationPreference = communicationPreferences.find((obj) => obj.id === state.communicationPreferences.preferredMethod);
+  invariant(communicationPreference, `Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -88,8 +88,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: state.applicantInformation.maritalStatus,
-    email: state.communicationPreferences.email,
-    communicationPreference: state.communicationPreferences,
+    contactInformationEmail: state.personalInformation.email,
+    communicationPreferenceEmail: state.communicationPreferences.email,
+    communicationPreference: getNameByLanguage(locale, communicationPreference),
   };
   const spouseInfo = state.partnerInformation
     ? {
@@ -154,7 +155,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     dentalBenefit,
     csrfToken,
     meta,
-    COMMUNICATION_METHOD_EMAIL_ID,
     siteKey: HCAPTCHA_SITE_KEY,
     hCaptchaEnabled,
   });
@@ -201,22 +201,8 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ReviewInformation() {
   const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const {
-    userInfo,
-    spouseInfo,
-    maritalStatuses,
-    preferredLanguage,
-    federalSocialPrograms,
-    provincialTerritorialSocialPrograms,
-    homeAddressInfo,
-    mailingAddressInfo,
-    dentalInsurance,
-    dentalBenefit,
-    csrfToken,
-    COMMUNICATION_METHOD_EMAIL_ID,
-    siteKey,
-    hCaptchaEnabled,
-  } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, csrfToken, siteKey, hCaptchaEnabled } =
+    useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -353,7 +339,7 @@ export default function ReviewInformation() {
                 </p>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.email')}>
-                {userInfo.email}
+                {userInfo.contactInformationEmail}
                 <p className="mt-4">
                   <InlineLink id="change-email" routeId="$lang/_public/apply/$id/adult-child/personal-information" params={params}>
                     {t('apply-adult-child:review-adult-information.email-change')}
@@ -398,16 +384,9 @@ export default function ReviewInformation() {
             <h2 className="mt-8 font-lato text-2xl font-bold">{t('apply-adult-child:review-adult-information.comm-title')}</h2>
             <dl className="mt-6 divide-y border-y">
               <DescriptionListItem term={t('apply-adult-child:review-adult-information.comm-pref-title')}>
-                {userInfo.communicationPreference.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID ? (
-                  <div className="grid grid-cols-1">
-                    <p className="mt-4">{t('apply-adult-child:review-adult-information.comm-electronic')}</p> <span>{userInfo.email}</span>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1">
-                    <p className="mt-4">{t('apply-adult-child:review-adult-information.comm-mail')}</p>
-                  </div>
-                )}
-                <p className="mt-4">
+                <p>{userInfo.communicationPreference}</p>
+                {userInfo.communicationPreferenceEmail && <p>{userInfo.communicationPreferenceEmail}</p>}
+                <p>
                   <InlineLink id="change-communication-preference" routeId="$lang/_public/apply/$id/adult-child/communication-preference" params={params}>
                     {t('apply-adult-child:review-adult-information.comm-pref-change')}
                   </InlineLink>

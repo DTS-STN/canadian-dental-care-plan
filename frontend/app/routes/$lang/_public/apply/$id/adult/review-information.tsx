@@ -8,7 +8,8 @@ import { UTCDate } from '@date-fns/utc';
 import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
@@ -73,23 +74,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const allCountries = await lookupService.getAllCountries();
   const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation.mailingCountry);
   const countryHome = allCountries.find((country) => country.countryId === state.personalInformation.homeCountry);
-
-  if (!countryMailing) {
-    throw new Error(`Unexpected mailing address country: ${state.personalInformation.mailingCountry}`);
-  }
-
-  if (!countryHome) {
-    throw new Error(`Unexpected home address country: ${state.personalInformation.homeCountry}`);
-  }
+  invariant(countryMailing, `Unexpected mailing address country: ${state.personalInformation.mailingCountry}`);
+  invariant(countryHome, `Unexpected home address country: ${state.personalInformation.homeCountry}`);
 
   // Getting CommunicationPreference by Id
   const communicationPreferences = await lookupService.getAllPreferredCommunicationMethods();
-  const communicationPreferenceDict = communicationPreferences.find((obj) => obj.id === state.communicationPreferences.preferredMethod);
-  const communicationPreference = communicationPreferenceDict && getNameByLanguage(locale, communicationPreferenceDict);
-
-  if (!communicationPreference) {
-    throw new Error(`Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
-  }
+  const communicationPreference = communicationPreferences.find((obj) => obj.id === state.communicationPreferences.preferredMethod);
+  invariant(communicationPreference, `Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -102,7 +93,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     martialStatus: state.applicantInformation.maritalStatus,
     contactInformationEmail: state.personalInformation.email,
     communicationPreferenceEmail: state.communicationPreferences.email,
-    communicationPreference: communicationPreference,
+    communicationPreference: getNameByLanguage(locale, communicationPreference),
   };
 
   const spouseInfo = state.partnerInformation
@@ -404,11 +395,7 @@ export default function ReviewInformation() {
             <dl className="divide-y border-y">
               <DescriptionListItem term={t('apply-adult:review-information.comm-pref-title')}>
                 <p>{userInfo.communicationPreference}</p>
-                {userInfo.communicationPreferenceEmail && (
-                  <p>
-                    <Trans ns={handle.i18nNamespaces} i18nKey="review-information.email-address" values={{ email: userInfo.communicationPreferenceEmail }} />
-                  </p>
-                )}
+                {userInfo.communicationPreferenceEmail && <p>{userInfo.communicationPreferenceEmail}</p>}
                 <p>
                   <InlineLink id="change-communication-preference" routeId="$lang/_public/apply/$id/adult/communication-preference" params={params}>
                     {t('apply-adult:review-information.comm-pref-change')}

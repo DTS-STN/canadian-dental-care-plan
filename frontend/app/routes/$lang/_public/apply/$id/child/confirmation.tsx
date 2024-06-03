@@ -3,6 +3,7 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
@@ -77,8 +78,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const maritalStatus = getNameByLanguage(locale, maritalStatusDict);
 
   const communicationPreferences = await lookupService.getAllPreferredCommunicationMethods();
-  const communicationPreferenceDict = communicationPreferences.find((obj) => obj.id === state.communicationPreferences?.preferredMethod);
-  const communicationPreference = getNameByLanguage(locale, communicationPreferenceDict!);
+  const communicationPreference = communicationPreferences.find((obj) => obj.id === state.communicationPreferences?.preferredMethod);
+  invariant(communicationPreference, `Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -89,8 +90,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: maritalStatus,
-    email: state.communicationPreferences.email,
-    communicationPreference: communicationPreference,
+    contactInformationEmail: state.personalInformation.email,
+    communicationPreferenceEmail: state.communicationPreferences.email,
+    communicationPreference: getNameByLanguage(locale, communicationPreference),
   };
 
   const spouseInfo = state.partnerInformation
@@ -336,7 +338,7 @@ export default function ApplyFlowConfirm() {
                   <span className="text-nowrap">{userInfo.altPhoneNumber} </span>
                 </DescriptionListItem>
                 <DescriptionListItem term={t('confirm.email')}>
-                  <span className="text-nowrap">{userInfo.email} </span>
+                  <span className="text-nowrap">{userInfo.contactInformationEmail} </span>
                 </DescriptionListItem>
                 <DescriptionListItem term={t('confirm.mailing')}>
                   <Address
@@ -367,11 +369,7 @@ export default function ApplyFlowConfirm() {
               <dl className="divide-y border-y">
                 <DescriptionListItem term={t('confirm.comm-pref')}>
                   <p>{userInfo.communicationPreference}</p>
-                  {userInfo.email && (
-                    <p>
-                      <Trans ns={handle.i18nNamespaces} i18nKey="confirm.email-address" values={{ email: userInfo.email }} />
-                    </p>
-                  )}
+                  {userInfo.communicationPreferenceEmail && <p>{userInfo.communicationPreferenceEmail}</p>}
                 </DescriptionListItem>
                 <DescriptionListItem term={t('confirm.lang-pref')}>{userInfo.preferredLanguage}</DescriptionListItem>
               </dl>

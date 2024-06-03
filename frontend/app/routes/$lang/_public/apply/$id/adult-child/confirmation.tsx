@@ -3,6 +3,7 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
@@ -57,8 +58,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     throw new Error(`Incomplete application "${state.id}" state!`);
   }
 
-  const allFederalSocialPrograms = await getLookupService().getAllFederalSocialPrograms();
-  const allProvincialTerritorialSocialPrograms = await getLookupService().getAllProvincialTerritorialSocialPrograms();
+  const lookupService = getLookupService();
+  const allFederalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
+  const allProvincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
   const selectedFederalBenefits = allFederalSocialPrograms
     .filter((obj) => obj.id === state.dentalBenefits?.federalSocialProgram)
     .map((obj) => getNameByLanguage(locale, obj))
@@ -69,25 +71,25 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     .join(', ');
 
   // Getting province by Id
-  const allRegions = await getLookupService().getAllRegions();
+  const allRegions = await lookupService.getAllRegions();
   const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
   const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
 
   // Getting Country by Id
-  const allCountries = await getLookupService().getAllCountries();
+  const allCountries = await lookupService.getAllCountries();
   const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation?.mailingCountry);
   const countryHome = allCountries.find((country) => country.countryId === state.personalInformation?.homeCountry);
 
-  const preferredLang = await getLookupService().getPreferredLanguage(state.communicationPreferences.preferredLanguage);
+  const preferredLang = await lookupService.getPreferredLanguage(state.communicationPreferences.preferredLanguage);
   const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : state.communicationPreferences.preferredLanguage;
 
-  const maritalStatuses = await getLookupService().getAllMaritalStatuses();
+  const maritalStatuses = await lookupService.getAllMaritalStatuses();
   const maritalStatusDict = maritalStatuses.find((obj) => obj.id === state.applicantInformation?.maritalStatus)!;
   const maritalStatus = getNameByLanguage(locale, maritalStatusDict);
 
-  const communicationPreferences = await getLookupService().getAllPreferredCommunicationMethods();
-  const communicationPreferenceDict = communicationPreferences.find((obj) => obj.id === state.communicationPreferences?.preferredMethod);
-  const communicationPreference = getNameByLanguage(locale, communicationPreferenceDict!);
+  const communicationPreferences = await lookupService.getAllPreferredCommunicationMethods();
+  const communicationPreference = communicationPreferences.find((obj) => obj.id === state.communicationPreferences?.preferredMethod);
+  invariant(communicationPreference, `Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,
@@ -98,8 +100,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: maritalStatus,
-    email: state.communicationPreferences.email,
-    communicationPreference: communicationPreference,
+    contactInformationEmail: state.personalInformation.email,
+    communicationPreferenceEmail: state.communicationPreferences.email,
+    communicationPreference: getNameByLanguage(locale, communicationPreference),
   };
 
   const spouseInfo = state.partnerInformation
@@ -329,7 +332,7 @@ export default function ApplyFlowConfirm() {
               <span className="text-nowrap">{userInfo.altPhoneNumber} </span>
             </DescriptionListItem>
             <DescriptionListItem term={t('confirm.email')}>
-              <span className="text-nowrap">{userInfo.email} </span>
+              <span className="text-nowrap">{userInfo.contactInformationEmail} </span>
             </DescriptionListItem>
             <DescriptionListItem term={t('confirm.mailing')}>
               <Address
@@ -360,9 +363,8 @@ export default function ApplyFlowConfirm() {
           <h3 className="font-lato text-2xl font-bold">{t('confirm.comm-prefs')}</h3>
           <dl className="divide-y border-y">
             <DescriptionListItem term={t('confirm.comm-pref')}>
-              <div className="flex flex-col">
-                <p>{userInfo.communicationPreference}</p>
-              </div>
+              <p>{userInfo.communicationPreference}</p>
+              {userInfo.communicationPreferenceEmail && <p>{userInfo.communicationPreferenceEmail}</p>}
             </DescriptionListItem>
             <DescriptionListItem term={t('confirm.lang-pref')}> {userInfo.preferredLanguage}</DescriptionListItem>
           </dl>
