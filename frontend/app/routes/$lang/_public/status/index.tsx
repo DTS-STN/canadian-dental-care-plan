@@ -205,7 +205,7 @@ export default function StatusChecker() {
             <InputRadios
               id="status-check-for"
               name="statusCheckFor"
-              legend={<Trans ns={handle.i18nNamespaces} i18nKey="status:form.radio-legend" />}
+              legend={t('status:form.radio-legend')}
               options={[
                 {
                   children: <Trans ns={handle.i18nNamespaces} i18nKey="status:form.radio-text.myself" />,

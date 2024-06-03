@@ -47,7 +47,7 @@
   },
   "form": {
     "complete-fields": "Remplir tous les champs.",
-    "radio-legend": "<strong>Vérifiez-vous le statut pour vous-même ou pour votre enfant?</strong>",
+    "radio-legend": "Vérifiez-vous le statut pour vous-même ou pour votre enfant?",
     "radio-text": {
       "myself": "Je vérifie le statut par <strong>moi-même</strong>",
       "child": "Je vérifie le statut de <strong>mon enfant</strong>"
