@@ -27,6 +27,36 @@ function createSubscriptionService() {
 
   /**
    *
+   * @param raoidcUserId
+   * @returns the user details by raoidcUserId
+   */
+  async function getUserByRaoidcUserId(raoidcUserId: string) {
+    const auditService = getAuditService();
+    const instrumentationService = getInstrumentationService();
+    auditService.audit('alert-subscription.getUserByRaodicUserId', { raoidcUserId });
+    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users?raoidcUserId=${raoidcUserId}`);
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const userSchema = z.object({
+      id: z.string(),
+      email: z.string(),
+      emailVerified: z.boolean(),
+    });
+    instrumentationService.countHttpStatus('http.client.cdcp-api.users.getUserByRaodicUserId', response.status);
+    const users = await response.json();
+
+    const userParsed = userSchema.parse(users._embedded.users[0]);
+
+    return userParsed;
+  }
+
+  /**
+   *
    * @param userId
    * @returns the subscription details for the user or null if no user is found or the user has no CDCP subscriptions.
    */
@@ -214,5 +244,5 @@ function createSubscriptionService() {
     return response;
   }
 
-  return { getSubscription, updateSubscription, validateConfirmationCode, requestNewConfirmationCode };
+  return { getUserByRaoidcUserId, getSubscription, updateSubscription, validateConfirmationCode, requestNewConfirmationCode };
 }

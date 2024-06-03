@@ -129,7 +129,7 @@ db.personalInformation.create({
 const unverifiedUserAttributes = [
   db.userAttributes.create({
     name: 'RAOIDC_USER_ID',
-    value: 'b5336580-d93d-4da9-9e19-c2a5e098bd08',
+    value: '1f9009b16b880729c91ac7f291a0bd9b',
   }),
 ];
 
@@ -150,7 +150,7 @@ db.subscription.create({
 const verifiedUserAttributes = [
   db.userAttributes.create({
     name: 'RAOIDC_USER_ID',
-    value: 'd827416b-f808-4035-9ccc-7572f3297015',
+    value: '8769695a4bcb78e132e06f96c246ea8e',
   }),
 ];
 
