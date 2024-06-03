@@ -107,9 +107,9 @@
       "title": "{{childName}}: access to other dental insurance",
       "legend": "Does {{childName}} have access to dental insurance or coverage:",
       "list": {
-        "employment": "Through a parent or guardian's employment benefits including health and wellness accounts",
-        "pension": "Through a parent or guardian's pension benefits",
-        "purchased": "Purchased by a parent or guardian from an insurance or benefits company",
+        "employment": "Through a parent or legal guardian's employment benefits including health and wellness accounts",
+        "pension": "Through a parent or legal guardian's pension benefits",
+        "purchased": "Purchased by a parent or legal guardian from an insurance or benefits company",
         "professional": "Through a professional or student organization"
       },
       "option-yes": "<strong>Yes</strong>, this child has access to dental insurance or coverage",
@@ -123,15 +123,15 @@
       "detail": {
         "additional-info": {
           "title": "Additional information",
-          "eligible": "The child is still considered to have access to dental insurance or coverage if a parent or guardian chooses to opt out of benefits provided through:",
+          "eligible": "A child is still considered to have access to dental insurance or coverage if a parent or legal guardian chooses to opt out of benefits provided through:",
           "eligible-list": {
             "employer": "an employer;",
             "pension": "pension (see exception); or",
             "professional": "professional or student organization"
           },
           "not-eligible": "As such, the child is not eligible for Canadian Dental Care Plan.",
-          "not-eligible-purchased": "If a parent or guardian purchased the current dental insurance policy privately, the child is not eligible for the Canadian Dental Care Plan while that coverage is in effect.",
-          "excepton": "Exception\u00a0: Your child may still be eligible if a parent or guardian retired and:",
+          "not-eligible-purchased": "If a parent or legal guardian purchased the current dental insurance policy privately, the child is not eligible for the Canadian Dental Care Plan while that coverage is in effect.",
+          "excepton": "Exception: A child may still be eligible if a parent or legal guardian retired and:",
           "exception-list": {
             "opted-out": "Opted out of pension benefits before December 11, 2023, and",
             "opt-back": "Can't opt back in under the pension rules"
@@ -375,7 +375,7 @@
     "first-name": "First name",
     "single-legal-name": "If your spouse or common-law partner has a single legal name",
     "name-instructions": "If using a single legal name, please enter that name in BOTH the first name and last name fields.",
-    "confirm-checkbox": "I confirm that my spouse or common-law partner is aware and has consented to the sharing of their personal information.",
+    "confirm-checkbox": "I confirm that my spouse or common-law partner is aware and has agreed to the sharing of their personal information.",
     "back-btn": "Back",
     "continue-btn": "Continue",
     "cancel-btn": "Cancel",
