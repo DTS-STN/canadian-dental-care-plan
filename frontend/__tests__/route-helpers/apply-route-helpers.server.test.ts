@@ -30,12 +30,12 @@ describe('apply-route-helpers.server', () => {
       expect(result).toEqual('youth');
     });
 
-    it.each([0.1, 1, 15, 15.9])('getAgeCategoryFromAge(%s) should return "children" for age greater than 0 and less than 16', (age) => {
+    it.each([0, 0.1, 1, 15, 15.9])('getAgeCategoryFromAge(%s) should return "children" for age greater than or equal to 0 and less than 16', (age) => {
       const result = getAgeCategoryFromAge(age);
       expect(result).toEqual('children');
     });
 
-    it.each([-1, 0])('getAgeCategoryFromAge(%s) should throw an error for age less than or equal to 0', (age) => {
+    it.each([-1])('getAgeCategoryFromAge(%s) should throw an error for age less than 0', (age) => {
       expect(() => {
         getAgeCategoryFromAge(age);
       }).toThrowError(`Invalid age [${age}]`);
