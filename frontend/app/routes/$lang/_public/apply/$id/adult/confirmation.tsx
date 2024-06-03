@@ -230,7 +230,7 @@ export default function ApplyFlowConfirm() {
           <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLinkAccount }} />
         </p>
         <p className="mt-4">{t('confirm.register-msca-info')}</p>
-        <ul className="ml-6 list-disc">
+        <ul className="list-disc space-y-1 pl-7">
           <li>{t('confirm.register-msca-correspondence')}</li>
           <li>{t('confirm.register-msca-confirm')}</li>
         </ul>
