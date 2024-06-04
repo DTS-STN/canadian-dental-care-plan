@@ -80,7 +80,7 @@ export default function ApplyFlowParentOrGuardian() {
   const noWrap = <span className="whitespace-nowrap" />;
 
   return (
-    <>
+    <div className="max-w-prose">
       <div className="mb-8 space-y-4">
         <p>{t('apply-adult-child:parent-or-guardian.unable-to-apply-child')}</p>
         <p>{t('apply-adult-child:parent-or-guardian.unable-to-apply')}</p>
@@ -108,6 +108,6 @@ export default function ApplyFlowParentOrGuardian() {
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>
       </fetcher.Form>
-    </>
+    </div>
   );
 }
