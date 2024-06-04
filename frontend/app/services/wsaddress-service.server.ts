@@ -36,9 +36,9 @@ const validateAddressResponseSchema = z.object({
   }),
 });
 
-export const getWSAddressService = moize.promise(createWSAddressService, { onCacheAdd: () => log.info('Creating new WSAddress service') });
+export const getWSAddressService = moize(createWSAddressService, { onCacheAdd: () => log.info('Creating new WSAddress service') });
 
-async function createWSAddressService() {
+function createWSAddressService() {
   const { INTEROP_API_BASE_URI } = getEnv();
 
   async function correctAddress({ address, city, province, postalCode, country }: { address: string; city: string; province?: string; postalCode?: string; country: string }) {

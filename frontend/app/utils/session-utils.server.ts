@@ -22,6 +22,7 @@ interface FileSessionStorageOptions {
 export function createFileSessionStorage({ cookie, dir }: FileSessionStorageOptions) {
   return createSessionStorage({
     cookie,
+    // eslint-disable-next-line @typescript-eslint/require-await
     async createData(data, expires) {
       const content = JSON.stringify({ data, expires });
       // eslint-disable-next-line no-constant-condition, @typescript-eslint/no-unnecessary-condition
@@ -37,6 +38,7 @@ export function createFileSessionStorage({ cookie, dir }: FileSessionStorageOpti
         }
       }
     },
+    // eslint-disable-next-line @typescript-eslint/require-await
     async readData(id) {
       try {
         const file = getFile(dir, id);
@@ -49,12 +51,14 @@ export function createFileSessionStorage({ cookie, dir }: FileSessionStorageOpti
         return null;
       }
     },
+    // eslint-disable-next-line @typescript-eslint/require-await
     async updateData(id, data, expires) {
       const content = JSON.stringify({ data, expires });
       const file = getFile(dir, id);
       fs.mkdirSync(path.dirname(file), { recursive: true });
       fs.writeFileSync(file, content, 'utf-8');
     },
+    // eslint-disable-next-line @typescript-eslint/require-await
     async deleteData(id) {
       try {
         fs.unlinkSync(getFile(dir, id));

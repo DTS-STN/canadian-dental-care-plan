@@ -52,7 +52,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   await raoidcService.handleSessionValidation(request, session);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const preferredLanguages = await lookupService.getAllPreferredLanguages();
+  const preferredLanguages = lookupService.getAllPreferredLanguages();
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:subscribe.page-title') }) };

@@ -69,8 +69,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     throw new Response(null, { status: 404 });
   }
 
-  const countryList = await lookupService.getAllCountries();
-  const regionList = await lookupService.getAllRegions();
+  const countryList = lookupService.getAllCountries();
+  const regionList = lookupService.getAllRegions();
 
   const csrfToken = String(session.get('csrfToken'));
 

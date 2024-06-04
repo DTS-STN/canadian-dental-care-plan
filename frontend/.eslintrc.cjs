@@ -63,6 +63,11 @@ module.exports = {
         '@typescript-eslint/no-unused-vars': ['error', { args: 'none' }],
         '@typescript-eslint/prefer-nullish-coalescing': 'error',
         '@typescript-eslint/prefer-optional-chain': 'error',
+        '@typescript-eslint/no-floating-promises': 'error',
+        // Note: you must disable the base rule as it can report incorrect errors
+        'require-await': 'off',
+        '@typescript-eslint/require-await': 'error',
+        '@typescript-eslint/await-thenable': 'error',
         'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
       },
     },

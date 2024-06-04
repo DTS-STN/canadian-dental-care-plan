@@ -62,8 +62,8 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
       session.set('userInfoToken', { sin: '999999999' });
       session.set('personalInformation', { preferredLanguageId: 'fr' });
 
-      vi.mocked(getLookupService().getPreferredLanguage).mockResolvedValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' });
-      vi.mocked(getLookupService().getAllPreferredLanguages).mockResolvedValue([
+      vi.mocked(getLookupService().getPreferredLanguage).mockReturnValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' });
+      vi.mocked(getLookupService().getAllPreferredLanguages).mockReturnValue([
         {
           id: 'en',
           nameEn: 'English',

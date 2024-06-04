@@ -69,7 +69,7 @@ export default function ApplyFlowApplicationDelegate() {
   const preparingToApply = <InlineLink to={t('apply:application-delegate.preparing-to-apply-href')} className="external-link" newTabIndicator target="_blank" />;
   const span = <span className="whitespace-nowrap" />;
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     fetcher.submit(event.currentTarget, { method: 'POST' });
     sessionStorage.removeItem('flow.state');

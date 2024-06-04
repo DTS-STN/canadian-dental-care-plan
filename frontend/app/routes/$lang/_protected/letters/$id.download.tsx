@@ -34,7 +34,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     instrumentationService.countHttpStatus('letters.download', 404);
     throw new Response(null, { status: 404 });
   }
-  const letterType = (await lettersService.getAllLetterTypes()).find(({ id }) => id === viewLetter.name);
+  const letterType = lettersService.getAllLetterTypes().find(({ id }) => id === viewLetter.name);
   if (!letterType) {
     instrumentationService.countHttpStatus('letters.download', 404);
     throw new Response(null, { status: 404 });

@@ -46,8 +46,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const lookupService = getLookupService();
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const preferredLanguages = await lookupService.getAllPreferredLanguages();
-  const preferredCommunicationMethods = await lookupService.getAllPreferredCommunicationMethods();
+  const preferredLanguages = lookupService.getAllPreferredLanguages();
+  const preferredCommunicationMethods = lookupService.getAllPreferredCommunicationMethods();
 
   const communicationMethodEmail = preferredCommunicationMethods.find((method) => method.id === COMMUNICATION_METHOD_EMAIL_ID);
   if (!communicationMethodEmail) {

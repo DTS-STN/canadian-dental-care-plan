@@ -11,16 +11,19 @@ export type debugPayloadtProps = {
 };
 export function DebugPayload({ data, enableCopy }: debugPayloadtProps) {
   const [hasCopied, setHasCopied] = useState(false);
+  const json = JSON.stringify(data, null, 2);
+
   useEffect(() => {
     setTimeout(() => {
       setHasCopied(false);
     }, 2000);
   }, [hasCopied]);
-  const json = JSON.stringify(data, null, 2);
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(json);
+
+  const copyToClipboard = async () => {
+    await navigator.clipboard.writeText(json);
     setHasCopied(true);
   };
+
   return (
     <>
       <pre className="rounded-log block max-h-96 overflow-auto bg-gray-100 p-4 shadow-inner">{json}</pre>

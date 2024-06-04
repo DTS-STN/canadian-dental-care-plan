@@ -207,7 +207,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         dateOfBirth: parsedChildInfoResult?.data.dateOfBirth ?? '',
       });
 
-  const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
+  const clientStatusList = lookupService.getAllClientFriendlyStatuses();
   const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
 
   function getAlertType() {

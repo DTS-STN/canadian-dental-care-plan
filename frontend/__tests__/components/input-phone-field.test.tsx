@@ -17,7 +17,7 @@ describe('InputPhoneField', () => {
     vi.resetModules();
   });
 
-  it('should render', async () => {
+  it('should render', () => {
     const phoneNumber = parsePhoneNumber('+15146667777').number;
     render(<InputPhoneField id="test-id" name="test" label="label test" defaultValue={phoneNumber} />);
 
@@ -31,7 +31,7 @@ describe('InputPhoneField', () => {
     expect(actual).not.toHaveAccessibleDescription();
   });
 
-  it('should render with help message', async () => {
+  it('should render with help message', () => {
     const phoneNumber = parsePhoneNumber('+15146667777').number;
     render(<InputPhoneField id="test-id" name="test" label="label test" defaultValue={phoneNumber} helpMessageSecondary="help message" />);
 
@@ -45,7 +45,7 @@ describe('InputPhoneField', () => {
     expect(actual).not.toBeRequired();
   });
 
-  it('should render with required', async () => {
+  it('should render with required', () => {
     const phoneNumber = parsePhoneNumber('+15146667777').number;
     render(<InputPhoneField id="test-id" name="test" label="label test" defaultValue={phoneNumber} required />);
 
@@ -58,7 +58,7 @@ describe('InputPhoneField', () => {
     expect(actual).not.toHaveAccessibleDescription();
   });
 
-  it('should render with error message', async () => {
+  it('should render with error message', () => {
     const phoneNumber = parsePhoneNumber('+15146667777').number;
     render(<InputPhoneField id="test-id" name="test" label="label test" defaultValue={phoneNumber} errorMessage="error message" />);
 

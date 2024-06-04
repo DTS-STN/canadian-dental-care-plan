@@ -25,6 +25,7 @@ const log = getLogger('express.server');
 
 installSourceMapSupport();
 installGlobals();
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 runServer();
 
 function installSourceMapSupport() {
@@ -88,7 +89,7 @@ async function runServer() {
 
   // prettier-ignore
   const remixRequestHandler = process.env.NODE_ENV === 'development'
-    ? await createDevRequestHandler(build, buildPath, versionPath)
+    ? createDevRequestHandler(build, buildPath, versionPath)
     : await createRequestHandler(build, process.env.NODE_ENV);
 
   const app = express();
@@ -113,6 +114,7 @@ async function runServer() {
   const server = app.listen(port, () => {
     log.info(`Server listening at http://localhost:${port}/`);
     if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       broadcastDevReady(build);
     }
   });
@@ -122,11 +124,12 @@ async function runServer() {
   }
 }
 
-async function createDevRequestHandler(initialBuild: ServerBuild, buildPath: string, versionPath: string) {
+function createDevRequestHandler(initialBuild: ServerBuild, buildPath: string, versionPath: string) {
   let build = initialBuild;
 
   const handleServerUpdate = async () => {
     build = await reimportServer(buildPath);
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     broadcastDevReady(build);
   };
 

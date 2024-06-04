@@ -103,7 +103,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const lookupService = getLookupService();
   const { sin, code } = parsedDataResult.data;
   const statusId = await applicationStatusService.getStatusIdWithSin({ sin, applicationCode: code });
-  const clientStatusList = await lookupService.getAllClientFriendlyStatuses();
+  const clientStatusList = lookupService.getAllClientFriendlyStatuses();
   const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
 
   function getAlertType() {

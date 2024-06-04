@@ -44,7 +44,7 @@ describe('wsaddress-service.server tests', () => {
         }),
       );
 
-      const wsAddressService = await getWSAddressService();
+      const wsAddressService = getWSAddressService();
       const result = await wsAddressService.correctAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' });
       expect(result).toStrictEqual({
         status: 'Corrected',
@@ -59,7 +59,7 @@ describe('wsaddress-service.server tests', () => {
     it('should throw error if response is not ok', async () => {
       vi.mocked(fetch).mockResolvedValue(new HttpResponse(null, { status: 500 }));
 
-      const wsAddressService = await getWSAddressService();
+      const wsAddressService = getWSAddressService();
       await expect(() => wsAddressService.correctAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' })).rejects.toThrowError();
     });
   });
@@ -84,7 +84,7 @@ describe('wsaddress-service.server tests', () => {
         }),
       );
 
-      const wsAddressService = await getWSAddressService();
+      const wsAddressService = getWSAddressService();
       const result = await wsAddressService.parseAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' });
       expect(result).toStrictEqual({
         apartmentUnitNumber: '100',
@@ -99,7 +99,7 @@ describe('wsaddress-service.server tests', () => {
     it('should throw error if response is not ok', async () => {
       vi.mocked(fetch).mockResolvedValue(new HttpResponse(null, { status: 500 }));
 
-      const wsAddressService = await getWSAddressService();
+      const wsAddressService = getWSAddressService();
       await expect(() => wsAddressService.parseAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' })).rejects.toThrowError();
     });
   });
@@ -121,7 +121,7 @@ describe('wsaddress-service.server tests', () => {
         }),
       );
 
-      const wsAddressService = await getWSAddressService();
+      const wsAddressService = getWSAddressService();
       const result = await wsAddressService.validateAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' });
       expect(result).toBe(true);
     });
@@ -129,7 +129,7 @@ describe('wsaddress-service.server tests', () => {
     it('should throw error if response is not ok', async () => {
       vi.mocked(fetch).mockResolvedValue(new HttpResponse(null, { status: 500 }));
 
-      const wsAddressService = await getWSAddressService();
+      const wsAddressService = getWSAddressService();
       await expect(() => wsAddressService.validateAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' })).rejects.toThrowError();
     });
   });

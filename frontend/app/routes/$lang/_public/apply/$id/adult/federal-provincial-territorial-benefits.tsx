@@ -56,9 +56,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
-  const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
-  const allRegions = await lookupService.getAllRegions();
+  const federalSocialPrograms = lookupService.getAllFederalSocialPrograms();
+  const provincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
+  const allRegions = lookupService.getAllRegions();
   const regions = allRegions.filter((region) => region.countryId === CANADA_COUNTRY_ID);
 
   const csrfToken = String(session.get('csrfToken'));

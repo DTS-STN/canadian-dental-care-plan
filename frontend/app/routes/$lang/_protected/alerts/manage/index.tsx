@@ -53,7 +53,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   await raoidcService.handleSessionValidation(request, session);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const preferredLanguages = await lookupService.getAllPreferredLanguages();
+  const preferredLanguages = lookupService.getAllPreferredLanguages();
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);

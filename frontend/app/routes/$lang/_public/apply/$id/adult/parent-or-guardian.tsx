@@ -81,7 +81,7 @@ export default function ApplyFlowParentOrGuardian() {
     return '$lang/_public/apply/$id/adult/date-of-birth';
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     fetcher.submit(event.currentTarget, { method: 'POST' });
     sessionStorage.removeItem('flow.state');

@@ -71,7 +71,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     return redirect(getPathById('$lang/_protected/alerts/index', params));
   }
 
-  const preferredLanguages = await lookupService.getAllPreferredLanguages();
+  const preferredLanguages = lookupService.getAllPreferredLanguages();
   const preferredLanguageDict = preferredLanguages.find((obj) => obj.id === alertSubscription.preferredLanguageId);
   const preferredLanguage = preferredLanguageDict && getNameByLanguage(locale, preferredLanguageDict);
 

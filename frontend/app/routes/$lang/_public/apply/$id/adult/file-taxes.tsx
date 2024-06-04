@@ -67,7 +67,7 @@ export default function ApplyFlowFileYourTaxes() {
 
   const taxInfo = <InlineLink to={t('apply-adult:eligibility.file-your-taxes.tax-info-href')} className="external-link" newTabIndicator target="_blank" />;
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     fetcher.submit(event.currentTarget, { method: 'POST' });
     sessionStorage.removeItem('flow.state');

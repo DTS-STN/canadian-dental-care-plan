@@ -13,6 +13,7 @@ export const handle = {
   transformAdobeAnalyticsUrl,
 } as const satisfies RouteHandleData;
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const lang = getLocale(request);
   return { lang };

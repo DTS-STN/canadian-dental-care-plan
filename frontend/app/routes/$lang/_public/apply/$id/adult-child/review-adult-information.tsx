@@ -54,28 +54,28 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   saveApplyState({ params, session, state: { editMode: true } });
 
   const lookupService = getLookupService();
-  const maritalStatuses = await lookupService.getAllMaritalStatuses();
-  const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
-  const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
+  const maritalStatuses = lookupService.getAllMaritalStatuses();
+  const provincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
+  const federalSocialPrograms = lookupService.getAllFederalSocialPrograms();
   const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
 
   // Getting province by Id
-  const allRegions = await lookupService.getAllRegions();
+  const allRegions = lookupService.getAllRegions();
   const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation.mailingProvince);
   const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation.homeProvince);
 
   // Getting Country by Id
-  const allCountries = await lookupService.getAllCountries();
+  const allCountries = lookupService.getAllCountries();
   const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation.mailingCountry);
   const countryHome = allCountries.find((country) => country.countryId === state.personalInformation.homeCountry);
   invariant(countryMailing, `Unexpected mailing address country: ${state.personalInformation.mailingCountry}`);
   invariant(countryHome, `Unexpected home address country: ${state.personalInformation.homeCountry}`);
 
   // Getting CommunicationPreference by Id
-  const communicationPreferences = await lookupService.getAllPreferredCommunicationMethods();
+  const communicationPreferences = lookupService.getAllPreferredCommunicationMethods();
   const communicationPreference = communicationPreferences.find((obj) => obj.id === state.communicationPreferences.preferredMethod);
   invariant(communicationPreference, `Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
 
@@ -102,7 +102,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
       }
     : undefined;
 
-  const preferredLanguage = await lookupService.getPreferredLanguage(userInfo.preferredLanguage);
+  const preferredLanguage = lookupService.getPreferredLanguage(userInfo.preferredLanguage);
 
   const mailingAddressInfo = {
     address: state.personalInformation.mailingAddress,
