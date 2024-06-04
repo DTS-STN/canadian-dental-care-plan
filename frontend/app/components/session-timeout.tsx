@@ -40,9 +40,9 @@ const SessionTimeout = ({ promptBeforeIdle, timeout, navigateTo }: SessionTimeou
   }, [reset]);
 
   const handleOnDialogOpenChange = useCallback(
-    (open: boolean) => {
+    async (open: boolean) => {
       if (!open) {
-        handleOnIdleContinueSession();
+        await handleOnIdleContinueSession();
       }
     },
     [handleOnIdleContinueSession],

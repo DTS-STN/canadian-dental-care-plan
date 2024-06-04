@@ -63,6 +63,7 @@ module.exports = {
         '@typescript-eslint/no-unused-vars': ['error', { args: 'none' }],
         '@typescript-eslint/prefer-nullish-coalescing': 'error',
         '@typescript-eslint/prefer-optional-chain': 'error',
+        '@typescript-eslint/no-floating-promises': 'error',
         'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
       },
     },

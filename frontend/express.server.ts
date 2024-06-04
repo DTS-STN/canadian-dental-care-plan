@@ -25,6 +25,7 @@ const log = getLogger('express.server');
 
 installSourceMapSupport();
 installGlobals();
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 runServer();
 
 function installSourceMapSupport() {
@@ -113,6 +114,7 @@ async function runServer() {
   const server = app.listen(port, () => {
     log.info(`Server listening at http://localhost:${port}/`);
     if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       broadcastDevReady(build);
     }
   });
@@ -127,6 +129,7 @@ async function createDevRequestHandler(initialBuild: ServerBuild, buildPath: str
 
   const handleServerUpdate = async () => {
     build = await reimportServer(buildPath);
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     broadcastDevReady(build);
   };
 
