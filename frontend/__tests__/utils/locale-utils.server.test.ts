@@ -19,12 +19,12 @@ describe('locale-utils.server', () => {
   });
 
   describe('getLocale()', () => {
-    it('should return the locale from the URL if it exists', async () => {
+    it('should return the locale from the URL if it exists', () => {
       expect(getLocale(new Request('http://localhost:3000/en/home'))).toEqual('en');
       expect(getLocale(new Request('http://localhost:3000/fr/home'))).toEqual('fr');
     });
 
-    it('should return the default locale if there is no locale in the URL', async () => {
+    it('should return the default locale if there is no locale in the URL', () => {
       expect(getLocale(new Request('http://localhost:3000/'))).toEqual('en');
     });
   });

@@ -44,7 +44,7 @@ describe('wsaddress-service.server tests', () => {
         }),
       );
 
-      const wsAddressService = await getWSAddressService();
+      const wsAddressService = getWSAddressService();
       const result = await wsAddressService.correctAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' });
       expect(result).toStrictEqual({
         status: 'Corrected',

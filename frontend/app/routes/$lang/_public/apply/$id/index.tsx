@@ -3,6 +3,7 @@ import { LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getPathById } from '~/utils/route-utils';
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   loadApplyState({ params, session });
   saveApplyState({ params, session, state: {} });

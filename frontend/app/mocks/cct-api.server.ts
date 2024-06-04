@@ -15,7 +15,7 @@ export function getCCTApiMockHandlers() {
     //
     // Handler for GET requests to retrieve pdf
     //
-    http.get('https://api.example.com/dental-care/client-letters/cct/v1/GetPdfByLetterId', async ({ request }) => {
+    http.get('https://api.example.com/dental-care/client-letters/cct/v1/GetPdfByLetterId', ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
 
       const url = new URL(request.url);

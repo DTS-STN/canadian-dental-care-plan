@@ -39,6 +39,7 @@ if (ENABLED_MOCKS.length > 0) {
  *
  * @see https://remix.run/docs/en/main/file-conventions/entry.server#handledatarequest
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function handleDataRequest(response: Response, { request }: LoaderFunctionArgs | ActionFunctionArgs) {
   log.debug('Touching session to extend its lifetime');
   instrumentationService.createCounter('http.server.requests').add(1);

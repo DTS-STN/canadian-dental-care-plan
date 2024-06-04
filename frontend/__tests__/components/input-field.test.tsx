@@ -16,7 +16,7 @@ describe('InputField', () => {
     vi.resetModules();
   });
 
-  it('should render', async () => {
+  it('should render', () => {
     render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" />);
 
     const actual: HTMLInputElement = screen.getByTestId('input-field');
@@ -29,7 +29,7 @@ describe('InputField', () => {
     expect(actual).not.toHaveAccessibleDescription();
   });
 
-  it('should render with help message', async () => {
+  it('should render with help message', () => {
     render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" helpMessageSecondary="help message" />);
 
     const actual = screen.getByTestId('input-field');
@@ -42,7 +42,7 @@ describe('InputField', () => {
     expect(actual).not.toBeRequired();
   });
 
-  it('should render with required', async () => {
+  it('should render with required', () => {
     render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" required />);
 
     const actual = screen.getByTestId('input-field');
@@ -54,7 +54,7 @@ describe('InputField', () => {
     expect(actual).not.toHaveAccessibleDescription();
   });
 
-  it('should render with error message', async () => {
+  it('should render with error message', () => {
     render(<InputField id="test-id" name="test" label="label test" defaultValue="default value" errorMessage="error message" />);
 
     const actual = screen.getByTestId('input-field');

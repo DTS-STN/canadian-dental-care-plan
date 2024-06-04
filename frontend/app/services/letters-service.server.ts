@@ -17,7 +17,7 @@ export const getLettersService = moize(createLettersService, { onCacheAdd: () =>
 
 function createLettersService() {
   // prettier-ignore
-  const { 
+  const {
     GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS,
     ENGLISH_LANGUAGE_CODE,
     FRENCH_LANGUAGE_CODE,
@@ -31,7 +31,7 @@ function createLettersService() {
   /**
    * @returns returns all the letter types
    */
-  async function getAllLetterTypes() {
+  function getAllLetterTypes() {
     log.debug('Fetching letter types');
 
     const letterTypes = letterTypesJson.value[0].OptionSet.Options.map((option) => {
@@ -147,7 +147,7 @@ function createLettersService() {
   }
 
   return {
-    getAllLetterTypes: moize(getAllLetterTypes, { isPromise: true, maxAge: 1000 * GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new getAllLetterTypes memo') }),
+    getAllLetterTypes: moize(getAllLetterTypes, { maxAge: 1000 * GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new getAllLetterTypes memo') }),
     getLetters,
     getPdf,
   };

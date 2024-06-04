@@ -11,7 +11,7 @@ describe('PageFooter', () => {
     vi.clearAllMocks();
   });
 
-  it('renders without crashing', async () => {
+  it('renders without crashing', () => {
     const RemixStub = createRemixStub([
       {
         Component: () => <PageFooter />,

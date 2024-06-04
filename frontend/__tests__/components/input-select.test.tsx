@@ -11,7 +11,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('InputSelect', () => {
-  it('should render', async () => {
+  it('should render', () => {
     render(
       <InputSelect
         id="some-id"
@@ -35,7 +35,7 @@ describe('InputSelect', () => {
     expect(actual).not.toHaveAccessibleDescription();
   });
 
-  it('should render with help message', async () => {
+  it('should render with help message', () => {
     render(
       <InputSelect
         id="some-id"
@@ -60,7 +60,7 @@ describe('InputSelect', () => {
     expect(actual).not.toBeRequired();
   });
 
-  it('should render with required', async () => {
+  it('should render with required', () => {
     render(
       <InputSelect
         id="some-id"
@@ -84,7 +84,7 @@ describe('InputSelect', () => {
     expect(actual).not.toHaveAccessibleDescription();
   });
 
-  it('should render with error message', async () => {
+  it('should render with error message', () => {
     render(
       <InputSelect
         id="some-id"

@@ -124,7 +124,7 @@ async function runServer() {
   }
 }
 
-async function createDevRequestHandler(initialBuild: ServerBuild, buildPath: string, versionPath: string) {
+function createDevRequestHandler(initialBuild: ServerBuild, buildPath: string, versionPath: string) {
   let build = initialBuild;
 
   const handleServerUpdate = async () => {

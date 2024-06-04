@@ -63,9 +63,9 @@ describe('letters-service.server tests', () => {
   });
 
   describe('getAllLetterTypes()', () => {
-    it('should return all the letter types', async () => {
+    it('should return all the letter types', () => {
       const lettersService = getLettersService();
-      const letterTypes = await lettersService.getAllLetterTypes();
+      const letterTypes = lettersService.getAllLetterTypes();
       expect(letterTypes.length).toBe(6);
     });
   });

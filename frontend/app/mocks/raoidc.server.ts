@@ -20,7 +20,7 @@ export function getRaoidcMockHandlers() {
     //
     // OIDC `/.well-known/openid-configuration` endpoint mock
     //
-    http.get(`${AUTH_RAOIDC_BASE_URL}/.well-known/openid-configuration`, async ({ request }) => {
+    http.get(`${AUTH_RAOIDC_BASE_URL}/.well-known/openid-configuration`, ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       return HttpResponse.json(getOpenidConfiguration(AUTH_RAOIDC_BASE_URL));
     }),
@@ -53,7 +53,7 @@ export function getRaoidcMockHandlers() {
     // RAOIDC `/validatesession` endpoint mock
     // (note: this is not a standard OIDC endpoint)
     //
-    http.get(`${AUTH_RAOIDC_BASE_URL}/validatesession`, async ({ request }) => {
+    http.get(`${AUTH_RAOIDC_BASE_URL}/validatesession`, ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       return HttpResponse.json(getSessionStatus());
     }),

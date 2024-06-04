@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 export const originEnumSchema = z.enum(['msca', 'msca-d']);
 
-export async function getUserOrigin(request: Request, session: Session) {
+export function getUserOrigin(request: Request, session: Session) {
   // try to get it from search params
   const { searchParams } = new URL(request.url);
   const originParam = searchParams.get('origin');

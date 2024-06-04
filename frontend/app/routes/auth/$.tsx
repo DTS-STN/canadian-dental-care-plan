@@ -57,7 +57,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 /**
  * Handler for /auth/login requests
  */
-async function handleLoginRequest({ request }: LoaderFunctionArgs) {
+function handleLoginRequest({ request }: LoaderFunctionArgs) {
   log.debug('Handling login request');
   getInstrumentationService().createCounter('auth.login.requests').add(1);
 
