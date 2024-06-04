@@ -23,9 +23,7 @@ import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionModel;
 import jakarta.annotation.Nullable;
 
 @Mapper
-public interface SubscriptionModelMapper {
-
-	final EmbeddedWrappers embeddedWrappers = new EmbeddedWrappers(false);
+public interface SubscriptionModelMapper extends AbstractModelMapper {
 
 	@Nullable
 	default CollectionModel<SubscriptionModel> toModel(String userId, @Nullable Iterable<Subscription> subscriptions) {
@@ -36,16 +34,6 @@ public interface SubscriptionModelMapper {
 				.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionsByUserId(userId)).withSelfRel());
 
 		return wrapCollection(collection, SubscriptionModel.class);
-	}
-
-	@SuppressWarnings({ "unchecked" })
-	default <C> CollectionModel<C> wrapCollection(CollectionModel<C> collectionModel, Class<C> type) {
-		Assert.notNull(collectionModel, "collectionModel is required; it must not be null");
-		Assert.notNull(type, "type is requred; it must not be null");
-		return collectionModel.getContent().isEmpty()
-				? (CollectionModel<C>) CollectionModel.of(List.of(embeddedWrappers.emptyCollectionOf(type)),
-						collectionModel.getLinks())
-				: collectionModel;
 	}
 
 	@Nullable
