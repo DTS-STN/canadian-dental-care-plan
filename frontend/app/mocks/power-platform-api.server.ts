@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { toPersonalInformation } from '~/mappers/personal-information-service-mappers.server';
 import { db } from '~/mocks/db';
 import { BenefitApplicationResponse, benefitApplicationRequestSchema } from '~/schemas/benefit-application-service-schemas.server';
-import { PersonalInfo, personalInformationApiSchema } from '~/schemas/personal-informaton-service-schemas.server';
+import { PersonalInformation, updateApplicantRequestSchema } from '~/schemas/personal-informaton-service-schemas.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('power-platform-api.server');
@@ -27,7 +27,7 @@ export function getPowerPlatformApiMockHandlers() {
     //
     // Retrieve personal details information (using POST instead of GET due the sin params logging with GET)
     //
-    http.post('https://api.example.com/dental-care/applicant-information/dts/v1/applicant/', async ({ request }) => {
+    http.post('https://api.example.com/dental-care/applicant-information/dts/v1/applicant', async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       const subscriptionKey = request.headers.get('Ocp-Apim-Subscription-Key');
       if (!subscriptionKey) {
@@ -219,7 +219,7 @@ export function getPowerPlatformApiMockHandlers() {
       }
 
       const requestBody = await request.json();
-      const parsedPersonalInformationApiRequest = await personalInformationApiSchema.safeParseAsync(requestBody);
+      const parsedPersonalInformationApiRequest = await updateApplicantRequestSchema.safeParseAsync(requestBody);
       if (!parsedPersonalInformationApiRequest.success) {
         log.debug('Invalid request body [%j]', requestBody);
         return new HttpResponse('Invalid request body!', { status: 400 });
@@ -247,7 +247,7 @@ function getPersonalInformation(personalSinId: string) {
       });
 }
 
-function toPersonalInformationDB(personalInformation: PersonalInfo) {
+function toPersonalInformationDB(personalInformation: PersonalInformation) {
   return {
     mailingAddressStreet: personalInformation.mailingAddress?.streetName,
     mailingAddressSecondaryUnitText: personalInformation.mailingAddress?.secondAddressLine,

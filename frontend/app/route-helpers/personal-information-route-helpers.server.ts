@@ -1,7 +1,7 @@
 import { Session, redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
 
-import { PersonalInfo } from '~/schemas/personal-informaton-service-schemas.server';
+import { PersonalInformation } from '~/schemas/personal-informaton-service-schemas.server';
 import { getPersonalInformationService } from '~/services/personal-information-service.server';
 import { getLogger } from '~/utils/logging.server';
 import { UserinfoToken } from '~/utils/raoidc-utils.server';
@@ -26,7 +26,7 @@ async function getPersonalInformation(userInfoToken: UserinfoToken, params: Para
     throw new Response(null, { status: 401 });
   }
 
-  const personalInformationFromSession: PersonalInfo | undefined = session.get('personalInformation');
+  const personalInformationFromSession: PersonalInformation | undefined = session.get('personalInformation');
   if (personalInformationFromSession && !session.get('personal-info-updated')) {
     log.debug('Returning personal information that already exists in session for userId [%s]', userInfoToken.sub);
     return personalInformationFromSession;

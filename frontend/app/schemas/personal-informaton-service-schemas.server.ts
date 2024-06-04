@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const personalInformationApiSchema = z.object({
+export const getApplicantResponseSchema = z.object({
   BenefitApplication: z.object({
     Applicant: z
       .object({
@@ -139,9 +139,14 @@ export const personalInformationApiSchema = z.object({
   }),
 });
 
-export type PersonalInformationApi = z.infer<typeof personalInformationApiSchema>;
+export type GetApplicantResponse = z.infer<typeof getApplicantResponseSchema>;
 
-export const personalInfoDtoSchema = z.object({
+// TODO definition for request to update applicant is not yet available from Interop; Using getApplicantResponseSchema for now
+export const updateApplicantRequestSchema = getApplicantResponseSchema;
+
+export type UpdateApplicantRequest = z.infer<typeof updateApplicantRequestSchema>;
+
+export const personalInformationSchema = z.object({
   applicantCategoryCode: z.string().optional(),
   applictantId: z.string().optional(),
   clientId: z.string().optional(),
@@ -182,4 +187,4 @@ export const personalInfoDtoSchema = z.object({
   benefitApplicationIdentification: z.string().optional(),
 });
 
-export type PersonalInfo = z.infer<typeof personalInfoDtoSchema>;
+export type PersonalInformation = z.infer<typeof personalInformationSchema>;
