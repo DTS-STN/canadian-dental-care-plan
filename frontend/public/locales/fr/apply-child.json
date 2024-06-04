@@ -471,12 +471,12 @@
     "no": "Non"
   },
   "review-child-information": {
-    "read-carefully": "(FR) Please review this information carefully. The information provided will be used by Sun Life to create your child(ren)'s member account.",
-    "page-title": "(FR) Review child(ren) information",
-    "page-sub-title": "(FR) {{child}} information",
+    "read-carefully": "Veuillez examiner attentivement les renseignements suivants. Les renseignements fournis seront utilisés par la Sun Life pour créer le compte de membre de votre/vos enfant(s) et figureront sur leur(s) carte(s) de membre.",
+    "page-title": "Passer en revue les renseignements de l'enfant",
+    "page-sub-title": "Renseignements sur l'enfant {{child}}",
     "dob-title": "Date de naissance",
     "dob-change": "Modifier la date de naissance",
-    "is-parent": "(FR) Parent or legal guardian of child",
+    "is-parent": "Parent ou tuteur légal de l'enfant",
     "sin-title": "Numéro d'assurance sociale (NAS)",
     "sin-change": "Modifier le NAS",
     "full-name-title": "Nom complet",
