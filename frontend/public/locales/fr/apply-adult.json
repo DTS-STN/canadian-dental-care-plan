@@ -239,8 +239,8 @@
     "dob-eligibility": {
       "page-title": "Découvrez quand vous pouvez présenter une demande",
       "ineligible-to-apply": "Vous n'êtes actuellement pas admissible au Régime canadien de soins dentaires.",
-      "currently-accepting": "(FR) The Canadian Dental Care Plan is currently accepting applications for people aged 65 and above, children under 18, and adults with a valid disability tax credit.",
-      "later-date": "(FR) Adults 18 to 64 who do not have a disability tax credit will be able to apply for the Canadian Dental Care Plan in 2025.",
+      "currently-accepting": "Le Régime canadien de soins dentaires accepte actuellement les demandes d'adhésion des personnes âgées de 65 ans et plus, des enfants de moins de 18 ans et des adultes qui reçoivent le crédit d'impôt pour personnes handicapées.",
+      "later-date": "Les adultes âgés de 18 à 64 ans qui n'ont pas de crédit d'impôt pour personnes handicapées valide pourront demander leur adhésion au Régime canadien de soins dentaires en 2025.",
       "eligibility-info": "<eligibilityInfo>Découvrez quand vous pouvez faire une demande au Régime canadien de soins dentaires.</eligibilityInfo>",
       "eligibility-info-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#quand",
       "back-btn": "Retour",
@@ -422,8 +422,8 @@
   },
   "living-independently": {
     "page-title": "Vivre de manière indépendante",
-    "description": "Vivre indépendamment de vos parents signifie que vous avez 16 ou 17 ans, que vous ne recevez aucune aide financière de vos parents et que votre résidence principale est différente de la leur.",
-    "form-instructions": "Vivez-vous indépendamment de vos parents ?",
+    "description": "Vivre de manière indépendante signifie que vous avez 16 ou 17 ans, que vous ne recevez pas d'aide financière de vos parents et que votre résidence principale est différente de la leur.",
+    "form-instructions": "Vivez-vous indépendamment de vos parents?",
     "radio-options": {
       "yes": "Oui",
       "no": "Non"
@@ -436,9 +436,9 @@
     "save-btn": "Enregistrer"
   },
   "parent-or-guardian": {
-    "page-title": "(FR) Parent or guardian needs to apply",
-    "unable-to-apply": "(FR) You are not able to apply for the Canadian Dental Care Plan for yourself. Please have a parent or legal guardian apply on your behalf.",
-    "apply-for-yourself": "(FR) If you have already applied for your child and now want to apply for yourself, you must speak to a Service Canada representative. Contact Service Canada by calling 1-833-537-4342.",
+    "page-title": "Le parent ou le tuteur légal doit faire la demande",
+    "unable-to-apply": "Vous ne pouvez pas présenter une demande d'adhésion au Régime canadien de soins dentaires pour vous même. Veuillez demander à votre parent ou tuteur légal de présenter une demande en votre nom.",
+    "apply-for-yourself": "Si vous avez déjà fait une demande pour votre enfant et que vous souhaitez maintenant présenter une demande pour vous-même, vous devez parler à un représentant de Service Canada. Contactez Service Canada en appelant au <noWrap>1-833-537-4342</noWrap>.",
     "back-btn": "Retour",
     "return-btn": "Revenir à la page principale",
     "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
