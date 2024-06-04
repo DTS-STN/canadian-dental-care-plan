@@ -292,32 +292,31 @@
     }
   },
   "contact-information": {
-    "page-title": "Informations de contact",
-    "form-instructions": "L'ajout d'un numéro de téléphone permet à Service Canada de vous contacter en cas de problème avec votre demande. Si vous ne fournissez pas de numéro de téléphone, nous communiquerons avec vous par la poste.",
+    "page-title": "Renseignements personnels",
     "phone-header": "Numéro de téléphone",
-    "add-phone": "(FR) Adding a phone number helps Government of Canada contact you if there is an issue with your application. Otherwise, we'll contact you by mail.",
+    "add-phone": "L'ajout d'un numéro de téléphone aide le gouvernement du Canada à vous contacter en cas de problème avec votre demande. Sinon, nous vous contacterons par la poste.",
     "phone-number": "Numéro de téléphone (facultatif)",
     "phone-number-alt": "Autre numéro de téléphone (facultatif)",
-    "email-header": "Adresse courriel",
-    "add-email": "(FR) Adding an email will help the Government of Canada and Sun Life contact you regarding your Canadian Dental Care Plan membership.",
+    "email-header": "Courriel",
+    "add-email": "L'ajout d'un courriel aidera le gouvernement du Canada et la Sun Life à vous contacter au sujet de votre adhésion au Régime canadien de soins dentaires.",
     "email": "Adresse courriel (facultatif)",
     "confirm-email": "Confirmer l'adresse courriel (facultatif)",
     "mailing-address": {
       "header": "Adresse postale"
     },
     "home-address": {
-      "header": "Adresse du domicile",
-      "use-mailing-address": "Mon adresse domiciliaire et mon adresse postale sont les mêmes."
+      "header": "Adresse à domicile",
+      "use-mailing-address": "Mon adresse à domicile est la même que mon adresse postale"
     },
     "address-field": {
       "address": "Adresse",
       "address-note": "Inclure le numéro municipal et le nom de rue",
       "apartment": "Appartement, suite, etc. (facultatif)",
       "country": "Pays",
-      "province": "Province, territoire, état ou région",
+      "province": "Province, territoire, État ou région",
       "city": "Ville ou municipalité",
-      "postal-code": "Code postal/code ZIP",
-      "postal-code-optional": "Code postal/code ZIP (facultatif)",
+      "postal-code": "Code postal ou code ZIP",
+      "postal-code-optional": "Code postal ou code ZIP (facultatif)",
       "select-one": "Choisissez une option"
     },
     "back": "Retour",
