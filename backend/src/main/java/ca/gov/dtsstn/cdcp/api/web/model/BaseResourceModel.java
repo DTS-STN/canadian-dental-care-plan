@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -94,6 +95,7 @@ public class BaseResourceModel<T extends BaseResourceModel<? extends T>> extends
 		return Objects.hash(super.hashCode(), id, createdBy, createdDate, lastModifiedBy, lastModifiedDate);
 	}
 
+	@NonNull
 	@Override
 	public String toString() {
 		return new ToStringCreator(this)

@@ -4,12 +4,13 @@ import java.util.Objects;
 
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.hateoas.server.core.Relation;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import ca.gov.dtsstn.cdcp.api.web.model.BaseResourceModel;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 
 @Schema(name = "Subscription")
 @Relation(collectionRelation = "subscriptions", itemRelation = "subscription")
@@ -48,6 +49,7 @@ public class SubscriptionModel extends BaseResourceModel<SubscriptionModel> {
 			&& Objects.equals(msLanguageCode, other.msLanguageCode);
 	}
 
+	@NonNull
 	@Override
 	public String toString() {
 		return new ToStringCreator(this)
