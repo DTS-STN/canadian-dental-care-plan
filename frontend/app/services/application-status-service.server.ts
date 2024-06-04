@@ -109,7 +109,7 @@ function createApplicationStatusService() {
 
     getAuditService().audit('application-status.post', { userId: 'anonymous' });
 
-    const url = new URL(`${INTEROP_STATUS_CHECK_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/application/v1/status_fnlndob`);
+    const url = new URL(`${INTEROP_STATUS_CHECK_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/status-check/v1/status_fnlndob`);
     const statusRequest = {
       BenefitApplication: {
         Applicant: {
