@@ -5,7 +5,7 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 
 import pageIds from '../../../../page-ids.json';
@@ -71,6 +71,8 @@ export default function ApplyFlowParentOrGuardian() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
+  const noWrap = <span className="whitespace-nowrap" />;
+
   function getBackButtonRouteId() {
     if (ageCategory === 'youth') {
       return '$lang/_public/apply/$id/adult/living-independently';
@@ -89,7 +91,9 @@ export default function ApplyFlowParentOrGuardian() {
     <>
       <div className="mb-8 max-w-prose space-y-4">
         <p className="mb-4">{t('apply-adult:parent-or-guardian.unable-to-apply')}</p>
-        <p>{t('apply-adult:parent-or-guardian.apply-for-yourself')}</p>
+        <p>
+          <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult:parent-or-guardian.apply-for-yourself" components={{ noWrap }} />
+        </p>
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
