@@ -55,19 +55,19 @@
       }
     },
     "information": {
-      "page-title": "(FR) {{childName}}: information",
+      "page-title": "{{childName}}\u00a0: Renseignements",
       "child-number": "Enfant {{childNumber}}",
-      "form-instructions-sin": "(FR) Provide the child's legal name as indicated on their Social Insurance Number (SIN) card or letter (if available), or other government documentation.",
-      "single-legal-name": "(FR) If the child has a single legal name",
-      "name-instructions": "(FR) If the child uses a single legal name, please enter that name in BOTH the first name and last name fields.",
+      "form-instructions-sin": "Indiquer le nom légal de l'enfant tel qu'indiqué sur sa carte ou sa lettre de numéro d'assurance sociale (le cas échéant) ou tout autre document gouvernemental.",
+      "single-legal-name": "Si l'enfant a un seul nom légal",
+      "name-instructions": "Si l'enfant utilise un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
       "last-name": "Nom de famille",
       "first-name": "Prénom",
-      "date-of-birth": "(FR) Date of birth",
-      "sin-legend": "(FR) Does this child have a Social Insurance Number (SIN)?",
-      "sin-yes": "(FR) <bold>Yes</bold>, this child has a SIN",
-      "sin-no": "(FR) <bold>No</bold>, this child does not have a SIN",
+      "date-of-birth": "Date de naissance",
+      "sin-legend": "L'enfant a-t-il un numéro d'assurance sociale (NAS)?",
+      "sin-yes": "<bold>Oui</bold>, l'enfant a un NAS",
+      "sin-no": "<bold>Non</bold>, l'enfant n'a pas de NAS",
       "sin": "Entrez un NAS de 9 chiffres",
-      "parent-legend": "(FR) Are you the parent or legal guardian of this child?",
+      "parent-legend": "Êtes-vous le parent ou le tuteur légal de cet enfant?",
       "radio-options": {
         "yes": "Oui",
         "no": "Non"
@@ -103,8 +103,8 @@
         "purchased": "achetée individuellement par un parent ou un tuteur légal ou par le biais d'un plan de groupe d'une compagnie d'assurance ou de prestations",
         "professional": "par l'intermédiaire d'une organisation professionnelle ou étudiante"
       },
-      "option-yes": "<strong>>Oui</strong, l'enfant a accès à une assurance dentaire",
-      "option-no": "(FR) <strong>Non</strong>, l'enfant n'a pas accès à une assurance dentaire",
+      "option-yes": "<strong>Oui</strong>, l'enfant a accès à une assurance dentaire",
+      "option-no": "<strong>Non</strong>, l'enfant n'a pas accès à une assurance dentaire",
       "button": {
         "back": "Retour",
         "continue": "Continuer",
@@ -172,11 +172,11 @@
       }
     },
     "parent-or-guardian": {
-      "page-title": "(FR) You must be a parent or legal guardian",
-      "must-be": "(FR) You must be a parent or legal guardian.",
-      "unable-to-apply": "(FR) You are not able to apply for this child. You must be a parent or legal guardian to apply on behalf of a child.",
-      "back-btn": "(FR) Back",
-      "continue-btn": "(FR) Proceed to apply for yourself"
+      "page-title": "Vous devez être le parent ou le tuteur légal",
+      "must-be": "Vous devez être le parent ou le tuteur légal",
+      "unable-to-apply": "Vous ne pouvez pas présenter de demande pour cet enfant. Vous devez être le parent ou le tuteur légal d'un enfant pour présenter une demande en son nom.",
+      "back-btn": "Retour",
+      "continue-btn": "Procédez à faire la demande vous-même"
     }
   },
   "communication-preference": {
@@ -517,11 +517,11 @@
       "proceed-btn": "Procédez à faire la demande vous-même"
     },
     "cannot-apply-child": {
-      "page-title": "(FR) You cannot apply for your child",
-      "ineligible-to-apply": "(FR) Your child is not currently eligible for the Canadian Dental Care Plan.",
-      "eligibility-info": "(FR) The Canadian Dental Care Plan is currently accepting applications for people aged 65 and above, children under 18, and adults with a valid disability tax credit.",
-      "eligibility-2025": "(FR) Adults 18 to 64 who do not have a disability tax credit will be able to apply for the Canadian Dental Care Plan in 2025.",
-      "when-to-apply": "(FR) Find out when you can apply for the Canadian Dental Care Plan",
+      "page-title": "Vous ne pouvez pas faire une demande pour votre enfant",
+      "ineligible-to-apply": "Votre enfant n'êtes pas admissibles au Régime canadien de soins dentaires pour le moment.",
+      "eligibility-info": "Le Régime canadien de soins dentaires accepte actuellement les demandes d'adhésion des personnes âgées de 65 ans et plus, des enfants de moins de 18 ans et des adultes qui reçoivent le crédit d'impôt pour personnes handicapées valide.",
+      "eligibility-2025": "Les adultes âgés de 18 à 64 ans qui n'ont pas de crédit d'impôt pour personnes handicapées valide pourront demander leur adhésion au Régime canadien de soins dentaires en 2025.",
+      "when-to-apply": "Découvrez quand vous pourrez faire une demande d'adhésion au Régime canadien de soins dentaires",
       "when-to-apply-href": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#quand",
       "back-btn": "Retour",
       "proceed-btn": "Procédez à faire la demande vous-même"
