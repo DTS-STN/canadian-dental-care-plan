@@ -5,6 +5,7 @@
     "edit-id-button": "Apply SIN",
     "error-message": {
       "valid-sin": "Must be a valid SIN"
-    }
+    },
+    "UUID-label": "Edit the UUID of the user (for user SUB and SID)"
   }
 }

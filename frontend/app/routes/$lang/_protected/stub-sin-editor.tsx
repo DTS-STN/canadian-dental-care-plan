@@ -4,7 +4,6 @@ import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } 
 import { Form, useActionData } from '@remix-run/react';
 
 import { UTCDate } from '@date-fns/utc';
-import md5 from 'md5';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -45,6 +44,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const sinToStubSchema = z.object({
     socialInsuranceNumberToStub: z.string().refine(isValidSin, { message: 'valid-sin' }),
+    userUUIDToStub: z.string(),
   });
 
   const formData = Object.fromEntries(await request.formData());
@@ -58,8 +58,8 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   const sinToMock = parsedDataResult.data.socialInsuranceNumberToStub;
-  const hashedMockedSin = md5(String(sinToMock));
   const currentDateInSeconds = Math.floor(UTCDate.now() / 1000);
+  const userStubUUID = parsedDataResult.data.userUUIDToStub;
 
   const idToken = {
     iss: 'GC-ECAS',
@@ -68,7 +68,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     exp: currentDateInSeconds + 300, //five minutes TTL for the token
     iat: currentDateInSeconds,
     aud: 'CDCP',
-    sub: hashedMockedSin,
+    sub: userStubUUID,
     nonce: 'hqwVxGbvJ5g7NSWoOv1BvrA9avVAY7CL',
     locale: 'en-CA',
   };
@@ -79,9 +79,9 @@ export async function action({ context: { session }, params, request }: ActionFu
     iss: 'GC-ECAS-MOCK',
     locale: 'en-CA',
     //TODO implement a future PR to have this value dynamic
-    sid: '76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6',
+    sid: userStubUUID,
     sin: sinToMock,
-    sub: hashedMockedSin,
+    sub: userStubUUID,
     mocked: true,
   };
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
@@ -89,7 +89,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     session.set('userInfoToken', userinfoTokenPayload);
   } else {
     userInfoToken.sin = sinToMock;
-    userInfoToken.sub = hashedMockedSin;
+    userInfoToken.sub = userStubUUID;
     session.set('userInfoToken', userInfoToken);
   }
   session.set('idToken', idToken);
@@ -136,6 +136,7 @@ export default function StubSinEditorPage() {
       {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
       <Form method="post" noValidate className="space-y-6">
         <InputField id="socialInsuranceNumberToStub" name="socialInsuranceNumberToStub" label={t('stub-sin-editor:index.edit-id-field')} required inputMode="numeric" pattern="\d{9}" placeholder="000000000" minLength={9} maxLength={9} />
+        <InputField id="userUUIDToStub" name="userUUIDToStub" inputMode="text" label={t('stub-sin-editor:index.UUID-label')} placeholder="00000000-0000-0000-0000-000000000000" />
         <Button variant="primary" id="continue-button">
           {t('stub-sin-editor:index.edit-id-button')}
         </Button>
