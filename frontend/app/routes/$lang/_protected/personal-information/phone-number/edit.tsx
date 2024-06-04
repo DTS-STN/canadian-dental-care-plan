@@ -13,7 +13,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
-import { PersonalInfo } from '~/schemas/personal-informaton-service-schemas.server';
+import { PersonalInformation } from '~/schemas/personal-informaton-service-schemas.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getPersonalInformationService } from '~/services/personal-information-service.server';
@@ -57,7 +57,7 @@ export async function loader({ context: { session }, request, params }: LoaderFu
   const personalInformationRouteHelper = getPersonalInformationRouteHelpers();
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const personalInformation: PersonalInfo = await personalInformationRouteHelper.getPersonalInformation(userInfoToken, params, request, session);
+  const personalInformation: PersonalInformation = await personalInformationRouteHelper.getPersonalInformation(userInfoToken, params, request, session);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:phone-number.edit.page-title') }) };
@@ -75,7 +75,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const personalInformationRouteHelper = getPersonalInformationRouteHelpers();
 
   const userInfoTokenAction: UserinfoToken = session.get('userInfoToken');
-  const personalInformation: PersonalInfo = await personalInformationRouteHelper.getPersonalInformation(userInfoTokenAction, params, request, session);
+  const personalInformation: PersonalInformation = await personalInformationRouteHelper.getPersonalInformation(userInfoTokenAction, params, request, session);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   await raoidcService.handleSessionValidation(request, session);

@@ -1,6 +1,16 @@
-import { PersonalInfo, PersonalInformationApi } from '~/schemas/personal-informaton-service-schemas.server';
+import { GetApplicantResponse, PersonalInformation, UpdateApplicantRequest } from '~/schemas/personal-informaton-service-schemas.server';
 
-export function toPersonalInformationApi(personalInformation: PersonalInfo): PersonalInformationApi {
+export function toGetApplicantRequest(sin: string) {
+  return {
+    Applicant: {
+      PersonSINIdentification: {
+        IdentificationID: sin,
+      },
+    },
+  };
+}
+
+export function toUpdateApplicantRequest(personalInformation: PersonalInformation): UpdateApplicantRequest {
   return {
     BenefitApplication: {
       Applicant: {
@@ -26,7 +36,7 @@ export function toPersonalInformationApi(personalInformation: PersonalInfo): Per
         },
         PersonContactInformation: [
           {
-            Address: [toAddress(personalInformation.mailingAddress, 'Mailing'), toAddress(personalInformation.homeAddress, 'Home')],
+            Address: [toUpdateAddressRequest({ ...personalInformation.mailingAddress, category: 'Mailing' }), toUpdateAddressRequest({ ...personalInformation.homeAddress, category: 'Home' })],
             EmailAddress: [
               {
                 EmailAddressID: personalInformation.emailAddress,
@@ -82,21 +92,21 @@ export function toPersonalInformationApi(personalInformation: PersonalInfo): Per
   };
 }
 
-export function toPersonalInformation(personalInformationApi: PersonalInformationApi): PersonalInfo {
-  const addressList = personalInformationApi.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.Address;
+export function toPersonalInformation(getApplicantResponse: GetApplicantResponse): PersonalInformation {
+  const addressList = getApplicantResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.Address;
   const homeAddressList = addressList?.filter((address) => address.AddressCategoryCode.ReferenceDataName === 'Home');
   const mailingAddressList = addressList?.filter((address) => address.AddressCategoryCode.ReferenceDataName === 'Mailing');
 
   return {
-    applicantCategoryCode: personalInformationApi.BenefitApplication.Applicant?.ApplicantCategoryCode.ReferenceDataID,
-    applictantId: personalInformationApi.BenefitApplication.Applicant?.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Applicant ID').at(0)?.IdentificationID,
-    clientId: personalInformationApi.BenefitApplication.Applicant?.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Client ID').at(0)?.IdentificationID,
-    clientNumber: personalInformationApi.BenefitApplication.Applicant?.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Client Number').at(0)?.IdentificationID,
-    birthDate: personalInformationApi.BenefitApplication.Applicant?.PersonBirthDate.dateTime,
-    firstName: personalInformationApi.BenefitApplication.Applicant?.PersonName?.at(0)?.PersonGivenName?.at(0),
-    lastName: personalInformationApi.BenefitApplication.Applicant?.PersonName?.at(0)?.PersonSurName,
-    emailAddress: personalInformationApi.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.EmailAddress.at(0)?.EmailAddressID,
-    maritalStatusId: personalInformationApi.BenefitApplication.Applicant?.PersonMaritalStatus.StatusCode.ReferenceDataID,
+    applicantCategoryCode: getApplicantResponse.BenefitApplication.Applicant?.ApplicantCategoryCode.ReferenceDataID,
+    applictantId: getApplicantResponse.BenefitApplication.Applicant?.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Applicant ID').at(0)?.IdentificationID,
+    clientId: getApplicantResponse.BenefitApplication.Applicant?.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Client ID').at(0)?.IdentificationID,
+    clientNumber: getApplicantResponse.BenefitApplication.Applicant?.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Client Number').at(0)?.IdentificationID,
+    birthDate: getApplicantResponse.BenefitApplication.Applicant?.PersonBirthDate.dateTime,
+    firstName: getApplicantResponse.BenefitApplication.Applicant?.PersonName?.at(0)?.PersonGivenName?.at(0),
+    lastName: getApplicantResponse.BenefitApplication.Applicant?.PersonName?.at(0)?.PersonSurName,
+    emailAddress: getApplicantResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.EmailAddress.at(0)?.EmailAddressID,
+    maritalStatusId: getApplicantResponse.BenefitApplication.Applicant?.PersonMaritalStatus.StatusCode.ReferenceDataID,
     homeAddress: homeAddressList
       ?.map((aHomeAddress) => ({
         streetName: aHomeAddress.AddressStreet.StreetName,
@@ -118,65 +128,44 @@ export function toPersonalInformation(personalInformationApi: PersonalInformatio
       }))
       .at(0),
 
-    primaryTelephoneNumber: personalInformationApi.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.TelephoneNumber.find((phoneNumber) => phoneNumber.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary')?.FullTelephoneNumber
+    primaryTelephoneNumber: getApplicantResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.TelephoneNumber.find((phoneNumber) => phoneNumber.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary')?.FullTelephoneNumber
       .TelephoneNumberFullID,
-    alternateTelephoneNumber: personalInformationApi.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.TelephoneNumber.find((phoneNumber) => phoneNumber.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate')?.FullTelephoneNumber
+    alternateTelephoneNumber: getApplicantResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.TelephoneNumber.find((phoneNumber) => phoneNumber.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate')?.FullTelephoneNumber
       .TelephoneNumberFullID,
-    preferredLanguageId: personalInformationApi.BenefitApplication.Applicant?.PreferredMethodCommunicationCode?.ReferenceDataID,
+    preferredLanguageId: getApplicantResponse.BenefitApplication.Applicant?.PreferredMethodCommunicationCode?.ReferenceDataID,
   };
 }
 
-interface ToAddressApi {
-  apartment?: string;
+interface ToUpdateAddressRequestArgs {
   category: string;
-  city?: string;
-  country?: string;
+  cityName?: string;
+  countryId?: string;
+  secondAddressLine?: string;
+  streetName?: string;
   postalCode?: string;
-  province?: string;
-  street?: string;
+  provinceTerritoryStateId?: string;
 }
 
-function toAddressApi({ apartment, category, city, country, postalCode, province, street }: ToAddressApi) {
+function toUpdateAddressRequest({ category, cityName, countryId, secondAddressLine, streetName, postalCode, provinceTerritoryStateId }: ToUpdateAddressRequestArgs) {
   return {
     AddressCategoryCode: {
       ReferenceDataName: category,
     },
-    AddressCityName: city ?? '',
+    AddressCityName: cityName,
     AddressCountry: {
       CountryCode: {
-        ReferenceDataID: country ?? '',
+        ReferenceDataID: countryId,
       },
     },
-    AddressPostalCode: postalCode ?? '',
+    AddressPostalCode: postalCode,
     AddressProvince: {
       ProvinceCode: {
-        ReferenceDataID: province ?? '',
+        ReferenceDataID: provinceTerritoryStateId,
       },
     },
-    AddressSecondaryUnitText: apartment ?? '',
+    AddressSecondaryUnitText: secondAddressLine,
     AddressStreet: {
-      StreetName: street ?? '',
+      StreetName: streetName,
     },
   };
-}
-
-interface AddressDto {
-  streetName?: string | undefined;
-  secondAddressLine?: string | undefined;
-  countryId?: string | undefined;
-  provinceTerritoryStateId?: string | undefined;
-  cityName?: string | undefined;
-  postalCode?: string | undefined;
-}
-
-function toAddress(addressDto: AddressDto | undefined, category: string) {
-  return toAddressApi({
-    apartment: addressDto?.secondAddressLine,
-    category: category,
-    city: addressDto?.cityName,
-    country: addressDto?.countryId,
-    postalCode: addressDto?.postalCode,
-    province: addressDto?.provinceTerritoryStateId,
-    street: addressDto?.streetName,
-  });
 }
