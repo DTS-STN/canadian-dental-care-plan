@@ -551,11 +551,11 @@
     "continue-btn": "Continuer"
   },
   "parent-or-guardian": {
-    "page-title": "(FR) Parent or legal guardian needs to apply",
-    "unable-to-apply-child": "(FR) Your child is not currently eligible to apply for the Canadian Dental Care Plan at this time.",
-    "unable-to-apply": "(FR) You are not able to apply for the Canadian Dental Care Plan for yourself. Please have a parent or legal guardian apply on your behalf.",
-    "service-canada": "(FR) If you have already applied for your child and now want to apply for yourself, you must speak to a Service Canada representative. Contact Service Canada by calling <noWrap>1-833-537-4342</noWrap>.",
-    "eligibility": "(FR) The Canadian Dental Care Plan is currently accepting applications for people aged 65 and above, children under 18, and adults with a valid disability tax credit.",
+    "page-title": "Le parent ou le tuteur légal doit faire la demande",
+    "unable-to-apply-child": "Votre enfant n'est actuellement pas admissible au Régime canadien de soins dentaires pour le moment.",
+    "unable-to-apply": "Vous ne pouvez pas présenter une demande d'adhésion au Régime canadien de soins dentaires pour vous même. Veuillez demander à votre parent ou tuteur légal de présenter une demande en votre nom.",
+    "service-canada": "Si vous avez déjà fait une demande pour votre enfant et que vous souhaitez maintenant présenter une demande pour vous-même, vous devez parler à un représentant de Service Canada. Contactez Service Canada en appelant au <noWrap>1-833-537-4342</noWrap>.",
+    "eligibility": "Le Régime canadien de soins dentaires accepte actuellement les demandes d'adhésion des personnes âgées de 65 ans et plus, des enfants de moins de 18 ans et des adultes qui reçoivent le crédit d'impôt pour personnes handicapées valide.",
     "back-btn": "Retour",
     "return-btn": "Revenir à la page principale",
     "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
