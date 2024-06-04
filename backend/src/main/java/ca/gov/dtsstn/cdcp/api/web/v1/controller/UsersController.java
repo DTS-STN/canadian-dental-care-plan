@@ -1,6 +1,7 @@
 package ca.gov.dtsstn.cdcp.api.web.v1.controller;
 
 import org.mapstruct.factory.Mappers;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,8 +10,9 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
@@ -69,25 +71,18 @@ public class UsersController {
 
 
     @PostMapping({ "/{userId}/email-validations"})
-    @Operation(summary = "Verify the status of a confirmation code.", operationId="verify-confirmation-code")
-    public ResponseEntity<?>  verifyConfirmationCodeStatus(
+    @Operation(summary = "Validate a user's email via a confirmation code.", operationId="verify-confirmation-code")
+	@ResponseStatus(code = HttpStatus.ACCEPTED)
+    public void verifyConfirmationCodeStatus(
             @NotBlank(message = "userId must not be null or blank")
             @Parameter(description = "The ID of the user.", required = true)
             @PathVariable String userId,
             @NotBlank(message = "code must not be null or blank")
             @Parameter(description = "The confirmation code.", required = true)
-            @RequestParam String code
+            @RequestBody String code
         ){
-			final var user = userService.getUserById(userId)
-				.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));
-			Assert.hasText(code, "id is required; it must not be null or blank");
-			if (userService.verifyConfirmationCode(code, user)) {
-				userService.setEmailValidated(userId);
-				return new ResponseEntity<>(HttpStatus.ACCEPTED);
+			if (userService.verifyEmail(code, userId)==false) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid confirmation code");
 			}
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		
-
     }
 }
-

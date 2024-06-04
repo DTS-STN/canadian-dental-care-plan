@@ -41,8 +41,6 @@ import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUserAttribute;
 @ComponentScan({ "ca.gov.dtsstn.cdcp.api.web.v1.model.mapper" })
 class UsersControllerIT {
 
-//	@MockBean AlertTypeService alertTypeService;
-
 	@MockBean UserService userService;
 
 	@Autowired MockMvc mockMvc;
@@ -64,7 +62,7 @@ class UsersControllerIT {
 		when(userService.getUserById(any())).thenReturn(Optional.of(mockUser));
 
 		mockMvc.perform(get("/api/v1/users/00000000-0000-0000-0000-000000000000"))
-			//.andDo(print())
+			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
 			.andExpect(jsonPath("$.id", is("00000000-0000-0000-0000-000000000000")))
@@ -82,7 +80,7 @@ class UsersControllerIT {
 		when(userService.getUserById(any())).thenReturn(Optional.empty());
 
 		mockMvc.perform(get("/api/v1/users/00000000-0000-0000-0000-000000000000"))
-			//.andDo(print())
+			.andDo(print())
 			.andExpect(status().isNotFound())
 			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PROBLEM_JSON_VALUE))
 			.andExpect(jsonPath("$.status", is(404)))
@@ -97,7 +95,7 @@ class UsersControllerIT {
 	@DisplayName("Test unauthenticated GET /api/v1/users/{id}")
 	void testGetUserById_Unauthorized() throws Exception {
 		mockMvc.perform(get("/api/v1/users/00000000-0000-0000-0000-000000000000"))
-			//.andDo(print())
+			.andDo(print())
 			.andExpect(status().isUnauthorized());
 	}
 
@@ -106,7 +104,7 @@ class UsersControllerIT {
 	@DisplayName("Test insufficient privilege GET /api/v1/users/{id}")
 	void testGetUserById_Forbidden() throws Exception {
 		mockMvc.perform(get("/api/v1/users/00000000-0000-0000-0000-000000000000"))
-			//.andDo(print())
+			.andDo(print())
 			.andExpect(status().isForbidden());
 	}
 
@@ -126,11 +124,11 @@ class UsersControllerIT {
 			.build();
 
 		when(userService.getUserById(any())).thenReturn(Optional.of(mockUser));
-		when(userService.verifyConfirmationCode(anyString(), any())).thenReturn(true);
+		when(userService.verifyEmail(anyString(), anyString())).thenReturn(true);
 
 		mockMvc.perform(post("/api/v1/users/00000000-0000-0000-0000-000000000000/email-validations")
 				.with(csrf()).header("origin", "http://localhost")
-				.param("code", "code value"))
+				.content("{\"code\": \"code value\"}"))
 			.andDo(print())
 			.andExpect(status().isAccepted());
 	}
@@ -151,11 +149,11 @@ class UsersControllerIT {
 			.build();
 
 			when(userService.getUserById(any())).thenReturn(Optional.of(mockUser));
-			when(userService.verifyConfirmationCode(anyString(), any())).thenReturn(false);
+			when(userService.verifyEmail(anyString(), any())).thenReturn(false);
 
 		mockMvc.perform(post("/api/v1/users/00000000-0000-0000-0000-000000000000/email-validations")
 				.with(csrf()).header("origin", "http://localhost")
-				.param("code", "code value"))
+				.content("{\"code\": \"code value\"}"))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
 	}

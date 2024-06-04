@@ -47,6 +47,8 @@ public class UserService {
 
 	private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
+	private String userIdRequiredMessage = "userId is required; it must not be null or blank";
+
 	public UserService(
 			ApplicationProperties applicationProperties,
 			AlertTypeRepository alertTypeRepository,
@@ -71,7 +73,7 @@ public class UserService {
 	}
 
 	public ConfirmationCode createConfirmationCodeForUser(String userId) {
-		Assert.hasText(userId, "userId is required; it must not be null or blank");
+		Assert.hasText(userId, userIdRequiredMessage);
 
 		final var codeLength = applicationProperties.getEmailNotifications().getConfirmationCodes().getLength();
 		final var expiryTimeUnit = applicationProperties.getEmailNotifications().getConfirmationCodes().getExpiry().getTimeUnit();
@@ -95,7 +97,7 @@ public class UserService {
 	}
 
 	public Subscription createSubscriptionForUser(String userId, String alertTypeId, String languageId) {
-		Assert.hasText(userId, "userId is required; it must not be null or blank");
+		Assert.hasText(userId, userIdRequiredMessage);
 		Assert.hasText(alertTypeId, "alertTypeId is required; it must not be null or blank");
 		Assert.hasText(languageId, "languageId is required; it must not be null or blank");
 
@@ -135,7 +137,7 @@ public class UserService {
 	}
 
 	public void updateUser(String userId, String email) {
-		Assert.hasText(userId, "userId is required; it must not be null or blank");
+		Assert.hasText(userId, userIdRequiredMessage);
 		Assert.hasText(email, "email is required; it must not be null or blank");
 
 		log.debug("Fetching user [{}] from repository", userId);
@@ -150,7 +152,7 @@ public class UserService {
 	}
 
 	public void updateSubscriptionForUser(String userId, String subscriptionId, String languageId) {
-		Assert.hasText(userId, "userId is required; it must not be null or blank");
+		Assert.hasText(userId, userIdRequiredMessage);
 		Assert.hasText(subscriptionId, "subscriptionId is required; it must not be null or blank");
 		Assert.hasText(languageId, "languageId is required; it must not be null or blank");
 
@@ -166,7 +168,7 @@ public class UserService {
 	}
 
 	public void deleteSubscriptionForUser(String userId, String subscriptionId) {
-		Assert.hasText(userId, "userId is required; it must not be null or blank");
+		Assert.hasText(userId, userIdRequiredMessage);
 		Assert.hasText(subscriptionId, "subscriptionId is required; it must not be null or blank");
 
 		final var user = userRepository.findById(userId).orElseThrow();
@@ -193,21 +195,17 @@ public class UserService {
 		return confirmationCode -> confirmationCode.getExpiryDate().isAfter(Instant.now());
 	}
 
-    public Boolean verifyConfirmationCode(String code, User user){
+    public boolean verifyEmail(String code, String userId){
 		Assert.hasText(code, "code is required; it must not be null or blank");
-		Assert.notNull(user, "user is required; it must not be null");
-		if (user.getConfirmationCodes().stream().map(confirmationCodeMapper::toEntity).filter(notExpired()).noneMatch(byCode(code))) {
-    		return false;
-    	}
-        return true;
-    }
-
-	public void setEmailValidated(String userId) {
-		Assert.hasText(userId, "userId is required; it must not be null or blank");
+		Assert.hasText(userId, userIdRequiredMessage);
 		log.debug("Fetching user [{}] from repository", userId);
 		final var user = userRepository.findById(userId).orElseThrow();
-		user.setEmailVerified(true);
-		user.setConfirmationCodes(null);
-		userRepository.save(user);
-	}
+		if (user.getConfirmationCodes().stream().filter(notExpired()).anyMatch(byCode(code))) {
+			user.setEmailVerified(true);
+			user.setConfirmationCodes(null);
+			userRepository.save(user);
+			return true;
+		}
+		return false;
+    }
 }

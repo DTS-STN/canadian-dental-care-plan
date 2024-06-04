@@ -2,7 +2,6 @@ package ca.gov.dtsstn.cdcp.api.service;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
@@ -12,6 +11,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +26,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import ca.gov.dtsstn.cdcp.api.config.properties.ApplicationProperties;
 import ca.gov.dtsstn.cdcp.api.data.entity.AlertTypeEntityBuilder;
+import ca.gov.dtsstn.cdcp.api.data.entity.ConfirmationCodeEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.entity.LanguageEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.entity.SubscriptionEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.entity.UserEntity;
@@ -33,8 +34,6 @@ import ca.gov.dtsstn.cdcp.api.data.entity.UserEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.repository.AlertTypeRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.LanguageRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.UserRepository;
-import ca.gov.dtsstn.cdcp.api.service.domain.ConfirmationCode;
-import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableConfirmationCode;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUser;
 
 @ExtendWith({ MockitoExtension.class })
@@ -54,9 +53,12 @@ class UserServiceTests {
 
 	UserService userService;
 
+	private String userId;
+
 	@BeforeEach
 	void setUp() {
 		this.userService = new UserService(applicationProperties, alertTypeRepository, languageRepository, userRepository);
+		userId = "00000000-0000-0000-0000-000000000000";
 	}
 
 	@Test()
@@ -144,48 +146,43 @@ class UserServiceTests {
 		when(userRepository.findById(any())).thenReturn(Optional.of(new UserEntity()));
 		assertThat(userService.getUserById("00000000-0000-0000-0000-000000000000")).isNotEmpty();
 	}
-	@Test
-	@DisplayName("Test userService.verifyConfirmationCode(..)")
-	void testVerifyConfirmationCode_verified() {
-		final Instant creationDate = LocalDateTime.now().minusDays(73).toInstant(ZoneOffset.UTC);
-		final Instant expiryDate = LocalDateTime.now().plusDays(288).toInstant(ZoneOffset.UTC);
-		final ConfirmationCode confirmationCode = ImmutableConfirmationCode.builder().code("code value").createdDate(creationDate).expiryDate(expiryDate).build();
-		final var user = ImmutableUser.builder().addConfirmationCodes(confirmationCode).build();
 
-		assertEquals(ConfirmationCodeStatus.VALID, userService.verifyConfirmationCode(confirmationCode, user));
+	@Test
+	@DisplayName("Test userService.verifyEmail(..) with valid input")
+	void testVerifyConfirmationCode_Valid() {
+		final var creationDate = LocalDateTime.now().minusDays(73).toInstant(ZoneOffset.UTC);
+		final var expiryDate = LocalDateTime.now().plusDays(288).toInstant(ZoneOffset.UTC);
+		final var codeValue = "code value";
+		final var confirmationCode = new ConfirmationCodeEntityBuilder().code(codeValue).createdDate(creationDate).expiryDate(expiryDate).build();
+		final var mockUser = new UserEntityBuilder().confirmationCodes(Collections.singleton(confirmationCode)).build();
+
+		when(userRepository.findById(any())).thenReturn(Optional.of(mockUser));
+
+		assertThat(userService.verifyEmail(codeValue, userId)).isTrue();
 	}
 
 	@Test
-	@DisplayName("Test userService.verifyConfirmationCode(..)")
-	void testVerifyConfirmationCode_expired() {
-		final Instant creationDate = LocalDateTime.now().minusDays(73).toInstant(ZoneOffset.UTC);
-		final Instant expiryDate = LocalDateTime.now().minusDays(28).toInstant(ZoneOffset.UTC);
-		final ConfirmationCode confirmationCode = ImmutableConfirmationCode.builder().code("code value").createdDate(creationDate).expiryDate(expiryDate).build();
-		final var user = ImmutableUser.builder().addConfirmationCodes(confirmationCode).build();
+	@DisplayName("Test userService.verifyEmail(..) with null code")
+	void testVerifyConfirmationCode_NullCodeValue() {
+		assertThrowsExactly(IllegalArgumentException.class, () -> userService.verifyEmail(null, userId), "code is required; it must not be null");
+	}
+
+	@Test
+	@DisplayName("Test userService.verifyEmail(..) with empty code string")
+	void testVerifyConfirmationCode_EmptyCodeValue() {
+		assertThrowsExactly(IllegalArgumentException.class, () -> userService.verifyEmail("", userId), "code is required; it must not be null");
+	}
+
+	@Test
+	@DisplayName("Test userService.verifyEmail(..) with mismatched input")
+	void testVerifyConfirmationCode_Mismached() {
+		final var creationDate = LocalDateTime.now().minusDays(73).toInstant(ZoneOffset.UTC);
+		final var expiryDate = LocalDateTime.now().plusDays(288).toInstant(ZoneOffset.UTC);
+		final var codeValue = "code value";
+		final var otherConfirmationCode = new ConfirmationCodeEntityBuilder().code("other code value").createdDate(creationDate).expiryDate(expiryDate).build();
+		final var mockUser = new UserEntityBuilder().confirmationCodes(Collections.singleton(otherConfirmationCode)).build();
 	
-		assertEquals(ConfirmationCodeStatus.EXPIRED, userService.verifyConfirmationCode(confirmationCode, user));
-	}
-
-	@Test
-	void testVerifyConfirmationCode_no_code() {
-		final var user = ImmutableUser.builder().build();
-
-		final Instant creationDate = LocalDateTime.now().minusDays(73).toInstant(ZoneOffset.UTC);
-		final Instant expiryDate = LocalDateTime.now().plusDays(288).toInstant(ZoneOffset.UTC);
-		ConfirmationCode confirmationCode = ImmutableConfirmationCode.builder().code("").createdDate(creationDate).expiryDate(expiryDate).build();
-		assertEquals(ConfirmationCodeStatus.NO_CODE, userService.verifyConfirmationCode(confirmationCode, user));
-		assertEquals(ConfirmationCodeStatus.NO_CODE, userService.verifyConfirmationCode(null, user));
-	}
-
-	@Test
-	@DisplayName("Test userService.verifyConfirmationCode(..)")
-	void testVerifyConfirmationCode_mistached() {
-		final Instant creationDate = LocalDateTime.now().minusDays(73).toInstant(ZoneOffset.UTC);
-		final Instant expiryDate = LocalDateTime.now().plusDays(288).toInstant(ZoneOffset.UTC);
-		final ConfirmationCode confirmationCode = ImmutableConfirmationCode.builder().code("code value").createdDate(creationDate).expiryDate(expiryDate).build();
-		final ConfirmationCode otherConfirmationCode = ImmutableConfirmationCode.builder().code("other code value").createdDate(creationDate).expiryDate(expiryDate).build();
-		final var user = ImmutableUser.builder().addConfirmationCodes(otherConfirmationCode).build();
-	
-		assertEquals(ConfirmationCodeStatus.MISMATCH, userService.verifyConfirmationCode(confirmationCode, user));
+		when(userRepository.findById(any())).thenReturn(Optional.of(mockUser));
+		assertThat(userService.verifyEmail(codeValue, userId)).isFalse();
 	}
 }
