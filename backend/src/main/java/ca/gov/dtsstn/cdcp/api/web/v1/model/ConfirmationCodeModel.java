@@ -4,12 +4,13 @@ import java.time.Instant;
 import java.util.Objects;
 
 import org.springframework.core.style.ToStringCreator;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import ca.gov.dtsstn.cdcp.api.web.model.BaseResourceModel;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 
 @Schema(name = "ConfirmationCode")
 @JsonPropertyOrder({ "id", "code", "expiryDate", "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate" })
@@ -52,6 +53,7 @@ public class ConfirmationCodeModel extends BaseResourceModel<ConfirmationCodeMod
 		return Objects.hash(super.hashCode(), code, expiryDate);
 	}
 
+	@NonNull
 	@Override
 	public String toString() {
 		return new ToStringCreator(this)

@@ -3,6 +3,7 @@ package ca.gov.dtsstn.cdcp.api.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -25,7 +26,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	 * This allows users to easily access the Swagger UI documentation for the API.
 	 */
 	@Override
-	public void addViewControllers(ViewControllerRegistry registry) {
+	public void addViewControllers(@NonNull ViewControllerRegistry registry) {
 		log.info("Redirecting / to /swagger-ui/index.html");
 		registry.addRedirectViewController("/", "/swagger-ui/index.html");
 	}

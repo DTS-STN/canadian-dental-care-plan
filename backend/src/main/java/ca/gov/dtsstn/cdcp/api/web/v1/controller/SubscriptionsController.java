@@ -142,7 +142,7 @@ public class SubscriptionsController {
 			@NotBlank(message = "subscriptionId must not be null or blank")
 			@Parameter(description = "The id of the subscription.", example = "00000000-0000-0000-0000-000000000000")
 			@PathVariable String subscriptionId,
-			
+
 			@Validated @RequestBody SubscriptionUpdateModel subscriptionUpdateModel) {
 
 		final var user = userService.getUserById(userId)
@@ -154,7 +154,7 @@ public class SubscriptionsController {
 
 		final var language = languageService.readByMsLocaleCode(subscriptionUpdateModel.getMsLanguageCode())
 				.orElseThrow(() -> new ResourceNotFoundException("No language with msLanguageCode=[%s] was found".formatted(subscriptionUpdateModel.getMsLanguageCode())));
-		
+
 		userService.updateSubscriptionForUser(userId, subscription.getId(), language.getId());
 	}
 
@@ -177,13 +177,9 @@ public class SubscriptionsController {
 			.orElseThrow(() -> new ResourceNotFoundException("No subscription with id=[%s] was found".formatted(subscriptionId)));
 
 		userService.deleteSubscriptionForUser(userId, subscription.getId());
-	}	
-
-	private Predicate<Subscription> byAlertTypeCode(String alertTypeCode) {
-		return subscription -> alertTypeCode.equals(subscription.getAlertType().getCode());
 	}
 
 	private Predicate<? super BaseDomainObject> byId(String id) {
 		return domainObject -> id.equals(domainObject.getId());
-	}	
+	}
 }

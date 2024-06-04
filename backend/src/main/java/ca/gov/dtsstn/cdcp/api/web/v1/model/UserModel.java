@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.hateoas.server.core.Relation;
+import org.springframework.lang.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -45,6 +46,7 @@ public class UserModel extends BaseResourceModel<UserModel> {
 		this.userAttributes = userAttributes;
 	}
 
+	@NonNull
 	@Override
 	public String toString() {
 		return new ToStringCreator(this)
