@@ -89,7 +89,7 @@ async function runServer() {
 
   // prettier-ignore
   const remixRequestHandler = process.env.NODE_ENV === 'development'
-    ? await createDevRequestHandler(build, buildPath, versionPath)
+    ? createDevRequestHandler(build, buildPath, versionPath)
     : await createRequestHandler(build, process.env.NODE_ENV);
 
   const app = express();

@@ -23,7 +23,7 @@ vi.mock('~/services/letters-service.server', () => ({
       { id: '2', issuedOn: '2004-02-29', name: 'DEN' },
       { id: '3', issuedOn: undefined, name: 'DEN' },
     ]),
-    getAllLetterTypes: vi.fn().mockResolvedValue([
+    getAllLetterTypes: vi.fn().mockReturnValue([
       { id: 'ACC', nameEn: 'Accepted', nameFr: '(FR) Accepted' },
       { id: 'DEN', nameEn: 'Denied', nameFr: '(FR) Denied' },
     ]),

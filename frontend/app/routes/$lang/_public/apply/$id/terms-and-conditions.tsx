@@ -29,7 +29,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, request, params }: LoaderFunctionArgs) {
-  await loadApplyState({ params, session });
+  loadApplyState({ params, session });
   const csrfToken = String(session.get('csrfToken'));
 
   const t = await getFixedT(request, handle.i18nNamespaces);

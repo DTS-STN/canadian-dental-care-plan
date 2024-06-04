@@ -44,7 +44,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
-  const locale = await getLocale(request);
+  const locale = getLocale(request);
 
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('page-view.personal-information', { userId: idToken.sub });
@@ -52,10 +52,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
-  const countryList = await getLookupService().getAllCountries();
-  const regionList = await getLookupService().getAllRegions();
-  const preferredLanguage = personalInformation.preferredLanguageId ? await getLookupService().getPreferredLanguage(personalInformation.preferredLanguageId) : undefined;
-  const maritalStatusList = await getLookupService().getAllMaritalStatuses();
+  const lookupService = getLookupService();
+  const countryList = lookupService.getAllCountries();
+  const regionList = lookupService.getAllRegions();
+  const preferredLanguage = personalInformation.preferredLanguageId ? lookupService.getPreferredLanguage(personalInformation.preferredLanguageId) : undefined;
+  const maritalStatusList = lookupService.getAllMaritalStatuses();
   const birthParsedFormat = personalInformation.birthDate ? toLocaleDateString(new UTCDate(personalInformation.birthDate), locale) : undefined;
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };

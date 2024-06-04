@@ -46,7 +46,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     instrumentationService.countHttpStatus('application.view', 404);
     throw new Response(null, { status: 404 });
   }
-  const locale = await getLocale(request);
+  const locale = getLocale(request);
   const submittedParsedFormat = viewApplication.submittedOn ? toLocaleDateString(new UTCDate(viewApplication.submittedOn), locale) : undefined;
 
   const t = await getFixedT(request, handle.i18nNamespaces);

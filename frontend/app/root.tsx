@@ -72,7 +72,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   };
   const origin = requestUrl.origin;
 
-  const userOrigin = await getUserOrigin(request, session);
+  const userOrigin = getUserOrigin(request, session);
   session.set('userOrigin', userOrigin);
 
   return json({ buildInfo, env, meta, origin, userOrigin });

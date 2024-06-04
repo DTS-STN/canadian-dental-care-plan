@@ -67,6 +67,7 @@ module.exports = {
         // Note: you must disable the base rule as it can report incorrect errors
         'require-await': 'off',
         '@typescript-eslint/require-await': 'error',
+        '@typescript-eslint/await-thenable': 'error',
         'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
       },
     },

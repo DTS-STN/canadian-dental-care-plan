@@ -37,7 +37,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('page-view.home', { userId: idToken.sub });
 
-  const userOrigin = await getUserOrigin(request, session);
+  const userOrigin = getUserOrigin(request, session);
   session.set('userOrigin', userOrigin);
 
   const t = await getFixedT(request, handle.i18nNamespaces);

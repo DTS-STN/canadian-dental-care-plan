@@ -71,10 +71,10 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const { CANADA_COUNTRY_ID } = getEnv();
   const lookupService = getLookupService();
 
-  const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
-  const allRegions = await lookupService.getAllRegions();
+  const federalSocialPrograms = lookupService.getAllFederalSocialPrograms();
+  const allRegions = lookupService.getAllRegions();
   const regions = allRegions.filter((region) => region.countryId === CANADA_COUNTRY_ID);
-  const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
+  const provincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
 
   await raoidcService.handleSessionValidation(request, session);
 

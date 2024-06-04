@@ -58,8 +58,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const lookupService = getLookupService();
-  const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
-  const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
+  const provincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
+  const federalSocialPrograms = lookupService.getAllFederalSocialPrograms();
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');

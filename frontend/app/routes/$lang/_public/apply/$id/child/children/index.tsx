@@ -53,8 +53,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:children.index.page-title') }) };
 
   const lookupService = getLookupService();
-  const federalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
-  const provincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
+  const federalSocialPrograms = lookupService.getAllFederalSocialPrograms();
+  const provincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
 
   const children = getChildrenState(state).map((child) => {
     const federalSocialProgramEntity = federalSocialPrograms.find((p) => p.id === child.dentalBenefits?.federalSocialProgram);

@@ -41,8 +41,10 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
   const csrfToken = String(session.get('csrfToken'));
-  const federalSocialProgramsList = await getLookupService().getAllFederalSocialPrograms();
-  const provincialAndTerritorialProgramsList = await getLookupService().getAllProvincialTerritorialSocialPrograms();
+
+  const lookupService = getLookupService();
+  const federalSocialProgramsList = lookupService.getAllFederalSocialPrograms();
+  const provincialAndTerritorialProgramsList = lookupService.getAllProvincialTerritorialSocialPrograms();
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();

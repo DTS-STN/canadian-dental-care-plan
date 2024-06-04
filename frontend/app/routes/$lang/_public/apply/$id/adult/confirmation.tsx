@@ -58,8 +58,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   }
 
   const lookupService = getLookupService();
-  const allFederalSocialPrograms = await lookupService.getAllFederalSocialPrograms();
-  const allProvincialTerritorialSocialPrograms = await lookupService.getAllProvincialTerritorialSocialPrograms();
+  const allFederalSocialPrograms = lookupService.getAllFederalSocialPrograms();
+  const allProvincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
   const selectedFederalBenefits = allFederalSocialPrograms
     .filter((obj) => obj.id === state.dentalBenefits?.federalSocialProgram)
     .map((obj) => getNameByLanguage(locale, obj))
@@ -70,23 +70,23 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     .join(', ');
 
   // Getting province by Id
-  const allRegions = await lookupService.getAllRegions();
+  const allRegions = lookupService.getAllRegions();
   const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.mailingProvince);
   const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation?.homeProvince);
 
   // Getting Country by Id
-  const allCountries = await lookupService.getAllCountries();
+  const allCountries = lookupService.getAllCountries();
   const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation?.mailingCountry);
   const countryHome = allCountries.find((country) => country.countryId === state.personalInformation?.homeCountry);
 
-  const preferredLang = await lookupService.getPreferredLanguage(state.communicationPreferences.preferredLanguage);
+  const preferredLang = lookupService.getPreferredLanguage(state.communicationPreferences.preferredLanguage);
   const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : state.communicationPreferences.preferredLanguage;
 
-  const maritalStatuses = await lookupService.getAllMaritalStatuses();
+  const maritalStatuses = lookupService.getAllMaritalStatuses();
   const maritalStatusDict = maritalStatuses.find((obj) => obj.id === state.applicantInformation?.maritalStatus)!;
   const maritalStatus = getNameByLanguage(locale, maritalStatusDict);
 
-  const communicationPreferences = await lookupService.getAllPreferredCommunicationMethods();
+  const communicationPreferences = lookupService.getAllPreferredCommunicationMethods();
   const communicationPreference = communicationPreferences.find((obj) => obj.id === state.communicationPreferences?.preferredMethod);
   invariant(communicationPreference, `Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
 

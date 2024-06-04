@@ -48,8 +48,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = getEnv();
 
-  const countryList = await lookupService.getAllCountries();
-  const regionList = await lookupService.getAllRegions();
+  const countryList = lookupService.getAllCountries();
+  const regionList = lookupService.getAllRegions();
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult:contact-information.page-title') }) };

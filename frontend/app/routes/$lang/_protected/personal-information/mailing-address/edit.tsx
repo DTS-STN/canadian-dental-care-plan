@@ -67,8 +67,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const csrfToken = String(session.get('csrfToken'));
 
-  const countryList = await getLookupService().getAllCountries();
-  const regionList = await getLookupService().getAllRegions();
+  const lookupService = getLookupService();
+  const countryList = lookupService.getAllCountries();
+  const regionList = lookupService.getAllRegions();
 
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
