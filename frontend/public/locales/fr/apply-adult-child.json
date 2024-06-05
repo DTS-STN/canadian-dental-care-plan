@@ -124,8 +124,8 @@
           "not-eligible-purchased": "Si un parent ou un tuteur légal a acheté la police d'assurance dentaire actuelle au privé, un enfant n'est pas admissible au Régime canadien de soins dentaires pendant que cette protection est en vigueur.",
           "excepton": "Exception\u00a0: Un enfant peut tout de même être admissible si un parent ou un tuteur légal a pris sa retraite et\u00a0:",
           "exception-list": {
-            "opted-out": "vous avez renoncé aux prestations de retraite avant le 11 décembre 2023, et",
-            "opt-back": "vous ne pouvez pas vous réinscrire en vertu des règles relatives aux régimes de retraite"
+            "opted-out": "a renoncé aux prestations de retraite avant le 11 décembre 2023, et",
+            "opt-back": "ne pouvez pas vous réinscrire en vertu des règles relatives aux régimes de retraite"
           }
         }
       },
