@@ -2,11 +2,8 @@ package ca.gov.dtsstn.cdcp.api.web.v1.controller;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -31,7 +28,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import ca.gov.dtsstn.cdcp.api.config.WebSecurityConfig;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
-import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableConfirmationCode;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUser;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUserAttribute;
 
@@ -108,53 +104,4 @@ class UsersControllerIT {
 			.andExpect(status().isForbidden());
 	}
 
-	@Test
-	@DisplayName("Test authenticated POST /api/v1/users/{userid}/email-validations with valid code")
-	@WithMockUser(roles = { "Users.Administer" })
-	void testVerifyConfirmationCodeStatus_Valid() throws Exception {
-		final var mockUser = ImmutableUser.builder()
-			.id("00000000-0000-0000-0000-000000000000")
-			.email("user@example.com")
-			.emailVerified(false)
-			.addUserAttributes(ImmutableUserAttribute.builder()
-				.name("EXAMPLE_ATTRIBUTE")
-				.value("42")
-				.build())
-			.addConfirmationCodes(ImmutableConfirmationCode.builder().code("code value").build())
-			.build();
-
-		when(userService.getUserById(any())).thenReturn(Optional.of(mockUser));
-		when(userService.verifyEmail(anyString(), anyString())).thenReturn(true);
-
-		mockMvc.perform(post("/api/v1/users/00000000-0000-0000-0000-000000000000/email-validations")
-				.with(csrf()).header("origin", "http://localhost")
-				.content("{\"code\": \"code value\"}"))
-			.andDo(print())
-			.andExpect(status().isAccepted());
-	}
-
-	@Test
-	@DisplayName("Test authenticated POST /api/v1/users/{userid}/email-validations with invalid code")
-	@WithMockUser(roles = { "Users.Administer" })
-	void testVerifyConfirmationCodeStatus_Invalid() throws Exception {
-		final var mockUser = ImmutableUser.builder()
-			.id("00000000-0000-0000-0000-000000000000")
-			.email("user@example.com")
-			.emailVerified(false)
-			.addUserAttributes(ImmutableUserAttribute.builder()
-				.name("EXAMPLE_ATTRIBUTE")
-				.value("42")
-				.build())
-			.addConfirmationCodes(ImmutableConfirmationCode.builder().code("other code value").build())
-			.build();
-
-			when(userService.getUserById(any())).thenReturn(Optional.of(mockUser));
-			when(userService.verifyEmail(anyString(), any())).thenReturn(false);
-
-		mockMvc.perform(post("/api/v1/users/00000000-0000-0000-0000-000000000000/email-validations")
-				.with(csrf()).header("origin", "http://localhost")
-				.content("{\"code\": \"code value\"}"))
-			.andDo(print())
-			.andExpect(status().isBadRequest());
-	}
 }

@@ -8,8 +8,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +33,7 @@ import ca.gov.dtsstn.cdcp.api.data.repository.AlertTypeRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.LanguageRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.UserRepository;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUser;
+import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
 
 @ExtendWith({ MockitoExtension.class })
 class UserServiceTests {
@@ -53,12 +52,9 @@ class UserServiceTests {
 
 	UserService userService;
 
-	private String userId;
-
 	@BeforeEach
 	void setUp() {
 		this.userService = new UserService(applicationProperties, alertTypeRepository, languageRepository, userRepository);
-		userId = "00000000-0000-0000-0000-000000000000";
 	}
 
 	@Test()
@@ -149,40 +145,52 @@ class UserServiceTests {
 
 	@Test
 	@DisplayName("Test userService.verifyEmail(..) with valid input")
-	void testVerifyConfirmationCode_Valid() {
-		final var creationDate = LocalDateTime.now().minusDays(73).toInstant(ZoneOffset.UTC);
-		final var expiryDate = LocalDateTime.now().plusDays(288).toInstant(ZoneOffset.UTC);
+	void testVerifyEmail_Valid() {
+		final var creationDate = Instant.now().minus(73, ChronoUnit.DAYS);
+		final var expiryDate = Instant.now().plus(288, ChronoUnit.DAYS);
 		final var codeValue = "code value";
 		final var confirmationCode = new ConfirmationCodeEntityBuilder().code(codeValue).createdDate(creationDate).expiryDate(expiryDate).build();
 		final var mockUser = new UserEntityBuilder().confirmationCodes(Collections.singleton(confirmationCode)).build();
 
 		when(userRepository.findById(any())).thenReturn(Optional.of(mockUser));
 
-		assertThat(userService.verifyEmail(codeValue, userId)).isTrue();
+		assertThat(userService.verifyEmail(codeValue, "00000000-0000-0000-0000-000000000000")).isTrue();
 	}
 
 	@Test
 	@DisplayName("Test userService.verifyEmail(..) with null code")
-	void testVerifyConfirmationCode_NullCodeValue() {
-		assertThrowsExactly(IllegalArgumentException.class, () -> userService.verifyEmail(null, userId), "code is required; it must not be null");
+	void testVerifyEmail_NullCodeValue() {
+		final var exception = assertThrows(IllegalArgumentException.class, () -> userService.verifyEmail(null, "00000000-0000-0000-0000-000000000000"));
+		assertThat(exception.getMessage()).isEqualTo("code is required; it must not be null or blank");
 	}
 
 	@Test
 	@DisplayName("Test userService.verifyEmail(..) with empty code string")
-	void testVerifyConfirmationCode_EmptyCodeValue() {
-		assertThrowsExactly(IllegalArgumentException.class, () -> userService.verifyEmail("", userId), "code is required; it must not be null");
+	void testVerifyEmail_EmptyCodeValue() {
+		final var exception = assertThrows(IllegalArgumentException.class, () -> userService.verifyEmail("", "00000000-0000-0000-0000-000000000000"));
+		assertThat(exception.getMessage()).isEqualTo("code is required; it must not be null or blank");
 	}
 
 	@Test
 	@DisplayName("Test userService.verifyEmail(..) with mismatched input")
-	void testVerifyConfirmationCode_Mismached() {
-		final var creationDate = LocalDateTime.now().minusDays(73).toInstant(ZoneOffset.UTC);
-		final var expiryDate = LocalDateTime.now().plusDays(288).toInstant(ZoneOffset.UTC);
+	void testVerifyEmail_Mismatched() {
 		final var codeValue = "code value";
-		final var otherConfirmationCode = new ConfirmationCodeEntityBuilder().code("other code value").createdDate(creationDate).expiryDate(expiryDate).build();
+		final var otherConfirmationCode = new ConfirmationCodeEntityBuilder().code("other code value")
+				.createdDate(Instant.now().minus(73, ChronoUnit.DAYS)).expiryDate(Instant.now().plus(288, ChronoUnit.DAYS)).build();
 		final var mockUser = new UserEntityBuilder().confirmationCodes(Collections.singleton(otherConfirmationCode)).build();
 	
 		when(userRepository.findById(any())).thenReturn(Optional.of(mockUser));
-		assertThat(userService.verifyEmail(codeValue, userId)).isFalse();
+		assertThat(userService.verifyEmail(codeValue, "00000000-0000-0000-0000-000000000000")).isFalse();
+	}
+
+	@Test
+	@DisplayName("Test userService.verifyEmail(..) with user not found")
+	void testVerifyEmail_UserNotFound() {
+		final var codeValue = "code value";
+
+		when(userRepository.findById(any())).thenReturn(Optional.empty());
+
+		final var exception = assertThrows(ResourceNotFoundException.class, () -> userService.verifyEmail(codeValue, "00000000-0000-0000-0000-000000000000"));
+		assertThat(exception.getMessage()).isEqualTo("No user with id=[%s] was found".formatted("00000000-0000-0000-0000-000000000000"));
 	}
 }
