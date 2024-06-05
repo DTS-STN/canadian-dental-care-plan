@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { E164Number } from 'libphonenumber-js';
-import PhoneInput, { FeatureProps } from 'react-phone-number-input';
+import PhoneInput, { FeatureProps } from 'react-phone-number-input/input';
 import enLabels from 'react-phone-number-input/locale/en';
 import frLabels from 'react-phone-number-input/locale/fr';
 
@@ -16,7 +16,7 @@ const inputReadOnlyClassName = 'read-only:bg-gray-100 read-only:pointer-events-n
 const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
 export interface InputPhoneFieldProps extends Omit<FeatureProps<React.InputHTMLAttributes<HTMLInputElement>>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children' | 'labels'> {
-  defaultValue?: E164Number;
+  defaultValue?: string;
   errorMessage?: string;
   helpMessagePrimary?: React.ReactNode;
   helpMessagePrimaryClassName?: string;
@@ -29,7 +29,7 @@ export interface InputPhoneFieldProps extends Omit<FeatureProps<React.InputHTMLA
 }
 
 export function InputPhoneField(props: InputPhoneFieldProps) {
-  const { 'aria-describedby': ariaDescribedby, className, defaultValue, errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, locale, required, ...restProps } = props;
+  const { 'aria-describedby': ariaDescribedby, className, defaultValue, defaultCountry, errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, locale, required, ...restProps } = props;
   const [value, setValue] = useState(defaultValue);
 
   const inputWrapperId = `input-phone-field-${id}`;
@@ -73,12 +73,11 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
         aria-invalid={!!errorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        countryCallingCodeEditable={false}
         data-testid="input-phone-field"
+        defaultCountry={defaultCountry ?? 'CA'}
         id={id}
-        international
         labels={labels}
-        numberInputProps={{ className: cn(inputBaseClassName, inputDisabledClassName, inputReadOnlyClassName, errorMessage && inputErrorClassName, className) }}
+        className={cn(inputBaseClassName, inputDisabledClassName, inputReadOnlyClassName, errorMessage && inputErrorClassName, className)}
         onChange={handleOnPhoneInputChange}
         required={required}
         value={value}

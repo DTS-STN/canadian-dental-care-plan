@@ -16,6 +16,7 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import { InputOptionProps } from '~/components/input-option';
+import { InputPhoneField } from '~/components/input-phone-field';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
@@ -376,7 +377,7 @@ export default function ApplyFlowPersonalInformation() {
             <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult:contact-information.phone-header')}</legend>
             <p className="mb-4">{t('apply-adult:contact-information.add-phone')}</p>
             <div className="grid items-end gap-6">
-              <InputField
+              <InputPhoneField
                 id="phone-number"
                 name="phoneNumber"
                 type="tel"
@@ -389,7 +390,7 @@ export default function ApplyFlowPersonalInformation() {
                 maxLength={100}
                 aria-describedby="adding-phone"
               />
-              <InputField
+              <InputPhoneField
                 id="phone-number-alt"
                 name="phoneNumberAlt"
                 type="tel"
