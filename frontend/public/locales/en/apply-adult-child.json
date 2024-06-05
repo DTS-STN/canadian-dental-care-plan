@@ -401,8 +401,8 @@
         "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own, you are not eligible for the Canadian Dental Care Plan while that coverage is in effect.",
         "excepton": "Exception:\u00a0You may still be eligible if you are retired and:",
         "exception-list": {
-          "opted-out": "Opted out of pension benefits before December 11, 2023, and",
-          "opt-back": "Can't opt back in under the pension rules"
+          "opted-out": "You opted out of pension benefits before December 11, 2023, and",
+          "opt-back": "You can't opt back in under the pension rules"
         }
       }
     },
