@@ -5,6 +5,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.server.core.EmbeddedWrappers;
 import org.springframework.util.Assert;
+
 public abstract class AbstractModelMapper {
 
 	public <C> CollectionModel<C> wrapCollection(CollectionModel<C> collectionModel, Class<C> type) {
@@ -13,7 +14,6 @@ public abstract class AbstractModelMapper {
 
 		return collectionModel.getContent().isEmpty() ? emptyCollection(type, collectionModel.getLinks()) : collectionModel;
 	}
-
 
 	@SuppressWarnings({ "unchecked" })
 	protected <C> CollectionModel<C> emptyCollection(Class<C> type, Links links) {
