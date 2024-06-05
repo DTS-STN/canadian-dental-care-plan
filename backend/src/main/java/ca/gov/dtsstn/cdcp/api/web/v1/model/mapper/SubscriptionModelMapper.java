@@ -13,8 +13,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.server.core.EmbeddedWrappers;
-import org.springframework.util.Assert;
 
 import ca.gov.dtsstn.cdcp.api.service.domain.Subscription;
 import ca.gov.dtsstn.cdcp.api.web.v1.controller.SubscriptionsController;
@@ -24,10 +22,10 @@ import jakarta.annotation.Nullable;
 
 
 @Mapper
-public interface SubscriptionModelMapper extends AbstractModelMapper {
+public abstract class SubscriptionModelMapper extends AbstractModelMapper {
 
 	@Nullable
-	default CollectionModel<SubscriptionModel> toModel(String userId, @Nullable Iterable<Subscription> subscriptions) {
+	public CollectionModel<SubscriptionModel> toModel(String userId, @Nullable Iterable<Subscription> subscriptions) {
 		final var subscriptionModels = StreamSupport.stream(subscriptions.spliterator(), false)
 			.map(subscription -> toModel(userId, subscription)).toList();
 
@@ -41,10 +39,10 @@ public interface SubscriptionModelMapper extends AbstractModelMapper {
 	@Mapping(target = "alertTypeCode", source = "subscription.alertType.code")
 	@Mapping(target = "msLanguageCode", source = "subscription.language.msLocaleCode")
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-	SubscriptionModel toModel(String userId, @Nullable Subscription subscription);
+	public abstract SubscriptionModel toModel(String userId, @Nullable Subscription subscription);
 
 	@AfterMapping
-	default SubscriptionModel afterMappingToModel(String userId, @MappingTarget SubscriptionModel subscription) {
+	public SubscriptionModel afterMappingToModel(String userId, @MappingTarget SubscriptionModel subscription) {
 		return subscription
 				.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionById(userId, subscription.getId())).withSelfRel());
 	}
@@ -56,7 +54,7 @@ public interface SubscriptionModelMapper extends AbstractModelMapper {
 	@Mapping(target = "lastModifiedDate", ignore = true)
 	@Mapping(target = "alertType.code", source = "alertTypeCode")
 	@Mapping(target = "language.msLocaleCode", source = "msLanguageCode")
-	Subscription toDomainObject(@Nullable SubscriptionCreateModel subscriptionModel);
+	public abstract Subscription toDomainObject(@Nullable SubscriptionCreateModel subscriptionModel);
 
 	@Mapping(target = "createdBy", ignore = true)
 	@Mapping(target = "createdDate", ignore = true)
@@ -64,6 +62,6 @@ public interface SubscriptionModelMapper extends AbstractModelMapper {
 	@Mapping(target = "lastModifiedDate", ignore = true)
 	@Mapping(target = "alertType.code", source = "alertTypeCode")
 	@Mapping(target = "language.msLocaleCode", source = "msLanguageCode")
-	Subscription toDomain(@Nullable SubscriptionModel subscriptionModel);
+	public abstract Subscription toDomain(@Nullable SubscriptionModel subscriptionModel);
 
 }
