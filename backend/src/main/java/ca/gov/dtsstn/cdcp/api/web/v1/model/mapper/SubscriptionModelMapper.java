@@ -22,16 +22,17 @@ import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionCreateModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionModel;
 import jakarta.annotation.Nullable;
 
+
 @Mapper
 public interface SubscriptionModelMapper extends AbstractModelMapper {
 
 	@Nullable
 	default CollectionModel<SubscriptionModel> toModel(String userId, @Nullable Iterable<Subscription> subscriptions) {
 		final var subscriptionModels = StreamSupport.stream(subscriptions.spliterator(), false)
-				.map(subscription -> toModel(userId, subscription)).toList();
+			.map(subscription -> toModel(userId, subscription)).toList();
 
 		final var collection = CollectionModel.of(subscriptionModels)
-				.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionsByUserId(userId)).withSelfRel());
+			.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionsByUserId(userId)).withSelfRel());
 
 		return wrapCollection(collection, SubscriptionModel.class);
 	}
@@ -45,8 +46,7 @@ public interface SubscriptionModelMapper extends AbstractModelMapper {
 	@AfterMapping
 	default SubscriptionModel afterMappingToModel(String userId, @MappingTarget SubscriptionModel subscription) {
 		return subscription
-				.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionById(userId, subscription.getId()))
-						.withSelfRel());
+				.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionById(userId, subscription.getId())).withSelfRel());
 	}
 
 	@Mapping(target = "id", ignore = true)
