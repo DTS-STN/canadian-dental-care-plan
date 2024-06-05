@@ -43,7 +43,7 @@ enum FormAction {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.adult.reviewInformation,
+  pageIdentifier: pageIds.public.apply.child.reviewAdultInformation,
   pageTitleI18nKey: 'apply-child:review-adult-information.page-title',
 } as const satisfies RouteHandleData;
 
