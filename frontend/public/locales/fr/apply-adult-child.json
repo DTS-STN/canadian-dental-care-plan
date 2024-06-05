@@ -122,7 +122,7 @@
           },
           "not-eligible": "Par conséquent, un enfant n'est pas admissible au Régime canadien de soins dentaires.",
           "not-eligible-purchased": "Si un parent ou un tuteur légal a acheté la police d'assurance dentaire actuelle au privé, un enfant n'est pas admissible au Régime canadien de soins dentaires pendant que cette protection est en vigueur.",
-          "excepton": "Exception\u00a0: Un enfant peut tout de même être admissible si un parent ou un tuteur légal a pris sa retraite et :",
+          "excepton": "Exception\u00a0: Un enfant peut tout de même être admissible si un parent ou un tuteur légal a pris sa retraite et\u00a0:",
           "exception-list": {
             "opted-out": "a renoncé aux prestations de retraite avant le 11 décembre 2023, et",
             "opt-back": "ne pouvez pas vous réinscrire en vertu des règles relatives aux régimes de retraite"
@@ -391,19 +391,17 @@
     "detail": {
       "additional-info": {
         "title": "Renseignements supplémentaires",
-        "eligible": "Vous êtes toujours considéré comme ayant accès à l'assurance ou à la couverture dentaire si vous choisissez de ne pas bénéficier des prestations fournies par votre assurance ou celle d'un membre de votre famille\u00a0:",
-        "eligible-list": {
-          "employer": "un employeur",
-          "pension": "un régime de retraite (voir exception)",
-          "professional": "une organisation professionnelle ou étudiante"
+        "eligible": "Exception\u00a0: Vous pourriez toujours être admissible si vous avez pris votre retraite et\u00a0:",
+        "list": {
+          "opted": "vous avez renoncé aux prestations de retraite avant le 11 décembre 2023, et",
+          "cannot-opt": "vous ne pouvez pas vous réinscrire en vertu des règles relatives aux régimes de retraite"
         },
-        "not-eligible": "À ce titre, vous n'êtes pas admissible au Régime canadien de soins dentaires.",
-        "not-eligible-purchased": "Si vous avez souscrit votre police d'assurance dentaire actuelle de votre propre chef, vous n'êtes pas admissible au Régime canadien de soins dentaires pendant que cette protection est en vigueur.",
-        "excepton": "Exception\u00a0: Vous pourriez toujours être admissible si vous avez pris votre retraite et\u00a0:",
-        "exception-list": {
-          "opted-out": "vous avez renoncé aux prestations de retraite avant le 11 décembre 2023, et",
-          "opt-back": "vous ne pouvez pas vous réinscrire en vertu des règles relatives aux régimes de retraite"
-        }
+        "not-eligible": "Vous êtes toujours considéré comme ayant accès à l'assurance ou à la couverture dentaire si vous choisissez de ne pas bénéficier des prestations fournies par votre assurance ou celle d'un membre de votre famille\u00a0:",
+        "not-eligible-employer": "un employeur;",
+        "not-eligible-pension": "un régime de retraite (voir exception);",
+        "not-eligible-organization": "une organisation professionnelle ou étudiante.",
+        "not-eligible-note": "À ce titre, vous n'êtes pas admissible au Régime canadien de soins dentaires.",
+        "not-eligible-purchased": "Si vous avez souscrit votre police d'assurance dentaire actuelle de votre propre chef, vous n'êtes pas admissible au Régime canadien de soins dentaires pendant que cette protection est en vigueur."
       }
     },
     "error-message": {
