@@ -6,6 +6,7 @@ import letterTypesJson from '~/resources/power-platform/letter-types.json';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getEnv } from '~/utils/env.server';
+import { getFetchFn } from '~/utils/fetch-utils';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('letters-service.server');
@@ -21,12 +22,15 @@ function createLettersService() {
     GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS,
     ENGLISH_LANGUAGE_CODE,
     FRENCH_LANGUAGE_CODE,
+    HTTP_PROXY_URL,
     INTEROP_API_BASE_URI,
     INTEROP_API_SUBSCRIPTION_KEY,
     INTEROP_CCT_API_BASE_URI,
     INTEROP_CCT_API_SUBSCRIPTION_KEY,
     INTEROP_CCT_API_COMMUNITY,
   } = getEnv();
+
+  const fetchFn = getFetchFn(HTTP_PROXY_URL);
 
   /**
    * @returns returns all the letter types
@@ -63,7 +67,7 @@ function createLettersService() {
     const url = new URL(`${INTEROP_CCT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetDocInfoByClientId`);
     url.searchParams.set('clientid', clientId);
 
-    const response = await fetch(url, {
+    const response = await fetchFn(url, {
       headers: {
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': INTEROP_CCT_API_SUBSCRIPTION_KEY ?? INTEROP_API_SUBSCRIPTION_KEY,
@@ -119,7 +123,7 @@ function createLettersService() {
 
     auditService.audit('pdf.get', { letterId, userId });
 
-    const response = await fetch(url, {
+    const response = await fetchFn(url, {
       headers: {
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': INTEROP_CCT_API_SUBSCRIPTION_KEY ?? INTEROP_API_SUBSCRIPTION_KEY,

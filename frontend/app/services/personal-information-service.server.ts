@@ -5,6 +5,7 @@ import { getInstrumentationService } from './instrumentation-service.server';
 import { toGetApplicantRequest, toPersonalInformation, toUpdateApplicantRequest } from '~/mappers/personal-information-service-mappers.server';
 import { PersonalInformation, getApplicantResponseSchema, updateApplicantRequestSchema } from '~/schemas/personal-informaton-service-schemas.server';
 import { getEnv } from '~/utils/env.server';
+import { getFetchFn } from '~/utils/fetch-utils';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('personal-information-service.server');
@@ -17,12 +18,15 @@ export const getPersonalInformationService = moize(createPersonalInformationServ
 
 function createPersonalInformationService() {
   // prettier-ignore
-  const { 
+  const {
+    HTTP_PROXY_URL,
     INTEROP_API_BASE_URI,
     INTEROP_API_SUBSCRIPTION_KEY,
     INTEROP_APPLICANT_API_BASE_URI,
     INTEROP_APPLICANT_API_SUBSCRIPTION_KEY,
   } = getEnv();
+
+  const fetchFn = getFetchFn(HTTP_PROXY_URL);
 
   async function getPersonalInformation(sin: string, userId: string) {
     log.debug('Fetching personal information for user id [%s]', userId);
@@ -36,7 +40,7 @@ function createPersonalInformationService() {
 
     auditService.audit('personal-information.get', { userId });
 
-    const response = await fetch(url, {
+    const response = await fetchFn(url, {
       method: 'POST', // Interop uses POST to avoid logging SIN in the API path
       body: JSON.stringify(applicantRequest),
       headers: {
@@ -80,7 +84,7 @@ function createPersonalInformationService() {
 
     // TODO: The Interop API for updating dental applicant information is not yet available.
     const url = `${INTEROP_APPLICANT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant/${sin}`;
-    const response = await fetch(url, {
+    const response = await fetchFn(url, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

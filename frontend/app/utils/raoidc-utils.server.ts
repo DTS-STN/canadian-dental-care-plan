@@ -5,6 +5,7 @@ import { UTCDate } from '@date-fns/utc';
 import { JWTPayload, JWTVerifyResult, SignJWT, compactDecrypt, importJWK, jwtVerify } from 'jose';
 import { createHash, subtle } from 'node:crypto';
 
+import { FetchFunction } from './fetch-utils';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('raoidc-utils.server');
@@ -128,21 +129,6 @@ export interface ServerMetadata extends Record<string, unknown> {
   revocation_endpoint?: string;
   token_endpoint_auth_methods_supported?: Array<string>;
   token_endpoint_auth_signing_alg_values_supported?: Array<string>;
-}
-
-/**
- * A custom fetch(..) function that can be used when calling OIDC endpoints.
- * Primarily used for intercepting responses or configuring an http proxy.
- */
-export interface FetchFunction {
-  (input: string | URL, init?: FetchFunctionInit): Promise<Response>;
-}
-
-/**
- * Init options for FetchFunction.
- */
-export interface FetchFunctionInit extends RequestInit {
-  body?: string; // forces compatibility between node.fetch() and undici.fetch()
 }
 
 /**

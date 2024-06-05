@@ -6,6 +6,7 @@ import { BenefitApplicationRequest, benefitApplicationRequestSchema, benefitAppl
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getEnv } from '~/utils/env.server';
+import { getFetchFn } from '~/utils/fetch-utils';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('benefit-application-service.server');
@@ -13,11 +14,14 @@ const log = getLogger('benefit-application-service.server');
 function createBenefitApplicationService() {
   // prettier-ignore
   const {
+    HTTP_PROXY_URL,
     INTEROP_API_BASE_URI,
     INTEROP_API_SUBSCRIPTION_KEY,
     INTEROP_BENEFIT_APPLICATION_API_BASE_URI,
     INTEROP_BENEFIT_APPLICATION_API_SUBSCRIPTION_KEY,
   } = getEnv();
+
+  const fetchFn = getFetchFn(HTTP_PROXY_URL);
 
   /**
    * Application submission to Power Platform
@@ -41,7 +45,7 @@ function createBenefitApplicationService() {
 
     const url = new URL(`${INTEROP_BENEFIT_APPLICATION_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application`);
 
-    const response = await fetch(url, {
+    const response = await fetchFn(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -90,7 +94,7 @@ function createBenefitApplicationService() {
 
     const url = new URL(`${INTEROP_BENEFIT_APPLICATION_API_BASE_URI ?? INTEROP_API_BASE_URI}/v1/users/${userId}/applications`);
 
-    const response = await fetch(url, {
+    const response = await fetchFn(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
