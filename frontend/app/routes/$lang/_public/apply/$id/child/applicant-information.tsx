@@ -211,6 +211,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
+  if (ageCategory === 'children') {
+    return redirect(getPathById('$lang/_public/apply/$id/child/contact-apply-child', params));
+  }
+
   if (state.editMode) {
     return redirect(getPathById('$lang/_public/apply/$id/child/review-adult-information', params));
   }

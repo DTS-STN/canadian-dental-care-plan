@@ -286,12 +286,12 @@
     }
   },
   "contact-apply-child": {
-    "page-title": "(FR) Contact us to apply for your child",
-    "speak-service-canada": "(FR) You must speak to a Service Canada representative if you are under 16 and applying for your child.",
-    "contact-service-canada": "(FR) Please contact Service Canada by calling <noWrap>1-833-537-4342</noWrap> or visit a <serviceCanadaOfficeLink>Service Canada Office</serviceCanadaOfficeLink>.",
+    "page-title": "Communiquez avec nous pour faire une demande pour votre enfant",
+    "speak-service-canada": "Vous devez parler à un représentant de Service Canada si vous avez moins de 16 ans et présentez une demande pour votre enfant.",
+    "contact-service-canada": "Veuillez communiquer avec Service Canada au <noWrap>1-833-537-4342<noWrap> ou vous rendre dans un <serviceCanadaOfficeLink>bureau de Service Canada</serviceCanadaOfficeLink>.",
     "service-canada-office-link": "https://www.servicecanada.gc.ca/tbsc-fsco/sc-hme.jsp?lang=fra",
-    "back-btn": "(FR) Back",
-    "return-btn": "(FR) Return to main page",
+    "back-btn": "Retour",
+    "return-btn": "Revenir à la page principale",
     "return-btn-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
   },
   "eligibility": {
