@@ -31,7 +31,7 @@ export const applyIdParamSchema = z.string().uuid();
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.adult.confirmation,
+  pageIdentifier: pageIds.public.apply.adultChild.confirmation,
   pageTitleI18nKey: 'apply-adult-child:confirm.page-title',
 } as const satisfies RouteHandleData;
 
