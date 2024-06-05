@@ -43,8 +43,7 @@ public abstract class SubscriptionModelMapper extends AbstractModelMapper {
 
 	@AfterMapping
 	public SubscriptionModel afterMappingToModel(String userId, @MappingTarget SubscriptionModel subscription) {
-		return subscription
-		.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionById(userId, subscription.getId())).withSelfRel());
+		return subscription.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionById(userId, subscription.getId())).withSelfRel());
 	}
 
 	@Mapping(target = "id", ignore = true)
