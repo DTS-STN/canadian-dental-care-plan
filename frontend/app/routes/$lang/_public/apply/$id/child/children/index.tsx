@@ -188,7 +188,7 @@ export default function ApplyFlowChildSummary() {
                       <DialogTrigger asChild>
                         <Button id="remove-child" disabled={isSubmitting} size="sm" variant="alternative">
                           <FontAwesomeIcon icon={faRemove} className="me-3 block size-3" />
-                          {t('apply-child:children.index.modal.remove-btn')}
+                          {t('apply-child:children.index.remove-btn')}
                         </Button>
                       </DialogTrigger>
                       <DialogContent className="sm:max-w-md">
