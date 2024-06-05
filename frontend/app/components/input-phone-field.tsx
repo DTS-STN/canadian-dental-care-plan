@@ -1,9 +1,7 @@
 import { useState } from 'react';
 
 import { E164Number } from 'libphonenumber-js';
-import PhoneInput, { FeatureProps } from 'react-phone-number-input/input';
-import enLabels from 'react-phone-number-input/locale/en';
-import frLabels from 'react-phone-number-input/locale/fr';
+import PhoneInput from 'react-phone-number-input/input';
 
 import { InputError } from './input-error';
 import { InputHelp } from './input-help';
@@ -15,7 +13,7 @@ const inputDisabledClassName = 'disabled:bg-gray-100 disabled:pointer-events-non
 const inputReadOnlyClassName = 'read-only:bg-gray-100 read-only:pointer-events-none read-only:cursor-not-allowed read-only:opacity-70';
 const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
-export interface InputPhoneFieldProps extends Omit<FeatureProps<React.InputHTMLAttributes<HTMLInputElement>>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children' | 'labels'> {
+export interface InputPhoneFieldProps extends Omit<React.ComponentProps<typeof PhoneInput>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children'> {
   defaultValue?: string;
   errorMessage?: string;
   helpMessagePrimary?: React.ReactNode;
@@ -24,12 +22,11 @@ export interface InputPhoneFieldProps extends Omit<FeatureProps<React.InputHTMLA
   helpMessageSecondaryClassName?: string;
   id: string;
   label: string;
-  locale?: string;
   name: string;
 }
 
 export function InputPhoneField(props: InputPhoneFieldProps) {
-  const { 'aria-describedby': ariaDescribedby, className, defaultValue, defaultCountry, errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, locale, required, ...restProps } = props;
+  const { 'aria-describedby': ariaDescribedby, className, defaultValue, defaultCountry, errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, required, ...restProps } = props;
   const [value, setValue] = useState(defaultValue);
 
   const inputWrapperId = `input-phone-field-${id}`;
@@ -45,8 +42,6 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
     if (helpMessageSecondary) describedby.push(inputHelpMessageSecondaryId);
     return describedby.length > 0 ? describedby.join(' ') : undefined;
   }
-
-  const labels = locale === 'fr' ? frLabels : enLabels;
 
   function handleOnPhoneInputChange(value?: E164Number) {
     setValue(value);
@@ -76,7 +71,6 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
         data-testid="input-phone-field"
         defaultCountry={defaultCountry ?? 'CA'}
         id={id}
-        labels={labels}
         className={cn(inputBaseClassName, inputDisabledClassName, inputReadOnlyClassName, errorMessage && inputErrorClassName, className)}
         onChange={handleOnPhoneInputChange}
         required={required}
