@@ -280,7 +280,7 @@
     "modal": {
       "header": "Fermer la demande",
       "info": "En fermant cette demande, vous mettrez fin à votre session et les informations saisies seront effacées de votre navigateur. Assurez-vous d'avoir une copie de votre code de demande.",
-      "are-you-sure": "Êtes-vous sûr de vouloir fermer la demande\u00a0?",
+      "are-you-sure": "Êtes-vous sûr de vouloir fermer la demande?",
       "back-btn": "Retour",
       "close-btn": "Fermer la demande"
     }
