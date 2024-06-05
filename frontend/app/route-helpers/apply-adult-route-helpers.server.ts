@@ -1,7 +1,8 @@
 import { Session, redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
+import { isRedirectResponse, isResponse } from '@remix-run/server-runtime/dist/responses';
 
-import { ApplyState, applicantInformationStateHasPartner, getAgeCategoryFromDateString, loadApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { ApplyState, applicantInformationStateHasPartner, getAgeCategoryFromDateString, loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 
@@ -43,6 +44,31 @@ export function loadApplyAdultState({ params, request, session }: LoadApplyAdult
   }
 
   return applyState;
+}
+
+interface LoadApplyAdultStateForReviewArgs {
+  params: Params;
+  request: Request;
+  session: Session;
+}
+
+/**
+ * Loads the adult state for the review page. It validates the state and throws a redirect if invalid.
+ * If a redirect exception is thrown, state.editMode is set to false.
+ * @param args - The arguments.
+ * @returns The validated adult state.
+ */
+export function loadApplyAdultStateForReview({ params, request, session }: LoadApplyAdultStateForReviewArgs) {
+  const state = loadApplyAdultState({ params, request, session });
+
+  try {
+    return validateApplyAdultStateForReview({ params, state });
+  } catch (err) {
+    if (isResponse(err) && isRedirectResponse(err)) {
+      saveApplyState({ params, session, state: { editMode: false } });
+    }
+    throw err;
+  }
 }
 
 interface ValidateApplyAdultStateForReviewArgs {

@@ -1,9 +1,10 @@
 import { Session, redirect } from '@remix-run/node';
 import { Params } from '@remix-run/react';
+import { isRedirectResponse, isResponse } from '@remix-run/server-runtime/dist/responses';
 
 import { z } from 'zod';
 
-import { ApplyState, ChildState, applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, isNewChildState, loadApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { ApplyState, ChildState, applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, isNewChildState, loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 
@@ -86,6 +87,31 @@ export function loadApplyAdultSingleChildState({ params, request, session }: Loa
     editMode,
     isNew,
   };
+}
+
+interface LoadApplyAdultChildStateForReviewArgs {
+  params: Params;
+  request: Request;
+  session: Session;
+}
+
+/**
+ * Loads the adult-child state for the review page. It validates the state and throws a redirect if invalid.
+ * If a redirect exception is thrown, state.editMode is set to false.
+ * @param args - The arguments.
+ * @returns The validated adult-child state.
+ */
+export function loadApplyAdultChildStateForReview({ params, request, session }: LoadApplyAdultChildStateForReviewArgs) {
+  const state = loadApplyAdultChildState({ params, request, session });
+
+  try {
+    return validateApplyAdultChildStateForReview({ params, state });
+  } catch (err) {
+    if (isResponse(err) && isRedirectResponse(err)) {
+      saveApplyState({ params, session, state: { editMode: false } });
+    }
+    throw err;
+  }
 }
 
 interface ValidateApplyAdultChildStateForReviewArgs {

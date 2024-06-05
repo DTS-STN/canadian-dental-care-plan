@@ -15,7 +15,7 @@ import { Button } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
 import { Progress } from '~/components/progress';
-import { loadApplyChildState, validateApplyChildStateForReview } from '~/route-helpers/apply-child-route-helpers.server';
+import { loadApplyChildStateForReview } from '~/route-helpers/apply-child-route-helpers.server';
 import { clearApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -46,7 +46,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const state = validateApplyChildStateForReview({ params, state: loadApplyChildState({ params, request, session }) });
+  const state = loadApplyChildStateForReview({ params, request, session });
 
   // apply state is valid then edit mode can be set to true
   saveApplyState({ params, session, state: { editMode: true } });
@@ -77,7 +77,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply-child/review-adult-information');
 
-  validateApplyChildStateForReview({ params, state: loadApplyChildState({ params, request, session }) });
+  loadApplyChildStateForReview({ params, request, session });
 
   const { ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
