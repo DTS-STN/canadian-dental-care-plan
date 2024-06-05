@@ -63,19 +63,19 @@
       }
     },
     "information": {
-      "page-title": "(FR) {{childName}}: information",
+      "page-title": "{{childName}}\u00a0: Renseignements",
       "child-number": "Enfant {{childNumber}}",
-      "form-instructions-sin": "(FR) Provide the child's legal name as indicated on their Social Insurance Number (SIN) card or letter (if available), or other government documentation.",
-      "single-legal-name": "(FR) If the child has a single legal name",
-      "name-instructions": "(FR) If the child uses a single legal name, please enter that name in BOTH the first name and last name fields.",
+      "form-instructions-sin": "Indiquer le nom légal de l'enfant tel qu'indiqué sur sa carte ou sa lettre de numéro d'assurance sociale (le cas échéant) ou tout autre document gouvernemental.",
+      "single-legal-name": "Si l'enfant a un seul nom légal",
+      "name-instructions": "Si l'enfant utilise un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",
       "last-name": "Nom de famille",
       "first-name": "Prénom",
-      "date-of-birth": "(FR) Date of birth",
-      "sin-legend": "(FR) Does this child have a Social Insurance Number (SIN)?",
-      "sin-yes": "(FR) <bold>Yes</bold>, this child has a SIN",
-      "sin-no": "(FR) <bold>No</bold>, this child does not have a SIN",
+      "date-of-birth": "Date de naissance",
+      "sin-legend": "L'enfant a-t-il un numéro d'assurance sociale (NAS)?",
+      "sin-yes": "<strong>Oui</strong>, l'enfant a un NAS",
+      "sin-no": "<strong>Non</strong>, l'enfant n'a pas de NAS",
       "sin": "Entrez un NAS de 9 chiffres",
-      "parent-legend": "(FR) Are you the parent or legal guardian of this child?",
+      "parent-legend": "Êtes-vous le parent ou le tuteur légal de cet enfant?",
       "radio-options": {
         "yes": "Oui",
         "no": "Non"
