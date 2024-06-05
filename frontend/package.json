@@ -65,6 +65,7 @@
     "react-dom": "^18.3.1",
     "react-i18next": "^14.1.2",
     "react-idle-timer": "^5.7.2",
+    "react-number-format": "^5.4.0",
     "react-phone-number-input": "^3.4.3",
     "sanitize-filename-ts": "^1.0.2",
     "source-map-support": "^0.5.21",

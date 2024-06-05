@@ -15,6 +15,7 @@ import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
+import { InputSinField } from '~/components/input-sin-field';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { PartnerInformationState, applicantInformationStateHasPartner, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
@@ -264,7 +265,7 @@ export default function ApplyFlowApplicationInformation() {
               }}
               required
             />
-            <InputField
+            <InputSinField
               id="social-insurance-number"
               name="socialInsuranceNumber"
               label={t('apply-adult:partner-information.sin')}

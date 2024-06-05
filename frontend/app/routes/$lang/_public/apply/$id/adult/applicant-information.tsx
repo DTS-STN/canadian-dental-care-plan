@@ -15,6 +15,7 @@ import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
+import { InputSinField } from '~/components/input-sin-field';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { ApplicantInformationState, applicantInformationStateHasPartner, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
@@ -231,7 +232,7 @@ export default function ApplyFlowApplicationInformation() {
                 required
               />
             </div>
-            <InputField
+            <InputSinField
               id="social-insurance-number"
               name="socialInsuranceNumber"
               label={t('applicant-information.sin')}
