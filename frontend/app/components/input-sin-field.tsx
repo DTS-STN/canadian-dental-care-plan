@@ -19,7 +19,6 @@ export interface InputSinFieldProps extends Omit<React.ComponentProps<typeof Pat
   helpMessageSecondaryClassName?: string;
   id: string;
   label: string;
-  locale?: string;
   name: string;
 }
 
