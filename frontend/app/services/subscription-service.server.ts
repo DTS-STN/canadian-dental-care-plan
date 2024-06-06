@@ -87,8 +87,21 @@ function createSubscriptionService() {
     });
 
     instrumentationService.countHttpStatus('http.client.cdcp-api.users.gets', response.status);
+
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed find data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to find data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
+
     const users = await response.json();
-    if (users._embedded.users.length == 0) {
+    if (users._embedded.users.length === 0) {
       return null;
     }
     const userParsed = userSchema.parse(users._embedded.users[0]);
@@ -136,10 +149,23 @@ function createSubscriptionService() {
       },
     });
 
-    instrumentationService.countHttpStatus('http.client.cdcp-api.users.gets', response.status);
+    instrumentationService.countHttpStatus('http.client.cdcp-api.users.delete', response.status);
+
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed find data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to find data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
+
     const users = await response.json();
-    if (users._embedded.users.length == 0) {
-      return null;
+    if (users._embedded.users.length === 0) {
+      throw new Error(`Failed to find the user: ${userId}.`);
     }
     const userParsed = userSchema.parse(users._embedded.users[0]);
 
@@ -151,7 +177,7 @@ function createSubscriptionService() {
       },
     });
 
-    instrumentationService.countHttpStatus('http.client.cdcp-api.alert-subscription.gets', subscriptionsResponse.status);
+    instrumentationService.countHttpStatus('http.client.cdcp-api.alert-subscription.delete', subscriptionsResponse.status);
 
     const subscriptions = subscriptionsSchema.parse(await subscriptionsResponse.json())._embedded.subscriptions;
 
