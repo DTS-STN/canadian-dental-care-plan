@@ -1,6 +1,5 @@
 import { createMemorySessionStorage } from '@remix-run/node';
 
-import { UTCDate } from '@date-fns/utc';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { loader } from '~/routes/$lang/_protected/personal-information/index';
@@ -66,7 +65,7 @@ vi.mock('~/services/personal-information-service.server', () => ({
       lastName: 'Maverick',
       mailingAddress: '123 Mailing Street',
       phoneNumber: '(555) 555-5555',
-      birthDate: new UTCDate('1950-10-11T00:00:00.000Z'),
+      birthDate: '1950-10-11',
       maritalStatusId: 'SINGLE',
       getHomeAddress: vi.fn().mockReturnValue({
         address: 'address',
@@ -169,7 +168,7 @@ describe('_gcweb-app.personal-information._index', () => {
           mailingAddress: '123 Mailing Street',
           phoneNumber: '(555) 555-5555',
           preferredLanguageId: '1033',
-          birthDate: '1950-10-11T00:00:00.000Z',
+          birthDate: '1950-10-11',
           maritalStatusId: 'SINGLE',
         },
       });

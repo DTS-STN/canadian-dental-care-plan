@@ -32,7 +32,7 @@ export function toUpdateApplicantRequest(personalInformation: PersonalInformatio
           },
         ],
         PersonBirthDate: {
-          dateTime: personalInformation.birthDate,
+          date: personalInformation.birthDate,
         },
         PersonContactInformation: [
           {
@@ -102,7 +102,7 @@ export function toPersonalInformation(getApplicantResponse: GetApplicantResponse
     applictantId: getApplicantResponse.BenefitApplication.Applicant?.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Applicant ID').at(0)?.IdentificationID,
     clientId: getApplicantResponse.BenefitApplication.Applicant?.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Client ID').at(0)?.IdentificationID,
     clientNumber: getApplicantResponse.BenefitApplication.Applicant?.ClientIdentification?.filter((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Client Number').at(0)?.IdentificationID,
-    birthDate: getApplicantResponse.BenefitApplication.Applicant?.PersonBirthDate.dateTime,
+    birthDate: getApplicantResponse.BenefitApplication.Applicant?.PersonBirthDate.date,
     firstName: getApplicantResponse.BenefitApplication.Applicant?.PersonName?.at(0)?.PersonGivenName?.at(0),
     lastName: getApplicantResponse.BenefitApplication.Applicant?.PersonName?.at(0)?.PersonSurName,
     emailAddress: getApplicantResponse.BenefitApplication.Applicant?.PersonContactInformation.at(0)?.EmailAddress.at(0)?.EmailAddressID,

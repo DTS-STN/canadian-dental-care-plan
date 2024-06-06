@@ -132,7 +132,7 @@ export function getPowerPlatformApiMockHandlers() {
             ClientIdentification: listOfClientId,
             PersonName: nameInfoList,
             PersonBirthDate: {
-              dateTime: peronalInformationEntity.birthdate,
+              date: peronalInformationEntity.birthdate,
             },
             PersonContactInformation: [
               {
@@ -266,7 +266,7 @@ function toPersonalInformationDB(personalInformation: PersonalInformation) {
     clientId: personalInformation.clientId,
     applicantId: personalInformation.applictantId,
     applicantCategoryCode: personalInformation.applicantCategoryCode,
-    birthdate: personalInformation.birthDate !== undefined ? new Date(personalInformation.birthDate) : undefined,
+    birthdate: personalInformation.birthDate,
     lastName: personalInformation.lastName,
     firstName: personalInformation.firstName,
     emailAddressId: personalInformation.emailAddress,

@@ -19,7 +19,7 @@
         }
       ],
       "PersonBirthDate": {
-        "dateTime": "1983-07-17T00:00:00Z"
+        "date": "1983-07-17"
       },
       "PersonContactInformation": [
         {
