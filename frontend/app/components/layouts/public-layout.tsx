@@ -92,7 +92,8 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
   const en = i18n.getFixedT('en');
   const fr = i18n.getFixedT('fr');
 
-  const homeLink = <Link to="/" className="text-slate-700 underline hover:text-blue-700 focus:text-blue-700" />;
+  const englishCdcpLink = <InlineLink to={en('gcweb:public-not-found.cdcp-link')} className="external-link" newTabIndicator target="_blank" />;
+  const frenchCdcpLink = <InlineLink to={fr('gcweb:public-not-found.cdcp-link')} className="external-link" newTabIndicator target="_blank" />;
 
   useEffect(() => {
     if (adobeAnalytics.isConfigured()) {
@@ -120,25 +121,25 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
         <div className="grid grid-cols-1 gap-6 py-2.5 sm:grid-cols-2 sm:py-3.5">
           <div id="english" lang="en">
             <PageTitle className="my-8">
-              <span>{en('gcweb:not-found.page-title')}</span>
-              <small className="block text-2xl font-normal text-neutral-500">{en('gcweb:not-found.page-subtitle')}</small>
+              <span>{en('gcweb:public-not-found.page-title')}</span>
+              <small className="block text-2xl font-normal text-neutral-500">{en('gcweb:public-not-found.page-subtitle')}</small>
             </PageTitle>
-            <p className="mb-8 text-lg text-gray-500">{en('gcweb:not-found.page-message')}</p>
+            <p className="mb-8 text-lg text-gray-500">{en('gcweb:public-not-found.page-message')}</p>
             <ul className="list-disc space-y-2 pl-10">
               <li>
-                <Trans t={en} ns={['gcweb']} i18nKey="gcweb:not-found.page-link" components={{ home: homeLink }} />
+                <Trans t={en} ns={['gcweb']} i18nKey="gcweb:public-not-found.return-cdcp" components={{ englishCdcpLink }} />
               </li>
             </ul>
           </div>
           <div id="french" lang="fr">
             <PageTitle className="my-8">
-              <span>{fr('gcweb:not-found.page-title')}</span>
-              <small className="block text-2xl font-normal text-neutral-500">{fr('gcweb:not-found.page-subtitle')}</small>
+              <span>{fr('gcweb:public-not-found.page-title')}</span>
+              <small className="block text-2xl font-normal text-neutral-500">{fr('gcweb:public-not-found.page-subtitle')}</small>
             </PageTitle>
-            <p className="mb-8 text-lg text-gray-500">{fr('gcweb:not-found.page-message')}</p>
+            <p className="mb-8 text-lg text-gray-500">{fr('gcweb:public-not-found.page-message')}</p>
             <ul className="list-disc space-y-2 pl-10">
               <li>
-                <Trans t={fr} ns={['gcweb']} i18nKey="gcweb:not-found.page-link" components={{ home: homeLink }} />
+                <Trans t={fr} ns={['gcweb']} i18nKey="gcweb:public-not-found.return-cdcp" components={{ frenchCdcpLink }} />
               </li>
             </ul>
           </div>
@@ -166,7 +167,7 @@ export interface NotFoundErrorProps {
 
 export function NotFoundError({ error }: NotFoundErrorProps) {
   const { t } = useTranslation(i18nNamespaces);
-  const home = <InlineLink to="/apply" />;
+  const cdcpLink = <InlineLink to={t('gcweb:public-not-found.cdcp-link')} className="external-link" newTabIndicator target="_blank" />;
 
   useEffect(() => {
     if (adobeAnalytics.isConfigured()) {
@@ -179,13 +180,13 @@ export function NotFoundError({ error }: NotFoundErrorProps) {
       <PageHeader />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
         <PageTitle className="my-8">
-          <span>{t('gcweb:not-found.page-title')}</span>
-          <small className="block text-2xl font-normal text-neutral-500">{t('gcweb:not-found.page-subtitle')}</small>
+          <span>{t('gcweb:public-not-found.page-title')}</span>
+          <small className="block text-2xl font-normal text-neutral-500">{t('gcweb:public-not-found.page-subtitle')}</small>
         </PageTitle>
-        <p className="mb-8 text-lg text-gray-500">{t('gcweb:not-found.page-message')}</p>
+        <p className="mb-8 text-lg text-gray-500">{t('gcweb:public-not-found.page-message')}</p>
         <ul className="list-disc space-y-2 pl-10">
           <li>
-            <Trans ns={i18nNamespaces} i18nKey="gcweb:not-found.page-link" components={{ home }} />
+            <Trans ns={i18nNamespaces} i18nKey="gcweb:public-not-found.unilingual-return-cdcp" components={{ cdcpLink }} />
           </li>
         </ul>
         <PageDetails />
