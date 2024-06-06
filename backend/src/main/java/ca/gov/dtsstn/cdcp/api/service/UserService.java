@@ -174,6 +174,29 @@ public class UserService {
 		userRepository.save(user);
 	}
 
+	public boolean verifyEmail(String userId, String code){
+		Assert.hasText(code, "code is required; it must not be null or blank");
+		Assert.hasText(userId, "userId is required; it must not be null or blank");
+
+		log.debug("Fetching user [{}] from repository" , userId);
+		final var user = userRepository.findById(userId).orElseThrow();
+
+		final var hasConfirmationCode = user.getConfirmationCodes().stream()
+			.filter(byNotExpired(Instant.now())).anyMatch(byCode(code));
+
+		if (hasConfirmationCode == false) {
+			log.debug("User [{}] has no valid confirmation code [{}]", userId, code);
+			return false;
+		}
+
+		log.info("Found confirmation code [{}] for user [{}]; validating email address", code, userId);
+		user.setEmailVerified(true);
+		user.getConfirmationCodes().clear();
+		userRepository.save(user);
+
+		return true;
+	}
+
 	private Predicate<SubscriptionEntity> byAlertTypeId(String alertTypeId) {
 		Assert.hasText(alertTypeId, "alertTypeId is required; it must not be null or blank");
 		return subscription -> alertTypeId.equals(subscription.getAlertType().getId());
@@ -187,6 +210,11 @@ public class UserService {
 	private Predicate<SubscriptionEntity> byId(String id) {
 		Assert.hasText(id, "id is required; it must not be null or blank");
 		return subscription -> id.equals(subscription.getId());
+	}
+
+	private Predicate<ConfirmationCodeEntity> byNotExpired(Instant instant) {
+		Assert.notNull(instant, "instant is required; it must not be null");
+		return confirmationCode -> confirmationCode.getExpiryDate().isAfter(instant);
 	}
 
 }
