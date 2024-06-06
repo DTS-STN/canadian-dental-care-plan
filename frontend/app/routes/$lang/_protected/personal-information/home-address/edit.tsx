@@ -4,6 +4,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
+import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import validator from 'validator';
@@ -32,6 +34,7 @@ import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   breadcrumbs: [
@@ -199,6 +202,7 @@ export default function PersonalInformationHomeAddressEdit() {
   const [countryRegions, setCountryRegions] = useState<typeof regionList>([]);
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const errorSummaryId = 'error-summary';
+  const isSubmitting = fetcher.state !== 'idle';
 
   // Keys order should match the input IDs order.
   const errorMessages = useMemo(
@@ -275,6 +279,7 @@ export default function PersonalInformationHomeAddressEdit() {
               required
               defaultValue={addressInfo.streetName}
               errorMessage={errorMessages['street-name']}
+              disabled={isSubmitting}
             />
             <InputField
               id="apartment-number"
@@ -330,11 +335,12 @@ export default function PersonalInformationHomeAddressEdit() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" routeId="$lang/_protected/personal-information/index" params={params}>
+          <ButtonLink id="back-button" routeId="$lang/_protected/personal-information/index" params={params} disabled={isSubmitting}>
             {t('personal-information:home-address.edit.button.back')}
           </ButtonLink>
-          <Button id="save-button" variant="primary">
+          <Button id="save-button" variant="primary" disabled={isSubmitting}>
             {t('personal-information:home-address.edit.button.save')}
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
         </div>
       </fetcher.Form>

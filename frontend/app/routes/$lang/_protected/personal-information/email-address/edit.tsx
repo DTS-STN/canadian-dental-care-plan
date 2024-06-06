@@ -4,6 +4,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
+import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
@@ -25,6 +27,7 @@ import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   breadcrumbs: [
@@ -133,7 +136,7 @@ export default function EmailAddressEdit() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const errorSummaryId = 'error-summary';
-
+  const isSubmitting = fetcher.state !== 'idle';
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const defaultValues = {
@@ -177,10 +180,11 @@ export default function EmailAddressEdit() {
           />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <Button id="submit" variant="primary">
+          <Button id="submit" variant="primary" disabled={isSubmitting}>
             {t('personal-information:email-address.edit.button.save')}
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
-          <ButtonLink id="cancel" routeId="$lang/_protected/personal-information/index" params={params}>
+          <ButtonLink id="cancel" routeId="$lang/_protected/personal-information/index" params={params} disabled={isSubmitting}>
             {t('personal-information:email-address.edit.button.cancel')}
           </ButtonLink>
         </div>
