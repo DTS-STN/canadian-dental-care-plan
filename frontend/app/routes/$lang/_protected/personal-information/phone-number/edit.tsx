@@ -4,6 +4,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
+import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isValidPhoneNumber, parsePhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -28,6 +30,7 @@ import { IdToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   breadcrumbs: [
@@ -139,7 +142,7 @@ export default function PhoneNumberEdit() {
   const { csrfToken, personalInformation } = useLoaderData<typeof loader>();
   const params = useParams();
   const errorSummaryId = 'error-summary';
-
+  const isSubmitting = fetcher.state !== 'idle';
   const { t } = useTranslation(handle.i18nNamespaces);
 
   const defaultValues = {
@@ -186,11 +189,12 @@ export default function PhoneNumberEdit() {
           />
         </div>
         <div className="flex flex-wrap items-center gap-6 sm:my-4">
-          <ButtonLink id="cancel" routeId="$lang/_protected/personal-information/index" params={params}>
+          <ButtonLink id="cancel" routeId="$lang/_protected/personal-information/index" params={params} disabled={isSubmitting}>
             {t('personal-information:phone-number.edit.button.cancel')}
           </ButtonLink>
-          <Button id="submit" variant="primary">
+          <Button id="submit" variant="primary" disabled={isSubmitting}>
             {t('personal-information:phone-number.edit.button.save')}
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
         </div>
       </fetcher.Form>
