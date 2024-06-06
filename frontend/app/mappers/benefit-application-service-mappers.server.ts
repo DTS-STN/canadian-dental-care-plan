@@ -420,7 +420,7 @@ function toRelatedPersonDependent({ children }: ToRelatedPersonDependentArgs) {
         },
       ],
       PersonRelationshipCode: {
-        ReferenceDataName: 'Dependent' as const,
+        ReferenceDataName: 'Dependant' as const,
       },
       PersonSINIdentification: {
         IdentificationID: child.information.socialInsuranceNumber ?? '',
