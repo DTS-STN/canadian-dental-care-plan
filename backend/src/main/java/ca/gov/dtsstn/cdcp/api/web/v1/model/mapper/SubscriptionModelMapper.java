@@ -3,7 +3,6 @@ package ca.gov.dtsstn.cdcp.api.web.v1.model.mapper;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.util.List;
 import java.util.stream.StreamSupport;
 
 import org.mapstruct.AfterMapping;
@@ -19,7 +18,6 @@ import ca.gov.dtsstn.cdcp.api.web.v1.controller.SubscriptionsController;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionCreateModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionModel;
 import jakarta.annotation.Nullable;
-
 
 @Mapper
 public abstract class SubscriptionModelMapper extends AbstractModelMapper {

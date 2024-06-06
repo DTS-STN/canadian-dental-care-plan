@@ -1,6 +1,7 @@
 package ca.gov.dtsstn.cdcp.api.web.v1.model.mapper;
 
 import java.util.List;
+
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
 import org.springframework.hateoas.server.core.EmbeddedWrappers;
@@ -22,5 +23,6 @@ public abstract class AbstractModelMapper {
 
 		final var emptyWrapper = new EmbeddedWrappers(false).emptyCollectionOf(type);
 		return (CollectionModel<C>) CollectionModel.of(List.of(emptyWrapper), links);
-	} 
+	}
+
 }
