@@ -236,7 +236,7 @@ describe('apply-adult-route-helpers.server', () => {
       expect(() => validateApplyAdultStateForReview({ params, state: mockState })).toThrow('MockedRedirect(MockedPath($lang/_public/apply/$id/adult/applicant-information, {"lang":"en","id":"00000000-0000-0000-0000-000000000000"}))');
     });
 
-    it('should redirect if personalInformation is undefined', () => {
+    it('should redirect if contactInformation is undefined', () => {
       const mockState = {
         ...baseState,
         typeOfApplication: 'adult',
@@ -256,7 +256,7 @@ describe('apply-adult-route-helpers.server', () => {
           lastName: 'Last Name',
           socialInsuranceNumber: '000-000-002',
         },
-        personalInformation: undefined,
+        contactInformation: undefined,
       } satisfies ApplyState;
 
       vi.mocked(getAgeCategoryFromDateString).mockReturnValueOnce('seniors');
@@ -285,7 +285,7 @@ describe('apply-adult-route-helpers.server', () => {
           lastName: 'Last Name',
           socialInsuranceNumber: '000-000-002',
         },
-        personalInformation: {
+        contactInformation: {
           copyMailingAddress: true,
           mailingAddress: '123 rue Peuplier',
           mailingCity: 'City',
@@ -320,7 +320,7 @@ describe('apply-adult-route-helpers.server', () => {
           lastName: 'Last Name',
           socialInsuranceNumber: '000-000-002',
         },
-        personalInformation: {
+        contactInformation: {
           copyMailingAddress: true,
           mailingAddress: '123 rue Peuplier',
           mailingCity: 'City',
@@ -359,7 +359,7 @@ describe('apply-adult-route-helpers.server', () => {
           lastName: 'Last Name',
           socialInsuranceNumber: '000-000-002',
         },
-        personalInformation: {
+        contactInformation: {
           copyMailingAddress: true,
           mailingAddress: '123 rue Peuplier',
           mailingCity: 'City',
@@ -398,7 +398,7 @@ describe('apply-adult-route-helpers.server', () => {
           lastName: 'Last Name',
           socialInsuranceNumber: '000-000-002',
         },
-        personalInformation: {
+        contactInformation: {
           copyMailingAddress: true,
           mailingAddress: '123 rue Peuplier',
           mailingCity: 'City',
@@ -450,7 +450,7 @@ describe('apply-adult-route-helpers.server', () => {
           lastName: 'Last Name',
           socialInsuranceNumber: '000-000-002',
         },
-        personalInformation: {
+        contactInformation: {
           copyMailingAddress: true,
           mailingAddress: '123 rue Peuplier',
           mailingCity: 'City',

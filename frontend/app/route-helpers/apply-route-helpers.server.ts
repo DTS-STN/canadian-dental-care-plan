@@ -65,7 +65,7 @@ export interface ApplyState {
     lastName: string;
     socialInsuranceNumber: string;
   };
-  readonly personalInformation?: {
+  readonly contactInformation?: {
     copyMailingAddress: boolean;
     homeAddress?: string;
     homeApartment?: string;
@@ -110,7 +110,7 @@ export type DentalFederalBenefitsState = Pick<NonNullable<ApplyState['dentalBene
 export type DentalInsuranceState = NonNullable<ApplyState['dentalInsurance']>;
 export type DentalProvincialTerritorialBenefitsState = Pick<NonNullable<ApplyState['dentalBenefits']>, 'hasProvincialTerritorialBenefits' | 'province' | 'provincialTerritorialSocialProgram'>;
 export type PartnerInformationState = NonNullable<ApplyState['partnerInformation']>;
-export type PersonalInformationState = NonNullable<ApplyState['personalInformation']>;
+export type ContactInformationState = NonNullable<ApplyState['contactInformation']>;
 export type SubmissionInfoState = NonNullable<ApplyState['submissionInfo']>;
 export type TypeOfApplicationState = NonNullable<ApplyState['typeOfApplication']>;
 

@@ -89,7 +89,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     lastUpdatedOn,
     livingIndependently,
     partnerInformation,
-    personalInformation,
+    contactInformation,
     submissionInfo,
     taxFiling2023,
     typeOfApplication,
@@ -153,7 +153,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     throw redirect(getPathById('$lang/_public/apply/$id/adult/applicant-information', params));
   }
 
-  if (personalInformation === undefined) {
+  if (contactInformation === undefined) {
     throw redirect(getPathById('$lang/_public/apply/$id/adult/personal-information', params));
   }
 
@@ -173,6 +173,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     ageCategory,
     applicantInformation,
     communicationPreferences,
+    contactInformation,
     dateOfBirth,
     dentalBenefits,
     dentalInsurance,
@@ -182,7 +183,6 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
     lastUpdatedOn,
     livingIndependently,
     partnerInformation,
-    personalInformation,
     submissionInfo,
     taxFiling2023,
     typeOfApplication,

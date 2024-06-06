@@ -120,7 +120,7 @@ interface ValidateStateForReviewArgs {
 }
 
 export function validateApplyChildStateForReview({ params, state }: ValidateStateForReviewArgs) {
-  const { applicantInformation, communicationPreferences, dateOfBirth, editMode, id, lastUpdatedOn, partnerInformation, personalInformation, submissionInfo, taxFiling2023, typeOfApplication } = state;
+  const { applicantInformation, communicationPreferences, dateOfBirth, editMode, id, lastUpdatedOn, partnerInformation, contactInformation, submissionInfo, taxFiling2023, typeOfApplication } = state;
 
   if (typeOfApplication === undefined) {
     throw redirect(getPathById('$lang/_public/apply/$id/type-application', params));
@@ -162,7 +162,7 @@ export function validateApplyChildStateForReview({ params, state }: ValidateStat
     throw redirect(getPathById('$lang/_public/apply/$id/child/applicant-information', params));
   }
 
-  if (personalInformation === undefined) {
+  if (contactInformation === undefined) {
     throw redirect(getPathById('$lang/_public/apply/$id/child/personal-information', params));
   }
 
@@ -175,12 +175,12 @@ export function validateApplyChildStateForReview({ params, state }: ValidateStat
     applicantInformation,
     children,
     communicationPreferences,
+    contactInformation,
     dateOfBirth,
     editMode,
     id,
     lastUpdatedOn,
     partnerInformation,
-    personalInformation,
     submissionInfo,
     taxFiling2023,
     typeOfApplication,

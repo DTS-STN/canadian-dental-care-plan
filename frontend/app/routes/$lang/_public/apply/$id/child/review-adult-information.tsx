@@ -65,15 +65,15 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   // Getting province by Id
   const allRegions = lookupService.getAllRegions();
-  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation.mailingProvince);
-  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.personalInformation.homeProvince);
+  const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.contactInformation.mailingProvince);
+  const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.contactInformation.homeProvince);
 
   // Getting Country by Id
   const allCountries = lookupService.getAllCountries();
-  const countryMailing = allCountries.find((country) => country.countryId === state.personalInformation.mailingCountry);
-  const countryHome = allCountries.find((country) => country.countryId === state.personalInformation.homeCountry);
-  invariant(countryMailing, `Unexpected mailing address country: ${state.personalInformation.mailingCountry}`);
-  invariant(countryHome, `Unexpected home address country: ${state.personalInformation.homeCountry}`);
+  const countryMailing = allCountries.find((country) => country.countryId === state.contactInformation.mailingCountry);
+  const countryHome = allCountries.find((country) => country.countryId === state.contactInformation.homeCountry);
+  invariant(countryMailing, `Unexpected mailing address country: ${state.contactInformation.mailingCountry}`);
+  invariant(countryHome, `Unexpected home address country: ${state.contactInformation.homeCountry}`);
 
   // Getting CommunicationPreference by Id
   const communicationPreferences = lookupService.getAllPreferredCommunicationMethods();
@@ -83,13 +83,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const userInfo = {
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
-    phoneNumber: state.personalInformation.phoneNumber,
-    altPhoneNumber: state.personalInformation.phoneNumberAlt,
+    phoneNumber: state.contactInformation.phoneNumber,
+    altPhoneNumber: state.contactInformation.phoneNumberAlt,
     preferredLanguage: state.communicationPreferences.preferredLanguage,
     birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
     martialStatus: state.applicantInformation.maritalStatus,
-    contactInformationEmail: state.personalInformation.email,
+    contactInformationEmail: state.contactInformation.email,
     communicationPreferenceEmail: state.communicationPreferences.email,
     communicationPreference: getNameByLanguage(locale, communicationPreference),
   };
@@ -106,21 +106,21 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const preferredLanguage = lookupService.getPreferredLanguage(userInfo.preferredLanguage);
 
   const mailingAddressInfo = {
-    address: state.personalInformation.mailingAddress,
-    city: state.personalInformation.mailingCity,
+    address: state.contactInformation.mailingAddress,
+    city: state.contactInformation.mailingCity,
     province: provinceMailing,
-    postalCode: state.personalInformation.mailingPostalCode,
+    postalCode: state.contactInformation.mailingPostalCode,
     country: countryMailing,
-    apartment: state.personalInformation.mailingApartment,
+    apartment: state.contactInformation.mailingApartment,
   };
 
   const homeAddressInfo = {
-    address: state.personalInformation.homeAddress,
-    city: state.personalInformation.homeCity,
+    address: state.contactInformation.homeAddress,
+    city: state.contactInformation.homeCity,
     province: provinceHome,
-    postalCode: state.personalInformation.homePostalCode,
+    postalCode: state.contactInformation.homePostalCode,
     country: countryHome,
-    apartment: state.personalInformation.homeApartment,
+    apartment: state.contactInformation.homeApartment,
   };
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
