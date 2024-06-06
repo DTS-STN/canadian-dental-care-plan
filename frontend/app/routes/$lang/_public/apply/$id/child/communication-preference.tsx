@@ -66,10 +66,10 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     preferredLanguages,
     defaultState: {
       ...(state.communicationPreferences ?? {}),
-      email: state.communicationPreferences?.email ?? state.personalInformation?.email,
+      email: state.communicationPreferences?.email ?? state.contactInformation?.email,
     },
     editMode: state.editMode,
-    isReadOnlyEmail: !!state.personalInformation?.email,
+    isReadOnlyEmail: !!state.contactInformation?.email,
   });
 }
 
@@ -96,7 +96,7 @@ export async function action({ context: { session }, params, request }: ActionFu
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:communication-preference.error-message.email-valid'), path: ['email'] });
         }
 
-        if (!state.personalInformation?.email) {
+        if (!state.contactInformation?.email) {
           if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:communication-preference.error-message.confirm-email-required'), path: ['confirmEmail'] });
           } else if (!validator.isEmail(val.confirmEmail)) {

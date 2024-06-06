@@ -5,10 +5,10 @@ import {
   ApplicantInformationState,
   ChildState,
   CommunicationPreferencesState,
+  ContactInformationState,
   DentalFederalBenefitsState,
   DentalProvincialTerritorialBenefitsState,
   PartnerInformationState,
-  PersonalInformationState,
   TypeOfApplicationState,
   getAgeCategoryFromDateString,
 } from '~/route-helpers/apply-route-helpers.server';
@@ -25,7 +25,7 @@ export interface ToBenefitApplicationRequestFromApplyAdultStateArgs {
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation: PartnerInformationState | undefined;
-  personalInformation: PersonalInformationState;
+  contactInformation: ContactInformationState;
   typeOfApplication: Extract<TypeOfApplicationState, 'adult'>;
 }
 
@@ -38,7 +38,7 @@ export function toBenefitApplicationRequestFromApplyAdultState({
   disabilityTaxCredit,
   livingIndependently,
   partnerInformation,
-  personalInformation,
+  contactInformation,
   typeOfApplication,
 }: ToBenefitApplicationRequestFromApplyAdultStateArgs) {
   const ageCategory = getAgeCategoryFromDateString(dateOfBirth);
@@ -60,7 +60,7 @@ export function toBenefitApplicationRequestFromApplyAdultState({
     disabilityTaxCredit: ageCategory === 'adults' ? disabilityTaxCredit : undefined,
     livingIndependently: ageCategory === 'youth' ? livingIndependently : undefined,
     partnerInformation,
-    personalInformation,
+    contactInformation,
     typeOfApplication,
   });
 }
@@ -75,7 +75,7 @@ export interface ToBenefitApplicationRequestFromApplyAdultChildStateArgs {
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation: PartnerInformationState | undefined;
-  personalInformation: PersonalInformationState;
+  contactInformation: ContactInformationState;
   typeOfApplication: Extract<TypeOfApplicationState, 'adult-child'>;
 }
 
@@ -89,7 +89,7 @@ export function toBenefitApplicationRequestFromApplyAdultChildState({
   disabilityTaxCredit,
   livingIndependently,
   partnerInformation,
-  personalInformation,
+  contactInformation,
   typeOfApplication,
 }: ToBenefitApplicationRequestFromApplyAdultChildStateArgs) {
   const ageCategory = getAgeCategoryFromDateString(dateOfBirth);
@@ -112,7 +112,7 @@ export function toBenefitApplicationRequestFromApplyAdultChildState({
     disabilityTaxCredit: ageCategory === 'adults' ? disabilityTaxCredit : undefined,
     livingIndependently: ageCategory === 'youth' ? livingIndependently : undefined,
     partnerInformation,
-    personalInformation,
+    contactInformation,
     typeOfApplication,
   });
 }
@@ -125,18 +125,18 @@ export interface ToBenefitApplicationRequestFromApplyChildStateArgs {
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation: PartnerInformationState | undefined;
-  personalInformation: PersonalInformationState;
+  contactInformation: ContactInformationState;
   typeOfApplication: Extract<TypeOfApplicationState, 'child'>;
 }
 
-export function toBenefitApplicationRequestFromApplyChildState({ applicantInformation, children, communicationPreferences, dateOfBirth, partnerInformation, personalInformation, typeOfApplication }: ToBenefitApplicationRequestFromApplyChildStateArgs) {
+export function toBenefitApplicationRequestFromApplyChildState({ applicantInformation, children, communicationPreferences, dateOfBirth, partnerInformation, contactInformation, typeOfApplication }: ToBenefitApplicationRequestFromApplyChildStateArgs) {
   return toBenefitApplicationRequest({
     applicantInformation,
     children,
     communicationPreferences,
     dateOfBirth,
     partnerInformation,
-    personalInformation,
+    contactInformation,
     typeOfApplication,
   });
 }
@@ -151,7 +151,7 @@ interface ToBenefitApplicationRequestArgs {
   disabilityTaxCredit?: boolean;
   livingIndependently?: boolean;
   partnerInformation: PartnerInformationState | undefined;
-  personalInformation: PersonalInformationState;
+  contactInformation: ContactInformationState;
   typeOfApplication: TypeOfApplicationState;
 }
 
@@ -165,7 +165,7 @@ function toBenefitApplicationRequest({
   disabilityTaxCredit,
   livingIndependently,
   partnerInformation,
-  personalInformation,
+  contactInformation,
   typeOfApplication,
 }: ToBenefitApplicationRequestArgs): BenefitApplicationRequest {
   return {
@@ -180,9 +180,9 @@ function toBenefitApplicationRequest({
         PersonBirthDate: toDate(dateOfBirth),
         PersonContactInformation: [
           {
-            Address: [toMailingAddress(personalInformation), toHomeAddress(personalInformation)],
-            EmailAddress: toEmailAddress({ contactEmail: personalInformation.email, communicationEmail: communicationPreferences.email }),
-            TelephoneNumber: toTelephoneNumber(personalInformation),
+            Address: [toMailingAddress(contactInformation), toHomeAddress(contactInformation)],
+            EmailAddress: toEmailAddress({ contactEmail: contactInformation.email, communicationEmail: communicationPreferences.email }),
+            TelephoneNumber: toTelephoneNumber(contactInformation),
           },
         ],
         PersonLanguage: [
@@ -208,7 +208,7 @@ function toBenefitApplicationRequest({
           IdentificationID: applicantInformation.socialInsuranceNumber,
         },
         RelatedPerson: toRelatedPersons({ partnerInformation, children }),
-        MailingSameAsHomeIndicator: personalInformation.copyMailingAddress,
+        MailingSameAsHomeIndicator: contactInformation.copyMailingAddress,
         PreferredMethodCommunicationCode: {
           ReferenceDataID: communicationPreferences.preferredMethod,
         },

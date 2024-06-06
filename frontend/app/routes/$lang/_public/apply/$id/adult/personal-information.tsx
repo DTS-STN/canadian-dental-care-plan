@@ -20,7 +20,7 @@ import { InputPhoneField } from '~/components/input-phone-field';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
-import { PersonalInformationState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { ContactInformationState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
@@ -59,7 +59,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     id: state.id,
     csrfToken,
     meta,
-    defaultState: state.personalInformation,
+    defaultState: state.contactInformation,
     maritalStatus: state.applicantInformation?.maritalStatus,
     countryList,
     regionList,
@@ -171,7 +171,7 @@ export async function action({ context: { session }, params, request }: ActionFu
       mailingPostalCode: val.mailingCountry && val.mailingPostalCode ? formatPostalCode(val.mailingCountry, val.mailingPostalCode) : val.mailingPostalCode,
       phoneNumber: val.phoneNumber ? parsePhoneNumber(val.phoneNumber, 'CA').formatInternational() : val.phoneNumber,
       phoneNumberAlt: val.phoneNumberAlt ? parsePhoneNumber(val.phoneNumberAlt, 'CA').formatInternational() : val.phoneNumberAlt,
-    })) satisfies z.ZodType<PersonalInformationState>;
+    })) satisfies z.ZodType<ContactInformationState>;
 
   const formData = await request.formData();
 
@@ -220,7 +220,7 @@ export async function action({ context: { session }, params, request }: ActionFu
       }
     : parsedDataResult.data;
 
-  saveApplyState({ params, session, state: { personalInformation: updatedData } });
+  saveApplyState({ params, session, state: { contactInformation: updatedData } });
 
   // if email is defined and comm. pref. preferredMethod is EMAIL then sync email
   if (updatedData.email && state.communicationPreferences?.preferredMethod === COMMUNICATION_METHOD_EMAIL_ID) {

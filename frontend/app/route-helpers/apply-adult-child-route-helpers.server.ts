@@ -133,7 +133,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     lastUpdatedOn,
     livingIndependently,
     partnerInformation,
-    personalInformation,
+    contactInformation,
     submissionInfo,
     taxFiling2023,
     typeOfApplication,
@@ -213,7 +213,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     throw redirect(getPathById('$lang/_public/apply/$id/adult-child/applicant-information', params));
   }
 
-  if (personalInformation === undefined) {
+  if (contactInformation === undefined) {
     throw redirect(getPathById('$lang/_public/apply/$id/adult-child/personal-information', params));
   }
 
@@ -237,6 +237,7 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     applicantInformation,
     children,
     communicationPreferences,
+    contactInformation,
     dateOfBirth,
     dentalBenefits,
     dentalInsurance,
@@ -246,7 +247,6 @@ export function validateApplyAdultChildStateForReview({ params, state }: Validat
     lastUpdatedOn,
     livingIndependently,
     partnerInformation,
-    personalInformation,
     submissionInfo,
     taxFiling2023,
     typeOfApplication,
