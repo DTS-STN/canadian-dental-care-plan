@@ -335,7 +335,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult:review-information.phone-title')}>
                 <p>{userInfo.phoneNumber}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-phone-number" routeId="$lang/_public/apply/$id/adult/personal-information" params={params}>
+                  <InlineLink id="change-phone-number" routeId="$lang/_public/apply/$id/adult/contact-information" params={params}>
                     {t('apply-adult:review-information.phone-change')}
                   </InlineLink>
                 </div>
@@ -343,7 +343,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult:review-information.alt-phone-title')}>
                 <p>{userInfo.altPhoneNumber}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-alternate-phone-number" routeId="$lang/_public/apply/$id/adult/personal-information" params={params}>
+                  <InlineLink id="change-alternate-phone-number" routeId="$lang/_public/apply/$id/adult/contact-information" params={params}>
                     {t('apply-adult:review-information.alt-phone-change')}
                   </InlineLink>
                 </div>
@@ -351,7 +351,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult:review-information.email')}>
                 <p>{userInfo.contactInformationEmail}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-email" routeId="$lang/_public/apply/$id/adult/personal-information" params={params}>
+                  <InlineLink id="change-email" routeId="$lang/_public/apply/$id/adult/contact-information" params={params}>
                     {t('apply-adult:review-information.email-change')}
                   </InlineLink>
                 </div>
@@ -367,7 +367,7 @@ export default function ReviewInformation() {
                   altFormat={true}
                 />
                 <div className="mt-4">
-                  <InlineLink id="change-mailing-address" routeId="$lang/_public/apply/$id/adult/personal-information" params={params}>
+                  <InlineLink id="change-mailing-address" routeId="$lang/_public/apply/$id/adult/contact-information" params={params}>
                     {t('apply-adult:review-information.mailing-change')}
                   </InlineLink>
                 </div>
@@ -383,7 +383,7 @@ export default function ReviewInformation() {
                   altFormat={true}
                 />
                 <div className="mt-4">
-                  <InlineLink id="change-home-address" routeId="$lang/_public/apply/$id/adult/personal-information" params={params}>
+                  <InlineLink id="change-home-address" routeId="$lang/_public/apply/$id/adult/contact-information" params={params}>
                     {t('apply-adult:review-information.home-change')}
                   </InlineLink>
                 </div>

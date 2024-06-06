@@ -163,7 +163,7 @@ export function validateApplyChildStateForReview({ params, state }: ValidateStat
   }
 
   if (contactInformation === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/child/personal-information', params));
+    throw redirect(getPathById('$lang/_public/apply/$id/child/contact-information', params));
   }
 
   if (communicationPreferences === undefined) {

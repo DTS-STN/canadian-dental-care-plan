@@ -283,7 +283,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId="$lang/_public/apply/$id/adult-child/personal-information"
+                routeId="$lang/_public/apply/$id/adult-child/contact-information"
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Communication click"

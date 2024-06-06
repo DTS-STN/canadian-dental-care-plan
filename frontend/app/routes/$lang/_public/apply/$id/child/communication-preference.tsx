@@ -288,7 +288,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
                 {t('apply-child:communication-preference.continue')}
                 <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
               </Button>
-              <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/child/personal-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Communication click">
+              <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/child/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Communication click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-child:communication-preference.back')}
               </ButtonLink>
