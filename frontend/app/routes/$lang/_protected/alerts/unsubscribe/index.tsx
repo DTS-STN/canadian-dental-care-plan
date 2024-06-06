@@ -108,16 +108,10 @@ export async function action({ context: { session }, params, request }: ActionFu
   const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
   invariant(alertSubscription, 'Expected alertSubscription to be defined');
 
-  const newAlertSubscription = {
-    id: alertSubscription.id,
-    userId: userInfoToken.sub,
-    msLanguageCode: alertSubscription.preferredLanguageId,
-    alertTypeCode: 'CDCP',
-  };
-  await subscriptionService.updateSubscription(userInfoToken.sin, newAlertSubscription);
+  await subscriptionService.deleteSubscription(userInfoToken.sub);
 
   const idToken: IdToken = session.get('idToken');
-  auditService.audit('update-data.unsubscribe-alerts', { userId: idToken.sub });
+  auditService.audit('delete-data.unsubscribe-alerts', { userId: idToken.sub });
   instrumentationService.countHttpStatus('alerts.unsubscribe', 302);
 
   return redirect(getPathById('$lang/_protected/alerts/unsubscribe/success', params));
@@ -125,7 +119,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function UnsubscribeAlerts() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken } = useLoaderData<typeof loader>();
+  const { csrfToken, alertSubscription } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
 
@@ -154,8 +148,7 @@ export default function UnsubscribeAlerts() {
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div>
           <p>
-            {/* TODO, implement the usage of email address with the user schema... */}
-            {/* <Trans ns={handle.i18nNamespaces} i18nKey="alerts:unsubscribe.note" values={{ email: alertSubscription.email }} />*/}
+            <Trans ns={handle.i18nNamespaces} i18nKey="alerts:unsubscribe.note" values={{ email: alertSubscription.email }} />
           </p>
           <InputCheckbox id="agree-to-unsubscribe" name="agreeToUnsubscribe" className="my-6" value={AgreeToUnsubscribeOption.Yes} errorMessage={fetcher.data?.errors.agreeToUnsubscribe?._errors[0]} required>
             <Trans ns={handle.i18nNamespaces} i18nKey="alerts:unsubscribe.agree" />

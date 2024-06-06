@@ -114,13 +114,15 @@ export async function action({ context: { session }, params, request }: ActionFu
   const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
   invariant(alertSubscription, 'Expected alertSubscription to be defined');
 
-  const newAlertSubscription = {
+  //TODO, update it in the next PR
+  /*const newAlertSubscription = {
     id: alertSubscription.id,
     userId: userInfoToken.sub,
     msLanguageCode: parsedDataResult.data.preferredLanguage,
     alertTypeCode: 'CDCP',
   };
-  await subscriptionService.updateSubscription(userInfoToken.sin, newAlertSubscription);
+  
+  await subscriptionService.updateSubscription(userInfoToken.sin, newAlertSubscription); */
 
   const idToken: IdToken = session.get('idToken');
   auditService.audit('update-data.manage-alerts', { userId: idToken.sub });
@@ -162,7 +164,7 @@ export default function ManageAlerts() {
       <fetcher.Form className="max-w-prose" method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mb-6 grid gap-6 md:grid-cols-2">
-          <InputField id="email" type="email" className="w-full" label={t('alerts:manage.email')} maxLength={100} name="email" errorMessage={errorMessages.email} autoComplete="email" required />
+          <InputField id="email" type="email" className="w-full" label={t('alerts:manage.email')} maxLength={100} name="email" defaultValue={alertSubscription?.email} errorMessage={errorMessages.email} autoComplete="email" required />
           <InputField id="confirm-email" type="email" className="w-full" label={t('alerts:manage.confirm-email')} maxLength={100} name="confirmEmail" errorMessage={errorMessages['confirm-email']} autoComplete="email" required />
         </div>
         <div className="mb-8 space-y-6">
