@@ -169,7 +169,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/review-information');
+  const log = getLogger('apply/adult/review-information');
 
   const state = loadApplyAdultStateForReview({ params, request, session });
 

@@ -50,7 +50,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/tax-filing');
+  const log = getLogger('apply/adult/tax-filing');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 

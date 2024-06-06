@@ -161,7 +161,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/review-adult-information');
+  const log = getLogger('apply/adult-child/review-adult-information');
 
   loadApplyAdultChildStateForReview({ params, request, session });
 

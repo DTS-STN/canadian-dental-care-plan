@@ -41,7 +41,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/file-taxes');
+  const log = getLogger('apply/child/file-taxes');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 

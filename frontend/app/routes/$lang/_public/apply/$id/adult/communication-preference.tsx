@@ -74,7 +74,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/communication-preference');
+  const log = getLogger('apply/adult/communication-preference');
 
   const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
 

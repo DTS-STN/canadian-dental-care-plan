@@ -41,7 +41,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/adult/dob-eligibility');
+  const log = getLogger('apply/adult-child/dob-eligibility');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const formData = await request.formData();

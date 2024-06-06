@@ -48,7 +48,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/child/dental-insurance');
+  const log = getLogger('apply/child/children/dental-insurance');
 
   const state = loadApplySingleChildState({ params, request, session });
   const applyState = loadApplyChildState({ params, request, session });
