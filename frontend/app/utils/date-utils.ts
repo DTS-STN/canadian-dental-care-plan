@@ -174,7 +174,6 @@ export function parseDateTimeString(dateTime: string) {
   return new UTCDate(dateTime);
 }
 
-// TODO: add unit tests
 export function toLocaleDateString(date: UTCDate, locale: string) {
   return date.toLocaleDateString(`${locale}-CA`, { year: 'numeric', month: 'long', day: 'numeric' });
 }
