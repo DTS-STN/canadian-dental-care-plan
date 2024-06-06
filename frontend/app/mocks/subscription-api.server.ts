@@ -30,7 +30,7 @@ export function getSubscriptionApiMockHandlers() {
 
   return [
     //
-    // Handler for GET request to retrieve user by userId
+    // Handler for GET request to retrieve user by raoidc user id
     //
     http.get('https://api.cdcp.example.com/api/v1/users', ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
@@ -50,14 +50,23 @@ export function getSubscriptionApiMockHandlers() {
 
       return HttpResponse.json({
         _embedded: {
-          users: [userEntity],
+          users: [
+            {
+              ...userEntity,
+              _links: {
+                self: {
+                  href: `https://api.cdcp.example.com/api/v1/users/${userEntity?.id}`,
+                },
+                subscriptions: {
+                  href: `https://api.cdcp.example.com/api/v1/users/${userEntity?.id}/subscriptions`,
+                },
+              },
+            },
+          ],
         },
         _links: {
           self: {
-            href: `https://api.cdcp.example.com/api/v1/users/${userEntity?.id}`,
-          },
-          subscriptions: {
-            href: `https://api.cdcp.example.com/api/v1/users/${userEntity?.id}/subscriptions`,
+            href: `https://api.cdcp.example.com/api/v1/users?raoidcUserId=${raoidcUserId}`,
           },
         },
       });
@@ -108,9 +117,20 @@ export function getSubscriptionApiMockHandlers() {
         where: { userId: { equals: parsedUserId.data } },
       });
 
+      const subscriptions = subscriptionEntities.map((subscriptionEntity) => ({
+        id: subscriptionEntity.id,
+        msLanguageCode: subscriptionEntity.msLanguageCode,
+        alertTypeCode: subscriptionEntity.alertTypeCode,
+        _links: {
+          self: {
+            href: `https://api.cdcp.example.com/api/v1/users/${subscriptionEntity.userId}/subscriptions/${subscriptionEntity.id}`,
+          },
+        },
+      }));
+
       return HttpResponse.json({
         _embedded: {
-          subscriptions: subscriptionEntities,
+          subscriptions: subscriptions,
         },
         _links: {
           self: {
@@ -118,6 +138,31 @@ export function getSubscriptionApiMockHandlers() {
           },
         },
       });
+    }),
+
+    //
+    // Handler for Delete subscriptions by subscriptionId
+    //
+    http.delete('https://api.cdcp.example.com/api/v1/users/:userId/subscriptions/:subscriptionId', ({ params, request }) => {
+      log.debug('Handling request for [%s]', request.url);
+
+      const parsedUserId = z.string().safeParse(params.userId);
+
+      if (!parsedUserId.success) {
+        throw new HttpResponse(null, { status: 400 });
+      }
+
+      const parsedSubscriptionId = z.string().safeParse(params.subscriptionId);
+
+      if (!parsedSubscriptionId.success) {
+        throw new HttpResponse(null, { status: 400 });
+      }
+
+      db.subscription.delete({
+        where: { id: { equals: parsedSubscriptionId.data } },
+      });
+
+      return HttpResponse.text(null, { status: 204 });
     }),
 
     //

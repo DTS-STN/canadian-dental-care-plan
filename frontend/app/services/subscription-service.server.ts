@@ -13,9 +13,53 @@ const subscriptionInfoSchema = z.object({
   userId: z.string(),
   msLanguageCode: z.string(),
   alertTypeCode: z.string(),
+  email: z.string(),
+  emailVerifed: z.boolean(),
 });
 
 type SubscriptionInfo = z.infer<typeof subscriptionInfoSchema>;
+
+const userSchema = z.object({
+  id: z.string(),
+  email: z.string(),
+  emailVerified: z.boolean(),
+  userAttributes: z.array(
+    z.object({
+      name: z.string(),
+      value: z.string(),
+    }),
+  ),
+  _links: z.object({
+    self: z.object({
+      href: z.string(),
+    }),
+    subscriptions: z.object({
+      href: z.string(),
+    }),
+  }),
+});
+
+const subscriptionsSchema = z.object({
+  _embedded: z.object({
+    subscriptions: z.array(
+      z.object({
+        id: z.string(),
+        msLanguageCode: z.string(),
+        alertTypeCode: z.string(),
+        _links: z.object({
+          self: z.object({
+            href: z.string(),
+          }),
+        }),
+      }),
+    ),
+  }),
+  _links: z.object({
+    self: z.object({
+      href: z.string(),
+    }),
+  }),
+});
 
 /**
  * Return a singleton instance (by means of memomization) of the subscription service.
@@ -27,36 +71,6 @@ function createSubscriptionService() {
 
   /**
    *
-   * @param raoidcUserId
-   * @returns the user details by raoidcUserId
-   */
-  async function getUserByRaoidcUserId(raoidcUserId: string) {
-    const auditService = getAuditService();
-    const instrumentationService = getInstrumentationService();
-    auditService.audit('alert-subscription.getUserByRaodicUserId', { raoidcUserId });
-    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users?raoidcUserId=${raoidcUserId}`);
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const userSchema = z.object({
-      id: z.string(),
-      email: z.string(),
-      emailVerified: z.boolean(),
-    });
-    instrumentationService.countHttpStatus('http.client.cdcp-api.users.getUserByRaodicUserId', response.status);
-    const users = await response.json();
-
-    const userParsed = userSchema.parse(users._embedded.users[0]);
-
-    return userParsed;
-  }
-
-  /**
-   *
    * @param userId
    * @returns the subscription details for the user or null if no user is found or the user has no CDCP subscriptions.
    */
@@ -64,7 +78,7 @@ function createSubscriptionService() {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
     auditService.audit('alert-subscription.get', { userId });
-    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users/${userId}`);
+    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users?raoidcUserId=${userId}`);
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -72,27 +86,25 @@ function createSubscriptionService() {
       },
     });
 
-    const userSchema = z.object({
-      id: z.string(),
-      email: z.string(),
-      emailVerified: z.boolean(),
-      userAttributes: z.array(
-        z.object({
-          name: z.string(),
-          value: z.string(),
-        }),
-      ),
-      _links: z.object({
-        self: z.object({
-          href: z.string(),
-        }),
-        subscriptions: z.object({
-          href: z.string(),
-        }),
-      }),
-    });
     instrumentationService.countHttpStatus('http.client.cdcp-api.users.gets', response.status);
-    const userParsed = userSchema.parse(await response.json());
+
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed find data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to find data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
+
+    const users = await response.json();
+    if (users._embedded.users.length === 0) {
+      return null;
+    }
+    const userParsed = userSchema.parse(users._embedded.users[0]);
 
     const userSubscriptionsURL = userParsed._links.subscriptions.href;
     const subscriptionsResponse = await fetch(userSubscriptionsURL, {
@@ -102,29 +114,13 @@ function createSubscriptionService() {
       },
     });
 
-    instrumentationService.countHttpStatus('http.client.cdcp-api.alert-subscription.gets', response.status);
-
-    const subscriptionsSchema = z.object({
-      _embedded: z.object({
-        subscriptions: z.array(
-          z.object({
-            id: z.string(),
-            msLanguageCode: z.string(),
-            alertTypeCode: z.string(),
-          }),
-        ),
-      }),
-      _links: z.object({
-        self: z.object({
-          href: z.string(),
-        }),
-      }),
-    });
+    instrumentationService.countHttpStatus('http.client.cdcp-api.alert-subscription.gets', subscriptionsResponse.status);
 
     const subscriptions = subscriptionsSchema.parse(await subscriptionsResponse.json())._embedded.subscriptions.map((subscription) => ({
       id: subscription.id,
       preferredLanguageId: subscription.msLanguageCode,
       alertType: subscription.alertTypeCode,
+      userId: userParsed.id,
       email: userParsed.email,
       emailVerified: userParsed.emailVerified,
     }));
@@ -134,6 +130,80 @@ function createSubscriptionService() {
       return null;
     }
     return cdcpSubscriptions.at(0);
+  }
+
+  /**
+   *
+   * @param userId
+   *
+   */
+  async function deleteSubscription(userId: string) {
+    const auditService = getAuditService();
+    const instrumentationService = getInstrumentationService();
+    auditService.audit('alert-subscription.delete', { userId });
+    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users?raoidcUserId=${userId}`);
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    instrumentationService.countHttpStatus('http.client.cdcp-api.users.delete', response.status);
+
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed find data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to find data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
+
+    const users = await response.json();
+    if (users._embedded.users.length === 0) {
+      throw new Error(`Failed to find the user: ${userId}.`);
+    }
+    const userParsed = userSchema.parse(users._embedded.users[0]);
+
+    const userSubscriptionsURL = userParsed._links.subscriptions.href;
+    const subscriptionsResponse = await fetch(userSubscriptionsURL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    instrumentationService.countHttpStatus('http.client.cdcp-api.alert-subscription.delete', subscriptionsResponse.status);
+
+    const subscriptions = subscriptionsSchema.parse(await subscriptionsResponse.json())._embedded.subscriptions;
+
+    const cdcpSubscriptions = subscriptions.filter((subscription) => subscription.alertTypeCode === 'CDCP');
+
+    const deleteSubscriptionUrl = cdcpSubscriptions.at(0)?._links.self.href ?? '';
+    const deleteResponse = await fetch(deleteSubscriptionUrl, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    instrumentationService.countHttpStatus('http.client.cdcp-api.alert-subscription.delete', deleteResponse.status);
+
+    if (!deleteResponse.ok) {
+      log.error('%j', {
+        message: 'Failed to delete data',
+        status: deleteResponse.status,
+        statusText: deleteResponse.statusText,
+        url: url,
+        responseBody: await deleteResponse.text(),
+      });
+
+      throw new Error(`Failed to delete data. Status: ${deleteResponse.status}, Status Text: ${deleteResponse.statusText}`);
+    }
   }
 
   async function updateSubscription(sin: string, subscription: SubscriptionInfo) {
@@ -244,5 +314,5 @@ function createSubscriptionService() {
     return response;
   }
 
-  return { getUserByRaoidcUserId, getSubscription, updateSubscription, validateConfirmationCode, requestNewConfirmationCode };
+  return { getSubscription, deleteSubscription, updateSubscription, validateConfirmationCode, requestNewConfirmationCode };
 }

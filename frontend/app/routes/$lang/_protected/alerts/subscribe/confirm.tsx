@@ -63,14 +63,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:confirm.page-title') }) };
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
-
   const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
   if (!alertSubscription) {
     instrumentationService.countHttpStatus('alerts.subscribe-confirm', 302);
     return redirect(getPathById('$lang/_protected/alerts/index', params));
   }
 
+  const email = alertSubscription.email;
   const preferredLanguages = lookupService.getAllPreferredLanguages();
   const preferredLanguageDict = preferredLanguages.find((obj) => obj.id === alertSubscription.preferredLanguageId);
   const preferredLanguage = preferredLanguageDict && getNameByLanguage(locale, preferredLanguageDict);
@@ -81,7 +80,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   auditService.audit('page-view.subscribe-alerts-confirm', { userId: idToken.sub });
   instrumentationService.countHttpStatus('alerts.subscribe-confirm', 200);
 
-  return json({ csrfToken, meta, alertSubscription, newCodeRequested, preferredLanguage, userInfoToken });
+  return json({ csrfToken, meta, alertSubscription, newCodeRequested, email, preferredLanguage });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -157,7 +156,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ConfirmSubscription() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, newCodeRequested, preferredLanguage } = useLoaderData<typeof loader>();
+  const { csrfToken, newCodeRequested, email, preferredLanguage } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const userOrigin = useUserOrigin();
@@ -188,14 +187,12 @@ export default function ConfirmSubscription() {
       <ContextualAlert type="info">
         {newCodeRequested ? (
           <p>
-            {/* TODO, implement the usage of email address with the user schema... */}
-            <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.code-sent-by-email" values={{ userEmailAddress: 'user@example.com' }} />
+            <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.code-sent-by-email" values={{ userEmailAddress: email }} />
           </p>
         ) : (
           <>
             <p id="confirmation-information">
-              {/* TODO, implement the usage of email address with the user schema... */}
-              <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.confirmation-information-text" values={{ userEmailAddress: 'user@example.com' }} />
+              <Trans ns={handle.i18nNamespaces} i18nKey="alerts:confirm.confirmation-information-text" values={{ userEmailAddress: email }} />
             </p>
             <p id="confirmation-completed" className="mt-4">
               {t('alerts:confirm.confirmation-completed-text')}
