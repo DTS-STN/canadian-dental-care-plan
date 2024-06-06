@@ -67,7 +67,7 @@ export default function ApplyFlowApplicationDelegate() {
 
   const contactServiceCanada = <InlineLink to={t('apply:application-delegate.contact-service-canada-href')} className="external-link" newTabIndicator target="_blank" />;
   const preparingToApply = <InlineLink to={t('apply:application-delegate.preparing-to-apply-href')} className="external-link" newTabIndicator target="_blank" />;
-  const span = <span className="whitespace-nowrap" />;
+  const noWrap = <span className="whitespace-nowrap" />;
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -76,10 +76,10 @@ export default function ApplyFlowApplicationDelegate() {
   }
 
   return (
-    <>
+    <div className="max-w-prose">
       <div className="mb-8 space-y-4">
         <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="apply:application-delegate.contact-representative" components={{ contactServiceCanada, span }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey="apply:application-delegate.contact-representative" components={{ contactServiceCanada, noWrap }} />
         </p>
         <p>
           <Trans ns={handle.i18nNamespaces} i18nKey="apply:application-delegate.prepare-to-apply" components={{ preparingToApply }} />
@@ -96,6 +96,6 @@ export default function ApplyFlowApplicationDelegate() {
           {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
         </Button>
       </fetcher.Form>
-    </>
+    </div>
   );
 }
