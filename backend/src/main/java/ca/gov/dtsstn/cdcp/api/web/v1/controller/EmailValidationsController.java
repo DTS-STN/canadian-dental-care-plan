@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
+import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.EmailVerificationModel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -41,6 +42,9 @@ public class EmailValidationsController {
 			@Parameter(description = "The ID of the user.", required = true)
 			@PathVariable String userId,
 			@RequestBody EmailVerificationModel emailVerificationModel) {
+
+		userService.getUserById(userId)
+			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));
 		if (userService.verifyEmail(emailVerificationModel.getConfirmationCode(), userId)==false) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid confirmation code");
 		}

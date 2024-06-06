@@ -29,7 +29,6 @@ import ca.gov.dtsstn.cdcp.api.service.domain.User;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.ConfirmationCodeMapper;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.SubscriptionMapper;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.UserMapper;
-import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
 
 @Service
 @Transactional
@@ -202,7 +201,7 @@ public class UserService {
 		Assert.hasText(code, "code is required; it must not be null or blank");
 		Assert.hasText(userId, USER_ID_REQUIRED_MESSAGE);
 		log.debug(FETCHING_USER_MESSAGE , userId);
-		final var user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));
+		final var user = userRepository.findById(userId).orElseThrow();
 		if (user.getConfirmationCodes().stream().filter(notExpired()).anyMatch(byCode(code))) {
 			user.setEmailVerified(true);
 			user.setConfirmationCodes(null);

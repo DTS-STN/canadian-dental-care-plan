@@ -11,6 +11,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +34,6 @@ import ca.gov.dtsstn.cdcp.api.data.repository.AlertTypeRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.LanguageRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.UserRepository;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUser;
-import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
 
 @ExtendWith({ MockitoExtension.class })
 class UserServiceTests {
@@ -54,19 +54,23 @@ class UserServiceTests {
 
 	@BeforeEach
 	void setUp() {
-		this.userService = new UserService(applicationProperties, alertTypeRepository, languageRepository, userRepository);
+		this.userService = new UserService(applicationProperties, alertTypeRepository, languageRepository,
+				userRepository);
 	}
 
 	@Test()
 	@DisplayName("Test userService.createUser(..) with null user")
 	void testCreateUser_NullUser() {
-		assertThrowsExactly(IllegalArgumentException.class, () -> userService.createUser(null), "user is required; it must not be null");
+		assertThrowsExactly(IllegalArgumentException.class, () -> userService.createUser(null),
+				"user is required; it must not be null");
 	}
 
 	@Test()
 	@DisplayName("Test userService.createUser(..) with non-null user.id")
 	void testCreateUser_NonNullUserId() {
-		assertThrowsExactly(IllegalArgumentException.class, () -> userService.createUser(ImmutableUser.builder().id("id").build()), "user.id must be null when creating new instance");
+		assertThrowsExactly(IllegalArgumentException.class,
+				() -> userService.createUser(ImmutableUser.builder().id("id").build()),
+				"user.id must be null when creating new instance");
 	}
 
 	@Test()
@@ -79,7 +83,8 @@ class UserServiceTests {
 	@Test()
 	@DisplayName("Test userService.createConfirmationCodeForUser(..) with null userId")
 	void testCreateConfirmationCodeForUser_NullUserId() {
-		assertThrowsExactly(IllegalArgumentException.class, () -> userService.createConfirmationCodeForUser(""), "user is required; it must not be null");
+		assertThrowsExactly(IllegalArgumentException.class, () -> userService.createConfirmationCodeForUser(""),
+				"user is required; it must not be null");
 	}
 
 	@Test
@@ -88,8 +93,10 @@ class UserServiceTests {
 		final var mockUser = new UserEntityBuilder().build();
 
 		when(applicationProperties.getEmailNotifications().getConfirmationCodes().getLength()).thenReturn(8);
-		when(applicationProperties.getEmailNotifications().getConfirmationCodes().getExpiry().getTimeUnit()).thenReturn(ChronoUnit.HOURS);
-		when(applicationProperties.getEmailNotifications().getConfirmationCodes().getExpiry().getValue()).thenReturn(24);
+		when(applicationProperties.getEmailNotifications().getConfirmationCodes().getExpiry().getTimeUnit())
+				.thenReturn(ChronoUnit.HOURS);
+		when(applicationProperties.getEmailNotifications().getConfirmationCodes().getExpiry().getValue())
+				.thenReturn(24);
 		when(userRepository.findById(any())).thenReturn(Optional.of(mockUser));
 		when(userRepository.save(any())).thenReturn(mockUser);
 
@@ -122,18 +129,14 @@ class UserServiceTests {
 	void testCreateSubscriptionForUser_ExistingSubscription() {
 		final var mockId = "00000000-0000-0000-0000-000000000000";
 
-		final var mockUser = new UserEntityBuilder()
-			.id(mockId)
-			.subscriptions(List.of(new SubscriptionEntityBuilder()
-				.alertType(new AlertTypeEntityBuilder()
-					.id(mockId)
-					.build())
-				.build()))
-			.build();
+		final var mockUser = new UserEntityBuilder().id(mockId).subscriptions(List
+				.of(new SubscriptionEntityBuilder().alertType(new AlertTypeEntityBuilder().id(mockId).build()).build()))
+				.build();
 
 		when(userRepository.findById(any())).thenReturn(Optional.of(mockUser));
 
-		assertThrows(DataIntegrityViolationException.class, () -> userService.createSubscriptionForUser(mockId, mockId, mockId));
+		assertThrows(DataIntegrityViolationException.class,
+				() -> userService.createSubscriptionForUser(mockId, mockId, mockId));
 	}
 
 	@Test
@@ -146,10 +149,9 @@ class UserServiceTests {
 	@Test
 	@DisplayName("Test userService.verifyEmail(..) with valid input")
 	void testVerifyEmail_Valid() {
-		final var creationDate = Instant.now().minus(73, ChronoUnit.DAYS);
-		final var expiryDate = Instant.now().plus(288, ChronoUnit.DAYS);
 		final var codeValue = "code value";
-		final var confirmationCode = new ConfirmationCodeEntityBuilder().code(codeValue).createdDate(creationDate).expiryDate(expiryDate).build();
+		final var confirmationCode = new ConfirmationCodeEntityBuilder().code(codeValue).createdDate(Instant.now().minus(73, ChronoUnit.DAYS))
+				.expiryDate(Instant.now().plus(288, ChronoUnit.DAYS)).build();
 		final var mockUser = new UserEntityBuilder().confirmationCodes(Collections.singleton(confirmationCode)).build();
 
 		when(userRepository.findById(any())).thenReturn(Optional.of(mockUser));
@@ -160,14 +162,16 @@ class UserServiceTests {
 	@Test
 	@DisplayName("Test userService.verifyEmail(..) with null code")
 	void testVerifyEmail_NullCodeValue() {
-		final var exception = assertThrows(IllegalArgumentException.class, () -> userService.verifyEmail(null, "00000000-0000-0000-0000-000000000000"));
+		final var exception = assertThrows(IllegalArgumentException.class,
+				() -> userService.verifyEmail(null, "00000000-0000-0000-0000-000000000000"));
 		assertThat(exception.getMessage()).isEqualTo("code is required; it must not be null or blank");
 	}
 
 	@Test
 	@DisplayName("Test userService.verifyEmail(..) with empty code string")
 	void testVerifyEmail_EmptyCodeValue() {
-		final var exception = assertThrows(IllegalArgumentException.class, () -> userService.verifyEmail("", "00000000-0000-0000-0000-000000000000"));
+		final var exception = assertThrows(IllegalArgumentException.class,
+				() -> userService.verifyEmail("", "00000000-0000-0000-0000-000000000000"));
 		assertThat(exception.getMessage()).isEqualTo("code is required; it must not be null or blank");
 	}
 
@@ -176,9 +180,11 @@ class UserServiceTests {
 	void testVerifyEmail_Mismatched() {
 		final var codeValue = "code value";
 		final var otherConfirmationCode = new ConfirmationCodeEntityBuilder().code("other code value")
-				.createdDate(Instant.now().minus(73, ChronoUnit.DAYS)).expiryDate(Instant.now().plus(288, ChronoUnit.DAYS)).build();
-		final var mockUser = new UserEntityBuilder().confirmationCodes(Collections.singleton(otherConfirmationCode)).build();
-	
+				.createdDate(Instant.now().minus(73, ChronoUnit.DAYS))
+				.expiryDate(Instant.now().plus(288, ChronoUnit.DAYS)).build();
+		final var mockUser = new UserEntityBuilder().confirmationCodes(Collections.singleton(otherConfirmationCode))
+				.build();
+
 		when(userRepository.findById(any())).thenReturn(Optional.of(mockUser));
 		assertThat(userService.verifyEmail(codeValue, "00000000-0000-0000-0000-000000000000")).isFalse();
 	}
@@ -190,7 +196,8 @@ class UserServiceTests {
 
 		when(userRepository.findById(any())).thenReturn(Optional.empty());
 
-		final var exception = assertThrows(ResourceNotFoundException.class, () -> userService.verifyEmail(codeValue, "00000000-0000-0000-0000-000000000000"));
-		assertThat(exception.getMessage()).isEqualTo("No user with id=[%s] was found".formatted("00000000-0000-0000-0000-000000000000"));
+		final var exception = assertThrows(NoSuchElementException.class,
+				() -> userService.verifyEmail(codeValue, "00000000-0000-0000-0000-000000000000"));
+		assertThat(exception.getMessage()).isEqualTo("No value present");
 	}
 }
