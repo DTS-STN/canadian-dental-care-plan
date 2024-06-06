@@ -34,7 +34,7 @@ import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult-child', 'apply', 'gcweb'),
-  pageIdentifier: pageIds.public.apply.adultChild.personalInformation,
+  pageIdentifier: pageIds.public.apply.adultChild.contactInformation,
   pageTitleI18nKey: 'apply-adult-child:contact-information.page-title',
 } as const satisfies RouteHandleData;
 
