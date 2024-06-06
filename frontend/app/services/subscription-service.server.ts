@@ -156,14 +156,8 @@ function createSubscriptionService() {
     const subscriptions = subscriptionsSchema.parse(await subscriptionsResponse.json())._embedded.subscriptions;
 
     const cdcpSubscriptions = subscriptions.filter((subscription) => subscription.alertTypeCode === 'CDCP');
-    if (cdcpSubscriptions.length === 0) {
-      return null;
-    }
 
-    const deleteSubscriptionUrl = cdcpSubscriptions.at(0)?._links.self.href;
-    if (!deleteSubscriptionUrl) {
-      return null;
-    }
+    const deleteSubscriptionUrl = cdcpSubscriptions.at(0)?._links.self.href ?? '';
     const deleteResponse = await fetch(deleteSubscriptionUrl, {
       method: 'DELETE',
       headers: {
