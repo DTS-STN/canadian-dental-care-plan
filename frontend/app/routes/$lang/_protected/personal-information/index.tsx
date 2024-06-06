@@ -4,7 +4,6 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData, useParams } from '@remix-run/react';
 
-import { UTCDate } from '@date-fns/utc';
 import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../page-ids.json';
@@ -17,7 +16,7 @@ import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-inf
 import { getAuditService } from '~/services/audit-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { toLocaleDateString } from '~/utils/date-utils';
+import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -42,7 +41,10 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-personal-info');
 
+  const lookupService = getLookupService();
+  const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
   const raoidcService = await getRaoidcService();
+
   await raoidcService.handleSessionValidation(request, session);
   const locale = getLocale(request);
 
@@ -50,18 +52,21 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   getAuditService().audit('page-view.personal-information', { userId: idToken.sub });
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
-  const lookupService = getLookupService();
+
+  const preferredLanguage = personalInformation.preferredLanguageId ? lookupService.getPreferredLanguage(personalInformation.preferredLanguageId) : undefined;
+  const birthParsedFormat = personalInformation.birthDate ? toLocaleDateString(parseDateString(personalInformation.birthDate), locale) : undefined;
+
   const countryList = lookupService.getAllCountries();
   const regionList = lookupService.getAllRegions();
-  const preferredLanguage = personalInformation.preferredLanguageId ? lookupService.getPreferredLanguage(personalInformation.preferredLanguageId) : undefined;
   const maritalStatusList = lookupService.getAllMaritalStatuses();
-  const birthParsedFormat = personalInformation.birthDate ? toLocaleDateString(new UTCDate(personalInformation.birthDate), locale) : undefined;
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };
+
   const updatedInfo = session.get('personal-info-updated');
   session.unset('personal-info-updated');
+
   return json({ preferredLanguage, countryList, personalInformation, birthParsedFormat, meta, regionList, maritalStatusList, updatedInfo });
 }
 

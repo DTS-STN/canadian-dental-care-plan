@@ -16,7 +16,7 @@ export const getApplicantResponseSchema = z.object({
           .array()
           .optional(),
         PersonBirthDate: z.object({
-          dateTime: z.string().datetime().optional(),
+          date: z.string().date().optional(),
         }),
         PersonContactInformation: z
           .object({
@@ -151,7 +151,7 @@ export const personalInformationSchema = z.object({
   applictantId: z.string().optional(),
   clientId: z.string().optional(),
   clientNumber: z.string().optional(),
-  birthDate: z.string().datetime().optional(),
+  birthDate: z.string().date().optional(),
   lastName: z.string().optional(),
   firstName: z.string().optional(),
   sin: z.string().optional(),
