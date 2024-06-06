@@ -122,7 +122,7 @@
           },
           "not-eligible": "As such, the child is not eligible for Canadian Dental Care Plan.",
           "not-eligible-purchased": "If a parent or legal guardian purchased the current dental insurance policy privately, a child is not eligible for the Canadian Dental Care Plan while that coverage is in effect.",
-          "excepton": "Exception: a child may still be eligible if a parent or legal guardian retired and:",
+          "excepton": "Exception: A child may still be eligible if a parent or legal guardian are retired and:",
           "exception-list": {
             "opted-out": "Opted out of pension benefits before December 11, 2023, and",
             "opt-back": "Can't opt back in under the pension rules"
