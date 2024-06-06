@@ -15,6 +15,7 @@ import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
+import { InputSinField } from '~/components/input-sin-field';
 import { AppPageTitle } from '~/components/layouts/public-layout';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
@@ -263,7 +264,7 @@ export default function ApplyFlowChildInformation() {
       defaultChecked: defaultState?.hasSocialInsuranceNumber === true,
       append: hasSocialInsuranceNumberValue === true && (
         <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
-          <InputField
+          <InputSinField
             id="social-insurance-number"
             name="socialInsuranceNumber"
             label={t('apply-adult-child:children.information.sin')}
