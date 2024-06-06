@@ -182,10 +182,10 @@
                         }
                       },
                       {
-                        "id": "$lang/_public/apply/$id/adult/personal-information",
-                        "file": "routes/$lang/_public/apply/$id/adult/personal-information.tsx",
+                        "id": "$lang/_public/apply/$id/adult/contact-information",
+                        "file": "routes/$lang/_public/apply/$id/adult/contact-information.tsx",
                         "paths": {
-                          "en": "/:lang/apply/:id/adult/personal-information",
+                          "en": "/:lang/apply/:id/adult/contact-information",
                           "fr": "/:lang/demander/:id/adulte/renseignements-personnels"
                         }
                       },
@@ -401,10 +401,10 @@
                         }
                       },
                       {
-                        "id": "$lang/_public/apply/$id/adult-child/personal-information",
-                        "file": "routes/$lang/_public/apply/$id/adult-child/personal-information.tsx",
+                        "id": "$lang/_public/apply/$id/adult-child/contact-information",
+                        "file": "routes/$lang/_public/apply/$id/adult-child/contact-information.tsx",
                         "paths": {
-                          "en": "/:lang/apply/:id/adult-child/personal-information",
+                          "en": "/:lang/apply/:id/adult-child/contact-information",
                           "fr": "/:lang/demander/:id/adulte-enfant/renseignements-personnels"
                         }
                       },
@@ -580,10 +580,10 @@
                         }
                       },
                       {
-                        "id": "$lang/_public/apply/$id/child/personal-information",
-                        "file": "routes/$lang/_public/apply/$id/child/personal-information.tsx",
+                        "id": "$lang/_public/apply/$id/child/contact-information",
+                        "file": "routes/$lang/_public/apply/$id/child/contact-information.tsx",
                         "paths": {
-                          "en": "/:lang/apply/:id/child/personal-information",
+                          "en": "/:lang/apply/:id/child/contact-information",
                           "fr": "/:lang/demander/:id/enfant/renseignements-personnels"
                         }
                       },

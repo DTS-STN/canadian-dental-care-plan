@@ -158,7 +158,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang/_public/apply/$id/child/review-adult-information', params));
   }
 
-  return redirect(getPathById('$lang/_public/apply/$id/child/personal-information', params));
+  return redirect(getPathById('$lang/_public/apply/$id/child/contact-information', params));
 }
 
 export default function ApplyFlowApplicationInformation() {

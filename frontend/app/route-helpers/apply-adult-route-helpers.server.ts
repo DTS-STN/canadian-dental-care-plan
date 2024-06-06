@@ -154,7 +154,7 @@ export function validateApplyAdultStateForReview({ params, state }: ValidateAppl
   }
 
   if (contactInformation === undefined) {
-    throw redirect(getPathById('$lang/_public/apply/$id/adult/personal-information', params));
+    throw redirect(getPathById('$lang/_public/apply/$id/adult/contact-information', params));
   }
 
   if (communicationPreferences === undefined) {

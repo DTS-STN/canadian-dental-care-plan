@@ -2,7 +2,7 @@ import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { loader } from '~/routes/$lang/_public/apply/$id/adult/personal-information';
+import { loader } from '~/routes/$lang/_public/apply/$id/adult/contact-information';
 
 vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
   loadApplyAdultState: vi.fn().mockReturnValue({
@@ -46,7 +46,7 @@ vi.mock('~/utils/env.server', () => ({
   }),
 }));
 
-describe('_public.apply.id.personal-information', () => {
+describe('_public.apply.id.contact-information', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -56,7 +56,7 @@ describe('_public.apply.id.personal-information', () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
       const response = await loader({
-        request: new Request('http://localhost:3000/apply/123/personal-information'),
+        request: new Request('http://localhost:3000/apply/123/contact-information'),
         context: { session },
         params: {},
       });
