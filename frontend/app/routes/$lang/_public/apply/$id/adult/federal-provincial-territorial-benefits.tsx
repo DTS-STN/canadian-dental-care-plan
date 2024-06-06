@@ -77,7 +77,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  const log = getLogger('apply/federal-provincial-territorial');
+  const log = getLogger('apply/adult/federal-provincial-territorial');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
