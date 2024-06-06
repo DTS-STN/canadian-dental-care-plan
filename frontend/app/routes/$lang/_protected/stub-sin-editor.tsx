@@ -17,7 +17,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { UserinfoToken } from '~/utils/raoidc-utils.server';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { isValidSin } from '~/utils/sin-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('stub-sin-editor', 'gcweb'),
@@ -43,7 +42,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const sinToStubSchema = z.object({
-    socialInsuranceNumberToStub: z.string().refine(isValidSin, { message: 'valid-sin' }),
+    socialInsuranceNumberToStub: z.string(),
     userUUIDToStub: z.string(),
   });
 
