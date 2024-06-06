@@ -47,34 +47,38 @@
       "summary": "Énoncé de confidentialité",
       "personal-information": {
         "heading": "Renseignements personnels",
-        "service-canada-application-administration": "Service Canada, qui fait partie d'Emploi et Développement social Canada (EDSC), administre les demandes au titre du Régime canadien de soins dentaires (RCSD) au nom de Santé Canada (SC). Service Canada recueillera les renseignements personnels que vous inclurez dans votre demande au RCSD afin de valider l'admissibilité en fonction des critères du RCSD."
+        "service-canada-application-administration": "(FR) The personal information collected in this application is required for the purposes of applying for the Canada Dental Care Plan (CDCP). Service Canada, which is part of Employment and Social Development Canada (ESDC), administers applications for the CDCP on behalf of Health Canada. Service Canada will collect the personal information you include in your CDCP application to register and enroll you into the Plan.",
+        "collection-use": "(FR) The collection, use, and disclosure of your personal information is authorized by, among other laws, the Department of Health Act, the Dental Care Measures Act, the Department of Employment and Social Development Act, and is protected by the provisions of the Privacy Act. ESDC carries out this application process using services from a third-party provider, Microsoft Corporation, which may be subject to foreign laws. For more information, see <microsoftDataPrivacyPolicy>Microsoft Data Privacy Policy & Privacy Principles</microsoftDataPrivacyPolicy>."
       },
       "how-we-protect-your-privacy": {
         "heading": "Comment protégeons-nous vos renseignements personnels",
-        "personal-information-collection-and-use-authorization": "La collecte et l'utilisation de vos renseignements personnels sont autorisées en vertu de la <i>Loi sur la protection des renseignements personnels</i>, de la <i>Loi sur le ministère de la Santé</i>, de la <i>Loi sur les mesures de soins dentaires</i>, de la <i>Loi sur le ministère de l'Emploi et du Développement social</i> et d'autres lois applicables.",
-        "personal-information-rights-and-access": "Vous avez droit à la protection de vos renseignements personnels, à l'accès à ceux-ci et, le cas échéant, à leur correction. Ils sont conservés dans les fichiers de renseignements personnels suivants\u00a0:",
+        "personal-information-rights-and-access": "(FR) You have the right to the protection of, access to, and where applicable, the correction of your personal information. It is kept in the following personal information banks (PIBS):",
         "personal-information-banks": {
-          "esdc-ppu-712": "Régime canadien de soins dentaires ESDC PPU 712",
-          "hc-ppu-440": "Régime canadien de soins dentaires HC PPU 440"
+          "esdc-ppu-712": "Régime canadien de soins dentaires (ESDC PPU 712)",
+          "hc-ppu-440": "Régime canadien de soins dentaires (HC PPU 440)"
         },
         "info-source-access": "Vous pouvez apprendre comment accéder à cette information dans la publication du gouvernement intitulée <infosource>Info Source</infosource>. Vous pouvez également accéder à Info Source en ligne dans n'importe quel Centre Service Canada.",
-        "esdc-application-third-party-provider": "EDSC exécute cette demande en utilisant les services du fournisseur tiers Microsoft Corporation, qui peuvent être soumis à des lois étrangères. Pour plus d'information, consultez\u00a0: <microsoftDataPrivacyPolicy>Politique de confidentialité des données et principes de confidentialité de Microsoft</microsoftDataPrivacyPolicy>.",
-        "personal-information-handling-complaint-process": "Si vous n'êtes pas satisfait de la façon dont vos renseignements personnels ont été traités par EDSC, vous pouvez communiquer avec le commissaire à la protection de la vie privée du Canada pour <fileacomplaint>déposer une plainte</fileacomplaint>."
+        "personal-information-handling-complaint-process": "(FR) If you do not agree with the way your personal information was handled by ESDC, you can contact the Office of the Privacy Commissioner of Canada (OPC) to <fileacomplaint>file a complaint</fileacomplaint>."
+      }
+    },
+    "sharing-your-information": {
+      "summary": "(FR) Sharing your information",
+      "government-of-canada-and-sun-life": {
+        "heading": "(FR) Government of Canada and Sun Life",
+        "share-info": "(FR) Employment and Social Development Canada (ESDC) may share your personal information with Health Canada (HC), the Canada Revenue Agency (CRA), and Sun Life to administer the plan, validate your eligibility, and register you for the Canadian Dental Care Plan (CDCP).",
+        "disclose-info": "(FR) Your information may also be disclosed to the CDCP benefits administrator (Sun Life), the benefits administrator's agents, and service providers for the purpose of underwriting, verification, administration, adjudication and investigation of claims under the CDCP.",
+        "sun-life-authorization": "(FR) Sun Life is authorized to collect, use, and disclose information about you to any person or organization, including oral health providers, institutions, investigative services, and the CDCP, for the purposes of program administration, audit, claims and patient/client safety."
       },
-      "who-we-can-share-your-information-with": {
-        "heading": "Avec qui nous partagerons vos renseignements",
-        "esdc-personal-information-sharing": "EDSC communiquera vos renseignements personnels à Santé Canada, l'Agence du revenu du Canada et la Sun Life dans le cadre de l'administration du régime afin de valider votre admissibilité et de vous inscrire au RCSD.",
-        "benefits-administration-data-disclosure": "Vos données peuvent également être divulguées à l'administrateur des prestations du RCSD (Sun Life) et aux agents et fournisseurs de services de l'administrateur des prestations aux fins de souscription, de vérification, d'administration, de décision et d'enquête concernant les prestations versées au titre du RCSD.",
-        "esdc-information-usage-policy": "EDSC peut utiliser ou partager les renseignements que vous fournissez pour les activités d'analyse des politiques, de recherche, de surveillance et d'évaluation au sein d'EDSC et de SC. Ces utilisations ou activités n'auront aucune incidence sur les décisions administratives prises à votre sujet.",
-        "sun-life-authorization": "La Sun Life est autorisée à recueillir, à utiliser et à divulguer des renseignements vous concernant et à les communiquer à des personnes d'intérêt ou organismes comme, par exemple, des fournisseurs de soins buccodentaires, des institutions, des agences d'enquêtes, ainsi qu'au RCSD pour l'administration du plan, la vérification, les demandes de règlement et la sécurité du patient/client. Si vous êtes considéré comme mineur dans votre province ou territoire, vos renseignements personnels peuvent également être communiqués vos parents ou tuteurs légaux. Pour de plus amples renseignements quant à la politique de confidentialité de la Sun Life, consultez le <sunlife>www.sunlife.ca</sunlife>."
-      },
-      "what-happens-if-you-dont-give-us-your-information": {
-        "heading": "Que se passe-t-il si vous ne nous fournissez pas vos renseignements",
-        "text": "La participation au RCSD est volontaire; toutefois, si vous ne fournissez pas vos renseignements personnels dans votre demande, vous ne pouvez pas être pris en considération pour le RCSD."
+      "sharing-of-information-and-oral-health-providers": {
+        "heading": "(FR) Sharing of information and Oral Health Providers",
+        "enrol-consent": "(FR) By enrolling in the CDCP, you are also providing consent to your oral health providers to disclose all personal information, as authorized by the Department of Health Act and the Dental Care Measures Act, that may be considered useful by Sun Life in the context of program administration, conducting claims verifications, managing claims, and patient/client safety. This information may include, but is not limited to, details on the services provided, patient clinical data, payments, and X-rays.",
+        "considered-minor": "(FR) If you are considered a minor in your province or territory, your information can also be shared with your parents or legal guardians.",
+        "analysis": "(FR) ESDC may use or share the information you provide for policy analysis, research, monitoring and/or evaluation activities within ESDC, Health Canada and Statistics Canada. These uses or activities will not result in any administrative decisions made about you."
       }
     },
     "apply": {
-      "application-start-consent": "En poursuivant la demande, vous acceptez aux conditions générales d'utilisation ci-dessus et à l'énoncé de confidentialité.",
+      "application-participation": "(FR) Participation in the Canadian Dental Care Plan is voluntary. However, if you do not provide your personal information in your application, you cannot be considered for the Canadian Dental Care Plan.",
+      "application-consent": "En poursuivant la demande, vous acceptez aux conditions générales d'utilisation ci-dessus et à l'énoncé de confidentialité. ",
       "back-button": "Retour",
       "link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html",
       "start-button": "Accepter et poursuivre"
