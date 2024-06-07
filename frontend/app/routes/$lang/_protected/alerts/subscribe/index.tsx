@@ -4,6 +4,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
+import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import validator from 'validator';
@@ -28,6 +30,7 @@ import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { cn } from '~/utils/tw-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';
 
 export const handle = {
@@ -134,6 +137,7 @@ export default function AlertsSubscribe() {
   const fetcher = useFetcher<typeof action>();
   const userOrigin = useUserOrigin();
   const errorSummaryId = 'error-summary';
+  const isSubmitting = fetcher.state !== 'idle';
 
   // Keys order should match the input IDs order.
   const errorMessages = useMemo(
@@ -179,11 +183,12 @@ export default function AlertsSubscribe() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={userOrigin?.to} params={params}>
+          <ButtonLink id="back-button" to={userOrigin?.to} params={params} disabled={isSubmitting}>
             {t('alerts:subscribe.button.back')}
           </ButtonLink>
-          <Button id="subscribe-button" variant="primary">
+          <Button id="subscribe-button" variant="primary" disabled={isSubmitting}>
             {t('alerts:subscribe.button.subscribe')}
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
         </div>
       </fetcher.Form>

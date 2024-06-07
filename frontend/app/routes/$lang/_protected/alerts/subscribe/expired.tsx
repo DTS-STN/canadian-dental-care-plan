@@ -2,6 +2,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
+import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 
@@ -20,6 +22,7 @@ import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'alerts:expired.page-title' }],
@@ -78,6 +81,7 @@ export default function ConfirmCodeExpired() {
   const { csrfToken } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
+  const isSubmitting = fetcher.state !== 'idle';
 
   return (
     <div className="max-w-prose">
@@ -103,8 +107,9 @@ export default function ConfirmCodeExpired() {
           <ButtonLink id="cancel" routeId="$lang/_protected/alerts/subscribe/confirm" params={params}>
             {t('alerts:expired.back')}
           </ButtonLink>
-          <Button id="submit-button" name="action" variant="primary">
+          <Button id="submit-button" name="action" variant="primary" disabled={isSubmitting}>
             {t('alerts:expired.request-new-code')}
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
         </div>
       </fetcher.Form>

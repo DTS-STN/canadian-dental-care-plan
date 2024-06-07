@@ -4,6 +4,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
+import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import validator from 'validator';
@@ -28,6 +30,7 @@ import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { cn } from '~/utils/tw-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';
 
 enum ConfirmationCodeAction {
@@ -160,7 +163,7 @@ export default function ConfirmSubscription() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const userOrigin = useUserOrigin();
-
+  const isSubmitting = fetcher.state !== 'idle';
   const invalidConfirmationCode = fetcher.data && 'invalidConfirmationCode' in fetcher.data ? fetcher.data.invalidConfirmationCode : undefined;
 
   const errorSummaryId = 'error-summary';
@@ -219,14 +222,15 @@ export default function ConfirmSubscription() {
           <InputField id="confirmationCode" label={t('alerts:confirm.confirmation-code-label')} maxLength={100} name="confirmationCode" errorMessage={errorMessages.confirmationCode} />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={userOrigin?.to} params={params}>
+          <ButtonLink id="back-button" to={userOrigin?.to} params={params} disabled={isSubmitting}>
             {t('alerts:confirm.back')}
           </ButtonLink>
-          <Button id="new-code-button" name="action" value={ConfirmationCodeAction.NewCode} variant="alternative">
+          <Button id="new-code-button" name="action" value={ConfirmationCodeAction.NewCode} variant="alternative" disabled={isSubmitting}>
             {t('alerts:confirm.request-new-code')}
           </Button>
-          <Button id="submit-button" name="action" value={ConfirmationCodeAction.Submit} variant="primary">
+          <Button id="submit-button" name="action" value={ConfirmationCodeAction.Submit} variant="primary" disabled={isSubmitting}>
             {t('alerts:confirm.submit-code')}
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
         </div>
       </fetcher.Form>
