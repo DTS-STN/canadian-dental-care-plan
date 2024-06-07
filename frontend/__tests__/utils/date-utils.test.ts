@@ -1,8 +1,7 @@
 import { renderHook } from '@testing-library/react';
 
 import { UTCDate } from '@date-fns/utc';
-import { afterEach, beforeEach } from 'node:test';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   extractDateParts,
@@ -91,6 +90,10 @@ describe('useMonths', () => {
       expect(getAgeFromDateString('2000-01-01')).toEqual(24);
     });
 
+    it('should return the age rounded down to closest full year from a given date string', () => {
+      expect(getAgeFromDateString('2000-01-02')).toEqual(23);
+    });
+
     it('should throw an error for an invalid date string', () => {
       expect(() => getAgeFromDateString('abcd-ef-gh')).toThrowError();
     });
@@ -98,7 +101,11 @@ describe('useMonths', () => {
 
   describe('getAgeFromDateTimeString', () => {
     it('should return the age from a given datetime string', () => {
-      expect(getAgeFromDateTimeString('2000-01-01T15:30:00.000Z')).toEqual(24);
+      expect(getAgeFromDateTimeString('2000-01-01T00:00:00.000Z')).toEqual(24);
+    });
+
+    it('should return the age rounded down to closest full year from a given datetime string', () => {
+      expect(getAgeFromDateTimeString('2000-01-02T00:00:00.000Z')).toEqual(23);
     });
 
     it('should throw an error for an invalid datetime string', () => {
@@ -108,11 +115,15 @@ describe('useMonths', () => {
 
   describe('getAgeFromDate', () => {
     it('should return the age from a given UTC date object', () => {
-      expect(getAgeFromDate(new UTCDate(2000, 1, 1))).toEqual(24);
+      expect(getAgeFromDate(new UTCDate(2000, 0, 1))).toEqual(24);
+    });
+
+    it('should return the age rounded down to closest full year from a given UTC date object', () => {
+      expect(getAgeFromDate(new UTCDate(2000, 0, 2))).toEqual(23);
     });
 
     it('should throw an error if the UTC date is in the future', () => {
-      expect(() => getAgeFromDate(new UTCDate(3000, 1, 1))).toThrowError();
+      expect(() => getAgeFromDate(new UTCDate(3000, 0, 1))).toThrowError();
     });
   });
 
@@ -132,11 +143,11 @@ describe('useMonths', () => {
 
   describe('isPastDateTimeString', () => {
     it('should return true if a datetime is in the past', () => {
-      expect(isPastDateTimeString('2000-05-20T15:30:00.000Z')).toEqual(true);
+      expect(isPastDateTimeString('2000-01-01T00:00:00.000Z')).toEqual(true);
     });
 
     it('should return false if a datetime is in the future', () => {
-      expect(isPastDateTimeString('3000-05-20T15:30:00.000Z')).toEqual(false);
+      expect(isPastDateTimeString('3000-01-01T00:00:00.000Z')).toEqual(false);
     });
 
     it('should throw an error for an invalid datetime string', () => {
@@ -146,11 +157,11 @@ describe('useMonths', () => {
 
   describe('isPastDate', () => {
     it('should return true if a UTC date is in the past', () => {
-      expect(isPastDate(new UTCDate(2000, 1, 1))).toEqual(true);
+      expect(isPastDate(new UTCDate(2000, 0, 1))).toEqual(true);
     });
 
     it('should return false if a UTC date is in the future', () => {
-      expect(isPastDate(new UTCDate(3000, 1, 1))).toEqual(false);
+      expect(isPastDate(new UTCDate(3000, 0, 1))).toEqual(false);
     });
   });
 
@@ -196,11 +207,15 @@ describe('useMonths', () => {
 
   describe('toLocaleDateString', () => {
     it('should return a formatted date given a UTC date object and an "en" locale', () => {
-      expect(toLocaleDateString(new UTCDate(2000, 1, 1), 'en')).toEqual('February 1, 2000');
+      expect(toLocaleDateString(new UTCDate(2000, 0, 1), 'en')).toEqual('January 1, 2000');
     });
 
     it('should return a formatted date given a UTC date object and an "fr" locale', () => {
-      expect(toLocaleDateString(new UTCDate(2000, 1, 1), 'fr')).toEqual('1 février 2000');
+      expect(toLocaleDateString(new UTCDate(2000, 0, 1), 'fr')).toEqual('1 janvier 2000');
+    });
+
+    it('should throw an error for an invalid Canadian locale', () => {
+      expect(() => toLocaleDateString(new UTCDate(2000, 0, 1), 'xy')).toThrowError();
     });
   });
 });
