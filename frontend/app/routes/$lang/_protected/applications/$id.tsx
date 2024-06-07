@@ -39,9 +39,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   }
 
   //prevent users from entering any ID in the URL and seeing other users' applications
-  const applications: { id: string | undefined; submittedOn: string | undefined; status: string | undefined; confirmationCode: string | undefined }[] | undefined = session.get('applications');
+  const applications: { id: string | undefined; submittedOn: string | undefined; status: string | undefined; confirmationCode: string | undefined; data: object[] }[] | undefined = session.get('applications');
   const viewApplication = applications?.find((applications) => applications.id === params.id);
-
   if (!viewApplication) {
     instrumentationService.countHttpStatus('application.view', 404);
     throw new Response(null, { status: 404 });

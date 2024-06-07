@@ -26,7 +26,7 @@ export function getApplicationHistoryApiMockHandlers() {
 
       return HttpResponse.json([
         {
-          AppicationId: '038d9d0f-fb35-4d98-8f31-a4b2171e521a',
+          ApplicationId: '038d9d0f-fb35-4d98-8f31-a4b2171e521a',
           SubmittedDate: '2024/04/05',
           ApplicationStatus: 'Submitted',
           ConfirmationCode: '202403051212',
@@ -185,7 +185,7 @@ export function getApplicationHistoryApiMockHandlers() {
           ],
         },
         {
-          AppicationId: '038d9d0f-fb35-4d98-9d34-a4b2171e789b',
+          ApplicationId: '038d9d0f-fb35-4d98-9d34-a4b2171e789b',
           SubmittedDate: '2024/03/05',
           ApplicationStatus: 'Approved',
           ConfirmationCode: '202403054231',

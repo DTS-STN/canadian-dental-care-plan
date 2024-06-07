@@ -1,7 +1,8 @@
 import { sort } from 'moderndash';
 import moize from 'moize';
-import { z } from 'zod';
 
+import { toBenefitApplication } from '~/mappers/application-history-mapper.server';
+import { applicationListSchema } from '~/schemas/application-history-service-schemas.server';
 import { BenefitApplicationRequest, benefitApplicationRequestSchema, benefitApplicationResponseSchema } from '~/schemas/benefit-application-service-schemas.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
@@ -37,15 +38,6 @@ function createBenefitApplicationService() {
       log.error('Unexpected benefit application request validation error: [%s]', parsedBenefitApplicationRequest.error);
       throw new Error(`Invalid benefit application request: ${parsedBenefitApplicationRequest.error}`);
     }
-    console.log('      ');
-    console.log('      ');
-    console.log('      ');
-    console.log('      ');
-    console.log(parsedBenefitApplicationRequest.data);
-    console.log('      ');
-    console.log('      ');
-    console.log('      ');
-    console.log('      ');
 
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
@@ -112,173 +104,10 @@ function createBenefitApplicationService() {
 
     instrumentationService.countHttpStatus('http.client.application-history-api.applications.gets', response.status);
 
-    const applicationsSchema = z.array(
-      z.object({
-        AppicationId: z.string().optional(),
-        SubmittedDate: z.string().optional(),
-        ApplicationStatus: z.string().optional(),
-        ConfirmationCode: z.string().optional(),
-        Data: z.array(
-          z.object({
-            BenefitApplication: z.object({
-              Applicant: z.object({
-                ApplicantDetail: z.object({
-                  PrivateDentalInsuranceIndicator: z.boolean().optional(),
-                  DisabilityTaxCreditIndicator: z.boolean().optional(),
-                  LivingIndependentlyIndicator: z.boolean().optional(),
-                  InsurancePlan: z
-                    .object({
-                      InsurancePlanIdentification: z
-                        .object({
-                          IdentificationID: z.string().optional(),
-                        })
-                        .array()
-                        .optional(),
-                    })
-                    .array()
-                    .optional(),
-                }),
-                PersonBirthDate: z.object({
-                  dateTime: z.string(),
-                }),
-                PersonContactInformation: z.array(
-                  z.object({
-                    Address: z.array(
-                      z.object({
-                        AddressCategoryCode: z.object({
-                          ReferenceDataName: z.string(),
-                        }),
-                        AddressCityName: z.string(),
-                        AddressCountry: z.object({
-                          CountryCode: z.object({
-                            ReferenceDataID: z.string(),
-                          }),
-                        }),
-                        AddressPostalCode: z.string(),
-                        AddressProvince: z.object({
-                          ProvinceCode: z.object({
-                            ReferenceDataID: z.string(),
-                          }),
-                        }),
-                        AddressSecondaryUnitText: z.string(),
-                        AddressStreet: z.object({
-                          StreetName: z.string(),
-                        }),
-                      }),
-                    ),
-                    EmailAddress: z.array(
-                      z.object({
-                        EmailAddressID: z.string(),
-                      }),
-                    ),
-                    TelephoneNumber: z.array(
-                      z.object({
-                        TelephoneNumberCategoryCode: z.object({
-                          ReferenceDataID: z.string(),
-                          ReferenceDataName: z.string(),
-                        }),
-                      }),
-                    ),
-                  }),
-                ),
-                PersonLanguage: z.array(
-                  z.object({
-                    CommunicationCategoryCode: z.object({
-                      ReferenceDataID: z.string(),
-                    }),
-                    PreferredIndicator: z.boolean(),
-                  }),
-                ),
-                PersonMaritalStatus: z.object({
-                  StatusCode: z.object({
-                    ReferenceDataID: z.string(),
-                  }),
-                }),
-                PersonName: z.array(
-                  z.object({
-                    PersonGivenName: z.array(z.string()),
-                    PersonSurName: z.string(),
-                  }),
-                ),
-                PersonSINIdentification: z.object({
-                  IdentificationID: z.string(),
-                }),
-                RelatedPerson: z.array(
-                  z.object({
-                    PersonBirthDate: z.object({
-                      dateTime: z.string(),
-                    }),
-                    PersonName: z.array(
-                      z.object({
-                        PersonGivenName: z.array(z.string()),
-                        PersonSurName: z.string(),
-                      }),
-                    ),
-                    PersonRelationshipCode: z.object({
-                      ReferenceDataName: z.string(),
-                    }),
-                    PersonSINIdentification: z.object({
-                      IdentificationID: z.string(),
-                    }),
-                    ApplicantDetail: z.object({
-                      ConsentToSharePersonalInformationIndicator: z.boolean().optional(),
-                      AttestParentOrGuardianIndicator: z.boolean().optional(),
-                      PrivateDentalInsuranceIndicator: z.boolean().optional(),
-                      InsurancePlan: z
-                        .object({
-                          InsurancePlanIdentification: z
-                            .object({
-                              IdentificationID: z.string().optional(),
-                            })
-                            .array()
-                            .optional(),
-                        })
-                        .array()
-                        .optional(),
-                    }),
-                  }),
-                ),
-                MailingSameAsHomeIndicator: z.boolean(),
-                PreferredMethodCommunicationCode: z.object({
-                  ReferenceDataID: z.string(),
-                }),
-              }),
-              BenefitApplicationCategoryCode: z.object({
-                ReferenceDataID: z.string(),
-              }),
-              BenefitApplicationChannelCode: z.object({
-                ReferenceDataID: z.string(),
-              }),
-            }),
-          }),
-        ),
-      }),
-    );
-
     const data = await response.json();
     log.trace('Applications for user id [%s]: [%j]', userId, data);
-    const applications = applicationsSchema.parse(data).map((application) => ({
-      id: application.AppicationId,
-      submittedOn: application.SubmittedDate,
-      status: application.ApplicationStatus,
-      confirmationCode: application.ConfirmationCode,
-      benefitApplicationDetails: [
-        // {
-        //   typeOfApplication: application.Data.BenefitApplication.BenefitApplicationCategoryCode,
-        //   disabilityTaxCredit: application.Data.BenefitApplication.BenefitApplicationCategoryCode,
-        //   livingIndependently: application.Data.BenefitApplication.BenefitApplicationCategoryCode,
-        //   applicantInformation: application.Data.BenefitApplication.BenefitApplicationCategoryCode,
-        //   communicationPreferences: application.Data.BenefitApplication.BenefitApplicationCategoryCode,
-        //   dateOfBirth: application.Data.BenefitApplication.BenefitApplicationCategoryCode,
-        //   dentalBenefits: application.Data.BenefitApplication.BenefitApplicationCategoryCode,
-        //   dentalInsurance: application.Data.BenefitApplication.BenefitApplicationCategoryCode,
-        //   personalInformation: application.Data.BenefitApplication.BenefitApplicationCategoryCode,
-        //   partnerInformation: application.Data.BenefitApplication.BenefitApplicationCategoryCode,
-        //   children: application.Data.BenefitApplication.BenefitApplicationCategoryCode,
-        // },
-      ],
-    }));
 
+    const applications = toBenefitApplication(applicationListSchema.parse(data)); // TODO: Update schema once application-history service becomes avaliable
     return sort(applications, {
       order: sortOrder,
       by: (item) => item.submittedOn ?? 'undefined',
