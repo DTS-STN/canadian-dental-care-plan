@@ -110,7 +110,6 @@ const serverEnv = z.object({
   AUTH_LOGOUT_REDIRECT_URL: z.string().url(),
   AUTH_RAOIDC_BASE_URL: z.string().trim().min(1),
   AUTH_RAOIDC_CLIENT_ID: z.string().trim().min(1),
-  AUTH_RAOIDC_PROXY_URL: z.string().trim().transform(emptyToUndefined).optional(),
   AUTH_RASCL_LOGOUT_URL: z.string().trim().min(1),
 
   // hCaptcha settings
@@ -118,6 +117,9 @@ const serverEnv = z.object({
   HCAPTCHA_SECRET_KEY: z.string().trim().min(1),
   HCAPTCHA_SITE_KEY: z.string().trim().min(1),
   HCAPTCHA_VERIFY_URL: z.string().url().default('https://api.hcaptcha.com/siteverify'),
+
+  // http proxy settings
+  HTTP_PROXY_URL: z.string().trim().transform(emptyToUndefined).optional(),
 
   // session configuration
   SESSION_STORAGE_TYPE: z.enum(['file', 'redis']).default('file'),

@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getEnv } from '~/utils/env.server';
+import { getFetchFn } from '~/utils/fetch-utils';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('application-status-service.server');
@@ -16,11 +17,14 @@ export const getApplicationStatusService = moize(createApplicationStatusService,
 function createApplicationStatusService() {
   // prettier-ignore
   const {
+    HTTP_PROXY_URL,
     INTEROP_API_BASE_URI,
     INTEROP_API_SUBSCRIPTION_KEY,
     INTEROP_STATUS_CHECK_API_BASE_URI,
     INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY,
   } = getEnv();
+
+  const fetchFn = getFetchFn(HTTP_PROXY_URL);
 
   interface GetStatusIdWithSinArgs {
     sin: string;
@@ -60,7 +64,7 @@ function createApplicationStatusService() {
       },
     };
 
-    const response = await fetch(url, {
+    const response = await fetchFn(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -68,6 +72,7 @@ function createApplicationStatusService() {
       },
       body: JSON.stringify(statusRequest),
     });
+
     instrumentationService.countHttpStatus('http.client.interop-api.status.posts', response.status);
     if (!response.ok) {
       log.error('%j', {
@@ -131,7 +136,7 @@ function createApplicationStatusService() {
       },
     };
 
-    const response = await fetch(url, {
+    const response = await fetchFn(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
