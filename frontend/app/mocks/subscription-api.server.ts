@@ -13,6 +13,10 @@ const subscriptionApiSchema = z.object({
   alertTypeCode: z.string(),
 });
 
+const confirmationCodeApiSchema = z.object({
+  confirmationCode: z.string(),
+});
+
 /**
  * Server-side MSW mocks for the subscription API.
  */
@@ -203,13 +207,13 @@ export function getSubscriptionApiMockHandlers() {
       }
 
       const requestBody = await request.json();
-      const parsedConfirmationCode = z.string().safeParse(requestBody);
+      const parsedConfirmationCode = confirmationCodeApiSchema.safeParse(requestBody);
       if (!parsedConfirmationCode.success) {
         throw new HttpResponse(null, { status: 400 });
       }
 
       const subscriptionConfirmationCodesEntities = db.subscriptionConfirmationCode.findMany({
-        where: { userId: { equals: parsedUserId.data }, code: { equals: parsedConfirmationCode.data } },
+        where: { userId: { equals: parsedUserId.data }, code: { equals: parsedConfirmationCode.data.confirmationCode } },
       });
 
       if (subscriptionConfirmationCodesEntities.length === 0) {
@@ -218,7 +222,7 @@ export function getSubscriptionApiMockHandlers() {
 
       const latestConfirmCode = subscriptionConfirmationCodesEntities.reduce((prev, current) => (prev.createdDate > current.createdDate ? prev : current));
 
-      if (latestConfirmCode.code === parsedConfirmationCode.data && timeEntered < latestConfirmCode.expiryDate) {
+      if (latestConfirmCode.code === parsedConfirmationCode.data.confirmationCode && timeEntered < latestConfirmCode.expiryDate) {
         db.user.update({
           where: { id: { equals: parsedUserId.data } },
           data: {

@@ -1,3 +1,5 @@
+import { json } from '@remix-run/node';
+
 import moize from 'moize';
 import { z } from 'zod';
 
@@ -285,7 +287,7 @@ function createSubscriptionService() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(enteredConfirmationCode),
+      body: JSON.stringify({ confirmationCode: enteredConfirmationCode }),
     });
 
     instrumentationService.countHttpStatus('alert-subscription.validate.posts', emailValidationResponse.status);
