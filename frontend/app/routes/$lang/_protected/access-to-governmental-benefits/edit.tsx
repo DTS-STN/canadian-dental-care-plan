@@ -4,6 +4,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
+import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
@@ -24,6 +26,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { cn } from '~/utils/tw-utils';
 
 enum HasFederalBenefitsOption {
   No = 'no',
@@ -177,6 +180,7 @@ export default function AccessToGovernmentalsBenefitsEdit() {
   const { csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, regions } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const errorSummaryId = 'error-summary';
+  const isSubmitting = fetcher.state !== 'idle';
 
   // Keys order should match the input IDs order.
   const errorMessages = useMemo(
@@ -332,11 +336,12 @@ export default function AccessToGovernmentalsBenefitsEdit() {
           />
         </fieldset>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <ButtonLink id="back-button" routeId="$lang/_protected/access-to-governmental-benefits/view" params={params}>
+          <ButtonLink id="back-button" routeId="$lang/_protected/access-to-governmental-benefits/view" params={params} disabled={isSubmitting}>
             {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.button.back')}
           </ButtonLink>
-          <Button id="save-button" variant="primary">
+          <Button id="save-button" variant="primary" disabled={isSubmitting}>
             {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.button.save')}
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
         </div>
       </fetcher.Form>
