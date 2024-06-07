@@ -38,16 +38,31 @@ export function extractDateParts(date: string) {
   };
 }
 
+/**
+ *
+ * @param date string representing the date (ex. '2024-01-01')
+ * @returns difference in full years from the current date and the input.  This operation rounds the year down for fractional time differences.
+ */
 export function getAgeFromDateString(date: string) {
   invariant(isValidDateString(date), `date is invalid [${date}]`);
   return getAgeFromDate(parseDateString(date));
 }
 
+/**
+ *
+ * @param dateTime string representing the datetime (ex. '2024-01-01T00:00:00Z')
+ * @returns difference in full years from the current date and the input.  This operation rounds the year down for fractional time differences.
+ */
 export function getAgeFromDateTimeString(dateTime: string) {
   invariant(isValidDateTimeString(dateTime), `dateTime is invalid [${dateTime}]`);
   return getAgeFromDate(parseDateTimeString(dateTime));
 }
 
+/**
+ *
+ * @param utcDate UTC date object (ex. new UTCDate(2024,1,1))
+ * @returns difference in full years from the current date and the input.  This operation rounds the year down for fractional time differences.
+ */
 export function getAgeFromDate(utcDate: UTCDate) {
   invariant(isPastDate(utcDate), `utcDate must be in past [${utcDate}]`);
   return differenceInYears(new UTCDate(), utcDate);
@@ -175,6 +190,7 @@ export function parseDateTimeString(dateTime: string) {
 }
 
 export function toLocaleDateString(date: UTCDate, locale: string) {
+  invariant(/^(en|fr)$/i.test(locale), `Canadian locale is invalid [${locale}]`);
   return date.toLocaleDateString(`${locale}-CA`, { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
