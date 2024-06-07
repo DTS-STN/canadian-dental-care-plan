@@ -87,6 +87,13 @@
     "page-message": "We're sorry you ended up here. Sometimes a page gets moved or deleted, but hopefully we can help you find what you're looking for.",
     "page-link": "Return to the <home>home page</home>"
   },
+  "protected-not-found": {
+    "document-title": "Not found",
+    "page-title": "We couldn't find that web page",
+    "page-subtitle": "(Error 404)",
+    "page-message": "We're sorry you ended up here. Sometimes a page gets moved or deleted, but hopefully we can help you find what you're looking for.",
+    "page-link": "Return to <dashboard>dashboard</dashboard>"
+  },
   "public-not-found": {
     "document-title": "Not found",
     "page-title": "We couldn't find that web page",

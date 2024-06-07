@@ -155,7 +155,8 @@ export interface NotFoundErrorProps {
 
 export function NotFoundError({ error }: NotFoundErrorProps) {
   const { t } = useTranslation(i18nNamespaces);
-  const home = <InlineLink to="/" />;
+  const userOrigin = useUserOrigin();
+  const dashboard = <InlineLink to={userOrigin ? userOrigin.to : '/'} />;
 
   useEffect(() => {
     if (adobeAnalytics.isConfigured()) {
@@ -168,13 +169,13 @@ export function NotFoundError({ error }: NotFoundErrorProps) {
       <PageHeader />
       <main className="container" property="mainContentOfPage" resource="#wb-main" typeof="WebPageElement">
         <PageTitle className="my-8">
-          <span>{t('gcweb:not-found.page-title')}</span>
-          <small className="block text-2xl font-normal text-neutral-500">{t('gcweb:not-found.page-subtitle')}</small>
+          <span>{t('gcweb:protected-not-found.page-title')}</span>
+          <small className="block text-2xl font-normal text-neutral-500">{t('gcweb:protected-not-found.page-subtitle')}</small>
         </PageTitle>
-        <p className="mb-8 text-lg text-gray-500">{t('gcweb:not-found.page-message')}</p>
+        <p className="mb-8 text-lg text-gray-500">{t('gcweb:protected-not-found.page-message')}</p>
         <ul className="list-disc space-y-2 pl-10">
           <li>
-            <Trans ns={i18nNamespaces} i18nKey="gcweb:not-found.page-link" components={{ home }} />
+            <Trans ns={i18nNamespaces} i18nKey="gcweb:protected-not-found.page-link" components={{ dashboard }} />
           </li>
         </ul>
         <PageDetails />
