@@ -97,6 +97,9 @@ export function getSubscriptionApiMockHandlers() {
           subscriptions: {
             href: `https://api.cdcp.example.com/api/v1/users/${parsedUserId.data}/subscriptions`,
           },
+          emailValidations: {
+            href: `http://api.cdcp.example.com/api/v1/users/${parsedUserId.data}/email-validations`,
+          },
         },
       });
     }),

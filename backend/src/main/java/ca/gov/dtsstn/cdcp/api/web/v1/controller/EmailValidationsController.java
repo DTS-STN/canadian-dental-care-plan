@@ -1,10 +1,15 @@
 package ca.gov.dtsstn.cdcp.api.web.v1.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,15 +21,17 @@ import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.EmailVerificationModel;
+import ca.gov.dtsstn.cdcp.api.web.v1.model.mapper.AbstractModelMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 
+
 @Validated
 @RestController
 @OAuthSecurityRequirement
-@RequestMapping({ "/api/v1/users" })
+@RequestMapping({ "/api/v1/users/{userId}/email-validations" })
 @Tag(name = "Email validations", description = "Endpoint for managing user email validations.")
 public class EmailValidationsController {
 
@@ -35,8 +42,21 @@ public class EmailValidationsController {
 		this.userService = userService;
 	}
 
+	@GetMapping
+	@Operation(summary = "List all email validations for a user")
+	public CollectionModel<EmailVerificationModel> getEmailVerificationByUserId(
+			@NotBlank(message = "userId must not be null or blank")
+			@Parameter(description = "The ID of the user.", required = true)
+			@PathVariable String userId) {
+		userService.getUserById(userId)
+			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));
+
+		return AbstractModelMapper.wrapCollection(CollectionModel.empty(), EmailVerificationModel.class)
+			.add(linkTo(methodOn(getClass()).getEmailVerificationByUserId(userId)).withSelfRel());
+	}
+
+	@PostMapping
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	@PostMapping({ "/{userId}/email-validations"})
 	@Operation(summary = "Create a new email validation for a user")
 	public void verifyConfirmationCodeStatus(
 			@NotBlank(message = "userId must not be null or blank")
