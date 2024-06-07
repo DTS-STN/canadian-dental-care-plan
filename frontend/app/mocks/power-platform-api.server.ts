@@ -250,13 +250,13 @@ function getPersonalInformation(personalSinId: string) {
 function toPersonalInformationDB(personalInformation: PersonalInformation) {
   return {
     mailingAddressStreet: personalInformation.mailingAddress?.streetName,
-    mailingAddressSecondaryUnitText: personalInformation.mailingAddress?.secondAddressLine,
+    mailingAddressSecondaryUnitText: personalInformation.mailingAddress?.apartment,
     mailingAddressCityName: personalInformation.mailingAddress?.cityName,
     mailingAddressProvince: personalInformation.mailingAddress?.provinceTerritoryStateId,
     mailingAddressCountryReferenceId: personalInformation.mailingAddress?.countryId,
     mailingAddressPostalCode: personalInformation.mailingAddress?.postalCode,
     homeAddressStreet: personalInformation.homeAddress?.streetName,
-    homeAddressSecondaryUnitText: personalInformation.homeAddress?.secondAddressLine,
+    homeAddressSecondaryUnitText: personalInformation.homeAddress?.apartment,
     homeAddressCityName: personalInformation.homeAddress?.cityName,
     homeAddressProvince: personalInformation.homeAddress?.provinceTerritoryStateId,
     homeAddressCountryReferenceId: personalInformation.homeAddress?.countryId,

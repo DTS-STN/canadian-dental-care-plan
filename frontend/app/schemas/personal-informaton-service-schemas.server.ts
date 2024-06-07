@@ -158,7 +158,7 @@ export const personalInformationSchema = z.object({
   homeAddress: z
     .object({
       streetName: z.string().optional(),
-      secondAddressLine: z.string().optional(),
+      apartment: z.string().optional(),
       cityName: z.string().optional(),
       provinceTerritoryStateId: z.string().optional(),
       countryId: z.string().optional(),
@@ -168,7 +168,7 @@ export const personalInformationSchema = z.object({
   mailingAddress: z
     .object({
       streetName: z.string().optional(),
-      secondAddressLine: z.string().optional(),
+      apartment: z.string().optional(),
       cityName: z.string().optional(),
       provinceTerritoryStateId: z.string().optional(),
       countryId: z.string().optional(),

@@ -94,6 +94,7 @@ export default function PersonalInformationIndex() {
               {personalInformation.homeAddress ? (
                 <Address
                   address={personalInformation.homeAddress.streetName ?? ''}
+                  apartment={personalInformation.homeAddress.apartment}
                   city={personalInformation.homeAddress.cityName ?? ''}
                   provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.homeAddress!.provinceTerritoryStateId)?.abbr}
                   postalZipCode={personalInformation.homeAddress.postalCode}
@@ -117,6 +118,7 @@ export default function PersonalInformationIndex() {
               {personalInformation.mailingAddress ? (
                 <Address
                   address={personalInformation.mailingAddress.streetName ?? ''}
+                  apartment={personalInformation.mailingAddress.apartment}
                   city={personalInformation.mailingAddress.cityName ?? ''}
                   provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.mailingAddress!.provinceTerritoryStateId)?.abbr}
                   postalZipCode={personalInformation.mailingAddress.postalCode}

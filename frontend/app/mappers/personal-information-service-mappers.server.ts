@@ -110,7 +110,7 @@ export function toPersonalInformation(getApplicantResponse: GetApplicantResponse
     homeAddress: homeAddressList
       ?.map((aHomeAddress) => ({
         streetName: aHomeAddress.AddressStreet.StreetName,
-        secondAddressLine: aHomeAddress.AddressSecondaryUnitText,
+        apartment: aHomeAddress.AddressSecondaryUnitText,
         cityName: aHomeAddress.AddressCityName,
         provinceTerritoryStateId: aHomeAddress.AddressProvince.ProvinceCode.ReferenceDataID,
         countryId: aHomeAddress.AddressCountry.CountryCode.ReferenceDataID,
@@ -120,7 +120,7 @@ export function toPersonalInformation(getApplicantResponse: GetApplicantResponse
     mailingAddress: mailingAddressList
       ?.map((aMailingAddress) => ({
         streetName: aMailingAddress.AddressStreet.StreetName,
-        secondAddressLine: aMailingAddress.AddressSecondaryUnitText,
+        apartment: aMailingAddress.AddressSecondaryUnitText,
         cityName: aMailingAddress.AddressCityName,
         provinceTerritoryStateId: aMailingAddress.AddressProvince.ProvinceCode.ReferenceDataID,
         countryId: aMailingAddress.AddressCountry.CountryCode.ReferenceDataID,
@@ -137,16 +137,16 @@ export function toPersonalInformation(getApplicantResponse: GetApplicantResponse
 }
 
 interface ToUpdateAddressRequestArgs {
+  apartment?: string;
   category: string;
   cityName?: string;
   countryId?: string;
-  secondAddressLine?: string;
   streetName?: string;
   postalCode?: string;
   provinceTerritoryStateId?: string;
 }
 
-function toUpdateAddressRequest({ category, cityName, countryId, secondAddressLine, streetName, postalCode, provinceTerritoryStateId }: ToUpdateAddressRequestArgs) {
+function toUpdateAddressRequest({ apartment, category, cityName, countryId, streetName, postalCode, provinceTerritoryStateId }: ToUpdateAddressRequestArgs) {
   return {
     AddressCategoryCode: {
       ReferenceDataName: category,
@@ -163,7 +163,7 @@ function toUpdateAddressRequest({ category, cityName, countryId, secondAddressLi
         ReferenceDataID: provinceTerritoryStateId,
       },
     },
-    AddressSecondaryUnitText: secondAddressLine,
+    AddressSecondaryUnitText: apartment,
     AddressStreet: {
       StreetName: streetName,
     },

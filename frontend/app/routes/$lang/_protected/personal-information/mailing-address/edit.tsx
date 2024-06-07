@@ -97,7 +97,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const formDataSchema = z
     .object({
       streetName: z.string().trim().min(1, t('personal-information:mailing-address.edit.error-message.address-required')).max(30),
-      secondAddressLine: z.string().trim().max(30).optional(),
+      apartment: z.string().trim().max(30).optional(),
       countryId: z.string().trim().min(1, t('personal-information:mailing-address.edit.error-message.country-required')),
       provinceTerritoryStateId: z.string().trim().min(1, t('personal-information:mailing-address.edit.error-message.province-required')).optional(),
       cityName: z.string().trim().min(1, t('personal-information:mailing-address.edit.error-message.city-required')).max(100),
@@ -136,7 +136,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const data = {
     streetName: String(formData.get('streetName') ?? ''),
-    secondAddressLine: formData.get('secondAddressLine') ? String(formData.get('secondAddressLine')) : undefined,
+    apartment: formData.get('apartment') ? String(formData.get('apartment')) : undefined,
     countryId: String(formData.get('countryId') ?? ''),
     provinceTerritoryStateId: formData.get('provinceTerritoryStateId') ? String(formData.get('provinceTerritoryStateId')) : undefined,
     cityName: String(formData.get('cityName') ?? ''),
@@ -158,13 +158,13 @@ export async function action({ context: { session }, params, request }: ActionFu
   const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
 
-  const { streetName, secondAddressLine, countryId, provinceTerritoryStateId, cityName, postalCode } = parsedDataResult.data;
+  const { streetName, apartment, countryId, provinceTerritoryStateId, cityName, postalCode } = parsedDataResult.data;
 
   const newPersonalInformation = {
     ...personalInformation,
     mailingAddress: {
       streetName,
-      secondAddressLine,
+      apartment,
       countryId,
       provinceTerritoryStateId,
       cityName,
@@ -174,7 +174,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     homeAddress: parsedDataResult.data.homeAndMailingAddressTheSame
       ? {
           streetName,
-          secondAddressLine,
+          apartment,
           countryId,
           provinceTerritoryStateId,
           cityName,
@@ -205,7 +205,7 @@ export default function PersonalInformationMailingAddressEdit() {
   const errorMessages = useMemo(
     () => ({
       'street-name': fetcher.data?.errors.streetName?._errors[0],
-      'apartment-number': fetcher.data?.errors.secondAddressLine?._errors[0],
+      'apartment-number': fetcher.data?.errors.apartment?._errors[0],
       'country-id': fetcher.data?.errors.countryId?._errors[0],
       'province-id': fetcher.data?.errors.provinceTerritoryStateId?._errors[0],
       'city-name': fetcher.data?.errors.cityName?._errors[0],
@@ -213,7 +213,7 @@ export default function PersonalInformationMailingAddressEdit() {
     }),
     [
       fetcher.data?.errors.streetName?._errors,
-      fetcher.data?.errors.secondAddressLine?._errors,
+      fetcher.data?.errors.apartment?._errors,
       fetcher.data?.errors.countryId?._errors,
       fetcher.data?.errors.provinceTerritoryStateId?._errors,
       fetcher.data?.errors.cityName?._errors,
@@ -281,15 +281,7 @@ export default function PersonalInformationMailingAddressEdit() {
               defaultValue={addressInfo.streetName}
               errorMessage={errorMessages['street-name']}
             />
-            <InputField
-              id="apartment-number"
-              name="secondAddressLine"
-              className="w-full"
-              label={t('personal-information:home-address.edit.field.apartment')}
-              maxLength={30}
-              defaultValue={addressInfo.secondAddressLine}
-              errorMessage={errorMessages['apartment-number']}
-            />
+            <InputField id="apartment-number" name="apartment" className="w-full" label={t('personal-information:home-address.edit.field.apartment')} maxLength={30} defaultValue={addressInfo.apartment} errorMessage={errorMessages['apartment-number']} />
             <InputSelect
               id="country-id"
               name="countryId"
