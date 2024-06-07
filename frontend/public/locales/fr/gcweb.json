@@ -87,6 +87,15 @@
     "page-message": "Nous sommes désolés que vous ayez abouti ici. Il arrive parfois qu'une page ait été déplacée ou supprimée. Heureusement, nous pouvons vous aider à trouver ce que vous cherchez.",
     "page-link": "Retournez à la <home>page d'accueil</home>"
   },
+  "public-not-found": {
+    "document-title": "Page introuvable",
+    "page-title": "Nous ne pouvons trouver cette page",
+    "page-subtitle": "(Erreur 404)",
+    "page-message": "Nous sommes désolés que vous ayez abouti ici. Il arrive parfois qu'une page ait été déplacée ou supprimée. Heureusement, nous pouvons vous aider à trouver ce que vous cherchez.",
+    "unilingual-return-cdcp": "Retournez à la page d'accueil du <cdcpLink>Régime canadien de soins dentaires</cdcpLink>.",
+    "return-cdcp": "Retournez à la page d'accueil du <frenchCdcpLink>Régime canadien de soins dentaires</frenchCdcpLink>.",
+    "cdcp-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html"
+  },
   "server-error": {
     "document-title": "Erreur interne du serveur",
     "page-title": "Nous éprouvons des difficultés avec cette page",

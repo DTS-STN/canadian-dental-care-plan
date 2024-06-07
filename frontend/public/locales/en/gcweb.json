@@ -87,6 +87,15 @@
     "page-message": "We're sorry you ended up here. Sometimes a page gets moved or deleted, but hopefully we can help you find what you're looking for.",
     "page-link": "Return to the <home>home page</home>"
   },
+  "public-not-found": {
+    "document-title": "Not found",
+    "page-title": "We couldn't find that web page",
+    "page-subtitle": "(Error 404)",
+    "page-message": "We're sorry you ended up here. Sometimes a page gets moved or deleted, but hopefully we can help you find what you're looking for.",
+    "unilingual-return-cdcp": "Return to the <cdcpLink>Canadian Dental Care Plan</cdcpLink> home page.",
+    "return-cdcp": "Return to the <englishCdcpLink>Canadian Dental Care Plan</englishCdcpLink> home page.",
+    "cdcp-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html"
+  },
   "server-error": {
     "document-title": "Internal server error",
     "page-title": "We're having a problem with that page",
