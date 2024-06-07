@@ -66,7 +66,6 @@ export default function ApplyIndex() {
   const hcaptchaTermsOfService = <InlineLink to={t('apply:terms-and-conditions.links.hcaptcha')} className="external-link" newTabIndicator target="_blank" />;
   const infosource = <InlineLink to={t('apply:terms-and-conditions.links.info-source')} className="external-link" newTabIndicator target="_blank" />;
   const microsoftDataPrivacyPolicy = <InlineLink to={t('apply:terms-and-conditions.links.microsoft-data-privacy-policy')} className="external-link" newTabIndicator target="_blank" />;
-  const sunlife = <InlineLink to={t('apply:terms-and-conditions.links.sun-life')} className="external-link" newTabIndicator target="_blank" />;
 
   return (
     <div className="max-w-prose">
@@ -111,12 +110,12 @@ export default function ApplyIndex() {
             <section className="space-y-4">
               <h2 className="font-lato text-lg font-bold"> {t('apply:terms-and-conditions.privacy-notice-statement.personal-information.heading')}</h2>
               <p>{t('apply:terms-and-conditions.privacy-notice-statement.personal-information.service-canada-application-administration')}</p>
+              <p>
+                <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.privacy-notice-statement.personal-information.collection-use" components={{ microsoftDataPrivacyPolicy }} />
+              </p>
             </section>
             <section className="space-y-4">
               <h2 className="font-lato text-lg font-bold"> {t('apply:terms-and-conditions.privacy-notice-statement.how-we-protect-your-privacy.heading')}</h2>
-              <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.privacy-notice-statement.how-we-protect-your-privacy.personal-information-collection-and-use-authorization" />
-              </p>
               <p>{t('apply:terms-and-conditions.privacy-notice-statement.how-we-protect-your-privacy.personal-information-rights-and-access')}</p>
               <ul className="list-disc space-y-1 pl-7">
                 <li>{t('apply:terms-and-conditions.privacy-notice-statement.how-we-protect-your-privacy.personal-information-banks.hc-ppu-440')}</li>
@@ -126,29 +125,30 @@ export default function ApplyIndex() {
                 <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.privacy-notice-statement.how-we-protect-your-privacy.info-source-access" components={{ infosource }} />
               </p>
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.privacy-notice-statement.how-we-protect-your-privacy.esdc-application-third-party-provider" components={{ microsoftDataPrivacyPolicy }} />
-              </p>
-              <p>
                 <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.privacy-notice-statement.how-we-protect-your-privacy.personal-information-handling-complaint-process" components={{ fileacomplaint }} />
               </p>
             </section>
+          </div>
+        </Collapsible>
+        <Collapsible summary={t('apply:terms-and-conditions.sharing-your-information.summary')}>
+          <div className="space-y-6">
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold"> {t('apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.heading')}</h2>
-              <p>{t('apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.esdc-personal-information-sharing')}</p>
-              <p>{t('apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.benefits-administration-data-disclosure')}</p>
-              <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.sun-life-authorization" components={{ sunlife }} />
-              </p>
-              <p>{t('apply:terms-and-conditions.privacy-notice-statement.who-we-can-share-your-information-with.esdc-information-usage-policy')}</p>
+              <h2 className="font-lato text-lg font-bold"> {t('apply:terms-and-conditions.sharing-your-information.government-of-canada-and-sun-life.heading')}</h2>
+              <p>{t('apply:terms-and-conditions.sharing-your-information.government-of-canada-and-sun-life.share-info')}</p>
+              <p>{t('apply:terms-and-conditions.sharing-your-information.government-of-canada-and-sun-life.disclose-info')}</p>
+              <p>{t('apply:terms-and-conditions.sharing-your-information.government-of-canada-and-sun-life.sun-life-authorization')}</p>
             </section>
             <section className="space-y-4">
-              <h2 className="font-lato text-lg font-bold">{t('apply:terms-and-conditions.privacy-notice-statement.what-happens-if-you-dont-give-us-your-information.heading')} </h2>
-              <p>{t('apply:terms-and-conditions.privacy-notice-statement.what-happens-if-you-dont-give-us-your-information.text')}</p>
+              <h2 className="font-lato text-lg font-bold"> {t('apply:terms-and-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.heading')}</h2>
+              <p>{t('apply:terms-and-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.enrol-consent')}</p>
+              <p>{t('apply:terms-and-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.considered-minor')}</p>
+              <p>{t('apply:terms-and-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.analysis')}</p>
             </section>
           </div>
         </Collapsible>
       </div>
-      <p className="my-8">{t('apply:terms-and-conditions.apply.application-start-consent')}</p>
+      <p className="my-8">{t('apply:terms-and-conditions.apply.application-participation')}</p>
+      <p className="my-8">{t('apply:terms-and-conditions.apply.application-consent')}</p>
       <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
