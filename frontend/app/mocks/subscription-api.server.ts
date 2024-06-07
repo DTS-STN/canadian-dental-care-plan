@@ -13,15 +13,6 @@ const subscriptionApiSchema = z.object({
   alertTypeCode: z.string(),
 });
 
-const validateSubscriptionSchema = z.object({
-  email: z.string(),
-  confirmationCode: z.string(),
-});
-
-const requestCodeSubscriptionSchema = z.object({
-  email: z.string(),
-});
-
 /**
  * Server-side MSW mocks for the subscription API.
  */
@@ -59,6 +50,9 @@ export function getSubscriptionApiMockHandlers() {
                 },
                 subscriptions: {
                   href: `https://api.cdcp.example.com/api/v1/users/${userEntity?.id}/subscriptions`,
+                },
+                emailValidations: {
+                  href: `https://api.cdcp.example.com/api/v1/users/${userEntity?.id}/email-validations`,
                 },
               },
             },
@@ -98,7 +92,7 @@ export function getSubscriptionApiMockHandlers() {
             href: `https://api.cdcp.example.com/api/v1/users/${parsedUserId.data}/subscriptions`,
           },
           emailValidations: {
-            href: `http://api.cdcp.example.com/api/v1/users/${parsedUserId.data}/email-validations`,
+            href: `https://api.cdcp.example.com/api/v1/users/${parsedUserId.data}/email-validations`,
           },
         },
       });
@@ -199,37 +193,46 @@ export function getSubscriptionApiMockHandlers() {
       return HttpResponse.text(null, { status: 204 });
     }),
 
-    http.post('https://api.cdcp.example.com/v1/codes/verify', async ({ params, request }) => {
+    http.post('https://api.cdcp.example.com/api/v1/users/:userId/email-validations', async ({ params, request }) => {
       log.debug('Handling request for [%s]', request.url);
       const timeEntered = new Date();
-      const requestBody = await request.json();
-      const validateSubscriptionSchemaData = validateSubscriptionSchema.safeParse(requestBody);
-      if (!validateSubscriptionSchemaData.success) {
+
+      const parsedUserId = z.string().safeParse(params.userId);
+      if (!parsedUserId.success) {
         throw new HttpResponse(null, { status: 400 });
       }
+
+      const requestBody = await request.json();
+      const parsedConfirmationCode = z.string().safeParse(requestBody);
+      if (!parsedConfirmationCode.success) {
+        throw new HttpResponse(null, { status: 400 });
+      }
+
       const subscriptionConfirmationCodesEntities = db.subscriptionConfirmationCode.findMany({
-        where: { email: { equals: validateSubscriptionSchemaData.data.email } },
+        where: { userId: { equals: parsedUserId.data }, code: { equals: parsedConfirmationCode.data } },
       });
 
       if (subscriptionConfirmationCodesEntities.length === 0) {
-        return HttpResponse.json({ confirmCodeStatus: 'noCode' }, { status: 200 });
+        return HttpResponse.json({ status: 400 });
       }
 
       const latestConfirmCode = subscriptionConfirmationCodesEntities.reduce((prev, current) => (prev.createdDate > current.createdDate ? prev : current));
 
-      if (latestConfirmCode.confirmationCode === validateSubscriptionSchemaData.data.confirmationCode && timeEntered < latestConfirmCode.expiryDate) {
-        return HttpResponse.json({ confirmCodeStatus: 'Valid' }, { status: 200 });
-      }
-      if (latestConfirmCode.confirmationCode === validateSubscriptionSchemaData.data.confirmationCode && timeEntered > latestConfirmCode.expiryDate) {
-        //Code expired
-        return HttpResponse.json({ confirmCodeStatus: 'expired' }, { status: 200 });
+      if (latestConfirmCode.code === parsedConfirmationCode.data && timeEntered < latestConfirmCode.expiryDate) {
+        db.user.update({
+          where: { id: { equals: parsedUserId.data } },
+          data: {
+            emailVerified: true,
+          },
+        });
+        return HttpResponse.json({ status: 202 });
       }
 
-      //There is at least 1 confirmation code for this user but the code entered by said user does not match it..
-      return HttpResponse.json({ confirmCodeStatus: 'mismatch' }, { status: 200 });
+      return HttpResponse.json({ status: 400 });
     }),
 
-    http.post('https://api.cdcp.example.com/v1/codes/request', async ({ params, request }) => {
+    //TODO: update this after backend is ready
+    /*http.post('https://api.cdcp.example.com/v1/codes/request', async ({ params, request }) => {
       log.debug('Handling request for [%s]', request.url);
       const timeEntered = new Date();
       const requestBody = await request.json();
@@ -264,6 +267,6 @@ export function getSubscriptionApiMockHandlers() {
       }
 
       return HttpResponse.json({ confirmCodeStatus: 'No Content' }, { status: 204 });
-    }),
+    }), */
   ];
 }

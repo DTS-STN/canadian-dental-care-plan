@@ -8,10 +8,12 @@ import pageIds from '../../../page-ids.json';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { getRaoidcService } from '~/services/raoidc-service.server';
+import { getSubscriptionService } from '~/services/subscription-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
+import { UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -28,6 +30,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
+  const subscriptionService = getSubscriptionService();
 
   await raoidcService.handleSessionValidation(request, session);
 
@@ -36,8 +39,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:subscribe.success.page-title') }) };
 
-  const alertSubscription = session.get('alertSubscription');
-  if (!alertSubscription.email) {
+  const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
+  if (!alertSubscription?.email) {
     log.warn('alert subscription email not found, throwing 400');
     throw new Response('alert subscription email not found', { status: 400 });
   }
