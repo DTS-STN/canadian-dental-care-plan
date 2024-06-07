@@ -1,5 +1,6 @@
 package ca.gov.dtsstn.cdcp.api.web.v1.controller;
 
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
@@ -20,11 +21,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.web.bind.annotation.GetMapping;
+
 
 @Validated
 @RestController
 @OAuthSecurityRequirement
-@RequestMapping({ "/api/v1/users" })
+@RequestMapping({ "/api/v1/users/{userId}/email-validations" })
 @Tag(name = "Email validations", description = "Endpoint for managing user email validations.")
 public class EmailValidationsController {
 
@@ -35,9 +38,18 @@ public class EmailValidationsController {
 		this.userService = userService;
 	}
 
+	@GetMapping	
+	@Operation(summary = "not implemented yet, dummy method for adding HATEOAS link in UserModelMapper")
+	public CollectionModel<EmailVerificationModel> getEmailVerificationByUserId(
+			@NotBlank(message = "userId must not be null or blank")
+			@Parameter(description = "The ID of the user.", required = true)
+			@PathVariable String userId) {
+		return CollectionModel.empty();
+	}
+
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	@PostMapping({ "/{userId}/email-validations"})
-	@Operation(summary = "Create a new email validation for a user")
+	@PostMapping
+
 	public void verifyConfirmationCodeStatus(
 			@NotBlank(message = "userId must not be null or blank")
 			@Parameter(description = "The ID of the user.", required = true)
