@@ -61,9 +61,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const lookupService = getLookupService();
-  const maritalStatuses = lookupService.getAllMaritalStatuses();
-  const provincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
-  const federalSocialPrograms = lookupService.getAllFederalSocialPrograms();
 
   // Getting province by Id
   const allRegions = lookupService.getAllRegions();
@@ -82,6 +79,10 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const communicationPreference = communicationPreferences.find((obj) => obj.id === state.communicationPreferences.preferredMethod);
   invariant(communicationPreference, `Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
 
+  const maritalStatuses = lookupService.getAllMaritalStatuses();
+  const maritalStatusDict = maritalStatuses.find((obj) => obj.id === state.applicantInformation.maritalStatus)!;
+  const maritalStatus = getNameByLanguage(locale, maritalStatusDict);
+
   const userInfo = {
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
@@ -90,7 +91,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     preferredLanguage: state.communicationPreferences.preferredLanguage,
     birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
-    martialStatus: state.applicantInformation.maritalStatus,
+    maritalStatus,
     contactInformationEmail: state.contactInformation.email,
     communicationPreferenceEmail: state.communicationPreferences.email,
     communicationPreference: getNameByLanguage(locale, communicationPreference),
@@ -128,15 +129,26 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const dentalInsurance = state.dentalInsurance;
 
+  const allFederalSocialPrograms = lookupService.getAllFederalSocialPrograms();
+  const allProvincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
+  const selectedFederalBenefits = allFederalSocialPrograms
+    .filter((obj) => obj.id === state.dentalBenefits.federalSocialProgram)
+    .map((obj) => getNameByLanguage(locale, obj))
+    .join(', ');
+  const selectedProvincialBenefits = allProvincialTerritorialSocialPrograms
+    .filter((obj) => obj.id === state.dentalBenefits.provincialTerritorialSocialProgram)
+    .map((obj) => getNameByLanguage(locale, obj))
+    .join(', ');
+
   const dentalBenefit = {
     federalBenefit: {
       access: state.dentalBenefits.hasFederalBenefits,
-      benefit: state.dentalBenefits.federalSocialProgram,
+      benefit: selectedFederalBenefits,
     },
     provTerrBenefit: {
       access: state.dentalBenefits.hasProvincialTerritorialBenefits,
       province: state.dentalBenefits.province,
-      benefit: state.dentalBenefits.provincialTerritorialSocialProgram,
+      benefit: selectedProvincialBenefits,
     },
   };
 
@@ -152,10 +164,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     id: state.id,
     userInfo,
     spouseInfo,
-    maritalStatuses,
     preferredLanguage,
-    federalSocialPrograms,
-    provincialTerritorialSocialPrograms,
     homeAddressInfo,
     mailingAddressInfo,
     dentalInsurance,
@@ -213,8 +222,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ReviewInformation() {
   const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, maritalStatuses, preferredLanguage, federalSocialPrograms, provincialTerritorialSocialPrograms, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, payload, csrfToken, siteKey, hCaptchaEnabled } =
-    useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, dentalInsurance, dentalBenefit, payload, csrfToken, siteKey, hCaptchaEnabled } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -239,15 +247,6 @@ export default function ReviewInformation() {
 
     fetcher.submit(formData, { method: 'POST' });
   }
-
-  const maritalStatusEntity = maritalStatuses.find((ms) => ms.id === userInfo.martialStatus);
-  const maritalStatus = maritalStatusEntity ? getNameByLanguage(i18n.language, maritalStatusEntity) : userInfo.martialStatus;
-
-  const federalSocialProgramEntity = federalSocialPrograms.find((p) => p.id === dentalBenefit.federalBenefit.benefit);
-  const federalSocialProgram = federalSocialProgramEntity ? getNameByLanguage(i18n.language, federalSocialProgramEntity) : federalSocialProgramEntity;
-
-  const provincialTerritorialSocialProgramEntity = provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === dentalBenefit.provTerrBenefit.province).find((p) => p.id === dentalBenefit.provTerrBenefit.benefit);
-  const provincialTerritorialSocialProgram = provincialTerritorialSocialProgramEntity ? getNameByLanguage(i18n.language, provincialTerritorialSocialProgramEntity) : provincialTerritorialSocialProgramEntity;
 
   return (
     <>
@@ -288,7 +287,7 @@ export default function ReviewInformation() {
                 </div>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-adult:review-information.marital-title')}>
-                <p>{maritalStatus}</p>
+                <p>{userInfo.maritalStatus}</p>
                 <div className="mt-4">
                   <InlineLink id="change-martial-status" routeId="$lang/_public/apply/$id/adult/applicant-information" params={params}>
                     {t('apply-adult:review-information.marital-change')}
@@ -431,8 +430,8 @@ export default function ReviewInformation() {
                     <p>{t('apply-adult:review-information.yes')}</p>
                     <p>{t('apply-adult:review-information.dental-benefit-has-access')}</p>
                     <ul className="ml-6 list-disc">
-                      {dentalBenefit.federalBenefit.access && <li>{federalSocialProgram}</li>}
-                      {dentalBenefit.provTerrBenefit.access && <li>{provincialTerritorialSocialProgram}</li>}
+                      {dentalBenefit.federalBenefit.access && <li>{dentalBenefit.federalBenefit.benefit}</li>}
+                      {dentalBenefit.provTerrBenefit.access && <li>{dentalBenefit.provTerrBenefit.benefit}</li>}
                     </ul>
                   </>
                 ) : (

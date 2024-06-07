@@ -61,7 +61,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const lookupService = getLookupService();
-  const maritalStatuses = lookupService.getAllMaritalStatuses();
 
   // Getting province by Id
   const allRegions = lookupService.getAllRegions();
@@ -80,6 +79,10 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const communicationPreference = communicationPreferences.find((obj) => obj.id === state.communicationPreferences.preferredMethod);
   invariant(communicationPreference, `Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
 
+  const maritalStatuses = lookupService.getAllMaritalStatuses();
+  const maritalStatusDict = maritalStatuses.find((obj) => obj.id === state.applicantInformation.maritalStatus)!;
+  const maritalStatus = getNameByLanguage(locale, maritalStatusDict);
+
   const userInfo = {
     firstName: state.applicantInformation.firstName,
     lastName: state.applicantInformation.lastName,
@@ -88,7 +91,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     preferredLanguage: state.communicationPreferences.preferredLanguage,
     birthday: toLocaleDateString(parseDateString(state.dateOfBirth), locale),
     sin: state.applicantInformation.socialInsuranceNumber,
-    martialStatus: state.applicantInformation.maritalStatus,
+    maritalStatus,
     contactInformationEmail: state.contactInformation.email,
     communicationPreferenceEmail: state.communicationPreferences.email,
     communicationPreference: getNameByLanguage(locale, communicationPreference),
@@ -134,7 +137,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     id: state.id,
     userInfo,
     spouseInfo,
-    maritalStatuses,
     preferredLanguage,
     homeAddressInfo,
     mailingAddressInfo,
@@ -190,7 +192,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ReviewInformation() {
   const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { userInfo, spouseInfo, maritalStatuses, preferredLanguage, homeAddressInfo, mailingAddressInfo, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
+  const { userInfo, spouseInfo, preferredLanguage, homeAddressInfo, mailingAddressInfo, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -215,9 +217,6 @@ export default function ReviewInformation() {
 
     fetcher.submit(formData, { method: 'POST' });
   }
-
-  const maritalStatusEntity = maritalStatuses.find((ms) => ms.id === userInfo.martialStatus);
-  const maritalStatus = maritalStatusEntity ? getNameByLanguage(i18n.language, maritalStatusEntity) : userInfo.martialStatus;
 
   return (
     <>
@@ -258,7 +257,7 @@ export default function ReviewInformation() {
                 </p>
               </DescriptionListItem>
               <DescriptionListItem term={t('apply-child:review-adult-information.marital-title')}>
-                {maritalStatus ? maritalStatus[0].toUpperCase() + maritalStatus.slice(1).toLowerCase() : maritalStatus}
+                {userInfo.maritalStatus}
                 <p className="mt-4">
                   <InlineLink id="change-martial-status" routeId="$lang/_public/apply/$id/child/applicant-information" params={params}>
                     {t('apply-child:review-adult-information.marital-change')}

@@ -27,7 +27,7 @@ import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
@@ -57,9 +57,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const { ENABLED_FEATURES, HCAPTCHA_SITE_KEY } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = getLocale(request);
   const lookupService = getLookupService();
-  const provincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
-  const federalSocialPrograms = lookupService.getAllFederalSocialPrograms();
+
+  const allFederalSocialPrograms = lookupService.getAllFederalSocialPrograms();
+  const allProvincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
   const viewPayloadEnabled = ENABLED_FEATURES.includes('view-payload');
@@ -69,11 +71,38 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const payload = viewPayloadEnabled ? toBenefitApplicationRequestFromApplyAdultChildState(state) : undefined;
 
+  const children = state.children.map((child) => {
+    return {
+      id: child.id,
+      firstName: child.information.firstName,
+      lastName: child.information.lastName,
+      birthday: toLocaleDateString(parseDateString(child.information.dateOfBirth), locale),
+      sin: child.information.socialInsuranceNumber,
+      isParent: child.information.isParent,
+      dentalInsurance: {
+        acessToDentalInsurance: child.dentalInsurance,
+        federalBenefit: {
+          access: child.dentalBenefits.hasFederalBenefits,
+          benefit: allFederalSocialPrograms
+            .filter((obj) => obj.id === child.dentalBenefits.federalSocialProgram)
+            .map((obj) => getNameByLanguage(locale, obj))
+            .join(', '),
+        },
+        provTerrBenefit: {
+          access: child.dentalBenefits.hasProvincialTerritorialBenefits,
+          province: child.dentalBenefits.province,
+          benefit: allProvincialTerritorialSocialPrograms
+            .filter((obj) => obj.id === child.dentalBenefits.provincialTerritorialSocialProgram)
+            .map((obj) => getNameByLanguage(locale, obj))
+            .join(', '),
+        },
+      },
+    };
+  });
+
   return json({
     id: state.id,
-    children: state.children,
-    federalSocialPrograms,
-    provincialTerritorialSocialPrograms,
+    children,
     csrfToken,
     meta,
     siteKey: HCAPTCHA_SITE_KEY,
@@ -127,7 +156,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 export default function ReviewInformation() {
   const params = useParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { children, federalSocialPrograms, provincialTerritorialSocialPrograms, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
+  const { children, csrfToken, siteKey, hCaptchaEnabled, payload } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const { captchaRef } = useHCaptcha();
@@ -166,15 +195,15 @@ export default function ReviewInformation() {
         <div className="space-y-10">
           {children.map((child) => {
             const childParams = { ...params, childId: child.id };
-            const dateOfBirth = toLocaleDateString(parseDateString(child.information.dateOfBirth), i18n.language);
+            const dateOfBirth = toLocaleDateString(parseDateString(child.birthday), i18n.language);
             return (
               <section key={child.id} className="space-y-8">
-                <h2 className="font-lato text-3xl font-bold">{child.information.firstName}</h2>
+                <h2 className="font-lato text-3xl font-bold">{child.firstName}</h2>
                 <section className="space-y-6">
-                  <h3 className="font-lato text-2xl font-bold">{t('apply-adult-child:review-child-information.page-sub-title', { child: child.information.firstName })}</h3>
+                  <h3 className="font-lato text-2xl font-bold">{t('apply-adult-child:review-child-information.page-sub-title', { child: child.firstName })}</h3>
                   <dl className="divide-y border-y">
                     <DescriptionListItem term={t('apply-adult-child:review-child-information.full-name-title')}>
-                      {`${child.information.firstName} ${child.information.lastName}`}
+                      {`${child.firstName} ${child.lastName}`}
                       <p className="mt-4">
                         <InlineLink id="change-full-name" routeId="$lang/_public/apply/$id/adult-child/children/$childId/information" params={childParams}>
                           {t('apply-adult-child:review-child-information.full-name-change')}
@@ -190,23 +219,21 @@ export default function ReviewInformation() {
                       </p>
                     </DescriptionListItem>
                     <DescriptionListItem term={t('apply-adult-child:review-child-information.sin-title')}>
-                      {child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}
+                      {child.sin && formatSin(child.sin)}
                       <p className="mt-4">
                         <InlineLink id="change-sin" routeId="$lang/_public/apply/$id/adult-child/children/$childId/information" params={childParams}>
                           {t('apply-adult-child:review-child-information.sin-change')}
                         </InlineLink>
                       </p>
                     </DescriptionListItem>
-                    <DescriptionListItem term={t('apply-adult-child:review-child-information.is-parent')}>
-                      {child.information.isParent ? t('apply-adult-child:review-child-information.yes') : t('apply-adult-child:review-child-information.no')}
-                    </DescriptionListItem>
+                    <DescriptionListItem term={t('apply-adult-child:review-child-information.is-parent')}>{child.isParent ? t('apply-adult-child:review-child-information.yes') : t('apply-adult-child:review-child-information.no')}</DescriptionListItem>
                   </dl>
                 </section>
                 <section className="space-y-6">
-                  <h3 className="font-lato text-2xl font-bold">{t('apply-adult-child:review-child-information.dental-title', { child: child.information.firstName })}</h3>
+                  <h3 className="font-lato text-2xl font-bold">{t('apply-adult-child:review-child-information.dental-title', { child: child.firstName })}</h3>
                   <dl className="divide-y border-y">
                     <DescriptionListItem term={t('apply-adult-child:review-child-information.dental-insurance-title')}>
-                      {child.dentalInsurance ? t('apply-adult-child:review-child-information.yes') : t('apply-adult-child:review-child-information.no')}
+                      {child.dentalInsurance.acessToDentalInsurance ? t('apply-adult-child:review-child-information.yes') : t('apply-adult-child:review-child-information.no')}
                       <p className="mt-4">
                         <InlineLink id="change-access-dental" routeId="$lang/_public/apply/$id/adult-child/children/$childId/dental-insurance" params={childParams}>
                           {t('apply-adult-child:review-child-information.dental-insurance-change')}
@@ -214,24 +241,14 @@ export default function ReviewInformation() {
                       </p>
                     </DescriptionListItem>
                     <DescriptionListItem term={t('apply-adult-child:review-child-information.dental-benefit-title')}>
-                      {child.dentalBenefits.hasFederalBenefits || child.dentalBenefits.hasProvincialTerritorialBenefits ? (
+                      {child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provTerrBenefit.access ? (
                         <>
                           <p>{t('apply-adult-child:review-child-information.yes')}</p>
                           <p>{t('apply-adult-child:review-child-information.dental-benefit-has-access')}</p>
                           <div>
                             <ul className="ml-6 list-disc">
-                              {child.dentalBenefits.hasFederalBenefits && <li>{getNameByLanguage(i18n.language, federalSocialPrograms.find((p) => p.id === child.dentalBenefits.federalSocialProgram) ?? { nameEn: '', nameFr: '' })}</li>}
-                              {child.dentalBenefits.hasProvincialTerritorialBenefits && (
-                                <li>
-                                  {getNameByLanguage(
-                                    i18n.language,
-                                    provincialTerritorialSocialPrograms.filter((p) => p.provinceTerritoryStateId === child.dentalBenefits.province).find((p) => p.id === child.dentalBenefits.provincialTerritorialSocialProgram) ?? {
-                                      nameEn: '',
-                                      nameFr: '',
-                                    },
-                                  )}
-                                </li>
-                              )}
+                              {child.dentalInsurance.federalBenefit.access && <li>{child.dentalInsurance.federalBenefit.benefit}</li>}
+                              {child.dentalInsurance.provTerrBenefit.access && <li>{child.dentalInsurance.provTerrBenefit.benefit}</li>}
                             </ul>
                           </div>
                         </>
