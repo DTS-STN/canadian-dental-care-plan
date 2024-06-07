@@ -36,6 +36,9 @@ const userSchema = z.object({
     subscriptions: z.object({
       href: z.string(),
     }),
+    emailValidations: z.object({
+      href: z.string(),
+    }),
   }),
 });
 
@@ -243,40 +246,67 @@ function createSubscriptionService() {
     }
   }
 
-  async function validateConfirmationCode(userEmail: string, enteredConfirmationCode: string, userId: string) {
+  async function validateConfirmationCode(enteredConfirmationCode: string, userId: string) {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
 
     auditService.audit('alert-subscription.validate', { userId });
-
-    const dataToPass = {
-      email: userEmail,
-      confirmationCode: enteredConfirmationCode,
-    };
-    // TODO: add CDCP_API_BASE_URI
-    const url = new URL(`https://api.cdcp.example.com/v1/codes/verify`);
+    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users?raoidcUserId=${userId}`);
     const response = await fetch(url, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(dataToPass),
     });
 
-    instrumentationService.countHttpStatus('http.client.cdcp-api.codes.verify.posts', response.status);
+    instrumentationService.countHttpStatus('alert-subscription.validate', response.status);
+
     if (!response.ok) {
       log.error('%j', {
-        message: 'Failed to verify data',
+        message: 'Failed find data',
         status: response.status,
         statusText: response.statusText,
         url: url,
         responseBody: await response.text(),
       });
 
-      throw new Error(`Failed to verify data. Status: ${response.status}, Status Text: ${response.statusText}`);
+      throw new Error(`Failed to find data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    return response;
+    const users = await response.json();
+    if (users._embedded.users.length === 0) {
+      throw new Error(`Failed to find the user: ${userId}.`);
+    }
+    const userParsed = userSchema.parse(users._embedded.users[0]);
+
+    const emailValidationsUrl = userParsed._links.emailValidations.href;
+    const emailValidationResponse = await fetch(emailValidationsUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ confirmationCode: enteredConfirmationCode }),
+    });
+
+    instrumentationService.countHttpStatus('alert-subscription.validate.posts', emailValidationResponse.status);
+    if (!emailValidationResponse.ok) {
+      log.error('%j', {
+        message: 'Failed to verify data',
+        status: emailValidationResponse.status,
+        statusText: emailValidationResponse.statusText,
+        url: url,
+        responseBody: await emailValidationResponse.text(),
+      });
+
+      throw new Error(`Failed to verify data. Status: ${emailValidationResponse.status}, Status Text: ${emailValidationResponse.statusText}`);
+    }
+
+    const verifyStatus = await emailValidationResponse.json();
+    if (verifyStatus.status === 202) {
+      return true;
+    }
+
+    return false;
   }
 
   async function requestNewConfirmationCode(userEmail: string, userId: string) {

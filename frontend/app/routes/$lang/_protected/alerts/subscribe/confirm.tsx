@@ -142,19 +142,13 @@ export async function action({ context: { session }, params, request }: ActionFu
   const confirmationCode = parsedDataResult.data.confirmationCode;
   invariant(confirmationCode, 'Expected confirmationCode to be defined');
 
-  // TODO service function shouldn't accept email; remove when services are changed
-  const response = await subscriptionService.validateConfirmationCode('user@example.com', confirmationCode, userInfoToken.sub);
-  const jsonReponseStatus = await response.json();
+  const validConfirmationCode = await subscriptionService.validateConfirmationCode(confirmationCode, userInfoToken.sub);
 
-  if (jsonReponseStatus.confirmCodeStatus === 'valid') {
+  if (validConfirmationCode) {
     return redirect(getPathById('$lang/_protected/alerts/subscribe/success', params));
   }
-  if (jsonReponseStatus.confirmCodeStatus === 'expired') {
-    return redirect(getPathById('$lang/_protected/alerts/subscribe/expired', params));
-  }
-  if (jsonReponseStatus.confirmCodeStatus === 'mismatch') {
-    return json({ invalidConfirmationCode: true });
-  }
+
+  return json({ invalidConfirmationCode: true });
 }
 
 export default function ConfirmSubscription() {

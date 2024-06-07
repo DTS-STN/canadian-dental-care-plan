@@ -956,14 +956,6 @@
                 }
               },
               {
-                "id": "$lang/_protected/alerts/subscribe/expired",
-                "file": "routes/$lang/_protected/alerts/subscribe/expired.tsx",
-                "paths": {
-                  "en": "/:lang/alerts/subscribe/expired",
-                  "fr": "/:lang/alertes/abonner/echue"
-                }
-              },
-              {
                 "id": "$lang/_protected/alerts/subscribe/success",
                 "file": "routes/$lang/_protected/alerts/subscribe/success.tsx",
                 "paths": {
