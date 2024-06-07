@@ -76,7 +76,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
       id: child.id,
       firstName: child.information.firstName,
       lastName: child.information.lastName,
-      birthday: toLocaleDateString(parseDateString(child.information.dateOfBirth), locale),
+      birthday: child.information.dateOfBirth,
       sin: child.information.socialInsuranceNumber,
       isParent: child.information.isParent,
       dentalInsurance: {
