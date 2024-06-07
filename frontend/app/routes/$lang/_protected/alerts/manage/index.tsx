@@ -4,6 +4,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
+import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import validator from 'validator';
@@ -29,6 +31,7 @@ import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'alerts:manage.page-title' }],
@@ -137,6 +140,7 @@ export default function ManageAlerts() {
   const { csrfToken, preferredLanguages, alertSubscription } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const errorSummaryId = 'error-summary';
+  const isSubmitting = fetcher.state !== 'idle';
 
   // Keys order should match the input IDs order.
   const errorMessages = useMemo(
@@ -185,8 +189,9 @@ export default function ManageAlerts() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <Button id="save-button" variant="primary">
+          <Button id="save-button" variant="primary" disabled={isSubmitting}>
             {t('alerts:manage.button.save')}
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
         </div>
       </fetcher.Form>

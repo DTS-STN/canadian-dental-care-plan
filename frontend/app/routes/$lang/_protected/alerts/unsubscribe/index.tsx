@@ -4,6 +4,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
+import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
@@ -25,6 +27,7 @@ import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { cn } from '~/utils/tw-utils';
 
 enum AgreeToUnsubscribeOption {
   Yes = 'yes',
@@ -122,7 +125,7 @@ export default function UnsubscribeAlerts() {
   const { csrfToken, alertSubscription } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
-
+  const isSubmitting = fetcher.state !== 'idle';
   const errorSummaryId = 'error-summary';
 
   // Keys order should match the input IDs order.
@@ -156,10 +159,11 @@ export default function UnsubscribeAlerts() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <Button id="unsubscribe-button" variant="primary">
+          <Button id="unsubscribe-button" variant="primary" disabled={isSubmitting}>
             {t('alerts:unsubscribe.button.unsubscribe')}
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
-          <ButtonLink id="cancel-button" routeId="$lang/_protected/alerts/manage/index" params={params}>
+          <ButtonLink id="cancel-button" routeId="$lang/_protected/alerts/manage/index" params={params} disabled={isSubmitting}>
             {t('alerts:unsubscribe.button.cancel')}
           </ButtonLink>
         </div>
