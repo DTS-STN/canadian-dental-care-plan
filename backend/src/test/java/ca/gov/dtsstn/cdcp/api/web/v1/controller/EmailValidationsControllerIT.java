@@ -29,7 +29,7 @@ import ca.gov.dtsstn.cdcp.api.service.UserService;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableConfirmationCode;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUser;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
-import ca.gov.dtsstn.cdcp.api.web.v1.model.ImmutableEmailVerificationModel;
+import ca.gov.dtsstn.cdcp.api.web.v1.model.ImmutableEmailValidationModel;
 
 @ActiveProfiles("test")
 @Import({ WebSecurityConfig.class })
@@ -58,7 +58,7 @@ class EmailValidationsControllerIT {
 		mockMvc.perform(post("/api/v1/users/00000000-0000-0000-0000-000000000000/email-validations")
 				.with(csrf()).header("origin", "http://localhost")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(ImmutableEmailVerificationModel.builder().confirmationCode("code value").build()))
+				.content(objectMapper.writeValueAsString(ImmutableEmailValidationModel.builder().confirmationCode("code value").build()))
 				.accept(MediaType.APPLICATION_JSON))
 			.andDo(print())
 			.andExpect(status().isAccepted());
@@ -79,7 +79,7 @@ class EmailValidationsControllerIT {
 			mockMvc.perform(post("/api/v1/users/00000000-0000-0000-0000-000000000000/email-validations")
 					.with(csrf()).header("origin", "http://localhost")
 					.contentType(MediaType.APPLICATION_JSON)
-					.content(objectMapper.writeValueAsString(ImmutableEmailVerificationModel.builder().confirmationCode("code value").build()))
+					.content(objectMapper.writeValueAsString(ImmutableEmailValidationModel.builder().confirmationCode("code value").build()))
 					.accept(MediaType.APPLICATION_JSON))
 				.andDo(print())
 				.andExpect(status().isBadRequest());
@@ -95,9 +95,10 @@ class EmailValidationsControllerIT {
 		mockMvc.perform(post("/api/v1/users/00000000-0000-0000-0000-000000000000/email-validations")
 				.with(csrf()).header("origin", "http://localhost")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(ImmutableEmailVerificationModel.builder().confirmationCode("code value").build()))
+				.content(objectMapper.writeValueAsString(ImmutableEmailValidationModel.builder().confirmationCode("code value").build()))
 				.accept(MediaType.APPLICATION_JSON))
 			.andDo(print())
 			.andExpect(status().isNotFound());
 	}
+
 }

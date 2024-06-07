@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
-import ca.gov.dtsstn.cdcp.api.web.v1.model.EmailVerificationModel;
+import ca.gov.dtsstn.cdcp.api.web.v1.model.EmailValidationModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.mapper.AbstractModelMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -44,15 +44,15 @@ public class EmailValidationsController {
 
 	@GetMapping
 	@Operation(summary = "List all email validations for a user")
-	public CollectionModel<EmailVerificationModel> getEmailVerificationByUserId(
+	public CollectionModel<EmailValidationModel> getEmailValidationByUserId(
 			@NotBlank(message = "userId must not be null or blank")
 			@Parameter(description = "The ID of the user.", required = true)
 			@PathVariable String userId) {
 		userService.getUserById(userId)
 			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));
 
-		return AbstractModelMapper.wrapCollection(CollectionModel.empty(), EmailVerificationModel.class)
-			.add(linkTo(methodOn(getClass()).getEmailVerificationByUserId(userId)).withSelfRel());
+		return AbstractModelMapper.wrapCollection(CollectionModel.empty(), EmailValidationModel.class)
+			.add(linkTo(methodOn(getClass()).getEmailValidationByUserId(userId)).withSelfRel());
 	}
 
 	@PostMapping
@@ -63,7 +63,7 @@ public class EmailValidationsController {
 			@Parameter(description = "The ID of the user.", required = true)
 			@PathVariable String userId,
 
-			@Validated @RequestBody EmailVerificationModel emailVerificationModel,
+			@Validated @RequestBody EmailValidationModel emailValidationModel,
 			BindingResult bindingResult) throws BindException {
 		// throw early if any validation errors were discovered
 		if (bindingResult.hasErrors()) { throw new BindException(bindingResult); }
@@ -71,7 +71,7 @@ public class EmailValidationsController {
 		userService.getUserById(userId)
 			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));
 
-		final var emailVerified = userService.verifyEmail(userId, emailVerificationModel.getConfirmationCode());
+		final var emailVerified = userService.verifyEmail(userId, emailValidationModel.getConfirmationCode());
 
 		if (emailVerified == false) {
 			bindingResult.rejectValue("confirmationCode", "confirmationCode", "Invalid confirmation code");

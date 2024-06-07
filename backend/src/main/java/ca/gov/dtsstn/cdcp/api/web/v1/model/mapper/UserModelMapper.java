@@ -24,7 +24,7 @@ public interface UserModelMapper {
 	default UserModel afterMappingToModel(@MappingTarget UserModel user) {
 		return user.add(linkTo(methodOn(UsersController.class).getUserById(user.getId())).withSelfRel())
 			.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionsByUserId(user.getId())).withRel("subscriptions"))
-			.add(linkTo(methodOn(EmailValidationsController.class).getEmailVerificationByUserId(user.getId())).withRel("emailValidations"));
+			.add(linkTo(methodOn(EmailValidationsController.class).getEmailValidationByUserId(user.getId())).withRel("emailValidations"));
 	}
 
 }
