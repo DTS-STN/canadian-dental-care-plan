@@ -134,7 +134,7 @@ const unverifiedUserAttributes = [
 ];
 
 const unverifiedUser = db.user.create({
-  id: '76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6',
+  id: '1234567890',
   email: 'unverified@example.com',
   emailVerified: false,
   userAttributes: unverifiedUserAttributes,
@@ -150,7 +150,7 @@ db.subscription.create({
 const verifiedUserAttributes = [
   db.userAttributes.create({
     name: 'RAOIDC_USER_ID',
-    value: '8769695a4bcb78e132e06f96c246ea8e',
+    value: '76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6',
   }),
 ];
 
