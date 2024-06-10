@@ -27,12 +27,11 @@ export interface FetchFunctionInit extends RequestInit {
  */
 export function getFetchFn(proxyUrl?: string, timeout?: number) {
   if (proxyUrl) {
-    if (timeout === undefined) {
-      ({ HTTP_PROXY_TLS_TIMEOUT: timeout } = getEnv());
-    }
-    log.debug('A proxy has been configured with timeout: [%s], [%d] milliseconds; using custom fetch', proxyUrl, timeout);
+    const { HTTP_PROXY_TLS_TIMEOUT } = getEnv();
+    const proxyTlsTimeout = timeout ?? HTTP_PROXY_TLS_TIMEOUT;
+    log.debug('A proxy has been configured with timeout: [%s], [%d] milliseconds; using custom fetch', proxyUrl, proxyTlsTimeout);
     return async (input: string | URL, init?: FetchFunctionInit) => {
-      const dispatcher = new ProxyAgent({ uri: proxyUrl, proxyTls: { timeout } });
+      const dispatcher = new ProxyAgent({ uri: proxyUrl, proxyTls: { timeout: proxyTlsTimeout } });
       const response = await undiciFetch(input, { ...init, dispatcher });
       return new Response(toNodeReadable(response.body));
     };
