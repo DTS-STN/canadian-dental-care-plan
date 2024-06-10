@@ -35,7 +35,6 @@ const validFeatureNames = [
   'show-prototype-banner',
   'authenticated-status-check',
   'update-governmental-benefit',
-  'power-platform-status-checker',
   'dependent-status-checker',
   'view-payload',
 ] as const;
