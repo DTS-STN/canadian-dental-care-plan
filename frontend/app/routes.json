@@ -2,11 +2,11 @@
   {
     "id": "index",
     "file": "routes/index.tsx",
+    "index": true,
     "paths": {
       "en": "/",
       "fr": "/"
-    },
-    "index": true
+    }
   },
   {
     "id": "[.]well-known.jwks[.]json",
@@ -57,8 +57,9 @@
     },
     "children": [
       {
-        "id": "$lang/",
+        "id": "$lang/index",
         "file": "routes/$lang/index.tsx",
+        "index": true,
         "paths": {
           "en": "/:lang/",
           "fr": "/:lang/"
@@ -669,6 +670,7 @@
                   {
                     "id": "$lang/_public/status/myself/index",
                     "file": "routes/$lang/_public/status/myself/index.tsx",
+                    "index": true,
                     "paths": {
                       "en": "/:lang/status/myself",
                       "fr": "/:lang/statut/moi-meme"
@@ -687,6 +689,7 @@
                   {
                     "id": "$lang/_public/status/child/index",
                     "file": "routes/$lang/_public/status/child/index.tsx",
+                    "index": true,
                     "paths": {
                       "en": "/:lang/status/child",
                       "fr": "/:lang/statut/enfant"
@@ -733,11 +736,11 @@
               {
                 "id": "$lang/_protected/letters/index",
                 "file": "routes/$lang/_protected/letters/index.tsx",
+                "index": true,
                 "paths": {
                   "en": "/:lang/letters",
                   "fr": "/:lang/lettres"
-                },
-                "index": true
+                }
               },
               {
                 "id": "$lang/_protected/letters/$id.download",
@@ -756,11 +759,11 @@
               {
                 "id": "$lang/_protected/personal-information/index",
                 "file": "routes/$lang/_protected/personal-information/index.tsx",
+                "index": true,
                 "paths": {
                   "en": "/:lang/personal-information",
                   "fr": "/:lang/informations-personnelles"
-                },
-                "index": true
+                }
               },
               {
                 "id": "$lang/_protected/personal-information/home-address/_route",
@@ -877,6 +880,7 @@
               {
                 "id": "$lang/_protected/access-to-governmental-benefits/index",
                 "file": "routes/$lang/_protected/access-to-governmental-benefits/index.tsx",
+                "index": true,
                 "paths": {
                   "en": "/:lang/access-to-governmental-benefits/index",
                   "fr": "/:lang/access-to-governmental-benefits/index"
@@ -891,11 +895,11 @@
               {
                 "id": "$lang/_protected/alerts/index",
                 "file": "routes/$lang/_protected/alerts/index.tsx",
+                "index": true,
                 "paths": {
                   "en": "/:lang/alerts",
                   "fr": "/:lang/alertes"
-                },
-                "index": true
+                }
               },
               {
                 "id": "$lang/_protected/alerts/subscribe/_route",
@@ -904,6 +908,7 @@
                   {
                     "id": "$lang/_protected/alerts/subscribe/index",
                     "file": "routes/$lang/_protected/alerts/subscribe/index.tsx",
+                    "index": true,
                     "paths": {
                       "en": "/:lang/alerts/subscribe",
                       "fr": "/:lang/alertes/abonner"
@@ -918,6 +923,7 @@
                   {
                     "id": "$lang/_protected/alerts/unsubscribe/index",
                     "file": "routes/$lang/_protected/alerts/unsubscribe/index.tsx",
+                    "index": true,
                     "paths": {
                       "en": "/:lang/alerts/unsubscribe",
                       "fr": "/:lang/alertes/desabonner"
@@ -940,6 +946,7 @@
                   {
                     "id": "$lang/_protected/alerts/manage/index",
                     "file": "routes/$lang/_protected/alerts/manage/index.tsx",
+                    "index": true,
                     "paths": {
                       "en": "/:lang/alerts/manage",
                       "fr": "/:lang/alertes/gerer"
@@ -972,6 +979,7 @@
               {
                 "id": "$lang/_protected/status-check/index",
                 "file": "routes/$lang/_protected/status-check/index.tsx",
+                "index": true,
                 "paths": {
                   "en": "/:lang/status-check",
                   "fr": "/:lang/verification-de-statut"
