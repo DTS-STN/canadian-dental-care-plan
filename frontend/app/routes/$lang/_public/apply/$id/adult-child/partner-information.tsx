@@ -97,17 +97,13 @@ export async function action({ context: { session }, params, request }: ActionFu
         .superRefine((sin, ctx) => {
           if (!isValidSin(sin)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:partner-information.error-message.sin-valid') });
-            return z.NEVER;
-          }
-
-          if (
+          } else if (
             [applyState.applicantInformation?.socialInsuranceNumber, ...applyState.children.map((child) => child.information?.socialInsuranceNumber)]
               .filter((sin) => sin !== undefined)
               .map((sin) => formatSin(sin as string))
               .includes(formatSin(sin))
           ) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-unique'), path: ['socialInsuranceNumber'], fatal: true });
-            return z.NEVER;
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-unique') });
           }
         }),
     })
