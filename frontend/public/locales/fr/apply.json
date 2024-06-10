@@ -110,9 +110,9 @@
     "multiple-application": "Ne soumettez pas plusieurs demandes pour un même enfant\u00a0: un seul parent devrait présenter la demande, et ce, pour chaque enfant.",
     "radio-options": {
       "personal": "Je présente une demande pour <strong>moi-même</strong>",
-      "delegate": "Je présente une demande pour <strong>mon (mes) enfant(s)</strong>",
-      "child": "Je présente une demande pour <strong>moi-même et mon (mes) enfant(s)</strong>",
-      "personal-and-child": "Je présente une demande <strong>au nom d'une autre personne à titre de représentant légal ou mandataire</strong>"
+      "child": "Je présente une demande pour <strong>mon (mes) enfant(s)</strong>",
+      "personal-and-child": "Je présente une demande pour <strong>moi-même et mon (mes) enfant(s)</strong>",
+      "delegate": "Je présente une demande <strong>au nom d'une autre personne à titre de représentant légal ou mandataire</strong>"
     },
     "error-message": {
       "type-of-application-required": "Sélectionnez à qui s'adresse cette demande"
