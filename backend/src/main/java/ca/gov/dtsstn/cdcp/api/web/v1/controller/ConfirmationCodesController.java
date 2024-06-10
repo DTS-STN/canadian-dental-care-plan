@@ -28,7 +28,7 @@ import jakarta.validation.constraints.NotBlank;
 @RestController
 @OAuthSecurityRequirement
 @RequestMapping({ "/api/v1/users/{userId}/confirmation-codes" })
-@Tag(name = "Confirmation codes", description = "Endpoint for managing user email confirmation codes.")
+@Tag(name = "Confirmation codes", description = "Endpoint for managing user confirmation code resources.")
 public class ConfirmationCodesController {
 
 	private final ConfirmationCodeModelMapper confirmationCodeModelMapper = Mappers.getMapper(ConfirmationCodeModelMapper.class);
@@ -44,7 +44,7 @@ public class ConfirmationCodesController {
 	@Operation(summary = "List all confirmation codes for a user")
 	public CollectionModel<ConfirmationCodeModel> getConfirmationCodesByUserId(
 			@NotBlank(message = "userId must not be null or blank")
-			@Parameter(description = "The ID of the user.", required = true)
+			@Parameter(description = "The ID of the user.", example = "00000000-0000-0000-0000-000000000000", required = true)
 			@PathVariable String userId) {
 		userService.getUserById(userId)
 			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));
@@ -57,11 +57,14 @@ public class ConfirmationCodesController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@Operation(summary = "Create a new confirmatin code for a user")
-	public void createSubscriptionForUser(
+	@Operation(summary = "Create a new confirmation code for a user")
+	public void createConfirmationCodeForUser(
 			@NotBlank(message = "userId must not be null or blank")
 			@Parameter(description = "The id of the user.", example = "00000000-0000-0000-0000-000000000000")
 			@PathVariable String userId) {
+
+		userService.getUserById(userId)
+			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));				
 
 		userService.createConfirmationCodeForUser(userId);
 	}
