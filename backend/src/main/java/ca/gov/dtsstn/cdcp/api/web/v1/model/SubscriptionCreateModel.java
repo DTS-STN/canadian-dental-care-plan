@@ -15,13 +15,11 @@ import jakarta.validation.constraints.NotBlank;
 @JsonDeserialize(as = ImmutableSubscriptionCreateModel.class)
 public interface SubscriptionCreateModel {
 
-	
 	@NotBlank
 	@Schema(example = "CDCP")
 	@AlertTypeCode(message = "Alert type code does not exist")
 	String getAlertTypeCode();
 
-	
 	@NotBlank
 	@Schema(example = "1033")
 	@LanguageCode(codeType = CodeType.MS_LOCALE_CODE, message = "Preferred language code does not exist")

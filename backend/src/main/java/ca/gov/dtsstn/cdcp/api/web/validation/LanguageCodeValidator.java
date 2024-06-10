@@ -33,7 +33,7 @@ public class LanguageCodeValidator implements ConstraintValidator<LanguageCode, 
 
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
-		if (value == null || StringUtils.isBlank(value)) { return true; }
+		if (StringUtils.isBlank(value)) { return true; }
 
 		return switch (codeType) {
 			case CodeType.INTERNAL_CODE -> languageService.readByCode(value).isPresent();

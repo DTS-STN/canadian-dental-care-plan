@@ -20,7 +20,7 @@ public class AlertTypeCodeValidator implements ConstraintValidator<AlertTypeCode
 
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
-		if (value == null || StringUtils.isBlank(value)) { return true; }
+		if (StringUtils.isBlank(value)) { return true; }
 		return alertTypeService.readByCode(value).isPresent();
 	}
 
