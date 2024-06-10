@@ -124,8 +124,8 @@
           "title": "Renseignements supplémentaires",
           "eligible": "Un enfant est toujours considéré comme ayant accès à une assurance dentaire ou à une couverture si un parent ou un tuteur légal choisit de se retirer des prestations offertes par\u00a0:",
           "eligible-list": {
-            "employer": "un employeur",
-            "pension": "un régime de retraite (voir exception)",
+            "employer": "un employeur;",
+            "pension": "un régime de retraite (voir exception);",
             "professional": "une organisation professionnelle ou étudiante"
           },
           "not-eligible": "Par conséquent, un enfant n'est pas admissible au Régime canadien de soins dentaires.",
