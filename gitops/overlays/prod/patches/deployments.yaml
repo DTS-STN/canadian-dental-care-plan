@@ -34,7 +34,19 @@ spec:
             - name: fluentd-conf
               mountPath: /etc/fluentd.conf
               subPath: fluentd.conf
+        - name: nginx-logger
+          image: docker.io/nginx
+          ports:
+            - name: nginx-logger
+              containerPort: 80
+          volumeMounts:
+            - name: nginx-logger-conf
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: config.conf
       volumes:
         - name: fluentd-conf
           configMap:
             name: frontend-fluentd
+        - name: nginx-logger-conf
+          configMap:
+            name: nginx-logger

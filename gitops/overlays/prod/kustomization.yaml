@@ -33,6 +33,10 @@ configMapGenerator:
     files:
       - ./configs/redis/replica.conf
       - ./configs/redis/sentinel.conf
+  - name: nginx-logger
+    behavior: create
+    files:
+      - ./configs/nginx-logger/config.conf
 secretGenerator:
   - name: frontend
     behavior: replace
