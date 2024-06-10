@@ -133,5 +133,21 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
         expect((error as Response).status).toEqual(404);
       }
     });
+
+    it('should throw 404 response if an invalid URL is supplied', async () => {
+      const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
+      session.set('userInfoToken', { sin: '999999999' });
+      session.set('personalInformation', {});
+
+      try {
+        await loader({
+          request: new Request('http://localhost:3000/en/personal-information/home-address/aardvark'),
+          context: { session },
+          params: {},
+        });
+      } catch (error) {
+        expect((error as Response).status).toEqual(404);
+      }
+    });
   });
 });
