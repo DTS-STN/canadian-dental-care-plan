@@ -6,6 +6,7 @@ import org.springframework.util.Assert;
 import ca.gov.dtsstn.cdcp.api.service.LanguageService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.apache.commons.lang3.StringUtils;
 
 @Component
 public class LanguageCodeValidator implements ConstraintValidator<LanguageCode, String> {
@@ -32,7 +33,7 @@ public class LanguageCodeValidator implements ConstraintValidator<LanguageCode, 
 
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
-		if (value == null) { return true; }
+		if (StringUtils.isBlank(value)) { return true; }
 
 		return switch (codeType) {
 			case CodeType.INTERNAL_CODE -> languageService.readByCode(value).isPresent();
