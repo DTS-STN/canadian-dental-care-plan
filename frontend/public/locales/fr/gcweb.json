@@ -80,13 +80,6 @@
     "screen-id": "Identificateur d'écran\u00a0:",
     "version": "Version\u00a0:"
   },
-  "not-found": {
-    "document-title": "Page introuvable",
-    "page-title": "Nous ne pouvons trouver cette page",
-    "page-subtitle": "(Erreur 404)",
-    "page-message": "Nous sommes désolés que vous ayez abouti ici. Il arrive parfois qu'une page ait été déplacée ou supprimée. Heureusement, nous pouvons vous aider à trouver ce que vous cherchez.",
-    "page-link": "Retournez à la <home>page d'accueil</home>"
-  },
   "protected-not-found": {
     "document-title": "Page introuvable",
     "page-title": "Nous ne pouvons trouver cette page",
