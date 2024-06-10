@@ -8,6 +8,7 @@
     "ms-playwright.playwright",
     "vscjava.vscode-java-pack",
     "yoavbls.pretty-ts-errors",
+    "vitest.explorer"
   ],
   // List of extensions recommended by VS Code that should
   // not be recommended for users of this workspace.
