@@ -1,6 +1,7 @@
 import { ProxyAgent, fetch as undiciFetch } from 'undici';
 import { toNodeReadable } from 'web-streams-node';
 
+import { getEnv } from './env.server';
 import { getLogger } from './logging.server';
 
 const log = getLogger('fetch-utils.server');
@@ -24,11 +25,14 @@ export interface FetchFunctionInit extends RequestInit {
  * Return a custom fetch() function if a proxy URL has been provided.
  * If no proxy has been provided, simply return global.fetch().
  */
-export function getFetchFn(proxyUrl?: string) {
+export function getFetchFn(proxyUrl?: string, timeout?: number) {
   if (proxyUrl) {
-    log.debug('A proxy has been configured: [%s]; using custom fetch', proxyUrl);
+    if (timeout === undefined) {
+      ({ HTTP_PROXY_TLS_TIMEOUT: timeout } = getEnv());
+    }
+    log.debug('A proxy has been configured with timeout: [%s], [%d] milliseconds; using custom fetch', proxyUrl, timeout);
     return async (input: string | URL, init?: FetchFunctionInit) => {
-      const dispatcher = new ProxyAgent({ uri: proxyUrl, proxyTls: { timeout: 30000 } }); // TODO :: GjB :: make timeout configurable?
+      const dispatcher = new ProxyAgent({ uri: proxyUrl, proxyTls: { timeout } });
       const response = await undiciFetch(input, { ...init, dispatcher });
       return new Response(toNodeReadable(response.body));
     };

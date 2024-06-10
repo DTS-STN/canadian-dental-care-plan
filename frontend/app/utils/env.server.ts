@@ -120,6 +120,7 @@ const serverEnv = z.object({
 
   // http proxy settings
   HTTP_PROXY_URL: z.string().trim().transform(emptyToUndefined).optional(),
+  HTTP_PROXY_TLS_TIMEOUT: z.coerce.number().default(30*1000),
 
   // session configuration
   SESSION_STORAGE_TYPE: z.enum(['file', 'redis']).default('file'),
