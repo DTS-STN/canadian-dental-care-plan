@@ -6,6 +6,7 @@ import org.springframework.util.Assert;
 import ca.gov.dtsstn.cdcp.api.service.AlertTypeService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.apache.commons.lang3.StringUtils;
 
 @Component
 public class AlertTypeCodeValidator implements ConstraintValidator<AlertTypeCode, String> {
@@ -19,7 +20,7 @@ public class AlertTypeCodeValidator implements ConstraintValidator<AlertTypeCode
 
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
-		if (value == null) { return true; }
+		if (value == null || StringUtils.isBlank(value)) { return true; }
 		return alertTypeService.readByCode(value).isPresent();
 	}
 
