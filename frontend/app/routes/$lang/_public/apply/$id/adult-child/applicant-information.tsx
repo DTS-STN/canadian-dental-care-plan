@@ -100,18 +100,14 @@ export async function action({ context: { session }, params, request }: ActionFu
       .min(1, t('apply-adult-child:applicant-information.error-message.sin-required'))
       .superRefine((sin, ctx) => {
         if (!isValidSin(sin)) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:applicant-information.error-message.sin-valid'), fatal: true });
-          return z.NEVER;
-        }
-
-        if (
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:applicant-information.error-message.sin-valid') });
+        } else if (
           [applyState.partnerInformation?.socialInsuranceNumber, ...applyState.children.map((child) => child.information?.socialInsuranceNumber)]
             .filter((sin) => sin !== undefined)
             .map((sin) => formatSin(sin as string))
             .includes(formatSin(sin))
         ) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-unique'), path: ['socialInsuranceNumber'], fatal: true });
-          return z.NEVER;
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-unique') });
         }
       }),
     firstName: z.string().trim().min(1, t('apply-adult-child:applicant-information.error-message.first-name-required')).max(100),
