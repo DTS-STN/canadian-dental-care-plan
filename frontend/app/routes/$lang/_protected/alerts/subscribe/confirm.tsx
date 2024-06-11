@@ -133,8 +133,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
 
   if (parsedDataResult.data.action === ConfirmationCodeAction.NewCode) {
-    // TODO service function shouldn't accept email; remove when services are changed
-    await subscriptionService.requestNewConfirmationCode('user@example.com', userInfoToken.sub);
+    await subscriptionService.requestNewConfirmationCode(userInfoToken.sub);
     session.set('newCodeRequested', true);
     return redirect(getPathById('$lang/_protected/alerts/subscribe/confirm', params));
   }

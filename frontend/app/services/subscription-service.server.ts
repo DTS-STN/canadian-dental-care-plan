@@ -39,6 +39,9 @@ const userSchema = z.object({
     emailValidations: z.object({
       href: z.string(),
     }),
+    confirmationCodes: z.object({
+      href: z.string(),
+    }),
   }),
 });
 
@@ -117,7 +120,7 @@ function createSubscriptionService() {
       },
     });
 
-    instrumentationService.countHttpStatus('http.client.cdcp-api.alert-subscription.gets', subscriptionsResponse.status);
+    instrumentationService.countHttpStatus('http.client.cdcp-api.subscriptions.gets', subscriptionsResponse.status);
 
     const subscriptions = subscriptionsSchema.parse(await subscriptionsResponse.json())._embedded.subscriptions.map((subscription) => ({
       id: subscription.id,
@@ -152,7 +155,7 @@ function createSubscriptionService() {
       },
     });
 
-    instrumentationService.countHttpStatus('http.client.cdcp-api.users.delete', response.status);
+    instrumentationService.countHttpStatus('http.client.cdcp-api.users.gets', response.status);
 
     if (!response.ok) {
       log.error('%j', {
@@ -180,7 +183,7 @@ function createSubscriptionService() {
       },
     });
 
-    instrumentationService.countHttpStatus('http.client.cdcp-api.alert-subscription.delete', subscriptionsResponse.status);
+    instrumentationService.countHttpStatus('http.client.cdcp-api.subscriptions.gets', subscriptionsResponse.status);
 
     const subscriptions = subscriptionsSchema.parse(await subscriptionsResponse.json())._embedded.subscriptions;
 
@@ -194,7 +197,7 @@ function createSubscriptionService() {
       },
     });
 
-    instrumentationService.countHttpStatus('http.client.cdcp-api.alert-subscription.delete', deleteResponse.status);
+    instrumentationService.countHttpStatus('http.client.cdcp-api.subscriptions.deletes', deleteResponse.status);
 
     if (!deleteResponse.ok) {
       log.error('%j', {
@@ -227,7 +230,7 @@ function createSubscriptionService() {
       body: JSON.stringify(subscription),
     });
 
-    instrumentationService.countHttpStatus('http.client.cdcp-api.alert-subscription.posts', response.status);
+    instrumentationService.countHttpStatus('http.client.cdcp-api.subscriptions.posts', response.status);
 
     if (response.status === 204) {
       return null;
@@ -259,7 +262,7 @@ function createSubscriptionService() {
       },
     });
 
-    instrumentationService.countHttpStatus('alert-subscription.validate', response.status);
+    instrumentationService.countHttpStatus('http.client.cdcp-api.users.gets', response.status);
 
     if (!response.ok) {
       log.error('%j', {
@@ -288,7 +291,7 @@ function createSubscriptionService() {
       body: JSON.stringify({ confirmationCode: enteredConfirmationCode }),
     });
 
-    instrumentationService.countHttpStatus('alert-subscription.validate.posts', emailValidationResponse.status);
+    instrumentationService.countHttpStatus('http.client.cdcp-api.email-validations.posts', emailValidationResponse.status);
     if (!emailValidationResponse.ok) {
       log.error('%j', {
         message: 'Failed to verify data',
@@ -309,39 +312,60 @@ function createSubscriptionService() {
     return false;
   }
 
-  async function requestNewConfirmationCode(userEmail: string, userId: string) {
+  async function requestNewConfirmationCode(userId: string) {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
 
     auditService.audit('alert-subscription.request-confirmation-code', { userId });
 
-    const dataToPass = {
-      email: userEmail,
-    };
-    // TODO: add CDCP_API_BASE_URI
-    const url = new URL(`https://api.cdcp.example.com/v1/codes/request`);
+    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users?raoidcUserId=${userId}`);
     const response = await fetch(url, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(dataToPass),
     });
 
-    instrumentationService.countHttpStatus('http.client.cdcp-api.codes.request.posts', response.status);
+    instrumentationService.countHttpStatus('http.client.cdcp-api.users.gets', response.status);
+
     if (!response.ok) {
       log.error('%j', {
-        message: 'Failed to request data',
+        message: 'Failed find data',
         status: response.status,
         statusText: response.statusText,
         url: url,
         responseBody: await response.text(),
       });
 
-      throw new Error(`Failed to request data. Status: ${response.status}, Status Text: ${response.statusText}`);
+      throw new Error(`Failed to find data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    return response;
+    const users = await response.json();
+    if (users._embedded.users.length === 0) {
+      throw new Error(`Failed to find the user: ${userId}.`);
+    }
+    const userParsed = userSchema.parse(users._embedded.users[0]);
+
+    const confirmationCodesUrl = userParsed._links.confirmationCodes.href;
+    const confirmationCodeResponse = await fetch(confirmationCodesUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    instrumentationService.countHttpStatus('http.client.cdcp-api.confirmation-codes.posts', confirmationCodeResponse.status);
+    if (!confirmationCodeResponse.ok) {
+      log.error('%j', {
+        message: 'Failed to request data',
+        status: confirmationCodeResponse.status,
+        statusText: confirmationCodeResponse.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to request data. Status: ${confirmationCodeResponse.status}, Status Text: ${confirmationCodeResponse.statusText}`);
+    }
   }
 
   return { getSubscription, deleteSubscription, updateSubscription, validateConfirmationCode, requestNewConfirmationCode };
