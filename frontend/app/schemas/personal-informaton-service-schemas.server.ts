@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+// TODO some fields in this schema aren't being used as personal information and can be removed
 export const getApplicantResponseSchema = z.object({
   BenefitApplication: z.object({
     Applicant: z
