@@ -79,7 +79,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('apply/adult-child/federal-provincial-territorial');
-  loadApplyAdultChildState({ params, request, session });
+  const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // NOTE: state validation schemas are independent otherwise user have to anwser
@@ -165,6 +165,10 @@ export async function action({ context: { session }, params, request }: ActionFu
       },
     },
   });
+
+  if (state.editMode) {
+    return redirect(getPathById('$lang/_public/apply/$id/adult-child/review-adult-information', params));
+  }
 
   return redirect(getPathById('$lang/_public/apply/$id/adult-child/children/index', params));
 }
