@@ -35,3 +35,13 @@ export const padWithZero = (value: number, maxLength: number) => {
   if (value.toString().length >= maxLength) return value.toString();
   return value.toString().padStart(maxLength, '0');
 };
+
+/**
+ *
+ * @param input - The string value of the input field to be validated
+ * @returns Boolean indicating whether the input contains all valid characters
+ */
+export function isAllValidInputCharacters(input: string): boolean {
+  const validCharactersRegex = /^[a-zA-Z0-9'(),\-.ÀÁÂÄÇÈÉÊËÌÍÎÏÒÓÔÖÙÚÛÜÝàáâäçèéêëìíîïòóôöùúûüýÿ\u00a0 ]+$/;
+  return validCharactersRegex.test(input);
+}
