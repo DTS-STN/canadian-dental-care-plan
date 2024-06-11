@@ -90,85 +90,92 @@ export default function AccessToGovernmentalsBenefitsView() {
   if (hasDentalPlans) {
     return (
       <div className="max-w-prose">
-        <>
-          <div className="mb-5 space-y-4">
-            {updatedInfo && (
-              <ContextualAlert type="success">
-                <h2 className="text-xl font-semibold">{t('access-to-governmental-benefits:access-to-governmental-benefits.view.info-updated.your-info-has-been-updated')}</h2>
-              </ContextualAlert>
-            )}
-            {personalInformation.provincialTerritorialDentalPlanId ? (
-              <div className="mb-5 space-y-4">
-                <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.view.provincial-or-territorial-dental-benefit')}</h2>
-                <ul className="list-disc space-y-6 pl-7">
-                  <li>{provincialAndTerritorialProgramsList.find((federalSocialProgram) => federalSocialProgram.id === personalInformation.provincialTerritorialDentalPlanId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '} </li>
-                </ul>
-              </div>
-            ) : (
-              <div className="mb-5 space-y-4">
-                <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.view.provincial-or-territorial-dental-benefit')}</h2>
-              </div>
-            )}
-          </div>
-          <div className="mb-5 space-y-4">
-            {personalInformation.federalDentalPlanId ? (
-              <div className="mb-5 space-y-4">
-                <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.view.federal-benefits-dental-benefits')}</h2>
-
-                <ul className="list-disc space-y-6 pl-7">
-                  <li>{federalSocialProgramsList.find((federalSocialProgram) => federalSocialProgram.id === personalInformation.federalDentalPlanId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '} </li>
-                </ul>
-              </div>
-            ) : (
-              <div className="mb-5 space-y-4">
-                <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.view.federal-benefits-dental-benefits')}</h2>
-              </div>
-            )}
-          </div>
-          <div className="mb-5 space-y-4">
-            <InlineLink routeId="$lang/_protected/access-to-governmental-benefits/edit" params={{ ...params }} className="font-lato font-semibold">
-              {t('access-to-governmental-benefits:access-to-governmental-benefits.view.update-your-access-text')}
-            </InlineLink>
-          </div>
-
-          <fetcher.Form method="post" noValidate>
-            <input type="hidden" name="_csrf" value={csrfToken} />
-            <div className="flex flex-wrap items-center gap-3">
-              <ButtonLink id="back-button" routeId="$lang/_protected/access-to-governmental-benefits/index" params={params}>
-                {t('access-to-governmental-benefits:access-to-governmental-benefits.view.back')}
-              </ButtonLink>
-            </div>
-          </fetcher.Form>
-        </>
-      </div>
-    );
-  } else {
-    return (
-      <div className="max-w-prose">
-        <>
+        <div className="mb-5 space-y-4">
           {updatedInfo && (
             <ContextualAlert type="success">
               <h2 className="text-xl font-semibold">{t('access-to-governmental-benefits:access-to-governmental-benefits.view.info-updated.your-info-has-been-updated')}</h2>
             </ContextualAlert>
           )}
-          <div className="mb-5 space-y-4">
-            <p>{t('access-to-governmental-benefits:access-to-governmental-benefits.view.no-government-benefits')}</p>
-          </div>
-          <div className="mb-5 space-y-4">
-            <InlineLink routeId="$lang/_protected/access-to-governmental-benefits/edit" params={{ ...params }} className="external-link" target="_blank">
-              {t('access-to-governmental-benefits:access-to-governmental-benefits.view.update-your-access-text')}
-            </InlineLink>
-          </div>
-
-          <fetcher.Form method="post" noValidate>
-            <input type="hidden" name="_csrf" value={csrfToken} />
-            <div className="flex flex-wrap items-center gap-3">
-              <ButtonLink id="back-button" routeId="$lang/_protected/access-to-governmental-benefits/index" params={params}>
-                {t('access-to-governmental-benefits:access-to-governmental-benefits.view.back')}
-              </ButtonLink>
+          {personalInformation.provincialTerritorialDentalPlanId ? (
+            <div className="mb-5 space-y-4">
+              <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.view.provincial-or-territorial-dental-benefit')}</h2>
+              <ul className="list-disc space-y-6 pl-7">
+                <li>{provincialAndTerritorialProgramsList.find((federalSocialProgram) => federalSocialProgram.id === personalInformation.provincialTerritorialDentalPlanId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '} </li>
+              </ul>
             </div>
-          </fetcher.Form>
-        </>
+          ) : (
+            <div className="mb-5 space-y-4">
+              <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.view.provincial-or-territorial-dental-benefit')}</h2>
+            </div>
+          )}
+        </div>
+        <div className="mb-5 space-y-4">
+          {personalInformation.federalDentalPlanId ? (
+            <div className="mb-5 space-y-4">
+              <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.view.federal-benefits-dental-benefits')}</h2>
+
+              <ul className="list-disc space-y-6 pl-7">
+                <li>{federalSocialProgramsList.find((federalSocialProgram) => federalSocialProgram.id === personalInformation.federalDentalPlanId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '} </li>
+              </ul>
+            </div>
+          ) : (
+            <div className="mb-5 space-y-4">
+              <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.view.federal-benefits-dental-benefits')}</h2>
+            </div>
+          )}
+        </div>
+        <div className="mb-5 space-y-4">
+          <InlineLink
+            routeId="$lang/_protected/access-to-governmental-benefits/edit"
+            params={{ ...params }}
+            className="font-lato font-semibold"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Update your access to governmental benefits - Access to governmental benefits click"
+          >
+            {t('access-to-governmental-benefits:access-to-governmental-benefits.view.update-your-access-text')}
+          </InlineLink>
+        </div>
+
+        <fetcher.Form method="post" noValidate>
+          <input type="hidden" name="_csrf" value={csrfToken} />
+          <div className="flex flex-wrap items-center gap-3">
+            <ButtonLink id="back-button" routeId="$lang/_protected/access-to-governmental-benefits/index" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Back - Access to governmental benefits click">
+              {t('access-to-governmental-benefits:access-to-governmental-benefits.view.back')}
+            </ButtonLink>
+          </div>
+        </fetcher.Form>
+      </div>
+    );
+  } else {
+    return (
+      <div className="max-w-prose">
+        {updatedInfo && (
+          <ContextualAlert type="success">
+            <h2 className="text-xl font-semibold">{t('access-to-governmental-benefits:access-to-governmental-benefits.view.info-updated.your-info-has-been-updated')}</h2>
+          </ContextualAlert>
+        )}
+        <div className="mb-5 space-y-4">
+          <p>{t('access-to-governmental-benefits:access-to-governmental-benefits.view.no-government-benefits')}</p>
+        </div>
+        <div className="mb-5 space-y-4">
+          <InlineLink
+            routeId="$lang/_protected/access-to-governmental-benefits/edit"
+            params={{ ...params }}
+            className="external-link"
+            target="_blank"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Update your access to governmental benefits - Access to governmental benefits click"
+          >
+            {t('access-to-governmental-benefits:access-to-governmental-benefits.view.update-your-access-text')}
+          </InlineLink>
+        </div>
+
+        <fetcher.Form method="post" noValidate>
+          <input type="hidden" name="_csrf" value={csrfToken} />
+          <div className="flex flex-wrap items-center gap-3">
+            <ButtonLink id="back-button" routeId="$lang/_protected/access-to-governmental-benefits/index" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Back - Access to governmental benefits click">
+              {t('access-to-governmental-benefits:access-to-governmental-benefits.view.back')}
+            </ButtonLink>
+          </div>
+        </fetcher.Form>
       </div>
     );
   }

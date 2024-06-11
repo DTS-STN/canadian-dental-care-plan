@@ -73,18 +73,21 @@ export default function AccessToGovernmentalsBenefitsIndex() {
 
   return (
     <div className="max-w-prose">
-      <>
-        <div className="mb-5 space-y-4">
-          <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.index.intro-text')}</h2>
-          <p>{t('access-to-governmental-benefits:access-to-governmental-benefits.index.body-text')}</p>
-        </div>
-        <div className="mb-5 space-y-4">
-          <InlineLink routeId="$lang/_protected/access-to-governmental-benefits/view" params={{ ...params }} className="font-lato font-semibold">
-            {t('access-to-governmental-benefits:access-to-governmental-benefits.index.update-your-access-text')}
-          </InlineLink>
-        </div>
-        <fetcher.Form method="post" noValidate></fetcher.Form>
-      </>
+      <div className="mb-5 space-y-4">
+        <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.index.intro-text')}</h2>
+        <p>{t('access-to-governmental-benefits:access-to-governmental-benefits.index.body-text')}</p>
+      </div>
+      <div className="mb-5 space-y-4">
+        <InlineLink
+          routeId="$lang/_protected/access-to-governmental-benefits/view"
+          params={{ ...params }}
+          className="font-lato font-semibold"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Update your access to governmental benefits - Update your dental benefits click"
+        >
+          {t('access-to-governmental-benefits:access-to-governmental-benefits.index.update-your-access-text')}
+        </InlineLink>
+      </div>
+      <fetcher.Form method="post" noValidate></fetcher.Form>
     </div>
   );
 }
