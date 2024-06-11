@@ -142,15 +142,15 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
   const parsedId = idSchema.safeParse(params.id);
 
   if (!parsedId.success) {
-    log.warn('Invalid "id" param format; id: [%s]', params.id);
-    throw redirect(getPathById('$lang/_public/apply/index', params));
+    log.warn('Invalid "id" param format; id: [%s], sessionId: [%s]', params.id, session.id);
+    throw new Response(null, { status: 404 });
   }
 
   const sessionName = getSessionName(parsedId.data);
 
   if (!session.has(sessionName)) {
-    log.warn('Apply session has not been found; sessionName: [%s]', sessionName);
-    throw redirect(getPathById('$lang/_public/apply/index', params));
+    log.warn('Apply session state has not been found; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
+    throw new Response(null, { status: 404 });
   }
 
   const state: ApplyState = session.get(sessionName);
@@ -162,7 +162,7 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
 
   if (differenceInMinutes(now, lastUpdatedOn) >= 15) {
     session.unset(sessionName);
-    log.warn('Apply session has expired; sessionName: [%s]', sessionName);
+    log.warn('Apply session state has expired; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
     throw redirect(getPathById('$lang/_public/apply/index', params));
   }
 
@@ -196,7 +196,7 @@ export function saveApplyState({ params, session, state, remove = undefined }: S
 
   const sessionName = getSessionName(currentState.id);
   session.set(sessionName, newState);
-
+  log.info('Apply session state saved; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
   return newState;
 }
 
@@ -214,6 +214,7 @@ export function clearApplyState({ params, session }: ClearStateArgs) {
 
   const sessionName = getSessionName(id);
   session.unset(sessionName);
+  log.info('Apply session state cleared; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
 }
 
 interface StartArgs {
@@ -238,7 +239,7 @@ export function startApplyState({ id, session }: StartArgs) {
 
   const sessionName = getSessionName(parsedId);
   session.set(sessionName, initialState);
-
+  log.info('Apply session state started; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
   return initialState;
 }
 
