@@ -304,7 +304,7 @@ export default function ApplyFlowConfirm() {
               <Address
                 address={mailingAddressInfo.address}
                 city={mailingAddressInfo.city}
-                provinceState={i18n.language === 'en' ? mailingAddressInfo.province?.nameEn : mailingAddressInfo.province?.nameFr}
+                provinceState={mailingAddressInfo.province?.abbr}
                 postalZipCode={mailingAddressInfo.postalCode}
                 country={i18n.language === 'en' ? mailingAddressInfo.country?.nameEn ?? '' : mailingAddressInfo.country?.nameFr ?? ''}
                 apartment={mailingAddressInfo.apartment}
@@ -314,8 +314,8 @@ export default function ApplyFlowConfirm() {
               <Address
                 address={homeAddressInfo.address ?? ''}
                 city={homeAddressInfo.city ?? ''}
-                provinceState={i18n.language === 'en' ? homeAddressInfo.province?.nameEn : homeAddressInfo.province?.nameFr}
-                postalZipCode={homeAddressInfo.postalCode ?? ''}
+                provinceState={homeAddressInfo.province?.abbr}
+                postalZipCode={homeAddressInfo.postalCode}
                 country={i18n.language === 'en' ? homeAddressInfo.country?.nameEn ?? '' : homeAddressInfo.country?.nameFr ?? ''}
                 apartment={homeAddressInfo.apartment}
               />
