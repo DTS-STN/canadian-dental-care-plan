@@ -25,7 +25,7 @@ function formatAddress(address: string, city: string, country: string, provinceS
   // prettier-ignore
   const linesAlt = [
     formattedAddress,
-    `${city}${provinceState ? ` ${provinceState}` : ''}`,
+    `${city}${provinceState ? `, ${provinceState}` : ''}`,
     `${postalZipCode ? `${postalZipCode}` : ''}`,
     `${country}`
   ];

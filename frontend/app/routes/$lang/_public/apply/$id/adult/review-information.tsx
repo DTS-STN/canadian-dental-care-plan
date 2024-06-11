@@ -363,7 +363,6 @@ export default function ReviewInformation() {
                   postalZipCode={mailingAddressInfo.postalCode}
                   country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
                   apartment={mailingAddressInfo.apartment}
-                  altFormat={true}
                 />
                 <div className="mt-4">
                   <InlineLink id="change-mailing-address" routeId="$lang/_public/apply/$id/adult/contact-information" params={params}>
@@ -379,7 +378,6 @@ export default function ReviewInformation() {
                   postalZipCode={homeAddressInfo.postalCode}
                   country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
                   apartment={homeAddressInfo.apartment}
-                  altFormat={true}
                 />
                 <div className="mt-4">
                   <InlineLink id="change-home-address" routeId="$lang/_public/apply/$id/adult/contact-information" params={params}>
