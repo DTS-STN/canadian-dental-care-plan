@@ -58,6 +58,9 @@ export function getSubscriptionApiMockHandlers() {
                 emailValidations: {
                   href: `https://api.cdcp.example.com/api/v1/users/${userEntity?.id}/email-validations`,
                 },
+                confirmationCodes: {
+                  href: `https://api.cdcp.example.com/api/v1/users/${userEntity?.id}/confirmation-codes`,
+                },
               },
             },
           ],
@@ -235,42 +238,23 @@ export function getSubscriptionApiMockHandlers() {
       return HttpResponse.json({ status: 400 });
     }),
 
-    //TODO: update this after backend is ready
-    /*http.post('https://api.cdcp.example.com/v1/codes/request', async ({ params, request }) => {
+    http.post('https://api.cdcp.example.com/api/v1/users/:userId/confirmation-codes', ({ params, request }) => {
       log.debug('Handling request for [%s]', request.url);
       const timeEntered = new Date();
-      const requestBody = await request.json();
-      const requestCodeSubscriptionSchemaData = requestCodeSubscriptionSchema.safeParse(requestBody);
-      if (!requestCodeSubscriptionSchemaData.success) {
+
+      const parsedUserId = z.string().safeParse(params.userId);
+      if (!parsedUserId.success) {
         throw new HttpResponse(null, { status: 400 });
       }
 
-      const subscriptionConfirmationCodesEntities = db.subscriptionConfirmationCode.findMany({
-        where: { email: { equals: requestCodeSubscriptionSchemaData.data.email } },
+      db.subscriptionConfirmationCode.create({
+        code: '0101',
+        userId: parsedUserId.data,
+        createdDate: timeEntered,
+        expiryDate: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000), // current date date + 2 days
       });
 
-      if (subscriptionConfirmationCodesEntities.length === 0) {
-        //No code found for that user --- generate a new code and update the user entity
-        db.subscriptionConfirmationCode.create({
-          id: '0000101',
-          email: requestCodeSubscriptionSchemaData.data.email,
-          confirmationCode: '0101',
-          createdDate: timeEntered,
-          expiryDate: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000), // current date date + 2 days
-        });
-      } else {
-        // Email existed with code already, updating the code only.
-        db.subscriptionConfirmationCode.update({
-          where: { email: { equals: requestCodeSubscriptionSchemaData.data.email } },
-          data: {
-            confirmationCode: '0101',
-            createdDate: timeEntered,
-            expiryDate: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000), // current date date + 2 days
-          },
-        });
-      }
-
       return HttpResponse.json({ confirmCodeStatus: 'No Content' }, { status: 204 });
-    }), */
+    }),
   ];
 }
