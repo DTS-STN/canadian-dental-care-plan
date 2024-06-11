@@ -129,7 +129,7 @@ export default function AccessToGovernmentalsBenefitsView() {
             routeId="$lang/_protected/access-to-governmental-benefits/edit"
             params={{ ...params }}
             className="font-lato font-semibold"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form - Access to Governmental Benefits:Edit - View click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information - Access to Governmental Benefits:Edit - View click"
           >
             {t('access-to-governmental-benefits:access-to-governmental-benefits.view.update-your-access-text')}
           </InlineLink>
@@ -138,7 +138,7 @@ export default function AccessToGovernmentalsBenefitsView() {
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" routeId="$lang/_protected/access-to-governmental-benefits/index" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form - Access to Governmental Benefits:Back - View click">
+            <ButtonLink id="back-button" routeId="$lang/_protected/access-to-governmental-benefits/index" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information - Access to Governmental Benefits:Back - View click">
               {t('access-to-governmental-benefits:access-to-governmental-benefits.view.back')}
             </ButtonLink>
           </div>
@@ -162,7 +162,7 @@ export default function AccessToGovernmentalsBenefitsView() {
             params={{ ...params }}
             className="external-link"
             target="_blank"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form - Access to Governmental Benefits:Edit - View click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information - Access to Governmental Benefits:Edit - View click"
           >
             {t('access-to-governmental-benefits:access-to-governmental-benefits.view.update-your-access-text')}
           </InlineLink>
@@ -171,7 +171,7 @@ export default function AccessToGovernmentalsBenefitsView() {
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" routeId="$lang/_protected/access-to-governmental-benefits/index" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form - Access to Governmental Benefits:Back - View click">
+            <ButtonLink id="back-button" routeId="$lang/_protected/access-to-governmental-benefits/index" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information - Access to Governmental Benefits:Back - View click">
               {t('access-to-governmental-benefits:access-to-governmental-benefits.view.back')}
             </ButtonLink>
           </div>

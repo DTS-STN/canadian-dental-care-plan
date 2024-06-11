@@ -82,7 +82,7 @@ export default function AccessToGovernmentalsBenefitsIndex() {
           routeId="$lang/_protected/access-to-governmental-benefits/view"
           params={{ ...params }}
           className="font-lato font-semibold"
-          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form - Access to Governmental Benefits:Index - Update click"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information - Access to Governmental Benefits:Index - Update click"
         >
           {t('access-to-governmental-benefits:access-to-governmental-benefits.index.update-your-access-text')}
         </InlineLink>
