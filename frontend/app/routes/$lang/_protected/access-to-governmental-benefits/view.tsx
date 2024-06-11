@@ -129,7 +129,7 @@ export default function AccessToGovernmentalsBenefitsView() {
             routeId="$lang/_protected/access-to-governmental-benefits/edit"
             params={{ ...params }}
             className="font-lato font-semibold"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information - Access to Governmental Benefits:Edit - Access to governmental benefits click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Update your access to governmental benefits - Access to governmental benefits click"
           >
             {t('access-to-governmental-benefits:access-to-governmental-benefits.view.update-your-access-text')}
           </InlineLink>
@@ -162,7 +162,7 @@ export default function AccessToGovernmentalsBenefitsView() {
             params={{ ...params }}
             className="external-link"
             target="_blank"
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information - Access to Governmental Benefits:Edit - Access to governmental benefits click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Update your access to governmental benefits - Access to governmental benefits click"
           >
             {t('access-to-governmental-benefits:access-to-governmental-benefits.view.update-your-access-text')}
           </InlineLink>

@@ -78,7 +78,12 @@ export default function AccessToGovernmentalsBenefitsIndex() {
         <p>{t('access-to-governmental-benefits:access-to-governmental-benefits.index.body-text')}</p>
       </div>
       <div className="mb-5 space-y-4">
-        <InlineLink routeId="$lang/_protected/access-to-governmental-benefits/view" params={{ ...params }} className="font-lato font-semibold" data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Index - Update your dental benefits click">
+        <InlineLink
+          routeId="$lang/_protected/access-to-governmental-benefits/view"
+          params={{ ...params }}
+          className="font-lato font-semibold"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Update your access to governmental benefits - Update your dental benefits click"
+        >
           {t('access-to-governmental-benefits:access-to-governmental-benefits.index.update-your-access-text')}
         </InlineLink>
       </div>
