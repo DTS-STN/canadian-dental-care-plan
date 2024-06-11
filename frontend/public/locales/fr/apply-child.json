@@ -142,7 +142,7 @@
       }
     },
     "dental-benefits": {
-      "title": "{{childName}}\u0a00: accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
+      "title": "{{childName}}\u00a0: accès à d'autres prestations dentaires fédérales, provinciales ou territoriales",
       "access-to-dental": "L'accès à des prestations dentaires dans le cadre d'un programme social provincial, territorial ou fédéral n'aura aucune incidence sur l'admissibilité de l'enfant au Régime canadien de soins dentaires.",
       "eligibility-criteria": "Si l'enfant répond à tous les critères d'admissibilité, sa couverture doit être coordonnée entre les régimes afin qu'il n'y ait pas de dédoublement ou de lacunes dans la couverture.",
       "select-one": "Choisissez une option",
