@@ -183,7 +183,7 @@ function createSubscriptionService() {
       },
     });
 
-    instrumentationService.countHttpStatus('http.client.cdcp-api.subscriptions.deletes', subscriptionsResponse.status);
+    instrumentationService.countHttpStatus('http.client.cdcp-api.subscriptions.gets', subscriptionsResponse.status);
 
     const subscriptions = subscriptionsSchema.parse(await subscriptionsResponse.json())._embedded.subscriptions;
 
