@@ -1,7 +1,8 @@
 import { sort } from 'moderndash';
 import moize from 'moize';
-import { z } from 'zod';
 
+import { toBenefitApplication } from '~/mappers/application-history-mapper.server';
+import { applicationListSchema } from '~/schemas/application-history-service-schemas.server';
 import { BenefitApplicationRequest, benefitApplicationRequestSchema, benefitApplicationResponseSchema } from '~/schemas/benefit-application-service-schemas.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
@@ -103,24 +104,10 @@ function createBenefitApplicationService() {
 
     instrumentationService.countHttpStatus('http.client.application-history-api.applications.gets', response.status);
 
-    const applicationsSchema = z.array(
-      z.object({
-        AppicationId: z.string().optional(),
-        SubmittedDate: z.string().optional(),
-        ApplicationStatus: z.string().optional(),
-        ConfirmationCode: z.string().optional(),
-      }),
-    );
-
     const data = await response.json();
     log.trace('Applications for user id [%s]: [%j]', userId, data);
-    const applications = applicationsSchema.parse(data).map((application) => ({
-      id: application.AppicationId,
-      submittedOn: application.SubmittedDate,
-      status: application.ApplicationStatus,
-      confirmationCode: application.ConfirmationCode,
-    }));
 
+    const applications = toBenefitApplication(applicationListSchema.parse(data)); // TODO: Update schema once application-history service becomes avaliable
     return sort(applications, {
       order: sortOrder,
       by: (item) => item.submittedOn ?? 'undefined',
