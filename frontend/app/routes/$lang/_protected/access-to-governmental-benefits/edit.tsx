@@ -336,12 +336,22 @@ export default function AccessToGovernmentalsBenefitsEdit() {
           />
         </fieldset>
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <ButtonLink id="back-button" routeId="$lang/_protected/access-to-governmental-benefits/view" params={params} disabled={isSubmitting}>
+          <ButtonLink
+            id="back-button"
+            routeId="$lang/_protected/access-to-governmental-benefits/view"
+            params={params}
+            disabled={isSubmitting}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form - Access to Governmental Benefits:Back - Edit click"
+          >
             {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.button.back')}
           </ButtonLink>
           <Button id="save-button" variant="primary" disabled={isSubmitting}>
             {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.button.save')}
-            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+            <FontAwesomeIcon
+              icon={isSubmitting ? faSpinner : faChevronRight}
+              className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form - Access to Governmental Benefits:Save - Edit click"
+            />
           </Button>
         </div>
       </fetcher.Form>
