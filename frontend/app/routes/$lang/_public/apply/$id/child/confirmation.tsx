@@ -354,7 +354,6 @@ export default function ApplyFlowConfirm() {
                     postalZipCode={mailingAddressInfo.postalCode}
                     country={i18n.language === 'en' ? mailingAddressInfo.country?.nameEn ?? '' : mailingAddressInfo.country?.nameFr ?? ''}
                     apartment={mailingAddressInfo.apartment}
-                    altFormat={true}
                   />
                 </DescriptionListItem>
                 <DescriptionListItem term={t('confirm.home')}>
@@ -365,7 +364,6 @@ export default function ApplyFlowConfirm() {
                     postalZipCode={homeAddressInfo.postalCode ?? ''}
                     country={i18n.language === 'en' ? homeAddressInfo.country?.nameEn ?? '' : homeAddressInfo.country?.nameFr ?? ''}
                     apartment={homeAddressInfo.apartment}
-                    altFormat={true}
                   />
                 </DescriptionListItem>
               </dl>
