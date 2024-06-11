@@ -7,14 +7,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
 import ca.gov.dtsstn.cdcp.api.web.json.JsonPatchProcessor;
+import ca.gov.dtsstn.cdcp.api.web.v1.model.UserCreateModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.UserModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.mapper.UserModelMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.json.JsonPatch;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.constraints.NotBlank;
+
 
 @Validated
 @RestController
@@ -86,4 +88,20 @@ public class UsersController {
 		}
 	}
 
+	@PostMapping({"/{userId}"})
+	@Operation(summary = "Create a new user ")
+	public void createUserByRaoidcUserIdAndEmail(
+		@NotBlank(message = "userId must not be null or blank")
+		@Parameter(description = "The id of the user.", example = "00000000-0000-0000-0000-000000000000", required = true)
+			@PathVariable String userId,
+
+		@Validated @RequestBody UserCreateModel user) {
+
+			userService.createUser(user.getEmail(), userId);
+	}
+	
+	public void createUserByEmail(){
+
+
+	}
 }

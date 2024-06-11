@@ -21,6 +21,7 @@ import ca.gov.dtsstn.cdcp.api.data.entity.ConfirmationCodeEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.entity.LanguageEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.entity.SubscriptionEntity;
 import ca.gov.dtsstn.cdcp.api.data.entity.SubscriptionEntityBuilder;
+import ca.gov.dtsstn.cdcp.api.data.entity.UserEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.repository.AlertTypeRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.LanguageRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.UserRepository;
@@ -30,6 +31,7 @@ import ca.gov.dtsstn.cdcp.api.service.domain.User;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.ConfirmationCodeMapper;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.SubscriptionMapper;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.UserMapper;
+
 
 @Service
 @Transactional
@@ -195,6 +197,12 @@ public class UserService {
 		userRepository.save(user);
 
 		return true;
+	}
+
+	public User createUser(String userEmail, String raoidcUserId){
+		//Lets assume the email has already been checked to make sure its a valid one...
+		Assert.hasText(userEmail, "userEmail is required; it must not be null or blank");
+		return userMapper.toUser(userRepository.save(new UserEntityBuilder().email(userEmail).id(raoidcUserId).build()));
 	}
 
 	private Predicate<SubscriptionEntity> byAlertTypeId(String alertTypeId) {
