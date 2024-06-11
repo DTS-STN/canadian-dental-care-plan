@@ -341,7 +341,7 @@ export default function AccessToGovernmentalsBenefitsEdit() {
             routeId="$lang/_protected/access-to-governmental-benefits/view"
             params={params}
             disabled={isSubmitting}
-            data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information - Access to Governmental Benefits:Back - Edit click"
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Back - Access to other federal, provincial or territorial dentail benefits click"
           >
             {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.button.back')}
           </ButtonLink>
@@ -350,7 +350,7 @@ export default function AccessToGovernmentalsBenefitsEdit() {
             <FontAwesomeIcon
               icon={isSubmitting ? faSpinner : faChevronRight}
               className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information - Access to Governmental Benefits:Save - Edit click"
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Save - Access to other federal, provincial or territorial dentail benefits click"
             />
           </Button>
         </div>
