@@ -43,6 +43,7 @@
 
 		<immutables.version>2.10.1</immutables.version>
 		<jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+		<johnzon.version>2.0.1</johnzon.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
 		<spring-boot.version>3.3.0</spring-boot.version>
 		<springdoc.version>2.5.0</springdoc.version>
@@ -57,6 +58,15 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.json</groupId>
+			<artifactId>jakarta.json-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.johnzon</groupId>
+			<artifactId>johnzon-core</artifactId>
+			<version>${johnzon.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>
