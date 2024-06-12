@@ -28,6 +28,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin } from '~/utils/sin-utils';
+import { isAllValidInputCharacters } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
 enum FormAction {
@@ -104,8 +105,8 @@ export async function action({ context: { session }, params, request }: ActionFu
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:applicant-information.error-message.sin-unique') });
         }
       }),
-    firstName: z.string().trim().min(1, t('apply-adult:applicant-information.error-message.first-name-required')).max(100),
-    lastName: z.string().trim().min(1, t('apply-adult:applicant-information.error-message.last-name-required')).max(100),
+    firstName: z.string().trim().min(1, t('apply-adult:applicant-information.error-message.first-name-required')).max(100).refine(isAllValidInputCharacters, t('apply-adult:applicant-information.error-message.characters-valid')),
+    lastName: z.string().trim().min(1, t('apply-adult:applicant-information.error-message.last-name-required')).max(100).refine(isAllValidInputCharacters, t('apply-adult:applicant-information.error-message.characters-valid')),
     maritalStatus: z
       .string({ errorMap: () => ({ message: t('apply-adult:applicant-information.error-message.marital-status-required') }) })
       .trim()
