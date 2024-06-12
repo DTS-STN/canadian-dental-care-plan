@@ -1,8 +1,10 @@
 package ca.gov.dtsstn.cdcp.api.service.domain.mapper;
 
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import ca.gov.dtsstn.cdcp.api.data.entity.UserEntity;
 import ca.gov.dtsstn.cdcp.api.service.domain.User;
@@ -28,18 +30,11 @@ public abstract class UserMapper extends AbstractDomainMapper {
 	public abstract UserEntity toUserEntity(@Nullable User user);
 
 	/**
-	 * Updates a {@link UserEntity} entity with the values from a {@link User} domain object.
+	 * Updates a {@link UserEntity} entity with the values from a {@link UserPatch} domain object.
 	 */
 	@Nullable
-	@Mapping(target = "id", ignore = true)
-	@Mapping(target = "isNew", ignore = true)
-	@Mapping(target = "createdBy", ignore = true)
-	@Mapping(target = "createdDate", ignore = true)
-	@Mapping(target = "lastModifiedBy", ignore = true)
-	@Mapping(target = "lastModifiedDate", ignore = true)
-	@Mapping(target = "confirmationCodes", qualifiedByName = { "updateConfirmationCodeEntities" })
-	@Mapping(target = "subscriptions", qualifiedByName = { "updateSubscriptionEntities" })
-	@Mapping(target = "userAttributes", qualifiedByName = { "updateUserAttributeEntities" })
-	public abstract void updateUserEntity(@MappingTarget UserEntity userEntity, @Nullable User user);
+	@Mapping(target = "email", ignore = false)
+	@BeanMapping(ignoreByDefault = true, nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+	public abstract UserEntity update(@MappingTarget UserEntity userEntity, @Nullable User user);
 
 }

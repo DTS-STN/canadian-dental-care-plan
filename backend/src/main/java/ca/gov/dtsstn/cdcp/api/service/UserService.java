@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,19 +135,18 @@ public class UserService {
 		return userRepository.findById(id).map(userMapper::toUser);
 	}
 
-	public void updateUser(String userId, String email) {
+	public void updateUser(String userId, User userPatch) {
 		Assert.hasText(userId, "userId is required; it must not be null or blank");
-		Assert.hasText(email, "email is required; it must not be null or blank");
+		Assert.notNull(userPatch, "userPatch is required; it must not be null");
 
 		log.debug("Fetching user [{}] from repository", userId);
 		final var user = userRepository.findById(userId).orElseThrow();
 
-		if (email.equals(user.getEmail()) == false) {
-			user.setEmail(email);
+		if (StringUtils.equals(userPatch.getEmail(), user.getEmail()) == false) {
 			user.setEmailVerified(false);
-
-			userRepository.save(user);
 		}
+
+		userRepository.save(userMapper.update(user, userPatch));
 	}
 
 	public void updateSubscriptionForUser(String userId, String subscriptionId, String languageId) {
