@@ -84,7 +84,7 @@ export function toUpdateApplicantRequest(personalInformation: PersonalInformatio
       },
       BenefitApplicationIdentification: [
         {
-          IdentificationID: personalInformation.benefitApplicationIdentification ?? '',
+          IdentificationID: personalInformation.benefitApplicationId ?? '',
           IdentificationCategoryText: 'Dental Application ID',
         },
       ],
@@ -134,7 +134,6 @@ export function toPersonalInformation(getApplicantResponse: GetApplicantResponse
   const mailingAddress = addresses?.find((address) => address.AddressCategoryCode.ReferenceDataName === 'Mailing');
 
   return {
-    applicantCategoryCode: applicant?.ApplicantCategoryCode.ReferenceDataID,
     applictantId: applicant?.ClientIdentification?.find((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Applicant ID')?.IdentificationID,
     clientId: applicant?.ClientIdentification?.find((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Client ID')?.IdentificationID,
     clientNumber: applicant?.ClientIdentification?.find((clientInfoDto) => clientInfoDto.IdentificationCategoryText === 'Client Number')?.IdentificationID,
