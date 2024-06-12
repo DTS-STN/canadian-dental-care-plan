@@ -64,8 +64,8 @@
       "first-name": "Prénom",
       "date-of-birth": "Date de naissance",
       "sin-legend": "L'enfant a-t-il un numéro d'assurance sociale (NAS)?",
-      "sin-yes": "<bold>Oui</bold>, l'enfant a un NAS",
-      "sin-no": "<bold>Non</bold>, l'enfant n'a pas de NAS",
+      "sin-yes": "<strong>Oui</strong>, l'enfant a un NAS",
+      "sin-no": "<strong>Non</strong>, l'enfant n'a pas de NAS",
       "sin": "Entrez un NAS de 9 chiffres",
       "parent-legend": "Êtes-vous le parent ou le tuteur légal de cet enfant?",
       "radio-options": {
