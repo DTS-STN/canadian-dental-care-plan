@@ -215,6 +215,7 @@
       "confirm-email-required": "Confirmez l'adresse courriel",
       "email-required": "Entrez l'adresse courriel",
       "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
+      "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@exemple.com",
       "preferred-language-required": "Sélectionnez la langue de communication préférée",
       "preferred-method-required": "Sélectionnez le moyen de communication préféré"
     }
@@ -420,6 +421,7 @@
       "confirm-email-required": "Confirmez l'adresse courriel",
       "email-required": "Entrez l'adresse courriel",
       "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
+      "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@exemple.com",
       "preferred-language-required": "Sélectionnez la langue de communication préférée"
     }
   },

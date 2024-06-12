@@ -100,7 +100,7 @@ export async function action({ context: { session }, params, request }: ActionFu
           if (typeof val.confirmEmail !== 'string' || validator.isEmpty(val.confirmEmail)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.confirm-email-required'), path: ['confirmEmail'] });
           } else if (!validator.isEmail(val.confirmEmail)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-valid'), path: ['confirmEmail'] });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.confirm-email-valid'), path: ['confirmEmail'] });
           } else if (val.email !== val.confirmEmail) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:communication-preference.error-message.email-match'), path: ['confirmEmail'] });
           }
