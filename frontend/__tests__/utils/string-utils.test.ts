@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { expandTemplate, padWithZero, randomHexString, randomString } from '~/utils/string-utils';
+import { expandTemplate, isAllValidInputCharacters, padWithZero, randomHexString, randomString } from '~/utils/string-utils';
 
 describe('expandTemplate', () => {
   it('should expand a template', () => {
@@ -57,5 +57,15 @@ describe('padWithZero', () => {
   it('should return the value as a string if its length is greater than or equal to maxLength', () => {
     expect(padWithZero(12345, 5)).toBe('12345');
     expect(padWithZero(123456, 5)).toBe('123456');
+  });
+});
+
+describe('isAllValidInputCharacters', () => {
+  it('should return true for input containing the entire valid character set', () => {
+    expect(isAllValidInputCharacters("a-zA-Z0-9'(),-.ÀÁÂÄÇÈÉÊËÌÍÎÏÒÓÔÖÙÚÛÜÝàáâäçèéêëìíîïòóôöùúûüýÿ\u00a0 ")).toEqual(true);
+  });
+
+  it('should return false for input containing invalid characters', () => {
+    expect(isAllValidInputCharacters('!"#$%&*+/:;<=>?@[\\]^_`{|}~¡¢£¤¥¦§¨©ª«¬\u00ad®¯±²³\u00b4µ-m¶·\u00b8¹º»¼½¾¿ÃãÅåÆæÐðÑñÕõ\u00d7ØøÞþẞß\u00f7')).toEqual(false);
   });
 });
