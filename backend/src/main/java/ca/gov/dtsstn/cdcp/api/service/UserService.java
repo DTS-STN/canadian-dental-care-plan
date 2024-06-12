@@ -237,5 +237,4 @@ public class UserService {
 		Assert.notNull(instant, "instant is required; it must not be null");
 		return confirmationCode -> confirmationCode.getExpiryDate().isAfter(instant);
 	}
-	
 }
