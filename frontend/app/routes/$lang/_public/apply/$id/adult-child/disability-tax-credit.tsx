@@ -89,7 +89,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
 
   if (state.editMode) {
-    return redirect(getPathById('$lang/_public/apply/$id/adult-child/review-information', params));
+    return redirect(getPathById('$lang/_public/apply/$id/adult-child/review-adult-information', params));
   }
 
   if (ageCategory !== 'adults') {
@@ -178,7 +178,7 @@ export default function ApplyFlowDisabilityTaxCredit() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId="$lang/_public/apply/$id/adult-child/review-information"
+                routeId="$lang/_public/apply/$id/adult-child/review-adult-information"
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Cancel - Disability tax credit click"
