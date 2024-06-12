@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { expandTemplate, isAllValidInputCharacters, padWithZero, randomHexString, randomString } from '~/utils/string-utils';
+import { expandTemplate, isAllValidInputCharacters, normalizeHyphens, padWithZero, randomHexString, randomString, removeInvalidInputCharacters } from '~/utils/string-utils';
 
 describe('expandTemplate', () => {
   it('should expand a template', () => {
@@ -62,10 +62,35 @@ describe('padWithZero', () => {
 
 describe('isAllValidInputCharacters', () => {
   it('should return true for input containing the entire valid character set', () => {
-    expect(isAllValidInputCharacters("a-zA-Z0-9'(),-.ÀÁÂÄÇÈÉÊËÌÍÎÏÒÓÔÖÙÚÛÜÝàáâäçèéêëìíîïòóôöùúûüýÿ\u00a0 ")).toEqual(true);
+    expect(isAllValidInputCharacters("a-zA-Z0-9'’ \u00a0(),-.ÀÁÂÄÇÈÉÊËÌÍÎÏÒÓÔÖÙÚÛÜÝàáâäçèéêëìíîïòóôöùúûüýÿ")).toEqual(true);
   });
 
   it('should return false for input containing invalid characters', () => {
     expect(isAllValidInputCharacters('!"#$%&*+/:;<=>?@[\\]^_`{|}~¡¢£¤¥¦§¨©ª«¬\u00ad®¯±²³\u00b4µ-m¶·\u00b8¹º»¼½¾¿ÃãÅåÆæÐðÑñÕõ\u00d7ØøÞþẞß\u00f7')).toEqual(false);
+  });
+});
+
+describe('removeInvalidInputCharacters', () => {
+  it.each([
+    ['abc123!@#', 'abc123'],
+    ['abcdef123', 'abcdef123'],
+    ['', ''],
+    ['!@#', ''],
+    ['a b c', 'a b c'],
+    ['a1b!c2@d#e3f', 'a1bc2de3f'],
+  ])('should remove invalid characters from "%s" to "%s"', (input, expectedOutput) => {
+    expect(removeInvalidInputCharacters(input)).toBe(expectedOutput);
+  });
+});
+
+describe('normalizeHyphens', () => {
+  it.each([
+    ['a--b---c', 'a-b-c'],
+    ['a-b-c', 'a-b-c'],
+    ['', ''],
+    ['----', '-'],
+    ['-abc--def-', '-abc-def-'],
+  ])('should normalize hyphens in "%s" to "%s"', (input, expectedOutput) => {
+    expect(normalizeHyphens(input)).toBe(expectedOutput);
   });
 });

@@ -36,12 +36,35 @@ export const padWithZero = (value: number, maxLength: number) => {
   return value.toString().padStart(maxLength, '0');
 };
 
+export const invalidInputCharactersRegex = /[^a-zA-Z0-9(),\-.'\u2019\s\u00a0ÀÁÂÄÇÈÉÊËÌÍÎÏÒÓÔÖÙÚÛÜÝàáâäçèéêëìíîïòóôöùúûüýÿ]/g;
+
 /**
+ * Checks if the input string contains only valid characters.
  *
- * @param input - The string value of the input field to be validated
- * @returns Boolean indicating whether the input contains all valid characters
+ * @param value - The input string to be checked.
+ * @returns - Returns true if the input contains only valid characters, otherwise false.
  */
-export function isAllValidInputCharacters(input: string): boolean {
-  const validCharactersRegex = /^[a-zA-Z0-9'(),\-.ÀÁÂÄÇÈÉÊËÌÍÎÏÒÓÔÖÙÚÛÜÝàáâäçèéêëìíîïòóôöùúûüýÿ\u00a0 ]+$/;
-  return validCharactersRegex.test(input);
+export function isAllValidInputCharacters(value: string) {
+  const invalidCharacters = value.match(invalidInputCharactersRegex);
+  return invalidCharacters == null;
+}
+
+/**
+ * Removes invalid characters from the input string based on a predefined regular expression.
+ *
+ * @param value - The input string to be filtered.
+ * @returns - The filtered string with invalid characters removed.
+ */
+export function removeInvalidInputCharacters(value: string) {
+  return value.replace(invalidInputCharactersRegex, '');
+}
+
+/**
+ * Normalizes hyphens in the input string by replacing sequences of two or more hyphens with a single hyphen.
+ *
+ * @param str - The input string to normalize.
+ * @returns - The normalized string with sequences of hyphens replaced by a single hyphen.
+ */
+export function normalizeHyphens(str: string) {
+  return str.replace(/-{2,}/g, '-');
 }
