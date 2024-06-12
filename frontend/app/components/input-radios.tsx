@@ -1,5 +1,7 @@
 import type { ComponentProps, ReactNode } from 'react';
 
+import { Except } from 'type-fest';
+
 import { InputError } from './input-error';
 import { InputHelp } from './input-help';
 import { InputRadio } from './input-radio';
@@ -13,7 +15,7 @@ export interface InputRadiosProps {
   helpMessageSecondary?: React.ReactNode;
   helpMessageSecondaryClassName?: string;
   id: string;
-  options: Omit<ComponentProps<typeof InputRadio>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-required' | 'id' | 'name' | 'required'>[];
+  options: Except<ComponentProps<typeof InputRadio>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-required' | 'id' | 'name' | 'required'>[];
   legend: ReactNode;
   name: string;
   required?: boolean;

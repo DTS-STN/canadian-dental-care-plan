@@ -1,5 +1,7 @@
 import type { ComponentProps, ReactNode } from 'react';
 
+import { Except } from 'type-fest';
+
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputError } from '~/components/input-error';
 import { InputHelp } from '~/components/input-help';
@@ -13,7 +15,7 @@ export interface InputCheckboxesProps {
   helpMessageSecondary?: React.ReactNode;
   helpMessageSecondaryClassName?: string;
   id: string;
-  options: Omit<ComponentProps<typeof InputCheckbox>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-required' | 'id' | 'name' | 'required'>[];
+  options: Except<ComponentProps<typeof InputCheckbox>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-required' | 'id' | 'name' | 'required'>[];
   legend: ReactNode;
   name: string;
   required?: boolean;

@@ -1,10 +1,12 @@
 import { useMatches, useParams } from '@remix-run/react';
 
+import { Except } from 'type-fest';
+
 import type { InlineLinkProps } from '~/components/inline-link';
 import { InlineLink } from '~/components/inline-link';
 import { getAltLanguage } from '~/utils/locale-utils';
 
-export type LanguageSwitcherProps = Omit<InlineLinkProps, 'to' | 'reloadDocument'>;
+export type LanguageSwitcherProps = Except<InlineLinkProps, 'to' | 'reloadDocument'>;
 
 /**
  * Component that can be used to switch from one language to another.

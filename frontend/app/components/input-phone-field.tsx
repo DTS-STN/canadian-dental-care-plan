@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { E164Number } from 'libphonenumber-js';
 import PhoneInput from 'react-phone-number-input/input';
+import { Except } from 'type-fest';
 
 import { InputError } from './input-error';
 import { InputHelp } from './input-help';
@@ -13,8 +14,8 @@ const inputDisabledClassName = 'disabled:bg-gray-100 disabled:pointer-events-non
 const inputReadOnlyClassName = 'read-only:bg-gray-100 read-only:pointer-events-none read-only:cursor-not-allowed read-only:opacity-70';
 const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
-export interface InputPhoneFieldProps extends Omit<React.ComponentProps<typeof PhoneInput>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children'> {
-  defaultValue?: string;
+export interface InputPhoneFieldProps extends Except<React.ComponentProps<typeof PhoneInput>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children' | 'onChange' | 'value'> {
+  defaultValue: string;
   errorMessage?: string;
   helpMessagePrimary?: React.ReactNode;
   helpMessagePrimaryClassName?: string;
@@ -27,7 +28,7 @@ export interface InputPhoneFieldProps extends Omit<React.ComponentProps<typeof P
 
 export function InputPhoneField(props: InputPhoneFieldProps) {
   const { 'aria-describedby': ariaDescribedby, className, defaultValue, defaultCountry, errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, required, ...restProps } = props;
-  const [value, setValue] = useState(defaultValue);
+  const [value, setValue] = useState<string | undefined>(defaultValue);
 
   const inputWrapperId = `input-phone-field-${id}`;
   const inputErrorId = `${inputWrapperId}-error`;
@@ -72,9 +73,9 @@ export function InputPhoneField(props: InputPhoneFieldProps) {
         defaultCountry={defaultCountry ?? 'CA'}
         id={id}
         className={cn(inputBaseClassName, inputDisabledClassName, inputReadOnlyClassName, errorMessage && inputErrorClassName, className)}
-        onChange={handleOnPhoneInputChange}
         required={required}
         value={value}
+        onChange={handleOnPhoneInputChange}
         {...restProps}
       />
       {helpMessageSecondary && (

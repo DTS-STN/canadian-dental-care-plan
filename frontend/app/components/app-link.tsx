@@ -4,6 +4,7 @@ import { Link, Params, useHref } from '@remix-run/react';
 
 import type { To } from 'react-router';
 import invariant from 'tiny-invariant';
+import { Except } from 'type-fest';
 
 import { NewTabIndicator } from '~/components/new-tab-indicator';
 import { getPathById } from '~/utils/route-utils';
@@ -11,7 +12,7 @@ import { getPathById } from '~/utils/route-utils';
 /**
  * Props for the AppLink component.
  */
-export interface AppLinkProps extends Omit<ComponentProps<typeof Link>, 'to'> {
+export interface AppLinkProps extends Except<ComponentProps<typeof Link>, 'to'> {
   newTabIndicator?: boolean;
   params?: Params;
   routeId?: string;

@@ -5,6 +5,7 @@ import { json } from '@remix-run/node';
 import { useParams } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
+import { Except } from 'type-fest';
 
 import pageIds from '../page-ids.json';
 import { AppLink, AppLinkProps } from '~/components/app-link';
@@ -98,7 +99,7 @@ export default function Index() {
   );
 }
 
-interface CardLinkProps extends Omit<AppLinkProps, 'className' | 'title'> {
+interface CardLinkProps extends Except<AppLinkProps, 'className' | 'title'> {
   children: ReactNode;
   inProgress?: boolean;
   title: ReactNode;

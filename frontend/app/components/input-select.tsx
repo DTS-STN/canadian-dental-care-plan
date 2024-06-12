@@ -1,6 +1,8 @@
 import { forwardRef } from 'react';
 import type { ComponentProps, ReactNode } from 'react';
 
+import { Except } from 'type-fest';
+
 import { InputError } from './input-error';
 import { InputHelp } from './input-help';
 import { InputLabel } from './input-label';
@@ -11,13 +13,13 @@ const inputBaseClassName = 'block rounded-lg border-gray-500 focus:border-blue-5
 const inputDisabledClassName = 'disabled:bg-gray-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-70';
 const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
-export interface InputSelectProps extends Omit<ComponentProps<'select'>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required'> {
+export interface InputSelectProps extends Except<ComponentProps<'select'>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required'> {
   errorMessage?: string;
   helpMessage?: ReactNode;
   id: string;
   label: string;
   name: string;
-  options: Omit<ComponentProps<typeof InputOption>, 'id'>[];
+  options: Except<ComponentProps<typeof InputOption>, 'id'>[];
 }
 
 const InputSelect = forwardRef<HTMLSelectElement, InputSelectProps>((props, ref) => {

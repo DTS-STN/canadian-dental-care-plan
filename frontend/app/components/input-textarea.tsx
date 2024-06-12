@@ -1,5 +1,7 @@
 import { forwardRef } from 'react';
 
+import { Except } from 'type-fest';
+
 import { InputError } from './input-error';
 import { InputHelp } from './input-help';
 import { InputLabel } from '~/components/input-label';
@@ -10,7 +12,7 @@ const inputDisabledClassName = 'disabled:bg-gray-100 disabled:pointer-events-non
 const inputReadOnlyClassName = 'read-only:bg-gray-100 read-only:pointer-events-none read-only:cursor-not-allowed read-only:opacity-70';
 const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
-export interface InputTextareaProps extends Omit<React.ComponentProps<'textarea'>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required'> {
+export interface InputTextareaProps extends Except<React.ComponentProps<'textarea'>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required'> {
   errorMessage?: string;
   helpMessage?: React.ReactNode;
   id: string;

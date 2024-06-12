@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 
+import { Except } from 'type-fest';
+
 import { cn } from '~/utils/tw-utils';
 
 const inputBaseClassName = 'h-4 w-4 border-gray-500 bg-gray-50 text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500';
@@ -7,7 +9,7 @@ const inputDisabledClassName = 'pointer-events-none cursor-not-allowed opacity-7
 const inputErrorClassName = 'border-red-500 text-red-700 focus:border-red-500 focus:ring-red-500';
 const inputReadOnlyClassName = 'pointer-events-none cursor-not-allowed opacity-70';
 
-export interface InputRadioProps extends Omit<React.ComponentProps<'input'>, 'aria-labelledby' | 'children' | 'type'> {
+export interface InputRadioProps extends Except<React.ComponentProps<'input'>, 'aria-labelledby' | 'children' | 'type'> {
   append?: ReactNode;
   appendClassName?: string;
   children: ReactNode;

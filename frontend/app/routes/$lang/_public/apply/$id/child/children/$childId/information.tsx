@@ -6,6 +6,7 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
+import { Except } from 'type-fest';
 import { z } from 'zod';
 
 import pageIds from '../../../../../../page-ids.json';
@@ -133,7 +134,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         ...val,
         dateOfBirth: `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`,
       };
-    }) satisfies z.ZodType<Omit<ChildInformationState, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>>;
+    }) satisfies z.ZodType<Except<ChildInformationState, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>>;
 
   const childSinSchema = z
     .object({

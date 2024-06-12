@@ -3,6 +3,7 @@ import { Params } from '@remix-run/react';
 
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns';
+import { Except } from 'type-fest';
 import { z } from 'zod';
 
 import { getAgeFromDateString } from '~/utils/date-utils';
@@ -172,8 +173,8 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
 interface SaveStateArgs {
   params: Params;
   session: Session;
-  state: Partial<Omit<ApplyState, 'id' | 'lastUpdatedOn'>>;
-  remove?: keyof Omit<ApplyState, 'id' | 'lastUpdatedOn'>;
+  state: Partial<Except<ApplyState, 'id' | 'lastUpdatedOn'>>;
+  remove?: keyof Except<ApplyState, 'id' | 'lastUpdatedOn'>;
 }
 
 /**
