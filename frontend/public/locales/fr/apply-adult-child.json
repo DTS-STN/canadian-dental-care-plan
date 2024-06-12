@@ -23,7 +23,8 @@
       "marital-status-no-partner-information": "Si vous êtes marié ou vivez en conjoint de fait, vous devez saisir leurs informations sur la page suivante. Sélectionnez votre état civil et appuyez sur «\u00a0Enregistrer\u00a0».",
       "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789 ",
       "sin-valid": "Le NAS doit être valide",
-      "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
+      "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique",
+      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés : apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
     }
   },
   "children": {
@@ -91,7 +92,8 @@
         "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
         "date-of-birth-year-required": "La date de naissance doit inclure une année",
         "has-social-insurance-number": "Sélectionnez si l'enfant a un NAS",
-        "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant"
+        "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant",
+        "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés : apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
       }
     },
     "dental-insurance": {
@@ -592,7 +594,8 @@
       "last-name-required": "Entrez le nom de famille",
       "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789 ",
       "sin-valid": "Le NAS doit être valide",
-      "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique"
+      "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique",
+      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés : apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
     }
   },
   "review-adult-information": {

@@ -23,7 +23,8 @@
       "marital-status-no-partner-information": "If you are married or in a common-law relationship you must enter their information on the next page. Select your marital status and press 'Save'.",
       "sin-required": "Enter 9-digit SIN, for example 123 456 789",
       "sin-valid": "Must be a valid SIN",
-      "sin-unique": "The Social Insurance Number (SIN) must be unique"
+      "sin-unique": "The Social Insurance Number (SIN) must be unique",
+      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
     }
   },
   "children": {
@@ -91,7 +92,8 @@
         "date-of-birth-year-number": "Year must be a number, for example 1950",
         "date-of-birth-year-required": "Date of birth must include a year",
         "has-social-insurance-number": "Select whether the child has a SIN",
-        "is-parent": "Select whether you are the parent or legal guardian of the child"
+        "is-parent": "Select whether you are the parent or legal guardian of the child",
+        "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
       }
     },
     "dental-insurance": {
@@ -592,7 +594,8 @@
       "last-name-required": "Enter last name",
       "sin-required": "Enter 9-digit SIN, for example 123 456 789",
       "sin-valid": "Must be a valid SIN",
-      "sin-unique": "The Social Insurance Number (SIN) must be unique"
+      "sin-unique": "The Social Insurance Number (SIN) must be unique",
+      "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
     }
   },
   "review-adult-information": {

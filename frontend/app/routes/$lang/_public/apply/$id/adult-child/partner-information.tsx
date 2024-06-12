@@ -28,6 +28,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin } from '~/utils/sin-utils';
+import { isAllValidInputCharacters } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
 export const handle = {
@@ -86,8 +87,8 @@ export async function action({ context: { session }, params, request }: ActionFu
         .int()
         .positive(),
       dateOfBirth: z.string(),
-      firstName: z.string().trim().min(1, t('apply-adult-child:partner-information.error-message.first-name-required')).max(100),
-      lastName: z.string().trim().min(1, t('apply-adult-child:partner-information.error-message.last-name-required')).max(100),
+      firstName: z.string().trim().min(1, t('apply-adult-child:partner-information.error-message.first-name-required')).max(100).refine(isAllValidInputCharacters, t('apply-adult-child:partner-information.error-message.characters-valid')),
+      lastName: z.string().trim().min(1, t('apply-adult-child:partner-information.error-message.last-name-required')).max(100).refine(isAllValidInputCharacters, t('apply-adult-child:partner-information.error-message.characters-valid')),
       socialInsuranceNumber: z
         .string()
         .trim()
