@@ -1,5 +1,6 @@
 package ca.gov.dtsstn.cdcp.api.web.v1.controller;
 
+import java.util.List;
 import org.mapstruct.factory.Mappers;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
@@ -15,6 +16,7 @@ import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
 import ca.gov.dtsstn.cdcp.api.web.json.JsonPatchProcessor;
+import ca.gov.dtsstn.cdcp.api.web.v1.model.UserAttributeModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.UserCreateModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.UserModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.mapper.UserModelMapper;
@@ -88,20 +90,13 @@ public class UsersController {
 		}
 	}
 
-	@PostMapping({"/{userId}"})
+	@PostMapping
 	@Operation(summary = "Create a new user ")
-	public void createUserByRaoidcUserIdAndEmail(
-		@NotBlank(message = "userId must not be null or blank")
-		@Parameter(description = "The id of the user.", example = "00000000-0000-0000-0000-000000000000", required = true)
-			@PathVariable String userId,
+	public void createUserByEmailAndUserAttributes(
 
 		@Validated @RequestBody UserCreateModel user) {
+			List<UserAttributeModel> userAttributesModels = user.getUserAttributeModel();
 
-			userService.createUser(user.getEmail(), userId);
-	}
-	
-	public void createUserByEmail(){
-
-
+			userService.createUser(user.getEmail(), userAttributesModels);
 	}
 }

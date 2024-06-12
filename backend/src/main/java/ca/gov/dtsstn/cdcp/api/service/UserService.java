@@ -1,6 +1,10 @@
 package ca.gov.dtsstn.cdcp.api.service;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -21,6 +25,8 @@ import ca.gov.dtsstn.cdcp.api.data.entity.ConfirmationCodeEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.entity.LanguageEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.entity.SubscriptionEntity;
 import ca.gov.dtsstn.cdcp.api.data.entity.SubscriptionEntityBuilder;
+import ca.gov.dtsstn.cdcp.api.data.entity.UserAttributeEntity;
+import ca.gov.dtsstn.cdcp.api.data.entity.UserAttributeEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.entity.UserEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.repository.AlertTypeRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.LanguageRepository;
@@ -31,7 +37,7 @@ import ca.gov.dtsstn.cdcp.api.service.domain.User;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.ConfirmationCodeMapper;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.SubscriptionMapper;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.UserMapper;
-
+import ca.gov.dtsstn.cdcp.api.web.v1.model.UserAttributeModel;
 
 @Service
 @Transactional
@@ -199,10 +205,17 @@ public class UserService {
 		return true;
 	}
 
-	public User createUser(String userEmail, String raoidcUserId){
-		//Lets assume the email has already been checked to make sure its a valid one...
+	public User createUser(String userEmail, List<UserAttributeModel> userAttributesModel){
+		//Verify Email
 		Assert.hasText(userEmail, "userEmail is required; it must not be null or blank");
-		return userMapper.toUser(userRepository.save(new UserEntityBuilder().email(userEmail).id(raoidcUserId).build()));
+
+		Collection<UserAttributeEntity> userAttributesCollection = new ArrayList<UserAttributeEntity>();
+		
+		for(UserAttributeModel e : userAttributesModel){
+			userAttributesCollection.add(new UserAttributeEntityBuilder().name(e.getName()).value(e.getValue()).build());
+		}
+		return userMapper.toUser(userRepository.save(new UserEntityBuilder().email(userEmail)
+			.userAttributes(userAttributesCollection).build()));
 	}
 
 	private Predicate<SubscriptionEntity> byAlertTypeId(String alertTypeId) {
@@ -224,5 +237,5 @@ public class UserService {
 		Assert.notNull(instant, "instant is required; it must not be null");
 		return confirmationCode -> confirmationCode.getExpiryDate().isAfter(instant);
 	}
-
+	
 }
