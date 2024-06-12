@@ -1,7 +1,88 @@
 import { z } from 'zod';
 
-// TODO some fields in this schema aren't being used as personal information and can be removed
 export const getApplicantResponseSchema = z.object({
+  BenefitApplication: z.object({
+    Applicant: z
+      .object({
+        ClientIdentification: z
+          .object({
+            IdentificationID: z.string().optional(),
+            IdentificationCategoryText: z.string().optional(),
+          })
+          .array()
+          .optional(),
+        PersonBirthDate: z.object({
+          date: z.string().date().optional(),
+        }),
+        PersonContactInformation: z
+          .object({
+            EmailAddress: z
+              .object({
+                EmailAddressID: z.string().optional(),
+              })
+              .array(),
+            TelephoneNumber: z
+              .object({
+                FullTelephoneNumber: z.object({
+                  TelephoneNumberFullID: z.string().optional(),
+                }),
+                TelephoneNumberCategoryCode: z.object({
+                  ReferenceDataName: z.string().optional(),
+                }),
+              })
+              .array(),
+            Address: z
+              .object({
+                AddressCategoryCode: z.object({
+                  ReferenceDataName: z.string().optional(),
+                }),
+                AddressStreet: z.object({
+                  StreetName: z.string().optional(),
+                }),
+                AddressSecondaryUnitText: z.string().optional(),
+                AddressCityName: z.string().optional(),
+                AddressProvince: z.object({
+                  ProvinceCode: z.object({
+                    ReferenceDataID: z.string().optional(),
+                  }),
+                }),
+                AddressCountry: z.object({
+                  CountryCode: z.object({
+                    ReferenceDataID: z.string().optional(),
+                  }),
+                }),
+                AddressPostalCode: z.string().optional(),
+              })
+              .array(),
+          })
+          .optional()
+          .array(),
+        PersonMaritalStatus: z.object({
+          StatusCode: z.object({
+            ReferenceDataID: z.string().optional(),
+          }),
+        }),
+        PersonName: z
+          .object({
+            PersonSurName: z.string().optional(),
+            PersonGivenName: z.string().array().optional(),
+          })
+          .array()
+          .optional(),
+        PreferredMethodCommunicationCode: z
+          .object({
+            ReferenceDataID: z.string().optional(),
+          })
+          .optional(),
+      })
+      .optional(),
+  }),
+});
+
+export type GetApplicantResponse = z.infer<typeof getApplicantResponseSchema>;
+
+// TODO definition for request to update applicant is not yet available from Interop; Using the full structure of the response for getting applicants for now
+export const updateApplicantRequestSchema = z.object({
   BenefitApplication: z.object({
     Applicant: z
       .object({
@@ -140,11 +221,6 @@ export const getApplicantResponseSchema = z.object({
   }),
 });
 
-export type GetApplicantResponse = z.infer<typeof getApplicantResponseSchema>;
-
-// TODO definition for request to update applicant is not yet available from Interop; Using getApplicantResponseSchema for now
-export const updateApplicantRequestSchema = getApplicantResponseSchema;
-
 export type UpdateApplicantRequest = z.infer<typeof updateApplicantRequestSchema>;
 
 export const personalInformationSchema = z.object({
@@ -185,7 +261,7 @@ export const personalInformationSchema = z.object({
   privateDentalPlanId: z.string().optional(),
   federalDentalPlanId: z.string().optional(),
   provincialTerritorialDentalPlanId: z.string().optional(),
-  benefitApplicationIdentification: z.string().optional(),
+  benefitApplicationId: z.string().optional(),
 });
 
 export type PersonalInformation = z.infer<typeof personalInformationSchema>;
