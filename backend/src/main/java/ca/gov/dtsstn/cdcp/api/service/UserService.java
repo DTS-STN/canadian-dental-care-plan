@@ -141,11 +141,12 @@ public class UserService {
 
 		log.debug("Fetching user [{}] from repository", userId);
 		final var user = userRepository.findById(userId).orElseThrow();
+
 		if (StringUtils.equals(userPatch.getEmail(), user.getEmail()) == false) {
 			user.setEmailVerified(false);
-
-			userRepository.save(userMapper.update(user, userPatch));
 		}
+
+		userRepository.save(userMapper.update(user, userPatch));
 	}
 
 	public void updateSubscriptionForUser(String userId, String subscriptionId, String languageId) {
