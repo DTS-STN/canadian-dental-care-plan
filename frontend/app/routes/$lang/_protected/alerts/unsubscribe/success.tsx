@@ -61,10 +61,10 @@ export default function UnsubscribeAlertsSuccess() {
     <div className="max-w-prose">
       <p className="mb-4">{t('alerts:success.unsubscribe-successful')}</p>
       <p className="mb-4">
-        <Trans ns={handle.i18nNamespaces} i18nKey="alerts:success.subscribe-again" components={{ subscribelink }} />
+        <Trans ns={handle.i18nNamespaces} i18nKey="alerts:success.subscribe-again" components={{ subscribelink }} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:completing the subscription process - Unsubscribe Confirmation click" />
       </p>
       {userOrigin && (
-        <ButtonLink id="back-button" to={userOrigin.to}>
+        <ButtonLink id="back-button" to={userOrigin.to} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Return to dashboard - Unsubscribe Confirmation click">
           {t('alerts:success.return-dashboard')}
         </ButtonLink>
       )}

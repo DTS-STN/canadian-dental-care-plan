@@ -215,13 +215,13 @@ export default function ConfirmSubscription() {
           <InputField id="confirmationCode" label={t('alerts:confirm.confirmation-code-label')} maxLength={100} name="confirmationCode" errorMessage={errorMessages.confirmationCode} />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={userOrigin?.to} params={params} disabled={isSubmitting}>
+          <ButtonLink id="back-button" to={userOrigin?.to} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Back - Confirmation code click">
             {t('alerts:confirm.back')}
           </ButtonLink>
-          <Button id="new-code-button" name="action" value={ConfirmationCodeAction.NewCode} variant="alternative" disabled={isSubmitting}>
+          <Button id="new-code-button" name="action" value={ConfirmationCodeAction.NewCode} variant="alternative" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Request New Confirmation Code - Confirmation code click">
             {t('alerts:confirm.request-new-code')}
           </Button>
-          <Button id="submit-button" name="action" value={ConfirmationCodeAction.Submit} variant="primary" disabled={isSubmitting}>
+          <Button id="submit-button" name="action" value={ConfirmationCodeAction.Submit} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Submit Confirmation Code - Confirmation code click">
             {t('alerts:confirm.submit-code')}
             <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>

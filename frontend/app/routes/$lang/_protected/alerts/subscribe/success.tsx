@@ -53,8 +53,8 @@ export default function SuccessSubscription() {
   const { alertSubscription } = useLoaderData<typeof loader>();
   const params = useParams();
 
-  const personalInformationLink = <InlineLink routeId="$lang/_protected/personal-information/index" params={params} />;
-  const homeLink = <InlineLink routeId="$lang/_protected/home" params={params} />;
+  const personalInformationLink = <InlineLink routeId="$lang/_protected/personal-information/index" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Manage my Personal Information - Subscription Confirmation click" />;
+  const homeLink = <InlineLink routeId="$lang/_protected/home" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Home - Subscription Confirmation click" />;
   return (
     <>
       <ContextualAlert type="success">
