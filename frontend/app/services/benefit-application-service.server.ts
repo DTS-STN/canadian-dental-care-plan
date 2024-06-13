@@ -104,7 +104,7 @@ function createBenefitApplicationService() {
     const applications = toBenefitApplication(applicationListSchema.parse(data)); // TODO: Update schema once application-history service becomes avaliable
     return sort(applications, {
       order: sortOrder,
-      by: (item) => item.submittedOn ?? 'undefined',
+      by: (item) => item.submittedOn,
     });
   }
 

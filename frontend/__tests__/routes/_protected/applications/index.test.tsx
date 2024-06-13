@@ -52,7 +52,7 @@ vi.mock('~/services/benefit-application-service.server', () => ({
             disabilityTaxCredit: true,
             applicantInformation: {
               maritalStatus: '775170001',
-              firstname: 'Claudia Jean',
+              firstName: 'Claudia Jean',
               lastName: 'Cregg',
               socialInsuranceNumber: '723 435 814',
             },
@@ -107,7 +107,7 @@ vi.mock('~/services/benefit-application-service.server', () => ({
             disabilityTaxCredit: true,
             applicantInformation: {
               maritalStatus: '775170001',
-              firstname: 'Abigail',
+              firstName: 'Abigail',
               lastName: 'Bartlet',
               socialInsuranceNumber: '723 435 814',
             },

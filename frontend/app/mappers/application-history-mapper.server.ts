@@ -1,12 +1,12 @@
-import { Application } from '~/schemas/application-history-service-schemas.server';
+import { ApplicationResponse } from '~/schemas/application-history-service-schemas.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 
-export function toBenefitApplication(applications: Application[]) {
+export function toBenefitApplication(applications: ApplicationResponse[]) {
   return applications.map((application) => {
     return {
       id: application.ApplicationId,
-      submittedOn: application.SubmittedDate,
+      submittedOn: application.SubmittedDate ? application.SubmittedDate.replace(/\//g, '-') : '',
       status: application.ApplicationStatus,
       confirmationCode: application.ConfirmationCode,
       applicationDetails: application.Data.map((applicationDetails) => {
@@ -150,7 +150,7 @@ function toDentalBenefits(insurancePlan?: ToInsurancePlanArgs) {
 function toApplicantInformation(maritalStatus: string, firstName?: string, lastName?: string, sin?: string) {
   return {
     maritalStatus: maritalStatus,
-    firstname: firstName,
+    firstName: firstName,
     lastName: lastName,
     socialInsuranceNumber: sin,
   };
