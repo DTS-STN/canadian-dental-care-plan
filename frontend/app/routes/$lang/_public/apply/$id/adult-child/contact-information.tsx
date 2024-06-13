@@ -17,6 +17,7 @@ import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import { InputOptionProps } from '~/components/input-option';
 import { InputPhoneField } from '~/components/input-phone-field';
+import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
@@ -31,6 +32,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { isAllValidInputCharacters } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
 export const handle = {
@@ -94,19 +96,19 @@ export async function action({ context: { session }, params, request }: ActionFu
         .optional(),
       email: z.string().trim().max(64).optional(),
       confirmEmail: z.string().trim().max(64).optional(),
-      mailingAddress: z.string().trim().min(1, t('apply-adult-child:contact-information.error-message.mailing-address.address-required')).max(30),
-      mailingApartment: z.string().trim().max(30).optional(),
+      mailingAddress: z.string().trim().min(1, t('apply-adult-child:contact-information.error-message.mailing-address.address-required')).max(30).refine(isAllValidInputCharacters, t('apply-adult-child:contact-information.error-message.characters-valid')),
+      mailingApartment: z.string().trim().max(30).refine(isAllValidInputCharacters, t('apply-adult-child:contact-information.error-message.characters-valid')).optional(),
       mailingCountry: z.string().trim().min(1, t('apply-adult-child:contact-information.error-message.mailing-address.country-required')),
       mailingProvince: z.string().trim().min(1, t('apply-adult-child:contact-information.error-message.mailing-address.province-required')).optional(),
-      mailingCity: z.string().trim().min(1, t('apply-adult-child:contact-information.error-message.mailing-address.city-required')).max(100),
-      mailingPostalCode: z.string().trim().max(100).optional(),
+      mailingCity: z.string().trim().min(1, t('apply-adult-child:contact-information.error-message.mailing-address.city-required')).max(100).refine(isAllValidInputCharacters, t('apply-adult-child:contact-information.error-message.characters-valid')),
+      mailingPostalCode: z.string().trim().max(100).refine(isAllValidInputCharacters, t('apply-adult-child:contact-information.error-message.characters-valid')).optional(),
       copyMailingAddress: z.boolean(),
-      homeAddress: z.string().trim().max(30).optional(),
-      homeApartment: z.string().trim().max(30).optional(),
+      homeAddress: z.string().trim().max(30).refine(isAllValidInputCharacters, t('apply-adult-child:contact-information.error-message.characters-valid')).optional(),
+      homeApartment: z.string().trim().max(30).refine(isAllValidInputCharacters, t('apply-adult-child:contact-information.error-message.characters-valid')).optional(),
       homeCountry: z.string().trim().optional(),
       homeProvince: z.string().trim().optional(),
-      homeCity: z.string().trim().max(100).optional(),
-      homePostalCode: z.string().trim().max(100).optional(),
+      homeCity: z.string().trim().max(100).refine(isAllValidInputCharacters, t('apply-adult-child:contact-information.error-message.characters-valid')).optional(),
+      homePostalCode: z.string().trim().max(100).refine(isAllValidInputCharacters, t('apply-adult-child:contact-information.error-message.characters-valid')).optional(),
     })
     .superRefine((val, ctx) => {
       if (val.email ?? val.confirmEmail) {
@@ -442,7 +444,7 @@ export default function ApplyFlowPersonalInformation() {
           <fieldset className="mb-6">
             <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult-child:contact-information.mailing-address.header')}</legend>
             <div className="space-y-6">
-              <InputField
+              <InputSanitizeField
                 id="mailing-address"
                 name="mailingAddress"
                 className="w-full"
@@ -455,7 +457,7 @@ export default function ApplyFlowPersonalInformation() {
                 errorMessage={errorMessages['mailing-address']}
                 required
               />
-              <InputField
+              <InputSanitizeField
                 id="mailing-apartment"
                 name="mailingApartment"
                 className="w-full"
@@ -490,7 +492,7 @@ export default function ApplyFlowPersonalInformation() {
                 />
               )}
               <div className="grid items-end gap-6 md:grid-cols-2">
-                <InputField
+                <InputSanitizeField
                   id="mailing-city"
                   name="mailingCity"
                   className="w-full"
@@ -501,14 +503,14 @@ export default function ApplyFlowPersonalInformation() {
                   errorMessage={errorMessages['mailing-city']}
                   required
                 />
-                <InputField
+                <InputSanitizeField
                   id="mailing-postal-code"
                   name="mailingPostalCode"
                   className="w-full"
                   label={mailingPostalCodeRequired ? t('apply-adult-child:contact-information.address-field.postal-code') : t('apply-adult-child:contact-information.address-field.postal-code-optional')}
                   maxLength={100}
                   autoComplete="postal-code"
-                  defaultValue={defaultState?.mailingPostalCode}
+                  defaultValue={defaultState?.mailingPostalCode ?? ''}
                   errorMessage={errorMessages['mailing-postal-code']}
                   required={mailingPostalCodeRequired}
                 />
@@ -523,7 +525,7 @@ export default function ApplyFlowPersonalInformation() {
               </InputCheckbox>
               {!copyAddressChecked && (
                 <>
-                  <InputField
+                  <InputSanitizeField
                     id="home-address"
                     name="homeAddress"
                     className="w-full"
@@ -536,7 +538,7 @@ export default function ApplyFlowPersonalInformation() {
                     errorMessage={errorMessages['home-address']}
                     required
                   />
-                  <InputField
+                  <InputSanitizeField
                     id="home-apartment"
                     name="homeApartment"
                     className="w-full"
@@ -571,7 +573,7 @@ export default function ApplyFlowPersonalInformation() {
                     />
                   )}
                   <div className="mb-6 grid items-end gap-6 md:grid-cols-2">
-                    <InputField
+                    <InputSanitizeField
                       id="home-city"
                       name="homeCity"
                       className="w-full"
@@ -582,7 +584,7 @@ export default function ApplyFlowPersonalInformation() {
                       errorMessage={errorMessages['home-city']}
                       required
                     />
-                    <InputField
+                    <InputSanitizeField
                       id="home-postal-code"
                       name="homePostalCode"
                       className="w-full"

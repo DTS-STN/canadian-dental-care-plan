@@ -333,7 +333,8 @@
       "email-required": "Entrez l'adresse courriel",
       "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
       "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@exemple.com",
-      "preferred-language-required": "Sélectionnez la langue de communication préférée"
+      "preferred-language-required": "Sélectionnez la langue de communication préférée",
+      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés : apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
     }
   },
   "dental-benefits": {
