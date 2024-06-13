@@ -4,6 +4,7 @@ import java.util.List;
 import org.immutables.value.Value.Immutable;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 
 @Immutable
@@ -14,6 +15,7 @@ public interface UserCreateModel {
 	@Email
 	String getEmail();
 
-	List<UserAttributeModel> getUserAttributes();
+	@Valid
+	List<UserAttributeCreateModel> getUserAttributes();
 
 }

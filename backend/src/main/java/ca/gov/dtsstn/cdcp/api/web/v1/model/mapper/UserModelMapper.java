@@ -13,6 +13,7 @@ import ca.gov.dtsstn.cdcp.api.web.v1.controller.ConfirmationCodesController;
 import ca.gov.dtsstn.cdcp.api.web.v1.controller.EmailValidationsController;
 import ca.gov.dtsstn.cdcp.api.web.v1.controller.SubscriptionsController;
 import ca.gov.dtsstn.cdcp.api.web.v1.controller.UsersController;
+import ca.gov.dtsstn.cdcp.api.web.v1.model.UserCreateModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.UserModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.UserPatchModel;
 import jakarta.annotation.Nullable;
@@ -46,6 +47,14 @@ public interface UserModelMapper {
 	@Mapping(target = "lastModifiedBy", ignore = true)
 	@Mapping(target = "lastModifiedDate", ignore = true)
 	@Nullable
-	User toDomainObject(@Nullable UserModel userModel);
+	User toDomain(@Nullable UserModel userModel);
+
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "createdBy", ignore = true)
+	@Mapping(target = "createdDate", ignore = true)
+	@Mapping(target = "lastModifiedBy", ignore = true)
+	@Mapping(target = "lastModifiedDate", ignore = true)
+	@Nullable
+	User toDomain(@Nullable UserCreateModel userCreateModel);
 
 }

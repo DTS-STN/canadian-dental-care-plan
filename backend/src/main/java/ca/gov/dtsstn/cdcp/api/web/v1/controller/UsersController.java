@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
-import ca.gov.dtsstn.cdcp.api.service.domain.mapper.UserAttributeMapper;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
 import ca.gov.dtsstn.cdcp.api.web.json.JsonPatchProcessor;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.UserCreateModel;
@@ -38,8 +37,6 @@ import jakarta.validation.constraints.NotBlank;
 public class UsersController {
 
 	private final UserModelMapper userModelMapper = Mappers.getMapper(UserModelMapper.class);
-	private final UserAttributeMapper userAttributeMapper = Mappers.getMapper(UserAttributeMapper.class);
-
 	private final UserService userService;
 
 	private final JsonPatchProcessor jsonPatchProcessor;
@@ -96,11 +93,7 @@ public class UsersController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@Operation(summary = "Create a new user")
 	public void createUserByEmailAndUserAttributes(@Validated @RequestBody UserCreateModel userCreateModel) 
-	{
-		UserModel userModel = new UserModel();
-		userModel.setUserAttributes(userCreateModel.getUserAttributes());
-		userModel.setEmail(userCreateModel.getEmail());
-		
-		userService.createUser(userModelMapper.toDomainObject(userModel));
+	{		
+		userService.createUser(userModelMapper.toDomain(userCreateModel));
 	}
 }
