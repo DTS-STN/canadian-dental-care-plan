@@ -160,7 +160,7 @@ export default function ManageAlerts() {
     }
   }, [errorMessages]);
 
-  const unsubscribelink = <InlineLink routeId="$lang/_protected/alerts/unsubscribe/index" params={params} />;
+  const unsubscribelink = <InlineLink routeId="$lang/_protected/alerts/unsubscribe/index" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Unsubscribe from CDCP email alerts - Manage CDCP email alerts click" />;
 
   return (
     <>

@@ -159,11 +159,11 @@ export default function UnsubscribeAlerts() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <Button id="unsubscribe-button" variant="primary" disabled={isSubmitting}>
+          <Button id="unsubscribe-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Unsubscribe from CDCP email alerts - Unsubscribe from CDCP email alerts click">
             {t('alerts:unsubscribe.button.unsubscribe')}
             <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
-          <ButtonLink id="cancel-button" routeId="$lang/_protected/alerts/manage/index" params={params} disabled={isSubmitting}>
+          <ButtonLink id="cancel-button" routeId="$lang/_protected/alerts/manage/index" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Cancel - Unsubscribe from CDCP email alerts click">
             {t('alerts:unsubscribe.button.cancel')}
           </ButtonLink>
         </div>

@@ -183,10 +183,10 @@ export default function AlertsSubscribe() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={userOrigin?.to} params={params} disabled={isSubmitting}>
+          <ButtonLink id="back-button" to={userOrigin?.to} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Back - Subscribe to CDCP email alerts click">
             {t('alerts:subscribe.button.back')}
           </ButtonLink>
-          <Button id="subscribe-button" variant="primary" disabled={isSubmitting}>
+          <Button id="subscribe-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Subscribe - Subscribe to CDCP email alerts click">
             {t('alerts:subscribe.button.subscribe')}
             <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
