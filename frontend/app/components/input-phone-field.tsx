@@ -13,7 +13,7 @@ const inputDisabledClassName = 'disabled:bg-gray-100 disabled:pointer-events-non
 const inputReadOnlyClassName = 'read-only:bg-gray-100 read-only:pointer-events-none read-only:cursor-not-allowed read-only:opacity-70';
 const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
-export interface InputPhoneFieldProps extends Omit<React.ComponentProps<typeof PhoneInput>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children'> {
+export interface InputPhoneFieldProps extends OmitStrict<React.ComponentProps<typeof PhoneInput>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children' | 'value'> {
   defaultValue?: string;
   errorMessage?: string;
   helpMessagePrimary?: React.ReactNode;

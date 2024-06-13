@@ -11,7 +11,7 @@ import { getPathById } from '~/utils/route-utils';
 /**
  * Props for the AppLink component.
  */
-export interface AppLinkProps extends Omit<ComponentProps<typeof Link>, 'to'> {
+export interface AppLinkProps extends OmitStrict<ComponentProps<typeof Link>, 'to'> {
   newTabIndicator?: boolean;
   params?: Params;
   routeId?: string;

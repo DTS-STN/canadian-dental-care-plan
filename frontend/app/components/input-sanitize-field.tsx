@@ -12,10 +12,7 @@ const inputReadOnlyClassName = 'read-only:bg-gray-100 read-only:pointer-events-n
 const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
 export interface InputSanitizeFieldProps
-  extends Omit<
-    React.ComponentProps<typeof NumberFormatBase>,
-    'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'children' | 'value' | 'onChange' | 'format' | 'type' | 'removeFormatting' | 'isValidInputCharacter' | 'getCaretBoundary'
-  > {
+  extends OmitStrict<React.ComponentProps<typeof NumberFormatBase>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'value' | 'onChange' | 'format' | 'type' | 'removeFormatting' | 'isValidInputCharacter' | 'getCaretBoundary'> {
   defaultValue: string;
   errorMessage?: string;
   helpMessagePrimary?: React.ReactNode;

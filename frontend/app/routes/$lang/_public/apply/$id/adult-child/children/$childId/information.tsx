@@ -134,7 +134,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         ...val,
         dateOfBirth: `${dateOfBirthParts.year}-${dateOfBirthParts.month}-${dateOfBirthParts.day}`,
       };
-    }) satisfies z.ZodType<Omit<ChildInformationState, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>>;
+    }) satisfies z.ZodType<OmitStrict<ChildInformationState, 'hasSocialInsuranceNumber' | 'socialInsuranceNumber'>>;
 
   const childSinSchema = z
     .object({

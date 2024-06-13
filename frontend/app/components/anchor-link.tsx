@@ -7,7 +7,7 @@ import { scrollAndFocusFromAnchorLink } from '~/utils/link-utils';
  * It extends the ComponentProps<'a'> type, omitting the 'href' property,
  * and adds the required 'anchorElementId' property.
  */
-export interface AnchorLinkProps extends Omit<ComponentProps<'a'>, 'href'> {
+export interface AnchorLinkProps extends OmitStrict<ComponentProps<'a'>, 'href'> {
   anchorElementId: string;
 }
 

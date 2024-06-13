@@ -172,8 +172,8 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
 interface SaveStateArgs {
   params: Params;
   session: Session;
-  state: Partial<Omit<ApplyState, 'id' | 'lastUpdatedOn'>>;
-  remove?: keyof Omit<ApplyState, 'id' | 'lastUpdatedOn'>;
+  state: Partial<OmitStrict<ApplyState, 'id' | 'lastUpdatedOn'>>;
+  remove?: keyof OmitStrict<ApplyState, 'id' | 'lastUpdatedOn'>;
 }
 
 /**
