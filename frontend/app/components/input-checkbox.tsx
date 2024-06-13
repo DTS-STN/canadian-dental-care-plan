@@ -8,7 +8,7 @@ const inputDisabledClassName = 'pointer-events-none cursor-not-allowed opacity-7
 const inputErrorClassName = 'border-red-500 text-red-700 focus:border-red-500 focus:ring-red-500';
 const inputReadOnlyClassName = 'pointer-events-none cursor-not-allowed opacity-70';
 
-export interface InputCheckboxProps extends Omit<React.ComponentProps<'input'>, 'aria-labelledby' | 'children' | 'type'> {
+export interface InputCheckboxProps extends OmitStrict<React.ComponentProps<'input'>, 'aria-labelledby' | 'children' | 'type'> {
   append?: ReactNode;
   appendClassName?: string;
   children: ReactNode;

@@ -13,7 +13,7 @@ export interface InputRadiosProps {
   helpMessageSecondary?: React.ReactNode;
   helpMessageSecondaryClassName?: string;
   id: string;
-  options: Omit<ComponentProps<typeof InputRadio>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-required' | 'id' | 'name' | 'required'>[];
+  options: OmitStrict<ComponentProps<typeof InputRadio>, 'aria-describedby' | 'aria-errormessage' | 'aria-invalid' | 'aria-required' | 'id' | 'name' | 'required'>[];
   legend: ReactNode;
   name: string;
   required?: boolean;

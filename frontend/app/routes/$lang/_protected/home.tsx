@@ -98,7 +98,7 @@ export default function Index() {
   );
 }
 
-interface CardLinkProps extends Omit<AppLinkProps, 'className' | 'title'> {
+interface CardLinkProps extends OmitStrict<AppLinkProps, 'className' | 'title'> {
   children: ReactNode;
   inProgress?: boolean;
   title: ReactNode;
