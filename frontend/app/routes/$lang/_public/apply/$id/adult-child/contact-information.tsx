@@ -26,8 +26,9 @@ import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { localizeAndSortRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
@@ -49,10 +50,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const lookupService = getLookupService();
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = getLocale(request);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = getEnv();
 
   const countryList = lookupService.getAllCountries();
-  const regionList = lookupService.getAllRegions();
+  const regionList = localizeAndSortRegions(lookupService.getAllRegions(), locale);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:contact-information.page-title') }) };
@@ -328,14 +330,10 @@ export default function ApplyFlowPersonalInformation() {
     .sort((country1, country2) => (country1.value === CANADA_COUNTRY_ID ? -1 : country2.value === CANADA_COUNTRY_ID ? 1 : 0)); //Sort by Canada first
 
   // populate mailing region/province/state list with selected country or current address country
-  const mailingRegions: InputOptionProps[] = mailingCountryRegions
-    .map(({ provinceTerritoryStateId, nameEn, nameFr }) => {
-      return {
-        children: i18n.language === 'fr' ? nameFr : nameEn,
-        value: provinceTerritoryStateId,
-      };
-    })
-    .sort((region1, region2) => region1.children.localeCompare(region2.children));
+  const mailingRegions: InputOptionProps[] = mailingCountryRegions.map(({ provinceTerritoryStateId, name }) => ({
+    children: name,
+    value: provinceTerritoryStateId,
+  }));
 
   useEffect(() => {
     const filteredRegions = regionList.filter((region) => region.countryId === selectedHomeCountry);
@@ -347,14 +345,10 @@ export default function ApplyFlowPersonalInformation() {
   };
 
   // populate home region/province/state list with selected country or current address country
-  const homeRegions: InputOptionProps[] = homeCountryRegions
-    .map(({ provinceTerritoryStateId, nameEn, nameFr }) => {
-      return {
-        children: i18n.language === 'fr' ? nameFr : nameEn,
-        value: provinceTerritoryStateId,
-      };
-    })
-    .sort((region1, region2) => region1.children.localeCompare(region2.children));
+  const homeRegions: InputOptionProps[] = homeCountryRegions.map(({ provinceTerritoryStateId, name }) => ({
+    children: name,
+    value: provinceTerritoryStateId,
+  }));
 
   const dummyOption: InputOptionProps = { children: t('apply-adult-child:contact-information.address-field.select-one'), value: '' };
 

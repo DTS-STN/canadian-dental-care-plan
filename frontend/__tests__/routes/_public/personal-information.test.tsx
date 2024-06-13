@@ -27,11 +27,7 @@ vi.mock('~/services/lookup-service.server', () => ({
     getAllRegions: vi.fn().mockReturnValue([
       {
         code: 'SP',
-        country: {
-          code: 'SUP',
-          nameEn: 'super country',
-          nameFr: '(FR) super country',
-        },
+        countryId: 'CAN',
         nameEn: 'sample',
         nameFr: '(FR) sample',
       },
@@ -75,13 +71,8 @@ describe('_public.apply.id.contact-information', () => {
         regionList: [
           {
             code: 'SP',
-            country: {
-              code: 'SUP',
-              nameEn: 'super country',
-              nameFr: '(FR) super country',
-            },
-            nameEn: 'sample',
-            nameFr: '(FR) sample',
+            countryId: 'CAN',
+            name: 'sample',
           },
         ],
         CANADA_COUNTRY_ID: 'CAN',
