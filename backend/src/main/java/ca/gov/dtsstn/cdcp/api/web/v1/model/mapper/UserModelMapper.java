@@ -47,14 +47,6 @@ public interface UserModelMapper {
 	@Mapping(target = "lastModifiedBy", ignore = true)
 	@Mapping(target = "lastModifiedDate", ignore = true)
 	@Nullable
-	User toDomain(@Nullable UserModel userModel);
-
-	@Mapping(target = "id", ignore = true)
-	@Mapping(target = "createdBy", ignore = true)
-	@Mapping(target = "createdDate", ignore = true)
-	@Mapping(target = "lastModifiedBy", ignore = true)
-	@Mapping(target = "lastModifiedDate", ignore = true)
-	@Nullable
 	User toDomain(@Nullable UserCreateModel userCreateModel);
 
 }
