@@ -73,7 +73,13 @@ export default function ApplyForYourself() {
         <p>{t('apply-adult-child:eligibility.apply-yourself.eligibility-info')}</p>
         <p>{t('apply-adult-child:eligibility.apply-yourself.eligibility-2025')}</p>
         <p>
-          <InlineLink to={t('apply-adult-child:eligibility.apply-yourself.when-to-apply-href')} className="external-link" newTabIndicator target="_blank">
+          <InlineLink
+            to={t('apply-adult-child:eligibility.apply-yourself.when-to-apply-href')}
+            className="external-link"
+            newTabIndicator
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Find out when you can apply for the Canadian Dental Care Plan - Apply for yourself click"
+            target="_blank"
+          >
             {t('apply-adult-child:eligibility.apply-yourself.when-to-apply')}
           </InlineLink>
         </p>

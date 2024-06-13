@@ -138,11 +138,29 @@ export default function StatusChecker() {
     fetcher.submit(formData, { method: 'POST' });
   }
 
-  const hcaptchaTermsOfService = <InlineLink to={t('status:links.hcaptcha')} className="external-link" newTabIndicator target="_blank" />;
-  const microsoftDataPrivacyPolicy = <InlineLink to={t('status:links.microsoft-data-privacy-policy')} className="external-link" newTabIndicator target="_blank" />;
-  const microsoftServiceAgreement = <InlineLink to={t('status:links.microsoft-service-agreement')} className="external-link" newTabIndicator target="_blank" />;
-  const fileacomplaint = <InlineLink to={t('status:links.file-complaint')} className="external-link" newTabIndicator target="_blank" />;
-  const canadaTermsConditions = <InlineLink to={t('status:links.canada-terms-conditions')} className="external-link" newTabIndicator target="_blank" />;
+  const hcaptchaTermsOfService = <InlineLink to={t('status:links.hcaptcha')} className="external-link" newTabIndicator data-gc-analytics-customclick="ESDC-EDSC: Canadian Dental Care Plan:Terms of Service - Status Checker click" target="_blank" />;
+  const microsoftDataPrivacyPolicy = (
+    <InlineLink
+      to={t('status:links.microsoft-data-privacy-policy')}
+      className="external-link"
+      newTabIndicator
+      data-gc-analytics-customclick="ESDC-EDSC: Canadian Dental Care Plan:Microsoft Data Privacy Policy & Privacy Principles - Status Checker click"
+      target="_blank"
+    />
+  );
+  const microsoftServiceAgreement = (
+    <InlineLink
+      to={t('status:links.microsoft-service-agreement')}
+      className="external-link"
+      newTabIndicator
+      data-gc-analytics-customclick="ESDC-EDSC: Canadian Dental Care Plan:Microsoft Corporation's Terms of Service Agreement - Status Checker click"
+      target="_blank"
+    />
+  );
+  const fileacomplaint = <InlineLink to={t('status:links.file-complaint')} className="external-link" newTabIndicator data-gc-analytics-customclick="ESDC-EDSC: Canadian Dental Care Plan:Report a concern - Status Checker click" target="_blank" />;
+  const canadaTermsConditions = (
+    <InlineLink to={t('status:links.canada-terms-conditions')} className="external-link" newTabIndicator data-gc-analytics-customclick="ESDC-EDSC: Canadian Dental Care Plan:Canada.ca website Terms and Conditions - Status Checker click" target="_blank" />
+  );
 
   return (
     <PublicLayout>

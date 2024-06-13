@@ -265,7 +265,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult:review-information.full-name-title')}>
                 <p>{`${userInfo.firstName} ${userInfo.lastName}`}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-full-name" routeId="$lang/_public/apply/$id/adult/applicant-information" params={params}>
+                  <InlineLink id="change-full-name" routeId="$lang/_public/apply/$id/adult/applicant-information" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Change full name - Review your information click">
                     {t('apply-adult:review-information.full-name-change')}
                   </InlineLink>
                 </div>
@@ -273,7 +273,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult:review-information.dob-title')}>
                 <p>{userInfo.birthday}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-date-of-birth" routeId="$lang/_public/apply/$id/adult/date-of-birth" params={params}>
+                  <InlineLink id="change-date-of-birth" routeId="$lang/_public/apply/$id/adult/date-of-birth" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Change date of birth - Review your information click">
                     {t('apply-adult:review-information.dob-change')}
                   </InlineLink>
                 </div>
@@ -281,7 +281,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult:review-information.sin-title')}>
                 <p>{formatSin(userInfo.sin)}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-sin" routeId="$lang/_public/apply/$id/adult/applicant-information" params={params}>
+                  <InlineLink id="change-sin" routeId="$lang/_public/apply/$id/adult/applicant-information" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Change SIN - Review your information click">
                     {t('apply-adult:review-information.sin-change')}
                   </InlineLink>
                 </div>
@@ -289,7 +289,12 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult:review-information.marital-title')}>
                 <p>{userInfo.maritalStatus}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-martial-status" routeId="$lang/_public/apply/$id/adult/applicant-information" params={params}>
+                  <InlineLink
+                    id="change-martial-status"
+                    routeId="$lang/_public/apply/$id/adult/applicant-information"
+                    params={params}
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Change marital status - Review your information click"
+                  >
                     {t('apply-adult:review-information.marital-change')}
                   </InlineLink>
                 </div>
@@ -303,7 +308,12 @@ export default function ReviewInformation() {
                 <DescriptionListItem term={t('apply-adult:review-information.full-name-title')}>
                   <p>{`${spouseInfo.firstName} ${spouseInfo.lastName}`}</p>
                   <div className="mt-4">
-                    <InlineLink id="change-spouse-full-name" routeId="$lang/_public/apply/$id/adult/partner-information" params={params}>
+                    <InlineLink
+                      id="change-spouse-full-name"
+                      routeId="$lang/_public/apply/$id/adult/partner-information"
+                      params={params}
+                      data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Change full name - Review your information click"
+                    >
                       {t('apply-adult:review-information.full-name-change')}
                     </InlineLink>
                   </div>
@@ -311,7 +321,12 @@ export default function ReviewInformation() {
                 <DescriptionListItem term={t('apply-adult:review-information.dob-title')}>
                   <p>{spouseInfo.birthday}</p>
                   <div className="mt-4">
-                    <InlineLink id="change-spouse-date-of-birth" routeId="$lang/_public/apply/$id/adult/partner-information" params={params}>
+                    <InlineLink
+                      id="change-spouse-date-of-birth"
+                      routeId="$lang/_public/apply/$id/adult/partner-information"
+                      params={params}
+                      data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Change date of birth - Review your information click"
+                    >
                       {t('apply-adult:review-information.dob-change')}
                     </InlineLink>
                   </div>
@@ -319,7 +334,7 @@ export default function ReviewInformation() {
                 <DescriptionListItem term={t('apply-adult:review-information.sin-title')}>
                   <p>{formatSin(spouseInfo.sin)}</p>
                   <div className="mt-4">
-                    <InlineLink id="change-spouse-sin" routeId="$lang/_public/apply/$id/adult/partner-information" params={params}>
+                    <InlineLink id="change-spouse-sin" routeId="$lang/_public/apply/$id/adult/partner-information" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Change SIN - Review your information click">
                       {t('apply-adult:review-information.sin-change')}
                     </InlineLink>
                   </div>
@@ -334,7 +349,12 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult:review-information.phone-title')}>
                 <p>{userInfo.phoneNumber}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-phone-number" routeId="$lang/_public/apply/$id/adult/contact-information" params={params}>
+                  <InlineLink
+                    id="change-phone-number"
+                    routeId="$lang/_public/apply/$id/adult/contact-information"
+                    params={params}
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Change phone number - Review your information click"
+                  >
                     {t('apply-adult:review-information.phone-change')}
                   </InlineLink>
                 </div>
@@ -342,7 +362,12 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult:review-information.alt-phone-title')}>
                 <p>{userInfo.altPhoneNumber}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-alternate-phone-number" routeId="$lang/_public/apply/$id/adult/contact-information" params={params}>
+                  <InlineLink
+                    id="change-alternate-phone-number"
+                    routeId="$lang/_public/apply/$id/adult/contact-information"
+                    params={params}
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Change alternate phone number - Review your information click"
+                  >
                     {t('apply-adult:review-information.alt-phone-change')}
                   </InlineLink>
                 </div>
@@ -350,7 +375,7 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult:review-information.email')}>
                 <p>{userInfo.contactInformationEmail}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-email" routeId="$lang/_public/apply/$id/adult/contact-information" params={params}>
+                  <InlineLink id="change-email" routeId="$lang/_public/apply/$id/adult/contact-information" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Change email address - Review your information click">
                     {t('apply-adult:review-information.email-change')}
                   </InlineLink>
                 </div>
@@ -365,7 +390,12 @@ export default function ReviewInformation() {
                   apartment={mailingAddressInfo.apartment}
                 />
                 <div className="mt-4">
-                  <InlineLink id="change-mailing-address" routeId="$lang/_public/apply/$id/adult/contact-information" params={params}>
+                  <InlineLink
+                    id="change-mailing-address"
+                    routeId="$lang/_public/apply/$id/adult/contact-information"
+                    params={params}
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Change mailing address - Review your information click"
+                  >
                     {t('apply-adult:review-information.mailing-change')}
                   </InlineLink>
                 </div>
@@ -380,7 +410,12 @@ export default function ReviewInformation() {
                   apartment={homeAddressInfo.apartment}
                 />
                 <div className="mt-4">
-                  <InlineLink id="change-home-address" routeId="$lang/_public/apply/$id/adult/contact-information" params={params}>
+                  <InlineLink
+                    id="change-home-address"
+                    routeId="$lang/_public/apply/$id/adult/contact-information"
+                    params={params}
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Change home address - Review your information click"
+                  >
                     {t('apply-adult:review-information.home-change')}
                   </InlineLink>
                 </div>
@@ -394,7 +429,12 @@ export default function ReviewInformation() {
                 <p>{userInfo.communicationPreference}</p>
                 {userInfo.communicationPreferenceEmail && <p>{userInfo.communicationPreferenceEmail}</p>}
                 <p>
-                  <InlineLink id="change-communication-preference" routeId="$lang/_public/apply/$id/adult/communication-preference" params={params}>
+                  <InlineLink
+                    id="change-communication-preference"
+                    routeId="$lang/_public/apply/$id/adult/communication-preference"
+                    params={params}
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Change communication preference - Review your information click"
+                  >
                     {t('apply-adult:review-information.comm-pref-change')}
                   </InlineLink>
                 </p>
@@ -403,7 +443,12 @@ export default function ReviewInformation() {
                 <DescriptionListItem term={t('apply-adult:review-information.lang-pref-title')}>
                   <p>{getNameByLanguage(i18n.language, preferredLanguage)}</p>
                   <div className="mt-4">
-                    <InlineLink id="change-language-preference" routeId="$lang/_public/apply/$id/adult/communication-preference" params={params}>
+                    <InlineLink
+                      id="change-language-preference"
+                      routeId="$lang/_public/apply/$id/adult/communication-preference"
+                      params={params}
+                      data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Change language preference - Review your information click"
+                    >
                       {t('apply-adult:review-information.lang-pref-change')}
                     </InlineLink>
                   </div>
@@ -417,7 +462,12 @@ export default function ReviewInformation() {
               <DescriptionListItem term={t('apply-adult:review-information.dental-insurance-title')}>
                 <p>{dentalInsurance ? t('apply-adult:review-information.yes') : t('apply-adult:review-information.no')}</p>
                 <div className="mt-4">
-                  <InlineLink id="change-access-dental" routeId="$lang/_public/apply/$id/adult/dental-insurance" params={params}>
+                  <InlineLink
+                    id="change-access-dental"
+                    routeId="$lang/_public/apply/$id/adult/dental-insurance"
+                    params={params}
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Change answer to dental insurance - Review your information click"
+                  >
                     {t('apply-adult:review-information.dental-insurance-change')}
                   </InlineLink>
                 </div>
@@ -436,7 +486,12 @@ export default function ReviewInformation() {
                   <p>{t('apply-adult:review-information.no')}</p>
                 )}
                 <div className="mt-4">
-                  <InlineLink id="change-dental-benefits" routeId="$lang/_public/apply/$id/adult/federal-provincial-territorial-benefits" params={params}>
+                  <InlineLink
+                    id="change-dental-benefits"
+                    routeId="$lang/_public/apply/$id/adult/federal-provincial-territorial-benefits"
+                    params={params}
+                    data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Change answer to government dental benefits - Review your information click"
+                  >
                     {t('apply-adult:review-information.dental-benefit-change')}
                   </InlineLink>
                 </div>
@@ -453,16 +508,21 @@ export default function ReviewInformation() {
         <fetcher.Form onSubmit={handleSubmit} method="post" className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
-          <Button id="confirm-button" name="_action" value={FormAction.Submit} variant="green" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Submit - Review your information click">
+          <Button id="confirm-button" name="_action" value={FormAction.Submit} variant="green" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Submit application - Review your information click">
             {t('apply-adult:review-information.submit-button')}
             {isSubmitting && submitAction === FormAction.Submit && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
           </Button>
-          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Exit - Review your information click">
+          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Review your information click">
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply-adult:review-information.back-button')}
           </Button>
         </fetcher.Form>
-        <InlineLink routeId="$lang/_public/apply/$id/adult/exit-application" params={params} className="mt-6 block font-lato font-semibold">
+        <InlineLink
+          routeId="$lang/_public/apply/$id/adult/exit-application"
+          params={params}
+          className="mt-6 block font-lato font-semibold"
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Exit application - Review your information click"
+        >
           {t('apply-adult:review-information.exit-button')}
         </InlineLink>
       </div>

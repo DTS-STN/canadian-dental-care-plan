@@ -65,7 +65,15 @@ export default function ApplyFlowDobEligibility() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const eligibilityInfo = <InlineLink to={t('apply-adult:eligibility.dob-eligibility.eligibility-info-href')} className="external-link" newTabIndicator target="_blank" />;
+  const eligibilityInfo = (
+    <InlineLink
+      to={t('apply-adult:eligibility.dob-eligibility.eligibility-info-href')}
+      className="external-link"
+      newTabIndicator
+      data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Find out when you can apply for the Canadian Dental Care Plan - Find out when you can apply click"
+      target="_blank"
+    />
+  );
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

@@ -61,11 +61,33 @@ export default function ApplyIndex() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  const canadaTermsConditions = <InlineLink to={t('apply:terms-and-conditions.links.canada-ca-terms-and-conditions')} className="external-link" newTabIndicator target="_blank" />;
-  const fileacomplaint = <InlineLink to={t('apply:terms-and-conditions.links.file-complaint')} className="external-link" newTabIndicator target="_blank" />;
-  const hcaptchaTermsOfService = <InlineLink to={t('apply:terms-and-conditions.links.hcaptcha')} className="external-link" newTabIndicator target="_blank" />;
-  const infosource = <InlineLink to={t('apply:terms-and-conditions.links.info-source')} className="external-link" newTabIndicator target="_blank" />;
-  const microsoftDataPrivacyPolicy = <InlineLink to={t('apply:terms-and-conditions.links.microsoft-data-privacy-policy')} className="external-link" newTabIndicator target="_blank" />;
+  const canadaTermsConditions = (
+    <InlineLink
+      to={t('apply:terms-and-conditions.links.canada-ca-terms-and-conditions')}
+      className="external-link"
+      newTabIndicator
+      data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Canada.ca website Terms and Conditions - Terms and Conditions click"
+      target="_blank"
+    />
+  );
+  const fileacomplaint = (
+    <InlineLink to={t('apply:terms-and-conditions.links.file-complaint')} className="external-link" newTabIndicator data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:file a complaint - Terms and Conditions click" target="_blank" />
+  );
+  const hcaptchaTermsOfService = (
+    <InlineLink to={t('apply:terms-and-conditions.links.hcaptcha')} className="external-link" newTabIndicator data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Terms of Service - Terms and Conditions click" target="_blank" />
+  );
+  const infosource = (
+    <InlineLink to={t('apply:terms-and-conditions.links.info-source')} className="external-link" newTabIndicator data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Info Source - Terms and Conditions click" target="_blank" />
+  );
+  const microsoftDataPrivacyPolicy = (
+    <InlineLink
+      to={t('apply:terms-and-conditions.links.microsoft-data-privacy-policy')}
+      className="external-link"
+      newTabIndicator
+      data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Microsoft Data Privacy Policy & Privacy Principles - Terms and Conditions click"
+      target="_blank"
+    />
+  );
 
   return (
     <div className="max-w-prose">
