@@ -13,8 +13,8 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
-import { InputField } from '~/components/input-field';
 import { InputRadios, InputRadiosProps } from '~/components/input-radios';
+import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSinField } from '~/components/input-sin-field';
 import { AppPageTitle } from '~/components/layouts/public-layout';
 import { Progress } from '~/components/progress';
@@ -306,7 +306,7 @@ export default function ApplyFlowChildInformation() {
               <p>{t('apply-adult-child:children.information.name-instructions')}</p>
             </Collapsible>
             <div className="grid items-end gap-6 md:grid-cols-2">
-              <InputField
+              <InputSanitizeField
                 id="first-name"
                 name="firstName"
                 label={t('apply-adult-child:children.information.first-name')}
@@ -318,7 +318,7 @@ export default function ApplyFlowChildInformation() {
                 defaultValue={defaultState?.firstName ?? ''}
                 required
               />
-              <InputField
+              <InputSanitizeField
                 id="last-name"
                 name="lastName"
                 label={t('apply-adult-child:children.information.last-name')}
