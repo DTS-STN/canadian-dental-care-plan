@@ -1,7 +1,7 @@
 package ca.gov.dtsstn.cdcp.api.web.v1.controller;
 
-import java.util.List;
 import org.mapstruct.factory.Mappers;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
 import org.springframework.validation.annotation.Validated;
@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
+import ca.gov.dtsstn.cdcp.api.service.domain.mapper.UserAttributeMapper;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
 import ca.gov.dtsstn.cdcp.api.web.json.JsonPatchProcessor;
-import ca.gov.dtsstn.cdcp.api.web.v1.model.UserAttributeModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.UserCreateModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.UserModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.mapper.UserModelMapper;
@@ -37,6 +38,7 @@ import jakarta.validation.constraints.NotBlank;
 public class UsersController {
 
 	private final UserModelMapper userModelMapper = Mappers.getMapper(UserModelMapper.class);
+	private final UserAttributeMapper userAttributeMapper = Mappers.getMapper(UserAttributeMapper.class);
 
 	private final UserService userService;
 
@@ -91,12 +93,14 @@ public class UsersController {
 	}
 
 	@PostMapping
-	@Operation(summary = "Create a new user ")
-	public void createUserByEmailAndUserAttributes(
-
-		@Validated @RequestBody UserCreateModel user) {
-			List<UserAttributeModel> userAttributesModels = user.getUserAttributeModel();
-
-			userService.createUser(user.getEmail(), userAttributesModels);
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Operation(summary = "Create a new user")
+	public void createUserByEmailAndUserAttributes(@Validated @RequestBody UserCreateModel userCreateModel) 
+	{
+		UserModel userModel = new UserModel();
+		userModel.setUserAttributes(userCreateModel.getUserAttributes());
+		userModel.setEmail(userCreateModel.getEmail());
+		
+		userService.createUser(userModelMapper.toDomainObject(userModel));
 	}
 }

@@ -1,13 +1,8 @@
 package ca.gov.dtsstn.cdcp.api.service;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
-
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.factory.Mappers;
@@ -17,7 +12,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
 import ca.gov.dtsstn.cdcp.api.config.properties.ApplicationProperties;
 import ca.gov.dtsstn.cdcp.api.data.entity.AlertTypeEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.entity.ConfirmationCodeEntity;
@@ -25,9 +19,6 @@ import ca.gov.dtsstn.cdcp.api.data.entity.ConfirmationCodeEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.entity.LanguageEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.entity.SubscriptionEntity;
 import ca.gov.dtsstn.cdcp.api.data.entity.SubscriptionEntityBuilder;
-import ca.gov.dtsstn.cdcp.api.data.entity.UserAttributeEntity;
-import ca.gov.dtsstn.cdcp.api.data.entity.UserAttributeEntityBuilder;
-import ca.gov.dtsstn.cdcp.api.data.entity.UserEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.repository.AlertTypeRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.LanguageRepository;
 import ca.gov.dtsstn.cdcp.api.data.repository.UserRepository;
@@ -37,7 +28,6 @@ import ca.gov.dtsstn.cdcp.api.service.domain.User;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.ConfirmationCodeMapper;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.SubscriptionMapper;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.UserMapper;
-import ca.gov.dtsstn.cdcp.api.web.v1.model.UserAttributeModel;
 
 @Service
 @Transactional
@@ -55,7 +45,7 @@ public class UserService {
 	private final SubscriptionMapper subscriptionMapper = Mappers.getMapper(SubscriptionMapper.class);
 
 	private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-
+	
 	public UserService(
 			ApplicationProperties applicationProperties,
 			AlertTypeRepository alertTypeRepository,
@@ -203,19 +193,6 @@ public class UserService {
 		userRepository.save(user);
 
 		return true;
-	}
-
-	public User createUser(String userEmail, List<UserAttributeModel> userAttributesModel){
-		//Verify Email
-		Assert.hasText(userEmail, "userEmail is required; it must not be null or blank");
-
-		Collection<UserAttributeEntity> userAttributesCollection = new ArrayList<UserAttributeEntity>();
-		
-		for(UserAttributeModel e : userAttributesModel){
-			userAttributesCollection.add(new UserAttributeEntityBuilder().name(e.getName()).value(e.getValue()).build());
-		}
-		return userMapper.toUser(userRepository.save(new UserEntityBuilder().email(userEmail)
-			.userAttributes(userAttributesCollection).build()));
 	}
 
 	private Predicate<SubscriptionEntity> byAlertTypeId(String alertTypeId) {

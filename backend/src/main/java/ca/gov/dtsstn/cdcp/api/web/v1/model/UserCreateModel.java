@@ -14,6 +14,6 @@ public interface UserCreateModel {
 	@Email
 	String getEmail();
 
-	List<UserAttributeModel> getUserAttributeModel();
+	List<UserAttributeModel> getUserAttributes();
 
 }
