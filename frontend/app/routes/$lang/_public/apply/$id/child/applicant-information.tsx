@@ -14,8 +14,8 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
-import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
+import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSinField } from '~/components/input-sin-field';
 import { Progress } from '~/components/progress';
 import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
@@ -291,7 +291,7 @@ export default function ApplyFlowApplicationInformation() {
               <p>{t('applicant-information.name-instructions')}</p>
             </Collapsible>
             <div className="grid items-end gap-6 md:grid-cols-2">
-              <InputField
+              <InputSanitizeField
                 id="first-name"
                 name="firstName"
                 label={t('applicant-information.first-name')}
@@ -303,7 +303,7 @@ export default function ApplyFlowApplicationInformation() {
                 defaultValue={defaultState?.firstName ?? ''}
                 required
               />
-              <InputField
+              <InputSanitizeField
                 id="last-name"
                 name="lastName"
                 label={t('applicant-information.last-name')}
