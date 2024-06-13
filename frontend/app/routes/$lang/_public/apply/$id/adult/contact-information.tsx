@@ -617,7 +617,7 @@ export default function ApplyFlowPersonalInformation() {
               </Button>
               <ButtonLink
                 id="back-button"
-                routeId={[MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED].includes(Number(maritalStatus)) ? '$lang/_public/apply/$id/adult/partner-information' : '$lang/_public/apply/$id/adult/contact-information'}
+                routeId={[MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED].includes(Number(maritalStatus)) ? '$lang/_public/apply/$id/adult/partner-information' : '$lang/_public/apply/$id/adult/applicant-information'}
                 params={params}
                 disabled={isSubmitting}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Contact information click"
