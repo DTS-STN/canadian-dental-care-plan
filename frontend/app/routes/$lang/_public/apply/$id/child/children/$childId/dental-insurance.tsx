@@ -14,7 +14,6 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
-import { Progress } from '~/components/progress';
 import { loadApplyChildState, loadApplySingleChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
@@ -150,12 +149,6 @@ export default function AccessToDentalInsuranceQuestion() {
 
   return (
     <>
-      <div className="my-6 sm:my-8">
-        <p id="progress-label" className="sr-only mb-2">
-          {t('apply:progress.label')}
-        </p>
-        <Progress aria-labelledby="progress-label" value={80} size="lg" />
-      </div>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('apply:required-label')}</p>
         {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
