@@ -24,6 +24,11 @@ import type { PublicEnv } from '~/utils/env.server';
  */
 declare global {
   /**
+   * Represents the locale of the application.
+   */
+  type AppLocale = 'en' | 'fr';
+
+  /**
    * Add the public environment variables to the global window type.
    */
   interface Window {
@@ -36,7 +41,7 @@ declare global {
    * @see https://github.com/pelotom/type-zoo?tab=readme-ov-file#omitstrictt-k-extends-keyof-t
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  export type OmitStrict<T, K extends keyof T> = T extends any ? Pick<T, Exclude<keyof T, K>> : never;
+  type OmitStrict<T, K extends keyof T> = T extends any ? Pick<T, Exclude<keyof T, K>> : never;
 }
 
 declare module 'i18next' {

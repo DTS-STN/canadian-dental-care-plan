@@ -24,7 +24,7 @@ export async function getFixedT<N extends Namespace>(localeOrRequest: 'en' | 'fr
 /**
  * Retrieves the locale using a deterministic lookup algorithm (URL → cookies → 🤷).
  */
-export function getLocale(request: Request) {
+export function getLocale(request: Request): AppLocale {
   const url = new URL(request.url);
 
   if (url.pathname.startsWith('/en')) {
