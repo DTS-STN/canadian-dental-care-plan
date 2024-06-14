@@ -117,7 +117,7 @@ export default function PersonalInformationIndex() {
               )}
               {useFeature('edit-personal-info') && (
                 <p className="mt-4">
-                  <InlineLink id="change-home-address-button" routeId="$lang/_protected/personal-information/home-address/edit" params={params}>
+                  <InlineLink id="change-home-address-button" routeId="$lang/_protected/personal-information/home-address/edit" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP:Change home address - Personal Information click">
                     {t('personal-information:index.change-home-address')}
                   </InlineLink>
                 </p>
@@ -141,7 +141,7 @@ export default function PersonalInformationIndex() {
               )}
               {useFeature('edit-personal-info') && (
                 <p className="mt-4">
-                  <InlineLink id="change-mailing-address-button" routeId="$lang/_protected/personal-information/mailing-address/edit" params={params}>
+                  <InlineLink id="change-mailing-address-button" routeId="$lang/_protected/personal-information/mailing-address/edit" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP:Change mailing address - Personal Information click">
                     {t('personal-information:index.change-mailing-address')}
                   </InlineLink>
                 </p>
@@ -157,7 +157,7 @@ export default function PersonalInformationIndex() {
 
               {useFeature('edit-personal-info') && (
                 <p className="mt-4">
-                  <InlineLink id="change-phone-number-button" routeId="$lang/_protected/personal-information/phone-number/edit" params={params}>
+                  <InlineLink id="change-phone-number-button" routeId="$lang/_protected/personal-information/phone-number/edit" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP:Change phone number - Personal Information click">
                     {t('personal-information:index.change-phone-number')}
                   </InlineLink>
                 </p>
@@ -171,7 +171,7 @@ export default function PersonalInformationIndex() {
 
               {useFeature('edit-personal-info') && (
                 <p className="mt-4">
-                  <InlineLink id="change-phone-number-button" routeId="$lang/_protected/personal-information/phone-number/edit" params={params}>
+                  <InlineLink id="change-phone-number-button" routeId="$lang/_protected/personal-information/phone-number/edit" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP:Change phone number - Personal Information click">
                     {t('personal-information:index.change-phone-number')}
                   </InlineLink>
                 </p>
@@ -183,7 +183,7 @@ export default function PersonalInformationIndex() {
           <p>{personalInformation.emailAddress}</p>
           {useFeature('edit-personal-info') && (
             <p>
-              <InlineLink id="change-email-address-button" routeId="$lang/_protected/personal-information/email-address/edit" params={params}>
+              <InlineLink id="change-email-address-button" routeId="$lang/_protected/personal-information/email-address/edit" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP:Change email address - Personal Information click">
                 {t('personal-information:index.change-email-address')}
               </InlineLink>
             </p>
@@ -193,7 +193,7 @@ export default function PersonalInformationIndex() {
           <p>{preferredLanguage ? getNameByLanguage(i18n.language, preferredLanguage) : t('personal-information:index.no-preferred-language-on-file')}</p>
           {useFeature('edit-personal-info') && (
             <p>
-              <InlineLink id="change-preferred-language-button" routeId="$lang/_protected/personal-information/preferred-language/edit" params={params}>
+              <InlineLink id="change-preferred-language-button" routeId="$lang/_protected/personal-information/preferred-language/edit" params={params} data-gc-analytics-customclick="ESDC-EDSC:CDCP:Change preferred language - Personal Information click">
                 {t('personal-information:index.change-preferred-language')}
               </InlineLink>
             </p>
@@ -205,7 +205,7 @@ export default function PersonalInformationIndex() {
 
       {userOrigin && (
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={userOrigin.to}>
+          <ButtonLink id="back-button" to={userOrigin.to} data-gc-analytics-customclick="ESDC-EDSC:CDCP:Return to dashboard - Personal Information click">
             {t('personal-information:index.dashboard-text')}
           </ButtonLink>
         </div>

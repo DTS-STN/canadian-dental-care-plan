@@ -325,10 +325,10 @@ export default function PersonalInformationMailingAddressEdit() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" routeId="$lang/_protected/personal-information/index" params={params} disabled={isSubmitting}>
+          <ButtonLink id="back-button" routeId="$lang/_protected/personal-information/index" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Back - Mailing address click">
             {t('personal-information:mailing-address.edit.button.back')}
           </ButtonLink>
-          <Button id="save-button" variant="primary" disabled={isSubmitting}>
+          <Button id="save-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Save - Mailing address click">
             {t('personal-information:mailing-address.edit.button.save')}
             <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>

@@ -189,10 +189,10 @@ export default function PhoneNumberEdit() {
           />
         </div>
         <div className="flex flex-wrap items-center gap-6 sm:my-4">
-          <ButtonLink id="cancel" routeId="$lang/_protected/personal-information/index" params={params} disabled={isSubmitting}>
+          <ButtonLink id="cancel" routeId="$lang/_protected/personal-information/index" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Cancel - Phone number click">
             {t('personal-information:phone-number.edit.button.cancel')}
           </ButtonLink>
-          <Button id="submit" variant="primary" disabled={isSubmitting}>
+          <Button id="submit" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Save - Phone number click">
             {t('personal-information:phone-number.edit.button.save')}
             <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
