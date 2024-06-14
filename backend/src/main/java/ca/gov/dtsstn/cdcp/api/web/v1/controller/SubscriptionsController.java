@@ -51,26 +51,26 @@ public class SubscriptionsController {
 
 	private final AlertTypeService alertTypeService;
 
+	private final JsonPatchProcessor jsonPatchProcessor;
+
 	private final LanguageService languageService;
 
 	private final UserService userService;
 
-	private final JsonPatchProcessor jsonPatchProcessor;
-
 	public SubscriptionsController(
 			AlertTypeService alertTypeService,
+			JsonPatchProcessor jsonPatchProcessor,
 			LanguageService languageService,
-			UserService userService,
-			JsonPatchProcessor jsonPatchProcessor) {
+			UserService userService) {
 		Assert.notNull(alertTypeService, "alertTypeService is required; it must not be null");
+		Assert.notNull(jsonPatchProcessor, "jsonPatchProcessor is required; it must not be null");
 		Assert.notNull(languageService, "languageService is required; it must not be null");
 		Assert.notNull(userService, "userService is required; it must not be null");
-		Assert.notNull(jsonPatchProcessor, "jsonPatchProcessor is required; it must not be null");
 
 		this.alertTypeService = alertTypeService;
+		this.jsonPatchProcessor = jsonPatchProcessor;
 		this.languageService = languageService;
 		this.userService = userService;
-		this.jsonPatchProcessor = jsonPatchProcessor;
 	}
 
 	@PostMapping
@@ -80,7 +80,6 @@ public class SubscriptionsController {
 			@NotBlank(message = "userId must not be null or blank")
 			@Parameter(description = "The id of the user.", example = "00000000-0000-0000-0000-000000000000")
 			@PathVariable String userId,
-
 			@Validated @RequestBody SubscriptionCreateModel subscription) {
 		final var user = userService.getUserById(userId)
 			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));
@@ -156,11 +155,14 @@ public class SubscriptionsController {
 			.orElseThrow(() -> new ResourceNotFoundException("No subscription with id=[%s] was found".formatted(subscriptionId)));
 
 		final var subscriptionModel = subscriptionModelMapper.toPatchModel(subscription);
-
 		final var subscriptionPatched = jsonPatchProcessor.patch(subscriptionModel, patch);
-		final var language = languageService.readByMsLocaleCode(subscriptionPatched.getMsLanguageCode())
-			.orElseThrow(() -> new ResourceNotFoundException("No language with msLanguageCode=[%s] was found".formatted(subscriptionPatched.getMsLanguageCode())));
-		userService.updateSubscriptionForUser(userId, subscriptionId, language.getId());
+
+		final var languageId = languageService
+			.readByMsLocaleCode(subscriptionPatched.getMsLanguageCode())
+			.map(Language::getId)
+			.orElseThrow(/* pre-validated input */);
+
+		userService.updateSubscriptionForUser(userId, subscriptionId, languageId);
 	}
 
 	@DeleteMapping({ "/{subscriptionId}" })
@@ -187,4 +189,5 @@ public class SubscriptionsController {
 	private Predicate<? super BaseDomainObject> byId(String id) {
 		return domainObject -> id.equals(domainObject.getId());
 	}
+
 }

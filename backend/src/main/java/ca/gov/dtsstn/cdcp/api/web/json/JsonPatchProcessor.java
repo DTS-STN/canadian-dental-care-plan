@@ -5,9 +5,12 @@ import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.DirectFieldBindingResult;
+import org.springframework.validation.SmartValidator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -19,10 +22,6 @@ import jakarta.json.JsonPatch;
 import jakarta.json.JsonStructure;
 import jakarta.json.JsonValue;
 
-import org.springframework.validation.BindException;
-import org.springframework.validation.DirectFieldBindingResult;
-import org.springframework.validation.SmartValidator;
-
 @Component
 public class JsonPatchProcessor {
 
@@ -33,7 +32,6 @@ public class JsonPatchProcessor {
 		.findAndRegisterModules();
 
 	private final SmartValidator validator;
-
 
 	public JsonPatchProcessor(SmartValidator validator) {
 		Assert.notNull(validator, "validator is required; it must not be null");
@@ -74,8 +72,7 @@ public class JsonPatchProcessor {
 			final var patchedObject = objectMapper.readValue(patchFn.apply(jsonObject).toString(), object.getClass());
 
 			log.debug("Performing JSON patch validation");
-			final var bindingResult = new DirectFieldBindingResult(patchedObject, "patch");
-			validator.validate(patchedObject, bindingResult);
+			final var bindingResult = validateObject(patchedObject);
 			if (bindingResult.hasErrors()) { throw new BindException(bindingResult); }
 			log.debug("No validation errors for {}", object.getClass().getSimpleName());
 
@@ -84,6 +81,13 @@ public class JsonPatchProcessor {
 		catch (final JsonProcessingException jsonProcessingException) {
 			throw new RuntimeException(jsonProcessingException);
 		}
+	}
+
+	protected BindingResult validateObject(Object object) {
+		Assert.notNull(object, "object is required; it must not be null");
+		final var bindingResult = new DirectFieldBindingResult(object, "patch");
+		validator.validate(object, bindingResult);
+		return bindingResult;
 	}
 
 }

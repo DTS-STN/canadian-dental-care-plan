@@ -2,6 +2,8 @@ package ca.gov.dtsstn.cdcp.api.web.json;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,11 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.validation.BindException;
+import org.springframework.validation.Errors;
 import org.springframework.validation.SmartValidator;
 
 import jakarta.json.Json;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.constraints.NotBlank;
 
 @ExtendWith({ MockitoExtension.class })
@@ -48,9 +51,17 @@ class JsonPatchProcessorTests {
 		final var patchObject = Json.createObjectBuilder().add("name", "").build();
 		final var jsonMergePatch = Json.createMergePatch(Json.createObjectBuilder(patchObject).build());
 
-		assertThatExceptionOfType(ConstraintViolationException.class)
+		doAnswer(invocation -> {
+			invocation.getArgument(1, Errors.class).reject("name", "name should not be blank");
+			return null;
+		}).when(validator).validate(any(), any());
+
+		assertThatExceptionOfType(BindException.class)
 			.isThrownBy(() -> jsonPatchProcessor.patch(entity, jsonMergePatch))
-			.withMessage("name: must not be blank");
+			.extracting(BindException::getAllErrors)
+				.matches(errors -> errors.stream()
+					.map(DefaultMessageSourceResolvable::getDefaultMessage)
+					.anyMatch("name should not be blank"::equals));
 	}
 
 	@Test
@@ -73,9 +84,17 @@ class JsonPatchProcessorTests {
 		final var patchObject = Json.createObjectBuilder().add("op", "replace").add("path", "/name").add("value", "").build();
 		final var jsonPatch = Json.createPatch(Json.createArrayBuilder().add(patchObject).build());
 
-		assertThatExceptionOfType(ConstraintViolationException.class)
+		doAnswer(invocation -> {
+			invocation.getArgument(1, Errors.class).reject("name", "name should not be blank");
+			return null;
+		}).when(validator).validate(any(), any());
+
+		assertThatExceptionOfType(BindException.class)
 			.isThrownBy(() -> jsonPatchProcessor.patch(entity, jsonPatch))
-			.withMessage("name: must not be blank");
+			.extracting(BindException::getAllErrors)
+				.matches(errors -> errors.stream()
+					.map(DefaultMessageSourceResolvable::getDefaultMessage)
+					.anyMatch("name should not be blank"::equals));
 	}
 
 	static class MyEntity {

@@ -64,11 +64,11 @@ public class UsersController {
 			@PathVariable String id,
 			@Validated @RequestBody JsonPatch patch) throws BindException {
 		final var user = userService.getUserById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(id)));
+			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(id)));
 
 		final var userPatchModel = userModelMapper.toPatchModel(user);
-
 		final var userPatched = jsonPatchProcessor.patch(userPatchModel, patch);
+
 		userService.updateUser(id, userModelMapper.toDomain(userPatched));
 	}
 
