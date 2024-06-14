@@ -361,7 +361,7 @@ export default function ApplyFlowPersonalInformation() {
         <p id="progress-label" className="sr-only mb-2">
           {t('apply:progress.label')}
         </p>
-        <Progress aria-labelledby="progress-label" value={60} size="lg" />
+        <Progress aria-labelledby="progress-label" value={45} size="lg" />
       </div>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('apply:optional-label')}</p>

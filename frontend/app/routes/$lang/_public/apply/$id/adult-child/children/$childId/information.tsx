@@ -17,7 +17,6 @@ import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSinField } from '~/components/input-sin-field';
 import { AppPageTitle } from '~/components/layouts/public-layout';
-import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { ChildInformationState, ChildSinState, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
@@ -289,12 +288,6 @@ export default function ApplyFlowChildInformation() {
   return (
     <>
       <AppPageTitle>{t('apply-adult-child:children.information.page-title', { childName })}</AppPageTitle>
-      <div className="my-6 sm:my-8">
-        <p id="progress-label" className="sr-only mb-2">
-          {t('apply:progress.label')}
-        </p>
-        <Progress aria-labelledby="progress-label" value={40} size="lg" />
-      </div>
       <div className="max-w-prose">
         <p className="mb-4">{t('apply-adult-child:children.information.form-instructions-sin')}</p>
         <p className="mb-4 italic">{t('apply:required-label')}</p>

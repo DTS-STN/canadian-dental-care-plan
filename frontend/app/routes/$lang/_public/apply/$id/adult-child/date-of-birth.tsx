@@ -227,7 +227,7 @@ export default function ApplyFlowDateOfBirth() {
         <p id="progress-label" className="sr-only mb-2">
           {t('apply:progress.label')}
         </p>
-        <Progress aria-labelledby="progress-label" value={30} size="lg" />
+        <Progress aria-labelledby="progress-label" value={27} size="lg" />
       </div>
       <div className="max-w-prose">
         <p className="mb-6">{t('apply-adult-child:eligibility.date-of-birth.description')}</p>

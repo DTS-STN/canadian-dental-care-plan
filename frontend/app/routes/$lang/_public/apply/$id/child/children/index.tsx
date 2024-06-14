@@ -134,7 +134,7 @@ export default function ApplyFlowChildSummary() {
         <p id="progress-label" className="sr-only mb-2">
           {t('apply:progress.label')}
         </p>
-        <Progress aria-labelledby="progress-label" value={40} size="lg" />
+        <Progress aria-labelledby="progress-label" value={37} size="lg" />
       </div>
       <div className="max-w-prose">
         <p>{t('apply-child:children.index.in-this-section')}</p>
