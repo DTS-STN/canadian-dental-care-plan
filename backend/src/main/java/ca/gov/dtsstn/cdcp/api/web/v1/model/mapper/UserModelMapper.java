@@ -2,12 +2,14 @@ package ca.gov.dtsstn.cdcp.api.web.v1.model.mapper;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+
 import ca.gov.dtsstn.cdcp.api.service.domain.User;
 import ca.gov.dtsstn.cdcp.api.web.v1.controller.ConfirmationCodesController;
 import ca.gov.dtsstn.cdcp.api.web.v1.controller.EmailValidationsController;
@@ -32,7 +34,6 @@ public interface UserModelMapper {
 			.add(linkTo(methodOn(ConfirmationCodesController.class).getConfirmationCodesByUserId(user.getId())).withRel("confirmationCodes"));
 	}
 
-
 	@Nullable	
 	UserPatchModel toPatchModel(@Nullable User user);
 
@@ -41,12 +42,12 @@ public interface UserModelMapper {
 	@BeanMapping(ignoreByDefault = true, nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 	User toDomain(@Nullable UserPatchModel userModel);	
 
+	@Nullable
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "createdBy", ignore = true)
 	@Mapping(target = "createdDate", ignore = true)
 	@Mapping(target = "lastModifiedBy", ignore = true)
 	@Mapping(target = "lastModifiedDate", ignore = true)
-	@Nullable
 	User toDomain(@Nullable UserCreateModel userCreateModel);
 
 }

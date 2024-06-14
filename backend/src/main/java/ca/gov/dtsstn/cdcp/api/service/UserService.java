@@ -3,6 +3,7 @@ package ca.gov.dtsstn.cdcp.api.service;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.function.Predicate;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.factory.Mappers;
@@ -12,6 +13,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
 import ca.gov.dtsstn.cdcp.api.config.properties.ApplicationProperties;
 import ca.gov.dtsstn.cdcp.api.data.entity.AlertTypeEntityBuilder;
 import ca.gov.dtsstn.cdcp.api.data.entity.ConfirmationCodeEntity;
@@ -45,7 +47,7 @@ public class UserService {
 	private final SubscriptionMapper subscriptionMapper = Mappers.getMapper(SubscriptionMapper.class);
 
 	private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-	
+
 	public UserService(
 			ApplicationProperties applicationProperties,
 			AlertTypeRepository alertTypeRepository,
@@ -214,4 +216,5 @@ public class UserService {
 		Assert.notNull(instant, "instant is required; it must not be null");
 		return confirmationCode -> confirmationCode.getExpiryDate().isAfter(instant);
 	}
+
 }

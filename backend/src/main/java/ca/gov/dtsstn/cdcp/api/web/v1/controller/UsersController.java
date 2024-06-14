@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
 import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
@@ -27,7 +28,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.json.JsonPatch;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.constraints.NotBlank;
-
 
 @Validated
 @RestController
@@ -92,8 +92,7 @@ public class UsersController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@Operation(summary = "Create a new user")
-	public void createUserByEmailAndUserAttributes(@Validated @RequestBody UserCreateModel userCreateModel) 
-	{		
+	public void createUserByEmailAndUserAttributes(@Validated @RequestBody UserCreateModel userCreateModel) {
 		userService.createUser(userModelMapper.toDomain(userCreateModel));
 	}
 }
