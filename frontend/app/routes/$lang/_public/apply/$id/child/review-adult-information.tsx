@@ -31,7 +31,7 @@ import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeCountries, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountries, localizeMaritalStatuses, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -80,9 +80,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const communicationPreference = communicationPreferences.find((obj) => obj.id === state.communicationPreferences.preferredMethod);
   invariant(communicationPreference, `Unexpected communication preference: ${state.communicationPreferences.preferredMethod}`);
 
-  const maritalStatuses = lookupService.getAllMaritalStatuses();
-  const maritalStatusDict = maritalStatuses.find((obj) => obj.id === state.applicantInformation.maritalStatus)!;
-  const maritalStatus = getNameByLanguage(locale, maritalStatusDict);
+  const maritalStatuses = localizeMaritalStatuses(lookupService.getAllMaritalStatuses(), locale);
+  const maritalStatus = maritalStatuses.find((obj) => obj.id === state.applicantInformation.maritalStatus)?.name;
+  invariant(maritalStatus, `Unexpected marital status: ${state.applicantInformation.maritalStatus}`);
 
   const userInfo = {
     firstName: state.applicantInformation.firstName,

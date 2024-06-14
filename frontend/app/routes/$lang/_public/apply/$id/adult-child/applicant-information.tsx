@@ -13,7 +13,7 @@ import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
-import { InputRadios } from '~/components/input-radios';
+import { InputRadios, InputRadiosProps } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSinField } from '~/components/input-sin-field';
 import { Progress } from '~/components/progress';
@@ -21,9 +21,10 @@ import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-rout
 import { ApplicantInformationState, applicantInformationStateHasPartner, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
-import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { localizeMaritalStatuses } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -51,7 +52,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const lookupService = getLookupService();
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const maritalStatuses = lookupService.getAllMaritalStatuses();
+  const locale = getLocale(request);
+  const maritalStatuses = localizeMaritalStatuses(lookupService.getAllMaritalStatuses(), locale);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:applicant-information.page-title') }) };
@@ -147,7 +149,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function ApplyFlowApplicationInformation() {
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { ageCategory, csrfToken, defaultState, maritalStatuses, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
@@ -189,6 +191,10 @@ export default function ApplyFlowApplicationInformation() {
       }
     }
   }, [errorMessages]);
+
+  const maritalStatusOptions = useMemo<InputRadiosProps['options']>(() => {
+    return maritalStatuses.map((status) => ({ defaultChecked: status.id === defaultState?.maritalStatus, children: status.name, value: status.id }));
+  }, [defaultState?.maritalStatus, maritalStatuses]);
 
   return (
     <>
@@ -246,14 +252,7 @@ export default function ApplyFlowApplicationInformation() {
               errorMessage={errorMessages['social-insurance-number']}
               required
             />
-            <InputRadios
-              id="marital-status"
-              name="maritalStatus"
-              legend={t('applicant-information.marital-status')}
-              options={maritalStatuses.map((status) => ({ defaultChecked: status.id === defaultState?.maritalStatus, children: getNameByLanguage(i18n.language, status), value: status.id }))}
-              errorMessage={errorMessages['input-radio-marital-status-option-0']}
-              required
-            />
+            <InputRadios id="marital-status" name="maritalStatus" legend={t('applicant-information.marital-status')} options={maritalStatusOptions} errorMessage={errorMessages['input-radio-marital-status-option-0']} required />
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
