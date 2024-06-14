@@ -188,7 +188,7 @@ export default function ReviewInformation() {
         <p id="progress-label" className="sr-only mb-2">
           {t('apply:progress.label')}
         </p>
-        <Progress aria-labelledby="progress-label" value={100} size="lg" />
+        <Progress aria-labelledby="progress-label" value={99} size="lg" />
       </div>
       <div className="max-w-prose">
         <p className="my-4 text-lg">{t('apply-adult-child:review-child-information.read-carefully')}</p>
