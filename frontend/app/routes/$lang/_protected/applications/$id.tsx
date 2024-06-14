@@ -72,7 +72,7 @@ export default function ViewApplication() {
       </dl>
       {userOrigin && (
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={userOrigin.to}>
+          <ButtonLink id="back-button" to={userOrigin.to} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Back - View application click">
             {t('applications:view-application.back-button')}
           </ButtonLink>
         </div>
