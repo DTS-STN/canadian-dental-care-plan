@@ -156,11 +156,18 @@ public class UserService {
 
 		log.debug("Fetching user [{}] from repository", userId);
 		final var user = userRepository.findById(userId).orElseThrow();
-		final var preferredLanguage = languageRepository.findById(languageId).orElseThrow();
 
+		log.debug("Fetching subscription [{}] for user [{}]", subscriptionId, userId);
 		final var subscription = user.getSubscriptions().stream()
 			.filter(byId(subscriptionId)).findFirst().orElseThrow();
-		subscription.setLanguage(preferredLanguage);
+
+		log.debug("Fetching language [{}] from repository", languageId);
+		final var preferredLanguage = languageRepository.findById(languageId).orElseThrow();
+
+		if (StringUtils.equals(subscription.getLanguage().getId(), languageId) == false) {
+			log.debug("Updating language for subscription [{}] to [{}]", subscriptionId, languageId);
+			subscription.setLanguage(preferredLanguage);
+		}
 
 		userRepository.save(user);
 	}

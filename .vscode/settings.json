@@ -52,6 +52,7 @@
     "org.springframework.test.web.servlet.result.MockMvcResultHandlers.*",
     "org.springframework.test.web.servlet.result.MockMvcResultMatchers.*"
   ],
+  "files.trimTrailingWhitespace": true,
   "java.configuration.updateBuildConfiguration": "automatic",
   // clsx Tailwind Support
   // https://github.com/lukeed/clsx/tree/master?tab=readme-ov-file#tailwind-support

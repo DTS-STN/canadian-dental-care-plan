@@ -26,7 +26,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.json.JsonPatch;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.constraints.NotBlank;
 
 @Validated
@@ -68,25 +67,12 @@ public class UsersController {
 			@PathVariable String id,
 			@Validated @RequestBody JsonPatch patch) throws BindException {
 		final var user = userService.getUserById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(id)));
+			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(id)));
 
 		final var userPatchModel = userModelMapper.toPatchModel(user);
+		final var userPatched = jsonPatchProcessor.patch(userPatchModel, patch);
 
-		try {
-			final var userPatched = jsonPatchProcessor.patch(userPatchModel, patch);
-			userService.updateUser(id, userModelMapper.toDomain(userPatched));
-		}
-		catch (final ConstraintViolationException constraintViolationException) {
-			final var bindException = new BindException(patch, "jsonPatch");
-
-			constraintViolationException.getConstraintViolations().forEach(constraintViolation -> {
-				final var errorCode = constraintViolation.getPropertyPath().toString();
-				final var message = constraintViolation.getMessage();
-				bindException.reject(errorCode, message);
-			});
-
-			throw bindException;
-		}
+		userService.updateUser(id, userModelMapper.toDomain(userPatched));
 	}
 
 	@PostMapping
