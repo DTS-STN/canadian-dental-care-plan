@@ -20,8 +20,9 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled, getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { localizeAndSortRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -70,12 +71,12 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
   const csrfToken = String(session.get('csrfToken'));
+  const locale = getLocale(request);
 
   const { CANADA_COUNTRY_ID } = getEnv();
   const lookupService = getLookupService();
-
   const federalSocialPrograms = lookupService.getAllFederalSocialPrograms();
-  const allRegions = lookupService.getAllRegions();
+  const allRegions = localizeAndSortRegions(lookupService.getAllRegions(), locale);
   const regions = allRegions.filter((region) => region.countryId === CANADA_COUNTRY_ID);
   const provincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
 
@@ -207,16 +208,6 @@ export default function AccessToGovernmentalsBenefitsEdit() {
   const [hasProvincialTerritorialBenefitValue, setHasProvincialTerritorialBenefitValue] = useState<boolean>();
   const [provinceValue, setProvinceValue] = useState<string>();
 
-  const sortedRegions = useMemo(
-    () =>
-      regions.sort((a, b) => {
-        const nameA = i18n.language === 'en' ? a.nameEn : a.nameFr;
-        const nameB = i18n.language === 'en' ? b.nameEn : b.nameFr;
-        return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
-      }),
-    [i18n.language, regions],
-  );
-
   function handleOnHasProvincialTerritorialBenefitChanged(e: React.ChangeEvent<HTMLInputElement>) {
     setHasProvincialTerritorialBenefitValue(e.target.value === HasProvincialTerritorialBenefitsOption.Yes);
     if (e.target.value !== HasProvincialTerritorialBenefitsOption.Yes) {
@@ -304,10 +295,10 @@ export default function AccessToGovernmentalsBenefitsEdit() {
                       onChange={handleOnRegionChanged}
                       options={[
                         { children: t('access-to-governmental-benefits:access-to-governmental-benefits.edit.select-one'), value: '', hidden: true },
-                        ...sortedRegions.map((region) => ({
+                        ...regions.map((region) => ({
                           id: region.provinceTerritoryStateId,
                           value: region.provinceTerritoryStateId,
-                          children: getNameByLanguage(i18n.language, region),
+                          children: region.name,
                         })),
                       ]}
                       required

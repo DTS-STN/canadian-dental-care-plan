@@ -26,8 +26,9 @@ import { getPersonalInformationService } from '~/services/personal-information-s
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled, getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { localizeAndSortRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
@@ -59,6 +60,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const raoidcService = await getRaoidcService();
 
   await raoidcService.handleSessionValidation(request, session);
+  const locale = getLocale(request);
 
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
 
@@ -73,7 +75,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   }
 
   const countryList = lookupService.getAllCountries();
-  const regionList = lookupService.getAllRegions();
+  const regionList = localizeAndSortRegions(lookupService.getAllRegions(), locale);
 
   const csrfToken = String(session.get('csrfToken'));
 
@@ -252,15 +254,13 @@ export default function PersonalInformationHomeAddressEdit() {
     .sort((country1, country2) => country1.children.localeCompare(country2.children));
 
   // populate region/province/state list with selected country or current address country
-  const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter((region) => region.countryId === addressInfo.countryId))
-    .map((region) => {
-      return {
-        children: i18n.language === 'fr' ? region.nameFr : region.nameEn,
-        value: region.provinceTerritoryStateId,
-        id: region.provinceTerritoryStateId,
-      };
-    })
-    .sort((region1, region2) => region1.children.localeCompare(region2.children));
+  const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter((region) => region.countryId === addressInfo.countryId)).map((region) => {
+    return {
+      children: region.name,
+      value: region.provinceTerritoryStateId,
+      id: region.provinceTerritoryStateId,
+    };
+  });
 
   return (
     <>

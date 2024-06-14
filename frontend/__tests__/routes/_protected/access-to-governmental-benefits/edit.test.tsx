@@ -126,6 +126,7 @@ vi.mock('~/utils/env.server', () => ({
 
 vi.mock('~/utils/locale-utils.server', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+  getLocale: vi.fn().mockReturnValue('en'),
 }));
 
 describe('Access View Governmental Page', () => {
@@ -191,15 +192,13 @@ describe('Access View Governmental Page', () => {
           {
             provinceTerritoryStateId: '9c440baa-35b3-eb11-8236-0022486d8d5f',
             countryId: 'CAN',
-            nameEn: 'Province name',
-            nameFr: 'Province name but in french',
+            name: 'Province name',
             abbr: 'abbrv',
           },
           {
             provinceTerritoryStateId: '9c440baa-35b3-eb11-8236-0022486d8d5f',
             countryId: 'CAN',
-            nameEn: 'Territory name',
-            nameFr: 'Territory name but in french',
+            name: 'Territory name',
             abbr: 'abbrv',
           },
         ],

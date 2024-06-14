@@ -22,8 +22,9 @@ import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { localizeAndSortRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -54,10 +55,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const { CANADA_COUNTRY_ID } = getEnv();
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = getLocale(request);
   const lookupService = getLookupService();
   const federalSocialPrograms = lookupService.getAllFederalSocialPrograms();
   const provincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
-  const allRegions = lookupService.getAllRegions();
+  const allRegions = localizeAndSortRegions(lookupService.getAllRegions(), locale);
   const regions = allRegions.filter((region) => region.countryId === CANADA_COUNTRY_ID);
 
   const csrfToken = String(session.get('csrfToken'));
@@ -194,16 +196,6 @@ export default function AccessToDentalInsuranceQuestion() {
   const [provinceValue, setProvinceValue] = useState(defaultState?.province);
   const errorSummaryId = 'error-summary';
 
-  const sortedRegions = useMemo(
-    () =>
-      regions.sort((a, b) => {
-        const nameA = i18n.language === 'en' ? a.nameEn : a.nameFr;
-        const nameB = i18n.language === 'en' ? b.nameEn : b.nameFr;
-        return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
-      }),
-    [i18n.language, regions],
-  );
-
   // Keys order should match the input IDs order.
   const errorMessages = useMemo(
     () => ({
@@ -338,10 +330,10 @@ export default function AccessToDentalInsuranceQuestion() {
                         onChange={handleOnRegionChanged}
                         options={[
                           { children: t('apply-child:children.dental-benefits.select-one'), value: '', hidden: true },
-                          ...sortedRegions.map((region) => ({
+                          ...regions.map((region) => ({
                             id: region.provinceTerritoryStateId,
                             value: region.provinceTerritoryStateId,
-                            children: getNameByLanguage(i18n.language, region),
+                            children: region.name,
                           })),
                         ]}
                         defaultValue={provinceValue}

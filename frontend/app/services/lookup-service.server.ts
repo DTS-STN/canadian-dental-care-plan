@@ -486,3 +486,8 @@ function createLookupService() {
     getPreferredLanguage: moize(getPreferredLanguage, { maxAge: 1000 * LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new PreferredLanguage memo') }),
   };
 }
+
+export type GetLookupService = typeof getLookupService;
+export type GetAllRegions = Pick<ReturnType<typeof getLookupService>, 'getAllRegions'>['getAllRegions'];
+export type GetAllRegionsReturnType = ReturnType<GetAllRegions>;
+export type Region = GetAllRegionsReturnType[number];
