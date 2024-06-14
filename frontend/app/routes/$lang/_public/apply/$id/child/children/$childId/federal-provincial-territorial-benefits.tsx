@@ -15,7 +15,6 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
-import { Progress } from '~/components/progress';
 import { loadApplyChildState, loadApplySingleChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -250,12 +249,6 @@ export default function AccessToDentalInsuranceQuestion() {
 
   return (
     <>
-      <div className="my-6 sm:my-8">
-        <p id="progress-label" className="sr-only mb-2">
-          {t('apply:progress.label')}
-        </p>
-        <Progress aria-labelledby="progress-label" value={90} size="lg" />
-      </div>
       <div className="max-w-prose">
         <p className="mb-4">{t('apply-child:children.dental-benefits.access-to-dental')}</p>
         <p className="mb-4">{t('apply-child:children.dental-benefits.eligibility-criteria')}</p>
