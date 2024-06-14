@@ -47,11 +47,14 @@ vi.mock('~/services/lookup-service.server', () => ({
 vi.mock('~/utils/env.server', () => ({
   getEnv: vi.fn().mockReturnValue({
     COMMUNICATION_METHOD_EMAIL_ID: 'email',
+    ENGLISH_LANGUAGE_CODE: 'en',
+    FRENCH_LANGUAGE_CODE: 'fr',
   }),
 }));
 
 vi.mock('~/utils/locale-utils.server', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
+  getLocale: vi.fn().mockResolvedValue('en'),
 }));
 
 describe('_public.apply.id.communication-preference', () => {
@@ -93,14 +96,12 @@ describe('_public.apply.id.communication-preference', () => {
         ],
         preferredLanguages: [
           {
-            id: 'en',
-            nameEn: 'English',
-            nameFr: 'Anglais',
+            id: 'fr',
+            name: 'French',
           },
           {
-            id: 'fr',
-            nameEn: 'French',
-            nameFr: 'Français',
+            id: 'en',
+            name: 'English',
           },
         ],
       });

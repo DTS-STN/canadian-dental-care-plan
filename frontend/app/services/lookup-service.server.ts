@@ -108,11 +108,16 @@ function createLookupService() {
   function getAllPreferredLanguages() {
     log.debug('Fetching all preferred languages');
 
-    const preferredLanguages = preferredLanguageJson.value[0].OptionSet.Options.map((o) => ({
-      id: o.Value.toString(),
-      nameEn: o.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label,
-      nameFr: o.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label,
-    }));
+    const preferredLanguages = [];
+    for (const o of preferredLanguageJson.value[0].OptionSet.Options) {
+      const id = o.Value.toString();
+      const nameEn = o.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label;
+      const nameFr = o.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label;
+      if (nameEn === undefined || nameFr === undefined) {
+        throw new Error('Missing English or French name in power platform data for all preferred languages');
+      }
+      preferredLanguages.push({ id, nameEn, nameFr });
+    }
 
     log.trace('Returning preferred languages: [%j]', preferredLanguages);
     return preferredLanguages;
@@ -497,3 +502,7 @@ export type MaritalStatus = ReturnType<GetAllMaritalStatuses>[number];
 
 export type GetAllRegions = Pick<ReturnType<typeof getLookupService>, 'getAllRegions'>['getAllRegions'];
 export type Region = ReturnType<GetAllRegions>[number];
+
+export type GetAllPreferredLanguages = Pick<ReturnType<typeof getLookupService>, 'getAllPreferredLanguages'>['getAllPreferredLanguages'];
+export type GetAllPreferredLanguagesReturnType = ReturnType<GetAllPreferredLanguages>;
+export type Language = GetAllPreferredLanguagesReturnType[number];

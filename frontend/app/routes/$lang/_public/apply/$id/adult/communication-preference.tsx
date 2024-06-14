@@ -22,8 +22,9 @@ import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { localizeAndSortPreferredLanguages } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -41,12 +42,14 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
-  const { COMMUNICATION_METHOD_EMAIL_ID } = getEnv();
+  const { COMMUNICATION_METHOD_EMAIL_ID, ENGLISH_LANGUAGE_CODE, FRENCH_LANGUAGE_CODE } = getEnv();
 
   const lookupService = getLookupService();
   const state = loadApplyAdultState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = getLocale(request);
   const preferredLanguages = lookupService.getAllPreferredLanguages();
+  const localizedAndSortedPreferredLanguages = localizeAndSortPreferredLanguages(preferredLanguages, locale, locale === 'en' ? ENGLISH_LANGUAGE_CODE : FRENCH_LANGUAGE_CODE);
   const preferredCommunicationMethods = lookupService.getAllPreferredCommunicationMethods();
 
   const communicationMethodEmail = preferredCommunicationMethods.find((method) => method.id === COMMUNICATION_METHOD_EMAIL_ID);
@@ -63,7 +66,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     csrfToken,
     meta,
     preferredCommunicationMethods,
-    preferredLanguages,
+    preferredLanguages: localizedAndSortedPreferredLanguages,
     defaultState: {
       ...(state.communicationPreferences ?? {}),
       email: state.communicationPreferences?.email ?? state.contactInformation?.email,
@@ -249,7 +252,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
                 legend={t('apply-adult:communication-preference.preferred-language')}
                 options={preferredLanguages.map((language) => ({
                   defaultChecked: defaultState.preferredLanguage === language.id,
-                  children: getNameByLanguage(i18n.language, language),
+                  children: language.name,
                   value: language.id,
                 }))}
                 errorMessage={errorMessages['input-radio-preferred-language-option-0']}
