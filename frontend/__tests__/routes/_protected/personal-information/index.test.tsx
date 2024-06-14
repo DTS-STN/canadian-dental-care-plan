@@ -153,7 +153,7 @@ describe('_gcweb-app.personal-information._index', () => {
             name: 'sample',
           },
         ],
-        maritalStatusList: [{ id: 'SINGLE', nameEn: 'Single', nameFr: 'Single but in french' }],
+        maritalStatus: 'Single',
         personalInformation: {
           clientNumber: '999999999',
           firstName: 'John',

@@ -20,7 +20,7 @@ import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
-import { localizeCountries, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountries, localizeMaritalStatuses, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -60,7 +60,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const countryList = localizeCountries(lookupService.getAllCountries(), locale);
   const regionList = localizeRegions(lookupService.getAllRegions(), locale);
-  const maritalStatusList = lookupService.getAllMaritalStatuses();
+
+  const maritalStatusList = localizeMaritalStatuses(lookupService.getAllMaritalStatuses(), locale);
+  const maritalStatus = maritalStatusList.find((maritalStatus) => maritalStatus.id === personalInformation.maritalStatusId)?.name;
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };
@@ -77,17 +79,14 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     meta,
     // TODO: Implement server-side mapping for mailing and home address provinceState to avoid sending the entire list to the client.
     regionList,
-    // TODO: Implement server-side mapping for maritalStatus to avoid sending the entire list to the client.
-    maritalStatusList,
+    maritalStatus,
     updatedInfo,
   });
 }
 
 export default function PersonalInformationIndex() {
-  const { personalInformation, preferredLanguage, countryList, birthParsedFormat, maritalStatusList, regionList, updatedInfo } = useLoaderData<typeof loader>();
+  const { personalInformation, preferredLanguage, countryList, birthParsedFormat, maritalStatus, regionList, updatedInfo } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const maritalStatus = maritalStatusList.find((maritalStatus) => maritalStatus.id === personalInformation.maritalStatusId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'];
-
   const params = useParams();
   const userOrigin = useUserOrigin();
 
@@ -200,7 +199,7 @@ export default function PersonalInformationIndex() {
             </p>
           )}
         </DescriptionListItem>
-        <DescriptionListItem term={t('personal-information:index.marital-status')}>{`${maritalStatus ?? t('personal-information:index.no-marital-status')} `}</DescriptionListItem>
+        <DescriptionListItem term={t('personal-information:index.marital-status')}>{maritalStatus ?? t('personal-information:index.no-marital-status')}</DescriptionListItem>
         <DescriptionListItem term={t('personal-information:index.date-of-birth')}>{birthParsedFormat}</DescriptionListItem>
       </dl>
 
