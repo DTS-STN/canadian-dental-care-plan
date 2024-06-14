@@ -126,9 +126,9 @@
           "title": "Additional information",
           "eligible": "A child is still considered to have access to dental insurance or coverage if a parent or legal guardian chooses to opt out of benefits provided through:",
           "eligible-list": {
-            "employer": "an employer;",
-            "pension": "pension (see exception); or",
-            "professional": "professional or student organization"
+            "employer": "an employer",
+            "pension": "pension (see exception)",
+            "professional": "professional or student organization."
           },
           "not-eligible": "As such, the child is not eligible for Canadian Dental Care Plan.",
           "not-eligible-purchased": "If a parent or legal guardian purchased the current dental insurance policy privately, the child is not eligible for the Canadian Dental Care Plan while that coverage is in effect.",
@@ -203,7 +203,7 @@
   },
   "communication-preference": {
     "page-title": "Communication",
-    "note": "If your child is eligible, we will share your and child's information with Sun Life Assurance Company of Canada (Sun Life). Sun Life will be responsible for handling member enrolment and administering claims processing and benefits for the Canadian Dental Care Plan.",
+    "note": "If your child is eligible, we will share your and your child's information with Sun Life Assurance Company of Canada (Sun Life). Sun Life will be responsible for handling member enrolment and administering claims processing and benefits for the Canadian Dental Care Plan.",
     "preferred-method": "What is your preferred method of communication for Sun Life?",
     "preferred-language": "What is your preferred official language of communication?",
     "email": "Email address",
@@ -243,7 +243,7 @@
     "msca-link-account": "https://www.canada.ca/en/employment-social-development/services/my-account.html",
     "msca-link-checker": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#status",
     "how-insurance": "How do I use my Canadian Dental Care Plan",
-    "eligible-text": "If your child(ren) is deemed eligible, Sun Life will send your child(ren) a welcome package. The welcome package will include your child's member card and details about the Canadian Dental Care Plan, including your coverage start date. The Canadian Dental Care Plan will not cover you for dental services received before that date.",
+    "eligible-text": "If your child is deemed eligible, Sun Life will send them a welcome package. The welcome package will include your child's member card and details about the Canadian Dental Care Plan, including their coverage start date. The Canadian Dental Care Plan will not cover dental services received before that start date.",
     "more-info-cdcp": "For more information on what services and how much will be covered, visit <moreInfoLink>Canadian Dental Care Plan: What is covered</moreInfoLink>.",
     "more-info-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/coverage.html",
     "more-info-service": "For more information, contact <dentalContactUsLink>Service Canada</dentalContactUsLink>.",

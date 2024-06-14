@@ -1,6 +1,6 @@
 {
   "applicant-information": {
-    "page-title": "Renseignements sur le parent ou le tuteur légal",
+    "page-title": "Coordonnées du parent ou du tuteur légal",
     "form-instructions-sin": "Veuillez indiquer votre nom légal tel qu'indiqué sur votre carte ou votre lettre de numéro d'assurance sociale (NAS).",
     "form-instructions-info": "Nous utiliserons les renseignements que vous avez fournis pour vérifier votre identité. Tout renseignement qui ne correspond pas à ceux associés à votre numéro d'assurance sociale pourrait retarder le traitement de votre demande.",
     "date-of-birth": "Date de naissance",
@@ -50,7 +50,7 @@
       "continue-btn": "Continuer avec la demande",
       "cancel-btn": "Annuler",
       "save-btn": "Enregistrer",
-      "dental-insurance-title": "Accès à une assurance ou une couverture dentaire",
+      "dental-insurance-title": "Accès à d'autres assurances ou couvertures de soins dentaires",
       "dental-benefit-title": "Accès à des prestations dentaires gouvernementales",
       "dental-benefit-has-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
       "dental-benefit-has-no-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
@@ -243,7 +243,7 @@
     "msca-link-account": "https://www.canada.ca/fr/emploi-developpement-social/services/mon-dossier.html",
     "msca-link-checker": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#etat",
     "how-insurance": "Comment utiliser le Régime canadien de soins dentaires",
-    "eligible-text": "Si votre/vos enfant(s) sont jugés admissibles, la Sun Life lui (leur) enverra une trousse de bienvenue par la poste. La trousse de bienvenue comprendra la carte de membre de votre/vos enfant(s) et des renseignements sur le Régime canadien de soins dentaires, y compris la date de début de votre couverture. Le Régime canadien de soins dentaires ne couvrira pas les services de soins dentaires que vous aurez reçus avant cette date.",
+    "eligible-text": "Si votre enfant sont jugés admissibles, la Sun Life lui enverra une trousse de bienvenue par la poste. La trousse de bienvenue comprendra la carte de membre de votre enfant et des renseignements sur le Régime canadien de soins dentaires, y compris la date de début de sa couverture. Le Régime canadien de soins dentaires ne couvrira pas les services de soins dentaires que vous aurez reçus avant cette date.",
     "more-info-cdcp": "Pour en savoir plus sur les services et le montant de la couverture, consultez le site Web du Régime canadien de soins dentaires. <moreInfoLink>Quels sont les services couverts.</moreInfoLink>",
     "more-info-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/couverture.html",
     "more-info-service": "Pour plus d'informations, contactez <dentalContactUsLink>Service Canada</dentalContactUsLink>.",
@@ -475,7 +475,7 @@
     "no": "Non"
   },
   "review-child-information": {
-    "read-carefully": "Veuillez examiner attentivement les renseignements suivants. Les renseignements fournis seront utilisés par la Sun Life pour créer le compte de membre de votre/vos enfant(s) et figureront sur leur(s) carte(s) de membre.",
+    "read-carefully": "Veuillez examiner attentivement les renseignements suivants. Les renseignements fournis seront utilisés par la Sun Life pour créer le compte de membre de votre/vos enfant(s).",
     "page-title": "Passer en revue les renseignements de l'enfant",
     "page-sub-title": "Renseignements sur l'enfant {{child}}",
     "dob-title": "Date de naissance",
@@ -486,7 +486,7 @@
     "full-name-title": "Nom complet",
     "full-name-change": "Modifier le nom complet",
     "dental-title": "{{child}} accès à l'assurance dentaire",
-    "dental-insurance-title": "Accès à une assurance ou une couverture dentaire",
+    "dental-insurance-title": "Accès à d'autres assurances ou couvertures de soins dentaires",
     "dental-insurance-change": "Modifier la réponse à «\u00a0accès à l'assurance dentaire\u00a0»",
     "dental-benefit-title": "Accès à des prestations dentaires gouvernementales",
     "dental-benefit-change": "Modifier la réponse à «\u00a0soins dentaires gouvernementaux\u00a0»",

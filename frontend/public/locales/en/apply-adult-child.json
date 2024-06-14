@@ -118,9 +118,9 @@
           "title": "Additional information",
           "eligible": "A child is still considered to have access to dental insurance or coverage if a parent or legal guardian chooses to opt out of benefits provided through:",
           "eligible-list": {
-            "employer": "an employer;",
-            "pension": "pension (see exception); or",
-            "professional": "professional or student organization"
+            "employer": "an employer",
+            "pension": "pension (see exception)",
+            "professional": "professional or student organization."
           },
           "not-eligible": "As such, the child is not eligible for Canadian Dental Care Plan.",
           "not-eligible-purchased": "If a parent or legal guardian purchased the current dental insurance policy privately, a child is not eligible for the Canadian Dental Care Plan while that coverage is in effect.",
@@ -397,9 +397,9 @@
         "title": "Additional information",
         "eligible": "You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your or a family member's:",
         "eligible-list": {
-          "employer": "employer;",
-          "pension": "pension (see exception); or",
-          "professional": "professional or student organization"
+          "employer": "employer",
+          "pension": "pension (see exception)",
+          "professional": "professional or student organization."
         },
         "not-eligible": "As such, you are not eligible for the Canadian Dental Care Plan.",
         "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own, you are not eligible for the Canadian Dental Care Plan while that coverage is in effect.",

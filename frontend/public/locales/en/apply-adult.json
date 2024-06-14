@@ -174,8 +174,8 @@
           "cannot-opt": "you can't opt back in under the pension rules"
         },
         "not-eligible": "You are still considered to have access to dental insurance or coverage if you choose to opt out of benefits provided through your or a family member's:",
-        "not-eligible-employer": "employer;",
-        "not-eligible-pension": "pension (see exception); or",
+        "not-eligible-employer": "employer",
+        "not-eligible-pension": "pension (see exception)",
         "not-eligible-organization": "professional or student organization.",
         "not-eligible-note": "As such, you are not eligible for the Canadian Dental Care Plan.",
         "not-eligible-purchased": "If you purchased your current dental insurance policy privately on your own, you are not eligible for the Canadian Dental Care Plan while that coverage is in effect."
