@@ -3,7 +3,6 @@ import { json } from '@remix-run/node';
 import { useParams } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
-import invariant from 'tiny-invariant';
 
 import pageIds from '../../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
@@ -14,7 +13,7 @@ import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
+import { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';
@@ -39,9 +38,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:success.page-title') }) };
-
-  const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
   const idToken: IdToken = session.get('idToken');
   auditService.audit('page-view.unsubscribe-alerts-success', { userId: idToken.sub });

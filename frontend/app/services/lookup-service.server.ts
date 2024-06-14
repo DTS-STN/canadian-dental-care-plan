@@ -449,7 +449,7 @@ function createLookupService() {
   }
 
   function getAllClientFriendlyStatuses() {
-    log.debug('Fetching all marital statuses');
+    log.debug('Fetching all client friendly statuses');
 
     const clientFriendlyStatuses = clientFriendlyStatusesJson.value.map((clientFriendlyStatus) => ({
       id: clientFriendlyStatus.esdc_clientfriendlystatusid,
@@ -457,7 +457,7 @@ function createLookupService() {
       nameFr: clientFriendlyStatus.esdc_descriptionfrench,
     }));
 
-    log.trace('Returning marital statuses: [%j]', clientFriendlyStatuses);
+    log.trace('Returning client friendly statuses: [%j]', clientFriendlyStatuses);
     return clientFriendlyStatuses;
   }
 

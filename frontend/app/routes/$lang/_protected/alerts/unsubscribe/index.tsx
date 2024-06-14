@@ -60,8 +60,6 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:unsubscribe.page-title') }) };
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
-
   const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
   if (!alertSubscription) {
     instrumentationService.countHttpStatus('alerts.unsubscribe', 302);
@@ -106,8 +104,6 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
-
   const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
   invariant(alertSubscription, 'Expected alertSubscription to be defined');
 

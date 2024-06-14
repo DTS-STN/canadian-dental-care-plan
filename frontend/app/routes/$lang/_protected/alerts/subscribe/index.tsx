@@ -108,9 +108,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   }
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
-
-  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sin);
+  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
   invariant(alertSubscription, 'Expected alertSubscription to be defined');
 
   //TODO: update it in the next PR
