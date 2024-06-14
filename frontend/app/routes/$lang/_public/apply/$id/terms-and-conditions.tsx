@@ -111,7 +111,10 @@ export default function ApplyIndex() {
               <h2 className="font-lato text-lg font-bold"> {t('apply:terms-and-conditions.privacy-notice-statement.personal-information.heading')}</h2>
               <p>{t('apply:terms-and-conditions.privacy-notice-statement.personal-information.service-canada-application-administration')}</p>
               <p>
-                <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.privacy-notice-statement.personal-information.collection-use" components={{ microsoftDataPrivacyPolicy }} />
+                <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.privacy-notice-statement.personal-information.collection-use" />
+              </p>
+              <p>
+                <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.privacy-notice-statement.personal-information.microsoft-policy" components={{ microsoftDataPrivacyPolicy }} />
               </p>
             </section>
             <section className="space-y-4">
@@ -140,7 +143,9 @@ export default function ApplyIndex() {
             </section>
             <section className="space-y-4">
               <h2 className="font-lato text-lg font-bold"> {t('apply:terms-and-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.heading')}</h2>
-              <p>{t('apply:terms-and-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.enrol-consent')}</p>
+              <p>
+                <Trans ns={handle.i18nNamespaces} i18nKey="apply:terms-and-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.enrol-consent" />
+              </p>
               <p>{t('apply:terms-and-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.considered-minor')}</p>
               <p>{t('apply:terms-and-conditions.sharing-your-information.sharing-of-information-and-oral-health-providers.analysis')}</p>
             </section>
