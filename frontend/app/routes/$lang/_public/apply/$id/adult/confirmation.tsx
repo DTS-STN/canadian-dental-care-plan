@@ -21,6 +21,7 @@ import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { localizeCountries, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -69,12 +70,12 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     .join(', ');
 
   // Getting province by Id
-  const allRegions = lookupService.getAllRegions();
+  const allRegions = localizeRegions(lookupService.getAllRegions(), locale);
   const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.contactInformation?.mailingProvince);
   const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.contactInformation?.homeProvince);
 
   // Getting Country by Id
-  const allCountries = lookupService.getAllCountries();
+  const allCountries = localizeCountries(lookupService.getAllCountries(), locale);
   const countryMailing = allCountries.find((country) => country.countryId === state.contactInformation?.mailingCountry);
   const countryHome = allCountries.find((country) => country.countryId === state.contactInformation?.homeCountry);
 
@@ -171,7 +172,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function ApplyFlowConfirm() {
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, csrfToken } = useLoaderData<typeof loader>();
 
@@ -306,7 +307,7 @@ export default function ApplyFlowConfirm() {
                 city={mailingAddressInfo.city}
                 provinceState={mailingAddressInfo.province?.abbr}
                 postalZipCode={mailingAddressInfo.postalCode}
-                country={i18n.language === 'en' ? mailingAddressInfo.country?.nameEn ?? '' : mailingAddressInfo.country?.nameFr ?? ''}
+                country={mailingAddressInfo.country?.name ?? ''}
                 apartment={mailingAddressInfo.apartment}
               />
             </DescriptionListItem>
@@ -316,7 +317,7 @@ export default function ApplyFlowConfirm() {
                 city={homeAddressInfo.city ?? ''}
                 provinceState={homeAddressInfo.province?.abbr}
                 postalZipCode={homeAddressInfo.postalCode}
-                country={i18n.language === 'en' ? homeAddressInfo.country?.nameEn ?? '' : homeAddressInfo.country?.nameFr ?? ''}
+                country={homeAddressInfo.country?.name ?? ''}
                 apartment={homeAddressInfo.apartment}
               />
             </DescriptionListItem>

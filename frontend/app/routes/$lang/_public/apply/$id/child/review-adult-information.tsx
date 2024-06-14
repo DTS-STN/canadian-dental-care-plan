@@ -31,6 +31,7 @@ import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { localizeCountries, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -63,12 +64,12 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const lookupService = getLookupService();
 
   // Getting province by Id
-  const allRegions = lookupService.getAllRegions();
+  const allRegions = localizeRegions(lookupService.getAllRegions(), locale);
   const provinceMailing = allRegions.find((region) => region.provinceTerritoryStateId === state.contactInformation.mailingProvince);
   const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.contactInformation.homeProvince);
 
   // Getting Country by Id
-  const allCountries = lookupService.getAllCountries();
+  const allCountries = localizeCountries(lookupService.getAllCountries(), locale);
   const countryMailing = allCountries.find((country) => country.countryId === state.contactInformation.mailingCountry);
   const countryHome = allCountries.find((country) => country.countryId === state.contactInformation.homeCountry);
   invariant(countryMailing, `Unexpected mailing address country: ${state.contactInformation.mailingCountry}`);
@@ -333,7 +334,7 @@ export default function ReviewInformation() {
                   city={mailingAddressInfo.city}
                   provinceState={mailingAddressInfo.province?.abbr}
                   postalZipCode={mailingAddressInfo.postalCode}
-                  country={i18n.language === 'en' ? mailingAddressInfo.country.nameEn : mailingAddressInfo.country.nameFr}
+                  country={mailingAddressInfo.country.name}
                   apartment={mailingAddressInfo.apartment}
                 />
                 <p className="mt-4">
@@ -348,7 +349,7 @@ export default function ReviewInformation() {
                   city={homeAddressInfo.city ?? ''}
                   provinceState={homeAddressInfo.province?.abbr}
                   postalZipCode={homeAddressInfo.postalCode}
-                  country={i18n.language === 'en' ? homeAddressInfo.country.nameEn : homeAddressInfo.country.nameFr}
+                  country={homeAddressInfo.country.name}
                   apartment={homeAddressInfo.apartment}
                 />
                 <p className="mt-4">

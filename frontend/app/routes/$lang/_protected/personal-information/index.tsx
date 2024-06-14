@@ -20,6 +20,7 @@ import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
+import { localizeCountries, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -57,8 +58,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const preferredLanguage = personalInformation.preferredLanguageId ? lookupService.getPreferredLanguage(personalInformation.preferredLanguageId) : undefined;
   const birthParsedFormat = personalInformation.birthDate ? toLocaleDateString(parseDateString(personalInformation.birthDate), locale) : undefined;
 
-  const countryList = lookupService.getAllCountries();
-  const regionList = lookupService.getAllRegions();
+  const countryList = localizeCountries(lookupService.getAllCountries(), locale);
+  const regionList = localizeRegions(lookupService.getAllRegions(), locale);
   const maritalStatusList = lookupService.getAllMaritalStatuses();
 
   const t = await getFixedT(request, handle.i18nNamespaces);
@@ -67,7 +68,19 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const updatedInfo = session.get('personal-info-updated');
   session.unset('personal-info-updated');
 
-  return json({ preferredLanguage, countryList, personalInformation, birthParsedFormat, meta, regionList, maritalStatusList, updatedInfo });
+  return json({
+    preferredLanguage,
+    // TODO: Implement server-side mapping for mailing and home address country to avoid sending the entire list to the client.
+    countryList,
+    personalInformation,
+    birthParsedFormat,
+    meta,
+    // TODO: Implement server-side mapping for mailing and home address provinceState to avoid sending the entire list to the client.
+    regionList,
+    // TODO: Implement server-side mapping for maritalStatus to avoid sending the entire list to the client.
+    maritalStatusList,
+    updatedInfo,
+  });
 }
 
 export default function PersonalInformationIndex() {
@@ -98,7 +111,7 @@ export default function PersonalInformationIndex() {
                   city={personalInformation.homeAddress.cityName ?? ''}
                   provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.homeAddress!.provinceTerritoryStateId)?.abbr}
                   postalZipCode={personalInformation.homeAddress.postalCode}
-                  country={countryList.find((country) => country.countryId === personalInformation.homeAddress!.countryId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '}
+                  country={countryList.find((country) => country.countryId === personalInformation.homeAddress!.countryId)?.name ?? ' '}
                 />
               ) : (
                 <p>{t('personal-information:index.no-address-on-file')}</p>
@@ -122,7 +135,7 @@ export default function PersonalInformationIndex() {
                   city={personalInformation.mailingAddress.cityName ?? ''}
                   provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.mailingAddress!.provinceTerritoryStateId)?.abbr}
                   postalZipCode={personalInformation.mailingAddress.postalCode}
-                  country={countryList.find((country) => country.countryId === personalInformation.mailingAddress!.countryId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ''}
+                  country={countryList.find((country) => country.countryId === personalInformation.mailingAddress!.countryId)?.name ?? ''}
                 />
               ) : (
                 <p>{t('personal-information:index.no-address-on-file')}</p>

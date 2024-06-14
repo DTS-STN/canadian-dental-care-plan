@@ -488,6 +488,11 @@ function createLookupService() {
 }
 
 export type GetLookupService = typeof getLookupService;
+
+export type GetAllCountries = Pick<ReturnType<typeof getLookupService>, 'getAllCountries'>['getAllCountries'];
+export type GetAllCountriesReturnType = ReturnType<GetAllCountries>;
+export type Country = GetAllCountriesReturnType[number];
+
 export type GetAllRegions = Pick<ReturnType<typeof getLookupService>, 'getAllRegions'>['getAllRegions'];
 export type GetAllRegionsReturnType = ReturnType<GetAllRegions>;
 export type Region = GetAllRegionsReturnType[number];

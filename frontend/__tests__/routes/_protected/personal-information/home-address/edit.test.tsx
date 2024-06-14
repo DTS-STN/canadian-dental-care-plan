@@ -94,8 +94,7 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
         countryList: [
           {
             code: 'SUP',
-            nameEn: 'super country',
-            nameFr: '(FR) super country',
+            name: 'super country',
           },
         ],
         meta: {},
