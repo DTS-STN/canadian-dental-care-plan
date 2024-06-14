@@ -241,7 +241,7 @@ export default function AccessToDentalInsuranceQuestion() {
         <p id="progress-label" className="sr-only mb-2">
           {t('apply:progress.label')}
         </p>
-        <Progress aria-labelledby="progress-label" value={90} size="lg" />
+        <Progress aria-labelledby="progress-label" value={88} size="lg" />
       </div>
       <div className="max-w-prose">
         <p className="mb-4">{t('apply-adult:dental-benefits.access-to-dental')}</p>
