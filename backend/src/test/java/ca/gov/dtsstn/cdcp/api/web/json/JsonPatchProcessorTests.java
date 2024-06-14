@@ -59,9 +59,9 @@ class JsonPatchProcessorTests {
 		assertThatExceptionOfType(BindException.class)
 			.isThrownBy(() -> jsonPatchProcessor.patch(entity, jsonMergePatch))
 			.extracting(BindException::getAllErrors)
-				.matches(errors -> errors.stream()
-					.map(DefaultMessageSourceResolvable::getDefaultMessage)
-					.anyMatch("name should not be blank"::equals));
+			.matches(errors -> errors.stream()
+				.map(DefaultMessageSourceResolvable::getDefaultMessage)
+				.anyMatch("name should not be blank"::equals));
 	}
 
 	@Test
@@ -92,9 +92,9 @@ class JsonPatchProcessorTests {
 		assertThatExceptionOfType(BindException.class)
 			.isThrownBy(() -> jsonPatchProcessor.patch(entity, jsonPatch))
 			.extracting(BindException::getAllErrors)
-				.matches(errors -> errors.stream()
-					.map(DefaultMessageSourceResolvable::getDefaultMessage)
-					.anyMatch("name should not be blank"::equals));
+			.matches(errors -> errors.stream()
+				.map(DefaultMessageSourceResolvable::getDefaultMessage)
+				.anyMatch("name should not be blank"::equals));
 	}
 
 	static class MyEntity {
