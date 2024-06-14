@@ -79,7 +79,7 @@
     "spouse-info": "Renseignements sur l'époux/l'épouse ou le conjoint/la conjointe de fait",
     "contact-info": "Coordonnées",
     "comm-prefs": "Communication",
-    "dental-insurance": "Accès à une assurance ou une couverture dentaire",
+    "dental-insurance": "Accès à d'autres assurances ou couvertures de soins dentaires",
     "dental-benefit-has-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
     "dob": "Date de naissance",
     "sin": "Numéro d'assurance sociale (NAS)",
@@ -287,7 +287,7 @@
     }
   },
   "contact-information": {
-    "page-title": "Renseignements personnels",
+    "page-title": "Coordonnées",
     "phone-header": "Numéro de téléphone",
     "add-phone": "L'ajout d'un numéro de téléphone aide le gouvernement du Canada à vous contacter en cas de problème avec votre demande. Sinon, nous vous contacterons par la poste.",
     "phone-number": "Numéro de téléphone (facultatif)",
@@ -383,7 +383,7 @@
     "lang-pref-title": "Langue de préférence",
     "lang-pref-change": "Modifier la langue de préférence",
     "dental-title": "Accès à l'assurance dentaire",
-    "dental-insurance-title": "Accès à une assurance ou une couverture dentaire",
+    "dental-insurance-title": "Accès à d'autres assurances ou couvertures de soins dentaires",
     "dental-insurance-change": "Modifier la réponse à «\u00a0accès à l'assurance dentaire\u00a0»",
     "dental-benefit-title": "Accès à des prestations dentaires gouvernementales",
     "dental-benefit-change": "Modifier la réponse à «\u00a0soins dentaires gouvernementaux\u00a0»",
