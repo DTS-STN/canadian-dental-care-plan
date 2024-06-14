@@ -60,7 +60,7 @@ export default function DataUnavailable() {
       </div>
       {userOrigin && (
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={userOrigin.to}>
+          <ButtonLink id="back-button" to={userOrigin.to} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Return to dashboard - You have not applied for CDCP click">
             {t('data-unavailable:back-button')}
           </ButtonLink>
         </div>
