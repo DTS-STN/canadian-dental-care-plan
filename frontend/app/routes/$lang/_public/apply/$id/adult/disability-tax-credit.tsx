@@ -133,7 +133,7 @@ export default function ApplyFlowDisabilityTaxCredit() {
         <p id="progress-label" className="sr-only mb-2">
           {t('apply:progress.label')}
         </p>
-        <Progress aria-labelledby="progress-label" value={35} size="lg" />
+        <Progress aria-labelledby="progress-label" value={39} size="lg" />
       </div>
       <div className="max-w-prose">
         <p className="mb-5">{t('apply-adult:disability-tax-credit.non-refundable')}</p>
