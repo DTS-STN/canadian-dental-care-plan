@@ -116,7 +116,7 @@ export default function ApplyFlowLivingIndependently() {
         <p id="progress-label" className="sr-only mb-2">
           {t('apply:progress.label')}
         </p>
-        <Progress aria-labelledby="progress-label" value={10} size="lg" />
+        <Progress aria-labelledby="progress-label" value={30} size="lg" />
       </div>
       <div className="max-w-prose">
         <p className="mb-6">{t('apply-adult-child:living-independently.description')}</p>
