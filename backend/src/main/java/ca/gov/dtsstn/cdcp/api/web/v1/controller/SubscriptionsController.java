@@ -6,6 +6,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,14 +29,15 @@ import ca.gov.dtsstn.cdcp.api.service.domain.Subscription;
 import ca.gov.dtsstn.cdcp.api.service.domain.User;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceConflictException;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
+import ca.gov.dtsstn.cdcp.api.web.json.JsonPatchProcessor;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionCreateModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionModel;
-import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionUpdateModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.mapper.SubscriptionModelMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.json.JsonPatch;
 import jakarta.validation.constraints.NotBlank;
 
 @Validated
@@ -53,17 +55,22 @@ public class SubscriptionsController {
 
 	private final UserService userService;
 
+	private final JsonPatchProcessor jsonPatchProcessor;
+
 	public SubscriptionsController(
 			AlertTypeService alertTypeService,
 			LanguageService languageService,
-			UserService userService) {
+			UserService userService,
+			JsonPatchProcessor jsonPatchProcessor) {
 		Assert.notNull(alertTypeService, "alertTypeService is required; it must not be null");
 		Assert.notNull(languageService, "languageService is required; it must not be null");
 		Assert.notNull(userService, "userService is required; it must not be null");
+		Assert.notNull(jsonPatchProcessor, "jsonPatchProcessor is required; it must not be null");
 
 		this.alertTypeService = alertTypeService;
 		this.languageService = languageService;
 		this.userService = userService;
+		this.jsonPatchProcessor = jsonPatchProcessor;
 	}
 
 	@PostMapping
@@ -130,7 +137,6 @@ public class SubscriptionsController {
 		return subscriptionModelMapper.toModel(userId, subscription);
 	}
 
-	//TODO: will use JSON PATCH in later PR
 	@PatchMapping({ "/{subscriptionId}" })
 	@Operation(summary = "Update a subscription by ID")
 	@ApiResponse(responseCode = "204", description = "The request has been successfully processed.")
@@ -138,13 +144,10 @@ public class SubscriptionsController {
 			@NotBlank(message = "userId must not be null or blank")
 			@Parameter(description = "The id of the user.", example = "00000000-0000-0000-0000-000000000000")
 			@PathVariable String userId,
-
 			@NotBlank(message = "subscriptionId must not be null or blank")
 			@Parameter(description = "The id of the subscription.", example = "00000000-0000-0000-0000-000000000000")
 			@PathVariable String subscriptionId,
-
-			@Validated @RequestBody SubscriptionUpdateModel subscriptionUpdateModel) {
-
+			@Validated @RequestBody JsonPatch patch) throws BindException {
 		final var user = userService.getUserById(userId)
 			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));
 
@@ -152,10 +155,12 @@ public class SubscriptionsController {
 			.filter(byId(subscriptionId)).findFirst()
 			.orElseThrow(() -> new ResourceNotFoundException("No subscription with id=[%s] was found".formatted(subscriptionId)));
 
-		final var language = languageService.readByMsLocaleCode(subscriptionUpdateModel.getMsLanguageCode())
-				.orElseThrow(() -> new ResourceNotFoundException("No language with msLanguageCode=[%s] was found".formatted(subscriptionUpdateModel.getMsLanguageCode())));
+		final var subscriptionModel = subscriptionModelMapper.toPatchModel(subscription);
 
-		userService.updateSubscriptionForUser(userId, subscription.getId(), language.getId());
+		final var subscriptionPatched = jsonPatchProcessor.patch(subscriptionModel, patch);
+		final var language = languageService.readByMsLocaleCode(subscriptionPatched.getMsLanguageCode())
+			.orElseThrow(() -> new ResourceNotFoundException("No language with msLanguageCode=[%s] was found".formatted(subscriptionPatched.getMsLanguageCode())));
+		userService.updateSubscriptionForUser(userId, subscriptionId, language.getId());
 	}
 
 	@DeleteMapping({ "/{subscriptionId}" })

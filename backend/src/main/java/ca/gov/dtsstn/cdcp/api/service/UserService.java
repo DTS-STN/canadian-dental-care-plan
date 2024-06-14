@@ -160,7 +160,10 @@ public class UserService {
 
 		final var subscription = user.getSubscriptions().stream()
 			.filter(byId(subscriptionId)).findFirst().orElseThrow();
-		subscription.setLanguage(preferredLanguage);
+
+		if (StringUtils.equals(subscription.getLanguage().getId(), languageId) == false) {
+			subscription.setLanguage(preferredLanguage);
+		}
 
 		userRepository.save(user);
 	}

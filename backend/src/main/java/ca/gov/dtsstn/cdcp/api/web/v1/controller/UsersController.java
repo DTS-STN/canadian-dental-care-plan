@@ -22,7 +22,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.json.JsonPatch;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.constraints.NotBlank;
 
 @Validated
@@ -69,21 +68,8 @@ public class UsersController {
 
 		final var userPatchModel = userModelMapper.toPatchModel(user);
 
-		try {
-			final var userPatched = jsonPatchProcessor.patch(userPatchModel, patch);
-			userService.updateUser(id, userModelMapper.toDomain(userPatched));
-		}
-		catch (final ConstraintViolationException constraintViolationException) {
-			final var bindException = new BindException(patch, "jsonPatch");
-
-			constraintViolationException.getConstraintViolations().forEach(constraintViolation -> {
-				final var errorCode = constraintViolation.getPropertyPath().toString();
-				final var message = constraintViolation.getMessage();
-				bindException.reject(errorCode, message);
-			});
-
-			throw bindException;
-		}
+		final var userPatched = jsonPatchProcessor.patch(userPatchModel, patch);
+		userService.updateUser(id, userModelMapper.toDomain(userPatched));
 	}
 
 }

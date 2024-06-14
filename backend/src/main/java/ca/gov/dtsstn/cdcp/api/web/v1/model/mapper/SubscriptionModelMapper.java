@@ -17,6 +17,7 @@ import ca.gov.dtsstn.cdcp.api.service.domain.Subscription;
 import ca.gov.dtsstn.cdcp.api.web.v1.controller.SubscriptionsController;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionCreateModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionModel;
+import ca.gov.dtsstn.cdcp.api.web.v1.model.SubscriptionPatchModel;
 import jakarta.annotation.Nullable;
 
 @Mapper
@@ -60,5 +61,9 @@ public abstract class SubscriptionModelMapper extends AbstractModelMapper {
 	@Mapping(target = "alertType.code", source = "alertTypeCode")
 	@Mapping(target = "language.msLocaleCode", source = "msLanguageCode")
 	public abstract Subscription toDomain(@Nullable SubscriptionModel subscriptionModel);
+
+	@Nullable
+	@Mapping(target = "msLanguageCode", source = "language.msLocaleCode")
+	public abstract SubscriptionPatchModel toPatchModel(@Nullable Subscription subscription);
 
 }

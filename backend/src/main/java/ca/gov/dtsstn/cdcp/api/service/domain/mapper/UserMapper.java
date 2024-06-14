@@ -30,7 +30,7 @@ public abstract class UserMapper extends AbstractDomainMapper {
 	public abstract UserEntity toUserEntity(@Nullable User user);
 
 	/**
-	 * Updates a {@link UserEntity} entity with the values from a {@link UserPatch} domain object.
+	 * Updates a {@link UserEntity} entity with the values from a {@link User} domain object.
 	 */
 	@Nullable
 	@Mapping(target = "email", ignore = false)

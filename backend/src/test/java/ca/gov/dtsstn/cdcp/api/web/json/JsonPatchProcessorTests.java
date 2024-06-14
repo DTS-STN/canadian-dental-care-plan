@@ -7,7 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.validation.BindException;
+import org.springframework.validation.SmartValidator;
 
 import jakarta.json.Json;
 import jakarta.validation.ConstraintViolationException;
@@ -18,14 +21,16 @@ class JsonPatchProcessorTests {
 
 	JsonPatchProcessor jsonPatchProcessor;
 
+	@Mock SmartValidator validator;
+
 	@BeforeEach
 	void beforeEach() {
-		this.jsonPatchProcessor = new JsonPatchProcessor();
+		this.jsonPatchProcessor = new JsonPatchProcessor(validator);
 	}
 
 	@Test
 	@DisplayName("Test patch(..) w/ JSON merge patch")
-	void testPatchJsonMergePatch() {
+	void testPatchJsonMergePatch() throws BindException{
 		final var entity = new MyEntity("id", "name");
 		final var patchObject = Json.createObjectBuilder().add("name", "updated name").build();
 		final var jsonMergePatch = Json.createMergePatch(Json.createObjectBuilder(patchObject).build());
@@ -50,7 +55,7 @@ class JsonPatchProcessorTests {
 
 	@Test
 	@DisplayName("Test patch(..) w/ JSON patch")
-	void testPatchJsonPatch() {
+	void testPatchJsonPatch() throws BindException {
 		final var entity = new MyEntity("id", "name");
 		final var patchObject = Json.createObjectBuilder().add("op", "replace").add("path", "/name").add("value", "updated name").build();
 		final var jsonPatch = Json.createPatch(Json.createArrayBuilder().add(patchObject).build());

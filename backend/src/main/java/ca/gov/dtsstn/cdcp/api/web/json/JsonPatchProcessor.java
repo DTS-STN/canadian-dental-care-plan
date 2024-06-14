@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -17,9 +18,10 @@ import jakarta.json.JsonMergePatch;
 import jakarta.json.JsonPatch;
 import jakarta.json.JsonStructure;
 import jakarta.json.JsonValue;
-import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
+
+import org.springframework.validation.BindException;
+import org.springframework.validation.DirectFieldBindingResult;
+import org.springframework.validation.SmartValidator;
 
 @Component
 public class JsonPatchProcessor {
@@ -30,7 +32,13 @@ public class JsonPatchProcessor {
 		.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
 		.findAndRegisterModules();
 
-	private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+	private final SmartValidator validator;
+
+
+	public JsonPatchProcessor(SmartValidator validator) {
+		Assert.notNull(validator, "validator is required; it must not be null");
+		this.validator = validator;
+	}
 
 	/**
 	 * Applies a JSON merge patch to the specified object. The object is not modified by the patch.
@@ -39,7 +47,7 @@ public class JsonPatchProcessor {
 	 * @param jsonMergePatch the JSON merge patch to apply
 	 * @return the transformed object after the patch
 	 */
-	public <T> T patch(T object, JsonMergePatch jsonMergePatch) {
+	public <T> T patch(T object, JsonMergePatch jsonMergePatch) throws BindException {
 		return patch(object, jsonMergePatch::apply);
 	}
 
@@ -50,12 +58,12 @@ public class JsonPatchProcessor {
 	 * @param jsonPatch the JSON patch to apply
 	 * @return the transformed target after the patch
 	 */
-	public <T> T patch(T object, JsonPatch jsonPatch) {
+	public <T> T patch(T object, JsonPatch jsonPatch) throws BindException{
 		return patch(object, jsonPatch::apply);
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	protected <T> T patch(T object, Function<? super JsonStructure, ? extends JsonValue> patchFn) {
+	protected <T> T patch(T object, Function<? super JsonStructure, ? extends JsonValue> patchFn) throws BindException {
 		Assert.notNull(object, "object is required; it must not be null");
 		Assert.notNull(patchFn, "patchFn is required; it must not be null");
 
@@ -66,8 +74,9 @@ public class JsonPatchProcessor {
 			final var patchedObject = objectMapper.readValue(patchFn.apply(jsonObject).toString(), object.getClass());
 
 			log.debug("Performing JSON patch validation");
-			final var constraintViolations = validator.validate(patchedObject);
-			if (constraintViolations.isEmpty() == false) { throw new ConstraintViolationException(constraintViolations); }
+			final var bindingResult = new DirectFieldBindingResult(patchedObject, "patch");
+			validator.validate(patchedObject, bindingResult);
+			if (bindingResult.hasErrors()) { throw new BindException(bindingResult); }
 			log.debug("No validation errors for {}", object.getClass().getSimpleName());
 
 			return (T) patchedObject;
