@@ -28,7 +28,7 @@ import { featureEnabled, getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeAndSortRegions } from '~/utils/lookup-utils.server';
+import { localizeAndSortCountries, localizeAndSortRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
@@ -74,7 +74,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     throw new Response(null, { status: 404 });
   }
 
-  const countryList = lookupService.getAllCountries();
+  const countryList = localizeAndSortCountries(lookupService.getAllCountries(), locale);
   const regionList = localizeAndSortRegions(lookupService.getAllRegions(), locale);
 
   const csrfToken = String(session.get('csrfToken'));
@@ -202,7 +202,7 @@ export default function PersonalInformationHomeAddressEdit() {
   const params = useParams();
   const [selectedCountry, setSelectedCountry] = useState(addressInfo.countryId);
   const [countryRegions, setCountryRegions] = useState<typeof regionList>([]);
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   const errorSummaryId = 'error-summary';
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -243,15 +243,15 @@ export default function PersonalInformationHomeAddressEdit() {
     setSelectedCountry(event.currentTarget.value);
   };
 
-  const countries: InputOptionProps[] = countryList
-    .map((country) => {
-      return {
-        children: i18n.language === 'fr' ? country.nameFr : country.nameEn,
+  const countries = useMemo<InputOptionProps[]>(
+    () =>
+      countryList.map((country) => ({
+        children: country.name,
         value: country.countryId,
         id: country.countryId,
-      };
-    })
-    .sort((country1, country2) => country1.children.localeCompare(country2.children));
+      })),
+    [countryList],
+  );
 
   // populate region/province/state list with selected country or current address country
   const regions: InputOptionProps[] = (selectedCountry ? countryRegions : regionList.filter((region) => region.countryId === addressInfo.countryId)).map((region) => {

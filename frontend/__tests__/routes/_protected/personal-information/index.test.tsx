@@ -19,7 +19,7 @@ vi.mock('~/services/lookup-service.server', () => ({
     ]),
     getPreferredLanguage: vi.fn().mockReturnValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' }),
     getAllCountries: vi.fn().mockReturnValue([{ code: 'SUP', nameEn: 'super country', nameFr: '(FR) super country' }]),
-    getAllRegions: vi.fn().mockReturnValue([{ code: 'SP', country: { code: 'SUP', nameEn: 'super country', nameFr: '(FR) super country' }, nameEn: 'sample', nameFr: '(FR) sample' }]),
+    getAllRegions: vi.fn().mockReturnValue([{ code: 'SP', countryId: "CAN", nameEn: 'sample', nameFr: '(FR) sample' }]),
     getAllMaritalStatuses: vi.fn().mockReturnValue([{ id: 'SINGLE', nameEn: 'Single', nameFr: 'Single but in french' }]),
   }),
 }));
@@ -137,8 +137,7 @@ describe('_gcweb-app.personal-information._index', () => {
         countryList: [
           {
             code: 'SUP',
-            nameEn: 'super country',
-            nameFr: '(FR) super country',
+            name: 'super country',
           },
         ],
         meta: {},
@@ -150,13 +149,8 @@ describe('_gcweb-app.personal-information._index', () => {
         regionList: [
           {
             code: 'SP',
-            country: {
-              code: 'SUP',
-              nameEn: 'super country',
-              nameFr: '(FR) super country',
-            },
-            nameEn: 'sample',
-            nameFr: '(FR) sample',
+            countryId: 'CAN',
+            name: 'sample',
           },
         ],
         maritalStatusList: [{ id: 'SINGLE', nameEn: 'Single', nameFr: 'Single but in french' }],

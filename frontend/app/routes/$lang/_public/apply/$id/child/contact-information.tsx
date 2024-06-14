@@ -28,7 +28,7 @@ import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeAndSortRegions } from '~/utils/lookup-utils.server';
+import { localizeAndSortCountries, localizeAndSortRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
@@ -53,7 +53,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const locale = getLocale(request);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = getEnv();
 
-  const countryList = lookupService.getAllCountries();
+  const countryList = localizeAndSortCountries(lookupService.getAllCountries(), locale);
   const regionList = localizeAndSortRegions(lookupService.getAllRegions(), locale);
 
   const csrfToken = String(session.get('csrfToken'));
@@ -239,7 +239,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function ApplyFlowPersonalInformation() {
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, defaultState, countryList, maritalStatus, regionList, CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
@@ -319,15 +319,14 @@ export default function ApplyFlowPersonalInformation() {
     setSelectedMailingCountry(event.currentTarget.value);
   };
 
-  const countries: InputOptionProps[] = countryList
-    .map(({ countryId, nameEn, nameFr }) => {
-      return {
-        children: i18n.language === 'fr' ? nameFr : nameEn,
+  const countries = useMemo<InputOptionProps[]>(
+    () =>
+      countryList.map(({ countryId, name }) => ({
+        children: name,
         value: countryId,
-      };
-    })
-    .sort((country1, country2) => country1.children.localeCompare(country2.children)) //Sort alphabetically
-    .sort((country1, country2) => (country1.value === CANADA_COUNTRY_ID ? -1 : country2.value === CANADA_COUNTRY_ID ? 1 : 0)); //Sort by Canada first
+      })),
+    [countryList],
+  );
 
   // populate mailing region/province/state list with selected country or current address country
   const mailingRegions: InputOptionProps[] = mailingCountryRegions.map(({ provinceTerritoryStateId, name }) => ({

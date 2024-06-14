@@ -90,8 +90,7 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
         countryList: [
           {
             code: 'SUP',
-            nameEn: 'super country',
-            nameFr: '(FR) super country',
+            name: 'super country',
           },
         ],
         meta: {},

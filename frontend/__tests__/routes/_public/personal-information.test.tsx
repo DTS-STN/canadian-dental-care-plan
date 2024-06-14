@@ -64,8 +64,7 @@ describe('_public.apply.id.contact-information', () => {
         countryList: [
           {
             code: 'SUP',
-            nameEn: 'super country',
-            nameFr: '(FR) super country',
+            name: 'super country',
           },
         ],
         regionList: [
