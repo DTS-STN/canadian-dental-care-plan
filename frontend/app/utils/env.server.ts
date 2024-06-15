@@ -96,7 +96,7 @@ const serverEnv = z.object({
   INTEROP_STATUS_CHECK_API_SUBSCRIPTION_KEY: z.string().trim().transform(emptyToUndefined).optional(),
 
   CDCP_API_BASE_URI: z.string().url(),
-  
+
   SHOW_SIN_EDIT_STUB_PAGE : z.string().transform(toBoolean).default('false'),
 
   // base URIs for My Service Canada Account variations
@@ -183,7 +183,12 @@ const serverEnv = z.object({
 
   // Adobe Analytics scripts
   ADOBE_ANALYTICS_SRC: z.string().url().optional(),
-  ADOBE_ANALYTICS_JQUERY_SRC: z.string().url().default('https://code.jquery.com/jquery-3.7.1.min.js')
+  ADOBE_ANALYTICS_JQUERY_SRC: z.string().url().default('https://code.jquery.com/jquery-3.7.1.min.js'),
+
+  // Dynatrace OneAgent (RUM) - Manual insertion - OneAgent JavaScript tag
+  // @see https://docs.dynatrace.com/docs/platform-modules/digital-experience/web-applications/initial-setup/rum-injection
+  DYNATRACE_ONE_AGENT_SRC: z.string().regex(/^\/\w*\.js$/).optional(),
+  DYNATRACE_ONE_AGENT_CONFIG: z.string().optional()
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;
@@ -201,6 +206,8 @@ const publicEnv = serverEnv.pick({
   SESSION_TIMEOUT_PROMPT_SECONDS: true,
   ADOBE_ANALYTICS_SRC: true,
   ADOBE_ANALYTICS_JQUERY_SRC: true,
+  DYNATRACE_ONE_AGENT_SRC: true,
+  DYNATRACE_ONE_AGENT_CONFIG: true,
 });
 
 export type PublicEnv = z.infer<typeof publicEnv>;

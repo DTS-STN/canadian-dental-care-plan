@@ -107,6 +107,7 @@ export default function App() {
           <link key={hrefLang} rel="alternate" hrefLang={hrefLang} href={href} />
         ))}
         <Links />
+        {env.DYNATRACE_ONE_AGENT_SRC && env.DYNATRACE_ONE_AGENT_CONFIG && <script src={env.DYNATRACE_ONE_AGENT_SRC} data-dtconfig={env.DYNATRACE_ONE_AGENT_CONFIG} nonce={nonce} suppressHydrationWarning />}
         {env.ADOBE_ANALYTICS_SRC && env.ADOBE_ANALYTICS_JQUERY_SRC && (
           <>
             <script src={env.ADOBE_ANALYTICS_JQUERY_SRC} nonce={nonce} suppressHydrationWarning />
