@@ -73,7 +73,6 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
         defaultValue={value.year ?? ''}
         name={names.year}
         label={t('gcweb:date-picker.year.label')}
-        placeholder={t('gcweb:date-picker.year.placeholder')}
         className="w-full sm:w-32"
         ariaDescribedBy={getAriaDescribedBy()}
         ariaErrorMessage={getAriaErrorMessageYear()}
@@ -123,7 +122,6 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
         defaultValue={value.day ?? ''}
         name={names.day}
         label={t('gcweb:date-picker.day.label')}
-        placeholder={t('gcweb:date-picker.day.placeholder')}
         className="w-full sm:w-20"
         ariaDescribedBy={getAriaDescribedBy()}
         ariaErrorMessage={getAriaErrorMessageDay()}
@@ -267,11 +265,10 @@ interface DatePickerYearProps {
   id: string;
   label: string;
   name: string;
-  placeholder: string;
   required?: boolean;
 }
 
-function DatePickerYear({ ariaDescribedBy, ariaErrorMessage, className, defaultValue, disabled, id, label, name, placeholder, required }: DatePickerYearProps) {
+function DatePickerYear({ ariaDescribedBy, ariaErrorMessage, className, defaultValue, disabled, id, label, name, required }: DatePickerYearProps) {
   const inputId = `date-picker-${id}-year`;
   const wrapperId = `date-picker-${id}-year-wrapper`;
   const inputLabelId = `date-picker-${id}-year-label`;
@@ -294,7 +291,6 @@ function DatePickerYear({ ariaDescribedBy, ariaErrorMessage, className, defaultV
         id={inputId}
         min={1900}
         name={name}
-        placeholder={placeholder}
         required={required}
         type="number"
       />
@@ -311,11 +307,10 @@ interface DatePickerDayProps {
   id: string;
   label: string;
   name: string;
-  placeholder: string;
   required?: boolean;
 }
 
-function DatePickerDay({ ariaDescribedBy, ariaErrorMessage, className, defaultValue, disabled, id, label, name, placeholder, required }: DatePickerDayProps) {
+function DatePickerDay({ ariaDescribedBy, ariaErrorMessage, className, defaultValue, disabled, id, label, name, required }: DatePickerDayProps) {
   const inputId = `date-picker-${id}-day`;
   const wrapperId = `date-picker-${id}-day-wrapper`;
   const inputLabelId = `date-picker-${id}-day-label`;
@@ -339,7 +334,6 @@ function DatePickerDay({ ariaDescribedBy, ariaErrorMessage, className, defaultVa
         max={31}
         min={1}
         name={name}
-        placeholder={placeholder}
         required={required}
         type="number"
       />

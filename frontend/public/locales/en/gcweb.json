@@ -126,16 +126,14 @@
   },
   "date-picker": {
     "day": {
-      "label": "Day",
-      "placeholder": "DD"
+      "label": "Day (DD)"
     },
     "month": {
       "label": "Month",
       "placeholder": "Select month"
     },
     "year": {
-      "label": "Year",
-      "placeholder": "YYYY"
+      "label": "Year (YYYY)"
     }
   },
   "screen-reader": {
