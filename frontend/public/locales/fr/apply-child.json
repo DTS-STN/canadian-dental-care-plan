@@ -73,8 +73,8 @@
       "first-name": "Prénom",
       "date-of-birth": "Date de naissance",
       "sin-legend": "L'enfant a-t-il un numéro d'assurance sociale (NAS)?",
-      "sin-yes": "<strong>Oui</strong>, l'enfant a un NAS",
-      "sin-no": "<strong>Non</strong>, l'enfant n'a pas de NAS",
+      "sin-yes": "<strong>Oui</strong>, cet enfant a un NAS",
+      "sin-no": "<strong>Non</strong>, cet enfant n'a pas de NAS",
       "sin": "Entrez un NAS de 9 chiffres",
       "parent-legend": "Êtes-vous le parent ou le tuteur légal de cet enfant?",
       "radio-options": {
@@ -151,8 +151,8 @@
       "federal-benefits": {
         "title": "Prestations fédérales",
         "legend": "Est-ce que {{childName}} bénéficie d'une assurance dentaire dans le cadre d'un programme social offert par un programme fédéral?",
-        "option-yes": "<strong>Oui</strong>, l'enfant bénéficie de prestations dentaires <strong>fédérales</strong>",
-        "option-no": "<strong>Non</strong>, l'enfant ne bénéficie pas de prestations dentaires <strong>fédérales</strong>",
+        "option-yes": "<strong>Oui</strong>, cet enfant bénéficie de prestations dentaires <strong>fédérales</strong>",
+        "option-no": "<strong>Non</strong>, cet enfant ne bénéficie pas de prestations dentaires <strong>fédérales</strong>",
         "social-programs": {
           "legend": "Veuillez sélectionner le programme social avec lequel l'enfant est assuré. Si l'enfant en a plus d'un, veuillez sélectionner celui qu'il utilise le plus."
         }
@@ -160,8 +160,8 @@
       "provincial-territorial-benefits": {
         "title": "Prestations provinciales ou territoriales",
         "legend": "Est-ce que {{childName}} bénéficie d'une assurance dentaire dans le cadre d'un programme social offert par votre province ou territoire?",
-        "option-yes": "<strong>Oui</strong>, l'enfant bénéficie de prestations dentaires <strong>provinciales ou territoriales</strong>",
-        "option-no": "<strong>Non</strong>, l'enfant ne bénéficie pas de prestations dentaires <strong>provinciales ou territoriales</strong>",
+        "option-yes": "<strong>Oui</strong>, cet enfant bénéficie de prestations dentaires <strong>provinciales ou territoriales</strong>",
+        "option-no": "<strong>Non</strong>, cet enfant ne bénéficie pas de prestations dentaires <strong>provinciales ou territoriales</strong>",
         "social-programs": {
           "input-legend": "Si oui, de quelle province ou de quel territoire?",
           "radio-legend": "Veuillez sélectionner le programme social avec lequel l'enfant est assuré. Si l'enfant en a plus d'un, veuillez sélectionner celui qu'il utilise le plus."
