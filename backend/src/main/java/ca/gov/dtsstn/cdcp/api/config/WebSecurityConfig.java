@@ -56,6 +56,9 @@ public class WebSecurityConfig {
 		}
 
 		@Bean SecurityFilterChain securityFilterChain() throws Exception {
+			log.info("Disabling CSRF protection (reason: stateless api)");
+			httpSecurity.csrf(csrf -> csrf.disable());
+
 			log.info("Configuring OAuth resource server settings");
 			httpSecurity.oauth2ResourceServer(oauth2 -> oauth2
 				.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
