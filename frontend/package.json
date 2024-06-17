@@ -72,7 +72,7 @@
     "tailwind-merge": "^2.3.0",
     "tiny-invariant": "^1.3.3",
     "tsx": "^4.15.2",
-    "undici": "^6.18.2",
+    "undici": "^6.19.0",
     "validator": "^13.12.0",
     "web-streams-node": "^0.4.0",
     "winston": "^3.13.0",
