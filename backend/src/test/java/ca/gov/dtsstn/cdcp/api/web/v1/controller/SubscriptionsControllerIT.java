@@ -127,6 +127,87 @@ class SubscriptionsControllerIT {
 
 	@Test
 	@WithMockUser(roles = { "Users.Administer" })
+	@DisplayName("Test authenticated GET /api/v1/users/{userId}/subscriptions/{subscriptionId}")
+	void testGetSubscriptionById_HappyPath() throws Exception {
+		final var mockUser = ImmutableUser.builder()
+			.id("00000000-0000-0000-0000-000000000000")
+			.addSubscriptions(ImmutableSubscription.builder()
+				.id("00000000-0000-0000-0000-000000000000")
+				.alertType(ImmutableAlertType.builder()
+					.code("ALERT_TYPE_CODE")
+					.build())
+				.language(ImmutableLanguage.builder()
+					.msLocaleCode("MS_LOCALE_CODE")
+					.build())
+				.build())
+			.build();
+
+		when(userService.getUserById("00000000-0000-0000-0000-000000000000")).thenReturn(Optional.of(mockUser));
+
+		mockMvc.perform(get("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions/00000000-0000-0000-0000-000000000000"))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
+			.andExpect(jsonPath("$.id", is("00000000-0000-0000-0000-000000000000")))
+			.andExpect(jsonPath("$.alertTypeCode", is("ALERT_TYPE_CODE")))
+			.andExpect(jsonPath("$.msLanguageCode", is("MS_LOCALE_CODE")))
+			.andExpect(jsonPath("$._links.self.href", is("http://localhost/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions/00000000-0000-0000-0000-000000000000")));
+	}
+
+	@Test
+	@WithMockUser(roles = { "Users.Administer" })
+	@DisplayName("Test authenticated GET /api/v1/users/{userId}/subscriptions/{subscriptionId} w/ invalid user")
+	void testGetSubscriptionById_InvalidUser() throws Exception {
+		mockMvc.perform(get("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions/00000000-0000-0000-0000-000000000000"))
+			.andDo(print())
+			.andExpect(status().isNotFound())
+			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PROBLEM_JSON_VALUE))
+			.andExpect(result -> assertThat(result)
+				.extracting(MvcResult::getResolvedException, type(ResourceNotFoundException.class))
+				.extracting(ResourceNotFoundException::getMessage)
+				.isEqualTo("No user with id=[00000000-0000-0000-0000-000000000000] was found"));
+	}
+
+	@Test
+	@WithMockUser(roles = { "Users.Administer" })
+	@DisplayName("Test authenticated GET /api/v1/users/{userId}/subscriptions/{subscriptionId} w/ invalid subscription")
+	void testGetSubscriptionById_InvalidSubscription() throws Exception {
+		final var mockUser = ImmutableUser.builder()
+			.id("00000000-0000-0000-0000-000000000000")
+			.build();
+
+		when(userService.getUserById("00000000-0000-0000-0000-000000000000")).thenReturn(Optional.of(mockUser));
+
+		mockMvc.perform(get("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions/00000000-0000-0000-0000-000000000000"))
+			.andDo(print())
+			.andExpect(status().isNotFound())
+			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PROBLEM_JSON_VALUE))
+			.andExpect(result -> assertThat(result)
+				.extracting(MvcResult::getResolvedException, type(ResourceNotFoundException.class))
+				.extracting(ResourceNotFoundException::getMessage)
+				.isEqualTo("No subscription with id=[00000000-0000-0000-0000-000000000000] was found"));
+	}
+
+	@Test
+	@WithAnonymousUser
+	@DisplayName("Test unauthenticated GET /api/v1/users/{userId}/subscriptions/{subscriptionId}")
+	void testGetSubscriptionById_Unauthorized() throws Exception {
+		mockMvc.perform(get("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions"))
+			.andDo(print())
+			.andExpect(status().isUnauthorized());
+	}
+
+	@Test
+	@WithMockUser(roles = { /* intentionally left blank */ })
+	@DisplayName("Test insufficient privilege GET /api/v1/users/{userId}/subscriptions/{subscriptionId}")
+	void testGetSubscriptionById_Forbidden() throws Exception {
+		mockMvc.perform(get("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions"))
+			.andDo(print())
+			.andExpect(status().isForbidden());
+	}
+
+	@Test
+	@WithMockUser(roles = { "Users.Administer" })
 	@DisplayName("Test authenticated POST /api/v1/users/{userId}/subscriptions")
 	void testCreateSubscriptionForUser_HappyPath() throws Exception {
 		final var mockAlertType = ImmutableAlertType.builder()
