@@ -1,12 +1,23 @@
 import { render } from '@testing-library/react';
 
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { Progress } from '~/components/progress';
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    i18n: { language: 'en' },
+  }),
+}));
+
 describe('Progress component', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.resetModules();
+  });
+
   it('renders with default props', () => {
-    const { getByTestId } = render(<Progress />);
+    const { getByTestId } = render(<Progress label="test" value={0} />);
     const rootElement = getByTestId('progress-root');
     const indicatorElement = getByTestId('progress-indicator');
 
@@ -17,7 +28,7 @@ describe('Progress component', () => {
   });
 
   it('renders with custom size and variant', () => {
-    const { getByTestId } = render(<Progress size="lg" variant="blue" />);
+    const { getByTestId } = render(<Progress size="lg" variant="blue" label="test" value={0} />);
     const rootElement = getByTestId('progress-root');
     const indicatorElement = getByTestId('progress-indicator');
 
@@ -28,7 +39,7 @@ describe('Progress component', () => {
   });
 
   it('renders with custom value', () => {
-    const { getByTestId } = render(<Progress value={50} />);
+    const { getByTestId } = render(<Progress value={50} label="test" />);
     const indicatorElement = getByTestId('progress-indicator');
 
     expect(indicatorElement).toBeInTheDocument();
@@ -36,7 +47,7 @@ describe('Progress component', () => {
   });
 
   it('renders with custom className', () => {
-    const { getByTestId } = render(<Progress className="custom-class" />);
+    const { getByTestId } = render(<Progress className="custom-class" label="test" value={0} />);
     const rootElement = getByTestId('progress-root');
 
     expect(rootElement).toBeInTheDocument();

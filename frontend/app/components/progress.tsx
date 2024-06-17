@@ -1,7 +1,9 @@
 import React from 'react';
 
 import * as ProgressPrimitive from '@radix-ui/react-progress';
+import { useTranslation } from 'react-i18next';
 
+import { formatPercent } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
 const sizes = {
@@ -26,13 +28,19 @@ const indicatorBaseClassName = 'h-full w-full flex-1 transition-all';
 export interface ProgressProps extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
   size?: keyof typeof sizes;
   variant?: keyof typeof variants;
+  label: string;
+  value: number;
 }
 
-const Progress = React.forwardRef<React.ElementRef<typeof ProgressPrimitive.Root>, ProgressProps>(({ className, size = 'base', variant = 'default', value, ...props }, ref) => {
+const Progress = React.forwardRef<React.ElementRef<typeof ProgressPrimitive.Root>, ProgressProps>(({ className, size = 'base', variant = 'default', value, label, ...props }, ref) => {
+  const { i18n } = useTranslation('gcweb');
   return (
-    <ProgressPrimitive.Root ref={ref} className={cn(rootBaseClassName, sizes[size], className)} data-testid="progress-root" value={value} {...props}>
-      <ProgressPrimitive.Indicator className={cn(indicatorBaseClassName, variants[variant])} style={{ transform: `translateX(-${100 - (value ?? 0)}%)` }} data-testid="progress-indicator" />
-    </ProgressPrimitive.Root>
+    <>
+      {label && <p id="progress-label" className="mb-2">{`${label} ${formatPercent(value, i18n.language)}`}</p>}
+      <ProgressPrimitive.Root ref={ref} className={cn(rootBaseClassName, sizes[size], className)} data-testid="progress-root" value={value} {...props} aria-labelledby={label && 'progress-label'}>
+        <ProgressPrimitive.Indicator className={cn(indicatorBaseClassName, variants[variant])} style={{ transform: `translateX(-${100 - value}%)` }} data-testid="progress-indicator" />
+      </ProgressPrimitive.Root>
+    </>
   );
 });
 Progress.displayName = ProgressPrimitive.Root.displayName;

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { expandTemplate, isAllValidInputCharacters, normalizeHyphens, padWithZero, randomHexString, randomString, removeInvalidInputCharacters } from '~/utils/string-utils';
+import { expandTemplate, formatPercent, isAllValidInputCharacters, normalizeHyphens, padWithZero, randomHexString, randomString, removeInvalidInputCharacters } from '~/utils/string-utils';
 
 describe('expandTemplate', () => {
   it('should expand a template', () => {
@@ -92,5 +92,26 @@ describe('normalizeHyphens', () => {
     ['-abc--def-', '-abc-def-'],
   ])('should normalize hyphens in "%s" to "%s"', (input, expectedOutput) => {
     expect(normalizeHyphens(input)).toBe(expectedOutput);
+  });
+});
+describe('formatPercent', () => {
+  it.each([
+    [0, '0%'],
+    [50, '50%'],
+    [100, '100%'],
+  ])('should format percentage in English', (input, expected) => {
+    expect(formatPercent(input, 'en')).toEqual(expected);
+  });
+
+  it.each([
+    [0, '0\u00a0%'],
+    [50, '50\u00a0%'],
+    [100, '100\u00a0%'],
+  ])('should format percentage in French', (input, expected) => {
+    expect(formatPercent(input, 'fr')).toEqual(expected);
+  });
+
+  it('should throw an error for invalid Canadian locale', () => {
+    expect(() => formatPercent(0, 'xy')).toThrowError();
   });
 });
