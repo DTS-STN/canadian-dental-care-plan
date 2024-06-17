@@ -3,9 +3,13 @@ package ca.gov.dtsstn.cdcp.api.web.v1.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.list;
 import static org.assertj.core.api.InstanceOfAssertFactories.type;
+import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Optional;
@@ -17,6 +21,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -58,6 +64,66 @@ class SubscriptionsControllerIT {
 	@Autowired MockMvc mockMvc;
 
 	final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
+
+	@Test
+	@WithMockUser(roles = { "Users.Administer" })
+	@DisplayName("Test authenticated GET /api/v1/users/{userId}/subscriptions")
+	void testGetSubscriptionsByUserId_HappyPath() throws Exception {
+		final var mockUser = ImmutableUser.builder()
+			.id("00000000-0000-0000-0000-000000000000")
+			.addSubscriptions(ImmutableSubscription.builder()
+				.id("00000000-0000-0000-0000-000000000000")
+				.alertType(ImmutableAlertType.builder()
+					.code("ALERT_TYPE_CODE")
+					.build())
+				.language(ImmutableLanguage.builder()
+					.msLocaleCode("MS_LOCALE_CODE")
+					.build())
+				.build())
+			.build();
+
+		when(userService.getUserById("00000000-0000-0000-0000-000000000000")).thenReturn(Optional.of(mockUser));
+
+		mockMvc.perform(get("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions"))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
+			.andExpect(jsonPath("$._embedded.subscriptions[0].id", is("00000000-0000-0000-0000-000000000000")))
+			.andExpect(jsonPath("$._embedded.subscriptions[0].alertTypeCode", is("ALERT_TYPE_CODE")))
+			.andExpect(jsonPath("$._embedded.subscriptions[0].msLanguageCode", is("MS_LOCALE_CODE")));
+	}
+
+	@Test
+	@WithMockUser(roles = { "Users.Administer" })
+	@DisplayName("Test authenticated GET /api/v1/users/{userId}/subscriptions w/ invalid user")
+	void testGetSubscriptionsByUserId_InvalidUser() throws Exception {
+		mockMvc.perform(get("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions"))
+			.andDo(print())
+			.andExpect(status().isNotFound())
+			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PROBLEM_JSON_VALUE))
+			.andExpect(result -> assertThat(result)
+				.extracting(MvcResult::getResolvedException, type(ResourceNotFoundException.class))
+				.extracting(ResourceNotFoundException::getMessage)
+				.isEqualTo("No user with id=[00000000-0000-0000-0000-000000000000] was found"));
+	}
+
+	@Test
+	@WithAnonymousUser
+	@DisplayName("Test unauthenticated GET /api/v1/users/{userId}/subscriptions")
+	void testGetSubscriptionsByUserId_Unauthorized() throws Exception {
+		mockMvc.perform(get("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions"))
+			.andDo(print())
+			.andExpect(status().isUnauthorized());
+	}
+
+	@Test
+	@WithMockUser(roles = { /* intentionally left blank */ })
+	@DisplayName("Test insufficient privilege GET /api/v1/users/{userId}/subscriptions")
+	void testGetSubscriptionsByUserId_Forbidden() throws Exception {
+		mockMvc.perform(get("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions"))
+			.andDo(print())
+			.andExpect(status().isForbidden());
+	}
 
 	@Test
 	@WithMockUser(roles = { "Users.Administer" })
@@ -150,6 +216,7 @@ class SubscriptionsControllerIT {
 					.build())))
 			.andDo(print())
 			.andExpect(status().isNotFound())
+			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PROBLEM_JSON_VALUE))
 			.andExpect(result -> assertThat(result)
 				.extracting(MvcResult::getResolvedException, type(ResourceNotFoundException.class))
 				.extracting(ResourceNotFoundException::getMessage)

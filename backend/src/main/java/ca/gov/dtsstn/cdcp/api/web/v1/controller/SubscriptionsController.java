@@ -26,7 +26,6 @@ import ca.gov.dtsstn.cdcp.api.service.domain.AlertType;
 import ca.gov.dtsstn.cdcp.api.service.domain.BaseDomainObject;
 import ca.gov.dtsstn.cdcp.api.service.domain.Language;
 import ca.gov.dtsstn.cdcp.api.service.domain.Subscription;
-import ca.gov.dtsstn.cdcp.api.service.domain.User;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceConflictException;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
 import ca.gov.dtsstn.cdcp.api.web.json.JsonPatchProcessor;
@@ -110,10 +109,10 @@ public class SubscriptionsController {
 			@NotBlank(message = "userId must not be null or blank")
 			@Parameter(description = "The id of the user.", example = "00000000-0000-0000-0000-000000000000")
 			@PathVariable String userId) {
-		return userService.getUserById(userId)
-			.map(User::getSubscriptions)
-			.map(subscriptions -> subscriptionModelMapper.toModel(userId, subscriptions))
+		final var user = userService.getUserById(userId)
 			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));
+
+		return subscriptionModelMapper.toModel(userId, user.getSubscriptions());
 	}
 
 	@GetMapping({ "/{subscriptionId}" })
