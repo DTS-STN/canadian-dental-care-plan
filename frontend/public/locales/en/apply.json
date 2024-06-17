@@ -13,7 +13,7 @@
     "page-title": "Apply"
   },
   "progress": {
-    "label": "Application Progress Tracking"
+    "label": "Application progress"
   },
   "required-label": "Complete all fields.",
   "optional-label": "Complete all fields unless marked as optional.",

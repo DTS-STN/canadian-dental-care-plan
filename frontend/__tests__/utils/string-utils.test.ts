@@ -94,6 +94,7 @@ describe('normalizeHyphens', () => {
     expect(normalizeHyphens(input)).toBe(expectedOutput);
   });
 });
+
 describe('formatPercent', () => {
   it.each([
     [0, '0%'],
