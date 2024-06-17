@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
@@ -35,7 +34,6 @@ import ca.gov.dtsstn.cdcp.api.web.json.JsonPatchProcessor;
 @ActiveProfiles("test")
 @Import({ WebSecurityConfig.class })
 @WebMvcTest({ UsersController.class })
-@ComponentScan({ "ca.gov.dtsstn.cdcp.api.web.v1.model.mapper" })
 class UsersControllerIT {
 
 	@MockBean JsonPatchProcessor jsonPatchProcessor;
