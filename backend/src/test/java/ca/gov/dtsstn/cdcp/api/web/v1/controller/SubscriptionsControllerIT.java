@@ -4,8 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.list;
 import static org.assertj.core.api.InstanceOfAssertFactories.type;
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -44,18 +46,18 @@ import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableSubscription;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUser;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceConflictException;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
-import ca.gov.dtsstn.cdcp.api.web.json.JsonPatchProcessor;
+import ca.gov.dtsstn.cdcp.api.web.json.JsonPatchMediaTypes;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.ImmutableSubscriptionCreateModel;
+import jakarta.json.Json;
 
 @ActiveProfiles("test")
 @Import({ WebSecurityConfig.class })
 @WebMvcTest({ SubscriptionsController.class })
+@ComponentScan({ "ca.gov.dtsstn.cdcp.api.web.json" })
 @ComponentScan({ "ca.gov.dtsstn.cdcp.api.web.validation" })
 class SubscriptionsControllerIT {
 
 	@MockBean AlertTypeService alertTypeService;
-
-	@MockBean JsonPatchProcessor jsonPatchProcessor;
 
 	@MockBean LanguageService languageService;
 
@@ -356,6 +358,112 @@ class SubscriptionsControllerIT {
 	@DisplayName("Test insufficient privilege POST /api/v1/users/{userId}/subscriptions")
 	void testCreateSubscriptionForUser_Forbidden() throws Exception {
 		mockMvc.perform(post("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions"))
+			.andDo(print())
+			.andExpect(status().isForbidden());
+	}
+
+	@Test
+	@WithMockUser(roles = { "Users.Administer" })
+	@DisplayName("Test authenticated PATCH /api/v1/users/{userId}/subscriptions/{subscriptionId}")
+	void testUpdateSubscriptionById_HappyPath() throws Exception {
+		final var existingSubscription = ImmutableSubscription.builder()
+			.id("00000000-0000-0000-0000-000000000000")
+			.language(ImmutableLanguage.builder()
+				.id("00000000-0000-0000-0000-000000000000")
+				.msLocaleCode("OLD_LANGUAGE_CODE")
+				.build())
+			.build();
+
+		final var existingUser = ImmutableUser.builder()
+			.id("00000000-0000-0000-0000-000000000000")
+			.addSubscriptions(existingSubscription)
+			.build();
+
+		final var newLanguage = ImmutableLanguage.builder()
+			.id("11111111-1111-1111-1111-111111111111")
+			.msLocaleCode("NEW_LANGUAGE_CODE")
+			.build();
+
+		when(userService.getUserById(existingUser.getId()))
+			.thenReturn(Optional.of(existingUser));
+
+		when(languageService.readByMsLocaleCode(newLanguage.getMsLocaleCode()))
+			.thenReturn(Optional.of(newLanguage));
+
+		final var jsonPatch = Json.createPatchBuilder()
+			.replace("/msLanguageCode", "NEW_LANGUAGE_CODE")
+			.build();
+
+		mockMvc.perform(patch("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions/00000000-0000-0000-0000-000000000000")
+				.contentType(JsonPatchMediaTypes.JSON_PATCH)
+				.content(jsonPatch.toJsonArray().toString()))
+			.andDo(print())
+			.andExpect(status().isNoContent());
+
+		verify(userService).updateSubscriptionForUser(existingUser.getId(), existingSubscription.getId(), newLanguage.getId());
+	}
+
+	@Test
+	@WithMockUser(roles = { "Users.Administer" })
+	@DisplayName("Test authenticated PATCH /api/v1/users/{userId}/subscriptions/{subscriptionId} w/ invalid user")
+	void testUpdateSubscriptionById_InvalidUser() throws Exception {
+		final var jsonPatch = Json.createPatchBuilder()
+			.replace("/msLanguageCode", "NEW_LANGUAGE_CODE")
+			.build();
+
+		mockMvc.perform(patch("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions/00000000-0000-0000-0000-000000000000")
+				.contentType(JsonPatchMediaTypes.JSON_PATCH)
+				.content(jsonPatch.toJsonArray().toString()))
+			.andDo(print())
+			.andExpect(status().isNotFound())
+			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PROBLEM_JSON_VALUE))
+			.andExpect(result -> assertThat(result)
+				.extracting(MvcResult::getResolvedException, type(ResourceNotFoundException.class))
+				.extracting(ResourceNotFoundException::getMessage)
+				.isEqualTo("No user with id=[00000000-0000-0000-0000-000000000000] was found"));
+	}
+
+	@Test
+	@WithMockUser(roles = { "Users.Administer" })
+	@DisplayName("Test authenticated PATCH /api/v1/users/{userId}/subscriptions/{subscriptionId} w/ invalid subscription")
+	void testUpdateSubscriptionById_InvalidSubscription() throws Exception {
+		final var existingUser = ImmutableUser.builder()
+			.id("00000000-0000-0000-0000-000000000000")
+			.build();
+
+		final var jsonPatch = Json.createPatchBuilder()
+			.replace("/msLanguageCode", "NEW_LANGUAGE_CODE")
+			.build();
+
+		when(userService.getUserById(existingUser.getId()))
+			.thenReturn(Optional.of(existingUser));
+
+		mockMvc.perform(patch("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions/00000000-0000-0000-0000-000000000000")
+				.contentType(JsonPatchMediaTypes.JSON_PATCH)
+				.content(jsonPatch.toJsonArray().toString()))
+			.andDo(print())
+			.andExpect(status().isNotFound())
+			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PROBLEM_JSON_VALUE))
+			.andExpect(result -> assertThat(result)
+				.extracting(MvcResult::getResolvedException, type(ResourceNotFoundException.class))
+				.extracting(ResourceNotFoundException::getMessage)
+				.isEqualTo("No subscription with id=[00000000-0000-0000-0000-000000000000] was found"));
+	}
+
+	@Test
+	@WithAnonymousUser
+	@DisplayName("Test unauthenticated PATCH /api/v1/users/{userId}/subscriptions/{subscriptionId}")
+	void testUpdateSubscriptionById_Unauthorized() throws Exception {
+		mockMvc.perform(patch("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions"))
+			.andDo(print())
+			.andExpect(status().isUnauthorized());
+	}
+
+	@Test
+	@WithMockUser(roles = { /* intentionally left blank */ })
+	@DisplayName("Test insufficient privilege PATCH /api/v1/users/{userId}/subscriptions/{subscriptionId}")
+	void testUpdateSubscriptionById_Forbidden() throws Exception {
+		mockMvc.perform(patch("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions"))
 			.andDo(print())
 			.andExpect(status().isForbidden());
 	}

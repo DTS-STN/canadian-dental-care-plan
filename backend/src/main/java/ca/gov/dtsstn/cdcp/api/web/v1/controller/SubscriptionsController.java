@@ -136,6 +136,7 @@ public class SubscriptionsController {
 	}
 
 	@PatchMapping({ "/{subscriptionId}" })
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@Operation(summary = "Update a subscription by ID")
 	@ApiResponse(responseCode = "204", description = "The request has been successfully processed.")
 	public void updateSubscriptionById(
