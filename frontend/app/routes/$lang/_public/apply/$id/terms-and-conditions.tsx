@@ -154,11 +154,13 @@ export default function ApplyIndex() {
         </Collapsible>
       </div>
       <p className="my-8">{t('apply:terms-and-conditions.apply.application-participation')}</p>
-      <p className="my-8">{t('apply:terms-and-conditions.apply.application-consent')}</p>
+      <p className="my-8" id="application-consent">
+        {t('apply:terms-and-conditions.apply.application-consent')}
+      </p>
       <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-          <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Agree and Continue - Terms and Conditions click">
+          <Button aria-describedby="application-consent" variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Agree and Continue - Terms and Conditions click">
             {t('apply:terms-and-conditions.apply.start-button')}
             <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
