@@ -86,7 +86,7 @@
     "full-name": "Nom complet",
     "marital-status": "État civil",
     "consent": "Consentement",
-    "consent-answer": "Mon époux/épouse ou mon conjoint/conjointe de fait est au courant et a consenti à la communication de ses renseignements personnels.",
+    "consent-answer": "Mon époux/épouse ou conjoint/conjointe de fait est au courant de la communication de ses renseignements personnels et il/elle y consent.",
     "phone-number": "Numéro de téléphone",
     "alt-phone-number": "Autre numéro de téléphone",
     "email": "Email",
@@ -363,8 +363,8 @@
     "spouse-title": "Renseignements sur l'époux/épouse ou le conjoint(e) de fait",
     "spouse-consent": {
       "label": "Consentement",
-      "yes": "Mon époux/épouse ou mon conjoint/conjointe de fait est au courant et a consenti à la communication de ses renseignements personnels.",
-      "no": "Mon époux/épouse ou mon conjoint/conjointe de fait est au courant et n'a pas consenti à la communication de ses renseignements personnels."
+      "yes": "Mon époux/épouse ou conjoint/conjointe de fait est au courant de la communication de ses renseignements personnels et il/elle y consent.",
+      "no": "Mon époux/épouse ou conjoint/conjointe de fait est au courant de la communication de ses renseignements personnels et il/elle n'y consent pas."
     },
     "contact-info-title": "Coordonnées",
     "phone-title": "Téléphone",
