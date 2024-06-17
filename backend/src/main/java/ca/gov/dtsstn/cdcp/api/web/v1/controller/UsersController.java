@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
+import ca.gov.dtsstn.cdcp.api.web.json.JsonPatchMediaTypes;
 import ca.gov.dtsstn.cdcp.api.web.json.JsonPatchProcessor;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.UserCreateModel;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.UserModel;
@@ -35,16 +36,17 @@ import jakarta.validation.constraints.NotBlank;
 @Tag(name = "Users", description = "Endpoint for managing user resources.")
 public class UsersController {
 
-	private final UserModelMapper userModelMapper = Mappers.getMapper(UserModelMapper.class);
-	private final UserService userService;
-
 	private final JsonPatchProcessor jsonPatchProcessor;
 
-	public UsersController(UserService userService, JsonPatchProcessor jsonPatchProcessor) {
-		Assert.notNull(userService, "userService is required; it must not be null");
+	private final UserModelMapper userModelMapper = Mappers.getMapper(UserModelMapper.class);
+
+	private final UserService userService;
+
+	public UsersController(JsonPatchProcessor jsonPatchProcessor, UserService userService) {
 		Assert.notNull(jsonPatchProcessor, "jsonPatchProcessor is required; it must not be null");
-		this.userService = userService;
+		Assert.notNull(userService, "userService is required; it must not be null");
 		this.jsonPatchProcessor = jsonPatchProcessor;
+		this.userService = userService;
 	}
 
 	@GetMapping({ "/{id}" })
@@ -58,8 +60,9 @@ public class UsersController {
 			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(id)));
 	}
 
-	@PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@Operation(summary = "Update a user by ID")
+	@PatchMapping(path = "/{id}", consumes = JsonPatchMediaTypes.JSON_PATCH_VALUE)
 	@ApiResponse(responseCode = "204", description = "The request has been successfully processed.")
 	public void updateUserById(
 			@NotBlank(message = "id must not be null or blank")
@@ -76,9 +79,9 @@ public class UsersController {
 	}
 
 	@PostMapping
-	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@Operation(summary = "Create a new user")
-	public void createUserByEmailAndUserAttributes(@Validated @RequestBody UserCreateModel userCreateModel) {
-		userService.createUser(userModelMapper.toDomain(userCreateModel));
+	public UserModel createUserByEmailAndUserAttributes(@Validated @RequestBody UserCreateModel userCreateModel) {
+		return userModelMapper.toModel(userService.createUser(userModelMapper.toDomain(userCreateModel)));
 	}
+
 }
