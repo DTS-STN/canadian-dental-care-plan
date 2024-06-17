@@ -91,7 +91,7 @@
         "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisi",
         "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
         "date-of-birth-year-required": "La date de naissance doit inclure une année",
-        "has-social-insurance-number": "Sélectionnez si l'enfant a un NAS",
+        "has-social-insurance-number": "Sélectionnez cet enfant a un NAS",
         "is-parent": "Sélectionnez si vous êtes le parent ou le tuteur légal de l'enfant",
         "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés : apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
       }
@@ -132,7 +132,7 @@
         }
       },
       "error-message": {
-        "dental-insurance-required": "Sélectionnez si l'enfant a accès à une assurance dentaire"
+        "dental-insurance-required": "Sélectionnez si cet enfant a accès à une assurance dentaire"
       }
     },
     "dental-benefits": {
@@ -167,9 +167,9 @@
       },
       "error-message": {
         "federal-benefit-program-required": "Sélectionnez le programme fédéral auquel l'enfant est couvert",
-        "federal-benefit-required": "Sélectionnez si l'enfant bénéficie d'une prestation dentaire fédérale",
-        "provincial-benefit-program-required": "Sélectionnez le programme provincial ou territorial auquel l'enfant est couvert",
-        "provincial-benefit-required": "Sélectionnez si l'enfant avez la prestation dentaire provinciale ou territoriale ",
+        "federal-benefit-required": "Sélectionnez si cet enfant a accès à une assurance dentaire",
+        "provincial-benefit-program-required": "Sélectionnez le programme provincial ou territorial qui couvre cet enfant",
+        "provincial-benefit-required": "Sélectionnez si cet enfant bénéficie d'une prestation dentaire provinciale ou territoriale",
         "provincial-territorial-required": "Sélectionnez une province ou territoire"
       }
     },
