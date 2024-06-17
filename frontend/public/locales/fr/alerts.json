@@ -14,7 +14,7 @@
     "error-message": {
       "email-match": "Les adresses courriel entrées ne concordent pas",
       "email-required": "Confirmez l'adresse courriel",
-      "confirm-email-required": "Confirm email address ",
+      "confirm-email-required": "Confirm email address",
       "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
       "preferred-language-required": "Sélectionnez la langue de communication préférée"
     },
@@ -42,7 +42,7 @@
     "error-message": {
       "email-match": "Les adresses courriel entrées ne concordent pas",
       "email-required": "Confirmez l'adresse courriel",
-      "confirm-email-required": "Confirm email address ",
+      "confirm-email-required": "Confirm email address",
       "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
       "preferred-language-required": "Sélectionnez la langue de communication préférée"
     }
