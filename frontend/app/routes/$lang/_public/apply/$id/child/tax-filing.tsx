@@ -115,10 +115,7 @@ export default function ApplyFlowTaxFiling() {
   return (
     <>
       <div className="my-6 sm:my-8">
-        <p id="progress-label" className="sr-only mb-2">
-          {t('apply:progress.label')}
-        </p>
-        <Progress aria-labelledby="progress-label" value={25} size="lg" />
+        <Progress value={25} size="lg" label={t('apply:progress.label')} />
       </div>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('apply:required-label')}</p>

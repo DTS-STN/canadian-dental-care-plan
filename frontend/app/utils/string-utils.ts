@@ -68,3 +68,13 @@ export function removeInvalidInputCharacters(value: string) {
 export function normalizeHyphens(str: string) {
   return str.replace(/-{2,}/g, '-');
 }
+
+/**
+ * @param value - The whole number percentage (i.e. multiplied by 100) to be formatted
+ * @param locale - The Canadian locale to be used for formatting
+ * @returns - The number formatted as a percentage in the givenlocale
+ */
+export function formatPercent(value: number, locale: string) {
+  if (!/en|fr/i.test(locale)) throw new Error(`locale must be 'en' or 'fr'`);
+  return Intl.NumberFormat(`${locale}-CA`, { style: 'percent' }).format(value / 100);
+}
