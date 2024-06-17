@@ -3,7 +3,6 @@ package ca.gov.dtsstn.cdcp.api.web.v1.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,7 +53,6 @@ class EmailValidationsControllerIT {
 		when(userService.verifyEmail(anyString(), anyString())).thenReturn(true);
 
 		mockMvc.perform(post("/api/v1/users/00000000-0000-0000-0000-000000000000/email-validations")
-				.with(csrf()).header("origin", "http://localhost")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(ImmutableEmailValidationModel.builder().confirmationCode("code value").build()))
 				.accept(MediaType.APPLICATION_JSON))
@@ -75,7 +73,6 @@ class EmailValidationsControllerIT {
 			when(userService.verifyEmail(anyString(), any())).thenReturn(false);
 
 			mockMvc.perform(post("/api/v1/users/00000000-0000-0000-0000-000000000000/email-validations")
-					.with(csrf()).header("origin", "http://localhost")
 					.contentType(MediaType.APPLICATION_JSON)
 					.content(objectMapper.writeValueAsString(ImmutableEmailValidationModel.builder().confirmationCode("code value").build()))
 					.accept(MediaType.APPLICATION_JSON))
@@ -91,7 +88,6 @@ class EmailValidationsControllerIT {
 		when(userService.verifyEmail(anyString(), any())).thenThrow(new ResourceNotFoundException("No user with id=[%s] was found".formatted("00000000-0000-0000-0000-000000000000")));
 
 		mockMvc.perform(post("/api/v1/users/00000000-0000-0000-0000-000000000000/email-validations")
-				.with(csrf()).header("origin", "http://localhost")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(ImmutableEmailValidationModel.builder().confirmationCode("code value").build()))
 				.accept(MediaType.APPLICATION_JSON))

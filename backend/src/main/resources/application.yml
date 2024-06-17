@@ -109,7 +109,7 @@ server:
       - text/plain
       - text/xml
   error:
-    include-stacktrace: never 
+    include-stacktrace: never
   shutdown: graceful
 
 ---
@@ -122,7 +122,7 @@ springdoc:
     #
     oauth:
       client-id: api://api.example.com
-      scopes: api://api.example.com/.default 
+      scopes: api://api.example.com/.default
 
 ---
 
@@ -143,7 +143,7 @@ application:
         # cache preferred languages for one minute to
         # reduce excessive database calls
         expire-after-write: 1
-        time-unit: minutes        
+        time-unit: minutes
   email-notifications:
     confirmation-codes:
       expiry:
