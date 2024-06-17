@@ -164,10 +164,10 @@ export default function PreferredLanguageEdit() {
           )}
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="cancel-button" routeId="$lang/_protected/personal-information/index" params={params} disabled={isSubmitting}>
+          <ButtonLink id="cancel-button" routeId="$lang/_protected/personal-information/index" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Back - Preferred Language click">
             {t('personal-information:preferred-language.edit.back')}
           </ButtonLink>
-          <Button id="change-button" variant="primary" disabled={isSubmitting}>
+          <Button id="change-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Save - Preferred Language click">
             {t('personal-information:preferred-language.edit.save')}
             <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </Button>
