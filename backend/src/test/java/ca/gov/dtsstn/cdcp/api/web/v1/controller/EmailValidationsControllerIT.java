@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -34,7 +33,6 @@ import ca.gov.dtsstn.cdcp.api.web.v1.model.ImmutableEmailValidationModel;
 @ActiveProfiles("test")
 @Import({ WebSecurityConfig.class })
 @WebMvcTest({ EmailValidationsController.class })
-@ComponentScan({ "ca.gov.dtsstn.cdcp.api.web.v1.model.mapper" })
 class EmailValidationsControllerIT {
 
 	@MockBean UserService userService;
