@@ -12,7 +12,7 @@ export const getUserService = moize(createUserService, { onCacheAdd: () => log.i
 function createUserService() {
   const { CDCP_API_BASE_URI } = getEnv();
 
-  async function createUserWithAttributesAndEmail(email: string, userId: string) {
+  async function createUser(email: string, userId: string) {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
     auditService.audit('user-service.create', { userId });
@@ -51,5 +51,5 @@ function createUserService() {
     return response.status;
   }
 
-  return { createUserWithAttributesAndEmail };
+  return { createUser };
 }

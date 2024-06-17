@@ -31,7 +31,7 @@ describe('user-service.server tests', () => {
       vi.mocked(fetch).mockResolvedValue(new HttpResponse(null, { status: 204 }));
 
       const userService = getUserService();
-      const newUserInfo = await userService.createUserWithAttributesAndEmail('test@email', '1234567890');
+      const newUserInfo = await userService.createUser('test@email', '1234567890');
 
       expect(newUserInfo).toBe(204);
     });
@@ -40,7 +40,7 @@ describe('user-service.server tests', () => {
       vi.mocked(fetch).mockResolvedValue(new HttpResponse(null, { status: 500 }));
 
       const userService = getUserService();
-      await expect(() => userService.createUserWithAttributesAndEmail('sin', 'userId')).rejects.toThrowError();
+      await expect(() => userService.createUser('sin', 'userId')).rejects.toThrowError();
     });
   });
 });
