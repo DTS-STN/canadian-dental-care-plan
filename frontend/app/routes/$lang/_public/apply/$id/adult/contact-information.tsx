@@ -370,7 +370,9 @@ export default function ApplyFlowPersonalInformation() {
           <input type="hidden" name="_csrf" value={csrfToken} />
           <fieldset className="mb-6">
             <legend className="mb-4 font-lato text-2xl font-bold">{t('apply-adult:contact-information.phone-header')}</legend>
-            <p className="mb-4">{t('apply-adult:contact-information.add-phone')}</p>
+            <p className="mb-4" id="adding-phone">
+              {t('apply-adult:contact-information.add-phone')}
+            </p>
             <div className="grid items-end gap-6">
               <InputPhoneField
                 id="phone-number"
