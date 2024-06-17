@@ -30,12 +30,15 @@ import ca.gov.dtsstn.cdcp.api.config.WebSecurityConfig;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUser;
 import ca.gov.dtsstn.cdcp.api.service.domain.ImmutableUserAttribute;
+import ca.gov.dtsstn.cdcp.api.web.json.JsonPatchProcessor;
 
 @ActiveProfiles("test")
 @Import({ WebSecurityConfig.class })
 @WebMvcTest({ UsersController.class })
 @ComponentScan({ "ca.gov.dtsstn.cdcp.api.web.v1.model.mapper" })
 class UsersControllerIT {
+
+	@MockBean JsonPatchProcessor jsonPatchProcessor;
 
 	@MockBean UserService userService;
 
