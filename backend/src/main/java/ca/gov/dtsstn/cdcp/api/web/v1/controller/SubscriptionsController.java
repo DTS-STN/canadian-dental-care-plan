@@ -166,6 +166,7 @@ public class SubscriptionsController {
 	}
 
 	@DeleteMapping({ "/{subscriptionId}" })
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@Operation(summary = "Delete a subscription by ID")
 	@ApiResponse(responseCode = "204", description = "The request has been successfully processed.")
 	public void deleteSubscriptionById(

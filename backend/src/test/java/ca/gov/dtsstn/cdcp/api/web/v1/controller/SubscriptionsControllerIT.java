@@ -6,6 +6,7 @@ import static org.assertj.core.api.InstanceOfAssertFactories.type;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -464,6 +465,83 @@ class SubscriptionsControllerIT {
 	@DisplayName("Test insufficient privilege PATCH /api/v1/users/{userId}/subscriptions/{subscriptionId}")
 	void testUpdateSubscriptionById_Forbidden() throws Exception {
 		mockMvc.perform(patch("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions"))
+			.andDo(print())
+			.andExpect(status().isForbidden());
+	}
+
+	@Test
+	@WithMockUser(roles = { "Users.Administer" })
+	@DisplayName("Test authenticated DELETE /api/v1/users/{userId}/subscriptions/{subscriptionId}")
+	void testDeleteSubscriptionById_HappyPath() throws Exception {
+		final var existingSubscription = ImmutableSubscription.builder()
+			.id("00000000-0000-0000-0000-000000000000")
+			.build();
+
+		final var existingUser = ImmutableUser.builder()
+			.id("00000000-0000-0000-0000-000000000000")
+			.addSubscriptions(existingSubscription)
+			.build();
+
+		when(userService.getUserById(existingUser.getId()))
+			.thenReturn(Optional.of(existingUser));
+
+		mockMvc.perform(delete("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions/00000000-0000-0000-0000-000000000000"))
+			.andDo(print())
+			.andExpect(status().isNoContent());
+
+		verify(userService).deleteSubscriptionForUser(existingUser.getId(), existingSubscription.getId());
+	}
+
+	@Test
+	@WithMockUser(roles = { "Users.Administer" })
+	@DisplayName("Test authenticated DELETE /api/v1/users/{userId}/subscriptions/{subscriptionId} w/ invalid user")
+	void testDeleteSubscriptionById_InvalidUser() throws Exception {
+		mockMvc.perform(delete("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions/00000000-0000-0000-0000-000000000000"))
+			.andDo(print())
+			.andExpect(status().isNotFound())
+			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PROBLEM_JSON_VALUE))
+			.andExpect(result -> assertThat(result)
+				.extracting(MvcResult::getResolvedException, type(ResourceNotFoundException.class))
+				.extracting(ResourceNotFoundException::getMessage)
+				.isEqualTo("No user with id=[00000000-0000-0000-0000-000000000000] was found"));
+	}
+
+	@Test
+	@WithMockUser(roles = { "Users.Administer" })
+	@DisplayName("Test authenticated DELETE /api/v1/users/{userId}/subscriptions/{subscriptionId} w/ invalid subscription")
+	void testDeleteSubscriptionById_InvalidSubscription() throws Exception {
+		final var existingUser = ImmutableUser.builder()
+			.id("00000000-0000-0000-0000-000000000000")
+			.build();
+
+		when(userService.getUserById(existingUser.getId()))
+			.thenReturn(Optional.of(existingUser));
+
+		mockMvc.perform(delete("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions/00000000-0000-0000-0000-000000000000"))
+			.andDo(print())
+			.andExpect(status().isNotFound())
+			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PROBLEM_JSON_VALUE))
+			.andExpect(result -> assertThat(result)
+				.extracting(MvcResult::getResolvedException, type(ResourceNotFoundException.class))
+				.extracting(ResourceNotFoundException::getMessage)
+				.isEqualTo("No subscription with id=[00000000-0000-0000-0000-000000000000] was found"));
+	}
+
+
+	@Test
+	@WithAnonymousUser
+	@DisplayName("Test unauthenticated DELETE /api/v1/users/{userId}/subscriptions/{subscriptionId}")
+	void testDeleteSubscriptionById_Unauthorized() throws Exception {
+		mockMvc.perform(delete("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions"))
+			.andDo(print())
+			.andExpect(status().isUnauthorized());
+	}
+
+	@Test
+	@WithMockUser(roles = { /* intentionally left blank */ })
+	@DisplayName("Test insufficient privilege DELETE /api/v1/users/{userId}/subscriptions/{subscriptionId}")
+	void testDeleteSubscriptionById_Forbidden() throws Exception {
+		mockMvc.perform(delete("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions"))
 			.andDo(print())
 			.andExpect(status().isForbidden());
 	}
