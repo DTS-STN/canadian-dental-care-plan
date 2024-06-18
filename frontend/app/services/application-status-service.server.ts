@@ -2,9 +2,8 @@ import moize from 'moize';
 import { z } from 'zod';
 
 import { getAuditService } from '~/services/audit-service.server';
-import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getEnv } from '~/utils/env.server';
-import { getFetchFn } from '~/utils/fetch-utils.server';
+import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('application-status-service.server');
@@ -44,7 +43,6 @@ function createApplicationStatusService() {
   async function getStatusIdWithSin({ sin, applicationCode }: GetStatusIdWithSinArgs) {
     log.debug('Fetching status id of dental application for application code [%s]', applicationCode);
     log.trace('Fetching status id of dental application for sin [%s], application code [%s]', sin, applicationCode);
-    const instrumentationService = getInstrumentationService();
 
     getAuditService().audit('application-status.post', { userId: 'anonymous' });
 
@@ -64,7 +62,7 @@ function createApplicationStatusService() {
       },
     };
 
-    const response = await fetchFn(url, {
+    const response = await instrumentedFetch(fetchFn, 'http.client.interop-api.status.posts', url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -73,7 +71,6 @@ function createApplicationStatusService() {
       body: JSON.stringify(statusRequest),
     });
 
-    instrumentationService.countHttpStatus('http.client.interop-api.status.posts', response.status);
     if (!response.ok) {
       log.error('%j', {
         message: "Failed to 'POST' for application status",
@@ -110,7 +107,6 @@ function createApplicationStatusService() {
   async function getStatusIdWithoutSin({ applicationCode, firstName, lastName, dateOfBirth }: GetStatusIdWithoutSinArgs) {
     log.debug('Fetching status id of dental application for application code [%s]', applicationCode);
     log.trace('Fetching status id of dental application for application code [%s], first name [%s], lastname [%s], date of birth [%s]', applicationCode, firstName, lastName, dateOfBirth);
-    const instrumentationService = getInstrumentationService();
 
     getAuditService().audit('application-status.post', { userId: 'anonymous' });
 
@@ -136,7 +132,7 @@ function createApplicationStatusService() {
       },
     };
 
-    const response = await fetchFn(url, {
+    const response = await instrumentedFetch(fetchFn, 'http.client.interop-api.status-fnlndob.posts', url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -144,7 +140,7 @@ function createApplicationStatusService() {
       },
       body: JSON.stringify(statusRequest),
     });
-    instrumentationService.countHttpStatus('http.client.interop-api.status-fnlndob.posts', response.status);
+
     if (!response.ok) {
       log.error('%j', {
         message: "Failed to 'POST' for application status",

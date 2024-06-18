@@ -1,11 +1,10 @@
 import moize from 'moize';
 
 import { getAuditService } from './audit-service.server';
-import { getInstrumentationService } from './instrumentation-service.server';
 import { toGetApplicantRequest, toPersonalInformation, toUpdateApplicantRequest } from '~/mappers/personal-information-service-mappers.server';
 import { PersonalInformation, getApplicantResponseSchema, updateApplicantRequestSchema } from '~/schemas/personal-informaton-service-schemas.server';
 import { getEnv } from '~/utils/env.server';
-import { getFetchFn } from '~/utils/fetch-utils.server';
+import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('personal-information-service.server');
@@ -36,11 +35,9 @@ function createPersonalInformationService() {
     const url = `${INTEROP_APPLICANT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant`;
 
     const auditService = getAuditService();
-    const instrumentationService = getInstrumentationService();
-
     auditService.audit('personal-information.get', { userId });
 
-    const response = await fetchFn(url, {
+    const response = await instrumentedFetch(fetchFn, 'http.client.interop-api.applicant.posts', url, {
       method: 'POST', // Interop uses POST to avoid logging SIN in the API path
       body: JSON.stringify(applicantRequest),
       headers: {
@@ -48,8 +45,6 @@ function createPersonalInformationService() {
         'Ocp-Apim-Subscription-Key': INTEROP_APPLICANT_API_SUBSCRIPTION_KEY ?? INTEROP_API_SUBSCRIPTION_KEY,
       },
     });
-
-    instrumentationService.countHttpStatus('http.client.interop-api.applicant.posts', response.status);
 
     if (response.status === 200) {
       const data = await response.json();
@@ -84,7 +79,7 @@ function createPersonalInformationService() {
 
     // TODO: The Interop API for updating dental applicant information is not yet available.
     const url = `${INTEROP_APPLICANT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/applicant/${sin}`;
-    const response = await fetchFn(url, {
+    const response = await instrumentedFetch(fetchFn, 'http.client.interop-api.applicant.puts', url, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
