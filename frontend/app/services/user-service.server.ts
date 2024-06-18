@@ -1,4 +1,5 @@
 import moize from 'moize';
+import { z } from 'zod';
 
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
@@ -6,6 +7,32 @@ import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('user-service.server');
+
+const userSchema = z.object({
+  id: z.string(),
+  email: z.string(),
+  emailVerified: z.boolean(),
+  userAttributes: z.array(
+    z.object({
+      name: z.string(),
+      value: z.string(),
+    }),
+  ),
+  _links: z.object({
+    self: z.object({
+      href: z.string(),
+    }),
+    subscriptions: z.object({
+      href: z.string(),
+    }),
+    emailValidations: z.object({
+      href: z.string(),
+    }),
+    confirmationCodes: z.object({
+      href: z.string(),
+    }),
+  }),
+});
 
 export const getUserService = moize(createUserService, { onCacheAdd: () => log.info('Creating new user service') });
 
@@ -35,7 +62,7 @@ function createUserService() {
       },
       body: JSON.stringify(newUser),
     });
-
+    console.debug('RESPONSE::::' + JSON.stringify(response, undefined, 4));
     instrumentationService.countHttpStatus('http.client.cdcp-api.users.posts', response.status);
 
     if (!response.ok) {
@@ -48,7 +75,14 @@ function createUserService() {
       });
       throw new Error(`Failed to create user. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
-    return response.status;
+
+    const users = await response.json();
+    console.debug(JSON.stringify('USERS:::: ' + users, undefined, 4));
+    if (users._embedded.users.length === 0) {
+      return null;
+    }
+
+    return userSchema.parse(users._embedded.users[0]);
   }
 
   return { createUser };
