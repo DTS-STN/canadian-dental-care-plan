@@ -4,9 +4,8 @@ import { z } from 'zod';
 
 import letterTypesJson from '~/resources/power-platform/letter-types.json';
 import { getAuditService } from '~/services/audit-service.server';
-import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getEnv } from '~/utils/env.server';
-import { getFetchFn } from '~/utils/fetch-utils.server';
+import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('letters-service.server');
@@ -61,13 +60,12 @@ function createLettersService() {
     log.debug('Fetching letters for user id [%s]', userId);
 
     const auditService = getAuditService();
-    const instrumentationService = getInstrumentationService();
     auditService.audit('letters.get', { userId });
 
     const url = new URL(`${INTEROP_CCT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetDocInfoByClientId`);
     url.searchParams.set('clientid', clientId);
 
-    const response = await fetchFn(url, {
+    const response = await instrumentedFetch(fetchFn, 'http.client.interop-api.get-doc-info-by-client-id.gets', url, {
       headers: {
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': INTEROP_CCT_API_SUBSCRIPTION_KEY ?? INTEROP_API_SUBSCRIPTION_KEY,
@@ -75,7 +73,6 @@ function createLettersService() {
       },
     });
 
-    instrumentationService.countHttpStatus('http.client.interop-api.get-doc-info-by-client-id.gets', response.status);
     if (!response.ok) {
       log.error('%j', {
         message: 'Failed to fetch data',
@@ -116,14 +113,14 @@ function createLettersService() {
    */
   async function getPdf(letterId: string, userId: string) {
     log.debug('Fetching PDF with letter id [%s] and user id [%s]', letterId, userId);
+
     const url = new URL(`${INTEROP_CCT_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/client-letters/cct/v1/GetPdfByLetterId`);
     url.searchParams.set('id', letterId);
-    const auditService = getAuditService();
-    const instrumentationService = getInstrumentationService();
 
+    const auditService = getAuditService();
     auditService.audit('pdf.get', { letterId, userId });
 
-    const response = await fetchFn(url, {
+    const response = await instrumentedFetch(fetchFn, 'http.client.interop-api.get-pdf-by-client-id.gets', url, {
       headers: {
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': INTEROP_CCT_API_SUBSCRIPTION_KEY ?? INTEROP_API_SUBSCRIPTION_KEY,
@@ -131,7 +128,6 @@ function createLettersService() {
       },
     });
 
-    instrumentationService.countHttpStatus('http.client.interop-api.get-pdf-by-client-id.gets', response.status);
     if (!response.ok) {
       log.error('%j', {
         message: 'Failed to fetch data',

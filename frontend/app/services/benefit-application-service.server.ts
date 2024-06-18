@@ -5,7 +5,6 @@ import { toBenefitApplication } from '~/mappers/application-history-mapper.serve
 import { applicationListSchema } from '~/schemas/application-history-service-schemas.server';
 import { BenefitApplicationRequest, benefitApplicationRequestSchema, benefitApplicationResponseSchema } from '~/schemas/benefit-application-service-schemas.server';
 import { getAuditService } from '~/services/audit-service.server';
-import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -84,19 +83,16 @@ function createBenefitApplicationService() {
     log.debug('Fetching applications for user id [%s]', userId);
 
     const auditService = getAuditService();
-    const instrumentationService = getInstrumentationService();
     auditService.audit('applications.get', { userId });
 
     const url = new URL(`${INTEROP_BENEFIT_APPLICATION_API_BASE_URI ?? INTEROP_API_BASE_URI}/v1/users/${userId}/applications`);
 
-    const response = await fetchFn(url, {
+    const response = await instrumentedFetch(fetchFn, 'http.client.application-history-api.applications.gets', url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     });
-
-    instrumentationService.countHttpStatus('http.client.application-history-api.applications.gets', response.status);
 
     const data = await response.json();
     log.trace('Applications for user id [%s]: [%j]', userId, data);
