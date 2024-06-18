@@ -6,7 +6,7 @@ import letterTypesJson from '~/resources/power-platform/letter-types.json';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getEnv } from '~/utils/env.server';
-import { getFetchFn } from '~/utils/fetch-utils';
+import { getFetchFn } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('letters-service.server');
