@@ -1,6 +1,6 @@
 {
   "applicant-information": {
-    "page-title": "Coordonnées du parent ou du tuteur légal",
+    "page-title": "Renseignements personnels du parent ou du tuteur légal",
     "form-instructions-sin": "Veuillez indiquer votre nom légal tel qu'indiqué sur votre carte ou votre lettre de numéro d'assurance sociale (NAS).",
     "form-instructions-info": "Nous utiliserons les renseignements que vous avez fournis pour vérifier votre identité. Tout renseignement qui ne correspond pas à ceux associés à votre numéro d'assurance sociale pourrait retarder le traitement de votre demande.",
     "date-of-birth": "Date de naissance",
@@ -368,7 +368,7 @@
     }
   },
   "contact-information": {
-    "page-title": "Renseignements personnels du parent ou du tuteur légal",
+    "page-title": "Coordonnées du parent ou du tuteur légal",
     "phone-header": "Numéro de téléphone",
     "add-phone": "L'ajout d'un numéro de téléphone aide le gouvernement du Canada à vous contacter en cas de problème avec votre demande. Sinon, nous vous contacterons par la poste.",
     "phone-number": "Numéro de téléphone (facultatif)",
