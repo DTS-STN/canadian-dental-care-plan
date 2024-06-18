@@ -15,6 +15,7 @@ import { getAuditService } from '~/services/audit-service.server';
 import { getBenefitApplicationService } from '~/services/benefit-application-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
+import { extractDateParts } from '~/utils/date-utils';
 import { featureEnabled } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -109,10 +110,9 @@ export default function ApplicationsIndex() {
               return (
                 <li key={application.id} className="py-4 sm:py-6">
                   <InlineLink id="view-application-details" routeId="$lang/_protected/applications/$id" className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4" params={{ ...params, id: application.id }} data-gc-analytics-customclick={gcAnalyticsCustomClickValue}>
-                    {application.submittedOn}
+                    {t('applications:index.application-title', { year: application.submittedOn ? extractDateParts(application.submittedOn).year : '' })}
                   </InlineLink>
-                  <p className="mt-1 text-sm text-gray-500">{t('applications:index.confirmation-code', { confirmationCode: application.confirmationCode })}</p>
-                  <p className="mt-1 text-sm text-gray-500">{t('applications:index.status', { status: application.status })}</p>
+                  <p className="mt-1 text-sm text-gray-500">{t('applications:index.date', { date: application.submittedOn })}</p>
                 </li>
               );
             })}

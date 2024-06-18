@@ -43,6 +43,9 @@ export function getApplicationHistoryApiMockHandlers() {
                           {
                             IdentificationID: 'fdf25fea-a7a9-ee11-a569-000d3af4f898',
                           },
+                          {
+                            IdentificationID: 'e174250d-26c5-ee11-9079-000d3a09d640',
+                          },
                         ],
                       },
                     ],

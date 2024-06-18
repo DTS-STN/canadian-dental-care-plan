@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const applicationSchema = z.object({
+const applicationResponseSchema = z.object({
   ApplicationId: z.string().optional(),
   SubmittedDate: z.string().optional(),
   ApplicationStatus: z.string().optional(),
@@ -142,8 +142,85 @@ const applicationSchema = z.object({
   ),
 });
 
-export type Application = z.infer<typeof applicationSchema>;
+export interface Application {
+  id?: string;
+  submittedOn?: string;
+  status?: string;
+  confirmationCode?: string;
+  applicationDetails?: [
+    {
+      typeOfApplication?: string;
+      applicantInformation?: {
+        maritalStatus?: string;
+        firstName?: string;
+        lastName?: string;
+        socialInsuranceNumber?: string;
+      };
+      communicationPreferences?: {
+        email?: string;
+        preferredLanguage?: string;
+        preferredMethod?: string;
+      };
+      dateOfBirth?: string;
+      personalInformation?: {
+        copyMailingAddress?: boolean;
+        homeAddress?: string;
+        homeApartment?: string;
+        homeCity?: string;
+        homeCountry?: string;
+        homePostalCode?: string;
+        homeProvince?: string;
+        mailingAddress?: string;
+        mailingApartment?: string;
+        mailingCity?: string;
+        mailingCountry?: string;
+        mailingPostalCode?: string;
+        mailingProvince?: string;
+        phoneNumber?: string;
+        phoneNumberAlt?: string;
+      };
+      children?: [
+        {
+          information: {
+            isParent?: boolean;
+            firstName?: string;
+            lastName?: string;
+            dateOfBirth?: string;
+            socialInsuranceNumber?: string;
+            hasSocialInsuranceNumber?: boolean;
+          };
+          dentalInsurance?: boolean;
+          dentalBenefits?: {
+            hasFederalBenefits?: boolean;
+            federalSocialProgram?: string;
+            provincialTerritorialSocialProgram?: string;
+            hasProvincialTerritorialBenefits?: boolean;
+            province?: string;
+          };
+        },
+      ];
+      partnerInformation?: {
+        confirm?: boolean;
+        dateOfBirth?: string;
+        firstName?: string;
+        lastName?: string;
+        socialInsuranceNumber: string;
+      };
+      disabilityTaxCredit?: boolean;
+      dentalBenefits?: {
+        hasFederalBenefits?: boolean;
+        federalSocialProgram?: string;
+        provincialTerritorialSocialProgram?: string;
+        hasProvincialTerritorialBenefits?: boolean;
+        province?: string;
+      };
+      dentalInsurance?: boolean;
+    },
+  ];
+}
 
-export const applicationListSchema = z.array(applicationSchema);
+export type ApplicationResponse = z.infer<typeof applicationResponseSchema>;
+
+export const applicationListSchema = z.array(applicationResponseSchema);
 
 export type ApplicationList = z.infer<typeof applicationListSchema>;
