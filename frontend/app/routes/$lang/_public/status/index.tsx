@@ -147,11 +147,12 @@ export default function StatusChecker() {
   return (
     <PublicLayout>
       <div className="max-w-prose">
-        <div className="space-y-4">
+        <div>
           <h2 className="font-bold">{t('status:status-checker-heading')}</h2>
-          <p>{t('status:status-checker-content')}</p>
+          <p className="mb-4">{t('status:status-checker-content')}</p>
           <h2 className="font-bold">{t('status:online-status-heading')}</h2>
-          <p>{t('status:online-status-content')}</p>
+          <p className="mb-4">{t('status:online-status-content')}</p>
+          <p className="mb-4">{t('status:terms-conditions')}</p>
         </div>
         <Collapsible summary={t('status:terms-of-use.summary')} className="mt-8">
           <div className="space-y-4">
@@ -185,12 +186,16 @@ export default function StatusChecker() {
         </Collapsible>
         <Collapsible summary={t('status:privacy-notice-statement.summary')} className="my-8">
           <div className="space-y-4">
-            <p>{t('status:privacy-notice-statement.collection-of-use')}</p>
+            <p>
+              <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.collection-of-use" components={ [<cite />] } />
+            </p>
             <p>{t('status:privacy-notice-statement.provided-information')}</p>
             <p>
               <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.third-party-provider" components={{ microsoftDataPrivacyPolicy }} />
             </p>
-            <p>{t('status:privacy-notice-statement.personal-information')}</p>
+            <p>
+              <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.personal-information" components={ [<cite />] } />
+            </p>
             <p>
               <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.report-a-concern" components={{ fileacomplaint }} />
             </p>

@@ -4,6 +4,7 @@
   "status-checker-content": "The Status Checker is a tool that lets you check the status of your Canadian Dental Care Plan application.",
   "online-status-heading": "Who can check their application status online?",
   "online-status-content": "If you applied for the Canadian Dental Care Plan, you can check your status online.",
+  "terms-conditions": "By using the Status Checker you agree to the following Terms and Conditions of Use and Privacy Notice Statement.",
   "status-heading": "Status",
   "empty-status": "The information you gave us doesn't match the information in our system.",
   "terms-of-use": {
@@ -32,10 +33,10 @@
   },
   "privacy-notice-statement": {
     "summary": "Privacy Notice Statement",
-    "collection-of-use": "The collection and use of your personal information is authorized under the Department of Health Act, the Dental Care Measures Act, the Department of Employment and Social Development Act, and other applicable laws.",
+    "collection-of-use": "The collection and use of your personal information is authorized under the <cite>Department of Health Act</cite>, the <cite>Dental Care Measures Act</cite>, the <cite>Department of Employment and Social Development Act</cite>, and other applicable laws.",
     "provided-information": "The provided information will never result in administrative decisions being made about you.",
     "third-party-provider": "ESDC carries out this application using services from third-party provider Microsoft Corporation, which may be subject to foreign laws. For more information, see <microsoftDataPrivacyPolicy>Microsoft Data Privacy Policy & Privacy Principles</microsoftDataPrivacyPolicy>.",
-    "personal-information": "Your personal information is administered in accordance with the Department of Employment and Social Development Act, Privacy Act and other applicable laws. Under the Privacy Act, you have the right to the protection of, access to, and where applicable, the correction of your personal information when you believe there is an error or omission.",
+    "personal-information": "Your personal information is administered in accordance with the <cite>Department of Employment and Social Development Act</cite>, <cite>Privacy Act</cite> and other applicable laws. Under the <cite>Privacy Act</cite>, you have the right to the protection of, access to, and where applicable, the correction of your personal information when you believe there is an error or omission.",
     "report-a-concern": "If you are not satisfied with our response to your privacy, you have the right to file a complaint with the Privacy Commissioner of Canada regarding Service Canada's handling of your personal information at: <fileacomplaint>Report a concern</fileacomplaint>."
   },
   "links": {
