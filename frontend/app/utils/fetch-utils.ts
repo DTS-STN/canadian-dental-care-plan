@@ -3,6 +3,7 @@ import { toNodeReadable } from 'web-streams-node';
 
 import { getEnv } from './env.server';
 import { getLogger } from './logging.server';
+import { getInstrumentationService } from '~/services/instrumentation-service.server';
 
 const log = getLogger('fetch-utils.server');
 
@@ -39,4 +40,26 @@ export function getFetchFn(proxyUrl?: string, timeout?: number) {
 
   log.debug('No proxy configured; using global fetch');
   return global.fetch;
+}
+
+/**
+ * Wraps a fetch() function and adds instrumentation/metrics collection
+ *
+ * @param fetchFn An existing fetch() function used to make the actual request
+ * @param metricPrefix A string prefix used for naming metrics (ex. "http.client.example-api.example-endpoint.gets", "http.client.example-api.example-endpoint.posts").
+ * @param input The URL or request object specifying the target of the fetch request
+ * @param init An object containing additional options for the fetch request (ex. headers, method)
+ * @returns A Promise that resolves to the Response object from the fetch() call
+ * @throws The original error thrown by the underlying fetch() call
+ */
+export async function instrumentedFetch(fetchFn: FetchFunction, metricPrefix: string, input: string | URL, init?: FetchFunctionInit) {
+  const instrumentationService = getInstrumentationService();
+  try {
+    const response = await fetchFn(input, init);
+    instrumentationService.countHttpStatus(metricPrefix, response.status);
+    return response;
+  } catch (error) {
+    instrumentationService.countHttpStatus(metricPrefix, 500);
+    throw error;
+  }
 }

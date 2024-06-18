@@ -7,7 +7,7 @@ import { BenefitApplicationRequest, benefitApplicationRequestSchema, benefitAppl
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getEnv } from '~/utils/env.server';
-import { getFetchFn } from '~/utils/fetch-utils';
+import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('benefit-application-service.server');
@@ -40,13 +40,11 @@ function createBenefitApplicationService() {
     }
 
     const auditService = getAuditService();
-    const instrumentationService = getInstrumentationService();
-
     auditService.audit('application-submit.post', { userId: 'anonymous' });
 
     const url = new URL(`${INTEROP_BENEFIT_APPLICATION_API_BASE_URI ?? INTEROP_API_BASE_URI}/dental-care/applicant-information/dts/v1/benefit-application`);
 
-    const response = await fetchFn(url, {
+    const response = await instrumentedFetch(fetchFn, 'http.client.interop-api.benefit-application.posts', url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -56,8 +54,6 @@ function createBenefitApplicationService() {
     });
 
     if (!response.ok) {
-      instrumentationService.countHttpStatus('http.client.interop-api.benefit-application.posts', response.status);
-
       log.error('%j', {
         message: "Failed to 'POST' for benefit application",
         status: response.status,
@@ -68,8 +64,6 @@ function createBenefitApplicationService() {
 
       throw new Error(`Failed to 'POST' for benefit application. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
-
-    instrumentationService.countHttpStatus('http.client.interop-api.benefit-application.posts', 200);
 
     const json = await response.json();
     const parsedBenefitApplicationResponse = await benefitApplicationResponseSchema.safeParseAsync(json);
