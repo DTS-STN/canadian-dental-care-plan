@@ -4,6 +4,7 @@
   "status-checker-content": "Il s'agit d'un outil qui vous permet de savoir où en est votre demande de participation au Régime canadien de soins dentaires",
   "online-status-heading": "Qui peut vérifier l'état de sa demande en ligne?",
   "online-status-content": "Si vous avez présenté une demande au titre du Régime canadien de soins dentaires, vous pouvez vérifier l'état de votre demande en ligne.",
+  "terms-conditions": "En utilisant le vérificateur de l'état d'une demande, vous acceptez les conditions générales d'utilisation et à l'énoncé de confidentialité.",
   "status-heading": "Statut",
   "empty-status": "Les informations que vous nous avez fournies ne correspondent pas aux informations dans notre système.",
   "terms-of-use": {
@@ -32,10 +33,10 @@
   },
   "privacy-notice-statement": {
     "summary": "Énoncé de confidentialité",
-    "collection-of-use": "La collecte et l'utilisation de vos renseignements personnels sont autorisées en vertu de la Loi sur le ministère de la Santé, de la Loi sur les mesures de soins dentaires, de la Loi sur la protection des renseignements personnels, de la Loi sur le ministère de l'Emploi et du Développement social et d'autres lois applicables.",
+    "collection-of-use": "La collecte et l'utilisation de vos renseignements personnels sont autorisées en vertu de la <cite>Loi sur le ministère de la Santé</cite>, de la <cite>Loi sur les mesures de soins dentaires</cite>, de la <cite>Loi sur la protection des renseignements personnels</cite>, de la <cite>Loi sur le ministère de l'Emploi et du Développement social</cite> et d'autres lois applicables.",
     "provided-information": "Les renseignements fournis ne donneront jamais lieu à des décisions administratives vous concernant.",
     "third-party-provider": "EDSC exécute cette application en utilisant les services du fournisseur tiers Microsoft Corporation, qui peut être soumis à des lois étrangères. Pour obtenir de plus amples renseignements, veuillez consulter la <microsoftDataPrivacyPolicy>politique de confidentialité des données et les principes de confidentialité de Microsoft</microsoftDataPrivacyPolicy>.",
-    "personal-information": "Vos renseignements personnels sont administrés conformément à ce que prévoient la Loi sur le ministère de l'Emploi et du Développement social, la Loi sur la protection des renseignements personnels ainsi que d'autres lois applicables. En vertu de la Loi sur la protection des renseignements personnels, vous avez le droit à la protection de vos renseignements personnels, à l'accès à ceux-ci et, le cas échéant, à la correction de vos renseignements personnels lorsque vous estimez qu'il y a une erreur ou une omission.",
+    "personal-information": "Vos renseignements personnels sont administrés conformément à ce que prévoient la <cite>Loi sur le ministère de l'Emploi et du Développement social</cite>, la <cite>Loi sur la protection des renseignements personnels</cite> ainsi que d'autres lois applicables. En vertu de la <cite>Loi sur la protection des renseignements personnels</cite>, vous avez le droit à la protection de vos renseignements personnels, à l'accès à ceux-ci et, le cas échéant, à la correction de vos renseignements personnels lorsque vous estimez qu'il y a une erreur ou une omission.",
     "report-a-concern": "Si vous n'êtes pas satisfait de nos réponses à vos préoccupations en matière de protection de la vie privée, vous avez le droit de déposer une plainte auprès du Commissaire à la protection de la vie privée du Canada concernant le traitement de vos renseignements personnels à la page suivante\u00a0: <fileacomplaint>Signaler un problème</fileacomplaint>."
   },
   "links": {
@@ -49,7 +50,7 @@
     "complete-fields": "Remplir tous les champs.",
     "radio-legend": "Vérifiez-vous le statut pour vous-même ou pour votre enfant?",
     "radio-text": {
-      "myself": "Je vérifie le statut par <strong>moi-même</strong>",
+      "myself": "Je vérifie le statut pour <strong>moi-même</strong>",
       "child": "Je vérifie le statut de <strong>mon enfant</strong>"
     },
     "application-code-label": "Votre code de demande ou votre numéro du client",
@@ -99,7 +100,7 @@
       "if-child-desc": "(FR) If the child goes by a single legal name, leave the first name field blank",
       "last-name": "Nom de famille de l'enfant",
       "first-name": "Prénom de l'enfant",
-      "date-of-birth-label": "Date de naissance e l'enfant",
+      "date-of-birth-label": "Date de naissance de l'enfant",
       "submit": "Vérifier l'état",
       "error-message": {
         "radio-required": "(FR) Please select an option.",
