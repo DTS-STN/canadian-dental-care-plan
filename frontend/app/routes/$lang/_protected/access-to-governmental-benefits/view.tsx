@@ -13,7 +13,7 @@ import { getInstrumentationService } from '~/services/instrumentation-service.se
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled } from '~/utils/env.server';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -88,6 +88,12 @@ export default function AccessToGovernmentalsBenefitsView() {
   const hasDentalPlans = personalInformation.federalDentalPlanId ?? personalInformation.provincialTerritorialDentalPlanId;
 
   if (hasDentalPlans) {
+    const federalSocialProgramName =
+      federalSocialProgramsList.filter((federalSocialProgram) => federalSocialProgram.id === personalInformation.provincialTerritorialDentalPlanId).map((federalSocialProgram) => getNameByLanguage(i18n.language, federalSocialProgram))[0] ?? ' ';
+    const provincialAndTerritorialProgramName =
+      provincialAndTerritorialProgramsList
+        .filter((provincialAndTerritorialProgram) => provincialAndTerritorialProgram.id === personalInformation.provincialTerritorialDentalPlanId)
+        .map((provincialAndTerritorialProgram) => getNameByLanguage(i18n.language, provincialAndTerritorialProgram))[0] ?? ' ';
     return (
       <div className="max-w-prose">
         <div className="mb-5 space-y-4">
@@ -100,7 +106,7 @@ export default function AccessToGovernmentalsBenefitsView() {
             <div className="mb-5 space-y-4">
               <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.view.provincial-or-territorial-dental-benefit')}</h2>
               <ul className="list-disc space-y-6 pl-7">
-                <li>{provincialAndTerritorialProgramsList.find((federalSocialProgram) => federalSocialProgram.id === personalInformation.provincialTerritorialDentalPlanId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '} </li>
+                <li>{provincialAndTerritorialProgramName}</li>
               </ul>
             </div>
           ) : (
@@ -115,7 +121,7 @@ export default function AccessToGovernmentalsBenefitsView() {
               <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.view.federal-benefits-dental-benefits')}</h2>
 
               <ul className="list-disc space-y-6 pl-7">
-                <li>{federalSocialProgramsList.find((federalSocialProgram) => federalSocialProgram.id === personalInformation.federalDentalPlanId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '} </li>
+                <li>{federalSocialProgramName} </li>
               </ul>
             </div>
           ) : (
