@@ -187,14 +187,14 @@ export default function StatusChecker() {
         <Collapsible summary={t('status:privacy-notice-statement.summary')} className="my-8">
           <div className="space-y-4">
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.collection-of-use" components={ [<cite />] } />
+              <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.collection-of-use" components={{ cite: <cite /> }} />
             </p>
             <p>{t('status:privacy-notice-statement.provided-information')}</p>
             <p>
               <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.third-party-provider" components={{ microsoftDataPrivacyPolicy }} />
             </p>
             <p>
-              <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.personal-information" components={ [<cite />] } />
+              <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.personal-information" components={{ cite: <cite /> }} />
             </p>
             <p>
               <Trans ns={handle.i18nNamespaces} i18nKey="status:privacy-notice-statement.report-a-concern" components={{ fileacomplaint }} />
