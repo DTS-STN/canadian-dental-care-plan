@@ -27,7 +27,7 @@ import { subtle } from 'node:crypto';
 
 import { generateCryptoKey, generateJwkId } from '~/utils/crypto-utils.server';
 import { getEnv } from '~/utils/env.server';
-import { getFetchFn } from '~/utils/fetch-utils';
+import { getFetchFn } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import type { ClientMetadata, IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import { fetchAccessToken, fetchServerMetadata, fetchUserInfo, generateAuthorizationRequest, generateCodeChallenge, generateRandomState, validateSession } from '~/utils/raoidc-utils.server';

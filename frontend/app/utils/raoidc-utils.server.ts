@@ -5,7 +5,7 @@ import { UTCDate } from '@date-fns/utc';
 import { JWTPayload, JWTVerifyResult, SignJWT, compactDecrypt, importJWK, jwtVerify } from 'jose';
 import { createHash, subtle } from 'node:crypto';
 
-import { FetchFunction } from './fetch-utils';
+import { FetchFunction } from './fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('raoidc-utils.server');
