@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { Button } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
+import { getSubscriptionService } from '~/services/subscription-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -92,6 +93,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     session.set('userInfoToken', userInfoToken);
   }
   session.set('idToken', idToken);
+
+  const subscriptionService = getSubscriptionService();
+  const user = await subscriptionService.getUserByRaoidcUserId(session.get('userInfoToken').sub);
+  session.set('userId', user?.id);
 
   return redirect(getPathById('$lang/_protected/home', params));
 }

@@ -101,6 +101,9 @@ export function getSubscriptionApiMockHandlers() {
           emailValidations: {
             href: `https://api.cdcp.example.com/api/v1/users/${parsedUserId.data}/email-validations`,
           },
+          confirmationCodes: {
+            href: `https://api.cdcp.example.com/api/v1/users/${userEntity?.id}/confirmation-codes`,
+          },
         },
       });
     }),

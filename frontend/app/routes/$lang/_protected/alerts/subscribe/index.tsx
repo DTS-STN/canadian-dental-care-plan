@@ -26,7 +26,7 @@ import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils'
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
+import { IdToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -107,8 +107,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
+  const alertSubscription = await subscriptionService.getSubscription(session.get('userId'));
   invariant(alertSubscription, 'Expected alertSubscription to be defined');
 
   //TODO: update it in the next PR

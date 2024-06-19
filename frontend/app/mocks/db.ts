@@ -134,7 +134,7 @@ const unverifiedUserAttributes = [
 ];
 
 const unverifiedUser = db.user.create({
-  id: '1234567890',
+  id: '86a1ba9b-0146-493e-b226-933571d371d5',
   email: 'unverified@example.com',
   emailVerified: false,
   userAttributes: unverifiedUserAttributes,
