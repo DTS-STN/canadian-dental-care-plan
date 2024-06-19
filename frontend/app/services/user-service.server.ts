@@ -10,8 +10,8 @@ const log = getLogger('user-service.server');
 
 const userSchema = z.object({
   id: z.string(),
-  email: z.string(),
-  emailVerified: z.boolean(),
+  email: z.string().optional(),
+  emailVerified: z.boolean().optional(),
   userAttributes: z.array(
     z.object({
       name: z.string(),
@@ -76,13 +76,7 @@ function createUserService() {
       throw new Error(`Failed to create user. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const users = await response.json();
-    console.debug(JSON.stringify('USERS:::: ' + users, undefined, 4));
-    if (users._embedded.users.length === 0) {
-      return null;
-    }
-
-    return userSchema.parse(users._embedded.users[0]);
+    return userSchema.parse(await response.json());
   }
 
   return { createUser };
