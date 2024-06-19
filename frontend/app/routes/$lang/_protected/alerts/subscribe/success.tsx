@@ -13,7 +13,6 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
@@ -39,8 +38,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:subscribe.success.page-title') }) };
 
-  const userInfoToken: UserinfoToken = session.get('userInfoToken');
-  const alertSubscription = await subscriptionService.getSubscription(userInfoToken.sub);
+  const alertSubscription = await subscriptionService.getSubscription(session.get('userId'));
   if (!alertSubscription?.email) {
     log.warn('alert subscription email not found, throwing 400');
     throw new Response('alert subscription email not found', { status: 400 });

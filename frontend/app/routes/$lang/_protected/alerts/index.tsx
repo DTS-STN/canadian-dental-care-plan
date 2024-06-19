@@ -21,7 +21,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   invariant(userInfoToken.sub, 'Expected userInfoToken.sub to be defined');
 
   const subscriptionService = getSubscriptionService();
-  const subscription = await subscriptionService.getSubscription(userInfoToken.sub);
+  const subscription = await subscriptionService.getSubscription(session.get('userId'));
 
   if (!subscription) {
     return redirect(getPathById('$lang/_protected/alerts/subscribe/index', params));

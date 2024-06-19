@@ -75,12 +75,8 @@ export const getSubscriptionService = moize(createSubscriptionService, { onCache
 function createSubscriptionService() {
   const { CDCP_API_BASE_URI } = getEnv();
 
-  /**
-   *
-   * @param userId
-   * @returns the subscription details for the user or null if no user is found or the user has no CDCP subscriptions.
-   */
-  async function getSubscription(userId: string) {
+  //TODO: move this function to user service after it is available
+  async function getUserByRaoidcUserId(userId: string) {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
     auditService.audit('alert-subscription.get', { userId });
@@ -108,9 +104,46 @@ function createSubscriptionService() {
 
     const users = await response.json();
     if (users._embedded.users.length === 0) {
+      //TODO: insert createUser api call here when it is ready
       return null;
     }
     const userParsed = userSchema.parse(users._embedded.users[0]);
+
+    return userParsed;
+  }
+  /**
+   *
+   * @param userId
+   * @returns the subscription details for the user or null if no user is found or the user has no CDCP subscriptions.
+   */
+  async function getSubscription(userId: string) {
+    const auditService = getAuditService();
+    const instrumentationService = getInstrumentationService();
+    auditService.audit('alert-subscription.get', { userId });
+    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users/${userId}`);
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    instrumentationService.countHttpStatus('http.client.cdcp-api.users.gets', response.status);
+
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed find data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to find data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
+
+    const user = await response.json();
+    const userParsed = userSchema.parse(user);
 
     const userSubscriptionsURL = userParsed._links.subscriptions.href;
     const subscriptionsResponse = await fetch(userSubscriptionsURL, {
@@ -147,7 +180,7 @@ function createSubscriptionService() {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
     auditService.audit('alert-subscription.delete', { userId });
-    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users?raoidcUserId=${userId}`);
+    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users/${userId}`);
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -169,11 +202,8 @@ function createSubscriptionService() {
       throw new Error(`Failed to find data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const users = await response.json();
-    if (users._embedded.users.length === 0) {
-      throw new Error(`Failed to find the user: ${userId}.`);
-    }
-    const userParsed = userSchema.parse(users._embedded.users[0]);
+    const user = await response.json();
+    const userParsed = userSchema.parse(user);
 
     const userSubscriptionsURL = userParsed._links.subscriptions.href;
     const subscriptionsResponse = await fetch(userSubscriptionsURL, {
@@ -212,6 +242,7 @@ function createSubscriptionService() {
     }
   }
 
+  //TODO: this one will be updated in another PR
   async function updateSubscription(sin: string, subscription: SubscriptionInfo) {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
@@ -254,7 +285,7 @@ function createSubscriptionService() {
     const instrumentationService = getInstrumentationService();
 
     auditService.audit('alert-subscription.validate', { userId });
-    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users?raoidcUserId=${userId}`);
+    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users/${userId}`);
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -276,11 +307,8 @@ function createSubscriptionService() {
       throw new Error(`Failed to find data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const users = await response.json();
-    if (users._embedded.users.length === 0) {
-      throw new Error(`Failed to find the user: ${userId}.`);
-    }
-    const userParsed = userSchema.parse(users._embedded.users[0]);
+    const user = await response.json();
+    const userParsed = userSchema.parse(user);
 
     const emailValidationsUrl = userParsed._links.emailValidations.href;
     const emailValidationResponse = await fetch(emailValidationsUrl, {
@@ -315,10 +343,9 @@ function createSubscriptionService() {
   async function requestNewConfirmationCode(userId: string) {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
-
     auditService.audit('alert-subscription.request-confirmation-code', { userId });
 
-    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users?raoidcUserId=${userId}`);
+    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users/${userId}`);
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -340,11 +367,8 @@ function createSubscriptionService() {
       throw new Error(`Failed to find data. Status: ${response.status}, Status Text: ${response.statusText}`);
     }
 
-    const users = await response.json();
-    if (users._embedded.users.length === 0) {
-      throw new Error(`Failed to find the user: ${userId}.`);
-    }
-    const userParsed = userSchema.parse(users._embedded.users[0]);
+    const user = await response.json();
+    const userParsed = userSchema.parse(user);
 
     const confirmationCodesUrl = userParsed._links.confirmationCodes.href;
     const confirmationCodeResponse = await fetch(confirmationCodesUrl, {
@@ -368,5 +392,5 @@ function createSubscriptionService() {
     }
   }
 
-  return { getSubscription, deleteSubscription, updateSubscription, validateConfirmationCode, requestNewConfirmationCode };
+  return { getUserByRaoidcUserId, getSubscription, deleteSubscription, updateSubscription, validateConfirmationCode, requestNewConfirmationCode };
 }
