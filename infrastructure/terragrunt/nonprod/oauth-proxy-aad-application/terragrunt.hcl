@@ -40,8 +40,7 @@ inputs = {
 
     #
     # TODO :: GjB :: remove production URL below after go-live
-    #                (on or around May 01, 2024)
     #
-    "https://srv024.service.canada.ca/oauth/callback",
+    "https://canada-dental-care-plan.prod-dp-internal.dts-stn.com/oauth/callback",
   ]
 }
