@@ -211,7 +211,7 @@
                         "file": "routes/$lang/_public/apply/$id/adult/disability-tax-credit.tsx",
                         "paths": {
                           "en": "/:lang/apply/:id/adult/disability-tax-credit",
-                          "fr": "/:lang/demander/:id/adulte/disability-tax-credit"
+                          "fr": "/:lang/demander/:id/adulte/credit-impot-personnes-handicapees"
                         }
                       },
                       {
@@ -219,7 +219,7 @@
                         "file": "routes/$lang/_public/apply/$id/adult/parent-or-guardian.tsx",
                         "paths": {
                           "en": "/:lang/apply/:id/adult/parent-or-guardian",
-                          "fr": "/:lang/demander/:id/adulte/parent-or-guardian"
+                          "fr": "/:lang/demander/:id/adulte/parent-ou-tuteur"
                         }
                       },
                       {
@@ -227,7 +227,7 @@
                         "file": "routes/$lang/_public/apply/$id/adult/living-independently.tsx",
                         "paths": {
                           "en": "/:lang/apply/:id/adult/living-independently",
-                          "fr": "/:lang/demander/:id/adulte/living-independently"
+                          "fr": "/:lang/demander/:id/adulte/vivre-maniere-independante"
                         }
                       }
                     ]
@@ -282,7 +282,7 @@
                                 "file": "routes/$lang/_public/apply/$id/adult-child/children/$childId/parent-or-guardian.tsx",
                                 "paths": {
                                   "en": "/:lang/apply/:id/adult-child/children/:childId/parent-or-guardian",
-                                  "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/parent-or-guardian"
+                                  "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/parent-ou-tuteur"
                                 }
                               },
                               {
@@ -290,7 +290,7 @@
                                 "file": "routes/$lang/_public/apply/$id/adult-child/children/$childId/cannot-apply-child.tsx",
                                 "paths": {
                                   "en": "/:lang/apply/:id/adult-child/children/:childId/cannot-apply-child",
-                                  "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/cannot-apply-child"
+                                  "fr": "/:lang/demander/:id/adulte-enfant/enfants/:childId/pas-demande-enfant"
                                 }
                               }
                             ]
@@ -318,7 +318,7 @@
                         "file": "routes/$lang/_public/apply/$id/adult-child/apply-children.tsx",
                         "paths": {
                           "en": "/:lang/apply/:id/adult-child/apply-children",
-                          "fr": "/:lang/demander/:id/adult-child/apply-children"
+                          "fr": "/:lang/demander/:id/adult-child/demande-enfant"
                         }
                       },
                       {
@@ -342,7 +342,7 @@
                         "file": "routes/$lang/_public/apply/$id/adult-child/review-adult-information.tsx",
                         "paths": {
                           "en": "/:lang/apply/:id/adult-child/review-adult-information",
-                          "fr": "/:lang/demander/:id/adulte-enfant/review-adult-information"
+                          "fr": "/:lang/demander/:id/adulte-enfant/revue-renseignements-adulte"
                         }
                       },
                       {
@@ -350,7 +350,7 @@
                         "file": "routes/$lang/_public/apply/$id/adult-child/review-child-information.tsx",
                         "paths": {
                           "en": "/:lang/apply/:id/adult-child/review-child-information",
-                          "fr": "/:lang/demander/:id/adulte-enfant/review-child-information"
+                          "fr": "/:lang/demander/:id/adulte-enfant/revue-renseignements-enfant"
                         }
                       },
                       {
@@ -382,7 +382,7 @@
                         "file": "routes/$lang/_public/apply/$id/adult-child/disability-tax-credit.tsx",
                         "paths": {
                           "en": "/:lang/apply/:id/adult-child/disability-tax-credit",
-                          "fr": "/:lang/demander/:id/adulte-enfant/disability-tax-credit"
+                          "fr": "/:lang/demander/:id/adulte-enfant/credit-impot-personnes-handicapees"
                         }
                       },
                       {
@@ -390,7 +390,7 @@
                         "file": "routes/$lang/_public/apply/$id/adult-child/parent-or-guardian.tsx",
                         "paths": {
                           "en": "/:lang/apply/:id/adult-child/parent-or-guardian",
-                          "fr": "/:lang/demander/:id/adulte-enfant/parent-or-guardian"
+                          "fr": "/:lang/demander/:id/adulte-enfant/parent-ou-tuteur"
                         }
                       },
                       {
@@ -398,7 +398,7 @@
                         "file": "routes/$lang/_public/apply/$id/adult-child/living-independently.tsx",
                         "paths": {
                           "en": "/:lang/apply/:id/adult-child/living-independently",
-                          "fr": "/:lang/demander/:id/adulte-enfant/living-independently"
+                          "fr": "/:lang/demander/:id/adulte-enfant/vivre-maniere-independante"
                         }
                       },
                       {
@@ -509,7 +509,7 @@
                                 "file": "routes/$lang/_public/apply/$id/child/children/$childId/parent-or-guardian.tsx",
                                 "paths": {
                                   "en": "/:lang/apply/:id/child/children/:childId/parent-or-guardian",
-                                  "fr": "/:lang/demander/:id/enfant/enfants/:childId/parent-or-guardian"
+                                  "fr": "/:lang/demander/:id/enfant/enfants/:childId/parent-ou-tuteur"
                                 }
                               },
                               {
@@ -517,7 +517,7 @@
                                 "file": "routes/$lang/_public/apply/$id/child/children/$childId/cannot-apply-child.tsx",
                                 "paths": {
                                   "en": "/:lang/apply/:id/child/children/:childId/cannot-apply-child",
-                                  "fr": "/:lang/demander/:id/enfant/enfants/:childId/cannot-apply-child"
+                                  "fr": "/:lang/demander/:id/enfant/enfants/:childId/pas-demande-enfant"
                                 }
                               }
                             ]
