@@ -16,12 +16,9 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: maintenance-shared
+                name: frontend
                 port:
-                  name: http
-                # name: frontend
-                # port:
-                #   name: oauth-proxy
+                  name: oauth-proxy
     - host: cdcp-staging.dev-dp-internal.dts-stn.com
       http:
         paths:
@@ -31,5 +28,4 @@ spec:
               service:
                 name: frontend
                 port:
-                  name: oauth-proxy
-                #   name: application
+                  name: application
