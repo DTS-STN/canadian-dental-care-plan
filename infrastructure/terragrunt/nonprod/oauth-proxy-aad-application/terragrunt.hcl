@@ -34,9 +34,15 @@ inputs = {
   ]
   application_web_redirect_uris = [
     "https://cdcp-dev.dev-dp.dts-stn.com/oauth/callback",
+    "https://cdcp-dev.dev-dp-internal.dts-stn.com/oauth/callback",
     "https://cdcp-int.dev-dp.dts-stn.com/oauth/callback",
+    "https://cdcp-int.dev-dp-internal.dts-stn.com/oauth/callback",
     "https://cdcp-perf.dev-dp.dts-stn.com/oauth/callback",
+    "https://cdcp-perf.dev-dp-internal.dts-stn.com/oauth/callback",
     "https://cdcp-staging.dev-dp.dts-stn.com/oauth/callback",
+    "https://cdcp-staging.dev-dp-internal.dts-stn.com/oauth/callback",
+    "https://cdcp-training.dev-dp.dts-stn.com/oauth/callback",
+    "https://cdcp-training.dev-dp-internal.dts-stn.com/oauth/callback",
 
     #
     # TODO :: GjB :: remove production URL below after go-live
