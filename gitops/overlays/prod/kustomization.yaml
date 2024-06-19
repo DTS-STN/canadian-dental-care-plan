@@ -11,11 +11,13 @@ labels:
 resources:
   - ../../base/frontend/
   - ../../base/fluentd-archiver/
+  - ../../base/maintenance/
   - ../../base/redis/
   - ./hpas.yaml
   - ./ingresses.yaml
 patches:
-  - path: ./patches/deployments.yaml
+  - path: ./patches/deployments-frontend.yaml
+  - path: ./patches/deployments-maintenance.yaml
   - path: ./patches/pvcs.yaml
   - path: ./patches/services.yaml
   - path: ./patches/stateful-sets.yaml
