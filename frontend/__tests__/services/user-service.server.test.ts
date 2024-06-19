@@ -3,8 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { getUserService } from '~/services/user-service.server';
 
-global.fetch = vi.fn();
-vi.stubGlobal('document', new Document());
+vi.stubGlobal('fetch', vi.fn());
 vi.mock('~/utils/logging.server', () => ({
   getLogger: vi.fn().mockReturnValue({
     info: vi.fn(),
