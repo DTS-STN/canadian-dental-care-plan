@@ -73,9 +73,8 @@ public class SubscriptionsController {
 	}
 
 	@PostMapping
-	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@Operation(summary = "Create a new subscription for a user")
-	public void createSubscriptionForUser(
+	public SubscriptionModel createSubscriptionForUser(
 			@NotBlank(message = "userId must not be null or blank")
 			@Parameter(description = "The id of the user.", example = "00000000-0000-0000-0000-000000000000")
 			@PathVariable String userId,
@@ -100,7 +99,9 @@ public class SubscriptionsController {
 				throw new ResourceConflictException("A subscription with code [%s] already exists for user [%s]".formatted(subscription.getAlertTypeCode(), userId));
 			});
 
-		userService.createSubscriptionForUser(userId, alertTypeId, languageId);
+		final var newSubscription = userService.createSubscriptionForUser(userId, alertTypeId, languageId);
+
+		return subscriptionModelMapper.toModel(userId, newSubscription);
 	}
 
 	@GetMapping

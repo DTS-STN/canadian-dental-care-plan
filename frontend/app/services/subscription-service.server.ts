@@ -9,15 +9,21 @@ import { getLogger } from '~/utils/logging.server';
 const log = getLogger('subscription-service.server');
 
 const subscriptionInfoSchema = z.object({
-  id: z.string(),
-  userId: z.string(),
+  id: z.string().optional(),
+  userId: z.string().optional(),
   msLanguageCode: z.string(),
   alertTypeCode: z.string(),
-  email: z.string(),
-  emailVerifed: z.boolean(),
+  email: z.string().optional(),
+  emailVerifed: z.boolean().optional(),
 });
 
 type SubscriptionInfo = z.infer<typeof subscriptionInfoSchema>;
+
+const userInfoSchema = z.object({
+  email: z.string(),
+});
+
+type UserInfo = z.infer<typeof userInfoSchema>;
 
 const userSchema = z.object({
   id: z.string(),
@@ -111,6 +117,35 @@ function createSubscriptionService() {
 
     return userParsed;
   }
+
+  async function updateUser(userId: string, userInfo: UserInfo) {
+    const auditService = getAuditService();
+    const instrumentationService = getInstrumentationService();
+    auditService.audit('alert-subscription.get', { userId });
+    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users/${userId}`);
+    const response = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify([{ op: 'replace', path: '/email', value: userInfo.email }]),
+    });
+
+    instrumentationService.countHttpStatus('http.client.cdcp-api.user.updates', response.status);
+
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed to update data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to update data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
+  }
+
   /**
    *
    * @param userId
@@ -242,7 +277,60 @@ function createSubscriptionService() {
     }
   }
 
-  //TODO: this one will be updated in another PR
+  async function createSubscription(userId: string, subscription: SubscriptionInfo) {
+    const auditService = getAuditService();
+    const instrumentationService = getInstrumentationService();
+    auditService.audit('alert-subscription.update', { userId });
+    const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users/${userId}`);
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    instrumentationService.countHttpStatus('http.client.cdcp-api.users.gets', response.status);
+
+    if (!response.ok) {
+      log.error('%j', {
+        message: 'Failed find data',
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        responseBody: await response.text(),
+      });
+
+      throw new Error(`Failed to find data. Status: ${response.status}, Status Text: ${response.statusText}`);
+    }
+
+    const user = await response.json();
+    const userParsed = userSchema.parse(user);
+
+    const userSubscriptionsURL = userParsed._links.subscriptions.href;
+    const subscriptionsResponse = await fetch(userSubscriptionsURL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(subscription),
+    });
+
+    instrumentationService.countHttpStatus('http.client.cdcp-api.subscriptions.create', subscriptionsResponse.status);
+
+    if (!subscriptionsResponse.ok) {
+      log.error('%j', {
+        message: 'Failed to create data',
+        status: subscriptionsResponse.status,
+        statusText: subscriptionsResponse.statusText,
+        url: url,
+        responseBody: await subscriptionsResponse.text(),
+      });
+
+      throw new Error(`Failed to create data. Status: ${subscriptionsResponse.status}, Status Text: ${subscriptionsResponse.statusText}`);
+    }
+  }
+
+  //TODO: will work on this function in next PR
   async function updateSubscription(sin: string, subscription: SubscriptionInfo) {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
@@ -343,6 +431,7 @@ function createSubscriptionService() {
   async function requestNewConfirmationCode(userId: string) {
     const auditService = getAuditService();
     const instrumentationService = getInstrumentationService();
+
     auditService.audit('alert-subscription.request-confirmation-code', { userId });
 
     const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users/${userId}`);
@@ -392,5 +481,5 @@ function createSubscriptionService() {
     }
   }
 
-  return { getUserByRaoidcUserId, getSubscription, deleteSubscription, updateSubscription, validateConfirmationCode, requestNewConfirmationCode };
+  return { getUserByRaoidcUserId, updateUser, getSubscription, deleteSubscription, createSubscription, updateSubscription, validateConfirmationCode, requestNewConfirmationCode };
 }
