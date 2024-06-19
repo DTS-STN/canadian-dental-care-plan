@@ -29,9 +29,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: maintenance-shared
+                name: frontend
                 port:
-                  name: http
-                # name: frontend
-                # port:
+                  name: oauth-proxy
                 #   name: application
