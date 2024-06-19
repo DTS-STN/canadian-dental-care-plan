@@ -13,8 +13,8 @@ import { getInstrumentationService } from '~/services/instrumentation-service.se
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled } from '~/utils/env.server';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
+import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { UserinfoToken } from '~/utils/raoidc-utils.server';
@@ -42,13 +42,23 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const raoidcService = await getRaoidcService();
   const csrfToken = String(session.get('csrfToken'));
 
+  const locale = getLocale(request);
   const lookupService = getLookupService();
-  const federalSocialProgramsList = lookupService.getAllFederalSocialPrograms();
-  const provincialAndTerritorialProgramsList = lookupService.getAllProvincialTerritorialSocialPrograms();
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformationRouteHelpers = getPersonalInformationRouteHelpers();
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
+
+  const federalSocialProgramName =
+    lookupService
+      .getAllFederalSocialPrograms()
+      .filter((federalSocialProgram) => federalSocialProgram.id === personalInformation.federalDentalPlanId)
+      .map((federalSocialProgram) => getNameByLanguage(locale, federalSocialProgram))[0] ?? '';
+  const provincialAndTerritorialProgramName =
+    lookupService
+      .getAllProvincialTerritorialSocialPrograms()
+      .filter((provincialAndTerritorialProgram) => provincialAndTerritorialProgram.id === personalInformation.provincialTerritorialDentalPlanId)
+      .map((provincialAndTerritorialProgram) => getNameByLanguage(locale, provincialAndTerritorialProgram))[0] ?? '';
 
   await raoidcService.handleSessionValidation(request, session);
 
@@ -57,7 +67,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   instrumentationService.countHttpStatus('access-to-governmental-benefits.view', 200);
   const updatedInfo = session.get('personal-info-updated');
-  return json({ meta, t, personalInformation, updatedInfo, federalSocialProgramsList, provincialAndTerritorialProgramsList, csrfToken });
+  return json({ meta, t, personalInformation, updatedInfo, federalSocialProgramName, provincialAndTerritorialProgramName, csrfToken });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -81,8 +91,8 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function AccessToGovernmentalsBenefitsView() {
-  const { t, i18n } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, updatedInfo, personalInformation, federalSocialProgramsList, provincialAndTerritorialProgramsList } = useLoaderData<typeof loader>();
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const { csrfToken, updatedInfo, personalInformation, federalSocialProgramName, provincialAndTerritorialProgramName } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const params = useParams();
   const hasDentalPlans = personalInformation.federalDentalPlanId ?? personalInformation.provincialTerritorialDentalPlanId;
@@ -100,7 +110,7 @@ export default function AccessToGovernmentalsBenefitsView() {
             <div className="mb-5 space-y-4">
               <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.view.provincial-or-territorial-dental-benefit')}</h2>
               <ul className="list-disc space-y-6 pl-7">
-                <li>{provincialAndTerritorialProgramsList.find((federalSocialProgram) => federalSocialProgram.id === personalInformation.provincialTerritorialDentalPlanId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '} </li>
+                <li>{provincialAndTerritorialProgramName}</li>
               </ul>
             </div>
           ) : (
@@ -115,7 +125,7 @@ export default function AccessToGovernmentalsBenefitsView() {
               <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.view.federal-benefits-dental-benefits')}</h2>
 
               <ul className="list-disc space-y-6 pl-7">
-                <li>{federalSocialProgramsList.find((federalSocialProgram) => federalSocialProgram.id === personalInformation.federalDentalPlanId)?.[i18n.language === 'fr' ? 'nameFr' : 'nameEn'] ?? ' '} </li>
+                <li>{federalSocialProgramName} </li>
               </ul>
             </div>
           ) : (
