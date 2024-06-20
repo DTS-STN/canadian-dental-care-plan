@@ -3,6 +3,7 @@ import { Params } from '@remix-run/react';
 
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns';
+import { omit } from 'moderndash';
 import { z } from 'zod';
 
 import { getAgeFromDateString } from '~/utils/date-utils';
@@ -173,7 +174,7 @@ interface SaveStateArgs {
   params: Params;
   session: Session;
   state: Partial<OmitStrict<ApplyState, 'id' | 'lastUpdatedOn'>>;
-  remove?: keyof OmitStrict<ApplyState, 'id' | 'lastUpdatedOn'>;
+  remove?: keyof OmitStrict<ApplyState, 'children' | 'editMode' | 'id' | 'lastUpdatedOn'>;
 }
 
 /**
@@ -184,14 +185,14 @@ interface SaveStateArgs {
 export function saveApplyState({ params, session, state, remove = undefined }: SaveStateArgs) {
   const currentState = loadApplyState({ params, session });
 
-  const newState: ApplyState = {
+  let newState = {
     ...currentState,
     ...state,
     lastUpdatedOn: new UTCDate().toISOString(),
-  };
+  } satisfies ApplyState;
 
   if (remove && remove in newState) {
-    delete newState[remove];
+    newState = omit(newState, [remove]);
   }
 
   const sessionName = getSessionName(currentState.id);

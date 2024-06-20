@@ -1,7 +1,6 @@
-import { ReactNode } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 
-export interface DescriptionListItemProps {
-  children: ReactNode;
+export interface DescriptionListItemProps extends PropsWithChildren {
   term: ReactNode;
 }
 

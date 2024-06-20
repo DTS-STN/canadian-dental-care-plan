@@ -8,6 +8,7 @@ import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isValidPhoneNumber, parsePhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
@@ -126,8 +127,9 @@ export async function action({ context: { session }, params, request }: ActionFu
   personalInformation.alternateTelephoneNumber = parsedDataResult.data.alternateTelephoneNumber;
 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
+  invariant(userInfoToken.sin, 'Expected userInfoToken.sin to be defined');
 
-  await personalInformationService.updatePersonalInformation(userInfoToken.sin!, personalInformation);
+  await personalInformationService.updatePersonalInformation(userInfoToken.sin, personalInformation);
   session.set('personalInformation', personalInformation);
   const idToken: IdToken = session.get('idToken');
   getAuditService().audit('update-data.phone-number', { userId: idToken.sub });

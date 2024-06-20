@@ -16,6 +16,7 @@ import { parseDateTimeString, toLocaleDateString } from '~/utils/date-utils';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
+import { localizeMaritalStatuses } from '~/utils/lookup-utils.server';
 import { IdToken } from '~/utils/raoidc-utils.server';
 import { RouteHandleData } from '~/utils/route-utils';
 import { formatSin } from '~/utils/sin-utils';
@@ -52,13 +53,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const locale = getLocale(request);
   const lookupService = getLookupService();
-  const maritalStatuses = lookupService.getAllMaritalStatuses();
-  const maritalStatusDict = maritalStatuses.find((maritalStatus) => maritalStatus.id === applicationDetails.applicantInformation?.maritalStatus)!;
-  if (!maritalStatusDict.nameEn || !maritalStatusDict.nameFr) {
-    instrumentationService.countHttpStatus('application.view', 404);
-    throw new Response(null, { status: 404 });
-  }
-  const maritalStatus = getNameByLanguage(locale, maritalStatusDict);
+  const maritalStatuses = localizeMaritalStatuses(lookupService.getAllMaritalStatuses(), locale);
+  const maritalStatus = maritalStatuses.find((maritalStatus) => maritalStatus.id === applicationDetails.applicantInformation?.maritalStatus);
 
   // Getting province by Id
   const allRegions = lookupService.getAllRegions();
@@ -119,7 +115,7 @@ export default function ViewApplication() {
               <DescriptionListItem term={t('applications:view-application.sin')}>
                 <span className="text-nowrap">{applicationDetails.applicantInformation?.socialInsuranceNumber}</span>
               </DescriptionListItem>
-              <DescriptionListItem term={t('applications:view-application.marital-status')}>{maritalStatus}</DescriptionListItem>
+              <DescriptionListItem term={t('applications:view-application.marital-status')}>{maritalStatus?.name}</DescriptionListItem>
             </dl>
             {applicationDetails.partnerInformation && (
               <section className="space-y-6">
