@@ -57,5 +57,5 @@ export default {
   cacheDirectory: './node_modules/.cache/remix',
   ignoredRouteFiles: ['**/*'], // we will manually configure routes (see below)
   routes: (defineRoutes) => jsonRoutes(defineRoutes, JSON.parse(readFileSync('./app/routes.json', 'utf8'))),
-  serverDependenciesToBundle: ['react-idle-timer'],
+  serverDependenciesToBundle: ['react-idle-timer', 'fast-json-patch'],
 };
