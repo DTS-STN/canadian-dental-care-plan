@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getEnv } from '~/utils/env.server';
+import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('user-service.server');
@@ -37,7 +38,8 @@ const userSchema = z.object({
 export const getUserService = moize(createUserService, { onCacheAdd: () => log.info('Creating new user service') });
 
 function createUserService() {
-  const { CDCP_API_BASE_URI } = getEnv();
+  const { CDCP_API_BASE_URI, HTTP_PROXY_URL } = getEnv();
+  const fetchFn = getFetchFn(HTTP_PROXY_URL);
 
   async function createUser(email: string, userId: string) {
     const auditService = getAuditService();
@@ -55,7 +57,7 @@ function createUserService() {
     };
 
     const url = new URL(`${CDCP_API_BASE_URI}/api/v1/users`);
-    const response = await fetch(url, {
+    const response = await instrumentedFetch(fetchFn, 'http.client.interop-api.users.posts', url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
