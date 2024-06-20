@@ -9,6 +9,7 @@ import fontawesomeStyleSheet from '@fortawesome/fontawesome-svg-core/styles.css'
 import { useTranslation } from 'react-i18next';
 import reactPhoneNumberInputStyleSheet from 'react-phone-number-input/style.css';
 
+import { getDynatraceService } from './services/dynatrace-service.server';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import fontLatoStyleSheet from '~/fonts/lato.css';
@@ -55,11 +56,13 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const buildInfoService = getBuildInfoService();
+  const dynatraceService = getDynatraceService();
   const requestUrl = new URL(request.url);
   const locale = getLocale(request);
   const t = await getFixedT(request, ['gcweb']);
 
   const buildInfo = buildInfoService.getBuildInfo();
+  const dynatraceRumScript = await dynatraceService.retrieveRumScript();
   const env = getPublicEnv();
   const meta = {
     author: t('gcweb:meta.author'),
@@ -75,12 +78,12 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const userOrigin = getUserOrigin(request, session);
   session.set('userOrigin', userOrigin);
 
-  return json({ buildInfo, env, meta, origin, userOrigin });
+  return json({ buildInfo, dynatraceRumScript, env, meta, origin, userOrigin });
 }
 
 export default function App() {
   const { nonce } = useContext(NonceContext);
-  const { env, origin } = useLoaderData<typeof loader>();
+  const { dynatraceRumScript, env, origin } = useLoaderData<typeof loader>();
   const location = useLocation();
   const ns = useI18nNamespaces();
   const { i18n } = useTranslation(ns);
@@ -107,7 +110,7 @@ export default function App() {
           <link key={hrefLang} rel="alternate" hrefLang={hrefLang} href={href} />
         ))}
         <Links />
-        {env.DYNATRACE_ONE_AGENT_SRC && env.DYNATRACE_ONE_AGENT_CONFIG && <script src={env.DYNATRACE_ONE_AGENT_SRC} data-dtconfig={env.DYNATRACE_ONE_AGENT_CONFIG} nonce={nonce} suppressHydrationWarning />}
+        {dynatraceRumScript && <script src={dynatraceRumScript.src} data-dtconfig={dynatraceRumScript['data-dtconfig']} nonce={nonce} suppressHydrationWarning />}
         {env.ADOBE_ANALYTICS_SRC && env.ADOBE_ANALYTICS_JQUERY_SRC && (
           <>
             <script src={env.ADOBE_ANALYTICS_JQUERY_SRC} nonce={nonce} suppressHydrationWarning />
