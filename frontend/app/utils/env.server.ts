@@ -185,10 +185,11 @@ const serverEnv = z.object({
   ADOBE_ANALYTICS_SRC: z.string().url().optional(),
   ADOBE_ANALYTICS_JQUERY_SRC: z.string().url().default('https://code.jquery.com/jquery-3.7.1.min.js'),
 
-  // Dynatrace OneAgent (RUM) - Manual insertion - OneAgent JavaScript tag
-  // @see https://docs.dynatrace.com/docs/platform-modules/digital-experience/web-applications/initial-setup/rum-injection
-  DYNATRACE_ONE_AGENT_SRC: z.string().regex(/^\/\w*\.js$/).optional(),
-  DYNATRACE_ONE_AGENT_CONFIG: z.string().optional()
+  // Dynatrace OneAgent (RUM) - Manual insertion - Retrieve via REST API - Use the Dynatrace API to insert the RUM JavaScript.
+  // @see https://docs.dynatrace.com/docs/platform-modules/digital-experience/web-applications/initial-setup/rum-injection#retrieve-via-rest-api
+  DYNATRACE_API_RUM_SCRIPT_TOKEN: z.string().trim().transform(emptyToUndefined).optional(),
+  DYNATRACE_API_RUM_SCRIPT_URI: z.string().trim().transform(emptyToUndefined).optional(),
+  DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS: z.coerce.number().default(1 * 60 * 60),
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;
@@ -206,8 +207,6 @@ const publicEnv = serverEnv.pick({
   SESSION_TIMEOUT_PROMPT_SECONDS: true,
   ADOBE_ANALYTICS_SRC: true,
   ADOBE_ANALYTICS_JQUERY_SRC: true,
-  DYNATRACE_ONE_AGENT_SRC: true,
-  DYNATRACE_ONE_AGENT_CONFIG: true,
 });
 
 export type PublicEnv = z.infer<typeof publicEnv>;
