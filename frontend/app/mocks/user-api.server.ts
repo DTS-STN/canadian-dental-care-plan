@@ -28,8 +28,8 @@ export function getUserApiMockHandlers() {
     http.post(`${CDCP_API_BASE_URI}/api/v1/users`, async ({ params, request }) => {
       log.debug('Handling request for [%s]', request.url);
 
-      const parsedUserId = z.string().safeParse(params.userId);
-      if (!parsedUserId.success) {
+      const parsedUser = z.string().safeParse(params.userId);
+      if (!parsedUser.success) {
         throw new HttpResponse(null, { status: 400 });
       }
 
@@ -39,7 +39,7 @@ export function getUserApiMockHandlers() {
         throw new HttpResponse(null, { status: 400 });
       }
 
-      const userAttributesList = parsedUserToCreate.data.userAttributes.map((element) => db.userAttributes.create(element));
+      const userAttributesList = parsedUserToCreate.data.userAttributes.map((userAttribute) => db.userAttributes.create(userAttribute));
 
       db.user.create({
         email: parsedUserToCreate.data.email,
