@@ -20,12 +20,6 @@ vi.mock('~/utils/env.server', () => ({
   }),
 }));
 
-vi.mock('~/services/instrumentation-service.server', () => ({
-  getInstrumentationService: () => ({
-    countHttpStatus: vi.fn(),
-  }),
-}));
-
 vi.mock('~/services/audit-service.server', () => ({
   getAuditService: vi.fn().mockReturnValue({
     audit: vi.fn(),
@@ -38,7 +32,7 @@ describe('user-service.server tests', () => {
     vi.resetModules();
   });
   describe('getUserService() -- Test creating a new user with the service ', () => {
-    it('should return 200 response after creating a user with the createUser() method', async () => {
+    it('should return a user object in the response after creating a user with the createUser() function', async () => {
       vi.mocked(fetch).mockResolvedValue(
         HttpResponse.json({
           id: 'fa6b6406-05b5-4b14-8535-e55015bc8052',
