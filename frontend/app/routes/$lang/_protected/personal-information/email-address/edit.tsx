@@ -68,6 +68,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  featureEnabled('edit-personal-info');
+
   const log = getLogger('email-address/edit');
 
   const instrumentationService = getInstrumentationService();

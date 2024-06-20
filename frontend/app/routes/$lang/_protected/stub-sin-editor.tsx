@@ -42,6 +42,12 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  // TODO SHOW_SIN_EDIT_STUB_PAGE should be added as a feature flag
+  const { SHOW_SIN_EDIT_STUB_PAGE } = getEnv();
+  if (!SHOW_SIN_EDIT_STUB_PAGE) {
+    throw new Response(null, { status: 404 });
+  }
+
   const sinToStubSchema = z.object({
     socialInsuranceNumberToStub: z.string(),
     userUUIDToStub: z.string(),

@@ -68,6 +68,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  featureEnabled('email-alerts');
+
   const log = getLogger('alerts/subscribe');
 
   const auditService = getAuditService();
