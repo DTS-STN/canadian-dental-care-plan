@@ -64,7 +64,6 @@ function createUserService() {
       },
       body: JSON.stringify(newUser),
     });
-    instrumentationService.countHttpStatus('http.client.cdcp-api.users.posts', response.status);
 
     if (!response.ok) {
       log.error('%j', {
