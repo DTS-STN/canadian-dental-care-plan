@@ -1,0 +1,340 @@
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
+import {
+  localizeAndSortCountries,
+  localizeAndSortMaritalStatuses,
+  localizeAndSortPreferredLanguages,
+  localizeAndSortRegions,
+  localizeCountries,
+  localizeCountry,
+  localizeLanguage,
+  localizeMaritalStatus,
+  localizeMaritalStatuses,
+  localizeRegion,
+  localizeRegions,
+} from '~/utils/lookup-utils.server';
+
+const mockCountries = [
+  { countryId: '001', nameEn: 'englishCountryOne', nameFr: 'frenchCountryOne' },
+  { countryId: '002', nameEn: 'englishCountryTwo', nameFr: 'frenchCountryTwo' },
+  { countryId: '003', nameEn: 'englishCountryThree', nameFr: 'frenchCountryThree' },
+];
+
+const mockMaritalStatuses = [
+  { id: '001', nameEn: 'englishMaritalStatusOne', nameFr: 'frenchMaritalStatusOne' },
+  { id: '002', nameEn: 'englishMaritalStatusTwo', nameFr: 'frenchMaritalStatusTwo' },
+  { id: '003', nameEn: 'englishMaritalStatusThree', nameFr: 'frenchMaritalStatusThree' },
+];
+
+const mockRegions = [
+  { countryId: '001', provinceTerritoryStateId: '001', nameEn: 'englishCountryOne', nameFr: 'frenchCountryOne', abbr: 'one' },
+  { countryId: '002', provinceTerritoryStateId: '002', nameEn: 'englishCountryTwo', nameFr: 'frenchCountryTwo', abbr: 'two' },
+  { countryId: '003', provinceTerritoryStateId: '003', nameEn: 'englishCountryThree', nameFr: 'frenchCountryThree', abbr: 'three' },
+];
+
+const mockLanguages = [
+  { id: '001', nameEn: 'englishLanguageOne', nameFr: 'frenchLanguageOne' },
+  { id: '002', nameEn: 'englishLanguageTwo', nameFr: 'frenchLanguageTwo' },
+  { id: '003', nameEn: 'englishLanguageThree', nameFr: 'frenchLanguageThree' },
+];
+
+describe('localizeCountry', () => {
+  it('should return the country id and english name', () => {
+    expect(localizeCountry(mockCountries[0], 'en')).toEqual({ countryId: '001', name: 'englishCountryOne' });
+  });
+
+  it('should return the country id and french name', () => {
+    expect(localizeCountry(mockCountries[0], 'fr')).toEqual({ countryId: '001', name: 'frenchCountryOne' });
+  });
+});
+
+describe('localizeCountries', () => {
+  it('should return an array of country ids and english names', () => {
+    expect(localizeCountries(mockCountries, 'en')).toEqual([
+      { countryId: '001', name: 'englishCountryOne' },
+      { countryId: '002', name: 'englishCountryTwo' },
+      { countryId: '003', name: 'englishCountryThree' },
+    ]);
+  });
+
+  it('should return an array of country ids and french names', () => {
+    expect(localizeCountries(mockCountries, 'fr')).toEqual([
+      { countryId: '001', name: 'frenchCountryOne' },
+      { countryId: '002', name: 'frenchCountryTwo' },
+      { countryId: '003', name: 'frenchCountryThree' },
+    ]);
+  });
+});
+
+describe('localizeAndSortCountries', () => {
+  vi.mock('~/utils/env.server', () => ({
+    getEnv: vi.fn().mockReturnValue({
+      CANADA_COUNTRY_ID: '0cf5389e-97ae-eb11-8236-000d3af4bfc3',
+    }),
+  }));
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should return an array of sorted country ids and english names', () => {
+    expect(localizeAndSortCountries(mockCountries, 'en')).toEqual([
+      { countryId: '001', name: 'englishCountryOne' },
+      { countryId: '003', name: 'englishCountryThree' },
+      { countryId: '002', name: 'englishCountryTwo' },
+    ]);
+  });
+
+  it('should return an array of sorted country ids and french names', () => {
+    expect(localizeAndSortCountries(mockCountries, 'fr')).toEqual([
+      { countryId: '001', name: 'frenchCountryOne' },
+      { countryId: '003', name: 'frenchCountryThree' },
+      { countryId: '002', name: 'frenchCountryTwo' },
+    ]);
+  });
+
+  it('should return an array of sorted country ids and french names with Canada first', () => {
+    const countries = [
+      {
+        countryId: '06f5389e-97ae-eb11-8236-000d3af4bfc3',
+        nameEn: 'Botswana',
+        nameFr: 'Botswana',
+      },
+      {
+        countryId: '08f5389e-97ae-eb11-8236-000d3af4bfc3',
+        nameEn: 'Central African Republic',
+        nameFr: 'Centrafrique',
+      },
+      {
+        countryId: '0cf5389e-97ae-eb11-8236-000d3af4bfc3',
+        nameEn: 'Canada',
+        nameFr: 'Canada',
+      },
+    ];
+    expect(localizeAndSortCountries(countries, 'fr')).toEqual([
+      { countryId: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', name: 'Canada' },
+      {
+        countryId: '06f5389e-97ae-eb11-8236-000d3af4bfc3',
+        name: 'Botswana',
+      },
+      {
+        countryId: '08f5389e-97ae-eb11-8236-000d3af4bfc3',
+        name: 'Centrafrique',
+      },
+    ]);
+  });
+});
+
+describe('localizeMaritalStatus', () => {
+  it('should return the marital status id and english name', () => {
+    expect(localizeMaritalStatus(mockMaritalStatuses[0], 'en')).toEqual({ id: '001', name: 'englishMaritalStatusOne' });
+  });
+
+  it('should return the marital status id and french name', () => {
+    expect(localizeMaritalStatus(mockMaritalStatuses[0], 'fr')).toEqual({ id: '001', name: 'frenchMaritalStatusOne' });
+  });
+});
+
+describe('localizeMaritalStatuses', () => {
+  it('should return an array of marital status ids and english names', () => {
+    expect(localizeMaritalStatuses(mockMaritalStatuses, 'en')).toEqual([
+      { id: '001', name: 'englishMaritalStatusOne' },
+      { id: '002', name: 'englishMaritalStatusTwo' },
+      { id: '003', name: 'englishMaritalStatusThree' },
+    ]);
+  });
+
+  it('should return an array of marital status ids and french name', () => {
+    expect(localizeMaritalStatuses(mockMaritalStatuses, 'fr')).toEqual([
+      { id: '001', name: 'frenchMaritalStatusOne' },
+      { id: '002', name: 'frenchMaritalStatusTwo' },
+      { id: '003', name: 'frenchMaritalStatusThree' },
+    ]);
+  });
+});
+
+describe('localizeAndSortMaritalStatuses', () => {
+  it('should return an array of sorted marital status ids and english names', () => {
+    expect(localizeAndSortMaritalStatuses(mockMaritalStatuses, 'en')).toEqual([
+      { id: '001', name: 'englishMaritalStatusOne' },
+      { id: '003', name: 'englishMaritalStatusThree' },
+      { id: '002', name: 'englishMaritalStatusTwo' },
+    ]);
+  });
+
+  it('should return an array of sorted marital status ids and french names', () => {
+    expect(localizeAndSortMaritalStatuses(mockMaritalStatuses, 'fr')).toEqual([
+      { id: '001', name: 'frenchMaritalStatusOne' },
+      { id: '003', name: 'frenchMaritalStatusThree' },
+      { id: '002', name: 'frenchMaritalStatusTwo' },
+    ]);
+  });
+});
+
+describe('localizeRegion', () => {
+  it('should return the region id and english name', () => {
+    expect(localizeRegion(mockRegions[0], 'en')).toEqual({
+      countryId: '001',
+      provinceTerritoryStateId: '001',
+      abbr: 'one',
+      name: 'englishCountryOne',
+    });
+  });
+
+  it('should return the region id and french name', () => {
+    expect(localizeRegion(mockRegions[0], 'fr')).toEqual({
+      countryId: '001',
+      provinceTerritoryStateId: '001',
+      abbr: 'one',
+      name: 'frenchCountryOne',
+    });
+  });
+});
+
+describe('localizeRegions', () => {
+  it('should return an array of region ids and english names', () => {
+    expect(localizeRegions(mockRegions, 'en')).toEqual([
+      {
+        countryId: '001',
+        provinceTerritoryStateId: '001',
+        abbr: 'one',
+        name: 'englishCountryOne',
+      },
+      {
+        countryId: '002',
+        provinceTerritoryStateId: '002',
+        abbr: 'two',
+        name: 'englishCountryTwo',
+      },
+      {
+        countryId: '003',
+        provinceTerritoryStateId: '003',
+        abbr: 'three',
+        name: 'englishCountryThree',
+      },
+    ]);
+  });
+
+  it('should return an array of region ids and french name', () => {
+    expect(localizeRegions(mockRegions, 'fr')).toEqual([
+      {
+        countryId: '001',
+        provinceTerritoryStateId: '001',
+        abbr: 'one',
+        name: 'frenchCountryOne',
+      },
+      {
+        countryId: '002',
+        provinceTerritoryStateId: '002',
+        abbr: 'two',
+        name: 'frenchCountryTwo',
+      },
+      {
+        countryId: '003',
+        provinceTerritoryStateId: '003',
+        abbr: 'three',
+        name: 'frenchCountryThree',
+      },
+    ]);
+  });
+});
+
+describe('localizAndSortRegions', () => {
+  it('should return a sorted array of region ids and english names', () => {
+    expect(localizeAndSortRegions(mockRegions, 'en')).toEqual([
+      {
+        countryId: '001',
+        provinceTerritoryStateId: '001',
+        abbr: 'one',
+        name: 'englishCountryOne',
+      },
+      {
+        countryId: '003',
+        provinceTerritoryStateId: '003',
+        abbr: 'three',
+        name: 'englishCountryThree',
+      },
+      {
+        countryId: '002',
+        provinceTerritoryStateId: '002',
+        abbr: 'two',
+        name: 'englishCountryTwo',
+      },
+    ]);
+  });
+
+  it('should return a sorted array of region ids and french name', () => {
+    expect(localizeAndSortRegions(mockRegions, 'fr')).toEqual([
+      {
+        countryId: '001',
+        provinceTerritoryStateId: '001',
+        abbr: 'one',
+        name: 'frenchCountryOne',
+      },
+      {
+        countryId: '003',
+        provinceTerritoryStateId: '003',
+        abbr: 'three',
+        name: 'frenchCountryThree',
+      },
+      {
+        countryId: '002',
+        provinceTerritoryStateId: '002',
+        abbr: 'two',
+        name: 'frenchCountryTwo',
+      },
+    ]);
+  });
+});
+
+describe('localizeLanguage', () => {
+  it('should return the language id and english name', () => {
+    expect(localizeLanguage(mockLanguages[0], 'en')).toEqual({
+      id: '001',
+      name: 'englishLanguageOne',
+    });
+  });
+
+  it('should return the language id and french name', () => {
+    expect(localizeLanguage(mockLanguages[0], 'fr')).toEqual({
+      id: '001',
+      name: 'frenchLanguageOne',
+    });
+  });
+});
+
+describe('localizeAndSortPreferredLanguages', () => {
+  it('should return a sorted array of language ids and english names', () => {
+    expect(localizeAndSortPreferredLanguages(mockLanguages, 'en')).toEqual([
+      {
+        id: '001',
+        name: 'englishLanguageOne',
+      },
+      {
+        id: '003',
+        name: 'englishLanguageThree',
+      },
+      {
+        id: '002',
+        name: 'englishLanguageTwo',
+      },
+    ]);
+  });
+
+  it('should return a sorted array of language ids and french name', () => {
+    expect(localizeAndSortPreferredLanguages(mockLanguages, 'fr')).toEqual([
+      {
+        id: '001',
+        name: 'frenchLanguageOne',
+      },
+      {
+        id: '003',
+        name: 'frenchLanguageThree',
+      },
+      {
+        id: '002',
+        name: 'frenchLanguageTwo',
+      },
+    ]);
+  });
+});
