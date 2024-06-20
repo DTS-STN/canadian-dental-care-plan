@@ -35,6 +35,10 @@ configMapGenerator:
     files:
       - ./configs/redis/replica.conf
       - ./configs/redis/sentinel.conf
+  - name: oauth-proxy
+    behavior: create
+    files:
+      - ./configs/oauth-proxy/config.conf
 secretGenerator:
   - name: frontend
     behavior: replace
@@ -44,3 +48,7 @@ secretGenerator:
     behavior: replace
     envs:
       - ./configs/redis/secrets.conf
+  - name: oauth-proxy
+    behavior: create
+    envs:
+      - ./configs/oauth-proxy/secrets.conf
