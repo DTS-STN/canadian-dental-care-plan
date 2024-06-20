@@ -105,8 +105,8 @@ function toPersonalInfo(Applicant: ToPersonalInfoArgs) {
     mailingCountry: Applicant.PersonContactInformation[0].Address[0].AddressCountry.CountryCode.ReferenceDataID,
     mailingPostalCode: Applicant.PersonContactInformation[0].Address[0].AddressPostalCode,
     mailingProvince: Applicant.PersonContactInformation[0].Address[0].AddressProvince.ProvinceCode.ReferenceDataID,
-    phoneNumber: Applicant.PersonContactInformation[0].TelephoneNumber.filter((telephonneInfo) => telephonneInfo.TelephoneNumberCategoryCode.ReferenceDataName == 'Primary').at(0)?.TelephoneNumberCategoryCode.ReferenceDataID,
-    phoneNumberAlt: Applicant.PersonContactInformation[0].TelephoneNumber.filter((telephonneInfo) => telephonneInfo.TelephoneNumberCategoryCode.ReferenceDataName == 'Alternate').at(0)?.TelephoneNumberCategoryCode.ReferenceDataID,
+    phoneNumber: Applicant.PersonContactInformation[0].TelephoneNumber.filter((telephonneInfo) => telephonneInfo.TelephoneNumberCategoryCode.ReferenceDataName === 'Primary').at(0)?.TelephoneNumberCategoryCode.ReferenceDataID,
+    phoneNumberAlt: Applicant.PersonContactInformation[0].TelephoneNumber.filter((telephonneInfo) => telephonneInfo.TelephoneNumberCategoryCode.ReferenceDataName === 'Alternate').at(0)?.TelephoneNumberCategoryCode.ReferenceDataID,
   };
 }
 

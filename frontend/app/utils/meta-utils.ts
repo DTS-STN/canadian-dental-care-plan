@@ -20,7 +20,7 @@ export const mergeMeta = <Loader extends LoaderFunction | unknown = unknown, Par
             || ('property' in meta && 'property' in parentMeta && meta.property === parentMeta.property)
             || ('title' in meta && 'title' in parentMeta);
         });
-        if (index == -1) {
+        if (index === -1) {
           // Parent meta not found in acc, so add it
           acc.push(parentMeta);
         }

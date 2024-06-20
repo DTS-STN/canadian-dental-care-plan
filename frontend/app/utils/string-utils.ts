@@ -46,7 +46,7 @@ export const invalidInputCharactersRegex = /[^a-zA-Z0-9(),\-.'\u2019\s\u00a0ÀÁ
  */
 export function isAllValidInputCharacters(value: string) {
   const invalidCharacters = value.match(invalidInputCharactersRegex);
-  return invalidCharacters == null;
+  return invalidCharacters === null;
 }
 
 /**
