@@ -55,7 +55,7 @@ module.exports = {
           },
         },
       },
-      extends: ['plugin:@typescript-eslint/recommended', 'plugin:import/recommended', 'plugin:import/typescript', 'prettier'],
+      extends: ['plugin:@typescript-eslint/strict', 'plugin:import/recommended', 'plugin:import/typescript', 'prettier'],
       rules: {
         '@typescript-eslint/no-unnecessary-condition': 'error',
         // Note: you must disable the base rule as it can report incorrect errors

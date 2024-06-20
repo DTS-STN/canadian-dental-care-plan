@@ -108,9 +108,9 @@ export default function PersonalInformationIndex() {
                   address={personalInformation.homeAddress.streetName ?? ''}
                   apartment={personalInformation.homeAddress.apartment}
                   city={personalInformation.homeAddress.cityName ?? ''}
-                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.homeAddress!.provinceTerritoryStateId)?.abbr}
+                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.homeAddress?.provinceTerritoryStateId)?.abbr}
                   postalZipCode={personalInformation.homeAddress.postalCode}
-                  country={countryList.find((country) => country.countryId === personalInformation.homeAddress!.countryId)?.name ?? ' '}
+                  country={countryList.find((country) => country.countryId === personalInformation.homeAddress?.countryId)?.name ?? ' '}
                 />
               ) : (
                 <p>{t('personal-information:index.no-address-on-file')}</p>
@@ -132,9 +132,9 @@ export default function PersonalInformationIndex() {
                   address={personalInformation.mailingAddress.streetName ?? ''}
                   apartment={personalInformation.mailingAddress.apartment}
                   city={personalInformation.mailingAddress.cityName ?? ''}
-                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.mailingAddress!.provinceTerritoryStateId)?.abbr}
+                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.mailingAddress?.provinceTerritoryStateId)?.abbr}
                   postalZipCode={personalInformation.mailingAddress.postalCode}
-                  country={countryList.find((country) => country.countryId === personalInformation.mailingAddress!.countryId)?.name ?? ''}
+                  country={countryList.find((country) => country.countryId === personalInformation.mailingAddress?.countryId)?.name ?? ''}
                 />
               ) : (
                 <p>{t('personal-information:index.no-address-on-file')}</p>
