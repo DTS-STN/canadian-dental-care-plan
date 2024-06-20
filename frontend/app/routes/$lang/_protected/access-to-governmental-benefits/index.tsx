@@ -33,6 +33,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('update-governmental-benefit');
+
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
   const csrfToken = String(session.get('csrfToken'));
@@ -47,6 +48,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
+  featureEnabled('update-governmental-benefit');
+
   const log = getLogger('access-to-governmental-benefits/index');
 
   const formData = await request.formData();

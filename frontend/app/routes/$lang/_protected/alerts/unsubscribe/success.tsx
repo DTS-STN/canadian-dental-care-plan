@@ -10,6 +10,7 @@ import { InlineLink } from '~/components/inline-link';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
+import { featureEnabled } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -30,6 +31,8 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+  featureEnabled('email-alerts');
+
   const auditService = getAuditService();
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
