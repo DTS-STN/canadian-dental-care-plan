@@ -38,7 +38,7 @@ describe('user-service.server tests', () => {
     vi.resetModules();
   });
   describe('getUserService() -- Test creating a new user with the service ', () => {
-    it('should return 200 response after creating a user', async () => {
+    it('should return 200 response after creating a user with the createUser() method', async () => {
       vi.mocked(fetch).mockResolvedValue(
         HttpResponse.json({
           id: 'fa6b6406-05b5-4b14-8535-e55015bc8052',
