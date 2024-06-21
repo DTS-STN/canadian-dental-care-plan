@@ -153,9 +153,12 @@ async function handleRaoidcCallbackRequest({ context: { session }, request }: Lo
   session.set('idToken', idToken);
   session.set('userInfoToken', userInfoToken);
 
-  const subscriptionService = getSubscriptionService();
-  const userInformation = await subscriptionService.getUserByRaoidcUserId(userInfoToken.sub);
-  session.set('userId', userInformation?.id);
+  const { ENABLED_FEATURES } = getEnv();
+  if (ENABLED_FEATURES.includes('email-alerts')) {
+    const subscriptionService = getSubscriptionService();
+    const userInformation = await subscriptionService.getUserByRaoidcUserId(userInfoToken.sub);
+    session.set('userId', userInformation?.id);
+  }
 
   log.debug('RAOIDC login successful; redirecting to [%s]', returnUrl);
   getAuditService().audit('auth.session-created', { userId: idToken.sub });
