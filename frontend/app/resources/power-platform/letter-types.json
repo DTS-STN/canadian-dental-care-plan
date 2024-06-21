@@ -35,7 +35,7 @@
                 }
               ],
               "UserLocalizedLabel": {
-                "Label": "Determination Letter",
+                "Label": "",
                 "LanguageCode": 1033,
                 "IsManaged": false,
                 "MetadataId": "d8b96bb4-ecb4-477b-ba83-747120543925",
@@ -89,7 +89,7 @@
                 }
               ],
               "UserLocalizedLabel": {
-                "Label": "Determination Letter - Eligible",
+                "Label": "",
                 "LanguageCode": 1033,
                 "IsManaged": false,
                 "MetadataId": "de3afd94-5b3c-48ce-bae1-4e6eb8775629",
@@ -143,7 +143,7 @@
                 }
               ],
               "UserLocalizedLabel": {
-                "Label": "Ineligible",
+                "Label": "",
                 "LanguageCode": 1033,
                 "IsManaged": false,
                 "MetadataId": "13ecbc16-1863-4672-baed-63b5cea170f2",
@@ -169,6 +169,223 @@
               }
             }
           },
+          {
+            "Value": "775170001-775170007",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Determination Letter - Eligible Dependent",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "d8b96bb4-ecb4-477b-ba83-747120543925",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de détermination - Personne à charge admissible",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "13ecbc16-1863-4672-baed-63b5cea170f2",
+                "HasChanged": null
+              }
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "775170001-775170008",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Determination Letter - Ineligible Dependent",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "d8b96bb4-ecb4-477b-ba83-747120543925",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de détermination - Personne à charge non admissible",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "13ecbc16-1863-4672-baed-63b5cea170f2",
+                "HasChanged": null
+              }
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "775170001-775170009",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Determination Letter - Re-Assess Child Dependent",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "d8b96bb4-ecb4-477b-ba83-747120543925",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de détermination - Réévaluer l’enfant à charge",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "13ecbc16-1863-4672-baed-63b5cea170f2",
+                "HasChanged": null
+              }
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": "775170001-775170010",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Determination Letter - Re-Assess Applicant",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "d8b96bb4-ecb4-477b-ba83-747120543925",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de détermination - Réévaluer le demandeur",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "13ecbc16-1863-4672-baed-63b5cea170f2",
+                "HasChanged": null
+              }
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "d06d1a32-e994-4f66-ab3f-29af87bea936",
+                "HasChanged": null
+              }
+            }
+          },
+
           {
             "Value": "775170002-775170002",
             "Color": null,
@@ -244,6 +461,100 @@
                 },
                 {
                   "Label": "Lettre de validation - ARC",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+              "Description": {
+                "LocalizedLabels": [
+                  {
+                    "Label": "",
+                    "LanguageCode": 1033,
+                    "IsManaged": false,
+                    "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                    "HasChanged": null
+                  }
+                ],
+                "UserLocalizedLabel": {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                  "HasChanged": null
+                }
+              }
+            }
+          },
+          {
+            "Value": "775170002-7751700011",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Validation Letter - Duplicate Child",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de validation - Enfant en double",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+              "Description": {
+                "LocalizedLabels": [
+                  {
+                    "Label": "",
+                    "LanguageCode": 1033,
+                    "IsManaged": false,
+                    "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                    "HasChanged": null
+                  }
+                ],
+                "UserLocalizedLabel": {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                  "HasChanged": null
+                }
+              }
+            }
+          },
+          {
+            "Value": "775170002-775170012",
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Validation Letter - Independent Child",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Lettre de validation - Enfant indépendant",
                   "LanguageCode": 1036,
                   "IsManaged": false,
                   "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
