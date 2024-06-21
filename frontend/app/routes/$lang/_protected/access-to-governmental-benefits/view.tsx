@@ -107,8 +107,7 @@ export default function AccessToGovernmentalsBenefitsView() {
           <h2 className="text-xl font-semibold">{t('access-to-governmental-benefits:access-to-governmental-benefits.view.info-updated.your-info-has-been-updated')}</h2>
         </ContextualAlert>
       )}
-      if {hasDentalPlans}
-      {
+      {hasDentalPlans ? (
         <>
           <div className="mb-5 space-y-4">
             {personalInformation.provincialTerritorialDentalPlanId ? (
@@ -140,13 +139,11 @@ export default function AccessToGovernmentalsBenefitsView() {
             )}
           </div>
         </>
-      }
-      :
-      {
+      ) : (
         <div className="mb-5 space-y-4">
           <p>{t('access-to-governmental-benefits:access-to-governmental-benefits.view.no-government-benefits')}</p>
         </div>
-      }
+      )}
       <div className="mb-5 space-y-4">
         <InlineLink
           routeId="$lang/_protected/access-to-governmental-benefits/edit"
