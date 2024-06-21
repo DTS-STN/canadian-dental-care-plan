@@ -31,7 +31,7 @@ import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeCountries, localizeMaritalStatuses, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountries, localizeFederalSocialProgram, localizeMaritalStatuses, localizeProvincialTerritorialSocialProgram, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -130,26 +130,19 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const dentalInsurance = state.dentalInsurance;
 
-  const allFederalSocialPrograms = lookupService.getAllFederalSocialPrograms();
-  const allProvincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
-  const selectedFederalBenefits = allFederalSocialPrograms
-    .filter((obj) => obj.id === state.dentalBenefits.federalSocialProgram)
-    .map((obj) => getNameByLanguage(locale, obj))
-    .join(', ');
-  const selectedProvincialBenefits = allProvincialTerritorialSocialPrograms
-    .filter((obj) => obj.id === state.dentalBenefits.provincialTerritorialSocialProgram)
-    .map((obj) => getNameByLanguage(locale, obj))
-    .join(', ');
+  const selectedFederalBenefit = state.dentalBenefits.federalSocialProgram && localizeFederalSocialProgram(lookupService.getFederalSocialProgramById(state.dentalBenefits.federalSocialProgram), locale);
+  const selectedProvincialBenefit =
+    state.dentalBenefits.provincialTerritorialSocialProgram && localizeProvincialTerritorialSocialProgram(lookupService.getProvincialTerritorialSocialProgramById(state.dentalBenefits.provincialTerritorialSocialProgram), locale);
 
   const dentalBenefit = {
     federalBenefit: {
       access: state.dentalBenefits.hasFederalBenefits,
-      benefit: selectedFederalBenefits,
+      benefit: selectedFederalBenefit ? selectedFederalBenefit.name : '',
     },
     provTerrBenefit: {
       access: state.dentalBenefits.hasProvincialTerritorialBenefits,
       province: state.dentalBenefits.province,
-      benefit: selectedProvincialBenefits,
+      benefit: selectedProvincialBenefit && selectedProvincialBenefit.name,
     },
   };
 

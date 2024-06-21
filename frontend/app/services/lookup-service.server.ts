@@ -376,6 +376,19 @@ function createLookupService() {
     return federalSocialPrograms;
   }
 
+  function getFederalSocialProgramsById(id: string) {
+    log.debug('Fetching federal social program with id: [%s]', id);
+
+    const federalSocialProgram = getAllFederalSocialPrograms().find((program) => program.id === id);
+
+    if (!federalSocialProgram) {
+      throw new Error(`Failed to find federal social program; id: ${id}`);
+    }
+
+    log.trace('Returning federal social program: [%j]', federalSocialProgram);
+    return federalSocialProgram;
+  }
+
   function getAllProvincialTerritorialSocialPrograms() {
     log.debug('Fetching all provincial/territorial social programs');
 
@@ -388,6 +401,19 @@ function createLookupService() {
 
     log.trace('Returning provincial/territorial social programs: [%j]', provincialTerritorialSocialPrograms);
     return provincialTerritorialSocialPrograms;
+  }
+
+  function getProvincialTerritorialSocialProgramById(id: string) {
+    log.debug('Fetching provincial/territorial social program with id: [%s]', id);
+
+    const provincialTerritorialSocialProgram = getAllProvincialTerritorialSocialPrograms().find((program) => program.id === id);
+
+    if (!provincialTerritorialSocialProgram) {
+      throw new Error(`Failed to find provincial/territorial social program; id: ${id}`);
+    }
+
+    log.trace('Returning provincial/territorial social program: [%j]', provincialTerritorialSocialProgram);
+    return provincialTerritorialSocialProgram;
   }
 
   function getAllCountries() {
@@ -474,6 +500,7 @@ function createLookupService() {
     getAllDisabilityTypes: moize.promise(getAllDisabilityTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_DISABILITY_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllDisabilityTypes memo') }),
     getAllEquityTypes: moize.promise(getAllEquityTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_EQUITY_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllEquityTypes memo') }),
     getAllFederalSocialPrograms: moize(getAllFederalSocialPrograms, { maxAge: 1000 * LOOKUP_SVC_ALL_FEDERAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllFederalSocialPrograms memo') }),
+    getFederalSocialProgramById: moize(getFederalSocialProgramsById, { maxAge: 1000 * LOOKUP_SVC_ALL_FEDERAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new FederalSocialProgramById memo') }),
     getAllGenderTypes: moize.promise(getAllGenderTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_GENDER_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllGenderTypes memo') }),
     getAllIndigenousGroupTypes: moize.promise(getAllIndigenousGroupTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_INDIGENOUS_GROUP_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllIndigenousGroupTypes memo') }),
     getAllIndigenousTypes: moize.promise(getAllIndigenousTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_INDIGENOUS_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllIndigenousTypes memo') }),
@@ -485,6 +512,10 @@ function createLookupService() {
     getAllProvincialTerritorialSocialPrograms: moize(getAllProvincialTerritorialSocialPrograms, {
       maxAge: 1000 * LOOKUP_SVC_ALL_PROVINCIAL_TERRITORIAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllProvincialTerritorialSocialPrograms memo'),
+    }),
+    getProvincialTerritorialSocialProgramById: moize(getProvincialTerritorialSocialProgramById, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_PROVINCIAL_TERRITORIAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new ProvincialTerritorialSocialProgramById memo'),
     }),
     getAllRegions: moize(getAllRegions, { maxAge: 1000 * LOOKUP_SVC_ALL_REGIONS_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllRegions memo') }),
     getAllSexAtBirthTypes: moize.promise(getAllSexAtBirthTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_SEX_AT_BIRTH_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllSexAtBirthTypes memo') }),
@@ -506,3 +537,9 @@ export type Region = ReturnType<GetAllRegions>[number];
 export type GetAllPreferredLanguages = Pick<ReturnType<typeof getLookupService>, 'getAllPreferredLanguages'>['getAllPreferredLanguages'];
 export type GetAllPreferredLanguagesReturnType = ReturnType<GetAllPreferredLanguages>;
 export type Language = GetAllPreferredLanguagesReturnType[number];
+
+export type GetAllFederalSocialPrograms = Pick<ReturnType<typeof getLookupService>, 'getAllFederalSocialPrograms'>['getAllFederalSocialPrograms'];
+export type FederalSocialProgram = ReturnType<GetAllFederalSocialPrograms>[number];
+
+export type GetAllProvincialTerritorialSocialPrograms = Pick<ReturnType<typeof getLookupService>, 'getAllProvincialTerritorialSocialPrograms'>['getAllProvincialTerritorialSocialPrograms'];
+export type ProvincialTerritorialSocialProgram = ReturnType<GetAllProvincialTerritorialSocialPrograms>[number];

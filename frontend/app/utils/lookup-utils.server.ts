@@ -1,5 +1,5 @@
 import { getEnv } from './env.server';
-import { Country, Language, MaritalStatus, Region } from '~/services/lookup-service.server';
+import { Country, FederalSocialProgram, Language, MaritalStatus, ProvincialTerritorialSocialProgram, Region } from '~/services/lookup-service.server';
 
 /**
  * Localizes a single country object by adding a localized name.
@@ -149,4 +149,58 @@ export function localizeAndSortPreferredLanguages(languages: Language[], locale:
     if (firstLanguageId && b.id === firstLanguageId.toString()) return 1;
     return a.name.localeCompare(b.name, locale);
   });
+}
+
+/**
+ * Localizes a single federal social program object by adding a localized name.
+ *
+ * @param program - The federal social program object to localize.
+ * @param locale - The locale code for localization.
+ * @returns The localized federal social program object with a localized name.
+ */
+export function localizeFederalSocialProgram(program: FederalSocialProgram, locale: string) {
+  const { nameEn, nameFr, ...rest } = program;
+  return {
+    ...rest,
+    name: locale === 'fr' ? nameFr : nameEn,
+  };
+}
+
+/**
+ * Localizes an array of federal social program objects by adding localized names and sorting them.
+ *
+ * @param program - The array of federal social program objects to localize.
+ * @param locale - The locale code for localization.
+ * @returns The localized and sorted array of federal social program objects.
+ */
+export function localizeAndSortFederalSocialPrograms(programs: FederalSocialProgram[], locale: string) {
+  const mappedFederalSocialPrograms = programs.map((program) => localizeFederalSocialProgram(program, locale));
+  return mappedFederalSocialPrograms.toSorted((a, b) => a.name.localeCompare(b.name, locale));
+}
+
+/**
+ * Localizes a single provincial/territorial social program object by adding a localized name.
+ *
+ * @param program - The provincial/territorial social program object to localize.
+ * @param locale - The locale code for localization.
+ * @returns The localized provincial/territorial social program object with a localized name.
+ */
+export function localizeProvincialTerritorialSocialProgram(program: ProvincialTerritorialSocialProgram, locale: string) {
+  const { nameEn, nameFr, ...rest } = program;
+  return {
+    ...rest,
+    name: locale === 'fr' ? nameFr : nameEn,
+  };
+}
+
+/**
+ * Localizes an array of provincial/territorial social program objects by adding localized names and sorting them.
+ *
+ * @param program - The array of provincial/territorial social program objects to localize.
+ * @param locale - The locale code for localization.
+ * @returns The localized and sorted array of provincial/territorial social program objects.
+ */
+export function localizeAndSortProvincialTerritorialSocialPrograms(programs: ProvincialTerritorialSocialProgram[], locale: string) {
+  const mappedProvincialTerritorialSocialPrograms = programs.map((program) => localizeProvincialTerritorialSocialProgram(program, locale));
+  return mappedProvincialTerritorialSocialPrograms.toSorted((a, b) => a.name.localeCompare(b.name, locale));
 }
