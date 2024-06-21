@@ -89,7 +89,7 @@
     "consent-answer": "Mon époux/épouse ou conjoint/conjointe de fait est au courant de la communication de ses renseignements personnels et il/elle y consent.",
     "phone-number": "Numéro de téléphone",
     "alt-phone-number": "Autre numéro de téléphone",
-    "email": "Email",
+    "email": "Courriel",
     "mailing": "Adresse postale",
     "home": "Adresse domiciliaire",
     "comm-pref": "Préférence en matière de communication",
@@ -400,7 +400,7 @@
     "no": "Non"
   },
   "disability-tax-credit": {
-    "page-title": "Vous pouvez demander le plan après avoir produit vos déclarations de revenus et reçu votre avis de cotisation.",
+    "page-title": "Crédit d'impôt pour personnes handicapées",
     "non-refundable": "Le crédit d'impôt pour personnes handicapées (CIPH) est un crédit d'impôt non remboursable qui aide les personnes handicapées et les membres de leur famille à réduire l'impôt sur le revenu qu'ils pourraient avoir à payer.",
     "more-info": "<dtcLink>Pour en savoir plus sur le crédit d'impôt pour personnes handicapées</dtcLink>",
     "form-label": "Avez-vous un certificat valide pour le crédit d'impôt pour personnes handicapées (CIPH) auprès de l'Agence du revenu du Canada pour 2023?",
