@@ -215,28 +215,41 @@ class SubscriptionsControllerIT {
 	void testCreateSubscriptionForUser_HappyPath() throws Exception {
 		final var mockAlertType = ImmutableAlertType.builder()
 			.id("00000000-0000-0000-0000-000000000000")
+			.code("ALERT_TYPE_CODE")
 			.build();
 
 		final var mockLanguage = ImmutableLanguage.builder()
 			.id("00000000-0000-0000-0000-000000000000")
+			.msLocaleCode("MS_LOCALE_CODE")
 			.build();
 
 		final var mockUser = ImmutableUser.builder()
 			.id("00000000-0000-0000-0000-000000000000")
 			.build();
 
-		when(alertTypeService.readByCode("ALERT_TYPE_CODE")).thenReturn(Optional.of(mockAlertType));
-		when(languageService.readByMsLocaleCode("LANGUAGE_CODE")).thenReturn(Optional.of(mockLanguage));
-		when(userService.getUserById("00000000-0000-0000-0000-000000000000")).thenReturn(Optional.of(mockUser));
+		when(alertTypeService.readByCode(mockAlertType.getCode())).thenReturn(Optional.of(mockAlertType));
+		when(languageService.readByMsLocaleCode(mockLanguage.getMsLocaleCode())).thenReturn(Optional.of(mockLanguage));
+		when(userService.getUserById(mockUser.getId())).thenReturn(Optional.of(mockUser));
+		when(userService.createSubscriptionForUser(mockUser.getId(), mockAlertType.getId(), mockLanguage.getId()))
+			.thenReturn(ImmutableSubscription.builder()
+				.id("00000000-0000-0000-0000-000000000000")
+				.alertType(mockAlertType)
+				.language(mockLanguage)
+				.build());
 
-		mockMvc.perform(post("/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions")
+		mockMvc.perform(post("/api/v1/users/{userId}/subscriptions", mockUser.getId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(ImmutableSubscriptionCreateModel.builder()
-					.alertTypeCode("ALERT_TYPE_CODE")
-					.msLanguageCode("LANGUAGE_CODE")
+					.alertTypeCode(mockAlertType.getCode())
+					.msLanguageCode(mockLanguage.getMsLocaleCode())
 					.build())))
 			.andDo(print())
-			.andExpect(status().isNoContent());
+			.andExpect(status().isOk())
+			.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
+			.andExpect(jsonPath("$.id", is("00000000-0000-0000-0000-000000000000")))
+			.andExpect(jsonPath("$.alertTypeCode", is(mockAlertType.getCode())))
+			.andExpect(jsonPath("$.msLanguageCode", is(mockLanguage.getMsLocaleCode())))
+			.andExpect(jsonPath("$._links.self.href", is("http://localhost/api/v1/users/00000000-0000-0000-0000-000000000000/subscriptions/00000000-0000-0000-0000-000000000000")));
 	}
 
 	@Test
