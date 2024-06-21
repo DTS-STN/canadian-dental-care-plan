@@ -71,28 +71,29 @@ public class UserService {
 		return userMapper.toUser(userRepository.save(userMapper.toUserEntity(user)));
 	}
 
-	public ConfirmationCode createConfirmationCodeForUser(String userId) {
-		Assert.hasText(userId, "userId is required; it must not be null or blank");
+	public Optional<User> getUserById(String id) {
+		Assert.hasText(id, "id is required; it must not be null or blank");
+		return userRepository.findById(id).map(userMapper::toUser);
+	}
 
-		final var codeLength = applicationProperties.getEmailNotifications().getConfirmationCodes().getLength();
-		final var expiryTimeUnit = applicationProperties.getEmailNotifications().getConfirmationCodes().getExpiry().getTimeUnit();
-		final var expiryTimeValue = applicationProperties.getEmailNotifications().getConfirmationCodes().getExpiry().getValue();
+
+	public Optional<User> getUserByRaoidcUserId(String id) {
+		Assert.hasText(id, "id is required; it must not be null or blank");
+		return userRepository.findByRaoidcUserId(id).map(userMapper::toUser);
+	}
+
+	public void updateUser(String userId, User userPatch) {
+		Assert.hasText(userId, "userId is required; it must not be null or blank");
+		Assert.notNull(userPatch, "userPatch is required; it must not be null");
 
 		log.debug("Fetching user [{}] from repository", userId);
 		final var user = userRepository.findById(userId).orElseThrow();
 
-		final var confirmationCode = new ConfirmationCodeEntityBuilder()
-			.code(RandomStringUtils.randomNumeric(codeLength))
-			.expiryDate(Instant.now().plus(expiryTimeValue, expiryTimeUnit))
-			.build();
+		if (StringUtils.equals(userPatch.getEmail(), user.getEmail()) == false) {
+			user.setEmailVerified(false);
+		}
 
-		log.debug("Creating confirmation code [{}] (expiry: [{}]) for user [{}]", confirmationCode.getCode(), confirmationCode.getExpiryDate(), userId);
-		user.getConfirmationCodes().add(confirmationCode);
-
-		// return the persisted entity so it includes the id and audit fields
-		return userRepository.save(user).getConfirmationCodes().stream()
-			.filter(byCode(confirmationCode.getCode())).findFirst()
-			.map(confirmationCodeMapper::toConfirmationCode).orElseThrow();
+		userRepository.save(userMapper.update(user, userPatch));
 	}
 
 	public Subscription createSubscriptionForUser(String userId, String alertTypeId, String languageId) {
@@ -128,25 +129,6 @@ public class UserService {
 		return userRepository.save(user).getSubscriptions().stream()
 			.filter(byAlertTypeId(alertType.getId())).findFirst()
 			.map(subscriptionMapper::toSubscription).orElseThrow();
-	}
-
-	public Optional<User> getUserById(String id) {
-		Assert.hasText(id, "id is required; it must not be null or blank");
-		return userRepository.findById(id).map(userMapper::toUser);
-	}
-
-	public void updateUser(String userId, User userPatch) {
-		Assert.hasText(userId, "userId is required; it must not be null or blank");
-		Assert.notNull(userPatch, "userPatch is required; it must not be null");
-
-		log.debug("Fetching user [{}] from repository", userId);
-		final var user = userRepository.findById(userId).orElseThrow();
-
-		if (StringUtils.equals(userPatch.getEmail(), user.getEmail()) == false) {
-			user.setEmailVerified(false);
-		}
-
-		userRepository.save(userMapper.update(user, userPatch));
 	}
 
 	public void updateSubscriptionForUser(String userId, String subscriptionId, String languageId) {
@@ -202,6 +184,30 @@ public class UserService {
 		userRepository.save(user);
 
 		return true;
+	}
+
+	public ConfirmationCode createConfirmationCodeForUser(String userId) {
+		Assert.hasText(userId, "userId is required; it must not be null or blank");
+
+		final var codeLength = applicationProperties.getEmailNotifications().getConfirmationCodes().getLength();
+		final var expiryTimeUnit = applicationProperties.getEmailNotifications().getConfirmationCodes().getExpiry().getTimeUnit();
+		final var expiryTimeValue = applicationProperties.getEmailNotifications().getConfirmationCodes().getExpiry().getValue();
+
+		log.debug("Fetching user [{}] from repository", userId);
+		final var user = userRepository.findById(userId).orElseThrow();
+
+		final var confirmationCode = new ConfirmationCodeEntityBuilder()
+			.code(RandomStringUtils.randomNumeric(codeLength))
+			.expiryDate(Instant.now().plus(expiryTimeValue, expiryTimeUnit))
+			.build();
+
+		log.debug("Creating confirmation code [{}] (expiry: [{}]) for user [{}]", confirmationCode.getCode(), confirmationCode.getExpiryDate(), userId);
+		user.getConfirmationCodes().add(confirmationCode);
+
+		// return the persisted entity so it includes the id and audit fields
+		return userRepository.save(user).getConfirmationCodes().stream()
+			.filter(byCode(confirmationCode.getCode())).findFirst()
+			.map(confirmationCodeMapper::toConfirmationCode).orElseThrow();
 	}
 
 	private Predicate<SubscriptionEntity> byAlertTypeId(String alertTypeId) {
