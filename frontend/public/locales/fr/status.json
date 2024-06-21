@@ -97,7 +97,7 @@
       "option-yes": "<strong>Oui</strong>, cet enfant a un NAS",
       "option-no": "<strong>Non</strong>, cet enfant n'a pas de NAS",
       "if-child-summary": "Si l'enfant a un seul nom légal",
-      "if-child-desc": "(FR) If the child goes by a single legal name, leave the first name field blank",
+      "if-child-desc": "Si l'enfant porte un seul nom légal, laissez le champ du prénom vide.",
       "last-name": "Nom de famille de l'enfant",
       "first-name": "Prénom de l'enfant",
       "date-of-birth-label": "Date de naissance de l'enfant",
