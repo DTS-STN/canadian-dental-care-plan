@@ -110,31 +110,23 @@ export default function AccessToGovernmentalsBenefitsView() {
       {hasDentalPlans ? (
         <>
           <div className="mb-5 space-y-4">
-            {personalInformation.provincialTerritorialDentalPlanId ? (
+            {personalInformation.provincialTerritorialDentalPlanId && (
               <div className="mb-5 space-y-4">
                 <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.view.provincial-or-territorial-dental-benefit')}</h2>
                 <ul className="list-disc space-y-6 pl-7">
                   <li>{provincialAndTerritorialProgramName}</li>
                 </ul>
               </div>
-            ) : (
-              <div className="mb-5 space-y-4">
-                <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.view.provincial-or-territorial-dental-benefit')}</h2>
-              </div>
             )}
           </div>
           <div className="mb-5 space-y-4">
-            {personalInformation.federalDentalPlanId ? (
+            {personalInformation.federalDentalPlanId && (
               <div className="mb-5 space-y-4">
                 <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.view.federal-benefits-dental-benefits')}</h2>
 
                 <ul className="list-disc space-y-6 pl-7">
                   <li>{federalSocialProgramName} </li>
                 </ul>
-              </div>
-            ) : (
-              <div className="mb-5 space-y-4">
-                <h2 className="font-bold"> {t('access-to-governmental-benefits:access-to-governmental-benefits.view.federal-benefits-dental-benefits')}</h2>
               </div>
             )}
           </div>
