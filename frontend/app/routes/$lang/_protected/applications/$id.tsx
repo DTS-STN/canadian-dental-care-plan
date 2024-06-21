@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from '@remix-run/node';
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 
@@ -8,27 +8,33 @@ import pageIds from '../../page-ids.json';
 import { Address } from '~/components/address';
 import { ButtonLink } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
+import { AppPageTitle } from '~/components/layouts/protected-layout';
 import type { Application } from '~/schemas/application-history-service-schemas.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { parseDateTimeString, toLocaleDateString } from '~/utils/date-utils';
+import { extractDateParts, parseDateTimeString, toLocaleDateString } from '~/utils/date-utils';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { localizeMaritalStatuses } from '~/utils/lookup-utils.server';
+import { mergeMeta } from '~/utils/meta-utils';
 import type { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';
 
 export const handle = {
-  breadcrumbs: [{ labelI18nKey: 'applications:view-application.page-title' }],
+  breadcrumbs: [{ labelI18nKey: 'applications:index.breadcrumbs.previous-applications', routeId: '$lang/_protected/applications/index' }, { labelI18nKey: 'applications:view-application.breadcrumbs.current-application' }],
   i18nNamespaces: getTypedI18nNamespaces('applications', 'gcweb'),
   pageIdentifier: pageIds.protected.applications.view,
-  pageTitleI18nKey: 'applications:view-application.page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
+  return data ? getTitleMetaTags(data.meta.title) : [];
+});
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-applications');
@@ -45,7 +51,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   //prevent users from entering any ID in the URL and seeing other users' applications
   const applications: Application[] | undefined = session.get('applications');
-  const applicationDetails = applications ? applications.find((applications) => applications.id === params.id)?.applicationDetails?.at(0) : undefined;
+  const viewApplication = applications ? applications.find((applications) => applications.id === params.id) : undefined;
+  const applicationDetails = viewApplication ? viewApplication.applicationDetails?.at(0) : undefined;
 
   if (!applicationDetails) {
     instrumentationService.countHttpStatus('application.view', 404);
@@ -76,6 +83,38 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const allFederalSocialPrograms = lookupService.getAllFederalSocialPrograms();
   const allProvincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const year = viewApplication?.submittedOn ? extractDateParts(viewApplication.submittedOn).year : '';
+  const meta = { title: t('gcweb:meta.title.template', { title: t('applications:view-application.page-title', { year }) }) };
+  const idToken: IdToken = session.get('idToken');
+  auditService.audit('page-view.application-details', { userId: idToken.sub });
+  instrumentationService.countHttpStatus('application-details.view', 200);
+
+  return json({
+    locale,
+    applicationDetails,
+    allFederalSocialPrograms,
+    allProvincialTerritorialSocialPrograms,
+    maritalStatus,
+    mailingProvince,
+    homeProvince,
+    mailingCountry,
+    homeCountry,
+    communicationPreferenceLang,
+    preferredLanguage,
+    year,
+    meta,
+    i18nOptions: { year },
+  });
+}
+
+export default function ViewApplication() {
+  const { t, i18n } = useTranslation(handle.i18nNamespaces);
+  const { applicationDetails, locale, year, allFederalSocialPrograms, allProvincialTerritorialSocialPrograms, maritalStatus, mailingProvince, homeProvince, mailingCountry, homeCountry, preferredLanguage, communicationPreferenceLang } =
+    useLoaderData<typeof loader>();
+
+  const dateOfBirth = applicationDetails.dateOfBirth ? toLocaleDateString(parseDateTimeString(applicationDetails.dateOfBirth), locale) : '';
+  const partnerDateOfBirth = applicationDetails.partnerInformation?.dateOfBirth ? toLocaleDateString(parseDateTimeString(applicationDetails.partnerInformation.dateOfBirth), locale) : '';
   const federalSocialProgram = allFederalSocialPrograms
     .filter((federalProgram) => federalProgram.id === applicationDetails.dentalBenefits?.federalSocialProgram)
     .map((obj) => getNameByLanguage(locale, obj))
@@ -85,39 +124,25 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     .map((obj) => getNameByLanguage(locale, obj))
     .join(', ');
 
-  const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('applications:view-application.page-title') }) };
-
-  const idToken: IdToken = session.get('idToken');
-  auditService.audit('page-view.application-details', { userId: idToken.sub });
-  instrumentationService.countHttpStatus('application-details.view', 200);
-
-  return json({ locale, applicationDetails, maritalStatus, mailingProvince, homeProvince, mailingCountry, homeCountry, communicationPreferenceLang, preferredLanguage, provincialTerritorialSocialProgram, federalSocialProgram, meta });
-}
-
-export default function ViewApplication() {
-  const { t, i18n } = useTranslation(handle.i18nNamespaces);
-  const { applicationDetails, locale, maritalStatus, mailingProvince, homeProvince, mailingCountry, homeCountry, preferredLanguage, provincialTerritorialSocialProgram, federalSocialProgram, communicationPreferenceLang } = useLoaderData<typeof loader>();
-
-  const dateOfBirth = applicationDetails.dateOfBirth ? toLocaleDateString(parseDateTimeString(applicationDetails.dateOfBirth), locale) : '';
-  const partnerDateOfBirth = applicationDetails.partnerInformation?.dateOfBirth ? toLocaleDateString(parseDateTimeString(applicationDetails.partnerInformation.dateOfBirth), locale) : '';
-
   const userOrigin = useUserOrigin();
   // TODO: Update with field mappings from Benefit Application from AB-3382
   return (
-    <div className="max-w-prose">
-      <div className="space-y-10">
-        <div className="divide-y border-y">
+    <>
+      <AppPageTitle>{t('applications:view-application.page-title', { year })}</AppPageTitle>
+      <div className="max-w-prose">
+        <div className="space-y-10">
           <section className="space-y-6">
-            <h2 className="font-lato">{t('applications:view-application.applicant-title')}</h2>
-            <dl className="divide-y border-y">
-              <DescriptionListItem term={t('applications:view-application.full-name')}>{`${applicationDetails.applicantInformation?.firstName} ${applicationDetails.applicantInformation?.lastName}`}</DescriptionListItem>
-              <DescriptionListItem term={t('applications:view-application.dob')}>{dateOfBirth}</DescriptionListItem>
-              <DescriptionListItem term={t('applications:view-application.sin')}>
-                <span className="text-nowrap">{applicationDetails.applicantInformation?.socialInsuranceNumber}</span>
-              </DescriptionListItem>
-              <DescriptionListItem term={t('applications:view-application.marital-status')}>{maritalStatus?.name}</DescriptionListItem>
-            </dl>
+            <section className="space-y-6">
+              <h2 className="font-lato text-2xl font-bold">{t('applications:view-application.applicant-title')}</h2>
+              <dl className="divide-y border-y">
+                <DescriptionListItem term={t('applications:view-application.full-name')}>{`${applicationDetails.applicantInformation?.firstName} ${applicationDetails.applicantInformation?.lastName}`}</DescriptionListItem>
+                <DescriptionListItem term={t('applications:view-application.dob')}>{dateOfBirth}</DescriptionListItem>
+                <DescriptionListItem term={t('applications:view-application.sin')}>
+                  <span className="text-nowrap">{applicationDetails.applicantInformation?.socialInsuranceNumber}</span>
+                </DescriptionListItem>
+                <DescriptionListItem term={t('applications:view-application.marital-status')}>{maritalStatus?.name}</DescriptionListItem>
+              </dl>
+            </section>
             {applicationDetails.partnerInformation && (
               <section className="space-y-6">
                 <h2 className="font-lato text-2xl font-bold">{t('applications:view-application.spouse-info')}</h2>
@@ -128,8 +153,63 @@ export default function ViewApplication() {
                     {applicationDetails.partnerInformation.socialInsuranceNumber ? formatSin(applicationDetails.partnerInformation.socialInsuranceNumber) : ''}
                     <span className="text-nowrap"></span>
                   </DescriptionListItem>
-                  <DescriptionListItem term={t('applications:view-application.consent')}>{t('applications:view-application.consent-answer')}</DescriptionListItem>
+                  <DescriptionListItem term={t('applications:view-application.consent')}>
+                    {applicationDetails.partnerInformation.confirm ? t('applications:view-application.consent-answer-yes') : t('applications:view-application.consent-answer-no')}
+                  </DescriptionListItem>
                 </dl>
+              </section>
+            )}
+            {applicationDetails.children && (
+              <section className="space-y-6">
+                <h2 className="font-lato text-2xl font-bold">{t('applications:view-application.child-information.page-title')}</h2>
+                {applicationDetails.children.map((child, key) => {
+                  const childName = `${child.information.firstName} ${child.information.lastName}`;
+                  // TODO: Refactor insurance details during mapping
+                  const childDateOfBirth = child.information.dateOfBirth ? toLocaleDateString(parseDateTimeString(child.information.dateOfBirth), i18n.language) : '';
+                  const childFederalSocialProgram = allFederalSocialPrograms
+                    .filter((federalProgram) => federalProgram.id === child.dentalBenefits?.federalSocialProgram)
+                    .map((obj) => getNameByLanguage(locale, obj))
+                    .join(', ');
+                  const childProvincialTerritorialSocialProgram = allProvincialTerritorialSocialPrograms
+                    .filter((provinceTerritorialProgram) => provinceTerritorialProgram.id === child.dentalBenefits?.provincialTerritorialSocialProgram)
+                    .map((obj) => getNameByLanguage(locale, obj))
+                    .join(', ');
+                  return (
+                    <section key={key}>
+                      <h3 className="mb-4 font-lato text-2xl font-bold">{childName}</h3>
+                      <dl className="mb-6 divide-y border-y">
+                        <DescriptionListItem term={t('applications:view-application.child-information.is-parent')}>
+                          {child.information.isParent ? t('applications:view-application.child-information.yes') : t('applications:view-application.child-information.no')}
+                        </DescriptionListItem>
+                        <DescriptionListItem term={t('applications:view-application.child-information.dob')}>
+                          <p>{childDateOfBirth}</p>
+                        </DescriptionListItem>
+                        <DescriptionListItem term={t('applications:view-application.child-information.sin')}>
+                          <p>{child.information.socialInsuranceNumber ? formatSin(child.information.socialInsuranceNumber) : ''}</p>
+                        </DescriptionListItem>
+                        <DescriptionListItem term={t('applications:view-application.child-information.dental-insurance-title')}>
+                          {child.dentalInsurance ? t('applications:view-application.child-information.yes') : t('applications:view-application.child-information.no')}
+                        </DescriptionListItem>
+                        <DescriptionListItem term={t('applications:view-application.child-information.dental-benefit-title')}>
+                          {!!child.dentalBenefits?.hasFederalBenefits || !!child.dentalBenefits?.hasProvincialTerritorialBenefits ? (
+                            <>
+                              <p>{t('applications:view-application.child-information.yes')}</p>
+                              <p>{t('applications:view-application.child-information.dental-benefit-has-access')}</p>
+                              <div>
+                                <ul className="ml-6 list-disc">
+                                  {child.dentalBenefits.hasFederalBenefits && <li>{childFederalSocialProgram}</li>}
+                                  {child.dentalBenefits.hasProvincialTerritorialBenefits && <li>{childProvincialTerritorialSocialProgram}</li>}
+                                </ul>
+                              </div>
+                            </>
+                          ) : (
+                            <>{t('applications:view-application.no')}</>
+                          )}
+                        </DescriptionListItem>
+                      </dl>
+                    </section>
+                  );
+                })}
               </section>
             )}
             <section className="space-y-6">
@@ -183,6 +263,8 @@ export default function ViewApplication() {
             <section className="space-y-6">
               <h2 className="font-lato text-2xl font-bold">{t('applications:view-application.dental-insurance')}</h2>
               <dl className="divide-y border-y">
+                <DescriptionListItem term={t('applications:view-application.dental-private')}>{applicationDetails.dentalInsurance ? t('applications:view-application.yes') : t('applications:view-application.no')}</DescriptionListItem>
+
                 <DescriptionListItem term={t('applications:view-application.dental-public')}>
                   {applicationDetails.dentalBenefits?.hasFederalBenefits ?? applicationDetails.dentalBenefits?.hasProvincialTerritorialBenefits ? (
                     <>
@@ -201,15 +283,15 @@ export default function ViewApplication() {
             </section>
           </section>
         </div>
-      </div>
 
-      {userOrigin && (
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={userOrigin.to} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Back - View application click">
-            {t('applications:view-application.back-button')}
-          </ButtonLink>
-        </div>
-      )}
-    </div>
+        {userOrigin && (
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <ButtonLink id="back-button" to={userOrigin.to} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Back - View application click">
+              {t('applications:view-application.back-button')}
+            </ButtonLink>
+          </div>
+        )}
+      </div>
+    </>
   );
 }

@@ -52,12 +52,12 @@ vi.mock('~/services/benefit-application-service.server', () => ({
             disabilityTaxCredit: true,
             applicantInformation: {
               maritalStatus: '775170001',
-              firstName: 'Claudia Jean',
-              lastName: 'Cregg',
-              socialInsuranceNumber: '723 435 814',
+              firstName: 'First name',
+              lastName: 'Last name',
+              socialInsuranceNumber: '800000945',
             },
             communicationPreferences: {
-              email: 'goldfish@bowl.ca',
+              email: 'anemail@@example.com',
               preferredLanguage: '1033',
               preferredMethod: '775170000',
             },
@@ -69,28 +69,28 @@ vi.mock('~/services/benefit-application-service.server', () => ({
             dentalInsurance: true,
             personalInformation: {
               copyMailingAddress: true,
-              homeAddress: '66 Seaborn St',
+              homeAddress: '123 Home',
               homeApartment: '',
-              homeCity: "St. John's",
+              homeCity: 'HomeCity',
               homeCountry: '0cf5389e-97ae-eb11-8236-000d3af4bfc3',
-              homePostalCode: 'A1B 5B9',
+              homePostalCode: 'J8T 7X7',
               homeProvince: '5abc28c9-38b3-eb11-8236-0022486d8d5f',
-              mailingAddress: '66 Seaborn St',
+              mailingAddress: '456 Mailing',
               mailingApartment: '',
-              mailingCity: "St. John's",
+              mailingCity: 'MailingCity',
               mailingCountry: '0cf5389e-97ae-eb11-8236-000d3af4bfc3',
-              mailingPostalCode: 'A1B 5B9',
+              mailingPostalCode: 'J8T 7X7',
               mailingProvince: '5abc28c9-38b3-eb11-8236-0022486d8d5f',
-              phoneNumber: '+1 702 656 2843',
-              phoneNumberAlt: '+1 416 363 2653',
+              phoneNumber: '78005553535',
+              phoneNumberAlt: '12133734253',
             },
 
             partnerInformation: {
               confirm: true,
               dateOfBirth: '1965-10-06T04:00:00.000Z',
-              firstName: 'Danny',
-              lastName: 'Concannon',
-              socialInsuranceNumber: '100-000-007',
+              firstName: 'Partner',
+              lastName: 'Name',
+              socialInsuranceNumber: '800001042',
             },
             children: [],
           },
@@ -98,7 +98,7 @@ vi.mock('~/services/benefit-application-service.server', () => ({
       },
       {
         id: '038d9d0f-fb35-4d98-8f31-a4b2171e521a',
-        submittedOn: '2024/06/05',
+        submittedOn: '2021/06/05',
         status: 'Submitted',
         confirmationCode: '202403051212',
         applicationDetails: [
@@ -107,12 +107,12 @@ vi.mock('~/services/benefit-application-service.server', () => ({
             disabilityTaxCredit: true,
             applicantInformation: {
               maritalStatus: '775170001',
-              firstName: 'Abigail',
-              lastName: 'Bartlet',
-              socialInsuranceNumber: '723 435 814',
+              firstName: 'Someone',
+              lastName: 'Else',
+              socialInsuranceNumber: '800000861',
             },
             communicationPreferences: {
-              email: 'communicat@bowl.ca',
+              email: 'email@example.com',
               preferredLanguage: '1033',
               preferredMethod: '775170000',
             },
@@ -124,31 +124,31 @@ vi.mock('~/services/benefit-application-service.server', () => ({
             dentalInsurance: true,
             personalInformation: {
               copyMailingAddress: false,
-              homeAddress: '3102 Main St, BC',
+              homeAddress: '567 Home Addr',
               homeApartment: 'Unit #302',
-              homeCity: 'Vancouver',
+              homeCity: 'BC City',
               homeCountry: '0cf5389e-97ae-eb11-8236-000d3af4bfc3',
-              homePostalCode: 'V5T 3G7',
+              homePostalCode: 'J8T 7X7',
               homeProvince: '9c440baa-35b3-eb11-8236-0022486d8d5f',
-              mailingAddress: '20399 Douglas Cres',
+              mailingAddress: '789 Mailing Addr',
               mailingApartment: '',
-              mailingCity: 'Langley',
+              mailingCity: 'MailingCity',
               mailingCountry: '0cf5389e-97ae-eb11-8236-000d3af4bfc3',
-              mailingPostalCode: 'V3A 4B3',
+              mailingPostalCode: 'J8T 7X7',
               mailingProvince: '9c440baa-35b3-eb11-8236-0022486d8d5f',
-              phoneNumber: '+1 604 514 2800',
-              phoneNumberAlt: '+1 604 638 4852',
+              phoneNumber: '12133734253',
+              phoneNumberAlt: '12223333333',
             },
             partnerInformation: {
               confirm: true,
               dateOfBirth: '1942-01-01T04:00:00.000Z',
-              firstName: 'Jed',
-              lastName: 'Barlet',
-              socialInsuranceNumber: '100-000-007',
+              firstName: 'Partner',
+              lastName: 'Info',
+              socialInsuranceNumber: '800000002',
             },
             children: [
               {
-                information: { isParent: false, firstName: 'Zoey', lastName: 'Bartlet', dateOfBirth: '1983-06-02T04:00:00.000Z', socialInsuranceNumber: '100-000-005', hasSocialInsuranceNumber: true },
+                information: { isParent: false, firstName: 'Child', lastName: 'Info', dateOfBirth: '1983-06-02T04:00:00.000Z', socialInsuranceNumber: '800009995', hasSocialInsuranceNumber: true },
                 dentalInsurance: true,
                 dentalBenefits: {
                   hasFederalBenefits: true,
@@ -175,7 +175,7 @@ describe('Applications Page', () => {
     it('should return sorted applications', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
-      session.set('userInfoToken', { sin: '999999999', sub: '00000000-0000-0000-0000-000000000000' });
+      session.set('userInfoToken', { sin: '800009979', sub: '00000000-0000-0000-0000-000000000000' });
 
       const response = await loader({
         request: new Request('http://localhost/applications?sort=asc'),
