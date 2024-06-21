@@ -103,9 +103,11 @@ export default function AccessToGovernmentalsBenefitsView() {
   return (
     <div className="max-w-prose">
       {updatedInfo && (
-        <ContextualAlert type="success">
-          <h2 className="text-xl font-semibold">{t('access-to-governmental-benefits:access-to-governmental-benefits.view.info-updated.your-info-has-been-updated')}</h2>
-        </ContextualAlert>
+        <div className="mb-5 space-y-4">
+          <ContextualAlert type="success">
+            <h2 className="text-xl font-semibold">{t('access-to-governmental-benefits:access-to-governmental-benefits.view.info-updated.your-info-has-been-updated')}</h2>
+          </ContextualAlert>
+        </div>
       )}
       {hasDentalPlans ? (
         <>
