@@ -1,3 +1,5 @@
+import jsonpatch from 'fast-json-patch';
+import type { Operation } from 'fast-json-patch';
 import { HttpResponse, http } from 'msw';
 import { z } from 'zod';
 
@@ -7,8 +9,8 @@ import { getLogger } from '~/utils/logging.server';
 const log = getLogger('subscription-api.server');
 
 const subscriptionApiSchema = z.object({
-  id: z.string(),
-  userId: z.string(),
+  id: z.string().optional(),
+  userId: z.string().optional(),
   msLanguageCode: z.string(),
   alertTypeCode: z.string(),
 });
@@ -102,10 +104,25 @@ export function getSubscriptionApiMockHandlers() {
             href: `https://api.cdcp.example.com/api/v1/users/${parsedUserId.data}/email-validations`,
           },
           confirmationCodes: {
-            href: `https://api.cdcp.example.com/api/v1/users/${userEntity?.id}/confirmation-codes`,
+            href: `https://api.cdcp.example.com/api/v1/users/${parsedUserId.data}/confirmation-codes`,
           },
         },
       });
+    }),
+
+    //
+    // Handler for patch request to update user by userId
+    //
+    http.patch('https://api.cdcp.example.com/api/v1/users/:userId', async ({ params, request }) => {
+      log.debug('Handling PATCH request for [%s]', request.url);
+
+      const userEntity = getUserEntity(params.userId);
+      const document = toUserPatchDocument(userEntity);
+      const patch = (await request.json()) as Operation[];
+      const patchResult = jsonpatch.applyPatch(document, patch, true);
+      db.user.update({ where: { id: { equals: userEntity.id } }, data: { ...patchResult.newDocument, emailVerified: false } });
+
+      return HttpResponse.text(null, { status: 204 });
     }),
 
     //
@@ -173,6 +190,43 @@ export function getSubscriptionApiMockHandlers() {
     }),
 
     //
+    // Handler for POST request to create email alerts decription
+    //
+    http.post('https://api.cdcp.example.com/api/v1/users/:userId/subscriptions', async ({ params, request }) => {
+      log.debug('Handling POST request for [%s]', request.url);
+
+      const parsedUserId = z.string().safeParse(params.userId);
+
+      if (!parsedUserId.success) {
+        throw new HttpResponse(null, { status: 400 });
+      }
+
+      const requestBody = await request.json();
+      const parsedSubscriptionApi = await subscriptionApiSchema.safeParseAsync(requestBody);
+
+      if (!parsedSubscriptionApi.success) {
+        throw new HttpResponse(null, { status: 400 });
+      }
+
+      const newSubscription = db.subscription.create({
+        userId: parsedUserId.data,
+        msLanguageCode: parsedSubscriptionApi.data.msLanguageCode,
+        alertTypeCode: 'CDCP',
+      });
+
+      return HttpResponse.json({
+        id: newSubscription.id,
+        msLanguageCode: newSubscription.msLanguageCode,
+        alertTypeCode: newSubscription.alertTypeCode,
+        _links: {
+          self: {
+            href: `https://api.cdcp.example.com/api/v1/users/${parsedUserId.data}/subscriptions/${newSubscription.id}`,
+          },
+        },
+      });
+    }),
+
+    //
     // Handler for PUT request to update email alerts decription
     //
     http.put('https://api.cdcp.example.com/v1/users/:userId/subscriptions', async ({ params, request }) => {
@@ -199,6 +253,21 @@ export function getSubscriptionApiMockHandlers() {
           },
         });
       }
+
+      return HttpResponse.text(null, { status: 204 });
+    }),
+
+    //
+    // Handler for patch request to update a subscription
+    //
+    http.patch('https://api.cdcp.example.com/api/v1/users/:userId/subscriptions/:subscriptionId', async ({ params, request }) => {
+      log.debug('Handling PATCH request for [%s]', request.url);
+
+      const subscriptionEntity = getSubscriptionEntity(params.subscriptionId);
+      const document = toSubscriptionPatchDocument(subscriptionEntity);
+      const patch = (await request.json()) as Operation[];
+      const patchResult = jsonpatch.applyPatch(document, patch, true);
+      db.subscription.update({ where: { id: { equals: subscriptionEntity.id } }, data: patchResult.newDocument });
 
       return HttpResponse.text(null, { status: 204 });
     }),
@@ -260,4 +329,54 @@ export function getSubscriptionApiMockHandlers() {
       return HttpResponse.json({ confirmCodeStatus: 'No Content' }, { status: 204 });
     }),
   ];
+}
+
+/**
+ * Retrieves a user entity based on the provided user ID.
+ *
+ * @param id - The user ID to look up in the database.
+ * @returns The user entity if found, otherwise throws a 404 error.
+ */
+function getUserEntity(id: string | readonly string[]) {
+  const parsedUserId = z.string().uuid().safeParse(id);
+  const userEntity = parsedUserId.success
+    ? db.user.findFirst({
+        where: { id: { equals: parsedUserId.data } },
+      })
+    : undefined;
+
+  if (!userEntity) {
+    throw new HttpResponse('User Not found', { status: 404, headers: { 'Content-Type': 'text/plain' } });
+  }
+
+  return userEntity;
+}
+
+/**
+ * Converts a user entity to a patch document with specific fields.
+ *
+ * @param userEntity - The user entity to convert.
+ * @returns Patch document containing selected user fields.
+ */
+function toUserPatchDocument({ email }: ReturnType<typeof getUserEntity>) {
+  return { email };
+}
+
+function getSubscriptionEntity(id: string | readonly string[]) {
+  const parsedSubscriptionId = z.string().safeParse(id);
+  const subscriptionEntity = parsedSubscriptionId.success
+    ? db.subscription.findFirst({
+        where: { id: { equals: parsedSubscriptionId.data } },
+      })
+    : undefined;
+
+  if (!subscriptionEntity) {
+    throw new HttpResponse('Subscription Not found', { status: 404, headers: { 'Content-Type': 'text/plain' } });
+  }
+
+  return subscriptionEntity;
+}
+
+function toSubscriptionPatchDocument({ msLanguageCode }: ReturnType<typeof getSubscriptionEntity>) {
+  return { msLanguageCode };
 }

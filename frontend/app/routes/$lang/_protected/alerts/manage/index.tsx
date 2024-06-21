@@ -115,15 +115,20 @@ export async function action({ context: { session }, params, request }: ActionFu
   const alertSubscription = await subscriptionService.getSubscription(session.get('userId'));
   invariant(alertSubscription, 'Expected alertSubscription to be defined');
 
-  //TODO, update it in the next PR
-  /*const newAlertSubscription = {
+  if (parsedDataResult.data.email !== alertSubscription.email) {
+    const newUserUpdateInfo = {
+      email: parsedDataResult.data.email,
+    };
+
+    await subscriptionService.updateUser(session.get('userId'), newUserUpdateInfo);
+  }
+  const newAlertSubscription = {
     id: alertSubscription.id,
-    userId: userInfoToken.sub,
     msLanguageCode: parsedDataResult.data.preferredLanguage,
     alertTypeCode: 'CDCP',
   };
 
-  await subscriptionService.updateSubscription(userInfoToken.sin, newAlertSubscription); */
+  await subscriptionService.updateSubscription(session.get('userId'), newAlertSubscription);
 
   const idToken: IdToken = session.get('idToken');
   auditService.audit('update-data.manage-alerts', { userId: idToken.sub });

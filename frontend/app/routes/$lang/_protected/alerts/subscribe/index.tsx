@@ -7,7 +7,6 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
-import invariant from 'tiny-invariant';
 import validator from 'validator';
 import { z } from 'zod';
 
@@ -109,18 +108,18 @@ export async function action({ context: { session }, params, request }: ActionFu
     return json({ errors: parsedDataResult.error.format() });
   }
 
-  const alertSubscription = await subscriptionService.getSubscription(session.get('userId'));
-  invariant(alertSubscription, 'Expected alertSubscription to be defined');
+  const newUserUpdateInfo = {
+    email: parsedDataResult.data.email,
+  };
 
-  //TODO: update it in the next PR
-  /* const newAlertSubscription = {
-    id: alertSubscription.id,
-    userId: userInfoToken.sub,
+  await subscriptionService.updateUser(session.get('userId'), newUserUpdateInfo);
+
+  const newAlertSubscription = {
     msLanguageCode: parsedDataResult.data.preferredLanguage,
     alertTypeCode: 'CDCP',
   };
 
-  await subscriptionService.updateSubscription(userInfoToken.sin, newAlertSubscription); */
+  await subscriptionService.createSubscription(session.get('userId'), newAlertSubscription);
 
   const idToken: IdToken = session.get('idToken');
   auditService.audit('update-data.subscribe-alerts', { userId: idToken.sub });
