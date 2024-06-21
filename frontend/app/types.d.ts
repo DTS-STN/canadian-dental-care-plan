@@ -1,5 +1,4 @@
-import { AppLoadContext, Session } from '@remix-run/node';
-import type { ActionFunctionArgs as RRActionFunctionArgs, LoaderFunctionArgs as RRLoaderFunctionArgs } from '@remix-run/router';
+import { Session } from '@remix-run/node';
 
 import type accessToGovernmentalBenefits from '../public/locales/en/access-to-governmental-benefits.json';
 import type alerts from '../public/locales/en/alerts.json';
@@ -72,18 +71,8 @@ declare module 'i18next' {
   }
 }
 
-declare module '@remix-run/node' {
-  /**
-   * Augment the action function context to include the server session.
-   */
-  export interface ActionFunctionArgs extends RRActionFunctionArgs<AppLoadContext> {
-    context: AppLoadContext & { session: Session };
-  }
-
-  /**
-   * Augment the loader function context to include the server session.
-   */
-  export interface LoaderFunctionArgs extends RRLoaderFunctionArgs<AppLoadContext> {
-    context: AppLoadContext & { session: Session };
+declare module '@remix-run/server-runtime' {
+  interface AppLoadContext {
+    session: Session;
   }
 }
