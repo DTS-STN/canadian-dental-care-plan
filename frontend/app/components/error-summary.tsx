@@ -40,7 +40,7 @@ export function createErrorSummaryItems(obj: Record<string, string | undefined>)
       if (!value) return undefined;
       return createErrorSummaryItem(key, value);
     })
-    .filter((item): item is ErrorSummaryItem => item !== undefined);
+    .filter((item) => item !== undefined);
 }
 
 /**

@@ -150,7 +150,7 @@ export async function action({ context: { session }, params, request }: ActionFu
           val.socialInsuranceNumber &&
           [applyState.applicantInformation?.socialInsuranceNumber, applyState.partnerInformation?.socialInsuranceNumber, ...applyState.children.filter((child) => state.id !== child.id).map((child) => child.information?.socialInsuranceNumber)]
             .filter((sin) => sin !== undefined)
-            .map((sin) => formatSin(sin as string))
+            .map((sin) => formatSin(sin))
             .includes(formatSin(val.socialInsuranceNumber))
         ) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-child:children.information.error-message.sin-unique'), path: ['socialInsuranceNumber'] });

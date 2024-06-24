@@ -107,7 +107,7 @@ export async function action({ context: { session }, params, request }: ActionFu
         } else if (
           [applyState.partnerInformation?.socialInsuranceNumber, ...applyState.children.map((child) => child.information?.socialInsuranceNumber)]
             .filter((sin) => sin !== undefined)
-            .map((sin) => formatSin(sin as string))
+            .map((sin) => formatSin(sin))
             .includes(formatSin(sin))
         ) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:children.information.error-message.sin-unique') });
