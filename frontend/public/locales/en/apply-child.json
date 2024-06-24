@@ -53,7 +53,6 @@
       "dental-insurance-title": "Access to other dental insurance or coverage",
       "dental-benefit-title": "Access to government dental benefits",
       "dental-benefit-has-access": "Has access to the following benefits:",
-      "dental-benefit-has-no-access": "Has access to the following benefits:",
       "yes": "Yes",
       "no": "No",
       "modal": {
@@ -490,7 +489,6 @@
     "dental-benefit-title": "Access to government dental benefits",
     "dental-benefit-change": "Change answer to government dental benefits",
     "dental-benefit-has-access": "Has access to the following benefits:",
-    "dental-benefit-has-no-access": "Has access to the following benefits:",
     "continue-button": "Continue",
     "back-button": "Back",
     "yes": "Yes",
