@@ -2,14 +2,18 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   localizeAndSortCountries,
+  localizeAndSortFederalSocialPrograms,
   localizeAndSortMaritalStatuses,
   localizeAndSortPreferredLanguages,
+  localizeAndSortProvincialTerritorialSocialPrograms,
   localizeAndSortRegions,
   localizeCountries,
   localizeCountry,
+  localizeFederalSocialProgram,
   localizeLanguage,
   localizeMaritalStatus,
   localizeMaritalStatuses,
+  localizeProvincialTerritorialSocialProgram,
   localizeRegion,
   localizeRegions,
 } from '~/utils/lookup-utils.server';
@@ -36,6 +40,18 @@ const mockLanguages = [
   { id: '001', nameEn: 'englishLanguageOne', nameFr: 'frenchLanguageOne' },
   { id: '002', nameEn: 'englishLanguageTwo', nameFr: 'frenchLanguageTwo' },
   { id: '003', nameEn: 'englishLanguageThree', nameFr: 'frenchLanguageThree' },
+];
+
+const mockFederalSocialPrograms = [
+  { id: '001', nameEn: 'englishProgramOne', nameFr: 'frenchProgramOne' },
+  { id: '002', nameEn: 'englishProgramTwo', nameFr: 'frenchProgramTwo' },
+  { id: '003', nameEn: 'englishProgramThree', nameFr: 'frenchProgramThree' },
+];
+
+const mockProvincialTerritorialSocialPrograms = [
+  { id: '001', provinceTerritoryStateId: '001', nameEn: 'englishProgramOne', nameFr: 'frenchProgramOne' },
+  { id: '002', provinceTerritoryStateId: '002', nameEn: 'englishProgramTwo', nameFr: 'frenchProgramTwo' },
+  { id: '003', provinceTerritoryStateId: '003', nameEn: 'englishProgramThree', nameFr: 'frenchProgramThree' },
 ];
 
 describe('localizeCountry', () => {
@@ -334,6 +350,118 @@ describe('localizeAndSortPreferredLanguages', () => {
       {
         id: '002',
         name: 'frenchLanguageTwo',
+      },
+    ]);
+  });
+});
+
+describe('localizeFederalSocialProgram', () => {
+  it('should return the federal social program id and english name', () => {
+    expect(localizeFederalSocialProgram(mockFederalSocialPrograms[0], 'en')).toEqual({
+      id: '001',
+      name: 'englishProgramOne',
+    });
+  });
+
+  it('should return the federal social program id and french name', () => {
+    expect(localizeFederalSocialProgram(mockFederalSocialPrograms[0], 'fr')).toEqual({
+      id: '001',
+      name: 'frenchProgramOne',
+    });
+  });
+});
+
+describe('localizeAndSortFederalSocialPrograms', () => {
+  it('should return an array of localized federal social program ids and english names', () => {
+    expect(localizeAndSortFederalSocialPrograms(mockFederalSocialPrograms, 'en')).toEqual([
+      {
+        id: '001',
+        name: 'englishProgramOne',
+      },
+      {
+        id: '003',
+        name: 'englishProgramThree',
+      },
+      {
+        id: '002',
+        name: 'englishProgramTwo',
+      },
+    ]);
+  });
+
+  it('should return an array of localized federal social program ids and french names', () => {
+    expect(localizeAndSortFederalSocialPrograms(mockFederalSocialPrograms, 'fr')).toEqual([
+      {
+        id: '001',
+        name: 'frenchProgramOne',
+      },
+      {
+        id: '003',
+        name: 'frenchProgramThree',
+      },
+      {
+        id: '002',
+        name: 'frenchProgramTwo',
+      },
+    ]);
+  });
+});
+
+describe('localizeProvincialTerritorialSocialProgram', () => {
+  it('should return the provincial/territorial social program id and english name', () => {
+    expect(localizeProvincialTerritorialSocialProgram(mockProvincialTerritorialSocialPrograms[0], 'en')).toEqual({
+      id: '001',
+      provinceTerritoryStateId: '001',
+      name: 'englishProgramOne',
+    });
+  });
+
+  it('should return the provincial/territorial social program id and french name', () => {
+    expect(localizeProvincialTerritorialSocialProgram(mockProvincialTerritorialSocialPrograms[0], 'fr')).toEqual({
+      id: '001',
+      provinceTerritoryStateId: '001',
+      name: 'frenchProgramOne',
+    });
+  });
+});
+
+describe('localizeAndSortProvincialTerritorialSocialPrograms', () => {
+  it('should return an array of localized provincial/territorial social program ids and english names', () => {
+    expect(localizeAndSortProvincialTerritorialSocialPrograms(mockProvincialTerritorialSocialPrograms, 'en')).toEqual([
+      {
+        id: '001',
+        name: 'englishProgramOne',
+        provinceTerritoryStateId: '001',
+      },
+      {
+        id: '003',
+        name: 'englishProgramThree',
+        provinceTerritoryStateId: '003',
+      },
+      {
+        id: '002',
+        name: 'englishProgramTwo',
+        provinceTerritoryStateId: '002',
+      },
+    ]);
+  });
+
+  it('should return an array of localized provincial/territorial social program ids and french names', () => {
+    expect(localizeAndSortProvincialTerritorialSocialPrograms(mockProvincialTerritorialSocialPrograms, 'fr')).toEqual([
+      {
+        id: '001',
+        name: 'frenchProgramOne',
+        provinceTerritoryStateId: '001',
+      },
+      {
+        id: '003',
+        name: 'frenchProgramThree',
+        provinceTerritoryStateId: '003',
+      },
+      {
+        id: '002',
+        name: 'frenchProgramTwo',
+        provinceTerritoryStateId: '002',
       },
     ]);
   });

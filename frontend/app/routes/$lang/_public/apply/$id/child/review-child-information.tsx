@@ -22,9 +22,10 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
-import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { localizeFederalSocialProgram, localizeProvincialTerritorialSocialProgram } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -56,15 +57,16 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const locale = getLocale(request);
   const lookupService = getLookupService();
 
-  const allFederalSocialPrograms = lookupService.getAllFederalSocialPrograms();
-  const allProvincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
-
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:review-child-information.page-title') }) };
 
   const children = state.children.map((child) => {
+    const selectedFederalBenefit = child.dentalBenefits.federalSocialProgram && localizeFederalSocialProgram(lookupService.getFederalSocialProgramById(child.dentalBenefits.federalSocialProgram), locale);
+    const selectedProvincialBenefit =
+      child.dentalBenefits.provincialTerritorialSocialProgram && localizeProvincialTerritorialSocialProgram(lookupService.getProvincialTerritorialSocialProgramById(child.dentalBenefits.provincialTerritorialSocialProgram), locale);
+
     return {
       id: child.id,
       firstName: child.information.firstName,
@@ -76,18 +78,12 @@ export async function loader({ context: { session }, params, request }: LoaderFu
         acessToDentalInsurance: child.dentalInsurance,
         federalBenefit: {
           access: child.dentalBenefits.hasFederalBenefits,
-          benefit: allFederalSocialPrograms
-            .filter((obj) => obj.id === child.dentalBenefits.federalSocialProgram)
-            .map((obj) => getNameByLanguage(locale, obj))
-            .join(', '),
+          benefit: selectedFederalBenefit && selectedFederalBenefit.name,
         },
         provTerrBenefit: {
           access: child.dentalBenefits.hasProvincialTerritorialBenefits,
           province: child.dentalBenefits.province,
-          benefit: allProvincialTerritorialSocialPrograms
-            .filter((obj) => obj.id === child.dentalBenefits.provincialTerritorialSocialProgram)
-            .map((obj) => getNameByLanguage(locale, obj))
-            .join(', '),
+          benefit: selectedProvincialBenefit && selectedProvincialBenefit.name,
         },
       },
     };

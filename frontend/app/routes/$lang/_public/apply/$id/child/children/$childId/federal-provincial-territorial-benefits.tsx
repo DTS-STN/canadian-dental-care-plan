@@ -20,10 +20,10 @@ import { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, s
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
-import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeAndSortRegions } from '~/utils/lookup-utils.server';
+import { localizeAndSortFederalSocialPrograms, localizeAndSortProvincialTerritorialSocialPrograms, localizeAndSortRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -56,8 +56,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const lookupService = getLookupService();
-  const federalSocialPrograms = lookupService.getAllFederalSocialPrograms();
-  const provincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
+  const federalSocialPrograms = localizeAndSortFederalSocialPrograms(lookupService.getAllFederalSocialPrograms(), locale);
+  const provincialTerritorialSocialPrograms = localizeAndSortProvincialTerritorialSocialPrograms(lookupService.getAllProvincialTerritorialSocialPrograms(), locale);
   const allRegions = localizeAndSortRegions(lookupService.getAllRegions(), locale);
   const regions = allRegions.filter((region) => region.countryId === CANADA_COUNTRY_ID);
 
@@ -184,7 +184,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function AccessToDentalInsuranceQuestion() {
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, regions, defaultState, editMode, childName } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
@@ -281,7 +281,7 @@ export default function AccessToDentalInsuranceQuestion() {
                       legend={t('apply-child:children.dental-benefits.federal-benefits.social-programs.legend')}
                       legendClassName="font-normal"
                       options={federalSocialPrograms.map((option) => ({
-                        children: getNameByLanguage(i18n.language, option),
+                        children: option.name,
                         defaultChecked: defaultState?.federalSocialProgram === option.id,
                         value: option.id,
                       }))}
@@ -343,7 +343,7 @@ export default function AccessToDentalInsuranceQuestion() {
                           options={provincialTerritorialSocialPrograms
                             .filter((program) => program.provinceTerritoryStateId === provinceValue)
                             .map((option) => ({
-                              children: getNameByLanguage(i18n.language, option),
+                              children: option.name,
                               value: option.id,
                               checked: provincialTerritorialSocialProgramValue === option.id,
                               onChange: handleOnProvincialTerritorialSocialProgramChanged,
