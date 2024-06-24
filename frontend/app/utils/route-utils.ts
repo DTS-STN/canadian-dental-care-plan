@@ -113,7 +113,7 @@ export function useI18nNamespaces() {
     .map(({ handle }) => handle as RouteHandleData | undefined)
     .map((handle) => i18nNamespacesSchema.safeParse(handle?.i18nNamespaces))
     .flatMap((result) => (result.success ? result.data : undefined))
-    .filter((i18nNamespaces): i18nNamespaces is FlatNamespace => i18nNamespaces !== undefined);
+    .filter((i18nNamespaces) => i18nNamespaces !== undefined);
   return [...new Set(namespaces)];
 }
 
