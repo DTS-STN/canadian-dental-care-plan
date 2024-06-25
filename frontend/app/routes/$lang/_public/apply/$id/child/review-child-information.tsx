@@ -1,4 +1,5 @@
-import { SyntheticEvent, useState } from 'react';
+import type { SyntheticEvent } from 'react';
+import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
@@ -27,7 +28,8 @@ import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { localizeFederalSocialProgram, localizeProvincialTerritorialSocialProgram } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { RouteHandleData, getPathById } from '~/utils/route-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
 

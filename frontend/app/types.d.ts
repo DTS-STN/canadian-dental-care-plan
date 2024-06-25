@@ -1,4 +1,4 @@
-import { Session } from '@remix-run/node';
+import type { Session } from '@remix-run/node';
 
 import type accessToGovernmentalBenefits from '../public/locales/en/access-to-governmental-benefits.json';
 import type alerts from '../public/locales/en/alerts.json';

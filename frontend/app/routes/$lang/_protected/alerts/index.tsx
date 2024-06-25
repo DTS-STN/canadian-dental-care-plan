@@ -6,7 +6,7 @@ import invariant from 'tiny-invariant';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSubscriptionService } from '~/services/subscription-service.server';
 import { featureEnabled } from '~/utils/env.server';
-import { UserinfoToken } from '~/utils/raoidc-utils.server';
+import type { UserinfoToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {

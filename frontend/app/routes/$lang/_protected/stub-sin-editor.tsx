@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
-import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 import { Form, useActionData } from '@remix-run/react';
 
 import { UTCDate } from '@date-fns/utc';
@@ -15,8 +16,9 @@ import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { UserinfoToken } from '~/utils/raoidc-utils.server';
-import { RouteHandleData, getPathById } from '~/utils/route-utils';
+import type { UserinfoToken } from '~/utils/raoidc-utils.server';
+import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {

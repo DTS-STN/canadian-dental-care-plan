@@ -1,10 +1,10 @@
 import { useRouteLoaderData } from '@remix-run/react';
-import { To } from '@remix-run/router';
+import type { To } from '@remix-run/router';
 
 import { useTranslation } from 'react-i18next';
 
 import { getTypedI18nNamespaces } from './locale-utils';
-import { loader as rootLoader } from '~/root';
+import type { loader as rootLoader } from '~/root';
 
 export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
 

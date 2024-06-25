@@ -1,4 +1,4 @@
-import { GetApplicantResponse, PersonalInformation, UpdateApplicantRequest } from '~/schemas/personal-informaton-service-schemas.server';
+import type { GetApplicantResponse, PersonalInformation, UpdateApplicantRequest } from '~/schemas/personal-informaton-service-schemas.server';
 
 export function toGetApplicantRequest(sin: string) {
   return {

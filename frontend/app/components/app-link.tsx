@@ -1,6 +1,7 @@
-import { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
 
-import { Link, Params, useHref } from '@remix-run/react';
+import type { Params } from '@remix-run/react';
+import { Link, useHref } from '@remix-run/react';
 
 import type { To } from 'react-router';
 import invariant from 'tiny-invariant';

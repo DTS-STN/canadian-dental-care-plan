@@ -1,4 +1,4 @@
-import { MetaArgs } from '@remix-run/node';
+import type { MetaArgs } from '@remix-run/node';
 
 import { describe, expect, it } from 'vitest';
 

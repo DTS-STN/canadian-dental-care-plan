@@ -1,6 +1,7 @@
 import moize from 'moize';
 
-import { BuildInfo, readBuildInfo } from '~/utils/build-info.server';
+import type { BuildInfo } from '~/utils/build-info.server';
+import { readBuildInfo } from '~/utils/build-info.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('build-info-service.server');

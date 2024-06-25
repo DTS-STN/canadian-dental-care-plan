@@ -2,7 +2,8 @@ import { render } from '@testing-library/react';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { InputRadios, InputRadiosProps } from '~/components/input-radios';
+import type { InputRadiosProps } from '~/components/input-radios';
+import { InputRadios } from '~/components/input-radios';
 
 describe('InputRadios', () => {
   afterEach(() => {

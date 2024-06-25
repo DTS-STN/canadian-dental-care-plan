@@ -1,10 +1,12 @@
-import { Session, redirect } from '@remix-run/node';
-import { Params } from '@remix-run/react';
+import type { Session } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
+import type { Params } from '@remix-run/react';
 import { isRedirectResponse, isResponse } from '@remix-run/server-runtime/dist/responses';
 
 import { z } from 'zod';
 
-import { ApplyState, ChildState, applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, isNewChildState, loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import type { ApplyState, ChildState } from '~/route-helpers/apply-route-helpers.server';
+import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, getChildrenState, isNewChildState, loadApplyState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLogger } from '~/utils/logging.server';
 import { getPathById } from '~/utils/route-utils';
 

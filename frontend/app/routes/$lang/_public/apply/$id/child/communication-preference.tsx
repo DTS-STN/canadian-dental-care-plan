@@ -1,4 +1,5 @@
-import { ChangeEventHandler, useEffect, useMemo, useState } from 'react';
+import type { ChangeEventHandler } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
@@ -14,10 +15,12 @@ import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
-import { InputRadios, InputRadiosProps } from '~/components/input-radios';
+import type { InputRadiosProps } from '~/components/input-radios';
+import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
-import { CommunicationPreferencesState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import type { CommunicationPreferencesState } from '~/route-helpers/apply-route-helpers.server';
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';

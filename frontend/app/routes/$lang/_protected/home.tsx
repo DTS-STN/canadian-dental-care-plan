@@ -7,14 +7,15 @@ import { useParams } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 
 import pageIds from '../page-ids.json';
-import { AppLink, AppLinkProps } from '~/components/app-link';
+import type { AppLinkProps } from '~/components/app-link';
+import { AppLink } from '~/components/app-link';
 import { useFeature } from '~/root';
 import { getAuditService } from '~/services/audit-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { IdToken } from '~/utils/raoidc-utils.server';
+import type { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { getUserOrigin } from '~/utils/user-origin-utils.server';

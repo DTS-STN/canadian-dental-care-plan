@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { useParams } from '@remix-run/react';
 
 import { BilingualNotFoundError, NotFoundError } from '~/components/layouts/public-layout';

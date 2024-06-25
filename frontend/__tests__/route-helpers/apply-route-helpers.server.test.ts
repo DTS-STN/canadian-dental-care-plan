@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { ChildState, applicantInformationStateHasPartner, getAgeCategoryFromAge, getChildrenState, isNewChildState } from '~/route-helpers/apply-route-helpers.server';
+import type { ChildState } from '~/route-helpers/apply-route-helpers.server';
+import { applicantInformationStateHasPartner, getAgeCategoryFromAge, getChildrenState, isNewChildState } from '~/route-helpers/apply-route-helpers.server';
 
 vi.mock('~/utils/env.server', () => ({
   getEnv: vi.fn(() => ({

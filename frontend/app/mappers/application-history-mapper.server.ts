@@ -1,4 +1,4 @@
-import { ApplicationResponse } from '~/schemas/application-history-service-schemas.server';
+import type { ApplicationResponse } from '~/schemas/application-history-service-schemas.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getEnv } from '~/utils/env.server';
 

@@ -1,4 +1,5 @@
-import { Link, MetaFunction } from '@remix-run/react';
+import type { MetaFunction } from '@remix-run/react';
+import { Link } from '@remix-run/react';
 
 import { ButtonLink } from '~/components/buttons';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';

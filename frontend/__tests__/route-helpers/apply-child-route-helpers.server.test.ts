@@ -1,9 +1,10 @@
-import { Params } from '@remix-run/react';
+import type { Params } from '@remix-run/react';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { validateApplyChildStateForReview } from '~/route-helpers/apply-child-route-helpers.server';
-import { ApplyState, applicantInformationStateHasPartner, getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
+import type { ApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { applicantInformationStateHasPartner, getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
 
 vi.mock('@remix-run/node', () => ({
   redirect: vi.fn((to: string) => `MockedRedirect(${to})`),

@@ -11,7 +11,8 @@
  */
 import { UTCDate } from '@date-fns/utc';
 import moize from 'moize';
-import { Client, clientCredentialsGrantRequest, discoveryRequest, isOAuth2Error, processClientCredentialsResponse, processDiscoveryResponse, protectedResourceRequest } from 'oauth4webapi';
+import type { Client } from 'oauth4webapi';
+import { clientCredentialsGrantRequest, discoveryRequest, isOAuth2Error, processClientCredentialsResponse, processDiscoveryResponse, protectedResourceRequest } from 'oauth4webapi';
 
 import { getLogger } from '~/utils/logging.server';
 
