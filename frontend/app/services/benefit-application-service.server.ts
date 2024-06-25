@@ -3,7 +3,8 @@ import moize from 'moize';
 
 import { toBenefitApplication } from '~/mappers/application-history-mapper.server';
 import { applicationListSchema } from '~/schemas/application-history-service-schemas.server';
-import { BenefitApplicationRequest, benefitApplicationRequestSchema, benefitApplicationResponseSchema } from '~/schemas/benefit-application-service-schemas.server';
+import type { BenefitApplicationRequest } from '~/schemas/benefit-application-service-schemas.server';
+import { benefitApplicationRequestSchema, benefitApplicationResponseSchema } from '~/schemas/benefit-application-service-schemas.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getEnv } from '~/utils/env.server';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';

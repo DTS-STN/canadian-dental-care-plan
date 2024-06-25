@@ -1,4 +1,4 @@
-import { LoaderFunction, MetaFunction } from '@remix-run/node';
+import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 
 /**
  * Merging helper {@link https://remix.run/docs/en/main/route/meta#meta-merging-helper}

@@ -1,7 +1,7 @@
 import { formatISO } from 'date-fns';
 import validator from 'validator';
 
-import {
+import type {
   ApplicantInformationState,
   ChildState,
   CommunicationPreferencesState,
@@ -10,9 +10,9 @@ import {
   DentalProvincialTerritorialBenefitsState,
   PartnerInformationState,
   TypeOfApplicationState,
-  getAgeCategoryFromDateString,
 } from '~/route-helpers/apply-route-helpers.server';
-import { BenefitApplicationRequest } from '~/schemas/benefit-application-service-schemas.server';
+import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
+import type { BenefitApplicationRequest } from '~/schemas/benefit-application-service-schemas.server';
 import { parseDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env.server';
 

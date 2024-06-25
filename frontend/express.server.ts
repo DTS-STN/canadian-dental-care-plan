@@ -5,7 +5,8 @@ import { broadcastDevReady, installGlobals, createRequestHandler as remixCreateR
 import { UTCDate } from '@date-fns/utc';
 import chokidar from 'chokidar';
 import compression from 'compression';
-import express, { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
+import express from 'express';
 import getPort from 'get-port';
 import morgan from 'morgan';
 import fs from 'node:fs';

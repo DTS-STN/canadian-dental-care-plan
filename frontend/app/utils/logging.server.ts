@@ -1,5 +1,6 @@
 import os from 'node:os';
-import { LeveledLogMethod, Logger, createLogger, format, transports } from 'winston';
+import type { LeveledLogMethod, Logger } from 'winston';
+import { createLogger, format, transports } from 'winston';
 import 'winston-daily-rotate-file';
 import { z } from 'zod';
 

@@ -1,4 +1,4 @@
-import { Session } from '@remix-run/node';
+import type { Session } from '@remix-run/node';
 
 import { z } from 'zod';
 

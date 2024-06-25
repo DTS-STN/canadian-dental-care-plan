@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 
-import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -12,20 +13,23 @@ import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
-import { ErrorSummary, ErrorSummaryItem, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import type { ErrorSummaryItem } from '~/components/error-summary';
+import { ErrorSummary, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSinField } from '~/components/input-sin-field';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
-import { PartnerInformationState, applicantInformationStateHasPartner, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import type { PartnerInformationState } from '~/route-helpers/apply-route-helpers.server';
+import { applicantInformationStateHasPartner, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { RouteHandleData, getPathById } from '~/utils/route-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin } from '~/utils/sin-utils';
 import { isAllValidInputCharacters } from '~/utils/string-utils';

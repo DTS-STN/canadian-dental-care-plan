@@ -1,4 +1,5 @@
-import { LoaderFunctionArgs, json } from '@remix-run/node';
+import type { LoaderFunctionArgs } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 
 import { useTranslation } from 'react-i18next';
@@ -7,7 +8,7 @@ import pageIds from '../../page-ids.json';
 import { Address } from '~/components/address';
 import { ButtonLink } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
-import { Application } from '~/schemas/application-history-service-schemas.server';
+import type { Application } from '~/schemas/application-history-service-schemas.server';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -17,8 +18,8 @@ import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { localizeMaritalStatuses } from '~/utils/lookup-utils.server';
-import { IdToken } from '~/utils/raoidc-utils.server';
-import { RouteHandleData } from '~/utils/route-utils';
+import type { IdToken } from '~/utils/raoidc-utils.server';
+import type { RouteHandleData } from '~/utils/route-utils';
 import { formatSin } from '~/utils/sin-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';
 

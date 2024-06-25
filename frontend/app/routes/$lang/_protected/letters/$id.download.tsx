@@ -10,7 +10,7 @@ import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled } from '~/utils/env.server';
 import { getNameByLanguage } from '~/utils/locale-utils';
 import { getLocale } from '~/utils/locale-utils.server';
-import { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
+import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-letters');

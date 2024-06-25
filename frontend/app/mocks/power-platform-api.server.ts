@@ -3,8 +3,10 @@ import { z } from 'zod';
 
 import { toPersonalInformation } from '~/mappers/personal-information-service-mappers.server';
 import { db } from '~/mocks/db';
-import { BenefitApplicationResponse, benefitApplicationRequestSchema } from '~/schemas/benefit-application-service-schemas.server';
-import { PersonalInformation, updateApplicantRequestSchema } from '~/schemas/personal-informaton-service-schemas.server';
+import type { BenefitApplicationResponse } from '~/schemas/benefit-application-service-schemas.server';
+import { benefitApplicationRequestSchema } from '~/schemas/benefit-application-service-schemas.server';
+import type { PersonalInformation } from '~/schemas/personal-informaton-service-schemas.server';
+import { updateApplicantRequestSchema } from '~/schemas/personal-informaton-service-schemas.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('power-platform-api.server');

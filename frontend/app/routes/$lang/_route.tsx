@@ -1,4 +1,5 @@
-import { LoaderFunctionArgs, json } from '@remix-run/node';
+import type { LoaderFunctionArgs } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { Outlet, isRouteErrorResponse, useParams, useRouteError } from '@remix-run/react';
 
 import { BilingualNotFoundError, NotFoundError, ServerError } from '~/components/layouts/public-layout';

@@ -20,7 +20,8 @@
  * initialized. This ensures that only a single instance of the service is
  * created for the application.
  */
-import { Session, redirect } from '@remix-run/node';
+import type { Session } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 
 import moize from 'moize';
 import { subtle } from 'node:crypto';

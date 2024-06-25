@@ -16,11 +16,9 @@ vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
   }),
 }));
 
-vi.mock('~/utils/locale-utils.server', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('~/utils/locale-utils.server')>();
+vi.mock('~/utils/locale-utils.server', () => {
   const tMockFn = vi.fn((key) => key);
   return {
-    ...actual,
     getFixedT: vi.fn().mockResolvedValue(tMockFn),
     redirectWithLocale: vi.fn().mockResolvedValueOnce(redirect('/en/apply/123/application-delegate')).mockResolvedValueOnce(redirect('/en/apply/123/tax-filing')),
   };

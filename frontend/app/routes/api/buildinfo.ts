@@ -1,4 +1,5 @@
-import { LoaderFunctionArgs, json } from '@remix-run/node';
+import type { LoaderFunctionArgs } from '@remix-run/node';
+import { json } from '@remix-run/node';
 
 import { getBuildInfoService } from '~/services/build-info-service.server';
 

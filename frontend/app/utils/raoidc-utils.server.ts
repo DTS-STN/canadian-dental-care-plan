@@ -2,10 +2,11 @@
  * Utility functions to help with RAOIDC requests.
  */
 import { UTCDate } from '@date-fns/utc';
-import { JWTPayload, JWTVerifyResult, SignJWT, compactDecrypt, importJWK, jwtVerify } from 'jose';
+import type { JWTPayload, JWTVerifyResult } from 'jose';
+import { SignJWT, compactDecrypt, importJWK, jwtVerify } from 'jose';
 import { createHash, subtle } from 'node:crypto';
 
-import { FetchFunction } from './fetch-utils.server';
+import type { FetchFunction } from './fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('raoidc-utils.server');

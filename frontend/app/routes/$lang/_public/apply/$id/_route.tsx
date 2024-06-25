@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 import { Outlet, useNavigate, useParams } from '@remix-run/react';
 
 import { handle as layoutHandle } from '~/routes/$lang/_public/apply/_route';
-import { RouteHandleData, getPathById } from '~/utils/route-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 
 export const handle = {
   // ensure that the parent layout's i18n namespaces are loaded

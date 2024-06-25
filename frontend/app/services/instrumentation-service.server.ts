@@ -20,15 +20,17 @@
  *   - https://www.npmjs.com/package/@opentelemetry/sdk-node
  *   - https://www.dynatrace.com/support/help/extend-dynatrace/opentelemetry
  */
-import { MetricOptions, Span, metrics, trace } from '@opentelemetry/api';
+import type { MetricOptions, Span } from '@opentelemetry/api';
+import { metrics, trace } from '@opentelemetry/api';
 import { ExportResultCode } from '@opentelemetry/core';
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-proto';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto';
 import { CompressionAlgorithm } from '@opentelemetry/otlp-exporter-base';
 import { Resource, envDetector, hostDetector, osDetector, processDetector } from '@opentelemetry/resources';
-import { AggregationTemporality, ConsoleMetricExporter, PeriodicExportingMetricReader, PushMetricExporter } from '@opentelemetry/sdk-metrics';
+import type { PushMetricExporter } from '@opentelemetry/sdk-metrics';
+import { AggregationTemporality, ConsoleMetricExporter, PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
 import { NodeSDK } from '@opentelemetry/sdk-node';
-import { SpanExporter } from '@opentelemetry/sdk-trace-base';
+import type { SpanExporter } from '@opentelemetry/sdk-trace-base';
 import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-node';
 import { SEMRESATTRS_DEPLOYMENT_ENVIRONMENT, SEMRESATTRS_SERVICE_NAME, SEMRESATTRS_SERVICE_VERSION } from '@opentelemetry/semantic-conventions';
 import moize from 'moize';

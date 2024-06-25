@@ -68,6 +68,8 @@ module.exports = {
         'require-await': 'off',
         '@typescript-eslint/require-await': 'error',
         '@typescript-eslint/await-thenable': 'error',
+        '@typescript-eslint/consistent-type-exports': 'error',
+        '@typescript-eslint/consistent-type-imports': 'error',
         'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
       },
     },

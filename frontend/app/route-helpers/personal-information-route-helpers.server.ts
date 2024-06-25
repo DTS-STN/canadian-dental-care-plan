@@ -1,10 +1,11 @@
-import { Session, redirect } from '@remix-run/node';
-import { Params } from '@remix-run/react';
+import type { Session } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
+import type { Params } from '@remix-run/react';
 
-import { PersonalInformation } from '~/schemas/personal-informaton-service-schemas.server';
+import type { PersonalInformation } from '~/schemas/personal-informaton-service-schemas.server';
 import { getPersonalInformationService } from '~/services/personal-information-service.server';
 import { getLogger } from '~/utils/logging.server';
-import { UserinfoToken } from '~/utils/raoidc-utils.server';
+import type { UserinfoToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 
 const log = getLogger('personal-information-route-helpers.server');

@@ -16,7 +16,8 @@ import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToError
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { loadApplyAdultChildState, loadApplyAdultSingleChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
-import { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/route-helpers/apply-route-helpers.server';
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';

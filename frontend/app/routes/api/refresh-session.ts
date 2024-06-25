@@ -1,7 +1,7 @@
 /**
  * An API route that can be used to refresh the user's server-side session.
  */
-import { LoaderFunctionArgs } from '@remix-run/node';
+import type { LoaderFunctionArgs } from '@remix-run/node';
 
 import { getLogger } from '~/utils/logging.server';
 

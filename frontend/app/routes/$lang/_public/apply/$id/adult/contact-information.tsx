@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, json, redirect } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -15,13 +16,14 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
-import { InputOptionProps } from '~/components/input-option';
+import type { InputOptionProps } from '~/components/input-option';
 import { InputPhoneField } from '~/components/input-phone-field';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
-import { ContactInformationState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import type { ContactInformationState } from '~/route-helpers/apply-route-helpers.server';
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
@@ -31,7 +33,8 @@ import { getLogger } from '~/utils/logging.server';
 import { localizeAndSortCountries, localizeAndSortRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
-import { RouteHandleData, getPathById } from '~/utils/route-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
+import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { isAllValidInputCharacters } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';

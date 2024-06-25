@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import HCaptcha from '@hcaptcha/react-hcaptcha';
+import type HCaptcha from '@hcaptcha/react-hcaptcha';
 
 export function useHCaptcha() {
   const captchaRef = useRef<HCaptcha>(null);

@@ -2,7 +2,8 @@ import moize from 'moize';
 
 import { getAuditService } from './audit-service.server';
 import { toGetApplicantRequest, toPersonalInformation, toUpdateApplicantRequest } from '~/mappers/personal-information-service-mappers.server';
-import { PersonalInformation, getApplicantResponseSchema, updateApplicantRequestSchema } from '~/schemas/personal-informaton-service-schemas.server';
+import type { PersonalInformation } from '~/schemas/personal-informaton-service-schemas.server';
+import { getApplicantResponseSchema, updateApplicantRequestSchema } from '~/schemas/personal-informaton-service-schemas.server';
 import { getEnv } from '~/utils/env.server';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';

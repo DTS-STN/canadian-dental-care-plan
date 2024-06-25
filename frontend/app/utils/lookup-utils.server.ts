@@ -1,5 +1,5 @@
 import { getEnv } from './env.server';
-import { Country, FederalSocialProgram, Language, MaritalStatus, ProvincialTerritorialSocialProgram, Region } from '~/services/lookup-service.server';
+import type { Country, FederalSocialProgram, Language, MaritalStatus, ProvincialTerritorialSocialProgram, Region } from '~/services/lookup-service.server';
 
 /**
  * Localizes a single country object by adding a localized name.

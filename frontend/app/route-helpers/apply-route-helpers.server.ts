@@ -1,5 +1,6 @@
-import { Session, redirect } from '@remix-run/node';
-import { Params } from '@remix-run/react';
+import type { Session } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
+import type { Params } from '@remix-run/react';
 
 import { UTCDate } from '@date-fns/utc';
 import { differenceInMinutes } from 'date-fns';

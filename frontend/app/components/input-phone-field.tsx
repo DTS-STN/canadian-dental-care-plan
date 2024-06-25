@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { E164Number } from 'libphonenumber-js';
+import type { E164Number } from 'libphonenumber-js';
 import PhoneInput from 'react-phone-number-input/input';
 
 import { InputError } from './input-error';

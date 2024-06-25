@@ -1,4 +1,5 @@
-import { LoaderFunctionArgs, MetaFunction, json } from '@remix-run/node';
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { json } from '@remix-run/node';
 
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -8,7 +9,7 @@ import { PublicLayout } from '~/components/layouts/public-layout';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { RouteHandleData } from '~/utils/route-utils';
+import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 
 export const handle = {
