@@ -194,7 +194,7 @@ function toChildren(relatedPeople: ToRelatedPersonArgs[]) {
       dentalBenefits: dentalBenefits,
     });
   });
-  return children;
+  return children.length > 0 ? children : undefined;
 }
 
 interface ToRelatedPersonArgs {

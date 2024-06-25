@@ -64,13 +64,13 @@ export function getApplicationHistoryApiMockHandlers() {
                           AddressCategoryCode: {
                             ReferenceDataName: 'Mailing',
                           },
-                          AddressCityName: "St. John's",
+                          AddressCityName: 'Fake City',
                           AddressCountry: {
                             CountryCode: {
                               ReferenceDataID: '0cf5389e-97ae-eb11-8236-000d3af4bfc3',
                             },
                           },
-                          AddressPostalCode: 'A1B 5B9',
+                          AddressPostalCode: 'J8T 7X7',
                           AddressProvince: {
                             ProvinceCode: {
                               ReferenceDataID: '5abc28c9-38b3-eb11-8236-0022486d8d5f',
@@ -78,20 +78,20 @@ export function getApplicationHistoryApiMockHandlers() {
                           },
                           AddressSecondaryUnitText: '',
                           AddressStreet: {
-                            StreetName: '66 Seaborn St',
+                            StreetName: 'Not True Crescent',
                           },
                         },
                         {
                           AddressCategoryCode: {
                             ReferenceDataName: 'Home',
                           },
-                          AddressCityName: "St. John's",
+                          AddressCityName: 'Home City',
                           AddressCountry: {
                             CountryCode: {
                               ReferenceDataID: '0cf5389e-97ae-eb11-8236-000d3af4bfc3',
                             },
                           },
-                          AddressPostalCode: 'A1B 5B9',
+                          AddressPostalCode: 'J8T 7X7',
                           AddressProvince: {
                             ProvinceCode: {
                               ReferenceDataID: '5abc28c9-38b3-eb11-8236-0022486d8d5f',
@@ -99,25 +99,25 @@ export function getApplicationHistoryApiMockHandlers() {
                           },
                           AddressSecondaryUnitText: '',
                           AddressStreet: {
-                            StreetName: '66 Seaborn St',
+                            StreetName: '987 Incomplete Street',
                           },
                         },
                       ],
                       EmailAddress: [
                         {
-                          EmailAddressID: 'goldfish@bowl.ca',
+                          EmailAddressID: 'fake@example.com',
                         },
                       ],
                       TelephoneNumber: [
                         {
                           TelephoneNumberCategoryCode: {
-                            ReferenceDataID: '+1 702 656 2843',
+                            ReferenceDataID: '555 432 4342',
                             ReferenceDataName: 'Primary',
                           },
                         },
                         {
                           TelephoneNumberCategoryCode: {
-                            ReferenceDataID: '+1 416 363 2653',
+                            ReferenceDataID: '555 542 3242',
                             ReferenceDataName: 'Alternate',
                           },
                         },
@@ -139,33 +139,33 @@ export function getApplicationHistoryApiMockHandlers() {
                   },
                   PersonName: [
                     {
-                      PersonGivenName: ['Claudia Jean'],
-                      PersonSurName: 'Cregg',
+                      PersonGivenName: ['First Middle'],
+                      PersonSurName: 'Last',
                     },
                   ],
                   PersonSINIdentification: {
-                    IdentificationID: '723 435 814',
+                    IdentificationID: '800001083',
                   },
                   RelatedPerson: [
                     {
                       PersonBirthDate: {
-                        date: '1965-10-06',
-                        dateTime: '1965-10-06T04:00:00.000Z',
+                        date: '1966-10-06',
+                        dateTime: '1966-10-06T04:00:00.000Z',
                         DayDate: '06',
                         MonthDate: '10',
-                        YearDate: '1965',
+                        YearDate: '1966',
                       },
                       PersonName: [
                         {
-                          PersonGivenName: ['Danny'],
-                          PersonSurName: 'Concannon',
+                          PersonGivenName: ['Spouse'],
+                          PersonSurName: 'Partner',
                         },
                       ],
                       PersonRelationshipCode: {
                         ReferenceDataName: 'Spouse',
                       },
                       PersonSINIdentification: {
-                        IdentificationID: '146 614 235',
+                        IdentificationID: '800000994',
                       },
                       ApplicantDetail: {
                         ConsentToSharePersonalInformationIndicator: true,
@@ -189,7 +189,7 @@ export function getApplicationHistoryApiMockHandlers() {
         },
         {
           ApplicationId: '038d9d0f-fb35-4d98-9d34-a4b2171e789b',
-          SubmittedDate: '2024/03/05',
+          SubmittedDate: '2021/03/05',
           ApplicationStatus: 'Approved',
           ConfirmationCode: '202403054231',
           Data: [
@@ -210,11 +210,11 @@ export function getApplicationHistoryApiMockHandlers() {
                     ],
                   },
                   PersonBirthDate: {
-                    date: '1965-09-22',
-                    dateTime: '1965-09-22T04:00:00.000Z',
-                    DayDate: '22',
-                    MonthDate: '09',
-                    YearDate: '1965',
+                    date: '1941-04-19',
+                    dateTime: '1941-09-22T04:00:00.000Z',
+                    DayDate: '19',
+                    MonthDate: '04',
+                    YearDate: '1941',
                   },
                   PersonContactInformation: [
                     {
@@ -223,60 +223,60 @@ export function getApplicationHistoryApiMockHandlers() {
                           AddressCategoryCode: {
                             ReferenceDataName: 'Mailing',
                           },
-                          AddressCityName: "St. John's",
+                          AddressCityName: 'Not Real Town',
                           AddressCountry: {
                             CountryCode: {
                               ReferenceDataID: '0cf5389e-97ae-eb11-8236-000d3af4bfc3',
                             },
                           },
-                          AddressPostalCode: 'A1B 5B9',
+                          AddressPostalCode: 'J8T 7X7',
                           AddressProvince: {
                             ProvinceCode: {
-                              ReferenceDataID: '5abc28c9-38b3-eb11-8236-0022486d8d5f',
+                              ReferenceDataID: '9c440baa-35b3-eb11-8236-0022486d8d5f',
                             },
                           },
                           AddressSecondaryUnitText: '',
                           AddressStreet: {
-                            StreetName: '66 Seaborn St',
+                            StreetName: '2343 Random Street',
                           },
                         },
                         {
                           AddressCategoryCode: {
                             ReferenceDataName: 'Home',
                           },
-                          AddressCityName: "St. John's",
+                          AddressCityName: 'Vancouver',
                           AddressCountry: {
                             CountryCode: {
                               ReferenceDataID: '0cf5389e-97ae-eb11-8236-000d3af4bfc3',
                             },
                           },
-                          AddressPostalCode: 'A1B 5B9',
+                          AddressPostalCode: 'J8T 7X7',
                           AddressProvince: {
                             ProvinceCode: {
-                              ReferenceDataID: '5abc28c9-38b3-eb11-8236-0022486d8d5f',
+                              ReferenceDataID: '9c440baa-35b3-eb11-8236-0022486d8d5f',
                             },
                           },
                           AddressSecondaryUnitText: '',
                           AddressStreet: {
-                            StreetName: '66 Seaborn St',
+                            StreetName: '2323 Pseudo Road',
                           },
                         },
                       ],
                       EmailAddress: [
                         {
-                          EmailAddressID: 'goldfish@bowl.ca',
+                          EmailAddressID: 'someemail@example.com',
                         },
                       ],
                       TelephoneNumber: [
                         {
                           TelephoneNumberCategoryCode: {
-                            ReferenceDataID: '+1 702 656 2843',
+                            ReferenceDataID: '555 000 0001',
                             ReferenceDataName: 'Primary',
                           },
                         },
                         {
                           TelephoneNumberCategoryCode: {
-                            ReferenceDataID: '+1 416 363 2653',
+                            ReferenceDataID: '555 201 0301',
                             ReferenceDataName: 'Alternate',
                           },
                         },
@@ -298,36 +298,88 @@ export function getApplicationHistoryApiMockHandlers() {
                   },
                   PersonName: [
                     {
-                      PersonGivenName: ['Claudia Jean'],
-                      PersonSurName: 'Cregg',
+                      PersonGivenName: ['Imaginary'],
+                      PersonSurName: 'Person',
                     },
                   ],
                   PersonSINIdentification: {
-                    IdentificationID: '723 435 814',
+                    IdentificationID: '800000895',
                   },
                   RelatedPerson: [
                     {
                       PersonBirthDate: {
-                        date: '1965-10-06',
-                        dateTime: '1965-10-06T04:00:00.000Z',
-                        DayDate: '06',
-                        MonthDate: '10',
-                        YearDate: '1965',
+                        date: '1942-01-01',
+                        dateTime: '1942-01-01T04:00:00.000Z',
+                        DayDate: '01',
+                        MonthDate: '01',
+                        YearDate: '1942',
                       },
                       PersonName: [
                         {
-                          PersonGivenName: ['Danny'],
-                          PersonSurName: 'Concannon',
+                          PersonGivenName: ['Pretend'],
+                          PersonSurName: 'Identity',
                         },
                       ],
                       PersonRelationshipCode: {
                         ReferenceDataName: 'Spouse',
                       },
                       PersonSINIdentification: {
-                        IdentificationID: '146 614 235',
+                        IdentificationID: '800000549',
                       },
                       ApplicantDetail: {
                         ConsentToSharePersonalInformationIndicator: true,
+                        AttestParentOrGuardianIndicator: false,
+                        PrivateDentalInsuranceIndicator: true,
+                        InsurancePlan: [
+                          {
+                            InsurancePlanIdentification: [
+                              {
+                                IdentificationID: 'fdf25fea-a7a9-ee11-a569-000d3af4f898',
+                              },
+                              {
+                                IdentificationID: 'e174250d-26c5-ee11-9079-000d3a09d640',
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      PersonBirthDate: {
+                        date: '1983-07-02',
+                        dateTime: '1983-07-02T04:00:00.000Z',
+                        DayDate: '02',
+                        MonthDate: '07',
+                        YearDate: '1983',
+                      },
+                      PersonName: [
+                        {
+                          PersonGivenName: ['Child'],
+                          PersonSurName: 'Three',
+                        },
+                      ],
+                      PersonRelationshipCode: {
+                        ReferenceDataName: 'Dependent',
+                      },
+                      PersonSINIdentification: {
+                        IdentificationID: '800009946',
+                      },
+                      ApplicantDetail: {
+                        ConsentToSharePersonalInformationIndicator: true,
+                        AttestParentOrGuardianIndicator: false,
+                        PrivateDentalInsuranceIndicator: true,
+                        InsurancePlan: [
+                          {
+                            InsurancePlanIdentification: [
+                              {
+                                IdentificationID: 'fdf25fea-a7a9-ee11-a569-000d3af4f898',
+                              },
+                              {
+                                IdentificationID: 'e174250d-26c5-ee11-9079-000d3a09d640',
+                              },
+                            ],
+                          },
+                        ],
                       },
                     },
                   ],

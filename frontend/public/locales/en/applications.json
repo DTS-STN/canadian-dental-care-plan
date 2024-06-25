@@ -2,23 +2,21 @@
   "index": {
     "page-title": "Previous applications",
     "breadcrumbs": {
-      "application": "Applications"
+      "previous-applications": "Previous Applications"
     },
-    "no-application": "There are no application submitted on file.",
-    "date": "Submitted Date: {{date}}",
-    "confirmation-code": "Confirmation Code: {{confirmationCode}}",
-    "status": "Status: {{status}}",
+    "no-application": "There are no applications submitted on file.",
+    "date": "Date: {{date}}",
     "application-title": "Canadian Dental Care Plan {{year}} application",
     "filter": "Filter by:",
     "newest": "Newest first",
     "oldest": "Oldest first",
-    "button": {
-      "back": "Back"
-    }
+    "back-button": "Back"
   },
   "view-application": {
-    "page-title": "View Applcation",
-    "submitted-date": "Submitted Date:",
+    "breadcrumbs": {
+      "current-application": "Canadian Dental Care Plan Application"
+    },
+    "page-title": "Canadian Dental Care Plan {{year}} application",
     "confirmation-code": "Confirmation Code:",
     "status": "Status:",
     "back-button": "Back",
@@ -35,7 +33,8 @@
     "full-name": "Full name",
     "marital-status": "Marital status",
     "consent": "Consent",
-    "consent-answer": "My spouse or common-law partner is aware and has consented to sharing of their personal information.",
+    "consent-answer-yes": "My spouse or common-law partner is aware and has consented to sharing of their personal information.",
+    "consent-answer-no": "My spouse or common-law partner is aware and has not consented to sharing of their personal information.",
     "phone-number": "Phone number",
     "alt-phone-number": "Alternate phone number",
     "email": "Email",
@@ -43,39 +42,20 @@
     "home": "Home address",
     "comm-pref": "Communication preference",
     "lang-pref": "Language preference",
-    "dental-private": "Access to dental insurance or coverage",
+    "dental-private": "Access to other dental insurance or coverage",
     "dental-public": "Access to government dental benefits",
-    "application-code": "Application code",
     "yes": "Yes",
     "no": "No",
     "exit": "Exit",
-    "close-application": "Close application",
-    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html",
-    "status-checker-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html",
-    "review-child-information": {
-      "read-carefully": "Please review this information carefully. The information provided will be used by Sun Life to create your child(ren)'s member account.",
-      "page-title": "Review child(ren) information",
-      "page-sub-title": "{{child}} information",
-      "dob-title": "Date of birth",
-      "dob-change": "Change date of birth",
+    "child-information": {
+      "page-title": "Child(ren) information",
+      "dob": "Date of birth",
       "is-parent": "Parent or legal guardian of child",
-      "sin-title": "Social Insurance Number (SIN)",
-      "sin-change": "Change SIN",
+      "sin": "Social Insurance Number (SIN)",
       "full-name-title": "Full name",
-      "full-name-change": "Change full name",
-      "dental-title": "{{child}} access to dental insurance",
       "dental-insurance-title": "Access to other dental insurance or coverage",
-      "dental-insurance-change": "Change answer to dental insurance",
       "dental-benefit-title": "Access to government dental benefits",
-      "dental-benefit-change": "Change answer to government dental benefits",
       "dental-benefit-has-access": "Has access to the following benefits:",
-      "dental-benefit-has-no-access": "Has access to the following benefits:",
-      "submit-app-title": "Submit your application",
-      "submit-p-proceed": "By proceeding with this application, you are agreeing to attest truthfully to the information provided.",
-      "submit-p-false-info": "If you provide false information on your application, you and others you applied for may be removed from the plan.",
-      "submit-p-repayment": "If you or your family members were not eligible to apply, you or your family member may have to repay the full cost of care received through the Canadian Dental Care Plan.",
-      "continue-button": "Continue",
-      "back-button": "Back",
       "yes": "Yes",
       "no": "No"
     }
