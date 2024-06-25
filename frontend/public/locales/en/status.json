@@ -59,7 +59,7 @@
     "continue": "Continue",
     "submit": "Check status",
     "error-message": {
-      "selection-required": "(FR) Select an option."
+      "selection-required": "Select whether you are checking the status for yourself or your child"
     }
   },
   "myself": {
@@ -75,10 +75,10 @@
       "sin-description": "Enter the 9-digit SIN",
       "submit": "Check status",
       "error-message": {
-        "sin-required": "The Social Insurance Number (SIN) is required.",
-        "sin-valid": "The Social Insurance Number (SIN) must be valid.",
-        "application-code-required": "The application code or client number is required",
-        "application-code-valid": "The application code or client number must be valid"
+        "sin-required": "Enter 9-digit SIN, for example 123 456 789",
+        "sin-valid": "The SIN entered does not exist",
+        "application-code-required": "Enter Application Code or Client Number",
+        "application-code-valid": "Must be a valid Application Code or Client Number. Your input must be 6, 11 or 13 digits long."
       }
     }
   },
@@ -104,12 +104,12 @@
       "date-of-birth-label": "Child's date of birth",
       "submit": "Check status",
       "error-message": {
-        "radio-required": "Please select an option.",
-        "sin-required": "The Social Insurance Number (SIN) is required.",
-        "sin-valid": "The Social Insurance Number (SIN) must be valid.",
-        "application-code-required": "The application code or client number is required",
-        "application-code-valid": "The application code or client number must be valid",
-        "first-name-too-long": "First name too long.",
+        "radio-required": "Select whether the child has a SIN",
+        "sin-required": "Enter 9-digit SIN, for example 123 456 789",
+        "sin-valid": "The SIN entered does not exist",
+        "application-code-required": "Enter Application Code or Client Number",
+        "application-code-valid": "Must be a valid Application Code or Client Number. Your input must be 6, 11 or 13 digits long.",
+        "first-name-too-long": "First name too long",
         "last-name-required": "Enter last name",
         "date-of-birth-day-number": "Day must be a number",
         "date-of-birth-day-required": "Date of birth must include a day",
@@ -118,7 +118,8 @@
         "date-of-birth-month-required": "Date of birth must include a month",
         "date-of-birth-valid": "Day must be valid for the given month and year",
         "date-of-birth-year-number": "Year must be a number, for example 1950",
-        "date-of-birth-year-required": "Date of birth must include a year"
+        "date-of-birth-year-required": "Date of birth must include a year",
+        "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
       }
     }
   }

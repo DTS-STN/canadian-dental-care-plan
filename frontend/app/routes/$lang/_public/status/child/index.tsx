@@ -18,6 +18,7 @@ import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
+import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { InputSinField } from '~/components/input-sin-field';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
@@ -33,6 +34,7 @@ import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { RouteHandleData, getPathById } from '~/utils/route-utils';
 import { formatSin, isValidSin } from '~/utils/sin-utils';
+import { isAllValidInputCharacters } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
 enum ChildHasSin {
@@ -86,8 +88,8 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const childInfoSchema = z
     .object({
-      firstName: z.string().max(100, t('status:child.form.error-message.first-name-too-long')).optional(),
-      lastName: z.string().trim().min(1, t('status:child.form.error-message.last-name-required')).max(100),
+      firstName: z.string().trim().max(100, t('status:child.form.error-message.first-name-too-long')).refine(isAllValidInputCharacters, t('status:child.form.error-message.characters-valid')).optional(),
+      lastName: z.string().trim().min(1, t('status:child.form.error-message.last-name-required')).max(100).refine(isAllValidInputCharacters, t('status:child.form.error-message.characters-valid')),
       dateOfBirthYear: z
         .number({
           required_error: t('status:child.form.error-message.date-of-birth-year-required'),
@@ -351,8 +353,18 @@ export default function StatusCheckerChild() {
                       </div>
                     </Collapsible>
                     <div className="grid items-end gap-6 md:grid-cols-2">
-                      <InputField id="first-name" name="firstName" label={t('status:child.form.first-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errorMessages['first-name']} />
-                      <InputField id="last-name" name="lastName" label={t('status:child.form.last-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errorMessages['last-name']} />
+                      <InputSanitizeField
+                        id="first-name"
+                        name="firstName"
+                        label={t('status:child.form.first-name')}
+                        className="w-full"
+                        maxLength={100}
+                        aria-describedby="name-instructions"
+                        required
+                        errorMessage={errorMessages['first-name']}
+                        defaultValue=""
+                      />
+                      <InputSanitizeField id="last-name" name="lastName" label={t('status:child.form.last-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errorMessages['last-name']} defaultValue="" />
                     </div>
                     <DatePickerField
                       id="date-of-birth"
