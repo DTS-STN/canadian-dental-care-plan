@@ -17,11 +17,14 @@ public abstract class ConfirmationCodeModelMapper extends AbstractModelMapper {
 
 	@Nullable
 	public CollectionModel<ConfirmationCodeModel> toModel(String userId, @Nullable Iterable<ConfirmationCode> confirmationCodes) {
+		if (confirmationCodes == null) {
+			return CollectionModel.empty();
+		}
 		final var confirmationCodeModels = StreamSupport.stream(confirmationCodes.spliterator(), false)
-			.map(confirmationCode -> toModel(confirmationCode)).toList();
+			.map(this::toModel).toList();
 
 		return wrapCollection(CollectionModel.of(confirmationCodeModels), ConfirmationCodeModel.class);
-	}	
+	}
 
 	@Nullable
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
