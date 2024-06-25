@@ -59,7 +59,7 @@
     "continue": "Continuer",
     "submit": "Vérifier l'état de votre demande",
     "error-message": {
-      "selection-required": "(FR) Select an option."
+      "selection-required": "Choisissez si vous vérifiez le statut pour vous-même ou pour votre enfant"
     }
   },
   "myself": {
@@ -75,10 +75,10 @@
       "sin-description": "Entrez un NAS de 9 chiffres",
       "submit": "Vérifier l'état",
       "error-message": {
-        "sin-required": "Le numéro d'assurance sociale (NAS) est requis.",
-        "sin-valid": "Le numéro d'assurance sociale (NAS) doit être valide.",
-        "application-code-required": "(FR) The application code or client number is required",
-        "application-code-valid": "(FR) The application code or client number must be valid"
+        "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
+        "sin-valid": "Le NAS saisi n'existe pas",
+        "application-code-required": "Entrez le code de demande ou le numéro de client",
+        "application-code-valid": "Doit être un code de demande ou un numéro de client valide. Votre saisie doit comporter 6, 11, 13 chiffres"
       }
     }
   },
@@ -103,12 +103,12 @@
       "date-of-birth-label": "Date de naissance de l'enfant",
       "submit": "Vérifier l'état",
       "error-message": {
-        "radio-required": "(FR) Please select an option.",
-        "sin-required": "Le numéro d'assurance sociale (NAS) est requis.",
-        "sin-valid": "Le numéro d'assurance sociale (NAS) doit être valide.",
-        "application-code-required": "(FR) The application code or client number is required",
-        "application-code-valid": "(FR) The application code or client number must be valid",
-        "first-name-too-long": "Prénom trop long.",
+        "radio-required": "Sélectionnez si l'enfant a un NAS",
+        "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
+        "sin-valid": "Le NAS saisi n'existe pas",
+        "application-code-required": "Entrez le code de demande ou le numéro de client",
+        "application-code-valid": "Doit être un code de demande ou un numéro de client valide. Votre saisie doit comporter 6, 11, 13 chiffres",
+        "first-name-too-long": "Prénom trop long",
         "last-name-required": "Entrez le nom de famille",
         "date-of-birth-day-number": "Le jour doit être un nombre",
         "date-of-birth-day-required": "La date de naissance doit inclure un jour",
@@ -117,7 +117,8 @@
         "date-of-birth-month-required": "La date de naissance doit inclure un mois",
         "date-of-birth-valid": "Le jour doit être valide pour le mois et l'année choisi",
         "date-of-birth-year-number": "L'année doit être un nombre, par exemple 1950",
-        "date-of-birth-year-required": "La date de naissance doit inclure une année"
+        "date-of-birth-year-required": "La date de naissance doit inclure une année",
+        "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés : apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
       }
     }
   }
