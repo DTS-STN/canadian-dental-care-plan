@@ -1,6 +1,7 @@
 package ca.gov.dtsstn.cdcp.api.data.entity;
 
 import java.time.Instant;
+import java.util.Objects;
 
 import org.immutables.builder.Builder;
 import org.springframework.core.style.ToStringCreator;
@@ -62,5 +63,26 @@ public class AlertTypeEntity extends AbstractEntity {
 			.append("description", description)
 			.toString();
 	}
+	@Override
+	public boolean equals(@Nullable Object obj) {
+		if (this == obj) { return true; }
+		if (obj == null || !super.equals(obj)) { return false; }
+		if (getClass() != obj.getClass()) { return false; }
 
+		final var other = (AlertTypeEntity) obj;
+
+		return Objects.equals(isNew, other.isNew)
+				&& Objects.equals(id, other.id)
+				&& Objects.equals(createdBy, other.createdBy)
+				&& Objects.equals(createdDate, other.createdDate)
+				&& Objects.equals(lastModifiedBy, other.lastModifiedBy)
+				&& Objects.equals(lastModifiedDate, other.lastModifiedDate)
+				&& Objects.equals(code, other.code)
+				&& Objects.equals(description, other.description)
+;
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), isNew, id, createdBy, createdDate, lastModifiedBy, lastModifiedDate, code, description);
+	}
 }
