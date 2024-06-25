@@ -18,6 +18,7 @@ import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
+import { InputSinField } from '~/components/input-sin-field';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
@@ -341,7 +342,7 @@ export default function StatusCheckerChild() {
                   errorMessage={errorMessages['input-radio-child-has-sin-option-0']}
                   required
                 />
-                {childHasSinState === true && <InputField id="sin" name="sin" label={t('status:child.form.sin-label')} helpMessagePrimary={t('status:child.form.sin-description')} required errorMessage={errorMessages.sin} />}
+                {childHasSinState === true && <InputSinField id="sin" name="sin" label={t('status:child.form.sin-label')} helpMessagePrimary={t('status:child.form.sin-description')} required errorMessage={errorMessages.sin} defaultValue="" />}
                 {childHasSinState === false && (
                   <>
                     <Collapsible summary={t('status:child.form.if-child-summary')} className="mt-8">
