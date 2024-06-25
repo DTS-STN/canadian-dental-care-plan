@@ -1,5 +1,6 @@
 package ca.gov.dtsstn.cdcp.api.web.v1.controller;
 
+import java.util.Collections;
 import java.util.HashSet;
 
 import org.mapstruct.factory.Mappers;
@@ -57,18 +58,18 @@ public class UsersController {
 	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)
 	@ApiResponse(responseCode = "200", description = "Retrieve a user satisfying the search criteria.")
-	@Operation(summary = "Search for a user by Raoidc user ID", operationId = "user-search")
+	@Operation(summary = "Search for a user by RAOIDC user ID", operationId = "user-search")
 	public CollectionModel<UserModel> search(
 			@NotBlank(message = "id must not be null or blank")
-			@Parameter(description = "The raoidc user id of the user.", example = "00000000-0000-0000-0000-000000000000")
+			@Parameter(description = "The RAOIDC user id of the user.", example = "00000000-0000-0000-0000-000000000000")
 			@RequestParam(required = true) String raoidcUserId) {
-		final var user = userService.getUserByRaoidcUserId(raoidcUserId)
-			.orElseThrow(() -> new ResourceNotFoundException("No user with raoidcUserId=[%s] was found".formatted(raoidcUserId)));
+		final var user = userService.getUserByRaoidcUserId(raoidcUserId);
 
-		var users = new HashSet<User>();
-		users.add(user);
+		if (!user.isPresent()) {
+			return CollectionModel.empty();
+		}
 
-		return userModelMapper.toModel(raoidcUserId, users);
+		return userModelMapper.toModel(raoidcUserId, Collections.singleton(user.get()));
 	}
 
 	@GetMapping({ "/{id}" })
