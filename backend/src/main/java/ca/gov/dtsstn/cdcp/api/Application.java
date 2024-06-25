@@ -25,7 +25,7 @@ public class Application {
 	/**
 	 * Main method for the application.
 	 */
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
