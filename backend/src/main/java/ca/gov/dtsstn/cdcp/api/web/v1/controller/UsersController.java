@@ -1,6 +1,9 @@
 package ca.gov.dtsstn.cdcp.api.web.v1.controller;
 
+import java.util.HashSet;
+
 import org.mapstruct.factory.Mappers;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
@@ -11,11 +14,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
+import ca.gov.dtsstn.cdcp.api.service.domain.User;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
 import ca.gov.dtsstn.cdcp.api.web.json.JsonPatchMediaTypes;
 import ca.gov.dtsstn.cdcp.api.web.json.JsonPatchProcessor;
@@ -47,6 +52,19 @@ public class UsersController {
 		Assert.notNull(userService, "userService is required; it must not be null");
 		this.jsonPatchProcessor = jsonPatchProcessor;
 		this.userService = userService;
+	}
+
+	@GetMapping
+	@ResponseStatus(code = HttpStatus.OK)
+	@ApiResponse(responseCode = "200", description = "Retrieve a user satisfying the search criteria.")
+	@Operation(summary = "Search for a user by RAOIDC user ID", operationId = "user-search")
+	public CollectionModel<UserModel> search(
+			@NotBlank(message = "id must not be null or blank")
+			@Parameter(description = "The RAOIDC user id of the user.", example = "00000000-0000-0000-0000-000000000000")
+			@RequestParam(required = true) String raoidcUserId) {
+		final var user = userService.getUserByRaoidcUserId(raoidcUserId);
+
+		return userModelMapper.toModel(raoidcUserId, user.stream().toList());
 	}
 
 	@GetMapping({ "/{id}" })
