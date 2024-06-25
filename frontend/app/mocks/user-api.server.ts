@@ -5,7 +5,7 @@ import { db } from './db';
 import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('subscription-api.server');
+const log = getLogger('user-api.server');
 
 const { CDCP_API_BASE_URI } = getEnv();
 
@@ -26,7 +26,7 @@ export function getUserApiMockHandlers() {
 
   return [
     http.post(`${CDCP_API_BASE_URI}/api/v1/users`, async ({ params, request }) => {
-      log.debug('Handling request for [%s]', request.url);
+      log.debug('Handling POST request for [%s]', request.url);
 
       const parsedUser = z.string().safeParse(params.userId);
       if (!parsedUser.success) {
@@ -43,6 +43,7 @@ export function getUserApiMockHandlers() {
 
       db.user.create({
         email: parsedUserToCreate.data.email,
+        emailVerified: false,
         userAttributes: userAttributesList,
       });
     }),
