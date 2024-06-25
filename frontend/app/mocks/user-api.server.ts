@@ -2,12 +2,9 @@ import { HttpResponse, http } from 'msw';
 import { z } from 'zod';
 
 import { db } from './db';
-import { getEnv } from '~/utils/env.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('user-api.server');
-
-const { CDCP_API_BASE_URI } = getEnv();
 
 const userSubmittedApiSchema = z.object({
   id: z.string().optional(),
@@ -25,7 +22,7 @@ export function getUserApiMockHandlers() {
   log.info('Initializing User API mock handlers');
 
   return [
-    http.post(`${CDCP_API_BASE_URI}/api/v1/users`, async ({ params, request }) => {
+    http.post('https://api.cdcp.example.com/api/v1/users', async ({ params, request }) => {
       log.debug('Handling POST request for [%s]', request.url);
 
       const parsedUser = z.string().safeParse(params.userId);
