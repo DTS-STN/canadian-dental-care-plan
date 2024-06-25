@@ -19,7 +19,7 @@ function tryOrElseFalse(fn: () => unknown) {
   catch { return false; }
 }
 
-const validMockNames = ['cct', 'lookup', 'power-platform', 'raoidc', 'status-check', 'wsaddress', 'subscription', 'application-history'] as const;
+const validMockNames = ['cct', 'lookup', 'power-platform', 'raoidc', 'status-check', 'wsaddress', 'subscription', 'application-history', 'user-api'] as const;
 export type MockName = (typeof validMockNames)[number];
 
 const validFeatureNames = [
