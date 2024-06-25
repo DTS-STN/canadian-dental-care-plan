@@ -53,7 +53,7 @@
     "i18next-fs-backend": "^2.3.1",
     "i18next-http-backend": "^2.5.2",
     "ioredis": "^5.4.1",
-    "isbot": "^5.1.9",
+    "isbot": "^5.1.10",
     "jose": "^5.4.1",
     "libphonenumber-js": "^1.11.4",
     "moderndash": "^3.12.0",
@@ -81,7 +81,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@playwright/test": "^1.44.1",
+    "@playwright/test": "^1.45.0",
     "@remix-run/dev": "^2.9.2",
     "@remix-run/testing": "^2.9.2",
     "@testing-library/jest-dom": "^6.4.6",
@@ -96,7 +96,7 @@
     "@types/react-dom": "^18.3.0",
     "@types/source-map-support": "^0.5.10",
     "@types/validator": "^13.12.0",
-    "@typescript-eslint/eslint-plugin": "^7.13.1",
+    "@typescript-eslint/eslint-plugin": "^7.14.1",
     "@vitejs/plugin-react": "^4.3.1",
     "@vitest/coverage-v8": "^1.6.0",
     "@vitest/ui": "^1.6.0",
