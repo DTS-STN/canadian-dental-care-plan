@@ -86,6 +86,11 @@ management:
         enabled: true
       show-components: always
       show-details: when-authorized
+  endpoints:
+    web:
+      exposure:
+        include:
+        - metrics
 
 ---
 

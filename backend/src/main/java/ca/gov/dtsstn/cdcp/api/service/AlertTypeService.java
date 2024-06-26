@@ -11,6 +11,7 @@ import org.springframework.util.Assert;
 import ca.gov.dtsstn.cdcp.api.data.repository.AlertTypeRepository;
 import ca.gov.dtsstn.cdcp.api.service.domain.AlertType;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.AlertTypeMapper;
+import io.micrometer.core.annotation.Timed;
 
 @Service
 @CacheConfig(cacheNames = { "alert-types" })
@@ -25,12 +26,14 @@ public class AlertTypeService {
 		this.alertTypeRepository = alertTypeRepository;
 	}
 
+	@Timed
 	@Cacheable(key = "{ 'id', #id }", sync = true)
 	public Optional<AlertType> readById(String id) {
 		Assert.hasText(id, "id is required; it must not be null or blank");
 		return alertTypeRepository.findById(id).map(alertTypeMapper::toAlertType);
 	}
 
+	@Timed
 	@Cacheable(key = "{ 'code', #code }", sync = true)
 	public Optional<AlertType> readByCode(String code) {
 		Assert.hasText(code, "code is required; it must not be null or blank");
