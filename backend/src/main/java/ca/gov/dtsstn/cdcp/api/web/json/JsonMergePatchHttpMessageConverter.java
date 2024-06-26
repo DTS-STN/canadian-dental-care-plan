@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 
 import jakarta.json.Json;
 import jakarta.json.JsonMergePatch;
-import jakarta.json.JsonReader;
-import jakarta.json.JsonWriter;
 
 @Component
 public class JsonMergePatchHttpMessageConverter extends AbstractHttpMessageConverter<JsonMergePatch> {
@@ -29,7 +27,7 @@ public class JsonMergePatchHttpMessageConverter extends AbstractHttpMessageConve
 
 	@Override
 	protected JsonMergePatch readInternal(Class<? extends JsonMergePatch> clazz, HttpInputMessage httpInputMessage) throws IOException, HttpMessageNotReadableException {
-		try (JsonReader jsonReader = Json.createReader(httpInputMessage.getBody())) {
+		try (final var jsonReader = Json.createReader(httpInputMessage.getBody())) {
 			return Json.createMergePatch(jsonReader.readValue());
 		}
 		catch (final Exception exception) {
@@ -40,7 +38,7 @@ public class JsonMergePatchHttpMessageConverter extends AbstractHttpMessageConve
 
 	@Override
 	protected void writeInternal(JsonMergePatch jsonMergePatch, HttpOutputMessage httpOutputMessage) throws IOException, HttpMessageNotWritableException {
-		try (JsonWriter jsonWriter = Json.createWriter(httpOutputMessage.getBody())){
+		try (final var jsonWriter = Json.createWriter(httpOutputMessage.getBody())){
 			jsonWriter.write(jsonMergePatch.toJsonValue());
 		}
 		catch (final Exception exception) {
