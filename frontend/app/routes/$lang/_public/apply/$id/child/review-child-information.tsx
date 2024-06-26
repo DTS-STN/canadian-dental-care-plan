@@ -9,6 +9,7 @@ import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-soli
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
@@ -155,8 +156,14 @@ export default function ReviewInformation() {
   function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
-    setSubmitAction(String(formData.get('_action')));
+    const formData = new FormData(event.currentTarget);
+
+    // Get the clicked button's value and append it to the FormData object
+    const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
+    invariant(submitter, 'Expected submitter to be defined');
+    formData.append(submitter.name, submitter.value);
+
+    setSubmitAction(submitter.value);
 
     if (hCaptchaEnabled && captchaRef.current) {
       try {
