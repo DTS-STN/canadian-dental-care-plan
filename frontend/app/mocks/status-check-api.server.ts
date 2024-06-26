@@ -50,7 +50,7 @@ export function getStatusCheckApiMockHandlers() {
         },
       });
     }),
-    http.post('https://api.example.com/dental-care/application/v1/status_fnlndob', async ({ request }) => {
+    http.post('https://api.example.com/dental-care/status-check/v1/status_fnlndob', async ({ request }) => {
       log.debug('Handling request for [%s]', request.url);
       const statusRequestSchema = z.object({
         BenefitApplication: z.object({
