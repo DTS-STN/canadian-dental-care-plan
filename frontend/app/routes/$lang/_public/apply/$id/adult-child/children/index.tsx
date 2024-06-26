@@ -7,6 +7,7 @@ import { faChevronLeft, faChevronRight, faEdit, faPlus, faRemove, faSpinner } fr
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { randomUUID } from 'crypto';
 import { useTranslation } from 'react-i18next';
+import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../../../page-ids.json';
@@ -129,8 +130,14 @@ export default function ApplyFlowChildSummary() {
   function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
-    setSubmitAction(String(formData.get('_action')));
+    const formData = new FormData(event.currentTarget);
+
+    // Get the clicked button's value and append it to the FormData object
+    const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
+    invariant(submitter, 'Expected submitter to be defined');
+    formData.append(submitter.name, submitter.value);
+
+    setSubmitAction(submitter.value);
 
     fetcher.submit(formData, { method: 'POST' });
   }

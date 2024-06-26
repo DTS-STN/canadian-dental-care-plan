@@ -220,8 +220,14 @@ export default function ReviewInformation() {
   function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget, event.nativeEvent.submitter);
-    setSubmitAction(String(formData.get('_action')));
+    const formData = new FormData(event.currentTarget);
+
+    // Get the clicked button's value and append it to the FormData object
+    const submitter = event.nativeEvent.submitter as HTMLButtonElement | null;
+    invariant(submitter, 'Expected submitter to be defined');
+    formData.append(submitter.name, submitter.value);
+
+    setSubmitAction(submitter.value);
 
     if (hCaptchaEnabled && captchaRef.current) {
       try {
