@@ -53,7 +53,6 @@
       "dental-insurance-title": "Accès à d'autres assurances ou couvertures de soins dentaires",
       "dental-benefit-title": "Accès à des prestations dentaires gouvernementales",
       "dental-benefit-has-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
-      "dental-benefit-has-no-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
       "yes": "Oui",
       "no": "Non",
       "modal": {
@@ -491,7 +490,6 @@
     "dental-benefit-title": "Accès à des prestations dentaires gouvernementales",
     "dental-benefit-change": "Modifier la réponse à «\u00a0soins dentaires gouvernementaux\u00a0»",
     "dental-benefit-has-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
-    "dental-benefit-has-no-access": "Accès à des prestations dentaires gouvernementales\u00a0:",
     "continue-button": "Continuer",
     "back-button": "Retour",
     "yes": "Oui",
