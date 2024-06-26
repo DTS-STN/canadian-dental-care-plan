@@ -8,9 +8,6 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +19,6 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 
 import jakarta.json.Json;
-import jakarta.json.JsonMergePatch;
 import jakarta.json.JsonPatch;
 
 @ExtendWith({ MockitoExtension.class })
@@ -75,24 +71,23 @@ class JsonPatchHttpMessageConverterTests {
 
 		when(httpOutputMessage.getBody()).thenReturn(byteArrayOutputStream);
 
-		final var map = Map.of("op", "replace", "path", "/id", "value", "value");
-		final var jsonPatchObject = Json.createArrayBuilder(List.of(map)).build();
-		jsonPatchHttpMessageConverter.writeInternal(Json.createPatch(jsonPatchObject), httpOutputMessage);
+		final var patchObject = Json.createPatchBuilder().replace("/op", "replace").build();
 
-		assertThat(byteArrayOutputStream).hasToString("[{\"op\":\"replace\",\"path\":\"/id\",\"value\":\"value\"}]");
+		jsonPatchHttpMessageConverter.writeInternal(patchObject, httpOutputMessage);
+
+		assertThat(byteArrayOutputStream).hasToString("[{\"op\":\"replace\",\"path\":\"/op\",\"value\":\"replace\"}]");
 	}
 
 	@Test
 	@DisplayName("Test writeInternal(..) with flawed input")
 	void testWriteInternalWithFlawedInput() throws Exception {
 		final var httpOutputMessage = mock(HttpOutputMessage.class);
-		final var byteArrayOutputStream = new ByteArrayOutputStream();
 
 		when(httpOutputMessage.getBody()).thenThrow(new IOException("Something went wrong"));
 
-		final var map = Map.of("op", "replace", "path", "/id", "value", "value");
-		final var jsonPatchObject = Json.createArrayBuilder(List.of(map)).build();
-		assertThrows(HttpMessageNotWritableException.class, () -> jsonPatchHttpMessageConverter.writeInternal(Json.createPatch(jsonPatchObject), httpOutputMessage));
+		final var patchObject = Json.createPatchBuilder().add("/op", "replace").add("/path", "/name").add("/value", "updated name").build();
+
+		assertThrows(HttpMessageNotWritableException.class, () -> jsonPatchHttpMessageConverter.writeInternal(patchObject, httpOutputMessage));
 	}
 
 }
