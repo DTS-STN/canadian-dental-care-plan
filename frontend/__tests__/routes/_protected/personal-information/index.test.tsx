@@ -18,8 +18,8 @@ vi.mock('~/services/lookup-service.server', () => ({
       { id: 'fr', nameEn: 'French', nameFr: 'Français' },
     ]),
     getPreferredLanguage: vi.fn().mockReturnValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' }),
-    getAllCountries: vi.fn().mockReturnValue([{ code: 'SUP', nameEn: 'super country', nameFr: '(FR) super country' }]),
-    getAllRegions: vi.fn().mockReturnValue([{ code: 'SP', countryId: "CAN", nameEn: 'sample', nameFr: '(FR) sample' }]),
+    getAllCountries: vi.fn().mockReturnValue([{ id: 'SUP', nameEn: 'super country', nameFr: '(FR) super country' }]),
+    getAllRegions: vi.fn().mockReturnValue([{ id: 'SP', countryId: "CAN", nameEn: 'sample', nameFr: '(FR) sample', abbr: 'SP' }]),
     getAllMaritalStatuses: vi.fn().mockReturnValue([{ id: 'SINGLE', nameEn: 'Single', nameFr: 'Single but in french' }]),
   }),
 }));
@@ -70,16 +70,16 @@ vi.mock('~/services/personal-information-service.server', () => ({
       getHomeAddress: vi.fn().mockReturnValue({
         address: 'address',
         city: 'mega-city',
-        province: 'mega province',
+        province: 'SP',
         postalCode: 'postal code',
-        country: 'super country',
+        country: 'SUP',
       }),
       getMailingAddress: vi.fn().mockReturnValue({
         address: 'address',
         city: 'mega-city',
-        province: 'mega province',
+        province: 'SP',
         postalCode: 'postal code',
-        country: 'super country',
+        country: 'SUP',
       }),
     }),
   }),
@@ -134,25 +134,16 @@ describe('_gcweb-app.personal-information._index', () => {
 
       expect(data).toEqual({
         birthParsedFormat: 'October 11, 1950',
-        countryList: [
-          {
-            code: 'SUP',
-            name: 'super country',
-          },
-        ],
+        homeAddressCountry: 'super country',
+        mailingAddressCountry: 'super country',
         meta: {},
         preferredLanguage: {
           id: 'fr',
           nameEn: 'French',
           nameFr: 'Français',
         },
-        regionList: [
-          {
-            code: 'SP',
-            countryId: 'CAN',
-            name: 'sample',
-          },
-        ],
+        homeAddressRegion: 'SP',
+        mailingAddressRegion: 'SP',
         maritalStatus: 'Single',
         personalInformation: {
           clientNumber: '999999999',

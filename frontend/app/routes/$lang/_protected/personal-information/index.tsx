@@ -70,22 +70,27 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const updatedInfo = session.get('personal-info-updated');
   session.unset('personal-info-updated');
 
+  const homeAddressCountry = countryList.find((country) => country.countryId === personalInformation.homeAddress?.countryId)?.name ?? ' ';
+  const mailingAddressCountry = countryList.find((country) => country.countryId === personalInformation.mailingAddress?.countryId)?.name ?? ' ';
+  const homeAddressRegion = regionList.find((region) => region.provinceTerritoryStateId === personalInformation.homeAddress?.provinceTerritoryStateId)?.abbr;
+  const mailingAddressRegion = regionList.find((region) => region.provinceTerritoryStateId === personalInformation.mailingAddress?.provinceTerritoryStateId)?.abbr;
+
   return json({
     preferredLanguage,
-    // TODO: Implement server-side mapping for mailing and home address country to avoid sending the entire list to the client.
-    countryList,
+    homeAddressCountry,
+    mailingAddressCountry,
     personalInformation,
     birthParsedFormat,
     meta,
-    // TODO: Implement server-side mapping for mailing and home address provinceState to avoid sending the entire list to the client.
-    regionList,
+    homeAddressRegion,
+    mailingAddressRegion,
     maritalStatus,
     updatedInfo,
   });
 }
 
 export default function PersonalInformationIndex() {
-  const { personalInformation, preferredLanguage, countryList, birthParsedFormat, maritalStatus, regionList, updatedInfo } = useLoaderData<typeof loader>();
+  const { personalInformation, preferredLanguage, homeAddressCountry, mailingAddressCountry, birthParsedFormat, maritalStatus, homeAddressRegion, mailingAddressRegion, updatedInfo } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const params = useParams();
   const userOrigin = useUserOrigin();
@@ -108,9 +113,9 @@ export default function PersonalInformationIndex() {
                   address={personalInformation.homeAddress.streetName ?? ''}
                   apartment={personalInformation.homeAddress.apartment}
                   city={personalInformation.homeAddress.cityName ?? ''}
-                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.homeAddress?.provinceTerritoryStateId)?.abbr}
+                  provinceState={homeAddressRegion}
                   postalZipCode={personalInformation.homeAddress.postalCode}
-                  country={countryList.find((country) => country.countryId === personalInformation.homeAddress?.countryId)?.name ?? ' '}
+                  country={homeAddressCountry}
                 />
               ) : (
                 <p>{t('personal-information:index.no-address-on-file')}</p>
@@ -132,9 +137,9 @@ export default function PersonalInformationIndex() {
                   address={personalInformation.mailingAddress.streetName ?? ''}
                   apartment={personalInformation.mailingAddress.apartment}
                   city={personalInformation.mailingAddress.cityName ?? ''}
-                  provinceState={regionList.find((region) => region.provinceTerritoryStateId === personalInformation.mailingAddress?.provinceTerritoryStateId)?.abbr}
+                  provinceState={mailingAddressRegion}
                   postalZipCode={personalInformation.mailingAddress.postalCode}
-                  country={countryList.find((country) => country.countryId === personalInformation.mailingAddress?.countryId)?.name ?? ''}
+                  country={mailingAddressCountry}
                 />
               ) : (
                 <p>{t('personal-information:index.no-address-on-file')}</p>
