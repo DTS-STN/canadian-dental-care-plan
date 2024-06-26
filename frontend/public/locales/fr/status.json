@@ -1,11 +1,11 @@
 {
-  "page-title": "Vérificateur de l'état d'une demande",
+  "page-title": "Vérificateur de l'état",
   "status-checker-heading": "Qu'est-ce que le vérificateur de l'état d'une demande?",
-  "status-checker-content": "Il s'agit d'un outil qui vous permet de savoir où en est votre demande de participation au Régime canadien de soins dentaires",
+  "status-checker-content": "Il s'agit d'un outil qui vous permet de savoir où en est votre demande de participation au Régime canadien de soins dentaires.",
   "online-status-heading": "Qui peut vérifier l'état de sa demande en ligne?",
   "online-status-content": "Si vous avez présenté une demande au titre du Régime canadien de soins dentaires, vous pouvez vérifier l'état de votre demande en ligne.",
   "terms-conditions": "En utilisant le vérificateur de l'état d'une demande, vous acceptez les conditions générales d'utilisation et à l'énoncé de confidentialité.",
-  "status-heading": "Statut",
+  "status-heading": "État",
   "empty-status": "Les informations que vous nous avez fournies ne correspondent pas aux informations dans notre système.",
   "terms-of-use": {
     "summary": "Conditions générales d'utilisation",
@@ -63,8 +63,8 @@
     }
   },
   "myself": {
-    "page-title": "Vérificateur de l'état d'une demande",
-    "status-heading": "Statut",
+    "page-title": "Vérificateur de l'état",
+    "status-heading": "État",
     "empty-status": "Les informations que vous nous avez fournies ne correspondent pas aux informations dans notre système.",
     "check-another": "Vérifier un autre état",
     "form": {
@@ -83,8 +83,8 @@
     }
   },
   "child": {
-    "page-title": "Vérificateur de l'état d'une demande",
-    "status-heading": "Statut",
+    "page-title": "Vérificateur de l'état",
+    "status-heading": "État",
     "empty-status": "Les informations que vous nous avez fournies ne correspondent pas aux informations dans notre système.",
     "check-another": "Vérifier un autre état",
     "form": {
