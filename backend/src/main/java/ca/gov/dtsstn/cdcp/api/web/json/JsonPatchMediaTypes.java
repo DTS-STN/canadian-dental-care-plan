@@ -12,4 +12,8 @@ public class JsonPatchMediaTypes {
 
 	public static final MediaType JSON_PATCH = MediaType.valueOf(JSON_PATCH_VALUE);
 
+	private JsonPatchMediaTypes() {
+		throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+	}
+
 }
