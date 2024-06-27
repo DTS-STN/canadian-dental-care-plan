@@ -38,8 +38,9 @@ class SubscriptionModelMapperTest {
 		final var subscriptionModels = subscriptionModelMapper.toModel("d827416b-f808-4035-9ccc-7572f3297015", subscriptions);
 		assertThat(subscriptionModels)
 			.hasSize(2)
-			.anyMatch(model -> model.getId() == "00000000-0000-0000-0000-000000000000")
-			.anyMatch(model -> model.getId() == "22222222-2222-2222-2222-222222222222");
+			.allMatch(model -> model.getId() != null)
+			.anyMatch(model -> model.getId().equals("00000000-0000-0000-0000-000000000000"))
+			.anyMatch(model -> model.getId().equals("22222222-2222-2222-2222-222222222222"));
 	}
 
 }
