@@ -287,7 +287,7 @@ export default function StatusCheckerChild() {
   }, [errorMessages]);
 
   useEffect(() => {
-    if (fetcher.data && 'status' in fetcher.data) {
+    if (fetcher.data && 'statusId' in fetcher.data) {
       const targetElement = document.getElementById('status');
       if (targetElement) {
         targetElement.scrollIntoView({ behavior: 'smooth' });
@@ -303,14 +303,14 @@ export default function StatusCheckerChild() {
   return (
     <PublicLayout>
       <div className="max-w-prose">
-        {fetcher.data && 'status' in fetcher.data ? (
+        {fetcher.data && 'status' in fetcher.data && fetcher.data.statusId ? (
           <>
             <ContextualAlert type={fetcher.data.status.alertType}>
               <div>
                 <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
                   {t('status:child.status-heading')}
                 </h2>
-                {fetcher.data.status.id ? getNameByLanguage(i18n.language, fetcher.data.status) : t('status:child.empty-status')}
+                {getNameByLanguage(i18n.language, fetcher.data.status)}
               </div>
             </ContextualAlert>
             <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} className="mt-12">
@@ -320,6 +320,7 @@ export default function StatusCheckerChild() {
           </>
         ) : (
           <>
+            {fetcher.data && 'statusId' in fetcher.data && !fetcher.data.statusId && <StatusNotFound />}
             <p className="mb-4 italic">{t('status:child.form.complete-fields')}</p>
             {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
             <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
@@ -396,5 +397,23 @@ export default function StatusCheckerChild() {
         )}
       </div>
     </PublicLayout>
+  );
+}
+
+function StatusNotFound() {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const noWrap = <span className="whitespace-nowrap" />;
+  return (
+    <div className="mb-4">
+      <ContextualAlert type="danger">
+        <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
+          {t('myself.status-not-found.heading')}
+        </h2>
+        <p className="mb-2">{t('myself.status-not-found.please-review')}</p>
+        <p>
+          <Trans ns={handle.i18nNamespaces} i18nKey="myself.status-not-found.contact-service-canada" components={{ noWrap }} />
+        </p>
+      </ContextualAlert>
+    </div>
   );
 }
