@@ -33,9 +33,15 @@ public class SpringDocConfig {
 
 	static final Logger log = LoggerFactory.getLogger(SpringDocConfig.class);
 
-	@Autowired ApplicationProperties applicationProperties;
+	private final ApplicationProperties applicationProperties;
+	private final GitProperties gitProperties;
 
-	@Autowired GitProperties gitProperties;
+	@Autowired
+	public SpringDocConfig(ApplicationProperties applicationProperties, GitProperties gitProperties) {
+		super();
+		this.applicationProperties = applicationProperties;
+		this.gitProperties = gitProperties;
+	}
 
 	/**
 	 * SpringDoc annotations used to tell Swagger UI that an endpoint is protected by OAuth.
