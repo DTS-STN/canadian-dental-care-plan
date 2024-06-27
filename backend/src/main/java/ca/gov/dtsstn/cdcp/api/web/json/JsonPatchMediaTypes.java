@@ -4,10 +4,6 @@ import org.springframework.http.MediaType;
 
 public class JsonPatchMediaTypes {
 
-	private JsonPatchMediaTypes() {
-		throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
-	}
-
 	public static final String JSON_MERGE_PATCH_VALUE = "application/merge-patch+json";
 
 	public static final MediaType JSON_MERGE_PATCH = MediaType.valueOf(JSON_MERGE_PATCH_VALUE);
@@ -15,5 +11,9 @@ public class JsonPatchMediaTypes {
 	public static final String JSON_PATCH_VALUE = "application/json-patch+json";
 
 	public static final MediaType JSON_PATCH = MediaType.valueOf(JSON_PATCH_VALUE);
+
+	private JsonPatchMediaTypes() {
+		throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+	}
 
 }
