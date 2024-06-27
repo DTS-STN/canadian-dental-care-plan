@@ -1,4 +1,25 @@
-const sinRegex = /^[1-9]\d{2}[ -]?\d{3}[ -]?\d{3}$/;
+/**
+ * Regular expression to validate Canadian SIN (Social Insurance Number) format.
+ *
+ * The SIN must follow the format XXXXXXXXX or XXX XXX XXX or XXX-XXX-XXX.
+ * The SIN number cannot consist entirely of zeros (e.g., 000000000 or 000 000 000 or 000-000-000 is not valid).
+ *
+ * Note: This regular expression only validates the format of the SIN.
+ * Consumers must validate the SIN against the Luhn algorithm separately.
+ *
+ * Examples of valid SIN formats:
+ * - 123-456-789
+ * - 123 456 789
+ * - 123456789
+ * - 000-000-010
+ *
+ * Examples of invalid SIN formats:
+ * - 000-000-000
+ * - 000000000
+ * - 123-45-6789
+ * - ABC-DEF-GHI
+ */
+const sinFormatRegex = /^(?!0{3}[ -]?0{3}[ -]?0{3})\d{3}[ -]?\d{3}[ -]?\d{3}$/;
 
 /**
  *
@@ -17,7 +38,7 @@ const sinRegex = /^[1-9]\d{2}[ -]?\d{3}[ -]?\d{3}$/;
  *
  */
 export function isValidSin(sin: string): boolean {
-  if (!sinRegex.test(sin)) return false;
+  if (!sinFormatRegex.test(sin)) return false;
   const multDigitString = [...sin.replace(/\D/g, '')].map((digit, index) => Number(digit) * (index % 2 === 0 ? 1 : 2)).join('');
   const digitSum = [...multDigitString].reduce((acc, cur) => acc + Number(cur), 0);
   return digitSum % 10 === 0;
