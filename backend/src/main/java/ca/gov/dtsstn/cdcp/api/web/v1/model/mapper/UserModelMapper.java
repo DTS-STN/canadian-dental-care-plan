@@ -45,7 +45,7 @@ public abstract class UserModelMapper extends AbstractModelMapper {
 		return user.add(linkTo(methodOn(UsersController.class).getUserById(user.getId())).withSelfRel())
 			.add(linkTo(methodOn(SubscriptionsController.class).getSubscriptionsByUserId(user.getId())).withRel("subscriptions"))
 			.add(linkTo(methodOn(EmailValidationsController.class).getEmailValidationByUserId(user.getId())).withRel("emailValidations"))
-			.add(linkTo(methodOn(ConfirmationCodesController.class).getConfirmationCodesByUserId(user.getId())).withRel("confirmationCodes"));
+			.add(linkTo(methodOn(ConfirmationCodesController.class).createConfirmationCodeForUser(user.getId())).withRel("confirmationCodes"));
 	}
 
 	@Nullable
