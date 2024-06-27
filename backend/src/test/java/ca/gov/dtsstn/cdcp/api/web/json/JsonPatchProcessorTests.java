@@ -39,7 +39,10 @@ class JsonPatchProcessorTests {
 		final var jsonMergePatch = Json.createMergePatch(Json.createObjectBuilder(patchObject).build());
 		final var patchedEntity = jsonPatchProcessor.patch(entity, jsonMergePatch);
 
-		assertThat(patchedEntity).isNotSameAs(entity).hasFieldOrPropertyWithValue("id", "id").hasFieldOrPropertyWithValue("name", "updated name");
+		assertThat(patchedEntity)
+			.isNotSameAs(entity)
+			.hasFieldOrPropertyWithValue("id", "id")
+			.hasFieldOrPropertyWithValue("name", "updated name");
 	}
 
 	@Test
@@ -70,7 +73,10 @@ class JsonPatchProcessorTests {
 		final var jsonPatch = Json.createPatch(Json.createArrayBuilder().add(patchObject).build());
 		final var patchedEntity = jsonPatchProcessor.patch(entity, jsonPatch);
 
-		assertThat(patchedEntity).isNotSameAs(entity).hasFieldOrPropertyWithValue("id", "id").hasFieldOrPropertyWithValue("name", "updated name");
+		assertThat(patchedEntity)
+			.isNotSameAs(entity)
+			.hasFieldOrPropertyWithValue("id", "id")
+			.hasFieldOrPropertyWithValue("name", "updated name");
 	}
 
 	@Test
