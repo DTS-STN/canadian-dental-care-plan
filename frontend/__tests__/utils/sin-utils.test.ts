@@ -3,11 +3,11 @@ import { describe, expect, it } from 'vitest';
 import { formatSin, isValidSin } from '~/utils/sin-utils';
 
 describe('isValidSin', () => {
-  it.each([['130692544'], ['178302576'], ['549831204'], ['130 692 544'], ['178 302 576'], ['549 831 204'], ['130-692-544'], ['178-302-576'], ['549-831-204']])('should return true for valid SIN "%s"', (sin) => {
+  it.each([['000000042'], ['000 000 042'], ['000-000-042'], ['800000002'], ['800 000 002'], ['800-000-002']])('should return true for valid SIN "%s"', (sin) => {
     expect(isValidSin(sin)).toEqual(true);
   });
 
-  it.each([['000000000'], ['451987368'], ['736194850'], ['000 000 000'], ['451 987 368'], ['736 194 850'], ['000-000-000'], ['451-987-368'], ['736-194-850']])('should return false for invalid SIN "%s"', (sin) => {
+  it.each([['000000000'], ['000 000 000'], ['000-000-000'], ['800000003'], ['800 000 003'], ['800-000-003']])('should return false for invalid SIN "%s"', (sin) => {
     expect(isValidSin(sin)).toEqual(false);
   });
 
