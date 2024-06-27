@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import jakarta.json.Json;
 import jakarta.json.JsonPatch;
 
+@SuppressWarnings("null")
 @Component
 public class JsonPatchHttpMessageConverter extends AbstractHttpMessageConverter<JsonPatch> {
 
@@ -27,8 +28,8 @@ public class JsonPatchHttpMessageConverter extends AbstractHttpMessageConverter<
 
 	@Override
 	protected JsonPatch readInternal(Class<? extends JsonPatch> clazz, HttpInputMessage httpInputMessage) throws IOException, HttpMessageNotReadableException {
-		try {
-			return Json.createPatch(Json.createReader(httpInputMessage.getBody()).readArray());
+		try (final var jsonReader = Json.createReader(httpInputMessage.getBody())) {
+			return Json.createPatch(jsonReader.readArray());
 		}
 		catch (final Exception exception) {
 			final var message = "Could not read JSON patch: %s".formatted(exception.getMessage());
@@ -38,8 +39,8 @@ public class JsonPatchHttpMessageConverter extends AbstractHttpMessageConverter<
 
 	@Override
 	protected void writeInternal(JsonPatch jsonPatch, HttpOutputMessage httpOutputMessage) {
-		try {
-			Json.createWriter(httpOutputMessage.getBody()).write(jsonPatch.toJsonArray());
+		try (final var jsonWriter = Json.createWriter(httpOutputMessage.getBody())){
+			jsonWriter.write(jsonPatch.toJsonArray());
 		}
 		catch (final Exception exception) {
 			final var message = "Could not write JSON patch: %s".formatted(exception.getMessage());
