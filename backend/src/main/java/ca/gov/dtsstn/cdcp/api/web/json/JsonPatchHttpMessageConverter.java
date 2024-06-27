@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import jakarta.json.Json;
 import jakarta.json.JsonPatch;
 
+@SuppressWarnings("null")
 @Component
 public class JsonPatchHttpMessageConverter extends AbstractHttpMessageConverter<JsonPatch> {
 
@@ -20,13 +21,11 @@ public class JsonPatchHttpMessageConverter extends AbstractHttpMessageConverter<
 		super(MediaType.APPLICATION_JSON, JsonPatchMediaTypes.JSON_PATCH);
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	protected boolean supports(Class<?> clazz) {
 		return JsonPatch.class.isAssignableFrom(clazz);
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	protected JsonPatch readInternal(Class<? extends JsonPatch> clazz, HttpInputMessage httpInputMessage) throws IOException, HttpMessageNotReadableException {
 		try (final var jsonReader = Json.createReader(httpInputMessage.getBody())) {
@@ -38,7 +37,6 @@ public class JsonPatchHttpMessageConverter extends AbstractHttpMessageConverter<
 		}
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	protected void writeInternal(JsonPatch jsonPatch, HttpOutputMessage httpOutputMessage) {
 		try (final var jsonWriter = Json.createWriter(httpOutputMessage.getBody())){
