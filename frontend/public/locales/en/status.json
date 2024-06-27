@@ -65,8 +65,12 @@
   "myself": {
     "page-title": "Status Checker",
     "status-heading": "Status",
-    "empty-status": "The information you gave us doesn't match the information in our system.",
     "check-another": "Check another status",
+    "status-not-found": {
+      "heading": "We could not find your application status with the information you gave us.",
+      "please-review": "Please make sure the information you entered is correct. If you applied recently, try again in 48 hours.",
+      "contact-service-canada": "If you're still having trouble, contact Service Canada at <noWrap>1-833-537-4342</noWrap>."
+    },
     "form": {
       "complete-fields": "Complete all fields.",
       "application-code-label": "Application Code or Client Number",
@@ -85,13 +89,16 @@
   "child": {
     "page-title": "Status Checker",
     "status-heading": "Status",
-    "empty-status": "The information you gave us doesn't match the information in our system.",
     "check-another": "Check another status",
+    "status-not-found": {
+      "heading": "We could not find your application status with the information you gave us.",
+      "please-review": "Please make sure the information you entered is correct. If you applied recently, try again in 48 hours.",
+      "contact-service-canada": "If you're still having trouble, contact Service Canada at <noWrap>1-833-537-4342</noWrap>."
+    },
     "form": {
       "complete-fields": "Complete all fields.",
       "application-code-label": "Application Code or Client Number",
       "application-code-description": "Enter the number you received after applying online, or the number found in the upper right-hand corner from the letter you may have received from Service Canada",
-
       "radio-legend": "Does the child have a Social Insurance Number (SIN)?",
       "sin-label": "Social Insurance Number (SIN)",
       "sin-description": "Enter the 9-digit SIN",

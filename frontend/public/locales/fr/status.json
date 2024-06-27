@@ -65,8 +65,12 @@
   "myself": {
     "page-title": "Vérificateur de l'état",
     "status-heading": "État",
-    "empty-status": "Les informations que vous nous avez fournies ne correspondent pas aux informations dans notre système.",
     "check-another": "Vérifier un autre état",
+    "status-not-found": {
+      "heading": "Nous n'avons pas pu trouver le statut de votre candidature avec les informations que vous nous avez fournies.",
+      "please-review": "Veuillez vous assurer que les informations que vous avez saisies sont correctes. Si vous avez postulé récemment, réessayez dans 48 heures.",
+      "contact-service-canada": "Si vous rencontrez toujours des difficultés, contactez Service Canada au <noWrap>1-833-537-4342</noWrap>."
+    },
     "form": {
       "complete-fields": "Remplir tous les champs",
       "application-code-label": "Code de demande ou numéro de client",
@@ -85,8 +89,12 @@
   "child": {
     "page-title": "Vérificateur de l'état",
     "status-heading": "État",
-    "empty-status": "Les informations que vous nous avez fournies ne correspondent pas aux informations dans notre système.",
     "check-another": "Vérifier un autre état",
+    "status-not-found": {
+      "heading": "Nous n'avons pas pu trouver le statut de votre candidature avec les informations que vous nous avez fournies.",
+      "please-review": "Veuillez vous assurer que les informations que vous avez saisies sont correctes. Si vous avez postulé récemment, réessayez dans 48 heures.",
+      "contact-service-canada": "Si vous rencontrez toujours des difficultés, contactez Service Canada au <noWrap>1-833-537-4342</noWrap>."
+    },
     "form": {
       "complete-fields": "Remplir tous les champs",
       "application-code-label": "Code de demande ou numéro de client",

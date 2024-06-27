@@ -8,7 +8,7 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
@@ -174,7 +174,7 @@ export default function StatusCheckerMyself() {
   }, [errorMessages]);
 
   useEffect(() => {
-    if (fetcher.data && 'status' in fetcher.data) {
+    if (fetcher.data && 'statusId' in fetcher.data) {
       const targetElement = document.getElementById('status');
       if (targetElement) {
         targetElement.scrollIntoView({ behavior: 'smooth' });
@@ -186,14 +186,14 @@ export default function StatusCheckerMyself() {
   return (
     <PublicLayout>
       <div className="max-w-prose">
-        {fetcher.data && 'status' in fetcher.data ? (
+        {fetcher.data && 'status' in fetcher.data && fetcher.data.statusId ? (
           <>
             <ContextualAlert type={fetcher.data.status.alertType}>
               <div>
                 <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
                   {t('status:myself.status-heading')}
                 </h2>
-                {fetcher.data.status.id ? getNameByLanguage(i18n.language, fetcher.data.status) : t('status:myself.empty-status')}
+                {getNameByLanguage(i18n.language, fetcher.data.status)}
               </div>
             </ContextualAlert>
             <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} className="mt-12">
@@ -203,6 +203,7 @@ export default function StatusCheckerMyself() {
           </>
         ) : (
           <>
+            {fetcher.data && 'statusId' in fetcher.data && !fetcher.data.statusId && <StatusNotFound />}
             <p className="mb-4 italic">{t('status:myself.form.complete-fields')}</p>
             {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
             <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
@@ -221,5 +222,23 @@ export default function StatusCheckerMyself() {
         )}
       </div>
     </PublicLayout>
+  );
+}
+
+function StatusNotFound() {
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const noWrap = <span className="whitespace-nowrap" />;
+  return (
+    <div className="mb-4">
+      <ContextualAlert type="danger">
+        <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
+          {t('myself.status-not-found.heading')}
+        </h2>
+        <p className="mb-2">{t('myself.status-not-found.please-review')}</p>
+        <p>
+          <Trans ns={handle.i18nNamespaces} i18nKey="myself.status-not-found.contact-service-canada" components={{ noWrap }} />
+        </p>
+      </ContextualAlert>
+    </div>
   );
 }
