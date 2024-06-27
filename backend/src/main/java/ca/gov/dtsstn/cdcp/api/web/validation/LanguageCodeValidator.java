@@ -15,7 +15,7 @@ public class LanguageCodeValidator implements ConstraintValidator<LanguageCode, 
 		INTERNAL_CODE,
 		ISO_CODE,
 		MS_LOCALE_CODE
-	};
+	}
 
 	private CodeType codeType;
 
