@@ -25,7 +25,7 @@ public abstract class SubscriptionModelMapper extends AbstractModelMapper {
 
 	@Nullable
 	public CollectionModel<SubscriptionModel> toModel(String userId, @Nullable Iterable<Subscription> subscriptions) {
-		if (subscriptions == null || subscriptions.spliterator() == null) {
+		if (subscriptions == null) {
 			return CollectionModel.empty();
 		}
 		final var subscriptionModels = StreamSupport.stream(subscriptions.spliterator(), false)
