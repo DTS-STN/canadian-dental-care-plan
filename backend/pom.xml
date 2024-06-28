@@ -45,6 +45,8 @@
 		<jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
 		<johnzon.version>2.0.1</johnzon.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
+		<opentelemetry-bom.version>1.39.0</opentelemetry-bom.version>
+		<opentelemetry-instrumentation-bom.version>2.5.0-alpha</opentelemetry-instrumentation-bom.version>
 		<spring-boot.version>3.3.1</spring-boot.version>
 		<springdoc.version>2.5.0</springdoc.version>
 	</properties>
@@ -76,6 +78,10 @@
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry.instrumentation</groupId>
+			<artifactId>opentelemetry-spring-boot-starter</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springdoc</groupId>
@@ -119,7 +125,7 @@
 		</dependency>
 
 		<!-- optional/provided dependencies -->
-		
+
 		<dependency>
 			<groupId>org.immutables</groupId>
 			<artifactId>builder</artifactId>
@@ -160,6 +166,26 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.opentelemetry</groupId>
+				<artifactId>opentelemetry-bom</artifactId>
+				<version>${opentelemetry-bom.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>io.opentelemetry.instrumentation</groupId>
+				<artifactId>opentelemetry-instrumentation-bom-alpha</artifactId>
+				<version>${opentelemetry-instrumentation-bom.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 
 	<build>

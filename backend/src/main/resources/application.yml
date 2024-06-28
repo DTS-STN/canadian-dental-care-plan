@@ -95,6 +95,32 @@ management:
 ---
 
 #
+# OpenTelemetry configuration properties, see:
+# https://opentelemetry.io/docs/languages/java/configuration
+#
+
+otel:
+  #
+  # ⚠️ OpenTelemetry exporter settings must be configured externally
+  # when `otel.(logs|metrics|traces).exporter` is set to `otlp`
+  #
+  exporter:
+    otlp:
+      endpoint: https://example.com/e/00000000-0000-0000-0000-000000000000/api/v2/otlp
+      headers:
+        authorization: Api-Token ${application.otel.api-token}
+  logs:
+    exporter: none
+  metrics:
+    exporter: none
+  service:
+    name: Canadian Dental Care Plan API
+  traces:
+    exporter: none
+
+---
+
+#
 # Server configuration properties, see:
 # https://docs.spring.io/spring-boot/docs/3.2.x/reference/html/application-properties.html#appendix.application-properties.server
 #
@@ -155,6 +181,8 @@ application:
         value: 24
         time-unit: hours
       length: 5
+  otel:
+    api-token: dt0c01.xxxxxxxxxxxxxxxxxxxxxxxx.yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
   swagger-ui:
     application-name: Canadian Dental Care Plan API
     contact-name: Digital Technology Solutions

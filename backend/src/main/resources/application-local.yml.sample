@@ -21,6 +21,17 @@ spring:
 
 ---
 
+otel:
+  exporter:
+    otlp:
+      endpoint: https://example.com/e/00000000-0000-0000-0000-000000000000/api/v2/otlp
+  metrics:
+    exporter: otlp
+  traces:
+    exporter: otlp
+
+---
+
 springdoc:
   swagger-ui:
     oauth:
@@ -30,6 +41,8 @@ springdoc:
 ---
 
 application:
+  otel:
+    api-token: dt0c01.xxxxxxxxxxxxxxxxxxxxxxxx.yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
   security:
     enabled: true
   swagger-ui:
