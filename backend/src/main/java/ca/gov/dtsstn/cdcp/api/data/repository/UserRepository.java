@@ -15,11 +15,7 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
 
 	List<UserEntity> findByEmail(String email);
 
-	@Query("""
-		SELECT user FROM User user JOIN FETCH user.userAttributes userAttribute
-		 WHERE userAttribute.name=:name
-		   AND userAttribute.value=:value
-	""")
+	@Query("SELECT user FROM User user JOIN FETCH user.userAttributes userAttribute WHERE userAttribute.name=:name AND userAttribute.value=:value")
 	List<UserEntity> findByUserAttributeValue(String name, String value);
 
 	default Optional<UserEntity> findByRaoidcUserId(String raoidcUserId) {
