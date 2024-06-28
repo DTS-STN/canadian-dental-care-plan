@@ -2,8 +2,10 @@ package ca.gov.dtsstn.cdcp.api.data.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.test.context.ActiveProfiles;
 
 import ca.gov.dtsstn.cdcp.api.config.DataSourceConfig;
@@ -26,6 +30,8 @@ import ca.gov.dtsstn.cdcp.api.data.entity.UserEntityBuilder;
 class UserRepositoryIT {
 
 	@Autowired UserRepository userRepository;
+
+	@MockBean AuditorAware<String> auditorAware;
 
 	@Test
 	@DisplayName("Test userRepository.findByEmail(..)")
@@ -47,6 +53,8 @@ class UserRepositoryIT {
 	@DisplayName("Test userRepository.findByRaoidcUserId(..)")
 	void testFindByRaoidcUserId() {
 		assertThat(userRepository.findByRaoidcUserId("d827416b-f808-4035-9ccc-7572f3297015")).isNotEmpty();
+
+		when(auditorAware.getCurrentAuditor()).thenReturn(Optional.of("Canadian Dental Care Plan API"));
 
 		// create a new user with the same RAOIDC user id
 		userRepository.save(new UserEntityBuilder()
