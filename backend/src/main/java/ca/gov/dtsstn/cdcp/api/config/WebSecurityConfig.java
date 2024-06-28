@@ -2,7 +2,6 @@ package ca.gov.dtsstn.cdcp.api.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +15,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * This class configures Spring Security for the application.
- */
+ */	
+@SuppressWarnings("java:S1118")
 @Configuration
 @EnableMethodSecurity
 public class WebSecurityConfig {
@@ -30,7 +30,7 @@ public class WebSecurityConfig {
 		@Bean WebSecurityCustomizer webSecurityCustomizer() {
 			log.info("Creating 'webSecurityCustomizer' bean");
 			log.warn("⚠️ All security checks are DISABLED -- set application.security.enabled=true to enable");
-			return (web) -> web.ignoring().anyRequest();
+			return web -> web.ignoring().anyRequest();
 		}
 
 	}
@@ -38,8 +38,6 @@ public class WebSecurityConfig {
 	@Configuration
 	@ConditionalOnProperty(name = { "application.security.enabled" }, havingValue = "true", matchIfMissing = false)
 	static class EnabledSecurityConfig {
-
-		@Autowired HttpSecurity httpSecurity;
 
 		/**
 		 * Converts incoming JWT claims to Spring Security roles.
@@ -55,7 +53,7 @@ public class WebSecurityConfig {
 			return jwtAuthenticationConverter;
 		}
 
-		@Bean SecurityFilterChain securityFilterChain() throws Exception {
+		@Bean SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 			log.info("Disabling CSRF protection (reason: stateless api)");
 			httpSecurity.csrf(csrf -> csrf.disable());
 
@@ -72,7 +70,7 @@ public class WebSecurityConfig {
 
 		@Bean WebSecurityCustomizer webSecurityCustomizer() {
 			log.info("Creating 'webSecurityCustomizer' bean");
-			return (web) -> web.ignoring()
+			return web -> web.ignoring()
 				// ignore root resource (required to forward to /swagger-ui)
 				.requestMatchers(new AntPathRequestMatcher("/"))
 				// ignore H2 console
