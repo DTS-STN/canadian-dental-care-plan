@@ -66,7 +66,8 @@ class UserServiceTests {
 	@Test()
 	@DisplayName("Test userService.createUser(..) with non-null user.id")
 	void testCreateUser_NonNullUserId() {
-		final var exception = assertThrows(IllegalArgumentException.class, () -> userService.createUser(ImmutableUser.builder().id("id").build()));
+		final var nonNullUserIdUser = ImmutableUser.builder().id("id").build();
+		final var exception = assertThrows(IllegalArgumentException.class, () -> userService.createUser(nonNullUserIdUser));
 		assertThat(exception.getMessage()).isEqualTo("user.id must be null when creating new instance");
 	}
 
