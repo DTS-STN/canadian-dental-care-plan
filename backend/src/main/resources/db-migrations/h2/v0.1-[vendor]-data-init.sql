@@ -25,9 +25,3 @@ INSERT INTO `subscription` (`id`, `user_id`, `language_id`, `alert_type_id`, `cr
 VALUES
 	('a6ea4925-f813-493e-80ec-a5b90ca28b6c', '76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6', '3a91d740-facf-48c2-bd9e-9ab46a8f6200', 'cf185099-8a17-4086-a890-c456250822a3', 'flyway-community-edition', CURRENT_TIMESTAMP, 'flyway-community-edition', CURRENT_TIMESTAMP),
 	('d3419bcb-5e46-4678-831b-c9211d479429', '76c48130-e1d4-4c2f-8dd0-1c17f9bbb4f6', '3a91d740-facf-48c2-bd9e-9ab46a8f6200', 'daf8b8d9-95f4-4f38-9ee3-17ac7826c1e7', 'flyway-community-edition', CURRENT_TIMESTAMP, 'flyway-community-edition', CURRENT_TIMESTAMP);
-
-
-INSERT INTO `confirmation_code` (`id`, `code`, `expiry_date`, `user_id`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`)
-VALUES
-	('a6ea4925-f813-493e-80ec-a5b90ca28b6c', '12345', CURRENT_TIMESTAMP, 'f9f33652-0ebd-46bc-8d93-04cef538a689', 'flyway-community-edition', CURRENT_TIMESTAMP, 'flyway-community-edition', CURRENT_TIMESTAMP),
-	('a6ea4925-f813-493e-80ec-a5b90ca28b6d', '54321', CURRENT_TIMESTAMP + 20000000, 'f9f33652-0ebd-46bc-8d93-04cef538a689', 'flyway-community-edition', CURRENT_TIMESTAMP, 'flyway-community-edition', CURRENT_TIMESTAMP);
