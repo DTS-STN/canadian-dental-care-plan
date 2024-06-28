@@ -15,10 +15,6 @@ import jakarta.persistence.Enumerated;
 @SuppressWarnings({ "serial" })
 public class EventLogEntity extends AbstractEntity {
 
-	public enum EventLogType {
-		/* placeholder for future types */
-	}
-
 	@Column(length = 128, nullable = true, updatable = false)
 	private String actor;
 
