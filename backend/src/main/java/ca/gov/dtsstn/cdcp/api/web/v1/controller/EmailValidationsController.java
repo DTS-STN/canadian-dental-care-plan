@@ -1,10 +1,7 @@
 package ca.gov.dtsstn.cdcp.api.web.v1.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -21,7 +18,6 @@ import ca.gov.dtsstn.cdcp.api.config.SpringDocConfig.OAuthSecurityRequirement;
 import ca.gov.dtsstn.cdcp.api.service.UserService;
 import ca.gov.dtsstn.cdcp.api.web.exception.ResourceNotFoundException;
 import ca.gov.dtsstn.cdcp.api.web.v1.model.EmailValidationModel;
-import ca.gov.dtsstn.cdcp.api.web.v1.model.mapper.AbstractModelMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,16 +39,13 @@ public class EmailValidationsController {
 	}
 
 	@GetMapping
+	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
 	@Operation(summary = "List all email validations for a user")
-	public CollectionModel<EmailValidationModel> getEmailValidationByUserId(
+	public ResponseEntity<Void> getEmailValidationByUserId(
 			@NotBlank(message = "userId must not be null or blank")
-			@Parameter(description = "The ID of the user.", required = true)
+			@Parameter(description = "The ID of the user.", example = "00000000-0000-0000-0000-000000000000")
 			@PathVariable String userId) {
-		userService.getUserById(userId)
-			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));
-
-		return AbstractModelMapper.wrapCollection(CollectionModel.empty(), EmailValidationModel.class)
-			.add(linkTo(methodOn(getClass()).getEmailValidationByUserId(userId)).withSelfRel());
+		return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
 	}
 
 	@PostMapping
@@ -60,7 +53,7 @@ public class EmailValidationsController {
 	@Operation(summary = "Create a new email validation for a user")
 	public void verifyConfirmationCodeStatus(
 			@NotBlank(message = "userId must not be null or blank")
-			@Parameter(description = "The ID of the user.", required = true)
+			@Parameter(description = "The ID of the user.", example = "00000000-0000-0000-0000-000000000000")
 			@PathVariable String userId,
 
 			@Validated @RequestBody EmailValidationModel emailValidationModel,
