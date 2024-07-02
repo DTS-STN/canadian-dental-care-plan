@@ -46,7 +46,7 @@ public class EmailValidationsController {
 	@Operation(summary = "List all email validations for a user")
 	public CollectionModel<EmailValidationModel> getEmailValidationByUserId(
 			@NotBlank(message = "userId must not be null or blank")
-			@Parameter(description = "The ID of the user.", required = true)
+			@Parameter(description = "The ID of the user.", example = "00000000-0000-0000-0000-000000000000")
 			@PathVariable String userId) {
 		userService.getUserById(userId)
 			.orElseThrow(() -> new ResourceNotFoundException("No user with id=[%s] was found".formatted(userId)));
@@ -60,7 +60,7 @@ public class EmailValidationsController {
 	@Operation(summary = "Create a new email validation for a user")
 	public void verifyConfirmationCodeStatus(
 			@NotBlank(message = "userId must not be null or blank")
-			@Parameter(description = "The ID of the user.", required = true)
+			@Parameter(description = "The ID of the user.", example = "00000000-0000-0000-0000-000000000000")
 			@PathVariable String userId,
 
 			@Validated @RequestBody EmailValidationModel emailValidationModel,

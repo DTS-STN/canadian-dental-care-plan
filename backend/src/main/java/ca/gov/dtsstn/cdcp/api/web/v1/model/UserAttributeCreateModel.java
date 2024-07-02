@@ -8,12 +8,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 @Immutable
-@Schema(name = "userAttribute")
+@Schema(name = "UserAttributeCreate")
 @JsonDeserialize(as = ImmutableUserAttributeCreateModel.class)
 public interface UserAttributeCreateModel {
 
 	@NotBlank
-	public String getName(); 
+	public String getName();
 
 	@NotBlank
 	public String getValue();
