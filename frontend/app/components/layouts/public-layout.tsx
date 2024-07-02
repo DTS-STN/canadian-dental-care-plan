@@ -46,9 +46,11 @@ export function PublicLayout({ children }: PropsWithChildren) {
 export function AppPageTitle({ children }: PropsWithChildren) {
   const { t } = useTranslation(i18nNamespaces);
   return (
-    <div className="my-8 max-w-prose border-b border-red-800">
-      <h2 className="font-lato text-lg text-stone-500 sm:text-xl">{t('gcweb:header.application-title')}</h2>
-      <PageTitle>{children}</PageTitle>
+    <div className="my-8 border-b border-red-800">
+      <div className="max-w-prose">
+        <h2 className="font-lato text-lg text-stone-500 sm:text-xl">{t('gcweb:header.application-title')}</h2>
+        <PageTitle>{children}</PageTitle>
+      </div>
     </div>
   );
 }
