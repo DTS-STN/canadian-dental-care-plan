@@ -117,7 +117,7 @@ public class SubscriptionsController {
 	}
 
 	@GetMapping({ "/{subscriptionId}" })
-	@Operation(summary = "Get a subscriptions by ID")
+	@Operation(summary = "Get a subscription by ID")
 	public SubscriptionModel getSubscriptionById(
 			@NotBlank(message = "userId must not be null or blank")
 			@Parameter(description = "The id of the user.", example = "00000000-0000-0000-0000-000000000000")
