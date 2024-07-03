@@ -11,7 +11,7 @@ import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { ContextualAlert } from '~/components/contextual-alert';
@@ -47,7 +47,7 @@ enum ChildHasSin {
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
-  pageIdentifier: pageIds.public.status.child.index,
+  pageIdentifier: pageIds.public.status.child,
   pageTitleI18nKey: 'status:child.page-title',
 } as const satisfies RouteHandleData;
 

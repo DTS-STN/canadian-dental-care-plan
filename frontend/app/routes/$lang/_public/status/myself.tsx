@@ -11,7 +11,7 @@ import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
@@ -36,7 +36,7 @@ import { cn } from '~/utils/tw-utils';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
-  pageIdentifier: pageIds.public.status.myself.index,
+  pageIdentifier: pageIds.public.status.myself,
   pageTitleI18nKey: 'status:myself.page-title',
 } as const satisfies RouteHandleData;
 
