@@ -1,7 +1,7 @@
 import type { FormEvent } from 'react';
 import { useEffect, useMemo } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
@@ -17,7 +17,6 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { InputPatternField } from '~/components/input-pattern-field';
-import { PublicLayout } from '~/components/layouts/public-layout';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -28,8 +27,10 @@ import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
+import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { cn } from '~/utils/tw-utils';
 
@@ -38,6 +39,10 @@ export const handle = {
   pageIdentifier: pageIds.public.status.myself.index,
   pageTitleI18nKey: 'status:myself.page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
+  return data ? getTitleMetaTags(data.meta.title) : [];
+});
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('status');
@@ -184,44 +189,42 @@ export default function StatusCheckerMyself() {
   }, [fetcher.data]);
 
   return (
-    <PublicLayout>
-      <div className="max-w-prose">
-        {fetcher.data && 'status' in fetcher.data && fetcher.data.statusId ? (
-          <>
-            <ContextualAlert type={fetcher.data.status.alertType}>
-              <div>
-                <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
-                  {t('status:myself.status-heading')}
-                </h2>
-                {getNameByLanguage(i18n.language, fetcher.data.status)}
-              </div>
-            </ContextualAlert>
-            <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} className="mt-12">
-              {t('status:myself.check-another')}
+    <div className="max-w-prose">
+      {fetcher.data && 'status' in fetcher.data && fetcher.data.statusId ? (
+        <>
+          <ContextualAlert type={fetcher.data.status.alertType}>
+            <div>
+              <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
+                {t('status:myself.status-heading')}
+              </h2>
+              {getNameByLanguage(i18n.language, fetcher.data.status)}
+            </div>
+          </ContextualAlert>
+          <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} className="mt-12">
+            {t('status:myself.check-another')}
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+          </ButtonLink>
+        </>
+      ) : (
+        <>
+          {fetcher.data && 'statusId' in fetcher.data && !fetcher.data.statusId && <StatusNotFound />}
+          <p className="mb-4 italic">{t('status:myself.form.complete-fields')}</p>
+          {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+          <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
+            <input type="hidden" name="_csrf" value={csrfToken} />
+            {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
+            <div className="mb-8 space-y-6">
+              <InputField id="code" name="code" label={t('status:myself.form.application-code-label')} helpMessagePrimary={t('status:myself.form.application-code-description')} required errorMessage={errorMessages.code} />
+              <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errorMessages.sin} defaultValue="" />
+            </div>
+            <Button variant="primary" id="submit" disabled={isSubmitting} data-gc-analytics-formsubmit="submit">
+              {t('status:myself.form.submit')}
               <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-            </ButtonLink>
-          </>
-        ) : (
-          <>
-            {fetcher.data && 'statusId' in fetcher.data && !fetcher.data.statusId && <StatusNotFound />}
-            <p className="mb-4 italic">{t('status:myself.form.complete-fields')}</p>
-            {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-            <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
-              <input type="hidden" name="_csrf" value={csrfToken} />
-              {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
-              <div className="mb-8 space-y-6">
-                <InputField id="code" name="code" label={t('status:myself.form.application-code-label')} helpMessagePrimary={t('status:myself.form.application-code-description')} required errorMessage={errorMessages.code} />
-                <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errorMessages.sin} defaultValue="" />
-              </div>
-              <Button variant="primary" id="submit" disabled={isSubmitting} data-gc-analytics-formsubmit="submit">
-                {t('status:myself.form.submit')}
-                <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-              </Button>
-            </fetcher.Form>
-          </>
-        )}
-      </div>
-    </PublicLayout>
+            </Button>
+          </fetcher.Form>
+        </>
+      )}
+    </div>
   );
 }
 

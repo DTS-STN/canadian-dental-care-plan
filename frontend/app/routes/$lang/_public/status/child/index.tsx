@@ -1,7 +1,7 @@
 import type { FormEvent } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
@@ -21,7 +21,6 @@ import { InputField } from '~/components/input-field';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
-import { PublicLayout } from '~/components/layouts/public-layout';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -33,8 +32,10 @@ import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
+import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { isAllValidInputCharacters } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
@@ -49,6 +50,10 @@ export const handle = {
   pageIdentifier: pageIds.public.status.child.index,
   pageTitleI18nKey: 'status:child.page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
+  return data ? getTitleMetaTags(data.meta.title) : [];
+});
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('status');
@@ -301,104 +306,102 @@ export default function StatusCheckerChild() {
   }
 
   return (
-    <PublicLayout>
-      <div className="max-w-prose">
-        {fetcher.data && 'status' in fetcher.data && fetcher.data.statusId ? (
-          <>
-            <ContextualAlert type={fetcher.data.status.alertType}>
-              <div>
-                <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
-                  {t('status:child.status-heading')}
-                </h2>
-                {getNameByLanguage(i18n.language, fetcher.data.status)}
-              </div>
-            </ContextualAlert>
-            <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} className="mt-12">
-              {t('status:child.check-another')}
-              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-            </ButtonLink>
-          </>
-        ) : (
-          <>
-            {fetcher.data && 'statusId' in fetcher.data && !fetcher.data.statusId && <StatusNotFound />}
-            <p className="mb-4 italic">{t('status:child.form.complete-fields')}</p>
-            {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-            <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
-              <input type="hidden" name="_csrf" value={csrfToken} />
-              {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
-              <div className="mb-8 space-y-6">
-                <InputField id="code" name="code" label={t('status:child.form.application-code-label')} helpMessagePrimary={t('status:child.form.application-code-description')} required errorMessage={errorMessages.code} />
-                <InputRadios
-                  id="child-has-sin"
-                  name="childHasSin"
-                  legend={t('status:child.form.radio-legend')}
-                  options={[
-                    {
-                      value: ChildHasSin.Yes,
-                      children: <Trans ns={handle.i18nNamespaces} i18nKey="status:child.form.option-yes" />,
-                      onChange: handleOnChildHasSinChanged,
-                    },
-                    {
-                      value: ChildHasSin.No,
-                      children: <Trans ns={handle.i18nNamespaces} i18nKey="status:child.form.option-no" />,
-                      onChange: handleOnChildHasSinChanged,
-                    },
-                  ]}
-                  errorMessage={errorMessages['input-radio-child-has-sin-option-0']}
-                  required
-                />
-                {childHasSinState === true && (
-                  <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:child.form.sin-label')} helpMessagePrimary={t('status:child.form.sin-description')} required errorMessage={errorMessages.sin} defaultValue="" />
-                )}
-                {childHasSinState === false && (
-                  <>
-                    <Collapsible summary={t('status:child.form.if-child-summary')} className="mt-8">
-                      <div className="space-y-4">
-                        <p>{t('status:child.form.if-child-desc')}</p>
-                      </div>
-                    </Collapsible>
-                    <div className="grid items-end gap-6 md:grid-cols-2">
-                      <InputSanitizeField
-                        id="first-name"
-                        name="firstName"
-                        label={t('status:child.form.first-name')}
-                        className="w-full"
-                        maxLength={100}
-                        aria-describedby="name-instructions"
-                        required
-                        errorMessage={errorMessages['first-name']}
-                        defaultValue=""
-                      />
-                      <InputSanitizeField id="last-name" name="lastName" label={t('status:child.form.last-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errorMessages['last-name']} defaultValue="" />
+    <div className="max-w-prose">
+      {fetcher.data && 'status' in fetcher.data && fetcher.data.statusId ? (
+        <>
+          <ContextualAlert type={fetcher.data.status.alertType}>
+            <div>
+              <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
+                {t('status:child.status-heading')}
+              </h2>
+              {getNameByLanguage(i18n.language, fetcher.data.status)}
+            </div>
+          </ContextualAlert>
+          <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} className="mt-12">
+            {t('status:child.check-another')}
+            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+          </ButtonLink>
+        </>
+      ) : (
+        <>
+          {fetcher.data && 'statusId' in fetcher.data && !fetcher.data.statusId && <StatusNotFound />}
+          <p className="mb-4 italic">{t('status:child.form.complete-fields')}</p>
+          {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+          <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
+            <input type="hidden" name="_csrf" value={csrfToken} />
+            {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
+            <div className="mb-8 space-y-6">
+              <InputField id="code" name="code" label={t('status:child.form.application-code-label')} helpMessagePrimary={t('status:child.form.application-code-description')} required errorMessage={errorMessages.code} />
+              <InputRadios
+                id="child-has-sin"
+                name="childHasSin"
+                legend={t('status:child.form.radio-legend')}
+                options={[
+                  {
+                    value: ChildHasSin.Yes,
+                    children: <Trans ns={handle.i18nNamespaces} i18nKey="status:child.form.option-yes" />,
+                    onChange: handleOnChildHasSinChanged,
+                  },
+                  {
+                    value: ChildHasSin.No,
+                    children: <Trans ns={handle.i18nNamespaces} i18nKey="status:child.form.option-no" />,
+                    onChange: handleOnChildHasSinChanged,
+                  },
+                ]}
+                errorMessage={errorMessages['input-radio-child-has-sin-option-0']}
+                required
+              />
+              {childHasSinState === true && (
+                <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:child.form.sin-label')} helpMessagePrimary={t('status:child.form.sin-description')} required errorMessage={errorMessages.sin} defaultValue="" />
+              )}
+              {childHasSinState === false && (
+                <>
+                  <Collapsible summary={t('status:child.form.if-child-summary')} className="mt-8">
+                    <div className="space-y-4">
+                      <p>{t('status:child.form.if-child-desc')}</p>
                     </div>
-                    <DatePickerField
-                      id="date-of-birth"
-                      names={{
-                        day: 'dateOfBirthDay',
-                        month: 'dateOfBirthMonth',
-                        year: 'dateOfBirthYear',
-                      }}
-                      defaultValue=""
-                      legend={t('status:child.form.date-of-birth-label')}
+                  </Collapsible>
+                  <div className="grid items-end gap-6 md:grid-cols-2">
+                    <InputSanitizeField
+                      id="first-name"
+                      name="firstName"
+                      label={t('status:child.form.first-name')}
+                      className="w-full"
+                      maxLength={100}
+                      aria-describedby="name-instructions"
                       required
-                      errorMessages={{
-                        year: errorMessages['date-picker-date-of-birth-year'],
-                        month: errorMessages['date-picker-date-of-birth-month'],
-                        day: errorMessages['date-picker-date-of-birth-day'],
-                      }}
+                      errorMessage={errorMessages['first-name']}
+                      defaultValue=""
                     />
-                  </>
-                )}
-              </div>
-              <Button variant="primary" id="submit" disabled={isSubmitting} data-gc-analytics-formsubmit="submit">
-                {t('status:child.form.submit')}
-                <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-              </Button>
-            </fetcher.Form>
-          </>
-        )}
-      </div>
-    </PublicLayout>
+                    <InputSanitizeField id="last-name" name="lastName" label={t('status:child.form.last-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errorMessages['last-name']} defaultValue="" />
+                  </div>
+                  <DatePickerField
+                    id="date-of-birth"
+                    names={{
+                      day: 'dateOfBirthDay',
+                      month: 'dateOfBirthMonth',
+                      year: 'dateOfBirthYear',
+                    }}
+                    defaultValue=""
+                    legend={t('status:child.form.date-of-birth-label')}
+                    required
+                    errorMessages={{
+                      year: errorMessages['date-picker-date-of-birth-year'],
+                      month: errorMessages['date-picker-date-of-birth-month'],
+                      day: errorMessages['date-picker-date-of-birth-day'],
+                    }}
+                  />
+                </>
+              )}
+            </div>
+            <Button variant="primary" id="submit" disabled={isSubmitting} data-gc-analytics-formsubmit="submit">
+              {t('status:child.form.submit')}
+              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
+            </Button>
+          </fetcher.Form>
+        </>
+      )}
+    </div>
   );
 }
 
