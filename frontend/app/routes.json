@@ -660,42 +660,20 @@
                 }
               },
               {
-                "id": "$lang/_public/status/myself/_route",
-                "file": "routes/$lang/_public/status/myself/_route.tsx",
+                "id": "$lang/_public/status/myself",
+                "file": "routes/$lang/_public/status/myself.tsx",
                 "paths": {
-                  "en": "/:lang/status",
-                  "fr": "/:lang/statut"
-                },
-                "children": [
-                  {
-                    "id": "$lang/_public/status/myself/index",
-                    "file": "routes/$lang/_public/status/myself/index.tsx",
-                    "index": true,
-                    "paths": {
-                      "en": "/:lang/status/myself",
-                      "fr": "/:lang/statut/moi-meme"
-                    }
-                  }
-                ]
+                  "en": "/:lang/status/myself",
+                  "fr": "/:lang/statut/moi-meme"
+                }
               },
               {
-                "id": "$lang/_public/status/child/_route",
-                "file": "routes/$lang/_public/status/child/_route.tsx",
+                "id": "$lang/_public/status/child",
+                "file": "routes/$lang/_public/status/child.tsx",
                 "paths": {
-                  "en": "/:lang/status",
-                  "fr": "/:lang/statut"
-                },
-                "children": [
-                  {
-                    "id": "$lang/_public/status/child/index",
-                    "file": "routes/$lang/_public/status/child/index.tsx",
-                    "index": true,
-                    "paths": {
-                      "en": "/:lang/status/child",
-                      "fr": "/:lang/statut/enfant"
-                    }
-                  }
-                ]
+                  "en": "/:lang/status/child",
+                  "fr": "/:lang/statut/enfant"
+                }
               }
             ]
           },

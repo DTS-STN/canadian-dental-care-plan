@@ -93,10 +93,10 @@ export async function action({ context: { session }, params, request }: ActionFu
     }
   }
   if (parsedCheckFor.data === CheckFor.Myself) {
-    return redirect(getPathById('$lang/_public/status/myself/index', params));
+    return redirect(getPathById('$lang/_public/status/myself', params));
   }
   // Child selected
-  return redirect(getPathById('$lang/_public/status/child/index', params));
+  return redirect(getPathById('$lang/_public/status/child', params));
 }
 
 export default function StatusChecker() {
