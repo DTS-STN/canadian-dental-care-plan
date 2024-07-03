@@ -16,7 +16,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
-import { InputSinField } from '~/components/input-sin-field';
+import { InputPatternField } from '~/components/input-pattern-field';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
@@ -30,7 +30,7 @@ import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
-import { formatSin, isValidSin } from '~/utils/sin-utils';
+import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { cn } from '~/utils/tw-utils';
 
 export const handle = {
@@ -211,7 +211,7 @@ export default function StatusCheckerMyself() {
               {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
               <div className="mb-8 space-y-6">
                 <InputField id="code" name="code" label={t('status:myself.form.application-code-label')} helpMessagePrimary={t('status:myself.form.application-code-description')} required errorMessage={errorMessages.code} />
-                <InputSinField id="sin" name="sin" label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errorMessages.sin} defaultValue="" />
+                <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errorMessages.sin} defaultValue="" />
               </div>
               <Button variant="primary" id="submit" disabled={isSubmitting} data-gc-analytics-formsubmit="submit">
                 {t('status:myself.form.submit')}

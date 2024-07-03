@@ -22,6 +22,17 @@
 const sinFormatRegex = /^(?!0{3}[ -]?0{3}[ -]?0{3})\d{3}[ -]?\d{3}[ -]?\d{3}$/;
 
 /**
+ * This pattern is intended for use with the `format` property of the `InputPatternField` component.
+ *
+ * Example:
+ * ```typescript
+ * // Usage with InputPatternField
+ * <InputPatternField format={sinInputPatternFormat} />
+ * ```
+ */
+export const sinInputPatternFormat = '### ### ###';
+
+/**
  *
  * @param sin - the Social Insurance Number (SIN)
  * @returns a boolean indicating if a SIN is valid using Luhn's Algorithm

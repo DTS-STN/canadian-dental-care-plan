@@ -10,9 +10,10 @@ const inputDisabledClassName = 'disabled:bg-gray-100 disabled:pointer-events-non
 const inputReadOnlyClassName = 'read-only:bg-gray-100 read-only:pointer-events-none read-only:cursor-not-allowed read-only:opacity-70';
 const inputErrorClassName = 'border-red-500 focus:border-red-500 focus:ring-red-500';
 
-export interface InputSinFieldProps extends OmitStrict<React.ComponentProps<typeof PatternFormat>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'value' | 'onChange' | 'format'> {
+export interface InputPatternFieldProps extends OmitStrict<React.ComponentProps<typeof PatternFormat>, 'aria-errormessage' | 'aria-invalid' | 'aria-labelledby' | 'aria-required' | 'value' | 'onChange'> {
   defaultValue: string;
   errorMessage?: string;
+  format: string;
   helpMessagePrimary?: React.ReactNode;
   helpMessagePrimaryClassName?: string;
   helpMessageSecondary?: React.ReactNode;
@@ -22,10 +23,10 @@ export interface InputSinFieldProps extends OmitStrict<React.ComponentProps<type
   name: string;
 }
 
-export function InputSinField(props: InputSinFieldProps) {
+export function InputPatternField(props: InputPatternFieldProps) {
   const { 'aria-describedby': ariaDescribedby, className, defaultValue, errorMessage, helpMessagePrimary, helpMessagePrimaryClassName, helpMessageSecondary, helpMessageSecondaryClassName, id, label, required, ...restProps } = props;
 
-  const inputWrapperId = `input-sin-field-${id}`;
+  const inputWrapperId = `input-pattern-field-${id}`;
   const inputErrorId = `${inputWrapperId}-error`;
   const inputHelpMessagePrimaryId = `${inputWrapperId}-help-primary`;
   const inputHelpMessageSecondaryId = `${inputWrapperId}-help-secondary`;
@@ -50,7 +51,7 @@ export function InputSinField(props: InputSinFieldProps) {
         </p>
       )}
       {helpMessagePrimary && (
-        <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="input-sin-field-help-primary">
+        <InputHelp id={inputHelpMessagePrimaryId} className={cn('mb-2', helpMessagePrimaryClassName)} data-testid="input-pattern-field-help-primary">
           {helpMessagePrimary}
         </InputHelp>
       )}
@@ -60,8 +61,7 @@ export function InputSinField(props: InputSinFieldProps) {
         aria-invalid={!!errorMessage}
         aria-labelledby={inputLabelId}
         aria-required={required}
-        data-testid="input-sin-field"
-        format="### ### ###"
+        data-testid="input-pattern-field"
         id={id}
         className={cn(inputBaseClassName, inputDisabledClassName, inputReadOnlyClassName, errorMessage && inputErrorClassName, className)}
         required={required}
@@ -69,7 +69,7 @@ export function InputSinField(props: InputSinFieldProps) {
         {...restProps}
       />
       {helpMessageSecondary && (
-        <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)} data-testid="input-sin-field-help-secondary">
+        <InputHelp id={inputHelpMessageSecondaryId} className={cn('mt-2', helpMessageSecondaryClassName)} data-testid="input-pattern-field-help-secondary">
           {helpMessageSecondary}
         </InputHelp>
       )}

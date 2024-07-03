@@ -16,10 +16,10 @@ import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
 import type { ErrorSummaryItem } from '~/components/error-summary';
 import { ErrorSummary, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { InputPatternField } from '~/components/input-pattern-field';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
-import { InputSinField } from '~/components/input-sin-field';
 import { Progress } from '~/components/progress';
 import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import type { ApplicantInformationState } from '~/route-helpers/apply-route-helpers.server';
@@ -35,7 +35,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { formatSin, isValidSin } from '~/utils/sin-utils';
+import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { isAllValidInputCharacters } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
@@ -341,9 +341,10 @@ export default function ApplyFlowApplicationInformation() {
               }}
               required
             />
-            <InputSinField
+            <InputPatternField
               id="social-insurance-number"
               name="socialInsuranceNumber"
+              format={sinInputPatternFormat}
               label={t('applicant-information.sin')}
               inputMode="numeric"
               helpMessagePrimary={t('apply-child:applicant-information.help-message.sin')}
