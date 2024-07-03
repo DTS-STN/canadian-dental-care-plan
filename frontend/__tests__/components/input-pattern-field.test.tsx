@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { InputSinField } from '~/components/input-sin-field';
+import { InputPatternField } from '~/components/input-pattern-field';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -10,11 +10,13 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-describe('InputSinField', () => {
+describe('InputPatternField', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.resetModules();
   });
+
+  const testFormat = '### ### ###';
 
   it.each([
     ['800000002', '800 000 002'],
@@ -23,10 +25,10 @@ describe('InputSinField', () => {
     ['800 000-002', '800 000 002'],
     ['800000 002', '800 000 002'],
     ['800000-002', '800 000 002'],
-  ])('should render %s -> %s', (sin, expected) => {
-    render(<InputSinField id="test-id" name="test" label="label test" defaultValue={sin} />);
+  ])('should render %s -> %s', (defaultValue, expected) => {
+    render(<InputPatternField id="test-id" name="test" label="label test" defaultValue={defaultValue} format={testFormat} />);
 
-    const actual: HTMLInputElement = screen.getByTestId('input-sin-field');
+    const actual: HTMLInputElement = screen.getByTestId('input-pattern-field');
 
     expect(actual).toBeInTheDocument();
     expect(actual).toHaveAccessibleName('label test');
@@ -37,10 +39,9 @@ describe('InputSinField', () => {
   });
 
   it('should render with help message', () => {
-    const sin = '800000002';
-    render(<InputSinField id="test-id" name="test" label="label test" defaultValue={sin} helpMessageSecondary="help message" />);
+    render(<InputPatternField id="test-id" name="test" label="label test" format={testFormat} defaultValue="800000002" helpMessageSecondary="help message" />);
 
-    const actual = screen.getByTestId('input-sin-field');
+    const actual = screen.getByTestId('input-pattern-field');
 
     expect(actual).toBeInTheDocument();
     expect(actual).toHaveAccessibleDescription('help message');
@@ -51,10 +52,9 @@ describe('InputSinField', () => {
   });
 
   it('should render with required', () => {
-    const sin = '800000002';
-    render(<InputSinField id="test-id" name="test" label="label test" defaultValue={sin} required />);
+    render(<InputPatternField id="test-id" name="test" label="label test" format={testFormat} defaultValue="800000002" required />);
 
-    const actual = screen.getByTestId('input-sin-field');
+    const actual = screen.getByTestId('input-pattern-field');
 
     expect(actual).toBeInTheDocument();
     expect(actual).toHaveAttribute('id', 'test-id');
@@ -64,10 +64,9 @@ describe('InputSinField', () => {
   });
 
   it('should render with error message', () => {
-    const sin = '800000002';
-    render(<InputSinField id="test-id" name="test" label="label test" defaultValue={sin} errorMessage="error message" />);
+    render(<InputPatternField id="test-id" name="test" label="label test" format={testFormat} defaultValue="800000002" errorMessage="error message" />);
 
-    const actual = screen.getByTestId('input-sin-field');
+    const actual = screen.getByTestId('input-pattern-field');
 
     expect(actual).toBeInTheDocument();
     expect(actual).toHaveAccessibleName('label test');

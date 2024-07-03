@@ -18,9 +18,9 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
+import { InputPatternField } from '~/components/input-pattern-field';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
-import { InputSinField } from '~/components/input-sin-field';
 import { PublicLayout } from '~/components/layouts/public-layout';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
@@ -35,7 +35,7 @@ import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
-import { formatSin, isValidSin } from '~/utils/sin-utils';
+import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { isAllValidInputCharacters } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
@@ -347,7 +347,9 @@ export default function StatusCheckerChild() {
                   errorMessage={errorMessages['input-radio-child-has-sin-option-0']}
                   required
                 />
-                {childHasSinState === true && <InputSinField id="sin" name="sin" label={t('status:child.form.sin-label')} helpMessagePrimary={t('status:child.form.sin-description')} required errorMessage={errorMessages.sin} defaultValue="" />}
+                {childHasSinState === true && (
+                  <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:child.form.sin-label')} helpMessagePrimary={t('status:child.form.sin-description')} required errorMessage={errorMessages.sin} defaultValue="" />
+                )}
                 {childHasSinState === false && (
                   <>
                     <Collapsible summary={t('status:child.form.if-child-summary')} className="mt-8">

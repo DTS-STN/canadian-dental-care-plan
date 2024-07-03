@@ -16,8 +16,8 @@ import { DatePickerField } from '~/components/date-picker-field';
 import type { ErrorSummaryItem } from '~/components/error-summary';
 import { ErrorSummary, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
+import { InputPatternField } from '~/components/input-pattern-field';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
-import { InputSinField } from '~/components/input-sin-field';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import type { PartnerInformationState } from '~/route-helpers/apply-route-helpers.server';
@@ -31,7 +31,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { formatSin, isValidSin } from '~/utils/sin-utils';
+import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { isAllValidInputCharacters } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
@@ -269,9 +269,10 @@ export default function ApplyFlowApplicationInformation() {
               }}
               required
             />
-            <InputSinField
+            <InputPatternField
               id="social-insurance-number"
               name="socialInsuranceNumber"
+              format={sinInputPatternFormat}
               label={t('apply-adult-child:partner-information.sin')}
               inputMode="numeric"
               helpMessagePrimary={t('apply-adult-child:partner-information.help-message.sin')}
