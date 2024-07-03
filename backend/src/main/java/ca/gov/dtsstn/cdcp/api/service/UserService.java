@@ -30,7 +30,7 @@ import ca.gov.dtsstn.cdcp.api.service.domain.User;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.ConfirmationCodeMapper;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.SubscriptionMapper;
 import ca.gov.dtsstn.cdcp.api.service.domain.mapper.UserMapper;
-import io.micrometer.core.annotation.Timed;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 
 @Service
 @Transactional
@@ -65,7 +65,7 @@ public class UserService {
 		this.userRepository = userRepository;
 	}
 
-	@Timed
+	@WithSpan
 	public User createUser(User user) {
 		Assert.notNull(user, "user is required; it must not be null");
 		Assert.isNull(user.getId(), "user.id must be null when creating new instance");
@@ -73,19 +73,19 @@ public class UserService {
 		return userMapper.toUser(userRepository.save(userMapper.toUserEntity(user)));
 	}
 
-	@Timed
+	@WithSpan
 	public Optional<User> getUserById(String id) {
 		Assert.hasText(id, "id is required; it must not be null or blank");
 		return userRepository.findById(id).map(userMapper::toUser);
 	}
 
-	@Timed
+	@WithSpan
 	public Optional<User> getUserByRaoidcUserId(String id) {
 		Assert.hasText(id, "id is required; it must not be null or blank");
 		return userRepository.findByRaoidcUserId(id).map(userMapper::toUser);
 	}
 
-	@Timed
+	@WithSpan
 	public void updateUser(String userId, User userPatch) {
 		Assert.hasText(userId, "userId is required; it must not be null or blank");
 		Assert.notNull(userPatch, "userPatch is required; it must not be null");
@@ -100,7 +100,7 @@ public class UserService {
 		userRepository.save(userMapper.update(user, userPatch));
 	}
 
-	@Timed
+	@WithSpan
 	public Subscription createSubscriptionForUser(String userId, String alertTypeId, String languageId) {
 		Assert.hasText(userId, "userId is required; it must not be null or blank");
 		Assert.hasText(alertTypeId, "alertTypeId is required; it must not be null or blank");
@@ -136,7 +136,7 @@ public class UserService {
 			.map(subscriptionMapper::toSubscription).orElseThrow();
 	}
 
-	@Timed
+	@WithSpan
 	public void updateSubscriptionForUser(String userId, String subscriptionId, String languageId) {
 		Assert.hasText(userId, "userId is required; it must not be null or blank");
 		Assert.hasText(subscriptionId, "subscriptionId is required; it must not be null or blank");
@@ -160,7 +160,7 @@ public class UserService {
 		userRepository.save(user);
 	}
 
-	@Timed
+	@WithSpan
 	public void deleteSubscriptionForUser(String userId, String subscriptionId) {
 		Assert.hasText(userId, "userId is required; it must not be null or blank");
 		Assert.hasText(subscriptionId, "subscriptionId is required; it must not be null or blank");
@@ -170,7 +170,7 @@ public class UserService {
 		userRepository.save(user);
 	}
 
-	@Timed
+	@WithSpan
 	public boolean verifyEmail(String userId, String code){
 		Assert.hasText(code, "code is required; it must not be null or blank");
 		Assert.hasText(userId, "userId is required; it must not be null or blank");
@@ -194,7 +194,7 @@ public class UserService {
 		return true;
 	}
 
-	@Timed
+	@WithSpan
 	public ConfirmationCode createConfirmationCodeForUser(String userId) {
 		Assert.hasText(userId, "userId is required; it must not be null or blank");
 
