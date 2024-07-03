@@ -272,6 +272,7 @@ export default function StatusCheckerChild() {
       sin: errors?.sin?._errors[0],
       'first-name': errors?.firstName?._errors[0],
       'last-name': errors?.lastName?._errors[0],
+      'date-picker-date-of-birth': errors?.dateOfBirth?._errors[0],
       'date-picker-date-of-birth-year': errors?.dateOfBirthYear?._errors[0],
       'date-picker-date-of-birth-month': errors?.dateOfBirthMonth?._errors[0],
       'date-picker-date-of-birth-day': errors?.dateOfBirthDay?._errors[0],
@@ -386,6 +387,7 @@ export default function StatusCheckerChild() {
                     legend={t('status:child.form.date-of-birth-label')}
                     required
                     errorMessages={{
+                      all: errorMessages['date-picker-date-of-birth'],
                       year: errorMessages['date-picker-date-of-birth-year'],
                       month: errorMessages['date-picker-date-of-birth-month'],
                       day: errorMessages['date-picker-date-of-birth-day'],
