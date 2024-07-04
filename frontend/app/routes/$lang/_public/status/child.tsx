@@ -36,7 +36,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
-import { isAllValidInputCharacters, removeAllSpaces } from '~/utils/string-utils';
+import { extractDigits, isAllValidInputCharacters } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
 enum ChildHasSin {
@@ -81,7 +81,7 @@ export async function action({ context: { session }, params, request }: ActionFu
       .trim()
       .min(1, t('status:child.form.error-message.application-code-required'))
       .refine(isValidCodeOrNumber, t('status:child.form.error-message.application-code-valid'))
-      .transform((code) => removeAllSpaces(code)),
+      .transform((code) => extractDigits(code)),
   });
 
   const childHasSinSchema = z.object({

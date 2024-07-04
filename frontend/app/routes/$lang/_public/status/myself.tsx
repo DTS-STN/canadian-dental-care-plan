@@ -31,6 +31,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
+import { extractDigits } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
 export const handle = {
@@ -75,7 +76,8 @@ export async function action({ context: { session }, params, request }: ActionFu
       .string({ required_error: t('status:myself.form.error-message.application-code-required') })
       .trim()
       .min(1)
-      .refine(isValidCodeOrNumber, t('status:myself.form.error-message.application-code-valid')),
+      .refine(isValidCodeOrNumber, t('status:myself.form.error-message.application-code-valid'))
+      .transform((code) => extractDigits(code)),
   });
 
   const formData = await request.formData();
