@@ -78,3 +78,12 @@ export function formatPercent(value: number, locale: string) {
   if (!/en|fr/i.test(locale)) throw new Error(`locale must be 'en' or 'fr'`);
   return Intl.NumberFormat(`${locale}-CA`, { style: 'percent' }).format(value / 100);
 }
+
+/**
+ *
+ * @param input - A string
+ * @returns The given string with removed spaces
+ */
+export function removeAllSpaces(input: string) {
+  return input.replace(/\D/g, '');
+}

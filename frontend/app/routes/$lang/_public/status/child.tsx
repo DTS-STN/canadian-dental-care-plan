@@ -24,7 +24,7 @@ import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
-import { applicationCodeInputPatternFormat, extractDigits, isValidCodeOrNumber } from '~/utils/application-code-utils';
+import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { featureEnabled, getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
@@ -36,7 +36,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
-import { isAllValidInputCharacters } from '~/utils/string-utils';
+import { isAllValidInputCharacters, removeAllSpaces } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
 enum ChildHasSin {
@@ -81,7 +81,7 @@ export async function action({ context: { session }, params, request }: ActionFu
       .trim()
       .min(1, t('status:child.form.error-message.application-code-required'))
       .refine(isValidCodeOrNumber, t('status:child.form.error-message.application-code-valid'))
-      .transform((code) => extractDigits(code)),
+      .transform((code) => removeAllSpaces(code)),
   });
 
   const childHasSinSchema = z.object({

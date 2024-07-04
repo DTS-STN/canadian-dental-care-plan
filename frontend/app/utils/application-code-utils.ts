@@ -55,12 +55,3 @@ export function formatSubmissionApplicationCode(applicationCode: string): string
   if (!/^\d{13}$/.test(strippedCode)) return applicationCode;
   return (strippedCode.match(/....$|.../g) ?? []).join(' ');
 }
-
-/**
- *
- * @param code - the application code
- * @returns a formatted code using a supplied separator
- */
-export function extractDigits(input: string) {
-  return input.replace(/\D/g, '');
-}
