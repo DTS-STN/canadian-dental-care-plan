@@ -17,7 +17,6 @@ import { Collapsible } from '~/components/collapsible';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { DatePickerField } from '~/components/date-picker-field';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
-import { InputField } from '~/components/input-field';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
@@ -25,7 +24,7 @@ import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
-import { isValidApplicationCode } from '~/utils/application-code-utils';
+import { applicationCodeInputPatternFormat, extractDigits, isValidCodeOrNumber } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { featureEnabled, getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
@@ -77,7 +76,12 @@ export async function action({ context: { session }, params, request }: ActionFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const codeSchema = z.object({
-    code: z.string().trim().min(1, t('status:child.form.error-message.application-code-required')).refine(isValidApplicationCode, t('status:child.form.error-message.application-code-valid')),
+    code: z
+      .string()
+      .trim()
+      .min(1, t('status:child.form.error-message.application-code-required'))
+      .refine(isValidCodeOrNumber, t('status:child.form.error-message.application-code-valid'))
+      .transform((code) => extractDigits(code)),
   });
 
   const childHasSinSchema = z.object({
@@ -332,7 +336,17 @@ export default function StatusCheckerChild() {
             <input type="hidden" name="_csrf" value={csrfToken} />
             {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
             <div className="mb-8 space-y-6">
-              <InputField id="code" name="code" label={t('status:child.form.application-code-label')} helpMessagePrimary={t('status:child.form.application-code-description')} required errorMessage={errorMessages.code} />
+              <InputPatternField
+                id="code"
+                name="code"
+                format={applicationCodeInputPatternFormat}
+                label={t('status:child.form.application-code-label')}
+                inputMode="numeric"
+                helpMessagePrimary={t('status:child.form.application-code-description')}
+                required
+                errorMessage={errorMessages.code}
+                defaultValue=""
+              />
               <InputRadios
                 id="child-has-sin"
                 name="childHasSin"
