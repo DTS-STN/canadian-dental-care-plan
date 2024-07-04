@@ -15,13 +15,12 @@ import pageIds from '../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
-import { InputField } from '~/components/input-field';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
-import { isValidApplicationCode } from '~/utils/application-code-utils';
+import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
 import { featureEnabled, getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -32,6 +31,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
+import { extractDigits } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
 
 export const handle = {
@@ -76,7 +76,8 @@ export async function action({ context: { session }, params, request }: ActionFu
       .string({ required_error: t('status:myself.form.error-message.application-code-required') })
       .trim()
       .min(1)
-      .refine(isValidApplicationCode, t('status:myself.form.error-message.application-code-valid')),
+      .refine(isValidCodeOrNumber, t('status:myself.form.error-message.application-code-valid'))
+      .transform((code) => extractDigits(code)),
   });
 
   const formData = await request.formData();
@@ -214,7 +215,17 @@ export default function StatusCheckerMyself() {
             <input type="hidden" name="_csrf" value={csrfToken} />
             {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
             <div className="mb-8 space-y-6">
-              <InputField id="code" name="code" label={t('status:myself.form.application-code-label')} helpMessagePrimary={t('status:myself.form.application-code-description')} required errorMessage={errorMessages.code} />
+              <InputPatternField
+                id="code"
+                name="code"
+                format={applicationCodeInputPatternFormat}
+                label={t('status:myself.form.application-code-label')}
+                inputMode="numeric"
+                helpMessagePrimary={t('status:myself.form.application-code-description')}
+                required
+                errorMessage={errorMessages.code}
+                defaultValue=""
+              />
               <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errorMessages.sin} defaultValue="" />
             </div>
             <Button variant="primary" id="submit" disabled={isSubmitting} data-gc-analytics-formsubmit="submit">
