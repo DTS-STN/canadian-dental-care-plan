@@ -69,6 +69,7 @@ export function InputSanitizeField(props: InputSanitizeFieldProps) {
         {...restProps}
         defaultValue={defaultValue}
         type="text"
+        inputMode="text"
         format={(value) => normalizeHyphens(removeInvalidInputCharacters(value))}
         removeFormatting={(value) => normalizeHyphens(removeInvalidInputCharacters(value))}
         isValidInputCharacter={(char) => isAllValidInputCharacters(char)}
