@@ -90,7 +90,8 @@ management:
     web:
       exposure:
         include:
-        - metrics
+          - health
+          - metrics
 
 ---
 
