@@ -292,7 +292,9 @@ function DatePickerYear({ ariaDescribedBy, ariaErrorMessage, className, defaultV
         min={1900}
         name={name}
         required={required}
-        type="number"
+        type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
       />
     </div>
   );
@@ -335,7 +337,9 @@ function DatePickerDay({ ariaDescribedBy, ariaErrorMessage, className, defaultVa
         min={1}
         name={name}
         required={required}
-        type="number"
+        type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
       />
     </div>
   );
