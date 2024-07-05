@@ -23,9 +23,10 @@ import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
 import { featureEnabled, getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
-import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
+import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { localizeClientFriendlyStatus } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -64,6 +65,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const { CLIENT_STATUS_SUCCESS_ID, ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const locale = getLocale(request);
 
   const formDataSchema = z.object({
     sin: z
@@ -112,8 +114,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const lookupService = getLookupService();
   const { sin, code } = parsedDataResult.data;
   const statusId = await applicationStatusService.getStatusIdWithSin({ sin, applicationCode: code });
-  const clientStatusList = lookupService.getAllClientFriendlyStatuses();
-  const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
+  const clientFriendlyStatus = statusId ? lookupService.getClientFriendlyStatusById(statusId) : null;
 
   function getAlertType() {
     if (!statusId) return 'danger';
@@ -123,7 +124,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   return json({
     status: {
-      ...(clientFriendlyStatus ?? {}),
+      ...(clientFriendlyStatus ? localizeClientFriendlyStatus(clientFriendlyStatus, locale) : {}),
       alertType: getAlertType(),
     },
     statusId,
@@ -134,7 +135,7 @@ export default function StatusCheckerMyself() {
   const { csrfToken, hCaptchaEnabled, siteKey } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const { i18n, t } = useTranslation(handle.i18nNamespaces);
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { captchaRef } = useHCaptcha();
   const params = useParams();
 
@@ -198,7 +199,7 @@ export default function StatusCheckerMyself() {
               <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
                 {t('status:myself.status-heading')}
               </h2>
-              {getNameByLanguage(i18n.language, fetcher.data.status)}
+              {fetcher.data.status.name}
             </div>
           </ContextualAlert>
           <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} className="mt-12">
