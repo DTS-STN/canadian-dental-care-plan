@@ -103,26 +103,17 @@ export async function action({ context: { session }, params, request }: ActionFu
     .object({
       firstName: z.string().trim().max(100, t('status:child.form.error-message.first-name-too-long')).refine(isAllValidInputCharacters, t('status:child.form.error-message.characters-valid')).optional(),
       lastName: z.string().trim().min(1, t('status:child.form.error-message.last-name-required')).max(100).refine(isAllValidInputCharacters, t('status:child.form.error-message.characters-valid')),
-      dateOfBirthYear: z
-        .number({
-          required_error: t('status:child.form.error-message.date-of-birth-year-required'),
-          invalid_type_error: t('status:child.form.error-message.date-of-birth-year-number'),
-        })
-        .int()
-        .positive(),
-      dateOfBirthMonth: z
-        .number({
-          required_error: t('status:child.form.error-message.date-of-birth-month-required'),
-        })
-        .int()
-        .positive(),
-      dateOfBirthDay: z
-        .number({
-          required_error: t('status:child.form.error-message.date-of-birth-day-required'),
-          invalid_type_error: t('status:child.form.error-message.date-of-birth-day-number'),
-        })
-        .int()
-        .positive(),
+      dateOfBirthYear: z.number({
+        required_error: t('status:child.form.error-message.date-of-birth-year-required'),
+        invalid_type_error: t('status:child.form.error-message.date-of-birth-year-number'),
+      }),
+      dateOfBirthMonth: z.number({
+        required_error: t('status:child.form.error-message.date-of-birth-month-required'),
+      }),
+      dateOfBirthDay: z.number({
+        required_error: t('status:child.form.error-message.date-of-birth-day-required'),
+        invalid_type_error: t('status:child.form.error-message.date-of-birth-day-number'),
+      }),
       dateOfBirth: z.string(),
     })
     .superRefine((val, ctx) => {
