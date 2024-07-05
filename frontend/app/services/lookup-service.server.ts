@@ -492,10 +492,24 @@ function createLookupService() {
     return clientFriendlyStatuses;
   }
 
+  function getClientFriendlyStatusById(id: string) {
+    log.debug('Fetching client friendly status');
+
+    const clientFriendlyStatus = getAllClientFriendlyStatuses().find((status) => status.id === id);
+
+    if (!clientFriendlyStatus) {
+      throw new Error(`Failed to find client friendly status; id: ${id}`);
+    }
+
+    log.trace('Returning client friendly statuse: [%j]', clientFriendlyStatus);
+    return clientFriendlyStatus;
+  }
+
   return {
     getAllAvoidedDentalCostTypes: moize.promise(getAllAvoidedDentalCostTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_AVOIDED_DENTAL_COST_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllAvoidedDentalCostTypes memo') }),
     getAllBornTypes: moize.promise(getAllBornTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllBornTypes memo') }),
     getAllClientFriendlyStatuses: moize(getAllClientFriendlyStatuses, { maxAge: 1000 * LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllClientFriendlyStatuses memo') }),
+    getClientFriendlyStatusById: moize(getClientFriendlyStatusById, { maxAge: 1000 * LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new ClientFriendlyStatusById memo') }),
     getAllCountries: moize(getAllCountries, { maxAge: 1000 * LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllCountries memo') }),
     getAllDisabilityTypes: moize.promise(getAllDisabilityTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_DISABILITY_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllDisabilityTypes memo') }),
     getAllEquityTypes: moize.promise(getAllEquityTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_EQUITY_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllEquityTypes memo') }),
@@ -543,3 +557,6 @@ export type FederalSocialProgram = ReturnType<GetAllFederalSocialPrograms>[numbe
 
 export type GetAllProvincialTerritorialSocialPrograms = Pick<ReturnType<typeof getLookupService>, 'getAllProvincialTerritorialSocialPrograms'>['getAllProvincialTerritorialSocialPrograms'];
 export type ProvincialTerritorialSocialProgram = ReturnType<GetAllProvincialTerritorialSocialPrograms>[number];
+
+export type GetAllClientFriendlyStatuses = Pick<ReturnType<typeof getLookupService>, 'getAllClientFriendlyStatuses'>['getAllClientFriendlyStatuses'];
+export type ClientFriendlyStatus = ReturnType<GetAllClientFriendlyStatuses>[number];

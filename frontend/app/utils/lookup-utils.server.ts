@@ -1,5 +1,5 @@
 import { getEnv } from './env.server';
-import type { Country, FederalSocialProgram, Language, MaritalStatus, ProvincialTerritorialSocialProgram, Region } from '~/services/lookup-service.server';
+import type { ClientFriendlyStatus, Country, FederalSocialProgram, Language, MaritalStatus, ProvincialTerritorialSocialProgram, Region } from '~/services/lookup-service.server';
 
 /**
  * Localizes a single country object by adding a localized name.
@@ -203,4 +203,12 @@ export function localizeProvincialTerritorialSocialProgram(program: ProvincialTe
 export function localizeAndSortProvincialTerritorialSocialPrograms(programs: ProvincialTerritorialSocialProgram[], locale: string) {
   const mappedProvincialTerritorialSocialPrograms = programs.map((program) => localizeProvincialTerritorialSocialProgram(program, locale));
   return mappedProvincialTerritorialSocialPrograms.toSorted((a, b) => a.name.localeCompare(b.name, locale));
+}
+
+export function localizeClientFriendlyStatus(clientFriendlyStatus: ClientFriendlyStatus, locale: string) {
+  const { nameEn, nameFr, ...rest } = clientFriendlyStatus;
+  return {
+    ...rest,
+    name: locale === 'fr' ? nameFr : nameEn,
+  };
 }
