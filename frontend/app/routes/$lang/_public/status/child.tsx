@@ -16,7 +16,8 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { DatePickerField } from '~/components/date-picker-field';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import type { ErrorSummaryItem } from '~/components/error-summary';
+import { ErrorSummary, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
@@ -266,35 +267,51 @@ export default function StatusCheckerChild() {
     fetcher.submit(formData, { method: 'POST' });
   }
 
+  const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
   const errorSummaryId = 'error-summary';
 
-  const errorMessages = useMemo(() => {
-    const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
-    return {
-      code: errors?.code?._errors[0],
-      'input-radio-child-has-sin-option-0': errors?.childHasSin?._errors[0],
-      sin: errors?.sin?._errors[0],
-      'first-name': errors?.firstName?._errors[0],
-      'last-name': errors?.lastName?._errors[0],
-      'date-picker-date-of-birth': errors?.dateOfBirth?._errors[0],
-      'date-picker-date-of-birth-year': errors?.dateOfBirthYear?._errors[0],
-      'date-picker-date-of-birth-month': errors?.dateOfBirthMonth?._errors[0],
-      'date-picker-date-of-birth-day': errors?.dateOfBirthDay?._errors[0],
-    };
-  }, [fetcher.data]);
+  const errorSummaryItems = useMemo(() => {
+    const items: ErrorSummaryItem[] = [];
+    if (errors?.code?._errors[0]) items.push(createErrorSummaryItem('code', errors.code._errors[0]));
+    if (errors?.childHasSin?._errors[0]) items.push(createErrorSummaryItem('input-radio-child-has-sin-option-0', errors.childHasSin._errors[0]));
+    if (errors?.sin?._errors[0]) items.push(createErrorSummaryItem('sin', errors.sin._errors[0]));
+    if (errors?.firstName?._errors[0]) items.push(createErrorSummaryItem('first-name', errors.firstName._errors[0]));
+    if (errors?.lastName?._errors[0]) items.push(createErrorSummaryItem('last-name', errors.lastName._errors[0]));
 
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
+    if (i18n.language === 'fr') {
+      if (errors?.dateOfBirth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', errors.dateOfBirth._errors[0]));
+      if (errors?.dateOfBirthDay?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', errors.dateOfBirthDay._errors[0]));
+      if (errors?.dateOfBirthMonth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', errors.dateOfBirthMonth._errors[0]));
+    } else {
+      if (errors?.dateOfBirth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', errors.dateOfBirth._errors[0]));
+      if (errors?.dateOfBirthMonth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', errors.dateOfBirthMonth._errors[0]));
+      if (errors?.dateOfBirthDay?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', errors.dateOfBirthDay._errors[0]));
+    }
+    if (errors?.dateOfBirthYear?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-year', errors.dateOfBirthYear._errors[0]));
+    return items;
+  }, [
+    i18n.language,
+    errors?.code?._errors,
+    errors?.childHasSin?._errors,
+    errors?.sin?._errors,
+    errors?.firstName?._errors,
+    errors?.lastName?._errors,
+    errors?.dateOfBirth?._errors,
+    errors?.dateOfBirthDay?._errors,
+    errors?.dateOfBirthMonth?._errors,
+    errors?.dateOfBirthYear?._errors,
+  ]);
 
   useEffect(() => {
-    if (hasErrors(errorMessages)) {
+    if (errorSummaryItems.length > 0) {
       scrollAndFocusToErrorSummary(errorSummaryId);
 
-      if (hasErrors(errorMessages) && adobeAnalytics.isConfigured()) {
-        const fieldIds = createErrorSummaryItems(errorMessages).map(({ fieldId }) => fieldId);
+      if (adobeAnalytics.isConfigured()) {
+        const fieldIds = errorSummaryItems.map(({ fieldId }) => fieldId);
         adobeAnalytics.pushValidationErrorEvent(fieldIds);
       }
     }
-  }, [errorMessages]);
+  }, [errorSummaryItems]);
 
   useEffect(() => {
     if (fetcher.data && 'statusId' in fetcher.data) {
@@ -344,7 +361,7 @@ export default function StatusCheckerChild() {
                 inputMode="numeric"
                 helpMessagePrimary={t('status:child.form.application-code-description')}
                 required
-                errorMessage={errorMessages.code}
+                errorMessage={errors?.code?._errors[0]}
                 defaultValue=""
               />
               <InputRadios
@@ -363,11 +380,11 @@ export default function StatusCheckerChild() {
                     onChange: handleOnChildHasSinChanged,
                   },
                 ]}
-                errorMessage={errorMessages['input-radio-child-has-sin-option-0']}
+                errorMessage={errors?.childHasSin?._errors[0]}
                 required
               />
               {childHasSinState === true && (
-                <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:child.form.sin-label')} helpMessagePrimary={t('status:child.form.sin-description')} required errorMessage={errorMessages.sin} defaultValue="" />
+                <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:child.form.sin-label')} helpMessagePrimary={t('status:child.form.sin-description')} required errorMessage={errors?.sin?._errors[0]} defaultValue="" />
               )}
               {childHasSinState === false && (
                 <>
@@ -385,10 +402,10 @@ export default function StatusCheckerChild() {
                       maxLength={100}
                       aria-describedby="name-instructions"
                       required
-                      errorMessage={errorMessages['first-name']}
+                      errorMessage={errors?.firstName?._errors[0]}
                       defaultValue=""
                     />
-                    <InputSanitizeField id="last-name" name="lastName" label={t('status:child.form.last-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errorMessages['last-name']} defaultValue="" />
+                    <InputSanitizeField id="last-name" name="lastName" label={t('status:child.form.last-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.lastName?._errors[0]} defaultValue="" />
                   </div>
                   <DatePickerField
                     id="date-of-birth"
@@ -401,10 +418,10 @@ export default function StatusCheckerChild() {
                     legend={t('status:child.form.date-of-birth-label')}
                     required
                     errorMessages={{
-                      all: errorMessages['date-picker-date-of-birth'],
-                      year: errorMessages['date-picker-date-of-birth-year'],
-                      month: errorMessages['date-picker-date-of-birth-month'],
-                      day: errorMessages['date-picker-date-of-birth-day'],
+                      all: errors?.dateOfBirth?._errors[0],
+                      year: errors?.dateOfBirthYear?._errors[0],
+                      month: errors?.dateOfBirthMonth?._errors[0],
+                      day: errors?.dateOfBirthDay?._errors[0],
                     }}
                   />
                 </>
