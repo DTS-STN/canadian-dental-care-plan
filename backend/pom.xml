@@ -288,6 +288,13 @@
 					<image>
 						<name>${image.name}:${image.tag}</name>
 					</image>
+					<docker>
+						<!--
+							when true, the value of the DOCKER_HOST environment variable will be provided to the CNB builder
+							see https://docs.spring.io/spring-boot/maven-plugin/build-image.html#build-image.examples.docker.podman
+						-->
+						<bindHostToBuilder>true</bindHostToBuilder>
+					</docker>
 				</configuration>
 			</plugin>
 		</plugins>
