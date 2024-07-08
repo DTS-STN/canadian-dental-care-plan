@@ -82,7 +82,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.45.1",
-    "@remix-run/dev": "^2.10.1",
+    "@remix-run/dev": "^2.10.2",
     "@remix-run/testing": "^2.10.1",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
