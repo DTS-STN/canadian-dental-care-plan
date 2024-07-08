@@ -12,6 +12,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../page-ids.json';
+import { ClientFriendlyStatusMarkdown } from '~/components/ClientFriendlyStatusMarkdownLink';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { ContextualAlert } from '~/components/contextual-alert';
@@ -328,7 +329,7 @@ export default function StatusCheckerChild() {
               <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
                 {t('status:child.status-heading')}
               </h2>
-              {fetcher.data.status.name}
+              {fetcher.data.status.name && <ClientFriendlyStatusMarkdown content={fetcher.data.status.name} />}
             </div>
           </ContextualAlert>
           <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} className="mt-12">
