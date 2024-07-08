@@ -107,7 +107,7 @@
       "if-child-summary": "Si l'enfant a un seul nom légal",
       "if-child-desc": "Si l'enfant porte un seul nom légal, laissez le champ du prénom vide.",
       "last-name": "Nom de famille de l'enfant",
-      "first-name": "Prénom de l'enfant (facultatif)",
+      "first-name": "Prénom de l'enfant",
       "date-of-birth-label": "Date de naissance de l'enfant",
       "submit": "Vérifier l'état",
       "error-message": {

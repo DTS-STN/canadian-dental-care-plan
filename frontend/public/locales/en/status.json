@@ -107,7 +107,7 @@
       "if-child-summary": "If the child has a single legal name",
       "if-child-desc": "If the child goes by a single legal name, leave the first name field blank",
       "last-name": "Child's last name",
-      "first-name": "Child's first name (optional)",
+      "first-name": "Child's first name",
       "date-of-birth-label": "Child's date of birth",
       "submit": "Check status",
       "error-message": {
