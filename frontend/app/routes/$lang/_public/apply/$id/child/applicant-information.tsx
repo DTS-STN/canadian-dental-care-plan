@@ -236,7 +236,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function ApplyFlowApplicationInformation() {
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, defaultState, dateOfBirth, maritalStatuses, editMode } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
@@ -249,14 +249,23 @@ export default function ApplyFlowApplicationInformation() {
     const items: ErrorSummaryItem[] = [];
     if (errors?.firstName?._errors[0]) items.push(createErrorSummaryItem('first-name', errors.firstName._errors[0]));
     if (errors?.lastName?._errors[0]) items.push(createErrorSummaryItem('last-name', errors.lastName._errors[0]));
-    if (errors?.dateOfBirth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', errors.dateOfBirth._errors[0]));
-    if (errors?.dateOfBirthMonth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', errors.dateOfBirthMonth._errors[0]));
-    if (errors?.dateOfBirthDay?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', errors.dateOfBirthDay._errors[0]));
+
+    if (i18n.language === 'fr') {
+      if (errors?.dateOfBirth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', errors.dateOfBirth._errors[0]));
+      if (errors?.dateOfBirthDay?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', errors.dateOfBirthDay._errors[0]));
+      if (errors?.dateOfBirthMonth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', errors.dateOfBirthMonth._errors[0]));
+    } else {
+      if (errors?.dateOfBirth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', errors.dateOfBirth._errors[0]));
+      if (errors?.dateOfBirthMonth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', errors.dateOfBirthMonth._errors[0]));
+      if (errors?.dateOfBirthDay?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', errors.dateOfBirthDay._errors[0]));
+    }
+
     if (errors?.dateOfBirthYear?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-year', errors.dateOfBirthYear._errors[0]));
     if (errors?.socialInsuranceNumber?._errors[0]) items.push(createErrorSummaryItem('social-insurance-number', errors.socialInsuranceNumber._errors[0]));
     if (errors?.maritalStatus?._errors[0]) items.push(createErrorSummaryItem('input-radio-marital-status-option-0', errors.maritalStatus._errors[0]));
     return items;
   }, [
+    i18n.language,
     errors?.firstName?._errors,
     errors?.lastName?._errors,
     errors?.maritalStatus?._errors,
