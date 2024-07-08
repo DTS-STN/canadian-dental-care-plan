@@ -236,7 +236,7 @@ export default function StatusCheckerChild() {
   const { csrfToken, hCaptchaEnabled, siteKey } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const { t } = useTranslation(handle.i18nNamespaces);
+  const { t, i18n } = useTranslation(handle.i18nNamespaces);
   const { captchaRef } = useHCaptcha();
   const params = useParams();
   const [childHasSinState, setChildHasSinState] = useState<boolean>();
