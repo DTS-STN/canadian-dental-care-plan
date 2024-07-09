@@ -45,7 +45,7 @@ export function getTitleMetaTags(title: string, dcTermsTitle?: string) {
   return [
     { title: normalizedTitle },
     { property: 'og:title', content: normalizedTitle },
-    { property: 'dcterms:title', content: normalizedDcTermsTitle }
+    { property: 'dcterms.title', content: normalizedDcTermsTitle }
   ];
 }
 

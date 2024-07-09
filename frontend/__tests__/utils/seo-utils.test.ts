@@ -79,14 +79,14 @@ describe('useAlternateLanguages', () => {
 describe('getTitleMetaTags', () => {
   it('returns an array with title meta tags', () => {
     const title = 'Test Title';
-    const expected = [{ title: title }, { property: 'og:title', content: title }, { property: 'dcterms:title', content: title }];
+    const expected = [{ title: title }, { property: 'og:title', content: title }, { property: 'dcterms.title', content: title }];
     expect(getTitleMetaTags(title)).toEqual(expected);
   });
 
   it('returns an array with title meta tags with different dcterms.title content', () => {
     const title = 'Test Title';
     const dcTermsTitle = 'Test DcTerms Title';
-    const expected = [{ title: title }, { property: 'og:title', content: title }, { property: 'dcterms:title', content: dcTermsTitle }];
+    const expected = [{ title: title }, { property: 'og:title', content: title }, { property: 'dcterms.title', content: dcTermsTitle }];
     expect(getTitleMetaTags(title, dcTermsTitle)).toEqual(expected);
   });
 });
