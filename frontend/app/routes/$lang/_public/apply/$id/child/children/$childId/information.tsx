@@ -321,7 +321,7 @@ export default function ApplyFlowChildInformation() {
                 label={t('apply-child:children.information.first-name')}
                 className="w-full"
                 maxLength={100}
-                aria-describedby="name-instructions"
+                aria-description={t('apply-child:children.information.name-instructions')}
                 autoComplete="given-name"
                 errorMessage={fetcher.data?.errors.firstName?._errors[0]}
                 defaultValue={defaultState?.firstName ?? ''}
@@ -336,7 +336,7 @@ export default function ApplyFlowChildInformation() {
                 autoComplete="family-name"
                 defaultValue={defaultState?.lastName ?? ''}
                 errorMessage={fetcher.data?.errors.lastName?._errors[0]}
-                aria-describedby="name-instructions"
+                aria-description={t('apply-child:children.information.name-instructions')}
                 required
               />
             </div>

@@ -245,7 +245,7 @@ export default function ApplyFlowApplicationInformation() {
                 autoComplete="given-name"
                 defaultValue={defaultState?.firstName ?? ''}
                 errorMessage={fetcher.data?.errors.firstName?._errors[0]}
-                aria-describedby="name-instructions"
+                aria-description={t('partner-information.name-instructions')}
                 required
               />
               <InputSanitizeField
@@ -257,7 +257,7 @@ export default function ApplyFlowApplicationInformation() {
                 autoComplete="family-name"
                 defaultValue={defaultState?.lastName ?? ''}
                 errorMessage={fetcher.data?.errors.lastName?._errors[0]}
-                aria-describedby="name-instructions"
+                aria-description={t('partner-information.name-instructions')}
                 required
               />
             </div>

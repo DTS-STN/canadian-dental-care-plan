@@ -71,6 +71,8 @@ module.exports = {
         '@typescript-eslint/consistent-type-exports': 'error',
         '@typescript-eslint/consistent-type-imports': 'error',
         'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
+        //Note: aria-props for aria-description is only supported in the upcoming WAI-ARIA 1.3 spec
+        'jsx-a11y/aria-props': 'warn',
       },
     },
     {
