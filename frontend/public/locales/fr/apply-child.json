@@ -37,6 +37,7 @@
     }
   },
   "children": {
+    "child-number": "Enfant {{childNumber}}",
     "index": {
       "page-title": "Demande pour enfant(s)",
       "in-this-section": "Dans cette section, vous ajouterez votre ou vos enfants à la demande.",
@@ -65,7 +66,6 @@
     },
     "information": {
       "page-title": "{{childName}}\u00a0: Renseignements",
-      "child-number": "Enfant {{childNumber}}",
       "form-instructions-sin": "Indiquer le nom légal de l'enfant tel qu'indiqué sur sa carte ou sa lettre de numéro d'assurance sociale (le cas échéant) ou tout autre document gouvernemental.",
       "single-legal-name": "Si l'enfant a un seul nom légal",
       "name-instructions": "Si l'enfant utilise un seul nom légal, veuillez indiquer ce nom dans les DEUX champs «\u00a0Prénom\u00a0» et «\u00a0Nom de famille\u00a0».",

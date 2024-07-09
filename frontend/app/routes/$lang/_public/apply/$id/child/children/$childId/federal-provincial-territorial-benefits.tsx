@@ -46,7 +46,8 @@ export const handle = {
 };
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+  if (!data) return [];
+  return getTitleMetaTags(data.meta.title, data.meta.dcTermsTitle);
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
@@ -63,8 +64,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const csrfToken = String(session.get('csrfToken'));
 
-  const childName = state.information?.firstName ?? '<Child 1 name>';
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-child:children.dental-benefits.title', { childName }) }) };
+  const childNumber = t('apply-child:children.child-number', { childNumber: state.childNumber });
+  const childName = state.information?.firstName ?? childNumber;
+
+  const meta = {
+    title: t('gcweb:meta.title.template', { title: t('apply-child:children.dental-benefits.title', { childName }) }),
+    dcTermsTitle: t('gcweb:meta.title.template', { title: t('apply-child:children.dental-benefits.title', { childName: childNumber }) }),
+  };
 
   return json({
     csrfToken,

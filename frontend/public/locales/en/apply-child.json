@@ -37,6 +37,7 @@
     }
   },
   "children": {
+    "child-number": "Child {{childNumber}}",
     "index": {
       "page-title": "Child(ren)'s application",
       "in-this-section": "In this section you will add your child(ren) to the application.",
@@ -65,7 +66,6 @@
     },
     "information": {
       "page-title": "{{childName}}: information",
-      "child-number": "Child {{childNumber}}",
       "form-instructions-sin": "Provide the child's legal name as indicated on their Social Insurance Number (SIN) card or letter (if available), or other government documentation.",
       "single-legal-name": "If the child has a single legal name",
       "name-instructions": "If the child uses a single legal name, please enter that name in BOTH the first name and last name fields.",

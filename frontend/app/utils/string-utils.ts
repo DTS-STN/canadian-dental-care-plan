@@ -78,3 +78,14 @@ export function formatPercent(value: number, locale: string) {
   if (!/en|fr/i.test(locale)) throw new Error(`locale must be 'en' or 'fr'`);
   return Intl.NumberFormat(`${locale}-CA`, { style: 'percent' }).format(value / 100);
 }
+
+/**
+ * Normalizes spaces in a string by replacing all whitespace characters
+ * (including non-breaking spaces) with regular spaces.
+ *
+ * @param str - The string to normalize.
+ * @returns The normalized string with all spaces replaced by regular spaces.
+ */
+export function normalizeSpaces(str: string) {
+  return str.replace(/[\s\u00a0]/g, ' ');
+}
