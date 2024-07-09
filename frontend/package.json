@@ -56,6 +56,7 @@
     "isbot": "^5.1.11",
     "jose": "^5.6.3",
     "libphonenumber-js": "^1.11.4",
+    "markdown-to-jsx": "^7.4.7",
     "moderndash": "^3.12.0",
     "moize": "^6.1.6",
     "morgan": "^1.10.0",
