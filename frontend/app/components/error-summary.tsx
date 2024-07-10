@@ -96,7 +96,7 @@ export function ErrorSummary({ errors, id }: ErrorSummaryProps) {
       {errors.length > 0 && (
         <ul className="mt-1.5 list-disc space-y-2 pl-7">
           {errors.map(({ fieldId, errorMessage }) => (
-            <li key={fieldId}>
+            <li key={`${fieldId}-${errorMessage}`}>
               <AnchorLink className="text-red-700 underline hover:decoration-2 focus:decoration-2" anchorElementId={fieldId}>
                 {errorMessage}
               </AnchorLink>
