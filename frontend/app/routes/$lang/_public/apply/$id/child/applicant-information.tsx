@@ -314,7 +314,7 @@ export default function ApplyFlowApplicationInformation() {
                 label={t('applicant-information.first-name')}
                 className="w-full"
                 maxLength={100}
-                aria-describedby="name-instructions"
+                aria-description={t('applicant-information.name-instructions')}
                 autoComplete="given-name"
                 errorMessage={errors?.firstName?._errors[0]}
                 defaultValue={defaultState?.firstName ?? ''}
@@ -329,7 +329,7 @@ export default function ApplyFlowApplicationInformation() {
                 autoComplete="family-name"
                 defaultValue={defaultState?.lastName ?? ''}
                 errorMessage={errors?.lastName?._errors[0]}
-                aria-describedby="name-instructions"
+                aria-description={t('applicant-information.name-instructions')}
                 required
               />
             </div>
