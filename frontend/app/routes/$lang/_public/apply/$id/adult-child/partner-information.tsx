@@ -70,26 +70,17 @@ export async function action({ context: { session }, params, request }: ActionFu
   const partnerInformationSchema = z
     .object({
       confirm: z.boolean().refine((val) => val === true, t('apply-adult-child:partner-information.error-message.confirm-required')),
-      dateOfBirthYear: z
-        .number({
-          required_error: t('apply-adult-child:partner-information.error-message.date-of-birth-year-required'),
-          invalid_type_error: t('apply-adult-child:partner-information.error-message.date-of-birth-year-number'),
-        })
-        .int()
-        .positive(),
-      dateOfBirthMonth: z
-        .number({
-          required_error: t('apply-adult-child:partner-information.error-message.date-of-birth-month-required'),
-        })
-        .int()
-        .positive(),
-      dateOfBirthDay: z
-        .number({
-          required_error: t('apply-adult-child:partner-information.error-message.date-of-birth-day-required'),
-          invalid_type_error: t('apply-adult-child:partner-information.error-message.date-of-birth-day-number'),
-        })
-        .int()
-        .positive(),
+      dateOfBirthYear: z.number({
+        required_error: t('apply-adult-child:partner-information.error-message.date-of-birth-year-required'),
+        invalid_type_error: t('apply-adult-child:partner-information.error-message.date-of-birth-year-number'),
+      }),
+      dateOfBirthMonth: z.number({
+        required_error: t('apply-adult-child:partner-information.error-message.date-of-birth-month-required'),
+      }),
+      dateOfBirthDay: z.number({
+        required_error: t('apply-adult-child:partner-information.error-message.date-of-birth-day-required'),
+        invalid_type_error: t('apply-adult-child:partner-information.error-message.date-of-birth-day-number'),
+      }),
       dateOfBirth: z.string(),
       firstName: z.string().trim().min(1, t('apply-adult-child:partner-information.error-message.first-name-required')).max(100).refine(isAllValidInputCharacters, t('apply-adult-child:partner-information.error-message.characters-valid')),
       lastName: z.string().trim().min(1, t('apply-adult-child:partner-information.error-message.last-name-required')).max(100).refine(isAllValidInputCharacters, t('apply-adult-child:partner-information.error-message.characters-valid')),

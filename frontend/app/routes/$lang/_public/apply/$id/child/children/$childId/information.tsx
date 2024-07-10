@@ -90,26 +90,17 @@ export async function action({ context: { session }, params, request }: ActionFu
     .object({
       firstName: z.string().trim().min(1, t('apply-child:children.information.error-message.first-name-required')).max(100).refine(isAllValidInputCharacters, t('apply-child:children.information.error-message.characters-valid')),
       lastName: z.string().trim().min(1, t('apply-child:children.information.error-message.last-name-required')).max(100).refine(isAllValidInputCharacters, t('apply-child:children.information.error-message.characters-valid')),
-      dateOfBirthYear: z
-        .number({
-          required_error: t('apply-child:children.information.error-message.date-of-birth-year-required'),
-          invalid_type_error: t('apply-child:children.information.error-message.date-of-birth-year-number'),
-        })
-        .int()
-        .positive(),
-      dateOfBirthMonth: z
-        .number({
-          required_error: t('apply-child:children.information.error-message.date-of-birth-month-required'),
-        })
-        .int()
-        .positive(),
-      dateOfBirthDay: z
-        .number({
-          required_error: t('apply-child:children.information.error-message.date-of-birth-day-required'),
-          invalid_type_error: t('apply-child:children.information.error-message.date-of-birth-day-number'),
-        })
-        .int()
-        .positive(),
+      dateOfBirthYear: z.number({
+        required_error: t('apply-child:children.information.error-message.date-of-birth-year-required'),
+        invalid_type_error: t('apply-child:children.information.error-message.date-of-birth-year-number'),
+      }),
+      dateOfBirthMonth: z.number({
+        required_error: t('apply-child:children.information.error-message.date-of-birth-month-required'),
+      }),
+      dateOfBirthDay: z.number({
+        required_error: t('apply-child:children.information.error-message.date-of-birth-day-required'),
+        invalid_type_error: t('apply-child:children.information.error-message.date-of-birth-day-number'),
+      }),
       dateOfBirth: z.string(),
       isParent: z.boolean({ errorMap: () => ({ message: t('apply-child:children.information.error-message.is-parent') }) }),
     })
