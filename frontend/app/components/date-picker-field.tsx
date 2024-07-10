@@ -133,41 +133,56 @@ export const DatePickerField = ({ defaultValue, disabled, errorMessages, helpMes
     [disabled, getAriaDescribedBy, getAriaErrorMessageDay, id, names.day, required, t, value.day],
   );
 
+  const datePickerErrorMessages = useMemo(() => {
+    return {
+      all:
+        typeof errorMessages?.all === 'string' ? (
+          <InputError id={inputErrorIdAll} data-testid="date-picker-error-all">
+            {errorMessages.all}
+          </InputError>
+        ) : undefined,
+      month:
+        typeof errorMessages?.month === 'string' ? (
+          <InputError id={inputErrorIdMonth} data-testid="date-picker-error-month">
+            {errorMessages.month}
+          </InputError>
+        ) : undefined,
+      day:
+        typeof errorMessages?.day === 'string' ? (
+          <InputError id={inputErrorIdDay} data-testid="date-picker-error-day">
+            {errorMessages.day}
+          </InputError>
+        ) : undefined,
+      year:
+        typeof errorMessages?.year === 'string' ? (
+          <InputError id={inputErrorIdYear} data-testid="date-picker-error-year">
+            {errorMessages.year}
+          </InputError>
+        ) : undefined,
+    };
+  }, [errorMessages?.all, errorMessages?.day, errorMessages?.month, errorMessages?.year, inputErrorIdAll, inputErrorIdDay, inputErrorIdMonth, inputErrorIdYear]);
+
   return (
     <div id={inputWrapperId} data-testid="date-picker-field">
       <fieldset>
         <InputLegend id={inputLegendId} className="mb-2">
           {legend}
         </InputLegend>
-        {errorMessages && (
+        {(datePickerErrorMessages.all !== undefined || datePickerErrorMessages.year !== undefined || datePickerErrorMessages.month !== undefined || datePickerErrorMessages.day !== undefined) && (
           <div className="mb-2 space-y-2">
-            {errorMessages.all && (
-              <p>
-                <InputError id={inputErrorIdAll} data-testid="date-picker-error-all">
-                  {errorMessages.all}
-                </InputError>
-              </p>
-            )}
-            {errorMessages.month && (
-              <p>
-                <InputError id={inputErrorIdMonth} data-testid="date-picker-error-month">
-                  {errorMessages.month}
-                </InputError>
-              </p>
-            )}
-            {errorMessages.day && (
-              <p>
-                <InputError id={inputErrorIdDay} data-testid="date-picker-error-day">
-                  {errorMessages.day}
-                </InputError>
-              </p>
-            )}
-            {errorMessages.year && (
-              <p>
-                <InputError id={inputErrorIdYear} data-testid="date-picker-error-year">
-                  {errorMessages.year}
-                </InputError>
-              </p>
+            {datePickerErrorMessages.all && <p>{datePickerErrorMessages.all}</p>}
+            {i18n.language === 'fr' ? (
+              <>
+                {datePickerErrorMessages.day && <p>{datePickerErrorMessages.day}</p>}
+                {datePickerErrorMessages.month && <p>{datePickerErrorMessages.month}</p>}
+                {datePickerErrorMessages.year && <p>{datePickerErrorMessages.year}</p>}
+              </>
+            ) : (
+              <>
+                {datePickerErrorMessages.month && <p>{datePickerErrorMessages.month}</p>}
+                {datePickerErrorMessages.day && <p>{datePickerErrorMessages.day}</p>}
+                {datePickerErrorMessages.year && <p>{datePickerErrorMessages.year}</p>}
+              </>
             )}
           </div>
         )}
