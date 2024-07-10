@@ -32,16 +32,22 @@ export const handle = {
 };
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
-  return data ? getTitleMetaTags(data.meta.title) : [];
+  if (!data) return [];
+  return getTitleMetaTags(data.meta.title, data.meta.dcTermsTitle);
 });
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyAdultSingleChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const childName = state.information?.firstName ?? '<Child 1 name>';
+
+  const childNumber = t('apply-adult-child:children.child-number', { childNumber: state.childNumber });
+  const childName = state.information?.firstName ?? childNumber;
 
   const csrfToken = String(session.get('csrfToken'));
-  const meta = { title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.dental-insurance.title', { childName }) }) };
+  const meta = {
+    title: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.dental-insurance.title', { childName }) }),
+    dcTermsTitle: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.dental-insurance.title', { childName: childNumber }) }),
+  };
 
   return json({ csrfToken, meta, defaultState: state.dentalInsurance, childName, editMode: state.editMode, i18nOptions: { childName } });
 }

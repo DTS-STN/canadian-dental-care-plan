@@ -87,3 +87,14 @@ export function formatPercent(value: number, locale: string) {
 export function extractDigits(input: string) {
   return input.replace(/\D/g, '');
 }
+
+/**
+ * Normalizes spaces in a string by replacing all whitespace characters
+ * (including non-breaking spaces) with regular spaces.
+ *
+ * @param str - The string to normalize.
+ * @returns The normalized string with all spaces replaced by regular spaces.
+ */
+export function normalizeSpaces(str: string) {
+  return str.replace(/[\s\u00a0]/g, ' ');
+}
