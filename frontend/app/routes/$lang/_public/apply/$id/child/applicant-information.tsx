@@ -87,26 +87,17 @@ export async function action({ context: { session }, params, request }: ActionFu
   // state validation schema
   const dateOfBirthSchema = z
     .object({
-      dateOfBirthYear: z
-        .number({
-          required_error: t('apply-child:applicant-information.error-message.date-of-birth-year-required'),
-          invalid_type_error: t('apply-child:applicant-information.error-message.date-of-birth-year-number'),
-        })
-        .int()
-        .positive(),
-      dateOfBirthMonth: z
-        .number({
-          required_error: t('apply-child:applicant-information.error-message.date-of-birth-month-required'),
-        })
-        .int()
-        .positive(),
-      dateOfBirthDay: z
-        .number({
-          required_error: t('apply-child:applicant-information.error-message.date-of-birth-day-required'),
-          invalid_type_error: t('apply-child:applicant-information.error-message.date-of-birth-day-number'),
-        })
-        .int()
-        .positive(),
+      dateOfBirthYear: z.number({
+        required_error: t('apply-child:applicant-information.error-message.date-of-birth-year-required'),
+        invalid_type_error: t('apply-child:applicant-information.error-message.date-of-birth-year-number'),
+      }),
+      dateOfBirthMonth: z.number({
+        required_error: t('apply-child:applicant-information.error-message.date-of-birth-month-required'),
+      }),
+      dateOfBirthDay: z.number({
+        required_error: t('apply-child:applicant-information.error-message.date-of-birth-day-required'),
+        invalid_type_error: t('apply-child:applicant-information.error-message.date-of-birth-day-number'),
+      }),
       dateOfBirth: z.string(),
     })
     .superRefine((val, ctx) => {
