@@ -660,34 +660,20 @@
                 }
               },
               {
-                "id": "$lang/_public/status/myself/_route",
-                "file": "routes/$lang/_public/status/myself/_route.tsx",
-                "children": [
-                  {
-                    "id": "$lang/_public/status/myself/index",
-                    "file": "routes/$lang/_public/status/myself/index.tsx",
-                    "paths": {
-                      "en": "/:lang/status/myself",
-                      "fr": "/:lang/statut/moi-meme"
-                    },
-                    "index": true
-                  }
-                ]
+                "id": "$lang/_public/status/myself",
+                "file": "routes/$lang/_public/status/myself.tsx",
+                "paths": {
+                  "en": "/:lang/status/myself",
+                  "fr": "/:lang/statut/moi-meme"
+                }
               },
               {
-                "id": "$lang/_public/status/child/_route",
-                "file": "routes/$lang/_public/status/child/_route.tsx",
-                "children": [
-                  {
-                    "id": "$lang/_public/status/child/index",
-                    "file": "routes/$lang/_public/status/child/index.tsx",
-                    "paths": {
-                      "en": "/:lang/status/child",
-                      "fr": "/:lang/statut/enfant"
-                    },
-                    "index": true
-                  }
-                ]
+                "id": "$lang/_public/status/child",
+                "file": "routes/$lang/_public/status/child.tsx",
+                "paths": {
+                  "en": "/:lang/status/child",
+                  "fr": "/:lang/statut/enfant"
+                }
               }
             ]
           },
