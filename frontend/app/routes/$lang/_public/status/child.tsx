@@ -1,5 +1,5 @@
 import type { FormEvent } from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
@@ -17,15 +17,13 @@ import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-statu
 import { Collapsible } from '~/components/collapsible';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { DatePickerField } from '~/components/date-picker-field';
-import type { ErrorSummaryItem } from '~/components/error-summary';
-import { ErrorSummary, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
-import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { featureEnabled, getEnv } from '~/utils/env.server';
@@ -242,8 +240,19 @@ export default function StatusCheckerChild() {
   const { captchaRef } = useHCaptcha();
   const params = useParams();
   const [childHasSinState, setChildHasSinState] = useState<boolean>();
-  const errorSummaryId = 'error-summary';
+
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
+  const errorSummary = useErrorSummary(errors, {
+    code: 'code',
+    childHasSin: 'input-radio-child-has-sin-option-0',
+    sin: 'sin',
+    firstName: 'first-name',
+    lastName: 'last-name',
+    ...(i18n.language === 'fr'
+      ? { dateOfBirth: 'date-picker-date-of-birth-day', dateOfBirthDay: 'date-picker-date-of-birth-day', dateOfBirthMonth: 'date-picker-date-of-birth-month' }
+      : { dateOfBirth: 'date-picker-date-of-birth-month', dateOfBirthMonth: 'date-picker-date-of-birth-month', dateOfBirthDay: 'date-picker-date-of-birth-day' }),
+    dateOfBirthYear: 'date-picker-date-of-birth-year',
+  });
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -262,40 +271,6 @@ export default function StatusCheckerChild() {
 
     fetcher.submit(formData, { method: 'POST' });
   }
-
-  const errorSummaryItems = useMemo(() => {
-    const items: ErrorSummaryItem[] = [];
-    // Optional chaining '?.' is not use to ensure useMemo has errors object as dependency
-    if (!errors) return items;
-    if (errors.code) items.push(createErrorSummaryItem('code', errors.code));
-    if (errors.childHasSin) items.push(createErrorSummaryItem('input-radio-child-has-sin-option-0', errors.childHasSin));
-    if (errors.sin) items.push(createErrorSummaryItem('sin', errors.sin));
-    if (errors.firstName) items.push(createErrorSummaryItem('first-name', errors.firstName));
-    if (errors.lastName) items.push(createErrorSummaryItem('last-name', errors.lastName));
-
-    if (i18n.language === 'fr') {
-      if (errors.dateOfBirth) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', errors.dateOfBirth));
-      if (errors.dateOfBirthDay) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', errors.dateOfBirthDay));
-      if (errors.dateOfBirthMonth) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', errors.dateOfBirthMonth));
-    } else {
-      if (errors.dateOfBirth) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', errors.dateOfBirth));
-      if (errors.dateOfBirthMonth) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', errors.dateOfBirthMonth));
-      if (errors.dateOfBirthDay) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', errors.dateOfBirthDay));
-    }
-    if (errors.dateOfBirthYear) items.push(createErrorSummaryItem('date-picker-date-of-birth-year', errors.dateOfBirthYear));
-    return items;
-  }, [errors, i18n.language]);
-
-  useEffect(() => {
-    if (errorSummaryItems.length > 0) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-
-      if (adobeAnalytics.isConfigured()) {
-        const fieldIds = errorSummaryItems.map(({ fieldId }) => fieldId);
-        adobeAnalytics.pushValidationErrorEvent(fieldIds);
-      }
-    }
-  }, [errorSummaryItems]);
 
   useEffect(() => {
     if (fetcher.data && 'statusId' in fetcher.data) {
@@ -332,7 +307,7 @@ export default function StatusCheckerChild() {
         <>
           {fetcher.data && 'statusId' in fetcher.data && !fetcher.data.statusId && <StatusNotFound />}
           <p className="mb-4 italic">{t('status:child.form.complete-fields')}</p>
-          {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+          <errorSummary.ErrorSummary />
           <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
             <input type="hidden" name="_csrf" value={csrfToken} />
             {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}

@@ -1,6 +1,11 @@
+import { useCallback, useEffect, useMemo } from 'react';
+
 import { useTranslation } from 'react-i18next';
+import { useDeepCompareMemo } from 'use-deep-compare';
+import validator from 'validator';
 
 import { AnchorLink } from '~/components/anchor-link';
+import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { scrollAndFocusFromAnchorLink } from '~/utils/link-utils';
 
 /**
@@ -106,4 +111,61 @@ export function ErrorSummary({ errors, id }: ErrorSummaryProps) {
       )}
     </section>
   );
+}
+
+/**
+ * Custom hook to generate error summary items based on provided errors and field mappings,
+ * and handle side effects such as scrolling to the error summary and pushing analytics events.
+ *
+ * @param errors - Object containing error messages keyed by field names.
+ * @param errorFieldMap - Object mapping field names (from errors) to corresponding field IDs. The order of field names will determine the output order.
+ * @param errorSummaryId - ID attribute for the error summary container.
+ */
+export function useErrorSummary<T extends Record<string, string | undefined>, U extends Record<keyof T, string>>(errors: T | undefined, errorFieldMap: U, errorSummaryId: string = 'error-summary') {
+  // Memoize `errorFieldMap` based on its content to trigger useMemo only if the content changes
+  const memoizeErrorFieldMap = useDeepCompareMemo(() => errorFieldMap, [errorFieldMap]);
+
+  // Memoizes the stringified errors to optimize dependencies for errorSummaryItems,
+  // ensuring updates only when the content of errors changes, not just references.
+  const memoizeStringifiedErrors = useDeepCompareMemo(() => JSON.stringify(errors), [errors]);
+
+  const errorSummaryItems = useMemo<ErrorSummaryItem[]>(() => {
+    return Object.keys(memoizeErrorFieldMap)
+      .map((key) => {
+        const fieldId = memoizeErrorFieldMap[key];
+        const errorMessage = errors && errors[key];
+
+        // prettier-ignore
+        if (typeof fieldId !== 'string' ||
+         validator.isEmpty(fieldId) ||
+         typeof errorMessage !== 'string' ||
+         validator.isEmpty(errorMessage)) {
+         return undefined;
+       }
+
+        return { errorMessage, fieldId };
+      })
+      .filter((i) => i !== undefined);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errors, memoizeStringifiedErrors, memoizeErrorFieldMap]);
+
+  useEffect(() => {
+    if (errorSummaryItems.length > 0) {
+      scrollAndFocusToErrorSummary(errorSummaryId);
+      if (adobeAnalytics.isConfigured()) {
+        const fieldIds = errorSummaryItems.map(({ fieldId }) => fieldId);
+        adobeAnalytics.pushValidationErrorEvent(fieldIds);
+      }
+    }
+  }, [errorSummaryId, errorSummaryItems]);
+
+  const errorSummaryComponent = useCallback(() => {
+    return errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />;
+  }, [errorSummaryId, errorSummaryItems]);
+
+  return {
+    errorSummaryId,
+    errorSummaryItems,
+    ErrorSummary: errorSummaryComponent,
+  };
 }

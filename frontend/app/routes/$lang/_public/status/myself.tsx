@@ -1,5 +1,5 @@
 import type { FormEvent } from 'react';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
@@ -15,12 +15,11 @@ import pageIds from '../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-status-markdown';
 import { ContextualAlert } from '~/components/contextual-alert';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
-import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
 import { featureEnabled, getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
@@ -142,8 +141,9 @@ export default function StatusCheckerMyself() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { captchaRef } = useHCaptcha();
   const params = useParams();
-  const errorSummaryId = 'error-summary';
+
   const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
+  const errorSummary = useErrorSummary(errors, { code: 'code', sin: 'sin' });
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -162,28 +162,6 @@ export default function StatusCheckerMyself() {
 
     fetcher.submit(formData, { method: 'POST' });
   }
-
-  const errorMessages = useMemo(() => {
-    // Optional chaining '?.' is not use to ensure useMemo has errors object as dependency
-    if (!errors) return {};
-    return {
-      code: errors.code,
-      sin: errors.sin,
-    };
-  }, [errors]);
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
-  useEffect(() => {
-    if (hasErrors(errorMessages)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-
-      if (hasErrors(errorMessages) && adobeAnalytics.isConfigured()) {
-        const fieldIds = createErrorSummaryItems(errorMessages).map(({ fieldId }) => fieldId);
-        adobeAnalytics.pushValidationErrorEvent(fieldIds);
-      }
-    }
-  }, [errorMessages]);
 
   useEffect(() => {
     if (fetcher.data && 'statusId' in fetcher.data) {
@@ -216,7 +194,7 @@ export default function StatusCheckerMyself() {
         <>
           {fetcher.data && 'statusId' in fetcher.data && !fetcher.data.statusId && <StatusNotFound />}
           <p className="mb-4 italic">{t('status:myself.form.complete-fields')}</p>
-          {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+          <errorSummary.ErrorSummary />
           <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
             <input type="hidden" name="_csrf" value={csrfToken} />
             {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
@@ -229,10 +207,10 @@ export default function StatusCheckerMyself() {
                 inputMode="numeric"
                 helpMessagePrimary={t('status:myself.form.application-code-description')}
                 required
-                errorMessage={errorMessages.code}
+                errorMessage={errors?.code}
                 defaultValue=""
               />
-              <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errorMessages.sin} defaultValue="" />
+              <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errors?.sin} defaultValue="" />
             </div>
             <Button variant="primary" id="submit" disabled={isSubmitting} data-gc-analytics-formsubmit="submit">
               {t('status:myself.form.submit')}

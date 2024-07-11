@@ -1,5 +1,4 @@
 import type { FormEvent } from 'react';
-import { useEffect, useMemo } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
@@ -14,11 +13,10 @@ import { z } from 'zod';
 import pageIds from '../../page-ids.json';
 import { Button } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputRadios } from '~/components/input-radios';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
-import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { featureEnabled, getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -107,29 +105,9 @@ export default function StatusChecker() {
   const isSubmitting = fetcher.state !== 'idle';
   const { t } = useTranslation(handle.i18nNamespaces);
   const { captchaRef } = useHCaptcha();
-  const errorSummaryId = 'error-summary';
+
   const errors = fetcher.data?.errors;
-
-  const errorMessages = useMemo(() => {
-    // Optional chaining '?.' is not use to ensure useMemo has errors object as dependency
-    if (!errors) return {};
-    return {
-      'input-radio-status-check-option-0': errors.checkFor,
-    };
-  }, [errors]);
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
-  useEffect(() => {
-    if (hasErrors(errorMessages)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-
-      if (adobeAnalytics.isConfigured()) {
-        const fieldIds = createErrorSummaryItems(errorMessages).map(({ fieldId }) => fieldId);
-        adobeAnalytics.pushValidationErrorEvent(fieldIds);
-      }
-    }
-  }, [errorMessages]);
+  const errorSummary = useErrorSummary(errors, { checkFor: 'input-radio-status-check-option-0' });
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -212,7 +190,7 @@ export default function StatusChecker() {
         </div>
       </Collapsible>
       <p className="mb-4 italic">{t('status:form.complete-fields')}</p>
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+      <errorSummary.ErrorSummary />
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
         <input type="hidden" name="_csrf" value={csrfToken} />
         {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
