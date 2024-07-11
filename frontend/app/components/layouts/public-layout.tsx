@@ -15,7 +15,7 @@ import { PageTitle } from '~/components/page-title';
 import { SkipNavigationLinks } from '~/components/skip-navigation-links';
 import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
-import { getTypedI18nNamespaces } from '~/utils/locale-utils';
+import { getAltLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useI18nNamespaces, usePageTitleI18nKey, usePageTitleI18nOptions } from '~/utils/route-utils';
 
 export const i18nNamespaces = getTypedI18nNamespaces('gcweb');
@@ -90,9 +90,12 @@ export interface BilingualNotFoundErrorProps {
  * A 404 page that renders both languages, for when the user's language cannot be detected
  */
 export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
-  const { i18n } = useTranslation(['gcweb']);
+  const { i18n, t } = useTranslation(['gcweb']);
   const en = i18n.getFixedT('en');
   const fr = i18n.getFixedT('fr');
+
+  const altLanguage = getAltLanguage(i18n.language);
+  const altLogoContent = <span lang={altLanguage}>{i18n.getFixedT(altLanguage)('gcweb:header.govt-of-canada.text')}</span>;
 
   const englishCdcpLink = <InlineLink to={en('gcweb:public-not-found.cdcp-link')} className="external-link" newTabIndicator target="_blank" />;
   const frenchCdcpLink = <InlineLink to={fr('gcweb:public-not-found.cdcp-link')} className="external-link" newTabIndicator target="_blank" />;
@@ -110,8 +113,9 @@ export function BilingualNotFoundError({ error }: BilingualNotFoundErrorProps) {
           <div className="container flex items-center justify-between gap-6 py-2.5 sm:py-3.5">
             <div property="publisher" typeof="GovernmentOrganization">
               <Link to="https://canada.ca/" property="url">
-                <img className="h-8 w-auto" src="/assets/sig-blk-en.svg" alt={`${en('gcweb:header.govt-of-canada.text')} / ${fr('gcweb:header.govt-of-canada.text')}`} property="logo" width="300" height="28" decoding="async" />
+                <img className="h-8 w-auto" src="/assets/sig-blk-en.svg" alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
               </Link>
+              <span className="sr-only">/ {altLogoContent}</span>
               <meta property="name" content={`${en('gcweb:header.govt-of-canada.text')} / ${fr('gcweb:header.govt-of-canada.text')}`} />
               <meta property="areaServed" typeof="Country" content="Canada" />
               <link property="logo" href="/assets/wmms-blk.svg" />
