@@ -17,8 +17,8 @@ export function PageHeaderBrand() {
         <div property="publisher" typeof="GovernmentOrganization">
           <Link to={t('gcweb:header.govt-of-canada.href')} property="url">
             <img className="h-8 w-auto" src={`/assets/sig-blk-${i18n.language}.svg`} alt={t('gcweb:header.govt-of-canada.text')} property="logo" width="300" height="28" decoding="async" />
+            <span className="sr-only">/ {altLogoContent}</span>
           </Link>
-          <span className="sr-only">/ {altLogoContent}</span>
           <meta property="name" content={t('gcweb:header.govt-of-canada.text')} />
           <meta property="areaServed" typeof="Country" content="Canada" />
           <link property="logo" href="/assets/wmms-blk.svg" />
