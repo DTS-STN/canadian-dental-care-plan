@@ -48,10 +48,10 @@ export default function RootIndex() {
           <div className="w-11/12 lg:w-8/12">
             <Link to="https://www.canada.ca/en.html" property="url">
               <img className="h-8 w-auto" src="/assets/sig-blk-en.svg" alt="Government of Canada" property="logo" width="300" height="28" decoding="async" />
+              <span className="sr-only">
+                / <span lang="fr">Gouvernement du Canada</span>
+              </span>
             </Link>
-            <span className="sr-only">
-              / <span lang="fr">Gouvernement du Canada</span>
-            </span>
           </div>
           <div className="mb-2 mt-9 grid grid-cols-2 gap-8 md:mx-4 lg:mx-8">
             <section lang="en">
