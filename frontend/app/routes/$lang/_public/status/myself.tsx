@@ -35,6 +35,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { extractDigits } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('status', 'gcweb'),
@@ -100,7 +101,9 @@ export async function action({ context: { session }, params, request }: ActionFu
   const parsedDataResult = formDataSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    return json({ errors: parsedDataResult.error.format() });
+    return json({
+      errors: transformFlattenedError(parsedDataResult.error.flatten()),
+    });
   }
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
@@ -139,6 +142,8 @@ export default function StatusCheckerMyself() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { captchaRef } = useHCaptcha();
   const params = useParams();
+  const errorSummaryId = 'error-summary';
+  const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -158,15 +163,14 @@ export default function StatusCheckerMyself() {
     fetcher.submit(formData, { method: 'POST' });
   }
 
-  const errorSummaryId = 'error-summary';
-
   const errorMessages = useMemo(() => {
-    const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
+    // Optional chaining '?.' is not use to ensure useMemo has errors object as dependency
+    if (!errors) return {};
     return {
-      code: errors?.code?._errors[0],
-      sin: errors?.sin?._errors[0],
+      code: errors.code,
+      sin: errors.sin,
     };
-  }, [fetcher.data]);
+  }, [errors]);
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 

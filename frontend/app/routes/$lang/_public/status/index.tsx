@@ -29,6 +29,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum CheckFor {
   Myself = 'Myself',
@@ -73,16 +74,17 @@ export async function action({ context: { session }, params, request }: ActionFu
     log.warn('Invalid CSRF token detected; expected: [%s], submitted: [%s]', expectedCsrfToken, submittedCsrfToken);
     throw new Response('Invalid CSRF token', { status: 400 });
   }
-  const checkForSchema = z.nativeEnum(CheckFor, {
-    errorMap: () => {
-      return { message: t('status:form.error-message.selection-required') };
-    },
+  const formDataSchema = z.object({
+    checkFor: z.nativeEnum(CheckFor, { errorMap: () => ({ message: t('status:form.error-message.selection-required') }) }),
   });
-  const statusCheckFor = formData.get('statusCheckFor');
-  const parsedCheckFor = checkForSchema.safeParse(statusCheckFor);
 
+  const data = { checkFor: formData.get('statusCheckFor') };
+
+  const parsedCheckFor = formDataSchema.safeParse(data);
   if (!parsedCheckFor.success) {
-    return json({ errors: parsedCheckFor.error.format()._errors });
+    return json({
+      errors: transformFlattenedError(parsedCheckFor.error.flatten()),
+    });
   }
 
   const hCaptchaEnabled = ENABLED_FEATURES.includes('hcaptcha');
@@ -92,7 +94,7 @@ export async function action({ context: { session }, params, request }: ActionFu
       return redirect(getPathById('$lang/_public/unable-to-process-request', params));
     }
   }
-  if (parsedCheckFor.data === CheckFor.Myself) {
+  if (parsedCheckFor.data.checkFor === CheckFor.Myself) {
     return redirect(getPathById('$lang/_public/status/myself', params));
   }
   // Child selected
@@ -106,13 +108,15 @@ export default function StatusChecker() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const { captchaRef } = useHCaptcha();
   const errorSummaryId = 'error-summary';
+  const errors = fetcher.data?.errors;
 
-  const errorMessages = useMemo(
-    () => ({
-      'input-radio-status-check-option-0': fetcher.data?.errors[0],
-    }),
-    [fetcher.data?.errors],
-  );
+  const errorMessages = useMemo(() => {
+    // Optional chaining '?.' is not use to ensure useMemo has errors object as dependency
+    if (!errors) return {};
+    return {
+      'input-radio-status-check-option-0': errors.checkFor,
+    };
+  }, [errors]);
 
   const errorSummaryItems = createErrorSummaryItems(errorMessages);
 
@@ -212,24 +216,23 @@ export default function StatusChecker() {
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
         <input type="hidden" name="_csrf" value={csrfToken} />
         {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
-        <fieldset>
-          <InputRadios
-            id="status-check-for"
-            name="statusCheckFor"
-            legend={t('status:form.radio-legend')}
-            options={[
-              {
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="status:form.radio-text.myself" />,
-                value: CheckFor.Myself,
-              },
-              {
-                children: <Trans ns={handle.i18nNamespaces} i18nKey="status:form.radio-text.child" />,
-                value: CheckFor.Child,
-              },
-            ]}
-            required
-          />
-        </fieldset>
+        <InputRadios
+          id="status-check-for"
+          name="statusCheckFor"
+          legend={t('status:form.radio-legend')}
+          options={[
+            {
+              children: <Trans ns={handle.i18nNamespaces} i18nKey="status:form.radio-text.myself" />,
+              value: CheckFor.Myself,
+            },
+            {
+              children: <Trans ns={handle.i18nNamespaces} i18nKey="status:form.radio-text.child" />,
+              value: CheckFor.Child,
+            },
+          ]}
+          required
+          errorMessage={errors?.checkFor}
+        />
         <Button variant="primary" id="submit" disabled={isSubmitting} className="my-8" data-gc-analytics-formsubmit="submit">
           {t('status:form.continue')}
           <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
