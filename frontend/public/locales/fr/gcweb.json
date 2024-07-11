@@ -112,7 +112,7 @@
   },
   "error-summary": {
     "header_one": "L'erreur suivante a été trouvée dans le formulaire\u00a0:",
-    "header_other": "Les {{count}} erreurs suivantes ont été trouvées dans le formulaire\u00a0:"
+    "header_other": "Les {{count}} erreurs suivantes ont été trouvées dans le formulaire:"
   },
   "asterisk-indicates-required-field": "Un astérisque (*) indique un champ requis",
   "session-timeout": {
