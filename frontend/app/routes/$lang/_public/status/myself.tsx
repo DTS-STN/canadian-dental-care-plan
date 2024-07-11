@@ -12,8 +12,8 @@ import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../page-ids.json';
-import { ClientFriendlyStatusMarkdown } from '~/components/ClientFriendlyStatusMarkdownLink';
 import { Button, ButtonLink } from '~/components/buttons';
+import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-status-markdown';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
