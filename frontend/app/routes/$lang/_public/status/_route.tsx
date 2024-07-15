@@ -3,6 +3,7 @@ import { Outlet, isRouteErrorResponse, useLoaderData, useRouteError } from '@rem
 
 import { NotFoundError, PublicLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import SessionTimeout from '~/components/session-timeout';
+import { getPublicEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getLocale } from '~/utils/locale-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -14,7 +15,8 @@ export const handle = {
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const lang = getLocale(request);
-  return { lang };
+  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = getPublicEnv();
+  return { lang, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
 }
 
 export function ErrorBoundary() {
@@ -32,10 +34,10 @@ export function ErrorBoundary() {
 }
 
 export default function Route() {
-  const { lang } = useLoaderData<typeof loader>();
+  const { lang, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = useLoaderData<typeof loader>();
   return (
     <PublicLayout>
-      <SessionTimeout navigateTo={`/${lang}/status`} promptBeforeIdle={5 * 60 * 1000} timeout={15 * 60 * 1000} />
+      <SessionTimeout navigateTo={`/${lang}/status`} promptBeforeIdle={SESSION_TIMEOUT_PROMPT_SECONDS * 1000} timeout={SESSION_TIMEOUT_SECONDS * 1000} />
       <Outlet />
     </PublicLayout>
   );
