@@ -57,7 +57,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   const childNumber = t('apply-adult-child:children.child-number', { childNumber: state.childNumber });
-  const childName = state.isNew ? childNumber : state.information?.firstName ?? childNumber;
+  const childName = state.isNew ? childNumber : (state.information?.firstName ?? childNumber);
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = {
