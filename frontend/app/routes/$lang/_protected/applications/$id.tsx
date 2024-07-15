@@ -249,7 +249,7 @@ export default function ViewApplication() {
                     city={applicationDetails.personalInformation?.mailingCity ?? ''}
                     provinceState={i18n.language === 'en' ? mailingProvince?.nameEn : mailingProvince?.nameFr}
                     postalZipCode={applicationDetails.personalInformation?.mailingPostalCode}
-                    country={i18n.language === 'en' ? mailingCountry?.nameEn ?? '' : mailingCountry?.nameFr ?? ''}
+                    country={i18n.language === 'en' ? (mailingCountry?.nameEn ?? '') : (mailingCountry?.nameFr ?? '')}
                     apartment={applicationDetails.personalInformation?.mailingApartment}
                     altFormat={true}
                   />
@@ -260,7 +260,7 @@ export default function ViewApplication() {
                     city={applicationDetails.personalInformation?.homeCity ?? ''}
                     provinceState={i18n.language === 'en' ? homeProvince?.nameEn : homeProvince?.nameFr}
                     postalZipCode={applicationDetails.personalInformation?.homePostalCode ?? ''}
-                    country={i18n.language === 'en' ? homeCountry?.nameEn ?? '' : homeCountry?.nameFr ?? ''}
+                    country={i18n.language === 'en' ? (homeCountry?.nameEn ?? '') : (homeCountry?.nameFr ?? '')}
                     apartment={applicationDetails.personalInformation?.homeApartment}
                     altFormat={true}
                   />
@@ -285,7 +285,7 @@ export default function ViewApplication() {
                 <DescriptionListItem term={t('applications:view-application.dental-private')}>{applicationDetails.dentalInsurance ? t('applications:view-application.yes') : t('applications:view-application.no')}</DescriptionListItem>
 
                 <DescriptionListItem term={t('applications:view-application.dental-public')}>
-                  {applicationDetails.dentalBenefits?.hasFederalBenefits ?? applicationDetails.dentalBenefits?.hasProvincialTerritorialBenefits ? (
+                  {(applicationDetails.dentalBenefits?.hasFederalBenefits ?? applicationDetails.dentalBenefits?.hasProvincialTerritorialBenefits) ? (
                     <>
                       <p>{t('applications:view-application.yes')}</p>
                       <p>{t('applications:view-application.dental-benefit-has-access')}</p>
