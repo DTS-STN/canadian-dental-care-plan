@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { Outlet, isRouteErrorResponse, json, useLoaderData, useRouteError } from '@remix-run/react';
+import { Outlet, isRouteErrorResponse, useLoaderData, useRouteError } from '@remix-run/react';
 
 import { NotFoundError, ProtectedLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/protected-layout';
 import SessionTimeout from '~/components/session-timeout';
@@ -12,8 +12,8 @@ export const handle = {
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
-  const env = getPublicEnv();
-  return json({ env });
+  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = getPublicEnv();
+  return { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
 }
 
 export function ErrorBoundary() {
@@ -31,10 +31,10 @@ export function ErrorBoundary() {
 }
 
 export default function Layout() {
-  const { env } = useLoaderData<typeof loader>();
+  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = useLoaderData<typeof loader>();
   return (
     <ProtectedLayout>
-      <SessionTimeout promptBeforeIdle={env.SESSION_TIMEOUT_PROMPT_SECONDS * 1000} timeout={env.SESSION_TIMEOUT_SECONDS * 1000} navigateTo="/auth/logout" />
+      <SessionTimeout promptBeforeIdle={SESSION_TIMEOUT_PROMPT_SECONDS * 1000} timeout={SESSION_TIMEOUT_SECONDS * 1000} navigateTo="/auth/logout" />
       <Outlet />
     </ProtectedLayout>
   );
