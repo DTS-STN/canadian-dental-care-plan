@@ -24,7 +24,12 @@ async function fillOutAddress(page: Page, group: string, address: string, unit: 
   //invalid postal code
   await page.getByRole('group', { name: group }).getByRole('textbox', { name: 'Postal code or ZIP code', exact: true }).fill('12345678');
   await page.getByRole('button', { name: 'Continue' }).click();
-  await hasError(page, 'Enter mailing address postal code in the correct format, such as A1A 1A1');
+  if (group === 'Mailing address') {
+    await hasError(page, 'Enter mailing address postal code in the correct format, such as A1A 1A1');
+  }
+  if (group === 'Home address') {
+    await hasError(page, 'Enter home address postal code in the correct format, such as A1A 1A1');
+  }
 
   await page.getByRole('group', { name: group }).getByRole('textbox', { name: 'Postal code or ZIP code', exact: true }).fill(postalCode);
 }
