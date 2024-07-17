@@ -1,0 +1,10 @@
+#
+# A Compose file that runs a Postgres database
+#
+services:
+  postgres:
+    image: docker.io/postgres:16.3
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=password
