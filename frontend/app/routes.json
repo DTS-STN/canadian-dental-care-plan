@@ -647,7 +647,7 @@
             "file": "routes/$lang/_public/status/_route.tsx",
             "paths": {
               "en": "/:lang/status",
-              "fr": "/:lang/statut"
+              "fr": "/:lang/etat"
             },
             "children": [
               {
@@ -656,7 +656,7 @@
                 "index": true,
                 "paths": {
                   "en": "/:lang/status",
-                  "fr": "/:lang/statut"
+                  "fr": "/:lang/etat"
                 }
               },
               {
@@ -664,7 +664,7 @@
                 "file": "routes/$lang/_public/status/myself.tsx",
                 "paths": {
                   "en": "/:lang/status/myself",
-                  "fr": "/:lang/statut/moi-meme"
+                  "fr": "/:lang/etat/moi-meme"
                 }
               },
               {
@@ -672,7 +672,7 @@
                 "file": "routes/$lang/_public/status/child.tsx",
                 "paths": {
                   "en": "/:lang/status/child",
-                  "fr": "/:lang/statut/enfant"
+                  "fr": "/:lang/etat/enfant"
                 }
               }
             ]
