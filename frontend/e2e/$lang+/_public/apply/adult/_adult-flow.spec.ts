@@ -3,13 +3,11 @@ import { expect, test } from '@playwright/test';
 
 // Reusable funtion to check empty input
 async function hasError(page: Page, error: string) {
-  await page.getByRole('button', { name: 'Continue' }).click();
   await expect(page.getByRole('link', { name: error })).toBeVisible();
 }
 
 // Reusable function to fill out date of birth
 async function fillOutDOB(page: Page, year: string) {
-  await page.getByRole('button', { name: 'Continue' }).click();
   await page.getByRole('combobox', { name: 'Month' }).selectOption('01');
   await page.getByRole('textbox', { name: 'Day (DD)' }).fill('1');
   await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
@@ -25,6 +23,7 @@ async function fillOutAddress(page: Page, group: string, address: string, unit: 
 
   //invalid postal code
   await page.getByRole('group', { name: group }).getByRole('textbox', { name: 'Postal code or ZIP code', exact: true }).fill('12345678');
+  await page.getByRole('button', { name: 'Continue' }).click();
   await hasError(page, 'Enter mailing address postal code in the correct format, such as A1A 1A1');
 
   await page.getByRole('group', { name: group }).getByRole('textbox', { name: 'Postal code or ZIP code', exact: true }).fill(postalCode);
@@ -32,7 +31,7 @@ async function fillOutAddress(page: Page, group: string, address: string, unit: 
 
 test.describe('Adult flow', () => {
   test('should complete application as adult applicant', async ({ page }) => {
-    await test.step('Terms and condition page', async () => {
+    await test.step('Navigate to online application', async () => {
       await page.goto('/en/apply');
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/terms-and-conditions/);
       await page.getByRole('button', { name: 'Agree and continue' }).click();
@@ -40,6 +39,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Type of application page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/type-application/);
+      await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
       await hasError(page, 'Select who this application is for');
@@ -50,6 +50,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Tax filing page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/tax-filing/);
+      await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
       await hasError(page, 'Select whether or not you have filed your taxes');
@@ -61,13 +62,13 @@ test.describe('Adult flow', () => {
     await test.step('File taxes page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/file-taxes/);
       await page.getByRole('link', { name: 'Back' }).click();
+      await page.getByRole('radio', { name: 'Yes', exact: true }).check();
+      await page.getByRole('button', { name: 'Continue' }).click();
     });
-
-    await page.getByRole('radio', { name: 'Yes', exact: true }).check();
-    await page.getByRole('button', { name: 'Continue' }).click();
 
     await test.step('Date of birth page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/date-of-birth/);
+      await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
       await hasError(page, 'Date of birth must include a year');
@@ -80,6 +81,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Disability tax credit page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/disability-tax-credit/);
+      await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
       await hasError(page, 'Select whether or not you have a valid disability tax credit');
@@ -91,13 +93,13 @@ test.describe('Adult flow', () => {
     await test.step('Find out when you can apply page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/dob-eligibility/);
       await page.getByRole('link', { name: 'Back' }).click();
+      await page.getByRole('radio', { name: 'Yes' }).check();
+      await page.getByRole('button', { name: 'Continue' }).click();
     });
-
-    await page.getByRole('radio', { name: 'Yes' }).check();
-    await page.getByRole('button', { name: 'Continue' }).click();
 
     await test.step('Applicant information page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/applicant-information/);
+      await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
       await hasError(page, 'Enter first name');
@@ -114,6 +116,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Partner information page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/partner-information/);
+      await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
       await hasError(page, 'Enter first name');
@@ -130,6 +133,7 @@ test.describe('Adult flow', () => {
 
       //check if sin is unique
       await page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill('900000001');
+      await page.getByRole('button', { name: 'Continue' }).click();
       await hasError(page, 'The Social Insurance Number (SIN) must be unique');
 
       await page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill('800000002');
@@ -139,6 +143,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Contact information page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/contact-information/);
+      await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
       await hasError(page, 'Enter mailing address, typically number and street');
@@ -150,6 +155,7 @@ test.describe('Adult flow', () => {
 
       //invalid phone number
       await page.getByRole('group', { name: 'Phone number' }).getByRole('textbox', { name: 'Phone number (optional)', exact: true }).fill('111');
+      await page.getByRole('button', { name: 'Continue' }).click();
       await hasError(page, "Phone number does not exist. If it's an international phone number, add '+' in front");
 
       await page.getByRole('group', { name: 'Phone number' }).getByRole('textbox', { name: 'Phone number (optional)', exact: true }).fill('2345678901');
@@ -157,11 +163,13 @@ test.describe('Adult flow', () => {
 
       //invalid email
       await page.getByRole('group', { name: 'Email' }).getByRole('textbox', { name: 'Email address (optional)', exact: true }).fill('123mail');
+      await page.getByRole('button', { name: 'Continue' }).click();
       await hasError(page, 'Enter an email address in the correct format, such as name@example.com');
 
       //email does not match
       await page.getByRole('group', { name: 'Email' }).getByRole('textbox', { name: 'Email address (optional)', exact: true }).fill('123@mail.com');
       await page.getByRole('group', { name: 'Email' }).getByRole('textbox', { name: 'Confirm email address (optional)', exact: true }).fill('124@mail.com');
+      await page.getByRole('button', { name: 'Continue' }).click();
       await hasError(page, 'The email addresses entered do not match');
 
       await page.getByRole('group', { name: 'Email' }).getByRole('textbox', { name: 'Confirm email address (optional)', exact: true }).fill('123@mail.com');
@@ -177,6 +185,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Communication preference page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/communication-preference/);
+      await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
       await hasError(page, 'Select preferred language of communication');
@@ -189,6 +198,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Dental insurance page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/dental-insurance/);
+      await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
       await hasError(page, 'Select whether you have access to dental insurance');
@@ -199,6 +209,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Access to other dental benefits page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/federal-provincial-territorial-benefits/);
+      await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
       await hasError(page, 'Select whether you have federal dental benefits');
@@ -206,6 +217,7 @@ test.describe('Adult flow', () => {
 
       await page.getByRole('group', { name: 'Federal benefits' }).getByRole('radio', { name: 'Yes, I have federal dental benefits' }).check();
       await page.getByRole('group', { name: 'Provincial or territorial benefits' }).getByRole('radio', { name: 'Yes, I have provincial or territorial dental benefits' }).check();
+      await page.getByRole('button', { name: 'Continue' }).click();
 
       // check for empty fields
       await hasError(page, 'Select which federal program you are covered under');
@@ -213,6 +225,7 @@ test.describe('Adult flow', () => {
 
       await page.getByRole('group', { name: 'Federal benefits' }).getByRole('radio', { name: 'Correctional Service Canada Health Services' }).check();
       await page.getByRole('group', { name: 'Provincial or territorial benefits' }).getByRole('combobox', { name: 'If yes, through which province or territory?' }).selectOption('Alberta');
+      await page.getByRole('button', { name: 'Continue' }).click();
 
       await hasError(page, 'Select which provincial or territorial program you are covered under');
       await page.getByRole('group', { name: 'Provincial or territorial benefits' }).getByRole('radio', { name: 'Alberta Adult Health Benefits' }).check();
