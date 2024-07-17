@@ -10,9 +10,9 @@ async function hasError(page: Page, error: string) {
 // Reusable function to fill out date of birth
 async function fillOutDOB(page: Page, year: string) {
   await page.getByRole('button', { name: 'Continue' }).click();
-  await page.getByTestId('date-picker-month-select').selectOption('01');
-  await page.getByTestId('date-picker-day-input').fill('1');
-  await page.getByTestId('date-picker-year-input').fill(year);
+  await page.getByRole('combobox', { name: 'Month' }).selectOption('01');
+  await page.getByRole('textbox', { name: 'Day (DD)' }).fill('1');
+  await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
 }
 
 // Reusable function to fill out address
