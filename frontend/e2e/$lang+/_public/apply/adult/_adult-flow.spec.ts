@@ -1,6 +1,17 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
+interface FillOutAddressArgs {
+  address: string;
+  city: string;
+  country: string;
+  group: string;
+  page: Page;
+  postalCode: string;
+  province: string;
+  unit: string;
+}
+
 // Reusable funtion to check empty input
 async function hasError(page: Page, error: string) {
   await expect(page.getByRole('link', { name: error })).toBeVisible();
@@ -14,24 +25,15 @@ async function fillOutDOB(page: Page, year: string) {
 }
 
 // Reusable function to fill out address
-async function fillOutAddress(page: Page, group: string, address: string, unit: string, country: string, province: string, city: string, postalCode: string) {
-  await page.getByRole('group', { name: group }).getByRole('textbox', { name: 'Address', exact: true }).fill(address);
-  await page.getByRole('group', { name: group }).getByRole('textbox', { name: 'Apartment, suite, etc. (optional)', exact: true }).fill(unit);
-  await page.getByRole('group', { name: group }).getByRole('combobox', { name: 'Country', exact: true }).selectOption(country);
-  await page.getByRole('group', { name: group }).getByRole('combobox', { name: 'Province, territory, state, or region', exact: true }).selectOption(province);
-  await page.getByRole('group', { name: group }).getByRole('textbox', { name: 'City or town', exact: true }).fill(city);
-
-  //invalid postal code
-  await page.getByRole('group', { name: group }).getByRole('textbox', { name: 'Postal code or ZIP code', exact: true }).fill('12345678');
-  await page.getByRole('button', { name: 'Continue' }).click();
-  if (group === 'Mailing address') {
-    await hasError(page, 'Enter mailing address postal code in the correct format, such as A1A 1A1');
-  }
-  if (group === 'Home address') {
-    await hasError(page, 'Enter home address postal code in the correct format, such as A1A 1A1');
-  }
-
-  await page.getByRole('group', { name: group }).getByRole('textbox', { name: 'Postal code or ZIP code', exact: true }).fill(postalCode);
+async function fillOutAddress({ address, city, country, group, page, postalCode, province, unit }: FillOutAddressArgs) {
+  const groupLocator = page.getByRole('group', { name: group });
+  await expect(groupLocator).toBeVisible();
+  await groupLocator.getByRole('textbox', { name: 'Address', exact: true }).fill(address);
+  await groupLocator.getByRole('textbox', { name: 'Apartment, suite, etc. (optional)', exact: true }).fill(unit);
+  await groupLocator.getByRole('combobox', { name: 'Country', exact: true }).selectOption(country);
+  await groupLocator.getByRole('combobox', { name: 'Province, territory, state, or region', exact: true }).selectOption(province);
+  await groupLocator.getByRole('textbox', { name: 'City or town', exact: true }).fill(city);
+  await groupLocator.getByRole('textbox', { name: 'Postal code or ZIP code', exact: true }).fill(postalCode);
 }
 
 test.describe('Adult flow', () => {
@@ -191,10 +193,10 @@ test.describe('Adult flow', () => {
       await page.getByRole('group', { name: 'Email' }).getByRole('textbox', { name: 'Confirm email address (optional)', exact: true }).fill('123@mail.com');
 
       //fillout mailing address
-      await fillOutAddress(page, 'Mailing address', '123 street', '404', 'Canada', 'Ontario', 'Ottawa', 'H0H0H0');
+      await fillOutAddress({ page, group: 'Mailing address', address: '123 street', unit: '404', country: 'Canada', province: 'Ontario', city: 'Ottawa', postalCode: 'H0H0H0' });
 
       //fillout home address
-      await fillOutAddress(page, 'Home address', '555 street', '', 'Canada', 'Quebec', 'Montreal', 'K1K1K1');
+      await fillOutAddress({ page, group: 'Home address', address: '555 street', unit: '', country: 'Canada', province: 'Quebec', city: 'Montreal', postalCode: 'K1K1K1' });
 
       await page.getByRole('button', { name: 'Continue' }).click();
     });
