@@ -35,15 +35,18 @@ async function fillOutAddress(page: Page, group: string, address: string, unit: 
 }
 
 test.describe('Adult flow', () => {
-  test('should complete application as adult applicant', async ({ page }) => {
-    await test.step('Navigate to online application', async () => {
-      await page.goto('/en/apply');
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/terms-and-conditions/);
-      await page.getByRole('button', { name: 'Agree and continue' }).click();
-    });
+  test.beforeEach('Navigate to online application', async ({ page }) => {
+    test.setTimeout(60000);
+    await page.goto('/en/apply');
+    await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/terms-and-conditions/);
+    await expect(page.getByRole('heading', { level: 1, name: 'Terms and conditions' })).toBeVisible();
+    await page.getByRole('button', { name: 'Agree and continue' }).click();
+  });
 
+  test('should complete application as adult applicant', async ({ page }) => {
     await test.step('Type of application page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/type-application/);
+      await expect(page.getByRole('heading', { level: 1, name: 'Type of application' })).toBeVisible();
       await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
@@ -55,6 +58,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Tax filing page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/tax-filing/);
+      await expect(page.getByRole('heading', { level: 1, name: 'Tax filing' })).toBeVisible();
       await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
@@ -66,6 +70,7 @@ test.describe('Adult flow', () => {
 
     await test.step('File taxes page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/file-taxes/);
+      await expect(page.getByRole('heading', { level: 1, name: 'File your taxes' })).toBeVisible();
       await page.getByRole('link', { name: 'Back' }).click();
       await page.getByRole('radio', { name: 'Yes', exact: true }).check();
       await page.getByRole('button', { name: 'Continue' }).click();
@@ -73,6 +78,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Date of birth page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/date-of-birth/);
+      await expect(page.getByRole('heading', { level: 1, name: 'Date of birth' })).toBeVisible();
       await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
@@ -86,6 +92,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Disability tax credit page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/disability-tax-credit/);
+      await expect(page.getByRole('heading', { level: 1, name: 'Disability tax credit' })).toBeVisible();
       await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
@@ -97,6 +104,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Find out when you can apply page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/dob-eligibility/);
+      await expect(page.getByRole('heading', { level: 1, name: 'Find out when you can apply' })).toBeVisible();
       await page.getByRole('link', { name: 'Back' }).click();
       await page.getByRole('radio', { name: 'Yes' }).check();
       await page.getByRole('button', { name: 'Continue' }).click();
@@ -104,6 +112,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Applicant information page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/applicant-information/);
+      await expect(page.getByRole('heading', { level: 1, name: 'Applicant information' })).toBeVisible();
       await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
@@ -121,6 +130,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Partner information page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/partner-information/);
+      await expect(page.getByRole('heading', { level: 1, name: 'Spouse or common-law partner information' })).toBeVisible();
       await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
@@ -148,6 +158,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Contact information page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/contact-information/);
+      await expect(page.getByRole('heading', { level: 1, name: 'Contact information' })).toBeVisible();
       await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
@@ -190,6 +201,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Communication preference page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/communication-preference/);
+      await expect(page.getByRole('heading', { level: 1, name: 'Communication' })).toBeVisible();
       await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
@@ -203,6 +215,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Dental insurance page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/dental-insurance/);
+      await expect(page.getByRole('heading', { level: 1, name: 'Access to other dental insurance' })).toBeVisible();
       await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
@@ -214,6 +227,7 @@ test.describe('Adult flow', () => {
 
     await test.step('Access to other dental benefits page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/federal-provincial-territorial-benefits/);
+      await expect(page.getByRole('heading', { level: 1, name: 'Access to other federal, provincial or territorial dental benefits' })).toBeVisible();
       await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
@@ -238,15 +252,17 @@ test.describe('Adult flow', () => {
     });
 
     await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/review-information/);
+    await expect(page.getByRole('heading', { level: 1, name: 'Review your information' })).toBeVisible();
     await page.getByRole('button', { name: 'Submit Application' }).click();
     await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/confirmation/);
+    await expect(page.getByRole('heading', { level: 1, name: 'Application successfully submitted' })).toBeVisible();
   });
-});
 
-test.describe('Youth flow', () => {
-  //TODO write test for youth flow
-});
+  test('should complete application as youth applicant', () => {
+    //TODO write test for youth flow
+  });
 
-test.describe('Senior', () => {
-  //TODO write test for senior flow
+  test('should complete application as senior applicant', () => {
+    //TODO write test for senior flow
+  });
 });
