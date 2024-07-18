@@ -9,6 +9,7 @@
     "dev": "remix dev --manual --command \"npm run start:server\"",
     "start": "cross-env NODE_ENV=production npm run start:server",
     "start:server": "tsx ./express.server.ts ./build/index.js",
+    "profile": "cross-env NODE_ENV=production tsx --prof --no-logfile-per-isolate ./express.server.ts ./build/index.js",
     "check:all": "npm run format:check && npm run lint && npm run typecheck",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
