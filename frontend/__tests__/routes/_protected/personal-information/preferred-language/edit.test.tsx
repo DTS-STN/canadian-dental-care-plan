@@ -25,7 +25,7 @@ vi.mock('~/services/lookup-service.server', () => ({
         nameFr: 'Français',
       },
     ]),
-    getPreferredLanguage: vi.fn().mockReturnValue({
+    getPreferredLanguageById: vi.fn().mockReturnValue({
       id: 'fr',
       nameEn: 'French',
       nameFr: 'Français',
@@ -62,7 +62,7 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
       session.set('userInfoToken', { sin: '999999999' });
       session.set('personalInformation', { preferredLanguageId: 'fr' });
 
-      vi.mocked(getLookupService().getPreferredLanguage).mockReturnValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' });
+      vi.mocked(getLookupService().getPreferredLanguageById).mockReturnValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' });
       vi.mocked(getLookupService().getAllPreferredLanguages).mockReturnValue([
         {
           id: 'en',

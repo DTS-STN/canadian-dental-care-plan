@@ -334,15 +334,15 @@ function createLookupService() {
     throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
   }
 
-  function getPreferredLanguage(preferredLanguageId: string) {
-    log.debug('Fetching preferred languages');
-    const preferredLanguage = preferredLanguageJson.value[0].OptionSet.Options.find(({ Value }) => Value.toString() === preferredLanguageId);
+  function getPreferredLanguageById(id: string) {
+    log.debug('Fetching preferred language with id: [%s]', id);
+    const preferredLanguage = preferredLanguageJson.value[0].OptionSet.Options.find(({ Value }) => Value.toString() === id);
 
     if (!preferredLanguage) {
       return null;
     }
 
-    log.trace('Returning preferred languages: [%j]', preferredLanguage);
+    log.trace('Returning preferred language: [%j]', preferredLanguage);
     return {
       id: preferredLanguage.Value.toString(),
       nameEn: preferredLanguage.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label,
@@ -506,34 +506,98 @@ function createLookupService() {
   }
 
   return {
-    getAllAvoidedDentalCostTypes: moize.promise(getAllAvoidedDentalCostTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_AVOIDED_DENTAL_COST_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllAvoidedDentalCostTypes memo') }),
-    getAllBornTypes: moize.promise(getAllBornTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllBornTypes memo') }),
-    getAllClientFriendlyStatuses: moize(getAllClientFriendlyStatuses, { maxAge: 1000 * LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllClientFriendlyStatuses memo') }),
-    getClientFriendlyStatusById: moize(getClientFriendlyStatusById, { maxAge: 1000 * LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new ClientFriendlyStatusById memo') }),
-    getAllCountries: moize(getAllCountries, { maxAge: 1000 * LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllCountries memo') }),
-    getAllDisabilityTypes: moize.promise(getAllDisabilityTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_DISABILITY_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllDisabilityTypes memo') }),
-    getAllEquityTypes: moize.promise(getAllEquityTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_EQUITY_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllEquityTypes memo') }),
-    getAllFederalSocialPrograms: moize(getAllFederalSocialPrograms, { maxAge: 1000 * LOOKUP_SVC_ALL_FEDERAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllFederalSocialPrograms memo') }),
-    getFederalSocialProgramById: moize(getFederalSocialProgramsById, { maxAge: 1000 * LOOKUP_SVC_ALL_FEDERAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new FederalSocialProgramById memo') }),
-    getAllGenderTypes: moize.promise(getAllGenderTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_GENDER_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllGenderTypes memo') }),
-    getAllIndigenousGroupTypes: moize.promise(getAllIndigenousGroupTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_INDIGENOUS_GROUP_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllIndigenousGroupTypes memo') }),
-    getAllIndigenousTypes: moize.promise(getAllIndigenousTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_INDIGENOUS_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllIndigenousTypes memo') }),
-    getAllLastTimeDentistVisitTypes: moize.promise(getAllLastTimeDentistVisitTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_LAST_TIME_DENTIST_VISIT_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllLastTimeDentistVisitTypes memo') }),
-    getAllMaritalStatuses: moize(getAllMaritalStatuses, { maxAge: 1000 * LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllMaritalStatuses memo') }),
-    getAllMouthPainTypes: moize.promise(getAllMouthPainTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_MOUTH_PAIN_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllMouthPainTypes memo') }),
-    getAllPreferredCommunicationMethods: moize(getAllPreferredCommunicationMethods, { maxAge: 1000 * LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllPreferredCommunicationMethods memo') }),
-    getAllPreferredLanguages: moize(getAllPreferredLanguages, { maxAge: 1000 * LOOKUP_SVC_ALL_PREFERRED_LANGUAGES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllPreferredLanguages memo') }),
+    getAllAvoidedDentalCostTypes: moize.promise(getAllAvoidedDentalCostTypes, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_AVOIDED_DENTAL_COST_TYPES_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllAvoidedDentalCostTypes memo'),
+    }),
+    getAllBornTypes: moize.promise(getAllBornTypes, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllBornTypes memo'),
+    }),
+    getAllClientFriendlyStatuses: moize(getAllClientFriendlyStatuses, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllClientFriendlyStatuses memo'),
+    }),
+    getClientFriendlyStatusById: moize(getClientFriendlyStatusById, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS,
+      maxSize: Infinity,
+      onCacheAdd: () => log.info('Creating new ClientFriendlyStatusById memo'),
+    }),
+    getAllCountries: moize(getAllCountries, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllCountries memo'),
+    }),
+    getAllDisabilityTypes: moize.promise(getAllDisabilityTypes, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_DISABILITY_TYPES_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllDisabilityTypes memo'),
+    }),
+    getAllEquityTypes: moize.promise(getAllEquityTypes, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_EQUITY_TYPES_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllEquityTypes memo'),
+    }),
+    getAllFederalSocialPrograms: moize(getAllFederalSocialPrograms, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_FEDERAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllFederalSocialPrograms memo'),
+    }),
+    getFederalSocialProgramById: moize(getFederalSocialProgramsById, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_FEDERAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
+      maxSize: Infinity,
+      onCacheAdd: () => log.info('Creating new FederalSocialProgramById memo'),
+    }),
+    getAllGenderTypes: moize.promise(getAllGenderTypes, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_GENDER_TYPES_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllGenderTypes memo'),
+    }),
+    getAllIndigenousGroupTypes: moize.promise(getAllIndigenousGroupTypes, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_INDIGENOUS_GROUP_TYPES_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllIndigenousGroupTypes memo'),
+    }),
+    getAllIndigenousTypes: moize.promise(getAllIndigenousTypes, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_INDIGENOUS_TYPES_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllIndigenousTypes memo'),
+    }),
+    getAllLastTimeDentistVisitTypes: moize.promise(getAllLastTimeDentistVisitTypes, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_LAST_TIME_DENTIST_VISIT_TYPES_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllLastTimeDentistVisitTypes memo'),
+    }),
+    getAllMaritalStatuses: moize(getAllMaritalStatuses, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllMaritalStatuses memo'),
+    }),
+    getAllMouthPainTypes: moize.promise(getAllMouthPainTypes, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_MOUTH_PAIN_TYPES_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllMouthPainTypes memo'),
+    }),
+    getAllPreferredCommunicationMethods: moize(getAllPreferredCommunicationMethods, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllPreferredCommunicationMethods memo'),
+    }),
+    getAllPreferredLanguages: moize(getAllPreferredLanguages, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_PREFERRED_LANGUAGES_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllPreferredLanguages memo'),
+    }),
+    getPreferredLanguageById: moize(getPreferredLanguageById, {
+      maxAge: 1000 * LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS,
+      maxSize: Infinity,
+      onCacheAdd: () => log.info('Creating new PreferredLanguage memo'),
+    }),
     getAllProvincialTerritorialSocialPrograms: moize(getAllProvincialTerritorialSocialPrograms, {
       maxAge: 1000 * LOOKUP_SVC_ALL_PROVINCIAL_TERRITORIAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllProvincialTerritorialSocialPrograms memo'),
     }),
     getProvincialTerritorialSocialProgramById: moize(getProvincialTerritorialSocialProgramById, {
       maxAge: 1000 * LOOKUP_SVC_ALL_PROVINCIAL_TERRITORIAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
+      maxSize: Infinity,
       onCacheAdd: () => log.info('Creating new ProvincialTerritorialSocialProgramById memo'),
     }),
-    getAllRegions: moize(getAllRegions, { maxAge: 1000 * LOOKUP_SVC_ALL_REGIONS_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllRegions memo') }),
-    getAllSexAtBirthTypes: moize.promise(getAllSexAtBirthTypes, { maxAge: 1000 * LOOKUP_SVC_ALL_SEX_AT_BIRTH_TYPES_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new AllSexAtBirthTypes memo') }),
-    getPreferredLanguage: moize(getPreferredLanguage, { maxAge: 1000 * LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS, onCacheAdd: () => log.info('Creating new PreferredLanguage memo') }),
+    getAllRegions: moize(getAllRegions, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_REGIONS_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllRegions memo'),
+    }),
+    getAllSexAtBirthTypes: moize.promise(getAllSexAtBirthTypes, {
+      maxAge: 1000 * LOOKUP_SVC_ALL_SEX_AT_BIRTH_TYPES_CACHE_TTL_SECONDS,
+      onCacheAdd: () => log.info('Creating new AllSexAtBirthTypes memo'),
+    }),
   };
 }
 

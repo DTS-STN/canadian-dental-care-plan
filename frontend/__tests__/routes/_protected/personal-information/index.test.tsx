@@ -17,7 +17,7 @@ vi.mock('~/services/lookup-service.server', () => ({
       { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
       { id: 'fr', nameEn: 'French', nameFr: 'Français' },
     ]),
-    getPreferredLanguage: vi.fn().mockReturnValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' }),
+    getPreferredLanguageById: vi.fn().mockReturnValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' }),
     getAllCountries: vi.fn().mockReturnValue([{ id: 'SUP', nameEn: 'super country', nameFr: '(FR) super country' }]),
     getAllRegions: vi.fn().mockReturnValue([{ id: 'SP', countryId: "CAN", nameEn: 'sample', nameFr: '(FR) sample', abbr: 'SP' }]),
     getAllMaritalStatuses: vi.fn().mockReturnValue([{ id: 'SINGLE', nameEn: 'Single', nameFr: 'Single but in french' }]),
