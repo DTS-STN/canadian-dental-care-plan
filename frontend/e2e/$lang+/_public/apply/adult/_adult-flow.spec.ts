@@ -108,6 +108,11 @@ test.describe('Adult flow', () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/dob-eligibility/);
       await expect(page.getByRole('heading', { level: 1, name: 'Find out when you can apply' })).toBeVisible();
       await page.getByRole('link', { name: 'Back' }).click();
+    });
+
+    await test.step('Return to Disability tax credit page', async () => {
+      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/disability-tax-credit/);
+      await expect(page.getByRole('heading', { level: 1, name: 'Disability tax credit' })).toBeVisible();
       await page.getByRole('radio', { name: 'Yes' }).check();
       await page.getByRole('button', { name: 'Continue' }).click();
     });
