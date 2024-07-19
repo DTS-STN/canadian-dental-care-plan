@@ -4,17 +4,17 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
-import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../page-ids.json';
-import { Button } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputRadios } from '~/components/input-radios';
+import { LoadingButton } from '~/components/loading-button';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { featureEnabled, getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
@@ -209,9 +209,9 @@ export default function StatusChecker() {
           required
           errorMessage={errors?.checkFor}
         />
-        <Button variant="primary" id="submit" disabled={isSubmitting} className="my-8" data-gc-analytics-formsubmit="submit" endIcon={isSubmitting ? faSpinner : faChevronRight} endIconProps={{ spin: isSubmitting }}>
+        <LoadingButton variant="primary" id="submit" loading={isSubmitting} className="my-8" data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
           {t('status:form.continue')}
-        </Button>
+        </LoadingButton>
       </fetcher.Form>
     </div>
   );
