@@ -110,7 +110,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
       }
     : undefined;
 
-  const preferredLanguage = lookupService.getPreferredLanguage(userInfo.preferredLanguage);
+  const preferredLanguage = lookupService.getPreferredLanguageById(userInfo.preferredLanguage);
 
   const mailingAddressInfo = {
     address: state.contactInformation.mailingAddress,

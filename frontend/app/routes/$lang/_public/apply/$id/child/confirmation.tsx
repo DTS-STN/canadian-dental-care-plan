@@ -70,7 +70,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const countryMailing = allCountries.find((country) => country.countryId === state.contactInformation?.mailingCountry);
   const countryHome = allCountries.find((country) => country.countryId === state.contactInformation?.homeCountry);
 
-  const preferredLang = lookupService.getPreferredLanguage(state.communicationPreferences.preferredLanguage);
+  const preferredLang = lookupService.getPreferredLanguageById(state.communicationPreferences.preferredLanguage);
   const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : state.communicationPreferences.preferredLanguage;
 
   const maritalStatuses = localizeMaritalStatuses(lookupService.getAllMaritalStatuses(), locale);
