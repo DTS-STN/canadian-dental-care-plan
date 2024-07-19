@@ -74,7 +74,7 @@
     "form": {
       "complete-fields": "Remplir tous les champs",
       "application-code-label": "Code de demande ou numéro de client",
-      "application-code-description": "Entrez le numéro que vous avez reçu sur la page de confirmation de la demande en ligne ou le numéro figurant dans le coin supérieur droit de la lettre que vous avez peut-être reçue de Service Canada.",
+      "application-code-description": "Entrez le numéro que vous avez reçu après avoir fait votre demande en ligne ou le numéro figurant dans le coin supérieur droit de la lettre que vous avez peut-être reçue de Service Canada.",
       "sin-label": "Numéro d'assurance sociale (NAS)",
       "sin-description": "Entrez un NAS de 9 chiffres",
       "submit": "Vérifier l'état",
@@ -98,7 +98,7 @@
     "form": {
       "complete-fields": "Remplir tous les champs",
       "application-code-label": "Code de demande ou numéro de client",
-      "application-code-description": "Entrez le numéro que vous avez reçu après avoir demande en ligne ou le numéro figurant dans le coin supérieur droit de la lettre que vous avez peut-être reçue de Service Canada.",
+      "application-code-description": "Entrez le numéro que vous avez reçu après avoir fait votre demande en ligne ou le numéro figurant dans le coin supérieur droit de la lettre que vous avez peut-être reçue de Service Canada.",
       "radio-legend": "L'enfant a-t-il un numéro d'assurance sociale (NAS)?",
       "sin-label": "Numéro d'assurance sociale (NAS)",
       "sin-description": "Entrez un NAS de 9 chiffres",
