@@ -6,7 +6,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -38,7 +37,6 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { extractDigits, isAllValidInputCharacters } from '~/utils/string-utils';
-import { cn } from '~/utils/tw-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum ChildHasSin {
@@ -298,9 +296,8 @@ export default function StatusCheckerChild() {
               {fetcher.data.status.name && <ClientFriendlyStatusMarkdown content={fetcher.data.status.name} />}
             </div>
           </ContextualAlert>
-          <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} className="mt-12">
+          <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} className="mt-12" endIcon={faChevronRight}>
             {t('status:child.check-another')}
-            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
           </ButtonLink>
         </>
       ) : (
@@ -376,9 +373,8 @@ export default function StatusCheckerChild() {
                 </>
               )}
             </div>
-            <Button variant="primary" id="submit" disabled={isSubmitting} data-gc-analytics-formsubmit="submit">
+            <Button variant="primary" id="submit" disabled={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={isSubmitting ? faSpinner : faChevronRight} endIconProps={{ spin: isSubmitting }}>
               {t('status:child.form.submit')}
-              <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
             </Button>
           </fetcher.Form>
         </>
