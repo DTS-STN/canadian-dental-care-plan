@@ -111,7 +111,7 @@
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-react": "^7.34.4",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "jsdom": "^24.1.0",
+    "jsdom": "^24.1.1",
     "patch-package": "^8.0.0",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.5",
