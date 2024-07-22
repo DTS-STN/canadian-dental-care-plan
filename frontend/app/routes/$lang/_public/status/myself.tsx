@@ -62,7 +62,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   featureEnabled('status');
   const log = getLogger('status/myself/index');
-  const { CLIENT_STATUS_SUCCESS_ID, ENABLED_FEATURES } = getEnv();
+  const { CLIENT_STATUS_SUCCESS_ID, ENABLED_FEATURES, INVALID_CLIENT_FRIENDLY_STATUS } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -115,7 +115,8 @@ export async function action({ context: { session }, params, request }: ActionFu
   const applicationStatusService = getApplicationStatusService();
   const lookupService = getLookupService();
   const { sin, code } = parsedDataResult.data;
-  const statusId = await applicationStatusService.getStatusIdWithSin({ sin, applicationCode: code });
+  let statusId = await applicationStatusService.getStatusIdWithSin({ sin, applicationCode: code });
+  statusId = statusId === INVALID_CLIENT_FRIENDLY_STATUS ? null : statusId;
   const clientFriendlyStatus = statusId ? lookupService.getClientFriendlyStatusById(statusId) : null;
 
   function getAlertType() {
