@@ -36,6 +36,41 @@ async function fillOutAddress({ address, city, country, group, page, postalCode,
   await groupLocator.getByRole('textbox', { name: 'Postal code or ZIP code', exact: true }).fill(postalCode);
 }
 
+// Reusable function for Type of application step
+async function typeOfApplication(page: Page) {
+  await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/type-application/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Type of application' })).toBeVisible();
+  await page.getByRole('button', { name: 'Continue' }).click();
+
+  //check for empty fields
+  await hasError(page, 'Select who this application is for');
+
+  await page.getByRole('radio', { name: 'I am applying for myself', exact: true }).check();
+  await page.getByRole('button', { name: 'Continue' }).click();
+}
+
+// Reusable function for Tax filing step
+async function taxFiling(page: Page) {
+  await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/tax-filing/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Tax filing' })).toBeVisible();
+  await page.getByRole('button', { name: 'Continue' }).click();
+
+  //check for empty fields
+  await hasError(page, 'Select whether or not you have filed your taxes');
+
+  await page.getByRole('radio', { name: 'No', exact: true }).check();
+  await page.getByRole('button', { name: 'Continue' }).click();
+}
+
+// Reusable function for File your taxes step
+async function fileTaxes(page: Page) {
+  await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/file-taxes/);
+  await expect(page.getByRole('heading', { level: 1, name: 'File your taxes' })).toBeVisible();
+  await page.getByRole('link', { name: 'Back' }).click();
+  await page.getByRole('radio', { name: 'Yes', exact: true }).check();
+  await page.getByRole('button', { name: 'Continue' }).click();
+}
+
 // Reusable function for applicant information step
 async function applicantInformation(page: Page) {
   await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/applicant-information/);
@@ -194,35 +229,15 @@ test.describe('Adult flow', () => {
 
   test('should complete application as adult applicant', async ({ page }) => {
     await test.step('Type of application page', async () => {
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/type-application/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Type of application' })).toBeVisible();
-      await page.getByRole('button', { name: 'Continue' }).click();
-
-      //check for empty fields
-      await hasError(page, 'Select who this application is for');
-
-      await page.getByRole('radio', { name: 'I am applying for myself', exact: true }).check();
-      await page.getByRole('button', { name: 'Continue' }).click();
+      await typeOfApplication(page);
     });
 
     await test.step('Tax filing page', async () => {
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/tax-filing/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Tax filing' })).toBeVisible();
-      await page.getByRole('button', { name: 'Continue' }).click();
-
-      //check for empty fields
-      await hasError(page, 'Select whether or not you have filed your taxes');
-
-      await page.getByRole('radio', { name: 'No', exact: true }).check();
-      await page.getByRole('button', { name: 'Continue' }).click();
+      await taxFiling(page);
     });
 
     await test.step('File taxes page', async () => {
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/file-taxes/);
-      await expect(page.getByRole('heading', { level: 1, name: 'File your taxes' })).toBeVisible();
-      await page.getByRole('link', { name: 'Back' }).click();
-      await page.getByRole('radio', { name: 'Yes', exact: true }).check();
-      await page.getByRole('button', { name: 'Continue' }).click();
+      await fileTaxes(page);
     });
 
     await test.step('Date of birth page', async () => {
@@ -297,35 +312,15 @@ test.describe('Adult flow', () => {
 
   test('should complete application as youth applicant', async ({ page }) => {
     await test.step('Type of application page', async () => {
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/type-application/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Type of application' })).toBeVisible();
-      await page.getByRole('button', { name: 'Continue' }).click();
-
-      //check for empty fields
-      await hasError(page, 'Select who this application is for');
-
-      await page.getByRole('radio', { name: 'I am applying for myself', exact: true }).check();
-      await page.getByRole('button', { name: 'Continue' }).click();
+      await typeOfApplication(page);
     });
 
     await test.step('Tax filing page', async () => {
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/tax-filing/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Tax filing' })).toBeVisible();
-      await page.getByRole('button', { name: 'Continue' }).click();
-
-      //check for empty fields
-      await hasError(page, 'Select whether or not you have filed your taxes');
-
-      await page.getByRole('radio', { name: 'No', exact: true }).check();
-      await page.getByRole('button', { name: 'Continue' }).click();
+      await taxFiling(page);
     });
 
     await test.step('File taxes page', async () => {
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/file-taxes/);
-      await expect(page.getByRole('heading', { level: 1, name: 'File your taxes' })).toBeVisible();
-      await page.getByRole('link', { name: 'Back' }).click();
-      await page.getByRole('radio', { name: 'Yes', exact: true }).check();
-      await page.getByRole('button', { name: 'Continue' }).click();
+      await fileTaxes(page);
     });
 
     await test.step('Date of birth page', async () => {
@@ -399,35 +394,15 @@ test.describe('Adult flow', () => {
 
   test('Should complete application as senior applicant', async ({ page }) => {
     await test.step('Type of application page', async () => {
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/type-application/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Type of application' })).toBeVisible();
-      await page.getByRole('button', { name: 'Continue' }).click();
-
-      //check for empty fields
-      await hasError(page, 'Select who this application is for');
-
-      await page.getByRole('radio', { name: 'I am applying for myself', exact: true }).check();
-      await page.getByRole('button', { name: 'Continue' }).click();
+      await typeOfApplication(page);
     });
 
     await test.step('Tax filing page', async () => {
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/tax-filing/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Tax filing' })).toBeVisible();
-      await page.getByRole('button', { name: 'Continue' }).click();
-
-      //check for empty fields
-      await hasError(page, 'Select whether or not you have filed your taxes');
-
-      await page.getByRole('radio', { name: 'No', exact: true }).check();
-      await page.getByRole('button', { name: 'Continue' }).click();
+      await taxFiling(page);
     });
 
     await test.step('File taxes page', async () => {
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/file-taxes/);
-      await expect(page.getByRole('heading', { level: 1, name: 'File your taxes' })).toBeVisible();
-      await page.getByRole('link', { name: 'Back' }).click();
-      await page.getByRole('radio', { name: 'Yes', exact: true }).check();
-      await page.getByRole('button', { name: 'Continue' }).click();
+      await fileTaxes(page);
     });
 
     await test.step('Date of birth page', async () => {
