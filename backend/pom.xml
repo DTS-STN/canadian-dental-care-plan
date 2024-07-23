@@ -23,7 +23,7 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 
 		<!-- NOTE: when updating Spring Boot, be sure to also update the <spring-boot.version> property below -->
-		<version>3.3.1</version>
+		<version>3.3.2</version>
 	</parent>
 
 
@@ -45,10 +45,9 @@
 		<jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
 		<johnzon.version>2.0.1</johnzon.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
-		<opentelemetry-bom.version>1.39.0</opentelemetry-bom.version>
-		<opentelemetry-instrumentation-bom.version>2.5.0-alpha</opentelemetry-instrumentation-bom.version>
-		<spring-boot.version>3.3.1</spring-boot.version>
-		<springdoc.version>2.5.0</springdoc.version>
+		<opentelemetry-instrumentation-bom.version>2.6.0</opentelemetry-instrumentation-bom.version>
+		<spring-boot.version>3.3.2</spring-boot.version>
+		<springdoc.version>2.6.0</springdoc.version>
 	</properties>
 
 
@@ -179,18 +178,12 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>io.opentelemetry</groupId>
-				<artifactId>opentelemetry-bom</artifactId>
-				<version>${opentelemetry-bom.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
+				<!-- see: https://opentelemetry.io/docs/zero-code/java/spring-boot-starter/getting-started/ -->
 				<groupId>io.opentelemetry.instrumentation</groupId>
-				<artifactId>opentelemetry-instrumentation-bom-alpha</artifactId>
+				<artifactId>opentelemetry-instrumentation-bom</artifactId>
 				<version>${opentelemetry-instrumentation-bom.version}</version>
-				<type>pom</type>
 				<scope>import</scope>
+				<type>pom</type>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
