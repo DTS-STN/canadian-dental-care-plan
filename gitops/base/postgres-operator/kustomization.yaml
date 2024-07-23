@@ -1,6 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
+namespace: canada-dental-care-plan
 labels:
   - includeTemplates: true
     pairs:
@@ -10,10 +10,10 @@ labels:
       postgres-operator.crunchydata.com/control-plane: postgres-operator
 
 resources:
-  - manager.yaml
-  - role_binding.yaml
-  - role.yaml
-  - service_account.yaml
+  - ./manager.yaml
+  - ./role_binding.yaml
+  - ./role.yaml
+  - ./service_account.yaml
 
 images:
   - name: postgres-operator
