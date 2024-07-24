@@ -33,6 +33,7 @@ ENV NODE_ENV production
 FROM base as deps
 
 WORKDIR /home/node
+COPY --chown=node:node other/patches/ ./other/patches/
 COPY --chown=node:node package.json package-lock.json ./
 
 USER node
@@ -55,7 +56,7 @@ RUN npm prune --omit dev
 # Intermediate image containing application build files
 FROM base as build
 
-RUN apt-get update && apt-get install jq --yes
+RUN apt-get update && apt-get install jq=1.6-2.1 --yes --no-install-recommends
 
 WORKDIR /home/node
 COPY --from=deps --chown=node:node /home/node/node_modules/ ./node_modules/
@@ -112,4 +113,4 @@ LABEL org.opencontainers.image.vendor=${IMAGE_VENDOR}
 
 USER node
 ENV PORT=3000
-CMD npm run start
+CMD ["npm", "run", "start"]
