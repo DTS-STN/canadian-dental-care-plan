@@ -24,7 +24,7 @@ import { LoadingButton } from '~/components/loading-button';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
-import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
+import { applicationCodeInputPatternFormat, getContextualAlertType, isValidCodeOrNumber } from '~/utils/application-code-utils';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { featureEnabled, getEnv } from '~/utils/env.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
@@ -72,7 +72,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   featureEnabled('status');
   const log = getLogger('status/child/index');
-  const { CLIENT_STATUS_SUCCESS_ID, ENABLED_FEATURES, INVALID_CLIENT_FRIENDLY_STATUS } = getEnv();
+  const { ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -202,7 +202,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const applicationStatusService = getApplicationStatusService();
   const lookupService = getLookupService();
 
-  let statusId = parsedSinResult
+  const statusId = parsedSinResult
     ? await applicationStatusService.getStatusIdWithSin({
         sin: parsedSinResult.data.sin,
         applicationCode: parsedCodeResult.data.code,
@@ -214,20 +214,12 @@ export async function action({ context: { session }, params, request }: ActionFu
         dateOfBirth: parsedChildInfoResult?.data.dateOfBirth ?? '',
       });
 
-  statusId = statusId === INVALID_CLIENT_FRIENDLY_STATUS ? null : statusId;
-
   const clientFriendlyStatus = statusId ? lookupService.getClientFriendlyStatusById(statusId) : null;
-
-  function getAlertType() {
-    if (!statusId) return 'danger';
-    if (clientFriendlyStatus?.id === CLIENT_STATUS_SUCCESS_ID) return 'success';
-    return 'info';
-  }
 
   return json({
     status: {
       ...(clientFriendlyStatus ? localizeClientFriendlyStatus(clientFriendlyStatus, locale) : {}),
-      alertType: getAlertType(),
+      alertType: getContextualAlertType(statusId),
     },
     statusId,
   } as const);
