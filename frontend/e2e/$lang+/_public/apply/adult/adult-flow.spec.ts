@@ -227,20 +227,20 @@ test.describe('Adult flow', () => {
     await page.getByRole('button', { name: 'Agree and continue' }).click();
   });
 
-  test('should complete application as adult applicant', async ({ page }) => {
-    await test.step('Type of application page', async () => {
+  test('Should complete application as adult applicant', async ({ page }) => {
+    await test.step('Should navigate to type of application page', async () => {
       await typeOfApplication(page);
     });
 
-    await test.step('Tax filing page', async () => {
+    await test.step('Should navigate to tax filing page', async () => {
       await taxFiling(page);
     });
 
-    await test.step('File taxes page', async () => {
+    await test.step('Should navigate to file taxes page', async () => {
       await fileTaxes(page);
     });
 
-    await test.step('Date of birth page', async () => {
+    await test.step('Should navigate to date of birth page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/date-of-birth/);
       await expect(page.getByRole('heading', { level: 1, name: 'Date of birth' })).toBeVisible();
       await page.getByRole('button', { name: 'Continue' }).click();
@@ -254,7 +254,7 @@ test.describe('Adult flow', () => {
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
-    await test.step('Disability tax credit page', async () => {
+    await test.step('Should navigate to disability tax credit page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/disability-tax-credit/);
       await expect(page.getByRole('heading', { level: 1, name: 'Disability tax credit' })).toBeVisible();
       await page.getByRole('button', { name: 'Continue' }).click();
@@ -266,40 +266,40 @@ test.describe('Adult flow', () => {
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
-    await test.step('Find out when you can apply page', async () => {
+    await test.step('Should navigate to find out when you can apply page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/dob-eligibility/);
       await expect(page.getByRole('heading', { level: 1, name: 'Find out when you can apply' })).toBeVisible();
       await page.getByRole('link', { name: 'Back' }).click();
     });
 
-    await test.step('Return to Disability tax credit page', async () => {
+    await test.step('Should navigate to return to Disability tax credit page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/disability-tax-credit/);
       await expect(page.getByRole('heading', { level: 1, name: 'Disability tax credit' })).toBeVisible();
       await page.getByRole('radio', { name: 'Yes' }).check();
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
-    await test.step('Applicant information page', async () => {
+    await test.step('Should navigate to applicant information page', async () => {
       await applicantInformation(page);
     });
 
-    await test.step('Partner information page', async () => {
+    await test.step('Should navigate to partner information page', async () => {
       await partnerInformation(page);
     });
 
-    await test.step('Contact information page', async () => {
+    await test.step('Should navigate to contact information page', async () => {
       await contactInformation(page);
     });
 
-    await test.step('Communication preference page', async () => {
+    await test.step('Should navigate to communication preference page', async () => {
       await communicationPreference(page);
     });
 
-    await test.step('Dental insurance page', async () => {
+    await test.step('Should navigate to dental insurance page', async () => {
       await dentalInsurance(page);
     });
 
-    await test.step('Access to other dental benefits page', async () => {
+    await test.step('Should navigate to access to other dental benefits page', async () => {
       await otherDentalBenefits(page);
     });
 
@@ -310,20 +310,20 @@ test.describe('Adult flow', () => {
     await expect(page.getByRole('heading', { level: 1, name: 'Application successfully submitted' })).toBeVisible();
   });
 
-  test('should complete application as youth applicant', async ({ page }) => {
-    await test.step('Type of application page', async () => {
+  test('Should complete application as youth applicant', async ({ page }) => {
+    await test.step('Should navigate to type of application page', async () => {
       await typeOfApplication(page);
     });
 
-    await test.step('Tax filing page', async () => {
+    await test.step('Should navigate to tax filing page', async () => {
       await taxFiling(page);
     });
 
-    await test.step('File taxes page', async () => {
+    await test.step('Should navigate to file taxes page', async () => {
       await fileTaxes(page);
     });
 
-    await test.step('Date of birth page', async () => {
+    await test.step('Should navigate to date of birth page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/date-of-birth/);
       await expect(page.getByRole('heading', { level: 1, name: 'Date of birth' })).toBeVisible();
       await page.getByRole('button', { name: 'Continue' }).click();
@@ -340,7 +340,7 @@ test.describe('Adult flow', () => {
       await page.getByRole('link', { name: 'Back' }).click();
     });
 
-    await test.step('Living independently page', async () => {
+    await test.step('Should navigate to living independently page', async () => {
       await fillOutDOB(page, '2007', '01', '01');
       await page.getByRole('button', { name: 'Continue' }).click();
 
@@ -361,27 +361,27 @@ test.describe('Adult flow', () => {
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
-    await test.step('Applicant information page', async () => {
+    await test.step('Should navigate to applicant information page', async () => {
       await applicantInformation(page);
     });
 
-    await test.step('Partner information page', async () => {
+    await test.step('Should navigate to partner information page', async () => {
       await partnerInformation(page);
     });
 
-    await test.step('Contact information page', async () => {
+    await test.step('Should navigate to contact information page', async () => {
       await contactInformation(page);
     });
 
-    await test.step('Communication preference page', async () => {
+    await test.step('Should navigate to communication preference page', async () => {
       await communicationPreference(page);
     });
 
-    await test.step('Dental insurance page', async () => {
+    await test.step('Should navigate to dental insurance page', async () => {
       await dentalInsurance(page);
     });
 
-    await test.step('Access to other dental benefits page', async () => {
+    await test.step('Should navigate to access to other dental benefits page', async () => {
       await otherDentalBenefits(page);
     });
 
@@ -393,19 +393,19 @@ test.describe('Adult flow', () => {
   });
 
   test('Should complete application as senior applicant', async ({ page }) => {
-    await test.step('Type of application page', async () => {
+    await test.step('Should navigate to type of application page', async () => {
       await typeOfApplication(page);
     });
 
-    await test.step('Tax filing page', async () => {
+    await test.step('Should navigate to tax filing page', async () => {
       await taxFiling(page);
     });
 
-    await test.step('File taxes page', async () => {
+    await test.step('Should navigate to file taxes page', async () => {
       await fileTaxes(page);
     });
 
-    await test.step('Date of birth page', async () => {
+    await test.step('Should navigate to date of birth page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/date-of-birth/);
       await expect(page.getByRole('heading', { level: 1, name: 'Date of birth' })).toBeVisible();
       await page.getByRole('button', { name: 'Continue' }).click();
@@ -419,27 +419,27 @@ test.describe('Adult flow', () => {
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
-    await test.step('Applicant information page', async () => {
+    await test.step('Should navigate to applicant information page', async () => {
       await applicantInformation(page);
     });
 
-    await test.step('Partner information page', async () => {
+    await test.step('Should navigate to partner information page', async () => {
       await partnerInformation(page);
     });
 
-    await test.step('Contact information page', async () => {
+    await test.step('Should navigate to contact information page', async () => {
       await contactInformation(page);
     });
 
-    await test.step('Communication preference page', async () => {
+    await test.step('Should navigate to communication preference page', async () => {
       await communicationPreference(page);
     });
 
-    await test.step('Dental insurance page', async () => {
+    await test.step('Should navigate to dental insurance page', async () => {
       await dentalInsurance(page);
     });
 
-    await test.step('Access to other dental benefits page', async () => {
+    await test.step('Should navigate to access to other dental benefits page', async () => {
       await otherDentalBenefits(page);
     });
 
