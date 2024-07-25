@@ -18,9 +18,6 @@ spec:
                 name: frontend
             - secretRef:
                 name: redis
-          resources:
-            limits:
-              cpu: 1000m
         - name: oauth-proxy
           image: quay.io/oauth2-proxy/oauth2-proxy:v7.6.0
           args:
@@ -64,10 +61,10 @@ spec:
           resources:
             requests:
               cpu: 50m
-              memory: 100Mi
+              memory: 128Mi
             limits:
               cpu: 100m
-              memory: 200Mi
+              memory: 256Mi
           volumeMounts:
             - name: audit-logs
               mountPath: /logs
