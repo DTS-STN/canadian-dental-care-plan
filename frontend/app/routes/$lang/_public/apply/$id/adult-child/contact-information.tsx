@@ -145,6 +145,10 @@ export async function action({ context: { session }, params, request }: ActionFu
         }
       }
 
+      if (val.mailingCountry && val.mailingCountry !== CANADA_COUNTRY_ID && val.mailingPostalCode && isValidPostalCode(CANADA_COUNTRY_ID, val.mailingPostalCode)) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:contact-information.error-message.mailing-address.invalid-postal-code-for-country'), path: ['mailingCountry'] });
+      }
+
       if (val.copyMailingAddress === false) {
         if (!val.homeAddress || validator.isEmpty(val.homeAddress)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:contact-information.error-message.home-address.address-required'), path: ['homeAddress'] });
@@ -168,6 +172,10 @@ export async function action({ context: { session }, params, request }: ActionFu
           } else if (!isValidPostalCode(val.homeCountry, val.homePostalCode)) {
             const message = val.homeCountry === CANADA_COUNTRY_ID ? t('apply-adult-child:contact-information.error-message.home-address.postal-code-valid') : t('apply-adult-child:contact-information.error-message.home-address.zip-code-valid');
             ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['homePostalCode'] });
+          }
+
+          if (val.homeCountry && val.homeCountry !== CANADA_COUNTRY_ID && val.homePostalCode && isValidPostalCode(CANADA_COUNTRY_ID, val.homePostalCode)) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult-child:contact-information.error-message.home-address.invalid-postal-code-for-country'), path: ['homeCountry'] });
           }
         }
       }
