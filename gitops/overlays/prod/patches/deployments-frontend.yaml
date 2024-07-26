@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
         - name: canada-dental-care-plan-frontend
-          image: dtsrhpprodscedspokeacr.azurecr.io/canada-dental-care-plan/canada-dental-care-plan-frontend:2.4.0
+          image: dtsrhpprodscedspokeacr.azurecr.io/canada-dental-care-plan/canada-dental-care-plan-frontend:3.0.0
           envFrom:
             - configMapRef:
                 name: frontend
@@ -19,15 +19,15 @@ spec:
             - secretRef:
                 name: redis
         - name: fluentd
-          image: docker.io/fluentd
+          image: docker.io/fluentd:v1.16-1
           args: [--config, /etc/fluentd.conf]
           resources:
             requests:
               cpu: 50m
-              memory: 100Mi
+              memory: 128Mi
             limits:
               cpu: 100m
-              memory: 200Mi
+              memory: 256Mi
           volumeMounts:
             - name: audit-logs
               mountPath: /logs
