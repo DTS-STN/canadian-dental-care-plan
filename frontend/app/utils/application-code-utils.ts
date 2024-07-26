@@ -1,3 +1,5 @@
+import { getEnv } from './env.server';
+
 export const applicationCodeInputPatternFormat = '### ### ### ####';
 const applicationCodeFormatRegex = /^\d{3}[ ]?\d{3}$/;
 const clientNumberFormatRegex = /^\d{3}[ ]?\d{3}[ ]?\d{3}[ ]?\d{2}$/;
@@ -54,4 +56,24 @@ export function formatSubmissionApplicationCode(applicationCode: string): string
   const strippedCode = applicationCode.replace(/ /g, '');
   if (!/^\d{13}$/.test(strippedCode)) return applicationCode;
   return (strippedCode.match(/....$|.../g) ?? []).join(' ');
+}
+
+/**
+ *
+ * @param statusId - the statusId of the application to check
+ * @param nullStatusMapping- the type to return if a null statusId is supplied; defaults to 'info'
+ * @returns the "info" | "success" | "danger" | "warning" which is consumed by the ContextualAlert component
+ */
+export function getContextualAlertType(statusId: string | null, nullStatusMapping = 'info') {
+  const { CLIENT_STATUS_SUCCESS_ID, INVALID_CLIENT_FRIENDLY_STATUS } = getEnv();
+  switch (statusId) {
+    case null:
+      return nullStatusMapping as 'info' | 'success' | 'danger' | 'warning';
+    case INVALID_CLIENT_FRIENDLY_STATUS:
+      return 'danger';
+    case CLIENT_STATUS_SUCCESS_ID:
+      return 'success';
+    default:
+      return 'info';
+  }
 }
