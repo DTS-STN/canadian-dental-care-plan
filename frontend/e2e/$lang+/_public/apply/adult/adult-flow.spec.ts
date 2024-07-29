@@ -17,6 +17,15 @@ async function hasError(page: Page, error: string) {
   await expect(page.getByRole('link', { name: error })).toBeVisible();
 }
 
+// Calculate date based on the given age
+function calculateDOB(age: number, date: Date = new Date()): { year: string; month: string; day: string } {
+  const year = date.getFullYear() - age;
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+
+  return { year: year.toString(), month, day };
+}
+
 // Reusable function to fill out date of birth
 async function fillOutDOB(page: Page, year: string, month: string, day: string) {
   await page.getByRole('combobox', { name: 'Month' }).selectOption(month);
@@ -107,7 +116,9 @@ async function partnerInformation(page: Page) {
 
   await page.getByRole('textbox', { name: 'First name' }).fill('John');
   await page.getByRole('textbox', { name: 'Last name' }).fill('Smith');
-  await fillOutDOB(page, '1995', '01', '01');
+
+  const { year, month, day } = calculateDOB(30);
+  await fillOutDOB(page, year, month, day);
 
   //check if sin is unique
   await page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill('900000001');
@@ -250,7 +261,8 @@ test.describe('Adult flow', () => {
       await hasError(page, 'Date of birth must include a month');
       await hasError(page, 'Date of birth must include a day');
 
-      await fillOutDOB(page, '1990', '01', '01');
+      const { year, month, day } = calculateDOB(30);
+      await fillOutDOB(page, year, month, day);
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
@@ -333,7 +345,8 @@ test.describe('Adult flow', () => {
       await hasError(page, 'Date of birth must include a month');
       await hasError(page, 'Date of birth must include a day');
 
-      await fillOutDOB(page, '2012', '01', '01');
+      const { year, month, day } = calculateDOB(15);
+      await fillOutDOB(page, year, month, day);
       await page.getByRole('button', { name: 'Continue' }).click();
 
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/parent-or-guardian/);
@@ -341,7 +354,8 @@ test.describe('Adult flow', () => {
     });
 
     await test.step('Should navigate to living independently page', async () => {
-      await fillOutDOB(page, '2007', '01', '01');
+      const { year, month, day } = calculateDOB(17);
+      await fillOutDOB(page, year, month, day);
       await page.getByRole('button', { name: 'Continue' }).click();
 
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/living-independently/);
@@ -415,7 +429,8 @@ test.describe('Adult flow', () => {
       await hasError(page, 'Date of birth must include a month');
       await hasError(page, 'Date of birth must include a day');
 
-      await fillOutDOB(page, '1958', '01', '01');
+      const { year, month, day } = calculateDOB(65);
+      await fillOutDOB(page, year, month, day);
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 

@@ -467,7 +467,7 @@
         "date-of-birth-valid": "Day must be valid for the given month and year",
         "date-of-birth-year-number": "Year must be a number, for example 1950",
         "date-of-birth-year-required": "Date of birth must include a year",
-        "child-age-required": "Select wether or not all the children are under 18 "
+        "child-age-required": "Select whether or not all the children are under 18 "
       },
       "back-btn": "Back",
       "continue-btn": "Continue",

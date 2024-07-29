@@ -17,6 +17,15 @@ async function hasError(page: Page, error: string) {
   await expect(page.getByRole('link', { name: error })).toBeVisible();
 }
 
+// Calculate date based on the given age
+function calculateDOB(age: number, date: Date = new Date()): { year: string; month: string; day: string } {
+  const year = date.getFullYear() - age;
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+
+  return { year: year.toString(), month, day };
+}
+
 // Reusable function to fill out date of birth
 async function fillOutDOB(page: Page, year: string, month: string, day: string, childUnder18: string) {
   // applicant date of birth
@@ -257,28 +266,28 @@ test.describe('Family flow', () => {
       await hasError(page, 'Date of birth must include a year');
       await hasError(page, 'Date of birth must include a month');
       await hasError(page, 'Date of birth must include a day');
-      await hasError(page, 'Select wether or not all the children are under 18');
+      await hasError(page, 'Select whether or not all the children are under 18');
 
-      await fillOutDOB(page, '1958', '01', '01', 'Yes');
+      const { year, month, day } = calculateDOB(65);
+      await fillOutDOB(page, year, month, day, 'Yes');
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
-    await test.step('Should navigate to applicant information page when applicant is 18-64', async () => {
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/applicant-information/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Applicant information' })).toBeVisible();
-
-      // Back to date of birth
+    await test.step('Should navigate to DTC page if applicant age is 18-64', async () => {
       await page.getByRole('link', { name: 'Back' }).click();
+
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/date-of-birth/);
       await expect(page.getByRole('heading', { level: 1, name: 'Age' })).toBeVisible();
 
-      await fillOutDOB(page, '1985', '02', '10', 'Yes');
+      const { year, month, day } = calculateDOB(35);
+      await fillOutDOB(page, year, month, day, 'Yes');
       await page.getByRole('button', { name: 'Continue' }).click();
-    });
 
-    await test.step('Should navigate to DTC page', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/disability-tax-credit/);
       await expect(page.getByRole('heading', { level: 1, name: 'Disability tax credit' })).toBeVisible();
+    });
+
+    await test.step('Should navigate to apply for your children page if applicant has no DTC, child is under 18', async () => {
       await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
@@ -286,9 +295,6 @@ test.describe('Family flow', () => {
 
       await page.getByRole('radio', { name: 'No' }).check();
       await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
-    await test.step('Should navigate to apply for your children page if applicant has no DTC, child is under 18', async () => {
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/apply-children/);
       await expect(page.getByRole('heading', { level: 1, name: 'Apply for your child(ren)' })).toBeVisible();
     });
@@ -300,7 +306,9 @@ test.describe('Family flow', () => {
       // Back to date of birth
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/date-of-birth/);
       await expect(page.getByRole('heading', { level: 1, name: 'Age' })).toBeVisible();
-      await fillOutDOB(page, '1985', '02', '10', 'No');
+
+      const { year, month, day } = calculateDOB(40);
+      await fillOutDOB(page, year, month, day, 'No');
 
       // Back to DTC
       await page.getByRole('button', { name: 'Continue' }).click();
@@ -319,7 +327,9 @@ test.describe('Family flow', () => {
       // Back to date of birth
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/date-of-birth/);
       await expect(page.getByRole('heading', { level: 1, name: 'Age' })).toBeVisible();
-      await fillOutDOB(page, '1985', '02', '10', 'No');
+
+      const { year, month, day } = calculateDOB(35);
+      await fillOutDOB(page, year, month, day, 'No');
       await page.getByRole('button', { name: 'Continue' }).click();
 
       // Continue to DTC
@@ -335,7 +345,8 @@ test.describe('Family flow', () => {
     await test.step('Should navigate to living independently page if applicant is 16 or 17, child is under 18', async () => {
       await page.getByRole('link', { name: 'Back' }).click();
 
-      await fillOutDOB(page, '2007', '03', '20', 'Yes');
+      const { year, month, day } = calculateDOB(16);
+      await fillOutDOB(page, year, month, day, 'Yes');
       await page.getByRole('button', { name: 'Continue' }).click();
 
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/living-independently/);
@@ -349,7 +360,8 @@ test.describe('Family flow', () => {
     await test.step('Should navigate to contact apply child page if applicant is under 16, child is under 18', async () => {
       await page.getByRole('link', { name: 'Back' }).click();
 
-      await fillOutDOB(page, '2012', '02', '10', 'Yes');
+      const { year, month, day } = calculateDOB(15);
+      await fillOutDOB(page, year, month, day, 'Yes');
       await page.getByRole('button', { name: 'Continue' }).click();
 
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/contact-apply-child/);
@@ -359,7 +371,8 @@ test.describe('Family flow', () => {
     await test.step('Should navigate to parent guardian page if applicant is 16 or 17, child is not under 18', async () => {
       await page.getByRole('link', { name: 'Back' }).click();
 
-      await fillOutDOB(page, '2007', '02', '10', 'No');
+      const { year, month, day } = calculateDOB(16);
+      await fillOutDOB(page, year, month, day, 'No');
       await page.getByRole('button', { name: 'Continue' }).click();
 
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/parent-or-guardian/);
@@ -369,7 +382,8 @@ test.describe('Family flow', () => {
     await test.step('Should navigate to parent guardian page if applicant is under 16, child is not under 18', async () => {
       await page.getByRole('link', { name: 'Back' }).click();
 
-      await fillOutDOB(page, '2017', '02', '10', 'No');
+      const { year, month, day } = calculateDOB(15);
+      await fillOutDOB(page, year, month, day, 'No');
       await page.getByRole('button', { name: 'Continue' }).click();
 
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/parent-or-guardian/);
@@ -382,7 +396,8 @@ test.describe('Family flow', () => {
       await expect(page.getByRole('heading', { level: 1, name: 'Age' })).toBeVisible();
 
       // Continue the flow
-      await fillOutDOB(page, '1958', '02', '10', 'Yes');
+      const { year, month, day } = calculateDOB(65);
+      await fillOutDOB(page, year, month, day, 'Yes');
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
