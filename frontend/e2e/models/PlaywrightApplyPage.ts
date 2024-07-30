@@ -1,0 +1,32 @@
+import { PlaywrightBasePage } from './PlaywrightBasePage';
+
+export class PlaywrightApplyPage extends PlaywrightBasePage {
+  async gotoIndexPage() {
+    await this.page.goto('/en/apply');
+  }
+
+  async isLoaded(applyPage: 'index' | 'terms-and-conditions' | 'type-application', heading?: string | RegExp) {
+    let pageInfo: { url: string | RegExp; heading: string | RegExp } | undefined = undefined;
+
+    switch (applyPage) {
+      case 'index':
+        pageInfo = { url: /\/en\/apply/, heading: 'Terms and conditions of use and privacy notice statement' };
+        break;
+
+      case 'terms-and-conditions':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/terms-and-conditions/, heading: 'Terms and conditions of use and privacy notice statement' };
+        break;
+
+      case 'type-application':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/type-application/, heading: 'Type of application' };
+        break;
+
+      default:
+        pageInfo = undefined;
+        break;
+    }
+
+    if (!pageInfo) throw Error(`applyPage '${applyPage}' not implemented.`);
+    await super.isLoaded(pageInfo.url, heading ?? pageInfo.heading);
+  }
+}
