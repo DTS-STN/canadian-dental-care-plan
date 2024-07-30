@@ -5,7 +5,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -17,6 +18,7 @@ import { Collapsible } from '~/components/collapsible';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorSummary } from '~/components/error-summary';
+import { InlineLink } from '~/components/inline-link';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
@@ -294,6 +296,9 @@ export default function StatusCheckerChild() {
           <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} className="mt-12" endIcon={faChevronRight}>
             {t('status:child.check-another')}
           </ButtonLink>
+          <InlineLink to={t('status:child.exit-link')} params={params} className="mt-6 block">
+            {t('status:child.exit-btn')}
+          </InlineLink>
         </>
       ) : (
         <>
@@ -368,9 +373,15 @@ export default function StatusCheckerChild() {
                 </>
               )}
             </div>
-            <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
-              {t('status:child.form.submit')}
-            </LoadingButton>
+            <div className="flex flex-wrap items-center gap-3">
+              <ButtonLink id="back-button" routeId="$lang/_public/status/index" params={params} disabled={isSubmitting}>
+                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+                {t('status:child.form.back-btn')}
+              </ButtonLink>
+              <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
+                {t('status:child.form.submit')}
+              </LoadingButton>
+            </div>
           </fetcher.Form>
         </>
       )}

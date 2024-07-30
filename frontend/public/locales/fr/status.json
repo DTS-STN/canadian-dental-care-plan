@@ -66,6 +66,8 @@
     "page-title": "Vérificateur de l'état",
     "status-heading": "État",
     "check-another": "Vérifier un autre état",
+    "exit-btn": "Quitter le vérificateur de l'état",
+    "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#etat",
     "status-not-found": {
       "heading": "Nous n'avons pas pu trouver le statut de votre candidature avec les informations que vous nous avez fournies.",
       "please-review": "Veuillez vous assurer que les informations que vous avez saisies sont correctes. Si vous avez postulé récemment, réessayez dans 48 heures.",
@@ -78,6 +80,7 @@
       "sin-label": "Numéro d'assurance sociale (NAS)",
       "sin-description": "Entrez un NAS de 9 chiffres",
       "submit": "Vérifier l'état",
+      "back-btn": "Retour",
       "error-message": {
         "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
         "sin-valid": "Le NAS saisi n'existe pas",
@@ -90,6 +93,8 @@
     "page-title": "Vérificateur de l'état",
     "status-heading": "État",
     "check-another": "Vérifier un autre état",
+    "exit-btn": "Quitter le vérificateur de l'état",
+    "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#etat",
     "status-not-found": {
       "heading": "Nous n'avons pas pu trouver le statut de votre candidature avec les informations que vous nous avez fournies.",
       "please-review": "Veuillez vous assurer que les informations que vous avez saisies sont correctes. Si vous avez postulé récemment, réessayez dans 48 heures.",
@@ -110,6 +115,7 @@
       "first-name": "Prénom de l'enfant",
       "date-of-birth-label": "Date de naissance de l'enfant",
       "submit": "Vérifier l'état",
+      "back-btn": "Retour",
       "error-message": {
         "radio-required": "Sélectionnez si l'enfant a un NAS",
         "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
