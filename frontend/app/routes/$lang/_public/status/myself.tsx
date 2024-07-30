@@ -5,7 +5,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -15,6 +16,7 @@ import { ButtonLink } from '~/components/buttons';
 import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-status-markdown';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { useErrorSummary } from '~/components/error-summary';
+import { InlineLink } from '~/components/inline-link';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { LoadingButton } from '~/components/loading-button';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
@@ -181,6 +183,9 @@ export default function StatusCheckerMyself() {
           <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} className="mt-12" endIcon={faChevronRight}>
             {t('status:myself.check-another')}
           </ButtonLink>
+          <InlineLink to={t('status:myself.exit-link')} params={params} className="mt-6 block">
+            {t('status:myself.exit-btn')}
+          </InlineLink>
         </>
       ) : (
         <>
@@ -204,9 +209,15 @@ export default function StatusCheckerMyself() {
               />
               <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errors?.sin} defaultValue="" />
             </div>
-            <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
-              {t('status:myself.form.submit')}
-            </LoadingButton>
+            <div className="flex flex-wrap items-center gap-3">
+              <ButtonLink id="back-button" routeId="$lang/_public/status/index" params={params} disabled={isSubmitting}>
+                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+                {t('status:myself.form.back-btn')}
+              </ButtonLink>
+              <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
+                {t('status:myself.form.submit')}
+              </LoadingButton>
+            </div>
           </fetcher.Form>
         </>
       )}

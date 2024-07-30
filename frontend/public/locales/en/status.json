@@ -66,6 +66,8 @@
     "page-title": "Status Checker",
     "status-heading": "Status",
     "check-another": "Check another status",
+    "exit-btn": "Exit status checker",
+    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#status",
     "status-not-found": {
       "heading": "We could not find your application status with the information you gave us.",
       "please-review": "Please make sure the information you entered is correct. If you applied recently, try again in 48 hours.",
@@ -78,6 +80,7 @@
       "sin-label": "Social Insurance Number (SIN)",
       "sin-description": "Enter the 9-digit SIN",
       "submit": "Check status",
+      "back-btn": "Back",
       "error-message": {
         "sin-required": "Enter 9-digit SIN, for example 123 456 789",
         "sin-valid": "The SIN entered does not exist",
@@ -90,6 +93,8 @@
     "page-title": "Status Checker",
     "status-heading": "Status",
     "check-another": "Check another status",
+    "exit-btn": "Exit status checker",
+    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#status",
     "status-not-found": {
       "heading": "We could not find your application status with the information you gave us.",
       "please-review": "Please make sure the information you entered is correct. If you applied recently, try again in 48 hours.",
@@ -110,6 +115,7 @@
       "first-name": "Child's first name",
       "date-of-birth-label": "Child's date of birth",
       "submit": "Check status",
+      "back-btn": "Back",
       "error-message": {
         "radio-required": "Select whether the child has a SIN",
         "sin-required": "Enter 9-digit SIN, for example 123 456 789",
