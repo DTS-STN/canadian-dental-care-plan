@@ -1,6 +1,9 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
+import { PlaywrightApplyAdultChildPage } from '../../../../models/PlaywrightApplyAdultChildPage';
+import { PlaywrightApplyPage } from '../../../../models/PlaywrightApplyPage';
+
 interface FillOutAddressArgs {
   address: string;
   city: string;
@@ -51,8 +54,8 @@ async function fillOutAddress({ address, city, country, group, page, postalCode,
 
 // Reusable function for Type of application step
 async function typeOfApplication(page: Page) {
-  await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/type-application/);
-  await expect(page.getByRole('heading', { level: 1, name: 'Type of application' })).toBeVisible();
+  const applyPage = new PlaywrightApplyPage(page);
+  await applyPage.isLoaded('type-application');
   await page.getByRole('button', { name: 'Continue' }).click();
 
   //check for empty fields
@@ -64,8 +67,8 @@ async function typeOfApplication(page: Page) {
 
 // Reusable function for Tax filing step
 async function taxFiling(page: Page) {
-  await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/tax-filing/);
-  await expect(page.getByRole('heading', { level: 1, name: 'Tax filing' })).toBeVisible();
+  const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
+  await applyAdultChildPage.isLoaded('tax-filing');
   await page.getByRole('button', { name: 'Continue' }).click();
 
   //check for empty fields
@@ -77,8 +80,8 @@ async function taxFiling(page: Page) {
 
 // Reusable function for File your taxes step
 async function fileTaxes(page: Page) {
-  await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/file-taxes/);
-  await expect(page.getByRole('heading', { level: 1, name: 'File your taxes' })).toBeVisible();
+  const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
+  await applyAdultChildPage.isLoaded('file-taxes');
   await page.getByRole('link', { name: 'Back' }).click();
   await page.getByRole('radio', { name: 'Yes', exact: true }).check();
   await page.getByRole('button', { name: 'Continue' }).click();
@@ -86,8 +89,8 @@ async function fileTaxes(page: Page) {
 
 // Reusable function for applicant information step
 async function applicantInformation(page: Page) {
-  await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/applicant-information/);
-  await expect(page.getByRole('heading', { level: 1, name: 'Applicant information' })).toBeVisible();
+  const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
+  await applyAdultChildPage.isLoaded('applicant-information');
   await page.getByRole('button', { name: 'Continue' }).click();
 
   //check for empty fields
@@ -105,8 +108,8 @@ async function applicantInformation(page: Page) {
 
 // Reusable function for partner information step
 async function partnerInformation(page: Page) {
-  await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/partner-information/);
-  await expect(page.getByRole('heading', { level: 1, name: 'Spouse or common-law partner information' })).toBeVisible();
+  const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
+  await applyAdultChildPage.isLoaded('partner-information');
   await page.getByRole('button', { name: 'Continue' }).click();
 
   //check for empty fields
@@ -137,8 +140,8 @@ async function partnerInformation(page: Page) {
 
 // Reusable function for contact information step
 async function contactInformation(page: Page) {
-  await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/contact-information/);
-  await expect(page.getByRole('heading', { level: 1, name: 'Contact information' })).toBeVisible();
+  const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
+  await applyAdultChildPage.isLoaded('contact-information');
   await page.getByRole('button', { name: 'Continue' }).click();
 
   //check for empty fields
@@ -181,8 +184,8 @@ async function contactInformation(page: Page) {
 
 // Reusable function for communication preference step
 async function communicationPreference(page: Page) {
-  await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/communication-preference/);
-  await expect(page.getByRole('heading', { level: 1, name: 'Communication' })).toBeVisible();
+  const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
+  await applyAdultChildPage.isLoaded('communication-preference');
   await page.getByRole('button', { name: 'Continue' }).click();
 
   //check for empty fields
@@ -196,8 +199,8 @@ async function communicationPreference(page: Page) {
 
 // Reusable function for dental insurance step
 async function dentalInsurance(page: Page) {
-  await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/dental-insurance/);
-  await expect(page.getByRole('heading', { level: 1, name: 'Access to other dental insurance' })).toBeVisible();
+  const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
+  await applyAdultChildPage.isLoaded('dental-insurance');
   await page.getByRole('button', { name: 'Continue' }).click();
 
   //check for empty fields
@@ -209,8 +212,8 @@ async function dentalInsurance(page: Page) {
 
 // Reusable function for other dental benefits step
 async function otherDentalBenefits(page: Page) {
-  await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/federal-provincial-territorial-benefits/);
-  await expect(page.getByRole('heading', { level: 1, name: 'Access to other federal, provincial or territorial dental benefits' })).toBeVisible();
+  const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
+  await applyAdultChildPage.isLoaded('federal-provincial-territorial-benefits');
   await page.getByRole('button', { name: 'Continue' }).click();
 
   //check for empty fields
@@ -237,13 +240,16 @@ async function otherDentalBenefits(page: Page) {
 test.describe('Family flow', () => {
   test.beforeEach('Navigate to online application', async ({ page }) => {
     test.setTimeout(60000);
-    await page.goto('/en/apply');
-    await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/terms-and-conditions/);
-    await expect(page.getByRole('heading', { level: 1, name: 'Terms and conditions' })).toBeVisible();
+    const applyPage = new PlaywrightApplyPage(page);
+    await applyPage.gotoIndexPage();
+
+    await applyPage.isLoaded('terms-and-conditions');
     await page.getByRole('button', { name: 'Agree and continue' }).click();
   });
 
   test('Should complete adult and child application', async ({ page }) => {
+    const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
+
     await test.step('Should navigate to type of application page', async () => {
       await typeOfApplication(page);
     });
@@ -258,8 +264,7 @@ test.describe('Family flow', () => {
 
     // Applicant age is 65 or older, child is under 18
     await test.step('Should navigate to date of birth page', async () => {
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/date-of-birth/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Age' })).toBeVisible();
+      await applyAdultChildPage.isLoaded('date-of-birth');
       await page.getByRole('button', { name: 'Continue' }).click();
 
       // check empty fields
@@ -276,15 +281,13 @@ test.describe('Family flow', () => {
     await test.step('Should navigate to DTC page if applicant age is 18-64', async () => {
       await page.getByRole('link', { name: 'Back' }).click();
 
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/date-of-birth/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Age' })).toBeVisible();
+      await applyAdultChildPage.isLoaded('date-of-birth');
 
       const { year, month, day } = calculateDOB(35);
       await fillOutDOB(page, year, month, day, 'Yes');
       await page.getByRole('button', { name: 'Continue' }).click();
 
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/disability-tax-credit/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Disability tax credit' })).toBeVisible();
+      await applyAdultChildPage.isLoaded('disability-tax-credit');
     });
 
     await test.step('Should navigate to apply for your children page if applicant has no DTC, child is under 18', async () => {
@@ -295,8 +298,7 @@ test.describe('Family flow', () => {
 
       await page.getByRole('radio', { name: 'No' }).check();
       await page.getByRole('button', { name: 'Continue' }).click();
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/apply-children/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Apply for your child(ren)' })).toBeVisible();
+      await applyAdultChildPage.isLoaded('apply-children');
     });
 
     await test.step('Should navigate to dob eligibility page if applicant is 18-64, has no DTC, child is not under 18', async () => {
@@ -304,20 +306,17 @@ test.describe('Family flow', () => {
       await page.getByRole('link', { name: 'Back' }).click();
 
       // Back to date of birth
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/date-of-birth/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Age' })).toBeVisible();
+      await applyAdultChildPage.isLoaded('date-of-birth');
 
       const { year, month, day } = calculateDOB(40);
       await fillOutDOB(page, year, month, day, 'No');
 
       // Back to DTC
       await page.getByRole('button', { name: 'Continue' }).click();
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/disability-tax-credit/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Disability tax credit' })).toBeVisible();
+      await applyAdultChildPage.isLoaded('disability-tax-credit');
       await page.getByRole('button', { name: 'Continue' }).click();
 
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/dob-eligibility/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Find out when you can apply' })).toBeVisible();
+      await applyAdultChildPage.isLoaded('dob-eligibility');
     });
 
     await test.step('Should navigate to apply for yourself page if applicant is 18-64, has DTC, child is not under 18', async () => {
@@ -325,21 +324,18 @@ test.describe('Family flow', () => {
       await page.getByRole('link', { name: 'Back' }).click();
 
       // Back to date of birth
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/date-of-birth/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Age' })).toBeVisible();
+      await applyAdultChildPage.isLoaded('date-of-birth');
 
       const { year, month, day } = calculateDOB(35);
       await fillOutDOB(page, year, month, day, 'No');
       await page.getByRole('button', { name: 'Continue' }).click();
 
       // Continue to DTC
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/disability-tax-credit/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Disability tax credit' })).toBeVisible();
+      await applyAdultChildPage.isLoaded('disability-tax-credit');
       await page.getByRole('radio', { name: 'Yes' }).check();
       await page.getByRole('button', { name: 'Continue' }).click();
 
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/apply-yourself/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Apply for yourself' })).toBeVisible();
+      await applyAdultChildPage.isLoaded('apply-yourself');
     });
 
     await test.step('Should navigate to living independently page if applicant is 16 or 17, child is under 18', async () => {
@@ -349,8 +345,7 @@ test.describe('Family flow', () => {
       await fillOutDOB(page, year, month, day, 'Yes');
       await page.getByRole('button', { name: 'Continue' }).click();
 
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/living-independently/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Living independently' })).toBeVisible();
+      await applyAdultChildPage.isLoaded('living-independently');
 
       //check for empty fields
       await page.getByRole('button', { name: 'Continue' }).click();
@@ -364,8 +359,7 @@ test.describe('Family flow', () => {
       await fillOutDOB(page, year, month, day, 'Yes');
       await page.getByRole('button', { name: 'Continue' }).click();
 
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/contact-apply-child/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Contact us to apply for your child' })).toBeVisible();
+      await applyAdultChildPage.isLoaded('contact-apply-child');
     });
 
     await test.step('Should navigate to parent guardian page if applicant is 16 or 17, child is not under 18', async () => {
@@ -375,8 +369,7 @@ test.describe('Family flow', () => {
       await fillOutDOB(page, year, month, day, 'No');
       await page.getByRole('button', { name: 'Continue' }).click();
 
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/parent-or-guardian/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Parent or legal guardian needs to apply' })).toBeVisible();
+      await applyAdultChildPage.isLoaded('parent-or-guardian');
     });
 
     await test.step('Should navigate to parent guardian page if applicant is under 16, child is not under 18', async () => {
@@ -386,14 +379,12 @@ test.describe('Family flow', () => {
       await fillOutDOB(page, year, month, day, 'No');
       await page.getByRole('button', { name: 'Continue' }).click();
 
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/parent-or-guardian/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Parent or legal guardian needs to apply' })).toBeVisible();
+      await applyAdultChildPage.isLoaded('parent-or-guardian');
     });
 
     await test.step('Should return to date of birth page', async () => {
       await page.getByRole('link', { name: 'Back' }).click();
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult-child\/date-of-birth/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Age' })).toBeVisible();
+      await applyAdultChildPage.isLoaded('date-of-birth');
 
       // Continue the flow
       const { year, month, day } = calculateDOB(65);
