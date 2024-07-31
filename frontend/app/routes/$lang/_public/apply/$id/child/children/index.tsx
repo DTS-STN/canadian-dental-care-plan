@@ -5,7 +5,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faChevronLeft, faChevronRight, faEdit, faPlus, faRemove, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faEdit, faPlus, faRemove } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { randomUUID } from 'crypto';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +16,7 @@ import pageIds from '../../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
+import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import { getChildrenState, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
@@ -265,17 +266,18 @@ export default function ApplyFlowChildSummary() {
             </div>
           ) : (
             <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Button
+              <LoadingButton
                 id="continue-button"
                 name="_action"
                 value={FormAction.Continue}
                 variant="primary"
                 disabled={!hasChildren || isSubmitting}
+                loading={isSubmitting && submitAction === FormAction.Continue}
+                endIcon={faChevronRight}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Child(ren) application click"
               >
                 {t('apply-child:children.index.continue-btn')}
-                {isSubmitting && submitAction === FormAction.Continue ? <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" /> : <FontAwesomeIcon icon={faChevronRight} className="ms-3 block size-4" />}
-              </Button>
+              </LoadingButton>
               <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/child/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Child(ren) application click">
                 <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-child:children.index.back-btn')}

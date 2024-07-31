@@ -2,16 +2,16 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
-import { Button, ButtonLink } from '~/components/buttons';
+import { ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
+import { LoadingButton } from '~/components/loading-button';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -25,7 +25,6 @@ import type { IdToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { cn } from '~/utils/tw-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum AgreeToUnsubscribeOption {
@@ -140,10 +139,9 @@ export default function UnsubscribeAlerts() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <Button id="unsubscribe-button" variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Unsubscribe from CDCP email alerts - Unsubscribe from CDCP email alerts click">
+          <LoadingButton id="unsubscribe-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Unsubscribe from CDCP email alerts - Unsubscribe from CDCP email alerts click">
             {t('alerts:unsubscribe.button.unsubscribe')}
-            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-          </Button>
+          </LoadingButton>
           <ButtonLink id="cancel-button" routeId="$lang/_protected/alerts/manage/index" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Cancel - Unsubscribe from CDCP email alerts click">
             {t('alerts:unsubscribe.button.cancel')}
           </ButtonLink>

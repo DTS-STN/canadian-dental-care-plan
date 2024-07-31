@@ -2,8 +2,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import validator from 'validator';
@@ -14,6 +13,7 @@ import { Button, ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
+import { LoadingButton } from '~/components/loading-button';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -28,7 +28,6 @@ import type { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { cn } from '~/utils/tw-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
@@ -208,10 +207,17 @@ export default function ConfirmSubscription() {
           <Button id="new-code-button" name="action" value={ConfirmationCodeAction.NewCode} variant="alternative" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Request New Confirmation Code - Confirmation code click">
             {t('alerts:confirm.request-new-code')}
           </Button>
-          <Button id="submit-button" name="action" value={ConfirmationCodeAction.Submit} variant="primary" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Submit Confirmation Code - Confirmation code click">
+          <LoadingButton
+            id="submit-button"
+            name="action"
+            value={ConfirmationCodeAction.Submit}
+            variant="primary"
+            loading={isSubmitting}
+            endIcon={faChevronRight}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Submit Confirmation Code - Confirmation code click"
+          >
             {t('alerts:confirm.submit-code')}
-            <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-          </Button>
+          </LoadingButton>
         </div>
       </fetcher.Form>
     </div>
