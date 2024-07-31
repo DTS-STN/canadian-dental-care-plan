@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
@@ -13,7 +13,7 @@ import { z } from 'zod';
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
@@ -23,7 +23,6 @@ import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.s
 import type { ApplicantInformationState } from '~/route-helpers/apply-route-helpers.server';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
-import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -35,6 +34,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { isAllValidInputCharacters } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum FormAction {
   Continue = 'continue',
@@ -90,8 +90,8 @@ export async function action({ context: { session }, params, request }: ActionFu
 
     if (applicantInformationStateHasPartner(state.applicantInformation) && state.partnerInformation === undefined) {
       const errorMessage = t('apply-adult:applicant-information.error-message.marital-status-no-partner-information');
-      const errors: z.ZodFormattedError<ApplicantInformationState, string> = { _errors: [errorMessage], maritalStatus: { _errors: [errorMessage] } };
-      return json({ errors });
+      const flattenedErrors: z.typeToFlattenedError<ApplicantInformationState, string> = { formErrors: [errorMessage], fieldErrors: { maritalStatus: [errorMessage] } };
+      return json({ errors: transformFlattenedError(flattenedErrors) });
     }
 
     return redirect(getPathById('$lang/_public/apply/$id/adult/review-information', params));
@@ -128,7 +128,9 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const parsedDataResult = applicantInformationSchema.safeParse(data);
   if (!parsedDataResult.success) {
-    return json({ errors: parsedDataResult.error.format() });
+    return json({
+      errors: transformFlattenedError(parsedDataResult.error.flatten()),
+    });
   }
 
   const hasPartner = applicantInformationStateHasPartner(parsedDataResult.data);
@@ -152,7 +154,14 @@ export default function ApplyFlowApplicationInformation() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const errorSummaryId = 'error-summary';
+
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    firstName: 'first-name',
+    lastName: 'last-name',
+    socialInsuranceNumber: 'social-insurance-number',
+    maritalStatus: 'input-radio-marital-status-option-0',
+  });
 
   function getBackButtonRouteId() {
     if (ageCategory === 'adults') {
@@ -165,30 +174,6 @@ export default function ApplyFlowApplicationInformation() {
 
     return '$lang/_public/apply/$id/adult/date-of-birth';
   }
-
-  // Keys order should match the input IDs order.
-  const errorMessages = useMemo(
-    () => ({
-      'first-name': fetcher.data?.errors.firstName?._errors[0],
-      'last-name': fetcher.data?.errors.lastName?._errors[0],
-      'social-insurance-number': fetcher.data?.errors.socialInsuranceNumber?._errors[0],
-      'input-radio-marital-status-option-0': fetcher.data?.errors.maritalStatus?._errors[0],
-    }),
-    [fetcher.data?.errors.firstName?._errors, fetcher.data?.errors.lastName?._errors, fetcher.data?.errors.maritalStatus?._errors, fetcher.data?.errors.socialInsuranceNumber?._errors],
-  );
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
-  useEffect(() => {
-    if (hasErrors(errorMessages)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-
-      if (adobeAnalytics.isConfigured()) {
-        const fieldIds = createErrorSummaryItems(errorMessages).map(({ fieldId }) => fieldId);
-        adobeAnalytics.pushValidationErrorEvent(fieldIds);
-      }
-    }
-  }, [errorMessages]);
 
   const maritalStatusOptions = useMemo<InputRadiosProps['options']>(() => {
     return maritalStatuses.map((status) => ({ defaultChecked: status.id === defaultState?.maritalStatus, children: status.name, value: status.id }));
@@ -203,7 +188,7 @@ export default function ApplyFlowApplicationInformation() {
         <p className="mb-4">{t('applicant-information.form-instructions-sin')}</p>
         <p className="mb-6">{t('applicant-information.form-instructions-info')}</p>
         <p className="mb-4 italic">{t('apply:required-label')}</p>
-        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-8 space-y-6">
@@ -219,7 +204,7 @@ export default function ApplyFlowApplicationInformation() {
                 maxLength={100}
                 aria-description={t('applicant-information.name-instructions')}
                 autoComplete="given-name"
-                errorMessage={errorMessages['first-name']}
+                errorMessage={errors?.firstName}
                 defaultValue={defaultState?.firstName ?? ''}
                 required
               />
@@ -232,7 +217,7 @@ export default function ApplyFlowApplicationInformation() {
                 aria-description={t('applicant-information.name-instructions')}
                 autoComplete="family-name"
                 defaultValue={defaultState?.lastName ?? ''}
-                errorMessage={errorMessages['last-name']}
+                errorMessage={errors?.lastName}
                 required
               />
             </div>
@@ -245,10 +230,10 @@ export default function ApplyFlowApplicationInformation() {
               helpMessagePrimary={t('apply-adult:applicant-information.help-message.sin')}
               helpMessagePrimaryClassName="text-black"
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
-              errorMessage={errorMessages['social-insurance-number']}
+              errorMessage={errors?.socialInsuranceNumber}
               required
             />
-            <InputRadios id="marital-status" name="maritalStatus" legend={t('applicant-information.marital-status')} options={maritalStatusOptions} errorMessage={errorMessages['input-radio-marital-status-option-0']} required />
+            <InputRadios id="marital-status" name="maritalStatus" legend={t('applicant-information.marital-status')} options={maritalStatusOptions} errorMessage={errors?.maritalStatus} required />
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">

@@ -19,7 +19,7 @@ describe('useUserOrigin', () => {
 
   it('should return undefined if no data is returned from the root loader', () => {
     vi.mocked(useRouteLoaderData);
-    expect(useUserOrigin()).toEqual(undefined);
+    expect(useUserOrigin()).toBeUndefined();
   });
 
   it('should return user origin from MSCA', () => {
