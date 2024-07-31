@@ -1,19 +1,13 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { formatSubmissionApplicationCode, getContextualAlertType, isValidCodeOrNumber } from '~/utils/application-code-utils';
-
-vi.mock('~/utils/env.server', () => ({
-  getEnv: vi.fn().mockReturnValue({
-    CLIENT_STATUS_SUCCESS_ID: '000',
-    INVALID_CLIENT_FRIENDLY_STATUS: '111',
-  }),
-}));
+import { formatSubmissionApplicationCode, isValidCodeOrNumber } from '~/utils/application-code-utils';
 
 describe('~/utils/application-code-utils.ts', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.resetModules();
   });
+
   describe('isValidCodeOrNumber()', () => {
     it.each([['123456'], ['123 456'], ['12345678901'], ['123 456 789 01'], ['1234567890123'], ['123 456 789 0123']])('should return true for a valid application code (6, 11 and 13 digits) with %s', (value) => {
       expect(isValidCodeOrNumber(value)).toEqual(true);
@@ -48,17 +42,6 @@ describe('~/utils/application-code-utils.ts', () => {
 
     it('should return the input if the application code is invalid', () => {
       expect(formatSubmissionApplicationCode('123 abc')).toEqual('123 abc');
-    });
-  });
-
-  describe('getContextualAlertType', () => {
-    it.each([
-      ['000', 'danger', 'success'],
-      ['111', 'warning', 'danger'],
-      ['222', undefined, 'info'],
-      [null, 'danger', 'danger'],
-    ])('getContextualAlertType(%j,%j) should return "%s"', (statusId, nullStatusMapping, expected) => {
-      expect(getContextualAlertType(statusId, nullStatusMapping)).toEqual(expected);
     });
   });
 });
