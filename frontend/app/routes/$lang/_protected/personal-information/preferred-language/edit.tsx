@@ -1,5 +1,3 @@
-import { useEffect, useMemo } from 'react';
-
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
@@ -12,7 +10,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
@@ -29,6 +27,7 @@ import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
   breadcrumbs: [
@@ -97,7 +96,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const parsedDataResult = formDataSchema.safeParse(data);
   if (!parsedDataResult.success) {
     instrumentationService.countHttpStatus('preferred-language.edit', 400);
-    return json({ errors: parsedDataResult.error.format() });
+    return json({ errors: transformFlattenedError(parsedDataResult.error.flatten()) });
   }
 
   instrumentationService.countHttpStatus('preferred-language.edit', 302);
@@ -124,27 +123,16 @@ export default function PreferredLanguageEdit() {
   const { csrfToken, preferredLanguageId, preferredLanguages } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const params = useParams();
-  const errorSummaryId = 'error-summary';
   const isSubmitting = fetcher.state !== 'idle';
-  // Keys order should match the input IDs order.
-  const errorMessages = useMemo(
-    () => ({
-      'input-radio-preferred-language-option-0': fetcher.data?.errors.preferredLanguage?._errors[0],
-    }),
-    [fetcher.data?.errors.preferredLanguage?._errors],
-  );
 
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
-  useEffect(() => {
-    if (hasErrors(errorMessages)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-    }
-  }, [errorMessages]);
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    preferredLanguage: 'input-radio-preferred-language-option-0',
+  });
 
   return (
     <>
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+      <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="my-6">
@@ -158,7 +146,7 @@ export default function PreferredLanguageEdit() {
                 children: getNameByLanguage(i18n.language, language),
                 value: language.id,
               }))}
-              errorMessage={errorMessages['input-radio-preferred-language-option-0']}
+              errorMessage={errors?.preferredLanguage}
               required
             />
           )}

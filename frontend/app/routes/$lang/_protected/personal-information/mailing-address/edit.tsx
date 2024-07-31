@@ -13,7 +13,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import type { InputOptionProps } from '~/components/input-option';
@@ -36,6 +36,7 @@ import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
   breadcrumbs: [
@@ -147,7 +148,9 @@ export async function action({ context: { session }, params, request }: ActionFu
   const parsedDataResult = formDataSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    return json({ errors: parsedDataResult.error.format() });
+    return json({
+      errors: transformFlattenedError(parsedDataResult.error.flatten()),
+    });
   }
 
   instrumentationService.countHttpStatus('mailing-address.edit', 302);
@@ -192,43 +195,25 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function PersonalInformationMailingAddressEdit() {
-  const fetcher = useFetcher<typeof action>();
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { addressInfo, countryList, regionList, csrfToken, CANADA_COUNTRY_ID, USA_COUNTRY_ID } = useLoaderData<typeof loader>();
   const params = useParams();
   const [selectedCountry, setSelectedCountry] = useState(addressInfo.countryId);
   const [countryRegions, setCountryRegions] = useState<typeof regionList>([]);
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const errorSummaryId = 'error-summary';
   const [copyAddressChecked, setCopyAddressChecked] = useState(false);
+  const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  // Keys order should match the input IDs order.
-  const errorMessages = useMemo(
-    () => ({
-      'street-name': fetcher.data?.errors.streetName?._errors[0],
-      'apartment-number': fetcher.data?.errors.apartment?._errors[0],
-      'country-id': fetcher.data?.errors.countryId?._errors[0],
-      'province-id': fetcher.data?.errors.provinceTerritoryStateId?._errors[0],
-      'city-name': fetcher.data?.errors.cityName?._errors[0],
-      'postal-code': fetcher.data?.errors.postalCode?._errors[0],
-    }),
-    [
-      fetcher.data?.errors.streetName?._errors,
-      fetcher.data?.errors.apartment?._errors,
-      fetcher.data?.errors.countryId?._errors,
-      fetcher.data?.errors.provinceTerritoryStateId?._errors,
-      fetcher.data?.errors.cityName?._errors,
-      fetcher.data?.errors.postalCode?._errors,
-    ],
-  );
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
-  useEffect(() => {
-    if (hasErrors(errorMessages)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-    }
-  }, [errorMessages]);
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    streetName: 'street-name',
+    apartment: 'apartment-number',
+    countryId: 'country-id',
+    provinceTerritoryStateId: 'province-id',
+    cityName: 'city-name',
+    postalCode: 'postal-code',
+    homeAndMailingAddressTheSame: 'input-checkbox-homeAndMailingAddressTheSame',
+  });
 
   useEffect(() => {
     const filteredRegions = regionList.filter((region) => region.countryId === selectedCountry);
@@ -262,7 +247,7 @@ export default function PersonalInformationMailingAddressEdit() {
 
   return (
     <>
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+      <errorSummary.ErrorSummary />
       <fetcher.Form className="max-w-prose" method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="my-6">
@@ -276,9 +261,9 @@ export default function PersonalInformationMailingAddressEdit() {
               helpMessagePrimary={t('personal-information:mailing-address.edit.field.address-note')}
               required
               defaultValue={addressInfo.streetName}
-              errorMessage={errorMessages['street-name']}
+              errorMessage={errors?.streetName}
             />
-            <InputField id="apartment-number" name="apartment" className="w-full" label={t('personal-information:home-address.edit.field.apartment')} maxLength={30} defaultValue={addressInfo.apartment} errorMessage={errorMessages['apartment-number']} />
+            <InputField id="apartment-number" name="apartment" className="w-full" label={t('personal-information:home-address.edit.field.apartment')} maxLength={30} defaultValue={addressInfo.apartment} errorMessage={errors?.apartment} />
             <InputSelect
               id="country-id"
               name="countryId"
@@ -288,7 +273,7 @@ export default function PersonalInformationMailingAddressEdit() {
               options={countries}
               onChange={countryChangeHandler}
               defaultValue={addressInfo.countryId}
-              errorMessage={errorMessages['country-id']}
+              errorMessage={errors?.countryId}
             />
             {regions.length > 0 && (
               <InputSelect
@@ -299,12 +284,12 @@ export default function PersonalInformationMailingAddressEdit() {
                 required
                 options={regions}
                 defaultValue={addressInfo.provinceTerritoryStateId}
-                errorMessage={errorMessages['province-id']}
+                errorMessage={errors?.provinceTerritoryStateId}
               />
             )}
 
             <div className="grid gap-6 md:grid-cols-2">
-              <InputField id="city-name" name="cityName" className="w-full" label={t('personal-information:mailing-address.edit.field.city')} maxLength={100} required defaultValue={addressInfo.cityName} errorMessage={errorMessages['city-name']} />
+              <InputField id="city-name" name="cityName" className="w-full" label={t('personal-information:mailing-address.edit.field.city')} maxLength={100} required defaultValue={addressInfo.cityName} errorMessage={errors?.cityName} />
               <InputField
                 id="postal-code"
                 name="postalCode"
@@ -312,7 +297,7 @@ export default function PersonalInformationMailingAddressEdit() {
                 label={t('personal-information:mailing-address.edit.field.postal-code')}
                 maxLength={100}
                 defaultValue={addressInfo.postalCode}
-                errorMessage={errorMessages['postal-code']}
+                errorMessage={errors?.postalCode}
                 required={selectedCountry === CANADA_COUNTRY_ID || selectedCountry === USA_COUNTRY_ID}
               />
             </div>

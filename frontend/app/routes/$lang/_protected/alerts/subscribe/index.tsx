@@ -1,5 +1,3 @@
-import { useEffect, useMemo } from 'react';
-
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
@@ -12,7 +10,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { InputRadios } from '~/components/input-radios';
 import { getAuditService } from '~/services/audit-service.server';
@@ -31,6 +29,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'alerts:subscribe.page-title' }],
@@ -105,7 +104,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   const parsedDataResult = formSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    return json({ errors: parsedDataResult.error.format() });
+    return json({ errors: transformFlattenedError(parsedDataResult.error.flatten()) });
   }
 
   const newUserUpdateInfo = {
@@ -132,37 +131,25 @@ export default function AlertsSubscribe() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, preferredLanguages } = useLoaderData<typeof loader>();
   const params = useParams();
-  const fetcher = useFetcher<typeof action>();
   const userOrigin = useUserOrigin();
-  const errorSummaryId = 'error-summary';
+  const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
-  // Keys order should match the input IDs order.
-  const errorMessages = useMemo(
-    () => ({
-      email: fetcher.data?.errors.email?._errors[0],
-      'confirm-email': fetcher.data?.errors.confirmEmail?._errors[0],
-      'input-radio-preferred-language-option-0': fetcher.data?.errors.preferredLanguage?._errors[0],
-    }),
-    [fetcher.data?.errors.email?._errors, fetcher.data?.errors.confirmEmail?._errors, fetcher.data?.errors.preferredLanguage?._errors],
-  );
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
-  useEffect(() => {
-    if (hasErrors(errorMessages)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-    }
-  }, [errorMessages]);
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    email: 'email',
+    confirmEmail: 'confirm-email',
+    preferredLanguage: 'input-radio-preferred-language-option-0',
+  });
 
   return (
     <div className="max-w-prose">
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+      <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mb-6 grid gap-6 md:grid-cols-2">
-          <InputField id="email" type="email" className="w-full" label={t('alerts:subscribe.email')} maxLength={100} name="email" errorMessage={errorMessages.email} autoComplete="email" required />
-          <InputField id="confirm-email" type="email" className="w-full" label={t('alerts:subscribe.confirm-email')} maxLength={100} name="confirmEmail" errorMessage={errorMessages['confirm-email']} autoComplete="email" required />
+          <InputField id="email" type="email" className="w-full" label={t('alerts:subscribe.email')} maxLength={100} name="email" errorMessage={errors?.email} autoComplete="email" required />
+          <InputField id="confirm-email" type="email" className="w-full" label={t('alerts:subscribe.confirm-email')} maxLength={100} name="confirmEmail" errorMessage={errors?.confirmEmail} autoComplete="email" required />
         </div>
         <div className="mb-8 space-y-6">
           {preferredLanguages.length > 0 && (
@@ -174,7 +161,7 @@ export default function AlertsSubscribe() {
                 children: getNameByLanguage(i18n.language, language),
                 value: language.id,
               }))}
-              errorMessage={errorMessages['input-radio-preferred-language-option-0']}
+              errorMessage={errors?.preferredLanguage}
               required
             />
           )}
