@@ -1,5 +1,3 @@
-import { useEffect, useMemo } from 'react';
-
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
@@ -12,7 +10,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
@@ -26,6 +24,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum DisabilityTaxCreditOption {
   No = 'no',
@@ -65,8 +64,10 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 
-  const disabilityTaxCreditSchema = z.nativeEnum(DisabilityTaxCreditOption, {
-    errorMap: () => ({ message: t('apply-adult:disability-tax-credit.error-message.disability-tax-credit-required') }),
+  const disabilityTaxCreditSchema = z.object({
+    disabilityTaxCredit: z.nativeEnum(DisabilityTaxCreditOption, {
+      errorMap: () => ({ message: t('apply-adult:disability-tax-credit.error-message.disability-tax-credit-required') }),
+    }),
   });
 
   const formData = await request.formData();
@@ -78,14 +79,14 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const data = formData.get('disabilityTaxCredit');
+  const data = { disabilityTaxCredit: formData.get('disabilityTaxCredit') };
   const parsedDataResult = disabilityTaxCreditSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    return json({ errors: parsedDataResult.error.format()._errors });
+    return json({ errors: transformFlattenedError(parsedDataResult.error.flatten()) });
   }
 
-  saveApplyState({ params, session, state: { disabilityTaxCredit: parsedDataResult.data === DisabilityTaxCreditOption.Yes } });
+  saveApplyState({ params, session, state: { disabilityTaxCredit: parsedDataResult.data.disabilityTaxCredit === DisabilityTaxCreditOption.Yes } });
 
   invariant(state.dateOfBirth, 'Expected state.dateOfBirth to be defined');
   const ageCategory = getAgeCategoryFromDateString(state.dateOfBirth);
@@ -98,7 +99,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang/_public/apply/$id/adult/date-of-birth', params));
   }
 
-  if (parsedDataResult.data === DisabilityTaxCreditOption.No) {
+  if (parsedDataResult.data.disabilityTaxCredit === DisabilityTaxCreditOption.No) {
     return redirect(getPathById('$lang/_public/apply/$id/adult/dob-eligibility', params));
   }
 
@@ -111,23 +112,9 @@ export default function ApplyFlowDisabilityTaxCredit() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const errorSummaryId = 'error-summary';
 
-  // Keys order should match the input IDs order.
-  const errorMessages = useMemo(
-    () => ({
-      'input-radio-disability-tax-credit-radios-option-0': fetcher.data?.errors[0],
-    }),
-    [fetcher.data?.errors],
-  );
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
-  useEffect(() => {
-    if (hasErrors(errorMessages)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-    }
-  }, [errorMessages]);
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, { disabilityTaxCredit: 'input-radio-disability-tax-credit-radios-option-0' });
 
   return (
     <>
@@ -140,7 +127,7 @@ export default function ApplyFlowDisabilityTaxCredit() {
           <Trans ns={handle.i18nNamespaces} i18nKey="apply-adult:disability-tax-credit.more-info" components={{ dtcLink: <InlineLink to={t('apply-adult:disability-tax-credit.dtc-link')} className="external-link" newTabIndicator target="_blank" /> }} />
         </p>
         <p className="mb-4 italic">{t('apply:required-label')}</p>
-        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <InputRadios
@@ -151,7 +138,7 @@ export default function ApplyFlowDisabilityTaxCredit() {
               { value: DisabilityTaxCreditOption.Yes, children: t('apply-adult:disability-tax-credit.radio-options.yes'), defaultChecked: defaultState === true },
               { value: DisabilityTaxCreditOption.No, children: t('apply-adult:disability-tax-credit.radio-options.no'), defaultChecked: defaultState === false },
             ]}
-            errorMessage={errorMessages['input-radio-disability-tax-credit-radios-option-0']}
+            errorMessage={errors?.disabilityTaxCredit}
             required
           />
           {editMode ? (

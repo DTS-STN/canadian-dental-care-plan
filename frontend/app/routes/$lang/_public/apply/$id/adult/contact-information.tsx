@@ -13,7 +13,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputField } from '~/components/input-field';
 import type { InputOptionProps } from '~/components/input-option';
@@ -25,7 +25,6 @@ import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.s
 import type { ContactInformationState } from '~/route-helpers/apply-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
-import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -38,6 +37,7 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { isAllValidInputCharacters } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
@@ -220,7 +220,9 @@ export async function action({ context: { session }, params, request }: ActionFu
   const parsedDataResult = personalInformationSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    return json({ errors: parsedDataResult.error.format() });
+    return json({
+      errors: transformFlattenedError(parsedDataResult.error.flatten()),
+    });
   }
 
   const updatedData = parsedDataResult.data.copyMailingAddress
@@ -260,62 +262,27 @@ export default function ApplyFlowPersonalInformation() {
   const [copyAddressChecked, setCopyAddressChecked] = useState(defaultState?.copyMailingAddress === true);
   const [selectedHomeCountry, setSelectedHomeCountry] = useState(defaultState?.homeCountry);
   const [homeCountryRegions, setHomeCountryRegions] = useState<typeof regionList>([]);
-  const errorSummaryId = 'error-summary';
 
-  // Keys order should match the input IDs order.
-  const errorMessages = useMemo(
-    () => ({
-      'phone-number': fetcher.data?.errors.phoneNumber?._errors[0],
-      'phone-number-alt': fetcher.data?.errors.phoneNumberAlt?._errors[0],
-      email: fetcher.data?.errors.email?._errors[0],
-      'confirm-email': fetcher.data?.errors.confirmEmail?._errors[0],
-      'mailing-address': fetcher.data?.errors.mailingAddress?._errors[0],
-      'mailing-apartment': fetcher.data?.errors.mailingApartment?._errors[0],
-      'mailing-province': fetcher.data?.errors.mailingProvince?._errors[0],
-      'mailing-country': fetcher.data?.errors.mailingCountry?._errors[0],
-      'mailing-city': fetcher.data?.errors.mailingCity?._errors[0],
-      'mailing-postal-code': fetcher.data?.errors.mailingPostalCode?._errors[0],
-      'copy-mailing-address': fetcher.data?.errors.copyMailingAddress?._errors[0],
-      'home-address': fetcher.data?.errors.homeAddress?._errors[0],
-      'home-apartment': fetcher.data?.errors.homeApartment?._errors[0],
-      'home-province': fetcher.data?.errors.homeProvince?._errors[0],
-      'home-country': fetcher.data?.errors.homeCountry?._errors[0],
-      'home-city': fetcher.data?.errors.homeCity?._errors[0],
-      'home-postal-code': fetcher.data?.errors.homePostalCode?._errors[0],
-    }),
-    [
-      fetcher.data?.errors.copyMailingAddress?._errors,
-      fetcher.data?.errors.homeAddress?._errors,
-      fetcher.data?.errors.homeApartment?._errors,
-      fetcher.data?.errors.homeCity?._errors,
-      fetcher.data?.errors.homeCountry?._errors,
-      fetcher.data?.errors.homePostalCode?._errors,
-      fetcher.data?.errors.homeProvince?._errors,
-      fetcher.data?.errors.mailingAddress?._errors,
-      fetcher.data?.errors.mailingApartment?._errors,
-      fetcher.data?.errors.mailingCity?._errors,
-      fetcher.data?.errors.mailingCountry?._errors,
-      fetcher.data?.errors.mailingPostalCode?._errors,
-      fetcher.data?.errors.mailingProvince?._errors,
-      fetcher.data?.errors.phoneNumber?._errors,
-      fetcher.data?.errors.phoneNumberAlt?._errors,
-      fetcher.data?.errors.email?._errors,
-      fetcher.data?.errors.confirmEmail?._errors,
-    ],
-  );
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
-  useEffect(() => {
-    if (hasErrors(errorMessages)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-
-      if (adobeAnalytics.isConfigured()) {
-        const fieldIds = createErrorSummaryItems(errorMessages).map(({ fieldId }) => fieldId);
-        adobeAnalytics.pushValidationErrorEvent(fieldIds);
-      }
-    }
-  }, [errorMessages]);
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    phoneNumber: 'phone-number',
+    phoneNumberAlt: 'phone-number-alt',
+    email: 'email',
+    confirmEmail: 'confirm-email',
+    mailingAddress: 'mailing-address',
+    mailingApartment: 'mailing-apartment',
+    mailingProvince: 'mailing-province',
+    mailingCountry: 'mailing-country',
+    mailingCity: 'mailing-city',
+    mailingPostalCode: 'mailing-postal-code',
+    copyMailingAddress: 'copy-mailing-address',
+    homeAddress: 'home-address',
+    homeApartment: 'home-apartment',
+    homeProvince: 'home-province',
+    homeCountry: 'home-country',
+    homeCity: 'home-city',
+    homePostalCode: 'home-postal-code',
+  });
 
   const checkHandler = () => {
     setCopyAddressChecked((curState) => !curState);
@@ -373,7 +340,7 @@ export default function ApplyFlowPersonalInformation() {
       </div>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('apply:optional-label')}</p>
-        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <fieldset className="mb-6">
@@ -390,7 +357,7 @@ export default function ApplyFlowPersonalInformation() {
                 className="w-full"
                 autoComplete="tel"
                 defaultValue={defaultState?.phoneNumber ?? ''}
-                errorMessage={errorMessages['phone-number']}
+                errorMessage={errors?.phoneNumber}
                 label={t('apply-adult:contact-information.phone-number')}
                 maxLength={100}
                 aria-describedby="adding-phone"
@@ -403,7 +370,7 @@ export default function ApplyFlowPersonalInformation() {
                 className="w-full"
                 autoComplete="tel"
                 defaultValue={defaultState?.phoneNumberAlt ?? ''}
-                errorMessage={errorMessages['phone-number-alt']}
+                errorMessage={errors?.phoneNumberAlt}
                 label={t('apply-adult:contact-information.phone-number-alt')}
                 maxLength={100}
                 aria-describedby="adding-phone"
@@ -415,7 +382,7 @@ export default function ApplyFlowPersonalInformation() {
             <p id="adding-email" className="mb-4">
               {t('apply-adult:contact-information.add-email')}
             </p>
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid items-end gap-6 md:grid-cols-2">
               <InputField
                 id="email"
                 name="email"
@@ -424,7 +391,7 @@ export default function ApplyFlowPersonalInformation() {
                 className="w-full"
                 autoComplete="email"
                 defaultValue={defaultState?.email ?? ''}
-                errorMessage={errorMessages['email']}
+                errorMessage={errors?.email}
                 label={t('apply-adult:contact-information.email')}
                 maxLength={64}
                 aria-describedby="adding-email"
@@ -437,7 +404,7 @@ export default function ApplyFlowPersonalInformation() {
                 className="w-full"
                 autoComplete="email"
                 defaultValue={defaultState?.email ?? ''}
-                errorMessage={errorMessages['confirm-email']}
+                errorMessage={errors?.confirmEmail}
                 label={t('apply-adult:contact-information.confirm-email')}
                 maxLength={64}
                 aria-describedby="adding-email"
@@ -457,7 +424,7 @@ export default function ApplyFlowPersonalInformation() {
                 helpMessagePrimaryClassName="text-black"
                 autoComplete="address-line1"
                 defaultValue={defaultState?.mailingAddress ?? ''}
-                errorMessage={errorMessages['mailing-address']}
+                errorMessage={errors?.mailingAddress}
                 required
               />
               <InputSanitizeField
@@ -468,7 +435,7 @@ export default function ApplyFlowPersonalInformation() {
                 maxLength={30}
                 autoComplete="address-line2"
                 defaultValue={defaultState?.mailingApartment ?? ''}
-                errorMessage={errorMessages['mailing-apartment']}
+                errorMessage={errors?.mailingApartment}
               />
               <InputSelect
                 id="mailing-country"
@@ -477,7 +444,7 @@ export default function ApplyFlowPersonalInformation() {
                 label={t('apply-adult:contact-information.address-field.country')}
                 autoComplete="country"
                 defaultValue={defaultState?.mailingCountry ?? ''}
-                errorMessage={errorMessages['mailing-country']}
+                errorMessage={errors?.mailingCountry}
                 options={[dummyOption, ...countries]}
                 onChange={mailingCountryChangeHandler}
                 required
@@ -489,7 +456,7 @@ export default function ApplyFlowPersonalInformation() {
                   className="w-full sm:w-1/2"
                   label={t('apply-adult:contact-information.address-field.province')}
                   defaultValue={defaultState?.mailingProvince ?? ''}
-                  errorMessage={errorMessages['mailing-province']}
+                  errorMessage={errors?.mailingProvince}
                   options={[dummyOption, ...mailingRegions]}
                   required
                 />
@@ -503,7 +470,7 @@ export default function ApplyFlowPersonalInformation() {
                   maxLength={100}
                   autoComplete="address-level2"
                   defaultValue={defaultState?.mailingCity ?? ''}
-                  errorMessage={errorMessages['mailing-city']}
+                  errorMessage={errors?.mailingCity}
                   required
                 />
                 <InputSanitizeField
@@ -514,7 +481,7 @@ export default function ApplyFlowPersonalInformation() {
                   maxLength={100}
                   autoComplete="postal-code"
                   defaultValue={defaultState?.mailingPostalCode ?? ''}
-                  errorMessage={errorMessages['mailing-postal-code']}
+                  errorMessage={errors?.mailingPostalCode}
                   required={mailingPostalCodeRequired}
                 />
               </div>
@@ -538,7 +505,7 @@ export default function ApplyFlowPersonalInformation() {
                     maxLength={30}
                     autoComplete="address-line1"
                     defaultValue={defaultState?.homeAddress ?? ''}
-                    errorMessage={errorMessages['home-address']}
+                    errorMessage={errors?.homeAddress}
                     required
                   />
                   <InputSanitizeField
@@ -549,7 +516,7 @@ export default function ApplyFlowPersonalInformation() {
                     maxLength={30}
                     autoComplete="address-line2"
                     defaultValue={defaultState?.homeApartment ?? ''}
-                    errorMessage={errorMessages['home-apartment']}
+                    errorMessage={errors?.homeApartment}
                   />
                   <InputSelect
                     id="home-country"
@@ -558,7 +525,7 @@ export default function ApplyFlowPersonalInformation() {
                     label={t('apply-adult:contact-information.address-field.country')}
                     autoComplete="country"
                     defaultValue={defaultState?.homeCountry ?? ''}
-                    errorMessage={errorMessages['home-country']}
+                    errorMessage={errors?.homeCountry}
                     options={[dummyOption, ...countries]}
                     onChange={homeCountryChangeHandler}
                     required
@@ -570,7 +537,7 @@ export default function ApplyFlowPersonalInformation() {
                       className="w-full sm:w-1/2"
                       label={t('apply-adult:contact-information.address-field.province')}
                       defaultValue={defaultState?.homeProvince ?? ''}
-                      errorMessage={errorMessages['home-province']}
+                      errorMessage={errors?.homeProvince}
                       options={[dummyOption, ...homeRegions]}
                       required
                     />
@@ -584,7 +551,7 @@ export default function ApplyFlowPersonalInformation() {
                       maxLength={100}
                       autoComplete="address-level2"
                       defaultValue={defaultState?.homeCity ?? ''}
-                      errorMessage={errorMessages['home-city']}
+                      errorMessage={errors?.homeCity}
                       required
                     />
                     <InputSanitizeField
@@ -595,7 +562,7 @@ export default function ApplyFlowPersonalInformation() {
                       maxLength={100}
                       autoComplete="postal-code"
                       defaultValue={defaultState?.homePostalCode ?? ''}
-                      errorMessage={errorMessages['home-postal-code']}
+                      errorMessage={errors?.homePostalCode}
                       required={homePostalCodeRequired}
                     />
                   </div>

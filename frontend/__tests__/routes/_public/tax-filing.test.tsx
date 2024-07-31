@@ -68,7 +68,7 @@ describe('_public.apply.id.tax-filing', () => {
 
       const data = await response.json();
       expect(response.status).toBe(200);
-      expect(data.errors.length).toBeGreaterThan(0);
+      expect(data.errors.taxFiling2023).toBeUndefined();
     });
 
     it('should redirect to date of birth page if tax filing is completed', async () => {

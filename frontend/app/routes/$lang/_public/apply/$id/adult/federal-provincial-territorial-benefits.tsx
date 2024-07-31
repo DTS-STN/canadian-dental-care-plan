@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
@@ -12,7 +12,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { Progress } from '~/components/progress';
@@ -20,7 +20,6 @@ import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.s
 import type { DentalFederalBenefitsState, DentalProvincialTerritorialBenefitsState } from '~/route-helpers/apply-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
-import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -30,6 +29,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum HasFederalBenefitsOption {
   No = 'no',
@@ -151,8 +151,8 @@ export async function action({ context: { session }, params, request }: ActionFu
   if (!parsedFederalBenefitsResult.success || !parsedProvincialTerritorialBenefitsResult.success) {
     return json({
       errors: {
-        ...(!parsedFederalBenefitsResult.success ? parsedFederalBenefitsResult.error.format() : {}),
-        ...(!parsedProvincialTerritorialBenefitsResult.success ? parsedProvincialTerritorialBenefitsResult.error.format() : {}),
+        ...(!parsedFederalBenefitsResult.success ? transformFlattenedError(parsedFederalBenefitsResult.error.flatten()) : {}),
+        ...(!parsedProvincialTerritorialBenefitsResult.success ? transformFlattenedError(parsedProvincialTerritorialBenefitsResult.error.flatten()) : {}),
       },
     });
   }
@@ -182,38 +182,15 @@ export default function AccessToDentalInsuranceQuestion() {
   const [hasProvincialTerritorialBenefitValue, setHasProvincialTerritorialBenefitValue] = useState(defaultState?.hasProvincialTerritorialBenefits);
   const [provincialTerritorialSocialProgramValue, setProvincialTerritorialSocialProgramValue] = useState(defaultState?.provincialTerritorialSocialProgram);
   const [provinceValue, setProvinceValue] = useState(defaultState?.province);
-  const errorSummaryId = 'error-summary';
 
-  // Keys order should match the input IDs order.
-  const errorMessages = useMemo(
-    () => ({
-      'input-radio-has-federal-benefits-option-0': fetcher.data?.errors.hasFederalBenefits?._errors[0],
-      'input-radio-federal-social-programs-option-0': fetcher.data?.errors.federalSocialProgram?._errors[0],
-      'input-radio-has-provincial-territorial-benefits-option-0': fetcher.data?.errors.hasProvincialTerritorialBenefits?._errors[0],
-      province: fetcher.data?.errors.province?._errors[0],
-      'input-radio-provincial-territorial-social-programs-option-0': fetcher.data?.errors.provincialTerritorialSocialProgram?._errors[0],
-    }),
-    [
-      fetcher.data?.errors.hasFederalBenefits?._errors,
-      fetcher.data?.errors.federalSocialProgram?._errors,
-      fetcher.data?.errors.province?._errors,
-      fetcher.data?.errors.hasProvincialTerritorialBenefits?._errors,
-      fetcher.data?.errors.provincialTerritorialSocialProgram?._errors,
-    ],
-  );
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
-  useEffect(() => {
-    if (hasErrors(errorMessages)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-
-      if (adobeAnalytics.isConfigured()) {
-        const fieldIds = createErrorSummaryItems(errorMessages).map(({ fieldId }) => fieldId);
-        adobeAnalytics.pushValidationErrorEvent(fieldIds);
-      }
-    }
-  }, [errorMessages]);
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    hasFederalBenefits: 'input-radio-has-federal-benefits-option-0',
+    federalSocialProgram: 'input-radio-federal-social-programs-option-0',
+    hasProvincialTerritorialBenefits: 'input-radio-has-provincial-territorial-benefits-option-0',
+    province: 'province',
+    provincialTerritorialSocialProgram: 'input-radio-provincial-territorial-social-programs-option-0',
+  });
 
   function handleOnHasFederalBenefitChanged(e: React.ChangeEvent<HTMLInputElement>) {
     setHasFederalBenefitValue(e.target.value === HasFederalBenefitsOption.Yes);
@@ -245,7 +222,7 @@ export default function AccessToDentalInsuranceQuestion() {
         <p className="mb-4">{t('apply-adult:dental-benefits.access-to-dental')}</p>
         <p className="mb-4">{t('apply-adult:dental-benefits.eligibility-criteria')}</p>
         <p className="mb-4 italic">{t('apply:required-label')}</p>
-        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <fieldset className="mb-6">
@@ -277,13 +254,13 @@ export default function AccessToDentalInsuranceQuestion() {
                         defaultChecked: defaultState?.federalSocialProgram === option.id,
                         value: option.id,
                       }))}
-                      errorMessage={errorMessages['input-radio-federal-social-programs-option-0']}
+                      errorMessage={errors?.federalSocialProgram}
                       required
                     />
                   ),
                 },
               ]}
-              errorMessage={errorMessages['input-radio-has-federal-benefits-option-0']}
+              errorMessage={errors?.hasFederalBenefits}
               required
             />
           </fieldset>
@@ -322,7 +299,7 @@ export default function AccessToDentalInsuranceQuestion() {
                           })),
                         ]}
                         defaultValue={provinceValue}
-                        errorMessage={errorMessages['province']}
+                        errorMessage={errors?.province}
                         required
                       />
                       {provinceValue && (
@@ -331,7 +308,7 @@ export default function AccessToDentalInsuranceQuestion() {
                           name="provincialTerritorialSocialProgram"
                           legend={t('apply-adult:dental-benefits.provincial-territorial-benefits.social-programs.radio-legend')}
                           legendClassName="font-normal"
-                          errorMessage={errorMessages['input-radio-provincial-territorial-social-programs-option-0']}
+                          errorMessage={errors?.provincialTerritorialSocialProgram}
                           options={provincialTerritorialSocialPrograms
                             .filter((program) => program.provinceTerritoryStateId === provinceValue)
                             .map((option) => ({
@@ -347,7 +324,7 @@ export default function AccessToDentalInsuranceQuestion() {
                   ),
                 },
               ]}
-              errorMessage={errorMessages['input-radio-has-provincial-territorial-benefits-option-0']}
+              errorMessage={errors?.hasProvincialTerritorialBenefits}
               required
             />
           </fieldset>

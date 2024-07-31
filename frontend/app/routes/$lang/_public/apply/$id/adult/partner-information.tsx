@@ -1,5 +1,3 @@
-import { useEffect, useMemo } from 'react';
-
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
@@ -13,8 +11,7 @@ import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
-import type { ErrorSummaryItem } from '~/components/error-summary';
-import { ErrorSummary, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
@@ -22,7 +19,6 @@ import { Progress } from '~/components/progress';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import type { PartnerInformationState } from '~/route-helpers/apply-route-helpers.server';
 import { applicantInformationStateHasPartner, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
-import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
@@ -34,6 +30,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { isAllValidInputCharacters } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
@@ -141,7 +138,9 @@ export async function action({ context: { session }, params, request }: ActionFu
   const parsedDataResult = partnerInformationSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    return json({ errors: parsedDataResult.error.format() });
+    return json({
+      errors: transformFlattenedError(parsedDataResult.error.flatten()),
+    });
   }
 
   saveApplyState({ params, session, state: { partnerInformation: parsedDataResult.data } });
@@ -159,50 +158,18 @@ export default function ApplyFlowApplicationInformation() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const errorSummaryId = 'error-summary';
 
-  // Keys order should match the input IDs order.
-  const errorSummaryItems = useMemo(() => {
-    const items: ErrorSummaryItem[] = [];
-    if (fetcher.data?.errors.firstName?._errors[0]) items.push(createErrorSummaryItem('first-name', fetcher.data.errors.firstName._errors[0]));
-    if (fetcher.data?.errors.lastName?._errors[0]) items.push(createErrorSummaryItem('last-name', fetcher.data.errors.lastName._errors[0]));
-
-    if (i18n.language === 'fr') {
-      if (fetcher.data?.errors.dateOfBirth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', fetcher.data.errors.dateOfBirth._errors[0]));
-      if (fetcher.data?.errors.dateOfBirthDay?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', fetcher.data.errors.dateOfBirthDay._errors[0]));
-      if (fetcher.data?.errors.dateOfBirthMonth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', fetcher.data.errors.dateOfBirthMonth._errors[0]));
-    } else {
-      if (fetcher.data?.errors.dateOfBirth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', fetcher.data.errors.dateOfBirth._errors[0]));
-      if (fetcher.data?.errors.dateOfBirthMonth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', fetcher.data.errors.dateOfBirthMonth._errors[0]));
-      if (fetcher.data?.errors.dateOfBirthDay?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', fetcher.data.errors.dateOfBirthDay._errors[0]));
-    }
-
-    if (fetcher.data?.errors.dateOfBirthYear?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-year', fetcher.data.errors.dateOfBirthYear._errors[0]));
-    if (fetcher.data?.errors.socialInsuranceNumber?._errors[0]) items.push(createErrorSummaryItem('social-insurance-number', fetcher.data.errors.socialInsuranceNumber._errors[0]));
-    if (fetcher.data?.errors.confirm?._errors[0]) items.push(createErrorSummaryItem('input-checkbox-confirm', fetcher.data.errors.confirm._errors[0]));
-    return items;
-  }, [
-    i18n.language,
-    fetcher.data?.errors.confirm?._errors,
-    fetcher.data?.errors.dateOfBirth?._errors,
-    fetcher.data?.errors.dateOfBirthDay?._errors,
-    fetcher.data?.errors.dateOfBirthMonth?._errors,
-    fetcher.data?.errors.dateOfBirthYear?._errors,
-    fetcher.data?.errors.firstName?._errors,
-    fetcher.data?.errors.lastName?._errors,
-    fetcher.data?.errors.socialInsuranceNumber?._errors,
-  ]);
-
-  useEffect(() => {
-    if (errorSummaryItems.length > 0) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-
-      if (adobeAnalytics.isConfigured()) {
-        const fieldIds = errorSummaryItems.map(({ fieldId }) => fieldId);
-        adobeAnalytics.pushValidationErrorEvent(fieldIds);
-      }
-    }
-  }, [errorSummaryItems]);
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    firstName: 'first-name',
+    lastName: 'last-name',
+    ...(i18n.language === 'fr'
+      ? { dateOfBirth: 'date-picker-date-of-birth-day', dateOfBirthDay: 'date-picker-date-of-birth-day', dateOfBirthMonth: 'date-picker-date-of-birth-month' }
+      : { dateOfBirth: 'date-picker-date-of-birth-month', dateOfBirthMonth: 'date-picker-date-of-birth-month', dateOfBirthDay: 'date-picker-date-of-birth-day' }),
+    dateOfBirthYear: 'date-picker-date-of-birth-year',
+    socialInsuranceNumber: 'social-insurance-number',
+    confirm: 'input-checkbox-confirm',
+  });
 
   return (
     <>
@@ -213,7 +180,7 @@ export default function ApplyFlowApplicationInformation() {
         <p className="mb-4">{t('partner-information.provide-sin')}</p>
         <p className="mb-6">{t('partner-information.required-information')}</p>
         <p className="mb-4 italic">{t('apply:required-label')}</p>
-        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="space-y-6">
@@ -229,7 +196,7 @@ export default function ApplyFlowApplicationInformation() {
                 maxLength={100}
                 autoComplete="given-name"
                 defaultValue={defaultState?.firstName ?? ''}
-                errorMessage={fetcher.data?.errors.firstName?._errors[0]}
+                errorMessage={errors?.firstName}
                 aria-description={t('partner-information.name-instructions')}
                 required
               />
@@ -241,7 +208,7 @@ export default function ApplyFlowApplicationInformation() {
                 maxLength={100}
                 autoComplete="family-name"
                 defaultValue={defaultState?.lastName ?? ''}
-                errorMessage={fetcher.data?.errors.lastName?._errors[0]}
+                errorMessage={errors?.lastName}
                 aria-description={t('partner-information.name-instructions')}
                 required
               />
@@ -256,10 +223,10 @@ export default function ApplyFlowApplicationInformation() {
               defaultValue={defaultState?.dateOfBirth ?? ''}
               legend={t('apply-adult:partner-information.date-of-birth')}
               errorMessages={{
-                all: fetcher.data?.errors.dateOfBirth?._errors[0],
-                year: fetcher.data?.errors.dateOfBirthYear?._errors[0],
-                month: fetcher.data?.errors.dateOfBirthMonth?._errors[0],
-                day: fetcher.data?.errors.dateOfBirthDay?._errors[0],
+                all: errors?.dateOfBirth,
+                year: errors?.dateOfBirthYear,
+                month: errors?.dateOfBirthMonth,
+                day: errors?.dateOfBirthDay,
               }}
               required
             />
@@ -272,10 +239,10 @@ export default function ApplyFlowApplicationInformation() {
               helpMessagePrimary={t('apply-adult:partner-information.help-message.sin')}
               helpMessagePrimaryClassName="text-black"
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
-              errorMessage={fetcher.data?.errors.socialInsuranceNumber?._errors[0]}
+              errorMessage={errors?.socialInsuranceNumber}
               required
             />
-            <InputCheckbox id="confirm" name="confirm" value="yes" errorMessage={fetcher.data?.errors.confirm?._errors[0]} defaultChecked={defaultState?.confirm === true} required>
+            <InputCheckbox id="confirm" name="confirm" value="yes" errorMessage={errors?.confirm} defaultChecked={defaultState?.confirm === true} required>
               {t('partner-information.confirm-checkbox')}
             </InputCheckbox>
           </div>

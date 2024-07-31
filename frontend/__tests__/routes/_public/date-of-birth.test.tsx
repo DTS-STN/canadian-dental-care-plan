@@ -77,10 +77,10 @@ describe('_public.apply.id.date-of-birth', () => {
 
       const data = await response.json();
       expect(response.status).toBe(200);
-      expect(data.errors.dateOfBirth).toEqual(undefined);
-      expect(data.errors.dateOfBirthYear?._errors.length).toBeGreaterThan(0);
-      expect(data.errors.dateOfBirthMonth?._errors.length).toBeGreaterThan(0);
-      expect(data.errors.dateOfBirthDay?._errors.length).toBeGreaterThan(0);
+      expect(data.errors.dateOfBirth).toBeUndefined();
+      expect(data.errors.dateOfBirthYear).toBeDefined();
+      expect(data.errors.dateOfBirthMonth).toBeDefined();
+      expect(data.errors.dateOfBirthDay).toBeDefined();
     });
 
     it('should redirect to applicant information page if dob is 65 years or over', async () => {

@@ -1,5 +1,3 @@
-import { useEffect, useMemo } from 'react';
-
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
@@ -12,12 +10,11 @@ import { z } from 'zod';
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
-import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -25,6 +22,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-adult', 'apply', 'gcweb'),
@@ -53,7 +51,9 @@ export async function action({ context: { session }, params, request }: ActionFu
   const t = await getFixedT(request, handle.i18nNamespaces);
 
   // state validation schema
-  const dentalInsuranceSchema = z.boolean({ errorMap: () => ({ message: t('apply-adult:dental-insurance.error-message.dental-insurance-required') }) });
+  const dentalInsuranceSchema = z.object({
+    dentalInsurance: z.boolean({ errorMap: () => ({ message: t('apply-adult:dental-insurance.error-message.dental-insurance-required') }) }),
+  });
 
   const formData = await request.formData();
   const expectedCsrfToken = String(session.get('csrfToken'));
@@ -64,14 +64,16 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const dentalInsurance = formData.get('dentalInsurance') ? formData.get('dentalInsurance') === 'yes' : undefined;
-  const parsedDataResult = dentalInsuranceSchema.safeParse(dentalInsurance);
+  const data = { dentalInsurance: formData.get('dentalInsurance') ? formData.get('dentalInsurance') === 'yes' : undefined };
+  const parsedDataResult = dentalInsuranceSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    return json({ errors: parsedDataResult.error.format()._errors });
+    return json({
+      errors: transformFlattenedError(parsedDataResult.error.flatten()),
+    });
   }
 
-  saveApplyState({ params, session, state: { dentalInsurance: parsedDataResult.data } });
+  saveApplyState({ params, session, state: { dentalInsurance: parsedDataResult.data.dentalInsurance } });
 
   if (state.editMode) {
     return redirect(getPathById('$lang/_public/apply/$id/adult/review-information', params));
@@ -86,28 +88,9 @@ export default function AccessToDentalInsuranceQuestion() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const errorSummaryId = 'error-summary';
 
-  // Keys order should match the input IDs order.
-  const errorMessages = useMemo(
-    () => ({
-      'input-radio-dental-insurance-option-0': fetcher.data?.errors[0],
-    }),
-    [fetcher.data?.errors],
-  );
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
-  useEffect(() => {
-    if (hasErrors(errorMessages)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-
-      if (adobeAnalytics.isConfigured()) {
-        const fieldIds = createErrorSummaryItems(errorMessages).map(({ fieldId }) => fieldId);
-        adobeAnalytics.pushValidationErrorEvent(fieldIds);
-      }
-    }
-  }, [errorMessages]);
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, { dentalInsurance: 'input-radio-dental-insurance-option-0' });
 
   const helpMessage = (
     <div className="my-4 space-y-4">
@@ -144,7 +127,7 @@ export default function AccessToDentalInsuranceQuestion() {
       </div>
       <div className="max-w-prose">
         <p className="mb-4 italic">{t('apply:required-label')}</p>
-        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="my-6">
@@ -166,7 +149,7 @@ export default function AccessToDentalInsuranceQuestion() {
               ]}
               helpMessagePrimary={helpMessage}
               helpMessagePrimaryClassName="text-black"
-              errorMessage={errorMessages['input-radio-dental-insurance-option-0']}
+              errorMessage={errors?.dentalInsurance}
               required
             />
           </div>

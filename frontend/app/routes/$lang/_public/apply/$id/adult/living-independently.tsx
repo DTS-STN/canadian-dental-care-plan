@@ -1,5 +1,3 @@
-import { useEffect, useMemo } from 'react';
-
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
@@ -11,12 +9,11 @@ import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
-import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -25,6 +22,7 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum LivingIndependentlyOption {
   No = 'no',
@@ -59,8 +57,10 @@ export async function action({ context: { session }, params, request }: ActionFu
   /**
    * Schema for living independently.
    */
-  const livingIndependentlySchema = z.nativeEnum(LivingIndependentlyOption, {
-    errorMap: () => ({ message: t('apply-adult:living-independently.error-message.living-independently-required') }),
+  const livingIndependentlySchema = z.object({
+    livingIndependently: z.nativeEnum(LivingIndependentlyOption, {
+      errorMap: () => ({ message: t('apply-adult:living-independently.error-message.living-independently-required') }),
+    }),
   });
 
   const formData = await request.formData();
@@ -72,20 +72,22 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response('Invalid CSRF token', { status: 400 });
   }
 
-  const data = String(formData.get('livingIndependently') ?? '');
+  const data = { livingIndependently: String(formData.get('livingIndependently') ?? '') };
   const parsedDataResult = livingIndependentlySchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    return json({ errors: parsedDataResult.error.format()._errors });
+    return json({
+      errors: transformFlattenedError(parsedDataResult.error.flatten()),
+    });
   }
 
-  saveApplyState({ params, session, state: { livingIndependently: parsedDataResult.data === LivingIndependentlyOption.Yes } });
+  saveApplyState({ params, session, state: { livingIndependently: parsedDataResult.data.livingIndependently === LivingIndependentlyOption.Yes } });
 
   if (state.editMode) {
     return redirect(getPathById('$lang/_public/apply/$id/adult/review-information', params));
   }
 
-  if (parsedDataResult.data === LivingIndependentlyOption.Yes) {
+  if (parsedDataResult.data.livingIndependently === LivingIndependentlyOption.Yes) {
     return redirect(getPathById('$lang/_public/apply/$id/adult/applicant-information', params));
   }
 
@@ -98,27 +100,9 @@ export default function ApplyFlowLivingIndependently() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const errorSummaryId = 'error-summary';
 
-  // Keys order should match the input IDs order.
-  const errorMessages = useMemo(
-    () => ({
-      'input-radio-living-independently-option-0': fetcher.data?.errors[0],
-    }),
-    [fetcher.data?.errors],
-  );
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
-  useEffect(() => {
-    if (hasErrors(errorMessages)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-
-      if (adobeAnalytics.isConfigured()) {
-        adobeAnalytics.pushValidationErrorEvent(errorSummaryItems.map(({ fieldId }) => fieldId));
-      }
-    }
-  }, [errorMessages, errorSummaryItems]);
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, { livingIndependently: 'input-radio-living-independently-option-0' });
 
   return (
     <>
@@ -128,7 +112,7 @@ export default function ApplyFlowLivingIndependently() {
       <div className="max-w-prose">
         <p className="mb-6">{t('apply-adult:living-independently.description')}</p>
         <p className="mb-4 italic">{t('apply:required-label')}</p>
-        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <InputRadios
@@ -148,7 +132,7 @@ export default function ApplyFlowLivingIndependently() {
               },
             ]}
             required
-            errorMessage={errorMessages['input-radio-living-independently-option-0']}
+            errorMessage={errors?.livingIndependently}
           />
           {editMode ? (
             <div className="mt-8 flex flex-wrap items-center gap-3">
