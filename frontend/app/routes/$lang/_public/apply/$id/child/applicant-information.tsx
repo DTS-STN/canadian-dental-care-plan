@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
@@ -14,8 +14,7 @@ import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
-import type { ErrorSummaryItem } from '~/components/error-summary';
-import { ErrorSummary, createErrorSummaryItem, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
@@ -25,7 +24,6 @@ import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.s
 import type { ApplicantInformationState } from '~/route-helpers/apply-route-helpers.server';
 import { applicantInformationStateHasPartner, getAgeCategoryFromDateString, saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
-import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -38,6 +36,7 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { isAllValidInputCharacters } from '~/utils/string-utils';
 import { cn } from '~/utils/tw-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum FormAction {
   Continue = 'continue',
@@ -166,8 +165,8 @@ export async function action({ context: { session }, params, request }: ActionFu
 
     if (applicantInformationStateHasPartner(state.applicantInformation) && state.partnerInformation === undefined) {
       const errorMessage = t('apply-child:applicant-information.error-message.marital-status-no-partner-information');
-      const errors: z.inferFormattedError<typeof applicantInformationSchema & typeof dateOfBirthSchema> = { _errors: [errorMessage], maritalStatus: { _errors: [errorMessage] } };
-      return json({ errors });
+      const flattenedErrors: z.typeToFlattenedError<z.infer<typeof applicantInformationSchema> & z.infer<typeof dateOfBirthSchema>> = { formErrors: [errorMessage], fieldErrors: { maritalStatus: [errorMessage] } };
+      return json({ errors: transformFlattenedError(flattenedErrors) });
     }
 
     return redirect(getPathById('$lang/_public/apply/$id/child/review-adult-information', params));
@@ -189,8 +188,8 @@ export async function action({ context: { session }, params, request }: ActionFu
   if (!parsedDataResult.success || !parsedDobResult.success) {
     return json({
       errors: {
-        ...(!parsedDataResult.success ? parsedDataResult.error.format() : {}),
-        ...(!parsedDobResult.success ? parsedDobResult.error.format() : {}),
+        ...(!parsedDataResult.success ? transformFlattenedError(parsedDataResult.error.flatten()) : {}),
+        ...(!parsedDobResult.success ? transformFlattenedError(parsedDobResult.error.flatten()) : {}),
       },
     });
   }
@@ -232,51 +231,18 @@ export default function ApplyFlowApplicationInformation() {
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const errorSummaryId = 'error-summary';
+
   const errors = fetcher.data?.errors;
-
-  // Keys order should match the input IDs order.
-  const errorSummaryItems = useMemo(() => {
-    const items: ErrorSummaryItem[] = [];
-    if (errors?.firstName?._errors[0]) items.push(createErrorSummaryItem('first-name', errors.firstName._errors[0]));
-    if (errors?.lastName?._errors[0]) items.push(createErrorSummaryItem('last-name', errors.lastName._errors[0]));
-
-    if (i18n.language === 'fr') {
-      if (errors?.dateOfBirth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', errors.dateOfBirth._errors[0]));
-      if (errors?.dateOfBirthDay?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', errors.dateOfBirthDay._errors[0]));
-      if (errors?.dateOfBirthMonth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', errors.dateOfBirthMonth._errors[0]));
-    } else {
-      if (errors?.dateOfBirth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', errors.dateOfBirth._errors[0]));
-      if (errors?.dateOfBirthMonth?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-month', errors.dateOfBirthMonth._errors[0]));
-      if (errors?.dateOfBirthDay?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-day', errors.dateOfBirthDay._errors[0]));
-    }
-
-    if (errors?.dateOfBirthYear?._errors[0]) items.push(createErrorSummaryItem('date-picker-date-of-birth-year', errors.dateOfBirthYear._errors[0]));
-    if (errors?.socialInsuranceNumber?._errors[0]) items.push(createErrorSummaryItem('social-insurance-number', errors.socialInsuranceNumber._errors[0]));
-    if (errors?.maritalStatus?._errors[0]) items.push(createErrorSummaryItem('input-radio-marital-status-option-0', errors.maritalStatus._errors[0]));
-    return items;
-  }, [
-    i18n.language,
-    errors?.firstName?._errors,
-    errors?.lastName?._errors,
-    errors?.maritalStatus?._errors,
-    errors?.socialInsuranceNumber?._errors,
-    errors?.dateOfBirth?._errors,
-    errors?.dateOfBirthDay?._errors,
-    errors?.dateOfBirthMonth?._errors,
-    errors?.dateOfBirthYear?._errors,
-  ]);
-
-  useEffect(() => {
-    if (errorSummaryItems.length > 0) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-
-      if (adobeAnalytics.isConfigured()) {
-        const fieldIds = errorSummaryItems.map(({ fieldId }) => fieldId);
-        adobeAnalytics.pushValidationErrorEvent(fieldIds);
-      }
-    }
-  }, [errorSummaryItems]);
+  const errorSummary = useErrorSummary(errors, {
+    firstName: 'first-name',
+    lastName: 'last-name',
+    ...(i18n.language === 'fr'
+      ? { dateOfBirth: 'date-picker-date-of-birth-day', dateOfBirthDay: 'date-picker-date-of-birth-day', dateOfBirthMonth: 'date-picker-date-of-birth-month' }
+      : { dateOfBirth: 'date-picker-date-of-birth-month', dateOfBirthMonth: 'date-picker-date-of-birth-month', dateOfBirthDay: 'date-picker-date-of-birth-day' }),
+    dateOfBirthYear: 'date-picker-date-of-birth-year',
+    socialInsuranceNumber: 'social-insurance-number',
+    maritalStatus: 'input-radio-marital-status-option-0',
+  });
 
   const maritalStatusOptions = useMemo<InputRadiosProps['options']>(() => {
     return maritalStatuses.map((status) => ({ defaultChecked: status.id === defaultState?.maritalStatus, children: status.name, value: status.id }));
@@ -291,7 +257,7 @@ export default function ApplyFlowApplicationInformation() {
         <p className="mb-4">{t('applicant-information.form-instructions-sin')}</p>
         <p className="mb-6">{t('applicant-information.form-instructions-info')}</p>
         <p className="mb-4 italic">{t('apply:required-label')}</p>
-        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-8 space-y-6">
@@ -307,7 +273,7 @@ export default function ApplyFlowApplicationInformation() {
                 maxLength={100}
                 aria-description={t('applicant-information.name-instructions')}
                 autoComplete="given-name"
-                errorMessage={errors?.firstName?._errors[0]}
+                errorMessage={errors?.firstName}
                 defaultValue={defaultState?.firstName ?? ''}
                 required
               />
@@ -319,7 +285,7 @@ export default function ApplyFlowApplicationInformation() {
                 maxLength={100}
                 autoComplete="family-name"
                 defaultValue={defaultState?.lastName ?? ''}
-                errorMessage={errors?.lastName?._errors[0]}
+                errorMessage={errors?.lastName}
                 aria-description={t('applicant-information.name-instructions')}
                 required
               />
@@ -334,10 +300,10 @@ export default function ApplyFlowApplicationInformation() {
               defaultValue={dateOfBirth ?? ''}
               legend={t('apply-child:applicant-information.date-of-birth')}
               errorMessages={{
-                all: errors?.dateOfBirth?._errors[0],
-                year: errors?.dateOfBirthYear?._errors[0],
-                month: errors?.dateOfBirthMonth?._errors[0],
-                day: errors?.dateOfBirthDay?._errors[0],
+                all: errors?.dateOfBirth,
+                year: errors?.dateOfBirthYear,
+                month: errors?.dateOfBirthMonth,
+                day: errors?.dateOfBirthDay,
               }}
               required
             />
@@ -350,10 +316,10 @@ export default function ApplyFlowApplicationInformation() {
               helpMessagePrimary={t('apply-child:applicant-information.help-message.sin')}
               helpMessagePrimaryClassName="text-black"
               defaultValue={defaultState?.socialInsuranceNumber ?? ''}
-              errorMessage={errors?.socialInsuranceNumber?._errors[0]}
+              errorMessage={errors?.socialInsuranceNumber}
               required
             />
-            <InputRadios id="marital-status" name="maritalStatus" legend={t('applicant-information.marital-status')} options={maritalStatusOptions} errorMessage={errors?.maritalStatus?._errors[0]} required />
+            <InputRadios id="marital-status" name="maritalStatus" legend={t('applicant-information.marital-status')} options={maritalStatusOptions} errorMessage={errors?.maritalStatus} required />
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
