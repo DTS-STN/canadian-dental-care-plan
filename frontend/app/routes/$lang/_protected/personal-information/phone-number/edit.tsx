@@ -1,5 +1,3 @@
-import { useEffect, useMemo } from 'react';
-
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
@@ -13,7 +11,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import type { PersonalInformation } from '~/schemas/personal-informaton-service-schemas.server';
@@ -31,6 +29,7 @@ import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
   breadcrumbs: [
@@ -118,8 +117,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   if (!parsedDataResult.success) {
     instrumentationService.countHttpStatus('phone-number.confirm', 400);
     return json({
-      errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof formDataSchema>>,
+      errors: transformFlattenedError(parsedDataResult.error.flatten()),
     });
   }
   personalInformation.primaryTelephoneNumber = parsedDataResult.data.primaryTelephoneNumber;
@@ -139,36 +137,27 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function PhoneNumberEdit() {
-  const fetcher = useFetcher<typeof action>();
+  const { t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, personalInformation } = useLoaderData<typeof loader>();
   const params = useParams();
-  const errorSummaryId = 'error-summary';
+
+  const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
-  const { t } = useTranslation(handle.i18nNamespaces);
+
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    primaryTelephoneNumber: 'primaryTelephoneNumber',
+    alternateTelephoneNumber: 'alternateTelephoneNumber',
+  });
 
   const defaultValues = {
     primaryTelephoneNumber: personalInformation.primaryTelephoneNumber ?? '',
     alternateTelephoneNumber: personalInformation.alternateTelephoneNumber ?? '',
   };
-  // Keys order should match the input IDs order.
-  const errorMessages = useMemo(
-    () => ({
-      primaryTelephoneNumber: fetcher.data?.errors.primaryTelephoneNumber?._errors[0],
-      alternateTelephoneNumber: fetcher.data?.errors.alternateTelephoneNumber?._errors[0],
-    }),
-    [fetcher.data?.errors.primaryTelephoneNumber?._errors, fetcher.data?.errors.alternateTelephoneNumber?._errors],
-  );
 
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
-  useEffect(() => {
-    if (hasErrors(errorMessages)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-    }
-  }, [errorMessages]);
   return (
     <>
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+      <errorSummary.ErrorSummary />
       <fetcher.Form className="max-w-prose" method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="grid gap-6">
@@ -178,7 +167,7 @@ export default function PhoneNumberEdit() {
             type="tel"
             label={t('personal-information:phone-number.edit.component.phone')}
             defaultValue={defaultValues.primaryTelephoneNumber}
-            errorMessage={errorMessages.primaryTelephoneNumber}
+            errorMessage={errors?.primaryTelephoneNumber}
           />
           <InputField
             id="alternateTelephoneNumber"
@@ -186,7 +175,7 @@ export default function PhoneNumberEdit() {
             type="tel"
             label={t('personal-information:phone-number.edit.component.alternate-phone')}
             defaultValue={defaultValues.alternateTelephoneNumber}
-            errorMessage={errorMessages.alternateTelephoneNumber}
+            errorMessage={errors?.alternateTelephoneNumber}
           />
         </div>
         <div className="flex flex-wrap items-center gap-6 sm:my-4">

@@ -1,5 +1,3 @@
-import { useEffect, useMemo } from 'react';
-
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
@@ -12,7 +10,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { getAuditService } from '~/services/audit-service.server';
@@ -29,6 +27,7 @@ import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
   breadcrumbs: [
@@ -64,7 +63,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:email-address.edit.page-title') }) };
 
   instrumentationService.countHttpStatus('email-address.edit', 200);
-  return json({ csrfToken, meta, emailAddress });
+  return json({ csrfToken, meta, defaultValues: { emailAddress } });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -106,10 +105,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   if (!parsedDataResult.success) {
     instrumentationService.countHttpStatus('email-address.edit', 400);
-    return json({
-      errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof formDataSchema>>,
-    });
+    return json({ errors: transformFlattenedError(parsedDataResult.error.flatten()) });
   }
 
   instrumentationService.countHttpStatus('email-address.edit', 302);
@@ -137,41 +133,25 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function EmailAddressEdit() {
-  const { csrfToken, emailAddress } = useLoaderData<typeof loader>();
+  const { t } = useTranslation(handle.i18nNamespaces);
+  const { csrfToken, defaultValues } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
-  const errorSummaryId = 'error-summary';
   const isSubmitting = fetcher.state !== 'idle';
-  const { t } = useTranslation(handle.i18nNamespaces);
 
-  const defaultValues = {
-    emailAddress: fetcher.data?.formData.emailAddress ?? emailAddress,
-    confirmEmailAddress: fetcher.data?.formData.confirmEmailAddress ?? emailAddress,
-  };
-
-  // Keys order should match the input IDs order.
-  const errorMessages = useMemo(
-    () => ({
-      emailAddress: fetcher.data?.errors.emailAddress?._errors[0],
-      confirmEmailAddress: fetcher.data?.errors.confirmEmailAddress?._errors[0],
-    }),
-    [fetcher.data?.errors.confirmEmailAddress?._errors, fetcher.data?.errors.emailAddress?._errors],
-  );
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-  useEffect(() => {
-    if (fetcher.data?.formData && hasErrors(fetcher.data.formData)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-    }
-  }, [fetcher.data]);
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    emailAddress: 'emailAddress',
+    confirmEmailAddress: 'confirmEmailAddress',
+  });
 
   return (
     <>
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+      <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="my-6">
-          <InputField id="emailAddress" name="emailAddress" type="tel" label={t('personal-information:email-address.edit.component.email')} required defaultValue={defaultValues.emailAddress} errorMessage={errorMessages.emailAddress} />
+          <InputField id="emailAddress" name="emailAddress" type="tel" label={t('personal-information:email-address.edit.component.email')} required defaultValue={defaultValues.emailAddress} errorMessage={errors?.emailAddress} />
         </div>
         <div className="my-6">
           <InputField
@@ -181,7 +161,7 @@ export default function EmailAddressEdit() {
             label={t('personal-information:email-address.edit.component.confirm-email')}
             required
             defaultValue={defaultValues.emailAddress}
-            errorMessage={errorMessages.confirmEmailAddress}
+            errorMessage={errors?.confirmEmailAddress}
           />
         </div>
         <div className="flex flex-wrap items-center gap-3">

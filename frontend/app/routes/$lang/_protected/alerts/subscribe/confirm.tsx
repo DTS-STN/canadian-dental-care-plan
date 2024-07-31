@@ -1,5 +1,3 @@
-import { useEffect, useMemo } from 'react';
-
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
@@ -14,7 +12,7 @@ import { z } from 'zod';
 import pageIds from '../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
 import { ContextualAlert } from '~/components/contextual-alert';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
@@ -32,6 +30,7 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum ConfirmationCodeAction {
   NewCode = 'new-code',
@@ -125,7 +124,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   if (!parsedDataResult.success) {
     instrumentationService.countHttpStatus('alerts.confirm', 400);
-    return json({ errors: parsedDataResult.error.format() });
+    return json({ errors: transformFlattenedError(parsedDataResult.error.flatten()) });
   }
 
   const idToken: IdToken = session.get('idToken');
@@ -158,26 +157,15 @@ export default function ConfirmSubscription() {
   const isSubmitting = fetcher.state !== 'idle';
   const invalidConfirmationCode = fetcher.data && 'invalidConfirmationCode' in fetcher.data ? fetcher.data.invalidConfirmationCode : undefined;
 
-  const errorSummaryId = 'error-summary';
-
-  const errorMessages = useMemo(() => {
-    const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
-    return {
-      confirmationCode: errors?.confirmationCode?._errors[0],
-    };
-  }, [fetcher.data]);
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
-  useEffect(() => {
-    if (hasErrors(errorMessages)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-    }
-  }, [errorMessages]);
+  const errors = fetcher.data && 'errors' in fetcher.data ? fetcher.data.errors : undefined;
+  const errorSummary = useErrorSummary(errors, {
+    confirmationCode: 'confirmationCode',
+    action: '',
+  });
 
   return (
     <div className="max-w-prose space-y-6">
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+      <errorSummary.ErrorSummary />
 
       <ContextualAlert type="info">
         {newCodeRequested ? (
@@ -211,7 +199,7 @@ export default function ConfirmSubscription() {
       <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div className="mb-8 space-y-6">
-          <InputField id="confirmationCode" label={t('alerts:confirm.confirmation-code-label')} maxLength={100} name="confirmationCode" errorMessage={errorMessages.confirmationCode} />
+          <InputField id="confirmationCode" label={t('alerts:confirm.confirmation-code-label')} maxLength={100} name="confirmationCode" errorMessage={errors?.confirmationCode} />
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <ButtonLink id="back-button" to={userOrigin?.to} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Back - Confirmation code click">

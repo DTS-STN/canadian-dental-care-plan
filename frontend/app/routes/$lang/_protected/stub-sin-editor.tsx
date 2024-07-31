@@ -1,15 +1,13 @@
-import { useEffect } from 'react';
-
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
-import { Form, useActionData } from '@remix-run/react';
+import { useFetcher } from '@remix-run/react';
 
 import { UTCDate } from '@date-fns/utc';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { Button } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { getSubscriptionService } from '~/services/subscription-service.server';
 import { getEnv } from '~/utils/env.server';
@@ -20,6 +18,7 @@ import type { UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('stub-sin-editor', 'gcweb'),
@@ -60,8 +59,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   if (!parsedDataResult.success) {
     return json({
-      errors: parsedDataResult.error.format(),
-      formData: formData as Partial<z.infer<typeof sinToStubSchema>>,
+      errors: transformFlattenedError(parsedDataResult.error.flatten()),
     });
   }
 
@@ -111,48 +109,24 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function StubSinEditorPage() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const actionData = useActionData<typeof action>();
+  const fetcher = useFetcher<typeof action>();
 
-  const errorSummaryId = 'error-summary';
-
-  /**
-   * Gets an error message based on the provided internationalization (i18n) key.
-   *
-   * @param errorI18nKey - The i18n key for the error message.
-   * @returns The corresponding error message, or undefined if no key is provided.
-   */
-  function getErrorMessage(errorI18nKey?: string): string | undefined {
-    if (!errorI18nKey) return undefined;
-
-    /**
-     * The 'as any' is employed to circumvent typechecking, as the type of
-     * 'errorI18nKey' is a string, and the string literal cannot undergo validation.
-     */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return t(`stub-sin-editor:index.error-message.${errorI18nKey}` as any);
-  }
-  const errorMessages = {
-    socialInsuranceNumber: getErrorMessage(actionData?.errors.socialInsuranceNumberToStub?._errors[0]),
-  };
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
-  useEffect(() => {
-    if (actionData?.formData && hasErrors(actionData.formData)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-    }
-  }, [actionData]);
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    socialInsuranceNumberToStub: 'socialInsuranceNumberToStub',
+    userUUIDToStub: 'userUUIDToStub',
+  });
 
   return (
     <>
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
-      <Form method="post" noValidate className="space-y-6">
+      <errorSummary.ErrorSummary />
+      <fetcher.Form method="post" noValidate className="space-y-6">
         <InputField id="socialInsuranceNumberToStub" name="socialInsuranceNumberToStub" label={t('stub-sin-editor:index.edit-id-field')} required inputMode="numeric" pattern="\d{9}" placeholder="000000000" minLength={9} maxLength={9} />
         <InputField id="userUUIDToStub" name="userUUIDToStub" inputMode="text" label={t('stub-sin-editor:index.UUID-label')} placeholder="00000000-0000-0000-0000-000000000000" />
         <Button variant="primary" id="continue-button">
           {t('stub-sin-editor:index.edit-id-button')}
         </Button>
-      </Form>
+      </fetcher.Form>
     </>
   );
 }

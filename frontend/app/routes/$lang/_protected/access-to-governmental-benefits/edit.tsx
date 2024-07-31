@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
@@ -12,7 +12,7 @@ import { z } from 'zod';
 
 import pageIds from '../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
@@ -28,6 +28,7 @@ import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum HasFederalBenefitsOption {
   No = 'no',
@@ -163,8 +164,8 @@ export async function action({ context: { session }, params, request }: ActionFu
   if (!parsedFederalBenefitsResult.success || !parsedProvincialTerritorialBenefitsResult.success) {
     return json({
       errors: {
-        ...(!parsedFederalBenefitsResult.success ? parsedFederalBenefitsResult.error.format() : {}),
-        ...(!parsedProvincialTerritorialBenefitsResult.success ? parsedProvincialTerritorialBenefitsResult.error.format() : {}),
+        ...(!parsedFederalBenefitsResult.success ? transformFlattenedError(parsedFederalBenefitsResult.error.flatten()) : {}),
+        ...(!parsedProvincialTerritorialBenefitsResult.success ? transformFlattenedError(parsedProvincialTerritorialBenefitsResult.error.flatten()) : {}),
       },
     });
   }
@@ -183,33 +184,21 @@ export default function AccessToGovernmentalsBenefitsEdit() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const { csrfToken, federalSocialPrograms, provincialTerritorialSocialPrograms, regions } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
-  const errorSummaryId = 'error-summary';
   const isSubmitting = fetcher.state !== 'idle';
-
-  // Keys order should match the input IDs order.
-  const errorMessages = useMemo(
-    () => ({
-      'input-radio-has-federal-benefits-option-0': fetcher.data?.errors.hasFederalBenefits?._errors[0],
-      'input-radio-federal-social-programs-option-0': fetcher.data?.errors.federalSocialProgram?._errors[0],
-      'input-radio-has-provincial-territorial-benefits-option-0': fetcher.data?.errors.hasProvincialTerritorialBenefits?._errors[0],
-      province: fetcher.data?.errors.province?._errors[0],
-      'input-radio-provincial-territorial-social-programs-option-0': fetcher.data?.errors.provincialTerritorialSocialProgram?._errors[0],
-    }),
-    [
-      fetcher.data?.errors.hasFederalBenefits?._errors,
-      fetcher.data?.errors.federalSocialProgram?._errors,
-      fetcher.data?.errors.province?._errors,
-      fetcher.data?.errors.hasProvincialTerritorialBenefits?._errors,
-      fetcher.data?.errors.provincialTerritorialSocialProgram?._errors,
-    ],
-  );
   const params = useParams();
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
   const [hasFederalBenefitValue, setHasFederalBenefitValue] = useState<boolean>();
   const [provincialTerritorialSocialProgramValue, setProvincialTerritorialSocialProgramValue] = useState<string>();
-
   const [hasProvincialTerritorialBenefitValue, setHasProvincialTerritorialBenefitValue] = useState<boolean>();
   const [provinceValue, setProvinceValue] = useState<string>();
+
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    hasFederalBenefits: 'input-radio-has-federal-benefits-option-0',
+    federalSocialProgram: 'input-radio-federal-social-programs-option-0',
+    hasProvincialTerritorialBenefits: 'input-radio-has-provincial-territorial-benefits-option-0',
+    province: 'province',
+    provincialTerritorialSocialProgram: 'input-radio-provincial-territorial-social-programs-option-0',
+  });
 
   function handleOnHasProvincialTerritorialBenefitChanged(e: React.ChangeEvent<HTMLInputElement>) {
     setHasProvincialTerritorialBenefitValue(e.target.value === HasProvincialTerritorialBenefitsOption.Yes);
@@ -237,7 +226,7 @@ export default function AccessToGovernmentalsBenefitsEdit() {
       <p className="mb-4">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.access-to-dental')}</p>
       <p className="mb-4">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.eligibility-criteria')}</p>
       <p className="mb-4 italic">{t('access-to-governmental-benefits:access-to-governmental-benefits.edit.required-label')}</p>
-      {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+      <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <fieldset className="mb-6">
