@@ -17,7 +17,7 @@ export default defineConfig({
   use: { baseURL: `http://localhost:${port}/`, trace: 'on-first-retry' },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
-    command: 'npm run-script build && npm start',
+    command: 'npm run build && npm run start',
     port: Number(port),
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
