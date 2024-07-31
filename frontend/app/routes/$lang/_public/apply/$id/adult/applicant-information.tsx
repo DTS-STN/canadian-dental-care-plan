@@ -90,7 +90,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
     if (applicantInformationStateHasPartner(state.applicantInformation) && state.partnerInformation === undefined) {
       const errorMessage = t('apply-adult:applicant-information.error-message.marital-status-no-partner-information');
-      const flattenedErrors: z.typeToFlattenedError<ApplicantInformationState, string> = { formErrors: [errorMessage], fieldErrors: { maritalStatus: [errorMessage] } };
+      const flattenedErrors: z.typeToFlattenedError<ApplicantInformationState> = { formErrors: [errorMessage], fieldErrors: { maritalStatus: [errorMessage] } };
       return json({ errors: transformFlattenedError(flattenedErrors) });
     }
 

@@ -66,7 +66,7 @@ describe('_public.apply.id.type-of-application', () => {
 
       const data = await response.json();
       expect(response.status).toBe(200);
-      expect(data.errors).toContain('apply:type-of-application.error-message.type-of-application-required');
+      expect(data.errors.typeOfApplication).toContain('apply:type-of-application.error-message.type-of-application-required');
     });
 
     it('should redirect to error page if delegate is selected', async () => {

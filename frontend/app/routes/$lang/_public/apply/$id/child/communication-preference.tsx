@@ -1,5 +1,5 @@
 import type { ChangeEventHandler } from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
@@ -13,7 +13,7 @@ import { z } from 'zod';
 
 import pageIds from '../../../../page-ids.json';
 import { Button, ButtonLink } from '~/components/buttons';
-import { ErrorSummary, createErrorSummaryItems, hasErrors, scrollAndFocusToErrorSummary } from '~/components/error-summary';
+import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import type { InputRadiosProps } from '~/components/input-radios';
 import { InputRadios } from '~/components/input-radios';
@@ -22,7 +22,6 @@ import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.s
 import type { CommunicationPreferencesState } from '~/route-helpers/apply-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
-import * as adobeAnalytics from '~/utils/adobe-analytics.client';
 import { getEnv } from '~/utils/env.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
@@ -33,6 +32,7 @@ import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { cn } from '~/utils/tw-utils';
+import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces('apply-child', 'apply', 'gcweb'),
@@ -132,7 +132,9 @@ export async function action({ context: { session }, params, request }: ActionFu
   const parsedDataResult = formSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
-    return json({ errors: parsedDataResult.error.format() });
+    return json({
+      errors: transformFlattenedError(parsedDataResult.error.flatten()),
+    });
   }
 
   saveApplyState({
@@ -158,35 +160,18 @@ export default function ApplyFlowCommunicationPreferencePage() {
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
   const [preferredMethodValue, setPreferredMethodValue] = useState(defaultState.preferredMethod ?? '');
-  const errorSummaryId = 'error-summary';
+
+  const errors = fetcher.data?.errors;
+  const errorSummary = useErrorSummary(errors, {
+    preferredLanguage: 'input-radio-preferred-language-option-0',
+    preferredMethod: 'input-radio-preferred-methods-option-0',
+    email: 'email',
+    confirmEmail: 'confirm-email',
+  });
 
   const handleOnPreferredMethodChecked: ChangeEventHandler<HTMLInputElement> = (e) => {
     setPreferredMethodValue(e.target.value);
   };
-
-  // Keys order should match the input IDs order.
-  const errorMessages = useMemo(
-    () => ({
-      'input-radio-preferred-language-option-0': fetcher.data?.errors.preferredLanguage?._errors[0],
-      'input-radio-preferred-methods-option-0': fetcher.data?.errors.preferredMethod?._errors[0],
-      email: fetcher.data?.errors.email?._errors[0],
-      'confirm-email': fetcher.data?.errors.confirmEmail?._errors[0],
-    }),
-    [fetcher.data?.errors.confirmEmail?._errors, fetcher.data?.errors.email?._errors, fetcher.data?.errors.preferredLanguage?._errors, fetcher.data?.errors.preferredMethod?._errors],
-  );
-
-  const errorSummaryItems = createErrorSummaryItems(errorMessages);
-
-  useEffect(() => {
-    if (hasErrors(errorMessages)) {
-      scrollAndFocusToErrorSummary(errorSummaryId);
-
-      if (adobeAnalytics.isConfigured()) {
-        const fieldIds = createErrorSummaryItems(errorMessages).map(({ fieldId }) => fieldId);
-        adobeAnalytics.pushValidationErrorEvent(fieldIds);
-      }
-    }
-  }, [errorMessages]);
 
   const nonEmailOptions: InputRadiosProps['options'] = preferredCommunicationMethods
     .filter((method) => method.id !== communicationMethodEmail.id)
@@ -212,7 +197,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
             label={t('apply-child:communication-preference.email')}
             maxLength={64}
             name="email"
-            errorMessage={errorMessages.email}
+            errorMessage={errors?.email}
             autoComplete="email"
             defaultValue={defaultState.email ?? ''}
             required
@@ -227,7 +212,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
               label={t('apply-child:communication-preference.confirm-email')}
               maxLength={64}
               name="confirmEmail"
-              errorMessage={errorMessages['confirm-email']}
+              errorMessage={errors?.confirmEmail}
               autoComplete="email"
               defaultValue={defaultState.email ?? ''}
               required
@@ -248,7 +233,7 @@ export default function ApplyFlowCommunicationPreferencePage() {
       <div className="max-w-prose">
         <p className="mb-6">{t('apply-child:communication-preference.note')}</p>
         <p className="mb-4 italic">{t('apply:required-label')}</p>
-        {errorSummaryItems.length > 0 && <ErrorSummary id={errorSummaryId} errors={errorSummaryItems} />}
+        <errorSummary.ErrorSummary />
         <fetcher.Form method="post" noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
           <div className="mb-8 space-y-6">
@@ -262,13 +247,11 @@ export default function ApplyFlowCommunicationPreferencePage() {
                   children: language.name,
                   value: language.id,
                 }))}
-                errorMessage={errorMessages['input-radio-preferred-language-option-0']}
+                errorMessage={errors?.preferredLanguage}
                 required
               />
             )}
-            {preferredCommunicationMethods.length > 0 && (
-              <InputRadios id="preferred-methods" legend={t('apply-child:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errorMessages['input-radio-preferred-methods-option-0']} required />
-            )}
+            {preferredCommunicationMethods.length > 0 && <InputRadios id="preferred-methods" legend={t('apply-child:communication-preference.preferred-method')} name="preferredMethod" options={options} errorMessage={errors?.preferredMethod} required />}
           </div>
           {editMode ? (
             <div className="flex flex-wrap items-center gap-3">
