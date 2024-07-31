@@ -6,7 +6,7 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { UTCDate } from '@date-fns/utc';
-import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +19,7 @@ import { Button } from '~/components/buttons';
 import { DebugPayload } from '~/components/debug-payload';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { InlineLink } from '~/components/inline-link';
+import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { toBenefitApplicationRequestFromApplyAdultState } from '~/mappers/benefit-application-service-mappers.server';
 import { loadApplyAdultStateForReview } from '~/route-helpers/apply-adult-route-helpers.server';
@@ -451,10 +452,17 @@ export default function ReviewInformation() {
         <fetcher.Form onSubmit={handleSubmit} method="post" className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
           <input type="hidden" name="_csrf" value={csrfToken} />
           {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
-          <Button id="confirm-button" name="_action" value={FormAction.Submit} variant="green" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Submit - Review your information click">
+          <LoadingButton
+            id="confirm-button"
+            name="_action"
+            value={FormAction.Submit}
+            variant="green"
+            disabled={isSubmitting}
+            loading={isSubmitting && submitAction === FormAction.Submit}
+            data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Submit - Review your information click"
+          >
             {t('apply-adult:review-information.submit-button')}
-            {isSubmitting && submitAction === FormAction.Submit && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
-          </Button>
+          </LoadingButton>
           <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Exit - Review your information click">
             <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
             {t('apply-adult:review-information.back-button')}

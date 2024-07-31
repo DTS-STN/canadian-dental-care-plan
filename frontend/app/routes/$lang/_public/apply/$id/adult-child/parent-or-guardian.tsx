@@ -4,13 +4,14 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 
 import pageIds from '../../../../page-ids.json';
-import { Button, ButtonLink } from '~/components/buttons';
+import { ButtonLink } from '~/components/buttons';
+import { LoadingButton } from '~/components/loading-button';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import { clearApplyState, getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -105,10 +106,9 @@ export default function ApplyFlowParentOrGuardian() {
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply-adult-child:parent-or-guardian.back-btn')}
         </ButtonLink>
-        <Button type="submit" variant="primary" data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Parent or legal guardian needs to apply click">
+        <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Parent or legal guardian needs to apply click">
           {t('apply-adult-child:parent-or-guardian.return-btn')}
-          {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
-        </Button>
+        </LoadingButton>
       </fetcher.Form>
     </div>
   );

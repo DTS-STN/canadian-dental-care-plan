@@ -4,17 +4,17 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
 
 import pageIds from '../../page-ids.json';
-import { Button, ButtonLink } from '~/components/buttons';
+import { ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputRadios } from '~/components/input-radios';
 import { InputSelect } from '~/components/input-select';
+import { LoadingButton } from '~/components/loading-button';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
@@ -27,7 +27,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { cn } from '~/utils/tw-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum HasFederalBenefitsOption {
@@ -328,14 +327,9 @@ export default function AccessToGovernmentalsBenefitsEdit() {
           >
             {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.button.back')}
           </ButtonLink>
-          <Button id="save-button" variant="primary" disabled={isSubmitting}>
+          <LoadingButton id="save-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight}>
             {t('access-to-governmental-benefits:access-to-governmental-benefits.edit.button.save')}
-            <FontAwesomeIcon
-              icon={isSubmitting ? faSpinner : faChevronRight}
-              className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')}
-              data-gc-analytics-customclick="ESDC-EDSC:CDCP Personal Information:Save - Access to other federal, provincial or territorial dental benefits click"
-            />
-          </Button>
+          </LoadingButton>
         </div>
       </fetcher.Form>
     </div>

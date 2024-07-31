@@ -2,13 +2,14 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../../../../../page-ids.json';
-import { Button, ButtonLink } from '~/components/buttons';
+import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
+import { LoadingButton } from '~/components/loading-button';
 import { loadApplySingleChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -87,10 +88,9 @@ export default function ApplyForYourself() {
           <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply-child:children.cannot-apply-child.back-btn')}
         </ButtonLink>
-        <Button type="submit" variant="primary" id="proceed-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Proceed - Child apply for yourself click">
+        <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Proceed - Child apply for yourself click">
           {t('apply-child:children.cannot-apply-child.return-btn')}
-          {isSubmitting && <FontAwesomeIcon icon={faSpinner} className="ms-3 block size-4 animate-spin" />}
-        </Button>
+        </LoadingButton>
       </fetcher.Form>
     </div>
   );

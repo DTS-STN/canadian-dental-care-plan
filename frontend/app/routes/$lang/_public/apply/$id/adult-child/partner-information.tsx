@@ -2,7 +2,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remi
 import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
-import { faChevronLeft, faChevronRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -15,6 +15,7 @@ import { useErrorSummary } from '~/components/error-summary';
 import { InputCheckbox } from '~/components/input-checkbox';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
+import { LoadingButton } from '~/components/loading-button';
 import { Progress } from '~/components/progress';
 import { loadApplyAdultChildState } from '~/route-helpers/apply-adult-child-route-helpers.server';
 import type { PartnerInformationState } from '~/route-helpers/apply-route-helpers.server';
@@ -29,7 +30,6 @@ import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin, isValidSin, sinInputPatternFormat } from '~/utils/sin-utils';
 import { isAllValidInputCharacters } from '~/utils/string-utils';
-import { cn } from '~/utils/tw-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
@@ -269,10 +269,15 @@ export default function ApplyFlowApplicationInformation() {
             </div>
           ) : (
             <div className="mt-8 flex flex-row-reverse flex-wrap items-center justify-end gap-3">
-              <Button variant="primary" id="continue-button" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Spouse or common-law partner information click">
+              <LoadingButton
+                variant="primary"
+                id="continue-button"
+                loading={isSubmitting}
+                endIcon={faChevronRight}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Spouse or common-law partner information click"
+              >
                 {t('apply-adult-child:partner-information.continue-btn')}
-                <FontAwesomeIcon icon={isSubmitting ? faSpinner : faChevronRight} className={cn('ms-3 block size-4', isSubmitting && 'animate-spin')} />
-              </Button>
+              </LoadingButton>
               <ButtonLink
                 id="back-button"
                 routeId="$lang/_public/apply/$id/adult-child/applicant-information"
