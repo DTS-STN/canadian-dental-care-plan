@@ -227,8 +227,8 @@ export default function ApplyFlowChildInformation() {
       : { dateOfBirth: 'date-picker-date-of-birth-month', dateOfBirthMonth: 'date-picker-date-of-birth-month', dateOfBirthDay: 'date-picker-date-of-birth-day' }),
     dateOfBirthYear: 'date-picker-date-of-birth-year',
     socialInsuranceNumber: 'social-insurance-number',
-    hasSocialInsuranceNumber: 'input-radios-has-social-insurance-number',
-    isParent: 'input-radios-is-parent-radios',
+    hasSocialInsuranceNumber: 'input-radio-has-social-insurance-number-option-0',
+    isParent: 'input-radio-is-parent-radios-option-0',
   });
 
   const handleSocialInsuranceNumberSelection: ChangeEventHandler<HTMLInputElement> = (e) => {
