@@ -51,7 +51,7 @@
     "fast-xml-parser": "^4.4.1",
     "i18next": "^23.12.2",
     "i18next-browser-languagedetector": "^8.0.0",
-    "i18next-fs-backend": "^2.3.1",
+    "i18next-fs-backend": "^2.3.2",
     "i18next-http-backend": "^2.5.2",
     "ioredis": "^5.4.1",
     "isbot": "^5.1.13",
@@ -74,8 +74,8 @@
     "source-map-support": "^0.5.21",
     "tailwind-merge": "^2.4.0",
     "tiny-invariant": "^1.3.3",
-    "tsx": "^4.16.2",
-    "undici": "^6.19.4",
+    "tsx": "^4.16.3",
+    "undici": "^6.19.5",
     "use-deep-compare": "^1.3.0",
     "validator": "^13.12.0",
     "web-streams-node": "^0.4.0",
@@ -102,8 +102,8 @@
     "@types/validator": "^13.12.0",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@vitejs/plugin-react": "^4.3.1",
-    "@vitest/coverage-v8": "^2.0.4",
-    "@vitest/ui": "^2.0.4",
+    "@vitest/coverage-v8": "^2.0.5",
+    "@vitest/ui": "^2.0.5",
     "chokidar": "^3.6.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
@@ -120,7 +120,7 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.5.4",
     "vite-tsconfig-paths": "^4.3.2",
-    "vitest": "^2.0.4"
+    "vitest": "^2.0.5"
   },
   "engines": {
     "node": ">=20.0.0"
