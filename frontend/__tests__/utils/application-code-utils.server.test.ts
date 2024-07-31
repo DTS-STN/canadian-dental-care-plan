@@ -16,12 +16,14 @@ describe('~/utils/application-code-utils.server.ts', () => {
   });
 
   describe('getContextualAlertType', () => {
-    it.each([
+    const testParams = [
       ['000', 'danger', 'success'],
       ['111', 'warning', 'danger'],
       ['222', undefined, 'info'],
       [null, 'danger', 'danger'],
-    ])('getContextualAlertType(%j,%j) should return "%s"', (statusId, nullStatusMapping, expected) => {
+    ] as const;
+
+    it.each(testParams)('getContextualAlertType(%j,%j) should return "%s"', (statusId, nullStatusMapping, expected) => {
       expect(getContextualAlertType(statusId, nullStatusMapping)).toEqual(expected);
     });
   });
