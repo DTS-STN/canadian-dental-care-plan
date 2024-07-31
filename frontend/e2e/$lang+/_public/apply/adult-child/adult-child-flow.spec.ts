@@ -83,6 +83,8 @@ async function fileTaxes(page: Page) {
   const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
   await applyAdultChildPage.isLoaded('file-taxes');
   await page.getByRole('link', { name: 'Back' }).click();
+
+  await applyAdultChildPage.isLoaded('tax-filing');
   await page.getByRole('radio', { name: 'Yes', exact: true }).check();
   await page.getByRole('button', { name: 'Continue' }).click();
 }
@@ -276,9 +278,11 @@ test.describe('Family flow', () => {
       const { year, month, day } = calculateDOB(65);
       await fillOutDOB(page, year, month, day, 'Yes');
       await page.getByRole('button', { name: 'Continue' }).click();
+      await applyAdultChildPage.isLoaded('applicant-information');
     });
 
     await test.step('Should navigate to DTC page if applicant age is 18-64', async () => {
+      await applyAdultChildPage.isLoaded('applicant-information');
       await page.getByRole('link', { name: 'Back' }).click();
 
       await applyAdultChildPage.isLoaded('date-of-birth');
@@ -291,6 +295,7 @@ test.describe('Family flow', () => {
     });
 
     await test.step('Should navigate to apply for your children page if applicant has no DTC, child is under 18', async () => {
+      await applyAdultChildPage.isLoaded('disability-tax-credit');
       await page.getByRole('button', { name: 'Continue' }).click();
 
       //check for empty fields
@@ -298,21 +303,24 @@ test.describe('Family flow', () => {
 
       await page.getByRole('radio', { name: 'No' }).check();
       await page.getByRole('button', { name: 'Continue' }).click();
+
       await applyAdultChildPage.isLoaded('apply-children');
     });
 
     await test.step('Should navigate to dob eligibility page if applicant is 18-64, has no DTC, child is not under 18', async () => {
+      await applyAdultChildPage.isLoaded('apply-children');
       await page.getByRole('link', { name: 'Back' }).click();
+
+      await applyAdultChildPage.isLoaded('disability-tax-credit');
       await page.getByRole('link', { name: 'Back' }).click();
 
       // Back to date of birth
       await applyAdultChildPage.isLoaded('date-of-birth');
-
       const { year, month, day } = calculateDOB(40);
       await fillOutDOB(page, year, month, day, 'No');
+      await page.getByRole('button', { name: 'Continue' }).click();
 
       // Back to DTC
-      await page.getByRole('button', { name: 'Continue' }).click();
       await applyAdultChildPage.isLoaded('disability-tax-credit');
       await page.getByRole('button', { name: 'Continue' }).click();
 
@@ -320,12 +328,14 @@ test.describe('Family flow', () => {
     });
 
     await test.step('Should navigate to apply for yourself page if applicant is 18-64, has DTC, child is not under 18', async () => {
+      await applyAdultChildPage.isLoaded('dob-eligibility');
       await page.getByRole('link', { name: 'Back' }).click();
+
+      await applyAdultChildPage.isLoaded('disability-tax-credit');
       await page.getByRole('link', { name: 'Back' }).click();
 
       // Back to date of birth
       await applyAdultChildPage.isLoaded('date-of-birth');
-
       const { year, month, day } = calculateDOB(35);
       await fillOutDOB(page, year, month, day, 'No');
       await page.getByRole('button', { name: 'Continue' }).click();
@@ -339,8 +349,10 @@ test.describe('Family flow', () => {
     });
 
     await test.step('Should navigate to living independently page if applicant is 16 or 17, child is under 18', async () => {
+      await applyAdultChildPage.isLoaded('apply-yourself');
       await page.getByRole('link', { name: 'Back' }).click();
 
+      await applyAdultChildPage.isLoaded('date-of-birth');
       const { year, month, day } = calculateDOB(16);
       await fillOutDOB(page, year, month, day, 'Yes');
       await page.getByRole('button', { name: 'Continue' }).click();
@@ -353,8 +365,10 @@ test.describe('Family flow', () => {
     });
 
     await test.step('Should navigate to contact apply child page if applicant is under 16, child is under 18', async () => {
+      await applyAdultChildPage.isLoaded('living-independently');
       await page.getByRole('link', { name: 'Back' }).click();
 
+      await applyAdultChildPage.isLoaded('date-of-birth');
       const { year, month, day } = calculateDOB(15);
       await fillOutDOB(page, year, month, day, 'Yes');
       await page.getByRole('button', { name: 'Continue' }).click();
@@ -363,8 +377,10 @@ test.describe('Family flow', () => {
     });
 
     await test.step('Should navigate to parent guardian page if applicant is 16 or 17, child is not under 18', async () => {
+      await applyAdultChildPage.isLoaded('contact-apply-child');
       await page.getByRole('link', { name: 'Back' }).click();
 
+      await applyAdultChildPage.isLoaded('date-of-birth');
       const { year, month, day } = calculateDOB(16);
       await fillOutDOB(page, year, month, day, 'No');
       await page.getByRole('button', { name: 'Continue' }).click();
@@ -373,8 +389,10 @@ test.describe('Family flow', () => {
     });
 
     await test.step('Should navigate to parent guardian page if applicant is under 16, child is not under 18', async () => {
+      await applyAdultChildPage.isLoaded('parent-or-guardian');
       await page.getByRole('link', { name: 'Back' }).click();
 
+      await applyAdultChildPage.isLoaded('date-of-birth');
       const { year, month, day } = calculateDOB(15);
       await fillOutDOB(page, year, month, day, 'No');
       await page.getByRole('button', { name: 'Continue' }).click();
@@ -383,7 +401,9 @@ test.describe('Family flow', () => {
     });
 
     await test.step('Should return to date of birth page', async () => {
+      await applyAdultChildPage.isLoaded('parent-or-guardian');
       await page.getByRole('link', { name: 'Back' }).click();
+
       await applyAdultChildPage.isLoaded('date-of-birth');
 
       // Continue the flow
@@ -416,6 +436,10 @@ test.describe('Family flow', () => {
       await otherDentalBenefits(page);
     });
 
-    // TODO: Create tests for child application
+    await test.step('Should navigate to children page', async () => {
+      await applyAdultChildPage.isLoaded('children');
+    });
+
+    // TODO: Add missing flow steps until it reaches confirm page
   });
 });
