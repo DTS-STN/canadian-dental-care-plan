@@ -7,7 +7,7 @@ import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLettersService } from '~/services/letters-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { featureEnabled } from '~/utils/env.server';
+import { featureEnabled } from '~/utils/env-utils.server';
 import { getNameByLanguage } from '~/utils/locale-utils';
 import { getLocale } from '~/utils/locale-utils.server';
 import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';

@@ -9,7 +9,7 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { InlineLink } from '~/components/inline-link';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSubscriptionService } from '~/services/subscription-service.server';
-import { featureEnabled } from '~/utils/env.server';
+import { featureEnabled } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';

@@ -28,7 +28,7 @@ import moize from 'moize';
 import { randomUUID } from 'node:crypto';
 
 import { getRedisService } from '~/services/redis-service.server';
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { createFileSessionStorage } from '~/utils/session-utils.server';
 

@@ -44,7 +44,7 @@ vi.mock('~/utils/locale-utils.server', () => ({
   getAltLanguage: vi.fn(),
 }));
 
-vi.mock('~/utils/env.server', () => ({
+vi.mock('~/utils/env-utils.server', () => ({
   featureEnabled: vi.fn().mockReturnValue(true),
   getEnv: vi.fn().mockReturnValue({
     INTEROP_CCT_API_BASE_URI: 'https://api.example.com',

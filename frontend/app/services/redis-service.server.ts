@@ -19,7 +19,7 @@
 import { Redis } from 'ioredis';
 import moize from 'moize';
 
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('redis-service.server');

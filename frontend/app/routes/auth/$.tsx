@@ -8,7 +8,7 @@ import { getInstrumentationService } from '~/services/instrumentation-service.se
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSessionService } from '~/services/session-service.server';
 import { getSubscriptionService } from '~/services/subscription-service.server';
-import { getEnv, mockEnabled } from '~/utils/env.server';
+import { getEnv, mockEnabled } from '~/utils/env-utils.server';
 import { getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import type { IdToken } from '~/utils/raoidc-utils.server';

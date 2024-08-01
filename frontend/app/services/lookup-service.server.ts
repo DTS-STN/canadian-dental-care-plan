@@ -9,7 +9,7 @@ import preferredLanguageJson from '~/resources/power-platform/preferred-language
 import preferredMethodOfCommunicationJson from '~/resources/power-platform/preferred-method-of-communication.json';
 import provincialProgramsJson from '~/resources/power-platform/provincial-programs.json';
 import regionsJson from '~/resources/power-platform/regions.json';
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('lookup-service.server');

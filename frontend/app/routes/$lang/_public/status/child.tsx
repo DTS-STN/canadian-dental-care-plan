@@ -29,7 +29,7 @@ import { getLookupService } from '~/services/lookup-service.server';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
 import { getContextualAlertType } from '~/utils/application-code-utils.server';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
-import { featureEnabled, getEnv } from '~/utils/env.server';
+import { featureEnabled, getEnv } from '~/utils/env-utils.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';

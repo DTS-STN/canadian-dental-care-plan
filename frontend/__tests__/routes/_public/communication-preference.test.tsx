@@ -44,7 +44,7 @@ vi.mock('~/services/lookup-service.server', () => ({
   }),
 }));
 
-vi.mock('~/utils/env.server', () => ({
+vi.mock('~/utils/env-utils.server', () => ({
   getEnv: vi.fn().mockReturnValue({
     COMMUNICATION_METHOD_EMAIL_ID: 'email',
     ENGLISH_LANGUAGE_CODE: 'en',

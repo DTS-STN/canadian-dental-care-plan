@@ -58,7 +58,7 @@ vi.mock('~/services/wsaddress-service.server', () => ({
   }),
 }));
 
-vi.mock('~/utils/env.server', () => ({
+vi.mock('~/utils/env-utils.server', () => ({
   getEnv: vi.fn().mockReturnValue({
     CANADA_COUNTRY_ID: 'CAN',
     USA_COUNTRY_ID: 'USA',

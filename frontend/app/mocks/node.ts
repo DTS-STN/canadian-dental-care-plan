@@ -9,7 +9,7 @@ import { getRaoidcMockHandlers } from '~/mocks/raoidc.server';
 import { getStatusCheckApiMockHandlers } from '~/mocks/status-check-api.server';
 import { getUserApiMockHandlers } from '~/mocks/user-api.server';
 import { getWSAddressApiMockHandlers } from '~/mocks/wsaddress-api.server';
-import { mockEnabled } from '~/utils/env.server';
+import { mockEnabled } from '~/utils/env-utils.server';
 
 export const server = setupServer(
   ...(mockEnabled('application-history') ? getApplicationHistoryApiMockHandlers() : []),

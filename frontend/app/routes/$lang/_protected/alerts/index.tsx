@@ -5,7 +5,7 @@ import invariant from 'tiny-invariant';
 
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSubscriptionService } from '~/services/subscription-service.server';
-import { featureEnabled } from '~/utils/env.server';
+import { featureEnabled } from '~/utils/env-utils.server';
 import type { UserinfoToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 

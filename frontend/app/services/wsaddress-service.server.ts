@@ -1,7 +1,7 @@
 import moize from 'moize';
 import { z } from 'zod';
 
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('wsaddress-service.server');

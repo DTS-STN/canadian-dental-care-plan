@@ -1,5 +1,5 @@
 import { getHCaptchaService } from '~/services/hcaptcha-service.server';
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getClientIpAddress } from '~/utils/ip-address-utils.server';
 import { getLogger } from '~/utils/logging.server';
 

@@ -1,6 +1,6 @@
 import type { ApplicationResponse } from '~/schemas/application-history-service-schemas.server';
 import { getLookupService } from '~/services/lookup-service.server';
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 
 export function toBenefitApplication(applications: ApplicationResponse[]) {
   return applications.map((application) => {

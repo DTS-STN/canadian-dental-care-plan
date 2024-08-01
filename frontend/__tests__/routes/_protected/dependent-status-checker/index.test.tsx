@@ -38,7 +38,7 @@ vi.mock('~/services/personal-information-service.server', () => ({
   }),
 }));
 
-vi.mock('~/utils/env.server', () => ({
+vi.mock('~/utils/env-utils.server', () => ({
   featureEnabled: vi.fn().mockReturnValue(true),
   getEnv: vi.fn().mockReturnValue({
     INTEROP_STATUS_CHECK_API_BASE_URI: 'https://api.example.com',

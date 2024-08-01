@@ -6,7 +6,7 @@ import { applicationListSchema } from '~/schemas/application-history-service-sch
 import type { BenefitApplicationRequest } from '~/schemas/benefit-application-service-schemas.server';
 import { benefitApplicationRequestSchema, benefitApplicationResponseSchema } from '~/schemas/benefit-application-service-schemas.server';
 import { getAuditService } from '~/services/audit-service.server';
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 

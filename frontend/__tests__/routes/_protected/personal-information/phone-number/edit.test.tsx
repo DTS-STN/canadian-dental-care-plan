@@ -40,7 +40,7 @@ vi.mock('~/utils/locale-utils.server', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
   redirectWithLocale: vi.fn().mockResolvedValue('/personal-information/phone-number/confirm'),
 }));
-vi.mock('~/utils/env.server', () => ({
+vi.mock('~/utils/env-utils.server', () => ({
   featureEnabled: vi.fn().mockResolvedValue(true),
   getEnv: vi.fn().mockReturnValue({}),
 }));

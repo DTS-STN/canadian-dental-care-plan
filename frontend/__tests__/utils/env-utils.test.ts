@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { getClientEnv } from '~/utils/env-utils';
-import { getPublicEnv } from '~/utils/env.server';
+import { getPublicEnv } from '~/utils/env-utils.server';
 
-vi.mock('~/utils/env.server', () => ({
+vi.mock('~/utils/env-utils.server', () => ({
   getPublicEnv: vi.fn(),
 }));
 

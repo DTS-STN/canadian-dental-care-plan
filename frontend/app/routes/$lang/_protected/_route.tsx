@@ -3,7 +3,7 @@ import { Outlet, isRouteErrorResponse, useLoaderData, useRouteError } from '@rem
 
 import { NotFoundError, ProtectedLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/protected-layout';
 import SessionTimeout from '~/components/session-timeout';
-import { getPublicEnv } from '~/utils/env.server';
+import { getPublicEnv } from '~/utils/env-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {

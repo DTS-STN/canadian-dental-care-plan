@@ -15,7 +15,7 @@ vi.mock('~/utils/logging.server', () => ({
   }),
 }));
 
-vi.mock('~/utils/env.server', () => ({
+vi.mock('~/utils/env-utils.server', () => ({
   getEnv: vi.fn().mockReturnValue({
     INTEROP_CCT_API_BASE_URI: 'https://api.example.com',
     INTEROP_CCT_API_SUBSCRIPTION_KEY: '00000000000000000000000000000000',

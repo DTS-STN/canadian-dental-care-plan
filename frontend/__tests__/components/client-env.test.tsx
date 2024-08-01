@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { ClientEnv } from '~/components/client-env';
-import type { PublicEnv } from '~/utils/env.server';
+import type { PublicEnv } from '~/utils/env-utils.server';
 
 describe('<ClientEnv>', () => {
   it('should render the script tag with the correct innerHTML', () => {

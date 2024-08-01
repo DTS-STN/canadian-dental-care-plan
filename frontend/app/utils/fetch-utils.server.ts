@@ -1,7 +1,7 @@
 import { ProxyAgent, fetch as undiciFetch } from 'undici';
 import { toNodeReadable } from 'web-streams-node';
 
-import { getEnv } from './env.server';
+import { getEnv } from './env-utils.server';
 import { getLogger } from './logging.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 
