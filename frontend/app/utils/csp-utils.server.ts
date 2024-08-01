@@ -1,4 +1,4 @@
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('csp-utils.server');

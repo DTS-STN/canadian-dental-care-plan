@@ -14,7 +14,7 @@ vi.mock('~/utils/logging.server', () => ({
   }),
 }));
 
-vi.mock('~/utils/env.server', () => ({
+vi.mock('~/utils/env-utils.server', () => ({
   getEnv: vi.fn().mockReturnValue({
     CDCP_API_BASE_URI: 'https://api.cdcp.example.com',
   }),

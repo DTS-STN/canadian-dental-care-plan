@@ -1,4 +1,4 @@
-import { getPublicEnv } from '~/utils/env.server';
+import { getPublicEnv } from '~/utils/env-utils.server';
 
 /**
  * A utility function that returns environment varaibles:

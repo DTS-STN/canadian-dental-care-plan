@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { adobeAnalyticsCSP, generateContentSecurityPolicy, hcaptchaCSP } from '~/utils/csp-utils.server';
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 
-vi.mock('~/utils/env.server', () => ({
+vi.mock('~/utils/env-utils.server', () => ({
   getEnv: vi.fn(),
 }));
 

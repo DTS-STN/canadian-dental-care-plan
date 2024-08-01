@@ -18,7 +18,7 @@ import { getInstrumentationService } from '~/services/instrumentation-service.se
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSubscriptionService } from '~/services/subscription-service.server';
-import { featureEnabled } from '~/utils/env.server';
+import { featureEnabled } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';

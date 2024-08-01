@@ -11,7 +11,7 @@ import { NonceProvider } from '~/components/nonce-context';
 import { server } from '~/mocks/node';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { generateContentSecurityPolicy } from '~/utils/csp-utils.server';
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getNamespaces } from '~/utils/locale-utils';
 import { getLocale, initI18n } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';

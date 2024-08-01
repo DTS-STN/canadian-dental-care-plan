@@ -115,7 +115,7 @@ vi.mock('~/services/personal-information-service.server', () => ({
   }),
 }));
 
-vi.mock('~/utils/env.server', () => ({
+vi.mock('~/utils/env-utils.server', () => ({
   featureEnabled: vi.fn().mockReturnValue(true),
   getEnv: vi.fn().mockReturnValue({
     ENGLISH_LANGUAGE_CODE: 1033,

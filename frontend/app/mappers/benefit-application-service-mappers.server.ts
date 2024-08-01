@@ -14,7 +14,7 @@ import type {
 import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
 import type { BenefitApplicationRequest } from '~/schemas/benefit-application-service-schemas.server';
 import { parseDateString } from '~/utils/date-utils';
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 
 export interface ToBenefitApplicationRequestFromApplyAdultStateArgs {
   applicantInformation: ApplicantInformationState;

@@ -3,7 +3,7 @@ import { CompactEncrypt, SignJWT } from 'jose';
 import { HttpResponse, http } from 'msw';
 
 import { generateCryptoKey } from '~/utils/crypto-utils.server';
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import type { JWKSet, ServerMetadata, TokenEndpointResponse, UserinfoResponse } from '~/utils/raoidc-utils.server';
 

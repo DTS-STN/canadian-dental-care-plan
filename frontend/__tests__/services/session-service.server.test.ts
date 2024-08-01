@@ -4,7 +4,7 @@ import { createSessionStorage } from '@remix-run/node';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { getRedisService } from '~/services/redis-service.server';
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { createFileSessionStorage } from '~/utils/session-utils.server';
 
 vi.mock('@remix-run/node', () => ({
@@ -22,7 +22,7 @@ vi.mock('~/services/redis-service.server', () => ({
   }),
 }));
 
-vi.mock('~/utils/env.server', () => ({
+vi.mock('~/utils/env-utils.server', () => ({
   getEnv: vi.fn(),
 }));
 

@@ -37,7 +37,7 @@ import moize from 'moize';
 import invariant from 'tiny-invariant';
 
 import { getBuildInfoService } from '~/services/build-info-service.server';
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('instrumentation.server');

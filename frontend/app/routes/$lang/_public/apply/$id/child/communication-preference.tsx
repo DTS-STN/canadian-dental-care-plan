@@ -23,7 +23,7 @@ import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.s
 import type { CommunicationPreferencesState } from '~/route-helpers/apply-route-helpers.server';
 import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';

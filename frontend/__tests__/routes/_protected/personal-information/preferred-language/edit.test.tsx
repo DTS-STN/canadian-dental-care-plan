@@ -47,7 +47,7 @@ vi.mock('~/utils/locale-utils.server', () => ({
   getFixedT: vi.fn().mockResolvedValue(vi.fn()),
 }));
 
-vi.mock('~/utils/env.server', () => ({
+vi.mock('~/utils/env-utils.server', () => ({
   featureEnabled: vi.fn().mockResolvedValue(true),
 }));
 

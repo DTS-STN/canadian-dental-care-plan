@@ -3,7 +3,7 @@ import { json } from '@remix-run/node';
 import { subtle } from 'node:crypto';
 
 import { generateCryptoKey, generateJwkId } from '~/utils/crypto-utils.server';
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('[.]well-known.jwks[.]json');

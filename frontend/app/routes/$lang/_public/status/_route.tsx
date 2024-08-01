@@ -3,7 +3,7 @@ import { Outlet, isRouteErrorResponse, useLoaderData, useRouteError } from '@rem
 
 import { NotFoundError, PublicLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import SessionTimeout from '~/components/session-timeout';
-import { getPublicEnv } from '~/utils/env.server';
+import { getPublicEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getLocale } from '~/utils/locale-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';

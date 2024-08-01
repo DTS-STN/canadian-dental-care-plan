@@ -27,7 +27,7 @@ import moize from 'moize';
 import { subtle } from 'node:crypto';
 
 import { generateCryptoKey, generateJwkId } from '~/utils/crypto-utils.server';
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getFetchFn } from '~/utils/fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import type { ClientMetadata, IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';

@@ -16,7 +16,7 @@ import type statusCheck from '../public/locales/en/status-check.json';
 import type status from '../public/locales/en/status.json';
 import type stubSinEditor from '../public/locales/en/stub-sin-editor.json';
 import type unableToProcessRequest from '../public/locales/en/unable-to-process-request.json';
-import type { PublicEnv } from '~/utils/env.server';
+import type { PublicEnv } from '~/utils/env-utils.server';
 
 /**
  * Application-scoped global types.

@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { generateCryptoKey } from './crypto-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
-const log = getLogger('env.server');
+const log = getLogger('env-utils.server');
 
 // none, error, warn, info, debug, verbose, all
 const otelLogLevels = Object.keys(DiagLogLevel).map((key) => key.toLowerCase());

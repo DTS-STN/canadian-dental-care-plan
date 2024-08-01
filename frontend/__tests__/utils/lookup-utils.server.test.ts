@@ -83,7 +83,7 @@ describe('localizeCountries', () => {
 });
 
 describe('localizeAndSortCountries', () => {
-  vi.mock('~/utils/env.server', () => ({
+  vi.mock('~/utils/env-utils.server', () => ({
     getEnv: vi.fn().mockReturnValue({
       CANADA_COUNTRY_ID: '0cf5389e-97ae-eb11-8236-000d3af4bfc3',
     }),

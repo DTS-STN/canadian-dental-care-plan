@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { getContextualAlertType } from '~/utils/application-code-utils.server';
 
-vi.mock('~/utils/env.server', () => ({
+vi.mock('~/utils/env-utils.server', () => ({
   getEnv: vi.fn().mockReturnValue({
     CLIENT_STATUS_SUCCESS_ID: '000',
     INVALID_CLIENT_FRIENDLY_STATUS: '111',

@@ -10,7 +10,7 @@ import { Button } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { getSubscriptionService } from '~/services/subscription-service.server';
-import { getEnv } from '~/utils/env.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
