@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { isConfigured, pushErrorEvent, pushPageviewEvent, pushValidationErrorEvent } from '~/utils/adobe-analytics.client';
-import { getClientEnv } from '~/utils/env-utils';
+import { getClientEnv } from '~/utils/env-utils.client';
 
-vi.mock('~/utils/env-utils');
+vi.mock('~/utils/env-utils.client');
 
 describe('isConfigured', () => {
   afterEach(() => {

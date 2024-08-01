@@ -1,6 +1,6 @@
 import validator from 'validator';
 
-import { getClientEnv } from '~/utils/env-utils';
+import { getClientEnv } from '~/utils/env-utils.client';
 
 type AdobeDataLayer = { push?: (object: Record<string, string | Record<string, string>>) => void };
 
