@@ -19,7 +19,7 @@ import { PageTitle } from '~/components/page-title';
 import { SkipNavigationLinks } from '~/components/skip-navigation-links';
 import { useFeature } from '~/root';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
-import { getClientEnv } from '~/utils/env-utils';
+import { getClientEnv } from '~/utils/env-utils.client';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { useBreadcrumbs, useI18nNamespaces, usePageTitleI18nKey } from '~/utils/route-utils';
 import { useUserOrigin } from '~/utils/user-origin-utils';

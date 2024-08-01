@@ -4,7 +4,7 @@ import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import I18NextHttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
-import { getClientEnv } from '~/utils/env-utils';
+import { getClientEnv } from '~/utils/env-utils.client';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { i18nNamespacesSchema } from '~/utils/route-utils';
 
