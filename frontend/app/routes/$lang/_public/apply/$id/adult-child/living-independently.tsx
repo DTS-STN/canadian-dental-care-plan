@@ -3,7 +3,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -135,9 +134,9 @@ export default function ApplyFlowLivingIndependently() {
               routeId="$lang/_public/apply/$id/adult-child/date-of-birth"
               params={params}
               disabled={isSubmitting}
+              startIcon={faChevronLeft}
               data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Living independently click"
             >
-              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
               {t('apply-adult-child:living-independently.back-btn')}
             </ButtonLink>
           </div>

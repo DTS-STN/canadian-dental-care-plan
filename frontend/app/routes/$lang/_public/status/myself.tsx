@@ -6,7 +6,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -211,8 +210,7 @@ export default function StatusCheckerMyself() {
               <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errors?.sin} defaultValue="" />
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <ButtonLink id="back-button" routeId="$lang/_public/status/index" params={params} disabled={isSubmitting}>
-                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+              <ButtonLink id="back-button" routeId="$lang/_public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
                 {t('status:myself.form.back-btn')}
               </ButtonLink>
               <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>

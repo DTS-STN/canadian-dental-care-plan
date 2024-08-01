@@ -3,7 +3,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
@@ -185,9 +184,9 @@ export default function ApplyFlowDisabilityTaxCredit() {
                 routeId="$lang/_public/apply/$id/adult-child/date-of-birth"
                 params={params}
                 disabled={isSubmitting}
+                startIcon={faChevronLeft}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult-Child:Back - Disability tax credit click"
               >
-                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-adult-child:disability-tax-credit.back-btn')}
               </ButtonLink>
             </div>

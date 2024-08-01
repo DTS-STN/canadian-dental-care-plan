@@ -3,7 +3,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../../../../../page-ids.json';
@@ -85,9 +84,9 @@ export default function ApplyForYourself() {
           routeId="$lang/_public/apply/$id/adult-child/children/$childId/information"
           params={params}
           disabled={isSubmitting}
+          startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - You cannot apply for your child click"
         >
-          <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply-adult-child:eligibility.apply-yourself.back-btn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" id="proceed-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Proceed - You cannot apply for your child click">

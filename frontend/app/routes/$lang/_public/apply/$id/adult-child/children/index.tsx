@@ -6,7 +6,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight, faEdit, faPlus, faRemove } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { randomUUID } from 'crypto';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
@@ -195,15 +194,14 @@ export default function ApplyFlowChildSummary() {
                       variant="alternative"
                       routeId="$lang/_public/apply/$id/adult-child/children/$childId/information"
                       params={{ ...params, childId: child.id }}
+                      startIcon={faEdit}
                       data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Edit child - Child(ren) application click"
                     >
-                      <FontAwesomeIcon icon={faEdit} className="me-3 block size-3" />
                       {t('apply-adult-child:children.index.edit-child')}
                     </ButtonLink>
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button id="remove-child" disabled={isSubmitting} size="sm" variant="alternative">
-                          <FontAwesomeIcon icon={faRemove} className="me-3 block size-3" />
+                        <Button id="remove-child" disabled={isSubmitting} size="sm" variant="alternative" startIcon={faRemove}>
                           {t('apply-adult-child:children.index.modal.remove-btn')}
                         </Button>
                       </DialogTrigger>
@@ -245,8 +243,7 @@ export default function ApplyFlowChildSummary() {
 
         <fetcher.Form method="post" onSubmit={handleSubmit} noValidate>
           <input type="hidden" name="_csrf" value={csrfToken} />
-          <Button className="my-10" id="add-child" name="_action" value={FormAction.Add} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Add child - Child(ren) application click">
-            <FontAwesomeIcon icon={faPlus} className="me-3 block size-4" />
+          <Button className="my-10" id="add-child" name="_action" value={FormAction.Add} disabled={isSubmitting} startIcon={faPlus} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Add child - Child(ren) application click">
             {children.length === 0 ? t('apply-adult-child:children.index.add-child') : t('apply-adult-child:children.index.add-another-child')}
           </Button>
 
@@ -291,9 +288,9 @@ export default function ApplyFlowChildSummary() {
                 routeId="$lang/_public/apply/$id/adult-child/federal-provincial-territorial-benefits"
                 params={params}
                 disabled={isSubmitting}
+                startIcon={faChevronLeft}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Child(ren) application click"
               >
-                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-adult-child:children.index.back-btn')}
               </ButtonLink>
             </div>

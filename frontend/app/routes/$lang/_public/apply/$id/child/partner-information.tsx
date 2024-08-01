@@ -3,7 +3,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -276,9 +275,9 @@ export default function ApplyFlowApplicationInformation() {
                 routeId="$lang/_public/apply/$id/child/applicant-information"
                 params={params}
                 disabled={isSubmitting}
+                startIcon={faChevronLeft}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Spouse or Common-law partner information click"
               >
-                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-child:partner-information.back-btn')}
               </ButtonLink>
             </div>

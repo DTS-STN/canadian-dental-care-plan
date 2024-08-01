@@ -6,7 +6,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
@@ -451,8 +450,7 @@ export default function ReviewInformation() {
           >
             {t('apply-adult-child:review-adult-information.continue-button')}
           </LoadingButton>
-          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Review adult information click">
-            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+          <Button id="back-button" name="_action" value={FormAction.Back} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Review adult information click">
             {t('apply-adult-child:review-adult-information.back-button')}
           </Button>
         </fetcher.Form>

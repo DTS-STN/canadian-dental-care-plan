@@ -5,7 +5,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../../../../../page-ids.json';
@@ -86,9 +85,9 @@ export default function ApplyFlowParentOrGuardian() {
           routeId="$lang/_public/apply/$id/child/children/$childId/information"
           params={params}
           disabled={isSubmitting}
+          startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Child parent or guardian needs to apply click"
         >
-          <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply-child:children.parent-or-guardian.back-btn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Exit - Child parent or guardian needs to apply click">

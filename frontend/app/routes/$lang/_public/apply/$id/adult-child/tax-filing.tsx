@@ -3,7 +3,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -124,8 +123,14 @@ export default function ApplyFlowTaxFiling() {
             <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Continue - Tax filing click">
               {t('apply-adult-child:eligibility.tax-filing.continue-btn')}
             </LoadingButton>
-            <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/type-application" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Tax filing click">
-              <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+            <ButtonLink
+              id="back-button"
+              routeId="$lang/_public/apply/$id/type-application"
+              params={params}
+              disabled={isSubmitting}
+              startIcon={faChevronLeft}
+              data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Tax filing click"
+            >
               {t('apply-adult-child:eligibility.tax-filing.back-btn')}
             </ButtonLink>
           </div>

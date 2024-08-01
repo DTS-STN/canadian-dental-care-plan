@@ -6,7 +6,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
@@ -260,8 +259,14 @@ export default function ApplyFlowCommunicationPreferencePage() {
               <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Communication click">
                 {t('apply-adult:communication-preference.continue')}
               </LoadingButton>
-              <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/adult/contact-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Communication click">
-                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+              <ButtonLink
+                id="back-button"
+                routeId="$lang/_public/apply/$id/adult/contact-information"
+                params={params}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Communication click"
+              >
                 {t('apply-adult:communication-preference.back')}
               </ButtonLink>
             </div>
