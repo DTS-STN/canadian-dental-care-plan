@@ -67,13 +67,28 @@ const serverEnv = z.object({
 
   // lookup identifiers
   CANADA_COUNTRY_ID: z.string().trim().min(1).default('0cf5389e-97ae-eb11-8236-000d3af4bfc3'),
+  USA_COUNTRY_ID: z.string().trim().min(1).default('fcf7389e-97ae-eb11-8236-000d3af4bfc3'),
   COMMUNICATION_METHOD_EMAIL_ID: z.string().trim().min(1).default('775170000'),
   FIRST_NATIONS_YES_TYPE_ID: z.string().trim().min(1).default('first-nations-yes'),
   OTHER_EQUITY_TYPE_ID: z.string().trim().min(1).default('equity-other'),
   OTHER_GENDER_TYPE_ID: z.string().trim().min(1).default('gender-other'),
-  USA_COUNTRY_ID: z.string().trim().min(1).default('fcf7389e-97ae-eb11-8236-000d3af4bfc3'),
   CLIENT_STATUS_SUCCESS_ID: z.string().trim().min(1).default('51af5170-614e-ee11-be6f-000d3a09d640'),
   INVALID_CLIENT_FRIENDLY_STATUS: z.string().trim().min(1).default('504fba6e-604e-ee11-be6f-000d3a09d640'),
+
+  // province/territory lookup identifiers
+  ALBERTA_PROVINCE_ID: z.string().trim().min(1).default("3b17d494-35b3-eb11-8236-0022486d8d5f"),
+  BRITISH_COLUMBIA_PROVINCE_ID: z.string().trim().min(1).default("9c440baa-35b3-eb11-8236-0022486d8d5f"),
+  MANITOBA_PROVINCE_ID: z.string().trim().min(1).default("6d861c55-36b3-eb11-8236-0022486d8d5f"),
+  NEW_BRUNSWICK_PROVINCE_ID: z.string().trim().min(1).default("23dc27a2-36b3-eb11-8236-0022486d8d5f"),
+  NOVA_SCOTIA_PROVINCE_ID: z.string().trim().min(1).default("fc2243c9-36b3-eb11-8236-0022486d8d5f"),
+  ONTARIO_PROVINCE_ID: z.string().trim().min(1).default("daf4d05b-37b3-eb11-8236-0022486d8d5f"),
+  QUEBEC_PROVINCE_ID: z.string().trim().min(1).default("39449f70-37b3-eb11-8236-0022486d8d5f"),
+  SASKATCHEWAN_PROVINCE_ID: z.string().trim().min(1).default("5bc09caf-38b3-eb11-8236-0022486d8d5f"),
+  NEWFOUNDLAND_PROVINCE_ID: z.string().trim().min(1).default("5abc28c9-38b3-eb11-8236-0022486d8d5f"),
+  PRINCE_EDWARD_ISLAND_PROVINCE_ID: z.string().trim().min(1).default("3b8110df-38b3-eb11-8236-0022486d8d5f"),
+  NUNAVUT_PROVINCE_ID: z.string().trim().min(1).default("9936c08e-39b3-eb11-8236-0022486d8d5f"),
+  NORTHWEST_TERRITORIES_PROVINCE_ID: z.string().trim().min(1).default("026aca2-39b3-eb11-8236-0022486d8d5f"),
+  YUKON_PROVINCE_ID: z.string().trim().min(1).default("8fef32b7-39b3-eb11-8236-0022486d8d5f"),
 
   // language codes
   ENGLISH_LANGUAGE_CODE: z.coerce.number().default(1033),

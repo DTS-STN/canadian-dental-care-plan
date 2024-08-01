@@ -32,7 +32,7 @@ import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { localizeAndSortCountries, localizeAndSortRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
+import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
@@ -136,12 +136,13 @@ export async function action({ context: { session }, params, request }: ActionFu
         if (!val.mailingProvince || validator.isEmpty(val.mailingProvince)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:contact-information.error-message.mailing-address.province-required'), path: ['mailingProvince'] });
         }
-
         if (!val.mailingPostalCode || validator.isEmpty(val.mailingPostalCode)) {
           ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:contact-information.error-message.mailing-address.postal-code-required'), path: ['mailingPostalCode'] });
         } else if (!isValidPostalCode(val.mailingCountry, val.mailingPostalCode)) {
           const message = val.mailingCountry === CANADA_COUNTRY_ID ? t('apply-adult:contact-information.error-message.mailing-address.postal-code-valid') : t('apply-adult:contact-information.error-message.mailing-address.zip-code-valid');
           ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['mailingPostalCode'] });
+        } else if (val.mailingCountry === CANADA_COUNTRY_ID && val.mailingProvince && !isValidCanadianPostalCode(val.mailingProvince, val.mailingPostalCode)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:contact-information.error-message.mailing-address.invalid-postal-code-for-province'), path: ['mailingPostalCode'] });
         }
       }
 
@@ -166,12 +167,13 @@ export async function action({ context: { session }, params, request }: ActionFu
           if (!val.homeProvince || validator.isEmpty(val.homeProvince)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:contact-information.error-message.home-address.province-required'), path: ['homeProvince'] });
           }
-
           if (!val.homePostalCode || validator.isEmpty(val.homePostalCode)) {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:contact-information.error-message.home-address.postal-code-required'), path: ['homePostalCode'] });
           } else if (!isValidPostalCode(val.homeCountry, val.homePostalCode)) {
             const message = val.homeCountry === CANADA_COUNTRY_ID ? t('apply-adult:contact-information.error-message.home-address.postal-code-valid') : t('apply-adult:contact-information.error-message.home-address.zip-code-valid');
             ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['homePostalCode'] });
+          } else if (val.homeCountry === CANADA_COUNTRY_ID && val.homeProvince && !isValidCanadianPostalCode(val.homeProvince, val.homePostalCode)) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: t('apply-adult:contact-information.error-message.home-address.invalid-postal-code-for-province'), path: ['homePostalCode'] });
           }
         }
 

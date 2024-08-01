@@ -1,11 +1,24 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { formatPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
+import { formatPostalCode, isValidCanadianPostalCode, isValidPostalCode } from '~/utils/postal-zip-code-utils.server';
 
 vi.mock('~/utils/env-utils.server', () => ({
   getEnv: vi.fn().mockReturnValue({
     CANADA_COUNTRY_ID: 'CA',
     USA_COUNTRY_ID: 'US',
+    ALBERTA_PROVINCE_ID: 'AB',
+    BRITISH_COLUMBIA_PROVINCE_ID: 'BC',
+    MANITOBA_PROVINCE_ID: 'MB',
+    NEW_BRUNSWICK_PROVINCE_ID: 'NB',
+    NOVA_SCOTIA_PROVINCE_ID: 'NS',
+    ONTARIO_PROVINCE_ID: 'ON',
+    QUEBEC_PROVINCE_ID: 'QC',
+    SASKATCHEWAN_PROVINCE_ID: 'SK',
+    NEWFOUNDLAND_PROVINCE_ID: 'NL',
+    PRINCE_EDWARD_ISLAND_PROVINCE_ID: 'PE',
+    NUNAVUT_PROVINCE_ID: 'NU',
+    NORTHWEST_TERRITORIES_PROVINCE_ID: 'NW',
+    YUKON_PROVINCE_ID: 'YU',
   }),
 }));
 
@@ -51,6 +64,54 @@ describe('~/utils/postal-zip-code-utils.server.ts', () => {
 
     it('should return true for country codes that are not Canadian or American codes', () => {
       expect(isValidPostalCode('XYZ', 'ABC 123')).toEqual(true);
+    });
+  });
+
+  describe('isValidCanadianPostalCode', () => {
+    const testParams = [
+      ['BC', 'v0h0h0', true],
+      ['AB', 't0h0h0', true],
+      ['SK', 's0h0h0', true],
+      ['MB', 'r0h0h0', true],
+      ['ON', 'k0h0h0', true],
+      ['ON', 'l0h0h0', true],
+      ['ON', 'm0h0h0', true],
+      ['ON', 'n0h0h0', true],
+      ['ON', 'p0h0h0', true],
+      ['QC', 'g0h0h0', true],
+      ['QC', 'j0h0h0', true],
+      ['NB', 'e0h0h0', true],
+      ['NS', 'b0h0h0', true],
+      ['PE', 'c0h0h0', true],
+      ['NL', 'a0h0h0', true],
+      ['YU', 'y0h0h0', true],
+      ['NW', 'x0h0h0', true],
+      ['BC', 'i0h0h0', false],
+      ['AB', 'i0h0h0', false],
+      ['SK', 'i0h0h0', false],
+      ['MB', 'i0h0h0', false],
+      ['ON', 'i0h0h0', false],
+      ['ON', 'i0h0h0', false],
+      ['ON', 'i0h0h0', false],
+      ['ON', 'i0h0h0', false],
+      ['ON', 'i0h0h0', false],
+      ['QC', 'i0h0h0', false],
+      ['QC', 'i0h0h0', false],
+      ['NB', 'i0h0h0', false],
+      ['NS', 'i0h0h0', false],
+      ['PE', 'i0h0h0', false],
+      ['NL', 'i0h0h0', false],
+      ['YU', 'i0h0h0', false],
+      ['XX', 'h0h0h0', false],
+      ['AB', 't0h 0h0', true],
+      ['AB', 't0h  0h0', false],
+      ['AB', 'T0h  0H0', false],
+      ['AB', 'T0h 0H0', true],
+      ['AB', '  T0h 0H0 ', false],
+    ] as const;
+
+    it.each(testParams)('isValidCanadianPostalCode(%j,%j) should return "%s"', (provinceCode, postalCode, expected) => {
+      expect(isValidCanadianPostalCode(provinceCode, postalCode)).toEqual(expected);
     });
   });
 
