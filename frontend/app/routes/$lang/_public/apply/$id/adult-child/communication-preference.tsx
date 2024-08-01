@@ -6,7 +6,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import validator from 'validator';
 import { z } from 'zod';
@@ -271,9 +270,9 @@ export default function ApplyFlowCommunicationPreferencePage() {
                 routeId="$lang/_public/apply/$id/adult-child/contact-information"
                 params={params}
                 disabled={isSubmitting}
+                startIcon={faChevronLeft}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Communication click"
               >
-                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-adult-child:communication-preference.back')}
               </ButtonLink>
             </div>

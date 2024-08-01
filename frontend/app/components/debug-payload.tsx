@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 import { faCheck, faClipboard } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Button } from './buttons';
 
@@ -28,9 +27,8 @@ export function DebugPayload({ data, enableCopy }: debugPayloadtProps) {
     <>
       <pre className="rounded-log block max-h-96 overflow-auto bg-gray-100 p-4 shadow-inner">{json}</pre>
       {enableCopy && (
-        <Button onClick={copyToClipboard}>
+        <Button onClick={copyToClipboard} endIcon={hasCopied ? faCheck : faClipboard}>
           Copy
-          <FontAwesomeIcon icon={hasCopied ? faCheck : faClipboard} className="ms-3 block size-4" />
         </Button>
       )}
     </>

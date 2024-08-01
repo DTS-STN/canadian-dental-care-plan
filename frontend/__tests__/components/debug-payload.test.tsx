@@ -1,14 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { faClipboard } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DebugPayload } from '~/components/debug-payload';
-
-vi.mock('@fortawesome/react-fontawesome', () => ({
-  FontAwesomeIcon: vi.fn(() => null),
-}));
 
 describe('DebugPayload', () => {
   beforeEach(() => {
@@ -60,7 +54,5 @@ describe('DebugPayload', () => {
     fireEvent.click(screen.getByText('Copy'));
 
     vi.advanceTimersByTime(2000);
-
-    expect(FontAwesomeIcon).toHaveBeenCalledWith(expect.objectContaining({ icon: faClipboard }), {});
   });
 });

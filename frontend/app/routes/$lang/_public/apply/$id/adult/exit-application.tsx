@@ -3,7 +3,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import pageIds from '../../../../page-ids.json';
@@ -72,8 +71,14 @@ export default function ApplyFlowTaxFiling() {
       </div>
       <fetcher.Form method="post" noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/adult/review-information" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Exiting the application click">
-          <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+        <ButtonLink
+          id="back-button"
+          routeId="$lang/_public/apply/$id/adult/review-information"
+          params={params}
+          disabled={isSubmitting}
+          startIcon={faChevronLeft}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Exiting the application click"
+        >
           {t('apply-adult:exit-application.back-btn')}
         </ButtonLink>
         <LoadingButton variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Exit - Exiting the application click">

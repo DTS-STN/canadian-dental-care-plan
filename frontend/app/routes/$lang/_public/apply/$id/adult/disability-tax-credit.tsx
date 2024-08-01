@@ -3,7 +3,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
@@ -155,8 +154,14 @@ export default function ApplyFlowDisabilityTaxCredit() {
               <LoadingButton variant="primary" id="continue-button" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Continue - Disability tax credit click">
                 {t('apply-adult:disability-tax-credit.continue-btn')}
               </LoadingButton>
-              <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/adult/date-of-birth" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Disability tax credit click">
-                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+              <ButtonLink
+                id="back-button"
+                routeId="$lang/_public/apply/$id/adult/date-of-birth"
+                params={params}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Disability tax credit click"
+              >
                 {t('apply-adult:disability-tax-credit.back-btn')}
               </ButtonLink>
             </div>

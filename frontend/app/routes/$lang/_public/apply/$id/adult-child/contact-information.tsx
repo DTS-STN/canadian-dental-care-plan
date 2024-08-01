@@ -5,7 +5,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isValidPhoneNumber, parsePhoneNumber } from 'libphonenumber-js';
 import { useTranslation } from 'react-i18next';
 import validator from 'validator';
@@ -597,9 +596,9 @@ export default function ApplyFlowPersonalInformation() {
                 routeId={[MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED].includes(Number(maritalStatus)) ? '$lang/_public/apply/$id/adult-child/partner-information' : '$lang/_public/apply/$id/adult-child/applicant-information'}
                 params={params}
                 disabled={isSubmitting}
+                startIcon={faChevronLeft}
                 data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Contact information click"
               >
-                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
                 {t('apply-adult-child:contact-information.back')}
               </ButtonLink>
             </div>

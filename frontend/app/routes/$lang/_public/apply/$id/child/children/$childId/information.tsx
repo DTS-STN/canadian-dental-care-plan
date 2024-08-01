@@ -6,7 +6,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -355,8 +354,14 @@ export default function ApplyFlowChildInformation() {
               <LoadingButton id="continue-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Continue - Child Information click">
                 {t('apply-child:children.information.continue-btn')}
               </LoadingButton>
-              <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/child/children/index" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Child Information click">
-                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+              <ButtonLink
+                id="back-button"
+                routeId="$lang/_public/apply/$id/child/children/index"
+                params={params}
+                disabled={isSubmitting}
+                startIcon={faChevronLeft}
+                data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Child:Back - Child Information click"
+              >
                 {t('apply-child:children.information.back-btn')}
               </ButtonLink>
             </div>

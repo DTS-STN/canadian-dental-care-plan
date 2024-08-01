@@ -5,7 +5,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
 import pageIds from '../../../../page-ids.json';
@@ -88,8 +87,14 @@ export default function ApplyFlowFileYourTaxes() {
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <ButtonLink id="back-button" routeId="$lang/_public/apply/$id/adult/tax-filing" params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - File your taxes click">
-          <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+        <ButtonLink
+          id="back-button"
+          routeId="$lang/_public/apply/$id/adult/tax-filing"
+          params={params}
+          disabled={isSubmitting}
+          startIcon={faChevronLeft}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - File your taxes click"
+        >
           {t('apply-adult:eligibility.file-your-taxes.back-btn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Exit - File your taxes click">

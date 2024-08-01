@@ -3,7 +3,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
 import pageIds from '../../../page-ids.json';
@@ -172,8 +171,7 @@ export default function ApplyIndex() {
           >
             {t('apply:terms-and-conditions.apply.start-button')}
           </LoadingButton>
-          <ButtonLink id="back-button" to={t('apply:terms-and-conditions.apply.link')} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Terms and Conditions click">
-            <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+          <ButtonLink id="back-button" size="xs" to={t('apply:terms-and-conditions.apply.link')} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Terms and Conditions click">
             {t('apply:terms-and-conditions.apply.back-button')}
           </ButtonLink>
         </div>

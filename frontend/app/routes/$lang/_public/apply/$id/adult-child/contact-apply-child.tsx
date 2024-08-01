@@ -5,7 +5,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 
@@ -98,9 +97,9 @@ export default function ApplyFlowContactApplyChild() {
           routeId="$lang/_public/apply/$id/adult-child/date-of-birth"
           params={params}
           disabled={isSubmitting}
+          startIcon={faChevronLeft}
           data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Back - Contact us to apply for your child click"
         >
-          <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
           {t('apply-adult-child:contact-apply-child.back-btn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult_Child:Exit - Contact us to apply for your child click">

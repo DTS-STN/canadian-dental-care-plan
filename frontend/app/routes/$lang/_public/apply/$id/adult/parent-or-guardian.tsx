@@ -5,7 +5,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 
@@ -100,8 +99,14 @@ export default function ApplyFlowParentOrGuardian() {
       </div>
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate className="flex flex-wrap items-center gap-3">
         <input type="hidden" name="_csrf" value={csrfToken} />
-        <ButtonLink id="back-button" routeId={getBackButtonRouteId()} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Parent or guardian needs to apply click">
-          <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+        <ButtonLink
+          id="back-button"
+          routeId={getBackButtonRouteId()}
+          params={params}
+          disabled={isSubmitting}
+          startIcon={faChevronLeft}
+          data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Parent or guardian needs to apply click"
+        >
           {t('apply-adult:parent-or-guardian.back-btn')}
         </ButtonLink>
         <LoadingButton type="submit" variant="primary" loading={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Exit - Parent or guardian needs to apply click">

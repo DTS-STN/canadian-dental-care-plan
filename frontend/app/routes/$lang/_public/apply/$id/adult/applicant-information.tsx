@@ -5,7 +5,6 @@ import { json, redirect } from '@remix-run/node';
 import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
@@ -257,8 +256,7 @@ export default function ApplyFlowApplicationInformation() {
               >
                 {t('apply-adult:applicant-information.continue-btn')}
               </LoadingButton>
-              <ButtonLink id="back-button" routeId={getBackButtonRouteId()} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Applicant information click">
-                <FontAwesomeIcon icon={faChevronLeft} className="me-3 block size-4" />
+              <ButtonLink id="back-button" routeId={getBackButtonRouteId()} params={params} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form-Adult:Back - Applicant information click">
                 {t('apply-adult:applicant-information.back-btn')}
               </ButtonLink>
             </div>

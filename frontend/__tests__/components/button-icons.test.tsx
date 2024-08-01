@@ -7,8 +7,8 @@ import { ButtonEndIcon, ButtonStartIcon } from '~/components/button-icons';
 // Mock FontAwesomeIcon to avoid rendering actual icons in tests
 vi.mock('@fortawesome/react-fontawesome', () => ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  FontAwesomeIcon: ({ className, icon, ...props }: any) => (
-    <div className={className} {...props}>
+  FontAwesomeIcon: ({ className, icon, ['aria-label']: ariaLabel }: any) => (
+    <div className={className} aria-label={ariaLabel}>
       {JSON.stringify(icon)}
     </div>
   ),
@@ -20,7 +20,7 @@ describe('ButtonStartIcon', () => {
     const icon = container.querySelector('div');
 
     expect(icon).toBeInTheDocument();
-    expect(icon).toHaveClass('me-3 block size-4 custom-class');
+    expect(icon).toHaveClass('me-2 custom-class');
     expect(icon).toHaveTextContent('spinner');
   });
 
@@ -40,7 +40,7 @@ describe('ButtonEndIcon', () => {
     const icon = container.querySelector('div');
 
     expect(icon).toBeInTheDocument();
-    expect(icon).toHaveClass('ms-3 block size-4 custom-class');
+    expect(icon).toHaveClass('ms-2 custom-class');
     expect(icon).toHaveTextContent('spinner');
   });
 
