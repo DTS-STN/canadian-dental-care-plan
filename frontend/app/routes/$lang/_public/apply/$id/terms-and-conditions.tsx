@@ -171,7 +171,7 @@ export default function ApplyIndex() {
           >
             {t('apply:terms-and-conditions.apply.start-button')}
           </LoadingButton>
-          <ButtonLink id="back-button" size="xs" to={t('apply:terms-and-conditions.apply.link')} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Terms and Conditions click">
+          <ButtonLink id="back-button" to={t('apply:terms-and-conditions.apply.link')} disabled={isSubmitting} startIcon={faChevronLeft} data-gc-analytics-customclick="ESDC-EDSC:CDCP Online Application Form:Back - Terms and Conditions click">
             {t('apply:terms-and-conditions.apply.back-button')}
           </ButtonLink>
         </div>
