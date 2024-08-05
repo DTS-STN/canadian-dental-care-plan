@@ -71,7 +71,7 @@ async function runServer() {
       return req.url ? ignoredUrls.includes(req.url) : false;
     },
     stream: {
-      write: (str: string) => log.info(str.trim()),
+      write: (str: string) => log.debug(str.trim()),
     },
   });
 
