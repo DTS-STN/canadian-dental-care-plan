@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { PlaywrightApplyAdultChildPage } from '../../../../models/PlaywrightApplyAdultChildPage';
+import { PlaywrightApplyAdultPage } from '../../../../models/PlaywrightApplyAdultPage';
 import { PlaywrightApplyPage } from '../../../../models/PlaywrightApplyPage';
 import { calculateDOB } from '../../../../utils/helpers';
 
@@ -117,6 +118,7 @@ test.describe('Adult category', () => {
     });
 
     await test.step('Should navigate to children application', async () => {
+      // TODO: This should be updated when Child page model is added
       await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/child\/children/);
       await expect(page.getByRole('heading', { level: 1, name: "Child(ren)'s application" })).toBeVisible();
     });
@@ -158,8 +160,8 @@ test.describe('Adult category', () => {
     });
 
     await test.step('Should navigate to adult flow application', async () => {
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/adult\/applicant-information/);
-      await expect(page.getByRole('heading', { level: 1, name: 'Applicant information' })).toBeVisible();
+      const applyAdultPage = new PlaywrightApplyAdultPage(page);
+      await applyAdultPage.isLoaded('applicant-information');
     });
   });
 });
