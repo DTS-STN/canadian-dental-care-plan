@@ -9,9 +9,11 @@ export function useHCaptcha() {
     let timeoutId: ReturnType<typeof setTimeout>;
 
     if (captchaRef.current?.isReady()) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       captchaRef.current.execute();
     } else {
       timeoutId = setTimeout(() => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         captchaRef.current?.execute();
       }, 500);
     }
