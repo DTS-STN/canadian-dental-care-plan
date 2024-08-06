@@ -71,7 +71,7 @@ describe('wsaddress-service.server tests', () => {
           '@context': 'some-context',
           'wsaddr:ParsedRequest': 'some-parsed-request',
           'wsaddr:ParsedResults': {
-            'nc:AddressFullText': '500 RUE DU BINOME',
+            'nc:AddressFullText': '123 FAUSSE RUE',
             'nc:AddressCityName': 'QUEBEC',
             'can:ProvinceCode': 'QC',
             'nc:AddressPostalCode': 'G1P4P1',
@@ -88,7 +88,7 @@ describe('wsaddress-service.server tests', () => {
       const result = await wsAddressService.parseAddress({ address: '123 Fake St', city: 'City', country: 'Country', postalCode: 'Postal Code', province: 'Province' });
       expect(result).toStrictEqual({
         apartmentUnitNumber: '100',
-        address: '500 RUE DU BINOME',
+        address: '123 FAUSSE RUE',
         city: 'QUEBEC',
         province: 'QC',
         postalCode: 'G1P4P1',

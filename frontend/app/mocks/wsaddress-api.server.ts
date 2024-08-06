@@ -26,7 +26,7 @@ export function getWSAddressApiMockHandlers() {
         },
         'wsaddr:CorrectionRequest': {
           'nc:LanguageName': 'en-CA',
-          'nc:AddressFullText': 'John Smith Accounting Department 23 Coronation',
+          'nc:AddressFullText': 'John Smith Accounting Department 123 Fake',
           'nc:AddressCityName': 'St Johns',
           'can:ProvinceCode': 'NFLD',
           'nc:AddressPostalCode': 'A1C5B9',
@@ -35,7 +35,7 @@ export function getWSAddressApiMockHandlers() {
         },
         'wsaddr:CorrectionResults': {
           'nc:LanguageName': 'en-CA',
-          'nc:AddressFullText': '23 CORONATION ST',
+          'nc:AddressFullText': '123 FAKE ST',
           'nc:AddressCityName': "ST. JOHN'S",
           'nc:ProvinceCode': 'NL',
           'nc:AddressPostalCode': 'A1C5B9',
@@ -48,7 +48,7 @@ export function getWSAddressApiMockHandlers() {
         'wsaddr:FunctionalMessages': [
           {
             'nc:ItemActionText': 'OriginalInput',
-            'nc:MessageText': 'JOHN SMITH ACCOUNTING DEPARTMENT 23 CORONATION ST JOHNS NFLD A1C5B9 CA',
+            'nc:MessageText': 'JOHN SMITH ACCOUNTING DEPARTMENT 123 FAKE ST JOHNS NFLD A1C5B9 CA',
           },
           {
             'nc:ItemActionText': 'Optimization',
@@ -90,7 +90,7 @@ export function getWSAddressApiMockHandlers() {
           'nc:LanguageName': 'fr-CA',
           'wsaddr:ParseFunction': 'correctAndParse',
           'wsaddr:GeoScope': 'Canada',
-          'nc:AddressFullText': '500 rue du Binôme, Québec, QC',
+          'nc:AddressFullText': '123 Fausse rue, Québec, QC',
           'nc:AddressCityName': 'Québec City',
           'can:ProvinceCode': 'QC',
           'nc:AddressPostalCode': 'G1P 4P1',
@@ -98,14 +98,14 @@ export function getWSAddressApiMockHandlers() {
         },
         'wsaddr:ParsedResults': {
           'nc:AddressCategoryText': 'Urban',
-          'nc:AddressFullText': '500 RUE DU BINOME',
+          'nc:AddressFullText': '123 FAUSSE RUE',
           'nc:AddressCityName': 'QUEBEC',
           'can:ProvinceCode': 'QC',
           'nc:AddressPostalCode': 'G1P4P1',
           'nc:CountryCode': 'CAN',
           'nc:StreetNumberText': '500',
           'nc:StreetExtensionText': '',
-          'nc:StreetName': 'DU BINOME',
+          'nc:StreetName': 'FAUSSE',
           'can:StreetDirectionalCode': 'UNKNOWN',
           'can:StreetCategoryCode': 'RUE',
           'nc:AddressSecondaryUnitText': '',
@@ -136,7 +136,7 @@ export function getWSAddressApiMockHandlers() {
         'wsaddr:FunctionalMessages': [
           {
             'nc:ItemActionText': 'OriginalInput',
-            'nc:MessageText': '500 RUE DU BINOME, QUEBEC, QC                                   QUEBEC CITY          QC    G1P 4P1    CAN',
+            'nc:MessageText': '500 FAUSSE RUE, QUEBEC, QC                                      QUEBEC CITY          QC    G1P 4P1    CAN',
           },
           {
             'nc:ItemActionText': 'CorrectionError',
@@ -176,7 +176,7 @@ export function getWSAddressApiMockHandlers() {
         },
         'wsaddr:ValidationRequest': {
           'nc:LanguageName': 'en-CA',
-          'nc:AddressFullText': '23 CORONATION ST',
+          'nc:AddressFullText': '123 FAKE ST',
           'nc:AddressCityName': "ST. JOHN'S",
           'can:ProvinceCode': 'NL',
           'nc:AddressPostalCode': 'A1C5B9',
@@ -227,14 +227,14 @@ export function getWSAddressApiMockHandlers() {
         },
         'wsaddr:FormattingRequest': {
           'nc:LanguageName': 'en-CA',
-          'nc:AddressFullText': '23 Coronation',
+          'nc:AddressFullText': '123 Fake',
           'nc:AddressCityName': 'St Johns',
           'can:ProvinceCode': 'NL',
           'nc:AddressPostalCode': 'A1C5B9',
           'nc:CountryCode': 'CAN',
         },
         'wsaddr:FormattingResults': {
-          'wsaddr:FormattedAddressLines': ['23 CORONATION', 'ST JOHNS NL  A1C 5B9'],
+          'wsaddr:FormattedAddressLines': ['123 FAKE', 'ST JOHNS NL  A1C 5B9'],
           'wsaddr:Information': {
             'wsaddr:StatusCode': 'Normal',
             'nc:MessageText': '',
