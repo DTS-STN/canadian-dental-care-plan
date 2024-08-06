@@ -12,6 +12,7 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
       | 'children-information'
       | 'children-parent-or-guardian'
       | 'children'
+      | 'confirmation'
       | 'communication-preference'
       | 'contact-apply-child'
       | 'contact-information'
@@ -24,6 +25,8 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
       | 'living-independently'
       | 'parent-or-guardian'
       | 'partner-information'
+      | 'review-adult-information'
+      | 'review-child-information'
       | 'tax-filing',
     heading?: string | RegExp,
   ) {
@@ -78,6 +81,10 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/contact-information/, heading: 'Contact information' };
         break;
 
+      case 'confirmation':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/confirmation/, heading: 'Application successfully submitted' };
+        break;
+
       case 'date-of-birth':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/date-of-birth/, heading: 'Age' };
         break;
@@ -112,6 +119,14 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
 
       case 'partner-information':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/partner-information/, heading: 'Spouse or common-law partner information' };
+        break;
+
+      case 'review-adult-information':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/review-adult-information/, heading: 'Review your information' };
+        break;
+
+      case 'review-child-information':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/review-child-information/, heading: 'Review child(ren) information' };
         break;
 
       case 'tax-filing':
