@@ -1,0 +1,53 @@
+/**
+ * An API route that can be used to perform actions with user's apply state.
+ */
+import type { ActionFunctionArgs } from '@remix-run/node';
+import { json } from '@remix-run/node';
+
+import { z } from 'zod';
+
+import { saveApplyState } from '~/route-helpers/apply-route-helpers.server';
+import { getLogger } from '~/utils/logging.server';
+
+const log = getLogger('routes/api/apply-state');
+
+export enum ApiApplyStateAction {
+  Extend = 'extend',
+}
+
+const bodySchema = z.object({
+  action: z.nativeEnum(ApiApplyStateAction),
+  id: z.string(),
+});
+
+export async function action({ context: { session }, request }: ActionFunctionArgs) {
+  const sessionId = session.id;
+  log.debug("Action with with user's apply state; sessionId: [%s]", sessionId);
+
+  if (request.method !== 'POST') {
+    log.warn('Invalid method requested [%s]; responding with 405; sessionId: [%s]', request.method, sessionId);
+    throw json({ message: 'Method not allowed' }, { status: 405 });
+  }
+
+  const requestBody = await request.json();
+  const parsedBody = bodySchema.safeParse(requestBody);
+
+  if (!parsedBody.success) {
+    log.debug('Invalid request body [%j]; sessionId: [%s]', requestBody, sessionId);
+    return json({ errors: parsedBody.error.flatten().fieldErrors }, { status: 400 });
+  }
+
+  const params = { id: parsedBody.data.id };
+
+  switch (parsedBody.data.action) {
+    case ApiApplyStateAction.Extend: {
+      log.debug("Extending user's apply state; id: [%s], sessionId: [%s]", params.id, sessionId);
+      saveApplyState({ params, session, state: {} });
+      return new Response(null, { status: 204 });
+    }
+
+    default: {
+      throw Error(`Action '${parsedBody.data.action}' not implemented; sessionId: [${sessionId}]`);
+    }
+  }
+}
