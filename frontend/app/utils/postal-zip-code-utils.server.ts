@@ -49,7 +49,7 @@ export function isValidCanadianPostalCode(provinceCode: string, postalCode: stri
     case ONTARIO_PROVINCE_ID:
       return /^[KLNMP]/.test(upperCasePostalCode);
     case QUEBEC_PROVINCE_ID:
-      return /^[GJ]/.test(upperCasePostalCode);
+      return /^[GHJ]/.test(upperCasePostalCode);
     case NEW_BRUNSWICK_PROVINCE_ID:
       return upperCasePostalCode.startsWith('E');
     case NOVA_SCOTIA_PROVINCE_ID:

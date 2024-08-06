@@ -79,6 +79,7 @@ describe('~/utils/postal-zip-code-utils.server.ts', () => {
       ['ON', 'n0h0h0', true],
       ['ON', 'p0h0h0', true],
       ['QC', 'g0h0h0', true],
+      ['QC', 'h0h0h0', true],
       ['QC', 'j0h0h0', true],
       ['NB', 'e0h0h0', true],
       ['NS', 'b0h0h0', true],
