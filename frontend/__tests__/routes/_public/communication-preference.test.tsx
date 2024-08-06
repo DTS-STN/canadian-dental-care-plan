@@ -160,8 +160,8 @@ describe('_public.apply.id.communication-preference', () => {
       const formData = new FormData();
       formData.append('_csrf', 'csrfToken');
       formData.append('preferredMethod', 'email');
-      formData.append('email', 'john@gmail.com');
-      formData.append('confirmEmail', 'johndoe@gmail.com');
+      formData.append('email', 'john@example.com');
+      formData.append('confirmEmail', 'johndoe@example.com');
       formData.append('preferredLanguage', 'fr');
 
       const response = await action({

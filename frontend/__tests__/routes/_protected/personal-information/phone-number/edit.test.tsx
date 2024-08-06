@@ -28,7 +28,7 @@ vi.mock('~/services/personal-information-service.server', () => ({
   getPersonalInformationService: vi.fn().mockReturnValue({
     getPersonalInformation: vi.fn().mockResolvedValue({
       clientNumber: '999999999',
-      primaryTelephoneNumber: '819-458-2974',
+      primaryTelephoneNumber: '555-555-5555',
     }),
   }),
 }));
@@ -65,7 +65,7 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
 
       expect(data).toMatchObject({
         meta: {},
-        personalInformation: { primaryTelephoneNumber: '819-458-2974' },
+        personalInformation: { primaryTelephoneNumber: '555-555-5555' },
       });
     });
   });
@@ -77,7 +77,7 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
       session.set('userInfoToken', { sin: '999999999', sub: '1111111' });
       const formData = new FormData();
       formData.append('_csrf', 'csrfToken');
-      formData.append('primaryTelephoneNumber', '819 426-55');
+      formData.append('primaryTelephoneNumber', '555 555-55');
 
       const response = await action({
         request: new Request('http://localhost:3000/en/personal-information/phone-number/edit', {
