@@ -17,6 +17,14 @@
     }
   },
   {
+    "id": "api/apply-state",
+    "file": "routes/api/apply-state.ts",
+    "paths": {
+      "en": "/api/apply-state",
+      "fr": "/api/apply-state"
+    }
+  },
+  {
     "id": "api/buildinfo",
     "file": "routes/api/buildinfo.ts",
     "paths": {
@@ -33,11 +41,11 @@
     }
   },
   {
-    "id": "api/refresh-session",
-    "file": "routes/api/refresh-session.ts",
+    "id": "api/session",
+    "file": "routes/api/session.ts",
     "paths": {
-      "en": "/api/refresh-session",
-      "fr": "/api/refresh-session"
+      "en": "/api/session",
+      "fr": "/api/session"
     }
   },
   {

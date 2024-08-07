@@ -1,8 +1,10 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { Outlet, isRouteErrorResponse, useLoaderData, useRouteError } from '@remix-run/react';
+import { Outlet, isRouteErrorResponse, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
 
 import { NotFoundError, PublicLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import SessionTimeout from '~/components/session-timeout';
+import { ApiSessionAction } from '~/routes/api/session';
+import { useApiSession } from '~/utils/api-utils';
 import { getPublicEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getLocale } from '~/utils/locale-utils.server';
@@ -35,9 +37,24 @@ export function ErrorBoundary() {
 
 export default function Route() {
   const { lang, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
+  const apiSession = useApiSession();
+
+  function handleOnSessionEnd() {
+    apiSession.submit({ action: ApiSessionAction.End });
+
+    // TODO: navigate to CDCP website page
+    const to = lang === 'fr' ? '/fr/etat' : '/en/status';
+    navigate(to);
+  }
+
+  function handleOnSessionExtend() {
+    apiSession.submit({ action: ApiSessionAction.Extend });
+  }
+
   return (
     <PublicLayout>
-      <SessionTimeout navigateTo={`/${lang}/status`} promptBeforeIdle={SESSION_TIMEOUT_PROMPT_SECONDS * 1000} timeout={SESSION_TIMEOUT_SECONDS * 1000} />
+      <SessionTimeout promptBeforeIdle={SESSION_TIMEOUT_PROMPT_SECONDS * 1000} timeout={SESSION_TIMEOUT_SECONDS * 1000} onSessionEnd={handleOnSessionEnd} onSessionExtend={handleOnSessionExtend} />
       <Outlet />
     </PublicLayout>
   );
