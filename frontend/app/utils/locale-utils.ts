@@ -108,3 +108,25 @@ export function getNameByLanguage<T extends { nameEn: string; nameFr: string } |
 export function removeLanguageFromPath(path: string) {
   return path.replace(/^(\/en|\/fr)/, '');
 }
+
+/**
+ * Determines the application locale based on the input string.
+ *
+ * @param locale - The locale string to evaluate.
+ * @returns The application locale ('en' or 'fr').
+ *
+ * @example
+ * // Returns 'en'
+ * useAppLocale('en');
+ *
+ * @example
+ * // Returns 'fr'
+ * useAppLocale('fr');
+ *
+ * @example
+ * // Returns 'en' for unsupported locale
+ * useAppLocale('es');
+ */
+export function useAppLocale(locale: string): AppLocale {
+  return locale === 'fr' ? 'fr' : 'en';
+}

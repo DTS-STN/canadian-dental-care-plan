@@ -2,7 +2,7 @@
  * An API route that can be used to perform actions with user's server-side session.
  */
 import type { ActionFunctionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 
 import { z } from 'zod';
 
@@ -18,6 +18,7 @@ export enum ApiSessionAction {
 
 const bodySchema = z.object({
   action: z.nativeEnum(ApiSessionAction),
+  redirectTo: z.string().trim().nullable().optional(),
 });
 
 export async function action({ context: { session }, request }: ActionFunctionArgs) {
@@ -37,11 +38,18 @@ export async function action({ context: { session }, request }: ActionFunctionAr
     return json({ errors: parsedBody.error.flatten().fieldErrors }, { status: 400 });
   }
 
-  switch (parsedBody.data.action) {
+  const { action, redirectTo } = parsedBody.data;
+
+  switch (action) {
     case ApiSessionAction.End: {
-      log.debug("Ending user's server-side session; sessionId: [%s]", sessionId);
+      log.debug("Ending user's server-side session; sessionId: [%s], redirectTo: [%s]", sessionId, redirectTo);
       const sessionService = await getSessionService();
       const headers = { 'Set-Cookie': await sessionService.destroySession(session) };
+
+      if (redirectTo) {
+        return redirect(redirectTo, { headers });
+      }
+
       return new Response(null, { headers, status: 204 });
     }
 

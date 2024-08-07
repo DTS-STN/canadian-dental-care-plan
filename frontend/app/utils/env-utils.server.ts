@@ -206,6 +206,14 @@ const serverEnv = z.object({
   DYNATRACE_API_RUM_SCRIPT_TOKEN: z.string().trim().transform(emptyToUndefined).optional(),
   DYNATRACE_API_RUM_SCRIPT_URI: z.string().trim().transform(emptyToUndefined).optional(),
   DYNATRACE_API_RUM_SCRIPT_URI_CACHE_TTL_SECONDS: z.coerce.number().default(1 * 60 * 60),
+
+  // CDCP Website URLs
+  CDCP_WEBSITE_APPLY_URL_EN: z.string().url().default('https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html'),
+  CDCP_WEBSITE_APPLY_URL_FR: z.string().url().default('https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html'),
+  CDCP_WEBSITE_STATUS_URL_EN: z.string().url().default('https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#status'),
+  CDCP_WEBSITE_STATUS_URL_FR: z.string().url().default('https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#etat'),
+  CDCP_WEBSITE_URL_EN: z.string().url().default('https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html'),
+  CDCP_WEBSITE_URL_FR: z.string().url().default('https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires.html'),
 });
 
 export type ServerEnv = z.infer<typeof serverEnv>;
@@ -215,6 +223,12 @@ export type ServerEnv = z.infer<typeof serverEnv>;
  * ⚠️ IMPORTANT: DO NOT PUT SENSITIVE CONFIGURATIONS HERE ⚠️
  */
 const publicEnv = serverEnv.pick({
+  CDCP_WEBSITE_APPLY_URL_EN: true,
+  CDCP_WEBSITE_APPLY_URL_FR: true,
+  CDCP_WEBSITE_STATUS_URL_EN: true,
+  CDCP_WEBSITE_STATUS_URL_FR: true,
+  CDCP_WEBSITE_URL_EN: true,
+  CDCP_WEBSITE_URL_FR: true,
   ENABLED_FEATURES: true,
   I18NEXT_DEBUG: true,
   SCCH_BASE_URI: true,
