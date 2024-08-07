@@ -87,7 +87,7 @@ const serverEnv = z.object({
   NEWFOUNDLAND_PROVINCE_ID: z.string().trim().min(1).default("5abc28c9-38b3-eb11-8236-0022486d8d5f"),
   PRINCE_EDWARD_ISLAND_PROVINCE_ID: z.string().trim().min(1).default("3b8110df-38b3-eb11-8236-0022486d8d5f"),
   NUNAVUT_PROVINCE_ID: z.string().trim().min(1).default("9936c08e-39b3-eb11-8236-0022486d8d5f"),
-  NORTHWEST_TERRITORIES_PROVINCE_ID: z.string().trim().min(1).default("026aca2-39b3-eb11-8236-0022486d8d5f"),
+  NORTHWEST_TERRITORIES_PROVINCE_ID: z.string().trim().min(1).default("6026aca2-39b3-eb11-8236-0022486d8d5f"),
   YUKON_PROVINCE_ID: z.string().trim().min(1).default("8fef32b7-39b3-eb11-8236-0022486d8d5f"),
 
   // language codes
