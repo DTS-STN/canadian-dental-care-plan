@@ -1,9 +1,10 @@
 import { useCallback } from 'react';
 
+import type { SubmitOptions } from '@remix-run/react';
 import { useSubmit } from '@remix-run/react';
 
 import type { ApiApplyStateAction } from '~/routes/api/apply-state';
-import type { ApiSessionAction } from '~/routes/api/session';
+import { ApiSessionAction } from '~/routes/api/session';
 
 /**
  * A custom hook for submitting API requests to the apply state endpoint.
@@ -52,8 +53,26 @@ export function useApiSession() {
    * submit({ action: ApiSessionAction.Extend });
    */
   const submit = useCallback(
-    ({ action }: { action: ApiSessionAction }) => {
-      remixSubmit({ action }, { action: '/api/session', encType: 'application/json', method: 'POST', navigate: false });
+    (args: { action: ApiSessionAction.End; redirectTo: string | null } | { action: ApiSessionAction.Extend }) => {
+      const { action } = args;
+      const defaultSubmitOpts: SubmitOptions = { action: '/api/session', encType: 'application/json', method: 'POST', navigate: false };
+
+      switch (action) {
+        case ApiSessionAction.End: {
+          const { redirectTo } = args;
+          remixSubmit({ action, redirectTo }, defaultSubmitOpts);
+          break;
+        }
+
+        case ApiSessionAction.Extend: {
+          remixSubmit({ action }, defaultSubmitOpts);
+          break;
+        }
+
+        default: {
+          throw Error(`Action '${action}' not implemented`);
+        }
+      }
     },
     [remixSubmit],
   );

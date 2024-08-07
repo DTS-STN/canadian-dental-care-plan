@@ -132,11 +132,29 @@ export default function App() {
 }
 
 /**
+ * A custom hook to retrieve client-side environment variables from the route loader data.
+ *
+ * This hook uses `useRouteLoaderData` to access the `env` object from the loader data of the 'root' route.
+ *
+ * @returns The `env` object containing client-side environment variables, or `undefined` if not available.
+ *
+ * @example
+ * const env = useClientEnv();
+ * if (env) {
+ *   console.log(env.CDCP_WEBSITE_URL_EN);
+ * }
+ */
+export function useClientEnv() {
+  const loaderData = useRouteLoaderData<typeof loader>('root');
+  return loaderData?.env;
+}
+
+/**
  * Return true if a given feature is enabled.
  */
 export function useFeature(feature: FeatureName) {
   // since this hook can be called from any route,
   // we must explicitly specify which loader to use
-  const loaderData = useRouteLoaderData<typeof loader>('root');
-  return loaderData?.env.ENABLED_FEATURES.includes(feature);
+  const env = useClientEnv();
+  return env?.ENABLED_FEATURES.includes(feature);
 }
