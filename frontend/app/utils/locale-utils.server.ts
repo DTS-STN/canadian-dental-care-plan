@@ -1,4 +1,5 @@
 import { redirect } from '@remix-run/node';
+import type { Params } from '@remix-run/react';
 
 import type { Namespace } from 'i18next';
 import { createInstance } from 'i18next';
@@ -22,22 +23,56 @@ export async function getFixedT<N extends Namespace>(localeOrRequest: 'en' | 'fr
 }
 
 /**
- * Retrieves the locale using a deterministic lookup algorithm (URL → cookies → 🤷).
+ * Extracts and returns the locale from the provided request URL.
+ *
+ * This function analyzes the pathname of the given `request` URL to determine the locale. It supports
+ * English (`'en'`) and French (`'fr'`). If the pathname does not start with `/en` or `/fr`, the function
+ * defaults to English (`'en'`).
+ *
+ * @param request - The HTTP request object containing the URL from which to extract the locale.
+ * @returns The detected locale, either `'en'` or `'fr'`. Defaults to `'en'` if no valid locale is found.
  */
 export function getLocale(request: Request): AppLocale {
-  const url = new URL(request.url);
+  const { pathname } = new URL(request.url);
 
-  if (url.pathname.startsWith('/en')) {
-    log.debug('Locale [en] detected in URL');
+  if (pathname.startsWith('/en')) {
+    log.debug('Locale [en] detected in URL; pathname: [%s]', pathname);
     return 'en';
   }
 
-  if (url.pathname.startsWith('/fr')) {
-    log.debug('Locale [fr] detected in URL');
+  if (pathname.startsWith('/fr')) {
+    log.debug('Locale [fr] detected in URL; pathname: [%s]', pathname);
     return 'fr';
   }
 
-  log.debug('Epic fail: no locale detected in URL search params or cookies; returning default [en]');
+  log.debug('No locale detected in URL; returning default [en]; pathname: [%s]', pathname);
+  return 'en';
+}
+
+/**
+ * Extracts and returns the locale from the provided parameters.
+ *
+ * This function checks the `lang` property in the given `params` object to determine the locale to use.
+ * It supports English (`'en'`) and French (`'fr'`). If the `lang` property is not recognized or is
+ * not provided, the function defaults to English (`'en'`).
+ *
+ * @param params - The parameters object containing the `lang` property.
+ * @returns The detected locale, either `'en'` or `'fr'`. Defaults to `'en'` if no valid locale is found.
+ */
+export function getLocaleFromParams(params: Params): AppLocale {
+  const lang = params.lang;
+
+  if (lang === 'en') {
+    log.debug("Locale [en] detected in 'lang' param; lang: [%s]", lang);
+    return 'en';
+  }
+
+  if (lang === 'fr') {
+    log.debug("Locale [fr] detected in 'lang' param; lang: [%s]", lang);
+    return 'fr';
+  }
+
+  log.debug("No locale detected in 'lang' param; returning default [en]; lang: [%s]", lang);
   return 'en';
 }
 

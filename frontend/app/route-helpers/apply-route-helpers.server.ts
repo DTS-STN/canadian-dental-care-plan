@@ -9,8 +9,9 @@ import { z } from 'zod';
 
 import { getAgeFromDateString } from '~/utils/date-utils';
 import { getEnv } from '~/utils/env-utils.server';
+import { getLocaleFromParams } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { getPathById } from '~/utils/route-utils';
+import { getCdcpWebsiteApplyUrl } from '~/utils/url-utils.server';
 
 const log = getLogger('apply-route-helpers.server');
 
@@ -141,18 +142,21 @@ interface LoadStateArgs {
  * @returns The loaded state.
  */
 export function loadApplyState({ params, session }: LoadStateArgs) {
+  const locale = getLocaleFromParams(params);
+  const cdcpWebsiteApplyUrl = getCdcpWebsiteApplyUrl(locale);
+
   const parsedId = idSchema.safeParse(params.id);
 
   if (!parsedId.success) {
-    log.warn('Invalid "id" param format; id: [%s], sessionId: [%s]', params.id, session.id);
-    throw new Response(null, { status: 404 });
+    log.warn('Invalid "id" param format; redirecting to [%s]; id: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, params.id, session.id);
+    throw redirect(cdcpWebsiteApplyUrl);
   }
 
   const sessionName = getSessionName(parsedId.data);
 
   if (!session.has(sessionName)) {
-    log.warn('Apply session state has not been found; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
-    throw new Response(null, { status: 404 });
+    log.warn('Apply session state has not been found; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionName, session.id);
+    throw redirect(cdcpWebsiteApplyUrl);
   }
 
   const state: ApplyState = session.get(sessionName);
@@ -164,8 +168,8 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
 
   if (differenceInMinutes(now, lastUpdatedOn) >= 15) {
     session.unset(sessionName);
-    log.warn('Apply session state has expired; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
-    throw redirect(getPathById('$lang/_public/apply/index', params));
+    log.warn('Apply session state has expired; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionName, session.id);
+    throw redirect(cdcpWebsiteApplyUrl);
   }
 
   return state;
