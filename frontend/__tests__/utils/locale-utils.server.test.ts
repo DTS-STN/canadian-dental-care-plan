@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { getEnv } from '~/utils/env-utils.server';
-import { getFixedT, getLocale, initI18n } from '~/utils/locale-utils.server';
+import { getFixedT, getLocale, getLocaleFromParams, initI18n } from '~/utils/locale-utils.server';
 
 vi.mock('~/utils/env-utils.server', () => ({
   getEnv: vi.fn(),
@@ -26,6 +26,28 @@ describe('locale-utils.server', () => {
 
     it('should return the default locale if there is no locale in the URL', () => {
       expect(getLocale(new Request('http://localhost:3000/'))).toEqual('en');
+    });
+  });
+
+  describe('getLocaleFromParams', () => {
+    it('should return "en" when lang is "en"', () => {
+      const params = { lang: 'en' };
+      expect(getLocaleFromParams(params)).toBe('en');
+    });
+
+    it('should return "fr" when lang is "fr"', () => {
+      const params = { lang: 'fr' };
+      expect(getLocaleFromParams(params)).toBe('fr');
+    });
+
+    it('should return "en" when lang is unsupported', () => {
+      const params = { lang: 'es' };
+      expect(getLocaleFromParams(params)).toBe('en');
+    });
+
+    it('should return "en" when lang is undefined', () => {
+      const params = {};
+      expect(getLocaleFromParams(params)).toBe('en');
     });
   });
 
