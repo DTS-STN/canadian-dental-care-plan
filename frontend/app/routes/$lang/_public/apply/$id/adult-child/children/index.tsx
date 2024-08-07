@@ -205,7 +205,7 @@ export default function ApplyFlowChildSummary() {
                           {t('apply-adult-child:children.index.modal.remove-btn')}
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="sm:max-w-md">
+                      <DialogContent aria-describedby={undefined} className="sm:max-w-md">
                         <DialogHeader>
                           <DialogTitle>{t('apply-adult-child:children.index.modal.header', { childName })}</DialogTitle>
                         </DialogHeader>

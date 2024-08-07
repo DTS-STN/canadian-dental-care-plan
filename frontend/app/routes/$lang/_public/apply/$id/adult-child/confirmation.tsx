@@ -451,7 +451,7 @@ export default function ApplyFlowConfirm() {
             {t('confirm.close-application')}
           </button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{t('confirm.modal.header')}</DialogTitle>
           </DialogHeader>
