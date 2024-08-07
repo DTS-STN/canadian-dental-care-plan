@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { useFetchers, useLocation } from '@remix-run/react';
+
 import { useTranslation } from 'react-i18next';
 import type { IIdleTimerProps } from 'react-idle-timer';
 import { useIdleTimer } from 'react-idle-timer';
@@ -17,16 +19,16 @@ export interface SessionTimeoutProps extends Required<Pick<IIdleTimerProps, 'pro
 
 const SessionTimeout = ({ promptBeforeIdle, timeout, onSessionEnd, onSessionExtend }: SessionTimeoutProps) => {
   const { t } = useTranslation(i18nNamespaces);
-  const [modalOpen, setModalOpen] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState('');
+  const { key: locationKey } = useLocation();
+  const fetchers = useFetchers();
+  const fetchersRunning = fetchers.filter(({ state }) => state !== 'idle').length > 0;
 
-  const { activate, getRemainingTime } = useIdleTimer({
+  const { activate, isPrompted, getRemainingTime } = useIdleTimer({
+    events: [],
     onIdle: () => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       endSession();
-    },
-    onPrompt: () => {
-      setModalOpen(true);
     },
     promptBeforeIdle,
     timeout,
@@ -34,13 +36,10 @@ const SessionTimeout = ({ promptBeforeIdle, timeout, onSessionEnd, onSessionExte
 
   async function endSession() {
     await onSessionEnd();
-    setModalOpen(false);
-    activate();
   }
 
   async function extendSession() {
     await onSessionExtend();
-    setModalOpen(false);
     activate();
   }
 
@@ -57,6 +56,11 @@ const SessionTimeout = ({ promptBeforeIdle, timeout, onSessionEnd, onSessionExte
   async function handleOnExtendSessionButtonClick() {
     await extendSession();
   }
+
+  useEffect(() => {
+    console.debug(`Activating idle-timer on ${Date.now()}; locationKey: [${locationKey}], fetchersRunning: [${fetchersRunning}]`);
+    activate();
+  }, [locationKey, fetchersRunning, activate]);
 
   useEffect(() => {
     const updateRemainingTime = () => {
@@ -76,7 +80,7 @@ const SessionTimeout = ({ promptBeforeIdle, timeout, onSessionEnd, onSessionExte
   }, [getRemainingTime]);
 
   return (
-    <Dialog open={modalOpen} onOpenChange={handleOnDialogOpenChange}>
+    <Dialog open={isPrompted()} onOpenChange={handleOnDialogOpenChange}>
       <DialogContent aria-describedby={undefined} className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{t('session-timeout.header')}</DialogTitle>
