@@ -377,7 +377,7 @@ export default function ApplyFlowConfirm() {
             {t('apply-adult:confirm.close-application')}
           </button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{t('apply-adult:confirm.modal.header')}</DialogTitle>
           </DialogHeader>

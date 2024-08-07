@@ -77,7 +77,7 @@ const SessionTimeout = ({ promptBeforeIdle, timeout, onSessionEnd, onSessionExte
 
   return (
     <Dialog open={modalOpen} onOpenChange={handleOnDialogOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent aria-describedby={undefined} className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{t('session-timeout.header')}</DialogTitle>
         </DialogHeader>
