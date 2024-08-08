@@ -161,12 +161,12 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
 
   const state: ApplyState = session.get(sessionName);
 
-  // Checks if the elapsed time since the last update exceeds 15 minutes,
+  // Checks if the elapsed time since the last update exceeds 20 minutes,
   // and performs necessary actions if it does.
   const lastUpdatedOn = new UTCDate(state.lastUpdatedOn);
   const now = new UTCDate();
 
-  if (differenceInMinutes(now, lastUpdatedOn) >= 15) {
+  if (differenceInMinutes(now, lastUpdatedOn) >= 20) {
     session.unset(sessionName);
     log.warn('Apply session state has expired; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionName, session.id);
     throw redirectDocument(cdcpWebsiteApplyUrl);
