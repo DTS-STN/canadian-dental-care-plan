@@ -5,7 +5,7 @@ import { PlaywrightApplyAdultPage } from '../../../../models/PlaywrightApplyAdul
 import { PlaywrightApplyPage } from '../../../../models/PlaywrightApplyPage';
 import { calculateDOB } from '../../../../utils/helpers';
 
-test.describe('Adult category', () => {
+test.describe('Senior category', () => {
   test.beforeEach('Navigate to adult and child application', async ({ page }) => {
     test.setTimeout(60000);
     const applyPage = new PlaywrightApplyPage(page);
@@ -36,71 +36,6 @@ test.describe('Adult category', () => {
     await test.step('Should return to CDCP main page', async () => {
       await page.getByRole('button', { name: 'Return to main page' }).click();
       await expect(page).toHaveURL('https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html');
-    });
-  });
-
-  test('Should return to CDCP main page if applicant and child are not eligible', async ({ page }) => {
-    const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
-
-    await test.step('Should navigate to tax filing page', async () => {
-      await applyAdultChildPage.fillTaxFilingForm('Yes');
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
-    await test.step('Should navigate to date of birth page', async () => {
-      const { year, month, day } = calculateDOB(35);
-      await applyAdultChildPage.fillDateOfBirthForm({ allChildrenUnder18: 'No', day: day, month: month, year: year });
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
-    await test.step('Should navigate to DTC page', async () => {
-      await applyAdultChildPage.isLoaded('disability-tax-credit');
-
-      await page.getByRole('radio', { name: 'No' }).check();
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
-    await test.step('Should navigate to when to apply page', async () => {
-      const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
-      await applyAdultChildPage.isLoaded('dob-eligibility');
-    });
-
-    await test.step('Should return to CDCP main page', async () => {
-      await page.getByRole('button', { name: 'Return to main page' }).click();
-      await expect(page).toHaveURL('https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html');
-    });
-  });
-
-  test('Should navigate to child flow if applicant is not eligible but wish to apply for children', async ({ page }) => {
-    const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
-
-    await test.step('Should navigate to tax filing page', async () => {
-      await applyAdultChildPage.fillTaxFilingForm('Yes');
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
-    await test.step('Should navigate to date of birth page', async () => {
-      const { year, month, day } = calculateDOB(35);
-      await applyAdultChildPage.fillDateOfBirthForm({ allChildrenUnder18: 'Yes', day: day, month: month, year: year });
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
-    await test.step('Should navigate to DTC page', async () => {
-      await applyAdultChildPage.isLoaded('disability-tax-credit');
-
-      await page.getByRole('radio', { name: 'No' }).check();
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
-    await test.step('Should navigate to apply children page', async () => {
-      await applyAdultChildPage.isLoaded('apply-children');
-      await page.getByRole('button', { name: 'Proceed to apply for your child(ren)' }).click();
-    });
-
-    await test.step('Should navigate to children application', async () => {
-      // TODO: This should be updated when Child page model is added
-      await expect(page).toHaveURL(/\/en\/apply\/[a-f0-9-]+\/child\/children/);
-      await expect(page.getByRole('heading', { level: 1, name: "Child(ren)'s application" })).toBeVisible();
     });
   });
 

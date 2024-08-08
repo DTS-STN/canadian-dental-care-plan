@@ -1,4 +1,14 @@
+import { expect } from '@playwright/test';
+
+import { fillOutAddress } from '../utils/helpers';
 import { PlaywrightBasePage } from './PlaywrightBasePage';
+
+interface FillDateOfBirthFormArgs {
+  allChildrenUnder18: string;
+  day: string;
+  month: string;
+  year: string;
+}
 
 export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
   async isLoaded(
@@ -12,6 +22,7 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
       | 'children-information'
       | 'children-parent-or-guardian'
       | 'children'
+      | 'confirmation'
       | 'communication-preference'
       | 'contact-apply-child'
       | 'contact-information'
@@ -24,6 +35,8 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
       | 'living-independently'
       | 'parent-or-guardian'
       | 'partner-information'
+      | 'review-adult-information'
+      | 'review-child-information'
       | 'tax-filing',
     heading?: string | RegExp,
   ) {
@@ -78,6 +91,10 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/contact-information/, heading: 'Contact information' };
         break;
 
+      case 'confirmation':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/confirmation/, heading: 'Application successfully submitted' };
+        break;
+
       case 'date-of-birth':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/date-of-birth/, heading: 'Age' };
         break;
@@ -114,6 +131,14 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/partner-information/, heading: 'Spouse or common-law partner information' };
         break;
 
+      case 'review-adult-information':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/review-adult-information/, heading: 'Review your information' };
+        break;
+
+      case 'review-child-information':
+        pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/review-child-information/, heading: 'Review child(ren) information' };
+        break;
+
       case 'tax-filing':
         pageInfo = { url: /\/en\/apply\/[a-f0-9-]+\/adult-child\/tax-filing/, heading: 'Tax filing' };
         break;
@@ -125,5 +150,96 @@ export class PlaywrightApplyAdultChildPage extends PlaywrightBasePage {
 
     if (!pageInfo) throw Error(`applyAdultChildPage '${applyAdultChildPage}' not implemented.`);
     await super.isLoaded(pageInfo.url, heading ?? pageInfo.heading);
+  }
+
+  async fillTaxFilingForm(fileTaxes: string) {
+    await this.isLoaded('tax-filing');
+    await this.page.getByRole('radio', { name: fileTaxes, exact: true }).check();
+  }
+
+  async fillDateOfBirthForm({ allChildrenUnder18, day, month, year }: FillDateOfBirthFormArgs) {
+    await this.isLoaded('date-of-birth');
+    await this.page.getByRole('combobox', { name: 'Month' }).selectOption(month);
+    await this.page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
+    await this.page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
+    await this.page.getByRole('group', { name: 'Are all the children you are applying for under 18?' }).getByRole('radio', { name: allChildrenUnder18 }).check();
+  }
+
+  async fillApplicantInformationForm() {
+    await this.isLoaded('applicant-information');
+    await this.page.getByRole('textbox', { name: 'First name' }).fill('John');
+    await this.page.getByRole('textbox', { name: 'Last name' }).fill('Smith');
+    await this.page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill('900000001');
+    await this.page.getByRole('radio', { name: 'Married' }).check();
+  }
+
+  async fillPartnerInformationForm() {
+    await this.isLoaded('partner-information');
+    await this.page.getByRole('textbox', { name: 'First name' }).fill('Mary');
+    await this.page.getByRole('textbox', { name: 'Last name' }).fill('Smith');
+    await this.page.getByRole('combobox', { name: 'Month' }).selectOption('01');
+    await this.page.getByRole('textbox', { name: 'Day (DD)' }).fill('01');
+    await this.page.getByRole('textbox', { name: 'Year (YYYY)' }).fill('1960');
+
+    //check if sin is unique
+    await this.page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill('900000001');
+    await this.page.getByRole('button', { name: 'Continue' }).click();
+    await expect(this.page.getByRole('link', { name: 'he Social Insurance Number (SIN) must be unique' })).toBeVisible();
+
+    await this.page.getByRole('textbox', { name: 'Social Insurance Number (SIN)' }).fill('800000002');
+    await this.page.getByRole('checkbox', { name: 'I confirm that my spouse or common-law partner is aware and has agreed to share their personal information.' }).check();
+  }
+
+  async fillContactInformationForm() {
+    await this.isLoaded('contact-information');
+    //invalid phone number
+    await this.page.getByRole('group', { name: 'Phone number' }).getByRole('textbox', { name: 'Phone number (optional)', exact: true }).fill('111');
+    await this.page.getByRole('button', { name: 'Continue' }).click();
+    await expect(this.page.getByRole('link', { name: "Phone number does not exist. If it's an international phone number, add '+' in front" })).toBeVisible();
+
+    await this.page.getByRole('group', { name: 'Phone number' }).getByRole('textbox', { name: 'Phone number (optional)', exact: true }).fill('2345678901');
+    await this.page.getByRole('group', { name: 'Phone number' }).getByRole('textbox', { name: 'Alternate phone number (optional)', exact: true }).fill('2345678902');
+
+    //invalid email
+    await this.page.getByRole('group', { name: 'Email' }).getByRole('textbox', { name: 'Email address (optional)', exact: true }).fill('123mail');
+    await this.page.getByRole('button', { name: 'Continue' }).click();
+    await expect(this.page.getByRole('link', { name: 'Enter an email address in the correct format, such as name@example.com' })).toBeVisible();
+
+    //email does not match
+    await this.page.getByRole('group', { name: 'Email' }).getByRole('textbox', { name: 'Email address (optional)', exact: true }).fill('123@mail.com');
+    await this.page.getByRole('group', { name: 'Email' }).getByRole('textbox', { name: 'Confirm email address (optional)', exact: true }).fill('124@mail.com');
+    await this.page.getByRole('button', { name: 'Continue' }).click();
+    await expect(this.page.getByRole('link', { name: 'The email addresses entered do not match' })).toBeVisible();
+
+    await this.page.getByRole('group', { name: 'Email' }).getByRole('textbox', { name: 'Confirm email address (optional)', exact: true }).fill('123@mail.com');
+
+    //fillout mailing address
+    await fillOutAddress({ page: this.page, group: 'Mailing address', address: '123 street', unit: '404', country: 'Canada', province: 'Ontario', city: 'Ottawa', postalCode: 'N3B1E6' });
+    //fillout home address
+    await fillOutAddress({ page: this.page, group: 'Home address', address: '555 street', unit: '', country: 'Canada', province: 'Quebec', city: 'Montreal', postalCode: 'J3T2K3' });
+  }
+
+  async fillCommunicationForm() {
+    await this.isLoaded('communication-preference');
+
+    await this.page.getByRole('group', { name: 'What is your preferred official language of communication?' }).getByRole('radio', { name: 'English' }).check();
+    await this.page.getByRole('group', { name: 'What is your preferred method of communication for Sun Life?' }).getByRole('radio', { name: 'Email' }).check();
+  }
+
+  async fillDentalInsuranceForm() {
+    await this.isLoaded('dental-insurance');
+    await this.page.getByRole('radio', { name: 'Yes, I have access to dental insurance or coverage', exact: true }).check();
+  }
+
+  async fillOtherDentalBenefitsForm() {
+    await this.isLoaded('federal-provincial-territorial-benefits');
+
+    await this.page.getByRole('group', { name: 'Federal benefits' }).getByRole('radio', { name: 'Yes, I have federal dental benefits' }).check();
+    await this.page.getByRole('group', { name: 'Provincial or territorial benefits' }).getByRole('radio', { name: 'Yes, I have provincial or territorial dental benefits' }).check();
+
+    await this.page.getByRole('group', { name: 'Federal benefits' }).getByRole('radio', { name: 'Correctional Service Canada Health Services' }).check();
+    await this.page.getByRole('group', { name: 'Provincial or territorial benefits' }).getByRole('combobox', { name: 'If yes, through which province or territory?' }).selectOption('Alberta');
+
+    await this.page.getByRole('group', { name: 'Provincial or territorial benefits' }).getByRole('radio', { name: 'Alberta Adult Health Benefits' }).check();
   }
 }
