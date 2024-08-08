@@ -22,6 +22,7 @@ import { InputPatternField } from '~/components/input-pattern-field';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
+import { useFeature } from '~/root';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -281,6 +282,8 @@ export default function StatusCheckerChild() {
     setChildHasSinState(e.target.value === ChildHasSin.Yes);
   }
 
+  const statusCheckerRedirectFlag = useFeature('status-checker-redirects');
+
   return (
     <div className="max-w-prose">
       {fetcher.data && 'status' in fetcher.data && fetcher.data.statusId ? (
@@ -296,9 +299,11 @@ export default function StatusCheckerChild() {
           <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} className="mt-12" endIcon={faChevronRight}>
             {t('status:child.check-another')}
           </ButtonLink>
-          <InlineLink to={t('status:child.exit-link')} params={params} className="mt-6 block">
-            {t('status:child.exit-btn')}
-          </InlineLink>
+          {statusCheckerRedirectFlag && (
+            <InlineLink to={t('status:child.exit-link')} params={params} className="mt-6 block">
+              {t('status:child.exit-btn')}
+            </InlineLink>
+          )}
         </>
       ) : (
         <>
@@ -374,9 +379,11 @@ export default function StatusCheckerChild() {
               )}
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <ButtonLink id="back-button" routeId="$lang/_public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
-                {t('status:child.form.back-btn')}
-              </ButtonLink>
+              {statusCheckerRedirectFlag && (
+                <ButtonLink id="back-button" routeId="$lang/_public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
+                  {t('status:child.form.back-btn')}
+                </ButtonLink>
+              )}
               <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
                 {t('status:child.form.submit')}
               </LoadingButton>
