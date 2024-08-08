@@ -183,13 +183,17 @@ export default function StatusCheckerMyself() {
               {fetcher.data.status.name && <ClientFriendlyStatusMarkdown content={fetcher.data.status.name} />}
             </div>
           </ContextualAlert>
-          <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} className="mt-12" endIcon={faChevronRight}>
-            {t('status:myself.check-another')}
-          </ButtonLink>
+          <div className="mt-12">
+            <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} endIcon={faChevronRight}>
+              {t('status:myself.check-another')}
+            </ButtonLink>
+          </div>
           {statusCheckerRedirectFlag && (
-            <InlineLink to={t('status:myself.exit-link')} params={params} className="mt-6 block">
-              {t('status:myself.exit-btn')}
-            </InlineLink>
+            <div className="mt-6">
+              <InlineLink to={t('status:myself.exit-link')} params={params} className="mt-6">
+                {t('status:myself.exit-btn')}
+              </InlineLink>
+            </div>
           )}
         </>
       ) : (
