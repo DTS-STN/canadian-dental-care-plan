@@ -25,9 +25,7 @@ test.describe('Adult category', () => {
     const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
 
     await test.step('Should navigate to tax filing page', async () => {
-      await applyAdultChildPage.isLoaded('tax-filing');
-
-      await page.getByRole('radio', { name: 'No', exact: true }).check();
+      await applyAdultChildPage.fillTaxFilingForm('No');
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
@@ -45,22 +43,13 @@ test.describe('Adult category', () => {
     const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
 
     await test.step('Should navigate to tax filing page', async () => {
-      await applyAdultChildPage.isLoaded('tax-filing');
-
-      await page.getByRole('radio', { name: 'Yes', exact: true }).check();
+      await applyAdultChildPage.fillTaxFilingForm('Yes');
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
     await test.step('Should navigate to date of birth page', async () => {
-      await applyAdultChildPage.isLoaded('date-of-birth');
-
       const { year, month, day } = calculateDOB(35);
-
-      await page.getByRole('combobox', { name: 'Month' }).selectOption(month);
-      await page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
-      await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
-      await page.getByRole('group', { name: 'Are all the children you are applying for under 18?' }).getByRole('radio', { name: 'No' }).check();
-
+      await applyAdultChildPage.fillDateOfBirthForm({ allChildrenUnder18: 'No', day: day, month: month, year: year });
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
@@ -86,22 +75,13 @@ test.describe('Adult category', () => {
     const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
 
     await test.step('Should navigate to tax filing page', async () => {
-      await applyAdultChildPage.isLoaded('tax-filing');
-
-      await page.getByRole('radio', { name: 'Yes', exact: true }).check();
+      await applyAdultChildPage.fillTaxFilingForm('Yes');
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
     await test.step('Should navigate to date of birth page', async () => {
-      await applyAdultChildPage.isLoaded('date-of-birth');
-
       const { year, month, day } = calculateDOB(35);
-
-      await page.getByRole('combobox', { name: 'Month' }).selectOption(month);
-      await page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
-      await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
-      await page.getByRole('group', { name: 'Are all the children you are applying for under 18?' }).getByRole('radio', { name: 'Yes' }).check();
-
+      await applyAdultChildPage.fillDateOfBirthForm({ allChildrenUnder18: 'Yes', day: day, month: month, year: year });
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
@@ -128,22 +108,13 @@ test.describe('Adult category', () => {
     const applyAdultChildPage = new PlaywrightApplyAdultChildPage(page);
 
     await test.step('Should navigate to tax filing page', async () => {
-      await applyAdultChildPage.isLoaded('tax-filing');
-
-      await page.getByRole('radio', { name: 'Yes', exact: true }).check();
+      await applyAdultChildPage.fillTaxFilingForm('Yes');
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
     await test.step('Should navigate to date of birth page', async () => {
-      await applyAdultChildPage.isLoaded('date-of-birth');
-
       const { year, month, day } = calculateDOB(35);
-
-      await page.getByRole('combobox', { name: 'Month' }).selectOption(month);
-      await page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
-      await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
-      await page.getByRole('group', { name: 'Are all the children you are applying for under 18?' }).getByRole('radio', { name: 'No' }).check();
-
+      await applyAdultChildPage.fillDateOfBirthForm({ allChildrenUnder18: 'No', day: day, month: month, year: year });
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
