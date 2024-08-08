@@ -1,5 +1,5 @@
 import type { Session } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import { redirectDocument } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
 
 import { UTCDate } from '@date-fns/utc';
@@ -149,14 +149,14 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
 
   if (!parsedId.success) {
     log.warn('Invalid "id" param format; redirecting to [%s]; id: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, params.id, session.id);
-    throw redirect(cdcpWebsiteApplyUrl);
+    throw redirectDocument(cdcpWebsiteApplyUrl);
   }
 
   const sessionName = getSessionName(parsedId.data);
 
   if (!session.has(sessionName)) {
     log.warn('Apply session state has not been found; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionName, session.id);
-    throw redirect(cdcpWebsiteApplyUrl);
+    throw redirectDocument(cdcpWebsiteApplyUrl);
   }
 
   const state: ApplyState = session.get(sessionName);
@@ -169,7 +169,7 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
   if (differenceInMinutes(now, lastUpdatedOn) >= 15) {
     session.unset(sessionName);
     log.warn('Apply session state has expired; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionName, session.id);
-    throw redirect(cdcpWebsiteApplyUrl);
+    throw redirectDocument(cdcpWebsiteApplyUrl);
   }
 
   return state;
