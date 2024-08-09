@@ -107,7 +107,7 @@ async function createRaoidcService() {
   /**
    * Handle an OIDC logout call.
    */
-  function generateSignoutRequest(sessionId: string, locale: 'en' | 'fr') {
+  function generateSignoutRequest(sessionId: string, locale: AppLocale) {
     return expandTemplate(AUTH_LOGOUT_REDIRECT_URL, { clientId: AUTH_RAOIDC_CLIENT_ID, sharedSessionId: sessionId, uiLocales: locale });
   }
 

@@ -16,11 +16,11 @@ export interface AppLinkProps extends OmitStrict<ComponentProps<typeof Link>, 't
   newTabIndicator?: boolean;
   params?: Params;
   routeId?: string;
-  targetLang?: 'en' | 'fr';
+  targetLang?: AppLocale;
   to?: To;
 }
 
-function getTo(params?: Params, routeId?: string, targetLang?: 'en' | 'fr', to?: To) {
+function getTo(params?: Params, routeId?: string, targetLang?: AppLocale, to?: To) {
   if (to) {
     return to;
   }

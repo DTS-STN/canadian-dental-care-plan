@@ -7,6 +7,7 @@ import I18NexFsBackend from 'i18next-fs-backend';
 import { resolve } from 'node:path';
 import { initReactI18next } from 'react-i18next';
 
+import { APP_LOCALES } from './locale-utils';
 import { getEnv } from '~/utils/env-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
@@ -16,7 +17,7 @@ const log = getLogger('locale-utils.server');
  * Returns a t function that defaults to the language resolved through the request.
  * @see https://www.i18next.com/overview/api#getfixedt
  */
-export async function getFixedT<N extends Namespace>(localeOrRequest: 'en' | 'fr' | Request, namespaces: N) {
+export async function getFixedT<N extends Namespace>(localeOrRequest: AppLocale | Request, namespaces: N) {
   const locale = typeof localeOrRequest === 'string' ? localeOrRequest : getLocale(localeOrRequest);
   const i18n = await initI18n(locale, namespaces);
   return i18n.getFixedT(locale, namespaces);
@@ -100,7 +101,7 @@ export async function initI18n<N extends Namespace>(locale: string | undefined, 
       },
       lng: locale,
       ns: namespaces,
-      preload: ['en', 'fr'],
+      preload: APP_LOCALES,
     });
 
   log.debug('i18next initialization complete');

@@ -2,6 +2,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { useParams } from '@remix-run/react';
 
 import { BilingualNotFoundError, NotFoundError } from '~/components/layouts/public-layout';
+import { isAppLocale } from '~/utils/locale-utils';
 import { getLogger } from '~/utils/logging.server';
 
 export function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
@@ -11,9 +12,10 @@ export function loader({ context: { session }, params, request }: LoaderFunction
 
 export function action({ context: { session }, params, request }: ActionFunctionArgs) {
   const log = getLogger('$lang/index');
+  const lang = params.lang;
 
-  if (!['en', 'fr'].includes(String(params.lang))) {
-    log.warn('Invalid lang requested [%s]; responding with 404', params.lang);
+  if (!isAppLocale(lang)) {
+    log.warn('Invalid lang requested [%s]; responding with 404', lang);
     throw new Response(null, { status: 404 });
   }
 
@@ -22,7 +24,6 @@ export function action({ context: { session }, params, request }: ActionFunction
 }
 
 export default function LangIndex() {
-  const { lang: langParam } = useParams();
-
-  return langParam && ['en', 'fr'].includes(langParam) ? <NotFoundError /> : <BilingualNotFoundError />;
+  const params = useParams();
+  return isAppLocale(params.lang) ? <NotFoundError /> : <BilingualNotFoundError />;
 }
