@@ -1,7 +1,7 @@
 import { useLocation } from '@remix-run/react';
 
 import { normalizeSpaces } from './string-utils';
-import { removeLanguageFromPath } from '~/utils/locale-utils';
+import { APP_LOCALES, removeLanguageFromPath } from '~/utils/locale-utils';
 
 /**
  * Custom hook to generate a canonical URL based on the current location and language.
@@ -22,7 +22,7 @@ export function useCanonicalURL(origin: string) {
  * @param origin - The origin URL. For more information on the origin URL, see {@link https://developer.mozilla.org/en-US/docs/Web/API/URL/origin}.
  * @returns An array of objects containing the hreflang and href for alternate language URLs.
  */
-export function useAlternateLanguages(origin: string, languages: Array<string> = ['en', 'fr']) {
+export function useAlternateLanguages(origin: string, languages: ReadonlyArray<AppLocale> = APP_LOCALES) {
   const { pathname, search } = useLocation();
   const pathWithoutLang = removeLanguageFromPath(pathname);
 

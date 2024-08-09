@@ -9,17 +9,44 @@ import type { RouteHandleData } from '~/utils/route-utils';
 import { i18nNamespacesSchema } from '~/utils/route-utils';
 
 /**
+ * A constant array representing the supported application locales.
+ * `as const` ensures that the array is treated as a tuple of literal types `'en'` and `'fr'`.
+ */
+export const APP_LOCALES = ['en', 'fr'] as const;
+
+/**
+ * Checks if a given value is a valid application locale.
+ *
+ * @param value - The value to check, which can be of any type.
+ * @returns `true` if the value is a valid `AppLocale`, otherwise `false`.
+ *
+ * @example
+ * ```
+ * isAppLocale('en'); // true
+ * isAppLocale('fr'); // true
+ * isAppLocale('es'); // false
+ * isAppLocale(123);  // false
+ * ```
+ */
+export function isAppLocale(value: unknown): value is AppLocale {
+  if (typeof value !== 'string') return false;
+  return APP_LOCALES.includes(value as AppLocale);
+}
+
+/**
  * Returns the alternate language for the given input language.
  * (ie: 'en' → 'fr'; 'fr' → 'en')
  */
 export function getAltLanguage(language?: string) {
+  if (!isAppLocale(language)) {
+    throw new Error(`Unexpected language: ${language}`);
+  }
+
   switch (language) {
     case 'en':
       return 'fr';
     case 'fr':
       return 'en';
-    default:
-      throw new Error(`Unexpected language: ${language}`);
   }
 }
 
@@ -64,7 +91,7 @@ export async function initI18n(namespaces: Array<string>) {
         escapeValue: false,
       },
       ns: namespaces,
-      preload: ['en', 'fr'],
+      preload: APP_LOCALES,
     });
 
   return i18n;

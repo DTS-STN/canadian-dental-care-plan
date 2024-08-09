@@ -17,15 +17,17 @@ import type status from '../public/locales/en/status.json';
 import type stubSinEditor from '../public/locales/en/stub-sin-editor.json';
 import type unableToProcessRequest from '../public/locales/en/unable-to-process-request.json';
 import type { PublicEnv } from '~/utils/env-utils.server';
+import type { APP_LOCALES } from '~/utils/locale-utils';
 
 /**
  * Application-scoped global types.
  */
 declare global {
   /**
-   * Represents the locale of the application.
+   * A union type representing the possible values for the application locale.
+   * This type is derived from the elements of the `APP_LOCALES` array.
    */
-  type AppLocale = 'en' | 'fr';
+  type AppLocale = (typeof APP_LOCALES)[number];
 
   /**
    * Add the public environment variables to the global window type.
