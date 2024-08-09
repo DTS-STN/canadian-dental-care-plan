@@ -4,14 +4,12 @@ import { Outlet, isRouteErrorResponse, useLoaderData, useParams, useRouteError }
 import { NotFoundError, PublicLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import SessionTimeout from '~/components/session-timeout';
 import { transformAdobeAnalyticsUrl } from '~/route-helpers/apply-route-helpers';
-import { ApiApplyStateAction } from '~/routes/api/apply-state';
-import { ApiSessionAction } from '~/routes/api/session';
-import { useApiApplyState, useApiSession } from '~/utils/api-utils';
+import { useApiApplyState } from '~/utils/api-apply-state-utils';
+import { useApiSession } from '~/utils/api-session-utils';
 import { getPublicEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getLocale } from '~/utils/locale-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
-import { getCdcpWebsiteApplyUrl } from '~/utils/url-utils.server';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces(...layoutI18nNamespaces),
@@ -21,9 +19,8 @@ export const handle = {
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const locale = getLocale(request);
-  const cdcpWebsiteApplyUrl = getCdcpWebsiteApplyUrl(locale);
   const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = getPublicEnv();
-  return { cdcpWebsiteApplyUrl, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
+  return { locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
 }
 
 export function ErrorBoundary() {
@@ -41,22 +38,25 @@ export function ErrorBoundary() {
 }
 
 export default function Layout() {
-  const { cdcpWebsiteApplyUrl, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = useLoaderData<typeof loader>();
+  const { locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = useLoaderData<typeof loader>();
   const params = useParams();
   const apiApplyState = useApiApplyState();
   const apiSession = useApiSession();
 
   function handleOnSessionEnd() {
-    apiSession.submit({ action: ApiSessionAction.End, redirectTo: cdcpWebsiteApplyUrl });
+    apiSession.submit({ action: 'end', locale, redirectTo: 'cdcp-website-apply' });
   }
 
   function handleOnSessionExtend() {
     // extends the apply state if 'id' param exists
-    if (typeof params.id === 'string') {
-      apiApplyState.submit({ action: ApiApplyStateAction.Extend, id: params.id });
-    } else {
-      apiSession.submit({ action: ApiSessionAction.Extend });
+    const id = params.id;
+    if (typeof id === 'string') {
+      apiApplyState.submit({ action: 'extend', id });
+      return;
     }
+
+    // extends the user's session
+    apiSession.submit({ action: 'extend' });
   }
 
   return (

@@ -3,13 +3,11 @@ import { Outlet, isRouteErrorResponse, useLoaderData, useRouteError } from '@rem
 
 import { NotFoundError, PublicLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import SessionTimeout from '~/components/session-timeout';
-import { ApiSessionAction } from '~/routes/api/session';
-import { useApiSession } from '~/utils/api-utils';
+import { useApiSession } from '~/utils/api-session-utils';
 import { getPublicEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getLocale } from '~/utils/locale-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
-import { getCdcpWebsiteStatusUrl } from '~/utils/url-utils.server';
 
 export const handle = {
   i18nNamespaces: getTypedI18nNamespaces(...layoutI18nNamespaces),
@@ -18,9 +16,8 @@ export const handle = {
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const locale = getLocale(request);
-  const cdcpWebsiteStatusUrl = getCdcpWebsiteStatusUrl(locale);
   const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = getPublicEnv();
-  return { cdcpWebsiteStatusUrl, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
+  return { locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
 }
 
 export function ErrorBoundary() {
@@ -38,15 +35,15 @@ export function ErrorBoundary() {
 }
 
 export default function Route() {
-  const { cdcpWebsiteStatusUrl, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = useLoaderData<typeof loader>();
+  const { locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = useLoaderData<typeof loader>();
   const apiSession = useApiSession();
 
   function handleOnSessionEnd() {
-    apiSession.submit({ action: ApiSessionAction.End, redirectTo: cdcpWebsiteStatusUrl });
+    apiSession.submit({ action: 'end', locale, redirectTo: 'cdcp-website-status' });
   }
 
   function handleOnSessionExtend() {
-    apiSession.submit({ action: ApiSessionAction.Extend });
+    apiSession.submit({ action: 'extend' });
   }
 
   return (

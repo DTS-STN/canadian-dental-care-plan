@@ -11,14 +11,8 @@ import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('routes/api/apply-state');
 
-export enum ApiApplyStateAction {
-  Extend = 'extend',
-}
-
-const bodySchema = z.object({
-  action: z.nativeEnum(ApiApplyStateAction),
-  id: z.string(),
-});
+const API_APPLY_STATE_ACTIONS = ['extend'] as const;
+export type ApiApplyStateAction = (typeof API_APPLY_STATE_ACTIONS)[number];
 
 export async function action({ context: { session }, request }: ActionFunctionArgs) {
   const sessionId = session.id;
@@ -28,6 +22,11 @@ export async function action({ context: { session }, request }: ActionFunctionAr
     log.warn('Invalid method requested [%s]; responding with 405; sessionId: [%s]', request.method, sessionId);
     throw json({ message: 'Method not allowed' }, { status: 405 });
   }
+
+  const bodySchema = z.object({
+    action: z.enum(API_APPLY_STATE_ACTIONS),
+    id: z.string(),
+  });
 
   const requestBody = await request.json();
   const parsedBody = bodySchema.safeParse(requestBody);
@@ -40,7 +39,7 @@ export async function action({ context: { session }, request }: ActionFunctionAr
   const params = { id: parsedBody.data.id };
 
   switch (parsedBody.data.action) {
-    case ApiApplyStateAction.Extend: {
+    case 'extend': {
       log.debug("Extending user's apply state; id: [%s], sessionId: [%s]", params.id, sessionId);
       saveApplyState({ params, session, state: {} });
       return new Response(null, { status: 204 });

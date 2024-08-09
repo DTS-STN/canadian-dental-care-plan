@@ -37,6 +37,15 @@ declare global {
   }
 
   /**
+   * Extract from `T` those types that are assignable to `U`, where `U` must exist in `T`.
+   *
+   * Similar to `Extract` but requires the extraction list to be composed of valid members of `T`.
+   *
+   * @see https://github.com/pelotom/type-zoo?tab=readme-ov-file#extractstrictt-u-extends-t
+   */
+  type ExtractStrict<T, U extends T> = T extends U ? T : never;
+
+  /**
    * Drop keys `K` from `T`, where `K` must exist in `T`.
    *
    * @see https://github.com/pelotom/type-zoo?tab=readme-ov-file#omitstrictt-k-extends-keyof-t
