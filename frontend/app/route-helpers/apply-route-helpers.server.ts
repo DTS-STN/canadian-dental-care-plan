@@ -1,5 +1,5 @@
 import type { Session } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import { redirectDocument } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
 
 import { UTCDate } from '@date-fns/utc';
@@ -149,27 +149,27 @@ export function loadApplyState({ params, session }: LoadStateArgs) {
 
   if (!parsedId.success) {
     log.warn('Invalid "id" param format; redirecting to [%s]; id: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, params.id, session.id);
-    throw redirect(cdcpWebsiteApplyUrl);
+    throw redirectDocument(cdcpWebsiteApplyUrl);
   }
 
   const sessionName = getSessionName(parsedId.data);
 
   if (!session.has(sessionName)) {
     log.warn('Apply session state has not been found; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionName, session.id);
-    throw redirect(cdcpWebsiteApplyUrl);
+    throw redirectDocument(cdcpWebsiteApplyUrl);
   }
 
   const state: ApplyState = session.get(sessionName);
 
-  // Checks if the elapsed time since the last update exceeds 15 minutes,
+  // Checks if the elapsed time since the last update exceeds 20 minutes,
   // and performs necessary actions if it does.
   const lastUpdatedOn = new UTCDate(state.lastUpdatedOn);
   const now = new UTCDate();
 
-  if (differenceInMinutes(now, lastUpdatedOn) >= 15) {
+  if (differenceInMinutes(now, lastUpdatedOn) >= 20) {
     session.unset(sessionName);
     log.warn('Apply session state has expired; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionName, session.id);
-    throw redirect(cdcpWebsiteApplyUrl);
+    throw redirectDocument(cdcpWebsiteApplyUrl);
   }
 
   return state;

@@ -2,7 +2,7 @@
  * An API route that can be used to perform actions with user's server-side session.
  */
 import type { ActionFunctionArgs } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { json, redirectDocument } from '@remix-run/node';
 
 import { z } from 'zod';
 
@@ -47,7 +47,7 @@ export async function action({ context: { session }, request }: ActionFunctionAr
       const headers = { 'Set-Cookie': await sessionService.destroySession(session) };
 
       if (redirectTo) {
-        return redirect(redirectTo, { headers });
+        return redirectDocument(redirectTo, { headers });
       }
 
       return new Response(null, { headers, status: 204 });

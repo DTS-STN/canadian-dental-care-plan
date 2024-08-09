@@ -18,6 +18,7 @@ import { useErrorSummary } from '~/components/error-summary';
 import { InlineLink } from '~/components/inline-link';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { LoadingButton } from '~/components/loading-button';
+import { useFeature } from '~/root';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -168,6 +169,8 @@ export default function StatusCheckerMyself() {
     }
   }, [fetcher.data]);
 
+  const statusCheckerRedirectFlag = useFeature('status-checker-redirects');
+
   return (
     <div className="max-w-prose">
       {fetcher.data && 'status' in fetcher.data && fetcher.data.statusId ? (
@@ -180,12 +183,18 @@ export default function StatusCheckerMyself() {
               {fetcher.data.status.name && <ClientFriendlyStatusMarkdown content={fetcher.data.status.name} />}
             </div>
           </ContextualAlert>
-          <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} className="mt-12" endIcon={faChevronRight}>
-            {t('status:myself.check-another')}
-          </ButtonLink>
-          <InlineLink to={t('status:myself.exit-link')} params={params} className="mt-6 block">
-            {t('status:myself.exit-btn')}
-          </InlineLink>
+          <div className="mt-12">
+            <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} endIcon={faChevronRight}>
+              {t('status:myself.check-another')}
+            </ButtonLink>
+          </div>
+          {statusCheckerRedirectFlag && (
+            <div className="mt-6">
+              <InlineLink to={t('status:myself.exit-link')} params={params} className="mt-6">
+                {t('status:myself.exit-btn')}
+              </InlineLink>
+            </div>
+          )}
         </>
       ) : (
         <>
@@ -210,9 +219,11 @@ export default function StatusCheckerMyself() {
               <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errors?.sin} defaultValue="" />
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <ButtonLink id="back-button" routeId="$lang/_public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
-                {t('status:myself.form.back-btn')}
-              </ButtonLink>
+              {statusCheckerRedirectFlag && (
+                <ButtonLink id="back-button" routeId="$lang/_public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
+                  {t('status:myself.form.back-btn')}
+                </ButtonLink>
+              )}
               <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
                 {t('status:myself.form.submit')}
               </LoadingButton>
