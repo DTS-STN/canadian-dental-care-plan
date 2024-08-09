@@ -3,8 +3,7 @@ import { Outlet, isRouteErrorResponse, useLoaderData, useNavigate, useRouteError
 
 import { NotFoundError, ProtectedLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/protected-layout';
 import SessionTimeout from '~/components/session-timeout';
-import { ApiSessionAction } from '~/routes/api/session';
-import { useApiSession } from '~/utils/api-utils';
+import { useApiSession } from '~/utils/api-session-utils';
 import { getPublicEnv } from '~/utils/env-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 
@@ -42,7 +41,7 @@ export default function Layout() {
   }
 
   function handleOnSessionExtend() {
-    apiSession.submit({ action: ApiSessionAction.Extend });
+    apiSession.submit({ action: 'extend' });
   }
 
   return (

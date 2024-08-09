@@ -7,19 +7,17 @@ import { json, redirectDocument } from '@remix-run/node';
 import { z } from 'zod';
 
 import { getSessionService } from '~/services/session-service.server';
+import { getApiSessionRedirectToUrl } from '~/utils/api-session-utils.server';
+import { APP_LOCALES } from '~/utils/locale-utils';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('routes/api/session');
 
-export enum ApiSessionAction {
-  End = 'end',
-  Extend = 'extend',
-}
+const API_SESSION_ACTIONS = ['end', 'extend'] as const;
+export type ApiSessionAction = (typeof API_SESSION_ACTIONS)[number];
 
-const bodySchema = z.object({
-  action: z.nativeEnum(ApiSessionAction),
-  redirectTo: z.string().trim().nullable().optional(),
-});
+const API_SESSION_REDIRECT_TO_OPTIONS = ['cdcp-website', 'cdcp-website-apply', 'cdcp-website-status'] as const;
+export type ApiSessionRedirectTo = (typeof API_SESSION_REDIRECT_TO_OPTIONS)[number];
 
 export async function action({ context: { session }, request }: ActionFunctionArgs) {
   const sessionId = session.id;
@@ -30,6 +28,12 @@ export async function action({ context: { session }, request }: ActionFunctionAr
     throw json({ message: 'Method not allowed' }, { status: 405 });
   }
 
+  const bodySchema = z.object({
+    action: z.enum(API_SESSION_ACTIONS),
+    locale: z.enum(APP_LOCALES).optional() satisfies z.ZodType<AppLocale | null | undefined>,
+    redirectTo: z.enum(API_SESSION_REDIRECT_TO_OPTIONS).optional(),
+  });
+
   const requestBody = await request.json();
   const parsedBody = bodySchema.safeParse(requestBody);
 
@@ -38,22 +42,23 @@ export async function action({ context: { session }, request }: ActionFunctionAr
     return json({ errors: parsedBody.error.flatten().fieldErrors }, { status: 400 });
   }
 
-  const { action, redirectTo } = parsedBody.data;
+  const { action, locale = 'en', redirectTo } = parsedBody.data;
 
   switch (action) {
-    case ApiSessionAction.End: {
-      log.debug("Ending user's server-side session; sessionId: [%s], redirectTo: [%s]", sessionId, redirectTo);
+    case 'end': {
+      log.debug("Ending user's server-side session; sessionId: [%s], locale: [%s], redirectTo: [%s]", sessionId, locale, redirectTo);
       const sessionService = await getSessionService();
       const headers = { 'Set-Cookie': await sessionService.destroySession(session) };
 
       if (redirectTo) {
-        return redirectDocument(redirectTo, { headers });
+        const redirectToUrl = getApiSessionRedirectToUrl(redirectTo, locale);
+        return redirectDocument(redirectToUrl, { headers });
       }
 
       return new Response(null, { headers, status: 204 });
     }
 
-    case ApiSessionAction.Extend: {
+    case 'extend': {
       log.debug("Extending user's server-side session lifetime; sessionId: [%s]", sessionId);
       return new Response(null, { status: 204 });
     }
