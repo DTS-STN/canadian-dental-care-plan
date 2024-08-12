@@ -17,15 +17,17 @@ import type status from '../public/locales/en/status.json';
 import type stubSinEditor from '../public/locales/en/stub-sin-editor.json';
 import type unableToProcessRequest from '../public/locales/en/unable-to-process-request.json';
 import type { PublicEnv } from '~/utils/env-utils.server';
+import type { APP_LOCALES } from '~/utils/locale-utils';
 
 /**
  * Application-scoped global types.
  */
 declare global {
   /**
-   * Represents the locale of the application.
+   * A union type representing the possible values for the application locale.
+   * This type is derived from the elements of the `APP_LOCALES` array.
    */
-  type AppLocale = 'en' | 'fr';
+  type AppLocale = (typeof APP_LOCALES)[number];
 
   /**
    * Add the public environment variables to the global window type.
@@ -33,6 +35,15 @@ declare global {
   interface Window {
     env: PublicEnv;
   }
+
+  /**
+   * Extract from `T` those types that are assignable to `U`, where `U` must exist in `T`.
+   *
+   * Similar to `Extract` but requires the extraction list to be composed of valid members of `T`.
+   *
+   * @see https://github.com/pelotom/type-zoo?tab=readme-ov-file#extractstrictt-u-extends-t
+   */
+  type ExtractStrict<T, U extends T> = T extends U ? T : never;
 
   /**
    * Drop keys `K` from `T`, where `K` must exist in `T`.

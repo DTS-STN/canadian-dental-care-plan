@@ -152,7 +152,7 @@ export function findRouteById(id: string, routes: Array<Route> = []): Route | un
 }
 
 export function getPathById(id: string, params: Params = {}) {
-  const { lang = 'en' } = params as { lang?: 'en' | 'fr' };
+  const { lang = 'en' } = params as { lang?: AppLocale };
 
   const route = findRouteById(id, routes);
   const path = route?.paths?.[lang];
