@@ -414,9 +414,11 @@ export default function ReviewInformation() {
             </Button>
           </div>
         </fetcher.Form>
-        <InlineLink routeId="$lang/_public/apply/$id/child/exit-application" params={params} className="mt-8 block font-lato font-semibold">
-          {t('apply-child:review-adult-information.exit-button')}
-        </InlineLink>
+        <div className="mt-8">
+          <InlineLink routeId="$lang/_public/apply/$id/child/exit-application" params={params}>
+            {t('apply-child:review-adult-information.exit-button')}
+          </InlineLink>
+        </div>
       </div>
       {payload && (
         <div className="mt-8">
