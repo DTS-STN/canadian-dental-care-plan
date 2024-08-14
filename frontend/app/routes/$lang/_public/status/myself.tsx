@@ -245,6 +245,7 @@ function StatusNotFound() {
           {t('myself.status-not-found.heading')}
         </h2>
         <p className="mb-2">{t('myself.status-not-found.please-review')}</p>
+        <p className="mb-2">{t('myself.status-not-found.if-submitted')}</p>
         <p>
           <Trans ns={handle.i18nNamespaces} i18nKey="myself.status-not-found.contact-service-canada" components={{ noWrap }} />
         </p>
