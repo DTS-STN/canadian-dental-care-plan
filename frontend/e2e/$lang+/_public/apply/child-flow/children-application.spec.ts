@@ -2,7 +2,6 @@ import { expect, test } from '@playwright/test';
 
 import { PlaywrightApplyChildPage } from '../../../../models/PlaywrightApplyChildPage';
 import { PlaywrightApplyPage } from '../../../../models/PlaywrightApplyPage';
-import { calculateDOB } from '../../../../utils/helpers';
 
 test.describe('Children application', () => {
   test.beforeEach('Navigate to child application', async ({ page }) => {
@@ -50,21 +49,7 @@ test.describe('Children application', () => {
     });
 
     await test.step('Should navigate to child information page', async () => {
-      await applyChildPage.isLoaded('children-information');
-
-      await page.getByRole('textbox', { name: 'First name' }).fill('Josh');
-      await page.getByRole('textbox', { name: 'Last name' }).fill('Smith');
-
-      const { year, month, day } = calculateDOB(25);
-
-      await page.getByRole('combobox', { name: 'Month' }).selectOption(month);
-      await page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
-      await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
-
-      await page.getByRole('group', { name: 'Does this child have a Social Insurance Number (SIN)?' }).getByRole('radio', { name: 'Yes, this child has a SIN' }).check();
-      await page.getByRole('textbox', { name: 'Enter the 9-digit SIN' }).fill('700000003');
-
-      await page.getByRole('group', { name: 'Are you the parent or legal guardian of this child?' }).getByRole('radio', { name: 'Yes' }).check();
+      await applyChildPage.fillChildInformationForm(25, 'Yes');
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
@@ -92,21 +77,7 @@ test.describe('Children application', () => {
     });
 
     await test.step('Should navigate to child information page', async () => {
-      await applyChildPage.isLoaded('children-information');
-
-      await page.getByRole('textbox', { name: 'First name' }).fill('Josh');
-      await page.getByRole('textbox', { name: 'Last name' }).fill('Smith');
-
-      const { year, month, day } = calculateDOB(12);
-
-      await page.getByRole('combobox', { name: 'Month' }).selectOption(month);
-      await page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
-      await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
-
-      await page.getByRole('group', { name: 'Does this child have a Social Insurance Number (SIN)?' }).getByRole('radio', { name: 'Yes, this child has a SIN' }).check();
-      await page.getByRole('textbox', { name: 'Enter the 9-digit SIN' }).fill('700000003');
-
-      await page.getByRole('group', { name: 'Are you the parent or legal guardian of this child?' }).getByRole('radio', { name: 'No' }).check();
+      await applyChildPage.fillChildInformationForm(12, 'No');
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 
@@ -134,21 +105,7 @@ test.describe('Children application', () => {
     });
 
     await test.step('Should navigate to child information page', async () => {
-      await applyChildPage.isLoaded('children-information');
-
-      await page.getByRole('textbox', { name: 'First name' }).fill('Josh');
-      await page.getByRole('textbox', { name: 'Last name' }).fill('Smith');
-
-      const { year, month, day } = calculateDOB(12);
-
-      await page.getByRole('combobox', { name: 'Month' }).selectOption(month);
-      await page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
-      await page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
-
-      await page.getByRole('group', { name: 'Does this child have a Social Insurance Number (SIN)?' }).getByRole('radio', { name: 'Yes, this child has a SIN' }).check();
-      await page.getByRole('textbox', { name: 'Enter the 9-digit SIN' }).fill('700000003');
-
-      await page.getByRole('group', { name: 'Are you the parent or legal guardian of this child?' }).getByRole('radio', { name: 'Yes' }).check();
+      await applyChildPage.fillChildInformationForm(12, 'Yes');
       await page.getByRole('button', { name: 'Continue' }).click();
     });
 

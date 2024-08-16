@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 
-import { fillOutAddress } from '../utils/helpers';
+import { calculateDOB, fillOutAddress } from '../utils/helpers';
 import { PlaywrightBasePage } from './PlaywrightBasePage';
 
 export class PlaywrightApplyChildPage extends PlaywrightBasePage {
@@ -93,6 +93,24 @@ export class PlaywrightApplyChildPage extends PlaywrightBasePage {
   async fillTaxFilingForm(fileTaxes: string) {
     await this.isLoaded('tax-filing');
     await this.page.getByRole('radio', { name: fileTaxes, exact: true }).check();
+  }
+
+  async fillChildInformationForm(age: number, isParentOrGuardian: string) {
+    await this.isLoaded('children-information');
+
+    await this.page.getByRole('textbox', { name: 'First name' }).fill('Josh');
+    await this.page.getByRole('textbox', { name: 'Last name' }).fill('Smith');
+
+    const { year, month, day } = calculateDOB(age);
+
+    await this.page.getByRole('combobox', { name: 'Month' }).selectOption(month);
+    await this.page.getByRole('textbox', { name: 'Day (DD)' }).fill(day);
+    await this.page.getByRole('textbox', { name: 'Year (YYYY)' }).fill(year);
+
+    await this.page.getByRole('group', { name: 'Does this child have a Social Insurance Number (SIN)?' }).getByRole('radio', { name: 'Yes, this child has a SIN' }).check();
+    await this.page.getByRole('textbox', { name: 'Enter the 9-digit SIN' }).fill('700000003');
+
+    await this.page.getByRole('group', { name: 'Are you the parent or legal guardian of this child?' }).getByRole('radio', { name: isParentOrGuardian }).check();
   }
 
   async fillApplicantInformationForm() {
