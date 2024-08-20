@@ -149,7 +149,7 @@ export default function StatusCheckerMyself() {
       try {
         const response = captchaRef.current.getResponse();
         formData.set('h-captcha-response', response);
-      } catch (error) {
+      } catch {
         /* intentionally ignore and proceed with submission */
       } finally {
         captchaRef.current.resetCaptcha();

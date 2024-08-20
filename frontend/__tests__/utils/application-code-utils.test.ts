@@ -23,8 +23,6 @@ describe('~/utils/application-code-utils.ts', () => {
     it('should return false for inputs that are of valid length and invalid charatcers', () => {
       expect(isValidCodeOrNumber('123ABC')).toEqual(false);
     });
-
-    it;
   });
 
   describe('formatSubmissionApplicationCode()', () => {
