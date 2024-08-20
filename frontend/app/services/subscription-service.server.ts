@@ -8,6 +8,7 @@ import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('subscription-service.server');
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const subscriptionInfoSchema = z.object({
   id: z.string().optional(),
   userId: z.string().optional(),
@@ -19,6 +20,7 @@ const subscriptionInfoSchema = z.object({
 
 type SubscriptionInfo = z.infer<typeof subscriptionInfoSchema>;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const userUpateInfoSchema = z.object({
   email: z.string(),
 });

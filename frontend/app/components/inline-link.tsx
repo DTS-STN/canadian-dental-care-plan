@@ -3,7 +3,7 @@ import type { ComponentProps } from 'react';
 import { AppLink } from '~/components/app-link';
 import { cn } from '~/utils/tw-utils';
 
-export interface InlineLinkProps extends ComponentProps<typeof AppLink> {}
+export type InlineLinkProps = ComponentProps<typeof AppLink>;
 
 export function InlineLink({ className, children, ...props }: InlineLinkProps) {
   return (
