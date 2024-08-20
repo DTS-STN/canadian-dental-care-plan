@@ -1,6 +1,9 @@
+import type { ReporterDescription } from '@playwright/test';
 import { defineConfig, devices } from '@playwright/test';
 
 const port = process.env.PORT ?? '3000';
+
+const reporter: ReporterDescription[] = [['list'], ['html']];
 
 export default defineConfig({
   testDir: './e2e',
@@ -10,7 +13,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: process.env.CI ? [...reporter, ['playwright-teamcity-reporter']] : reporter,
   use: { baseURL: `http://localhost:${port}/`, trace: 'on-first-retry' },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
