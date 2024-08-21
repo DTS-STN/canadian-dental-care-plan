@@ -1,4 +1,4 @@
-import { getPublicEnv } from './env-utils.server';
+import { getEnv } from './env-utils.server';
 
 /**
  * Returns the URL for applying to the Canadian Dental Care Plan (CDCP) website
@@ -8,7 +8,7 @@ import { getPublicEnv } from './env-utils.server';
  * @returns The URL for applying to the CDCP website.
  */
 export function getCdcpWebsiteApplyUrl(locale: AppLocale) {
-  const { CDCP_WEBSITE_APPLY_URL_EN, CDCP_WEBSITE_APPLY_URL_FR } = getPublicEnv();
+  const { CDCP_WEBSITE_APPLY_URL_EN, CDCP_WEBSITE_APPLY_URL_FR } = getEnv();
   return locale === 'fr' ? CDCP_WEBSITE_APPLY_URL_FR : CDCP_WEBSITE_APPLY_URL_EN;
 }
 
@@ -20,7 +20,7 @@ export function getCdcpWebsiteApplyUrl(locale: AppLocale) {
  * @returns The URL for checking the status of an application on the CDCP website.
  */
 export function getCdcpWebsiteStatusUrl(locale: AppLocale) {
-  const { CDCP_WEBSITE_STATUS_URL_EN, CDCP_WEBSITE_STATUS_URL_FR } = getPublicEnv();
+  const { CDCP_WEBSITE_STATUS_URL_EN, CDCP_WEBSITE_STATUS_URL_FR } = getEnv();
   return locale === 'fr' ? CDCP_WEBSITE_STATUS_URL_FR : CDCP_WEBSITE_STATUS_URL_EN;
 }
 
@@ -32,6 +32,6 @@ export function getCdcpWebsiteStatusUrl(locale: AppLocale) {
  * @returns The base URL of the CDCP website.
  */
 export function getCdcpWebsiteUrl(locale: AppLocale) {
-  const { CDCP_WEBSITE_URL_EN, CDCP_WEBSITE_URL_FR } = getPublicEnv();
+  const { CDCP_WEBSITE_URL_EN, CDCP_WEBSITE_URL_FR } = getEnv();
   return locale === 'fr' ? CDCP_WEBSITE_URL_FR : CDCP_WEBSITE_URL_EN;
 }

@@ -1,33 +1,27 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { getClientEnv } from '~/utils/env-utils';
-import { getPublicEnv } from '~/utils/env-utils.server';
-
-vi.mock('~/utils/env-utils.server', () => ({
-  getPublicEnv: vi.fn(),
-}));
 
 describe('getClientEnv', () => {
   afterEach(() => {
     vi.resetAllMocks();
     vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
   });
 
   it('should return the public environment variables from the window object when called from a client-side browser', () => {
-    const env = { I18NEXT_DEBUG: false };
+    const env = { I18NEXT_DEBUG: true };
 
     vi.stubGlobal('document', new Document());
     vi.stubGlobal('window', { env });
 
-    expect(getClientEnv()).toEqual(env);
+    expect(getClientEnv()).toMatchObject(env);
   });
 
   it('should return the public environment variables from process.env when called from a server-side component', () => {
-    const env = { I18NEXT_DEBUG: false };
-
     vi.stubGlobal('document', undefined);
-    vi.mocked(getPublicEnv, { partial: true }).mockReturnValue(env);
+    vi.stubEnv('I18NEXT_DEBUG', 'true');
 
-    expect(getClientEnv()).toEqual(env);
+    expect(getClientEnv()).toMatchObject({ I18NEXT_DEBUG: true });
   });
 });

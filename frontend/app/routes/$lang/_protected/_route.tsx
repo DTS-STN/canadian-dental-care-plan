@@ -4,7 +4,7 @@ import { Outlet, isRouteErrorResponse, useLoaderData, useNavigate, useRouteError
 import { NotFoundError, ProtectedLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/protected-layout';
 import SessionTimeout from '~/components/session-timeout';
 import { useApiSession } from '~/utils/api-session-utils';
-import { getPublicEnv } from '~/utils/env-utils.server';
+import { getClientEnv } from '~/utils/env-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 
 export const handle = {
@@ -13,7 +13,7 @@ export const handle = {
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
-  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = getPublicEnv();
+  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = getClientEnv();
   return { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
 }
 
