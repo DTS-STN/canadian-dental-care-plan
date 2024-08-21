@@ -52,7 +52,7 @@
     "i18next": "^23.14.0",
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-fs-backend": "^2.3.2",
-    "i18next-http-backend": "^2.6.0",
+    "i18next-http-backend": "^2.6.1",
     "ioredis": "^5.4.1",
     "isbot": "^5.1.17",
     "jose": "^5.7.0",
