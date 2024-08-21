@@ -2,7 +2,6 @@
 import { installGlobals } from '@remix-run/node';
 
 import react from '@vitejs/plugin-react';
-import envOnly from 'vite-env-only';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { configDefaults, defineConfig } from 'vitest/config';
 
@@ -11,7 +10,7 @@ import { configDefaults, defineConfig } from 'vitest/config';
 installGlobals({ nativeFetch: true });
 
 export default defineConfig({
-  plugins: [envOnly({}), react(), tsconfigPaths()],
+  plugins: [react(), tsconfigPaths()],
   test: {
     pool: 'forks',
     testTimeout: 50000,

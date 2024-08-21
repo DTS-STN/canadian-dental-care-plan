@@ -8,7 +8,6 @@ import { config as fontAwesomeConfig } from '@fortawesome/fontawesome-svg-core';
 import fontawesomeStyleSheet from '@fortawesome/fontawesome-svg-core/styles.css?url';
 import { useTranslation } from 'react-i18next';
 import reactPhoneNumberInputStyleSheet from 'react-phone-number-input/style.css?url';
-import { serverOnly$ } from 'vite-env-only';
 
 import { getDynatraceService } from './services/dynatrace-service.server';
 import type { FeatureName } from './utils/env-utils';
@@ -16,7 +15,6 @@ import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import fontLatoStyleSheet from '~/fonts/lato.css?url';
 import fontNotoSansStyleSheet from '~/fonts/noto-sans.css?url';
-import { sessionMiddleware } from '~/middleware/session-middleware.server';
 import { getBuildInfoService } from '~/services/build-info-service.server';
 import tailwindStyleSheet from '~/tailwind.css?url';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
@@ -55,8 +53,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     { property: 'og:type', content: 'website' },
   ];
 };
-
-export const middleware = serverOnly$([sessionMiddleware]);
 
 export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
   const buildInfoService = getBuildInfoService();

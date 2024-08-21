@@ -6,7 +6,6 @@ import { readFileSync } from 'node:fs';
 import { expressDevServer } from 'remix-express-dev-server';
 import tailwindcss from 'tailwindcss';
 import { defineConfig } from 'vite';
-import envOnly from 'vite-env-only';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 interface JsonRoute {
@@ -57,7 +56,6 @@ export default defineConfig({
     host: true,
   },
   plugins: [
-    envOnly(),
     expressDevServer(),
     remix({
       ignoredRouteFiles: ['**/*'], // we will manually configure routes

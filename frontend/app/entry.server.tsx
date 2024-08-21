@@ -6,11 +6,8 @@ import { isbot } from 'isbot';
 import { PassThrough } from 'node:stream';
 import { renderToPipeableStream } from 'react-dom/server';
 import { I18nextProvider } from 'react-i18next';
-import { serverOnly$ } from 'vite-env-only';
 
 import { NonceProvider } from '~/components/nonce-context';
-import { securityHeadersMiddleware } from '~/middleware/securityheaders-middleware.server';
-import { sessionMiddleware } from '~/middleware/session-middleware.server';
 import { server } from '~/mocks/node';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { generateContentSecurityPolicy } from '~/utils/csp-utils.server';
@@ -36,10 +33,6 @@ if (ENABLED_MOCKS.length > 0) {
   server.listen({ onUnhandledRequest: 'bypass' });
   log.info('‼️ Mock Service Worker has been enabled with the following mocks: %s', ENABLED_MOCKS);
 }
-
-// NOTE :: GjB :: since middleware has not yet been officially added to Remix
-//                we must use serverOnly$(..) to prevent shipping to the client
-export const middleware = serverOnly$([securityHeadersMiddleware, sessionMiddleware]);
 
 /**
  * We need to extend the server-side session lifetime whenever a client-side
