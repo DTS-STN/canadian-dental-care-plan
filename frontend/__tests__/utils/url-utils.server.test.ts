@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { getPublicEnv } from '~/utils/env-utils.server';
+import { getEnv } from '~/utils/env-utils.server';
 import { getCdcpWebsiteApplyUrl, getCdcpWebsiteStatusUrl, getCdcpWebsiteUrl } from '~/utils/url-utils.server';
 
-// Mock the getPublicEnv function
+// Mock the getEnv function
 vi.mock('~/utils/env-utils.server', () => ({
-  getPublicEnv: vi.fn(),
+  getEnv: vi.fn(),
 }));
 
 describe('CDCP Website URL functions', () => {
@@ -15,7 +15,7 @@ describe('CDCP Website URL functions', () => {
 
   describe('getCdcpWebsiteApplyUrl', () => {
     it('should return the French URL for apply when locale is "fr"', () => {
-      vi.mocked(getPublicEnv, { partial: true }).mockReturnValue({
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({
         CDCP_WEBSITE_APPLY_URL_EN: 'https://example.com/en/apply',
         CDCP_WEBSITE_APPLY_URL_FR: 'https://example.com/fr/apply',
       });
@@ -25,7 +25,7 @@ describe('CDCP Website URL functions', () => {
     });
 
     it('should return the English URL for apply when locale is "en"', () => {
-      vi.mocked(getPublicEnv, { partial: true }).mockReturnValue({
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({
         CDCP_WEBSITE_APPLY_URL_EN: 'https://example.com/en/apply',
         CDCP_WEBSITE_APPLY_URL_FR: 'https://example.com/fr/apply',
       });
@@ -37,7 +37,7 @@ describe('CDCP Website URL functions', () => {
 
   describe('getCdcpWebsiteStatusUrl', () => {
     it('should return the French URL for status when locale is "fr"', () => {
-      vi.mocked(getPublicEnv, { partial: true }).mockReturnValue({
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({
         CDCP_WEBSITE_STATUS_URL_EN: 'https://example.com/en/status',
         CDCP_WEBSITE_STATUS_URL_FR: 'https://example.com/fr/status',
       });
@@ -47,7 +47,7 @@ describe('CDCP Website URL functions', () => {
     });
 
     it('should return the English URL for status when locale is "en"', () => {
-      vi.mocked(getPublicEnv, { partial: true }).mockReturnValue({
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({
         CDCP_WEBSITE_STATUS_URL_EN: 'https://example.com/en/status',
         CDCP_WEBSITE_STATUS_URL_FR: 'https://example.com/fr/status',
       });
@@ -59,7 +59,7 @@ describe('CDCP Website URL functions', () => {
 
   describe('getCdcpWebsiteUrl', () => {
     it('should return the French base URL when locale is "fr"', () => {
-      vi.mocked(getPublicEnv, { partial: true }).mockReturnValue({
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({
         CDCP_WEBSITE_URL_EN: 'https://example.com/en',
         CDCP_WEBSITE_URL_FR: 'https://example.com/fr',
       });
@@ -69,7 +69,7 @@ describe('CDCP Website URL functions', () => {
     });
 
     it('should return the English base URL when locale is "en"', () => {
-      vi.mocked(getPublicEnv, { partial: true }).mockReturnValue({
+      vi.mocked(getEnv, { partial: true }).mockReturnValue({
         CDCP_WEBSITE_URL_EN: 'https://example.com/en',
         CDCP_WEBSITE_URL_FR: 'https://example.com/fr',
       });

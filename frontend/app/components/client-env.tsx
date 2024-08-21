@@ -1,8 +1,10 @@
 import type { ScriptProps } from '@remix-run/react/dist/components';
 
-import type { PublicEnv } from '~/utils/env-utils.server';
+import type { ClientEnv } from '~/utils/env-utils';
 
-export type ClientEnvProps = ScriptProps & { env: PublicEnv };
+export interface ClientEnvProps extends ScriptProps {
+  env: ClientEnv;
+}
 
 /**
  * The <ClientEnv> component is used to provide the browser access to the

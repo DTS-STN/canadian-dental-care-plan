@@ -2,7 +2,9 @@ import { DiagLogLevel } from '@opentelemetry/api';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
-import { generateCryptoKey } from './crypto-utils.server';
+import { generateCryptoKey } from '~/utils/crypto-utils.server';
+import type { FeatureName } from '~/utils/env-utils';
+import { clientEnvSchema } from '~/utils/env-utils';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('env-utils.server');
@@ -22,27 +24,7 @@ function tryOrElseFalse(fn: () => unknown) {
 const validMockNames = ['cct', 'lookup', 'power-platform', 'raoidc', 'status-check', 'wsaddress', 'subscription', 'application-history', 'user-api'] as const;
 export type MockName = (typeof validMockNames)[number];
 
-const validFeatureNames = [
-  'doc-upload',
-  'email-alerts',
-  'hcaptcha',
-  'view-personal-info',
-  'view-applications',
-  'view-letters',
-  'view-messages',
-  'edit-personal-info',
-  'status',
-  'show-prototype-banner',
-  'authenticated-status-check',
-  'update-governmental-benefit',
-  'dependent-status-checker',
-  'view-payload',
-  'status-checker-redirects',
-] as const;
-export type FeatureName = (typeof validFeatureNames)[number];
-
 // refiners
-const areValidFeatureNames = (arr: Array<string>) => arr.every((featureName) => validFeatureNames.includes(featureName as FeatureName));
 const areValidMockNames = (arr: Array<string>) => arr.every((mockName) => validMockNames.includes(mockName as MockName));
 const isValidPublicKey = (val: string) => tryOrElseFalse(() => generateCryptoKey(val, 'verify'));
 const isValidPrivateKey = (val: string) => tryOrElseFalse(() => generateCryptoKey(val, 'sign'));
@@ -56,10 +38,8 @@ const toBoolean = (val?: string) => val === 'true';
  * Environment variables that will be available to server only.
  */
 // prettier-ignore
-const serverEnv = z.object({
+const serverEnv = clientEnvSchema.extend({
   NODE_ENV: z.enum(['production', 'development', 'test']),
-  ENABLED_FEATURES: z.string().transform(emptyToUndefined).transform(csvToArray).refine(areValidFeatureNames).default(""),
-  I18NEXT_DEBUG: z.string().transform(toBoolean).default('false'),
 
   // applicant category codes
   APPLICANT_CATEGORY_CODE_INDIVIDUAL: z.coerce.number().default(775170000),
@@ -116,10 +96,6 @@ const serverEnv = z.object({
 
   SHOW_SIN_EDIT_STUB_PAGE : z.string().transform(toBoolean).default('false'),
 
-  // base URIs for My Service Canada Account variations
-  SCCH_BASE_URI: z.string().url().default('https://service.canada.ca'),
-  MSCA_BASE_URI: z.string().url().default('https://srv136.services.gc.ca'),
-
   // auth/oidc settings
   AUTH_JWT_PRIVATE_KEY: z.string().refine(isValidPrivateKey),
   AUTH_JWT_PUBLIC_KEY: z.string().refine(isValidPublicKey),
@@ -149,8 +125,7 @@ const serverEnv = z.object({
   SESSION_COOKIE_HTTP_ONLY: z.string().transform(toBoolean).default('true'),
   SESSION_COOKIE_SECURE: z.string().transform(toBoolean).default('true'),
   SESSION_FILE_DIR: z.string().trim().min(1).default('./node_modules/cache/sessions/'),
-  SESSION_TIMEOUT_SECONDS: z.coerce.number().min(0).default(19 * 60),
-  SESSION_TIMEOUT_PROMPT_SECONDS: z.coerce.number().min(0).default(5 * 60),
+
 
   // redis server configuration
   REDIS_SENTINEL_NAME: z.string().trim().transform(emptyToUndefined).optional(),
@@ -198,10 +173,6 @@ const serverEnv = z.object({
   OTEL_TRACES_ENDPOINT: z.string().trim().transform(emptyToUndefined).optional(),
   OTEL_USE_CONSOLE_EXPORTERS: z.string().transform(toBoolean).default('false'),
 
-  // Adobe Analytics scripts
-  ADOBE_ANALYTICS_SRC: z.string().url().optional(),
-  ADOBE_ANALYTICS_JQUERY_SRC: z.string().url().default('https://code.jquery.com/jquery-3.7.1.min.js'),
-
   // Dynatrace OneAgent (RUM) - Manual insertion - Retrieve via REST API - Use the Dynatrace API to insert the RUM JavaScript.
   // @see https://docs.dynatrace.com/docs/platform-modules/digital-experience/web-applications/initial-setup/rum-injection#retrieve-via-rest-api
   DYNATRACE_API_RUM_SCRIPT_TOKEN: z.string().trim().transform(emptyToUndefined).optional(),
@@ -219,29 +190,6 @@ const serverEnv = z.object({
 
 export type ServerEnv = z.infer<typeof serverEnv>;
 
-/**
- * Environment variables that are safe to expose publicly.
- * ⚠️ IMPORTANT: DO NOT PUT SENSITIVE CONFIGURATIONS HERE ⚠️
- */
-const publicEnv = serverEnv.pick({
-  CDCP_WEBSITE_APPLY_URL_EN: true,
-  CDCP_WEBSITE_APPLY_URL_FR: true,
-  CDCP_WEBSITE_STATUS_URL_EN: true,
-  CDCP_WEBSITE_STATUS_URL_FR: true,
-  CDCP_WEBSITE_URL_EN: true,
-  CDCP_WEBSITE_URL_FR: true,
-  ENABLED_FEATURES: true,
-  I18NEXT_DEBUG: true,
-  SCCH_BASE_URI: true,
-  MSCA_BASE_URI: true,
-  SESSION_TIMEOUT_SECONDS: true,
-  SESSION_TIMEOUT_PROMPT_SECONDS: true,
-  ADOBE_ANALYTICS_SRC: true,
-  ADOBE_ANALYTICS_JQUERY_SRC: true,
-});
-
-export type PublicEnv = z.infer<typeof publicEnv>;
-
 export function getEnv() {
   const result = serverEnv.safeParse(process.env);
 
@@ -252,8 +200,8 @@ export function getEnv() {
   return result.data;
 }
 
-export function getPublicEnv() {
-  const result = publicEnv.safeParse(process.env);
+export function getClientEnv() {
+  const result = clientEnvSchema.safeParse(process.env);
 
   if (!result.success) {
     throw new Error(`Invalid application configuration: ${result.error}`);

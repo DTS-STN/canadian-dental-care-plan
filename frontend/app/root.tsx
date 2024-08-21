@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import reactPhoneNumberInputStyleSheet from 'react-phone-number-input/style.css';
 
 import { getDynatraceService } from './services/dynatrace-service.server';
+import type { FeatureName } from './utils/env-utils';
 import { ClientEnv } from '~/components/client-env';
 import { NonceContext } from '~/components/nonce-context';
 import fontLatoStyleSheet from '~/fonts/lato.css';
@@ -17,8 +18,7 @@ import fontNotoSansStyleSheet from '~/fonts/noto-sans.css';
 import { getBuildInfoService } from '~/services/build-info-service.server';
 import tailwindStyleSheet from '~/tailwind.css';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
-import type { FeatureName } from '~/utils/env-utils.server';
-import { getPublicEnv } from '~/utils/env-utils.server';
+import { getClientEnv } from '~/utils/env-utils.server';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { useI18nNamespaces, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
 import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
@@ -63,7 +63,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
 
   const buildInfo = buildInfoService.getBuildInfo();
   const dynatraceRumScript = await dynatraceService.retrieveRumScript();
-  const env = getPublicEnv();
+  const env = getClientEnv();
   const meta = {
     author: t('gcweb:meta.author'),
     description: t('gcweb:meta.description'),
