@@ -21,10 +21,9 @@
 # 	$ docker run --init --rm --publish 3000:3000 canadian-dental-care-plan
 #
 
+ARG BASE_IMAGE=docker.io/node:20.17.0-bookworm-slim
 
-
-# base node image
-FROM docker.io/node:20.17.0-bookworm-slim AS base
+FROM $BASE_IMAGE AS base
 ENV NODE_ENV production
 
 
