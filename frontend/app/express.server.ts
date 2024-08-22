@@ -1,10 +1,13 @@
 import type { AppLoadContext } from '@remix-run/node';
+import { createRequestHandler } from '@remix-run/node';
 
 import { UTCDate } from '@date-fns/utc';
 import compression from 'compression';
 import type { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import { createExpressApp } from 'remix-create-express-app';
+import { createRemixRequest, sendRemixResponse } from 'remix-create-express-app/remix';
+import invariant from 'tiny-invariant';
 
 import { getSessionService } from './services/session-service.server';
 import { getEnv } from './utils/env-utils.server';
@@ -43,35 +46,9 @@ function securityHeadersRequestHandler(request: Request, response: Response, nex
   next();
 }
 
-async function sessionInitRequestHandler(request: Request, response: Response, next: NextFunction) {
-  function shouldSkip({ url: pathname }: Request) {
-    const statelessPaths = ['/api/readyz'];
-    return statelessPaths.includes(pathname);
-  }
-
-  if (shouldSkip(request)) {
-    log.debug('Stateless request to [%s] detected; bypassing session init', request.url);
-    return;
-  }
-
-  log.debug('Initializing server session...');
-  const session = await sessionService.getSession(request.headers.cookie);
-
-  // We use session-scoped CSRF tokens to ensure back button and multi-tab navigation still works.
-  // @see: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern
-  if (!session.has('csrfToken')) {
-    const csrfToken = randomString(32);
-    log.debug('Adding CSRF token [%s] to session', csrfToken);
-    session.set('csrfToken', csrfToken);
-  }
-
-  log.debug('Setting session.lastAccessTime');
-  session.set('lastAccessTime', new UTCDate().toISOString());
-
-  log.debug('Auto-committing session');
-  response.appendHeader('Set-Cookie', await sessionService.commitSession(session));
-
-  next();
+function shouldSkipSessionHandling({ url: pathname }: Request) {
+  const statelessPaths = ['/api/readyz'];
+  return statelessPaths.includes(pathname);
 }
 
 export const expressApp = await createExpressApp({
@@ -85,13 +62,56 @@ export const expressApp = await createExpressApp({
     app.use(securityHeadersRequestHandler);
     // log all requests using the loggingRequestHandler
     app.use(loggingRequestHandler);
-    // initialize sessions
-    app.use(sessionInitRequestHandler);
     // enable X-Forwarded-* header support to build OAuth callback URLs
     app.set('trust proxy', true);
   },
+  customRequestHandler: (defaultCreateRequestHandler) => {
+    return ({ build, getLoadContext, mode }) => {
+      const remixRequestHandler = createRequestHandler(build, mode);
+
+      return async (request: Request, response: Response, next: NextFunction) => {
+        try {
+          const loadContext = await getLoadContext?.(request, response);
+          invariant(loadContext, 'loadContext should not be undefined');
+
+          const remixRequest = createRemixRequest(request, response);
+          const remixResponse = await remixRequestHandler(remixRequest, loadContext);
+
+          if (!shouldSkipSessionHandling(request)) {
+            const sessionCookie = await sessionService.commitSession(loadContext.session);
+            remixResponse.headers.append('Set-Cookie', sessionCookie);
+          }
+
+          await sendRemixResponse(response, remixResponse);
+        } catch (error: unknown) {
+          // express doesn't support async functions,
+          // so we have to pass along the error manually using next()
+          return next(error);
+        }
+      };
+    };
+  },
   getLoadContext: async (request: Request, response: Response) => {
+    if (shouldSkipSessionHandling(request)) {
+      log.debug('Stateless request to [%s] detected; bypassing session init', request.url);
+      return {} as AppLoadContext;
+    }
+
+    log.debug('Initializing server session...');
+    const session = await sessionService.getSession(request.headers.cookie);
+
+    // We use session-scoped CSRF tokens to ensure back button and multi-tab navigation still works.
+    // @see: https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern
+    if (!session.has('csrfToken')) {
+      const csrfToken = randomString(32);
+      log.debug('Adding CSRF token [%s] to session', csrfToken);
+      session.set('csrfToken', csrfToken);
+    }
+
+    log.debug('Setting session.lastAccessTime');
+    session.set('lastAccessTime', new UTCDate().toISOString());
+
     log.debug('Adding session to ApplicationContext');
-    return { session: await sessionService.getSession(request.headers.cookie) } as AppLoadContext;
+    return { session } as AppLoadContext;
   },
 });
