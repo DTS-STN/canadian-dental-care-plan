@@ -63,7 +63,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     dcTermsTitle: t('gcweb:meta.title.template', { title: t('apply-adult-child:children.information.page-title', { childName: childNumber }) }),
   };
 
-  return json({ csrfToken, meta, defaultState: state.information, childName, editMode: state.editMode });
+  return json({ csrfToken, meta, defaultState: state.information, childName, editMode: state.editMode, isNew: state.isNew });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -211,7 +211,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ApplyFlowChildInformation() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, defaultState, childName, editMode } = useLoaderData<typeof loader>();
+  const { csrfToken, defaultState, childName, editMode, isNew } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
@@ -327,8 +327,8 @@ export default function ApplyFlowChildInformation() {
               name="isParent"
               legend={t('apply-adult-child:children.information.parent-legend')}
               options={[
-                { value: YesNoOption.Yes, children: t('apply-adult-child:children.information.radio-options.yes'), defaultChecked: defaultState?.isParent === true, readOnly: editMode },
-                { value: YesNoOption.No, children: t('apply-adult-child:children.information.radio-options.no'), defaultChecked: defaultState?.isParent === false, readOnly: editMode },
+                { value: YesNoOption.Yes, children: t('apply-adult-child:children.information.radio-options.yes'), defaultChecked: defaultState?.isParent === true, readOnly: !isNew },
+                { value: YesNoOption.No, children: t('apply-adult-child:children.information.radio-options.no'), defaultChecked: defaultState?.isParent === false, readOnly: !isNew },
               ]}
               errorMessage={errors?.isParent}
             />
