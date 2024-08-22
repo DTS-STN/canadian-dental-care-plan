@@ -72,13 +72,15 @@ export const expressApp = await createExpressApp({
       return async (request: Request, response: Response, next: NextFunction) => {
         try {
           const loadContext = await getLoadContext?.(request, response);
-          invariant(loadContext, 'loadContext should not be undefined');
+          invariant(loadContext, 'Expected loadContext to be defined');
 
           const remixRequest = createRemixRequest(request, response);
           const remixResponse = await remixRequestHandler(remixRequest, loadContext);
 
           if (!shouldSkipSessionHandling(request)) {
-            const sessionCookie = await sessionService.commitSession(loadContext.session);
+            const session = loadContext.session;
+            invariant(session, 'Expected session to be defined');
+            const sessionCookie = await sessionService.commitSession(session);
             remixResponse.headers.append('Set-Cookie', sessionCookie);
           }
 
