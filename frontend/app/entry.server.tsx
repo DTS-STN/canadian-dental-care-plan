@@ -17,11 +17,19 @@ import { getLocale, initI18n } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { randomHexString } from '~/utils/string-utils';
 
+// The express server must be exported so remix-express-vite-plugin can correctly handle it.
+// see: https://github.com/kiliman/remix-express-vite-plugin/blob/main/packages/remix-create-express-app/README.md#configuration
+export { expressApp as app } from '~/express.server';
+
 const abortDelay = 5_000;
+
+// instrumentation needs to be started as early as possible to ensure proper initialization
+const instrumentationService = getInstrumentationService();
+instrumentationService.startInstrumentation();
+
 const log = getLogger('entry.server');
 
 const { ENABLED_MOCKS } = getEnv();
-const instrumentationService = getInstrumentationService();
 
 if (ENABLED_MOCKS.length > 0) {
   server.listen({ onUnhandledRequest: 'bypass' });
@@ -43,13 +51,6 @@ if (ENABLED_MOCKS.length > 0) {
 export async function handleDataRequest(response: Response, { request }: LoaderFunctionArgs | ActionFunctionArgs) {
   log.debug('Touching session to extend its lifetime');
   instrumentationService.createCounter('http.server.requests').add(1);
-
-  //
-  // TODO :: GjB :: Remove this?
-  //
-  // const sessionService = await getSessionService();
-  // const session = await sessionService.getSession(request);
-  // response.headers.append('Set-Cookie', await sessionService.commitSession(session));
 
   return response;
 }

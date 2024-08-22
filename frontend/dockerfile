@@ -82,9 +82,6 @@ WORKDIR /home/node
 # COPY files in order of least → most likely to change to keep image sizes smaller
 COPY --from=prod-deps --chown=node:node /home/node/package.json /home/node/package-lock.json ./
 COPY --from=prod-deps --chown=node:node /home/node/node_modules/ ./node_modules/
-COPY --from=build --chown=node:node /home/node/express.server.ts ./
-COPY --from=build --chown=node:node /home/node/tsconfig.json ./
-COPY --from=build --chown=node:node /home/node/app/ ./app/
 COPY --from=build --chown=node:node /home/node/build/ ./build/
 COPY --from=build --chown=node:node /home/node/public/ ./public/
 COPY --from=build --chown=node:node /home/node/build-info.json ./
