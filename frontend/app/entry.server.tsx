@@ -17,6 +17,8 @@ import { getLocale, initI18n } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { randomHexString } from '~/utils/string-utils';
 
+// The express server must be exported so remix-express-vite-plugin can correctly handle it.
+// see: https://github.com/kiliman/remix-express-vite-plugin/blob/main/packages/remix-create-express-app/README.md#configuration
 export { expressApp as app } from '~/express.server';
 
 const abortDelay = 5_000;
