@@ -65,7 +65,11 @@ export const expressApp = await createExpressApp({
     // enable X-Forwarded-* header support to build OAuth callback URLs
     app.set('trust proxy', true);
   },
-  customRequestHandler: (defaultCreateRequestHandler) => {
+  customRequestHandler: () => {
+    /**
+     * A custom request handler that will auto-commit the session after
+     * remix has performed all of its request processing.
+     */
     return ({ build, getLoadContext, mode }) => {
       const remixRequestHandler = createRequestHandler(build, mode);
 
@@ -80,6 +84,8 @@ export const expressApp = await createExpressApp({
           if (!shouldSkipSessionHandling(request)) {
             const session = loadContext.session;
             invariant(session, 'Expected session to be defined');
+
+            log.debug('Auto-committing session and creating session cookie');
             const sessionCookie = await sessionService.commitSession(session);
             remixResponse.headers.append('Set-Cookie', sessionCookie);
           }
@@ -110,10 +116,11 @@ export const expressApp = await createExpressApp({
       session.set('csrfToken', csrfToken);
     }
 
-    log.debug('Setting session.lastAccessTime');
-    session.set('lastAccessTime', new UTCDate().toISOString());
+    const lastAccessTime = new UTCDate().toISOString();
+    log.debug('Setting session.lastAccessTime to [%s]', lastAccessTime);
+    session.set('lastAccessTime', lastAccessTime);
 
-    log.debug('Adding session to ApplicationContext');
+    log.debug('Adding session to AppLoadContext');
     return { session } as AppLoadContext;
   },
 });
