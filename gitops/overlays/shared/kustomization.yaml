@@ -19,3 +19,4 @@ labels:
       app.kubernetes.io/tier: nonprod
 resources:
   - ../../base/maintenance/
+  - ../../base/squid-proxy/
