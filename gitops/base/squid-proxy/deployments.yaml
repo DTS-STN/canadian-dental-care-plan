@@ -28,10 +28,10 @@ spec:
               port: squid
           resources:
             requests:
-              cpu: 25m
+              cpu: 100m
               memory: 32Mi
             limits:
-              cpu: 50
+              cpu: 200m
               memory: 64Mi
           securityContext:
             allowPrivilegeEscalation: false
