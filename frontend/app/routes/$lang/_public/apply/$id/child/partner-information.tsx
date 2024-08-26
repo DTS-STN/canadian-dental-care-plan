@@ -201,6 +201,7 @@ export default function ApplyFlowApplicationInformation() {
                 autoComplete="given-name"
                 defaultValue={defaultState?.firstName ?? ''}
                 errorMessage={errors?.firstName}
+                // eslint-disable-next-line jsx-a11y/aria-props
                 aria-description={t('partner-information.name-instructions')}
                 required
               />
@@ -213,6 +214,7 @@ export default function ApplyFlowApplicationInformation() {
                 autoComplete="family-name"
                 defaultValue={defaultState?.lastName ?? ''}
                 errorMessage={errors?.lastName}
+                // eslint-disable-next-line jsx-a11y/aria-props
                 aria-description={t('partner-information.name-instructions')}
                 required
               />
