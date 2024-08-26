@@ -14,8 +14,8 @@
     "lint": "eslint --ignore-path ./.gitignore --cache --cache-location ./node_modules/.cache/eslint ./",
     "typecheck": "tsc",
     "test:all": "npm run test:unit run && npm run test:e2e",
-    "test:e2e": "npm run test:e2e:install && playwright test",
-    "test:e2e:install": "playwright install --with-deps chromium",
+    "test:e2e": "playwright test",
+    "test:e2e:install": "playwright install chromium",
     "test:unit": "vitest",
     "test:unit:coverage": "vitest run --coverage",
     "test:unit:ui": "vitest --ui --coverage.enabled=true"
