@@ -65,7 +65,7 @@ export function handleError(error: unknown, { request }: LoaderFunctionArgs | Ac
   // cancellation and race-condition handling can cause a lot of requests to be aborted
   if (!request.signal.aborted) {
     if (error instanceof Error) {
-      log.error('Unexpected server error:', error);
+      log.error(error);
     } else {
       log.error('Unexpected server error: [%j]', error);
     }

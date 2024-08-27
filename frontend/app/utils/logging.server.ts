@@ -1,7 +1,11 @@
+import { isEmpty, omit } from 'moderndash';
 import os from 'node:os';
+import util from 'node:util';
+import { LEVEL, MESSAGE, SPLAT } from 'triple-beam';
 import type { LeveledLogMethod, Logger } from 'winston';
 import { createLogger, format, transports } from 'winston';
 import 'winston-daily-rotate-file';
+import { fullFormat } from 'winston-error-format';
 import { z } from 'zod';
 
 // see https://github.com/winstonjs/winston?tab=readme-ov-file#using-custom-logging-levels
@@ -16,12 +20,12 @@ const env = {
 } as const;
 
 /**
- * Formats a log category string to be a fixed length. When the category string
+ * Formats a log label string to be a fixed length. When the label string
  * is longer than the specified size, it is truncated and prefixed by a
  * horizontal ellipsis (…).
  */
-function formatCategory(category: string, size: number) {
-  const str = category.padStart(size);
+function formatLabel(label: string, size: number) {
+  const str = label.padStart(size);
   return str.length <= size ? str : `…${str.slice(-size + 1)}`;
 }
 
@@ -33,9 +37,21 @@ export const getLogger = (category: string) => {
     level: env.logLevel,
     levels: logLevels,
     format: format.combine(
+      format.label({ label: category }),
       format.timestamp(),
       format.splat(),
-      format.printf((info) => `${info.timestamp} ${info.level.toUpperCase().padStart(7)} --- [${formatCategory(category, 25)}]: ${info.stack ?? info.message}`),
+      fullFormat(),
+      format.printf((info) => {
+        const { label, level, message, timestamp, ...rest } = info;
+        let formattedInfo = `${timestamp} ${level.toUpperCase().padStart(7)} --- [${formatLabel(label, 25)}]: ${message}`;
+
+        if (!isEmpty(rest)) {
+          const stripped = omit(rest, [LEVEL, MESSAGE, SPLAT]);
+          formattedInfo += ` --- ${util.inspect(stripped, false, null, true)}`;
+        }
+
+        return formattedInfo;
+      }),
     ),
     transports: [new transports.Console()],
   });
