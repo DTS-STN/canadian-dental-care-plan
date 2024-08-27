@@ -1,13 +1,6 @@
-/// <reference types="vitest" />
-import { installGlobals } from '@remix-run/node';
-
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { configDefaults, defineConfig } from 'vitest/config';
-
-// install global node polyfills
-// see: https://remix.run/docs/en/main/other-api/node#polyfills
-installGlobals({ nativeFetch: true });
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],

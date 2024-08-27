@@ -1,6 +1,5 @@
 import { vitePlugin as remix } from '@remix-run/dev';
 import type { DefineRouteFunction, DefineRoutesFunction } from '@remix-run/dev/dist/config/routes';
-import { installGlobals } from '@remix-run/node';
 
 import { readFileSync } from 'node:fs';
 import { expressDevServer } from 'remix-express-dev-server';
@@ -20,10 +19,6 @@ interface JsonRoute {
 }
 
 type Language = 'en' | 'fr';
-
-// install global node polyfills
-// see: https://remix.run/docs/en/main/other-api/node#polyfills
-installGlobals({ nativeFetch: true });
 
 function jsonRoutes(defineRoutesFn: DefineRoutesFunction, jsonRoutes: Array<JsonRoute>) {
   return defineRoutesFn((routeFn) => {
