@@ -1,4 +1,4 @@
-import { ProxyAgent, fetch as undiciFetch } from 'undici';
+import { ProxyAgent } from 'undici';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
@@ -6,8 +6,11 @@ import { getEnv } from '~/utils/env-utils.server';
 import { getFetchFn, instrumentedFetch } from '~/utils/fetch-utils.server';
 
 describe('fetch-utils.server', () => {
+  vi.stubGlobal('fetch', vi.fn());
+
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.resetModules();
   });
 
   describe('getFetchFn', () => {
@@ -23,11 +26,6 @@ describe('fetch-utils.server', () => {
 
     vi.mock('undici', () => ({
       ProxyAgent: vi.fn(),
-      fetch: vi.fn(),
-    }));
-
-    vi.mock('web-streams-node', () => ({
-      toNodeReadable: vi.fn(),
     }));
 
     it('should return global fetch when no proxy URL is provided', () => {
@@ -37,7 +35,7 @@ describe('fetch-utils.server', () => {
 
     it('should return custom fetch function when a proxy URL is provided', async () => {
       vi.mocked(getEnv, { partial: true }).mockReturnValue({ HTTP_PROXY_TLS_TIMEOUT: 1000 });
-      vi.mocked(undiciFetch, { partial: true }).mockResolvedValue({ status: 200 });
+      vi.mocked(fetch, { partial: true }).mockResolvedValue({ status: 200 });
 
       const proxyUrl = 'http://proxy.example.com';
       const fetchFn = getFetchFn(proxyUrl);
@@ -45,12 +43,12 @@ describe('fetch-utils.server', () => {
 
       await fetchFn('https://api.example.com');
       expect(ProxyAgent).toHaveBeenCalledWith({ uri: proxyUrl, proxyTls: { timeout: 1000 } });
-      expect(undiciFetch).toHaveBeenCalled();
+      expect(fetch).toHaveBeenCalled();
     });
 
     it('should return custom fetch function with specified timeout when a proxy URL and timeout value is provided', async () => {
       vi.mocked(getEnv, { partial: true }).mockReturnValue({ HTTP_PROXY_TLS_TIMEOUT: 1000 });
-      vi.mocked(undiciFetch, { partial: true }).mockResolvedValue({ status: 200 });
+      vi.mocked(fetch, { partial: true }).mockResolvedValue({ status: 200 });
 
       const proxyUrl = 'http://proxy.example.com';
       const fetchFn = getFetchFn(proxyUrl, 2000);
@@ -58,7 +56,7 @@ describe('fetch-utils.server', () => {
 
       await fetchFn('https://api.example.com');
       expect(ProxyAgent).toHaveBeenCalledWith({ uri: proxyUrl, proxyTls: { timeout: 2000 } });
-      expect(undiciFetch).toHaveBeenCalled();
+      expect(fetch).toHaveBeenCalled();
     });
   });
 
