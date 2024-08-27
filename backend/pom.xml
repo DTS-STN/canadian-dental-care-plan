@@ -23,7 +23,7 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 
 		<!-- NOTE: when updating Spring Boot, be sure to also update the <spring-boot.version> property below -->
-		<version>3.3.2</version>
+		<version>3.3.3</version>
 	</parent>
 
 
@@ -44,9 +44,9 @@
 		<immutables.version>2.10.1</immutables.version>
 		<jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
 		<johnzon.version>2.0.1</johnzon.version>
-		<mapstruct.version>1.5.5.Final</mapstruct.version>
-		<opentelemetry-instrumentation-bom.version>2.6.0</opentelemetry-instrumentation-bom.version>
-		<spring-boot.version>3.3.2</spring-boot.version>
+		<mapstruct.version>1.6.0</mapstruct.version>
+		<opentelemetry-instrumentation-bom.version>2.7.0</opentelemetry-instrumentation-bom.version>
+		<spring-boot.version>3.3.3</spring-boot.version>
 		<springdoc.version>2.6.0</springdoc.version>
 	</properties>
 
