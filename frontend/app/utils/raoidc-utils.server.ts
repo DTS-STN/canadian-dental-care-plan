@@ -6,7 +6,7 @@ import type { JWTPayload, JWTVerifyResult } from 'jose';
 import { SignJWT, compactDecrypt, importJWK, jwtVerify } from 'jose';
 import { createHash, subtle } from 'node:crypto';
 
-import type { FetchFunction } from './fetch-utils.server';
+import type { FetchFn } from './fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('raoidc-utils.server');
@@ -145,7 +145,7 @@ export interface JWKSet {
  *
  * @see https://datatracker.ietf.org/doc/html/rfc8414#section-3
  */
-export async function fetchServerMetadata(authServerUrl: string, fetchFn?: FetchFunction) {
+export async function fetchServerMetadata(authServerUrl: string, fetchFn?: FetchFn) {
   const discoveryUrl = authServerUrl + '/.well-known/openid-configuration';
   log.info('Fetching OIDC server metadata from [%s]', discoveryUrl);
 
@@ -210,7 +210,7 @@ export function generateAuthorizationRequest(authorizationUri: string, clientId:
  *
  * @see https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.3
  */
-export async function fetchAccessToken(serverMetadata: ServerMetadata, serverJwks: JWKSet, authCode: string, client: ClientMetadata, codeVerifier: string, redirectUri: string, fetchFn?: FetchFunction) {
+export async function fetchAccessToken(serverMetadata: ServerMetadata, serverJwks: JWKSet, authCode: string, client: ClientMetadata, codeVerifier: string, redirectUri: string, fetchFn?: FetchFn) {
   log.debug('Exchanging authorization code for access/id tokens');
 
   const clientAssertion = await createClientAssertion(serverMetadata.issuer, client);
@@ -258,7 +258,7 @@ export async function fetchAccessToken(serverMetadata: ServerMetadata, serverJwk
 /**
  * Fetch the current user's info from the auth server's userinfo endpoint.
  */
-export async function fetchUserInfo(userinfoUri: string, serverJwks: JWKSet, accessToken: string, client: ClientMetadata, fetchFn?: FetchFunction) {
+export async function fetchUserInfo(userinfoUri: string, serverJwks: JWKSet, accessToken: string, client: ClientMetadata, fetchFn?: FetchFn) {
   log.debug('Fetching user info');
 
   const fetchOptions = {
@@ -295,7 +295,7 @@ export async function fetchUserInfo(userinfoUri: string, serverJwks: JWKSet, acc
  * validation call is that the user's RAOIDC/ECAS session is extended for
  * another TTL (typically 20 minutes).
  */
-export async function validateSession(authUrl: string, clientId: string, sessionId: string, fetchFn?: FetchFunction) {
+export async function validateSession(authUrl: string, clientId: string, sessionId: string, fetchFn?: FetchFn) {
   const validateUrl = new URL('validatesession', authUrl + '/');
   log.debug('Validating/extending session [%s] via [%s]', sessionId, validateUrl);
 
