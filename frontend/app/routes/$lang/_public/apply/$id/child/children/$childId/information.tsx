@@ -182,13 +182,19 @@ export async function action({ context: { session }, params, request }: ActionFu
     });
   }
 
+  const ageCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
+
   saveApplyState({
     params,
     session,
     state: {
       children: applyState.children.map((child) => {
         if (child.id !== state.id) return child;
-        return { ...child, information: { ...parsedDataResult.data, ...parsedSinDataResult.data } };
+        const information = { ...parsedDataResult.data, ...parsedSinDataResult.data };
+        if (ageCategory !== 'youth' && ageCategory !== 'children') {
+          information['dateOfBirth'] = child.information?.dateOfBirth ?? '';
+        }
+        return { ...child, information };
       }),
     },
   });
@@ -201,8 +207,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     return redirect(getPathById('$lang/_public/apply/$id/child/children/$childId/parent-or-guardian', params));
   }
 
-  const childAgeCategory = getAgeCategoryFromDateString(parsedDataResult.data.dateOfBirth);
-  if (childAgeCategory === 'adults' || childAgeCategory === 'seniors') {
+  if (ageCategory === 'adults' || ageCategory === 'seniors') {
     return redirect(getPathById('$lang/_public/apply/$id/child/children/$childId/cannot-apply-child', params));
   }
 
