@@ -13,12 +13,12 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
+import { useFeature } from '~/root';
 import { loadApplyAdultState } from '~/route-helpers/apply-adult-route-helpers.server';
 import { clearApplyState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
-import { isFeatureEnabled } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -173,7 +173,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function ApplyFlowConfirm() {
-  const featureEnabled = isFeatureEnabled('view-letters');
+  const featureEnabled = !useFeature('view-letters');
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, csrfToken } = useLoaderData<typeof loader>();

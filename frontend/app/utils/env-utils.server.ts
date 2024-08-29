@@ -211,14 +211,6 @@ export function getClientEnv() {
 }
 
 /**
- * Return true if the feature is not enabled
- */
-export function isFeatureEnabled(feature: string): boolean {
-  const { ENABLED_FEATURES } = getEnv();
-  return !ENABLED_FEATURES.includes(feature);
-}
-
-/**
  * A helper function to be used in actions and loaders that checks if a feature
  * is enabled. If the feature is not enabled, a 404 response will be thrown.
  */
