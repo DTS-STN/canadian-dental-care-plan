@@ -211,7 +211,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function ApplyFlowConfirm() {
-  const featureFlagged = useFeature('view-letters');
+  const viewLettersEnabled = useFeature('view-letters');
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, csrfToken } = useLoaderData<typeof loader>();
@@ -268,16 +268,16 @@ export default function ApplyFlowConfirm() {
       </section>
 
       <section>
-        <h2 className="font-lato text-3xl font-bold">{featureFlagged ? t('confirm.register-msca-title') : t('confirm.register-msca-title-featured')}</h2>
+        <h2 className="font-lato text-3xl font-bold">{viewLettersEnabled ? t('confirm.register-msca-title-featured') : t('confirm.register-msca-title')}</h2>
         <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey={featureFlagged ? 'confirm.register-msca-text' : 'confirm.register-msca-text-featured'} components={{ mscaLinkAccount }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey={viewLettersEnabled ? 'confirm.register-msca-text-featured' : 'confirm.register-msca-text'} components={{ mscaLinkAccount }} />
         </p>
-        <p className="mt-4">{featureFlagged ? t('confirm.register-msca-info') : t('confirm.register-msca-info-featured')}</p>
+        <p className="mt-4">{viewLettersEnabled ? t('confirm.register-msca-info-featured') : t('confirm.register-msca-info')}</p>
         <ul className="list-disc space-y-1 pl-7">
           <li>{t('confirm.register-msca-correspondence')}</li>
           <li>{t('confirm.register-msca-confirm')}</li>
         </ul>
-        {featureFlagged && (
+        {!viewLettersEnabled && (
           <p className="mt-4">
             <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-checker" components={{ mscaLinkChecker }} />
           </p>
