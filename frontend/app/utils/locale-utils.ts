@@ -1,6 +1,5 @@
-import type { FlatNamespace } from 'i18next';
+import type { FlatNamespace, LanguageDetectorModule } from 'i18next';
 import { createInstance } from 'i18next';
-import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import I18NextHttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
@@ -75,17 +74,19 @@ export async function initI18n(namespaces: Array<string>) {
   const { I18NEXT_DEBUG } = getClientEnv();
   const i18n = createInstance();
 
+  const languageDetector = {
+    type: 'languageDetector',
+    detect: () => document.documentElement.lang,
+  } satisfies LanguageDetectorModule;
+
   await i18n
     .use(initReactI18next)
-    .use(I18nextBrowserLanguageDetector)
+    .use(languageDetector)
     .use(I18NextHttpBackend)
     .init({
       appendNamespaceToMissingKey: true,
       debug: I18NEXT_DEBUG,
       defaultNS: false,
-      detection: {
-        order: ['htmlTag'],
-      },
       fallbackLng: false,
       interpolation: {
         escapeValue: false,
