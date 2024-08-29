@@ -18,6 +18,7 @@ import { clearApplyState, getChildrenState } from '~/route-helpers/apply-route-h
 import { getLookupService } from '~/services/lookup-service.server';
 import { formatSubmissionApplicationCode } from '~/utils/application-code-utils';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
+import { isFeatureEnabled } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -210,6 +211,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function ApplyFlowConfirm() {
+  const featureEnabled = isFeatureEnabled('view-letters');
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, dentalInsurance, submissionInfo, csrfToken } = useLoaderData<typeof loader>();
@@ -266,18 +268,20 @@ export default function ApplyFlowConfirm() {
       </section>
 
       <section>
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.register-msca-title')}</h2>
+        <h2 className="font-lato text-3xl font-bold">{featureEnabled ? t('confirm.register-msca-title-featured') : t('confirm.register-msca-title')}</h2>
         <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLinkAccount }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey={featureEnabled ? 'confirm.register-msca-text-featured' : 'confirm.register-msca-text'} components={{ mscaLinkAccount }} />
         </p>
-        <p className="mt-4">{t('confirm.register-msca-info')}</p>
+        <p className="mt-4">{featureEnabled ? t('confirm.register-msca-info-featured') : t('confirm.register-msca-info')}</p>
         <ul className="list-disc space-y-1 pl-7">
           <li>{t('confirm.register-msca-correspondence')}</li>
           <li>{t('confirm.register-msca-confirm')}</li>
         </ul>
-        <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-checker" components={{ mscaLinkChecker }} />
-        </p>
+        {!featureEnabled && (
+          <p className="mt-4">
+            <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-checker" components={{ mscaLinkChecker }} />
+          </p>
+        )}
       </section>
 
       <section>
