@@ -10,16 +10,15 @@ import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../page-ids.json';
+import pageIds from '../../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
-import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-status-markdown';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { useErrorSummary } from '~/components/error-summary';
-import { InlineLink } from '~/components/inline-link';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { LoadingButton } from '~/components/loading-button';
 import { useFeature } from '~/root';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
+import { saveStatusState } from '~/route-helpers/status-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
@@ -121,13 +120,19 @@ export async function action({ context: { session }, params, request }: ActionFu
   const statusId = await applicationStatusService.getStatusIdWithSin({ sin, applicationCode: code });
   const clientFriendlyStatus = statusId ? lookupService.getClientFriendlyStatusById(statusId) : null;
 
-  return json({
-    status: {
-      ...(clientFriendlyStatus ? localizeClientFriendlyStatus(clientFriendlyStatus, locale) : {}),
-      alertType: getContextualAlertType(statusId),
+  saveStatusState({
+    params,
+    session,
+    state: {
+      statusCheckResult: {
+        ...(clientFriendlyStatus ? localizeClientFriendlyStatus(clientFriendlyStatus, locale) : {}),
+        alertType: getContextualAlertType(statusId),
+        statusId: statusId,
+      },
     },
-    statusId,
-  } as const);
+  });
+
+  return redirect(getPathById('$lang/_public/status/$id/result', { ...params }));
 }
 
 export default function StatusCheckerMyself() {
@@ -173,64 +178,37 @@ export default function StatusCheckerMyself() {
 
   return (
     <div className="max-w-prose">
-      {fetcher.data && 'status' in fetcher.data && fetcher.data.statusId ? (
-        <>
-          <ContextualAlert type={fetcher.data.status.alertType}>
-            <div>
-              <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
-                {t('status:myself.status-heading')}
-              </h2>
-              {fetcher.data.status.name && <ClientFriendlyStatusMarkdown content={fetcher.data.status.name} />}
-            </div>
-          </ContextualAlert>
-          <div className="mt-12">
-            <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} endIcon={faChevronRight}>
-              {t('status:myself.check-another')}
-            </ButtonLink>
-          </div>
+      {fetcher.data && 'statusId' in fetcher.data && !fetcher.data.statusId && <StatusNotFound />}
+      <p className="mb-4 italic">{t('status:myself.form.complete-fields')}</p>
+      <errorSummary.ErrorSummary />
+      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
+        <input type="hidden" name="_csrf" value={csrfToken} />
+        {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
+        <div className="mb-8 space-y-6">
+          <InputPatternField
+            id="code"
+            name="code"
+            format={applicationCodeInputPatternFormat}
+            label={t('status:myself.form.application-code-label')}
+            inputMode="numeric"
+            helpMessagePrimary={t('status:myself.form.application-code-description')}
+            required
+            errorMessage={errors?.code}
+            defaultValue=""
+          />
+          <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errors?.sin} defaultValue="" />
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
           {statusCheckerRedirectFlag && (
-            <div className="mt-6">
-              <InlineLink to={t('status:myself.exit-link')} params={params} className="mt-6">
-                {t('status:myself.exit-btn')}
-              </InlineLink>
-            </div>
+            <ButtonLink id="back-button" routeId="$lang/_public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
+              {t('status:myself.form.back-btn')}
+            </ButtonLink>
           )}
-        </>
-      ) : (
-        <>
-          {fetcher.data && 'statusId' in fetcher.data && !fetcher.data.statusId && <StatusNotFound />}
-          <p className="mb-4 italic">{t('status:myself.form.complete-fields')}</p>
-          <errorSummary.ErrorSummary />
-          <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
-            <input type="hidden" name="_csrf" value={csrfToken} />
-            {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
-            <div className="mb-8 space-y-6">
-              <InputPatternField
-                id="code"
-                name="code"
-                format={applicationCodeInputPatternFormat}
-                label={t('status:myself.form.application-code-label')}
-                inputMode="numeric"
-                helpMessagePrimary={t('status:myself.form.application-code-description')}
-                required
-                errorMessage={errors?.code}
-                defaultValue=""
-              />
-              <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:myself.form.sin-label')} helpMessagePrimary={t('status:myself.form.sin-description')} required errorMessage={errors?.sin} defaultValue="" />
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              {statusCheckerRedirectFlag && (
-                <ButtonLink id="back-button" routeId="$lang/_public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
-                  {t('status:myself.form.back-btn')}
-                </ButtonLink>
-              )}
-              <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
-                {t('status:myself.form.submit')}
-              </LoadingButton>
-            </div>
-          </fetcher.Form>
-        </>
-      )}
+          <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
+            {t('status:myself.form.submit')}
+          </LoadingButton>
+        </div>
+      </fetcher.Form>
     </div>
   );
 }
