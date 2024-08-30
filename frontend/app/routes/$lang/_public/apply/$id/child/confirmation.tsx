@@ -13,6 +13,7 @@ import { ContextualAlert } from '~/components/contextual-alert';
 import { DescriptionListItem } from '~/components/description-list-item';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/dialog';
 import { InlineLink } from '~/components/inline-link';
+import { useFeature } from '~/root';
 import { loadApplyChildState } from '~/route-helpers/apply-child-route-helpers.server';
 import { clearApplyState, getChildrenState } from '~/route-helpers/apply-route-helpers.server';
 import { getLookupService } from '~/services/lookup-service.server';
@@ -193,6 +194,7 @@ export async function action({ context: { session }, params, request }: ActionFu
 }
 
 export default function ApplyFlowConfirm() {
+  const viewLettersEnabled = useFeature('view-letters');
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
   const { children, userInfo, spouseInfo, homeAddressInfo, mailingAddressInfo, submissionInfo, csrfToken } = useLoaderData<typeof loader>();
@@ -243,18 +245,20 @@ export default function ApplyFlowConfirm() {
         <p className="mt-4">{t('confirm.mail-letter')}</p>
       </section>
       <section>
-        <h2 className="font-lato text-3xl font-bold">{t('confirm.register-msca-title')}</h2>
+        <h2 className="font-lato text-3xl font-bold">{viewLettersEnabled ? t('confirm.register-msca-title-featured') : t('confirm.register-msca-title')}</h2>
         <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-text" components={{ mscaLinkAccount }} />
+          <Trans ns={handle.i18nNamespaces} i18nKey={viewLettersEnabled ? 'confirm.register-msca-text-featured' : 'confirm.register-msca-text'} components={{ mscaLinkAccount }} />
         </p>
-        <p className="mt-4">{t('confirm.register-msca-info')}</p>
+        <p className="mt-4">{viewLettersEnabled ? t('confirm.register-msca-info-featured') : t('confirm.register-msca-info')}</p>
         <ul className="list-disc space-y-1 pl-7">
           <li>{t('confirm.register-msca-correspondence')}</li>
           <li>{t('confirm.register-msca-confirm')}</li>
         </ul>
-        <p className="mt-4">
-          <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-checker" components={{ mscaLinkChecker }} />
-        </p>
+        {!viewLettersEnabled && (
+          <p className="mt-4">
+            <Trans ns={handle.i18nNamespaces} i18nKey="confirm.register-msca-checker" components={{ mscaLinkChecker }} />
+          </p>
+        )}
       </section>
       <section>
         <h2 className="font-lato text-3xl font-bold">{t('confirm.how-insurance')}</h2>
