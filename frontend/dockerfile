@@ -129,5 +129,4 @@ LABEL org.opencontainers.image.vendor=${IMAGE_VENDOR}
 
 USER node
 ENV PORT=3000
-
-CMD ["docker-entrypoint.sh", "npm", "run", "start"]
+CMD ["npm", "run", "start"]
