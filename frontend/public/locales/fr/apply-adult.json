@@ -24,7 +24,7 @@
       "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
       "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique",
-      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés : apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
+      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
     }
   },
   "communication-preference": {
@@ -283,7 +283,7 @@
       "sin-required": "Entrez un NAS de 9 chiffres, par exemple 123 456 789",
       "sin-valid": "Le NAS doit être valide",
       "sin-unique": "Le numéro d'assurance sociale (NAS) doit être unique",
-      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés : apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
+      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
     }
   },
   "contact-information": {
@@ -349,7 +349,7 @@
       "email-valid": "Entrez l'adresse courriel dans le bon format, par exemple nom@exemple.com",
       "confirm-email-valid": "Entrez la confirmation de l'adresse courriel dans le bon format, par exemple nom@exemple.com",
       "preferred-language-required": "Sélectionnez la langue de communication préférée",
-      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés : apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
+      "characters-valid": "Seuls les lettres, les chiffres et les caractères suivants sont acceptés\u00a0: apostrophe ('), virgule (,), point (.), trait d'union (-) et parenthèse ()"
     }
   },
   "review-information": {
