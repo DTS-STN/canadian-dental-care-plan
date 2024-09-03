@@ -1019,11 +1019,11 @@
             ]
           },
           {
-            "id": "$lang/_protected/stub-sin-editor",
-            "file": "routes/$lang/_protected/stub-sin-editor.tsx",
+            "id": "$lang/_protected/stub-login",
+            "file": "routes/$lang/_protected/stub-login.tsx",
             "paths": {
-              "en": "/:lang/stub-sin-editor",
-              "fr": "/:lang/stub-sin-editor"
+              "en": "/:lang/stub-login",
+              "fr": "/:lang/stub-login"
             }
           }
         ]

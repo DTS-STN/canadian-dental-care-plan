@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
-import { useFetcher } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { UTCDate } from '@date-fns/utc';
 import { useTranslation } from 'react-i18next';
@@ -9,21 +9,23 @@ import { z } from 'zod';
 import { Button } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
+import { InputPatternField } from '~/components/input-pattern-field';
 import { getSubscriptionService } from '~/services/subscription-service.server';
 import { getEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
-import type { UserinfoToken } from '~/utils/raoidc-utils.server';
+import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { sinInputPatternFormat } from '~/utils/sin-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('stub-sin-editor', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('stub-login', 'gcweb'),
   pageIdentifier: 'CDCP-00XX',
-  pageTitleI18nKey: 'stub-sin-editor:index.page-title',
+  pageTitleI18nKey: 'stub-login:index.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -36,10 +38,20 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   if (!SHOW_SIN_EDIT_STUB_PAGE) {
     throw new Response(null, { status: 404 });
   }
-  const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('stub-sin-editor:index.page-title') }) };
 
-  return { meta };
+  const t = await getFixedT(request, handle.i18nNamespaces);
+  const meta = { title: t('gcweb:meta.title.template', { title: t('stub-login:index.page-title') }) };
+
+  const idToken: IdToken | undefined = session.get('idToken');
+  const userInfoToken: UserinfoToken | undefined = session.get('userInfoToken');
+
+  const defaultValues = {
+    sin: userInfoToken?.sin ?? '',
+    sid: idToken?.sid ?? '00000000-0000-0000-0000-000000000000',
+    sub: idToken?.sub ?? '00000000-0000-0000-0000-000000000000',
+  };
+
+  return { meta, defaultValues };
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -49,13 +61,23 @@ export async function action({ context: { session }, params, request }: ActionFu
     throw new Response(null, { status: 404 });
   }
 
-  const sinToStubSchema = z.object({
-    socialInsuranceNumberToStub: z.string(),
-    userUUIDToStub: z.string(),
+  const t = await getFixedT(request, handle.i18nNamespaces);
+
+  const stubLoginSchema = z.object({
+    sin: z.string().trim().min(1, t('stub-login:index.error-message.sin-required')),
+    sid: z.string().trim().min(1, t('stub-login:index.error-message.sid-required')),
+    sub: z.string().trim().min(1, t('stub-login:index.error-message.sub-required')),
   });
 
-  const formData = Object.fromEntries(await request.formData());
-  const parsedDataResult = sinToStubSchema.safeParse(formData);
+  const formData = await request.formData();
+
+  const data = {
+    sin: String(formData.get('sin') ?? ''),
+    sid: String(formData.get('sid') ?? ''),
+    sub: String(formData.get('sub') ?? ''),
+  };
+
+  const parsedDataResult = stubLoginSchema.safeParse(data);
 
   if (!parsedDataResult.success) {
     return json({
@@ -63,9 +85,11 @@ export async function action({ context: { session }, params, request }: ActionFu
     });
   }
 
-  const sinToMock = parsedDataResult.data.socialInsuranceNumberToStub;
+  const sin = parsedDataResult.data.sin;
+  const sid = parsedDataResult.data.sid;
+  const sub = parsedDataResult.data.sub;
+
   const currentDateInSeconds = Math.floor(UTCDate.now() / 1000);
-  const userStubUUID = parsedDataResult.data.userUUIDToStub;
 
   const idToken = {
     iss: 'GC-ECAS',
@@ -74,7 +98,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     exp: currentDateInSeconds + 300, //five minutes TTL for the token
     iat: currentDateInSeconds,
     aud: 'CDCP',
-    sub: userStubUUID,
+    sub,
     nonce: 'hqwVxGbvJ5g7NSWoOv1BvrA9avVAY7CL',
     locale: 'en-CA',
   };
@@ -84,18 +108,17 @@ export async function action({ context: { session }, params, request }: ActionFu
     birthdate: '2000-01-01',
     iss: 'GC-ECAS-MOCK',
     locale: 'en-CA',
-    //TODO implement a future PR to have this value dynamic
-    sid: userStubUUID,
-    sin: sinToMock,
-    sub: userStubUUID,
+    sid,
+    sin,
+    sub,
     mocked: true,
   };
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   if (!session.has('userInfoToken')) {
     session.set('userInfoToken', userinfoTokenPayload);
   } else {
-    userInfoToken.sin = sinToMock;
-    userInfoToken.sub = userStubUUID;
+    userInfoToken.sin = sin;
+    userInfoToken.sub = sub;
     session.set('userInfoToken', userInfoToken);
   }
   session.set('idToken', idToken);
@@ -107,26 +130,34 @@ export async function action({ context: { session }, params, request }: ActionFu
   return redirect(getPathById('$lang/_protected/home', params));
 }
 
-export default function StubSinEditorPage() {
+export default function StubLogin() {
   const { t } = useTranslation(handle.i18nNamespaces);
+  const { defaultValues } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
 
   const errors = fetcher.data?.errors;
   const errorSummary = useErrorSummary(errors, {
-    socialInsuranceNumberToStub: 'socialInsuranceNumberToStub',
-    userUUIDToStub: 'userUUIDToStub',
+    sin: 'sin',
+    sid: 'sid',
+    sub: 'sub',
   });
 
   return (
-    <>
+    <div className="max-w-prose">
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate className="space-y-6">
-        <InputField id="socialInsuranceNumberToStub" name="socialInsuranceNumberToStub" label={t('stub-sin-editor:index.edit-id-field')} required inputMode="numeric" pattern="\d{9}" placeholder="000000000" minLength={9} maxLength={9} />
-        <InputField id="userUUIDToStub" name="userUUIDToStub" inputMode="text" label={t('stub-sin-editor:index.UUID-label')} placeholder="00000000-0000-0000-0000-000000000000" />
-        <Button variant="primary" id="continue-button">
-          {t('stub-sin-editor:index.edit-id-button')}
+        <InputPatternField id="sin" name="sin" label={t('stub-login:index.sin')} required inputMode="numeric" format={sinInputPatternFormat} defaultValue={defaultValues.sin} />
+        <fieldset>
+          <legend className="mb-2 text-xl font-semibold">{t('stub-login:index.raoidc')}</legend>
+          <div className="space-y-6">
+            <InputField id="sid" name="sid" className="w-full" inputMode="text" label={t('stub-login:index.sid')} defaultValue={defaultValues.sid} />
+            <InputField id="sub" name="sub" className="w-full" inputMode="text" label={t('stub-login:index.sub')} defaultValue={defaultValues.sub} />
+          </div>
+        </fieldset>
+        <Button variant="primary" id="login-button">
+          {t('stub-login:index.login')}
         </Button>
       </fetcher.Form>
-    </>
+    </div>
   );
 }
