@@ -10,9 +10,9 @@ import { z } from 'zod';
 import type { ContextualAlertType } from '~/utils/application-code-utils.server';
 import { getLocaleFromParams } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { getCdcpWebsiteApplyUrl } from '~/utils/url-utils.server';
+import { getCdcpWebsiteStatusUrl } from '~/utils/url-utils.server';
 
-const log = getLogger('apply-route-helpers.server');
+const log = getLogger('status-route-helpers.server');
 
 export interface StatusState {
   readonly lastUpdatedOn: string;
@@ -51,20 +51,20 @@ interface LoadStateArgs {
  */
 export function loadStatusState({ params, session }: LoadStateArgs) {
   const locale = getLocaleFromParams(params);
-  const cdcpWebsiteApplyUrl = getCdcpWebsiteApplyUrl(locale);
+  const cdcpWebsiteStatusUrl = getCdcpWebsiteStatusUrl(locale);
 
   const parsedId = idSchema.safeParse(params.id);
 
   if (!parsedId.success) {
-    log.warn('Invalid "id" param format; redirecting to [%s]; id: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, params.id, session.id);
-    throw redirectDocument(cdcpWebsiteApplyUrl);
+    log.warn('Invalid "id" param format; redirecting to [%s]; id: [%s], sessionId: [%s]', cdcpWebsiteStatusUrl, params.id, session.id);
+    throw redirectDocument(cdcpWebsiteStatusUrl);
   }
 
   const sessionName = getSessionName(parsedId.data);
 
   if (!session.has(sessionName)) {
-    log.warn('Status session state has not been found; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionName, session.id);
-    throw redirectDocument(cdcpWebsiteApplyUrl);
+    log.warn('Status session state has not been found; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteStatusUrl, sessionName, session.id);
+    throw redirectDocument(cdcpWebsiteStatusUrl);
   }
 
   const state: StatusState = session.get(sessionName);
@@ -76,8 +76,8 @@ export function loadStatusState({ params, session }: LoadStateArgs) {
 
   if (differenceInMinutes(now, lastUpdatedOn) >= 20) {
     session.unset(sessionName);
-    log.warn('Status session state has expired; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteApplyUrl, sessionName, session.id);
-    throw redirectDocument(cdcpWebsiteApplyUrl);
+    log.warn('Status session state has expired; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteStatusUrl, sessionName, session.id);
+    throw redirectDocument(cdcpWebsiteStatusUrl);
   }
 
   return state;

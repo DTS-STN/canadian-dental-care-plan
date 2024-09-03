@@ -112,7 +112,8 @@
     "status": {
       "index": "CDCP-STAT-0001",
       "myself": "CDCP-STAT-0002",
-      "child": "CDCP-STAT-0003"
+      "child": "CDCP-STAT-0003",
+      "result": "CDCP-STAT-0004"
     },
     "unableToProcessRequest": "CDCP-UNAB-0001",
     "notFound": "CDCP-ERR-0404"

@@ -7,18 +7,17 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import pageIds from '../../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
-import { ContextualAlert } from '~/components/contextual-alert';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { LoadingButton } from '~/components/loading-button';
 import { useFeature } from '~/root';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
-import { saveStatusState } from '~/route-helpers/status-route-helpers.server';
+import { clearStatusState, saveStatusState } from '~/route-helpers/status-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
@@ -110,6 +109,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   if (hCaptchaEnabled) {
     const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
     if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse(hCaptchaResponse, request))) {
+      clearStatusState({ params, session });
       return redirect(getPathById('$lang/_public/unable-to-process-request', params));
     }
   }
@@ -178,7 +178,6 @@ export default function StatusCheckerMyself() {
 
   return (
     <div className="max-w-prose">
-      {fetcher.data && 'statusId' in fetcher.data && !fetcher.data.statusId && <StatusNotFound />}
       <p className="mb-4 italic">{t('status:myself.form.complete-fields')}</p>
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
@@ -209,25 +208,6 @@ export default function StatusCheckerMyself() {
           </LoadingButton>
         </div>
       </fetcher.Form>
-    </div>
-  );
-}
-
-function StatusNotFound() {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const noWrap = <span className="whitespace-nowrap" />;
-  return (
-    <div className="mb-4">
-      <ContextualAlert type="danger">
-        <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
-          {t('myself.status-not-found.heading')}
-        </h2>
-        <p className="mb-2">{t('myself.status-not-found.please-review')}</p>
-        <p className="mb-2">{t('myself.status-not-found.if-submitted')}</p>
-        <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="myself.status-not-found.contact-service-canada" components={{ noWrap }} />
-        </p>
-      </ContextualAlert>
     </div>
   );
 }

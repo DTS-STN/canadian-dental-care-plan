@@ -65,15 +65,6 @@
   "myself": {
     "page-title": "Status Checker",
     "status-heading": "Status",
-    "check-another": "Check another status",
-    "exit-btn": "Exit status checker",
-    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#status",
-    "status-not-found": {
-      "heading": "We could not find your application status with the information you gave us.",
-      "please-review": "Please make sure the information you entered is correct. If you applied recently, try again in 48 hours.",
-      "if-submitted": "If you have submitted more than one application for yourself, your children, or both, use the last application code you received.",
-      "contact-service-canada": "Contact Service Canada if this issue continues by calling <noWrap>1-833-537-4342</noWrap>."
-    },
     "form": {
       "complete-fields": "Complete all fields.",
       "application-code-label": "Application Code or Client Number",
@@ -93,14 +84,6 @@
   "child": {
     "page-title": "Status Checker",
     "status-heading": "Status",
-    "check-another": "Check another status",
-    "exit-btn": "Exit status checker",
-    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#status",
-    "status-not-found": {
-      "heading": "We could not find your application status with the information you gave us.",
-      "please-review": "Please make sure the information you entered is correct. If you applied recently, try again in 48 hours.",
-      "contact-service-canada": "If you're still having trouble, contact Service Canada at <noWrap>1-833-537-4342</noWrap>."
-    },
     "form": {
       "complete-fields": "Complete all fields.",
       "application-code-label": "Application Code or Client Number",
@@ -135,6 +118,19 @@
         "date-of-birth-year-required": "Date of birth must include a year",
         "characters-valid": "Only letters, numbers and the following characters are accepted: apostrophe ('), comma (,), period (.), hyphen (-) and bracket ()"
       }
+    }
+  },
+  "result": {
+    "page-title": "Status Checker",
+    "status-heading": "Status",
+    "check-another": "Check another status",
+    "exit-btn": "Exit status checker",
+    "exit-link": "https://www.canada.ca/en/services/benefits/dental/dental-care-plan/apply.html#status",
+    "status-not-found": {
+      "heading": "We could not find your application status with the information you gave us.",
+      "please-review": "Please make sure the information you entered is correct. If you applied recently, try again in 48 hours.",
+      "if-submitted": "If you have submitted more than one application for yourself, your children, or both, use the last application code you received.",
+      "contact-service-canada": "Contact Service Canada if this issue continues by calling <noWrap>1-833-537-4342</noWrap>."
     }
   }
 }
