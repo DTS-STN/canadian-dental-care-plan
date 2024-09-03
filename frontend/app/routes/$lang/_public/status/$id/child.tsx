@@ -10,20 +10,18 @@ import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../page-ids.json';
+import pageIds from '../../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
-import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-status-markdown';
 import { Collapsible } from '~/components/collapsible';
-import { ContextualAlert } from '~/components/contextual-alert';
 import { DatePickerField } from '~/components/date-picker-field';
 import { useErrorSummary } from '~/components/error-summary';
-import { InlineLink } from '~/components/inline-link';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { InputRadios } from '~/components/input-radios';
 import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
 import { useFeature } from '~/root';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
+import { clearStatusState, saveStatusState } from '~/route-helpers/status-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
@@ -198,6 +196,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   if (hCaptchaEnabled) {
     const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
     if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse(hCaptchaResponse, request))) {
+      clearStatusState({ params, session });
       return redirect(getPathById('$lang/_public/unable-to-process-request', params));
     }
   }
@@ -219,13 +218,19 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const clientFriendlyStatus = statusId ? lookupService.getClientFriendlyStatusById(statusId) : null;
 
-  return json({
-    status: {
-      ...(clientFriendlyStatus ? localizeClientFriendlyStatus(clientFriendlyStatus, locale) : {}),
-      alertType: getContextualAlertType(statusId),
+  saveStatusState({
+    params,
+    session,
+    state: {
+      statusCheckResult: {
+        ...(clientFriendlyStatus ? localizeClientFriendlyStatus(clientFriendlyStatus, locale) : {}),
+        alertType: getContextualAlertType(statusId),
+        statusId: statusId,
+      },
     },
-    statusId,
-  } as const);
+  });
+
+  return redirect(getPathById('$lang/_public/status/$id/result', { ...params }));
 }
 
 export default function StatusCheckerChild() {
@@ -286,134 +291,87 @@ export default function StatusCheckerChild() {
 
   return (
     <div className="max-w-prose">
-      {fetcher.data && 'status' in fetcher.data && fetcher.data.statusId ? (
-        <>
-          <ContextualAlert type={fetcher.data.status.alertType}>
-            <div>
-              <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
-                {t('status:child.status-heading')}
-              </h2>
-              {fetcher.data.status.name && <ClientFriendlyStatusMarkdown content={fetcher.data.status.name} />}
-            </div>
-          </ContextualAlert>
-          <div className="mt-12">
-            <ButtonLink id="cancel-button" variant="primary" type="button" routeId="$lang/_public/status/index" params={params} endIcon={faChevronRight}>
-              {t('status:child.check-another')}
-            </ButtonLink>
-          </div>
-          {statusCheckerRedirectFlag && (
-            <div className="mt-6">
-              <InlineLink to={t('status:child.exit-link')} params={params}>
-                {t('status:child.exit-btn')}
-              </InlineLink>
-            </div>
+      <p className="mb-4 italic">{t('status:child.form.complete-fields')}</p>
+      <errorSummary.ErrorSummary />
+      <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
+        <input type="hidden" name="_csrf" value={csrfToken} />
+        {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
+        <div className="mb-8 space-y-6">
+          <InputPatternField
+            id="code"
+            name="code"
+            format={applicationCodeInputPatternFormat}
+            label={t('status:child.form.application-code-label')}
+            inputMode="numeric"
+            helpMessagePrimary={t('status:child.form.application-code-description')}
+            required
+            errorMessage={errors?.code}
+            defaultValue=""
+          />
+          <InputRadios
+            id="child-has-sin"
+            name="childHasSin"
+            legend={t('status:child.form.radio-legend')}
+            options={[
+              {
+                value: ChildHasSin.Yes,
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="status:child.form.option-yes" />,
+                onChange: handleOnChildHasSinChanged,
+              },
+              {
+                value: ChildHasSin.No,
+                children: <Trans ns={handle.i18nNamespaces} i18nKey="status:child.form.option-no" />,
+                onChange: handleOnChildHasSinChanged,
+              },
+            ]}
+            errorMessage={errors?.childHasSin}
+            required
+          />
+          {childHasSinState === true && (
+            <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:child.form.sin-label')} helpMessagePrimary={t('status:child.form.sin-description')} required errorMessage={errors?.sin} defaultValue="" />
           )}
-        </>
-      ) : (
-        <>
-          {fetcher.data && 'statusId' in fetcher.data && !fetcher.data.statusId && <StatusNotFound />}
-          <p className="mb-4 italic">{t('status:child.form.complete-fields')}</p>
-          <errorSummary.ErrorSummary />
-          <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
-            <input type="hidden" name="_csrf" value={csrfToken} />
-            {hCaptchaEnabled && <HCaptcha size="invisible" sitekey={siteKey} ref={captchaRef} />}
-            <div className="mb-8 space-y-6">
-              <InputPatternField
-                id="code"
-                name="code"
-                format={applicationCodeInputPatternFormat}
-                label={t('status:child.form.application-code-label')}
-                inputMode="numeric"
-                helpMessagePrimary={t('status:child.form.application-code-description')}
-                required
-                errorMessage={errors?.code}
+          {childHasSinState === false && (
+            <>
+              <Collapsible summary={t('status:child.form.if-child-summary')} className="mt-8">
+                <div className="space-y-4">
+                  <p>{t('status:child.form.if-child-desc')}</p>
+                </div>
+              </Collapsible>
+              <div className="grid items-end gap-6 md:grid-cols-2">
+                <InputSanitizeField id="first-name" name="firstName" label={t('status:child.form.first-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.firstName} defaultValue="" />
+                <InputSanitizeField id="last-name" name="lastName" label={t('status:child.form.last-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.lastName} defaultValue="" />
+              </div>
+              <DatePickerField
+                id="date-of-birth"
+                names={{
+                  day: 'dateOfBirthDay',
+                  month: 'dateOfBirthMonth',
+                  year: 'dateOfBirthYear',
+                }}
                 defaultValue=""
-              />
-              <InputRadios
-                id="child-has-sin"
-                name="childHasSin"
-                legend={t('status:child.form.radio-legend')}
-                options={[
-                  {
-                    value: ChildHasSin.Yes,
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey="status:child.form.option-yes" />,
-                    onChange: handleOnChildHasSinChanged,
-                  },
-                  {
-                    value: ChildHasSin.No,
-                    children: <Trans ns={handle.i18nNamespaces} i18nKey="status:child.form.option-no" />,
-                    onChange: handleOnChildHasSinChanged,
-                  },
-                ]}
-                errorMessage={errors?.childHasSin}
+                legend={t('status:child.form.date-of-birth-label')}
                 required
+                errorMessages={{
+                  all: errors?.dateOfBirth,
+                  year: errors?.dateOfBirthYear,
+                  month: errors?.dateOfBirthMonth,
+                  day: errors?.dateOfBirthDay,
+                }}
               />
-              {childHasSinState === true && (
-                <InputPatternField id="sin" name="sin" format={sinInputPatternFormat} label={t('status:child.form.sin-label')} helpMessagePrimary={t('status:child.form.sin-description')} required errorMessage={errors?.sin} defaultValue="" />
-              )}
-              {childHasSinState === false && (
-                <>
-                  <Collapsible summary={t('status:child.form.if-child-summary')} className="mt-8">
-                    <div className="space-y-4">
-                      <p>{t('status:child.form.if-child-desc')}</p>
-                    </div>
-                  </Collapsible>
-                  <div className="grid items-end gap-6 md:grid-cols-2">
-                    <InputSanitizeField id="first-name" name="firstName" label={t('status:child.form.first-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.firstName} defaultValue="" />
-                    <InputSanitizeField id="last-name" name="lastName" label={t('status:child.form.last-name')} className="w-full" maxLength={100} aria-describedby="name-instructions" required errorMessage={errors?.lastName} defaultValue="" />
-                  </div>
-                  <DatePickerField
-                    id="date-of-birth"
-                    names={{
-                      day: 'dateOfBirthDay',
-                      month: 'dateOfBirthMonth',
-                      year: 'dateOfBirthYear',
-                    }}
-                    defaultValue=""
-                    legend={t('status:child.form.date-of-birth-label')}
-                    required
-                    errorMessages={{
-                      all: errors?.dateOfBirth,
-                      year: errors?.dateOfBirthYear,
-                      month: errors?.dateOfBirthMonth,
-                      day: errors?.dateOfBirthDay,
-                    }}
-                  />
-                </>
-              )}
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              {statusCheckerRedirectFlag && (
-                <ButtonLink id="back-button" routeId="$lang/_public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
-                  {t('status:child.form.back-btn')}
-                </ButtonLink>
-              )}
-              <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
-                {t('status:child.form.submit')}
-              </LoadingButton>
-            </div>
-          </fetcher.Form>
-        </>
-      )}
-    </div>
-  );
-}
-
-function StatusNotFound() {
-  const { t } = useTranslation(handle.i18nNamespaces);
-  const noWrap = <span className="whitespace-nowrap" />;
-  return (
-    <div className="mb-4">
-      <ContextualAlert type="danger">
-        <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
-          {t('myself.status-not-found.heading')}
-        </h2>
-        <p className="mb-2">{t('myself.status-not-found.please-review')}</p>
-        <p className="mb-2">{t('myself.status-not-found.if-submitted')}</p>
-        <p>
-          <Trans ns={handle.i18nNamespaces} i18nKey="myself.status-not-found.contact-service-canada" components={{ noWrap }} />
-        </p>
-      </ContextualAlert>
+            </>
+          )}
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          {statusCheckerRedirectFlag && (
+            <ButtonLink id="back-button" routeId="$lang/_public/status/index" params={params} startIcon={faChevronLeft} disabled={isSubmitting}>
+              {t('status:child.form.back-btn')}
+            </ButtonLink>
+          )}
+          <LoadingButton variant="primary" id="submit" loading={isSubmitting} data-gc-analytics-formsubmit="submit" endIcon={faChevronRight}>
+            {t('status:child.form.submit')}
+          </LoadingButton>
+        </div>
+      </fetcher.Form>
     </div>
   );
 }

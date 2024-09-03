@@ -1,6 +1,6 @@
 import { getEnv } from '~/utils/env-utils.server';
 
-type ContextualAlertType = 'info' | 'success' | 'danger' | 'warning';
+export type ContextualAlertType = 'info' | 'success' | 'danger' | 'warning';
 
 /**
  * @param statusId - the statusId of the application to check
