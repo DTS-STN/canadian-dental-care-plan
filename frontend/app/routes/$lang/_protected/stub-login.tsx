@@ -21,9 +21,9 @@ import { getTitleMetaTags } from '~/utils/seo-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
-  i18nNamespaces: getTypedI18nNamespaces('stub-sin-editor', 'gcweb'),
+  i18nNamespaces: getTypedI18nNamespaces('stub-login', 'gcweb'),
   pageIdentifier: 'CDCP-00XX',
-  pageTitleI18nKey: 'stub-sin-editor:index.page-title',
+  pageTitleI18nKey: 'stub-login:index.page-title',
 } as const satisfies RouteHandleData;
 
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
@@ -37,7 +37,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
     throw new Response(null, { status: 404 });
   }
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const meta = { title: t('gcweb:meta.title.template', { title: t('stub-sin-editor:index.page-title') }) };
+  const meta = { title: t('gcweb:meta.title.template', { title: t('stub-login:index.page-title') }) };
 
   return { meta };
 }
@@ -107,7 +107,7 @@ export async function action({ context: { session }, params, request }: ActionFu
   return redirect(getPathById('$lang/_protected/home', params));
 }
 
-export default function StubSinEditorPage() {
+export default function StubLogin() {
   const { t } = useTranslation(handle.i18nNamespaces);
   const fetcher = useFetcher<typeof action>();
 
@@ -121,10 +121,10 @@ export default function StubSinEditorPage() {
     <>
       <errorSummary.ErrorSummary />
       <fetcher.Form method="post" noValidate className="space-y-6">
-        <InputField id="socialInsuranceNumberToStub" name="socialInsuranceNumberToStub" label={t('stub-sin-editor:index.edit-id-field')} required inputMode="numeric" pattern="\d{9}" placeholder="000000000" minLength={9} maxLength={9} />
-        <InputField id="userUUIDToStub" name="userUUIDToStub" inputMode="text" label={t('stub-sin-editor:index.UUID-label')} placeholder="00000000-0000-0000-0000-000000000000" />
+        <InputField id="socialInsuranceNumberToStub" name="socialInsuranceNumberToStub" label={t('stub-login:index.edit-id-field')} required inputMode="numeric" pattern="\d{9}" placeholder="000000000" minLength={9} maxLength={9} />
+        <InputField id="userUUIDToStub" name="userUUIDToStub" inputMode="text" label={t('stub-login:index.UUID-label')} placeholder="00000000-0000-0000-0000-000000000000" />
         <Button variant="primary" id="continue-button">
-          {t('stub-sin-editor:index.edit-id-button')}
+          {t('stub-login:index.edit-id-button')}
         </Button>
       </fetcher.Form>
     </>
