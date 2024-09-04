@@ -441,53 +441,6 @@
             }
           },
           {
-            "Value": "775170002-775170004",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Validation Letter - CRA",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de validation - ARC",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ],
-              "Description": {
-                "LocalizedLabels": [
-                  {
-                    "Label": "",
-                    "LanguageCode": 1033,
-                    "IsManaged": false,
-                    "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                    "HasChanged": null
-                  }
-                ],
-                "UserLocalizedLabel": {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                  "HasChanged": null
-                }
-              }
-            }
-          },
-          {
             "Value": "775170002-7751700011",
             "Color": null,
             "IsManaged": false,
@@ -513,24 +466,24 @@
                   "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
                   "HasChanged": null
                 }
-              ],
-              "Description": {
-                "LocalizedLabels": [
-                  {
-                    "Label": "",
-                    "LanguageCode": 1033,
-                    "IsManaged": false,
-                    "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                    "HasChanged": null
-                  }
-                ],
-                "UserLocalizedLabel": {
+              ]
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
                   "Label": "",
                   "LanguageCode": 1033,
                   "IsManaged": false,
                   "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
                   "HasChanged": null
                 }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
+                "HasChanged": null
               }
             }
           },
@@ -560,62 +513,7 @@
                   "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
                   "HasChanged": null
                 }
-              ],
-              "Description": {
-                "LocalizedLabels": [
-                  {
-                    "Label": "",
-                    "LanguageCode": 1033,
-                    "IsManaged": false,
-                    "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                    "HasChanged": null
-                  }
-                ],
-                "UserLocalizedLabel": {
-                  "Label": "",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
-                  "HasChanged": null
-                }
-              }
-            }
-          },
-          {
-            "Value": "775170002-775170005",
-            "Color": null,
-            "IsManaged": false,
-            "ExternalValue": null,
-            "ParentValues": [],
-            "Tag": null,
-            "IsHidden": false,
-            "MetadataId": null,
-            "HasChanged": null,
-            "Label": {
-              "LocalizedLabels": [
-                {
-                  "Label": "Validation Letter - No Tax",
-                  "LanguageCode": 1033,
-                  "IsManaged": false,
-                  "MetadataId": "2a5adffb-c46f-4062-ad47-e1a99e6ae0fc",
-                  "HasChanged": null
-                },
-                {
-                  "Label": "Lettre de validation - Aucune taxe",
-                  "LanguageCode": 1036,
-                  "IsManaged": false,
-                  "MetadataId": "7f078da9-fb53-ee11-be6f-000d3a09d1b8",
-                  "HasChanged": null
-                }
-              ],
-
-              "UserLocalizedLabel": {
-                "Label": "CRA",
-                "LanguageCode": 1033,
-                "IsManaged": false,
-                "MetadataId": "235bb920-57ec-45b6-a613-4e2043f7f2de",
-                "HasChanged": null
-              }
+              ]
             },
             "Description": {
               "LocalizedLabels": [
@@ -623,7 +521,7 @@
                   "Label": "",
                   "LanguageCode": 1033,
                   "IsManaged": false,
-                  "MetadataId": "d0466980-bf54-4f69-a510-d82a668549ce",
+                  "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
                   "HasChanged": null
                 }
               ],
@@ -631,7 +529,7 @@
                 "Label": "",
                 "LanguageCode": 1033,
                 "IsManaged": false,
-                "MetadataId": "d0466980-bf54-4f69-a510-d82a668549ce",
+                "MetadataId": "6b4b16bd-8263-4083-85ac-6fc4b97a602d",
                 "HasChanged": null
               }
             }
