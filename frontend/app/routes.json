@@ -668,27 +668,27 @@
                 }
               },
               {
-                "id": "$lang/_public/status/$id/myself",
-                "file": "routes/$lang/_public/status/$id/myself.tsx",
+                "id": "$lang/_public/status/myself",
+                "file": "routes/$lang/_public/status/myself.tsx",
                 "paths": {
-                  "en": "/:lang/status/:id/myself",
-                  "fr": "/:lang/etat/:id/moi-meme"
+                  "en": "/:lang/status/myself",
+                  "fr": "/:lang/etat/moi-meme"
                 }
               },
               {
-                "id": "$lang/_public/status/$id/child",
-                "file": "routes/$lang/_public/status/$id/child.tsx",
+                "id": "$lang/_public/status/child",
+                "file": "routes/$lang/_public/status/child.tsx",
                 "paths": {
-                  "en": "/:lang/status/:id/child",
-                  "fr": "/:lang/etat/:id/enfant"
+                  "en": "/:lang/status/child",
+                  "fr": "/:lang/etat/enfant"
                 }
               },
               {
-                "id": "$lang/_public/status/$id/result",
-                "file": "routes/$lang/_public/status/$id/result.tsx",
+                "id": "$lang/_public/status/result",
+                "file": "routes/$lang/_public/status/result.tsx",
                 "paths": {
-                  "en": "/:lang/status/:id/result",
-                  "fr": "/:lang/etat/:id/result"
+                  "en": "/:lang/status/result",
+                  "fr": "/:lang/etat/result"
                 }
               }
             ]

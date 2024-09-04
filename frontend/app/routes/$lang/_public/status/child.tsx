@@ -7,10 +7,11 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { randomUUID } from 'crypto';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { Collapsible } from '~/components/collapsible';
 import { DatePickerField } from '~/components/date-picker-field';
@@ -21,7 +22,7 @@ import { InputSanitizeField } from '~/components/input-sanitize-field';
 import { LoadingButton } from '~/components/loading-button';
 import { useFeature } from '~/root';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
-import { clearStatusState, saveStatusState } from '~/route-helpers/status-route-helpers.server';
+import { clearStatusState, saveStatusState, startStatusState } from '~/route-helpers/status-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
@@ -218,7 +219,11 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const clientFriendlyStatus = statusId ? lookupService.getClientFriendlyStatusById(statusId) : null;
 
+  const id = randomUUID().toString();
+  startStatusState({ id, session });
+
   saveStatusState({
+    id,
     params,
     session,
     state: {
@@ -230,7 +235,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
-  return redirect(getPathById('$lang/_public/status/$id/result', { ...params }));
+  return redirect(getPathById('$lang/_public/status/result?id=' + id, { ...params }));
 }
 
 export default function StatusCheckerChild() {

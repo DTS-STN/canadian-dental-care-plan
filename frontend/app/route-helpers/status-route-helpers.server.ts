@@ -40,6 +40,7 @@ function getSessionName(id: string) {
 }
 
 interface LoadStateArgs {
+  id?: string;
   params: Params;
   session: Session;
 }
@@ -49,11 +50,11 @@ interface LoadStateArgs {
  * @param args - The arguments.
  * @returns The loaded state.
  */
-export function loadStatusState({ params, session }: LoadStateArgs) {
+export function loadStatusState({ id, params, session }: LoadStateArgs) {
   const locale = getLocaleFromParams(params);
   const cdcpWebsiteStatusUrl = getCdcpWebsiteStatusUrl(locale);
 
-  const parsedId = idSchema.safeParse(params.id);
+  const parsedId = idSchema.safeParse(id ?? params.id);
 
   if (!parsedId.success) {
     log.warn('Invalid "id" param format; redirecting to [%s]; id: [%s], sessionId: [%s]', cdcpWebsiteStatusUrl, params.id, session.id);
@@ -84,6 +85,7 @@ export function loadStatusState({ params, session }: LoadStateArgs) {
 }
 
 interface SaveStateArgs {
+  id?: string;
   params: Params;
   session: Session;
   state: Partial<OmitStrict<StatusState, 'id' | 'lastUpdatedOn'>>;
@@ -95,8 +97,8 @@ interface SaveStateArgs {
  * @param args - The arguments.
  * @returns The new status state.
  */
-export function saveStatusState({ params, session, state, remove = undefined }: SaveStateArgs) {
-  const currentState = loadStatusState({ params, session });
+export function saveStatusState({ id, params, session, state, remove = undefined }: SaveStateArgs) {
+  const currentState = loadStatusState({ id, params, session });
 
   let newState = {
     ...currentState,
@@ -115,6 +117,7 @@ export function saveStatusState({ params, session, state, remove = undefined }: 
 }
 
 interface ClearStateArgs {
+  id?: string;
   params: Params;
   session: Session;
 }
@@ -123,10 +126,10 @@ interface ClearStateArgs {
  * Clears status state.
  * @param args - The arguments.
  */
-export function clearStatusState({ params, session }: ClearStateArgs) {
-  const { id } = loadStatusState({ params, session });
+export function clearStatusState({ id, params, session }: ClearStateArgs) {
+  const { id: stateId } = loadStatusState({ id, params, session });
 
-  const sessionName = getSessionName(id);
+  const sessionName = getSessionName(id ?? stateId);
   session.unset(sessionName);
   log.info('Status session state cleared; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
 }

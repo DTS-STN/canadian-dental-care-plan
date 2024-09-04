@@ -6,7 +6,6 @@ import { useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
-import { randomUUID } from 'crypto';
 import { Trans, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
@@ -17,7 +16,6 @@ import { InlineLink } from '~/components/inline-link';
 import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
-import { startStatusState } from '~/route-helpers/status-route-helpers.server';
 import { featureEnabled, getEnv } from '~/utils/env-utils.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -93,14 +91,11 @@ export async function action({ context: { session }, params, request }: ActionFu
     }
   }
 
-  const id = randomUUID().toString();
-  startStatusState({ id, session });
-
   if (parsedCheckFor.data.checkFor === CheckFor.Myself) {
-    return redirect(getPathById('$lang/_public/status/$id/myself', { ...params, id }));
+    return redirect(getPathById('$lang/_public/status/myself', { ...params }));
   }
   // Child selected
-  return redirect(getPathById('$lang/_public/status/$id/child', { ...params, id }));
+  return redirect(getPathById('$lang/_public/status/child', { ...params }));
 }
 
 export default function StatusChecker() {

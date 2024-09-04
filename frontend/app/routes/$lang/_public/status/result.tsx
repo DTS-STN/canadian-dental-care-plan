@@ -9,7 +9,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../page-ids.json';
 import { Button } from '~/components/buttons';
 import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-status-markdown';
 import { ContextualAlert } from '~/components/contextual-alert';
@@ -35,7 +35,11 @@ export const handle = {
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('status');
-  const { statusCheckResult } = loadStatusState({ params, session });
+
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get('query');
+
+  const { statusCheckResult } = loadStatusState({ id: id ?? undefined, params, session });
 
   const csrfToken = String(session.get('csrfToken'));
 
