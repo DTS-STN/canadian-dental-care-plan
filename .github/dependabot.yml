@@ -7,6 +7,21 @@ updates:
     schedule:
       interval: weekly
       day: monday
+    groups:
+      dev-minor-versions:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
+      prod-minor-versions:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - '*'
 
   - package-ecosystem: docker
     directory: /frontend
