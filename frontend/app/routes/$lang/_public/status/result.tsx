@@ -37,7 +37,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   featureEnabled('status');
 
   const { searchParams } = new URL(request.url);
-  const id = searchParams.get('query');
+  const id = searchParams.get('id');
 
   const { statusCheckResult } = loadStatusState({ id: id ?? undefined, params, session });
 

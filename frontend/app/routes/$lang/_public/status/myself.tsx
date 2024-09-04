@@ -137,7 +137,7 @@ export async function action({ context: { session }, params, request }: ActionFu
     },
   });
 
-  return redirect(getPathById('$lang/_public/status/result?id=' + id, { ...params }));
+  return redirect(getPathById('$lang/_public/status/result', { ...params }) + `?id=${id}`);
 }
 
 export default function StatusCheckerMyself() {
