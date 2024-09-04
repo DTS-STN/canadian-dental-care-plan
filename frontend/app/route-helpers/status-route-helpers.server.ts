@@ -2,25 +2,18 @@ import type { Session } from '@remix-run/node';
 import { redirectDocument } from '@remix-run/node';
 import type { Params } from '@remix-run/react';
 
-import { UTCDate } from '@date-fns/utc';
-import { differenceInMinutes } from 'date-fns';
-import { omit } from 'moderndash';
 import { z } from 'zod';
 
-import type { ContextualAlertType } from '~/utils/application-code-utils.server';
 import { getLocaleFromParams } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { getPathById } from '~/utils/route-utils';
 import { getCdcpWebsiteStatusUrl } from '~/utils/url-utils.server';
 
 const log = getLogger('status-route-helpers.server');
 
 export interface StatusState {
-  readonly lastUpdatedOn: string;
   readonly id: string;
-  readonly statusCheckResult?: {
-    alertType: ContextualAlertType;
-    name?: string;
-    id?: string;
+  readonly statusCheckResult: {
     statusId?: string | null;
   };
 }
@@ -39,8 +32,13 @@ function getSessionName(id: string) {
   return `status-flow-${idSchema.parse(id)}`;
 }
 
+export function getStatusStateIdFromUrl(url: string | URL) {
+  const { searchParams } = new URL(url);
+  return searchParams.get('id');
+}
+
 interface LoadStateArgs {
-  id?: string;
+  id: string | null;
   params: Params;
   session: Session;
 }
@@ -54,10 +52,10 @@ export function loadStatusState({ id, params, session }: LoadStateArgs) {
   const locale = getLocaleFromParams(params);
   const cdcpWebsiteStatusUrl = getCdcpWebsiteStatusUrl(locale);
 
-  const parsedId = idSchema.safeParse(id ?? params.id);
+  const parsedId = idSchema.safeParse(id);
 
   if (!parsedId.success) {
-    log.warn('Invalid "id" param format; redirecting to [%s]; id: [%s], sessionId: [%s]', cdcpWebsiteStatusUrl, params.id, session.id);
+    log.warn('Invalid "id" query string format; redirecting to [%s]; id: [%s], sessionId: [%s]', cdcpWebsiteStatusUrl, id, session.id);
     throw redirectDocument(cdcpWebsiteStatusUrl);
   }
 
@@ -69,27 +67,15 @@ export function loadStatusState({ id, params, session }: LoadStateArgs) {
   }
 
   const state: StatusState = session.get(sessionName);
-
-  // Checks if the elapsed time since the last update exceeds 20 minutes,
-  // and performs necessary actions if it does.
-  const lastUpdatedOn = new UTCDate(state.lastUpdatedOn);
-  const now = new UTCDate();
-
-  if (differenceInMinutes(now, lastUpdatedOn) >= 20) {
-    session.unset(sessionName);
-    log.warn('Status session state has expired; redirecting to [%s]; sessionName: [%s], sessionId: [%s]', cdcpWebsiteStatusUrl, sessionName, session.id);
-    throw redirectDocument(cdcpWebsiteStatusUrl);
-  }
-
   return state;
 }
 
 interface SaveStateArgs {
-  id?: string;
+  id: string;
   params: Params;
   session: Session;
-  state: Partial<OmitStrict<StatusState, 'id' | 'lastUpdatedOn'>>;
-  remove?: keyof OmitStrict<StatusState, 'id' | 'lastUpdatedOn'>;
+  state: Partial<OmitStrict<StatusState, 'id' | 'statusCheckResult'>>;
+  remove?: keyof OmitStrict<StatusState, 'id' | 'statusCheckResult'>;
 }
 
 /**
@@ -97,18 +83,13 @@ interface SaveStateArgs {
  * @param args - The arguments.
  * @returns The new status state.
  */
-export function saveStatusState({ id, params, session, state, remove = undefined }: SaveStateArgs) {
+export function saveStatusState({ id, params, session, state }: SaveStateArgs) {
   const currentState = loadStatusState({ id, params, session });
 
-  let newState = {
+  const newState = {
     ...currentState,
     ...state,
-    lastUpdatedOn: new UTCDate().toISOString(),
   } satisfies StatusState;
-
-  if (remove && remove in newState) {
-    newState = omit(newState, [remove]);
-  }
 
   const sessionName = getSessionName(currentState.id);
   session.set(sessionName, newState);
@@ -117,7 +98,7 @@ export function saveStatusState({ id, params, session, state, remove = undefined
 }
 
 interface ClearStateArgs {
-  id?: string;
+  id: string;
   params: Params;
   session: Session;
 }
@@ -127,9 +108,8 @@ interface ClearStateArgs {
  * @param args - The arguments.
  */
 export function clearStatusState({ id, params, session }: ClearStateArgs) {
-  const { id: stateId } = loadStatusState({ id, params, session });
-
-  const sessionName = getSessionName(id ?? stateId);
+  const state = loadStatusState({ id, params, session });
+  const sessionName = getSessionName(state.id);
   session.unset(sessionName);
   log.info('Status session state cleared; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
 }
@@ -149,11 +129,20 @@ export function startStatusState({ id, session }: StartArgs) {
 
   const initialState: StatusState = {
     id: parsedId,
-    lastUpdatedOn: new UTCDate().toISOString(),
+    statusCheckResult: {},
   };
 
   const sessionName = getSessionName(parsedId);
   session.set(sessionName, initialState);
   log.info('Status session state started; sessionName: [%s], sessionId: [%s]', sessionName, session.id);
   return initialState;
+}
+
+interface GetStatusResultUrlArgs {
+  id: string;
+  params: Params;
+}
+
+export function getStatusResultUrl({ id, params }: GetStatusResultUrlArgs) {
+  return getPathById('$lang/_public/status/result', params) + `?id=${id}`;
 }
