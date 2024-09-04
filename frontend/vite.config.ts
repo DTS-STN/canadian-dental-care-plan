@@ -30,8 +30,8 @@ interface JsonRoute {
  * This function iterates through an array of JsonRoute route definitions
  * and creates localized routes for both English ('en') and French ('fr') languages.
  *
- * @param {DefineRoutesFunction} defineRoutesFn - The Remix function for defining routes.
- * @param {Array<JsonRoute>} jsonRoutes - An array of JsonRoute route definitions.
+ * @param defineRoutesFn - The Remix function for defining routes.
+ * @param jsonRoutes - An array of JsonRoute route definitions.
  */
 function jsonRoutes(defineRoutesFn: DefineRoutesFunction, jsonRoutes: Array<JsonRoute>) {
   return defineRoutesFn((routeFn) => {
@@ -49,9 +49,9 @@ function jsonRoutes(defineRoutesFn: DefineRoutesFunction, jsonRoutes: Array<Json
  * and uses Remix's `routeFn` to register the route with its associated file,
  * ID, and any child routes.
  *
- * @param {'en' | 'fr'} language - The language for which to define the route ('en' or 'fr').
- * @param {DefineRouteFunction} routeFn - The Remix function for defining a single route.
- * @param {JsonRoute} jsonRoute - The JsonRoute route definition.
+ * @param language - The language for which to define the route ('en' or 'fr').
+ * @param routeFn - The Remix function for defining a single route.
+ * @param jsonRoute - The JsonRoute route definition.
  */
 function defineRoute(language: 'en' | 'fr', routeFn: DefineRouteFunction, jsonRoute: JsonRoute) {
   const path = language === 'en' ? jsonRoute.paths?.en : jsonRoute.paths?.fr;
