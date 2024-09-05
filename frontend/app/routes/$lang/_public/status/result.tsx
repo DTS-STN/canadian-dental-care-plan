@@ -1,7 +1,7 @@
 import type { SyntheticEvent } from 'react';
 
 import { json } from '@remix-run/node';
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect, useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -22,8 +22,10 @@ import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
 import { localizeClientFriendlyStatus } from '~/utils/lookup-utils.server';
+import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getTitleMetaTags } from '~/utils/seo-utils';
 
 enum FormAction {
   Cancel = 'cancel',
@@ -35,6 +37,10 @@ export const handle = {
   pageIdentifier: pageIds.public.status.result,
   pageTitleI18nKey: 'status:result.page-title',
 } as const satisfies RouteHandleData;
+
+export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
+  return data ? getTitleMetaTags(data.meta.title) : [];
+});
 
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('status');
