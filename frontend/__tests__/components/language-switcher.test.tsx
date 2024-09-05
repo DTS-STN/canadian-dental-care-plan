@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 
-import { useMatches, useParams } from '@remix-run/react';
+import { useMatches, useParams, useSearchParams } from '@remix-run/react';
 import { createRemixStub } from '@remix-run/testing';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -25,6 +25,7 @@ vi.mock('@remix-run/react', async (actual) => {
     useLocation: vi.fn(),
     useMatches: vi.fn(),
     useParams: vi.fn(),
+    useSearchParams: vi.fn(),
   };
 });
 
@@ -47,6 +48,7 @@ describe('Language Switcher', () => {
     const responseLang = 'fr';
 
     vi.mocked(useParams).mockReturnValue({ lang: requestedLang });
+    vi.mocked(useSearchParams).mockReturnValue([new URLSearchParams({ id: '1' }), vi.fn()]);
     vi.mocked(getAltLanguage).mockReturnValue(responseLang);
     vi.mocked(useMatches).mockReturnValue([{ id: '$lang/_public/apply/index', data: {}, handle: {}, params: {}, pathname: '' }]);
 
@@ -56,6 +58,6 @@ describe('Language Switcher', () => {
     const element = await waitFor(() => screen.findByTestId('language-switcher'));
 
     expect(element.textContent).toBe('Français');
-    expect(element.getAttribute('href')).toBe('/fr/demander');
+    expect(element.getAttribute('href')).toBe('/fr/demander?id=1');
   });
 });

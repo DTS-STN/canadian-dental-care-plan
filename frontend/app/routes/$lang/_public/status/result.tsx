@@ -1,7 +1,7 @@
 import type { SyntheticEvent } from 'react';
 
 import { json } from '@remix-run/node';
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { redirect, useFetcher, useLoaderData } from '@remix-run/react';
 
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -9,18 +9,23 @@ import { Trans, useTranslation } from 'react-i18next';
 import invariant from 'tiny-invariant';
 import { z } from 'zod';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../page-ids.json';
 import { Button } from '~/components/buttons';
 import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-status-markdown';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { useFeature } from '~/root';
-import { clearStatusState, loadStatusState } from '~/route-helpers/status-route-helpers.server';
+import { clearStatusState, getStatusStateIdFromUrl, loadStatusState } from '~/route-helpers/status-route-helpers.server';
+import { getLookupService } from '~/services/lookup-service.server';
+import { getContextualAlertType } from '~/utils/application-code-utils.server';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT } from '~/utils/locale-utils.server';
+import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
+import { localizeClientFriendlyStatus } from '~/utils/lookup-utils.server';
+import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
+import { getTitleMetaTags } from '~/utils/seo-utils';
 
 enum FormAction {
   Cancel = 'cancel',
@@ -33,21 +38,37 @@ export const handle = {
   pageTitleI18nKey: 'status:result.page-title',
 } as const satisfies RouteHandleData;
 
+export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
+  return data ? getTitleMetaTags(data.meta.title) : [];
+});
+
 export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('status');
-  const { statusCheckResult } = loadStatusState({ params, session });
+
+  const statusStateId = getStatusStateIdFromUrl(request.url);
+  const { statusCheckResult } = loadStatusState({ id: statusStateId, params, session });
+
+  const lookupService = getLookupService();
+  const locale = getLocale(request);
 
   const csrfToken = String(session.get('csrfToken'));
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-
   const meta = { title: t('gcweb:meta.title.template', { title: t('status:result.page-title') }) };
 
-  return json({ statusResult: statusCheckResult, csrfToken, meta });
+  const statusId = statusCheckResult.statusId ?? null;
+  const alertType = getContextualAlertType(statusId);
+  const clientFriendlyStatus = statusId ? localizeClientFriendlyStatus(lookupService.getClientFriendlyStatusById(statusId), locale) : null;
+
+  return json({ statusResult: { alertType, clientFriendlyStatus }, csrfToken, meta });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
   featureEnabled('status');
+
+  const statusStateId = getStatusStateIdFromUrl(request.url);
+  const { id } = loadStatusState({ id: statusStateId, params, session });
+
   const t = await getFixedT(request, handle.i18nNamespaces);
   const log = getLogger('status/result/index');
 
@@ -62,13 +83,12 @@ export async function action({ context: { session }, params, request }: ActionFu
 
   const formAction = z.nativeEnum(FormAction).parse(formData.get('_action'));
 
-  clearStatusState({ params, session });
-
   if (formAction === FormAction.Cancel) {
     return redirect(getPathById('$lang/_public/status/index', params));
-  } else {
-    return redirect(t('status:result.exit-link'));
   }
+
+  clearStatusState({ id, params, session });
+  return redirect(t('status:result.exit-link'));
 }
 
 export default function StatusCheckerResult() {
@@ -95,19 +115,14 @@ export default function StatusCheckerResult() {
   return (
     <fetcher.Form method="post" onSubmit={handleSubmit} noValidate autoComplete="off" data-gc-analytics-formname="ESDC-EDSC: Canadian Dental Care Plan Status Checker">
       <input type="hidden" name="_csrf" value={csrfToken} />
-
       <div className="max-w-prose">
-        {statusResult && !statusResult.statusId ? (
-          <StatusNotFound />
-        ) : (
-          <ContextualAlert type={statusResult?.alertType ?? 'warning'}>
-            <div>
-              <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
-                {t('status:result.status-heading')}
-              </h2>
-              {statusResult?.name && <ClientFriendlyStatusMarkdown content={statusResult.name} />}
-            </div>
+        {statusResult.clientFriendlyStatus ? (
+          <ContextualAlert type={statusResult.alertType}>
+            <h2 className="mb-2 font-bold">{t('status:result.status-heading')}</h2>
+            <ClientFriendlyStatusMarkdown content={statusResult.clientFriendlyStatus.name} />
           </ContextualAlert>
+        ) : (
+          <StatusNotFound />
         )}
         <div className="mt-12">
           <Button id="cancel-button" name="_action" value={FormAction.Cancel} disabled={isSubmitting} variant="primary" endIcon={faChevronRight}>
@@ -132,9 +147,7 @@ function StatusNotFound() {
   return (
     <div className="mb-4">
       <ContextualAlert type="danger">
-        <h2 className="mb-2 font-bold" tabIndex={-1} id="status">
-          {t('result.status-not-found.heading')}
-        </h2>
+        <h2 className="mb-2 font-bold">{t('result.status-not-found.heading')}</h2>
         <p className="mb-2">{t('result.status-not-found.please-review')}</p>
         <p className="mb-2">{t('result.status-not-found.if-submitted')}</p>
         <p>

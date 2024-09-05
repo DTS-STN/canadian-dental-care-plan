@@ -7,27 +7,25 @@ import { useFetcher, useLoaderData, useParams } from '@remix-run/react';
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { randomUUID } from 'crypto';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import pageIds from '../../../page-ids.json';
+import pageIds from '../../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { useErrorSummary } from '~/components/error-summary';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { LoadingButton } from '~/components/loading-button';
 import { useFeature } from '~/root';
 import { getHCaptchaRouteHelpers } from '~/route-helpers/h-captcha-route-helpers.server';
-import { clearStatusState, saveStatusState } from '~/route-helpers/status-route-helpers.server';
+import { getStatusResultUrl, saveStatusState, startStatusState } from '~/route-helpers/status-route-helpers.server';
 import { getApplicationStatusService } from '~/services/application-status-service.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { applicationCodeInputPatternFormat, isValidCodeOrNumber } from '~/utils/application-code-utils';
-import { getContextualAlertType } from '~/utils/application-code-utils.server';
 import { featureEnabled, getEnv } from '~/utils/env-utils.server';
 import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
-import { getFixedT, getLocale } from '~/utils/locale-utils.server';
+import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeClientFriendlyStatus } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -66,7 +64,6 @@ export async function action({ context: { session }, params, request }: ActionFu
   const { ENABLED_FEATURES } = getEnv();
   const hCaptchaRouteHelpers = getHCaptchaRouteHelpers();
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const locale = getLocale(request);
 
   const formDataSchema = z.object({
     sin: z
@@ -109,30 +106,28 @@ export async function action({ context: { session }, params, request }: ActionFu
   if (hCaptchaEnabled) {
     const hCaptchaResponse = String(formData.get('h-captcha-response') ?? '');
     if (!(await hCaptchaRouteHelpers.verifyHCaptchaResponse(hCaptchaResponse, request))) {
-      clearStatusState({ params, session });
       return redirect(getPathById('$lang/_public/unable-to-process-request', params));
     }
   }
 
   const applicationStatusService = getApplicationStatusService();
-  const lookupService = getLookupService();
   const { sin, code } = parsedDataResult.data;
   const statusId = await applicationStatusService.getStatusIdWithSin({ sin, applicationCode: code });
-  const clientFriendlyStatus = statusId ? lookupService.getClientFriendlyStatusById(statusId) : null;
 
+  const id = randomUUID().toString();
+  startStatusState({ id, session });
   saveStatusState({
+    id,
     params,
     session,
     state: {
       statusCheckResult: {
-        ...(clientFriendlyStatus ? localizeClientFriendlyStatus(clientFriendlyStatus, locale) : {}),
-        alertType: getContextualAlertType(statusId),
         statusId: statusId,
       },
     },
   });
 
-  return redirect(getPathById('$lang/_public/status/$id/result', { ...params }));
+  return redirect(getStatusResultUrl({ id, params }));
 }
 
 export default function StatusCheckerMyself() {
