@@ -688,7 +688,7 @@
                 "file": "routes/$lang/_public/status/result.tsx",
                 "paths": {
                   "en": "/:lang/status/result",
-                  "fr": "/:lang/etat/result"
+                  "fr": "/:lang/etat/resultat"
                 }
               }
             ]
