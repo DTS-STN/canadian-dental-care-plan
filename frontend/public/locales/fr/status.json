@@ -127,7 +127,7 @@
     "exit-btn": "Quitter le vérificateur de l'état",
     "exit-link": "https://www.canada.ca/fr/services/prestations/dentaire/regime-soins-dentaires/demande.html#etat",
     "status-not-found": {
-      "heading": "Nous n'avons pas pu trouver l'état de votre demande avec les informations.",
+      "heading": "Nous n'avons pas pu trouver l'état de votre demande avec les informations que vous nous avez fournies.",
       "please-review": "Veuillez vous assurer que les informations que vous avez saisies sont correctes. Si vous avez postulé récemment, réessayez dans 48 heures.",
       "if-submitted": "Si vous avez soumis plus d'une demande pour vous-même, vos enfants ou les deux, utilisez le dernier code de demande que vous avez reçu.",
       "contact-service-canada": "Contactez Service Canada si ce problème persiste en appelant au <noWrap>1-833-537-4342</noWrap>."
