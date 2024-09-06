@@ -1,7 +1,9 @@
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 
+import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { loader } from '~/routes/$lang/_protected/personal-information/home-address/edit';
 
 vi.mock('~/services/address-service.server', () => ({
@@ -79,7 +81,7 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/personal-information/home-address/edit'),
-        context: { session },
+        context: { session, container: mock<ContainerProvider>() },
         params: {},
       });
 
@@ -116,7 +118,7 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
       try {
         await loader({
           request: new Request('http://localhost:3000/en/personal-information/home-address/edit'),
-          context: { session },
+          context: { session, container: mock<ContainerProvider>() },
           params: {},
         });
       } catch (error) {
@@ -132,7 +134,7 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
       try {
         await loader({
           request: new Request('http://localhost:3000/en/personal-information/home-address/aardvark'),
-          context: { session },
+          context: { session, container: mock<ContainerProvider>() },
           params: {},
         });
       } catch (error) {

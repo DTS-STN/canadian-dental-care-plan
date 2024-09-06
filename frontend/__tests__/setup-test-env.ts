@@ -1,3 +1,6 @@
+// require by inversify to be the first import
+import 'reflect-metadata';
+
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
 

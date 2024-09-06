@@ -1,7 +1,9 @@
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 
+import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { loader } from '~/routes/$lang/_protected/applications/index';
 
 vi.mock('~/services/audit-service.server', () => ({
@@ -32,9 +34,6 @@ vi.mock('~/services/session-service.server', () => ({
 
 vi.mock('~/utils/env-utils.server', () => ({
   featureEnabled: vi.fn().mockReturnValue(true),
-  getClientEnv: vi.fn().mockReturnValue({
-    SCCH_BASE_URI: 'https://api.example.com',
-  }),
 }));
 
 vi.mock('~/utils/locale-utils.server', () => ({
@@ -180,9 +179,11 @@ describe('Applications Page', () => {
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
       session.set('userInfoToken', { sin: '800009979', sub: '00000000-0000-0000-0000-000000000000' });
 
+      const mockContainer = mock<ContainerProvider>({ config: { client: { SCCH_BASE_URI: 'https://api.example.com' } } });
+
       const response = await loader({
         request: new Request('http://localhost/applications?sort=asc'),
-        context: { session },
+        context: { session, container: mockContainer },
         params: {},
       });
 

@@ -1,7 +1,9 @@
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 
+import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { loader } from '~/routes/$lang/_protected/personal-information/mailing-address/edit';
 
 vi.mock('~/services/address-service.server', () => ({
@@ -75,7 +77,7 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information/mailing-address/edit'),
-        context: { session },
+        context: { session, container: mock<ContainerProvider>() },
         params: {},
       });
 
@@ -115,7 +117,7 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
       try {
         await loader({
           request: new Request('http://localhost:3000/personal-information/mailing-address/edit'),
-          context: { session },
+          context: { session, container: mock<ContainerProvider>() },
           params: {},
         });
       } catch (error) {

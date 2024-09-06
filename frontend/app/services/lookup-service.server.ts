@@ -5,7 +5,6 @@ import clientFriendlyStatusesJson from '~/resources/power-platform/client-friend
 import countriesJson from '~/resources/power-platform/countries.json';
 import federalProgramsJson from '~/resources/power-platform/federal-programs.json';
 import maritalStatusesJson from '~/resources/power-platform/marital-statuses.json';
-import preferredLanguageJson from '~/resources/power-platform/preferred-language.json';
 import preferredMethodOfCommunicationJson from '~/resources/power-platform/preferred-method-of-communication.json';
 import provincialProgramsJson from '~/resources/power-platform/provincial-programs.json';
 import regionsJson from '~/resources/power-platform/regions.json';
@@ -96,32 +95,12 @@ function createLookupService() {
     LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_MOUTH_PAIN_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_ALL_PREFERRED_LANGUAGES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_PROVINCIAL_TERRITORIAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_REGIONS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_SEX_AT_BIRTH_TYPES_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS,
     ENGLISH_LANGUAGE_CODE,
     FRENCH_LANGUAGE_CODE,
   } = getEnv();
-
-  function getAllPreferredLanguages() {
-    log.debug('Fetching all preferred languages');
-
-    const preferredLanguages = [];
-    for (const o of preferredLanguageJson.value[0].OptionSet.Options) {
-      const id = o.Value.toString();
-      const nameEn = o.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label;
-      const nameFr = o.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label;
-      if (nameEn === undefined || nameFr === undefined) {
-        throw new Error('Missing English or French name in power platform data for all preferred languages');
-      }
-      preferredLanguages.push({ id, nameEn, nameFr });
-    }
-
-    log.trace('Returning preferred languages: [%j]', preferredLanguages);
-    return preferredLanguages;
-  }
 
   async function getAllIndigenousTypes() {
     const url = `${INTEROP_API_BASE_URI}/lookups/indigenous-types/`;
@@ -332,22 +311,6 @@ function createLookupService() {
     });
 
     throw new Error(`Failed to fetch data. Status: ${response.status}, Status Text: ${response.statusText}`);
-  }
-
-  function getPreferredLanguageById(id: string) {
-    log.debug('Fetching preferred language with id: [%s]', id);
-    const preferredLanguage = preferredLanguageJson.value[0].OptionSet.Options.find(({ Value }) => Value.toString() === id);
-
-    if (!preferredLanguage) {
-      return null;
-    }
-
-    log.trace('Returning preferred language: [%j]', preferredLanguage);
-    return {
-      id: preferredLanguage.Value.toString(),
-      nameEn: preferredLanguage.Label.LocalizedLabels.find((label) => label.LanguageCode === ENGLISH_LANGUAGE_CODE)?.Label,
-      nameFr: preferredLanguage.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label,
-    };
   }
 
   function getAllPreferredCommunicationMethods() {
@@ -572,15 +535,6 @@ function createLookupService() {
       maxAge: 1000 * LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllPreferredCommunicationMethods memo'),
     }),
-    getAllPreferredLanguages: moize(getAllPreferredLanguages, {
-      maxAge: 1000 * LOOKUP_SVC_ALL_PREFERRED_LANGUAGES_CACHE_TTL_SECONDS,
-      onCacheAdd: () => log.info('Creating new AllPreferredLanguages memo'),
-    }),
-    getPreferredLanguageById: moize(getPreferredLanguageById, {
-      maxAge: 1000 * LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS,
-      maxSize: Infinity,
-      onCacheAdd: () => log.info('Creating new PreferredLanguage memo'),
-    }),
     getAllProvincialTerritorialSocialPrograms: moize(getAllProvincialTerritorialSocialPrograms, {
       maxAge: 1000 * LOOKUP_SVC_ALL_PROVINCIAL_TERRITORIAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllProvincialTerritorialSocialPrograms memo'),
@@ -611,10 +565,6 @@ export type MaritalStatus = ReturnType<GetAllMaritalStatuses>[number];
 
 export type GetAllRegions = Pick<ReturnType<typeof getLookupService>, 'getAllRegions'>['getAllRegions'];
 export type Region = ReturnType<GetAllRegions>[number];
-
-export type GetAllPreferredLanguages = Pick<ReturnType<typeof getLookupService>, 'getAllPreferredLanguages'>['getAllPreferredLanguages'];
-export type GetAllPreferredLanguagesReturnType = ReturnType<GetAllPreferredLanguages>;
-export type Language = GetAllPreferredLanguagesReturnType[number];
 
 export type GetAllFederalSocialPrograms = Pick<ReturnType<typeof getLookupService>, 'getAllFederalSocialPrograms'>['getAllFederalSocialPrograms'];
 export type FederalSocialProgram = ReturnType<GetAllFederalSocialPrograms>[number];

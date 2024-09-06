@@ -1,3 +1,6 @@
+// require by inversify to be the first import
+import 'reflect-metadata';
+
 import type { AppLoadContext } from '@remix-run/node';
 import { createRequestHandler } from '@remix-run/node';
 
@@ -9,9 +12,12 @@ import { createExpressApp } from 'remix-create-express-app';
 import { createRemixRequest, sendRemixResponse } from 'remix-create-express-app/remix';
 import invariant from 'tiny-invariant';
 
+import { SERVICE_IDENTIFIER } from './.server/constants/service-identifier.contant';
+import type { ContainerProvider } from './.server/providers/container.provider';
 import { getSessionService } from './services/session-service.server';
 import { getEnv } from './utils/env-utils.server';
 import { randomString } from './utils/string-utils';
+import { initContainer } from '~/.server/container.init';
 import { getLogger } from '~/utils/logging.server';
 
 const { NODE_ENV } = getEnv();
@@ -19,6 +25,9 @@ const { NODE_ENV } = getEnv();
 const log = getLogger('express.server');
 const logFormat = NODE_ENV === 'development' ? 'dev' : 'tiny';
 const sessionService = await getSessionService();
+
+// global IoC container singleton
+const container = initContainer();
 
 const loggingRequestHandler = morgan(logFormat, {
   skip: (request) => {
@@ -120,7 +129,13 @@ export const expressApp = await createExpressApp({
     log.debug('Setting session.lastAccessTime to [%s]', lastAccessTime);
     session.set('lastAccessTime', lastAccessTime);
 
-    log.debug('Adding session to AppLoadContext');
-    return { session } as AppLoadContext;
+    const containerProvider = container.get<ContainerProvider>(SERVICE_IDENTIFIER.CONTAINER_PROVIDER);
+    invariant(containerProvider, 'Expected containerProvider to be defined');
+
+    log.debug('Adding container and session to AppLoadContext;');
+    return {
+      container: containerProvider,
+      session,
+    } as AppLoadContext;
   },
 });

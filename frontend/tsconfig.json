@@ -18,6 +18,8 @@
     "strict": true,
     "strictNullChecks": true,
     "target": "ES2022",
-    "types": ["@remix-run/node", "vite/client"]
+    "types": ["@remix-run/node", "vite/client", "reflect-metadata"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   }
 }

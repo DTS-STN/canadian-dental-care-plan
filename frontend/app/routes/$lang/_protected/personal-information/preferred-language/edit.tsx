@@ -14,7 +14,6 @@ import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { getPersonalInformationRouteHelpers } from '~/route-helpers/personal-information-route-helpers.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { getPersonalInformationService } from '~/services/personal-information-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled } from '~/utils/env-utils.server';
@@ -43,10 +42,9 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { container, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('edit-personal-info');
   const instrumentationService = getInstrumentationService();
-  const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
 
   await raoidcService.handleSessionValidation(request, session);
@@ -57,7 +55,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const preferredLanguageId = personalInformation.preferredLanguageId;
 
   const csrfToken = String(session.get('csrfToken'));
-  const preferredLanguages = lookupService.getAllPreferredLanguages();
+  const preferredLanguages = container.service.preferredLanguage.getAllPreferredLanguages();
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:preferred-language.edit.page-title') }) };

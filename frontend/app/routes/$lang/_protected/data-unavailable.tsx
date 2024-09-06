@@ -8,7 +8,6 @@ import pageIds from '../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { getClientEnv } from '~/utils/env-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -27,14 +26,14 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { container, session }, request }: LoaderFunctionArgs) {
   const raoidcService = await getRaoidcService();
   await raoidcService.handleSessionValidation(request, session);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('data-unavailable:page-title') }) };
 
-  const { SCCH_BASE_URI } = getClientEnv();
+  const { SCCH_BASE_URI } = container.config.client;
 
   return json({ meta, SCCH_BASE_URI });
 }

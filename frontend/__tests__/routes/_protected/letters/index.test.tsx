@@ -1,7 +1,9 @@
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 
+import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { loader } from '~/routes/$lang/_protected/letters/index';
 
 vi.mock('~/services/audit-service.server', () => ({
@@ -54,9 +56,6 @@ vi.mock('~/services/personal-information-service.server', () => ({
 
 vi.mock('~/utils/env-utils.server', () => ({
   featureEnabled: vi.fn().mockReturnValue(true),
-  getClientEnv: vi.fn().mockReturnValue({
-    SCCH_BASE_URI: 'https://api.example.com',
-  }),
 }));
 
 vi.mock('~/utils/locale-utils.server', () => ({
@@ -74,9 +73,11 @@ describe('Letters Page', () => {
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
       session.set('userInfoToken', { sin: '999999999', sub: '1111111' });
 
+      const mockContainer = mock<ContainerProvider>({ config: { client: { SCCH_BASE_URI: 'https://api.example.com' } } });
+
       const response = await loader({
         request: new Request('http://localhost/letters?sort=desc'),
-        context: { session },
+        context: { session, container: mockContainer },
         params: {},
       });
 
@@ -95,9 +96,11 @@ describe('Letters Page', () => {
     session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
     session.set('userInfoToken', { sin: '999999999' });
 
+    const mockContainer = mock<ContainerProvider>({ config: { client: { SCCH_BASE_URI: 'https://api.example.com' } } });
+
     const response = await loader({
       request: new Request('http://localhost/letters'),
-      context: { session },
+      context: { session, container: mockContainer },
       params: {},
     });
 

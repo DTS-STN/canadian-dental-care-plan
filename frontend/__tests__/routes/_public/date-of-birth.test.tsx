@@ -1,7 +1,9 @@
 import { createMemorySessionStorage, redirect } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 
+import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { getAgeCategoryFromDateString } from '~/route-helpers/apply-route-helpers.server';
 import { action, loader } from '~/routes/$lang/_public/apply/$id/adult/date-of-birth';
 import { extractDateParts, getAgeFromDateString, isPastDateString, isValidDateString } from '~/utils/date-utils';
@@ -45,7 +47,7 @@ describe('_public.apply.id.date-of-birth', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth'),
-        context: { session },
+        context: { session, container: mock<ContainerProvider>() },
         params: {},
       });
 
@@ -71,7 +73,7 @@ describe('_public.apply.id.date-of-birth', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth', { method: 'POST', body: formData }),
-        context: { session },
+        context: { session, container: mock<ContainerProvider>() },
         params: {},
       });
 
@@ -102,7 +104,7 @@ describe('_public.apply.id.date-of-birth', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth', { method: 'POST', body: formData }),
-        context: { session },
+        context: { session, container: mock<ContainerProvider>() },
         params: { lang: 'en', id: '123' },
       });
 
@@ -129,7 +131,7 @@ describe('_public.apply.id.date-of-birth', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/date-of-birth', { method: 'POST', body: formData }),
-        context: { session },
+        context: { session, container: mock<ContainerProvider>() },
         params: { lang: 'en', id: '123' },
       });
 

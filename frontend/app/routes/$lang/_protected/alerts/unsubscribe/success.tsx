@@ -10,7 +10,7 @@ import { InlineLink } from '~/components/inline-link';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { featureEnabled, getClientEnv } from '~/utils/env-utils.server';
+import { featureEnabled } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -29,7 +29,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { container, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('email-alerts');
 
   const auditService = getAuditService();
@@ -40,7 +40,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:success.page-title') }) };
-  const { SCCH_BASE_URI } = getClientEnv();
+  const { SCCH_BASE_URI } = container.config.client;
 
   const idToken: IdToken = session.get('idToken');
   auditService.audit('page-view.unsubscribe-alerts-success', { userId: idToken.sub });
