@@ -1,6 +1,6 @@
 import { Suspense, useContext, useEffect } from 'react';
 
-import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import type { HeadersFunction, LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useLocation, useRouteLoaderData } from '@remix-run/react';
 
@@ -52,6 +52,12 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     { property: 'og:site_name', content: data.meta.siteName },
     { property: 'og:type', content: 'website' },
   ];
+};
+
+export const headers: HeadersFunction = ({ loaderHeaders }) => {
+  return {
+    'Cache-Control': `private, no-cache, no-store, must-revalidate, max-age=0`,
+  };
 };
 
 export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
