@@ -18,7 +18,7 @@ import { extractDateParts, parseDateTimeString, toLocaleDateString } from '~/uti
 import { featureEnabled } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
-import { localizeFederalSocialProgram, localizeMaritalStatuses, localizeProvincialTerritorialSocialProgram } from '~/utils/lookup-utils.server';
+import { localizeCountries, localizeFederalSocialProgram, localizeMaritalStatuses, localizeProvincialTerritorialSocialProgram, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -51,8 +51,8 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   //prevent users from entering any ID in the URL and seeing other users' applications
   const applications: Application[] | undefined = session.get('applications');
-  const viewApplication = applications ? applications.find((applications) => applications.id === params.id) : undefined;
-  const applicationDetails = viewApplication ? viewApplication.applicationDetails?.at(0) : undefined;
+  const viewApplication = applications?.find((applications) => applications.id === params.id);
+  const applicationDetails = viewApplication?.applicationDetails?.at(0);
 
   if (!applicationDetails) {
     instrumentationService.countHttpStatus('application.view', 404);
@@ -61,16 +61,15 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const locale = getLocale(request);
   const lookupService = getLookupService();
+
   const maritalStatuses = localizeMaritalStatuses(lookupService.getAllMaritalStatuses(), locale);
   const maritalStatus = maritalStatuses.find((maritalStatus) => maritalStatus.id === applicationDetails.applicantInformation?.maritalStatus);
 
-  // Getting province by Id
-  const allRegions = lookupService.getAllRegions();
+  const allRegions = localizeRegions(lookupService.getAllRegions(), locale);
   const mailingProvince = allRegions.find((region) => region.provinceTerritoryStateId === applicationDetails.personalInformation?.mailingProvince);
   const homeProvince = allRegions.find((region) => region.provinceTerritoryStateId === applicationDetails.personalInformation?.homeProvince);
 
-  // Getting Country by Id
-  const allCountries = lookupService.getAllCountries();
+  const allCountries = localizeCountries(lookupService.getAllCountries(), locale);
   const mailingCountry = allCountries.find((country) => country.countryId === applicationDetails.personalInformation?.mailingCountry);
   const homeCountry = allCountries.find((country) => country.countryId === applicationDetails.personalInformation?.homeCountry);
 
@@ -81,8 +80,21 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const communicationPreference = allCommunicationPreferences.find((communicationType) => communicationType.id === applicationDetails.communicationPreferences?.preferredMethod);
   const communicationPreferenceLang = communicationPreference ? getNameByLanguage(locale, communicationPreference) : '';
 
-  const allFederalSocialPrograms = lookupService.getAllFederalSocialPrograms();
-  const allProvincialTerritorialSocialPrograms = lookupService.getAllProvincialTerritorialSocialPrograms();
+  const applicantFederalSocialProgram = applicationDetails.dentalBenefits?.federalSocialProgram ? localizeFederalSocialProgram(lookupService.getFederalSocialProgramById(applicationDetails.dentalBenefits.federalSocialProgram), locale) : '';
+  const applicantProvincialTerritorialSocialProgram =
+    applicationDetails.dentalBenefits?.provincialTerritorialSocialProgram && localizeProvincialTerritorialSocialProgram(lookupService.getProvincialTerritorialSocialProgramById(applicationDetails.dentalBenefits.provincialTerritorialSocialProgram), locale);
+
+  const dentalBenefit = {
+    federalBenefit: {
+      access: applicationDetails.dentalBenefits?.hasFederalBenefits,
+      benefit: applicantFederalSocialProgram ? applicantFederalSocialProgram.name : '',
+    },
+    provTerrBenefit: {
+      access: applicationDetails.dentalBenefits?.hasProvincialTerritorialBenefits,
+      province: applicationDetails.dentalBenefits?.province,
+      benefit: applicantProvincialTerritorialSocialProgram && applicantProvincialTerritorialSocialProgram.name,
+    },
+  };
 
   const children = applicationDetails.children?.map((child) => {
     const selectedFederalBenefit = child.dentalBenefits?.federalSocialProgram ? localizeFederalSocialProgram(lookupService.getFederalSocialProgramById(child.dentalBenefits.federalSocialProgram), locale) : undefined;
@@ -99,11 +111,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
       dentalInsurance: {
         acessToDentalInsurance: child.dentalInsurance,
         federalBenefit: {
-          hasFederalBenefits: child.dentalBenefits?.hasFederalBenefits,
+          access: !!child.dentalBenefits?.hasFederalBenefits,
           benefit: selectedFederalBenefit?.name,
         },
         provincialTerritorialBenefit: {
-          hasProvincialTerritorialBenefits: child.dentalBenefits?.hasProvincialTerritorialBenefits,
+          access: !!child.dentalBenefits?.hasProvincialTerritorialBenefits,
           province: child.dentalBenefits?.province,
           benefit: selectedProvincialBenefit?.name,
         },
@@ -117,20 +129,10 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   auditService.audit('page-view.application-details', { userId: idToken.sub });
   instrumentationService.countHttpStatus('application-details.view', 200);
 
-  const applicantFederalSocialProgram = allFederalSocialPrograms
-    .filter((federalProgram) => federalProgram.id === applicationDetails.dentalBenefits?.federalSocialProgram)
-    .map((obj) => getNameByLanguage(locale, obj))
-    .join(', ');
-  const applicantProvincialTerritorialSocialProgram = allProvincialTerritorialSocialPrograms
-    .filter((provinceTerritorialProgram) => provinceTerritorialProgram.id === applicationDetails.dentalBenefits?.provincialTerritorialSocialProgram)
-    .map((obj) => getNameByLanguage(locale, obj))
-    .join(', ');
-
   return json({
     locale,
     applicationDetails,
-    applicantFederalSocialProgram,
-    applicantProvincialTerritorialSocialProgram,
+    dentalBenefit,
     maritalStatus,
     mailingProvince,
     homeProvince,
@@ -147,8 +149,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
 export default function ViewApplication() {
   const { t, i18n } = useTranslation(handle.i18nNamespaces);
-  const { applicationDetails, locale, year, children, applicantFederalSocialProgram, applicantProvincialTerritorialSocialProgram, maritalStatus, mailingProvince, homeProvince, mailingCountry, homeCountry, preferredLanguage, communicationPreferenceLang } =
-    useLoaderData<typeof loader>();
+  const { applicationDetails, locale, year, children, dentalBenefit, maritalStatus, mailingProvince, homeProvince, mailingCountry, homeCountry, preferredLanguage, communicationPreferenceLang } = useLoaderData<typeof loader>();
 
   const dateOfBirth = applicationDetails.dateOfBirth ? toLocaleDateString(parseDateTimeString(applicationDetails.dateOfBirth), locale) : '';
   const partnerDateOfBirth = applicationDetails.partnerInformation?.dateOfBirth ? toLocaleDateString(parseDateTimeString(applicationDetails.partnerInformation.dateOfBirth), locale) : '';
@@ -210,14 +211,14 @@ export default function ViewApplication() {
                           {child.dentalInsurance.acessToDentalInsurance ? t('applications:view-application.child-information.yes') : t('applications:view-application.child-information.no')}
                         </DescriptionListItem>
                         <DescriptionListItem term={t('applications:view-application.child-information.dental-benefit-title')}>
-                          {!!child.dentalInsurance.federalBenefit.hasFederalBenefits || !!child.dentalInsurance.provincialTerritorialBenefit.hasProvincialTerritorialBenefits ? (
+                          {child.dentalInsurance.federalBenefit.access || child.dentalInsurance.provincialTerritorialBenefit.access ? (
                             <>
                               <p>{t('applications:view-application.child-information.yes')}</p>
                               <p>{t('applications:view-application.child-information.dental-benefit-has-access')}</p>
                               <div>
                                 <ul className="ml-6 list-disc">
-                                  {child.dentalInsurance.federalBenefit.hasFederalBenefits && <li>{child.dentalInsurance.federalBenefit.benefit}</li>}
-                                  {child.dentalInsurance.provincialTerritorialBenefit.hasProvincialTerritorialBenefits && <li>{child.dentalInsurance.provincialTerritorialBenefit.benefit}</li>}
+                                  {child.dentalInsurance.federalBenefit.access && <li>{child.dentalInsurance.federalBenefit.benefit}</li>}
+                                  {child.dentalInsurance.provincialTerritorialBenefit.access && <li>{child.dentalInsurance.provincialTerritorialBenefit.benefit}</li>}
                                 </ul>
                               </div>
                             </>
@@ -247,9 +248,9 @@ export default function ViewApplication() {
                   <Address
                     address={applicationDetails.personalInformation?.mailingAddress ?? ''}
                     city={applicationDetails.personalInformation?.mailingCity ?? ''}
-                    provinceState={i18n.language === 'en' ? mailingProvince?.nameEn : mailingProvince?.nameFr}
+                    provinceState={mailingProvince?.name}
                     postalZipCode={applicationDetails.personalInformation?.mailingPostalCode}
-                    country={i18n.language === 'en' ? (mailingCountry?.nameEn ?? '') : (mailingCountry?.nameFr ?? '')}
+                    country={mailingCountry?.name ?? ''}
                     apartment={applicationDetails.personalInformation?.mailingApartment}
                     altFormat={true}
                   />
@@ -258,9 +259,9 @@ export default function ViewApplication() {
                   <Address
                     address={applicationDetails.personalInformation?.homeAddress ?? ''}
                     city={applicationDetails.personalInformation?.homeCity ?? ''}
-                    provinceState={i18n.language === 'en' ? homeProvince?.nameEn : homeProvince?.nameFr}
+                    provinceState={homeProvince?.name}
                     postalZipCode={applicationDetails.personalInformation?.homePostalCode ?? ''}
-                    country={i18n.language === 'en' ? (homeCountry?.nameEn ?? '') : (homeCountry?.nameFr ?? '')}
+                    country={homeCountry?.name ?? ''}
                     apartment={applicationDetails.personalInformation?.homeApartment}
                     altFormat={true}
                   />
@@ -283,15 +284,14 @@ export default function ViewApplication() {
               <h2 className="font-lato text-2xl font-bold">{t('applications:view-application.dental-insurance')}</h2>
               <dl className="divide-y border-y">
                 <DescriptionListItem term={t('applications:view-application.dental-private')}>{applicationDetails.dentalInsurance ? t('applications:view-application.yes') : t('applications:view-application.no')}</DescriptionListItem>
-
                 <DescriptionListItem term={t('applications:view-application.dental-public')}>
-                  {(applicationDetails.dentalBenefits?.hasFederalBenefits ?? applicationDetails.dentalBenefits?.hasProvincialTerritorialBenefits) ? (
+                  {dentalBenefit.federalBenefit.access || dentalBenefit.provTerrBenefit.access ? (
                     <>
                       <p>{t('applications:view-application.yes')}</p>
                       <p>{t('applications:view-application.dental-benefit-has-access')}</p>
                       <ul className="ml-6 list-disc">
-                        {applicationDetails.dentalBenefits.hasFederalBenefits && <li>{applicantFederalSocialProgram}</li>}
-                        {applicationDetails.dentalBenefits.hasProvincialTerritorialBenefits && <li>{applicantProvincialTerritorialSocialProgram}</li>}
+                        {dentalBenefit.federalBenefit.access && <li>{dentalBenefit.federalBenefit.benefit}</li>}
+                        {dentalBenefit.provTerrBenefit.access && <li>{dentalBenefit.provTerrBenefit.benefit}</li>}
                       </ul>
                     </>
                   ) : (
