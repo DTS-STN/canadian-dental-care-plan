@@ -80,7 +80,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@playwright/test": "^1.46.1",
+    "@playwright/test": "^1.47.0",
     "@remix-run/dev": "^2.11.2",
     "@remix-run/testing": "^2.11.2",
     "@testing-library/jest-dom": "^6.5.0",
