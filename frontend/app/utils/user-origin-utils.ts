@@ -15,13 +15,6 @@ export function useUserOrigin(): { to: To; text: string; isFromMSCAD: boolean } 
   if (!data) return undefined;
 
   switch (data.userOrigin) {
-    case 'msca': {
-      return {
-        to: t('gcweb:header.menu-msca-home.href', { baseUri: data.env.MSCA_BASE_URI }),
-        text: t('gcweb:header.menu-dashboard.text'),
-        isFromMSCAD: false,
-      };
-    }
     case 'msca-d': {
       return {
         to: t('gcweb:header.menu-dashboard.href', { baseUri: data.env.SCCH_BASE_URI }),

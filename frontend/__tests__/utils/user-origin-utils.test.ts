@@ -22,18 +22,6 @@ describe('useUserOrigin', () => {
     expect(useUserOrigin()).toBeUndefined();
   });
 
-  it('should return user origin from MSCA', () => {
-    vi.mocked(useRouteLoaderData).mockReturnValue({
-      userOrigin: 'msca',
-      env: 'msca',
-    });
-    expect(useUserOrigin()).toEqual({
-      to: 'gcweb:header.menu-msca-home.href',
-      text: 'gcweb:header.menu-dashboard.text',
-      isFromMSCAD: false,
-    });
-  });
-
   it('should return user origin from MSCA-D', () => {
     vi.mocked(useRouteLoaderData).mockReturnValue({
       userOrigin: 'msca-d',
@@ -46,10 +34,10 @@ describe('useUserOrigin', () => {
     });
   });
 
-  it('should throw an error for origins that are not msca or msca-d', () => {
+  it('should throw an error for origin that is not msca-d', () => {
     vi.mocked(useRouteLoaderData).mockReturnValue({
-      userOrigin: 'not-msca-or-msca-d',
-      env: 'not-msca-or-msca-d',
+      userOrigin: 'not-msca-d',
+      env: 'not-msca-d',
     });
     expect(() => useUserOrigin()).toThrowError();
   });
