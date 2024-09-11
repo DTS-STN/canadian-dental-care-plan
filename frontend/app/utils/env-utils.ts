@@ -43,7 +43,6 @@ export const clientEnvSchema = z.object({
 
   // base URIs for My Service Canada Account variations
   SCCH_BASE_URI: z.string().url().default('https://service.canada.ca'),
-  MSCA_BASE_URI: z.string().url().default('https://srv136.services.gc.ca'),
 
   SESSION_TIMEOUT_SECONDS: z.coerce.number().min(0).default(19 * 60),
   SESSION_TIMEOUT_PROMPT_SECONDS: z.coerce.number().min(0).default(5 * 60),
