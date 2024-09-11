@@ -94,8 +94,6 @@ const serverEnv = clientEnvSchema.extend({
 
   CDCP_API_BASE_URI: z.string().url(),
 
-  SHOW_SIN_EDIT_STUB_PAGE : z.string().transform(toBoolean).default('false'),
-
   // auth/oidc settings
   AUTH_JWT_PRIVATE_KEY: z.string().refine(isValidPrivateKey),
   AUTH_JWT_PUBLIC_KEY: z.string().refine(isValidPublicKey),
