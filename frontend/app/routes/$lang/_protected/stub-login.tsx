@@ -11,7 +11,7 @@ import { useErrorSummary } from '~/components/error-summary';
 import { InputField } from '~/components/input-field';
 import { InputPatternField } from '~/components/input-pattern-field';
 import { getSubscriptionService } from '~/services/subscription-service.server';
-import { getEnv } from '~/utils/env-utils.server';
+import { featureEnabled } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -34,10 +34,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 });
 
 export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
-  const { SHOW_SIN_EDIT_STUB_PAGE } = getEnv();
-  if (!SHOW_SIN_EDIT_STUB_PAGE) {
-    throw new Response(null, { status: 404 });
-  }
+  featureEnabled('stub-login');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('stub-login:index.page-title') }) };
@@ -55,11 +52,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
-  // TODO SHOW_SIN_EDIT_STUB_PAGE should be added as a feature flag
-  const { SHOW_SIN_EDIT_STUB_PAGE } = getEnv();
-  if (!SHOW_SIN_EDIT_STUB_PAGE) {
-    throw new Response(null, { status: 404 });
-  }
+  featureEnabled('stub-login');
 
   const t = await getFixedT(request, handle.i18nNamespaces);
 

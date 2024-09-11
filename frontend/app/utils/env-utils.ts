@@ -16,6 +16,7 @@ const validFeatureNames = [
   'dependent-status-checker',
   'view-payload',
   'status-checker-redirects',
+  'stub-login',
 ] as const;
 export type FeatureName = (typeof validFeatureNames)[number];
 
