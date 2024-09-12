@@ -15,7 +15,7 @@ import { getInstrumentationService } from '~/services/instrumentation-service.se
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { extractDateParts, parseDateTimeString, toLocaleDateString } from '~/utils/date-utils';
-import { featureEnabled } from '~/utils/env-utils.server';
+import { featureEnabled, getClientEnv } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { localizeCountries, localizeFederalSocialProgram, localizeMaritalStatuses, localizeProvincialTerritorialSocialProgram, localizeRegions } from '~/utils/lookup-utils.server';
@@ -24,7 +24,6 @@ import type { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
 import { formatSin } from '~/utils/sin-utils';
-import { useUserOrigin } from '~/utils/user-origin-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'applications:index.breadcrumbs.previous-applications', routeId: '$lang/_protected/applications/index' }, { labelI18nKey: 'applications:view-application.breadcrumbs.current-application' }],
@@ -123,6 +122,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     };
   });
   const t = await getFixedT(request, handle.i18nNamespaces);
+  const { SCCH_BASE_URI } = getClientEnv();
   const year = viewApplication?.submittedOn ? extractDateParts(viewApplication.submittedOn).year : '';
   const meta = { title: t('gcweb:meta.title.template', { title: t('applications:view-application.page-title', { year }) }) };
   const idToken: IdToken = session.get('idToken');
@@ -144,16 +144,16 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     meta,
     children,
     i18nOptions: { year },
+    SCCH_BASE_URI,
   });
 }
 
 export default function ViewApplication() {
   const { t, i18n } = useTranslation(handle.i18nNamespaces);
-  const { applicationDetails, locale, year, children, dentalBenefit, maritalStatus, mailingProvince, homeProvince, mailingCountry, homeCountry, preferredLanguage, communicationPreferenceLang } = useLoaderData<typeof loader>();
+  const { applicationDetails, locale, year, children, dentalBenefit, maritalStatus, mailingProvince, homeProvince, mailingCountry, homeCountry, preferredLanguage, communicationPreferenceLang, SCCH_BASE_URI } = useLoaderData<typeof loader>();
 
   const dateOfBirth = applicationDetails.dateOfBirth ? toLocaleDateString(parseDateTimeString(applicationDetails.dateOfBirth), locale) : '';
   const partnerDateOfBirth = applicationDetails.partnerInformation?.dateOfBirth ? toLocaleDateString(parseDateTimeString(applicationDetails.partnerInformation.dateOfBirth), locale) : '';
-  const userOrigin = useUserOrigin();
   // TODO: Update with field mappings from Benefit Application from AB-3382
   return (
     <>
@@ -303,13 +303,11 @@ export default function ViewApplication() {
           </section>
         </div>
 
-        {userOrigin && (
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <ButtonLink id="back-button" to={userOrigin.to} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Back - View application click">
-              {t('applications:view-application.back-button')}
-            </ButtonLink>
-          </div>
-        )}
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Back - View application click">
+            {t('applications:view-application.back-button')}
+          </ButtonLink>
+        </div>
       </div>
     </>
   );

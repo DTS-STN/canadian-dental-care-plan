@@ -1,5 +1,6 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -7,12 +8,12 @@ import pageIds from '../page-ids.json';
 import { ButtonLink } from '~/components/buttons';
 import { InlineLink } from '~/components/inline-link';
 import { getRaoidcService } from '~/services/raoidc-service.server';
+import { getClientEnv } from '~/utils/env-utils';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { useUserOrigin } from '~/utils/user-origin-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'data-unavailable:breadcrumbs.cdcp' }],
@@ -33,12 +34,14 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('data-unavailable:page-title') }) };
 
-  return json({ meta });
+  const { SCCH_BASE_URI } = getClientEnv();
+
+  return json({ meta, SCCH_BASE_URI });
 }
 
 export default function DataUnavailable() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const userOrigin = useUserOrigin();
+  const { SCCH_BASE_URI } = useLoaderData<typeof loader>();
 
   const doyouqualify = <InlineLink to={t('data-unavailable:do-you-qualify.href')} className="external-link" newTabIndicator target="_blank" />;
   const howtoapply = <InlineLink to={t('data-unavailable:how-to-apply.href')} className="external-link" newTabIndicator target="_blank" />;
@@ -58,13 +61,12 @@ export default function DataUnavailable() {
           <Trans ns={handle.i18nNamespaces} i18nKey="data-unavailable:service-delay" components={{ statuschecker }} />
         </p>
       </div>
-      {userOrigin && (
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={userOrigin.to} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Return to dashboard - You have not applied for CDCP click">
-            {t('data-unavailable:back-button')}
-          </ButtonLink>
-        </div>
-      )}
+
+      <div className="mt-6 flex flex-wrap items-center gap-3">
+        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Return to dashboard - You have not applied for CDCP click">
+          {t('data-unavailable:back-button')}
+        </ButtonLink>
+      </div>
     </>
   );
 }

@@ -32,6 +32,9 @@ vi.mock('~/services/session-service.server', () => ({
 
 vi.mock('~/utils/env-utils.server', () => ({
   featureEnabled: vi.fn().mockReturnValue(true),
+  getClientEnv: vi.fn().mockReturnValue({
+    SCCH_BASE_URI: 'https://api.example.com',
+  }),
 }));
 
 vi.mock('~/utils/locale-utils.server', () => ({
