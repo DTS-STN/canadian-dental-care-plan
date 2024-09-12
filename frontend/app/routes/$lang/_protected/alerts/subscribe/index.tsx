@@ -18,7 +18,7 @@ import { getInstrumentationService } from '~/services/instrumentation-service.se
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSubscriptionService } from '~/services/subscription-service.server';
-import { featureEnabled } from '~/utils/env-utils.server';
+import { featureEnabled, getClientEnv } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -27,7 +27,6 @@ import type { IdToken } from '~/utils/raoidc-utils.server';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { useUserOrigin } from '~/utils/user-origin-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 export const handle = {
@@ -56,12 +55,13 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:subscribe.page-title') }) };
+  const { SCCH_BASE_URI } = getClientEnv();
 
   const idToken: IdToken = session.get('idToken');
   auditService.audit('page-view.subscribe-alerts', { userId: idToken.sub });
   instrumentationService.countHttpStatus('alerts.subscribe', 200);
 
-  return json({ csrfToken, meta, preferredLanguages });
+  return json({ csrfToken, meta, preferredLanguages, SCCH_BASE_URI });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -128,9 +128,8 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function AlertsSubscribe() {
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, preferredLanguages } = useLoaderData<typeof loader>();
+  const { csrfToken, preferredLanguages, SCCH_BASE_URI } = useLoaderData<typeof loader>();
   const params = useParams();
-  const userOrigin = useUserOrigin();
   const fetcher = useFetcher<typeof action>();
   const isSubmitting = fetcher.state !== 'idle';
 
@@ -167,7 +166,7 @@ export default function AlertsSubscribe() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={userOrigin?.to} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Back - Subscribe to CDCP email alerts click">
+          <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Back - Subscribe to CDCP email alerts click">
             {t('alerts:subscribe.button.back')}
           </ButtonLink>
           <LoadingButton id="subscribe-button" variant="primary" loading={isSubmitting} endIcon={faChevronRight} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Subscribe - Subscribe to CDCP email alerts click">

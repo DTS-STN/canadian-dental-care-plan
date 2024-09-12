@@ -19,7 +19,7 @@ import { getInstrumentationService } from '~/services/instrumentation-service.se
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSubscriptionService } from '~/services/subscription-service.server';
-import { featureEnabled } from '~/utils/env-utils.server';
+import { featureEnabled, getClientEnv } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -28,7 +28,6 @@ import type { IdToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { useUserOrigin } from '~/utils/user-origin-utils';
 import { transformFlattenedError } from '~/utils/zod-utils.server';
 
 enum ConfirmationCodeAction {
@@ -80,7 +79,9 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   auditService.audit('page-view.subscribe-alerts-confirm', { userId: idToken.sub });
   instrumentationService.countHttpStatus('alerts.subscribe-confirm', 200);
 
-  return json({ csrfToken, meta, alertSubscription, newCodeRequested, email, preferredLanguage });
+  const { SCCH_BASE_URI } = getClientEnv();
+
+  return json({ csrfToken, meta, alertSubscription, newCodeRequested, email, preferredLanguage, SCCH_BASE_URI });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {
@@ -149,10 +150,9 @@ export async function action({ context: { session }, params, request }: ActionFu
 
 export default function ConfirmSubscription() {
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { csrfToken, newCodeRequested, email, preferredLanguage } = useLoaderData<typeof loader>();
+  const { csrfToken, newCodeRequested, email, preferredLanguage, SCCH_BASE_URI } = useLoaderData<typeof loader>();
   const params = useParams();
   const fetcher = useFetcher<typeof action>();
-  const userOrigin = useUserOrigin();
   const isSubmitting = fetcher.state !== 'idle';
   const invalidConfirmationCode = fetcher.data && 'invalidConfirmationCode' in fetcher.data ? fetcher.data.invalidConfirmationCode : undefined;
 
@@ -201,7 +201,7 @@ export default function ConfirmSubscription() {
           <InputField id="confirmationCode" label={t('alerts:confirm.confirmation-code-label')} maxLength={100} name="confirmationCode" errorMessage={errors?.confirmationCode} />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={userOrigin?.to} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Back - Confirmation code click">
+          <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} params={params} disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Back - Confirmation code click">
             {t('alerts:confirm.back')}
           </ButtonLink>
           <Button id="new-code-button" name="action" value={ConfirmationCodeAction.NewCode} variant="alternative" disabled={isSubmitting} data-gc-analytics-customclick="ESDC-EDSC:CDCP Alerts:Request New Confirmation Code - Confirmation code click">

@@ -53,6 +53,9 @@ vi.mock('~/utils/env-utils.server', () => ({
     ENGLISH_LANGUAGE_CODE: 1033,
     FRENCH_LANGUAGE_CODE: 1036,
   }),
+  getClientEnv: vi.fn().mockReturnValue({
+    SCCH_BASE_URI: 'https://api.example.com',
+  }),
 }));
 
 vi.mock('~/services/personal-information-service.server', () => ({
@@ -133,6 +136,7 @@ describe('_gcweb-app.personal-information._index', () => {
       const data = await response.json();
 
       expect(data).toEqual({
+        SCCH_BASE_URI: 'https://api.example.com',
         birthParsedFormat: 'October 11, 1950',
         homeAddressCountry: 'super country',
         mailingAddressCountry: 'super country',

@@ -17,14 +17,13 @@ import { getBenefitApplicationService } from '~/services/benefit-application-ser
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { extractDateParts } from '~/utils/date-utils';
-import { featureEnabled } from '~/utils/env-utils.server';
+import { featureEnabled, getClientEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { useUserOrigin } from '~/utils/user-origin-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'applications:index.page-title' }],
@@ -65,15 +64,15 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   auditService.audit('page-view.applications', { userId: idToken.sub });
   instrumentationService.countHttpStatus('applications.view', 200);
 
-  return json({ applications, meta, sortOrder });
+  const { SCCH_BASE_URI } = getClientEnv();
+  return json({ applications, meta, sortOrder, SCCH_BASE_URI });
 }
 
 export default function ApplicationsIndex() {
   const [, setSearchParams] = useSearchParams();
   const { t } = useTranslation(handle.i18nNamespaces);
-  const { applications, sortOrder } = useLoaderData<typeof loader>();
+  const { applications, sortOrder, SCCH_BASE_URI } = useLoaderData<typeof loader>();
   const params = useParams();
-  const userOrigin = useUserOrigin();
 
   function handleOnSortOrderChange(e: ChangeEvent<HTMLSelectElement>) {
     setSearchParams((prev) => {
@@ -121,13 +120,11 @@ export default function ApplicationsIndex() {
         </>
       )}
 
-      {userOrigin && (
-        <div className="my-6 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={userOrigin.to} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Back - Applications click">
-            {t('applications:index.back-button')}
-          </ButtonLink>
-        </div>
-      )}
+      <div className="my-6 flex flex-wrap items-center gap-3">
+        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP Applications:Back - Applications click">
+          {t('applications:index.back-button')}
+        </ButtonLink>
+      </div>
     </>
   );
 }

@@ -17,7 +17,7 @@ import { getAuditService } from '~/services/audit-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
-import { featureEnabled } from '~/utils/env-utils.server';
+import { featureEnabled, getClientEnv } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { localizeCountries, localizeMaritalStatuses, localizeRegions } from '~/utils/lookup-utils.server';
@@ -25,7 +25,6 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { useUserOrigin } from '~/utils/user-origin-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'personal-information:index.page-title' }],
@@ -66,6 +65,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };
+  const { SCCH_BASE_URI } = getClientEnv();
 
   const updatedInfo = session.get('personal-info-updated');
   session.unset('personal-info-updated');
@@ -86,14 +86,14 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     mailingAddressRegion,
     maritalStatus,
     updatedInfo,
+    SCCH_BASE_URI,
   });
 }
 
 export default function PersonalInformationIndex() {
-  const { personalInformation, preferredLanguage, homeAddressCountry, mailingAddressCountry, birthParsedFormat, maritalStatus, homeAddressRegion, mailingAddressRegion, updatedInfo } = useLoaderData<typeof loader>();
+  const { personalInformation, preferredLanguage, homeAddressCountry, mailingAddressCountry, birthParsedFormat, maritalStatus, homeAddressRegion, mailingAddressRegion, updatedInfo, SCCH_BASE_URI } = useLoaderData<typeof loader>();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
   const params = useParams();
-  const userOrigin = useUserOrigin();
 
   return (
     <div className="max-w-prose font-lato">
@@ -208,13 +208,11 @@ export default function PersonalInformationIndex() {
         <DescriptionListItem term={t('personal-information:index.date-of-birth')}>{birthParsedFormat}</DescriptionListItem>
       </dl>
 
-      {userOrigin && (
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={userOrigin.to} data-gc-analytics-customclick="ESDC-EDSC:CDCP:Return to dashboard - Personal Information click">
-            {t('personal-information:index.dashboard-text')}
-          </ButtonLink>
-        </div>
-      )}
+      <div className="mt-6 flex flex-wrap items-center gap-3">
+        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })} data-gc-analytics-customclick="ESDC-EDSC:CDCP:Return to dashboard - Personal Information click">
+          {t('personal-information:index.dashboard-text')}
+        </ButtonLink>
+      </div>
     </div>
   );
 }

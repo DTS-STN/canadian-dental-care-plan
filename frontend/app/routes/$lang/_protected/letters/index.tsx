@@ -17,14 +17,13 @@ import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLettersService } from '~/services/letters-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { featureEnabled } from '~/utils/env-utils.server';
+import { featureEnabled, getClientEnv } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
-import { useUserOrigin } from '~/utils/user-origin-utils';
 
 export const handle = {
   breadcrumbs: [{ labelI18nKey: 'letters:index.page-title' }],
@@ -64,20 +63,20 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('letters:index.page-title') }) };
+  const { SCCH_BASE_URI } = getClientEnv();
 
   const idToken: IdToken = session.get('idToken');
   auditService.audit('page-view.letters', { userId: idToken.sub });
   instrumentationService.countHttpStatus('letters.view', 200);
 
-  return json({ letters, letterTypes, meta, sortOrder });
+  return json({ letters, letterTypes, meta, sortOrder, SCCH_BASE_URI });
 }
 
 export default function LettersIndex() {
   const [, setSearchParams] = useSearchParams();
   const { i18n, t } = useTranslation(handle.i18nNamespaces);
-  const { letters, letterTypes, sortOrder } = useLoaderData<typeof loader>();
+  const { letters, letterTypes, sortOrder, SCCH_BASE_URI } = useLoaderData<typeof loader>();
   const params = useParams();
-  const userOrigin = useUserOrigin();
 
   function handleOnSortOrderChange(e: ChangeEvent<HTMLSelectElement>) {
     setSearchParams((prev) => {
@@ -128,13 +127,11 @@ export default function LettersIndex() {
         </>
       )}
 
-      {userOrigin && (
-        <div className="my-6 flex flex-wrap items-center gap-3">
-          <ButtonLink id="back-button" to={userOrigin.to}>
-            {t('letters:index.button.back')}
-          </ButtonLink>
-        </div>
-      )}
+      <div className="my-6 flex flex-wrap items-center gap-3">
+        <ButtonLink id="back-button" to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>
+          {t('letters:index.button.back')}
+        </ButtonLink>
+      </div>
     </>
   );
 }
