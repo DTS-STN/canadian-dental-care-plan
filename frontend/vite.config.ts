@@ -79,6 +79,12 @@ export default defineConfig({
     port: 3000,
     host: true,
   },
+  optimizeDeps: {
+    // exclude the otlp-exporter-base package because it causes
+    // issues with vite's dependency optimization
+    // see: https://github.com/open-telemetry/opentelemetry-js/issues/4794
+    exclude: ['@opentelemetry/otlp-exporter-base'],
+  },
   plugins: [
     expressDevServer(),
     tsconfigPaths(),
@@ -91,6 +97,9 @@ export default defineConfig({
           ignoredRouteFiles: ['**/*'], // we will manually configure routes
           routes: (defineRoutes) => jsonRoutes(defineRoutes, JSON.parse(readFileSync('./app/routes.json', 'utf8'))),
           future: {
+            // Fix vite client-side dependency optimization issues that trigger a server restart.
+            // https://remix.run/docs/en/main/guides/dependency-optimization
+            unstable_optimizeDeps: true,
             v3_fetcherPersist: true,
             v3_relativeSplatPath: true,
             v3_throwAbortReason: true,
