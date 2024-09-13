@@ -73,6 +73,9 @@ function NavigationMenu() {
         {/* Use of a workaround (onFocusOutside={(e) => e.preventDefault()}) for the drowndownmenucontent with the resize issue raised by accessibility : https://github.com/radix-ui/primitives/issues/2754 */}
         <DropdownMenuContent onFocusOutside={(e) => e.preventDefault()} side="bottom" avoidCollisions={false} className="w-svw rounded-t-none sm:w-[260px]" sideOffset={0} align="center">
           <DropdownMenuItem asChild className="cursor-pointer">
+            <Link to={t('gcweb:header.menu-dashboard.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-dashboard.text')}</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild className="cursor-pointer">
             <Link to={t('gcweb:header.menu-profile.href', { baseUri: SCCH_BASE_URI })}>{t('gcweb:header.menu-profile.text')}</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild className="cursor-pointer">
