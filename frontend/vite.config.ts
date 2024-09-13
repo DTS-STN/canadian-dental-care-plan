@@ -7,7 +7,7 @@ import { expressDevServer } from 'remix-express-dev-server';
 import tailwindcss from 'tailwindcss';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import { configDefaults } from 'vitest/config';
+import { coverageConfigDefaults } from 'vitest/config';
 
 /**
  * Represents a single route definition in the JSON configuration file.
@@ -110,16 +110,12 @@ export default defineConfig({
     noExternal: ['react-idle-timer', 'fast-json-patch'],
   },
   test: {
-    testTimeout: 50000,
-    // happy-dom doesn't support button submit or FormData
-    // https://github.com/capricorn86/happy-dom/issues/527
-    // https://github.com/capricorn86/happy-dom/issues/585
     environment: 'jsdom',
     setupFiles: ['./__tests__/setup-test-env.ts'],
-    exclude: [...configDefaults.exclude, '**/build/**', '**/e2e/**'],
+    include: ['./__tests__/**/*.test.{ts,tsx}'],
     coverage: {
-      include: ['**/app/**'],
-      exclude: ['**/app/**/*.d.ts', '**/app/mocks/**'],
+      include: ['**/app/**/*.{ts,tsx}'],
+      exclude: ['**/app/mocks/**', ...coverageConfigDefaults.exclude],
     },
   },
 });
