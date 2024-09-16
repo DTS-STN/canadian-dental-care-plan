@@ -49,7 +49,7 @@ describe('PreferredLanguageRepositoryImpl', () => {
 
     const repository = new PreferredLanguageRepositoryImpl(mockLogFactory);
 
-    const preferredLanguages = repository.getAllPreferredLanguages();
+    const preferredLanguages = repository.findAll();
 
     expect(preferredLanguages).toEqual([
       {
@@ -83,7 +83,7 @@ describe('PreferredLanguageRepositoryImpl', () => {
 
     const repository = new PreferredLanguageRepositoryImpl(mockLogFactory);
 
-    const preferredLanguages = repository.getAllPreferredLanguages();
+    const preferredLanguages = repository.findAll();
 
     expect(preferredLanguages).toEqual([]);
   });
@@ -94,7 +94,7 @@ describe('PreferredLanguageRepositoryImpl', () => {
 
     const repository = new PreferredLanguageRepositoryImpl(mockLogFactory);
 
-    const preferredLanguage = repository.getPreferredLanguageById('1033');
+    const preferredLanguage = repository.findById('1033');
 
     expect(preferredLanguage).toEqual({
       Value: 1033,
@@ -119,7 +119,7 @@ describe('PreferredLanguageRepositoryImpl', () => {
 
     const repository = new PreferredLanguageRepositoryImpl(mockLogFactory);
 
-    const preferredLanguage = repository.getPreferredLanguageById('non-existent-id');
+    const preferredLanguage = repository.findById('non-existent-id');
 
     expect(preferredLanguage).toBeNull();
   });

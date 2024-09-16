@@ -109,7 +109,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
       }
     : undefined;
 
-  const preferredLanguage = serviceProvider.preferredLanguageService.getPreferredLanguageById(userInfo.preferredLanguage);
+  const preferredLanguage = serviceProvider.preferredLanguageService.findById(userInfo.preferredLanguage);
 
   const mailingAddressInfo = {
     address: state.contactInformation.mailingAddress,
