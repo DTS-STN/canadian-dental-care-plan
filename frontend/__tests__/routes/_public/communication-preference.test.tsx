@@ -57,7 +57,7 @@ describe('_public.apply.id.communication-preference', () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
       const mockContainer = mock<ContainerProvider>({
-        service: {
+        serviceProvider: {
           preferredLanguageService: {
             getAllPreferredLanguages: vi.fn().mockReturnValue([
               { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
@@ -107,7 +107,7 @@ describe('_public.apply.id.communication-preference', () => {
         ],
       });
 
-      expect(mockContainer.service.preferredLanguageService.getAllPreferredLanguages).toHaveBeenCalledTimes(1);
+      expect(mockContainer.serviceProvider.preferredLanguageService.getAllPreferredLanguages).toHaveBeenCalledTimes(1);
     });
   });
 

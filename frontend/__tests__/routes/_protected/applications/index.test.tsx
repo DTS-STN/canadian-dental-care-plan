@@ -179,7 +179,7 @@ describe('Applications Page', () => {
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
       session.set('userInfoToken', { sin: '800009979', sub: '00000000-0000-0000-0000-000000000000' });
 
-      const mockContainer = mock<ContainerProvider>({ config: { clientConfig: { SCCH_BASE_URI: 'https://api.example.com' } } });
+      const mockContainer = mock<ContainerProvider>({ configProvider: { clientConfig: { SCCH_BASE_URI: 'https://api.example.com' } } });
 
       const response = await loader({
         request: new Request('http://localhost/applications?sort=asc'),

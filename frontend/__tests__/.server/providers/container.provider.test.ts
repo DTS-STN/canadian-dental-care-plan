@@ -10,13 +10,13 @@ describe('ContainerProviderImpl', () => {
     const mockContainerConfigProvider = mock<ContainerConfigProvider>();
     const containerProvider = new ContainerProviderImpl(mockContainerConfigProvider, mock<ContainerServiceProvider>());
 
-    expect(containerProvider.config).toBe(mockContainerConfigProvider);
+    expect(containerProvider.configProvider).toBe(mockContainerConfigProvider);
   });
 
   it('should inject container service provider', () => {
     const mockContainerServiceProvider = mock<ContainerServiceProvider>();
     const containerProvider = new ContainerProviderImpl(mock<ContainerConfigProvider>(), mockContainerServiceProvider);
 
-    expect(containerProvider.service).toBe(mockContainerServiceProvider);
+    expect(containerProvider.serviceProvider).toBe(mockContainerServiceProvider);
   });
 });

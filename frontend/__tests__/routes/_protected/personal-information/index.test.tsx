@@ -92,8 +92,8 @@ describe('_gcweb-app.personal-information._index', () => {
 
   describe('loader()', () => {
     const mockContainer = mock<ContainerProvider>({
-      config: { clientConfig: { SCCH_BASE_URI: 'https://api.example.com' } },
-      service: {
+      configProvider: { clientConfig: { SCCH_BASE_URI: 'https://api.example.com' } },
+      serviceProvider: {
         preferredLanguageService: {
           getPreferredLanguageById: vi.fn().mockReturnValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' }),
           getAllPreferredLanguages: vi.fn().mockReturnValue([

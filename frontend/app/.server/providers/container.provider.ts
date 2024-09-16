@@ -5,17 +5,17 @@ import type { ContainerConfigProvider } from '~/.server/providers/container-conf
 import type { ContainerServiceProvider } from '~/.server/providers/container-service.provider';
 
 export interface ContainerProvider {
-  config: ContainerConfigProvider;
-  service: ContainerServiceProvider;
+  configProvider: ContainerConfigProvider;
+  serviceProvider: ContainerServiceProvider;
 }
 
 @injectable()
 export class ContainerProviderImpl implements ContainerProvider {
   constructor(
     @inject(SERVICE_IDENTIFIER.CONTAINER_CONFIG_PROVIDER)
-    public readonly config: ContainerConfigProvider,
+    public readonly configProvider: ContainerConfigProvider,
 
     @inject(SERVICE_IDENTIFIER.CONTAINER_SERVICE_PROVIDER)
-    public readonly service: ContainerServiceProvider,
+    public readonly serviceProvider: ContainerServiceProvider,
   ) {}
 }

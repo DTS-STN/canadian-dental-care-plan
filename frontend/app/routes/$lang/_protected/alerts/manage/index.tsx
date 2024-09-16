@@ -51,7 +51,7 @@ export async function loader({ context: { container, session }, params, request 
   await raoidcService.handleSessionValidation(request, session);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const preferredLanguages = container.service.preferredLanguageService.getAllPreferredLanguages();
+  const preferredLanguages = container.serviceProvider.preferredLanguageService.getAllPreferredLanguages();
 
   const alertSubscription = await subscriptionService.getSubscription(session.get('userId'));
 

@@ -67,7 +67,7 @@ export async function loader({ context: { container, session }, params, request 
   }
 
   const email = alertSubscription.email;
-  const preferredLanguages = container.service.preferredLanguageService.getAllPreferredLanguages();
+  const preferredLanguages = container.serviceProvider.preferredLanguageService.getAllPreferredLanguages();
   const preferredLanguageDict = preferredLanguages.find((obj) => obj.id === alertSubscription.preferredLanguageId);
   const preferredLanguage = preferredLanguageDict && getNameByLanguage(locale, preferredLanguageDict);
 
@@ -77,7 +77,7 @@ export async function loader({ context: { container, session }, params, request 
   auditService.audit('page-view.subscribe-alerts-confirm', { userId: idToken.sub });
   instrumentationService.countHttpStatus('alerts.subscribe-confirm', 200);
 
-  const { SCCH_BASE_URI } = container.config.clientConfig;
+  const { SCCH_BASE_URI } = container.configProvider.clientConfig;
 
   return json({ csrfToken, meta, alertSubscription, newCodeRequested, email, preferredLanguage, SCCH_BASE_URI });
 }

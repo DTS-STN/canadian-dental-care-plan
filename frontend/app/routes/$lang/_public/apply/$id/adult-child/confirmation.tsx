@@ -81,7 +81,7 @@ export async function loader({ context: { container, session }, params, request 
   const countryMailing = allCountries.find((country) => country.countryId === state.contactInformation?.mailingCountry);
   const countryHome = allCountries.find((country) => country.countryId === state.contactInformation?.homeCountry);
 
-  const preferredLang = container.service.preferredLanguageService.getPreferredLanguageById(state.communicationPreferences.preferredLanguage);
+  const preferredLang = container.serviceProvider.preferredLanguageService.getPreferredLanguageById(state.communicationPreferences.preferredLanguage);
   const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : state.communicationPreferences.preferredLanguage;
 
   const maritalStatuses = localizeMaritalStatuses(lookupService.getAllMaritalStatuses(), locale);

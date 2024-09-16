@@ -55,7 +55,7 @@ export async function loader({ context: { container, session }, params, request 
   const preferredLanguageId = personalInformation.preferredLanguageId;
 
   const csrfToken = String(session.get('csrfToken'));
-  const preferredLanguages = container.service.preferredLanguageService.getAllPreferredLanguages();
+  const preferredLanguages = container.serviceProvider.preferredLanguageService.getAllPreferredLanguages();
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:preferred-language.edit.page-title') }) };
