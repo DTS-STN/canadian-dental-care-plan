@@ -17,7 +17,7 @@ import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getLettersService } from '~/services/letters-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
-import { featureEnabled, getClientEnv } from '~/utils/env-utils.server';
+import { featureEnabled } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -39,7 +39,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
 
 const orderEnumSchema = z.enum(['asc', 'desc']);
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-letters');
 
   const auditService = getAuditService();
@@ -63,7 +63,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('letters:index.page-title') }) };
-  const { SCCH_BASE_URI } = getClientEnv();
+  const { SCCH_BASE_URI } = configProvider.clientConfig;
 
   const idToken: IdToken = session.get('idToken');
   auditService.audit('page-view.letters', { userId: idToken.sub });

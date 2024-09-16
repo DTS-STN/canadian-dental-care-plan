@@ -1,5 +1,6 @@
 import { getEnv } from './env-utils.server';
-import type { ClientFriendlyStatus, Country, FederalSocialProgram, Language, MaritalStatus, ProvincialTerritorialSocialProgram, Region } from '~/services/lookup-service.server';
+import type { PreferredLanguageDto } from '~/.server/domain/dtos/preferred-language.dto';
+import type { ClientFriendlyStatus, Country, FederalSocialProgram, MaritalStatus, ProvincialTerritorialSocialProgram, Region } from '~/services/lookup-service.server';
 
 /**
  * Localizes a single country object by adding a localized name.
@@ -126,7 +127,7 @@ export function localizeAndSortRegions(regions: ReadonlyArray<Region>, locale: A
  * @param locale - The locale code for localization.
  * @returns The localized language object with a localized name.
  */
-export function localizeLanguage(language: Language, locale: string) {
+export function localizeLanguage(language: PreferredLanguageDto, locale: string) {
   const { nameEn, nameFr, ...rest } = language;
   return {
     ...rest,
@@ -142,7 +143,7 @@ export function localizeLanguage(language: Language, locale: string) {
  * @param firstLanguageId - The language ID that specifies the language object that should appear first in the sorted array.
  * @returns The localized and sorted array of language objects.
  */
-export function localizeAndSortPreferredLanguages(languages: Language[], locale: string, firstLanguageId?: number) {
+export function localizeAndSortPreferredLanguages(languages: PreferredLanguageDto[], locale: string, firstLanguageId?: number) {
   const mappedLanguages = languages.map((language) => localizeLanguage(language, locale));
   return mappedLanguages.toSorted((a, b) => {
     if (firstLanguageId && a.id === firstLanguageId.toString()) return -1;

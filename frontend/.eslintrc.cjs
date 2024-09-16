@@ -15,6 +15,7 @@ module.exports = {
     ecmaFeatures: { jsx: true },
     project: ['./tsconfig.json'],
   },
+  ignorePatterns: ['!**/.server', '!**/.client'],
   overrides: [
     {
       // React sources

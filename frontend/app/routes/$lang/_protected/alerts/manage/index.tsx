@@ -16,7 +16,6 @@ import { InputRadios } from '~/components/input-radios';
 import { LoadingButton } from '~/components/loading-button';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSubscriptionService } from '~/services/subscription-service.server';
 import { featureEnabled } from '~/utils/env-utils.server';
@@ -41,19 +40,18 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('email-alerts');
 
   const auditService = getAuditService();
   const instrumentationService = getInstrumentationService();
-  const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
   const subscriptionService = getSubscriptionService();
 
   await raoidcService.handleSessionValidation(request, session);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const preferredLanguages = lookupService.getAllPreferredLanguages();
+  const preferredLanguages = serviceProvider.preferredLanguageService.getAllPreferredLanguages();
 
   const alertSubscription = await subscriptionService.getSubscription(session.get('userId'));
 

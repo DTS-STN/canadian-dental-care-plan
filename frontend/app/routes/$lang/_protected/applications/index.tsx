@@ -17,7 +17,7 @@ import { getBenefitApplicationService } from '~/services/benefit-application-ser
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { extractDateParts } from '~/utils/date-utils';
-import { featureEnabled, getClientEnv } from '~/utils/env-utils.server';
+import { featureEnabled } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT } from '~/utils/locale-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
@@ -39,7 +39,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-applications');
 
   const auditService = getAuditService();
@@ -64,7 +64,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   auditService.audit('page-view.applications', { userId: idToken.sub });
   instrumentationService.countHttpStatus('applications.view', 200);
 
-  const { SCCH_BASE_URI } = getClientEnv();
+  const { SCCH_BASE_URI } = configProvider.clientConfig;
   return json({ applications, meta, sortOrder, SCCH_BASE_URI });
 }
 

@@ -1,7 +1,9 @@
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 
+import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { action, loader } from '~/routes/$lang/_public/apply/$id/adult/communication-preference';
 
 vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
@@ -17,18 +19,6 @@ vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
 
 vi.mock('~/services/lookup-service.server', () => ({
   getLookupService: vi.fn().mockReturnValue({
-    getAllPreferredLanguages: vi.fn().mockReturnValue([
-      {
-        id: 'en',
-        nameEn: 'English',
-        nameFr: 'Anglais',
-      },
-      {
-        id: 'fr',
-        nameEn: 'French',
-        nameFr: 'Français',
-      },
-    ]),
     getAllPreferredCommunicationMethods: vi.fn().mockReturnValue([
       {
         id: 'email',
@@ -66,9 +56,20 @@ describe('_public.apply.id.communication-preference', () => {
     it('should id, state, country list and region list', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
+      const mockContainerProvider = mock<ContainerProvider>({
+        serviceProvider: {
+          preferredLanguageService: {
+            getAllPreferredLanguages: vi.fn().mockReturnValue([
+              { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
+              { id: 'fr', nameEn: 'French', nameFr: 'Français' },
+            ]),
+          },
+        },
+      });
+
       const response = await loader({
         request: new Request('http://localhost:3000/apply/123/communication-preference'),
-        context: { session },
+        context: { session, ...mockContainerProvider },
         params: {},
       });
 
@@ -105,6 +106,8 @@ describe('_public.apply.id.communication-preference', () => {
           },
         ],
       });
+
+      expect(mockContainerProvider.serviceProvider.preferredLanguageService.getAllPreferredLanguages).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -123,7 +126,7 @@ describe('_public.apply.id.communication-preference', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { session },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 
@@ -144,7 +147,7 @@ describe('_public.apply.id.communication-preference', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { session },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 
@@ -166,7 +169,7 @@ describe('_public.apply.id.communication-preference', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { session },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 

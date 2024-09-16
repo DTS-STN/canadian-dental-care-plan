@@ -1,7 +1,9 @@
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 
+import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { loader } from '~/routes/$lang/_protected/personal-information/index';
 
 vi.mock('~/services/audit-service.server', () => ({
@@ -13,11 +15,6 @@ vi.mock('~/services/audit-service.server', () => ({
 vi.mock('~/services/lookup-service.server', () => ({
   // prettier-ignore
   getLookupService: vi.fn().mockReturnValue({
-    getAllPreferredLanguages: vi.fn().mockReturnValue([
-      { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
-      { id: 'fr', nameEn: 'French', nameFr: 'Français' },
-    ]),
-    getPreferredLanguageById: vi.fn().mockReturnValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' }),
     getAllCountries: vi.fn().mockReturnValue([{ id: 'SUP', nameEn: 'super country', nameFr: '(FR) super country' }]),
     getAllRegions: vi.fn().mockReturnValue([{ id: 'SP', countryId: "CAN", nameEn: 'sample', nameFr: '(FR) sample', abbr: 'SP' }]),
     getAllMaritalStatuses: vi.fn().mockReturnValue([{ id: 'SINGLE', nameEn: 'Single', nameFr: 'Single but in french' }]),
@@ -94,6 +91,19 @@ describe('_gcweb-app.personal-information._index', () => {
   });
 
   describe('loader()', () => {
+    const mockContainerProvider = mock<ContainerProvider>({
+      configProvider: { clientConfig: { SCCH_BASE_URI: 'https://api.example.com' } },
+      serviceProvider: {
+        preferredLanguageService: {
+          getPreferredLanguageById: vi.fn().mockReturnValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' }),
+          getAllPreferredLanguages: vi.fn().mockReturnValue([
+            { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
+            { id: 'fr', nameEn: 'French', nameFr: 'Français' },
+          ]),
+        },
+      },
+    });
+
     it('should return a Response object', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
@@ -101,7 +111,7 @@ describe('_gcweb-app.personal-information._index', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/personal-information'),
-        context: { session },
+        context: { session, ...mockContainerProvider },
         params: {},
       });
 
@@ -115,7 +125,7 @@ describe('_gcweb-app.personal-information._index', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/fr/personal-information'),
-        context: { session },
+        context: { session, ...mockContainerProvider },
         params: {},
       });
 
@@ -129,7 +139,7 @@ describe('_gcweb-app.personal-information._index', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/personal-information'),
-        context: { session },
+        context: { session, ...mockContainerProvider },
         params: {},
       });
 

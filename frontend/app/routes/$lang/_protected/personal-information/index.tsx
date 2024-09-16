@@ -17,7 +17,7 @@ import { getAuditService } from '~/services/audit-service.server';
 import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
-import { featureEnabled, getClientEnv } from '~/utils/env-utils.server';
+import { featureEnabled } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { localizeCountries, localizeMaritalStatuses, localizeRegions } from '~/utils/lookup-utils.server';
@@ -38,7 +38,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-personal-info');
 
   const lookupService = getLookupService();
@@ -54,7 +54,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
 
-  const preferredLanguage = personalInformation.preferredLanguageId ? lookupService.getPreferredLanguageById(personalInformation.preferredLanguageId) : undefined;
+  const preferredLanguage = personalInformation.preferredLanguageId ? serviceProvider.preferredLanguageService.getPreferredLanguageById(personalInformation.preferredLanguageId) : undefined;
   const birthParsedFormat = personalInformation.birthDate ? toLocaleDateString(parseDateString(personalInformation.birthDate), locale) : undefined;
 
   const countryList = localizeCountries(lookupService.getAllCountries(), locale);
@@ -65,7 +65,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };
-  const { SCCH_BASE_URI } = getClientEnv();
+  const { SCCH_BASE_URI } = configProvider.clientConfig;
 
   const updatedInfo = session.get('personal-info-updated');
   session.unset('personal-info-updated');

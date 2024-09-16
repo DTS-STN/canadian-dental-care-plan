@@ -18,7 +18,6 @@ import fontNotoSansStyleSheet from '~/fonts/noto-sans.css?url';
 import { getBuildInfoService } from '~/services/build-info-service.server';
 import tailwindStyleSheet from '~/tailwind.css?url';
 import * as adobeAnalytics from '~/utils/adobe-analytics.client';
-import { getClientEnv } from '~/utils/env-utils.server';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { useI18nNamespaces, useTransformAdobeAnalyticsUrl } from '~/utils/route-utils';
 import { getDescriptionMetaTags, getTitleMetaTags, useAlternateLanguages, useCanonicalURL } from '~/utils/seo-utils';
@@ -60,7 +59,7 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
   };
 };
 
-export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, request }: LoaderFunctionArgs) {
   const buildInfoService = getBuildInfoService();
   const dynatraceService = getDynatraceService();
   const requestUrl = new URL(request.url);
@@ -69,7 +68,7 @@ export async function loader({ context: { session }, request }: LoaderFunctionAr
 
   const buildInfo = buildInfoService.getBuildInfo();
   const dynatraceRumScript = await dynatraceService.retrieveRumScript();
-  const env = getClientEnv();
+  const env = configProvider.clientConfig;
   const meta = {
     author: t('gcweb:meta.author'),
     description: t('gcweb:meta.description'),

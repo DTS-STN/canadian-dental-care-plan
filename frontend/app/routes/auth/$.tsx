@@ -20,21 +20,21 @@ const defaultProviderId = 'raoidc';
 /**
  * A do-all authentication handler for the application
  */
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const { '*': slug } = params;
 
   switch (slug) {
     case 'login': {
-      return handleLoginRequest({ context: { session }, params, request });
+      return handleLoginRequest({ context, params, request });
     }
     case 'logout': {
-      return handleLogoutRequest({ context: { session }, params, request });
+      return handleLogoutRequest({ context, params, request });
     }
     case 'login/raoidc': {
-      return handleRaoidcLoginRequest({ context: { session }, params, request });
+      return handleRaoidcLoginRequest({ context, params, request });
     }
     case 'callback/raoidc': {
-      return handleRaoidcCallbackRequest({ context: { session }, params, request });
+      return handleRaoidcCallbackRequest({ context, params, request });
     }
     //
     // A mock authorize route for testing purposes
@@ -45,7 +45,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
         return new Response(null, { status: 404 });
       }
 
-      return handleMockAuthorizeRequest({ context: { session }, params, request });
+      return handleMockAuthorizeRequest({ context, params, request });
     }
   }
 

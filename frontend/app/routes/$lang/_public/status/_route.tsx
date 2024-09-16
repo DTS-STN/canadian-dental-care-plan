@@ -4,7 +4,6 @@ import { Outlet, isRouteErrorResponse, useLoaderData, useRouteError } from '@rem
 import { NotFoundError, PublicLayout, ServerError, i18nNamespaces as layoutI18nNamespaces } from '~/components/layouts/public-layout';
 import SessionTimeout from '~/components/session-timeout';
 import { useApiSession } from '~/utils/api-session-utils';
-import { getClientEnv } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getLocale } from '~/utils/locale-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -14,9 +13,9 @@ export const handle = {
 } as const satisfies RouteHandleData;
 
 // eslint-disable-next-line @typescript-eslint/require-await
-export async function loader({ context: { session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, request }: LoaderFunctionArgs) {
   const locale = getLocale(request);
-  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = getClientEnv();
+  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = configProvider.clientConfig;
   return { locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
 }
 

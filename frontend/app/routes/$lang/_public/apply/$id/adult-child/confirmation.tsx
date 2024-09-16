@@ -40,7 +40,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
@@ -81,7 +81,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const countryMailing = allCountries.find((country) => country.countryId === state.contactInformation?.mailingCountry);
   const countryHome = allCountries.find((country) => country.countryId === state.contactInformation?.homeCountry);
 
-  const preferredLang = lookupService.getPreferredLanguageById(state.communicationPreferences.preferredLanguage);
+  const preferredLang = serviceProvider.preferredLanguageService.getPreferredLanguageById(state.communicationPreferences.preferredLanguage);
   const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : state.communicationPreferences.preferredLanguage;
 
   const maritalStatuses = localizeMaritalStatuses(lookupService.getAllMaritalStatuses(), locale);

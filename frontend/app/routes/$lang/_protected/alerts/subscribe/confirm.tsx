@@ -16,10 +16,9 @@ import { InputField } from '~/components/input-field';
 import { LoadingButton } from '~/components/loading-button';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { getSubscriptionService } from '~/services/subscription-service.server';
-import { featureEnabled, getClientEnv } from '~/utils/env-utils.server';
+import { featureEnabled } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -45,12 +44,11 @@ export const handle = {
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('email-alerts');
 
   const auditService = getAuditService();
   const instrumentationService = getInstrumentationService();
-  const lookupService = getLookupService();
   const raoidcService = await getRaoidcService();
   const subscriptionService = getSubscriptionService();
 
@@ -69,7 +67,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   }
 
   const email = alertSubscription.email;
-  const preferredLanguages = lookupService.getAllPreferredLanguages();
+  const preferredLanguages = serviceProvider.preferredLanguageService.getAllPreferredLanguages();
   const preferredLanguageDict = preferredLanguages.find((obj) => obj.id === alertSubscription.preferredLanguageId);
   const preferredLanguage = preferredLanguageDict && getNameByLanguage(locale, preferredLanguageDict);
 
@@ -79,7 +77,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   auditService.audit('page-view.subscribe-alerts-confirm', { userId: idToken.sub });
   instrumentationService.countHttpStatus('alerts.subscribe-confirm', 200);
 
-  const { SCCH_BASE_URI } = getClientEnv();
+  const { SCCH_BASE_URI } = configProvider.clientConfig;
 
   return json({ csrfToken, meta, alertSubscription, newCodeRequested, email, preferredLanguage, SCCH_BASE_URI });
 }

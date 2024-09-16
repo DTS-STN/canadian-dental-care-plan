@@ -1,35 +1,14 @@
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 
+import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { loader } from '~/routes/$lang/_protected/personal-information/preferred-language/edit';
-import { getLookupService } from '~/services/lookup-service.server';
 
 vi.mock('~/services/instrumentation-service.server', () => ({
   getInstrumentationService: () => ({
     countHttpStatus: vi.fn(),
-  }),
-}));
-
-vi.mock('~/services/lookup-service.server', () => ({
-  getLookupService: vi.fn().mockReturnValue({
-    getAllPreferredLanguages: vi.fn().mockReturnValue([
-      {
-        id: 'en',
-        nameEn: 'English',
-        nameFr: 'Anglais',
-      },
-      {
-        id: 'fr',
-        nameEn: 'French',
-        nameFr: 'Français',
-      },
-    ]),
-    getPreferredLanguageById: vi.fn().mockReturnValue({
-      id: 'fr',
-      nameEn: 'French',
-      nameFr: 'Français',
-    }),
   }),
 }));
 
@@ -57,28 +36,25 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
   });
 
   describe('loader()', () => {
+    const mockContainerProvider = mock<ContainerProvider>({
+      serviceProvider: {
+        preferredLanguageService: {
+          getAllPreferredLanguages: vi.fn().mockReturnValue([
+            { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
+            { id: 'fr', nameEn: 'French', nameFr: 'Français' },
+          ]),
+        },
+      },
+    });
+
     it('should return preferred language if it is found', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
       session.set('userInfoToken', { sin: '999999999' });
       session.set('personalInformation', { preferredLanguageId: 'fr' });
 
-      vi.mocked(getLookupService().getPreferredLanguageById).mockReturnValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' });
-      vi.mocked(getLookupService().getAllPreferredLanguages).mockReturnValue([
-        {
-          id: 'en',
-          nameEn: 'English',
-          nameFr: 'Anglais',
-        },
-        {
-          id: 'fr',
-          nameEn: 'French',
-          nameFr: 'Français',
-        },
-      ]);
-
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information/preferred/edit'),
-        context: { session },
+        context: { session, ...mockContainerProvider },
         params: {},
       });
 
@@ -102,7 +78,7 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
       try {
         await loader({
           request: new Request('http://localhost:3000/personal-information/preferred-language/edit'),
-          context: { session },
+          context: { session, ...mockContainerProvider },
           params: {},
         });
       } catch (error) {

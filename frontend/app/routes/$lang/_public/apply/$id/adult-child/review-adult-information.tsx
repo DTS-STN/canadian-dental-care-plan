@@ -50,7 +50,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const state = loadApplyAdultChildStateForReview({ params, request, session });
 
   // apply state is valid then edit mode can be set to true
@@ -106,7 +106,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
       }
     : undefined;
 
-  const preferredLanguage = lookupService.getPreferredLanguageById(userInfo.preferredLanguage);
+  const preferredLanguage = serviceProvider.preferredLanguageService.getPreferredLanguageById(userInfo.preferredLanguage);
 
   const mailingAddressInfo = {
     address: state.contactInformation.mailingAddress,

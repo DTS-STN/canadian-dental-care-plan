@@ -1,7 +1,9 @@
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { mock } from 'vitest-mock-extended';
 
+import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { loader } from '~/routes/$lang/_protected/access-to-governmental-benefits/index';
 
 vi.mock('~/services/audit-service.server', () => ({
@@ -51,7 +53,7 @@ describe('Access Governmental Page', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/access-to-governmental-benefits/index'),
-        context: { session },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 
