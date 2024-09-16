@@ -65,7 +65,7 @@ export async function loader({ context: { container, session }, params, request 
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };
-  const { SCCH_BASE_URI } = container.config.client;
+  const { SCCH_BASE_URI } = container.config.clientConfig;
 
   const updatedInfo = session.get('personal-info-updated');
   session.unset('personal-info-updated');

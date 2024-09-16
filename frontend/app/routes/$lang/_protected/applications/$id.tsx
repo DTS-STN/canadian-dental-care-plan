@@ -122,7 +122,7 @@ export async function loader({ context: { container, session }, params, request 
     };
   });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const { SCCH_BASE_URI } = container.config.client;
+  const { SCCH_BASE_URI } = container.config.clientConfig;
   const year = viewApplication?.submittedOn ? extractDateParts(viewApplication.submittedOn).year : '';
   const meta = { title: t('gcweb:meta.title.template', { title: t('applications:view-application.page-title', { year }) }) };
   const idToken: IdToken = session.get('idToken');

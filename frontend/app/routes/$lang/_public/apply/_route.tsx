@@ -18,7 +18,7 @@ export const handle = {
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function loader({ context: { container, session }, request }: LoaderFunctionArgs) {
   const locale = getLocale(request);
-  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = container.config.client;
+  const { SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS } = container.config.clientConfig;
   return { locale, SESSION_TIMEOUT_PROMPT_SECONDS, SESSION_TIMEOUT_SECONDS };
 }
 

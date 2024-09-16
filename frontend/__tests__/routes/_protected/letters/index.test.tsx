@@ -73,7 +73,7 @@ describe('Letters Page', () => {
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
       session.set('userInfoToken', { sin: '999999999', sub: '1111111' });
 
-      const mockContainer = mock<ContainerProvider>({ config: { client: { SCCH_BASE_URI: 'https://api.example.com' } } });
+      const mockContainer = mock<ContainerProvider>({ config: { clientConfig: { SCCH_BASE_URI: 'https://api.example.com' } } });
 
       const response = await loader({
         request: new Request('http://localhost/letters?sort=desc'),
@@ -96,7 +96,7 @@ describe('Letters Page', () => {
     session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
     session.set('userInfoToken', { sin: '999999999' });
 
-    const mockContainer = mock<ContainerProvider>({ config: { client: { SCCH_BASE_URI: 'https://api.example.com' } } });
+    const mockContainer = mock<ContainerProvider>({ config: { clientConfig: { SCCH_BASE_URI: 'https://api.example.com' } } });
 
     const response = await loader({
       request: new Request('http://localhost/letters'),

@@ -40,7 +40,7 @@ export async function loader({ context: { container, session }, params, request 
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:success.page-title') }) };
-  const { SCCH_BASE_URI } = container.config.client;
+  const { SCCH_BASE_URI } = container.config.clientConfig;
 
   const idToken: IdToken = session.get('idToken');
   auditService.audit('page-view.unsubscribe-alerts-success', { userId: idToken.sub });

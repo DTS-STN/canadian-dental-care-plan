@@ -64,7 +64,7 @@ export async function loader({ context: { container, session }, params, request 
   auditService.audit('page-view.applications', { userId: idToken.sub });
   instrumentationService.countHttpStatus('applications.view', 200);
 
-  const { SCCH_BASE_URI } = container.config.client;
+  const { SCCH_BASE_URI } = container.config.clientConfig;
   return json({ applications, meta, sortOrder, SCCH_BASE_URI });
 }
 

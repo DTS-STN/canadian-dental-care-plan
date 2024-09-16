@@ -10,13 +10,13 @@ describe('ContainerConfigProviderImpl', () => {
     const mockClientConfig = mock<ClientConfig>();
     const containerConfigProvider = new ContainerConfigProviderImpl(mockClientConfig, mock<ServerConfig>());
 
-    expect(containerConfigProvider.client).toBe(mockClientConfig);
+    expect(containerConfigProvider.clientConfig).toBe(mockClientConfig);
   });
 
   it('should inject server config', () => {
     const mockServerConfig = mock<ServerConfig>();
     const containerConfigProvider = new ContainerConfigProviderImpl(mock<ClientConfig>(), mockServerConfig);
 
-    expect(containerConfigProvider.server).toBe(mockServerConfig);
+    expect(containerConfigProvider.serverConfig).toBe(mockServerConfig);
   });
 });

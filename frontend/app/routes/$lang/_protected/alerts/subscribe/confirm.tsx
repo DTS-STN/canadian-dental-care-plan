@@ -77,7 +77,7 @@ export async function loader({ context: { container, session }, params, request 
   auditService.audit('page-view.subscribe-alerts-confirm', { userId: idToken.sub });
   instrumentationService.countHttpStatus('alerts.subscribe-confirm', 200);
 
-  const { SCCH_BASE_URI } = container.config.client;
+  const { SCCH_BASE_URI } = container.config.clientConfig;
 
   return json({ csrfToken, meta, alertSubscription, newCodeRequested, email, preferredLanguage, SCCH_BASE_URI });
 }

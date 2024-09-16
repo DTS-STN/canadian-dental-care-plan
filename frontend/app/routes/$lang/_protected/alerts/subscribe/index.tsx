@@ -53,7 +53,7 @@ export async function loader({ context: { container, session }, params, request 
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:subscribe.page-title') }) };
-  const { SCCH_BASE_URI } = container.config.client;
+  const { SCCH_BASE_URI } = container.config.clientConfig;
 
   const idToken: IdToken = session.get('idToken');
   auditService.audit('page-view.subscribe-alerts', { userId: idToken.sub });
