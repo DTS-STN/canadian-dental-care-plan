@@ -9,6 +9,6 @@ describe('ContainerServiceProviderImpl', () => {
     const mockPreferredLanguageService = mock<PreferredLanguageService>();
     const containerProvider = new ContainerServiceProviderImpl(mockPreferredLanguageService);
 
-    expect(containerProvider.preferredLanguage).toBe(mockPreferredLanguageService);
+    expect(containerProvider.preferredLanguageService).toBe(mockPreferredLanguageService);
   });
 });

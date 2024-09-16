@@ -58,7 +58,7 @@ describe('_public.apply.id.communication-preference', () => {
 
       const mockContainer = mock<ContainerProvider>({
         service: {
-          preferredLanguage: {
+          preferredLanguageService: {
             getAllPreferredLanguages: vi.fn().mockReturnValue([
               { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
               { id: 'fr', nameEn: 'French', nameFr: 'Français' },
@@ -107,7 +107,7 @@ describe('_public.apply.id.communication-preference', () => {
         ],
       });
 
-      expect(mockContainer.service.preferredLanguage.getAllPreferredLanguages).toHaveBeenCalledTimes(1);
+      expect(mockContainer.service.preferredLanguageService.getAllPreferredLanguages).toHaveBeenCalledTimes(1);
     });
   });
 

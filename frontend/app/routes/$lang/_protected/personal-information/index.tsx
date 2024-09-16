@@ -54,7 +54,7 @@ export async function loader({ context: { container, session }, params, request 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
 
-  const preferredLanguage = personalInformation.preferredLanguageId ? container.service.preferredLanguage.getPreferredLanguageById(personalInformation.preferredLanguageId) : undefined;
+  const preferredLanguage = personalInformation.preferredLanguageId ? container.service.preferredLanguageService.getPreferredLanguageById(personalInformation.preferredLanguageId) : undefined;
   const birthParsedFormat = personalInformation.birthDate ? toLocaleDateString(parseDateString(personalInformation.birthDate), locale) : undefined;
 
   const countryList = localizeCountries(lookupService.getAllCountries(), locale);

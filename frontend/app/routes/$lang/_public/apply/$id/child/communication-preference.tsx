@@ -50,7 +50,7 @@ export async function loader({ context: { container, session }, params, request 
   const state = loadApplyChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
-  const preferredLanguages = container.service.preferredLanguage.getAllPreferredLanguages();
+  const preferredLanguages = container.service.preferredLanguageService.getAllPreferredLanguages();
   const localizedAndSortedPreferredLanguages = localizeAndSortPreferredLanguages(preferredLanguages, locale, locale === 'en' ? ENGLISH_LANGUAGE_CODE : FRENCH_LANGUAGE_CODE);
   const preferredCommunicationMethods = lookupService.getAllPreferredCommunicationMethods();
 

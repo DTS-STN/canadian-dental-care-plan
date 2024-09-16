@@ -72,7 +72,7 @@ export async function loader({ context: { container, session }, params, request 
   const mailingCountry = allCountries.find((country) => country.countryId === applicationDetails.personalInformation?.mailingCountry);
   const homeCountry = allCountries.find((country) => country.countryId === applicationDetails.personalInformation?.homeCountry);
 
-  const preferredLang = applicationDetails.communicationPreferences?.preferredLanguage ? container.service.preferredLanguage.getPreferredLanguageById(applicationDetails.communicationPreferences.preferredLanguage) : undefined;
+  const preferredLang = applicationDetails.communicationPreferences?.preferredLanguage ? container.service.preferredLanguageService.getPreferredLanguageById(applicationDetails.communicationPreferences.preferredLanguage) : undefined;
   const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : '';
 
   const allCommunicationPreferences = lookupService.getAllPreferredCommunicationMethods();

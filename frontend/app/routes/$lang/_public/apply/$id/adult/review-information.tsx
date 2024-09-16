@@ -110,7 +110,7 @@ export async function loader({ context: { container, session }, params, request 
       }
     : undefined;
 
-  const preferredLanguage = container.service.preferredLanguage.getPreferredLanguageById(userInfo.preferredLanguage);
+  const preferredLanguage = container.service.preferredLanguageService.getPreferredLanguageById(userInfo.preferredLanguage);
 
   const mailingAddressInfo = {
     address: state.contactInformation.mailingAddress,
