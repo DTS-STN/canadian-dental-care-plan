@@ -59,7 +59,7 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/personal-information/phone-number/edit'),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 
@@ -86,7 +86,7 @@ describe('_gcweb-app.personal-information.phone-number.edit', () => {
           method: 'POST',
           body: formData,
         }),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
       const data = await response.json();

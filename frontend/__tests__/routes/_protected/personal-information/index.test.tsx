@@ -91,7 +91,7 @@ describe('_gcweb-app.personal-information._index', () => {
   });
 
   describe('loader()', () => {
-    const mockContainer = mock<ContainerProvider>({
+    const mockContainerProvider = mock<ContainerProvider>({
       configProvider: { clientConfig: { SCCH_BASE_URI: 'https://api.example.com' } },
       serviceProvider: {
         preferredLanguageService: {
@@ -111,7 +111,7 @@ describe('_gcweb-app.personal-information._index', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/personal-information'),
-        context: { session, container: mockContainer },
+        context: { session, ...mockContainerProvider },
         params: {},
       });
 
@@ -125,7 +125,7 @@ describe('_gcweb-app.personal-information._index', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/fr/personal-information'),
-        context: { session, container: mockContainer },
+        context: { session, ...mockContainerProvider },
         params: {},
       });
 
@@ -139,7 +139,7 @@ describe('_gcweb-app.personal-information._index', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/personal-information'),
-        context: { session, container: mockContainer },
+        context: { session, ...mockContainerProvider },
         params: {},
       });
 

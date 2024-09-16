@@ -35,7 +35,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { container, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-applications');
 
   const auditService = getAuditService();
@@ -72,7 +72,7 @@ export async function loader({ context: { container, session }, params, request 
   const mailingCountry = allCountries.find((country) => country.countryId === applicationDetails.personalInformation?.mailingCountry);
   const homeCountry = allCountries.find((country) => country.countryId === applicationDetails.personalInformation?.homeCountry);
 
-  const preferredLang = applicationDetails.communicationPreferences?.preferredLanguage ? container.serviceProvider.preferredLanguageService.getPreferredLanguageById(applicationDetails.communicationPreferences.preferredLanguage) : undefined;
+  const preferredLang = applicationDetails.communicationPreferences?.preferredLanguage ? serviceProvider.preferredLanguageService.getPreferredLanguageById(applicationDetails.communicationPreferences.preferredLanguage) : undefined;
   const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : '';
 
   const allCommunicationPreferences = lookupService.getAllPreferredCommunicationMethods();
@@ -122,7 +122,7 @@ export async function loader({ context: { container, session }, params, request 
     };
   });
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const { SCCH_BASE_URI } = container.configProvider.clientConfig;
+  const { SCCH_BASE_URI } = configProvider.clientConfig;
   const year = viewApplication?.submittedOn ? extractDateParts(viewApplication.submittedOn).year : '';
   const meta = { title: t('gcweb:meta.title.template', { title: t('applications:view-application.page-title', { year }) }) };
   const idToken: IdToken = session.get('idToken');

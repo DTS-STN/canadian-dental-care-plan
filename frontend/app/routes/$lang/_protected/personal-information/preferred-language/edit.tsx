@@ -42,7 +42,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { container, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('edit-personal-info');
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
@@ -55,7 +55,7 @@ export async function loader({ context: { container, session }, params, request 
   const preferredLanguageId = personalInformation.preferredLanguageId;
 
   const csrfToken = String(session.get('csrfToken'));
-  const preferredLanguages = container.serviceProvider.preferredLanguageService.getAllPreferredLanguages();
+  const preferredLanguages = serviceProvider.preferredLanguageService.getAllPreferredLanguages();
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:preferred-language.edit.page-title') }) };

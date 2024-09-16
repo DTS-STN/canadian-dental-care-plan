@@ -55,7 +55,7 @@ describe('_public.apply.id.contact-information', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/apply/123/contact-information'),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 

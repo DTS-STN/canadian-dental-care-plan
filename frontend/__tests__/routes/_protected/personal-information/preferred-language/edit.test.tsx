@@ -36,7 +36,7 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
   });
 
   describe('loader()', () => {
-    const mockContainer = mock<ContainerProvider>({
+    const mockContainerProvider = mock<ContainerProvider>({
       serviceProvider: {
         preferredLanguageService: {
           getAllPreferredLanguages: vi.fn().mockReturnValue([
@@ -54,7 +54,7 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information/preferred/edit'),
-        context: { session, container: mockContainer },
+        context: { session, ...mockContainerProvider },
         params: {},
       });
 
@@ -78,7 +78,7 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
       try {
         await loader({
           request: new Request('http://localhost:3000/personal-information/preferred-language/edit'),
-          context: { session, container: mockContainer },
+          context: { session, ...mockContainerProvider },
           params: {},
         });
       } catch (error) {

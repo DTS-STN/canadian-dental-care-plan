@@ -40,7 +40,7 @@ describe('_public.apply.id.tax-filing', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/adult/tax-filing'),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 
@@ -64,7 +64,7 @@ describe('_public.apply.id.tax-filing', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/tax-filing', { method: 'POST', body: formData }),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 
@@ -83,7 +83,7 @@ describe('_public.apply.id.tax-filing', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/tax-filing', { method: 'POST', body: formData }),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: { lang: 'en', id: '123' },
       });
 
@@ -101,7 +101,7 @@ describe('_public.apply.id.tax-filing', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/tax-filing', { method: 'POST', body: formData }),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: { lang: 'en', id: '123' },
       });
 

@@ -59,7 +59,7 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
   };
 };
 
-export async function loader({ context: { container, session }, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, request }: LoaderFunctionArgs) {
   const buildInfoService = getBuildInfoService();
   const dynatraceService = getDynatraceService();
   const requestUrl = new URL(request.url);
@@ -68,7 +68,7 @@ export async function loader({ context: { container, session }, request }: Loade
 
   const buildInfo = buildInfoService.getBuildInfo();
   const dynatraceRumScript = await dynatraceService.retrieveRumScript();
-  const env = container.configProvider.clientConfig;
+  const env = configProvider.clientConfig;
   const meta = {
     author: t('gcweb:meta.author'),
     description: t('gcweb:meta.description'),

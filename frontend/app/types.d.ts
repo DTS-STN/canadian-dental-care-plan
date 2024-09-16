@@ -84,8 +84,7 @@ declare module 'i18next' {
 }
 
 declare module '@remix-run/server-runtime' {
-  interface AppLoadContext {
-    container: ContainerProvider;
+  interface AppLoadContext extends ContainerProvider {
     session: Session;
   }
 }

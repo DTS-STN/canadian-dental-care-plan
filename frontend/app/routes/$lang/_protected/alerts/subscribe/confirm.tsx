@@ -44,7 +44,7 @@ export const handle = {
 export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
-export async function loader({ context: { container, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('email-alerts');
 
   const auditService = getAuditService();
@@ -67,7 +67,7 @@ export async function loader({ context: { container, session }, params, request 
   }
 
   const email = alertSubscription.email;
-  const preferredLanguages = container.serviceProvider.preferredLanguageService.getAllPreferredLanguages();
+  const preferredLanguages = serviceProvider.preferredLanguageService.getAllPreferredLanguages();
   const preferredLanguageDict = preferredLanguages.find((obj) => obj.id === alertSubscription.preferredLanguageId);
   const preferredLanguage = preferredLanguageDict && getNameByLanguage(locale, preferredLanguageDict);
 
@@ -77,7 +77,7 @@ export async function loader({ context: { container, session }, params, request 
   auditService.audit('page-view.subscribe-alerts-confirm', { userId: idToken.sub });
   instrumentationService.countHttpStatus('alerts.subscribe-confirm', 200);
 
-  const { SCCH_BASE_URI } = container.configProvider.clientConfig;
+  const { SCCH_BASE_URI } = configProvider.clientConfig;
 
   return json({ csrfToken, meta, alertSubscription, newCodeRequested, email, preferredLanguage, SCCH_BASE_URI });
 }

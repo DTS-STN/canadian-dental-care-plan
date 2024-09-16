@@ -73,7 +73,7 @@ describe('Dependent Status Checker Page', () => {
 
       const response = await loader({
         request: new Request('http://localhost/dependent-status-checker'),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 

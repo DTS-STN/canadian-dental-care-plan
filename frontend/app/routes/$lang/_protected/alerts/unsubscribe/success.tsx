@@ -29,7 +29,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { container, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('email-alerts');
 
   const auditService = getAuditService();
@@ -40,7 +40,7 @@ export async function loader({ context: { container, session }, params, request 
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:success.page-title') }) };
-  const { SCCH_BASE_URI } = container.configProvider.clientConfig;
+  const { SCCH_BASE_URI } = configProvider.clientConfig;
 
   const idToken: IdToken = session.get('idToken');
   auditService.audit('page-view.unsubscribe-alerts-success', { userId: idToken.sub });

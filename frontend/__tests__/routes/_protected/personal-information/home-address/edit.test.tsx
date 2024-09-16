@@ -81,7 +81,7 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/personal-information/home-address/edit'),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 
@@ -118,7 +118,7 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
       try {
         await loader({
           request: new Request('http://localhost:3000/en/personal-information/home-address/edit'),
-          context: { session, container: mock<ContainerProvider>() },
+          context: { session, ...mock<ContainerProvider>() },
           params: {},
         });
       } catch (error) {
@@ -134,7 +134,7 @@ describe('_gcweb-app.personal-information.home-address.edit', () => {
       try {
         await loader({
           request: new Request('http://localhost:3000/en/personal-information/home-address/aardvark'),
-          context: { session, container: mock<ContainerProvider>() },
+          context: { session, ...mock<ContainerProvider>() },
           params: {},
         });
       } catch (error) {

@@ -144,7 +144,7 @@ describe('Access View Governmental Page', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/access-to-governmental-benefits/edit'),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 

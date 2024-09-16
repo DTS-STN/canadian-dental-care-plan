@@ -77,7 +77,7 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information/mailing-address/edit'),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 
@@ -117,7 +117,7 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
       try {
         await loader({
           request: new Request('http://localhost:3000/personal-information/mailing-address/edit'),
-          context: { session, container: mock<ContainerProvider>() },
+          context: { session, ...mock<ContainerProvider>() },
           params: {},
         });
       } catch (error) {

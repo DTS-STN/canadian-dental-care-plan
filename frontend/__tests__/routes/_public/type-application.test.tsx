@@ -38,7 +38,7 @@ describe('_public.apply.id.type-of-application', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application'),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 
@@ -62,7 +62,7 @@ describe('_public.apply.id.type-of-application', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 
@@ -81,7 +81,7 @@ describe('_public.apply.id.type-of-application', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: { lang: 'en', id: '123' },
       });
 
@@ -99,7 +99,7 @@ describe('_public.apply.id.type-of-application', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: { lang: 'en', id: '123' },
       });
 

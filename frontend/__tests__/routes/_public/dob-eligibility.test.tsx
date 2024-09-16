@@ -29,7 +29,7 @@ describe('_public.apply.id.dob-eligibility', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/dob-eligibility'),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 

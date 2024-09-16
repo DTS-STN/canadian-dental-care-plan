@@ -38,7 +38,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { container, session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { configProvider, serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('view-personal-info');
 
   const lookupService = getLookupService();
@@ -54,7 +54,7 @@ export async function loader({ context: { container, session }, params, request 
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
 
-  const preferredLanguage = personalInformation.preferredLanguageId ? container.serviceProvider.preferredLanguageService.getPreferredLanguageById(personalInformation.preferredLanguageId) : undefined;
+  const preferredLanguage = personalInformation.preferredLanguageId ? serviceProvider.preferredLanguageService.getPreferredLanguageById(personalInformation.preferredLanguageId) : undefined;
   const birthParsedFormat = personalInformation.birthDate ? toLocaleDateString(parseDateString(personalInformation.birthDate), locale) : undefined;
 
   const countryList = localizeCountries(lookupService.getAllCountries(), locale);
@@ -65,7 +65,7 @@ export async function loader({ context: { container, session }, params, request 
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };
-  const { SCCH_BASE_URI } = container.configProvider.clientConfig;
+  const { SCCH_BASE_URI } = configProvider.clientConfig;
 
   const updatedInfo = session.get('personal-info-updated');
   session.unset('personal-info-updated');

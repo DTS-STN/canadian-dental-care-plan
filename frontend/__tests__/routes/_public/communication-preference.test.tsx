@@ -56,7 +56,7 @@ describe('_public.apply.id.communication-preference', () => {
     it('should id, state, country list and region list', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
-      const mockContainer = mock<ContainerProvider>({
+      const mockContainerProvider = mock<ContainerProvider>({
         serviceProvider: {
           preferredLanguageService: {
             getAllPreferredLanguages: vi.fn().mockReturnValue([
@@ -69,7 +69,7 @@ describe('_public.apply.id.communication-preference', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/apply/123/communication-preference'),
-        context: { session, container: mockContainer },
+        context: { session, ...mockContainerProvider },
         params: {},
       });
 
@@ -107,7 +107,7 @@ describe('_public.apply.id.communication-preference', () => {
         ],
       });
 
-      expect(mockContainer.serviceProvider.preferredLanguageService.getAllPreferredLanguages).toHaveBeenCalledTimes(1);
+      expect(mockContainerProvider.serviceProvider.preferredLanguageService.getAllPreferredLanguages).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -126,7 +126,7 @@ describe('_public.apply.id.communication-preference', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 
@@ -147,7 +147,7 @@ describe('_public.apply.id.communication-preference', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 
@@ -169,7 +169,7 @@ describe('_public.apply.id.communication-preference', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { session, container: mock<ContainerProvider>() },
+        context: { session, ...mock<ContainerProvider>() },
         params: {},
       });
 

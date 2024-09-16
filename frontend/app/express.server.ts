@@ -132,9 +132,9 @@ export const expressApp = await createExpressApp({
     const containerProvider = container.get<ContainerProvider>(SERVICE_IDENTIFIER.CONTAINER_PROVIDER);
     invariant(containerProvider, 'Expected containerProvider to be defined');
 
-    log.debug('Adding container and session to AppLoadContext;');
+    log.debug('Adding container provider and session to AppLoadContext;');
     return {
-      container: containerProvider,
+      ...containerProvider,
       session,
     } as AppLoadContext;
   },
