@@ -5,6 +5,7 @@ import { UTCDate } from '@date-fns/utc';
 import type { JWTPayload, JWTVerifyResult } from 'jose';
 import { SignJWT, compactDecrypt, importJWK, jwtVerify } from 'jose';
 import { createHash, subtle } from 'node:crypto';
+import invariant from 'tiny-invariant';
 
 import type { FetchFn } from './fetch-utils.server';
 import { getLogger } from '~/utils/logging.server';
@@ -356,8 +357,9 @@ async function createClientAssertion(issuer: string, client: ClientMetadata) {
  * Decrypt a JWE token using the provided private key.
  */
 async function decryptJwe(jwe: string, privateKey: CryptoKey) {
-  const jwk = await subtle.exportKey('jwk', privateKey);
-  const key = await importJWK({ ...jwk }, 'RSA-OAEP');
+  const { kty, ...restOfJwk } = await subtle.exportKey('jwk', privateKey);
+  invariant(kty, 'Expected JWK to have a key type');
+  const key = await importJWK({ ...restOfJwk, kty }, 'RSA-OAEP');
   const decryptResult = await compactDecrypt(jwe, key, { keyManagementAlgorithms: ['RSA-OAEP-256'] });
   return decryptResult.plaintext.toString();
 }
@@ -479,7 +481,9 @@ function validateServerMetadata(serverMetadata: ServerMetadata) {
  */
 async function verifyJwt<Payload = JWTPayload>(jwt: string, jwks: JWKSet, alg = 'RSA-OAEP') {
   for (const key of jwks.keys) {
-    const keyLike = await importJWK(key, alg);
+    const { kty, ...restOfKey } = key;
+    invariant(kty, 'Expected JWK to have a key type');
+    const keyLike = await importJWK({ ...restOfKey, kty }, alg);
 
     try {
       return await jwtVerify<Payload>(jwt, keyLike);
