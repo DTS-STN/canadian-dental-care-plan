@@ -9,8 +9,8 @@ import type { PreferredLanguageRepository } from '~/.server/domain/repositories/
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 
 export interface PreferredLanguageService {
-  getAllPreferredLanguages(): PreferredLanguageDto[];
-  getPreferredLanguageById(id: string): PreferredLanguageDto | null;
+  findAll(): PreferredLanguageDto[];
+  findById(id: string): PreferredLanguageDto | null;
 }
 
 @injectable()
@@ -26,32 +26,32 @@ export class PreferredLanguageServiceImpl implements PreferredLanguageService {
     this.log = logFactory.createLogger('PreferredLanguageRepositoryImpl');
 
     // set moize options
-    this.getAllPreferredLanguages.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PREFERRED_LANGUAGES_CACHE_TTL_SECONDS;
-    this.getPreferredLanguageById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS;
+    this.findAll.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PREFERRED_LANGUAGES_CACHE_TTL_SECONDS;
+    this.findById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS;
   }
 
-  private getAllPreferredLanguagesImpl(): PreferredLanguageDto[] {
+  private findAllImpl(): PreferredLanguageDto[] {
     this.log.debug('Get all preferred languages');
-    const preferredLanguageEntities = this.preferredLanguageRepository.getAllPreferredLanguages();
+    const preferredLanguageEntities = this.preferredLanguageRepository.findAll();
     const preferredLanguageDtos = this.preferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos(preferredLanguageEntities);
     this.log.trace('Returning preferred languages: [%j]', preferredLanguageDtos);
     return preferredLanguageDtos;
   }
 
-  getAllPreferredLanguages = moize(this.getAllPreferredLanguagesImpl, {
-    onCacheAdd: () => this.log.info('Creating new getAllPreferredLanguages memo'),
+  findAll = moize(this.findAllImpl, {
+    onCacheAdd: () => this.log.info('Creating new findAll memo'),
   });
 
-  private getPreferredLanguageByIdImpl(id: string): PreferredLanguageDto | null {
+  private findByIdImpl(id: string): PreferredLanguageDto | null {
     this.log.debug('Get preferred language with id: [%s]', id);
-    const preferredLanguageEntity = this.preferredLanguageRepository.getPreferredLanguageById(id);
+    const preferredLanguageEntity = this.preferredLanguageRepository.findById(id);
     const preferredLanguageDto = preferredLanguageEntity ? this.preferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto(preferredLanguageEntity) : null;
     this.log.trace('Returning preferred language: [%j]', preferredLanguageDto);
     return preferredLanguageDto;
   }
 
-  getPreferredLanguageById = moize(this.getPreferredLanguageByIdImpl, {
+  findById = moize(this.findByIdImpl, {
     maxSize: Infinity,
-    onCacheAdd: () => this.log.info('Creating new getPreferredLanguageById memo'),
+    onCacheAdd: () => this.log.info('Creating new findById memo'),
   });
 }

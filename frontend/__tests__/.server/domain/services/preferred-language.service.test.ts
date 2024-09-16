@@ -27,15 +27,15 @@ describe('PreferredLanguageServiceImpl', () => {
       const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
       // Act and Assert
-      expect(service.getAllPreferredLanguages.options.maxAge).toBe(10000); // 10 seconds in milliseconds
-      expect(service.getPreferredLanguageById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
+      expect(service.findAll.options.maxAge).toBe(10000); // 10 seconds in milliseconds
+      expect(service.findById.options.maxAge).toBe(5000); // 5 seconds in milliseconds
     });
   });
 
-  describe('getAllPreferredLanguages', () => {
+  describe('findAll', () => {
     it('fetches all preferred languages', () => {
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
-      mockPreferredLanguageRepository.getAllPreferredLanguages.mockReturnValueOnce([
+      mockPreferredLanguageRepository.findAll.mockReturnValueOnce([
         {
           Value: 1033,
           Label: {
@@ -66,19 +66,19 @@ describe('PreferredLanguageServiceImpl', () => {
 
       const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
-      const dtos = service.getAllPreferredLanguages();
+      const dtos = service.findAll();
 
       expect(dtos).toEqual(mockDtos);
-      expect(mockPreferredLanguageRepository.getAllPreferredLanguages).toHaveBeenCalledTimes(1);
+      expect(mockPreferredLanguageRepository.findAll).toHaveBeenCalledTimes(1);
       expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntitiesToPreferredLanguageDtos).toHaveBeenCalledTimes(1);
     });
   });
 
-  describe('getPreferredLanguageById', () => {
+  describe('findById', () => {
     it('fetches preferred language by id', () => {
       const id = '1033';
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
-      mockPreferredLanguageRepository.getPreferredLanguageById.mockReturnValueOnce({
+      mockPreferredLanguageRepository.findById.mockReturnValueOnce({
         Value: 1033,
         Label: {
           LocalizedLabels: [
@@ -95,26 +95,26 @@ describe('PreferredLanguageServiceImpl', () => {
 
       const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
-      const dto = service.getPreferredLanguageById(id);
+      const dto = service.findById(id);
 
       expect(dto).toEqual(mockDto);
-      expect(mockPreferredLanguageRepository.getPreferredLanguageById).toHaveBeenCalledTimes(1);
+      expect(mockPreferredLanguageRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto).toHaveBeenCalledTimes(1);
     });
 
     it('fetches preferred language by id returns null if not found', () => {
       const id = '1033';
       const mockPreferredLanguageRepository = mock<PreferredLanguageRepository>();
-      mockPreferredLanguageRepository.getPreferredLanguageById.mockReturnValueOnce(null);
+      mockPreferredLanguageRepository.findById.mockReturnValueOnce(null);
 
       const mockPreferredLanguageDtoMapper = mock<PreferredLanguageDtoMapper>();
 
       const service = new PreferredLanguageServiceImpl(mockLogFactory, mockPreferredLanguageDtoMapper, mockPreferredLanguageRepository, mockServerConfig);
 
-      const dto = service.getPreferredLanguageById(id);
+      const dto = service.findById(id);
 
       expect(dto).toEqual(null);
-      expect(mockPreferredLanguageRepository.getPreferredLanguageById).toHaveBeenCalledTimes(1);
+      expect(mockPreferredLanguageRepository.findById).toHaveBeenCalledTimes(1);
       expect(mockPreferredLanguageDtoMapper.mapPreferredLanguageEntityToPreferredLanguageDto).not.toHaveBeenCalled();
     });
   });

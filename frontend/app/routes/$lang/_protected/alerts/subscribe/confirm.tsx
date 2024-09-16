@@ -67,7 +67,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   }
 
   const email = alertSubscription.email;
-  const preferredLanguages = serviceProvider.preferredLanguageService.getAllPreferredLanguages();
+  const preferredLanguages = serviceProvider.preferredLanguageService.findAll();
   const preferredLanguageDict = preferredLanguages.find((obj) => obj.id === alertSubscription.preferredLanguageId);
   const preferredLanguage = preferredLanguageDict && getNameByLanguage(locale, preferredLanguageDict);
 

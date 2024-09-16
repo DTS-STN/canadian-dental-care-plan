@@ -39,7 +39,7 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
     const mockContainerProvider = mock<ContainerProvider>({
       serviceProvider: {
         preferredLanguageService: {
-          getAllPreferredLanguages: vi.fn().mockReturnValue([
+          findAll: vi.fn().mockReturnValue([
             { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
             { id: 'fr', nameEn: 'French', nameFr: 'Français' },
           ]),

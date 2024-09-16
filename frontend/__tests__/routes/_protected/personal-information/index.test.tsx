@@ -95,8 +95,8 @@ describe('_gcweb-app.personal-information._index', () => {
       configProvider: { clientConfig: { SCCH_BASE_URI: 'https://api.example.com' } },
       serviceProvider: {
         preferredLanguageService: {
-          getPreferredLanguageById: vi.fn().mockReturnValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' }),
-          getAllPreferredLanguages: vi.fn().mockReturnValue([
+          findById: vi.fn().mockReturnValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' }),
+          findAll: vi.fn().mockReturnValue([
             { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
             { id: 'fr', nameEn: 'French', nameFr: 'Français' },
           ]),
