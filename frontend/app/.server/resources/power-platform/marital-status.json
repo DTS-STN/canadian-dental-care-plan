@@ -1,0 +1,338 @@
+{
+  "@odata.context": "https://canadadental-uat.crm3.dynamics.com/api/data/v9.2/$metadata#EntityDefinitions('esdc_dentalapplicant')/Attributes/Microsoft.Dynamics.CRM.PicklistAttributeMetadata(LogicalName,OptionSet(Options))",
+  "value": [
+    {
+      "LogicalName": "esdc_maritalstatus",
+      "MetadataId": "4e8d46c4-0806-ee11-8f6e-000d3a09d1b8",
+      "OptionSet": {
+        "MetadataId": "544306b8-6901-ee11-8f6d-000d3a09d640",
+        "Options": [
+          {
+            "Value": 775170000,
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": "",
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Single",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "57f30299-4881-4b9d-a1c0-0813a07f1818",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Célibataire",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "89078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "Single",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "57f30299-4881-4b9d-a1c0-0813a07f1818",
+                "HasChanged": null
+              }
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "9cce4134-7149-4ad7-a7cd-577c5e4a347c",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "9cce4134-7149-4ad7-a7cd-577c5e4a347c",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": 775170001,
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": "",
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Married",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "3dafe7c4-1331-4e8b-b2fd-c8e685a91f0d",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Marié(e)",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "8b078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "Married",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "3dafe7c4-1331-4e8b-b2fd-c8e685a91f0d",
+                "HasChanged": null
+              }
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "aec037ef-4d23-490d-b1ff-3bfa672bd17a",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "aec037ef-4d23-490d-b1ff-3bfa672bd17a",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": 775170002,
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": "",
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Common-Law",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "e3179196-04d9-418d-b541-8582f5cd19cd",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Conjoint(e) de fait",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "8d078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "Common-Law",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "e3179196-04d9-418d-b541-8582f5cd19cd",
+                "HasChanged": null
+              }
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "a9ab416c-79cc-403e-9628-1d257524610e",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "a9ab416c-79cc-403e-9628-1d257524610e",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": 775170003,
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": "",
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Separated",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "e02921f0-0d8f-468e-ba6b-c93784a4fc73",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Séparé(e)",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "8f078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "Separated",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "e02921f0-0d8f-468e-ba6b-c93784a4fc73",
+                "HasChanged": null
+              }
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "d871b477-1ec4-4e5f-b92a-44b1f8fdfa5e",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "d871b477-1ec4-4e5f-b92a-44b1f8fdfa5e",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": 775170004,
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": "",
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Divorced",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "69fb9529-7983-49a3-8a31-37906d43cc19",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Divorcé(e)",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "91078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "Divorced",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "69fb9529-7983-49a3-8a31-37906d43cc19",
+                "HasChanged": null
+              }
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "b2332f0b-6388-481e-8186-0cf6b9e74f99",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "b2332f0b-6388-481e-8186-0cf6b9e74f99",
+                "HasChanged": null
+              }
+            }
+          },
+          {
+            "Value": 775170005,
+            "Color": null,
+            "IsManaged": false,
+            "ExternalValue": null,
+            "ParentValues": [],
+            "Tag": null,
+            "IsHidden": false,
+            "MetadataId": null,
+            "HasChanged": null,
+            "Label": {
+              "LocalizedLabels": [
+                {
+                  "Label": "Widowed",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "aec484bd-0cce-4482-92c3-3217b8be8d48",
+                  "HasChanged": null
+                },
+                {
+                  "Label": "Veuf ou veuve",
+                  "LanguageCode": 1036,
+                  "IsManaged": false,
+                  "MetadataId": "93078da9-fb53-ee11-be6f-000d3a09d1b8",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "Widowed",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "aec484bd-0cce-4482-92c3-3217b8be8d48",
+                "HasChanged": null
+              }
+            },
+            "Description": {
+              "LocalizedLabels": [
+                {
+                  "Label": "",
+                  "LanguageCode": 1033,
+                  "IsManaged": false,
+                  "MetadataId": "98b78ea4-1fc8-4b92-bf9f-a4779f95097d",
+                  "HasChanged": null
+                }
+              ],
+              "UserLocalizedLabel": {
+                "Label": "",
+                "LanguageCode": 1033,
+                "IsManaged": false,
+                "MetadataId": "98b78ea4-1fc8-4b92-bf9f-a4779f95097d",
+                "HasChanged": null
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
