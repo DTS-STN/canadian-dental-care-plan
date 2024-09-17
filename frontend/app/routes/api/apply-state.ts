@@ -39,6 +39,7 @@ export async function action({ context: { session }, request }: ActionFunctionAr
   const params = { id: parsedBody.data.id };
 
   switch (parsedBody.data.action) {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     case 'extend': {
       log.debug("Extending user's apply state; id: [%s], sessionId: [%s]", params.id, sessionId);
       saveApplyState({ params, session, state: {} });
