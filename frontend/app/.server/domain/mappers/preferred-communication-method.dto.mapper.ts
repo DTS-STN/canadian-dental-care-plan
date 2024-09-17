@@ -22,7 +22,7 @@ export class PreferredCommunicationMethodDtoMapperImpl implements PreferredCommu
     const nameFr = preferredCommunicationMethodEntity.Label.LocalizedLabels.find((label) => label.LanguageCode === FRENCH_LANGUAGE_CODE)?.Label;
 
     if (nameEn === undefined || nameFr === undefined) {
-      throw new Error(`Preferred nommunication method missing English or French name; id: [${id}]`);
+      throw new Error(`Preferred communication method missing English or French name; id: [${id}]`);
     }
 
     return { id, nameEn, nameFr };
