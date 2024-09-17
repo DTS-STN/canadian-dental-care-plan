@@ -1,0 +1,1468 @@
+{
+  "@odata.context": "https://canadadental-uat.crm3.dynamics.com/api/data/v9.2/$metadata#esdc_countries(esdc_countryid,esdc_nameenglish,esdc_namefrench,esdc_countrycodealpha3)",
+  "value": [
+    {
+      "@odata.etag": "W/\"2057049018\"",
+      "esdc_countryid": "626b779e-33ba-eb11-8236-000d3a09c766",
+      "esdc_nameenglish": "Eswatini (fmr. \"Swaziland\")",
+      "esdc_namefrench": "Eswatini (auparavant «\u00a0Swaziland\u00a0»)",
+      "esdc_countrycodealpha3": "SWZ"
+    },
+    {
+      "@odata.etag": "W/\"2057049065\"",
+      "esdc_countryid": "397e9fa8-f69a-ee11-be37-000d3a09d132",
+      "esdc_nameenglish": "Saint Vincent and the Grenadines",
+      "esdc_namefrench": "Saint-Vincent-et-les Grenadines",
+      "esdc_countrycodealpha3": "VCT"
+    },
+    {
+      "@odata.etag": "W/\"2057049007\"",
+      "esdc_countryid": "e0344256-eb95-ee11-be37-000d3a09d640",
+      "esdc_nameenglish": "Palestine State",
+      "esdc_namefrench": "État palestinien",
+      "esdc_countrycodealpha3": "PSE"
+    },
+    {
+      "@odata.etag": "W/\"2057049072\"",
+      "esdc_countryid": "b9c53ad5-eb95-ee11-be37-000d3a09d640",
+      "esdc_nameenglish": "Hong Kong",
+      "esdc_namefrench": "Hong-Kong",
+      "esdc_countrycodealpha3": "HKG"
+    },
+    {
+      "@odata.etag": "W/\"2057049010\"",
+      "esdc_countryid": "7cf4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Aruba",
+      "esdc_namefrench": "Aruba",
+      "esdc_countrycodealpha3": "ABW"
+    },
+    {
+      "@odata.etag": "W/\"2057049256\"",
+      "esdc_countryid": "7ef4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Afghanistan",
+      "esdc_namefrench": "Afghanistan",
+      "esdc_countrycodealpha3": "AFG"
+    },
+    {
+      "@odata.etag": "W/\"2057049871\"",
+      "esdc_countryid": "80f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Angola",
+      "esdc_namefrench": "Angola",
+      "esdc_countrycodealpha3": "AGO"
+    },
+    {
+      "@odata.etag": "W/\"2057049181\"",
+      "esdc_countryid": "88f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Albania",
+      "esdc_namefrench": "Albanie",
+      "esdc_countrycodealpha3": "ALB"
+    },
+    {
+      "@odata.etag": "W/\"2057049025\"",
+      "esdc_countryid": "8af4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Andorra",
+      "esdc_namefrench": "Andorre",
+      "esdc_countrycodealpha3": "AND"
+    },
+    {
+      "@odata.etag": "W/\"2057049078\"",
+      "esdc_countryid": "9cf4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "United Arab Emirates",
+      "esdc_namefrench": "Émirats arabes unis",
+      "esdc_countrycodealpha3": "ARE"
+    },
+    {
+      "@odata.etag": "W/\"2057049024\"",
+      "esdc_countryid": "a0f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Argentina",
+      "esdc_namefrench": "Argentine",
+      "esdc_countrycodealpha3": "ARG"
+    },
+    {
+      "@odata.etag": "W/\"2057049182\"",
+      "esdc_countryid": "a2f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Armenia",
+      "esdc_namefrench": "Arménie",
+      "esdc_countrycodealpha3": "ARM"
+    },
+    {
+      "@odata.etag": "W/\"2057049022\"",
+      "esdc_countryid": "b0f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Antigua and Barbuda",
+      "esdc_namefrench": "Antigua-et-Barbuda",
+      "esdc_countrycodealpha3": "ATG"
+    },
+    {
+      "@odata.etag": "W/\"2057049026\"",
+      "esdc_countryid": "b9f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Australia",
+      "esdc_namefrench": "Australie",
+      "esdc_countrycodealpha3": "AUS"
+    },
+    {
+      "@odata.etag": "W/\"2057049099\"",
+      "esdc_countryid": "bff4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Austria",
+      "esdc_namefrench": "Autriche",
+      "esdc_countrycodealpha3": "AUT"
+    },
+    {
+      "@odata.etag": "W/\"2057049028\"",
+      "esdc_countryid": "c1f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Azerbaijan",
+      "esdc_namefrench": "Azerbaïdjan",
+      "esdc_countrycodealpha3": "AZE"
+    },
+    {
+      "@odata.etag": "W/\"2057049031\"",
+      "esdc_countryid": "c3f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Burundi",
+      "esdc_namefrench": "Burundi",
+      "esdc_countrycodealpha3": "BDI"
+    },
+    {
+      "@odata.etag": "W/\"2057049037\"",
+      "esdc_countryid": "c5f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Belgium",
+      "esdc_namefrench": "Belgique",
+      "esdc_countrycodealpha3": "BEL"
+    },
+    {
+      "@odata.etag": "W/\"2057049125\"",
+      "esdc_countryid": "c7f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Benin",
+      "esdc_namefrench": "Bénin",
+      "esdc_countrycodealpha3": "BEN"
+    },
+    {
+      "@odata.etag": "W/\"2057049126\"",
+      "esdc_countryid": "d9f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Burkina Faso",
+      "esdc_namefrench": "Burkina Faso",
+      "esdc_countrycodealpha3": "BFA"
+    },
+    {
+      "@odata.etag": "W/\"2057049011\"",
+      "esdc_countryid": "ddf4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Bangladesh",
+      "esdc_namefrench": "Bangladesh",
+      "esdc_countrycodealpha3": "BGD"
+    },
+    {
+      "@odata.etag": "W/\"2057049127\"",
+      "esdc_countryid": "e4f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Bulgaria",
+      "esdc_namefrench": "Bulgarie",
+      "esdc_countrycodealpha3": "BGR"
+    },
+    {
+      "@odata.etag": "W/\"2057049012\"",
+      "esdc_countryid": "e6f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Bahrain",
+      "esdc_namefrench": "Bahreïn",
+      "esdc_countrycodealpha3": "BHR"
+    },
+    {
+      "@odata.etag": "W/\"2057049128\"",
+      "esdc_countryid": "e8f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Bahamas",
+      "esdc_namefrench": "Bahamas",
+      "esdc_countrycodealpha3": "BHS"
+    },
+    {
+      "@odata.etag": "W/\"2057049023\"",
+      "esdc_countryid": "eaf4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Bosnia-Herzegovina",
+      "esdc_namefrench": "Bosnie-Herzégovine",
+      "esdc_countrycodealpha3": "BIH"
+    },
+    {
+      "@odata.etag": "W/\"2057049129\"",
+      "esdc_countryid": "eef4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Belarus",
+      "esdc_namefrench": "Bélarus",
+      "esdc_countrycodealpha3": "BLR"
+    },
+    {
+      "@odata.etag": "W/\"2057049021\"",
+      "esdc_countryid": "f2f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Belize",
+      "esdc_namefrench": "Bélize",
+      "esdc_countrycodealpha3": "BLZ"
+    },
+    {
+      "@odata.etag": "W/\"2057049130\"",
+      "esdc_countryid": "f6f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Bermuda",
+      "esdc_namefrench": "Bermudes",
+      "esdc_countrycodealpha3": "BMU"
+    },
+    {
+      "@odata.etag": "W/\"2057049019\"",
+      "esdc_countryid": "f8f4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Bolivia",
+      "esdc_namefrench": "Bolivie",
+      "esdc_countrycodealpha3": "BOL"
+    },
+    {
+      "@odata.etag": "W/\"2057049131\"",
+      "esdc_countryid": "faf4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Brazil",
+      "esdc_namefrench": "Brésil",
+      "esdc_countrycodealpha3": "BRA"
+    },
+    {
+      "@odata.etag": "W/\"2057049068\"",
+      "esdc_countryid": "fcf4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Barbados",
+      "esdc_namefrench": "Barbade",
+      "esdc_countrycodealpha3": "BRB"
+    },
+    {
+      "@odata.etag": "W/\"2057049132\"",
+      "esdc_countryid": "fef4389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Brunei Darussalam",
+      "esdc_namefrench": "Brunéi Darussalam",
+      "esdc_countrycodealpha3": "BRN"
+    },
+    {
+      "@odata.etag": "W/\"2057049020\"",
+      "esdc_countryid": "00f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Bhutan",
+      "esdc_namefrench": "Bhoutan",
+      "esdc_countrycodealpha3": "BTN"
+    },
+    {
+      "@odata.etag": "W/\"2057049133\"",
+      "esdc_countryid": "06f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Botswana",
+      "esdc_namefrench": "Botswana",
+      "esdc_countrycodealpha3": "BWA"
+    },
+    {
+      "@odata.etag": "W/\"2057049914\"",
+      "esdc_countryid": "08f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Central African Republic",
+      "esdc_namefrench": "Centrafrique",
+      "esdc_countrycodealpha3": "CAF"
+    },
+    {
+      "@odata.etag": "W/\"2057049134\"",
+      "esdc_countryid": "0cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Canada",
+      "esdc_namefrench": "Canada",
+      "esdc_countrycodealpha3": "CAN"
+    },
+    {
+      "@odata.etag": "W/\"2057049033\"",
+      "esdc_countryid": "10f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Switzerland",
+      "esdc_namefrench": "Suisse",
+      "esdc_countrycodealpha3": "CHE"
+    },
+    {
+      "@odata.etag": "W/\"2057049135\"",
+      "esdc_countryid": "12f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Chile",
+      "esdc_namefrench": "Chili",
+      "esdc_countrycodealpha3": "CHL"
+    },
+    {
+      "@odata.etag": "W/\"2057049890\"",
+      "esdc_countryid": "16f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "China",
+      "esdc_namefrench": "Chine",
+      "esdc_countrycodealpha3": "CHN"
+    },
+    {
+      "@odata.etag": "W/\"2057049136\"",
+      "esdc_countryid": "24f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Côte d'Ivoire",
+      "esdc_namefrench": "Côte d'Ivoire",
+      "esdc_countrycodealpha3": "CIV"
+    },
+    {
+      "@odata.etag": "W/\"2057049262\"",
+      "esdc_countryid": "26f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Cameroon",
+      "esdc_namefrench": "Cameroun",
+      "esdc_countrycodealpha3": "CMR"
+    },
+    {
+      "@odata.etag": "W/\"2057049137\"",
+      "esdc_countryid": "30f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Congo, Democratic Republic Of",
+      "esdc_namefrench": "Congo (République Démocratique Du)",
+      "esdc_countrycodealpha3": "COD"
+    },
+    {
+      "@odata.etag": "W/\"2057049249\"",
+      "esdc_countryid": "3af5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Congo (Republic)",
+      "esdc_namefrench": "Congo (République)",
+      "esdc_countrycodealpha3": "COG"
+    },
+    {
+      "@odata.etag": "W/\"2057049138\"",
+      "esdc_countryid": "42f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Colombia",
+      "esdc_namefrench": "Colombie",
+      "esdc_countrycodealpha3": "COL"
+    },
+    {
+      "@odata.etag": "W/\"2057049902\"",
+      "esdc_countryid": "44f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Comoros",
+      "esdc_namefrench": "Comores",
+      "esdc_countrycodealpha3": "COM"
+    },
+    {
+      "@odata.etag": "W/\"2057049139\"",
+      "esdc_countryid": "48f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Cabo Verde",
+      "esdc_namefrench": "Cap-Vert",
+      "esdc_countrycodealpha3": "CPV"
+    },
+    {
+      "@odata.etag": "W/\"2057049069\"",
+      "esdc_countryid": "4af5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Costa Rica",
+      "esdc_namefrench": "Costa Rica",
+      "esdc_countrycodealpha3": "CRI"
+    },
+    {
+      "@odata.etag": "W/\"2057049140\"",
+      "esdc_countryid": "4cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Cuba",
+      "esdc_namefrench": "Cuba",
+      "esdc_countrycodealpha3": "CUB"
+    },
+    {
+      "@odata.etag": "W/\"2057049666\"",
+      "esdc_countryid": "4ef5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Curacao",
+      "esdc_namefrench": "Curaçao",
+      "esdc_countrycodealpha3": "CUW"
+    },
+    {
+      "@odata.etag": "W/\"2057049667\"",
+      "esdc_countryid": "54f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Cyprus",
+      "esdc_namefrench": "Chypre",
+      "esdc_countrycodealpha3": "CYP"
+    },
+    {
+      "@odata.etag": "W/\"2057049015\"",
+      "esdc_countryid": "56f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Czechia (Czech Republic)",
+      "esdc_namefrench": "Tchéquie (République tchèque)",
+      "esdc_countrycodealpha3": "CZE"
+    },
+    {
+      "@odata.etag": "W/\"2057049668\"",
+      "esdc_countryid": "58f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Germany",
+      "esdc_namefrench": "Allemagne",
+      "esdc_countrycodealpha3": "DEU"
+    },
+    {
+      "@odata.etag": "W/\"2057049014\"",
+      "esdc_countryid": "5af5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Djibouti",
+      "esdc_namefrench": "Djibouti",
+      "esdc_countrycodealpha3": "DJI"
+    },
+    {
+      "@odata.etag": "W/\"2057049669\"",
+      "esdc_countryid": "5cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Dominica",
+      "esdc_namefrench": "Dominique",
+      "esdc_countrycodealpha3": "DMA"
+    },
+    {
+      "@odata.etag": "W/\"2057049074\"",
+      "esdc_countryid": "5ef5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Denmark",
+      "esdc_namefrench": "Danemark",
+      "esdc_countrycodealpha3": "DNK"
+    },
+    {
+      "@odata.etag": "W/\"2057049670\"",
+      "esdc_countryid": "60f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Dominican Republic",
+      "esdc_namefrench": "République dominicaine",
+      "esdc_countrycodealpha3": "DOM"
+    },
+    {
+      "@odata.etag": "W/\"2057049920\"",
+      "esdc_countryid": "62f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Algeria",
+      "esdc_namefrench": "Algérie",
+      "esdc_countrycodealpha3": "DZA"
+    },
+    {
+      "@odata.etag": "W/\"2057049671\"",
+      "esdc_countryid": "64f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Ecuador",
+      "esdc_namefrench": "Équateur",
+      "esdc_countrycodealpha3": "ECU"
+    },
+    {
+      "@odata.etag": "W/\"2057049030\"",
+      "esdc_countryid": "68f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Egypt",
+      "esdc_namefrench": "Égypte",
+      "esdc_countrycodealpha3": "EGY"
+    },
+    {
+      "@odata.etag": "W/\"2057049672\"",
+      "esdc_countryid": "6ef5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Eritrea",
+      "esdc_namefrench": "Érythrée",
+      "esdc_countrycodealpha3": "ERI"
+    },
+    {
+      "@odata.etag": "W/\"2057049243\"",
+      "esdc_countryid": "7af5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Spain",
+      "esdc_namefrench": "Espagne",
+      "esdc_countrycodealpha3": "ESP"
+    },
+    {
+      "@odata.etag": "W/\"2057049673\"",
+      "esdc_countryid": "7ef5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Estonia",
+      "esdc_namefrench": "Estonie",
+      "esdc_countrycodealpha3": "EST"
+    },
+    {
+      "@odata.etag": "W/\"2057049070\"",
+      "esdc_countryid": "80f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Ethiopia",
+      "esdc_namefrench": "Éthiopie",
+      "esdc_countrycodealpha3": "ETH"
+    },
+    {
+      "@odata.etag": "W/\"2057049674\"",
+      "esdc_countryid": "84f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Finland",
+      "esdc_namefrench": "Finlande",
+      "esdc_countrycodealpha3": "FIN"
+    },
+    {
+      "@odata.etag": "W/\"2057049896\"",
+      "esdc_countryid": "86f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Fiji",
+      "esdc_namefrench": "Fidji",
+      "esdc_countrycodealpha3": "FJI"
+    },
+    {
+      "@odata.etag": "W/\"2057049675\"",
+      "esdc_countryid": "92f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "France",
+      "esdc_namefrench": "France",
+      "esdc_countrycodealpha3": "FRA"
+    },
+    {
+      "@odata.etag": "W/\"2057049008\"",
+      "esdc_countryid": "9cf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Micronesia",
+      "esdc_namefrench": "Micronésie",
+      "esdc_countrycodealpha3": "FSM"
+    },
+    {
+      "@odata.etag": "W/\"2057049676\"",
+      "esdc_countryid": "a0f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Gabon",
+      "esdc_namefrench": "Gabon",
+      "esdc_countrycodealpha3": "GAB"
+    },
+    {
+      "@odata.etag": "W/\"2057049878\"",
+      "esdc_countryid": "a8f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "England",
+      "esdc_namefrench": "Angleterre",
+      "esdc_countrycodealpha3": "GBR"
+    },
+    {
+      "@odata.etag": "W/\"2057049677\"",
+      "esdc_countryid": "acf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Northern Ireland",
+      "esdc_namefrench": "Irlande du Nord",
+      "esdc_countrycodealpha3": "GBR"
+    },
+    {
+      "@odata.etag": "W/\"2057049884\"",
+      "esdc_countryid": "b0f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Scotland",
+      "esdc_namefrench": "Écosse",
+      "esdc_countrycodealpha3": "GBR"
+    },
+    {
+      "@odata.etag": "W/\"2057049678\"",
+      "esdc_countryid": "b4f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "United Kingdom",
+      "esdc_namefrench": "Royaume-Uni",
+      "esdc_countrycodealpha3": "GBR"
+    },
+    {
+      "@odata.etag": "W/\"2057049076\"",
+      "esdc_countryid": "b6f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Wales",
+      "esdc_namefrench": "Pays de Galles",
+      "esdc_countrycodealpha3": "GBR"
+    },
+    {
+      "@odata.etag": "W/\"2057049679\"",
+      "esdc_countryid": "b8f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Georgia",
+      "esdc_namefrench": "Géorgie",
+      "esdc_countrycodealpha3": "GEO"
+    },
+    {
+      "@odata.etag": "W/\"2057049017\"",
+      "esdc_countryid": "baf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Guernsey",
+      "esdc_namefrench": "Guernesey",
+      "esdc_countrycodealpha3": "GGY"
+    },
+    {
+      "@odata.etag": "W/\"2057049680\"",
+      "esdc_countryid": "bef5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Ghana",
+      "esdc_namefrench": "Ghana",
+      "esdc_countrycodealpha3": "GHA"
+    },
+    {
+      "@odata.etag": "W/\"2057049013\"",
+      "esdc_countryid": "c4f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Guinea",
+      "esdc_namefrench": "Guinée",
+      "esdc_countrycodealpha3": "GIN"
+    },
+    {
+      "@odata.etag": "W/\"2057049681\"",
+      "esdc_countryid": "d0f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Gambia",
+      "esdc_namefrench": "Gambie",
+      "esdc_countrycodealpha3": "GMB"
+    },
+    {
+      "@odata.etag": "W/\"2057049009\"",
+      "esdc_countryid": "d4f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Guinea-Bissau",
+      "esdc_namefrench": "Guinée-Bissau",
+      "esdc_countrycodealpha3": "GNB"
+    },
+    {
+      "@odata.etag": "W/\"2057049682\"",
+      "esdc_countryid": "e0f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Equatorial Guinea",
+      "esdc_namefrench": "Guinée Équatoriale",
+      "esdc_countrycodealpha3": "GNQ"
+    },
+    {
+      "@odata.etag": "W/\"2057049908\"",
+      "esdc_countryid": "eaf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Greece",
+      "esdc_namefrench": "Grèce",
+      "esdc_countrycodealpha3": "GRC"
+    },
+    {
+      "@odata.etag": "W/\"2057049683\"",
+      "esdc_countryid": "eff5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Grenada",
+      "esdc_namefrench": "Grenade",
+      "esdc_countrycodealpha3": "GRD"
+    },
+    {
+      "@odata.etag": "W/\"2057049684\"",
+      "esdc_countryid": "f3f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Guatemala",
+      "esdc_namefrench": "Guatemala",
+      "esdc_countrycodealpha3": "GTM"
+    },
+    {
+      "@odata.etag": "W/\"2057049685\"",
+      "esdc_countryid": "f6f5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "French Guiana",
+      "esdc_namefrench": "Guyane Française",
+      "esdc_countrycodealpha3": "GUF"
+    },
+    {
+      "@odata.etag": "W/\"2057049686\"",
+      "esdc_countryid": "fcf5389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Guyana",
+      "esdc_namefrench": "Guyana",
+      "esdc_countrycodealpha3": "GUY"
+    },
+    {
+      "@odata.etag": "W/\"2057049687\"",
+      "esdc_countryid": "00f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Honduras",
+      "esdc_namefrench": "Honduras",
+      "esdc_countrycodealpha3": "HND"
+    },
+    {
+      "@odata.etag": "W/\"2057049688\"",
+      "esdc_countryid": "02f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Croatia",
+      "esdc_namefrench": "Croatie",
+      "esdc_countrycodealpha3": "HRV"
+    },
+    {
+      "@odata.etag": "W/\"2057049689\"",
+      "esdc_countryid": "04f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Haiti",
+      "esdc_namefrench": "Haïti",
+      "esdc_countrycodealpha3": "HTI"
+    },
+    {
+      "@odata.etag": "W/\"2057049690\"",
+      "esdc_countryid": "06f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Hungary",
+      "esdc_namefrench": "Hongrie",
+      "esdc_countrycodealpha3": "HUN"
+    },
+    {
+      "@odata.etag": "W/\"2057049691\"",
+      "esdc_countryid": "0cf6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Indonesia",
+      "esdc_namefrench": "Indonésie",
+      "esdc_countrycodealpha3": "IDN"
+    },
+    {
+      "@odata.etag": "W/\"2057049692\"",
+      "esdc_countryid": "1cf6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Isle of Man",
+      "esdc_namefrench": "île de Man",
+      "esdc_countrycodealpha3": "IMN"
+    },
+    {
+      "@odata.etag": "W/\"2057049693\"",
+      "esdc_countryid": "27f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "India",
+      "esdc_namefrench": "Inde",
+      "esdc_countrycodealpha3": "IND"
+    },
+    {
+      "@odata.etag": "W/\"2057049694\"",
+      "esdc_countryid": "32f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Ireland",
+      "esdc_namefrench": "Irlande",
+      "esdc_countrycodealpha3": "IRL"
+    },
+    {
+      "@odata.etag": "W/\"2057049695\"",
+      "esdc_countryid": "36f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Iran",
+      "esdc_namefrench": "Iran",
+      "esdc_countrycodealpha3": "IRN"
+    },
+    {
+      "@odata.etag": "W/\"2057049696\"",
+      "esdc_countryid": "3af6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Iraq",
+      "esdc_namefrench": "Iraq",
+      "esdc_countrycodealpha3": "IRQ"
+    },
+    {
+      "@odata.etag": "W/\"2057049697\"",
+      "esdc_countryid": "3ef6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Iceland",
+      "esdc_namefrench": "Islande",
+      "esdc_countrycodealpha3": "ISL"
+    },
+    {
+      "@odata.etag": "W/\"2057049698\"",
+      "esdc_countryid": "40f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Israel",
+      "esdc_namefrench": "Israël",
+      "esdc_countrycodealpha3": "ISR"
+    },
+    {
+      "@odata.etag": "W/\"2057049699\"",
+      "esdc_countryid": "44f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Italy",
+      "esdc_namefrench": "Italie",
+      "esdc_countrycodealpha3": "ITA"
+    },
+    {
+      "@odata.etag": "W/\"2057049700\"",
+      "esdc_countryid": "4af6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Jamaica",
+      "esdc_namefrench": "Jamaïque",
+      "esdc_countrycodealpha3": "JAM"
+    },
+    {
+      "@odata.etag": "W/\"2057049701\"",
+      "esdc_countryid": "4cf6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Jersey",
+      "esdc_namefrench": "Jersey",
+      "esdc_countrycodealpha3": "JEY"
+    },
+    {
+      "@odata.etag": "W/\"2057049702\"",
+      "esdc_countryid": "4ef6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Jordan",
+      "esdc_namefrench": "Jordanie",
+      "esdc_countrycodealpha3": "JOR"
+    },
+    {
+      "@odata.etag": "W/\"2057049703\"",
+      "esdc_countryid": "52f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Japan",
+      "esdc_namefrench": "Japon",
+      "esdc_countrycodealpha3": "JPN"
+    },
+    {
+      "@odata.etag": "W/\"2057049704\"",
+      "esdc_countryid": "56f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Kazakhstan",
+      "esdc_namefrench": "Kazakhstan",
+      "esdc_countrycodealpha3": "KAZ"
+    },
+    {
+      "@odata.etag": "W/\"2057049705\"",
+      "esdc_countryid": "58f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Kenya",
+      "esdc_namefrench": "Kenya",
+      "esdc_countrycodealpha3": "KEN"
+    },
+    {
+      "@odata.etag": "W/\"2057049706\"",
+      "esdc_countryid": "5af6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Kyrgyzstan",
+      "esdc_namefrench": "Kirghizistan",
+      "esdc_countrycodealpha3": "KGZ"
+    },
+    {
+      "@odata.etag": "W/\"2057049707\"",
+      "esdc_countryid": "5cf6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Cambodia",
+      "esdc_namefrench": "Cambodge",
+      "esdc_countrycodealpha3": "KHM"
+    },
+    {
+      "@odata.etag": "W/\"2057049708\"",
+      "esdc_countryid": "64f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Kiribati",
+      "esdc_namefrench": "Kiribati",
+      "esdc_countrycodealpha3": "KIR"
+    },
+    {
+      "@odata.etag": "W/\"2057049709\"",
+      "esdc_countryid": "66f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Saint Kitts and Nevis",
+      "esdc_namefrench": "Saint-Kitts-et-Nevis",
+      "esdc_countrycodealpha3": "KNA"
+    },
+    {
+      "@odata.etag": "W/\"2057049710\"",
+      "esdc_countryid": "6ef6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Korea (South)",
+      "esdc_namefrench": "Corée (Du Sud)",
+      "esdc_countrycodealpha3": "KOR"
+    },
+    {
+      "@odata.etag": "W/\"2057049711\"",
+      "esdc_countryid": "74f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Kuwait",
+      "esdc_namefrench": "Koweït",
+      "esdc_countrycodealpha3": "KWT"
+    },
+    {
+      "@odata.etag": "W/\"2057049712\"",
+      "esdc_countryid": "76f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Lao (People's Democratic Republic)",
+      "esdc_namefrench": "Lao (République démocratique populaire)",
+      "esdc_countrycodealpha3": "LAO"
+    },
+    {
+      "@odata.etag": "W/\"2057049713\"",
+      "esdc_countryid": "78f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Lebanon",
+      "esdc_namefrench": "Liban",
+      "esdc_countrycodealpha3": "LBN"
+    },
+    {
+      "@odata.etag": "W/\"2057049714\"",
+      "esdc_countryid": "7af6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Liberia",
+      "esdc_namefrench": "Libéria",
+      "esdc_countrycodealpha3": "LBR"
+    },
+    {
+      "@odata.etag": "W/\"2057049715\"",
+      "esdc_countryid": "7df6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Libya",
+      "esdc_namefrench": "Libye",
+      "esdc_countrycodealpha3": "LBY"
+    },
+    {
+      "@odata.etag": "W/\"2057049716\"",
+      "esdc_countryid": "81f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Saint Lucia",
+      "esdc_namefrench": "Sainte-Lucie",
+      "esdc_countrycodealpha3": "LCA"
+    },
+    {
+      "@odata.etag": "W/\"2057049717\"",
+      "esdc_countryid": "83f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Liechtenstein",
+      "esdc_namefrench": "Liechtenstein",
+      "esdc_countrycodealpha3": "LIE"
+    },
+    {
+      "@odata.etag": "W/\"2057049718\"",
+      "esdc_countryid": "87f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Sri Lanka",
+      "esdc_namefrench": "Sri Lanka",
+      "esdc_countrycodealpha3": "LKA"
+    },
+    {
+      "@odata.etag": "W/\"2057049719\"",
+      "esdc_countryid": "8bf6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Lesotho",
+      "esdc_namefrench": "Lesotho",
+      "esdc_countrycodealpha3": "LSO"
+    },
+    {
+      "@odata.etag": "W/\"2057049720\"",
+      "esdc_countryid": "8df6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Lithuania",
+      "esdc_namefrench": "Lituanie",
+      "esdc_countrycodealpha3": "LTU"
+    },
+    {
+      "@odata.etag": "W/\"2057049721\"",
+      "esdc_countryid": "8ff6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Luxembourg",
+      "esdc_namefrench": "Luxembourg",
+      "esdc_countrycodealpha3": "LUX"
+    },
+    {
+      "@odata.etag": "W/\"2057049722\"",
+      "esdc_countryid": "91f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Latvia",
+      "esdc_namefrench": "Lettonie",
+      "esdc_countrycodealpha3": "LVA"
+    },
+    {
+      "@odata.etag": "W/\"2057049723\"",
+      "esdc_countryid": "93f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Saint Martin",
+      "esdc_namefrench": "Saint-Martin",
+      "esdc_countrycodealpha3": "MAF"
+    },
+    {
+      "@odata.etag": "W/\"2057049724\"",
+      "esdc_countryid": "9bf6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Morocco",
+      "esdc_namefrench": "Maroc",
+      "esdc_countrycodealpha3": "MAR"
+    },
+    {
+      "@odata.etag": "W/\"2057049725\"",
+      "esdc_countryid": "a1f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Monaco",
+      "esdc_namefrench": "Monaco",
+      "esdc_countrycodealpha3": "MCO"
+    },
+    {
+      "@odata.etag": "W/\"2057049726\"",
+      "esdc_countryid": "a3f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Moldova",
+      "esdc_namefrench": "Moldavie",
+      "esdc_countrycodealpha3": "MDA"
+    },
+    {
+      "@odata.etag": "W/\"2057049727\"",
+      "esdc_countryid": "a8f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Madagascar",
+      "esdc_namefrench": "Madagascar",
+      "esdc_countrycodealpha3": "MDG"
+    },
+    {
+      "@odata.etag": "W/\"2057049728\"",
+      "esdc_countryid": "acf6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Maldives",
+      "esdc_namefrench": "Maldives",
+      "esdc_countrycodealpha3": "MDV"
+    },
+    {
+      "@odata.etag": "W/\"2057049729\"",
+      "esdc_countryid": "aef6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Mexico",
+      "esdc_namefrench": "Mexique",
+      "esdc_countrycodealpha3": "MEX"
+    },
+    {
+      "@odata.etag": "W/\"2057049730\"",
+      "esdc_countryid": "b0f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Marshall Islands",
+      "esdc_namefrench": "Îles Marshall",
+      "esdc_countrycodealpha3": "MHL"
+    },
+    {
+      "@odata.etag": "W/\"2057049731\"",
+      "esdc_countryid": "b2f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "North Macedonia",
+      "esdc_namefrench": "Macédoine du Nord",
+      "esdc_countrycodealpha3": "MKD"
+    },
+    {
+      "@odata.etag": "W/\"2057049732\"",
+      "esdc_countryid": "b6f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Mali",
+      "esdc_namefrench": "Mali",
+      "esdc_countrycodealpha3": "MLI"
+    },
+    {
+      "@odata.etag": "W/\"2057049733\"",
+      "esdc_countryid": "b8f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Malta",
+      "esdc_namefrench": "Malte",
+      "esdc_countrycodealpha3": "MLT"
+    },
+    {
+      "@odata.etag": "W/\"2057049734\"",
+      "esdc_countryid": "bcf6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Myanmar",
+      "esdc_namefrench": "Myanmar",
+      "esdc_countrycodealpha3": "MMR"
+    },
+    {
+      "@odata.etag": "W/\"2057049735\"",
+      "esdc_countryid": "c0f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Montenegro",
+      "esdc_namefrench": "Montenegro",
+      "esdc_countrycodealpha3": "MNE"
+    },
+    {
+      "@odata.etag": "W/\"2057049736\"",
+      "esdc_countryid": "c2f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Mongolia",
+      "esdc_namefrench": "Mongolie",
+      "esdc_countrycodealpha3": "MNG"
+    },
+    {
+      "@odata.etag": "W/\"2057049737\"",
+      "esdc_countryid": "c8f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Mozambique",
+      "esdc_namefrench": "Mozambique",
+      "esdc_countrycodealpha3": "MOZ"
+    },
+    {
+      "@odata.etag": "W/\"2057049738\"",
+      "esdc_countryid": "caf6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Mauritania",
+      "esdc_namefrench": "Mauritanie",
+      "esdc_countrycodealpha3": "MRT"
+    },
+    {
+      "@odata.etag": "W/\"2057049739\"",
+      "esdc_countryid": "ccf6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Montserrat",
+      "esdc_namefrench": "Montserrat",
+      "esdc_countrycodealpha3": "MSR"
+    },
+    {
+      "@odata.etag": "W/\"2057049740\"",
+      "esdc_countryid": "d0f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Mauritius",
+      "esdc_namefrench": "Maurice",
+      "esdc_countrycodealpha3": "MUS"
+    },
+    {
+      "@odata.etag": "W/\"2057049741\"",
+      "esdc_countryid": "d2f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Malawi",
+      "esdc_namefrench": "Malawi",
+      "esdc_countrycodealpha3": "MWI"
+    },
+    {
+      "@odata.etag": "W/\"2057049742\"",
+      "esdc_countryid": "e4f6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Malaysia",
+      "esdc_namefrench": "Malaise",
+      "esdc_countrycodealpha3": "MYS"
+    },
+    {
+      "@odata.etag": "W/\"2057049743\"",
+      "esdc_countryid": "fcf6389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Namibia",
+      "esdc_namefrench": "Namibie",
+      "esdc_countrycodealpha3": "NAM"
+    },
+    {
+      "@odata.etag": "W/\"2057049744\"",
+      "esdc_countryid": "02f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Niger",
+      "esdc_namefrench": "Niger",
+      "esdc_countrycodealpha3": "NER"
+    },
+    {
+      "@odata.etag": "W/\"2057049745\"",
+      "esdc_countryid": "08f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Nigeria",
+      "esdc_namefrench": "Nigéria",
+      "esdc_countrycodealpha3": "NGA"
+    },
+    {
+      "@odata.etag": "W/\"2057049746\"",
+      "esdc_countryid": "0af7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Nicaragua",
+      "esdc_namefrench": "Nicaragua",
+      "esdc_countrycodealpha3": "NIC"
+    },
+    {
+      "@odata.etag": "W/\"2057049747\"",
+      "esdc_countryid": "12f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Netherlands",
+      "esdc_namefrench": "Pays-Bas",
+      "esdc_countrycodealpha3": "NLD"
+    },
+    {
+      "@odata.etag": "W/\"2057049748\"",
+      "esdc_countryid": "14f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Norway",
+      "esdc_namefrench": "Norvège",
+      "esdc_countrycodealpha3": "NOR"
+    },
+    {
+      "@odata.etag": "W/\"2057049749\"",
+      "esdc_countryid": "16f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Nepal",
+      "esdc_namefrench": "Népal",
+      "esdc_countrycodealpha3": "NPL"
+    },
+    {
+      "@odata.etag": "W/\"2057049750\"",
+      "esdc_countryid": "18f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Nauru",
+      "esdc_namefrench": "Nauru",
+      "esdc_countrycodealpha3": "NRU"
+    },
+    {
+      "@odata.etag": "W/\"2057049751\"",
+      "esdc_countryid": "1cf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "New Zealand",
+      "esdc_namefrench": "Nouvelle-Zélande",
+      "esdc_countrycodealpha3": "NZL"
+    },
+    {
+      "@odata.etag": "W/\"2057049752\"",
+      "esdc_countryid": "27f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Oman",
+      "esdc_namefrench": "Oman",
+      "esdc_countrycodealpha3": "OMN"
+    },
+    {
+      "@odata.etag": "W/\"2057049753\"",
+      "esdc_countryid": "2df7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Pakistan",
+      "esdc_namefrench": "Pakistan",
+      "esdc_countrycodealpha3": "PAK"
+    },
+    {
+      "@odata.etag": "W/\"2057049754\"",
+      "esdc_countryid": "35f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Panama",
+      "esdc_namefrench": "Panama",
+      "esdc_countrycodealpha3": "PAN"
+    },
+    {
+      "@odata.etag": "W/\"2057049755\"",
+      "esdc_countryid": "3df7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Peru",
+      "esdc_namefrench": "Pérou",
+      "esdc_countrycodealpha3": "PER"
+    },
+    {
+      "@odata.etag": "W/\"2057049756\"",
+      "esdc_countryid": "41f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Philippines",
+      "esdc_namefrench": "Philippines",
+      "esdc_countrycodealpha3": "PHL"
+    },
+    {
+      "@odata.etag": "W/\"2057049757\"",
+      "esdc_countryid": "43f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Palau",
+      "esdc_namefrench": "Palaos",
+      "esdc_countrycodealpha3": "PLW"
+    },
+    {
+      "@odata.etag": "W/\"2057049758\"",
+      "esdc_countryid": "45f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Papua New Guinea",
+      "esdc_namefrench": "Papouasie-Nouvelle-Guinée",
+      "esdc_countrycodealpha3": "PNG"
+    },
+    {
+      "@odata.etag": "W/\"2057049759\"",
+      "esdc_countryid": "4df7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Poland",
+      "esdc_namefrench": "Pologne",
+      "esdc_countrycodealpha3": "POL"
+    },
+    {
+      "@odata.etag": "W/\"2057049760\"",
+      "esdc_countryid": "51f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Korea (Democratic People's Republic)",
+      "esdc_namefrench": "Corée (République populaire démocratique)",
+      "esdc_countrycodealpha3": "PRK"
+    },
+    {
+      "@odata.etag": "W/\"2057049761\"",
+      "esdc_countryid": "59f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Portugal",
+      "esdc_namefrench": "Portugal",
+      "esdc_countrycodealpha3": "PRT"
+    },
+    {
+      "@odata.etag": "W/\"2057049762\"",
+      "esdc_countryid": "5bf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Paraguay",
+      "esdc_namefrench": "Paraguay",
+      "esdc_countrycodealpha3": "PRY"
+    },
+    {
+      "@odata.etag": "W/\"2057049763\"",
+      "esdc_countryid": "61f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Qatar",
+      "esdc_namefrench": "Qatar",
+      "esdc_countrycodealpha3": "QAT"
+    },
+    {
+      "@odata.etag": "W/\"2057049764\"",
+      "esdc_countryid": "65f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Romania",
+      "esdc_namefrench": "Roumanie",
+      "esdc_countrycodealpha3": "ROU"
+    },
+    {
+      "@odata.etag": "W/\"2057049765\"",
+      "esdc_countryid": "6bf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Russian Federation",
+      "esdc_namefrench": "Russie (Fédération de)",
+      "esdc_countrycodealpha3": "RUS"
+    },
+    {
+      "@odata.etag": "W/\"2057049141\"",
+      "esdc_countryid": "6ff7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Rwanda",
+      "esdc_namefrench": "Rwanda",
+      "esdc_countrycodealpha3": "RWA"
+    },
+    {
+      "@odata.etag": "W/\"2057049142\"",
+      "esdc_countryid": "71f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Saudi Arabia",
+      "esdc_namefrench": "Arabie Saoudite",
+      "esdc_countrycodealpha3": "SAU"
+    },
+    {
+      "@odata.etag": "W/\"2057049143\"",
+      "esdc_countryid": "75f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Sudan",
+      "esdc_namefrench": "Soudan",
+      "esdc_countrycodealpha3": "SDN"
+    },
+    {
+      "@odata.etag": "W/\"2057049144\"",
+      "esdc_countryid": "7df7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Senegal",
+      "esdc_namefrench": "Sénégal",
+      "esdc_countrycodealpha3": "SEN"
+    },
+    {
+      "@odata.etag": "W/\"2057049145\"",
+      "esdc_countryid": "7ff7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Singapore",
+      "esdc_namefrench": "Singapour",
+      "esdc_countrycodealpha3": "SGP"
+    },
+    {
+      "@odata.etag": "W/\"2057049146\"",
+      "esdc_countryid": "83f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Solomon Islands",
+      "esdc_namefrench": "Îles Salomon",
+      "esdc_countrycodealpha3": "SLB"
+    },
+    {
+      "@odata.etag": "W/\"2057049147\"",
+      "esdc_countryid": "85f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Sierra Leone",
+      "esdc_namefrench": "Sierra Leone",
+      "esdc_countrycodealpha3": "SLE"
+    },
+    {
+      "@odata.etag": "W/\"2057049148\"",
+      "esdc_countryid": "87f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "El Salvador",
+      "esdc_namefrench": "El Salvador",
+      "esdc_countrycodealpha3": "SLV"
+    },
+    {
+      "@odata.etag": "W/\"2057049149\"",
+      "esdc_countryid": "89f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "San Marino",
+      "esdc_namefrench": "Saint-Marin",
+      "esdc_countrycodealpha3": "SMR"
+    },
+    {
+      "@odata.etag": "W/\"2057049150\"",
+      "esdc_countryid": "91f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Somalia",
+      "esdc_namefrench": "Somalie",
+      "esdc_countrycodealpha3": "SOM"
+    },
+    {
+      "@odata.etag": "W/\"2057049151\"",
+      "esdc_countryid": "97f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Serbia",
+      "esdc_namefrench": "Serbie",
+      "esdc_countrycodealpha3": "SRB"
+    },
+    {
+      "@odata.etag": "W/\"2057049152\"",
+      "esdc_countryid": "99f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "South Sudan",
+      "esdc_namefrench": "Soudan du Sud",
+      "esdc_countrycodealpha3": "SSD"
+    },
+    {
+      "@odata.etag": "W/\"2057049153\"",
+      "esdc_countryid": "9df7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Sao Tome and Principe",
+      "esdc_namefrench": "Sao Tomé-et-Principe",
+      "esdc_countrycodealpha3": "STP"
+    },
+    {
+      "@odata.etag": "W/\"2057049154\"",
+      "esdc_countryid": "a3f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Suriname",
+      "esdc_namefrench": "Suriname",
+      "esdc_countrycodealpha3": "SUR"
+    },
+    {
+      "@odata.etag": "W/\"2057049155\"",
+      "esdc_countryid": "a5f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Slovakia",
+      "esdc_namefrench": "Slovaquie",
+      "esdc_countrycodealpha3": "SVK"
+    },
+    {
+      "@odata.etag": "W/\"2057049156\"",
+      "esdc_countryid": "a9f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Slovenia",
+      "esdc_namefrench": "Slovénie",
+      "esdc_countrycodealpha3": "SVN"
+    },
+    {
+      "@odata.etag": "W/\"2057049157\"",
+      "esdc_countryid": "abf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Sweden",
+      "esdc_namefrench": "Suède",
+      "esdc_countrycodealpha3": "SWE"
+    },
+    {
+      "@odata.etag": "W/\"2057049158\"",
+      "esdc_countryid": "b1f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Seychelles",
+      "esdc_namefrench": "Seychelles",
+      "esdc_countrycodealpha3": "SYC"
+    },
+    {
+      "@odata.etag": "W/\"2057049159\"",
+      "esdc_countryid": "b3f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Syria",
+      "esdc_namefrench": "Syrie",
+      "esdc_countrycodealpha3": "SYR"
+    },
+    {
+      "@odata.etag": "W/\"2057049160\"",
+      "esdc_countryid": "bdf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Chad",
+      "esdc_namefrench": "Chad",
+      "esdc_countrycodealpha3": "TCD"
+    },
+    {
+      "@odata.etag": "W/\"2057049161\"",
+      "esdc_countryid": "c1f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Togo",
+      "esdc_namefrench": "Togo",
+      "esdc_countrycodealpha3": "TGO"
+    },
+    {
+      "@odata.etag": "W/\"2057049162\"",
+      "esdc_countryid": "c5f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Thailand",
+      "esdc_namefrench": "Thaïlande",
+      "esdc_countrycodealpha3": "THA"
+    },
+    {
+      "@odata.etag": "W/\"2057049163\"",
+      "esdc_countryid": "c7f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Tajikistan",
+      "esdc_namefrench": "Tadjikistan",
+      "esdc_countrycodealpha3": "TJK"
+    },
+    {
+      "@odata.etag": "W/\"2057049164\"",
+      "esdc_countryid": "cbf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Turkmenistan",
+      "esdc_namefrench": "Turkménistan",
+      "esdc_countrycodealpha3": "TKM"
+    },
+    {
+      "@odata.etag": "W/\"2057049165\"",
+      "esdc_countryid": "cff7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Timor-Leste",
+      "esdc_namefrench": "Timor Leste",
+      "esdc_countrycodealpha3": "TLS"
+    },
+    {
+      "@odata.etag": "W/\"2057049166\"",
+      "esdc_countryid": "d3f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Tonga",
+      "esdc_namefrench": "Tonga",
+      "esdc_countrycodealpha3": "TON"
+    },
+    {
+      "@odata.etag": "W/\"2057049167\"",
+      "esdc_countryid": "ddf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Trinidad and Tobago",
+      "esdc_namefrench": "Trinité-et-Tobago",
+      "esdc_countrycodealpha3": "TTO"
+    },
+    {
+      "@odata.etag": "W/\"2057049168\"",
+      "esdc_countryid": "dff7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Tunisia",
+      "esdc_namefrench": "Tunisie",
+      "esdc_countrycodealpha3": "TUN"
+    },
+    {
+      "@odata.etag": "W/\"2057049169\"",
+      "esdc_countryid": "e1f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Turkey",
+      "esdc_namefrench": "Turquie",
+      "esdc_countrycodealpha3": "TUR"
+    },
+    {
+      "@odata.etag": "W/\"2057049170\"",
+      "esdc_countryid": "e5f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Tuvalu",
+      "esdc_namefrench": "Tuvalu",
+      "esdc_countrycodealpha3": "TUV"
+    },
+    {
+      "@odata.etag": "W/\"2057049171\"",
+      "esdc_countryid": "ebf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Tanzania",
+      "esdc_namefrench": "Tanzanie",
+      "esdc_countrycodealpha3": "TZA"
+    },
+    {
+      "@odata.etag": "W/\"2057049172\"",
+      "esdc_countryid": "f2f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Uganda",
+      "esdc_namefrench": "Ouganda",
+      "esdc_countrycodealpha3": "UGA"
+    },
+    {
+      "@odata.etag": "W/\"2057049040\"",
+      "esdc_countryid": "f4f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Ukraine",
+      "esdc_namefrench": "Ukraine",
+      "esdc_countrycodealpha3": "UKR"
+    },
+    {
+      "@odata.etag": "W/\"2057049043\"",
+      "esdc_countryid": "f8f7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Uruguay",
+      "esdc_namefrench": "Uruguay",
+      "esdc_countrycodealpha3": "URY"
+    },
+    {
+      "@odata.etag": "W/\"2057049173\"",
+      "esdc_countryid": "fcf7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "United States of America",
+      "esdc_namefrench": "États-Unis d’Amérique",
+      "esdc_countrycodealpha3": "USA"
+    },
+    {
+      "@odata.etag": "W/\"2057049174\"",
+      "esdc_countryid": "fef7389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Uzbekistan",
+      "esdc_namefrench": "Ouzbékistan",
+      "esdc_countrycodealpha3": "UZB"
+    },
+    {
+      "@odata.etag": "W/\"2057049049\"",
+      "esdc_countryid": "00f8389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Holy See (Vatican)",
+      "esdc_namefrench": "Saint-Siège (Vatican)",
+      "esdc_countrycodealpha3": "VAT"
+    },
+    {
+      "@odata.etag": "W/\"2057049053\"",
+      "esdc_countryid": "0af8389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Venezuela",
+      "esdc_namefrench": "Vénézuéla",
+      "esdc_countrycodealpha3": "VEN"
+    },
+    {
+      "@odata.etag": "W/\"2057049175\"",
+      "esdc_countryid": "22f8389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Vietnam",
+      "esdc_namefrench": "Viêt Nam",
+      "esdc_countrycodealpha3": "VNM"
+    },
+    {
+      "@odata.etag": "W/\"2057049176\"",
+      "esdc_countryid": "26f8389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Vanuatu",
+      "esdc_namefrench": "Vanuatu",
+      "esdc_countrycodealpha3": "VUT"
+    },
+    {
+      "@odata.etag": "W/\"2057049177\"",
+      "esdc_countryid": "2cf8389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Samoa",
+      "esdc_namefrench": "Samoa",
+      "esdc_countrycodealpha3": "WSM"
+    },
+    {
+      "@odata.etag": "W/\"2057049178\"",
+      "esdc_countryid": "32f8389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Yemen",
+      "esdc_namefrench": "Yémen",
+      "esdc_countrycodealpha3": "YEM"
+    },
+    {
+      "@odata.etag": "W/\"2057049179\"",
+      "esdc_countryid": "38f8389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "South Africa",
+      "esdc_namefrench": "Afrique du Sud",
+      "esdc_countrycodealpha3": "ZAF"
+    },
+    {
+      "@odata.etag": "W/\"2057049180\"",
+      "esdc_countryid": "3ef8389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Zambia",
+      "esdc_namefrench": "Zambie",
+      "esdc_countrycodealpha3": "ZMB"
+    },
+    {
+      "@odata.etag": "W/\"2057049060\"",
+      "esdc_countryid": "42f8389e-97ae-eb11-8236-000d3af4bfc3",
+      "esdc_nameenglish": "Zimbabwe",
+      "esdc_namefrench": "Zimbabwe",
+      "esdc_countrycodealpha3": "ZWE"
+    }
+  ]
+}
