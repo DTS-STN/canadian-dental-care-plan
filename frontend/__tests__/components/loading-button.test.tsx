@@ -8,12 +8,12 @@ import { LoadingButton } from '~/components/loading-button';
 
 vi.mock('~/components/button-icons', () => ({
   ButtonStartIcon: (props: any) => (
-    <div data-testid="button-start-icon" {...props}>
+    <div data-testid="button-start-icon">
       <i className={`fa ${props.icon.iconName}`} data-testid="font-awesome-icon"></i>
     </div>
   ),
   ButtonEndIcon: (props: any) => (
-    <div data-testid="button-end-icon" {...props}>
+    <div data-testid="button-end-icon">
       <i className={`fa ${props.icon.iconName}`} data-testid="font-awesome-icon"></i>
     </div>
   ),
