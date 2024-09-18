@@ -1,5 +1,8 @@
 export const SERVICE_IDENTIFIER = {
   CLIENT_CONFIG: Symbol.for('ClientConfig'),
+  CLIENT_FRIENDLY_STATUS_DTO_MAPPER: Symbol.for('ClientFriendlyStatusDtoMapper'),
+  CLIENT_FRIENDLY_STATUS_REPOSITORY: Symbol.for('ClientFriendlyStatusRepository'),
+  CLIENT_FRIENDLY_STATUS_SERVICE: Symbol.for('ClientFriendlyStatusService'),
   CONFIG_FACTORY: Symbol.for('ConfigFactory'),
   CONTAINER_CONFIG_PROVIDER: Symbol.for('ContainerConfigProvider'),
   CONTAINER_PROVIDER: Symbol.for('ContainerProvider'),
