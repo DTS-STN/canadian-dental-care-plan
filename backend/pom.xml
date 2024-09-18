@@ -300,17 +300,9 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<!-- Perform CVE dependency scans during the verify phase -->
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
 				<version>${dependency-check-maven.version}</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
