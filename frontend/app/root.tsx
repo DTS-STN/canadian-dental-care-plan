@@ -68,7 +68,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const buildInfo = buildInfoService.getBuildInfo();
   const dynatraceRumScript = await dynatraceService.retrieveRumScript();
-  const env = configProvider.clientConfig;
+  const env = configProvider.getClientConfig();
   const meta = {
     author: t('gcweb:meta.author'),
     description: t('gcweb:meta.description'),

@@ -54,7 +54,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const userInfoToken: UserinfoToken = session.get('userInfoToken');
   const personalInformation = await personalInformationRouteHelpers.getPersonalInformation(userInfoToken, params, request, session);
 
-  const preferredLanguage = personalInformation.preferredLanguageId ? serviceProvider.preferredLanguageService.findById(personalInformation.preferredLanguageId) : undefined;
+  const preferredLanguage = personalInformation.preferredLanguageId ? serviceProvider.getPreferredLanguageService().findById(personalInformation.preferredLanguageId) : undefined;
   const birthParsedFormat = personalInformation.birthDate ? toLocaleDateString(parseDateString(personalInformation.birthDate), locale) : undefined;
 
   const countryList = localizeCountries(lookupService.getAllCountries(), locale);
@@ -65,7 +65,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
 
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('personal-information:index.page-title') }) };
-  const { SCCH_BASE_URI } = configProvider.clientConfig;
+  const { SCCH_BASE_URI } = configProvider.getClientConfig();
 
   const updatedInfo = session.get('personal-info-updated');
   session.unset('personal-info-updated');

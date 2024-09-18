@@ -23,7 +23,7 @@ export class MaritalStatusServiceImpl implements MaritalStatusService {
     @inject(SERVICE_IDENTIFIER.MARITAL_STATUS_REPOSITORY) private readonly maritalStatusRepository: MaritalStatusRepository,
     @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_MARITAL_STATUS_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('MaritalStatusRepositoryImpl');
+    this.log = logFactory.createLogger('MaritalStatusServiceImpl');
 
     // set moize options
     this.findAll.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS;

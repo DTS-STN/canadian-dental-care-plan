@@ -23,7 +23,7 @@ export class ProvinceTerritoryStateServiceImpl implements ProvinceTerritoryState
     @inject(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_REPOSITORY) private readonly provinceTerritoryStateRepository: ProvinceTerritoryStateRepository,
     @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PROVINCE_TERRITORY_STATE_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('ProvinceTerritoryStateRepositoryImpl');
+    this.log = logFactory.createLogger('ProvinceTerritoryStateServiceImpl');
 
     // set moize options
     this.findAll.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS;

@@ -33,7 +33,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const t = await getFixedT(request, handle.i18nNamespaces);
   const meta = { title: t('gcweb:meta.title.template', { title: t('data-unavailable:page-title') }) };
 
-  const { SCCH_BASE_URI } = configProvider.clientConfig;
+  const { SCCH_BASE_URI } = configProvider.getClientConfig();
 
   return json({ meta, SCCH_BASE_URI });
 }

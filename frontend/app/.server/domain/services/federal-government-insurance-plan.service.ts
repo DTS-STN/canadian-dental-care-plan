@@ -23,7 +23,7 @@ export class FederalGovernmentInsurancePlanServiceImpl implements FederalGovernm
     @inject(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY) private readonly federalGovernmentInsurancePlanRepository: FederalGovernmentInsurancePlanRepository,
     @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('FederalGovernmentInsurancePlanRepositoryImpl');
+    this.log = logFactory.createLogger('FederalGovernmentInsurancePlanServiceImpl');
 
     // set moize options
     this.findAll.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS;

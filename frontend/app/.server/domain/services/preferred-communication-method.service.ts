@@ -23,7 +23,7 @@ export class PreferredCommunicationMethodServiceImpl implements PreferredCommuni
     @inject(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_REPOSITORY) private readonly preferredCommunicationMethodRepository: PreferredCommunicationMethodRepository,
     @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_PREFERRED_COMMUNICATION_METHOD_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('PreferredCommunicationMethodRepositoryImpl');
+    this.log = logFactory.createLogger('PreferredCommunicationMethodServiceImpl');
 
     // set moize options
     this.findAll.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS;

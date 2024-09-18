@@ -1,21 +1,23 @@
-import { inject, injectable } from 'inversify';
+import { Container, injectable } from 'inversify';
 
 import type { ClientConfig } from '~/.server/configs/client.config';
 import type { ServerConfig } from '~/.server/configs/server.config';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
 
 export interface ContainerConfigProvider {
-  clientConfig: ClientConfig;
-  serverConfig: ServerConfig;
+  getClientConfig(): ClientConfig;
+  getServerConfig(): ServerConfig;
 }
 
 @injectable()
 export class ContainerConfigProviderImpl implements ContainerConfigProvider {
-  constructor(
-    @inject(SERVICE_IDENTIFIER.CLIENT_CONFIG)
-    public readonly clientConfig: ClientConfig,
+  constructor(private readonly container: Container) {}
 
-    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG)
-    public readonly serverConfig: ServerConfig,
-  ) {}
+  public getClientConfig(): ClientConfig {
+    return this.container.get<ClientConfig>(SERVICE_IDENTIFIER.CLIENT_CONFIG);
+  }
+
+  public getServerConfig(): ServerConfig {
+    return this.container.get<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG);
+  }
 }

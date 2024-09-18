@@ -1,9 +1,9 @@
+import type { AppLoadContext } from '@remix-run/node';
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { loader } from '~/routes/$lang/_public/apply/$id/adult/contact-information';
 
 vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
@@ -55,7 +55,7 @@ describe('_public.apply.id.contact-information', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/apply/123/contact-information'),
-        context: { session, ...mock<ContainerProvider>() },
+        context: { ...mock<AppLoadContext>(), session },
         params: {},
       });
 

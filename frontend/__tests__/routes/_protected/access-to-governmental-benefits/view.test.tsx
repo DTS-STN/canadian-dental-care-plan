@@ -1,9 +1,9 @@
+import type { AppLoadContext } from '@remix-run/node';
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { loader } from '~/routes/$lang/_protected/access-to-governmental-benefits/view';
 
 vi.mock('~/services/audit-service.server', () => ({
@@ -144,7 +144,7 @@ describe('Access View Governmental Page', () => {
       session.set('userInfoToken', { sin: '999999999' });
       const response = await loader({
         request: new Request('http://localhost:3000/en/access-to-governmental-benefits/view'),
-        context: { session, ...mock<ContainerProvider>() },
+        context: { ...mock<AppLoadContext>(), session },
         params: {},
       });
 
@@ -165,7 +165,7 @@ describe('Access View Governmental Page', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/access-to-governmental-benefits/view'),
-        context: { session, ...mock<ContainerProvider>() },
+        context: { ...mock<AppLoadContext>(), session },
         params: {},
       });
 
@@ -233,7 +233,7 @@ describe('Access View Governmental Page', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/access-to-governmental-benefits/view'),
-        context: { session, ...mock<ContainerProvider>() },
+        context: { ...mock<AppLoadContext>(), session },
         params: {},
       });
 

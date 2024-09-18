@@ -1,9 +1,9 @@
+import type { AppLoadContext } from '@remix-run/node';
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { action, loader } from '~/routes/$lang/_public/apply/$id/adult/communication-preference';
 
 vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
@@ -56,20 +56,20 @@ describe('_public.apply.id.communication-preference', () => {
     it('should id, state, country list and region list', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
-      const mockContainerProvider = mock<ContainerProvider>({
+      const mockAppLoadContext = mock<AppLoadContext>({
         serviceProvider: {
-          preferredLanguageService: {
+          getPreferredLanguageService: vi.fn().mockReturnValue({
             findAll: vi.fn().mockReturnValue([
               { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
               { id: 'fr', nameEn: 'French', nameFr: 'Français' },
             ]),
-          },
+          }),
         },
       });
 
       const response = await loader({
         request: new Request('http://localhost:3000/apply/123/communication-preference'),
-        context: { session, ...mockContainerProvider },
+        context: { ...mockAppLoadContext, session },
         params: {},
       });
 
@@ -107,7 +107,7 @@ describe('_public.apply.id.communication-preference', () => {
         ],
       });
 
-      expect(mockContainerProvider.serviceProvider.preferredLanguageService.findAll).toHaveBeenCalledTimes(1);
+      expect(mockAppLoadContext.serviceProvider.getPreferredLanguageService().findAll).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -126,7 +126,7 @@ describe('_public.apply.id.communication-preference', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { session, ...mock<ContainerProvider>() },
+        context: { ...mock<AppLoadContext>(), session },
         params: {},
       });
 
@@ -147,7 +147,7 @@ describe('_public.apply.id.communication-preference', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { session, ...mock<ContainerProvider>() },
+        context: { ...mock<AppLoadContext>(), session },
         params: {},
       });
 
@@ -169,7 +169,7 @@ describe('_public.apply.id.communication-preference', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/apply/123/communication-preference', { method: 'POST', body: formData }),
-        context: { session, ...mock<ContainerProvider>() },
+        context: { ...mock<AppLoadContext>(), session },
         params: {},
       });
 

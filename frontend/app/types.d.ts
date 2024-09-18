@@ -16,7 +16,8 @@ import type statusCheck from '../public/locales/en/status-check.json';
 import type status from '../public/locales/en/status.json';
 import type stubLogin from '../public/locales/en/stub-login.json';
 import type unableToProcessRequest from '../public/locales/en/unable-to-process-request.json';
-import type { ContainerProvider } from './.server/providers/container.provider';
+import type { ContainerConfigProvider } from '~/.server/providers/container-config.provider';
+import type { ContainerServiceProvider } from '~/.server/providers/container-service.provider';
 import type { ClientEnv } from '~/utils/env-utils.server';
 import type { APP_LOCALES } from '~/utils/locale-utils';
 
@@ -85,6 +86,8 @@ declare module 'i18next' {
 
 declare module '@remix-run/server-runtime' {
   interface AppLoadContext extends ContainerProvider {
+    configProvider: ContainerConfigProvider;
+    serviceProvider: ContainerServiceProvider;
     session: Session;
   }
 }
