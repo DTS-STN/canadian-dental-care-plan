@@ -80,6 +80,8 @@ export const getLookupService = moize(createLookupService, { onCacheAdd: () => l
 
 function createLookupService() {
   const {
+    ENGLISH_LANGUAGE_CODE,
+    FRENCH_LANGUAGE_CODE,
     INTEROP_API_BASE_URI,
     LOOKUP_SVC_ALL_AVOIDED_DENTAL_COST_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS,
@@ -87,7 +89,7 @@ function createLookupService() {
     LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_DISABILITY_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_EQUITY_TYPES_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_ALL_FEDERAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
+    LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_GENDER_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_INDIGENOUS_GROUP_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_INDIGENOUS_TYPES_CACHE_TTL_SECONDS,
@@ -95,11 +97,11 @@ function createLookupService() {
     LOOKUP_SVC_ALL_MARITAL_STATUSES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_MOUTH_PAIN_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_PREFERRED_COMMUNICATION_METHODS_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_ALL_PROVINCIAL_TERRITORIAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_ALL_REGIONS_CACHE_TTL_SECONDS,
+    LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS,
+    LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_SEX_AT_BIRTH_TYPES_CACHE_TTL_SECONDS,
-    ENGLISH_LANGUAGE_CODE,
-    FRENCH_LANGUAGE_CODE,
+    LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS,
+    LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS,
   } = getEnv();
 
   async function getAllIndigenousTypes() {
@@ -499,11 +501,11 @@ function createLookupService() {
       onCacheAdd: () => log.info('Creating new AllEquityTypes memo'),
     }),
     getAllFederalSocialPrograms: moize(getAllFederalSocialPrograms, {
-      maxAge: 1000 * LOOKUP_SVC_ALL_FEDERAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
+      maxAge: 1000 * LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllFederalSocialPrograms memo'),
     }),
     getFederalSocialProgramById: moize(getFederalSocialProgramsById, {
-      maxAge: 1000 * LOOKUP_SVC_ALL_FEDERAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
+      maxAge: 1000 * LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS,
       maxSize: Infinity,
       onCacheAdd: () => log.info('Creating new FederalSocialProgramById memo'),
     }),
@@ -536,16 +538,16 @@ function createLookupService() {
       onCacheAdd: () => log.info('Creating new AllPreferredCommunicationMethods memo'),
     }),
     getAllProvincialTerritorialSocialPrograms: moize(getAllProvincialTerritorialSocialPrograms, {
-      maxAge: 1000 * LOOKUP_SVC_ALL_PROVINCIAL_TERRITORIAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
+      maxAge: 1000 * LOOKUP_SVC_ALL_PROVINCIAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllProvincialTerritorialSocialPrograms memo'),
     }),
     getProvincialTerritorialSocialProgramById: moize(getProvincialTerritorialSocialProgramById, {
-      maxAge: 1000 * LOOKUP_SVC_ALL_PROVINCIAL_TERRITORIAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS,
+      maxAge: 1000 * LOOKUP_SVC_PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS,
       maxSize: Infinity,
       onCacheAdd: () => log.info('Creating new ProvincialTerritorialSocialProgramById memo'),
     }),
     getAllRegions: moize(getAllRegions, {
-      maxAge: 1000 * LOOKUP_SVC_ALL_REGIONS_CACHE_TTL_SECONDS,
+      maxAge: 1000 * LOOKUP_SVC_ALL_PROVINCE_TERRITORY_STATES_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllRegions memo'),
     }),
     getAllSexAtBirthTypes: moize.promise(getAllSexAtBirthTypes, {
