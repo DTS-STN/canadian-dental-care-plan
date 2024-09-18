@@ -23,5 +23,8 @@ export const SERVICE_IDENTIFIER = {
   PREFERRED_LANGUAGE_DTO_MAPPER: Symbol.for('PreferredLanguageDtoMapper'),
   PREFERRED_LANGUAGE_REPOSITORY: Symbol.for('PreferredLanguageRepository'),
   PREFERRED_LANGUAGE_SERVICE: Symbol.for('PreferredLanguageService'),
+  PROVINCE_TERRITORY_STATE_DTO_MAPPER: Symbol.for('ProvinceTerritoryStateDtoMapper'),
+  PROVINCE_TERRITORY_STATE_REPOSITORY: Symbol.for('ProvinceTerritoryStateRepository'),
+  PROVINCE_TERRITORY_STATE_SERVICE: Symbol.for('ProvinceTerritoryStateService'),
   SERVER_CONFIG: Symbol.for('ServerConfig'),
 };
