@@ -26,5 +26,8 @@ export const SERVICE_IDENTIFIER = {
   PROVINCE_TERRITORY_STATE_DTO_MAPPER: Symbol.for('ProvinceTerritoryStateDtoMapper'),
   PROVINCE_TERRITORY_STATE_REPOSITORY: Symbol.for('ProvinceTerritoryStateRepository'),
   PROVINCE_TERRITORY_STATE_SERVICE: Symbol.for('ProvinceTerritoryStateService'),
+  PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_DTO_MAPPER: Symbol.for('ProvincialGovernmentInsurancePlanDtoMapper'),
+  PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY: Symbol.for('ProvincialGovernmentInsurancePlanRepository'),
+  PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE: Symbol.for('ProvincialGovernmentInsurancePlanService'),
   SERVER_CONFIG: Symbol.for('ServerConfig'),
 };
