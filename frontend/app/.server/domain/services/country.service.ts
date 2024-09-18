@@ -23,7 +23,7 @@ export class CountryServiceImpl implements CountryService {
     @inject(SERVICE_IDENTIFIER.COUNTRY_REPOSITORY) private readonly countryRepository: CountryRepository,
     @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_COUNTRY_CACHE_TTL_SECONDS'>,
   ) {
-    this.log = logFactory.createLogger('CountryRepositoryImpl');
+    this.log = logFactory.createLogger('CountryServiceImpl');
 
     // set moize options
     this.findAll.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS;
