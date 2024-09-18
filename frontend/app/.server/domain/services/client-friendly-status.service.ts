@@ -21,13 +21,13 @@ export class ClientFriendlyStatusServiceImpl implements ClientFriendlyStatusServ
     @inject(SERVICE_IDENTIFIER.LOG_FACTORY) logFactory: LogFactory,
     @inject(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_DTO_MAPPER) private readonly clientFriendlyStatusDtoMapper: ClientFriendlyStatusDtoMapper,
     @inject(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_REPOSITORY) private readonly clientFriendlyStatusRepository: ClientFriendlyStatusRepository,
-    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_CLIENT_FRIENDLY_STATUSE_CACHE_TTL_SECONDS'>,
+    @inject(SERVICE_IDENTIFIER.SERVER_CONFIG) private readonly serverConfig: Pick<ServerConfig, 'LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS' | 'LOOKUP_SVC_CLIENT_FRIENDLY_STATUS_CACHE_TTL_SECONDS'>,
   ) {
     this.log = logFactory.createLogger('ClientFriendlyStatusRepositoryImpl');
 
     // set moize options
     this.findAll.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS;
-    this.findById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_CLIENT_FRIENDLY_STATUSE_CACHE_TTL_SECONDS;
+    this.findById.options.maxAge = 1000 * this.serverConfig.LOOKUP_SVC_CLIENT_FRIENDLY_STATUS_CACHE_TTL_SECONDS;
   }
 
   private findAllImpl(): ClientFriendlyStatusDto[] {
