@@ -160,6 +160,7 @@ const serverEnv = clientEnvSchema.extend({
   LOOKUP_SVC_CLIENT_FRIENDLY_STATUSE_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_COUNTRY_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
+  LOOKUP_SVC_MARITAL_STATUSE_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
 
