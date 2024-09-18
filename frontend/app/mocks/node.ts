@@ -1,6 +1,7 @@
 import { setupServer } from 'msw/node';
 
 import { getApplicationHistoryApiMockHandlers } from './application-history-api.server';
+import { getClientApplicationApiMockHandlers } from './client-application-api.server';
 import { getSubscriptionApiMockHandlers } from './subscription-api.server';
 import { getCCTApiMockHandlers } from '~/mocks/cct-api.server';
 import { getLookupApiMockHandlers } from '~/mocks/lookup-api.server';
@@ -13,6 +14,7 @@ import { mockEnabled } from '~/utils/env-utils.server';
 
 export const server = setupServer(
   ...(mockEnabled('application-history') ? getApplicationHistoryApiMockHandlers() : []),
+  ...(mockEnabled('client-application') ? getClientApplicationApiMockHandlers() : []),
   ...(mockEnabled('subscription') ? getSubscriptionApiMockHandlers() : []),
   ...(mockEnabled('cct') ? getCCTApiMockHandlers() : []),
   ...(mockEnabled('lookup') ? getLookupApiMockHandlers() : []),
