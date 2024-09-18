@@ -48,6 +48,7 @@
 		<opentelemetry-instrumentation-bom.version>2.7.0</opentelemetry-instrumentation-bom.version>
 		<spring-boot.version>3.3.3</spring-boot.version>
 		<springdoc.version>2.6.0</springdoc.version>
+		<dependency-check-maven.version>10.0.4</dependency-check-maven.version>
 	</properties>
 
 
@@ -298,7 +299,11 @@
 					</docker>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>${dependency-check-maven.version}</version>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>
