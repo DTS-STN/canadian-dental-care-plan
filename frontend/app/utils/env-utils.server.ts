@@ -145,7 +145,7 @@ const serverEnv = clientEnvSchema.extend({
   LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_DISABILITY_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_EQUITY_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_ALL_FEDERAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
+  LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_GENDER_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_INDIGENOUS_GROUP_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_INDIGENOUS_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
@@ -157,9 +157,10 @@ const serverEnv = clientEnvSchema.extend({
   LOOKUP_SVC_ALL_PROVINCIAL_TERRITORIAL_SOCIAL_PROGRAMS_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_REGIONS_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_ALL_SEX_AT_BIRTH_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
-  LOOKUP_SVC_COUNTRY_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   LOOKUP_SVC_CLIENT_FRIENDLY_STATUSE_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
+  LOOKUP_SVC_COUNTRY_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
+  LOOKUP_SVC_FEDERAL_GOVERNMENT_INSURANCE_PLAN_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
+  LOOKUP_SVC_PREFERRED_LANGUAGE_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
   GET_ALL_LETTER_TYPES_CACHE_TTL_SECONDS: z.coerce.number().default(24 * 60 * 60),
 
   // OpenTelemetry/Dynatrace settings
