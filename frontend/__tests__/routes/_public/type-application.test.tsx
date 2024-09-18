@@ -1,9 +1,9 @@
+import type { AppLoadContext } from '@remix-run/node';
 import { createMemorySessionStorage, redirect } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { action, loader } from '~/routes/$lang/_public/apply/$id/type-application';
 
 vi.mock('~/route-helpers/apply-route-helpers.server', () => ({
@@ -38,7 +38,7 @@ describe('_public.apply.id.type-of-application', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application'),
-        context: { session, ...mock<ContainerProvider>() },
+        context: { ...mock<AppLoadContext>(), session },
         params: {},
       });
 
@@ -62,7 +62,7 @@ describe('_public.apply.id.type-of-application', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }),
-        context: { session, ...mock<ContainerProvider>() },
+        context: { ...mock<AppLoadContext>(), session },
         params: {},
       });
 
@@ -81,7 +81,7 @@ describe('_public.apply.id.type-of-application', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }),
-        context: { session, ...mock<ContainerProvider>() },
+        context: { ...mock<AppLoadContext>(), session },
         params: { lang: 'en', id: '123' },
       });
 
@@ -99,7 +99,7 @@ describe('_public.apply.id.type-of-application', () => {
 
       const response = await action({
         request: new Request('http://localhost:3000/en/apply/123/adult/type-of-application', { method: 'POST', body: formData }),
-        context: { session, ...mock<ContainerProvider>() },
+        context: { ...mock<AppLoadContext>(), session },
         params: { lang: 'en', id: '123' },
       });
 

@@ -1,22 +1,20 @@
-import { describe, expect, it } from 'vitest';
+import type { Container } from 'inversify';
+import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import type { ClientConfig } from '~/.server/configs/client.config';
-import type { ServerConfig } from '~/.server/configs/server.config';
+import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
 import { ContainerConfigProviderImpl } from '~/.server/providers/container-config.provider';
 
 describe('ContainerConfigProviderImpl', () => {
-  it('should inject client config', () => {
-    const mockClientConfig = mock<ClientConfig>();
-    const containerConfigProvider = new ContainerConfigProviderImpl(mockClientConfig, mock<ServerConfig>());
+  it("should call the container's get function with the correct identifier", () => {
+    const mockContainer = mock<Container>({ get: vi.fn().mockImplementation((serviceIdentifier) => serviceIdentifier) });
 
-    expect(containerConfigProvider.clientConfig).toBe(mockClientConfig);
-  });
+    const serviceProvider = new ContainerConfigProviderImpl(mockContainer);
 
-  it('should inject server config', () => {
-    const mockServerConfig = mock<ServerConfig>();
-    const containerConfigProvider = new ContainerConfigProviderImpl(mock<ClientConfig>(), mockServerConfig);
+    serviceProvider.getClientConfig();
+    expect(mockContainer.get).toBeCalledWith(SERVICE_IDENTIFIER.CLIENT_CONFIG);
 
-    expect(containerConfigProvider.serverConfig).toBe(mockServerConfig);
+    serviceProvider.getServerConfig();
+    expect(mockContainer.get).toBeCalledWith(SERVICE_IDENTIFIER.SERVER_CONFIG);
   });
 });

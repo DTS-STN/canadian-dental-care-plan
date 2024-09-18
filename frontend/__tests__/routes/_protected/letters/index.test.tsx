@@ -1,9 +1,9 @@
+import type { AppLoadContext } from '@remix-run/node';
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { loader } from '~/routes/$lang/_protected/letters/index';
 
 vi.mock('~/services/audit-service.server', () => ({
@@ -73,11 +73,11 @@ describe('Letters Page', () => {
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
       session.set('userInfoToken', { sin: '999999999', sub: '1111111' });
 
-      const mockContainerProvider = mock<ContainerProvider>({ configProvider: { clientConfig: { SCCH_BASE_URI: 'https://api.example.com' } } });
+      const mockAppLoadContext = mock<AppLoadContext>({ configProvider: { getClientConfig: vi.fn().mockReturnValue({ SCCH_BASE_URI: 'https://api.example.com' }) } });
 
       const response = await loader({
         request: new Request('http://localhost/letters?sort=desc'),
-        context: { session, ...mockContainerProvider },
+        context: { ...mockAppLoadContext, session },
         params: {},
       });
 
@@ -96,11 +96,11 @@ describe('Letters Page', () => {
     session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
     session.set('userInfoToken', { sin: '999999999' });
 
-    const mockContainerProvider = mock<ContainerProvider>({ configProvider: { clientConfig: { SCCH_BASE_URI: 'https://api.example.com' } } });
+    const mockAppLoadContext = mock<AppLoadContext>({ configProvider: { getClientConfig: vi.fn().mockReturnValue({ SCCH_BASE_URI: 'https://api.example.com' }) } });
 
     const response = await loader({
       request: new Request('http://localhost/letters'),
-      context: { session, ...mockContainerProvider },
+      context: { ...mockAppLoadContext, session },
       params: {},
     });
 

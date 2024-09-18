@@ -64,7 +64,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   auditService.audit('page-view.applications', { userId: idToken.sub });
   instrumentationService.countHttpStatus('applications.view', 200);
 
-  const { SCCH_BASE_URI } = configProvider.clientConfig;
+  const { SCCH_BASE_URI } = configProvider.getClientConfig();
   return json({ applications, meta, sortOrder, SCCH_BASE_URI });
 }
 

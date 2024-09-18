@@ -1,9 +1,9 @@
+import type { AppLoadContext } from '@remix-run/node';
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { loader } from '~/routes/$lang/_protected/personal-information/index';
 
 vi.mock('~/services/audit-service.server', () => ({
@@ -91,16 +91,16 @@ describe('_gcweb-app.personal-information._index', () => {
   });
 
   describe('loader()', () => {
-    const mockContainerProvider = mock<ContainerProvider>({
-      configProvider: { clientConfig: { SCCH_BASE_URI: 'https://api.example.com' } },
+    const mockAppLoadContext = mock<AppLoadContext>({
+      configProvider: { getClientConfig: vi.fn().mockReturnValue({ SCCH_BASE_URI: 'https://api.example.com' }) },
       serviceProvider: {
-        preferredLanguageService: {
-          findById: vi.fn().mockReturnValue({ id: 'fr', nameEn: 'French', nameFr: 'Français' }),
-          findAll: vi.fn().mockReturnValue([
+        getPreferredLanguageService: () => ({
+          findById: () => ({ id: 'fr', nameEn: 'French', nameFr: 'Français' }),
+          findAll: () => [
             { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
             { id: 'fr', nameEn: 'French', nameFr: 'Français' },
-          ]),
-        },
+          ],
+        }),
       },
     });
 
@@ -111,7 +111,7 @@ describe('_gcweb-app.personal-information._index', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/personal-information'),
-        context: { session, ...mockContainerProvider },
+        context: { ...mockAppLoadContext, session },
         params: {},
       });
 
@@ -125,7 +125,7 @@ describe('_gcweb-app.personal-information._index', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/fr/personal-information'),
-        context: { session, ...mockContainerProvider },
+        context: { ...mockAppLoadContext, session },
         params: {},
       });
 
@@ -139,7 +139,7 @@ describe('_gcweb-app.personal-information._index', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/en/personal-information'),
-        context: { session, ...mockContainerProvider },
+        context: { ...mockAppLoadContext, session },
         params: {},
       });
 

@@ -5,22 +5,56 @@ import { makeLoggerMiddleware, textSerializer } from 'inversify-logger-middlewar
 import type { ClientConfig } from '~/.server/configs/client.config';
 import type { ServerConfig } from '~/.server/configs/server.config';
 import { SERVICE_IDENTIFIER } from '~/.server/constants/service-identifier.contant';
+import type { ClientFriendlyStatusDtoMapper } from '~/.server/domain/mappers/client-friendly-status.dto.mapper';
+import { ClientFriendlyStatusDtoMapperImpl } from '~/.server/domain/mappers/client-friendly-status.dto.mapper';
+import type { CountryDtoMapper } from '~/.server/domain/mappers/country.dto.mapper';
+import { CountryDtoMapperImpl } from '~/.server/domain/mappers/country.dto.mapper';
+import type { FederalGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers/federal-government-insurance-plan.dto.mapper';
+import { FederalGovernmentInsurancePlanDtoMapperImpl } from '~/.server/domain/mappers/federal-government-insurance-plan.dto.mapper';
+import type { MaritalStatusDtoMapper } from '~/.server/domain/mappers/marital-status.dto.mapper';
+import { MaritalStatusDtoMapperImpl } from '~/.server/domain/mappers/marital-status.dto.mapper';
+import type { PreferredCommunicationMethodDtoMapper } from '~/.server/domain/mappers/preferred-communication-method.dto.mapper';
+import { PreferredCommunicationMethodDtoMapperImpl } from '~/.server/domain/mappers/preferred-communication-method.dto.mapper';
 import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers/preferred-language.dto.mapper';
 import { PreferredLanguageDtoMapperImpl } from '~/.server/domain/mappers/preferred-language.dto.mapper';
+import type { ProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers/province-territory-state.dto.mapper';
+import { ProvinceTerritoryStateDtoMapperImpl } from '~/.server/domain/mappers/province-territory-state.dto.mapper';
+import type { ProvincialGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers/provincial-government-insurance-plan.dto.mapper';
+import { ProvincialGovernmentInsurancePlanDtoMapperImpl } from '~/.server/domain/mappers/provincial-government-insurance-plan.dto.mapper';
+import type { ClientFriendlyStatusRepository } from '~/.server/domain/repositories/client-friendly-status.repository';
+import { ClientFriendlyStatusRepositoryImpl } from '~/.server/domain/repositories/client-friendly-status.repository';
+import type { CountryRepository } from '~/.server/domain/repositories/country.repository';
+import { CountryRepositoryImpl } from '~/.server/domain/repositories/country.repository';
+import type { FederalGovernmentInsurancePlanRepository } from '~/.server/domain/repositories/federal-government-insurance-plan.repository';
+import { FederalGovernmentInsurancePlanRepositoryImpl } from '~/.server/domain/repositories/federal-government-insurance-plan.repository';
+import type { MaritalStatusRepository } from '~/.server/domain/repositories/marital-status.repository';
+import { MaritalStatusRepositoryImpl } from '~/.server/domain/repositories/marital-status.repository';
+import type { PreferredCommunicationMethodRepository } from '~/.server/domain/repositories/preferred-communication-method.repository';
+import { PreferredCommunicationMethodRepositoryImpl } from '~/.server/domain/repositories/preferred-communication-method.repository';
 import type { PreferredLanguageRepository } from '~/.server/domain/repositories/preferred-language.repository';
 import { PreferredLanguageRepositoryImpl } from '~/.server/domain/repositories/preferred-language.repository';
+import type { ProvinceTerritoryStateRepository } from '~/.server/domain/repositories/province-territory-state.repository';
+import { ProvinceTerritoryStateRepositoryImpl } from '~/.server/domain/repositories/province-territory-state.repository';
+import type { ProvincialGovernmentInsurancePlanRepository } from '~/.server/domain/repositories/provincial-government-insurance-plan.repository';
+import { ProvincialGovernmentInsurancePlanRepositoryImpl } from '~/.server/domain/repositories/provincial-government-insurance-plan.repository';
+import type { ClientFriendlyStatusService } from '~/.server/domain/services/client-friendly-status.service';
+import { ClientFriendlyStatusServiceImpl } from '~/.server/domain/services/client-friendly-status.service';
+import type { CountryService } from '~/.server/domain/services/country.service';
+import { CountryServiceImpl } from '~/.server/domain/services/country.service';
+import type { MaritalStatusService } from '~/.server/domain/services/marital-status.service';
+import { MaritalStatusServiceImpl } from '~/.server/domain/services/marital-status.service';
+import type { PreferredCommunicationMethodService } from '~/.server/domain/services/preferred-communication-method.service';
+import { PreferredCommunicationMethodServiceImpl } from '~/.server/domain/services/preferred-communication-method.service';
 import type { PreferredLanguageService } from '~/.server/domain/services/preferred-language.service';
 import { PreferredLanguageServiceImpl } from '~/.server/domain/services/preferred-language.service';
+import type { ProvinceTerritoryStateService } from '~/.server/domain/services/province-territory-state.service';
+import { ProvinceTerritoryStateServiceImpl } from '~/.server/domain/services/province-territory-state.service';
+import type { ProvincialGovernmentInsurancePlanService } from '~/.server/domain/services/provincial-government-insurance-plan.service';
+import { ProvincialGovernmentInsurancePlanServiceImpl } from '~/.server/domain/services/provincial-government-insurance-plan.service';
 import type { ConfigFactory } from '~/.server/factories/config.factory';
 import { ConfigFactoryImpl } from '~/.server/factories/config.factory';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 import { LogFactoryImpl } from '~/.server/factories/log.factory';
-import type { ContainerConfigProvider } from '~/.server/providers/container-config.provider';
-import { ContainerConfigProviderImpl } from '~/.server/providers/container-config.provider';
-import type { ContainerServiceProvider } from '~/.server/providers/container-service.provider';
-import { ContainerServiceProviderImpl } from '~/.server/providers/container-service.provider';
-import type { ContainerProvider } from '~/.server/providers/container.provider';
-import { ContainerProviderImpl } from '~/.server/providers/container.provider';
 import { getLogger } from '~/utils/logging.server';
 
 export function initContainer() {
@@ -33,11 +67,6 @@ export function initContainer() {
   container.bind<ConfigFactory>(SERVICE_IDENTIFIER.CONFIG_FACTORY).to(ConfigFactoryImpl).inSingletonScope();
   container.bind<LogFactory>(SERVICE_IDENTIFIER.LOG_FACTORY).to(LogFactoryImpl).inSingletonScope();
 
-  // configure providers
-  container.bind<ContainerConfigProvider>(SERVICE_IDENTIFIER.CONTAINER_CONFIG_PROVIDER).to(ContainerConfigProviderImpl).inSingletonScope();
-  container.bind<ContainerProvider>(SERVICE_IDENTIFIER.CONTAINER_PROVIDER).to(ContainerProviderImpl).inSingletonScope();
-  container.bind<ContainerServiceProvider>(SERVICE_IDENTIFIER.CONTAINER_SERVICE_PROVIDER).to(ContainerServiceProviderImpl).inSingletonScope();
-
   // configue configs
   container
     .bind<ClientConfig>(SERVICE_IDENTIFIER.CLIENT_CONFIG)
@@ -49,13 +78,33 @@ export function initContainer() {
     .inSingletonScope();
 
   // configure repositories
+  container.bind<ClientFriendlyStatusRepository>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_REPOSITORY).to(ClientFriendlyStatusRepositoryImpl).inSingletonScope();
+  container.bind<CountryRepository>(SERVICE_IDENTIFIER.COUNTRY_REPOSITORY).to(CountryRepositoryImpl).inSingletonScope();
+  container.bind<FederalGovernmentInsurancePlanRepository>(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY).to(FederalGovernmentInsurancePlanRepositoryImpl).inSingletonScope();
+  container.bind<MaritalStatusRepository>(SERVICE_IDENTIFIER.MARITAL_STATUS_REPOSITORY).to(MaritalStatusRepositoryImpl).inSingletonScope();
+  container.bind<PreferredCommunicationMethodRepository>(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_REPOSITORY).to(PreferredCommunicationMethodRepositoryImpl).inSingletonScope();
   container.bind<PreferredLanguageRepository>(SERVICE_IDENTIFIER.PREFERRED_LANGUAGE_REPOSITORY).to(PreferredLanguageRepositoryImpl).inSingletonScope();
+  container.bind<ProvinceTerritoryStateRepository>(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_REPOSITORY).to(ProvinceTerritoryStateRepositoryImpl).inSingletonScope();
+  container.bind<ProvincialGovernmentInsurancePlanRepository>(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_REPOSITORY).to(ProvincialGovernmentInsurancePlanRepositoryImpl).inSingletonScope();
 
   // configure mappers
+  container.bind<ClientFriendlyStatusDtoMapper>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_DTO_MAPPER).to(ClientFriendlyStatusDtoMapperImpl).inSingletonScope();
+  container.bind<CountryDtoMapper>(SERVICE_IDENTIFIER.COUNTRY_DTO_MAPPER).to(CountryDtoMapperImpl).inSingletonScope();
+  container.bind<FederalGovernmentInsurancePlanDtoMapper>(SERVICE_IDENTIFIER.FEDERAL_GOVERNMENT_INSURANCE_PLAN_DTO_MAPPER).to(FederalGovernmentInsurancePlanDtoMapperImpl).inSingletonScope();
+  container.bind<MaritalStatusDtoMapper>(SERVICE_IDENTIFIER.MARITAL_STATUS_DTO_MAPPER).to(MaritalStatusDtoMapperImpl).inSingletonScope();
+  container.bind<PreferredCommunicationMethodDtoMapper>(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_DTO_MAPPER).to(PreferredCommunicationMethodDtoMapperImpl).inSingletonScope();
   container.bind<PreferredLanguageDtoMapper>(SERVICE_IDENTIFIER.PREFERRED_LANGUAGE_DTO_MAPPER).to(PreferredLanguageDtoMapperImpl).inSingletonScope();
+  container.bind<ProvinceTerritoryStateDtoMapper>(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_DTO_MAPPER).to(ProvinceTerritoryStateDtoMapperImpl).inSingletonScope();
+  container.bind<ProvincialGovernmentInsurancePlanDtoMapper>(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_DTO_MAPPER).to(ProvincialGovernmentInsurancePlanDtoMapperImpl).inSingletonScope();
 
   //configure services
+  container.bind<ClientFriendlyStatusService>(SERVICE_IDENTIFIER.CLIENT_FRIENDLY_STATUS_SERVICE).to(ClientFriendlyStatusServiceImpl).inSingletonScope();
+  container.bind<CountryService>(SERVICE_IDENTIFIER.COUNTRY_SERVICE).to(CountryServiceImpl).inSingletonScope();
+  container.bind<MaritalStatusService>(SERVICE_IDENTIFIER.MARITAL_STATUS_SERVICE).to(MaritalStatusServiceImpl).inSingletonScope();
+  container.bind<PreferredCommunicationMethodService>(SERVICE_IDENTIFIER.PREFERRED_COMMUNICATION_METHOD_SERVICE).to(PreferredCommunicationMethodServiceImpl).inSingletonScope();
   container.bind<PreferredLanguageService>(SERVICE_IDENTIFIER.PREFERRED_LANGUAGE_SERVICE).to(PreferredLanguageServiceImpl).inSingletonScope();
+  container.bind<ProvinceTerritoryStateService>(SERVICE_IDENTIFIER.PROVINCE_TERRITORY_STATE_SERVICE).to(ProvinceTerritoryStateServiceImpl).inSingletonScope();
+  container.bind<ProvincialGovernmentInsurancePlanService>(SERVICE_IDENTIFIER.PROVINCIAL_GOVERNMENT_INSURANCE_PLAN_SERVICE).to(ProvincialGovernmentInsurancePlanServiceImpl).inSingletonScope();
 
   // configure container logger middleware
   const serverConfig = container.get<ServerConfig>(SERVICE_IDENTIFIER.SERVER_CONFIG);

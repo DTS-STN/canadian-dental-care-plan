@@ -49,11 +49,11 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   await raoidcService.handleSessionValidation(request, session);
 
   const t = await getFixedT(request, handle.i18nNamespaces);
-  const preferredLanguages = serviceProvider.preferredLanguageService.findAll();
+  const preferredLanguages = serviceProvider.getPreferredLanguageService().findAll();
 
   const csrfToken = String(session.get('csrfToken'));
   const meta = { title: t('gcweb:meta.title.template', { title: t('alerts:subscribe.page-title') }) };
-  const { SCCH_BASE_URI } = configProvider.clientConfig;
+  const { SCCH_BASE_URI } = configProvider.getClientConfig();
 
   const idToken: IdToken = session.get('idToken');
   auditService.audit('page-view.subscribe-alerts', { userId: idToken.sub });

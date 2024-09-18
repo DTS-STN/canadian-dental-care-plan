@@ -1,9 +1,9 @@
+import type { AppLoadContext } from '@remix-run/node';
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { loader } from '~/routes/$lang/_protected/personal-information/preferred-language/edit';
 
 vi.mock('~/services/instrumentation-service.server', () => ({
@@ -36,14 +36,15 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
   });
 
   describe('loader()', () => {
-    const mockContainerProvider = mock<ContainerProvider>({
+    const mockAppLoadContext = mock<AppLoadContext>({
       serviceProvider: {
-        preferredLanguageService: {
-          findAll: vi.fn().mockReturnValue([
+        getPreferredLanguageService: () => ({
+          findById: vi.fn(),
+          findAll: () => [
             { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
             { id: 'fr', nameEn: 'French', nameFr: 'Français' },
-          ]),
-        },
+          ],
+        }),
       },
     });
 
@@ -54,7 +55,7 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
 
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information/preferred/edit'),
-        context: { session, ...mockContainerProvider },
+        context: { ...mockAppLoadContext, session },
         params: {},
       });
 
@@ -78,7 +79,7 @@ describe('_gcweb-app.personal-information.preferred-language.edit', () => {
       try {
         await loader({
           request: new Request('http://localhost:3000/personal-information/preferred-language/edit'),
-          context: { session, ...mockContainerProvider },
+          context: { ...mockAppLoadContext, session },
           params: {},
         });
       } catch (error) {

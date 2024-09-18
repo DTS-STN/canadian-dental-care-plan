@@ -1,9 +1,9 @@
+import type { AppLoadContext } from '@remix-run/node';
 import { createMemorySessionStorage } from '@remix-run/node';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
-import type { ContainerProvider } from '~/.server/providers/container.provider';
 import { loader } from '~/routes/$lang/_protected/dependent-status-checker/index';
 
 vi.mock('~/services/audit-service.server', () => ({
@@ -73,7 +73,7 @@ describe('Dependent Status Checker Page', () => {
 
       const response = await loader({
         request: new Request('http://localhost/dependent-status-checker'),
-        context: { session, ...mock<ContainerProvider>() },
+        context: { ...mock<AppLoadContext>(), session },
         params: {},
       });
 
