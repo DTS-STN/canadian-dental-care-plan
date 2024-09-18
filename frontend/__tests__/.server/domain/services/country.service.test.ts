@@ -69,7 +69,7 @@ describe('CountryServiceImpl', () => {
 
   describe('findById', () => {
     it('fetches country by id', () => {
-      const id = '1033';
+      const id = '1';
       const mockCountryRepository = mock<CountryRepository>();
       mockCountryRepository.findById.mockReturnValueOnce({
         esdc_countryid: '1',

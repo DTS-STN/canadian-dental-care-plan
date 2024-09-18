@@ -75,7 +75,7 @@ describe('FederalGovernmentInsurancePlanServiceImpl', () => {
 
   describe('findById', () => {
     it('fetches federal government insurance plan by id', () => {
-      const id = '1033';
+      const id = '1';
       const mockFederalGovernmentInsurancePlanRepository = mock<FederalGovernmentInsurancePlanRepository>();
       mockFederalGovernmentInsurancePlanRepository.findById.mockReturnValueOnce({
         esdc_governmentinsuranceplanid: '1',

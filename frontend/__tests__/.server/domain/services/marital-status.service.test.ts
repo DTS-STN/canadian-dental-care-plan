@@ -76,7 +76,7 @@ describe('MaritalStatusServiceImpl', () => {
 
   describe('findById', () => {
     it('fetches marital status by id', () => {
-      const id = '1033';
+      const id = '1';
       const mockMaritalStatusRepository = mock<MaritalStatusRepository>();
       mockMaritalStatusRepository.findById.mockReturnValueOnce({
         Value: 1,

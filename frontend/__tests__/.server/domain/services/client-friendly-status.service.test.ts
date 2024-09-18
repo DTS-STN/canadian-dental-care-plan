@@ -75,7 +75,7 @@ describe('ClientFriendlyStatusServiceImpl', () => {
 
   describe('findById', () => {
     it('fetches client friendly status by id', () => {
-      const id = '1033';
+      const id = '1';
       const mockClientFriendlyStatusRepository = mock<ClientFriendlyStatusRepository>();
       mockClientFriendlyStatusRepository.findById.mockReturnValueOnce({
         esdc_clientfriendlystatusid: '1',
