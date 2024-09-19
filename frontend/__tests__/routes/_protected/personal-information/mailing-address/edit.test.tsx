@@ -15,13 +15,6 @@ vi.mock('~/services/address-service.server', () => ({
 
 vi.mock('~/services/lookup-service.server', () => ({
   getLookupService: vi.fn().mockReturnValue({
-    getAllCountries: vi.fn().mockReturnValue([
-      {
-        code: 'SUP',
-        nameEn: 'super country',
-        nameFr: '(FR) super country',
-      },
-    ]),
     getAllRegions: vi.fn().mockReturnValue([
       {
         code: 'SP',
@@ -75,9 +68,26 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
       session.set('userInfoToken', { sin: '999999999' });
       session.set('personalInformation', { mailingAddress: { streetName: '111 Fake Mailing St', cityName: 'city', countryId: 'country' } });
 
+      const mockAppLoadContext = mock<AppLoadContext>({
+        serviceProvider: {
+          getCountryService() {
+            return {
+              findAll: vi.fn().mockReturnValue([
+                {
+                  id: '1',
+                  nameEn: 'super country',
+                  nameFr: '(FR) super country',
+                },
+              ]),
+              findById: vi.fn(),
+            };
+          },
+        },
+      });
+
       const response = await loader({
         request: new Request('http://localhost:3000/personal-information/mailing-address/edit'),
-        context: { ...mock<AppLoadContext>(), session },
+        context: { ...mockAppLoadContext, session },
         params: {},
       });
 
@@ -91,7 +101,7 @@ describe('_gcweb-app.personal-information.mailing-address.edit', () => {
         },
         countryList: [
           {
-            code: 'SUP',
+            id: '1',
             name: 'super country',
           },
         ],

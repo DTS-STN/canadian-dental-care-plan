@@ -19,9 +19,9 @@ import {
 } from '~/utils/lookup-utils.server';
 
 const mockCountries = [
-  { countryId: '001', nameEn: 'englishCountryOne', nameFr: 'frenchCountryOne' },
-  { countryId: '002', nameEn: 'englishCountryTwo', nameFr: 'frenchCountryTwo' },
-  { countryId: '003', nameEn: 'englishCountryThree', nameFr: 'frenchCountryThree' },
+  { id: '001', nameEn: 'englishCountryOne', nameFr: 'frenchCountryOne' },
+  { id: '002', nameEn: 'englishCountryTwo', nameFr: 'frenchCountryTwo' },
+  { id: '003', nameEn: 'englishCountryThree', nameFr: 'frenchCountryThree' },
 ];
 
 const mockMaritalStatuses = [
@@ -56,28 +56,28 @@ const mockProvincialTerritorialSocialPrograms = [
 
 describe('localizeCountry', () => {
   it('should return the country id and english name', () => {
-    expect(localizeCountry(mockCountries[0], 'en')).toEqual({ countryId: '001', name: 'englishCountryOne' });
+    expect(localizeCountry(mockCountries[0], 'en')).toEqual({ id: '001', name: 'englishCountryOne' });
   });
 
   it('should return the country id and french name', () => {
-    expect(localizeCountry(mockCountries[0], 'fr')).toEqual({ countryId: '001', name: 'frenchCountryOne' });
+    expect(localizeCountry(mockCountries[0], 'fr')).toEqual({ id: '001', name: 'frenchCountryOne' });
   });
 });
 
 describe('localizeCountries', () => {
   it('should return an array of country ids and english names', () => {
     expect(localizeCountries(mockCountries, 'en')).toEqual([
-      { countryId: '001', name: 'englishCountryOne' },
-      { countryId: '002', name: 'englishCountryTwo' },
-      { countryId: '003', name: 'englishCountryThree' },
+      { id: '001', name: 'englishCountryOne' },
+      { id: '002', name: 'englishCountryTwo' },
+      { id: '003', name: 'englishCountryThree' },
     ]);
   });
 
   it('should return an array of country ids and french names', () => {
     expect(localizeCountries(mockCountries, 'fr')).toEqual([
-      { countryId: '001', name: 'frenchCountryOne' },
-      { countryId: '002', name: 'frenchCountryTwo' },
-      { countryId: '003', name: 'frenchCountryThree' },
+      { id: '001', name: 'frenchCountryOne' },
+      { id: '002', name: 'frenchCountryTwo' },
+      { id: '003', name: 'frenchCountryThree' },
     ]);
   });
 });
@@ -95,46 +95,46 @@ describe('localizeAndSortCountries', () => {
 
   it('should return an array of sorted country ids and english names', () => {
     expect(localizeAndSortCountries(mockCountries, 'en')).toEqual([
-      { countryId: '001', name: 'englishCountryOne' },
-      { countryId: '003', name: 'englishCountryThree' },
-      { countryId: '002', name: 'englishCountryTwo' },
+      { id: '001', name: 'englishCountryOne' },
+      { id: '003', name: 'englishCountryThree' },
+      { id: '002', name: 'englishCountryTwo' },
     ]);
   });
 
   it('should return an array of sorted country ids and french names', () => {
     expect(localizeAndSortCountries(mockCountries, 'fr')).toEqual([
-      { countryId: '001', name: 'frenchCountryOne' },
-      { countryId: '003', name: 'frenchCountryThree' },
-      { countryId: '002', name: 'frenchCountryTwo' },
+      { id: '001', name: 'frenchCountryOne' },
+      { id: '003', name: 'frenchCountryThree' },
+      { id: '002', name: 'frenchCountryTwo' },
     ]);
   });
 
   it('should return an array of sorted country ids and french names with Canada first', () => {
     const countries = [
       {
-        countryId: '06f5389e-97ae-eb11-8236-000d3af4bfc3',
+        id: '06f5389e-97ae-eb11-8236-000d3af4bfc3',
         nameEn: 'Botswana',
         nameFr: 'Botswana',
       },
       {
-        countryId: '08f5389e-97ae-eb11-8236-000d3af4bfc3',
+        id: '08f5389e-97ae-eb11-8236-000d3af4bfc3',
         nameEn: 'Central African Republic',
         nameFr: 'Centrafrique',
       },
       {
-        countryId: '0cf5389e-97ae-eb11-8236-000d3af4bfc3',
+        id: '0cf5389e-97ae-eb11-8236-000d3af4bfc3',
         nameEn: 'Canada',
         nameFr: 'Canada',
       },
     ];
     expect(localizeAndSortCountries(countries, 'fr')).toEqual([
-      { countryId: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', name: 'Canada' },
+      { id: '0cf5389e-97ae-eb11-8236-000d3af4bfc3', name: 'Canada' },
       {
-        countryId: '06f5389e-97ae-eb11-8236-000d3af4bfc3',
+        id: '06f5389e-97ae-eb11-8236-000d3af4bfc3',
         name: 'Botswana',
       },
       {
-        countryId: '08f5389e-97ae-eb11-8236-000d3af4bfc3',
+        id: '08f5389e-97ae-eb11-8236-000d3af4bfc3',
         name: 'Centrafrique',
       },
     ]);

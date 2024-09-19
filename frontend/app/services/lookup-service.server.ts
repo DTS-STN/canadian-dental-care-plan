@@ -1,7 +1,6 @@
 import moize from 'moize';
 import { z } from 'zod';
 
-import countriesJson from '~/resources/power-platform/countries.json';
 import federalProgramsJson from '~/resources/power-platform/federal-programs.json';
 import maritalStatusesJson from '~/resources/power-platform/marital-statuses.json';
 import preferredMethodOfCommunicationJson from '~/resources/power-platform/preferred-method-of-communication.json';
@@ -84,7 +83,6 @@ function createLookupService() {
     INTEROP_API_BASE_URI,
     LOOKUP_SVC_ALL_AVOIDED_DENTAL_COST_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_DISABILITY_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_EQUITY_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_FEDERAL_GOVERNMENT_INSURANCE_PLANS_CACHE_TTL_SECONDS,
@@ -379,19 +377,6 @@ function createLookupService() {
     return provincialTerritorialSocialProgram;
   }
 
-  function getAllCountries() {
-    log.debug('Fetching all countries');
-
-    const countries = countriesJson.value.map((country) => ({
-      countryId: country.esdc_countryid,
-      nameEn: country.esdc_nameenglish,
-      nameFr: country.esdc_namefrench,
-    }));
-
-    log.trace('Returning countries: [%j]', countries);
-    return countries;
-  }
-
   function getAllRegions() {
     log.debug('Fetching all regions');
 
@@ -450,10 +435,6 @@ function createLookupService() {
     getAllBornTypes: moize.promise(getAllBornTypes, {
       maxAge: 1000 * LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllBornTypes memo'),
-    }),
-    getAllCountries: moize(getAllCountries, {
-      maxAge: 1000 * LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS,
-      onCacheAdd: () => log.info('Creating new AllCountries memo'),
     }),
     getAllDisabilityTypes: moize.promise(getAllDisabilityTypes, {
       maxAge: 1000 * LOOKUP_SVC_ALL_DISABILITY_TYPES_CACHE_TTL_SECONDS,
@@ -521,9 +502,6 @@ function createLookupService() {
 }
 
 export type GetLookupService = typeof getLookupService;
-
-export type GetAllCountries = Pick<ReturnType<typeof getLookupService>, 'getAllCountries'>['getAllCountries'];
-export type Country = ReturnType<GetAllCountries>[number];
 
 export type GetAllMaritalStatuses = Pick<ReturnType<typeof getLookupService>, 'getAllMaritalStatuses'>['getAllMaritalStatuses'];
 export type MaritalStatus = ReturnType<GetAllMaritalStatuses>[number];
