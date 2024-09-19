@@ -19,13 +19,6 @@ vi.mock('~/route-helpers/apply-adult-route-helpers.server', () => ({
 
 vi.mock('~/services/lookup-service.server', () => ({
   getLookupService: vi.fn().mockReturnValue({
-    getAllCountries: vi.fn().mockReturnValue([
-      {
-        code: 'SUP',
-        nameEn: 'super country',
-        nameFr: '(FR) super country',
-      },
-    ]),
     getAllRegions: vi.fn().mockReturnValue([
       {
         code: 'SP',
@@ -53,9 +46,26 @@ describe('_public.apply.id.contact-information', () => {
     it('should id, state, country list and region list', async () => {
       const session = await createMemorySessionStorage({ cookie: { secrets: [''] } }).getSession();
 
+      const mockAppLoadContext = mock<AppLoadContext>({
+        serviceProvider: {
+          getCountryService() {
+            return {
+              findAll: vi.fn().mockReturnValue([
+                {
+                  id: '1',
+                  nameEn: 'super country',
+                  nameFr: '(FR) super country',
+                },
+              ]),
+              findById: vi.fn(),
+            };
+          },
+        },
+      });
+
       const response = await loader({
         request: new Request('http://localhost:3000/apply/123/contact-information'),
-        context: { ...mock<AppLoadContext>(), session },
+        context: { ...mockAppLoadContext, session },
         params: {},
       });
 
@@ -65,7 +75,7 @@ describe('_public.apply.id.contact-information', () => {
         id: '123',
         countryList: [
           {
-            code: 'SUP',
+            id: '1',
             name: 'super country',
           },
         ],

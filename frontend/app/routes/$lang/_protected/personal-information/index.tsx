@@ -20,7 +20,7 @@ import { parseDateString, toLocaleDateString } from '~/utils/date-utils';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
-import { localizeCountries, localizeMaritalStatuses, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountry, localizeMaritalStatuses, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { IdToken, UserinfoToken } from '~/utils/raoidc-utils.server';
 import type { RouteHandleData } from '~/utils/route-utils';
@@ -57,7 +57,6 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const preferredLanguage = personalInformation.preferredLanguageId ? serviceProvider.getPreferredLanguageService().findById(personalInformation.preferredLanguageId) : undefined;
   const birthParsedFormat = personalInformation.birthDate ? toLocaleDateString(parseDateString(personalInformation.birthDate), locale) : undefined;
 
-  const countryList = localizeCountries(lookupService.getAllCountries(), locale);
   const regionList = localizeRegions(lookupService.getAllRegions(), locale);
 
   const maritalStatusList = localizeMaritalStatuses(lookupService.getAllMaritalStatuses(), locale);
@@ -70,15 +69,15 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const updatedInfo = session.get('personal-info-updated');
   session.unset('personal-info-updated');
 
-  const homeAddressCountry = countryList.find((country) => country.countryId === personalInformation.homeAddress?.countryId)?.name ?? ' ';
-  const mailingAddressCountry = countryList.find((country) => country.countryId === personalInformation.mailingAddress?.countryId)?.name ?? ' ';
+  const homeAddressCountry = personalInformation.homeAddress?.countryId ? serviceProvider.getCountryService().findById(personalInformation.homeAddress.countryId) : null;
+  const mailingAddressCountry = personalInformation.mailingAddress?.countryId ? serviceProvider.getCountryService().findById(personalInformation.mailingAddress.countryId) : null;
   const homeAddressRegion = regionList.find((region) => region.provinceTerritoryStateId === personalInformation.homeAddress?.provinceTerritoryStateId)?.abbr;
   const mailingAddressRegion = regionList.find((region) => region.provinceTerritoryStateId === personalInformation.mailingAddress?.provinceTerritoryStateId)?.abbr;
 
   return json({
     preferredLanguage,
-    homeAddressCountry,
-    mailingAddressCountry,
+    homeAddressCountry: homeAddressCountry && localizeCountry(homeAddressCountry, locale).name,
+    mailingAddressCountry: mailingAddressCountry && localizeCountry(mailingAddressCountry, locale).name,
     personalInformation,
     birthParsedFormat,
     meta,
@@ -115,7 +114,7 @@ export default function PersonalInformationIndex() {
                   city={personalInformation.homeAddress.cityName ?? ''}
                   provinceState={homeAddressRegion}
                   postalZipCode={personalInformation.homeAddress.postalCode}
-                  country={homeAddressCountry}
+                  country={homeAddressCountry ?? ''}
                 />
               ) : (
                 <p>{t('personal-information:index.no-address-on-file')}</p>
@@ -139,7 +138,7 @@ export default function PersonalInformationIndex() {
                   city={personalInformation.mailingAddress.cityName ?? ''}
                   provinceState={mailingAddressRegion}
                   postalZipCode={personalInformation.mailingAddress.postalCode}
-                  country={mailingAddressCountry}
+                  country={mailingAddressCountry ?? ''}
                 />
               ) : (
                 <p>{t('personal-information:index.no-address-on-file')}</p>

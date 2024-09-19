@@ -53,7 +53,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('edit-personal-info');
   const instrumentationService = getInstrumentationService();
   const lookupService = getLookupService();
@@ -74,7 +74,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     throw new Response(null, { status: 404 });
   }
 
-  const countryList = localizeAndSortCountries(lookupService.getAllCountries(), locale);
+  const countryList = localizeAndSortCountries(serviceProvider.getCountryService().findAll(), locale);
   const regionList = localizeAndSortRegions(lookupService.getAllRegions(), locale);
 
   const csrfToken = String(session.get('csrfToken'));
@@ -231,8 +231,8 @@ export default function PersonalInformationHomeAddressEdit() {
     () =>
       countryList.map((country) => ({
         children: country.name,
-        value: country.countryId,
-        id: country.countryId,
+        value: country.id,
+        id: country.id,
       })),
     [countryList],
   );

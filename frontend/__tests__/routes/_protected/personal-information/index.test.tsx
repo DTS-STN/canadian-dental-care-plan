@@ -15,8 +15,7 @@ vi.mock('~/services/audit-service.server', () => ({
 vi.mock('~/services/lookup-service.server', () => ({
   // prettier-ignore
   getLookupService: vi.fn().mockReturnValue({
-    getAllCountries: vi.fn().mockReturnValue([{ id: 'SUP', nameEn: 'super country', nameFr: '(FR) super country' }]),
-    getAllRegions: vi.fn().mockReturnValue([{ id: 'SP', countryId: "CAN", nameEn: 'sample', nameFr: '(FR) sample', abbr: 'SP' }]),
+    getAllRegions: vi.fn().mockReturnValue([{ provinceTerritoryStateId: 'SP', countryId: "CAN", nameEn: 'sample', nameFr: '(FR) sample', abbr: 'SP' }]),
     getAllMaritalStatuses: vi.fn().mockReturnValue([{ id: 'SINGLE', nameEn: 'Single', nameFr: 'Single but in french' }]),
   }),
 }));
@@ -61,26 +60,26 @@ vi.mock('~/services/personal-information-service.server', () => ({
       clientNumber: '999999999',
       preferredLanguageId: '1033',
       firstName: 'John',
-      homeAddress: '123 Home Street',
+      homeAddress: {
+        apartment: '123',
+        cityName: 'mega-city',
+        countryId: '1',
+        postalCode: 'postal code',
+        provinceTerritoryStateId: 'SP',
+        streetName: '123 Home Street',
+      },
       lastName: 'Maverick',
-      mailingAddress: '123 Mailing Street',
+      mailingAddress: {
+        apartment: '123',
+        cityName: 'mega-city',
+        countryId: '1',
+        postalCode: 'postal code',
+        provinceTerritoryStateId: 'SP',
+        streetName: '123 Mailing Street',
+      },
       phoneNumber: '(555) 555-5555',
       birthDate: '1950-10-11',
       maritalStatusId: 'SINGLE',
-      getHomeAddress: vi.fn().mockReturnValue({
-        address: 'address',
-        city: 'mega-city',
-        province: 'SP',
-        postalCode: 'postal code',
-        country: 'SUP',
-      }),
-      getMailingAddress: vi.fn().mockReturnValue({
-        address: 'address',
-        city: 'mega-city',
-        province: 'SP',
-        postalCode: 'postal code',
-        country: 'SUP',
-      }),
     }),
   }),
 }));
@@ -94,12 +93,13 @@ describe('_gcweb-app.personal-information._index', () => {
     const mockAppLoadContext = mock<AppLoadContext>({
       configProvider: { getClientConfig: vi.fn().mockReturnValue({ SCCH_BASE_URI: 'https://api.example.com' }) },
       serviceProvider: {
+        getCountryService: () => ({
+          findAll: vi.fn(),
+          findById: () => ({ id: '1', nameEn: 'super country', nameFr: 'super country fr' }),
+        }),
         getPreferredLanguageService: () => ({
           findById: () => ({ id: 'fr', nameEn: 'French', nameFr: 'Français' }),
-          findAll: () => [
-            { id: 'en', nameEn: 'English', nameFr: 'Anglais' },
-            { id: 'fr', nameEn: 'French', nameFr: 'Français' },
-          ],
+          findAll: vi.fn(),
         }),
       },
     });
@@ -162,9 +162,23 @@ describe('_gcweb-app.personal-information._index', () => {
         personalInformation: {
           clientNumber: '999999999',
           firstName: 'John',
-          homeAddress: '123 Home Street',
+          homeAddress: {
+            apartment: '123',
+            cityName: 'mega-city',
+            countryId: '1',
+            postalCode: 'postal code',
+            provinceTerritoryStateId: 'SP',
+            streetName: '123 Home Street',
+          },
           lastName: 'Maverick',
-          mailingAddress: '123 Mailing Street',
+          mailingAddress: {
+            apartment: '123',
+            cityName: 'mega-city',
+            countryId: '1',
+            postalCode: 'postal code',
+            provinceTerritoryStateId: 'SP',
+            streetName: '123 Mailing Street',
+          },
           phoneNumber: '(555) 555-5555',
           preferredLanguageId: '1033',
           birthDate: '1950-10-11',

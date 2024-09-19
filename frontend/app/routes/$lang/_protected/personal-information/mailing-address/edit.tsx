@@ -53,7 +53,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return getTitleMetaTags(data.meta.title);
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('edit-personal-info');
   const instrumentationService = getInstrumentationService();
   const raoidcService = await getRaoidcService();
@@ -72,7 +72,7 @@ export async function loader({ context: { session }, params, request }: LoaderFu
   const csrfToken = String(session.get('csrfToken'));
   const locale = getLocale(request);
   const lookupService = getLookupService();
-  const countryList = localizeAndSortCountries(lookupService.getAllCountries(), locale);
+  const countryList = localizeAndSortCountries(serviceProvider.getCountryService().findAll(), locale);
   const regionList = localizeAndSortRegions(lookupService.getAllRegions(), locale);
 
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID } = getEnv();
@@ -231,8 +231,8 @@ export default function PersonalInformationMailingAddressEdit() {
     () =>
       countryList.map((country) => ({
         children: country.name,
-        value: country.countryId,
-        id: country.countryId,
+        value: country.id,
+        id: country.id,
       })),
     [countryList],
   );

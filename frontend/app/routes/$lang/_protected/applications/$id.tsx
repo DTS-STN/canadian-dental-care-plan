@@ -68,9 +68,9 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const mailingProvince = allRegions.find((region) => region.provinceTerritoryStateId === applicationDetails.personalInformation?.mailingProvince);
   const homeProvince = allRegions.find((region) => region.provinceTerritoryStateId === applicationDetails.personalInformation?.homeProvince);
 
-  const allCountries = localizeCountries(lookupService.getAllCountries(), locale);
-  const mailingCountry = allCountries.find((country) => country.countryId === applicationDetails.personalInformation?.mailingCountry);
-  const homeCountry = allCountries.find((country) => country.countryId === applicationDetails.personalInformation?.homeCountry);
+  const allCountries = localizeCountries(serviceProvider.getCountryService().findAll(), locale);
+  const mailingCountry = allCountries.find((country) => country.id === applicationDetails.personalInformation?.mailingCountry);
+  const homeCountry = allCountries.find((country) => country.id === applicationDetails.personalInformation?.homeCountry);
 
   const preferredLang = applicationDetails.communicationPreferences?.preferredLanguage ? serviceProvider.getPreferredLanguageService().findById(applicationDetails.communicationPreferences.preferredLanguage) : undefined;
   const preferredLanguage = preferredLang ? getNameByLanguage(locale, preferredLang) : '';

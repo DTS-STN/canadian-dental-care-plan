@@ -48,14 +48,14 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   const lookupService = getLookupService();
   const state = loadApplyAdultChildState({ params, request, session });
   const t = await getFixedT(request, handle.i18nNamespaces);
   const locale = getLocale(request);
   const { CANADA_COUNTRY_ID, USA_COUNTRY_ID, MARITAL_STATUS_CODE_COMMONLAW, MARITAL_STATUS_CODE_MARRIED } = getEnv();
 
-  const countryList = localizeAndSortCountries(lookupService.getAllCountries(), locale);
+  const countryList = localizeAndSortCountries(serviceProvider.getCountryService().findAll(), locale);
   const regionList = localizeAndSortRegions(lookupService.getAllRegions(), locale);
 
   const csrfToken = String(session.get('csrfToken'));
@@ -298,14 +298,9 @@ export default function ApplyFlowPersonalInformation() {
     setSelectedMailingCountry(event.currentTarget.value);
   };
 
-  const countries = useMemo<InputOptionProps[]>(
-    () =>
-      countryList.map(({ countryId, name }) => ({
-        children: name,
-        value: countryId,
-      })),
-    [countryList],
-  );
+  const countries = useMemo<InputOptionProps[]>(() => {
+    return countryList.map(({ id, name }) => ({ children: name, value: id }));
+  }, [countryList]);
 
   // populate mailing region/province/state list with selected country or current address country
   const mailingRegions: InputOptionProps[] = mailingCountryRegions.map(({ provinceTerritoryStateId, name }) => ({

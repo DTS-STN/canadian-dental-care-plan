@@ -28,7 +28,7 @@ import { useHCaptcha } from '~/utils/hcaptcha-utils';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
 import { getFixedT, getLocale } from '~/utils/locale-utils.server';
 import { getLogger } from '~/utils/logging.server';
-import { localizeCountries, localizeFederalSocialProgram, localizeMaritalStatuses, localizeProvincialTerritorialSocialProgram, localizeRegions } from '~/utils/lookup-utils.server';
+import { localizeCountry, localizeFederalSocialProgram, localizeMaritalStatuses, localizeProvincialTerritorialSocialProgram, localizeRegions } from '~/utils/lookup-utils.server';
 import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
@@ -68,9 +68,8 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
   const provinceHome = allRegions.find((region) => region.provinceTerritoryStateId === state.contactInformation.homeProvince);
 
   // Getting Country by Id
-  const allCountries = localizeCountries(lookupService.getAllCountries(), locale);
-  const countryMailing = allCountries.find((country) => country.countryId === state.contactInformation.mailingCountry);
-  const countryHome = allCountries.find((country) => country.countryId === state.contactInformation.homeCountry);
+  const countryMailing = serviceProvider.getCountryService().findById(state.contactInformation.mailingCountry);
+  const countryHome = state.contactInformation.homeCountry ? serviceProvider.getCountryService().findById(state.contactInformation.homeCountry) : null;
   invariant(countryMailing, `Unexpected mailing address country: ${state.contactInformation.mailingCountry}`);
   invariant(countryHome, `Unexpected home address country: ${state.contactInformation.homeCountry}`);
 
@@ -113,7 +112,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     city: state.contactInformation.mailingCity,
     province: provinceMailing,
     postalCode: state.contactInformation.mailingPostalCode,
-    country: countryMailing,
+    country: localizeCountry(countryMailing, locale),
     apartment: state.contactInformation.mailingApartment,
   };
 
@@ -122,7 +121,7 @@ export async function loader({ context: { configProvider, serviceProvider, sessi
     city: state.contactInformation.homeCity,
     province: provinceHome,
     postalCode: state.contactInformation.homePostalCode,
-    country: countryHome,
+    country: localizeCountry(countryHome, locale),
     apartment: state.contactInformation.homeApartment,
   };
 
