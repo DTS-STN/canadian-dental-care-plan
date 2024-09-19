@@ -15,7 +15,6 @@ import { ClientFriendlyStatusMarkdown } from '~/components/client-friendly-statu
 import { ContextualAlert } from '~/components/contextual-alert';
 import { useFeature } from '~/root';
 import { clearStatusState, getStatusStateIdFromUrl, loadStatusState } from '~/route-helpers/status-route-helpers.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { getContextualAlertType } from '~/utils/application-code-utils.server';
 import { featureEnabled } from '~/utils/env-utils.server';
 import { getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -42,13 +41,12 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('status');
 
   const statusStateId = getStatusStateIdFromUrl(request.url);
   const { statusCheckResult } = loadStatusState({ id: statusStateId, params, session });
 
-  const lookupService = getLookupService();
   const locale = getLocale(request);
 
   const csrfToken = String(session.get('csrfToken'));
@@ -58,9 +56,16 @@ export async function loader({ context: { session }, params, request }: LoaderFu
 
   const statusId = statusCheckResult.statusId ?? null;
   const alertType = getContextualAlertType(statusId);
-  const clientFriendlyStatus = statusId ? localizeClientFriendlyStatus(lookupService.getClientFriendlyStatusById(statusId), locale) : null;
+  const clientFriendlyStatus = statusId ? serviceProvider.getClientFriendlyStatusService().findById(statusId) : null;
 
-  return json({ statusResult: { alertType, clientFriendlyStatus }, csrfToken, meta });
+  return json({
+    statusResult: {
+      alertType,
+      clientFriendlyStatus: clientFriendlyStatus && localizeClientFriendlyStatus(clientFriendlyStatus, locale),
+    },
+    csrfToken,
+    meta,
+  });
 }
 
 export async function action({ context: { session }, params, request }: ActionFunctionArgs) {

@@ -8,7 +8,6 @@ import pageIds from '../../page-ids.json';
 import { ContextualAlert } from '~/components/contextual-alert';
 import { getAuditService } from '~/services/audit-service.server';
 import { getInstrumentationService } from '~/services/instrumentation-service.server';
-import { getLookupService } from '~/services/lookup-service.server';
 import { getRaoidcService } from '~/services/raoidc-service.server';
 import { featureEnabled, getEnv } from '~/utils/env-utils.server';
 import { getNameByLanguage, getTypedI18nNamespaces } from '~/utils/locale-utils';
@@ -28,7 +27,7 @@ export const meta: MetaFunction<typeof loader> = mergeMeta(({ data }) => {
   return data ? getTitleMetaTags(data.meta.title) : [];
 });
 
-export async function loader({ context: { session }, params, request }: LoaderFunctionArgs) {
+export async function loader({ context: { serviceProvider, session }, params, request }: LoaderFunctionArgs) {
   featureEnabled('dependent-status-checker');
 
   const raoidcService = await getRaoidcService();
@@ -63,19 +62,11 @@ export async function loader({ context: { session }, params, request }: LoaderFu
     throw new Response(null, { status: 400 });
   }
 
-  //const applicationStatusService = getApplicationStatusService();
-  const lookupService = getLookupService();
-
-  //const statusId = await applicationStatusService.getStatusId({ sin: userInfoToken.sin, applicationCode: personalInformation.clientNumber });
-
-  const clientStatusList = lookupService.getAllClientFriendlyStatuses();
-
   const { CLIENT_STATUS_SUCCESS_ID } = getEnv();
-
-  //Placeholder pending future design / implementation changes.
   const statusId = CLIENT_STATUS_SUCCESS_ID;
 
-  const clientFriendlyStatus = clientStatusList.find((status) => status.id === statusId);
+  const clientFriendlyStatus = serviceProvider.getClientFriendlyStatusService().findById(statusId);
+
   function getAlertType() {
     //if (!statusId) return 'danger';
     if (clientFriendlyStatus?.id === CLIENT_STATUS_SUCCESS_ID) return 'success';
