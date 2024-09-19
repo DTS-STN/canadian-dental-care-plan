@@ -1,7 +1,7 @@
 import { HttpResponse, http } from 'msw';
 import { z } from 'zod';
 
-import { getLookupService } from '~/services/lookup-service.server';
+import clientFriendlyStatusDataSource from '~/.server/resources/power-platform/client-friendly-status.json';
 import { getLogger } from '~/utils/logging.server';
 
 const log = getLogger('status-check-api.server');
@@ -17,9 +17,7 @@ const log = getLogger('status-check-api.server');
  *    '000003': 'e882086c-c4e6-ee11-a204-000d3a09d1b8',
  *  }
  */
-const MOCK_APPLICATION_CODES_TO_STATUS_CODES_MAP: Record<string, string> = getLookupService()
-  .getAllClientFriendlyStatuses()
-  .reduce((acc, { id }, i) => ({ ...acc, [(i + 1).toString().padStart(6, '0')]: id }), {});
+const MOCK_APPLICATION_CODES_TO_STATUS_CODES_MAP: Record<string, string> = clientFriendlyStatusDataSource.value.reduce((acc, { esdc_clientfriendlystatusid }, i) => ({ ...acc, [(i + 1).toString().padStart(6, '0')]: esdc_clientfriendlystatusid }), {});
 
 /**
  * Server-side MSW mocks for the Status Check API

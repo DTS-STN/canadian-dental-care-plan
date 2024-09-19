@@ -71,9 +71,22 @@ describe('Dependent Status Checker Page', () => {
       session.set('idToken', { sub: '00000000-0000-0000-0000-000000000000' });
       session.set('userInfoToken', { sin: '999999999', sub: '1111111' });
 
+      const mockAppLoadContext = mock<AppLoadContext>({
+        serviceProvider: {
+          getClientFriendlyStatusService: () => ({
+            findAll: vi.fn(),
+            findById: vi.fn().mockResolvedValue({
+              id: '00000000-0000-0000-0000-000000000000',
+              nameEn: 'Success',
+              nameFr: 'Succès',
+            }),
+          }),
+        },
+      });
+
       const response = await loader({
         request: new Request('http://localhost/dependent-status-checker'),
-        context: { ...mock<AppLoadContext>(), session },
+        context: { ...mockAppLoadContext, session },
         params: {},
       });
 

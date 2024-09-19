@@ -1,7 +1,6 @@
 import moize from 'moize';
 import { z } from 'zod';
 
-import clientFriendlyStatusesJson from '~/resources/power-platform/client-friendly-statuses.json';
 import countriesJson from '~/resources/power-platform/countries.json';
 import federalProgramsJson from '~/resources/power-platform/federal-programs.json';
 import maritalStatusesJson from '~/resources/power-platform/marital-statuses.json';
@@ -85,7 +84,6 @@ function createLookupService() {
     INTEROP_API_BASE_URI,
     LOOKUP_SVC_ALL_AVOIDED_DENTAL_COST_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS,
-    LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_DISABILITY_TYPES_CACHE_TTL_SECONDS,
     LOOKUP_SVC_ALL_EQUITY_TYPES_CACHE_TTL_SECONDS,
@@ -444,32 +442,6 @@ function createLookupService() {
     return equityTypeSchemaList.parse(data);
   }
 
-  function getAllClientFriendlyStatuses() {
-    log.debug('Fetching all client friendly statuses');
-
-    const clientFriendlyStatuses = clientFriendlyStatusesJson.value.map((clientFriendlyStatus) => ({
-      id: clientFriendlyStatus.esdc_clientfriendlystatusid,
-      nameEn: clientFriendlyStatus.esdc_descriptionenglish,
-      nameFr: clientFriendlyStatus.esdc_descriptionfrench,
-    }));
-
-    log.trace('Returning client friendly statuses: [%j]', clientFriendlyStatuses);
-    return clientFriendlyStatuses;
-  }
-
-  function getClientFriendlyStatusById(id: string) {
-    log.debug('Fetching client friendly status');
-
-    const clientFriendlyStatus = getAllClientFriendlyStatuses().find((status) => status.id === id);
-
-    if (!clientFriendlyStatus) {
-      throw new Error(`Failed to find client friendly status; id: ${id}`);
-    }
-
-    log.trace('Returning client friendly statuse: [%j]', clientFriendlyStatus);
-    return clientFriendlyStatus;
-  }
-
   return {
     getAllAvoidedDentalCostTypes: moize.promise(getAllAvoidedDentalCostTypes, {
       maxAge: 1000 * LOOKUP_SVC_ALL_AVOIDED_DENTAL_COST_TYPES_CACHE_TTL_SECONDS,
@@ -478,15 +450,6 @@ function createLookupService() {
     getAllBornTypes: moize.promise(getAllBornTypes, {
       maxAge: 1000 * LOOKUP_SVC_ALL_BORN_TYPES_CACHE_TTL_SECONDS,
       onCacheAdd: () => log.info('Creating new AllBornTypes memo'),
-    }),
-    getAllClientFriendlyStatuses: moize(getAllClientFriendlyStatuses, {
-      maxAge: 1000 * LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS,
-      onCacheAdd: () => log.info('Creating new AllClientFriendlyStatuses memo'),
-    }),
-    getClientFriendlyStatusById: moize(getClientFriendlyStatusById, {
-      maxAge: 1000 * LOOKUP_SVC_ALL_CLIENT_FRIENDLY_STATUSES_CACHE_TTL_SECONDS,
-      maxSize: Infinity,
-      onCacheAdd: () => log.info('Creating new ClientFriendlyStatusById memo'),
     }),
     getAllCountries: moize(getAllCountries, {
       maxAge: 1000 * LOOKUP_SVC_ALL_COUNTRIES_CACHE_TTL_SECONDS,
@@ -573,6 +536,3 @@ export type FederalSocialProgram = ReturnType<GetAllFederalSocialPrograms>[numbe
 
 export type GetAllProvincialTerritorialSocialPrograms = Pick<ReturnType<typeof getLookupService>, 'getAllProvincialTerritorialSocialPrograms'>['getAllProvincialTerritorialSocialPrograms'];
 export type ProvincialTerritorialSocialProgram = ReturnType<GetAllProvincialTerritorialSocialPrograms>[number];
-
-export type GetAllClientFriendlyStatuses = Pick<ReturnType<typeof getLookupService>, 'getAllClientFriendlyStatuses'>['getAllClientFriendlyStatuses'];
-export type ClientFriendlyStatus = ReturnType<GetAllClientFriendlyStatuses>[number];

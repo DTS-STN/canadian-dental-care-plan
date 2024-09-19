@@ -1,6 +1,7 @@
 import { getEnv } from './env-utils.server';
+import type { ClientFriendlyStatusDto } from '~/.server/domain/dtos/client-friendly-status.dto';
 import type { PreferredLanguageDto } from '~/.server/domain/dtos/preferred-language.dto';
-import type { ClientFriendlyStatus, Country, FederalSocialProgram, MaritalStatus, ProvincialTerritorialSocialProgram, Region } from '~/services/lookup-service.server';
+import type { Country, FederalSocialProgram, MaritalStatus, ProvincialTerritorialSocialProgram, Region } from '~/services/lookup-service.server';
 
 /**
  * Localizes a single country object by adding a localized name.
@@ -206,7 +207,7 @@ export function localizeAndSortProvincialTerritorialSocialPrograms(programs: Pro
   return mappedProvincialTerritorialSocialPrograms.toSorted((a, b) => a.name.localeCompare(b.name, locale));
 }
 
-export function localizeClientFriendlyStatus(clientFriendlyStatus: ClientFriendlyStatus, locale: string) {
+export function localizeClientFriendlyStatus(clientFriendlyStatus: ClientFriendlyStatusDto, locale: string) {
   const { nameEn, nameFr, ...rest } = clientFriendlyStatus;
   return {
     ...rest,
