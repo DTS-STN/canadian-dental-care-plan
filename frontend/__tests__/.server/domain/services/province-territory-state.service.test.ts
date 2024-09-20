@@ -5,7 +5,7 @@ import type { ServerConfig } from '~/.server/configs/server.config';
 import type { ProvinceTerritoryStateDto } from '~/.server/domain/dtos';
 import type { ProvinceTerritoryStateDtoMapper } from '~/.server/domain/mappers';
 import type { ProvinceTerritoryStateRepository } from '~/.server/domain/repositories/province-territory-state.repository';
-import { ProvinceTerritoryStateServiceImpl } from '~/.server/domain/services/province-territory-state.service';
+import { ProvinceTerritoryStateServiceImpl } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 
 vi.mock('moize');

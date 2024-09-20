@@ -1,7 +1,7 @@
 import { sort } from 'moderndash';
 import moize from 'moize';
 
-import type { FederalGovernmentInsurancePlanService } from '~/.server/domain/services/federal-government-insurance-plan.service';
+import type { FederalGovernmentInsurancePlanService } from '~/.server/domain/services';
 import { getApplicationHistoryMapper } from '~/mappers/application-history-mapper.server';
 import { applicationListSchema } from '~/schemas/application-history-service-schemas.server';
 import type { BenefitApplicationRequest } from '~/schemas/benefit-application-service-schemas.server';

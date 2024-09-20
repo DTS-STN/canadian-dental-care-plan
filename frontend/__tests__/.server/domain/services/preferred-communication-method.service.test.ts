@@ -5,7 +5,7 @@ import type { ServerConfig } from '~/.server/configs/server.config';
 import type { PreferredCommunicationMethodDto } from '~/.server/domain/dtos';
 import type { PreferredCommunicationMethodDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredCommunicationMethodRepository } from '~/.server/domain/repositories/preferred-communication-method.repository';
-import { PreferredCommunicationMethodServiceImpl } from '~/.server/domain/services/preferred-communication-method.service';
+import { PreferredCommunicationMethodServiceImpl } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 
 vi.mock('moize');

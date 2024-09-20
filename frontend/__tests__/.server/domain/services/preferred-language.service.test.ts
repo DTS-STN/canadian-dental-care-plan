@@ -5,7 +5,7 @@ import type { ServerConfig } from '~/.server/configs/server.config';
 import type { PreferredLanguageDto } from '~/.server/domain/dtos';
 import type { PreferredLanguageDtoMapper } from '~/.server/domain/mappers';
 import type { PreferredLanguageRepository } from '~/.server/domain/repositories/preferred-language.repository';
-import { PreferredLanguageServiceImpl } from '~/.server/domain/services/preferred-language.service';
+import { PreferredLanguageServiceImpl } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 
 vi.mock('moize');

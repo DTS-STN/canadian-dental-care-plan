@@ -5,7 +5,7 @@ import type { ServerConfig } from '~/.server/configs/server.config';
 import type { CountryDto } from '~/.server/domain/dtos';
 import type { CountryDtoMapper } from '~/.server/domain/mappers';
 import type { CountryRepository } from '~/.server/domain/repositories/country.repository';
-import { CountryServiceImpl } from '~/.server/domain/services/country.service';
+import { CountryServiceImpl } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 
 vi.mock('moize');

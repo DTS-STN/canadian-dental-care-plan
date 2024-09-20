@@ -5,7 +5,7 @@ import type { ServerConfig } from '~/.server/configs/server.config';
 import type { FederalGovernmentInsurancePlanDto } from '~/.server/domain/dtos';
 import type { FederalGovernmentInsurancePlanDtoMapper } from '~/.server/domain/mappers';
 import type { FederalGovernmentInsurancePlanRepository } from '~/.server/domain/repositories/federal-government-insurance-plan.repository';
-import { FederalGovernmentInsurancePlanServiceImpl } from '~/.server/domain/services/federal-government-insurance-plan.service';
+import { FederalGovernmentInsurancePlanServiceImpl } from '~/.server/domain/services';
 import type { LogFactory, Logger } from '~/.server/factories/log.factory';
 
 vi.mock('moize');
